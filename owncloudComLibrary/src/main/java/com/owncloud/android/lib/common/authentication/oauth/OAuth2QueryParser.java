@@ -33,8 +33,6 @@ import java.util.Map;
 
 public class OAuth2QueryParser {
 
-    private static final String TAG = OAuth2QueryParser.class.getName();
-
     private Map<String, String> mOAuth2ParsedAuthorizationResponse;
 
     public OAuth2QueryParser() {

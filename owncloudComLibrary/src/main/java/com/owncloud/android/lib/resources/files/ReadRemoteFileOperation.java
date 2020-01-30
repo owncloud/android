@@ -99,8 +99,7 @@ public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            e.printStackTrace();
-            Timber.e(result.getException(), "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage());
+            Timber.e(e, "Synchronizing  file %s", mRemotePath);
         }
 
         return result;

@@ -24,13 +24,12 @@
 
 package com.owncloud.android.lib.common.network;
 
-import android.util.Log;
-
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
 import okio.Okio;
 import okio.Source;
+import timber.log.Timber;
 
 import java.io.File;
 import java.util.Collection;
@@ -44,8 +43,6 @@ import java.util.Set;
  * @author David González Verdugo
  */
 public class FileRequestBody extends RequestBody implements ProgressiveDataTransferer {
-
-    private static final String TAG = FileRequestBody.class.getSimpleName();
 
     protected File mFile;
     private MediaType mContentType;
@@ -87,11 +84,10 @@ public class FileRequestBody extends RequestBody implements ProgressiveDataTrans
                 }
             }
 
-            Log.d(TAG, "File with name " + mFile.getName() + " and size " + mFile.length() +
-                    " written in request body");
+            Timber.d("File with name " + mFile.getName() + " and size " + mFile.length() + " written in request body");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
     }
 

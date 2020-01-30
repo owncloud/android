@@ -24,8 +24,6 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.CopyMethod;
@@ -33,6 +31,7 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import timber.log.Timber;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -48,8 +47,6 @@ import java.util.concurrent.TimeUnit;
  * @author David González V.
  */
 public class CopyRemoteFileOperation extends RemoteOperation<String> {
-
-    private static final String TAG = CopyRemoteFileOperation.class.getSimpleName();
 
     private static final int COPY_READ_TIMEOUT = 600000;
     private static final int COPY_CONNECTION_TIMEOUT = 5000;
@@ -120,13 +117,11 @@ public class CopyRemoteFileOperation extends RemoteOperation<String> {
                 client.exhaustResponse(copyMethod.getResponseBodyAsStream());
             }
 
-            Log.i(TAG, "Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
-                    result.getLogMessage());
+            Timber.i("Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " + result.getLogMessage());
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            Log.e(TAG, "Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
-                    result.getLogMessage(), e);
+            Timber.e(e, "Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " + result.getLogMessage());
         }
 
         return result;
