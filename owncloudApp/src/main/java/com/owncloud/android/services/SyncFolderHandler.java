@@ -128,7 +128,7 @@ class SyncFolderHandler extends Handler {
 
                 mService.dispatchResultToOperationListeners(mCurrentSyncOperation, result);
 
-                sendBroadcastFinishedSyncFolder(account, remotePath, result.isSuccess());
+                sendBroadcastFinishedSyncFolder(account, remotePath, result != null && result.isSuccess());
             }
         }
     }

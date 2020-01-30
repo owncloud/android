@@ -204,10 +204,8 @@ public class OperationsService extends Service {
                     saveAllClients(this, MainApp.Companion.getAccountType());
 
             // TODO - get rid of these exceptions
-        } catch (
-                AccountNotFoundException | AuthenticatorException |
-                        OperationCanceledException | IOException e) {
-            e.printStackTrace();
+        } catch (AccountNotFoundException | AuthenticatorException | OperationCanceledException | IOException e) {
+            Timber.e(e);
         }
 
         mUndispatchedFinishedOperations.clear();
