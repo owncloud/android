@@ -23,6 +23,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import timber.log.Timber;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -79,7 +80,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
             mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
 
         } catch (AccountUtils.AccountNotFoundException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         return mediaSource;
@@ -137,12 +138,8 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
                 return new CustomHttpDataSourceFactory(MainApp.Companion.getUserAgent(),
                         bandwidthMeter, params);
 
-            } catch (AuthenticatorException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (OperationCanceledException e) {
-                e.printStackTrace();
+            } catch (AuthenticatorException | IOException | OperationCanceledException e) {
+                Timber.e(e);
             }
         }
 

@@ -138,7 +138,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                     try {
                         usedNumbers.add(Integer.parseInt(number))
                     } catch (e: Exception) {
-                        Timber.e(e, "Wrong capture of number in share named " + share.name)
+                        Timber.e(e, "Wrong capture of number in share named ${share.name}")
                         return ""
                     }
                 }
@@ -437,13 +437,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     override fun unshareButtonPressed(share: OCShare) {
         // Unshare
-        Timber.d("Removing private share with " + share.sharedWithDisplayName)
+        Timber.d("Removing private share with ${share.sharedWithDisplayName}")
         removeShare(share)
     }
 
     override fun editShare(share: OCShare) {
         // move to fragment to edit share
-        Timber.d("Editing " + share.sharedWithDisplayName)
+        Timber.d("Editing ${share.sharedWithDisplayName}")
         listener?.showEditPrivateShare(share)
     }
 

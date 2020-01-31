@@ -1174,7 +1174,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
      * @param db Database where table of files is included.
      */
     private fun updateAccountName(db: SQLiteDatabase) {
-        Timber.d("SQL : THREAD:  " + Thread.currentThread().name)
+        Timber.d("SQL : THREAD:  ${Thread.currentThread().name}")
         val ama = AccountManager.get(context)
         try {
             // get accounts from AccountManager ;  we can't be sure if accounts in it are updated or not although
