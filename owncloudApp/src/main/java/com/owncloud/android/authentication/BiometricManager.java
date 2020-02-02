@@ -55,7 +55,7 @@ import java.util.Set;
     private static int BIOMETRIC_TIMEOUT = 1000;
     // keeping a "low" positive value is the easiest way to prevent the biometric is requested on rotations
 
-    public static BiometricManager mBiometricManagerInstance = null;
+    private static BiometricManager mBiometricManagerInstance = null;
 
     public static BiometricManager getBiometricManager(Context context) {
 
@@ -69,7 +69,7 @@ import java.util.Set;
     private Long mTimestamp = 0l;
     private int mVisibleActivitiesCounter = 0;
 
-    protected BiometricManager() {
+    private BiometricManager() {
     }
 
     public void onActivityStarted(Activity activity) {
@@ -78,24 +78,20 @@ import java.util.Set;
 
             if (biometricShouldBeRequested()) {
 
-                // There's no biometrics registered in the device
-                if (!isHardwareDetected() || !hasEnrolledBiometric() && PassCodeManager.getPassCodeManager().isPassCodeEnabled()) {
-
+                if (isHardwareDetected() && hasEnrolledBiometric()) {
+                    // Use biometric lock
+                    Intent i = new Intent(MainApp.Companion.getAppContext(), BiometricActivity.class);
+                    activity.startActivity(i);
+                } else if (PassCodeManager.getPassCodeManager().isPassCodeEnabled()) {
                     // Cancel biometric lock and use passcode unlock method
                     PassCodeManager.getPassCodeManager().onBiometricCancelled(activity);
                     mVisibleActivitiesCounter++;
-                    return;
-
-                } else if (!isHardwareDetected() || !hasEnrolledBiometric() && PatternManager.getPatternManager().isPatternEnabled()) {
-
+                } else if (PatternManager.getPatternManager().isPatternEnabled()) {
                     // Cancel biometric lock and use pattern unlock method
                     PatternManager.getPatternManager().onBiometricCancelled(activity);
                     mVisibleActivitiesCounter++;
-                    return;
                 }
 
-                Intent i = new Intent(MainApp.Companion.getAppContext(), BiometricActivity.class);
-                activity.startActivity(i);
             }
         }
 
@@ -126,7 +122,7 @@ import java.util.Set;
         return false;
     }
 
-    public boolean isBiometricEnabled() {
+    protected boolean isBiometricEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.Companion.getAppContext());
         return (appPrefs.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false));
     }
