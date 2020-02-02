@@ -81,6 +81,7 @@
 	</string>
   <string name="error_reason">поскольку</string>
   <string name="auth_failure_snackbar">Аутентификация не удалась</string>
+  <string name="server_not_supported">Версия вашего сервера старше чем 10, и поэтому не поддерживается. Пожалуйста, обновите ваш сервер до свежей версии.</string>
   <string name="auth_failure_snackbar_action">Измените учётную запись</string>
   <string name="auth_oauth_failure">Токен доступа устарел или стал недопустимым. Перевойдите, чтобы восстановить доступ</string>
   <string name="auth_oauth_failure_snackbar_action">Войти</string>
