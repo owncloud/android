@@ -16,12 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.authentication.repository
 
-package com.owncloud.android.domain.server.model
+import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
+import com.owncloud.android.domain.authentication.AuthenticationRepository
 
-data class ServerInfo(
-    val ownCloudVersion: String,
-    val baseUrl: String,
-    val authenticationMethods: AuthenticationMethod,
-    val isSecureConnection: Boolean
-)
+class OCAuthenticationRepository(
+    private val remoteAuthenticationDataSource: RemoteAuthenticationDataSource
+) : AuthenticationRepository {
+    override fun login(serverUrl: String, username: String, password: String) =
+        remoteAuthenticationDataSource.login(serverPath = serverUrl, username = username, password = password)
+}

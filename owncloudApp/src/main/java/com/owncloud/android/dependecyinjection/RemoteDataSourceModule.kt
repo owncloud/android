@@ -20,6 +20,8 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
+import com.owncloud.android.data.authentication.datasources.implementation.OCRemoteAuthenticationDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.network.OCCapabilityService
@@ -86,4 +88,5 @@ val remoteDataSourceModule = module {
     }
     factory<RemoteServerDataSource> { OCRemoteServerDataSource(get()) }
     factory<RemoteAnonymousDatasource> { OCRemoteAnonymousDataSource() }
+    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext()) }
 }

@@ -36,7 +36,7 @@ class OCAnonymousServerRepository(
         val pairRemoteStatus = remoteAnonymousDatasource.getRemoteStatus(path)
 
         // Second step: get authentication method required by the server
-        val listOfAuthenticationMethods = remoteAnonymousDatasource.getAuthenticationMethods(
+        val authenticationMethod = remoteAnonymousDatasource.getAuthenticationMethod(
             normalizeProtocolPrefix(
                 trimWebdavSuffix(path),
                 pairRemoteStatus.second
@@ -46,7 +46,7 @@ class OCAnonymousServerRepository(
         return ServerInfo(
             ownCloudVersion = pairRemoteStatus.first.version,
             baseUrl = normalizeProtocolPrefix(trimWebdavSuffix(path), pairRemoteStatus.second),
-            authenticationMethods = listOfAuthenticationMethods,
+            authenticationMethods = authenticationMethod,
             isSecureConnection = pairRemoteStatus.second
         )
     }

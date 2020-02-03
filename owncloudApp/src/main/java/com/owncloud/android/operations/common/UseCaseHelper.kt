@@ -19,6 +19,7 @@
 package com.owncloud.android.operations.common
 
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.authentication.usecases.LoginAsyncUseCase
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.CheckPathExistenceUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoUseCase
@@ -29,12 +30,13 @@ import org.koin.core.inject
 
 /*
  * Helper to call usecases from java classes.
- * TODO: Remove this and call directly to usecases.
+ * TODO: Remove this and call directly to usecases from ViewModel.
  */
 class UseCaseHelper : KoinComponent {
     private val getUserInfoUseCase: GetUserInfoUseCase by inject()
     private val checkPathExistenceUseCase: CheckPathExistenceUseCase by inject()
     private val getServerInfoUseCase: GetServerInfoUseCase by inject()
+    private val loginAsyncUseCase: LoginAsyncUseCase by inject()
 
     fun getUserInfo(): UseCaseResult<UserInfo> = getUserInfoUseCase.execute(Unit)
 
@@ -43,4 +45,13 @@ class UseCaseHelper : KoinComponent {
 
     fun getServerInfo(serverUrl: String): UseCaseResult<ServerInfo> =
         getServerInfoUseCase.execute(GetServerInfoUseCase.Params(serverPath = serverUrl))
+
+    fun login(serverUrl: String, username: String, password: String) =
+        loginAsyncUseCase.execute(
+            LoginAsyncUseCase.Params(
+                serverPath = serverUrl,
+                username = username,
+                password = password
+            )
+        )
 }

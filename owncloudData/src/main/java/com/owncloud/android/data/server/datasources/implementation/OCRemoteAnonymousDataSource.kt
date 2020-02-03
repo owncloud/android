@@ -38,8 +38,7 @@ class OCRemoteAnonymousDataSource : RemoteAnonymousDatasource {
     }
 
     /* Basically, tries to access to the root folder without authorization and analyzes the response.*/
-    override fun getAuthenticationMethods(path: String): List<AuthenticationMethod> {
-        val listOfAuthenticationMethods: MutableList<AuthenticationMethod> = mutableListOf()
+    override fun getAuthenticationMethod(path: String): AuthenticationMethod {
         // Step 1: check whether the root folder exists, following redirections
         serverService = OCAnonymousServerService(path)
         var checkPathExistenceResult = serverService.checkPathExistence("", isUserLogged = false)
@@ -52,21 +51,16 @@ class OCRemoteAnonymousDataSource : RemoteAnonymousDatasource {
         }
 
         // Step 2: look for authentication methods
+        var authenticationMethod: AuthenticationMethod = AuthenticationMethod.NONE
         if (checkPathExistenceResult.httpCode == HttpConstants.HTTP_UNAUTHORIZED) {
-            val authHeaders = checkPathExistenceResult.authenticateHeaders
-            for (authHeader in authHeaders) {
-                if (authHeader.contains("basic")) {
-                    listOfAuthenticationMethods.add(AuthenticationMethod.BASIC_HTTP_AUTH)
-                }
-                if (authHeader.contains("bearer")) {
-                    listOfAuthenticationMethods.add(AuthenticationMethod.BEARER_TOKEN)
-                }
+            val authenticateHeaders = checkPathExistenceResult.authenticateHeaders
+            if (authenticateHeaders.contains("basic")) {
+                authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH
+            } else if (authenticateHeaders.contains("bearer")) {
+                authenticationMethod = AuthenticationMethod.BEARER_TOKEN
             }
-        } else if (checkPathExistenceResult.isSuccess) {
-            listOfAuthenticationMethods.add(AuthenticationMethod.NONE)
         }
-
-        return listOfAuthenticationMethods
+        return authenticationMethod
     }
 
     override fun getRemoteStatus(path: String): Pair<OwnCloudVersion, Boolean> {
