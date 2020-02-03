@@ -208,7 +208,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private int mAuthStatusIcon = 0;
 
-    private String mAuthToken = "";
+    private String mAccessToken = "";
     private String mRefreshToken = "";
     private AuthenticatorAsyncTask mAsyncTask;
 
@@ -581,7 +581,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             isPasswordExposed = savedInstanceState.getBoolean(KEY_PASSWORD_EXPOSED, false);
             mAuthStatusText = savedInstanceState.getString(KEY_AUTH_STATUS_TEXT);
             mAuthStatusIcon = savedInstanceState.getInt(KEY_AUTH_STATUS_ICON);
-            mAuthToken = savedInstanceState.getString(KEY_AUTH_TOKEN);
+            mAccessToken = savedInstanceState.getString(KEY_AUTH_TOKEN);
         }
 
         /// step 2 - set properties of UI elements (text, visibility, enabled...)
@@ -676,7 +676,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         outState.putBoolean(KEY_PASSWORD_EXPOSED, isPasswordVisible());
         outState.putInt(KEY_AUTH_STATUS_ICON, mAuthStatusIcon);
         outState.putString(KEY_AUTH_STATUS_TEXT, mAuthStatusText);
-        outState.putString(KEY_AUTH_TOKEN, mAuthToken);
+        outState.putString(KEY_AUTH_TOKEN, mAccessToken);
 
         /// authentication
         outState.putBoolean(KEY_AUTH_IS_FIRST_ATTEMPT_TAG, mIsFirstAuthAttempt);
@@ -712,7 +712,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         password
                 );
             } else if (OAUTH_TOKEN_TYPE.equals(mAuthTokenType)) {
-                credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, mAuthToken);
+                credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, mAccessToken);
             }
             accessRootFolder(credentials);
         }
@@ -1088,13 +1088,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             if (tokenResponse != null && tokenResponse.accessToken != null && tokenResponse.refreshToken != null) {
                 mAuthStateManager.updateAfterTokenResponse(tokenResponse, authorizationException);
-                mAuthToken = tokenResponse.accessToken;
+                mAccessToken = tokenResponse.accessToken;
                 mRefreshToken = tokenResponse.refreshToken;
 
                 // Validate token accessing to root folder / getting session
                 OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
                         tokenResponse.additionalParameters.get(OAuth2Constants.KEY_USER_ID),
-                        mAuthToken
+                        mAccessToken
                 );
 
                 accessRootFolder(credentials);
@@ -1395,14 +1395,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             /// time to test the retrieved access token on the ownCloud server
             Map<String, String> tokens = result.getData();
-            mAuthToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
+            mAccessToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
 
             mRefreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
 
             /// validate token accessing to root folder / getting session
             OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
                     tokens.get(OAuth2Constants.KEY_USER_ID),
-                    mAuthToken
+                    mAccessToken
             );
 
             accessRootFolder(credentials);
@@ -1565,7 +1565,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             intent.putExtra(AccountManager.KEY_USERDATA, username);
 
             if (isOAuth) {
-                mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
+                mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAccessToken);
             }
             /// add user data to the new account; TODO probably can be done in the last parameter 
             //      addAccountExplicitly, or in KEY_USERDATA
@@ -1620,7 +1620,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (!mUsernameInput.getText().toString().trim().equals(username)) {
             // fail - not a new account, but an existing one; disallow
             result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME);
-            mAuthToken = "";
+            mAccessToken = "";
             updateAuthStatusIconAndText(result);
             showAuthStatus();
             Timber.d(result.getLogMessage());
@@ -1659,10 +1659,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType()).
                 equals(mAuthTokenType)) { // OAuth
-            response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
+            response.putString(AccountManager.KEY_AUTHTOKEN, mAccessToken);
             // the next line is necessary, notifications are calling directly to the
             // AuthenticatorActivity to update, without AccountManager intervention
-            mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
+            mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAccessToken);
 
             if (OAuthSupported == null || OAuthSupported.equals("FALSE")) {
                 mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
