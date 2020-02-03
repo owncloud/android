@@ -8,12 +8,12 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,7 +47,7 @@ import java.util.List;
  */
 @Deprecated
 // TODO: Remove this operation. Get AuthenticationMethods from GetServerInfoUseCase
-public class DetectAuthenticationMethodOperation extends RemoteOperation<List<AuthenticationMethod>> {
+public class DetectAuthenticationMethodOperation extends RemoteOperation<AuthenticationMethod> {
 
     /**
      *  Performs the operation.
@@ -59,8 +59,8 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
      *  any, is requested by the server.
      */
     @Override
-    protected RemoteOperationResult<List<AuthenticationMethod>> run(OwnCloudClient client) {
-        ArrayList<AuthenticationMethod> allAvailableAuthMethods = new ArrayList<>();
+    protected RemoteOperationResult<AuthenticationMethod> run(OwnCloudClient client) {
+        AuthenticationMethod authenticationMethod = null;
 
         CheckPathExistenceOperation operation = new CheckPathExistenceOperation("",
                 false);
@@ -79,50 +79,31 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
 
         // Step 2: look for authentication methods
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
-            ArrayList<String> authHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
-            for (String authHeader : authHeaders) {
-                if (authHeader.startsWith("basic")) {
-                    allAvailableAuthMethods.add(AuthenticationMethod.BASIC_HTTP_AUTH);
-                } else if (authHeader.startsWith("bearer")) {
-                    allAvailableAuthMethods.add(AuthenticationMethod.BEARER_TOKEN);
-                }
+            String authenticateHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
+            if (authenticateHeaders.contains("basic")) {
+                authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH;
+            } else if (authenticateHeaders.contains("bearer")) {
+                authenticationMethod = AuthenticationMethod.BEARER_TOKEN;
             }
         } else if (resultFromExistenceCheck.isSuccess()) {
-            allAvailableAuthMethods.add(AuthenticationMethod.NONE);
+            authenticationMethod = AuthenticationMethod.NONE;
         }
 
         // Step 3: prepare result with available authentication methods
-        RemoteOperationResult<List<AuthenticationMethod>> result =
-                new RemoteOperationResult<>(resultFromExistenceCheck);
+        RemoteOperationResult<AuthenticationMethod> result = new RemoteOperationResult<>(resultFromExistenceCheck);
 
-        if (allAvailableAuthMethods.isEmpty()) {
+        if (authenticationMethod == null) {
             Timber.d("Authentication method not found: ");
         } else {
-            Timber.d("Authentication methods found:");
-            for (AuthenticationMethod authMetod : allAvailableAuthMethods) {
-                Timber.d(authenticationMethodToString(authMetod));
-            }
+            Timber.d("Authentication method:%s", authenticationMethod);
 
             result = new RemoteOperationResult<>(result.getHttpCode(), result.getHttpPhrase(), null);
             result.setSuccess(true);
         }
 
-        result.setData(allAvailableAuthMethods);
+        result.setData(authenticationMethod);
 
         return result;  // same result instance, so that other errors
         // can be handled by the caller transparently
-    }
-
-    private String authenticationMethodToString(AuthenticationMethod value) {
-        switch (value) {
-            case NONE:
-                return "NONE";
-            case BASIC_HTTP_AUTH:
-                return "BASIC_HTTP_AUTH";
-            case BEARER_TOKEN:
-                return "BEARER_TOKEN";
-            default:
-                return "UNKNOWN";
-        }
     }
 }

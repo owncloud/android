@@ -64,7 +64,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.domain.server.model.ServerInfo;
 import com.owncloud.android.domain.user.model.UserInfo;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -83,7 +82,6 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.users.RemoteUserInfo;
 import com.owncloud.android.operations.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
-import com.owncloud.android.operations.common.UseCaseHelper;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.LoadingDialog;
@@ -386,12 +384,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mServerInfo.mVersion = new OwnCloudVersion(ocVersion);
             }
 
-            ArrayList<String> authenticationMethodNames = savedInstanceState.
-                    getStringArrayList(KEY_SERVER_AUTH_METHOD);
+            String authenticationMethodName = savedInstanceState.getString(KEY_SERVER_AUTH_METHOD);
 
-            for (String authenticationMethodName : authenticationMethodNames) {
-                mServerInfo.mAuthMethods.add(AuthenticationMethod.valueOf(authenticationMethodName));
-            }
+            mServerInfo.mAuthMethod = (AuthenticationMethod.valueOf(authenticationMethodName));
         }
 
         /// step 2 - set properties of UI elements (text, visibility, enabled...)
@@ -590,14 +585,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             outState.putString(KEY_OC_VERSION, mServerInfo.mVersion.getVersion());
         }
 
-        ArrayList<String> authenticationMethodNames = new ArrayList<>();
+        String authenticationMethodNames = mServerInfo.mAuthMethod.name();
 
-        for (AuthenticationMethod authenticationMethod : mServerInfo.mAuthMethods) {
-
-            authenticationMethodNames.add(authenticationMethod.name());
-        }
-
-        outState.putStringArrayList(KEY_SERVER_AUTH_METHOD, authenticationMethodNames);
+        outState.putString(KEY_SERVER_AUTH_METHOD, authenticationMethodNames);
 
         /// Authentication PRE-fragment state
         outState.putBoolean(KEY_PASSWORD_EXPOSED, isPasswordVisible());
@@ -761,10 +751,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             Intent getServerInfoIntent = new Intent();
             getServerInfoIntent.setAction(OperationsService.ACTION_GET_SERVER_INFO);
-            getServerInfoIntent.putExtra(
-                    OperationsService.EXTRA_SERVER_URL,
-                    normalizeUrlSuffix(uri)
-            );
+            getServerInfoIntent.putExtra(OperationsService.EXTRA_SERVER_URL, normalizeUrlSuffix(uri));
             if (mOperationsServiceBinder != null) {
                 mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getServerInfoIntent);
             } else {
@@ -883,7 +870,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 username,
                 password
         );
-        accessRootFolder(credentials);
+        accessRootFolderBasicCredentials(username, password);
+    }
+
+    private void accessRootFolderBasicCredentials(String username, String password) {
+        mAsyncTask = new AuthenticatorAsyncTask(this);
+        Object[] params = {mServerInfo.mBaseUrl, username, password};
+        mAsyncTask.execute(params);
     }
 
     /**
@@ -1014,9 +1007,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerIsValid = true;
 
             // Update mAuthTokenType depending on the server info
-            if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BEARER_TOKEN)) {
+            if (mServerInfo.mAuthMethod.equals(AuthenticationMethod.BEARER_TOKEN)) {
                 mAuthTokenType = OAUTH_TOKEN_TYPE; // OAuth2
-            } else if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BASIC_HTTP_AUTH)) {
+            } else if (mServerInfo.mAuthMethod.equals(AuthenticationMethod.BASIC_HTTP_AUTH)) {
                 mAuthTokenType = BASIC_TOKEN_TYPE; // Basic
             }
 

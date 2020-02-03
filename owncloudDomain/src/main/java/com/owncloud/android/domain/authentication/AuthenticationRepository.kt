@@ -17,11 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.server.model
+package com.owncloud.android.domain.authentication
 
-data class ServerInfo(
-    val ownCloudVersion: String,
-    val baseUrl: String,
-    val authenticationMethods: AuthenticationMethod,
-    val isSecureConnection: Boolean
-)
+interface AuthenticationRepository {
+    fun login(serverUrl: String, username: String, password: String)
+}

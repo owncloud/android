@@ -32,9 +32,6 @@ import com.owncloud.android.lib.resources.server.GetRemoteStatusOperation;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import timber.log.Timber;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Get basic information from an ownCloud server given its URL.
  * <p>
@@ -80,23 +77,22 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
             mResultData.mVersion = remoteStatusResult.getData();
             mResultData.mIsSslConn = (remoteStatusResult.getCode() == ResultCode.OK_SSL);
             mResultData.mBaseUrl = normalizeProtocolPrefix(mUrl, mResultData.mIsSslConn);
-            final RemoteOperationResult<List<AuthenticationMethod>> detectAuthResult =
-                    detectAuthorizationMethod(client);
+            final RemoteOperationResult<AuthenticationMethod> detectAuthResult = detectAuthorizationMethod(client);
 
             // third: merge results
             if (detectAuthResult.isSuccess()) {
-                mResultData.mAuthMethods = detectAuthResult.getData();
+                mResultData.mAuthMethod = detectAuthResult.getData();
                 result.setData(mResultData);
             } else {
                 result = new RemoteOperationResult<>(detectAuthResult);
-                mResultData.mAuthMethods = detectAuthResult.getData();
+                mResultData.mAuthMethod = detectAuthResult.getData();
                 result.setData(mResultData);
             }
         }
         return result;
     }
 
-    private RemoteOperationResult<List<AuthenticationMethod>> detectAuthorizationMethod(OwnCloudClient client) {
+    private RemoteOperationResult<AuthenticationMethod> detectAuthorizationMethod(OwnCloudClient client) {
         Timber.d("Trying empty authorization to detect authentication method");
         DetectAuthenticationMethodOperation operation = new DetectAuthenticationMethodOperation();
         return operation.execute(client);
@@ -133,7 +129,7 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
     public static class ServerInfo {
         public OwnCloudVersion mVersion = null;
         public String mBaseUrl = "";
-        public List<AuthenticationMethod> mAuthMethods = new ArrayList<>();
+        public AuthenticationMethod mAuthMethod = null;
         public boolean mIsSslConn = false;
     }
 }

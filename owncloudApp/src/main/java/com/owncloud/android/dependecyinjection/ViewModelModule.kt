@@ -19,6 +19,7 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -32,4 +33,6 @@ val viewModelModule = module {
     viewModel { (filePath: String, accountName: String) ->
         OCShareViewModel(filePath, accountName, get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
+
+    viewModel { OCAuthenticationViewModel(get(), get(), get()) }
 }

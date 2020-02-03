@@ -16,12 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.authentication.datasources
 
-package com.owncloud.android.domain.server.model
-
-data class ServerInfo(
-    val ownCloudVersion: String,
-    val baseUrl: String,
-    val authenticationMethods: AuthenticationMethod,
-    val isSecureConnection: Boolean
-)
+interface RemoteAuthenticationDataSource {
+    fun login(serverPath: String, username: String, password: String)
+}

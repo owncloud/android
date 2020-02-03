@@ -6,7 +6,7 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion
 interface RemoteAnonymousDatasource {
     fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean
 
-    fun getAuthenticationMethods(path: String): List<AuthenticationMethod>
+    fun getAuthenticationMethod(path: String): AuthenticationMethod
 
     /**
      * Returns a Pair<OwncloudVersion, isSSLConnection>

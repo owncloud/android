@@ -19,6 +19,7 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.domain.authentication.usecases.LoginAsyncUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
@@ -37,6 +38,9 @@ import com.owncloud.android.domain.user.usecases.GetUserInfoUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
+    // Authentication
+    factory { LoginAsyncUseCase(get()) }
+
     // Capabilities
     factory { GetCapabilitiesAsLiveDataUseCase(get()) }
     factory { GetStoredCapabilitiesUseCase(get()) }
