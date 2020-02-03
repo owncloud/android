@@ -44,13 +44,11 @@ import java.lang.ref.WeakReference;
 public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperationResult> {
 
     private Context mContext;
-    private UseCaseHelper mUseCaseHelper;
     private final WeakReference<OnAuthenticatorTaskListener> mListener;
 
     AuthenticatorAsyncTask(Activity activity) {
         mContext = activity.getApplicationContext();
         mListener = new WeakReference<>((OnAuthenticatorTaskListener) activity);
-        mUseCaseHelper = new UseCaseHelper();
     }
 
     @Override
