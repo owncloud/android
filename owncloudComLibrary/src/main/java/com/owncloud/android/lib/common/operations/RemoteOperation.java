@@ -9,7 +9,7 @@ import android.os.Handler;
 
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import okhttp3.OkHttpClient;
 import timber.log.Timber;
@@ -134,7 +134,7 @@ public abstract class RemoteOperation<T> implements Runnable {
         if (mClient == null) {
             if (mAccount != null && mContext != null) {
                 OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
-                mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                mClient = SingleSessionManager.getDefaultSingleton().
                         getClientFor(ocAccount, mContext);
             } else {
                 throw new IllegalStateException("Trying to run a remote operation " +

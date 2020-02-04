@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2019 ownCloud GmbH.
+ *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
 
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
 import com.owncloud.android.lib.common.http.interceptors.RequestHeaderInterceptor;
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
@@ -132,7 +132,7 @@ public class HttpClient {
     private static HttpInterceptor getOkHttpInterceptor() {
         if (sOkHttpInterceptor == null) {
             sOkHttpInterceptor = new HttpInterceptor();
-            addHeaderForAllRequests(HttpConstants.USER_AGENT_HEADER, OwnCloudClientManagerFactory.getUserAgent());
+            addHeaderForAllRequests(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
             addHeaderForAllRequests(HttpConstants.PARAM_SINGLE_COOKIE_HEADER, "true");
             addHeaderForAllRequests(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
         }
