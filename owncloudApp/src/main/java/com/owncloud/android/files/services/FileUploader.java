@@ -9,7 +9,7 @@
  * @author David González Verdugo
  * <p>
  * Copyright (C) 2012 Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -58,13 +58,12 @@ import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.RemoveChunksFolderOperation;
 import com.owncloud.android.operations.UploadFileOperation;
@@ -848,7 +847,7 @@ public class FileUploader extends Service
                         mCurrentAccount,
                         this
                 );
-                mUploadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                mUploadClient = SingleSessionManager.getDefaultSingleton().
                         getClientFor(ocAccount, this);
 
                 /// perform the upload

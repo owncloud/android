@@ -5,7 +5,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,8 +43,7 @@ import com.owncloud.android.dependecyinjection.repositoryModule
 import com.owncloud.android.dependecyinjection.useCaseModule
 import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy
+import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfiguration
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry
 import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider
@@ -76,11 +75,7 @@ class MainApp : MultiDexApplication() {
 
         OwnCloudClient.setContext(appContext)
 
-        OwnCloudClientManagerFactory.setUserAgent(userAgent)
-
-        OwnCloudClientManagerFactory.setDefaultPolicy(
-            Policy.SINGLE_SESSION_PER_ACCOUNT
-        )
+        SingleSessionManager.setUserAgent(userAgent)
 
         val oauth2Provider = OwnCloudOAuth2Provider()
         oauth2Provider.authorizationCodeEndpointPath = getString(R.string.oauth2_url_endpoint_auth)

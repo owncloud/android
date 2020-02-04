@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  * <p>
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,7 +33,7 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.IndexedForest;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.utils.Extras;
@@ -116,7 +116,7 @@ class SyncFolderHandler extends Handler {
 
                 // always get client from client manager, to get fresh credentials in case of update
                 OwnCloudAccount ocAccount = new OwnCloudAccount(account, mService);
-                mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
                         getClientFor(ocAccount, mService);
 
                 result = mCurrentSyncOperation.execute(mOwnCloudClient, mStorageManager);
