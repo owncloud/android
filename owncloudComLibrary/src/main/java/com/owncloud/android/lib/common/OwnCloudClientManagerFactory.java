@@ -25,7 +25,7 @@ package com.owncloud.android.lib.common;
 
 public class OwnCloudClientManagerFactory {
 
-    private static Policy sDefaultPolicy = Policy.ALWAYS_NEW_CLIENT;
+    private static Policy sDefaultPolicy = Policy.NEW_CLIENT;
     private static OwnCloudClientManager sDefaultSingleton;
     private static String sUserAgent;
 
@@ -35,7 +35,7 @@ public class OwnCloudClientManagerFactory {
 
     private static OwnCloudClientManager newOwnCloudClientManager(Policy policy) {
         switch (policy) {
-            case ALWAYS_NEW_CLIENT:
+            case NEW_CLIENT:
                 return new SimpleFactoryManager();
 
             case SINGLE_SESSION_PER_ACCOUNT:
@@ -75,11 +75,11 @@ public class OwnCloudClientManagerFactory {
         if (sDefaultSingleton == null) {
             return false;
         }
-        return policy == Policy.ALWAYS_NEW_CLIENT && !(sDefaultSingleton instanceof SimpleFactoryManager);
+        return policy == Policy.NEW_CLIENT && !(sDefaultSingleton instanceof SimpleFactoryManager);
     }
 
     public enum Policy {
-        ALWAYS_NEW_CLIENT,
+        NEW_CLIENT,
         SINGLE_SESSION_PER_ACCOUNT
     }
 }
