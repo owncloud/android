@@ -425,6 +425,15 @@ public class OperationsService extends Service {
                         } else {
                             OwnCloudCredentials credentials = null;
                             ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
+                            if (ocAccount.getSavedAccount() == null) {
+                                OwnCloudClientManagerFactory.setDefaultPolicy(
+                                        OwnCloudClientManagerFactory.Policy.NEW_CLIENT
+                                );
+                            } else {
+                                OwnCloudClientManagerFactory.setDefaultPolicy(
+                                        OwnCloudClientManagerFactory.Policy.SINGLE_SESSION_PER_ACCOUNT
+                                );
+                            }
                             mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
                             mStorageManager = null;
