@@ -46,7 +46,7 @@ class OCAnonymousServerRepository(
         return ServerInfo(
             ownCloudVersion = pairRemoteStatus.first.version,
             baseUrl = normalizeProtocolPrefix(trimWebdavSuffix(path), pairRemoteStatus.second),
-            authenticationMethods = authenticationMethod,
+            authenticationMethod = authenticationMethod,
             isSecureConnection = pairRemoteStatus.second
         )
     }

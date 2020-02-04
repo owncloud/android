@@ -22,6 +22,6 @@ package com.owncloud.android.domain.server.model
 data class ServerInfo(
     val ownCloudVersion: String,
     val baseUrl: String,
-    val authenticationMethods: AuthenticationMethod,
+    val authenticationMethod: AuthenticationMethod,
     val isSecureConnection: Boolean
 )
