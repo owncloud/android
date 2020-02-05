@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2019 ownCloud GmbH.
+ *   Copyright (C) 2020 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -53,9 +53,8 @@ import static com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID
 public class OwnCloudClient extends HttpClient {
 
     public static final String WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
-    public static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
+    private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     public static final String STATUS_PATH = "/status.php";
-    public static final String FILES_WEB_PATH = "/index.php/apps/files";
 
     private static final int MAX_REDIRECTIONS_COUNT = 3;
     private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
@@ -68,13 +67,8 @@ public class OwnCloudClient extends HttpClient {
     private OwnCloudVersion mVersion = null;
     private OwnCloudAccount mAccount;
 
-    /**
-     * {@link @OwnCloudClientManager} holding a reference to this object and delivering it to callers; might be
-     * NULL
-     */
-    private OwnCloudClientManager mOwnCloudClientManager = null;
+    private SingleSessionManager mSingleSessionManager = null;
 
-    private String mRedirectedLocation;
     private boolean mFollowRedirects;
 
     public OwnCloudClient(Uri baseUri) {
@@ -97,7 +91,7 @@ public class OwnCloudClient extends HttpClient {
         mCredentials.applyTo(this);
     }
 
-    public void applyCredentials() {
+    void applyCredentials() {
         mCredentials.applyTo(this);
     }
 
@@ -110,7 +104,6 @@ public class OwnCloudClient extends HttpClient {
             setRequestId(method);
 
             status = method.execute();
-            checkFirstRedirection(method);
 
             if (mFollowRedirects) {
                 status = followRedirection(method).getLastStatus();
@@ -123,13 +116,6 @@ public class OwnCloudClient extends HttpClient {
         } while (repeatWithFreshCredentials);
 
         return status;
-    }
-
-    private void checkFirstRedirection(HttpBaseMethod method) {
-        final String location = method.getResponseHeader(HttpConstants.LOCATION_HEADER_LOWER);
-        if (location != null && !location.isEmpty()) {
-            mRedirectedLocation = location;
-        }
     }
 
     private int executeRedirectedHttpMethod(HttpBaseMethod method) throws Exception {
@@ -360,10 +346,10 @@ public class OwnCloudClient extends HttpClient {
                     }
                 }
 
-                if (!credentialsWereRefreshed && mOwnCloudClientManager != null) {
+                if (!credentialsWereRefreshed && mSingleSessionManager != null) {
                     // if credentials are not refreshed, client must be removed
                     // from the OwnCloudClientManager to prevent it is reused once and again
-                    mOwnCloudClientManager.removeClientFor(mAccount);
+                    mSingleSessionManager.removeClientFor(mAccount);
                 }
             }
             // else: onExecute will finish with status 401
@@ -395,7 +381,7 @@ public class OwnCloudClient extends HttpClient {
 
     /**
      * Invalidates credentials stored for the given account in the system  {@link AccountManager} and in
-     * current {@link OwnCloudClientManagerFactory#getDefaultSingleton()} instance.
+     * current {@link SingleSessionManager#getDefaultSingleton()} instance.
      * <p>
      * {@link #shouldInvalidateAccountCredentials(int)} should be called first.
      *
@@ -409,10 +395,6 @@ public class OwnCloudClient extends HttpClient {
         );
         am.clearPassword(mAccount.getSavedAccount()); // being strict, only needed for Basic Auth credentials
         return true;
-    }
-
-    void setOwnCloudClientManager(OwnCloudClientManager clientManager) {
-        mOwnCloudClientManager = clientManager;
     }
 
     public boolean followRedirects() {
