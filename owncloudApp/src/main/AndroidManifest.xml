@@ -20,9 +20,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.owncloud.android">
 
-    <uses-sdk
-        tools:overrideLibrary="android.support.customtabs" />
-
     <!--
          GET_ACCOUNTS is needed for API < 23.
         For API >= 23 results in the addition of CONTACTS group to the list of permissions that may be

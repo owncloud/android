@@ -179,7 +179,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             accessToken = accountManager.peekAuthToken(account, authTokenType);
             if (accessToken == null && canBeRefreshed(authTokenType)) {
                 refreshToken(account, authTokenType, accountManager, accountAuthenticatorResponse);
-                return null;  // We return null because of the callbacks used within refreshToken methodqq
+                return null;  // We return null because of the callbacks used within refreshToken method
             }
         }
 
@@ -308,28 +308,20 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private void refreshToken(Account account, String authTokenType, AccountManager accountManager,
                               AccountAuthenticatorResponse accountAuthenticatorResponse) {
 
+        // Prepare everything to perform the token request
+
         String refreshToken = accountManager.getUserData(
                 account,
                 AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
         );
-        Timber.d("Get OAuth2 refresh token from account: %s, to exchange it for new access and refresh tokens",
-                refreshToken);
 
         if (refreshToken == null || refreshToken.length() <= 0) {
             Timber.w("No refresh token stored for silent renewal of access token");
             return;
         }
 
-        String scope = accountManager.getUserData(
-                account,
-                AccountUtils.Constants.KEY_OAUTH2_SCOPE
-        );
-
-        ClientAuthentication clientAuth = new ClientSecretBasic(mContext.getString(R.string.oauth2_client_secret));
-
-        AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
-        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder());
-        AuthorizationService authService = new AuthorizationService(mContext, appAuthConfigurationBuilder.build());
+        Timber.d("Get OAuth2 refresh token from account: %s, to exchange it for new access and refresh tokens",
+                refreshToken);
 
         String baseUrl = accountManager.getUserData(
                 account,
@@ -341,6 +333,11 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
         );
 
+        String scope = accountManager.getUserData(
+                account,
+                AccountUtils.Constants.KEY_OAUTH2_SCOPE
+        );
+
         TokenRequest tokenRequest = new TokenRequest.Builder(
                 serviceConfiguration,
                 mContext.getString(R.string.oauth2_client_id))
@@ -348,6 +345,14 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 .setScope(scope)
                 .setRefreshToken(refreshToken)
                 .build();
+
+        ClientAuthentication clientAuth = new ClientSecretBasic(mContext.getString(R.string.oauth2_client_secret));
+
+        AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
+        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder());
+        AuthorizationService authService = new AuthorizationService(mContext, appAuthConfigurationBuilder.build());
+
+        // Let's perform the token request
 
         authService.performTokenRequest(
                 tokenRequest,

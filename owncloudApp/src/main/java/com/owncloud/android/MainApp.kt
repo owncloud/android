@@ -44,9 +44,6 @@ import com.owncloud.android.dependecyinjection.useCaseModule
 import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfiguration
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry
-import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider
 import com.owncloud.android.lib.common.utils.LoggingHelper
 import com.owncloud.android.ui.activity.FingerprintActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
@@ -76,20 +73,6 @@ class MainApp : MultiDexApplication() {
         OwnCloudClient.setContext(appContext)
 
         SingleSessionManager.setUserAgent(userAgent)
-
-        val oauth2Provider = OwnCloudOAuth2Provider()
-        oauth2Provider.authorizationCodeEndpointPath = getString(R.string.oauth2_url_endpoint_auth)
-        oauth2Provider.accessTokenEndpointPath = getString(R.string.oauth2_url_endpoint_access)
-        oauth2Provider.clientConfiguration = OAuth2ClientConfiguration(
-            getString(R.string.oauth2_client_id),
-            getString(R.string.oauth2_client_secret),
-            getString(R.string.oauth2_redirect_uri)
-        )
-
-        OAuth2ProvidersRegistry.getInstance().registerProvider(
-            OwnCloudOAuth2Provider.NAME,
-            oauth2Provider
-        )
 
         // initialise thumbnails cache on background thread
         ThumbnailsCacheManager.InitDiskCacheTask().execute()
