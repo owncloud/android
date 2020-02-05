@@ -104,7 +104,6 @@ public class OwnCloudClient extends HttpClient {
             setRequestId(method);
 
             status = method.execute();
-            checkFirstRedirection(method);
 
             if (mFollowRedirects) {
                 status = followRedirection(method).getLastStatus();
@@ -117,10 +116,6 @@ public class OwnCloudClient extends HttpClient {
         } while (repeatWithFreshCredentials);
 
         return status;
-    }
-
-    private void checkFirstRedirection(HttpBaseMethod method) {
-        final String location = method.getResponseHeader(HttpConstants.LOCATION_HEADER_LOWER);
     }
 
     private int executeRedirectedHttpMethod(HttpBaseMethod method) throws Exception {
