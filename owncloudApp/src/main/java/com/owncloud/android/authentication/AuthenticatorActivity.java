@@ -208,8 +208,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private int mAuthStatusIcon = 0;
 
+    // OAuth2 fields
     private String mAccessToken = "";
     private String mRefreshToken = "";
+    private String mScope = "";
+
     private AuthenticatorAsyncTask mAsyncTask;
 
     private boolean mIsFirstAuthAttempt;
@@ -237,7 +240,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     };
 
     private AuthorizationService mAuthService;
-    private AuthStateManager mAuthStateManager;
 
     /**
      * {@inheritDoc}
@@ -334,8 +336,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mCustomTabPackageName != null) {
             CustomTabsClient.bindCustomTabsService(this, mCustomTabPackageName, mCustomTabServiceConnection);
         }
-
-        mAuthStateManager = AuthStateManager.getInstance(this);
     }
 
     @Override
@@ -1054,12 +1054,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         AuthorizationResponse authorizationResponse = AuthorizationResponse.fromIntent(intent);
         AuthorizationException authorizationException = AuthorizationException.fromIntent(intent);
 
-        if (authorizationResponse != null || authorizationException != null) {  // Save authorization state
-            mAuthStateManager.updateAfterAuthorization(authorizationResponse, authorizationException);
-        }
-
         if (authorizationResponse != null && authorizationResponse.authorizationCode != null) {
-            mAuthStateManager.updateAfterAuthorization(authorizationResponse, authorizationException);
             exchangeAuthorizationCodeForTokens(authorizationResponse);
         } else if (authorizationException != null) {
             updateOAuthStatusIconAndText(authorizationException);
@@ -1082,14 +1077,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private TokenResponseCallback handleExchangeAuthorizationCodeForTokensResponse() {
         return (tokenResponse, authorizationException) -> {
-            if (tokenResponse != null || authorizationException != null) {  // Save authorization state
-                mAuthStateManager.updateAfterTokenResponse(tokenResponse, authorizationException);
-            }
-
             if (tokenResponse != null && tokenResponse.accessToken != null && tokenResponse.refreshToken != null) {
-                mAuthStateManager.updateAfterTokenResponse(tokenResponse, authorizationException);
                 mAccessToken = tokenResponse.accessToken;
                 mRefreshToken = tokenResponse.refreshToken;
+                mScope = tokenResponse.scope;
 
                 // Validate token accessing to root folder / getting session
                 OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
@@ -1591,6 +1582,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             if (isOAuth) {
                 mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
                 mAccountMgr.setUserData(mAccount, Constants.KEY_OAUTH2_REFRESH_TOKEN, mRefreshToken);
+                mAccountMgr.setUserData(mAccount, Constants.KEY_OAUTH2_SCOPE, mScope);
             }
 
             setAccountAuthenticatorResult(intent.getExtras());
