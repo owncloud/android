@@ -319,5 +319,10 @@ public class AccountUtils {
          * OAuth2 refresh token
          **/
         public static final String KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token";
+
+        /**
+         * OAuth2 scope
+         */
+        public static final String KEY_OAUTH2_SCOPE = "oc_oauth2_scope";
     }
 }

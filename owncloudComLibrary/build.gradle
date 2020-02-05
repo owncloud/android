@@ -25,6 +25,8 @@ android {
 
         versionCode = 10000401
         versionName = "1.0.4.1"
+
+        manifestPlaceholders = [appAuthRedirectScheme: 'oc']
     }
 
     lintOptions {
