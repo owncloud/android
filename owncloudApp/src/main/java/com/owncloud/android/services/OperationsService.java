@@ -5,7 +5,7 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,8 +24,6 @@ package com.owncloud.android.services;
 
 import android.accounts.Account;
 import android.accounts.AccountsException;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
@@ -44,8 +42,8 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
@@ -199,14 +197,7 @@ public class OperationsService extends Service {
     public void onDestroy() {
         Timber.v("Destroying service");
         // Saving cookies
-        try {
-            OwnCloudClientManagerFactory.getDefaultSingleton().
-                    saveAllClients(this, MainApp.Companion.getAccountType());
-
-            // TODO - get rid of these exceptions
-        } catch (AccountNotFoundException | AuthenticatorException | OperationCanceledException | IOException e) {
-            Timber.e(e);
-        }
+        SingleSessionManager.getDefaultSingleton().saveAllClients(this, MainApp.Companion.getAccountType());
 
         mUndispatchedFinishedOperations.clear();
 
@@ -254,7 +245,7 @@ public class OperationsService extends Service {
 
         private ServiceHandler mServiceHandler;
 
-        public OperationsServiceBinder(ServiceHandler serviceHandler) {
+        OperationsServiceBinder(ServiceHandler serviceHandler) {
             mServiceHandler = serviceHandler;
         }
 
@@ -268,7 +259,7 @@ public class OperationsService extends Service {
             mSyncFolderHandler.cancel(account, file);
         }
 
-        public void clearListeners() {
+        void clearListeners() {
             mBoundListeners.clear();
         }
 
@@ -409,7 +400,7 @@ public class OperationsService extends Service {
                         OwnCloudAccount ocAccount;
                         if (mLastTarget.mAccount != null) {
                             ocAccount = new OwnCloudAccount(mLastTarget.mAccount, mService);
-                            mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                            mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
 
                             OwnCloudVersion version = com.owncloud.android.authentication.AccountUtils.getServerVersion(
@@ -425,8 +416,17 @@ public class OperationsService extends Service {
                         } else {
                             OwnCloudCredentials credentials = null;
                             ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
-                            mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                                    getClientFor(ocAccount, mService);
+
+                            if (currentOperation instanceof GetServerInfoOperation) { // Use clean client
+                                mOwnCloudClient = OwnCloudClientFactory.createOwnCloudClient(
+                                        ocAccount.getBaseUri(),
+                                        mService,
+                                        true);
+                            } else {
+                                mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
+                                        getClientFor(ocAccount, mService);
+                            }
+
                             mStorageManager = null;
                         }
                     }

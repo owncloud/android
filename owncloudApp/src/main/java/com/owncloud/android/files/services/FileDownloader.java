@@ -5,7 +5,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * Copyright (C) 2012 Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,7 +49,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -68,7 +68,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -459,7 +458,7 @@ public class FileDownloader extends Service
                         mCurrentAccount,
                         this
                 );
-                mDownloadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                mDownloadClient = SingleSessionManager.getDefaultSingleton().
                         getClientFor(ocAccount, this);
 
                 /// perform the download

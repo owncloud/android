@@ -4,7 +4,7 @@
  * @author Tobias Kaminsky
  * @author David A. Velasco
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -41,7 +41,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -176,7 +176,7 @@ public class ThumbnailsCacheManager {
                             mAccount,
                             MainApp.Companion.getAppContext()
                     );
-                    mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                    mClient = SingleSessionManager.getDefaultSingleton().
                             getClientFor(ocAccount, MainApp.Companion.getAppContext());
                 }
 
@@ -428,7 +428,7 @@ public class ThumbnailsCacheManager {
             try {
                 OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount,
                         MainApp.Companion.getAppContext());
-                mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                mClient = SingleSessionManager.getDefaultSingleton().
                         getClientFor(ocAccount, MainApp.Companion.getAppContext());
 
                 mUsername = mAccount.name;

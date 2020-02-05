@@ -9,7 +9,7 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -72,7 +72,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
@@ -1587,7 +1587,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         // remove managed clients for this account to enforce creation with fresh credentials
         OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, this);
-        OwnCloudClientManagerFactory.getDefaultSingleton().removeClientFor(ocAccount);
+        SingleSessionManager.getDefaultSingleton().removeClientFor(ocAccount);
 
         setAccountAuthenticatorResult(response);
         final Intent intent = new Intent();
