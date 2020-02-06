@@ -28,7 +28,7 @@ android {
 
         multiDexEnabled true
 
-        manifestPlaceholders = [appAuthRedirectScheme: 'oc']
+        manifestPlaceholders = [appAuthRedirectScheme: '']
     }
 
     buildTypes {

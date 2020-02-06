@@ -167,7 +167,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             return e.getFailureBundle();
         }
 
-        String accessToken = "";
+        String accessToken;
 
         /// check if required token is stored
         final AccountManager accountManager = AccountManager.get(mContext);
@@ -309,13 +309,12 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                               AccountAuthenticatorResponse accountAuthenticatorResponse) {
 
         // Prepare everything to perform the token request
-
         String refreshToken = accountManager.getUserData(
                 account,
                 AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
         );
 
-        if (refreshToken == null || refreshToken.length() <= 0) {
+        if (refreshToken == null || refreshToken.isEmpty()) {
             Timber.w("No refresh token stored for silent renewal of access token");
             return;
         }
@@ -340,8 +339,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         TokenRequest tokenRequest = new TokenRequest.Builder(
                 serviceConfiguration,
-                mContext.getString(R.string.oauth2_client_id))
-                .setGrantType(GrantTypeValues.REFRESH_TOKEN)
+                mContext.getString(R.string.oauth2_client_id)
+        ).setGrantType(GrantTypeValues.REFRESH_TOKEN)
                 .setScope(scope)
                 .setRefreshToken(refreshToken)
                 .build();
@@ -353,18 +352,13 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         AuthorizationService authService = new AuthorizationService(mContext, appAuthConfigurationBuilder.build());
 
         // Let's perform the token request
-
         authService.performTokenRequest(
                 tokenRequest,
                 clientAuth,
                 (tokenResponse, authorizationException) -> {
-                    String newAccessToken = "";
-                    String newRefreshToken = "";
-
                     if (tokenResponse != null && tokenResponse.accessToken != null &&
                             tokenResponse.refreshToken != null) {
-
-                        newAccessToken = tokenResponse.accessToken;
+                        String newAccessToken = tokenResponse.accessToken;
                         Timber.d("Set OAuth2 new access token in account: %s", newAccessToken);
                         accountManager.setAuthToken(account, authTokenType, newAccessToken);
 
@@ -374,7 +368,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                         result.putString(AccountManager.KEY_AUTHTOKEN, newAccessToken);
                         accountAuthenticatorResponse.onResult(result);
 
-                        newRefreshToken = tokenResponse.refreshToken;
+                        String newRefreshToken = tokenResponse.refreshToken;
                         Timber.d("Set OAuth2 new refresh token in account: %s", newRefreshToken);
                         accountManager.setUserData(
                                 account,
