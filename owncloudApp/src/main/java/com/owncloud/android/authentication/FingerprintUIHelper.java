@@ -16,7 +16,7 @@
  * Modifications
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  */
 
 package com.owncloud.android.authentication;

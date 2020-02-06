@@ -17,7 +17,7 @@
  *
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  */
 
 package com.owncloud.android.ui.dialog;
