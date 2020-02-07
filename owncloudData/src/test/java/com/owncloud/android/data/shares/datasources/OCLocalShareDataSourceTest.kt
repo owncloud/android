@@ -37,7 +37,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class OCLocalDataSourceTest {
+class OCLocalShareDataSourceTest {
     private lateinit var ocLocalSharesDataSource: OCLocalShareDataSource
     private val ocSharesDao = mockkClass(OCShareDao::class)
     private val ocShareMapper = OCShareMapper()

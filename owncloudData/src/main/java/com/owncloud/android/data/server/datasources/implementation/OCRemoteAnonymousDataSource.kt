@@ -19,34 +19,27 @@
 
 package com.owncloud.android.data.server.datasources.implementation
 
+import android.net.Uri
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.server.datasources.RemoteAnonymousDatasource
 import com.owncloud.android.data.server.network.OCAnonymousServerService
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.server.AnonymousService
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 
-class OCRemoteAnonymousDataSource : RemoteAnonymousDatasource {
-    private lateinit var serverService: OCAnonymousServerService
-
-    override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean {
-        serverService = OCAnonymousServerService(path)
-        executeRemoteOperation {
-            serverService.checkPathExistence(path = path, isUserLogged = checkUserCredentials)
-        }.let { return it == Any() }
-    }
+class OCRemoteAnonymousDataSource(
+    private val anonymousService: AnonymousService
+) : RemoteAnonymousDatasource {
 
     /* Basically, tries to access to the root folder without authorization and analyzes the response.*/
     override fun getAuthenticationMethod(path: String): AuthenticationMethod {
         // Step 1: check whether the root folder exists, following redirections
-        serverService = OCAnonymousServerService(path)
-        var checkPathExistenceResult = serverService.checkPathExistence("", isUserLogged = false)
+        var checkPathExistenceResult = anonymousService.checkPathExistence(path, isUserLogged = false)
         var redirectionLocation = checkPathExistenceResult.redirectedLocation
         while (!redirectionLocation.isNullOrEmpty()) {
-            serverService = OCAnonymousServerService(redirectionLocation)
-            //serverService.client.baseUri = Uri.parse(redirectionLocation)
-            checkPathExistenceResult = serverService.checkPathExistence("", isUserLogged = false)
+            checkPathExistenceResult = anonymousService.checkPathExistence(redirectionLocation, isUserLogged = false)
             redirectionLocation = checkPathExistenceResult.redirectedLocation
         }
 
@@ -64,8 +57,7 @@ class OCRemoteAnonymousDataSource : RemoteAnonymousDatasource {
     }
 
     override fun getRemoteStatus(path: String): Pair<OwnCloudVersion, Boolean> {
-        serverService = OCAnonymousServerService(path)
-        val remoteStatusResult = serverService.getRemoteStatus(path)
+        val remoteStatusResult = anonymousService.getRemoteStatus(path)
 
         val ownCloudVersion = executeRemoteOperation {
             remoteStatusResult

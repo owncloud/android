@@ -28,8 +28,6 @@ import java.util.Locale
 class OCAnonymousServerRepository(
     private val remoteAnonymousDatasource: RemoteAnonymousDatasource
 ) : AnonymousServerRepository {
-    override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
-        remoteAnonymousDatasource.checkPathExistence(path, userLogged)
 
     override fun getServerInfo(path: String): ServerInfo {
         // First step: check the status of the server (including its version)
