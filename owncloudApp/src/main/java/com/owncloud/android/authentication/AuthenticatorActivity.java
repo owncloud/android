@@ -891,8 +891,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showAuthStatus();
 
         AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-                Uri.parse("https://oidc-workshop.owncloud-demo.com/signin/v1/identifier/_/authorize"), // auth endpoint
-                Uri.parse("https://oidc-workshop.owncloud-demo.com/konnect/v1/token") // token endpoint
+                Uri.parse("auth_endpoint"), // auth endpoint
+                Uri.parse("token_endpoint") // token endpoint
         );
 
         String clientId = getString(R.string.oauth2_client_id);
@@ -902,7 +902,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 clientId,
                 ResponseTypeValues.CODE,
                 redirectUri
-        ).setScope("openid offline_access");
+        ).setScope("openid offline_access email");
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
         appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(this));

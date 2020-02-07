@@ -324,8 +324,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         );
 
         AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-                Uri.parse("https://oidc-workshop.owncloud-demo.com/signin/v1/identifier/_/authorize"), // auth endpoint
-                Uri.parse("https://oidc-workshop.owncloud-demo.com/konnect/v1/token") // token endpoint
+                Uri.parse("auth_endpoint"), // auth endpoint
+                Uri.parse("token_endpoint") // token endpoint
         );
 
         String scope = accountManager.getUserData(
