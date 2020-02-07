@@ -32,7 +32,6 @@ import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
-import com.owncloud.android.operations.common.UseCaseHelper;
 
 import java.lang.ref.WeakReference;
 
