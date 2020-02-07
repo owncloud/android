@@ -32,6 +32,8 @@ import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation;
 import com.owncloud.android.lib.resources.users.GetUserInfoRemoteOperation;
+import com.owncloud.android.operations.common.UseCaseHelper;
+import timber.log.Timber;
 
 import java.lang.ref.WeakReference;
 
@@ -43,11 +45,13 @@ import java.lang.ref.WeakReference;
 public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperationResult> {
 
     private Context mContext;
+    private UseCaseHelper mUseCaseHelper;
     private final WeakReference<OnAuthenticatorTaskListener> mListener;
 
     AuthenticatorAsyncTask(Activity activity) {
         mContext = activity.getApplicationContext();
         mListener = new WeakReference<>((OnAuthenticatorTaskListener) activity);
+        mUseCaseHelper = new UseCaseHelper();
     }
 
     @Override
@@ -57,7 +61,7 @@ public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperat
         if (params != null && params.length == 3) {
             String username = (String) params[1];
             String password = (String) params[2];
-
+            Timber.d("Server info : " + mUseCaseHelper.getServerInfo((String)params[0]));
             /// validate credentials accessing the root folder
             credentials = OwnCloudCredentialsFactory.newBasicCredentials(
                     username,

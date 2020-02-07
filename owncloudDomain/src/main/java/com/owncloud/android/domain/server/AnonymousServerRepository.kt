@@ -22,7 +22,5 @@ package com.owncloud.android.domain.server
 import com.owncloud.android.domain.server.model.ServerInfo
 
 interface AnonymousServerRepository {
-    fun checkPathExistence(path: String, userLogged: Boolean): Boolean
-
     fun getServerInfo(path: String): ServerInfo
 }

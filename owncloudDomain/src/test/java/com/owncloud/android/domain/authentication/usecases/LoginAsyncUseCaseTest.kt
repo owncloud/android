@@ -33,7 +33,7 @@ class LoginAsyncUseCaseTest {
     private val authRepository: AuthenticationRepository = spyk()
     private val useCase = LoginAsyncUseCase(authRepository)
     private val useCaseParams = LoginAsyncUseCase.Params(
-        serverPath = "http://demo.owncloud.com",
+        serverPath = "https://demo.owncloud.com",
         username = "test",
         password = "test"
     )

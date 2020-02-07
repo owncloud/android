@@ -61,7 +61,7 @@ val remoteDataSourceModule = module {
     single<ShareeService> { OCShareeService(get()) }
     single<UserService> { OCUserService(get()) }
     single<ServerService> { OCServerService(get()) }
-    single<AnonymousService>{ OCAnonymousServerService(get())}
+    single<AnonymousService>{ OCAnonymousServerService()}
 
     factory<RemoteCapabilitiesDataSource> {
         OCRemoteCapabilitiesDataSource(
@@ -87,6 +87,6 @@ val remoteDataSourceModule = module {
         )
     }
     factory<RemoteServerDataSource> { OCRemoteServerDataSource(get()) }
-    factory<RemoteAnonymousDatasource> { OCRemoteAnonymousDataSource() }
+    factory<RemoteAnonymousDatasource> { OCRemoteAnonymousDataSource(get()) }
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext()) }
 }

@@ -77,7 +77,6 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<Authent
         // Step 2: look for authentication methods
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
             String authenticateHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
-            Timber.d("MEthods " + authenticateHeaders);
             if (authenticateHeaders.contains("basic")) {
                 authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH;
             } else if (authenticateHeaders.contains("bearer")) {

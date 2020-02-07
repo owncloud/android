@@ -19,7 +19,7 @@
 package com.owncloud.android.domain.server.usecases
 
 import com.owncloud.android.domain.server.AnonymousServerRepository
-import com.owncloud.android.testutil.OCServerInfo
+import com.owncloud.android.testutil.OC_ServerInfo
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -36,14 +36,14 @@ class GetServerInfoUseCaseTest {
 
     @Test
     fun getServerInfoSuccess() {
-        every { anonymousServerRepository.getServerInfo(useCaseParams.serverPath) } returns OCServerInfo
+        every { anonymousServerRepository.getServerInfo(useCaseParams.serverPath) } returns OC_ServerInfo
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertFalse(useCaseResult.isError)
 
         assertNull(useCaseResult.getThrowableOrNull())
-        assertEquals(OCServerInfo, useCaseResult.getDataOrNull())
+        assertEquals(OC_ServerInfo, useCaseResult.getDataOrNull())
 
         verify(exactly = 1) { anonymousServerRepository.getServerInfo(useCaseParams.serverPath) }
     }

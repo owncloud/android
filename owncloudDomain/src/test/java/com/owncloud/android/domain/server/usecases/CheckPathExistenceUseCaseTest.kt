@@ -37,7 +37,7 @@ class CheckPathExistenceUseCaseTest {
     )
 
     @Test
-    fun getServerInfoSuccess() {
+    fun checkPathExistence_exists() {
         every { serverRepository.checkPathExistence(any(), any()) } returns true
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -46,6 +46,20 @@ class CheckPathExistenceUseCaseTest {
 
         assertNull(useCaseResult.getThrowableOrNull())
         assertEquals(true, useCaseResult.getDataOrNull())
+
+        verify(exactly = 1) { serverRepository.checkPathExistence(any(), any()) }
+    }
+
+    @Test
+    fun checkPathExistence_notExists() {
+        every { serverRepository.checkPathExistence(any(), any()) } returns false
+        val useCaseResult = useCase.execute(useCaseParams)
+
+        assertTrue(useCaseResult.isSuccess)
+        assertFalse(useCaseResult.isError)
+
+        assertNull(useCaseResult.getThrowableOrNull())
+        assertEquals(false, useCaseResult.getDataOrNull())
 
         verify(exactly = 1) { serverRepository.checkPathExistence(any(), any()) }
     }

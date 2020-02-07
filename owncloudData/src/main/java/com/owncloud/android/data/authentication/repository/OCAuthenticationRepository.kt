@@ -24,6 +24,8 @@ import com.owncloud.android.domain.authentication.AuthenticationRepository
 class OCAuthenticationRepository(
     private val remoteAuthenticationDataSource: RemoteAuthenticationDataSource
 ) : AuthenticationRepository {
-    override fun login(serverUrl: String, username: String, password: String) =
+    override fun login(serverUrl: String, username: String, password: String) {
         remoteAuthenticationDataSource.login(serverPath = serverUrl, username = username, password = password)
+        //TODO: Add account creation stuff
+    }
 }
