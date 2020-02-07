@@ -46,7 +46,7 @@ import javax.net.ssl.SSLException
  * @author David González Verdugo
  * @author Abel García de Prada
  */
-class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
+class GetStatusRemoteOperation : RemoteOperation<OwnCloudVersion>() {
     private lateinit var latestResult: RemoteOperationResult<OwnCloudVersion>
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {

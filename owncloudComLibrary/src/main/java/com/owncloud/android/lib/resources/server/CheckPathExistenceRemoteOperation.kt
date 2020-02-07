@@ -47,10 +47,10 @@ import java.util.concurrent.TimeUnit
  * @param isUserLogged    When `true`, the username won't be added at the end of the PROPFIND url since is not
  *                        needed to check user credentials
  */
-class CheckPathExistenceOperation(
+class CheckPathExistenceRemoteOperation(
     val remotePath: String? = "",
     val isUserLogged: Boolean
-) : RemoteOperation<Any>() {
+) : RemoteOperation<Boolean>() {
     /**
      * Gets the sequence of redirections followed during the execution of the operation.
      *
@@ -59,7 +59,7 @@ class CheckPathExistenceOperation(
     var redirectionPath: RedirectionPath? = null
         private set
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<Any> {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<Boolean> {
         val previousFollowRedirects = client.followRedirects()
         return try {
             val stringUrl =
@@ -82,14 +82,13 @@ class CheckPathExistenceOperation(
              * 207 MULTI_STATUS: path exists.
              */
             Timber.d(
-                "Existence check for $stringUrl${WebdavUtils.encodePath(remotePath)} finished with HTTP status $status${if (!isSuccess(
-                        status
-                    )
-                ) "(FAIL)" else ""}"
+                "Existence check for $stringUrl finished with HTTP status $status${if (!isSuccess(status)) "(FAIL)" else ""}"
             )
-            if (isSuccess(status)) RemoteOperationResult(ResultCode.OK) else RemoteOperationResult(propFindMethod)
+            if (isSuccess(status)) RemoteOperationResult<Boolean>(ResultCode.OK).apply { data = true }
+            else RemoteOperationResult<Boolean>(propFindMethod).apply { data = false }
+
         } catch (e: Exception) {
-            val result = RemoteOperationResult<Any>(e)
+            val result = RemoteOperationResult<Boolean>(e)
             Timber.e(
                 e,
                 "Existence check for ${client.userFilesWebDavUri}${WebdavUtils.encodePath(remotePath)} : ${result.logMessage}"
@@ -103,7 +102,7 @@ class CheckPathExistenceOperation(
     /**
      * @return 'True' if the operation was executed and at least one redirection was followed.
      */
-    fun wasRedirected() = (redirectionPath!=null && redirectionPath!!.redirectionsCount > 0)
+    fun wasRedirected() = redirectionPath?.redirectionsCount ?: 0 > 0
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS
 

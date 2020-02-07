@@ -27,5 +27,5 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.Service
 
 interface ServerService: Service {
-    fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Any>
+    fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Boolean>
 }

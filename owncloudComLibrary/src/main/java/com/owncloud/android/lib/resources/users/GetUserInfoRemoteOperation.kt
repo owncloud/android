@@ -45,7 +45,7 @@ import java.net.URL
  * @author David González Verdugo
  * @author Abel García de Prada
  */
-class GetRemoteUserInfoOperation : RemoteOperation<RemoteUserInfo>() {
+class GetUserInfoRemoteOperation : RemoteOperation<RemoteUserInfo>() {
     override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteUserInfo> {
         var result: RemoteOperationResult<RemoteUserInfo>
         //Get the user
