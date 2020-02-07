@@ -19,16 +19,13 @@
 
 package com.owncloud.android.data.server.datasources.implementation
 
-import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.server.datasources.RemoteServerDataSource
 import com.owncloud.android.lib.resources.server.ServerService
 
 class OCRemoteServerDataSource(
     private val serverService: ServerService
 ) : RemoteServerDataSource {
-    override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean {
-        executeRemoteOperation {
-            serverService.checkPathExistence(path = path, isUserLogged = checkUserCredentials)
-        }.let { return it == Any() }
-    }
+    override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean =
+        serverService.checkPathExistence(path = path, isUserLogged = checkUserCredentials).data
+
 }

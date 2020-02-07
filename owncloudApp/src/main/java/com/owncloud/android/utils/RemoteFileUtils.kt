@@ -20,7 +20,9 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation
 import com.owncloud.android.operations.common.UseCaseHelper
+import timber.log.Timber
 
 class RemoteFileUtils {
     companion object {
@@ -64,9 +66,10 @@ class RemoteFileUtils {
         }
 
         private fun existsFile(remotePath: String): Boolean {
-
             val useCaseHelper = UseCaseHelper()
-            return useCaseHelper.checkPathExistence(remotePath).isSuccess
+            val exists = useCaseHelper.checkPathExistence(remotePath).getDataOrNull() == true
+            Timber.d("File with same name exists = " + exists)
+            return exists
         }
     }
 }

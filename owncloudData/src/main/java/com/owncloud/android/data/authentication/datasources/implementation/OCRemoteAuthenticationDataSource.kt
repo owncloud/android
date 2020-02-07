@@ -25,7 +25,7 @@ import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
-import com.owncloud.android.lib.resources.server.CheckPathExistenceOperation
+import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation
 
 class OCRemoteAuthenticationDataSource(private val context: Context) : RemoteAuthenticationDataSource {
     override fun login(serverPath: String, username: String, password: String) {
@@ -36,7 +36,7 @@ class OCRemoteAuthenticationDataSource(private val context: Context) : RemoteAut
         val client: OwnCloudClient =
             OwnCloudClientFactory.createOwnCloudClient(url, context, false).apply { setCredentials(credentials) }
 
-        val operation = CheckPathExistenceOperation("/", true)
+        val operation = CheckPathExistenceRemoteOperation("/", true)
         executeRemoteOperation { operation.execute(client) }
 
         if (operation.wasRedirected()) {

@@ -27,11 +27,8 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.server.CheckPathExistenceOperation;
+import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation;
 import timber.log.Timber;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Operation to find out what authentication method requires
@@ -62,7 +59,7 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<Authent
     protected RemoteOperationResult<AuthenticationMethod> run(OwnCloudClient client) {
         AuthenticationMethod authenticationMethod = null;
 
-        CheckPathExistenceOperation operation = new CheckPathExistenceOperation("",
+        CheckPathExistenceRemoteOperation operation = new CheckPathExistenceRemoteOperation("",
                 false);
         client.clearCredentials();
 
@@ -80,6 +77,7 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<Authent
         // Step 2: look for authentication methods
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
             String authenticateHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
+            Timber.d("MEthods " + authenticateHeaders);
             if (authenticateHeaders.contains("basic")) {
                 authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH;
             } else if (authenticateHeaders.contains("bearer")) {

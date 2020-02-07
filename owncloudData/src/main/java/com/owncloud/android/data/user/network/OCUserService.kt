@@ -21,12 +21,11 @@ package com.owncloud.android.data.user.network
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation
+import com.owncloud.android.lib.resources.users.GetUserInfoRemoteOperation
 import com.owncloud.android.lib.resources.users.RemoteUserInfo
-import com.owncloud.android.lib.resources.users.UserInfoResponse
 import com.owncloud.android.lib.resources.users.UserService
 
 class OCUserService(override val client: OwnCloudClient) : UserService {
     override fun getUserInfo(): RemoteOperationResult<RemoteUserInfo> =
-        GetRemoteUserInfoOperation().execute(client)
+        GetUserInfoRemoteOperation().execute(client)
 }

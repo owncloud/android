@@ -23,19 +23,19 @@ import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.server.AnonymousService
-import com.owncloud.android.lib.resources.server.CheckPathExistenceOperation
-import com.owncloud.android.lib.resources.server.GetRemoteStatusOperation
+import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation
+import com.owncloud.android.lib.resources.server.GetStatusRemoteOperation
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 
 class OCAnonymousServerService(baseUrl: String) : AnonymousService {
     var client: OwnCloudClient = OwnCloudClient(Uri.parse(baseUrl))
 
-    override fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Any> =
-        CheckPathExistenceOperation(
+    override fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Boolean> =
+        CheckPathExistenceRemoteOperation(
             remotePath = path,
             isUserLogged = true
         ).execute(client)
 
     override fun getRemoteStatus(path: String): RemoteOperationResult<OwnCloudVersion> =
-        GetRemoteStatusOperation().execute(client)
+        GetStatusRemoteOperation().execute(client)
 }

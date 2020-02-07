@@ -30,9 +30,8 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.server.CheckPathExistenceOperation;
-import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
-import com.owncloud.android.operations.common.UseCaseHelper;
+import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation;
+import com.owncloud.android.lib.resources.users.GetUserInfoRemoteOperation;
 
 import java.lang.ref.WeakReference;
 
@@ -49,7 +48,6 @@ public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperat
     AuthenticatorAsyncTask(Activity activity) {
         mContext = activity.getApplicationContext();
         mListener = new WeakReference<>((OnAuthenticatorTaskListener) activity);
-      //  mUseCaseHelper = new UseCaseHelper();
     }
 
     @Override
@@ -80,21 +78,21 @@ public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperat
             client.setCredentials(credentials);
 
             // Operation - try credentials
-            CheckPathExistenceOperation checkPathExistenceOperation = new CheckPathExistenceOperation(
+            CheckPathExistenceRemoteOperation checkPathExistenceRemoteOperation = new CheckPathExistenceRemoteOperation(
                     OCFile.ROOT_PATH,
                     true
             );
-            result = checkPathExistenceOperation.execute(client);
+            result = checkPathExistenceRemoteOperation.execute(client);
 
             String targetUrlAfterPermanentRedirection = null;
-            if (checkPathExistenceOperation.wasRedirected()) {
-                RedirectionPath redirectionPath = checkPathExistenceOperation.getRedirectionPath();
+            if (checkPathExistenceRemoteOperation.wasRedirected()) {
+                RedirectionPath redirectionPath = checkPathExistenceRemoteOperation.getRedirectionPath();
                 targetUrlAfterPermanentRedirection = redirectionPath.getLastPermanentLocation();
             }
 
             // Operation - get display name
             if (result.isSuccess()) {
-                GetRemoteUserInfoOperation remoteUserNameOperation = new GetRemoteUserInfoOperation();
+                GetUserInfoRemoteOperation remoteUserNameOperation = new GetUserInfoRemoteOperation();
                 if (targetUrlAfterPermanentRedirection != null) {
                     // we can't assume that any subpath of the domain is correctly redirected; ugly stuff
                     client = OwnCloudClientFactory.createOwnCloudClient(

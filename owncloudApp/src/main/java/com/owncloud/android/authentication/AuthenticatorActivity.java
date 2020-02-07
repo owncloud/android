@@ -584,10 +584,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mServerInfo.mVersion != null) {
             outState.putString(KEY_OC_VERSION, mServerInfo.mVersion.getVersion());
         }
-
-        String authenticationMethodNames = mServerInfo.mAuthMethod.name();
-
-        outState.putString(KEY_SERVER_AUTH_METHOD, authenticationMethodNames);
+        if (mServerInfo.mAuthMethod != null) {
+            outState.putString(KEY_SERVER_AUTH_METHOD, mServerInfo.mAuthMethod.name());
+        }
 
         /// Authentication PRE-fragment state
         outState.putBoolean(KEY_PASSWORD_EXPOSED, isPasswordVisible());
