@@ -416,6 +416,7 @@
   <string name="copy_file_error">Настъпи грешка при опита за копиране на този файл или папка.</string>
   <string name="forbidden_permissions_copy">да копира този файл</string>
   <string name="prefs_category_camera_upload">Качване от камера</string>
+  <string name="prefs_camera_video_upload_path_title">Път за качване на видео</string>
   <string name="sync_folder_failed_content">Синхронизацията на папка %1$s не може да бъде завършена</string>
   <string name="shared_subject_header">споделен</string>
   <string name="with_you_subject_header">с теб</string>
@@ -514,10 +515,40 @@
   <string name="share_via_link_password_enforced_label">Парола *</string>
   <string name="share_via_link_expiration_date_enforced_label">Изтича на *</string>
   <string name="share_via_link_expiration_date_explanation_label">Публичната връзка изтича не по-късно от %1$d дни след създаването й</string>
+  <string name="share_via_link_default_name_template">%1$s връзка</string>
+  <string name="share_via_link_empty_password">Паролата е празна</string>
+  <string name="private_link_info">Това е поверителна връзка и само хората, които имат достъп до файла/папката могат да я използват. Използвайте я за себе си  като постоянна връзка или да насочвате други към файловете в рамката на това споделяне.</string>
+  <string name="file_private_link_error">Поверителната връзка не е налична за този файл</string>
+  <string name="download_notification_channel_name">Изтегляния</string>
+  <string name="download_notification_channel_description">Вижте името на файла и напредъка на изтегляне</string>
+  <string name="upload_notification_channel_name">Качвания</string>
+  <string name="upload_notification_channel_description">Вижте името на файла и напредъка на качване</string>
+  <string name="media_service_notification_channel_name">Музикален плеър</string>
+  <string name="media_service_notification_channel_description">Вижте музикалния плейър</string>
+  <string name="file_sync_notification_channel_name">Синхронизиране на файлове</string>
+  <string name="file_sync_notification_channel_description">Вижте резултата от синхронизирането на файловете</string>
+  <string name="clicks_to_be_developer">Щракнете върху %1$d за да активирате менюто за програмисти</string>
+  <string name="rate_dialog_title">Оценете %1$s приложението!</string>
+  <string name="rate_dialog_description">Ако обичате и използвате това приложение, можете ли да отделите малко време, за да го оцените? Вашето мнение е много важно за нас.</string>
+  <string name="button_no_thanks_name">НЕ, БЛАГОДАРЯ</string>
+  <string name="button_later_name">ПО КЪСНО</string>
+  <string name="button_rate_now_name">ОЦЕНИ СЕГА</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d избран</item>
     <item quantity="other">%d избран</item>
   </plurals>
   <!--Welcome to oC intro features-->
-  <string name="welcome_feature_4_title">Качване от камера</string>
+  <string name="welcome_feature_skip_button">Пропусни</string>
+  <string name="welcome_feature_1_title">Управлявайте и  синхронизирайте всичките си файлове</string>
+  <string name="welcome_feature_1_text">Можете да копирате, премествате, изтривате</string>
+  <string name="welcome_feature_2_title">Споделяйте файлове и папки</string>
+  <string name="welcome_feature_2_text">Можете да споделяте поверително или публично</string>
+  <string name="welcome_feature_3_title">Мулти акаунт</string>
+  <string name="welcome_feature_3_text">Свържете се с всички свои собствени ownCloud сървъри</string>
+  <string name="welcome_feature_4_title">Качване от камерата</string>
+  <string name="welcome_feature_4_text">Вашите снимки/видеоклипове се качват автоматично</string>
+  <string name="welcome_feature_5_title">Видео поток</string>
+  <string name="welcome_feature_5_text">Възпроизвеждайте видеоклиповете си без да ги изтегляте</string>
+  <string name="no_borwser_installed_alert">Не е инсталиран браузър. Моля, инсталирайте браузър за да имате достъп до сигурно влизане.</string>
+  <string name="common_not_found">не беше намерен</string>
 </resources>
