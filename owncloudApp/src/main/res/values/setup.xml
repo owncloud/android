@@ -82,12 +82,17 @@
     <!-- constants that must be respected by the authorization server; if changed, the app must be rebuild -->
     <string name="oauth2_redirect_uri">oc://android.owncloud.com</string>
 
-    <!-- values that should be provided by ownCloud server -->
+    <!-- ownCloud server should provide service discovery url or authorization and token endpoints (see below)-->
+    <bool name="use_oauth2_service_discovery_location">false</bool>
+
+    <!-- Service discovery document, standard location -->
+    <string name="oauth2_service_discovery_location">https://oidc-workshop.owncloud-demo.com</string>
+
     <!-- AUTHORIZATION ENDPOINT -->
-    <string name="oauth2_url_endpoint_auth">signin/v1/identifier/_/authorize</string>
+    <string name="oauth2_url_endpoint_auth">https://oidc-workshop.owncloud-demo.com/signin/v1/identifier/_/authorize</string>
 
     <!-- TOKEN ENDPOINT -->
-    <string name="oauth2_url_endpoint_access">konnect/v1/token</string>
+    <string name="oauth2_url_endpoint_access">https://oidc-workshop.owncloud-demo.com/konnect/v1/token</string>
 
     <!-- values that should be pre-agreed between app and authorization server, but can be loaded without rebuilding the app -->
     <string name="oauth2_client_id">e4rAsNUSIUs0lF4nbv9FmCeUkTlV9GdgTLDH1b5uie7syb90SzEVrbN7HIpmWJeD</string>
@@ -102,4 +107,5 @@
     <!-- Header images -->
     <bool name="use_drawer_background_header">true</bool>
     <bool name="use_drawer_logo">true</bool>
+
 </resources>

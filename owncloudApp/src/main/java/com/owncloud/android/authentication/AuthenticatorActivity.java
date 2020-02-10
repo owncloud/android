@@ -64,6 +64,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.oauth.AuthStateManager;
+import com.owncloud.android.authentication.oauth.OAuthServiceConfiguration;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
@@ -90,6 +92,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import net.openid.appauth.AppAuthConfiguration;
+import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
 import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationResponse;
@@ -203,6 +206,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             MainApp.Companion.getAccountType());
 
     private AuthorizationService mAuthService;
+    private AuthStateManager mAuthStateManager;
 
     /**
      * {@inheritDoc}
@@ -293,6 +297,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         /// initialize block to be moved to single Fragment to retrieve and validate credentials 
         initAuthorizationPreFragment(savedInstanceState);
+
+        mAuthStateManager = AuthStateManager.getInstance(this);
     }
 
     @Override
@@ -890,15 +896,26 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mAuthStatusText = getResources().getString(R.string.oauth_login_connection);
         showAuthStatus();
 
-        AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-                Uri.parse("auth_endpoint"), // auth endpoint
-                Uri.parse("token_endpoint") // token endpoint
+        OAuthServiceConfiguration.Companion.buildAuthorizationServiceConfiguration(
+                this,
+                (authorizationServiceConfiguration, authorizationException) -> {
+                    if (authorizationException != null) {
+                        updateOAuthStatusIconAndText(authorizationException);
+                        Timber.e(authorizationException, "Failed to fetch configuration");
+                    } else if (authorizationServiceConfiguration != null) {
+                        performGetAuthorizationCodeRequest(authorizationServiceConfiguration);
+                        AuthState authState = new AuthState(authorizationServiceConfiguration);
+                        mAuthStateManager.replace(authState);
+                    }
+                }
         );
+    }
 
+    private void performGetAuthorizationCodeRequest(AuthorizationServiceConfiguration authorizationServiceConfiguration) {
         String clientId = getString(R.string.oauth2_client_id);
         Uri redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri));
         AuthorizationRequest.Builder builder = new AuthorizationRequest.Builder(
-                serviceConfiguration,
+                authorizationServiceConfiguration,
                 clientId,
                 ResponseTypeValues.CODE,
                 redirectUri
@@ -906,11 +923,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
         appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(this));
+
         mAuthService = new AuthorizationService(this, appAuthConfigurationBuilder.build());
 
         AuthorizationRequest request = builder.build();
         Intent completedIntent = new Intent(this, AuthenticatorActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this, 0, completedIntent, 0
+        );
 
         mAuthService.performAuthorizationRequest(request, pendingIntent);
     }
@@ -954,6 +974,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 );
 
                 accessRootFolder(credentials);
+
             } else if (authorizationException != null) {
                 updateOAuthStatusIconAndText(authorizationException);
                 showAuthStatus();
@@ -1540,7 +1561,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Called when the 'action' button in an IME is pressed ('enter' in software keyboard).
-     * 
+     *
      * Used to trigger the authentication check when the user presses 'enter' after writing the
      * password, or to throw the server test when the only field on screen is the URL input field.
      */
@@ -1650,7 +1671,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * Implements callback methods for service binding.
      */
     private class OperationsServiceConnection implements ServiceConnection {
-
         @Override
         public void onServiceConnected(ComponentName component, IBinder service) {
             if (component.equals(
