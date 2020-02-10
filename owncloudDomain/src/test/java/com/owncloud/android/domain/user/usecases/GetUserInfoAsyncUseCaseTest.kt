@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.domain.server.usecases
+package com.owncloud.android.domain.user.usecases
 
-import com.owncloud.android.domain.server.AnonymousServerRepository
-import com.owncloud.android.testutil.OC_ServerInfo
+import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.domain.user.UserRepository
+import com.owncloud.android.testutil.OC_UserInfo
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -29,28 +30,26 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class GetServerInfoUseCaseTest {
-    private val anonymousServerRepository: AnonymousServerRepository = spyk()
-    private val useCase = GetServerInfoUseCase((anonymousServerRepository))
-    private val useCaseParams = GetServerInfoUseCase.Params(serverPath = "http://demo.owncloud.com")
+class GetUserInfoAsyncUseCaseTest {
+    private val userRepository: UserRepository = spyk()
+    private val useCase = GetUserInfoAsyncUseCase((userRepository))
+    private val useCaseParams = Unit
 
     @Test
-    fun getServerInfoSuccess() {
-        every { anonymousServerRepository.getServerInfo(useCaseParams.serverPath) } returns OC_ServerInfo
+    fun getUserInfoSuccess() {
+        every { userRepository.getUserInfo() } returns OC_UserInfo
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertFalse(useCaseResult.isError)
+        assertEquals(OC_UserInfo, useCaseResult.getDataOrNull())
 
-        assertNull(useCaseResult.getThrowableOrNull())
-        assertEquals(OC_ServerInfo, useCaseResult.getDataOrNull())
-
-        verify(exactly = 1) { anonymousServerRepository.getServerInfo(useCaseParams.serverPath) }
+        verify(exactly = 1) { userRepository.getUserInfo() }
     }
 
     @Test
-    fun getServerInfoWithException() {
-        every { anonymousServerRepository.getServerInfo(useCaseParams.serverPath)  } throws Exception()
+    fun getUserInfoWithUnauthorizedException() {
+        every { userRepository.getUserInfo() } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -58,8 +57,8 @@ class GetServerInfoUseCaseTest {
         assertTrue(useCaseResult.isError)
 
         assertNull(useCaseResult.getDataOrNull())
-        assertTrue(useCaseResult.getThrowableOrNull() is Exception)
+        assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { anonymousServerRepository.getServerInfo(useCaseParams.serverPath)}
+        verify(exactly = 1) { userRepository.getUserInfo() }
     }
 }

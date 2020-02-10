@@ -23,14 +23,14 @@ package com.owncloud.android.presentation.viewmodels.authentication
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.authentication.usecases.LoginAsyncUseCase
-import com.owncloud.android.domain.user.usecases.GetUserInfoUseCase
+import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class OCAuthenticationViewModel(
     private val loginAsyncUseCase: LoginAsyncUseCase,
-    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val getUserInfoAsyncUseCase: GetUserInfoAsyncUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
     fun login(
@@ -52,7 +52,7 @@ class OCAuthenticationViewModel(
 
     fun getUserInfo() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val useCaseResult = getUserInfoUseCase.execute(Unit)
+            val useCaseResult = getUserInfoAsyncUseCase.execute(Unit)
             Timber.d(useCaseResult.toString())
         }
     }

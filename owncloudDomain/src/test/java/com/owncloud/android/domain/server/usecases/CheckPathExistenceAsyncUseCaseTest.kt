@@ -28,10 +28,10 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class CheckPathExistenceUseCaseTest {
+class CheckPathExistenceAsyncUseCaseTest {
     private val serverRepository: ServerRepository = spyk()
-    private val useCase = CheckPathExistenceUseCase(serverRepository)
-    private val useCaseParams = CheckPathExistenceUseCase.Params(
+    private val useCase = CheckPathExistenceAsyncUseCase(serverRepository)
+    private val useCaseParams = CheckPathExistenceAsyncUseCase.Params(
         remotePath = "http://demo.owncloud.com",
         isUserLogged = false
     )

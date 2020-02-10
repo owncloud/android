@@ -19,10 +19,8 @@
 
 package com.owncloud.android.data.server.datasources.implementation
 
-import android.net.Uri
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.server.datasources.RemoteAnonymousDatasource
-import com.owncloud.android.data.server.network.OCAnonymousServerService
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.operations.RemoteOperationResult

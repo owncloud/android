@@ -26,10 +26,12 @@ import com.owncloud.android.testutil.OC_ServerInfo
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
+import java.lang.Exception
 
 class OCRemoteServerDataSourceTest {
     private lateinit var ocRemoteServerDataSource: OCRemoteServerDataSource
@@ -53,6 +55,8 @@ class OCRemoteServerDataSourceTest {
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
+
+        verify { ocServerService.checkPathExistence(OC_ServerInfo.baseUrl, true) }
     }
 
     @Test
@@ -67,5 +71,18 @@ class OCRemoteServerDataSourceTest {
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
+
+        verify { ocServerService.checkPathExistence(OC_ServerInfo.baseUrl, true) }
+    }
+
+    @Test(expected = Exception::class)
+    fun checkPathExistenceException() {
+        every {
+            ocServerService.checkPathExistence(OC_ServerInfo.baseUrl, true)
+        } throws Exception()
+
+        ocRemoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
+
+        verify { ocServerService.checkPathExistence(OC_ServerInfo.baseUrl, true) }
     }
 }

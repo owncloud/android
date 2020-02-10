@@ -61,7 +61,6 @@ public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperat
         if (params != null && params.length == 3) {
             String username = (String) params[1];
             String password = (String) params[2];
-            Timber.d("Server info : " + mUseCaseHelper.getServerInfo((String)params[0]));
             /// validate credentials accessing the root folder
             credentials = OwnCloudCredentialsFactory.newBasicCredentials(
                     username,
