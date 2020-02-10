@@ -21,10 +21,10 @@ package com.owncloud.android.operations.common
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.authentication.usecases.LoginAsyncUseCase
 import com.owncloud.android.domain.server.model.ServerInfo
-import com.owncloud.android.domain.server.usecases.CheckPathExistenceUseCase
-import com.owncloud.android.domain.server.usecases.GetServerInfoUseCase
+import com.owncloud.android.domain.server.usecases.CheckPathExistenceAsyncUseCase
+import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.user.model.UserInfo
-import com.owncloud.android.domain.user.usecases.GetUserInfoUseCase
+import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -33,18 +33,18 @@ import org.koin.core.inject
  * TODO: Remove this and call directly to usecases from ViewModel.
  */
 class UseCaseHelper : KoinComponent {
-    private val getUserInfoUseCase: GetUserInfoUseCase by inject()
-    private val checkPathExistenceUseCase: CheckPathExistenceUseCase by inject()
-    private val getServerInfoUseCase: GetServerInfoUseCase by inject()
+    private val mGetUserInfoAsyncUseCase: GetUserInfoAsyncUseCase by inject()
+    private val mCheckPathExistenceAsyncUseCase: CheckPathExistenceAsyncUseCase by inject()
+    private val mGetServerInfoAsyncUseCase: GetServerInfoAsyncUseCase by inject()
     private val loginAsyncUseCase: LoginAsyncUseCase by inject()
 
-    fun getUserInfo(): UseCaseResult<UserInfo> = getUserInfoUseCase.execute(Unit)
+    fun getUserInfo(): UseCaseResult<UserInfo> = mGetUserInfoAsyncUseCase.execute(Unit)
 
     fun checkPathExistence(remotePath: String): UseCaseResult<Any> =
-        checkPathExistenceUseCase.execute(CheckPathExistenceUseCase.Params(remotePath, false))
+        mCheckPathExistenceAsyncUseCase.execute(CheckPathExistenceAsyncUseCase.Params(remotePath, false))
 
     fun getServerInfo(serverUrl: String): UseCaseResult<ServerInfo> =
-        getServerInfoUseCase.execute(GetServerInfoUseCase.Params(serverPath = serverUrl))
+        mGetServerInfoAsyncUseCase.execute(GetServerInfoAsyncUseCase.Params(serverPath = serverUrl))
 
     fun login(serverUrl: String, username: String, password: String) =
         loginAsyncUseCase.execute(

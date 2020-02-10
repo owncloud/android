@@ -43,7 +43,7 @@ import timber.log.Timber;
  * a value of {@link AuthenticationMethod}.
  */
 @Deprecated
-// TODO: Remove this operation. Get AuthenticationMethods from GetServerInfoUseCase
+// TODO: Remove this operation. Get AuthenticationMethods from GetServerInfoAsyncUseCase
 public class DetectAuthenticationMethodOperation extends RemoteOperation<AuthenticationMethod> {
 
     /**
@@ -68,15 +68,18 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<Authent
         // Step 1: check whether the root folder exists, following redirections
         RemoteOperationResult resultFromExistenceCheck = operation.execute(client);
         String redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
+        Timber.d("Redirected location:" + redirectedLocation);
         while (redirectedLocation != null && redirectedLocation.length() > 0) {
             client.setBaseUri(Uri.parse(resultFromExistenceCheck.getRedirectedLocation()));
             resultFromExistenceCheck = operation.execute(client);
             redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
+            Timber.d("Redirected location:" + redirectedLocation);
         }
 
         // Step 2: look for authentication methods
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
             String authenticateHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
+            Timber.d("Authentication Header:" + authenticateHeaders);
             if (authenticateHeaders.contains("basic")) {
                 authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH;
             } else if (authenticateHeaders.contains("bearer")) {

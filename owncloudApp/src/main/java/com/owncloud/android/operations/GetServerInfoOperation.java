@@ -38,7 +38,7 @@ import timber.log.Timber;
  * Checks the existence of a configured ownCloud server in the URL, gets its version
  * and finds out what authentication method is needed to access files in it.
  *
- * TODO: Remove this operation. Call {@link com.owncloud.android.domain.server.usecases.GetServerInfoUseCase} instead.
+ * TODO: Remove this operation. Call {@link com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase} instead.
  */
 @Deprecated
 public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperation.ServerInfo> {
@@ -75,6 +75,7 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
         if (remoteStatusResult.isSuccess()) {
             // second: get authentication method required by the server
             mResultData.mVersion = remoteStatusResult.getData();
+            Timber.d("Result code : " + remoteStatusResult.getCode());
             mResultData.mIsSslConn = (remoteStatusResult.getCode() == ResultCode.OK_SSL);
             mResultData.mBaseUrl = normalizeProtocolPrefix(mUrl, mResultData.mIsSslConn);
             final RemoteOperationResult<AuthenticationMethod> detectAuthResult = detectAuthorizationMethod(client);

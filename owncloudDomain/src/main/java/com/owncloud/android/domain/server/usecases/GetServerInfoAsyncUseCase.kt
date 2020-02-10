@@ -20,16 +20,16 @@
 package com.owncloud.android.domain.server.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.server.ServerRepository
+import com.owncloud.android.domain.server.AnonymousServerRepository
+import com.owncloud.android.domain.server.model.ServerInfo
 
-class CheckPathExistenceUseCase(
-    private val serverRepository: ServerRepository
-) : BaseUseCaseWithResult<Boolean, CheckPathExistenceUseCase.Params>() {
-    override fun run(params: Params): Boolean =
-        serverRepository.checkPathExistence(params.remotePath, params.isUserLogged)
+class GetServerInfoAsyncUseCase(
+    private val anonymousServerRepository: AnonymousServerRepository
+) : BaseUseCaseWithResult<ServerInfo, GetServerInfoAsyncUseCase.Params>() {
+    override fun run(params: Params): ServerInfo =
+        anonymousServerRepository.getServerInfo(params.serverPath)
 
     data class Params(
-        val remotePath: String,
-        val isUserLogged: Boolean
+        val serverPath: String
     )
 }

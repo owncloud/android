@@ -21,7 +21,7 @@ package com.owncloud.android.domain.capabilities.usecases
 
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
+import com.owncloud.android.domain.BaseUseCase
 
 class GetStoredCapabilitiesUseCase(
     private val capabilityRepository: CapabilityRepository

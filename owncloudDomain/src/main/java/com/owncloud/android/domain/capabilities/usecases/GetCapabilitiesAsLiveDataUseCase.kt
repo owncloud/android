@@ -20,7 +20,7 @@
 package com.owncloud.android.domain.capabilities.usecases
 
 import androidx.lifecycle.LiveData
-import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
+import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.capabilities.model.OCCapability
 

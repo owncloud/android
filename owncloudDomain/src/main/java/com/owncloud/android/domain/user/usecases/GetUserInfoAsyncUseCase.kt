@@ -17,19 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.server.usecases
+package com.owncloud.android.domain.user.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.server.AnonymousServerRepository
-import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.user.UserRepository
+import com.owncloud.android.domain.user.model.UserInfo
 
-class GetServerInfoUseCase(
-    private val anonymousServerRepository: AnonymousServerRepository
-) : BaseUseCaseWithResult<ServerInfo, GetServerInfoUseCase.Params>() {
-    override fun run(params: Params): ServerInfo =
-        anonymousServerRepository.getServerInfo(params.serverPath)
-
-    data class Params(
-        val serverPath: String
-    )
+class GetUserInfoAsyncUseCase(
+    private val userRepository: UserRepository
+) : BaseUseCaseWithResult<UserInfo, Unit>() {
+    override fun run(params: Unit): UserInfo =
+        userRepository.getUserInfo()
 }

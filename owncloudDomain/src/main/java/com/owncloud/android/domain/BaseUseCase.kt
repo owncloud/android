@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
+ * @author David González Verdugo
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,16 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.user.usecases
+package com.owncloud.android.domain
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
-import com.owncloud.android.domain.user.UserRepository
-import com.owncloud.android.domain.user.model.UserInfo
+/**
+ * Parent class for use cases that do not require network operations, e.g. get data from database. That's why error
+ * handling is not needed as it is in [com.owncloud.android.domain.BaseUseCaseWithResult]
+ */
+abstract class BaseUseCase<out Type, in Params> {
 
-class GetUserInfoUseCase(
-    private val userRepository: UserRepository
-) : BaseUseCaseWithResult<UserInfo, Unit>() {
-    override fun run(params: Unit): UserInfo =
-        userRepository.getUserInfo()
+    protected abstract fun run(params: Params): Type
+
+    fun execute(params: Params): Type = run(params)
 }

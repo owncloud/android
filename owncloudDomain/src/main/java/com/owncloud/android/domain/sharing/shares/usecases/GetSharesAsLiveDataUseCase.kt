@@ -20,6 +20,7 @@
 package com.owncloud.android.domain.sharing.shares.usecases
 
 import androidx.lifecycle.LiveData
+import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 

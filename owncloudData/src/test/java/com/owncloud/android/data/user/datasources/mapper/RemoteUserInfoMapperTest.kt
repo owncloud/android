@@ -48,4 +48,9 @@ class RemoteUserInfoMapperTest {
         assertNotNull(userInfo)
         assertEquals(OC_UserInfo, userInfo)
     }
+
+    @Test
+    fun checkToRemoteNull() {
+        assertNull(ocRemoteUserInfoMapper.toRemote(null))
+    }
 }
