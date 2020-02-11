@@ -905,7 +905,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         );
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
-        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder());
+        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(this));
         mAuthService = new AuthorizationService(this, appAuthConfigurationBuilder.build());
 
         AuthorizationRequest request = builder.build();

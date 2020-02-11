@@ -348,7 +348,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         ClientAuthentication clientAuth = new ClientSecretBasic(mContext.getString(R.string.oauth2_client_secret));
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
-        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder());
+        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(mContext));
         AuthorizationService authService = new AuthorizationService(mContext, appAuthConfigurationBuilder.build());
 
         // Let's perform the token request
