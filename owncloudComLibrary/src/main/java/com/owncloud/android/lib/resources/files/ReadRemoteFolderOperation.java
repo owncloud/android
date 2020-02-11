@@ -106,7 +106,9 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
         } finally {
-            if (result.isSuccess()) {
+            if (result == null) {
+                Timber.e("Synchronized " + mRemotePath + ": result is null");
+            } else if (result.isSuccess()) {
                 Timber.i("Synchronized " + mRemotePath + ": " + result.getLogMessage());
             } else {
                 if (result.isException()) {
