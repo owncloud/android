@@ -8,6 +8,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     api 'com.gitlab.ownclouders:dav4android:oc_support_1.0.1'
     api 'com.github.hannesa2:Logcat:1.6.0'
+    api 'net.openid:appauth:0.7.1'
 }
 
 allOpen {
@@ -24,6 +25,10 @@ android {
 
         versionCode = 10000401
         versionName = "1.0.4.1"
+
+        // This is pretty ugly but manifest placeholders don't seem to work very well when using different modules
+        // See https://github.com/openid/AppAuth-Android/issues/325
+        manifestPlaceholders = [appAuthRedirectScheme: '']
     }
 
     lintOptions {

@@ -316,8 +316,18 @@ public class AccountUtils {
         public static final String KEY_DISPLAY_NAME = "oc_display_name";
 
         /**
+         * OAuth2 user id
+         **/
+        public static final String KEY_USER_ID = "user_id";
+
+        /**
          * OAuth2 refresh token
          **/
         public static final String KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token";
+
+        /**
+         * OAuth2 scope
+         */
+        public static final String KEY_OAUTH2_SCOPE = "oc_oauth2_scope";
     }
 }

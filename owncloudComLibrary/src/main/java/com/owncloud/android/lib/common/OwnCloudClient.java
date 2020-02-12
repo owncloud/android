@@ -334,7 +334,6 @@ public class OwnCloudClient extends HttpClient {
             if (invalidated) {
                 if (getCredentials().authTokenCanBeRefreshed() &&
                         repeatCounter < MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS) {
-
                     try {
                         mAccount.loadCredentials(getContext());
                         // if mAccount.getCredentials().length() == 0 --> refresh failed
@@ -342,7 +341,9 @@ public class OwnCloudClient extends HttpClient {
                         credentialsWereRefreshed = true;
 
                     } catch (AccountsException | IOException e) {
-                        Timber.e(e, "Error while trying to refresh auth token for %s", mAccount.getSavedAccount().name);
+                        Timber.e(e, "Error while trying to refresh auth token for %s",
+                                mAccount.getSavedAccount().name
+                        );
                     }
                 }
 
