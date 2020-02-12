@@ -14,12 +14,12 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,15 +28,12 @@ package com.owncloud.android.authentication;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -47,7 +44,6 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -62,9 +58,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import androidx.browser.customtabs.CustomTabsClient;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -78,13 +71,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundExce
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2GetAccessTokenOperation;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2QueryParser;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
+import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -102,11 +89,19 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import net.openid.appauth.AppAuthConfiguration;
+import net.openid.appauth.AuthorizationException;
+import net.openid.appauth.AuthorizationRequest;
+import net.openid.appauth.AuthorizationResponse;
+import net.openid.appauth.AuthorizationService;
+import net.openid.appauth.AuthorizationService.TokenResponseCallback;
+import net.openid.appauth.AuthorizationServiceConfiguration;
+import net.openid.appauth.ClientAuthentication;
+import net.openid.appauth.ClientSecretBasic;
+import net.openid.appauth.ResponseTypeValues;
 import timber.log.Timber;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static android.content.Intent.ACTION_VIEW;
 
@@ -147,12 +142,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private static final String KEY_USERNAME = "USERNAME";
     private static final String KEY_PASSWORD = "PASSWORD";
     private static final String KEY_ASYNC_TASK_IN_PROGRESS = "AUTH_IN_PROGRESS";
-
-    private static final String ACTION_CUSTOM_TABS_CONNECTION =
-            "android.support.customtabs.action.CustomTabsService";
-
-    // ChromeCustomTab
-    String mCustomTabPackageName;
 
     /// parameters from EXTRAs in starter Intent
     private byte mAction;
@@ -196,8 +185,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private int mAuthStatusIcon = 0;
 
-    private String mAuthToken = "";
+    // OAuth2 fields
+    private String mAccessToken = "";
     private String mRefreshToken = "";
+    private String mScope = "";
+
     private AuthenticatorAsyncTask mAsyncTask;
 
     private boolean mIsFirstAuthAttempt;
@@ -210,23 +202,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private final String OAUTH_TOKEN_TYPE = AccountTypeUtils.getAuthTokenTypeAccessToken(
             MainApp.Companion.getAccountType());
 
-    private CustomTabsClient mCustomTabsClient;
-    private CustomTabsServiceConnection mCustomTabServiceConnection = new CustomTabsServiceConnection() {
-        @Override
-        public void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
-            mCustomTabsClient = client;
-            mCustomTabsClient.warmup(0);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mCustomTabsClient = null;
-        }
-    };
+    private AuthorizationService mAuthService;
 
     /**
      * {@inheritDoc}
-     * <p>
+     *
      * IMPORTANT ENTRY POINT 1: activity is shown to the user
      */
     @Override
@@ -313,53 +293,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         /// initialize block to be moved to single Fragment to retrieve and validate credentials 
         initAuthorizationPreFragment(savedInstanceState);
-
-        mCustomTabPackageName = getCustomTabPackageName();
-
-        if (mCustomTabPackageName != null) {
-            CustomTabsClient.bindCustomTabsService(this, mCustomTabPackageName, mCustomTabServiceConnection);
-        }
     }
 
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_VIEW)) {
-            getOAuth2AccessTokenFromCapturedRedirection(intent.getData());
-        }
-    }
-
-    private String getCustomTabPackageName() {
-
-        PackageManager pm = getPackageManager();
-        // Get default VIEW intent handler.
-        Intent activityIntent = new Intent(ACTION_VIEW, Uri.parse("https://owncloud.org"));
-        ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
-
-        // Get all apps that can handle VIEW intents.
-        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, 0);
-        List<String> packagesSupportingCustomTabs = new ArrayList<>();
-        for (ResolveInfo info : resolvedActivityList) {
-            Intent serviceIntent = new Intent();
-            serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
-            serviceIntent.setPackage(info.activityInfo.packageName);
-            if (pm.resolveService(serviceIntent, 0) != null) {
-                packagesSupportingCustomTabs.add(info.activityInfo.packageName);
-            }
-        }
-
-        // Now packagesSupportingCustomTabs contains all apps that can handle both VIEW intents
-        // and service calls.
-        if (defaultViewHandlerInfo != null
-                && packagesSupportingCustomTabs.contains(defaultViewHandlerInfo.activityInfo.packageName)) {
-            // try getting the ChromeCustomTab of the default browser
-            return defaultViewHandlerInfo.activityInfo.packageName;
-        } else if (packagesSupportingCustomTabs.size() >= 1) {
-            // try getting the ChromeCustomTab of the first browser that support its
-            return packagesSupportingCustomTabs.get(0);
-        } else {
-            // return null if we don't have a browser installed that can handle ChromeCustomTabs
-            return null;
+        if (intent != null) {
+            handleGetAuthorizationCodeResponse(intent);
         }
     }
 
@@ -565,7 +505,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             isPasswordExposed = savedInstanceState.getBoolean(KEY_PASSWORD_EXPOSED, false);
             mAuthStatusText = savedInstanceState.getString(KEY_AUTH_STATUS_TEXT);
             mAuthStatusIcon = savedInstanceState.getInt(KEY_AUTH_STATUS_ICON);
-            mAuthToken = savedInstanceState.getString(KEY_AUTH_TOKEN);
+            mAccessToken = savedInstanceState.getString(KEY_AUTH_TOKEN);
         }
 
         /// step 2 - set properties of UI elements (text, visibility, enabled...)
@@ -625,7 +565,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Saves relevant state before {@link #onPause()}
-     * <p>
+     *
      * See {@link super#onSaveInstanceState(Bundle)}
      */
     @Override
@@ -660,7 +600,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         outState.putBoolean(KEY_PASSWORD_EXPOSED, isPasswordVisible());
         outState.putInt(KEY_AUTH_STATUS_ICON, mAuthStatusIcon);
         outState.putString(KEY_AUTH_STATUS_TEXT, mAuthStatusText);
-        outState.putString(KEY_AUTH_TOKEN, mAuthToken);
+        outState.putString(KEY_AUTH_TOKEN, mAccessToken);
 
         /// authentication
         outState.putBoolean(KEY_AUTH_IS_FIRST_ATTEMPT_TAG, mIsFirstAuthAttempt);
@@ -696,7 +636,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         password
                 );
             } else if (OAUTH_TOKEN_TYPE.equals(mAuthTokenType)) {
-                credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, mAuthToken);
+                credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, mAccessToken);
             }
             accessRootFolder(credentials);
         }
@@ -738,6 +678,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
 
         mHostUrlInputWatcher = null;
         mUsernamePasswordInputWatcher = null;
@@ -747,67 +688,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mOperationsServiceBinder = null;
         }
 
-        if (mCustomTabServiceConnection != null
-                && mCustomTabPackageName != null) {
-            unbindService(mCustomTabServiceConnection);
-
-        }
-
-        super.onDestroy();
-    }
-
-    /**
-     * Parses the redirection with the response to the GET AUTHORIZATION request to the
-     * OAuth server and requests for the access token (GET ACCESS TOKEN)
-     *
-     * @param capturedUriFromOAuth2Redirection Redirection after authorization code request ends
-     */
-    private void getOAuth2AccessTokenFromCapturedRedirection(Uri capturedUriFromOAuth2Redirection) {
-
-        // Parse data from OAuth redirection
-        String queryParameters = capturedUriFromOAuth2Redirection.getQuery();
-        Map<String, String> parsedQuery = new OAuth2QueryParser().parse(queryParameters);
-
-        if (parsedQuery.keySet().contains(OAuth2Constants.KEY_CODE)) {
-
-            /// Showing the dialog with instructions for the user
-            LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true);
-            dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
-
-            /// CREATE ACCESS TOKEN to the oAuth server
-            Intent getAccessTokenIntent = new Intent();
-            getAccessTokenIntent.setAction(OperationsService.ACTION_OAUTH2_GET_ACCESS_TOKEN);
-
-            getAccessTokenIntent.putExtra(
-                    OperationsService.EXTRA_SERVER_URL,
-                    mServerInfo.mBaseUrl
-            );
-
-            getAccessTokenIntent.putExtra(
-                    OperationsService.EXTRA_OAUTH2_AUTHORIZATION_CODE,
-                    parsedQuery.get(OAuth2Constants.KEY_CODE)
-            );
-
-            if (mOperationsServiceBinder != null) {
-                Timber.i("Getting OAuth access token...");
-                mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getAccessTokenIntent);
-            }
-
-        } else {
-            // did not obtain authorization code
-
-            if (parsedQuery.keySet().contains(OAuth2Constants.KEY_ERROR) &&
-                    (OAuth2Constants.VALUE_ERROR_ACCESS_DENIED.equals(parsedQuery.get(OAuth2Constants.KEY_ERROR)))) {
-                onGetOAuthAccessTokenFinish(
-                        new RemoteOperationResult(ResultCode.OAUTH2_ERROR_ACCESS_DENIED)
-                );
-
-            } else {
-                onGetOAuthAccessTokenFinish(
-                        new RemoteOperationResult(ResultCode.OAUTH2_ERROR)
-                );
-            }
-
+        if (mAuthService != null) {
+            mAuthService.dispose();
         }
     }
 
@@ -829,11 +711,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Handles changes in focus on the text input for the server URL.
-     * <p>
+     *
      * IMPORTANT ENTRY POINT 2: When (!hasFocus), user wrote the server URL and changed to
      * other field. The operation to check the existence of the server in the entered URL is
      * started.
-     * <p>
+     *
      * When hasFocus:    user 'comes back' to write again the server URL.
      */
     private void onUrlInputFocusLost() {
@@ -895,9 +777,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Handles changes in focus on the text input for the password (basic authorization).
-     * <p>
+     *
      * When (hasFocus), the button to toggle password visibility is shown.
-     * <p>
+     *
      * When (!hasFocus), the button is made invisible and the password is hidden.
      *
      * @param hasFocus 'True' if focus is received, 'false' if is lost
@@ -949,13 +831,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Checks the credentials of the user in the root of the ownCloud server
      * before creating a new local account.
-     * <p>
+     *
      * For basic authorization, a check of existence of the root folder is
      * performed.
-     * <p>
+     *
      * For OAuth, starts the flow to get an access token; the credentials test
      * is postponed until it is available.
-     * <p>
+     *
      * IMPORTANT ENTRY POINT 4
      */
     public void onLoginClick() {
@@ -999,6 +881,88 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         accessRootFolder(credentials);
     }
 
+    /**
+     * OAuth step 1: Get authorization code
+     */
+    private void startOauthorization() {  // OAuth step 1: Get authorization code
+        // be gentle with the user
+        mAuthStatusIcon = R.drawable.progress_small;
+        mAuthStatusText = getResources().getString(R.string.oauth_login_connection);
+        showAuthStatus();
+
+        AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
+                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
+                Uri.parse(mServerInfo.mBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_access)) // token endpoint
+        );
+
+        String clientId = getString(R.string.oauth2_client_id);
+        Uri redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri));
+        AuthorizationRequest.Builder builder = new AuthorizationRequest.Builder(
+                serviceConfiguration,
+                clientId,
+                ResponseTypeValues.CODE,
+                redirectUri
+        );
+
+        AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
+        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(this));
+        mAuthService = new AuthorizationService(this, appAuthConfigurationBuilder.build());
+
+        AuthorizationRequest request = builder.build();
+        Intent completedIntent = new Intent(this, AuthenticatorActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0);
+
+        mAuthService.performAuthorizationRequest(request, pendingIntent);
+    }
+
+    private void handleGetAuthorizationCodeResponse(Intent intent) {
+        AuthorizationResponse authorizationResponse = AuthorizationResponse.fromIntent(intent);
+        AuthorizationException authorizationException = AuthorizationException.fromIntent(intent);
+
+        if (authorizationResponse != null && authorizationResponse.authorizationCode != null) {
+            exchangeAuthorizationCodeForTokens(authorizationResponse);
+        } else if (authorizationException != null) {
+            updateOAuthStatusIconAndText(authorizationException);
+            showAuthStatus();
+            Timber.e(authorizationException, "OAuth request to get authorization code failed");
+        }
+    }
+
+    /**
+     * OAuth step 2: Exchange the received authorization code for access and refresh tokens
+     */
+    private void exchangeAuthorizationCodeForTokens(AuthorizationResponse authorizationResponse) {
+        ClientAuthentication clientAuth = new ClientSecretBasic(getString(R.string.oauth2_client_secret));
+        mAuthService.performTokenRequest(
+                authorizationResponse.createTokenExchangeRequest(),
+                clientAuth,
+                handleExchangeAuthorizationCodeForTokensResponse()
+        );
+    }
+
+    private TokenResponseCallback handleExchangeAuthorizationCodeForTokensResponse() {
+        return (tokenResponse, authorizationException) -> {
+            if (tokenResponse != null && tokenResponse.accessToken != null && tokenResponse.refreshToken != null) {
+                mAccessToken = tokenResponse.accessToken;
+                mRefreshToken = tokenResponse.refreshToken;
+                mScope = tokenResponse.scope;
+
+                // Validate token accessing to root folder / getting session
+                OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
+                        tokenResponse.additionalParameters.get(Constants.KEY_USER_ID),
+                        mAccessToken
+                );
+
+                accessRootFolder(credentials);
+            } else if (authorizationException != null) {
+                updateOAuthStatusIconAndText(authorizationException);
+                showAuthStatus();
+                Timber.e(authorizationException,
+                        "OAuth request to exchange authorization code for tokens failed");
+            }
+        };
+    }
+
     private void accessRootFolder(OwnCloudCredentials credentials) {
         mAsyncTask = new AuthenticatorAsyncTask(this);
         Object[] params = {mServerInfo.mBaseUrl, credentials};
@@ -1006,82 +970,17 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     /**
-     * Starts the OAuth 'grant type' flow to get an access token, with
-     * a GET AUTHORIZATION request to the BUILT-IN authorization server.
-     */
-    private void startOauthorization() {
-        // be gentle with the user
-        mAuthStatusIcon = R.drawable.progress_small;
-        mAuthStatusText = getResources().getString(R.string.oauth_login_connection);
-        showAuthStatus();
-
-        // GET AUTHORIZATION CODE URI to open in WebView
-        OAuth2Provider oAuth2Provider = OAuth2ProvidersRegistry.getInstance().getProvider();
-        oAuth2Provider.setAuthorizationServerUri(mServerInfo.mBaseUrl);
-
-        OAuth2RequestBuilder builder = oAuth2Provider.getOperationBuilder();
-        builder.setGrantType(OAuth2GrantType.AUTHORIZATION_CODE);
-        builder.setRequest(OAuth2RequestBuilder.OAuthRequest.GET_AUTHORIZATION_CODE);
-
-        if (mCustomTabPackageName != null) {
-            openUrlWithCustomTab(builder.buildUri());
-        } else {
-            openUrlInBrowser(builder.buildUri());
-        }
-    }
-
-    private void openUrlWithCustomTab(String url) {
-        TypedValue backgroundColor = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, backgroundColor, true);
-
-        CustomTabsIntent intent = new CustomTabsIntent.Builder()
-                .setToolbarColor(backgroundColor.data)
-                .setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left)
-                .setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right)
-                .setShowTitle(true)
-                .build();
-
-        try {
-            intent.launchUrl(this, Uri.parse(url));
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-    }
-
-    private void openUrlInBrowser(String url) {
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        } catch (ActivityNotFoundException ae) {
-            onNoBrowserInstalled();
-        }
-    }
-
-    private void onNoBrowserInstalled() {
-        new AlertDialog.Builder(this)
-                .setMessage(R.string.no_borwser_installed_alert)
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
-                .create()
-                .show();
-    }
-
-    /**
      * Callback method invoked when a RemoteOperation executed by this Activity finishes.
-     * <p>
+     *
      * Dispatches the operation flow to the right method.
      */
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
-
         if (operation instanceof GetServerInfoOperation) {
             if (operation.hashCode() == mWaitingForOpId) {
                 onGetServerInfoFinish(result);
             }   // else nothing ; only the last check operation is considered; 
             // multiple can be started if the user amends a URL quickly
-
-        } else if (operation instanceof OAuth2GetAccessTokenOperation) {
-            onGetOAuthAccessTokenFinish(result);
         }
     }
 
@@ -1116,7 +1015,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mAuthTokenType = BASIC_TOKEN_TYPE; // Basic
             }
 
-            if(!result.getData().mVersion.isServerVersionSupported()){
+            if (!result.getData().mVersion.isServerVersionSupported()) {
                 mServerIsValid = false;
                 mServerStatusIcon = R.drawable.common_error;
                 mServerStatusText = getString(R.string.server_not_supported);
@@ -1288,44 +1187,18 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-    /**
-     * Processes the result of the request for an access token sent to an OAuth authorization server
-     *
-     * @param result Result of the operation.
-     */
-    private void onGetOAuthAccessTokenFinish(RemoteOperationResult<Map<String, String>> result) {
-        mWaitingForOpId = Long.MAX_VALUE;
-        dismissDialog();
-
-        if (result.isSuccess()) {
-            /// be gentle with the user
-            LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_trying_to_login, true);
-            dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
-
-            /// time to test the retrieved access token on the ownCloud server
-            Map<String, String> tokens = result.getData();
-            mAuthToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
-
-            mRefreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
-
-            /// validate token accessing to root folder / getting session
-            OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
-                    tokens.get(OAuth2Constants.KEY_USER_ID),
-                    mAuthToken
-            );
-
-            accessRootFolder(credentials);
-
+    private void updateOAuthStatusIconAndText(AuthorizationException authorizationException) {
+        mAuthStatusIcon = R.drawable.common_error;
+        if (authorizationException == AuthorizationException.AuthorizationRequestErrors.ACCESS_DENIED) {
+            mAuthStatusText = getResources().getString(R.string.auth_oauth_error_access_denied);
         } else {
-            updateAuthStatusIconAndText(result);
-            showAuthStatus();
-            Timber.d("Access failed: %s", result.getLogMessage());
+            mAuthStatusText = getResources().getString(R.string.auth_oauth_error);
         }
     }
 
     /**
      * Processes the result of the access check performed to try the user credentials.
-     * <p>
+     *
      * Creates a new account through the AccountManager.
      *
      * @param result Result of the operation.
@@ -1409,9 +1282,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Creates a new account through the Account Authenticator that started this activity.
-     * <p>
+     *
      * This makes the account permanent.
-     * <p>
+     *
      * TODO Decide how to name the OAuth accounts
      */
     private boolean createAccount(RemoteOperationResult<UserInfo> authResult) {
@@ -1474,7 +1347,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             intent.putExtra(AccountManager.KEY_USERDATA, username);
 
             if (isOAuth) {
-                mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
+                mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAccessToken);
             }
             /// add user data to the new account; TODO probably can be done in the last parameter 
             //      addAccountExplicitly, or in KEY_USERDATA
@@ -1500,6 +1373,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             if (isOAuth) {
                 mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
                 mAccountMgr.setUserData(mAccount, Constants.KEY_OAUTH2_REFRESH_TOKEN, mRefreshToken);
+                mAccountMgr.setUserData(mAccount, Constants.KEY_OAUTH2_SCOPE, mScope);
             }
 
             setAccountAuthenticatorResult(intent.getExtras());
@@ -1513,7 +1387,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Update an existing account
-     * <p>
+     *
      * Check if the username of the account to update is the same as the username in the current
      * account, calling {@link #updateAccountAuthentication()} if so and showing an error otherwise
      *
@@ -1529,7 +1403,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (!mUsernameInput.getText().toString().trim().equals(username)) {
             // fail - not a new account, but an existing one; disallow
             result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME);
-            mAuthToken = "";
+            mAccessToken = "";
             updateAuthStatusIconAndText(result);
             showAuthStatus();
             Timber.d(result.getLogMessage());
@@ -1552,10 +1426,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Updates the authentication token.
-     * <p>
+     *
      * Sets the proper response so that the AccountAuthenticator that started this activity
      * saves a new authorization token for mAccount.
-     * <p>
+     *
      * Kills the session kept by OwnCloudClientManager so that a new one will be created with
      * the new credentials when needed.
      */
@@ -1568,10 +1442,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType()).
                 equals(mAuthTokenType)) { // OAuth
-            response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
+            response.putString(AccountManager.KEY_AUTHTOKEN, mAccessToken);
             // the next line is necessary, notifications are calling directly to the
             // AuthenticatorActivity to update, without AccountManager intervention
-            mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
+            mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAccessToken);
 
             if (OAuthSupported == null || OAuthSupported.equals("FALSE")) {
                 mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
@@ -1621,7 +1495,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerStatusView.setCompoundDrawablesWithIntrinsicBounds(mServerStatusIcon, 0, 0, 0);
             mServerStatusView.setVisibility(View.VISIBLE);
         }
-
     }
 
     /**
@@ -1651,7 +1524,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Called when the eye icon in the password field is clicked.
-     * <p>
+     *
      * Toggles the visibility of the password in the field.
      */
     public void onViewPasswordClick() {
@@ -1667,7 +1540,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Called when the 'action' button in an IME is pressed ('enter' in software keyboard).
-     * <p>
+     * 
      * Used to trigger the authentication check when the user presses 'enter' after writing the
      * password, or to throw the server test when the only field on screen is the URL input field.
      */

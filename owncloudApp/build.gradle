@@ -117,6 +117,8 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+        manifestPlaceholders = [appAuthRedirectScheme: 'oc']
     }
 
     compileOptions {

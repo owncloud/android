@@ -3,6 +3,7 @@
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
+ * @author David González Verdugo
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
  *
@@ -35,28 +36,23 @@ import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2RefreshAccessTokenOperation;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
+import net.openid.appauth.AppAuthConfiguration;
+import net.openid.appauth.AuthorizationService;
+import net.openid.appauth.AuthorizationServiceConfiguration;
+import net.openid.appauth.ClientAuthentication;
+import net.openid.appauth.ClientSecretBasic;
+import net.openid.appauth.GrantTypeValues;
+import net.openid.appauth.TokenRequest;
 import timber.log.Timber;
-
-import java.util.Map;
 
 /**
  * Authenticator for ownCloud accounts.
- * 
+ *
  * Controller class accessed from the system AccountManager, providing integration of ownCloud accounts with the
  * Android system.
- * 
- * TODO - better separation in operations for OAuth-capable and regular ownCloud accounts.
- * TODO - review completeness
  */
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
@@ -64,7 +60,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      * Is used by android system to assign accounts to authenticators. Should be
      * used by application and all extensions.
      */
-    public static final String KEY_AUTH_TOKEN_TYPE = "authTokenType";
+    static final String KEY_AUTH_TOKEN_TYPE = "authTokenType";
     private static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
     private static final String KEY_LOGIN_OPTIONS = "loginOptions";
     public static final String KEY_ACCOUNT = "account";
@@ -73,7 +69,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     private Handler mHandler;
 
-    public AccountAuthenticator(Context context) {
+    AccountAuthenticator(Context context) {
         super(context);
         mContext = context;
         mHandler = new Handler();
@@ -160,7 +156,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      * {@inheritDoc}
      */
     @Override
-    public Bundle getAuthToken(AccountAuthenticatorResponse response,
+    public Bundle getAuthToken(AccountAuthenticatorResponse accountAuthenticatorResponse,
                                Account account, String authTokenType, Bundle options) {
         /// validate parameters
         try {
@@ -171,19 +167,23 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             return e.getFailureBundle();
         }
 
-        /// check if required token is stored
-        final AccountManager am = AccountManager.get(mContext);
         String accessToken;
+
+        /// check if required token is stored
+        final AccountManager accountManager = AccountManager.get(mContext);
         if (authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.Companion.getAccountType()))) {
-            accessToken = am.getPassword(account);
+            // Basic
+            accessToken = accountManager.getPassword(account);
         } else {
-            // Gets an auth token from the AccountManager's cache. If no auth token is cached for
+            // OAuth, gets an auth token from the AccountManager's cache. If no auth token is cached for
             // this account, null will be returned
-            accessToken = am.peekAuthToken(account, authTokenType);
+            accessToken = accountManager.peekAuthToken(account, authTokenType);
             if (accessToken == null && canBeRefreshed(authTokenType)) {
-                accessToken = refreshToken(account, authTokenType, am);
+                refreshToken(accountAuthenticatorResponse, account, authTokenType, accountManager, options);
+                return null;  // We return null because of the callbacks used within refreshToken method
             }
         }
+
         if (accessToken != null) {
             final Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
@@ -193,16 +193,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         }
 
         /// if not stored, return Intent to access the AuthenticatorActivity and UPDATE the token for the account
-        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
-        intent.putExtra(KEY_LOGIN_OPTIONS, options);
-        intent.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
-        intent.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
-
-        final Bundle bundle = new Bundle();
-        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        return bundle;
+        return prepareBundleToAccessAuthenticatorActivity(accountAuthenticatorResponse, account, authTokenType, options);
     }
 
     @Override
@@ -306,69 +297,113 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 getAccountType())));
     }
 
-    private String refreshToken(Account account, String authTokenType, AccountManager accountManager) {
+    private void refreshToken(
+            AccountAuthenticatorResponse accountAuthenticatorResponse,
+            Account account,
+            String authTokenType,
+            AccountManager accountManager,
+            Bundle options) {
 
-        Timber.v("Refreshing token!");
-        String accessToken;
-        try {
-            String refreshToken = accountManager.getUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
-            );
+        // Prepare everything to perform the token request
+        String refreshToken = accountManager.getUserData(
+                account,
+                AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
+        );
 
-            if (refreshToken == null || refreshToken.length() <= 0) {
-                Timber.w("No refresh token stored for silent renewal of access token");
-                return null;
-            }
-
-            OAuth2Provider oAuth2Provider = OAuth2ProvidersRegistry.getInstance().getProvider();
-
-            OAuth2RequestBuilder builder = oAuth2Provider.getOperationBuilder();
-            builder.setRequest(OAuth2RequestBuilder.OAuthRequest.REFRESH_ACCESS_TOKEN);
-            builder.setRefreshToken(refreshToken);
-
-            OAuth2RefreshAccessTokenOperation oAuth2RefreshAccessTokenOperation =
-                    (OAuth2RefreshAccessTokenOperation) builder.buildOperation();
-
-            OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
-                    Uri.parse(accountManager.getUserData(account, AccountUtils.Constants.KEY_OC_BASE_URL)),
-                    mContext,
-                    true
-            );
-
-            RemoteOperationResult<Map<String, String>> result = oAuth2RefreshAccessTokenOperation.execute(client);
-            if (!result.isSuccess()) {
-                Timber.e("Failed to refresh access token");
-                return null;
-            }
-
-            // Get new access and refresh tokens
-            Map<String, String> tokens = result.getData();
-
-            accessToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
-
-            Timber.d("Got OAuth2 access token: %s", accessToken);
-
-            accountManager.setAuthToken(account, authTokenType, accessToken);
-
-            Timber.d("Set OAuth2 new access token in account: %s", accessToken);
-
-            refreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
-
-            Timber.d("Got OAuth2 refresh token: %s", refreshToken);
-
-            accountManager.setUserData(
-                    account,
-                    AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN,
-                    refreshToken
-            );
-
-        } catch (Exception e) {
-            Timber.e(e, "Failed to store refreshed access token");
-            return null;
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            Timber.w("No refresh token stored for silent renewal of access token");
+            return;
         }
 
-        return accessToken;
+        Timber.d("Get OAuth2 refresh token from account: %s, to exchange it for new access and refresh tokens",
+                refreshToken);
+
+        String baseUrl = accountManager.getUserData(
+                account,
+                AccountUtils.Constants.KEY_OC_BASE_URL
+        );
+
+        AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
+                Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
+                Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
+        );
+
+        String scope = accountManager.getUserData(
+                account,
+                AccountUtils.Constants.KEY_OAUTH2_SCOPE
+        );
+
+        TokenRequest tokenRequest = new TokenRequest.Builder(
+                serviceConfiguration,
+                mContext.getString(R.string.oauth2_client_id)
+        ).setGrantType(GrantTypeValues.REFRESH_TOKEN)
+                .setScope(scope)
+                .setRefreshToken(refreshToken)
+                .build();
+
+        ClientAuthentication clientAuth = new ClientSecretBasic(mContext.getString(R.string.oauth2_client_secret));
+
+        AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
+        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(mContext));
+        AuthorizationService authService = new AuthorizationService(mContext, appAuthConfigurationBuilder.build());
+
+        // Let's perform the token request
+        authService.performTokenRequest(
+                tokenRequest,
+                clientAuth,
+                (tokenResponse, authorizationException) -> {
+                    if (tokenResponse != null && tokenResponse.accessToken != null &&
+                            tokenResponse.refreshToken != null) {
+                        String newAccessToken = tokenResponse.accessToken;
+                        Timber.d("Set OAuth2 new access token in account: %s", newAccessToken);
+                        accountManager.setAuthToken(account, authTokenType, newAccessToken);
+
+                        final Bundle result = new Bundle();
+                        result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+                        result.putString(AccountManager.KEY_ACCOUNT_TYPE, MainApp.Companion.getAccountType());
+                        result.putString(AccountManager.KEY_AUTHTOKEN, newAccessToken);
+                        accountAuthenticatorResponse.onResult(result);
+
+                        String newRefreshToken = tokenResponse.refreshToken;
+                        Timber.d("Set OAuth2 new refresh token in account: %s", newRefreshToken);
+                        accountManager.setUserData(
+                                account,
+                                AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN,
+                                newRefreshToken
+                        );
+
+                    } else if (authorizationException != null) {
+                        Timber.e(authorizationException, "OAuth request to refresh access token failed");
+                        Bundle result = prepareBundleToAccessAuthenticatorActivity(accountAuthenticatorResponse, account,
+                                authTokenType, options);
+                        accountAuthenticatorResponse.onResult(result);
+                    }
+                    authService.dispose(); // Authorization service no longer required, cleaning up...
+                });
     }
 
+    /**
+     * Return bundle with intent to access AuthenticatorActivity and UPDATE the token for the account
+     */
+    private Bundle prepareBundleToAccessAuthenticatorActivity(
+            AccountAuthenticatorResponse accountAuthenticatorResponse,
+            Account account,
+            String authTokenType,
+            Bundle options
+    ) {
+        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
+                accountAuthenticatorResponse);
+        intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
+        intent.putExtra(KEY_LOGIN_OPTIONS, options);
+        intent.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+        intent.putExtra(
+                AuthenticatorActivity.EXTRA_ACTION,
+                AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN
+        );
+
+        final Bundle bundle = new Bundle();
+        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+        return bundle;
+    }
 }
