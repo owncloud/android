@@ -21,6 +21,7 @@ package com.owncloud.android.data.server.datasources.implementation
 
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
+import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -60,6 +61,11 @@ class OCRemoteServerInfoDataSource(
         val ownCloudVersion = executeRemoteOperation {
             remoteStatusResult
         }
+
+        if(!ownCloudVersion.isServerVersionSupported){
+            throw OwncloudVersionNotSupportedException()
+        }
+
         return Pair(ownCloudVersion, remoteStatusResult.code == RemoteOperationResult.ResultCode.OK_SSL)
     }
 }

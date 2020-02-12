@@ -20,19 +20,47 @@
 
 package com.owncloud.android.presentation.viewmodels.authentication
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.authentication.usecases.LoginAsyncUseCase
+import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class OCAuthenticationViewModel(
     private val loginAsyncUseCase: LoginAsyncUseCase,
-    private val getUserInfoAsyncUseCase: GetUserInfoAsyncUseCase,
+    private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
+
+    private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
+    val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
+
+    fun getServerInfo(
+        serverUrl: String
+    ) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            _serverInfo.postValue(Event(UIResult.Loading()))
+            val useCaseResult = getServerInfoAsyncUseCase.execute(
+                GetServerInfoAsyncUseCase.Params(serverPath = serverUrl)
+            )
+            Timber.d(useCaseResult.toString())
+
+            if (useCaseResult.isSuccess) {
+                _serverInfo.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
+            } else {
+                _serverInfo.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
+            }
+        }
+    }
+
     fun login(
         serverUrl: String,
         username: String,
@@ -46,13 +74,6 @@ class OCAuthenticationViewModel(
                     password = password
                 )
             )
-            Timber.d(useCaseResult.toString())
-        }
-    }
-
-    fun getUserInfo() {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val useCaseResult = getUserInfoAsyncUseCase.execute(Unit)
             Timber.d(useCaseResult.toString())
         }
     }
