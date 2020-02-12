@@ -72,11 +72,6 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/Theme.ownCloud.Splash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.FileDisplayActivity"
@@ -273,5 +268,15 @@
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity android:name=".ui.activity.PatternLockActivity" />
         <activity android:name=".ui.activity.BiometricActivity" />
+        <activity
+            android:name=".presentation.ui.authentication.LoginActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>
