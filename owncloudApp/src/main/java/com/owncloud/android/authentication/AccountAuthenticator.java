@@ -172,13 +172,14 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         /// check if required token is stored
         final AccountManager accountManager = AccountManager.get(mContext);
         if (authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.Companion.getAccountType()))) {
+            // Basic
             accessToken = accountManager.getPassword(account);
         } else {
-            // Gets an auth token from the AccountManager's cache. If no auth token is cached for
+            // OAuth, gets an auth token from the AccountManager's cache. If no auth token is cached for
             // this account, null will be returned
             accessToken = accountManager.peekAuthToken(account, authTokenType);
             if (accessToken == null && canBeRefreshed(authTokenType)) {
-                refreshToken(account, authTokenType, accountManager, accountAuthenticatorResponse);
+                refreshToken(accountAuthenticatorResponse, account, authTokenType, accountManager, options);
                 return null;  // We return null because of the callbacks used within refreshToken method
             }
         }
@@ -192,16 +193,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         }
 
         /// if not stored, return Intent to access the AuthenticatorActivity and UPDATE the token for the account
-        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, accountAuthenticatorResponse);
-        intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
-        intent.putExtra(KEY_LOGIN_OPTIONS, options);
-        intent.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
-        intent.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
-
-        final Bundle bundle = new Bundle();
-        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        return bundle;
+        return prepareBundleToAccessAuthenticatorActivity(accountAuthenticatorResponse, account, authTokenType, options);
     }
 
     @Override
@@ -305,8 +297,12 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 getAccountType())));
     }
 
-    private void refreshToken(Account account, String authTokenType, AccountManager accountManager,
-                              AccountAuthenticatorResponse accountAuthenticatorResponse) {
+    private void refreshToken(
+            AccountAuthenticatorResponse accountAuthenticatorResponse,
+            Account account,
+            String authTokenType,
+            AccountManager accountManager,
+            Bundle options) {
 
         // Prepare everything to perform the token request
         String refreshToken = accountManager.getUserData(
@@ -378,8 +374,36 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
                     } else if (authorizationException != null) {
                         Timber.e(authorizationException, "OAuth request to refresh access token failed");
-                        accountAuthenticatorResponse.onError(authorizationException.code, authorizationException.error);
+                        Bundle result = prepareBundleToAccessAuthenticatorActivity(accountAuthenticatorResponse, account,
+                                authTokenType, options);
+                        accountAuthenticatorResponse.onResult(result);
                     }
+                    authService.dispose(); // Authorization service no longer required, cleaning up...
                 });
+    }
+
+    /**
+     * Return bundle with intent to access AuthenticatorActivity and UPDATE the token for the account
+     */
+    private Bundle prepareBundleToAccessAuthenticatorActivity(
+            AccountAuthenticatorResponse accountAuthenticatorResponse,
+            Account account,
+            String authTokenType,
+            Bundle options
+    ) {
+        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
+                accountAuthenticatorResponse);
+        intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
+        intent.putExtra(KEY_LOGIN_OPTIONS, options);
+        intent.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+        intent.putExtra(
+                AuthenticatorActivity.EXTRA_ACTION,
+                AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN
+        );
+
+        final Bundle bundle = new Bundle();
+        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+        return bundle;
     }
 }
