@@ -37,9 +37,10 @@ import timber.log.Timber;
 
 import java.util.Locale;
 
+import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_PATH_4_0_AND_LATER;
+
 public class AccountUtils {
 
-    public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
     private static final String ODAV_PATH = "/remote.php/odav";
 
     public static final int ACCOUNT_VERSION = 1;

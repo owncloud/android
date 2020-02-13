@@ -102,9 +102,8 @@ import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.ResponseTypeValues;
 import timber.log.Timber;
 
-import java.util.ArrayList;
-
 import static android.content.Intent.ACTION_VIEW;
+import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_PATH_4_0_AND_LATER;
 
 /**
  * This Activity is used to add an ownCloud account to the App
@@ -1109,8 +1108,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     // TODO remove, if possible
     private String trimUrlWebdav(String url) {
-        if (url.toLowerCase().endsWith(AccountUtils.WEBDAV_PATH_4_0_AND_LATER)) {
-            url = url.substring(0, url.length() - AccountUtils.WEBDAV_PATH_4_0_AND_LATER.length());
+        if (url.toLowerCase().endsWith(WEBDAV_PATH_4_0_AND_LATER)) {
+            url = url.substring(0, url.length() - WEBDAV_PATH_4_0_AND_LATER.length());
         }
         return url;
     }

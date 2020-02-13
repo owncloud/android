@@ -27,7 +27,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
-import com.owncloud.android.lib.resources.server.GetStatusRemoteOperation;
+import com.owncloud.android.lib.resources.server.GetRemoteStatusOperation;
 import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -61,7 +61,7 @@ public class SyncCapabilitiesOperation extends SyncOperation<RemoteCapability> {
             ConnectivityManager cm =(ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             if (activeNetwork.isConnected()) {
-                GetStatusRemoteOperation getStatus = new GetStatusRemoteOperation();
+                GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation();
                 RemoteOperationResult<OwnCloudVersion> statusResult = getStatus.execute(client);
                 if (statusResult.isSuccess()) {
                     serverVersion = statusResult.getData();
