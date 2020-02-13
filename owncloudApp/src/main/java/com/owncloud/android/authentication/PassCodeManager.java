@@ -98,7 +98,7 @@ public class PassCodeManager {
     private void checkPasscode(Activity activity) {
         Intent i = new Intent(MainApp.Companion.getAppContext(), PassCodeActivity.class);
         i.setAction(PassCodeActivity.ACTION_CHECK);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         activity.startActivity(i);
     }
 

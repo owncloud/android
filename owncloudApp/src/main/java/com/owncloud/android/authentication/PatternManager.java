@@ -94,6 +94,7 @@ public class PatternManager {
     private void checkPattern(Activity activity) {
         Intent i = new Intent(MainApp.Companion.getAppContext(), PatternLockActivity.class);
         i.setAction(PatternLockActivity.ACTION_CHECK);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         activity.startActivity(i);
     }
 
