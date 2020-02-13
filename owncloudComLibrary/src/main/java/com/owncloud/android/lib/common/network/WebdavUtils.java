@@ -34,6 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_PATH_4_0_AND_LATER;
+
 public class WebdavUtils {
     public static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat(
             "dd.MM.yyyy hh:mm");
@@ -120,4 +122,31 @@ public class WebdavUtils {
         }
         return result;
     }
+
+    public static String trimWebdavSuffix(String url) {
+        if (url == null) {
+            url = "";
+        } else {
+            if (url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+            }
+            if (url.toLowerCase().endsWith(WEBDAV_PATH_4_0_AND_LATER)) {
+                url = url.substring(0, url.length() - WEBDAV_PATH_4_0_AND_LATER.length());
+            }
+        }
+        return url;
+    }
+
+    public static String normalizeProtocolPrefix(String url, boolean isSslConn) {
+        if (!url.toLowerCase().startsWith("http://") &&
+                !url.toLowerCase().startsWith("https://")) {
+            if (isSslConn) {
+                return "https://" + url;
+            } else {
+                return "http://" + url;
+            }
+        }
+        return url;
+    }
+
 }
