@@ -31,9 +31,8 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation;
-import com.owncloud.android.lib.resources.users.GetUserInfoRemoteOperation;
+import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.operations.common.UseCaseHelper;
-import timber.log.Timber;
 
 import java.lang.ref.WeakReference;
 
@@ -95,7 +94,7 @@ public class AuthenticatorAsyncTask extends AsyncTask<Object, Void, RemoteOperat
 
             // Operation - get display name
             if (result.isSuccess()) {
-                GetUserInfoRemoteOperation remoteUserNameOperation = new GetUserInfoRemoteOperation();
+                GetRemoteUserInfoOperation remoteUserNameOperation = new GetRemoteUserInfoOperation();
                 if (targetUrlAfterPermanentRedirection != null) {
                     // we can't assume that any subpath of the domain is correctly redirected; ugly stuff
                     client = OwnCloudClientFactory.createOwnCloudClient(

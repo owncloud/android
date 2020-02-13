@@ -22,8 +22,8 @@ package com.owncloud.android.data.server.repository
 import com.owncloud.android.data.server.datasources.RemoteAnonymousDatasource
 import com.owncloud.android.domain.server.AnonymousServerRepository
 import com.owncloud.android.domain.server.model.ServerInfo
-import com.owncloud.android.lib.common.accounts.AccountUtils
-import java.util.Locale
+import com.owncloud.android.lib.common.network.WebdavUtils.normalizeProtocolPrefix
+import com.owncloud.android.lib.common.network.WebdavUtils.trimWebdavSuffix
 
 class OCAnonymousServerRepository(
     private val remoteAnonymousDatasource: RemoteAnonymousDatasource
@@ -47,31 +47,5 @@ class OCAnonymousServerRepository(
             authenticationMethod = authenticationMethod,
             isSecureConnection = pairRemoteStatus.second
         )
-    }
-
-    private fun trimWebdavSuffix(url: String): String {
-        var newUrl = url
-        if (newUrl.isNotBlank()) {
-            if (url.endsWith("/")) {
-                newUrl = url.substring(0, url.length - 1)
-            }
-            if (url.toLowerCase(Locale.getDefault()).endsWith(AccountUtils.Constants.WEBDAV_PATH_4_0_AND_LATER)) {
-                newUrl = url.substring(0, url.length - AccountUtils.Constants.WEBDAV_PATH_4_0_AND_LATER.length)
-            }
-        }
-        return newUrl
-    }
-
-    private fun normalizeProtocolPrefix(url: String, isSslConnection: Boolean): String {
-        if (!url.toLowerCase(Locale.getDefault()).startsWith("http://") &&
-            !url.toLowerCase(Locale.getDefault()).startsWith("https://")
-        ) {
-            return if (isSslConnection) {
-                "https://$url"
-            } else {
-                "http://$url"
-            }
-        }
-        return url
     }
 }

@@ -23,14 +23,16 @@ package com.owncloud.android.operations;
 
 import android.content.Context;
 
-import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.server.GetStatusRemoteOperation;
+import com.owncloud.android.lib.resources.server.GetRemoteStatusOperation;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import timber.log.Timber;
+
+import static com.owncloud.android.lib.common.network.WebdavUtils.normalizeProtocolPrefix;
+import static com.owncloud.android.lib.common.network.WebdavUtils.trimWebdavSuffix;
 
 /**
  * Get basic information from an ownCloud server given its URL.
@@ -68,14 +70,13 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
     @Override
     protected RemoteOperationResult<ServerInfo> run(OwnCloudClient client) {
         // first: check the status of the server (including its version)
-        GetStatusRemoteOperation getStatusOperation = new GetStatusRemoteOperation();
+        GetRemoteStatusOperation getStatusOperation = new GetRemoteStatusOperation();
         final RemoteOperationResult<OwnCloudVersion> remoteStatusResult = getStatusOperation.execute(client);
         RemoteOperationResult<ServerInfo> result = new RemoteOperationResult(remoteStatusResult);
 
         if (remoteStatusResult.isSuccess()) {
             // second: get authentication method required by the server
             mResultData.mVersion = remoteStatusResult.getData();
-            Timber.d("Result code : " + remoteStatusResult.getCode());
             mResultData.mIsSslConn = (remoteStatusResult.getCode() == ResultCode.OK_SSL);
             mResultData.mBaseUrl = normalizeProtocolPrefix(mUrl, mResultData.mIsSslConn);
             final RemoteOperationResult<AuthenticationMethod> detectAuthResult = detectAuthorizationMethod(client);
@@ -97,32 +98,6 @@ public class GetServerInfoOperation extends RemoteOperation<GetServerInfoOperati
         Timber.d("Trying empty authorization to detect authentication method");
         DetectAuthenticationMethodOperation operation = new DetectAuthenticationMethodOperation();
         return operation.execute(client);
-    }
-
-    private String trimWebdavSuffix(String url) {
-        if (url == null) {
-            url = "";
-        } else {
-            if (url.endsWith("/")) {
-                url = url.substring(0, url.length() - 1);
-            }
-            if (url.toLowerCase().endsWith(AccountUtils.WEBDAV_PATH_4_0_AND_LATER)) {
-                url = url.substring(0, url.length() - AccountUtils.WEBDAV_PATH_4_0_AND_LATER.length());
-            }
-        }
-        return url;
-    }
-
-    private String normalizeProtocolPrefix(String url, boolean isSslConn) {
-        if (!url.toLowerCase().startsWith("http://") &&
-                !url.toLowerCase().startsWith("https://")) {
-            if (isSslConn) {
-                return "https://" + url;
-            } else {
-                return "http://" + url;
-            }
-        }
-        return url;
     }
 
     @Deprecated
