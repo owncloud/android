@@ -334,7 +334,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         );
 
         TokenRequest tokenRequest = new TokenRequest.Builder(
-                serviceConfiguration,
+                authorizationServiceConfiguration,
                 mContext.getString(R.string.oauth2_client_id)
         ).setGrantType(GrantTypeValues.REFRESH_TOKEN)
                 .setScope(scope)
