@@ -68,6 +68,7 @@ import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.exceptions.UnhandledHttpCodeException
 import com.owncloud.android.domain.exceptions.UnknownErrorException
 import com.owncloud.android.domain.exceptions.WrongServerResponseException
+import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import java.net.SocketTimeoutException
 
@@ -93,7 +94,7 @@ private fun <T> handleRemoteOperationResult(
         }
         RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE -> throw ServerNotReachableException()
         RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE -> throw ServiceUnavailableException()
-        RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED -> throw SSLRecoverablePeerUnverifiedException()
+        RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED -> throw remoteOperationResult.exception as CertificateCombinedException
         RemoteOperationResult.ResultCode.BAD_OC_VERSION -> throw BadOcVersionException()
         RemoteOperationResult.ResultCode.INCORRECT_ADDRESS -> throw IncorrectAddressException()
         RemoteOperationResult.ResultCode.SSL_ERROR -> throw SSLErrorException()

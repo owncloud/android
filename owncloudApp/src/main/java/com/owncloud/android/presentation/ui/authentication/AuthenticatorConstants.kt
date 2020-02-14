@@ -27,3 +27,5 @@ const val ACTION_UPDATE_TOKEN: Byte = 1 // requested by the user
 const val ACTION_UPDATE_EXPIRED_TOKEN: Byte = 2 // detected by the app
 
 const val KEY_AUTH_TOKEN_TYPE = "authTokenType"
+
+const val UNTRUSTED_CERT_DIALOG_TAG = "UNTRUSTED_CERT_DIALOG";

@@ -31,6 +31,7 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -42,13 +43,16 @@ import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
+import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
+import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.account_setup.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
 
     private val authenticatorViewModel by viewModel<OCAuthenticationViewModel>()
 
@@ -127,6 +131,17 @@ class LoginActivity : AppCompatActivity() {
         authenticatorViewModel.getServerInfo(serverUrl = uri)
     }
 
+    /**
+     * Show untrusted cert dialog
+     */
+    private fun showUntrustedCertDialog(certificateCombinedException: CertificateCombinedException) { // Show a dialog with the certificate info
+        val dialog = SslUntrustedCertDialog.newInstanceForFullSslError(certificateCombinedException)
+        val fm = supportFragmentManager
+        val ft = fm.beginTransaction()
+        ft.addToBackStack(null)
+        dialog.show(ft, UNTRUSTED_CERT_DIALOG_TAG)
+    }
+
     private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
         uiResult.getStoredData()?.run {
             server_status_text.apply {
@@ -177,6 +192,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun getServerInfoIsError(uiResult: UIResult<ServerInfo>) {
         when (uiResult.getThrowableOrNull()) {
+            is CertificateCombinedException ->
+                showUntrustedCertDialog(uiResult.getThrowableOrNull() as CertificateCombinedException)
             is OwncloudVersionNotSupportedException -> server_status_text.apply {
                 text = getString(R.string.server_not_supported)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
@@ -192,5 +209,20 @@ class LoginActivity : AppCompatActivity() {
         }
         server_status_text.isVisible = true
     }
+
+    override fun onSavedCertificate() {
+        Timber.d("Server certificate is trusted")
+        checkOcServer()
+    }
+
+    override fun onCancelCertificate() {
+        Timber.d("Server certificate is not trusted")
+    }
+
+    override fun onFailedSavingCertificate() {
+        Timber.d("Server certificate could not be saved")
+        Toast.makeText(this, R.string.ssl_validator_not_saved, Toast.LENGTH_LONG).show()
+    }
+
 
 }
