@@ -72,7 +72,7 @@ dependencies {
     // Timber
     implementation libs.timber
 
-    implementation 'com.github.hannesa2:CVScanner:1.0'
+    implementation 'com.github.hannesa2:CVScanner:1.11'
 
     // Tests
     testImplementation project(":owncloudTestUtil")
@@ -143,22 +143,37 @@ android {
     }
 
     signingConfigs {
-        release {
-            if (System.env.OC_RELEASE_KEYSTORE) {
+        if (System.env.OC_RELEASE_KEYSTORE) {
+            release {
+                println "I run with OC_RELEASE_KEYSTORE"
                 storeFile file(System.env.OC_RELEASE_KEYSTORE)  // use an absolute path
                 storePassword System.env.OC_RELEASE_KEYSTORE_PASSWORD
                 keyAlias System.env.OC_RELEASE_KEY_ALIAS
                 keyPassword System.env.OC_RELEASE_KEY_PASSWORD
             }
+        } else if (System.getenv("CI")) {
+            release {
+                println "I run on Github CI"
+                storeFile file('../signing/release.keystore')
+                storePassword System.getenv("KEYSTORE_PASS")
+                keyAlias System.getenv("ALIAS_NAME")
+                keyPassword System.getenv("ALIAS_PASS")
+            }
+        } else {
+            release {
+                def keystore = "${project.gradle.gradleUserHomeDir}/../.android/debug.keystore"
+                println "I run local using $keystore"
+                storePassword "android"
+                keyPassword "android"
+                keyAlias "androiddebugkey"
+                storeFile file(keystore)
+            }
         }
     }
 
     buildTypes {
-
         release {
-            if (System.env.OC_RELEASE_KEYSTORE) {
-                signingConfig signingConfigs.release
-            }
+            signingConfig signingConfigs.release
         }
 
         debug {
@@ -257,8 +272,16 @@ static def getGitCommitCount() {
 }
 
 static def getTag() {
-    def process = "git describe --abbrev=0".execute()
-    return process.text.toString().trim()
+    def tagVersion = "$System.env.TAG_VERSION"
+    if (tagVersion == "null") {
+        println "No variable TAG_VERSION specified, I'm using 'git describe --abbrev=0'"
+        def process = "git describe --abbrev=0".execute()
+        tagVersion = process.text.toString().trim()
+    } else {
+        def tagVersionToken = tagVersion.split("/")
+        tagVersion = tagVersionToken[2]
+    }
+    return tagVersion
 }
 
 static def getLatestGitHash() {

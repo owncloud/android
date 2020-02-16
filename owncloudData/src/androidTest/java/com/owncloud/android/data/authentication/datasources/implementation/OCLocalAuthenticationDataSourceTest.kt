@@ -56,6 +56,7 @@ import com.owncloud.android.testutil.OC_REFRESH_TOKEN
 import com.owncloud.android.testutil.OC_SCOPE
 import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.annotation.FailsOnGithubAction
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
 import io.mockk.mockk
@@ -148,6 +149,7 @@ class OCLocalAuthenticationDataSourceTest {
     }
 
     @Test
+    @FailsOnGithubAction
     fun addBasicAccountAlreadyExistsUpdateDifferentUsername() {
 
         mockSelectedAccountNameInPreferences()
