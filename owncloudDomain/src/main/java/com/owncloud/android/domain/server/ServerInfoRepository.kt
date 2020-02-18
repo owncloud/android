@@ -21,6 +21,6 @@ package com.owncloud.android.domain.server
 
 import com.owncloud.android.domain.server.model.ServerInfo
 
-interface AnonymousServerRepository {
+interface ServerInfoRepository {
     fun getServerInfo(path: String): ServerInfo
 }

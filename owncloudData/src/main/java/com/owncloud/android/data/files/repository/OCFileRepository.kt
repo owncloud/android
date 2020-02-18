@@ -17,19 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.server.usecases
+package com.owncloud.android.data.files.repository
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.server.ServerRepository
+import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.domain.files.FileRepository
 
-class CheckPathExistenceAsyncUseCase(
-    private val serverRepository: ServerRepository
-) : BaseUseCaseWithResult<Boolean, CheckPathExistenceAsyncUseCase.Params>() {
-    override fun run(params: Params): Boolean =
-        serverRepository.checkPathExistence(params.remotePath, params.isUserLogged)
-
-    data class Params(
-        val remotePath: String,
-        val isUserLogged: Boolean
-    )
+class OCFileRepository(
+    private val remoteFileDataSource: RemoteFileDataSource
+) : FileRepository {
+    override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
+        remoteFileDataSource.checkPathExistence(path, userLogged)
 }

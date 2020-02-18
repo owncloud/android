@@ -20,14 +20,14 @@
 package com.owncloud.android.domain.server.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.server.AnonymousServerRepository
+import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.server.model.ServerInfo
 
 class GetServerInfoAsyncUseCase(
-    private val anonymousServerRepository: AnonymousServerRepository
+    private val serverInfoRepository: ServerInfoRepository
 ) : BaseUseCaseWithResult<ServerInfo, GetServerInfoAsyncUseCase.Params>() {
     override fun run(params: Params): ServerInfo =
-        anonymousServerRepository.getServerInfo(params.serverPath)
+        serverInfoRepository.getServerInfo(params.serverPath)
 
     data class Params(
         val serverPath: String

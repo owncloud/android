@@ -17,27 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.server.network
+package com.owncloud.android.data.files.network
 
-import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.server.AnonymousService
-import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation
-import com.owncloud.android.lib.resources.server.GetRemoteStatusOperation
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
+import com.owncloud.android.lib.resources.files.FileService
 
-class OCAnonymousServerService : AnonymousService {
+class OCFileService(override val client: OwnCloudClient) :
+    FileService {
     override fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Boolean> =
         CheckPathExistenceRemoteOperation(
             remotePath = path,
-            isUserLogged = true
-        ).execute(createClientFromPath(path))
-
-    override fun getRemoteStatus(path: String): RemoteOperationResult<OwnCloudVersion> =
-        GetRemoteStatusOperation().execute(createClientFromPath(path))
-
-    private fun createClientFromPath(path: String): OwnCloudClient {
-        return OwnCloudClient(Uri.parse(path))
-    }
+            isUserLogged = isUserLogged
+        ).execute(client)
 }

@@ -20,24 +20,24 @@
 package com.owncloud.android.data.server.datasources.implementation
 
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.server.datasources.RemoteAnonymousDatasource
+import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.server.AnonymousService
+import com.owncloud.android.lib.resources.status.ServerInfoService
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 
-class OCRemoteAnonymousDataSource(
-    private val anonymousService: AnonymousService
-) : RemoteAnonymousDatasource {
+class OCRemoteServerInfoDataSource(
+    private val serverInfoService: ServerInfoService
+) : RemoteServerInfoDataSource {
 
     /* Basically, tries to access to the root folder without authorization and analyzes the response.*/
     override fun getAuthenticationMethod(path: String): AuthenticationMethod {
         // Step 1: check whether the root folder exists, following redirections
-        var checkPathExistenceResult = anonymousService.checkPathExistence(path, isUserLogged = false)
+        var checkPathExistenceResult = serverInfoService.checkPathExistence(path, isUserLogged = false)
         var redirectionLocation = checkPathExistenceResult.redirectedLocation
         while (!redirectionLocation.isNullOrEmpty()) {
-            checkPathExistenceResult = anonymousService.checkPathExistence(redirectionLocation, isUserLogged = false)
+            checkPathExistenceResult = serverInfoService.checkPathExistence(redirectionLocation, isUserLogged = false)
             redirectionLocation = checkPathExistenceResult.redirectedLocation
         }
 
@@ -55,7 +55,7 @@ class OCRemoteAnonymousDataSource(
     }
 
     override fun getRemoteStatus(path: String): Pair<OwnCloudVersion, Boolean> {
-        val remoteStatusResult = anonymousService.getRemoteStatus(path)
+        val remoteStatusResult = serverInfoService.getRemoteStatus(path)
 
         val ownCloudVersion = executeRemoteOperation {
             remoteStatusResult

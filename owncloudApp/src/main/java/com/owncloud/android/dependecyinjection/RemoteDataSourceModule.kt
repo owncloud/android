@@ -25,12 +25,12 @@ import com.owncloud.android.data.authentication.datasources.implementation.OCRem
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.network.OCCapabilityService
-import com.owncloud.android.data.server.datasources.RemoteAnonymousDatasource
-import com.owncloud.android.data.server.datasources.RemoteServerDataSource
-import com.owncloud.android.data.server.datasources.implementation.OCRemoteAnonymousDataSource
-import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerDataSource
-import com.owncloud.android.data.server.network.OCAnonymousServerService
-import com.owncloud.android.data.server.network.OCServerService
+import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
+import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerInfoDataSource
+import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
+import com.owncloud.android.data.server.network.OCServerInfoService
+import com.owncloud.android.data.files.network.OCFileService
 import com.owncloud.android.data.sharing.shares.network.OCShareService
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
@@ -42,8 +42,8 @@ import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDat
 import com.owncloud.android.data.user.network.OCUserService
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.lib.resources.server.AnonymousService
-import com.owncloud.android.lib.resources.server.ServerService
+import com.owncloud.android.lib.resources.status.ServerInfoService
+import com.owncloud.android.lib.resources.files.FileService
 import com.owncloud.android.lib.resources.shares.ShareService
 import com.owncloud.android.lib.resources.shares.ShareeService
 import com.owncloud.android.lib.resources.status.CapabilityService
@@ -60,8 +60,8 @@ val remoteDataSourceModule = module {
     single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
     single<UserService> { OCUserService(get()) }
-    single<ServerService> { OCServerService(get()) }
-    single<AnonymousService>{ OCAnonymousServerService()}
+    single<FileService> { OCFileService(get()) }
+    single<ServerInfoService>{ OCServerInfoService()}
 
     factory<RemoteCapabilitiesDataSource> {
         OCRemoteCapabilitiesDataSource(
@@ -86,7 +86,11 @@ val remoteDataSourceModule = module {
             get()
         )
     }
-    factory<RemoteServerDataSource> { OCRemoteServerDataSource(get()) }
-    factory<RemoteAnonymousDatasource> { OCRemoteAnonymousDataSource(get()) }
+    factory<RemoteFileDataSource> {
+        OCRemoteFileDataSource(
+            get()
+        )
+    }
+    factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext()) }
 }

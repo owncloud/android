@@ -27,7 +27,7 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation;
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
 import timber.log.Timber;
 
 /**

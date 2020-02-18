@@ -3,7 +3,7 @@ package com.owncloud.android.data.server.datasources
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 
-interface RemoteAnonymousDatasource {
+interface RemoteServerInfoDataSource {
 
     fun getAuthenticationMethod(path: String): AuthenticationMethod
 

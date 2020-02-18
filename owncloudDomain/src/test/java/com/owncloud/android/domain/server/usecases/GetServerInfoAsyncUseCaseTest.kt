@@ -18,7 +18,7 @@
  */
 package com.owncloud.android.domain.server.usecases
 
-import com.owncloud.android.domain.server.AnonymousServerRepository
+import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.testutil.OC_ServerInfo
 import io.mockk.every
 import io.mockk.spyk
@@ -30,13 +30,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GetServerInfoAsyncUseCaseTest {
-    private val anonymousServerRepository: AnonymousServerRepository = spyk()
-    private val useCase = GetServerInfoAsyncUseCase((anonymousServerRepository))
+    private val serverInfoRepository: ServerInfoRepository = spyk()
+    private val useCase = GetServerInfoAsyncUseCase((serverInfoRepository))
     private val useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = "http://demo.owncloud.com")
 
     @Test
     fun getServerInfoSuccess() {
-        every { anonymousServerRepository.getServerInfo(useCaseParams.serverPath) } returns OC_ServerInfo
+        every { serverInfoRepository.getServerInfo(useCaseParams.serverPath) } returns OC_ServerInfo
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
@@ -45,12 +45,12 @@ class GetServerInfoAsyncUseCaseTest {
         assertNull(useCaseResult.getThrowableOrNull())
         assertEquals(OC_ServerInfo, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { anonymousServerRepository.getServerInfo(useCaseParams.serverPath) }
+        verify(exactly = 1) { serverInfoRepository.getServerInfo(useCaseParams.serverPath) }
     }
 
     @Test
     fun getServerInfoWithException() {
-        every { anonymousServerRepository.getServerInfo(useCaseParams.serverPath)  } throws Exception()
+        every { serverInfoRepository.getServerInfo(useCaseParams.serverPath)  } throws Exception()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -60,6 +60,6 @@ class GetServerInfoAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is Exception)
 
-        verify(exactly = 1) { anonymousServerRepository.getServerInfo(useCaseParams.serverPath)}
+        verify(exactly = 1) { serverInfoRepository.getServerInfo(useCaseParams.serverPath)}
     }
 }
