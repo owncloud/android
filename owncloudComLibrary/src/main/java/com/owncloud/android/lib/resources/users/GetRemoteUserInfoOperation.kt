@@ -62,7 +62,7 @@ class GetRemoteUserInfoOperation : RemoteOperation<RemoteUserInfo>() {
                 val commonResponse: CommonOcsResponse<UserInfoResponse>? = adapter.fromJson(response)
 
                 result = RemoteOperationResult(ResultCode.OK)
-                result.setData(commonResponse?.ocs?.data?.toRemoteUserInfo())
+                result.data = commonResponse?.ocs?.data?.toRemoteUserInfo()
             } else {
                 result = RemoteOperationResult(getMethod)
                 Timber.e("Failed response while getting user information status code: $status, response: $response")

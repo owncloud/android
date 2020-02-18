@@ -82,20 +82,23 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
                 latestResult =
                     if (isSuccess(status)) RemoteOperationResult(ResultCode.OK)
                     else RemoteOperationResult(getMethod)
+
             } catch (sslE: SSLException) {
                 latestResult = RemoteOperationResult(sslE)
                 return successfulConnection
             }
+
             var redirectedLocation = latestResult.redirectedLocation
             while (!redirectedLocation.isNullOrEmpty() && !latestResult.isSuccess) {
                 isRedirectToNonSecureConnection =
-                    isRedirectToNonSecureConnection or
+                    isRedirectToNonSecureConnection ||
                             (baseUrlSt.startsWith(HTTPS_PREFIX) && redirectedLocation.startsWith(HTTP_PREFIX))
 
                 getMethod = GetMethod(URL(redirectedLocation)).apply {
                     setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
                     setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
                 }
+
                 status = client.executeHttpMethod(getMethod)
                 latestResult = RemoteOperationResult(getMethod)
                 redirectedLocation = latestResult.redirectedLocation
@@ -128,12 +131,12 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
             latestResult = RemoteOperationResult(e)
         }
         when {
-            latestResult.isSuccess -> Timber.i("Connection check at $baseUrlSt: ${latestResult.logMessage}")
+            latestResult.isSuccess -> Timber.i("Connection check at $baseUrlSt successful: ${latestResult.logMessage}")
 
             latestResult.isException ->
                 Timber.e(latestResult.exception, "Connection check at $baseUrlSt: ${latestResult.logMessage}")
 
-            else -> Timber.e("Connection check at $baseUrlSt: ${latestResult.logMessage}")
+            else -> Timber.e("Connection check at $baseUrlSt failed: ${latestResult.logMessage}")
         }
         return successfulConnection
     }
