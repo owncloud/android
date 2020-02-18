@@ -19,22 +19,22 @@
 
 package com.owncloud.android.data.server.repository
 
-import com.owncloud.android.data.server.datasources.RemoteAnonymousDatasource
-import com.owncloud.android.domain.server.AnonymousServerRepository
+import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
+import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.lib.common.network.WebdavUtils.normalizeProtocolPrefix
 import com.owncloud.android.lib.common.network.WebdavUtils.trimWebdavSuffix
 
-class OCAnonymousServerRepository(
-    private val remoteAnonymousDatasource: RemoteAnonymousDatasource
-) : AnonymousServerRepository {
+class OCServerInfoInfoRepository(
+    private val remoteServerInfoDataSource: RemoteServerInfoDataSource
+) : ServerInfoRepository {
 
     override fun getServerInfo(path: String): ServerInfo {
         // First step: check the status of the server (including its version)
-        val pairRemoteStatus = remoteAnonymousDatasource.getRemoteStatus(path)
+        val pairRemoteStatus = remoteServerInfoDataSource.getRemoteStatus(path)
 
         // Second step: get authentication method required by the server
-        val authenticationMethod = remoteAnonymousDatasource.getAuthenticationMethod(
+        val authenticationMethod = remoteServerInfoDataSource.getAuthenticationMethod(
             normalizeProtocolPrefix(
                 trimWebdavSuffix(path),
                 pairRemoteStatus.second

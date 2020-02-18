@@ -20,9 +20,7 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.resources.server.CheckPathExistenceRemoteOperation
-import com.owncloud.android.operations.common.UseCaseHelper
-import timber.log.Timber
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 
 class RemoteFileUtils {
     companion object {
@@ -34,8 +32,8 @@ class RemoteFileUtils {
          * @param remotePath
          * @return
          */
-        fun getAvailableRemotePath(remotePath: String): String? {
-            var checkExistsFile = existsFile(remotePath)
+        fun getAvailableRemotePath(ownCloudClient: OwnCloudClient, remotePath: String): String? {
+            var checkExistsFile = existsFile(ownCloudClient, remotePath)
             if (!checkExistsFile) {
                 return remotePath
             }
@@ -52,9 +50,9 @@ class RemoteFileUtils {
             do {
                 suffix = " ($count)"
                 checkExistsFile = if (pos >= 0) {
-                    existsFile("${remotePath.substringBeforeLast('.', "")}$suffix.$extension")
+                    existsFile(ownCloudClient, "${remotePath.substringBeforeLast('.', "")}$suffix.$extension")
                 } else {
-                    existsFile(remotePath + suffix)
+                    existsFile(ownCloudClient, remotePath + suffix)
                 }
                 count++
             } while (checkExistsFile)
@@ -65,11 +63,13 @@ class RemoteFileUtils {
             }
         }
 
-        private fun existsFile(remotePath: String): Boolean {
-            val useCaseHelper = UseCaseHelper()
-            val exists = useCaseHelper.checkPathExistence(remotePath).getDataOrNull() == true
-            Timber.d("File with same name exists = " + exists)
-            return exists
+        private fun existsFile(ownCloudClient: OwnCloudClient, remotePath: String): Boolean {
+            val existsOperation =
+                CheckPathExistenceRemoteOperation(
+                    remotePath,
+                    false
+                )
+            return existsOperation.execute(ownCloudClient).isSuccess
         }
     }
 }

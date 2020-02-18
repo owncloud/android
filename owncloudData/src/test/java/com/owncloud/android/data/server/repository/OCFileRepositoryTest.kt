@@ -20,7 +20,8 @@
 package com.owncloud.android.data.server.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.owncloud.android.data.server.datasources.RemoteServerDataSource
+import com.owncloud.android.data.files.repository.OCFileRepository
+import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_ServerInfo
 import io.mockk.every
@@ -29,19 +30,20 @@ import io.mockk.verify
 import org.junit.Rule
 import org.junit.Test
 
-class OCServerRepositoryTest {
+class OCFileRepositoryTest {
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val remoteServerDataSource = mockk<RemoteServerDataSource>(relaxed = true)
-    private val ocServerRepository: OCServerRepository = OCServerRepository(remoteServerDataSource)
+    private val remoteServerDataSource = mockk<RemoteFileDataSource>(relaxed = true)
+    private val ocFileRepository: OCFileRepository =
+        OCFileRepository(remoteServerDataSource)
 
     @Test
     fun checkPathExistenceExists() {
         every { remoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false) } returns true
 
-        ocServerRepository.checkPathExistence(OC_ServerInfo.baseUrl, false)
+        ocFileRepository.checkPathExistence(OC_ServerInfo.baseUrl, false)
 
         verify(exactly = 1) {
             remoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false)
@@ -52,7 +54,7 @@ class OCServerRepositoryTest {
     fun checkPathExistenceExistsNoConnection() {
         every { remoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false) } throws NoConnectionWithServerException()
 
-        ocServerRepository.checkPathExistence(OC_ServerInfo.baseUrl, false)
+        ocFileRepository.checkPathExistence(OC_ServerInfo.baseUrl, false)
 
         verify(exactly = 1) {
             remoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false)

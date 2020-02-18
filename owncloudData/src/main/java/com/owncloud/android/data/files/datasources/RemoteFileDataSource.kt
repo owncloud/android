@@ -17,15 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.server.datasources.implementation
+package com.owncloud.android.data.files.datasources
 
-import com.owncloud.android.data.server.datasources.RemoteServerDataSource
-import com.owncloud.android.lib.resources.server.ServerService
-
-class OCRemoteServerDataSource(
-    private val serverService: ServerService
-) : RemoteServerDataSource {
-    override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean =
-        serverService.checkPathExistence(path = path, isUserLogged = checkUserCredentials).data
-
+interface RemoteFileDataSource {
+    fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean
 }

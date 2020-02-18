@@ -17,8 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.server
+package com.owncloud.android.data.files.datasources.implementation
 
-interface ServerRepository {
-    fun checkPathExistence(path: String, userLogged: Boolean): Boolean
+import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.lib.resources.files.FileService
+
+class OCRemoteFileDataSource(
+    private val fileService: FileService
+) : RemoteFileDataSource {
+    override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean =
+        fileService.checkPathExistence(path = path, isUserLogged = checkUserCredentials).data
+
 }
