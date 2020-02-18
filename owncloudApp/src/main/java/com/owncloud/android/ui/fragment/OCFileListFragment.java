@@ -98,8 +98,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
 
-    protected final static String ARG_ALLOW_CONTEXTUAL_MODE = MY_PACKAGE + ".ALLOW_CONTEXTUAL";
-    protected final static String ARG_HIDE_FAB = MY_PACKAGE + ".HIDE_FAB";
+    private final static String ARG_ALLOW_CONTEXTUAL_MODE = MY_PACKAGE + ".ALLOW_CONTEXTUAL";
+    private final static String ARG_HIDE_FAB = MY_PACKAGE + ".HIDE_FAB";
 
     private static final String KEY_FILE = MY_PACKAGE + ".extra.FILE";
     private static final String KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED";
@@ -132,6 +132,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
      *
      * @param justFolders          When 'true', only folders will be shown to the user, not files.
      * @param onlyAvailableOffline When 'true', only available offline files will be shown to the user.
+     * @param sharedByLinkFiles    When 'true', only share by link files will be shown to the user.
+     * @param pickingAFolder       When 'true', only folders will be clickable when selecting a folder when copying or
+     *                             moving files or configuring upload path for camera uploads
      * @param hideFAB              When 'true', floating action button is hidden.
      * @param allowContextualMode  When 'true', contextual action mode is enabled long-pressing an item.
      * @return New fragment with arguments set.
@@ -140,6 +143,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             boolean justFolders,
             boolean onlyAvailableOffline,
             boolean sharedByLinkFiles,
+            boolean pickingAFolder,
             boolean hideFAB,
             boolean allowContextualMode
     ) {
@@ -151,6 +155,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (onlyAvailableOffline || sharedByLinkFiles) {
             hideFAB = true;
         }
+        args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder);
         args.putBoolean(ARG_HIDE_FAB, hideFAB);
         args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
         frag.setArguments(args);
@@ -227,11 +232,13 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
         boolean onlyAvailableOffline = isShowingOnlyAvailableOffline();
         boolean sharedByLinkFiles = isShowingSharedByLinkFiles();
+        boolean folderPicker = isPickingAFolder();
 
         mFileListAdapter = new FileListListAdapter(
                 justFolders,
                 onlyAvailableOffline,
                 sharedByLinkFiles,
+                folderPicker,
                 getActivity(),
                 mContainerActivity
         );
@@ -577,7 +584,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
         }
 
-        public void storeStateIn(Bundle outState) {
+        void storeStateIn(Bundle outState) {
             outState.putBoolean(KEY_ACTION_MODE_CLOSED_BY_DRAWER, mActionModeClosedByDrawer);
             if (mSelectionWhenActionModeClosedByDrawer != null) {
                 SparseBooleanArrayParcelable sbap = new SparseBooleanArrayParcelable(
@@ -587,7 +594,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
         }
 
-        public void loadStateFrom(Bundle savedInstanceState) {
+        void loadStateFrom(Bundle savedInstanceState) {
             mActionModeClosedByDrawer = savedInstanceState.getBoolean(
                     KEY_ACTION_MODE_CLOSED_BY_DRAWER,
                     mActionModeClosedByDrawer
@@ -768,7 +775,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 if (PreviewImageFragment.canBePreviewed(file)) {
                     // preview image - it handles the sync, if needed
                     ((FileDisplayActivity) mContainerActivity).startImagePreview(file);
-
                 } else if (PreviewTextFragment.canBePreviewed(file)) {
                     ((FileDisplayActivity) mContainerActivity).startTextPreview(file);
                     mContainerActivity.getFileOperationsHelper().syncFile(file);
@@ -832,7 +838,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * @param menuId Identifier of the action menu selected by the user
      * @return 'true' if the menu selection started any action, 'false' otherwise.
      */
-    public boolean onFileActionChosen(int menuId) {
+    private boolean onFileActionChosen(int menuId) {
         final ArrayList<OCFile> checkedFiles = mFileListAdapter.getCheckedItems(getListView());
         if (checkedFiles.size() <= 0) {
             return false;
@@ -1102,7 +1108,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * @param file Folder to check.
      * @return 'true' is folder should be shown in grid mode, 'false' if list mode is preferred.
      */
-    public boolean isGridViewPreferred(OCFile file) {
+    private boolean isGridViewPreferred(OCFile file) {
         if (file != null) {
             OCFile fileToTest = file;
             OCFile parentDir;

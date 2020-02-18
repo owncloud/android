@@ -51,7 +51,7 @@ import java.util.ArrayList;
 public class ExtendedListFragment extends Fragment
         implements OnItemClickListener, OnEnforceableRefreshListener {
 
-    protected static final String KEY_SAVED_LIST_POSITION = "SAVED_LIST_POSITION";
+    private static final String KEY_SAVED_LIST_POSITION = "SAVED_LIST_POSITION";
 
     private static final String KEY_INDEXES = "INDEXES";
     private static final String KEY_FIRST_POSITIONS = "FIRST_POSITIONS";
@@ -60,19 +60,21 @@ public class ExtendedListFragment extends Fragment
     private static final String KEY_EMPTY_LIST_MESSAGE = "EMPTY_LIST_MESSAGE";
     private static final String KEY_IS_GRID_VISIBLE = "IS_GRID_VISIBLE";
 
-    protected static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
-    protected static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
+    static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
+    static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
             ".ONLY_AVAILABLE_OFFLINE";
-    protected static final String ARG_SHARED_BY_LINK_FILES = ExtendedListFragment.class.getCanonicalName() +
+    static final String ARG_SHARED_BY_LINK_FILES = ExtendedListFragment.class.getCanonicalName() +
             ".SHARED_BY_LINK_FILES";
+    protected static final String ARG_PICKING_A_FOLDER = ExtendedListFragment.class.getCanonicalName() +
+            ".ARG_PICKING_A_FOLDER";
 
     private ProgressBar mProgressBar;
     private View mShadowView;
 
-    protected SwipeRefreshLayout mRefreshListLayout;
+    SwipeRefreshLayout mRefreshListLayout;
     private SwipeRefreshLayout mRefreshGridLayout;
-    protected SwipeRefreshLayout mRefreshEmptyLayout;
-    protected TextView mEmptyListMessage;
+    SwipeRefreshLayout mRefreshEmptyLayout;
+    TextView mEmptyListMessage;
 
     private FloatingActionsMenu mFabMain;
     private FloatingActionButton mFabUpload;
@@ -86,7 +88,7 @@ public class ExtendedListFragment extends Fragment
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = null;
 
-    protected AbsListView mCurrentListView;
+    AbsListView mCurrentListView;
     private ExtendedListView mListView;
     private View mListFooterView;
     private GridViewWithHeaderAndFooter mGridView;
@@ -94,7 +96,7 @@ public class ExtendedListFragment extends Fragment
 
     private ListAdapter mAdapter;
 
-    protected void setListAdapter(ListAdapter listAdapter) {
+    void setListAdapter(ListAdapter listAdapter) {
         mAdapter = listAdapter;
         mCurrentListView.setAdapter(listAdapter);
         mCurrentListView.invalidateViews();
@@ -104,11 +106,11 @@ public class ExtendedListFragment extends Fragment
         return mCurrentListView;
     }
 
-    public FloatingActionButton getFabUpload() {
+    FloatingActionButton getFabUpload() {
         return mFabUpload;
     }
 
-    public FloatingActionButton getFabMkdir() {
+    FloatingActionButton getFabMkdir() {
         return mFabMkdir;
     }
 
@@ -116,7 +118,7 @@ public class ExtendedListFragment extends Fragment
         return mFabMain;
     }
 
-    public void switchToGridView() {
+    void switchToGridView() {
         if (!isGridEnabled()) {
             mListView.setAdapter(null);
             mRefreshListLayout.setVisibility(View.GONE);
@@ -126,7 +128,7 @@ public class ExtendedListFragment extends Fragment
         }
     }
 
-    public void switchToListView() {
+    void switchToListView() {
         if (isGridEnabled()) {
             mGridView.setAdapter(null);
             mRefreshGridLayout.setVisibility(View.GONE);
@@ -483,5 +485,10 @@ public class ExtendedListFragment extends Fragment
     boolean isShowingSharedByLinkFiles() {
         Bundle args = getArguments();
         return ((args != null) && args.getBoolean(ARG_SHARED_BY_LINK_FILES, false));
+    }
+
+    boolean isPickingAFolder() {
+        Bundle args = getArguments();
+        return ((args != null) && args.getBoolean(ARG_PICKING_A_FOLDER, false));
     }
 }

@@ -74,6 +74,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private boolean mJustFolders;
     private boolean mOnlyAvailableOffline;
     private boolean mSharedByLinkFiles;
+    private boolean mFolderPicker;
 
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
@@ -85,13 +86,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             boolean justFolders,
             boolean onlyAvailableOffline,
             boolean sharedByLinkFiles,
+            boolean folderPicker,
             Context context,
             ComponentsGetter transferServiceGetter
     ) {
-
         mJustFolders = justFolders;
         mOnlyAvailableOffline = onlyAvailableOffline;
         mSharedByLinkFiles = sharedByLinkFiles;
+        mFolderPicker = folderPicker;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
 
@@ -114,7 +116,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public boolean isEnabled(int position) {
-        return true;
+        // Disable click for files when selecting a folder in copying and moving operations
+        return !mFolderPicker || mFiles.get(position).isFolder();
     }
 
     @Override
