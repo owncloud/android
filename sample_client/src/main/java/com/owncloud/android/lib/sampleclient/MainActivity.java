@@ -40,7 +40,7 @@ import android.widget.Toast;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
@@ -82,7 +82,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
         final Uri serverUri = Uri.parse(getString(R.string.server_base_url));
 
-        OwnCloudClientManagerFactory.setUserAgent(getUserAgent());
+        SingleSessionManager.setUserAgent(getUserAgent());
         mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
 
         mClient.setCredentials(
