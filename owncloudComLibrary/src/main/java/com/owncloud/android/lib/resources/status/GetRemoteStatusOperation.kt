@@ -21,7 +21,7 @@
 *   THE SOFTWARE.
 *
 */
-package com.owncloud.android.lib.resources.server
+package com.owncloud.android.lib.resources.status
 
 import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -30,7 +30,6 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -52,7 +51,9 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
     override fun run(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {
 
         val baseUriStr = client.baseUri.toString()
-        if (baseUriStr.startsWith(HTTP_PREFIX) || baseUriStr.startsWith(HTTPS_PREFIX)) {
+        if (baseUriStr.startsWith(HTTP_PREFIX) || baseUriStr.startsWith(
+                HTTPS_PREFIX
+            )) {
             tryConnection(client)
         } else {
             client.baseUri = Uri.parse(HTTPS_PREFIX + baseUriStr)
@@ -92,7 +93,9 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
             while (!redirectedLocation.isNullOrEmpty() && !latestResult.isSuccess) {
                 isRedirectToNonSecureConnection =
                     isRedirectToNonSecureConnection ||
-                            (baseUrlSt.startsWith(HTTPS_PREFIX) && redirectedLocation.startsWith(HTTP_PREFIX))
+                            (baseUrlSt.startsWith(HTTPS_PREFIX) && redirectedLocation.startsWith(
+                                HTTP_PREFIX
+                            ))
 
                 getMethod = GetMethod(URL(redirectedLocation)).apply {
                     setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)

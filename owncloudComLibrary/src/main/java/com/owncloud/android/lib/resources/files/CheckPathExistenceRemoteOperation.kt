@@ -21,7 +21,7 @@
 *   THE SOFTWARE.
 *
 */
-package com.owncloud.android.lib.resources.server
+package com.owncloud.android.lib.resources.files
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
