@@ -23,6 +23,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
+import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
@@ -41,48 +42,55 @@ class OCServerInfoRepositoryTest {
     private val ocServerInfoRepository: OCServerInfoRepository = OCServerInfoRepository(remoteServerInfoDataSource)
 
     @Test
-    fun getServerInfoSecureConnection() {
-        every { remoteServerInfoDataSource.getRemoteStatus(OC_SERVER_INFO.baseUrl) } returns
-                Pair(OwnCloudVersion(OC_SERVER_INFO.ownCloudVersion), true)
+    fun getServerInfoBasicAndSecureConnection() {
+        val expectedValue =
+            OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = true)
 
-        every { remoteServerInfoDataSource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl) } returns
-                AuthenticationMethod.BASIC_HTTP_AUTH
+        prepareServerInfoToBeRetrieved(expectedValue)
 
-        val serverInfo = ocServerInfoRepository.getServerInfo(OC_SERVER_INFO.baseUrl)
-        assertEquals(OC_SERVER_INFO.copy(isSecureConnection = true), serverInfo)
+        val currentValue = ocServerInfoRepository.getServerInfo(OC_SERVER_INFO.baseUrl)
+        assertEquals(expectedValue, currentValue)
 
-        verify { remoteServerInfoDataSource.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
-        verify { remoteServerInfoDataSource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl) }
+        verifyDataSourceCalls()
     }
 
     @Test
-    fun getServerInfoInSecureConnection() {
-        every { remoteServerInfoDataSource.getRemoteStatus(OC_SERVER_INFO.baseUrl) } returns
-                Pair(OwnCloudVersion(OC_SERVER_INFO.ownCloudVersion), false)
+    fun getServerInfoBasicAndInSecureConnection() {
+        val expectedValue =
+            OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = false)
 
-        every { remoteServerInfoDataSource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl) } returns
-                AuthenticationMethod.BASIC_HTTP_AUTH
+        prepareServerInfoToBeRetrieved(expectedValue)
 
-        val serverInfo = ocServerInfoRepository.getServerInfo(OC_SERVER_INFO.baseUrl)
-        assertEquals(OC_SERVER_INFO.copy(isSecureConnection = false), serverInfo)
+        val currentValue = ocServerInfoRepository.getServerInfo(OC_SERVER_INFO.baseUrl)
+        assertEquals(expectedValue, currentValue)
 
-        verify { remoteServerInfoDataSource.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
-        verify { remoteServerInfoDataSource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl) }
+        verifyDataSourceCalls()
     }
 
     @Test
-    fun getServerInfoBearerAuthMethod() {
-        every { remoteServerInfoDataSource.getRemoteStatus(OC_SERVER_INFO.baseUrl) } returns
-                Pair(OwnCloudVersion(OC_SERVER_INFO.ownCloudVersion), false)
+    fun getServerInfoBearerAndSecureConnection() {
+        val expectedValue =
+            OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BEARER_TOKEN, isSecureConnection = true)
 
-        every { remoteServerInfoDataSource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl) } returns
-                AuthenticationMethod.BEARER_TOKEN
+        prepareServerInfoToBeRetrieved(expectedValue)
 
-        val serverInfo = ocServerInfoRepository.getServerInfo(OC_SERVER_INFO.baseUrl)
-        assertEquals(OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BEARER_TOKEN), serverInfo)
+        val currentValue = ocServerInfoRepository.getServerInfo(OC_SERVER_INFO.baseUrl)
+        assertEquals(expectedValue, currentValue)
 
-        verify { remoteServerInfoDataSource.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
-        verify { remoteServerInfoDataSource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl) }
+        verifyDataSourceCalls()
+    }
+
+    @Test
+    fun getServerInfoBearerAndInSecureConnection() {
+        val expectedValue =
+            OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = false)
+
+        prepareServerInfoToBeRetrieved(expectedValue)
+
+        val currentValue = ocServerInfoRepository.getServerInfo(OC_SERVER_INFO.baseUrl)
+        assertEquals(expectedValue, currentValue)
+
+        verifyDataSourceCalls()
     }
 
     @Test(expected = NoConnectionWithServerException::class)
@@ -92,5 +100,20 @@ class OCServerInfoRepositoryTest {
         } throws NoConnectionWithServerException()
 
         ocServerInfoRepository.getServerInfo(OC_SERVER_INFO.baseUrl)
+
+        verify(exactly = 0) { remoteServerInfoDataSource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl) }
+    }
+
+    private fun prepareServerInfoToBeRetrieved(expectedServerInfo: ServerInfo) {
+        every { remoteServerInfoDataSource.getRemoteStatus(OC_SERVER_INFO.baseUrl) } returns
+                Pair(OwnCloudVersion(OC_SERVER_INFO.ownCloudVersion), expectedServerInfo.isSecureConnection)
+
+        every { remoteServerInfoDataSource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl) } returns
+                expectedServerInfo.authenticationMethod
+    }
+
+    private fun verifyDataSourceCalls() {
+        verify { remoteServerInfoDataSource.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+        verify { remoteServerInfoDataSource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl) }
     }
 }

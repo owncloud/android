@@ -87,48 +87,39 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test
     fun getAuthenticationMethodBasic() {
-        val checkPathExistenceResultMocked: RemoteOperationResult<Boolean> =
-            createRemoteOperationResultMock(
-                data = true,
-                isSuccess = true,
-                resultCode = OK_SSL,
-                authenticationHeader = basicAuthHeader,
-                httpCode = HTTP_UNAUTHORIZED,
-                redirectedLocation = null
-            )
+        val expectedValue = AuthenticationMethod.BASIC_HTTP_AUTH
+        prepareAuthorizationMethodToBeRetrieved(expectedValue)
 
-        every {
-            ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
-        } returns checkPathExistenceResultMocked
+        val currentValue = ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl)
 
-        val authenticationMethod = ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl)
-
-        assertNotNull(authenticationMethod)
-        assertEquals(AuthenticationMethod.BASIC_HTTP_AUTH, authenticationMethod)
+        assertNotNull(expectedValue)
+        assertEquals(expectedValue, currentValue)
 
         verify { ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     @Test
     fun getAuthenticationMethodBearer() {
-        val checkPathExistenceResultMocked: RemoteOperationResult<Boolean> =
-            createRemoteOperationResultMock(
-                data = true,
-                isSuccess = true,
-                resultCode = OK_SSL,
-                authenticationHeader = bearerHeader,
-                httpCode = HTTP_UNAUTHORIZED,
-                redirectedLocation = null
-            )
+        val expectedValue = AuthenticationMethod.BEARER_TOKEN
+        prepareAuthorizationMethodToBeRetrieved(expectedValue)
 
-        every {
-            ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
-        } returns checkPathExistenceResultMocked
+        val currentValue = ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl)
 
-        val authenticationMethod = ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl)
+        assertNotNull(expectedValue)
+        assertEquals(expectedValue, currentValue)
 
-        assertNotNull(authenticationMethod)
-        assertEquals(AuthenticationMethod.BEARER_TOKEN, authenticationMethod)
+        verify { ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
+    }
+
+    @Test
+    fun getAuthenticationMethodNone() {
+        val expectedValue = AuthenticationMethod.NONE
+        prepareAuthorizationMethodToBeRetrieved(expectedValue)
+
+        val currentValue = ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl)
+
+        assertNotNull(expectedValue)
+        assertEquals(expectedValue, currentValue)
 
         verify { ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
@@ -144,34 +135,26 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test
     fun getRemoteStatusIsSecureConnection() {
-        val remoteStatusResultMocked: RemoteOperationResult<OwnCloudVersion> =
-            createRemoteOperationResultMock(data = OC_OWNCLOUD_VERSION, isSuccess = true, resultCode = OK_SSL)
+        val expectedValue = Pair(OC_OWNCLOUD_VERSION, true)
+        prepareRemoteStatusToBeRetrieved(expectedValue)
 
-        every {
-            ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl)
-        } returns remoteStatusResultMocked
+        val currentValue = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
 
-        val remoteStatus = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
-
-        assertNotNull(remoteStatus)
-        assertEquals(Pair(OC_OWNCLOUD_VERSION, true), remoteStatus)
+        assertNotNull(currentValue)
+        assertEquals(expectedValue, currentValue)
 
         verify { ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
     }
 
     @Test
     fun getRemoteStatusIsNotSecureConnection() {
-        val remoteStatusResultMocked: RemoteOperationResult<OwnCloudVersion> =
-            createRemoteOperationResultMock(data = OC_OWNCLOUD_VERSION, isSuccess = true, resultCode = OK_NO_SSL)
+        val expectedValue = Pair(OC_OWNCLOUD_VERSION, false)
+        prepareRemoteStatusToBeRetrieved(expectedValue)
 
-        every {
-            ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl)
-        } returns remoteStatusResultMocked
+        val currentValue = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
 
-        val remoteStatus = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
-
-        assertNotNull(remoteStatus)
-        assertEquals(Pair(OC_OWNCLOUD_VERSION, false), remoteStatus)
+        assertNotNull(currentValue)
+        assertEquals(expectedValue, currentValue)
 
         verify { ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
     }
@@ -183,5 +166,44 @@ class OCRemoteServerInfoDataSourceTest {
         } throws Exception()
 
         ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
+    }
+
+    private fun prepareAuthorizationMethodToBeRetrieved(expectedAuthenticationMethod: AuthenticationMethod) {
+        val expectedAuthHeader = when (expectedAuthenticationMethod) {
+            AuthenticationMethod.BEARER_TOKEN -> bearerHeader
+            AuthenticationMethod.BASIC_HTTP_AUTH -> basicAuthHeader
+            else -> null
+        }
+
+        val checkPathExistenceResultMocked: RemoteOperationResult<Boolean> =
+            createRemoteOperationResultMock(
+                data = true,
+                isSuccess = true,
+                resultCode = OK_SSL,
+                authenticationHeader = expectedAuthHeader,
+                httpCode = HTTP_UNAUTHORIZED
+            )
+
+        every {
+            ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
+        } returns checkPathExistenceResultMocked
+    }
+
+    private fun prepareRemoteStatusToBeRetrieved(expectedPair: Pair<OwnCloudVersion, Boolean>) {
+        val expectedResultCode = when (expectedPair.second) {
+            true -> OK_SSL
+            false -> OK_NO_SSL
+        }
+
+        val remoteStatusResultMocked: RemoteOperationResult<OwnCloudVersion> =
+            createRemoteOperationResultMock(
+                data = OC_OWNCLOUD_VERSION,
+                isSuccess = true,
+                resultCode = expectedResultCode
+            )
+
+        every {
+            ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl)
+        } returns remoteStatusResultMocked
     }
 }
