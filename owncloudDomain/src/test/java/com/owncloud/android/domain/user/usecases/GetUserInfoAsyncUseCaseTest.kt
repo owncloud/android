@@ -20,7 +20,7 @@ package com.owncloud.android.domain.user.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.user.UserRepository
-import com.owncloud.android.testutil.OC_UserInfo
+import com.owncloud.android.testutil.OC_USER_INFO
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -37,12 +37,12 @@ class GetUserInfoAsyncUseCaseTest {
 
     @Test
     fun getUserInfoSuccess() {
-        every { userRepository.getUserInfo() } returns OC_UserInfo
+        every { userRepository.getUserInfo() } returns OC_USER_INFO
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertFalse(useCaseResult.isError)
-        assertEquals(OC_UserInfo, useCaseResult.getDataOrNull())
+        assertEquals(OC_USER_INFO, useCaseResult.getDataOrNull())
 
         verify(exactly = 1) { userRepository.getUserInfo() }
     }

@@ -25,11 +25,11 @@ import com.owncloud.android.lib.resources.users.RemoteUserInfo
 
 class RemoteUserInfoMapper : RemoteMapper<UserInfo, RemoteUserInfo> {
     override fun toModel(remote: RemoteUserInfo?): UserInfo? =
-        remote?.run {
+        remote?.let {
             UserInfo(
-                id = id,
-                displayName = displayName,
-                email = email
+                id = it.id,
+                displayName = it.displayName,
+                email = it.email
             )
         }
 

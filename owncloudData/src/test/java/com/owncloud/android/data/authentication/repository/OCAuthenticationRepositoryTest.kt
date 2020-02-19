@@ -21,7 +21,7 @@ package com.owncloud.android.data.authentication.repository
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
-import com.owncloud.android.testutil.OC_ServerInfo
+import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -41,10 +41,10 @@ class OCAuthenticationRepositoryTest {
     fun loginOk() {
         every { remoteAuthenticationDataSource.login(any(), any(), any()) } returns Unit
 
-        ocAuthenticationRepository.login(OC_ServerInfo.baseUrl, "username", "password")
+        ocAuthenticationRepository.login(OC_SERVER_INFO.baseUrl, "username", "password")
 
         verify(exactly = 1) {
-            remoteAuthenticationDataSource.login(OC_ServerInfo.baseUrl, "username", "password")
+            remoteAuthenticationDataSource.login(OC_SERVER_INFO.baseUrl, "username", "password")
         }
     }
 
@@ -54,7 +54,7 @@ class OCAuthenticationRepositoryTest {
             remoteAuthenticationDataSource.login(any(), any(), any())
         } throws NoConnectionWithServerException()
 
-        ocAuthenticationRepository.login(OC_ServerInfo.baseUrl, "test", "test")
+        ocAuthenticationRepository.login(OC_SERVER_INFO.baseUrl, "test", "test")
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.login(any(), any(), any())
