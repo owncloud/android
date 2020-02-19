@@ -45,9 +45,9 @@ class OCRemoteServerInfoDataSource(
         var authenticationMethod: AuthenticationMethod = AuthenticationMethod.NONE
         if (checkPathExistenceResult.httpCode == HttpConstants.HTTP_UNAUTHORIZED) {
             val authenticateHeaders = checkPathExistenceResult.authenticateHeaders
-            if (authenticateHeaders.contains(AuthenticationMethod.BASIC_HTTP_AUTH.toString())) {
+            if (authenticateHeaders.startsWith(AuthenticationMethod.BASIC_HTTP_AUTH.toString())) {
                 authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH
-            } else if (authenticateHeaders.contains(AuthenticationMethod.BEARER_TOKEN.toString())) {
+            } else if (authenticateHeaders.startsWith(AuthenticationMethod.BEARER_TOKEN.toString())) {
                 authenticationMethod = AuthenticationMethod.BEARER_TOKEN
             }
         }
