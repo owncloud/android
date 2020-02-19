@@ -22,7 +22,7 @@ package com.owncloud.android.data.file.datasource
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
 import com.owncloud.android.data.files.network.OCFileService
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.testutil.OC_ServerInfo
+import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
@@ -49,15 +49,15 @@ class OCRemoteFileDataSourceTest {
             createRemoteOperationResultMock(data = true, isSuccess = true)
 
         every {
-            ocFileService.checkPathExistence(OC_ServerInfo.baseUrl, true)
+            ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
         } returns checkPathExistenceRemoteResult
 
-        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
 
-        verify { ocFileService.checkPathExistence(OC_ServerInfo.baseUrl, true) }
+        verify { ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true) }
     }
 
     @Test
@@ -66,23 +66,23 @@ class OCRemoteFileDataSourceTest {
             createRemoteOperationResultMock(data = false, isSuccess = true)
 
         every {
-            ocFileService.checkPathExistence(OC_ServerInfo.baseUrl, true)
+            ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
         } returns checkPathExistenceRemoteResult
 
-        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
 
-        verify { ocFileService.checkPathExistence(OC_ServerInfo.baseUrl, true) }
+        verify { ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true) }
     }
 
     @Test(expected = Exception::class)
     fun checkPathExistenceException() {
         every {
-            ocFileService.checkPathExistence(OC_ServerInfo.baseUrl, true)
+            ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
         } throws Exception()
 
-        ocRemoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
+        ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
     }
 }

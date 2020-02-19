@@ -23,7 +23,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
-import com.owncloud.android.testutil.OC_ServerInfo
+import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -40,23 +40,23 @@ class OCFileRepositoryTest {
 
     @Test
     fun checkPathExistenceExists() {
-        every { remoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false) } returns true
+        every { remoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, false) } returns true
 
-        ocFileRepository.checkPathExistence(OC_ServerInfo.baseUrl, false)
+        ocFileRepository.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
 
         verify(exactly = 1) {
-            remoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false)
+            remoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
         }
     }
 
     @Test(expected = NoConnectionWithServerException::class)
     fun checkPathExistenceExistsNoConnection() {
-        every { remoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false) } throws NoConnectionWithServerException()
+        every { remoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, false) } throws NoConnectionWithServerException()
 
-        ocFileRepository.checkPathExistence(OC_ServerInfo.baseUrl, false)
+        ocFileRepository.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
 
         verify(exactly = 1) {
-            remoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false)
+            remoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
         }
     }
 }

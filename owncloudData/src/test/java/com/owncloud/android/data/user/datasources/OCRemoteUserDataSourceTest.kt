@@ -24,7 +24,7 @@ import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.data.user.network.OCUserService
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.users.RemoteUserInfo
-import com.owncloud.android.testutil.OC_UserInfo
+import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
@@ -40,9 +40,9 @@ class OCRemoteUserDataSourceTest {
     private val remoteUserInfoMapper = RemoteUserInfoMapper()
 
     private val remoteUserInfo = RemoteUserInfo(
-        id = OC_UserInfo.id,
-        displayName = OC_UserInfo.displayName,
-        email = OC_UserInfo.email
+        id = OC_USER_INFO.id,
+        displayName = OC_USER_INFO.displayName,
+        email = OC_USER_INFO.email
     )
 
     @Before
@@ -62,7 +62,7 @@ class OCRemoteUserDataSourceTest {
         val userInfo = ocRemoteUserDataSource.getUserInfo()
 
         assertNotNull(userInfo)
-        assertEquals(OC_UserInfo, userInfo)
+        assertEquals(OC_USER_INFO, userInfo)
     }
 
     @Test(expected = Exception::class)

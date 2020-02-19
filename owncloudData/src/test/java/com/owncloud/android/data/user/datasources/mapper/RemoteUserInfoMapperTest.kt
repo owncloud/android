@@ -20,7 +20,7 @@
 package com.owncloud.android.data.user.datasources.mapper
 
 import com.owncloud.android.lib.resources.users.RemoteUserInfo
-import com.owncloud.android.testutil.OC_UserInfo
+import com.owncloud.android.testutil.OC_USER_INFO
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -38,15 +38,15 @@ class RemoteUserInfoMapperTest {
     @Test
     fun checkToModelNotNull() {
         val remoteUserInfo = RemoteUserInfo(
-            id = OC_UserInfo.id,
-            displayName = OC_UserInfo.displayName,
-            email = OC_UserInfo.email
+            id = OC_USER_INFO.id,
+            displayName = OC_USER_INFO.displayName,
+            email = OC_USER_INFO.email
         )
         assertNotNull(remoteUserInfo)
 
         val userInfo = ocRemoteUserInfoMapper.toModel(remoteUserInfo)
         assertNotNull(userInfo)
-        assertEquals(OC_UserInfo, userInfo)
+        assertEquals(OC_USER_INFO, userInfo)
     }
 
     @Test

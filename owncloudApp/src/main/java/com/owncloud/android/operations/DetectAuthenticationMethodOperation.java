@@ -59,8 +59,7 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<Authent
     protected RemoteOperationResult<AuthenticationMethod> run(OwnCloudClient client) {
         AuthenticationMethod authenticationMethod = null;
 
-        CheckPathExistenceRemoteOperation operation = new CheckPathExistenceRemoteOperation("",
-                false);
+        CheckPathExistenceRemoteOperation operation = new CheckPathExistenceRemoteOperation("", false);
         client.clearCredentials();
 
         client.setFollowRedirects(false);
@@ -68,21 +67,21 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<Authent
         // Step 1: check whether the root folder exists, following redirections
         RemoteOperationResult resultFromExistenceCheck = operation.execute(client);
         String redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
-        Timber.d("Redirected location:" + redirectedLocation);
+        Timber.d("Redirected location: %s", redirectedLocation);
         while (redirectedLocation != null && redirectedLocation.length() > 0) {
             client.setBaseUri(Uri.parse(resultFromExistenceCheck.getRedirectedLocation()));
             resultFromExistenceCheck = operation.execute(client);
             redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
-            Timber.d("Redirected location:" + redirectedLocation);
+            Timber.d("Redirected location: %s", redirectedLocation);
         }
 
         // Step 2: look for authentication methods
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
             String authenticateHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
-            Timber.d("Authentication Header:" + authenticateHeaders);
-            if (authenticateHeaders.contains("basic")) {
+            Timber.d("Authentication Header: %s", authenticateHeaders);
+            if (authenticateHeaders.startsWith(AuthenticationMethod.BASIC_HTTP_AUTH.toString())) {
                 authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH;
-            } else if (authenticateHeaders.contains("bearer")) {
+            } else if (authenticateHeaders.contains(AuthenticationMethod.BEARER_TOKEN.toString())) {
                 authenticationMethod = AuthenticationMethod.BEARER_TOKEN;
             }
         } else if (resultFromExistenceCheck.isSuccess()) {
@@ -95,7 +94,7 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<Authent
         if (authenticationMethod == null) {
             Timber.d("Authentication method not found: ");
         } else {
-            Timber.d("Authentication method:%s", authenticationMethod);
+            Timber.d("Authentication method: %s", authenticationMethod);
 
             result = new RemoteOperationResult<>(result.getHttpCode(), result.getHttpPhrase(), null);
             result.setSuccess(true);
