@@ -64,6 +64,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.domain.user.model.UserInfo;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
@@ -78,7 +79,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
+import com.owncloud.android.lib.resources.users.RemoteUserInfo;
 import com.owncloud.android.operations.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.services.OperationsService;
@@ -101,9 +102,8 @@ import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.ResponseTypeValues;
 import timber.log.Timber;
 
-import java.util.ArrayList;
-
 import static android.content.Intent.ACTION_VIEW;
+import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_PATH_4_0_AND_LATER;
 
 /**
  * This Activity is used to add an ownCloud account to the App
@@ -383,12 +383,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mServerInfo.mVersion = new OwnCloudVersion(ocVersion);
             }
 
-            ArrayList<String> authenticationMethodNames = savedInstanceState.
-                    getStringArrayList(KEY_SERVER_AUTH_METHOD);
+            String authenticationMethodName = savedInstanceState.getString(KEY_SERVER_AUTH_METHOD);
 
-            for (String authenticationMethodName : authenticationMethodNames) {
-                mServerInfo.mAuthMethods.add(AuthenticationMethod.valueOf(authenticationMethodName));
-            }
+            mServerInfo.mAuthMethod = (AuthenticationMethod.valueOf(authenticationMethodName));
         }
 
         /// step 2 - set properties of UI elements (text, visibility, enabled...)
@@ -586,15 +583,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mServerInfo.mVersion != null) {
             outState.putString(KEY_OC_VERSION, mServerInfo.mVersion.getVersion());
         }
-
-        ArrayList<String> authenticationMethodNames = new ArrayList<>();
-
-        for (AuthenticationMethod authenticationMethod : mServerInfo.mAuthMethods) {
-
-            authenticationMethodNames.add(authenticationMethod.name());
+        if (mServerInfo.mAuthMethod != null) {
+            outState.putString(KEY_SERVER_AUTH_METHOD, mServerInfo.mAuthMethod.name());
         }
-
-        outState.putStringArrayList(KEY_SERVER_AUTH_METHOD, authenticationMethodNames);
 
         /// Authentication PRE-fragment state
         outState.putBoolean(KEY_PASSWORD_EXPOSED, isPasswordVisible());
@@ -758,10 +749,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             Intent getServerInfoIntent = new Intent();
             getServerInfoIntent.setAction(OperationsService.ACTION_GET_SERVER_INFO);
-            getServerInfoIntent.putExtra(
-                    OperationsService.EXTRA_SERVER_URL,
-                    normalizeUrlSuffix(uri)
-            );
+            getServerInfoIntent.putExtra(OperationsService.EXTRA_SERVER_URL, normalizeUrlSuffix(uri));
             if (mOperationsServiceBinder != null) {
                 mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getServerInfoIntent);
             } else {
@@ -878,7 +866,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 username,
                 password
         );
-        accessRootFolder(credentials);
+        accessRootFolderBasicCredentials(username, password);
+    }
+
+    private void accessRootFolderBasicCredentials(String username, String password) {
+        mAsyncTask = new AuthenticatorAsyncTask(this);
+        Object[] params = {mServerInfo.mBaseUrl, username, password};
+        mAsyncTask.execute(params);
     }
 
     /**
@@ -1009,9 +1003,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerIsValid = true;
 
             // Update mAuthTokenType depending on the server info
-            if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BEARER_TOKEN)) {
+            if (mServerInfo.mAuthMethod.equals(AuthenticationMethod.BEARER_TOKEN)) {
                 mAuthTokenType = OAUTH_TOKEN_TYPE; // OAuth2
-            } else if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BASIC_HTTP_AUTH)) {
+            } else if (mServerInfo.mAuthMethod.equals(AuthenticationMethod.BASIC_HTTP_AUTH)) {
                 mAuthTokenType = BASIC_TOKEN_TYPE; // Basic
             }
 
@@ -1114,8 +1108,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     // TODO remove, if possible
     private String trimUrlWebdav(String url) {
-        if (url.toLowerCase().endsWith(AccountUtils.WEBDAV_PATH_4_0_AND_LATER)) {
-            url = url.substring(0, url.length() - AccountUtils.WEBDAV_PATH_4_0_AND_LATER.length());
+        if (url.toLowerCase().endsWith(WEBDAV_PATH_4_0_AND_LATER)) {
+            url = url.substring(0, url.length() - WEBDAV_PATH_4_0_AND_LATER.length());
         }
         return url;
     }
@@ -1213,7 +1207,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Timber.d("Successful access - time to save the account");
 
             boolean success = false;
-            String username = ((RemoteOperationResult<UserInfo>) result).getData().mId;
+            String username = ((RemoteOperationResult<RemoteUserInfo>) result).getData().getId();
 
             if (mAction == ACTION_CREATE) {
 
@@ -1361,7 +1355,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 try {
                     UserInfo userInfo = authResult.getData();
                     mAccountMgr.setUserData(
-                            mAccount, Constants.KEY_DISPLAY_NAME, userInfo.mDisplayName
+                            mAccount, Constants.KEY_DISPLAY_NAME, userInfo.getDisplayName()
                     );
                 } catch (ClassCastException c) {
                     Timber.w("Couldn't get display name for %s", username);

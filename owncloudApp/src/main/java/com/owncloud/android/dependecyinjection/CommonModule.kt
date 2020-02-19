@@ -23,6 +23,7 @@ import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMap
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
+import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import org.koin.dsl.module
 
@@ -32,6 +33,7 @@ val commonModule = module {
 
     factory { RemoteCapabilityMapper() }
     factory { RemoteShareMapper() }
+    factory { RemoteUserInfoMapper() }
 
     single { CoroutinesDispatcherProvider() }
 }

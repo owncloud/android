@@ -8,12 +8,12 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,11 +27,8 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
 import timber.log.Timber;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Operation to find out what authentication method requires
@@ -45,7 +42,9 @@ import java.util.List;
  * RemoteOperationResult)} returns in {@link RemoteOperationResult#getData()}
  * a value of {@link AuthenticationMethod}.
  */
-public class DetectAuthenticationMethodOperation extends RemoteOperation<List<AuthenticationMethod>> {
+@Deprecated
+// TODO: Remove this operation. Get AuthenticationMethods from GetServerInfoAsyncUseCase
+public class DetectAuthenticationMethodOperation extends RemoteOperation<AuthenticationMethod> {
 
     /**
      *  Performs the operation.
@@ -57,11 +56,10 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
      *  any, is requested by the server.
      */
     @Override
-    protected RemoteOperationResult<List<AuthenticationMethod>> run(OwnCloudClient client) {
-        ArrayList<AuthenticationMethod> allAvailableAuthMethods = new ArrayList<>();
+    protected RemoteOperationResult<AuthenticationMethod> run(OwnCloudClient client) {
+        AuthenticationMethod authenticationMethod = null;
 
-        ExistenceCheckRemoteOperation operation = new ExistenceCheckRemoteOperation("", false,
-                false);
+        CheckPathExistenceRemoteOperation operation = new CheckPathExistenceRemoteOperation("", false);
         client.clearCredentials();
 
         client.setFollowRedirects(false);
@@ -69,58 +67,42 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<List<Au
         // Step 1: check whether the root folder exists, following redirections
         RemoteOperationResult resultFromExistenceCheck = operation.execute(client);
         String redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
+        Timber.d("Redirected location: %s", redirectedLocation);
         while (redirectedLocation != null && redirectedLocation.length() > 0) {
             client.setBaseUri(Uri.parse(resultFromExistenceCheck.getRedirectedLocation()));
             resultFromExistenceCheck = operation.execute(client);
             redirectedLocation = resultFromExistenceCheck.getRedirectedLocation();
+            Timber.d("Redirected location: %s", redirectedLocation);
         }
 
         // Step 2: look for authentication methods
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
-            ArrayList<String> authHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
-            for (String authHeader : authHeaders) {
-                if (authHeader.startsWith("basic")) {
-                    allAvailableAuthMethods.add(AuthenticationMethod.BASIC_HTTP_AUTH);
-                } else if (authHeader.startsWith("bearer")) {
-                    allAvailableAuthMethods.add(AuthenticationMethod.BEARER_TOKEN);
-                }
+            String authenticateHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
+            Timber.d("Authentication Header: %s", authenticateHeaders);
+            if (authenticateHeaders.startsWith(AuthenticationMethod.BASIC_HTTP_AUTH.toString())) {
+                authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH;
+            } else if (authenticateHeaders.contains(AuthenticationMethod.BEARER_TOKEN.toString())) {
+                authenticationMethod = AuthenticationMethod.BEARER_TOKEN;
             }
         } else if (resultFromExistenceCheck.isSuccess()) {
-            allAvailableAuthMethods.add(AuthenticationMethod.NONE);
+            authenticationMethod = AuthenticationMethod.NONE;
         }
 
         // Step 3: prepare result with available authentication methods
-        RemoteOperationResult<List<AuthenticationMethod>> result =
-                new RemoteOperationResult<>(resultFromExistenceCheck);
+        RemoteOperationResult<AuthenticationMethod> result = new RemoteOperationResult<>(resultFromExistenceCheck);
 
-        if (allAvailableAuthMethods.isEmpty()) {
+        if (authenticationMethod == null) {
             Timber.d("Authentication method not found: ");
         } else {
-            Timber.d("Authentication methods found:");
-            for (AuthenticationMethod authMetod : allAvailableAuthMethods) {
-                Timber.d(authenticationMethodToString(authMetod));
-            }
+            Timber.d("Authentication method: %s", authenticationMethod);
 
             result = new RemoteOperationResult<>(result.getHttpCode(), result.getHttpPhrase(), null);
             result.setSuccess(true);
         }
 
-        result.setData(allAvailableAuthMethods);
+        result.setData(authenticationMethod);
 
         return result;  // same result instance, so that other errors
         // can be handled by the caller transparently
-    }
-
-    private String authenticationMethodToString(AuthenticationMethod value) {
-        switch (value) {
-            case NONE:
-                return "NONE";
-            case BASIC_HTTP_AUTH:
-                return "BASIC_HTTP_AUTH";
-            case BEARER_TOKEN:
-                return "BEARER_TOKEN";
-            default:
-                return "UNKNOWN";
-        }
     }
 }
