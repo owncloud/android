@@ -36,8 +36,7 @@ class OCRemoteAuthenticationDataSource(private val context: Context) : RemoteAut
         val client: OwnCloudClient =
             OwnCloudClientFactory.createOwnCloudClient(url, context, false).apply { setCredentials(credentials) }
 
-        val operation =
-            CheckPathExistenceRemoteOperation("/", true)
+        val operation = CheckPathExistenceRemoteOperation("/", true)
         executeRemoteOperation { operation.execute(client) }
 
         if (operation.wasRedirected()) {

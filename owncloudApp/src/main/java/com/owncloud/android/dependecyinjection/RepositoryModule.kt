@@ -21,7 +21,7 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.data.authentication.repository.OCAuthenticationRepository
 import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
-import com.owncloud.android.data.server.repository.OCServerInfoInfoRepository
+import com.owncloud.android.data.server.repository.OCServerInfoRepository
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
@@ -46,6 +46,6 @@ val repositoryModule = module {
     factory<ShareeRepository> { OCShareeRepository(get()) }
     factory<UserRepository> { OCUserRepository(get()) }
     factory<FileRepository> { OCFileRepository(get()) }
-    factory<ServerInfoRepository> { OCServerInfoInfoRepository(get()) }
+    factory<ServerInfoRepository> { OCServerInfoRepository(get()) }
     factory<AuthenticationRepository> { OCAuthenticationRepository(get()) }
 }

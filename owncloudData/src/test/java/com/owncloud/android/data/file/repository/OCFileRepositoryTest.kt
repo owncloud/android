@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.server.repository
+package com.owncloud.android.data.file.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.owncloud.android.data.files.repository.OCFileRepository
@@ -35,29 +35,28 @@ class OCFileRepositoryTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val remoteServerDataSource = mockk<RemoteFileDataSource>(relaxed = true)
-    private val ocFileRepository: OCFileRepository =
-        OCFileRepository(remoteServerDataSource)
+    private val remoteFileDataSource = mockk<RemoteFileDataSource>(relaxed = true)
+    private val ocFileRepository: OCFileRepository = OCFileRepository(remoteFileDataSource)
 
     @Test
     fun checkPathExistenceExists() {
-        every { remoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false) } returns true
+        every { remoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false) } returns true
 
         ocFileRepository.checkPathExistence(OC_ServerInfo.baseUrl, false)
 
         verify(exactly = 1) {
-            remoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false)
+            remoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false)
         }
     }
 
     @Test(expected = NoConnectionWithServerException::class)
     fun checkPathExistenceExistsNoConnection() {
-        every { remoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false) } throws NoConnectionWithServerException()
+        every { remoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false) } throws NoConnectionWithServerException()
 
         ocFileRepository.checkPathExistence(OC_ServerInfo.baseUrl, false)
 
         verify(exactly = 1) {
-            remoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false)
+            remoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, false)
         }
     }
 }
