@@ -139,12 +139,7 @@ class OCRemoteServerInfoDataSourceTest {
             ocInfoService.checkPathExistence(OC_ServerInfo.baseUrl, false)
         } throws Exception()
 
-        val authenticationMethod = ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_ServerInfo.baseUrl)
-
-        assertNotNull(authenticationMethod)
-        assertEquals(AuthenticationMethod.BASIC_HTTP_AUTH, authenticationMethod)
-
-        verify { ocInfoService.checkPathExistence(OC_ServerInfo.baseUrl, false) }
+        ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_ServerInfo.baseUrl)
     }
 
     @Test
@@ -187,11 +182,6 @@ class OCRemoteServerInfoDataSourceTest {
             ocInfoService.getRemoteStatus(OC_ServerInfo.baseUrl)
         } throws Exception()
 
-        val remoteStatus = ocRemoteServerInfoDatasource.getRemoteStatus(OC_ServerInfo.baseUrl)
-
-        assertNotNull(remoteStatus)
-        assertEquals(Pair(OC_OWNCLOUD_VERSION, true), remoteStatus)
-
-        verify { ocInfoService.getRemoteStatus(OC_ServerInfo.baseUrl) }
+        ocRemoteServerInfoDatasource.getRemoteStatus(OC_ServerInfo.baseUrl)
     }
 }

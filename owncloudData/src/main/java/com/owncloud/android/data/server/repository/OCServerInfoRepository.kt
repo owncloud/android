@@ -25,7 +25,7 @@ import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.lib.common.network.WebdavUtils.normalizeProtocolPrefix
 import com.owncloud.android.lib.common.network.WebdavUtils.trimWebdavSuffix
 
-class OCServerInfoInfoRepository(
+class OCServerInfoRepository(
     private val remoteServerInfoDataSource: RemoteServerInfoDataSource
 ) : ServerInfoRepository {
 

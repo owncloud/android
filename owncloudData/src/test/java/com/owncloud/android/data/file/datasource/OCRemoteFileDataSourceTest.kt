@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.server.datasources
+package com.owncloud.android.data.file.datasource
 
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
 import com.owncloud.android.data.files.network.OCFileService
@@ -34,27 +34,25 @@ import org.junit.Test
 import java.lang.Exception
 
 class OCRemoteFileDataSourceTest {
-    private lateinit var ocRemoteServerDataSource: OCRemoteFileDataSource
+    private lateinit var ocRemoteFileDataSource: OCRemoteFileDataSource
 
     private val ocFileService: OCFileService = mockk()
 
     @Before
     fun init() {
-        ocRemoteServerDataSource =
-            OCRemoteFileDataSource(
-                ocFileService
-            )
+        ocRemoteFileDataSource = OCRemoteFileDataSource(ocFileService)
     }
 
     @Test
     fun checkPathExistenceTrue() {
-        val checkPathExistenceRemoteResult: RemoteOperationResult<Boolean> = createRemoteOperationResultMock(data = true, isSuccess = true)
+        val checkPathExistenceRemoteResult: RemoteOperationResult<Boolean> =
+            createRemoteOperationResultMock(data = true, isSuccess = true)
 
         every {
             ocFileService.checkPathExistence(OC_ServerInfo.baseUrl, true)
         } returns checkPathExistenceRemoteResult
 
-        val checkPathExistence = ocRemoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
@@ -64,13 +62,14 @@ class OCRemoteFileDataSourceTest {
 
     @Test
     fun checkPathExistenceFalse() {
-        val checkPathExistenceRemoteResult: RemoteOperationResult<Boolean> = createRemoteOperationResultMock(data = false, isSuccess = true)
+        val checkPathExistenceRemoteResult: RemoteOperationResult<Boolean> =
+            createRemoteOperationResultMock(data = false, isSuccess = true)
 
         every {
             ocFileService.checkPathExistence(OC_ServerInfo.baseUrl, true)
         } returns checkPathExistenceRemoteResult
 
-        val checkPathExistence = ocRemoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
@@ -84,8 +83,6 @@ class OCRemoteFileDataSourceTest {
             ocFileService.checkPathExistence(OC_ServerInfo.baseUrl, true)
         } throws Exception()
 
-        ocRemoteServerDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
-
-        verify { ocFileService.checkPathExistence(OC_ServerInfo.baseUrl, true) }
+        ocRemoteFileDataSource.checkPathExistence(OC_ServerInfo.baseUrl, true)
     }
 }
