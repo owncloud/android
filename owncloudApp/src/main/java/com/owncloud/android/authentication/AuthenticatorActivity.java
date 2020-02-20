@@ -1313,7 +1313,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             showAuthStatus();
             Timber.d(result.getLogMessage());
             return false;
-
         } else {
             mAccount = newAccount;
 
