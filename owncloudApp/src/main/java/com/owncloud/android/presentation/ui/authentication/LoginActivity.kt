@@ -34,6 +34,7 @@ import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
@@ -117,6 +118,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             isVisible = false
         }
 
+        // LiveData observers
         authenticatorViewModel.serverInfo.observe(this, Observer { event ->
             when (event.peekContent()) {
                 is UIResult.Success -> getServerInfoIsSuccess(event.peekContent())
@@ -142,6 +144,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         dialog.show(ft, UNTRUSTED_CERT_DIALOG_TAG)
     }
 
+    private fun updateLoginButtonState(){
+        loginButton.isVisible = account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
+    }
+
     private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
         uiResult.getStoredData()?.run {
             server_status_text.apply {
@@ -161,16 +167,20 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         visibility = VISIBLE
                         isFocusable = true
                         isEnabled = true
+                        doAfterTextChanged { updateLoginButtonState() }
                     }
                     account_password.apply {
                         visibility = VISIBLE
                         isFocusable = true
                         isEnabled = true
+                        doAfterTextChanged { updateLoginButtonState() }
                     }
                 }
+
                 AuthenticationMethod.BEARER_TOKEN -> {
                     loginButton.visibility = VISIBLE
                 }
+
                 else -> {
                     server_status_text.apply {
                         text = resources.getString(R.string.auth_unsupported_auth_method)
