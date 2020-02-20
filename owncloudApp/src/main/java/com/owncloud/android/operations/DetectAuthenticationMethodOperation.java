@@ -28,6 +28,7 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
+import com.owncloud.android.domain.server.model.AuthenticationMethod;
 import timber.log.Timber;
 
 /**
@@ -79,9 +80,13 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation<Authent
         if (resultFromExistenceCheck.getHttpCode() == HttpConstants.HTTP_UNAUTHORIZED) {
             String authenticateHeaders = resultFromExistenceCheck.getAuthenticateHeaders();
             Timber.d("Authentication Header: %s", authenticateHeaders);
-            if (authenticateHeaders.startsWith(AuthenticationMethod.BASIC_HTTP_AUTH.toString())) {
+            if (authenticateHeaders.startsWith(
+                    (AuthenticationMethod.BASIC_HTTP_AUTH).toString())
+            ) {
                 authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH;
-            } else if (authenticateHeaders.contains(AuthenticationMethod.BEARER_TOKEN.toString())) {
+            } else if (authenticateHeaders.startsWith(
+                    (AuthenticationMethod.BEARER_TOKEN).toString())
+            ) {
                 authenticationMethod = AuthenticationMethod.BEARER_TOKEN;
             }
         } else if (resultFromExistenceCheck.isSuccess()) {

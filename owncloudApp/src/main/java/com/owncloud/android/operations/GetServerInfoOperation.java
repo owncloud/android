@@ -29,6 +29,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.domain.server.model.AuthenticationMethod;
 import timber.log.Timber;
 
 import static com.owncloud.android.lib.common.network.WebdavUtils.normalizeProtocolPrefix;

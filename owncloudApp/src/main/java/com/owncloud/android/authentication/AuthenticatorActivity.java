@@ -80,7 +80,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.users.RemoteUserInfo;
-import com.owncloud.android.operations.AuthenticationMethod;
+import com.owncloud.android.domain.server.model.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
