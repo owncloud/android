@@ -144,8 +144,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         dialog.show(ft, UNTRUSTED_CERT_DIALOG_TAG)
     }
 
-    private fun updateLoginButtonState(){
-        loginButton.isVisible = account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
+    private fun updateLoginButtonState() {
+        loginButton.isVisible =
+            account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
     }
 
     private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
@@ -163,17 +164,24 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
             when (authenticationMethod) {
                 AuthenticationMethod.BASIC_HTTP_AUTH -> {
-                    account_username.apply {
+                    account_username_container.apply {
                         visibility = VISIBLE
                         isFocusable = true
                         isEnabled = true
+                    }
+                    account_username.apply{
                         doAfterTextChanged { updateLoginButtonState() }
                     }
-                    account_password.apply {
+                    account_password_container.apply {
                         visibility = VISIBLE
                         isFocusable = true
                         isEnabled = true
-                        doAfterTextChanged { updateLoginButtonState() }
+                    }
+                    account_password.apply {
+                        doAfterTextChanged {
+                            updateLoginButtonState()
+                            account_password_container.isPasswordVisibilityToggleEnabled = !account_password.text.isNullOrEmpty()
+                        }
                     }
                 }
 
@@ -233,6 +241,5 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         Timber.d("Server certificate could not be saved")
         Toast.makeText(this, R.string.ssl_validator_not_saved, Toast.LENGTH_LONG).show()
     }
-
 
 }
