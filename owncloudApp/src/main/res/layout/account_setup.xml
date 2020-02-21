@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
@@ -18,6 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/login_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -80,8 +80,7 @@
                 android:id="@+id/hostUrlFrame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                >
+                android:layout_marginBottom="0dp">
 
                 <EditText
                     android:id="@+id/hostUrlInput"
@@ -137,28 +136,47 @@
                 android:text="@string/auth_testing_connection"
                 android:textColor="@color/login_connection_text_color" />
 
-            <EditText
-                android:id="@+id/account_username"
-                style="@style/EditText.Authenticator"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_username_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/auth_username"
-                android:inputType="textNoSuggestions"
-                android:theme="@style/EditText.Authenticator"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:hintEnabled="false">
 
-            <EditText
-                android:id="@+id/account_password"
-                style="@style/EditText.Authenticator"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_username"
+                    style="@style/EditText.Authenticator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:hint="@string/auth_username"
+                    android:inputType="textNoSuggestions"
+                    android:theme="@style/EditText.Authenticator">
+
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_password_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawablePadding="5dp"
-                android:ems="10"
-                android:hint="@string/auth_password"
-                android:inputType="textPassword"
-                android:theme="@style/EditText.Authenticator"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="false"
+                app:passwordToggleTint="@color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_password"
+                    style="@style/EditText.Authenticator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:hint="@string/auth_password"
+                    android:inputType="textPassword"
+                    android:theme="@style/EditText.Authenticator">
+
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/auth_status_text"
@@ -195,8 +213,8 @@
                     android:contentDescription="@string/auth_register"
                     android:gravity="center"
                     android:onClick="onRegisterClick"
-                    android:paddingBottom="5dp"
                     android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:text="@string/auth_register"
                     android:textColor="@color/login_text_color" />
             </LinearLayout>
