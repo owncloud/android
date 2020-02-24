@@ -231,7 +231,7 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public Uri getUserFilesWebDavUri() {
-        return mCredentials instanceof OwnCloudAnonymousCredentials
+        return (mCredentials instanceof OwnCloudAnonymousCredentials || mAccount == null)
                 ? Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0)
                 : Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0 + AccountUtils.getUserId(
                 mAccount.getSavedAccount(), getContext()
