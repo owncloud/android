@@ -61,20 +61,28 @@ class OCAuthenticationViewModel(
         }
     }
 
+    private val _loginResult = MediatorLiveData<Event<UIResult<Unit>>>()
+    val loginResult: LiveData<Event<UIResult<Unit>>> = _loginResult
+
     fun login(
-        serverUrl: String,
         username: String,
         password: String
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val useCaseResult = loginAsyncUseCase.execute(
                 LoginAsyncUseCase.Params(
-                    serverPath = serverUrl,
+                    serverPath = serverInfo.value?.peekContent()?.getStoredData()?.baseUrl?: "",
                     username = username,
                     password = password
                 )
             )
             Timber.d(useCaseResult.toString())
+
+            if(useCaseResult.isSuccess){
+                _loginResult.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
+            } else {
+                _loginResult.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
+            }
         }
     }
 }

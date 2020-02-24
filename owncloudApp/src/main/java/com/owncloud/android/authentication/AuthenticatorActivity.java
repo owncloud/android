@@ -62,6 +62,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.user.model.UserInfo;
@@ -173,8 +175,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             new GetServerInfoOperation.ServerInfo();
 
     /// Authentication PRE-Fragment elements
-    private EditText mUsernameInput;
-    private EditText mPasswordInput;
+    private TextInputLayout mUsernameInputLayout;
+    private TextInputLayout mPasswordInputLayout;
+    private TextInputEditText mUsernameInput;
+    private TextInputEditText mPasswordInput;
     private View mCheckServerButton;
     private View mLoginButton;
     private TextView mAuthStatusView;
@@ -484,6 +488,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private void initAuthorizationPreFragment(Bundle savedInstanceState) {
 
         /// step 0 - get UI elements in layout
+        mUsernameInputLayout = findViewById(R.id.account_username_container);
+        mPasswordInputLayout = findViewById(R.id.account_password_container);
         mUsernameInput = findViewById(R.id.account_username);
         mPasswordInput = findViewById(R.id.account_password);
         mAuthStatusView = findViewById(R.id.auth_status_text);
@@ -551,10 +557,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (AccountTypeUtils.getAuthTokenTypePass(MainApp.Companion.getAccountType()).
                 equals(mAuthTokenType)) {
             // basic HTTP authorization
+            mUsernameInputLayout.setVisibility(View.VISIBLE);
+            mPasswordInputLayout.setVisibility(View.VISIBLE);
             mUsernameInput.setVisibility(View.VISIBLE);
             mPasswordInput.setVisibility(View.VISIBLE);
 
         } else {
+            mUsernameInputLayout.setVisibility(View.GONE);
+            mPasswordInputLayout.setVisibility(View.GONE);
             mUsernameInput.setVisibility(View.GONE);
             mPasswordInput.setVisibility(View.GONE);
         }
