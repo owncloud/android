@@ -51,6 +51,7 @@
   <string name="prefs_log_delete_history_button">Wyczyść historię</string>
   <string name="prefs_help">Pomoc</string>
   <string name="prefs_sync_calendar_contacts">Synchronizuj swoje kontakty, kalendarze i zadania</string>
+  <string name="prefs_sync_calendar_contacts_summary">Instalacja DAVx⁵</string>
   <string name="prefs_recommend">Poleć znajomemu</string>
   <string name="prefs_feedback">Wsparcie</string>
   <string name="prefs_imprint">Stopka</string>
@@ -69,10 +70,15 @@
   <string name="passcode_already_set">Wzór odblokowywania i hasło nie mogą być włączone jednocześnie, proszę wyłączyć hasło</string>
   <string name="pattern_no_longer_required">Nie będziesz więcej pytany o wzór odblokowywania</string>
   <string name="pattern_configure_your_pattern_explanation">Wzór odblokowywania będzie wymagany przy każdorazowym uruchomieniu aplikacji</string>
+  <string name="pass_code_locked">Zablokowanie hasłem</string>
+  <string name="pattern_locked">Zablokowanie wzorem</string>
   <string name="recommend_subject">Wypróbuj %1$s na swoim smartphonie!</string>
   <string name="recommend_text">Chciałbym zaprosić Cię do używania %1$s na swoim smartfonie!\nŚciągnij tutaj: %2$s</string>
+  <string name="error_reason">ponieważ</string>
   <string name="auth_failure_snackbar">Uwierzytelnianie nieudane</string>
+  <string name="server_not_supported">Twoja wersja serwera jest niższa niż 10, więc nie jest to obsługiwane, proszę zaktualizować Twój serwer do nowszej wersji</string>
   <string name="auth_failure_snackbar_action">Zmień konto</string>
+  <string name="auth_oauth_failure">Klucz dostępu wygasł lub jest nieprawidłowy. Zarejestruj się ponownie aby uzyskać dostęp</string>
   <string name="auth_oauth_failure_snackbar_action">Zaloguj</string>
   <string name="auth_check_server">Sprawdź serwer</string>
   <string name="auth_host_url">Adres serwera https://...</string>
@@ -97,6 +103,7 @@
   <string name="file_list_seconds_ago">sekund temu</string>
   <string name="file_list_empty">Pusto. Wyślij coś!</string>
   <string name="file_list_empty_available_offline">Nie ma plików dostępnych offline.</string>
+  <string name="file_list_empty_shared_by_links">Żadne pliki nie są współdzielone przez link.</string>
   <string name="file_list_loading">Wczytywanie...</string>
   <string name="file_list_no_app_for_file_type">Nie znaleziono aplikacji dla tego rodzaju pliku</string>
   <string name="local_file_list_empty">Nie ma plików w tym folderze.</string>
@@ -129,6 +136,7 @@
   <string name="common_error">Błąd</string>
   <string name="common_loading">Wczytywanie...</string>
   <string name="common_unknown">nieznane</string>
+  <string name="common_error_unknown">nieznany błąd</string>
   <string name="common_pending">Oczekujące</string>
   <string name="common_important">Ważne</string>
   <string name="about_title">O aplikacji</string>
@@ -149,6 +157,8 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Nazwa pliku nie może być pusta</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Nazwa pliku nie może być dłuższa niż %d znaków</string>
   <string name="uploader_upload_text_filename_hint">Nazwa pliku</string>
+  <string name="uploader_upload_camera_upload_files">Wgrywanie plików zdjęć</string>
+  <string name="uploader_upload_available_offline_files">Wgrywanie dostępnych plików offline</string>
   <string name="ssl_certificate_not_trusted">Certyfikat serwera nie jest niezaufany</string>
   <string name="uploads_view_title">Wysłane</string>
   <string name="uploads_view_group_current_uploads">Bieżący</string>
@@ -238,6 +248,7 @@
   <string name="media_forward_description">Przycisk przewijania do przodu</string>
   <string name="upload_from_camera_title">Obraz z kamery</string>
   <string name="auth_getting_authorization">Pobieram autoryzację...</string>
+  <string name="auth_trying_to_login">Próba logowania…</string>
   <string name="auth_no_net_conn_title">Brak połączenia sieciowego</string>
   <string name="auth_nossl_plain_ok_title">Nie można nawiązać bezpiecznego połączenia.</string>
   <string name="auth_connection_established">Połączenie nawiązane</string>
@@ -274,6 +285,8 @@
   <string name="confirmation_remove_local">Tylko lokalnie</string>
   <string name="confirmation_remove_account_alert">Czy naprawdę chcesz usunąć konto %1$s?</string>
   <string name="confirmation_remove_public_share_title">Usuń link</string>
+  <string name="confirmation_remove_private_share_title">Usuń prywatny udział</string>
+  <string name="confirmation_remove_share_message">Czy na pewno chcesz usunąć udział %1$s?</string>
   <string name="remove_success_msg">Usunięto</string>
   <string name="remove_fail_msg">Nie można usunąć</string>
   <string name="rename_dialog_title">Wprowadź nową nazwę</string>
@@ -342,8 +355,11 @@
   <string name="preview_image_error_unknown_format">Ten obrazek nie może zostać wyświetlony</string>
   <string name="error__upload__local_file_not_copied">%1$s nie może zostać skopiowany do lokalnego folderu %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Ścieżka wrzucania obrazu</string>
+  <string name="get_capabilities_error">Pobranie właściwości z serwera nie było możliwe</string>
   <string name="share_link_no_support_share_api">Przepraszamy, ale współdzielenie nie jest włączone na Twoim serwerze. Proszę skontaktuj się z
 		administratorem.</string>
+  <string name="share_link_file_error">Udostępnienie tego pliku lub katalogu nie było możliwe</string>
+  <string name="update_link_file_error">Wgranie tego pliku lub katalogu nie było możliwe</string>
   <string name="share_link_password_title">Wprowadź hasło</string>
   <string name="share_link_empty_password">Musisz wprowadzić hasło</string>
   <string name="activity_chooser_send_file_title">Wyślij</string>
@@ -353,6 +369,7 @@
   <string name="clipboard_uxexpected_error">Wystąpił błąd podczas kopiowania do schowka</string>
   <string name="clipboard_label">Skopiowano tekst z %1$s</string>
   <string name="error_cant_bind_to_operations_service">Błąd krytyczny: nie można wykonać operacji</string>
+  <string name="network_error_socket_exception">błąd połączenia z serwerem</string>
   <string name="network_error_socket_timeout_exception">Serwer zbyt długo nie odpowiadał</string>
   <string name="network_error_connect_timeout_exception">Zbyt długi czas łączenia z serwerem</string>
   <string name="network_host_not_available">Serwer jest nieosiągalny</string>
@@ -435,6 +452,7 @@
   <string name="share_via_link_password_title">Zabezpieczone</string>
   <string name="share_via_link_edit_permission_read_only_label">Pobieranie / Podgląd</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Pobieranie / Podgląd / Wysyłanie</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Tylko wgrywanie (upuszczanie pliku)</string>
   <string name="share_get_public_link_button">Pobierz link</string>
   <string name="share_with_title">Współdziel z</string>
   <string name="share_with_edit_title">Współdziel z %1$s</string>
@@ -488,6 +506,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Wygaśnięcie</string>
   <string name="share_via_link_expiration_date_explanation_label">Link publiczny wygaśnie nie później niż %1$d dni od jego utworzenia</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
+  <string name="share_via_link_empty_password">Hasło jest puste</string>
   <string name="private_link_info">To jest link prywatny. Tylko użytkownicy, którzy mają przyznany dostęp do folderów lub plików mogą z niego skorzystać. Użyj go jako linka bezpośredniego dla siebie lub jako odnośnik dla użytkowników, którym udostępniasz.</string>
   <string name="file_private_link_error">Link prywatny nie jest dostępny dla tego pliku</string>
   <string name="download_notification_channel_name">Pobrania</string>
@@ -518,6 +537,7 @@
   <string name="welcome_feature_3_text">Podłącz do twoich wszystkich serwerów ownCloud</string>
   <string name="welcome_feature_4_title">Wrzucanie kamery</string>
   <string name="welcome_feature_4_text">Automatyczne wysyłanie twoich zdjęć oraz wideo </string>
+  <string name="welcome_feature_5_title">Wideotransmisja</string>
   <string name="welcome_feature_5_text">Odtwarzaj twoje pliki wideo bez pobierania</string>
   <string name="no_borwser_installed_alert">Przeglądarka nie jest zainstalowana. Zainstaluj przeglądarkę by umożliwić bezpieczne logowanie.</string>
   <string name="common_not_found">nie znaleziono</string>
