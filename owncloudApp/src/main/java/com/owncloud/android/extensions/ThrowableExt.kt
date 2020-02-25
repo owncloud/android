@@ -40,7 +40,11 @@ import com.owncloud.android.domain.exceptions.ServerResponseTimeoutException
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 
-fun Throwable.parseError(genericErrorMessage: String, resources: Resources): CharSequence {
+fun Throwable.parseError(
+    genericErrorMessage: String,
+    resources: Resources,
+    showJustReason: Boolean = false
+): CharSequence {
     if (!this.message.isNullOrEmpty()) { // If there's an specific error message from layers below use it
         return this.message as String
     } else { // Build the error message otherwise
@@ -68,8 +72,9 @@ fun Throwable.parseError(genericErrorMessage: String, resources: Resources): Cha
 
         return if (reason.isEmpty()) {
             genericErrorMessage
-        } else {
+        } else if (showJustReason) {
+            reason
+        } else
             "$genericErrorMessage ${resources.getString(R.string.error_reason)} $reason"
-        }
     }
 }

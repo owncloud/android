@@ -270,7 +270,7 @@
         <activity android:name=".ui.activity.FingerprintActivity" />
         <activity
             android:name=".presentation.ui.authentication.LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.ownCloud.Toolbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

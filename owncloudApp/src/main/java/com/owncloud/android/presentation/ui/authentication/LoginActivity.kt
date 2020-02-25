@@ -27,6 +27,9 @@
 package com.owncloud.android.presentation.ui.authentication
 
 import android.accounts.Account
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -110,16 +113,19 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             if (resources.getBoolean(R.bool.show_welcome_link)) {
                 visibility = VISIBLE
                 text = String.format(getString(R.string.auth_register), getString(R.string.app_name))
+                setOnClickListener {
+                    val register = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.welcome_link_url)))
+                    setResult(Activity.RESULT_CANCELED)
+                    startActivity(register)
+                }
             } else visibility = GONE
         }
 
-        embeddedCheckServerButton.run {
-            setOnClickListener { checkOcServer() }
-        }
+        thumbnail.setOnClickListener { checkOcServer() }
 
-        server_status_text.run {
-            isVisible = false
-        }
+        embeddedCheckServerButton.setOnClickListener { checkOcServer() }
+
+        server_status_text.isVisible = false
 
         // LiveData observers
         authenticatorViewModel.serverInfo.observe(this, Observer { event ->
@@ -157,12 +163,18 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
         uiResult.getStoredData()?.run {
-            hostUrlInput.doAfterTextChanged {
-                if (authenticatorViewModel.serverInfo.value == null || uiResult.getStoredData()?.baseUrl != hostUrlInput.text.toString()) {
-                    showBasicAuthFields(shouldBeVisible = false)
-                    server_status_text.run{
-                        text = ""
-                        isVisible = false
+            hostUrlInput.run {
+                uiResult.getStoredData()?.let { setText(it.baseUrl) }
+                doAfterTextChanged {
+                    //If user modifies url, reset fields and force him to check url again
+                    if (authenticatorViewModel.serverInfo.value == null ||
+                        uiResult.getStoredData()?.baseUrl != hostUrlInput.text.toString()
+                    ) {
+                        showOrHideBasicAuthFields(shouldBeVisible = false)
+                        server_status_text.run {
+                            text = ""
+                            isVisible = false
+                        }
                     }
                 }
             }
@@ -180,7 +192,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
             when (authenticationMethod) {
                 AuthenticationMethod.BASIC_HTTP_AUTH -> {
-                    showBasicAuthFields(shouldBeVisible = true)
+                    showOrHideBasicAuthFields(shouldBeVisible = true)
                     account_username.run {
                         doAfterTextChanged { updateLoginButtonState() }
                     }
@@ -229,37 +241,36 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
             }
             else -> server_status_text.run {
-                text = uiResult.getThrowableOrNull()?.parseError("", resources)
+                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
         }
         server_status_text.isVisible = true
-        showBasicAuthFields(shouldBeVisible = false)
+        showOrHideBasicAuthFields(shouldBeVisible = false)
     }
 
     private fun loginIsSuccess(uiResult: UIResult<Unit>) {
-        dismissDialog()
+        dismissLoadingDialog()
         Toast.makeText(applicationContext, "Login success, time to save account", Toast.LENGTH_LONG).show()
         auth_status_text.isVisible = false
     }
 
     private fun loginIsLoading() {
-        val dialog = LoadingDialog.newInstance(R.string.auth_trying_to_login, true)
-        dialog.show(supportFragmentManager, WAIT_DIALOG_TAG)
+        showLoadingDialog()
     }
 
     private fun loginIsError(uiResult: UIResult<Unit>) {
-        dismissDialog()
+        dismissLoadingDialog()
         when (uiResult.getThrowableOrNull()) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {
                 server_status_text.run {
                     text = getString(R.string.error_no_network_connection)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
                 }
-                showBasicAuthFields(shouldBeVisible = false)
+                showOrHideBasicAuthFields(shouldBeVisible = false)
             }
             else -> auth_status_text.run {
-                text = uiResult.getThrowableOrNull()?.parseError("", resources)
+                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
                 isVisible = true
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
@@ -291,18 +302,26 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         Toast.makeText(this, R.string.ssl_validator_not_saved, Toast.LENGTH_LONG).show()
     }
 
-    private fun dismissDialog() {
+    // TODO: Create an extension to show or hide a loading dialog from an activity.
+    private fun showLoadingDialog() {
+        val dialog = LoadingDialog.newInstance(R.string.auth_trying_to_login, true)
+        dialog.show(supportFragmentManager, WAIT_DIALOG_TAG)
+    }
+
+    private fun dismissLoadingDialog() {
         val frag = supportFragmentManager.findFragmentByTag(WAIT_DIALOG_TAG)
         if (frag is DialogFragment) {
             frag.dismiss()
         }
     }
 
-    private fun showBasicAuthFields(shouldBeVisible: Boolean) {
+    /* Show or hide Basic Auth fields and reset its values */
+    private fun showOrHideBasicAuthFields(shouldBeVisible: Boolean) {
         account_username_container.run {
             visibility = if (shouldBeVisible) VISIBLE else GONE
             isFocusable = shouldBeVisible
             isEnabled = shouldBeVisible
+            if(shouldBeVisible) requestFocus()
         }
         account_password_container.run {
             visibility = if (shouldBeVisible) VISIBLE else GONE

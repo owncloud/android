@@ -82,7 +82,8 @@
                 android:id="@+id/hostUrlFrame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp">
+                android:layout_marginBottom="0dp"
+                android:focusable="true">
 
                 <EditText
                     android:id="@+id/hostUrlInput"
@@ -215,7 +216,6 @@
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/auth_register"
                     android:gravity="center"
-                    android:onClick="onRegisterClick"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:text="@string/auth_register"
