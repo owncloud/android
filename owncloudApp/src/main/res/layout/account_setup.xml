@@ -18,6 +18,7 @@
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -28,7 +29,8 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/login_background_image"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        tools:visibility="visible"/>
 
     <ScrollView
         android:id="@+id/scroll"
@@ -92,7 +94,7 @@
                     android:hint="@string/auth_host_url"
                     android:inputType="textUri"
                     android:paddingEnd="55dp"
-                    android:theme="@style/EditText.Authenticator">
+                    android:theme="@style/Theme.ownCloud.Authenticator.EditText">
 
                     <requestFocus />
                 </EditText>
@@ -151,7 +153,7 @@
                     android:drawablePadding="5dp"
                     android:hint="@string/auth_username"
                     android:inputType="textNoSuggestions"
-                    android:theme="@style/EditText.Authenticator">
+                    android:theme="@style/Theme.ownCloud.Authenticator.EditText">
 
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
@@ -172,8 +174,8 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="5dp"
                     android:hint="@string/auth_password"
-                    android:inputType="textPassword"
-                    android:theme="@style/EditText.Authenticator">
+                    android:theme="@style/Theme.ownCloud.Authenticator.EditText"
+                    android:inputType="textPassword">
 
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
@@ -198,7 +200,8 @@
                 android:contentDescription="@string/setup_btn_login"
                 android:text="@string/setup_btn_login"
                 android:theme="@style/Button.Authenticator"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
