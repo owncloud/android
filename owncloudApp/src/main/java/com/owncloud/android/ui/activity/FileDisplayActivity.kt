@@ -363,7 +363,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun createMinFragments() {
-        val listOfFiles = OCFileListFragment.newInstance(false, onlyAvailableOffline, onlySharedByLink, false, true)
+        val listOfFiles = OCFileListFragment.newInstance(false, onlyAvailableOffline, onlySharedByLink, false, false, true)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
