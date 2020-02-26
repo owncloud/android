@@ -88,15 +88,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         // UI initialization
         setContentView(R.layout.account_setup)
 
-        login_layout.run {
-            filterTouchesWhenObscured =
-                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
-            if (resources.getBoolean(R.bool.use_login_background_image)) {
-                login_background_image.visibility = VISIBLE
-            } else {
-                setBackgroundColor(resources.getColor(R.color.login_background_color))
-            }
-        }
+        login_layout.filterTouchesWhenObscured =
+            PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
+
+        initBrandableOptionsUI()
 
         instructions_message.run {
             if (loginAction == ACTION_UPDATE_EXPIRED_TOKEN) {
@@ -106,18 +101,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     getString(R.string.auth_expired_basic_auth_toast)
                 }
                 visibility = VISIBLE
-            } else visibility = GONE
-        }
-
-        welcome_link.run {
-            if (resources.getBoolean(R.bool.show_welcome_link)) {
-                visibility = VISIBLE
-                text = String.format(getString(R.string.auth_register), getString(R.string.app_name))
-                setOnClickListener {
-                    val register = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.welcome_link_url)))
-                    setResult(Activity.RESULT_CANCELED)
-                    startActivity(register)
-                }
             } else visibility = GONE
         }
 
@@ -151,13 +134,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun updateLoginButtonState() {
-        loginButton.isVisible =
-            account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
-        loginButton.setOnClickListener {
-            authenticatorViewModel.login(
-                account_username.text.toString(),
-                account_password.text.toString()
-            )
+        loginButton.run {
+            isVisible = account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
+            setOnClickListener {
+                authenticatorViewModel.login(account_username.text.toString(), account_password.text.toString())
+            }
         }
     }
 
@@ -321,7 +302,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             visibility = if (shouldBeVisible) VISIBLE else GONE
             isFocusable = shouldBeVisible
             isEnabled = shouldBeVisible
-            if(shouldBeVisible) requestFocus()
+            if (shouldBeVisible) requestFocus()
         }
         account_password_container.run {
             visibility = if (shouldBeVisible) VISIBLE else GONE
@@ -337,6 +318,42 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         auth_status_text.run {
             isVisible = false
             text = ""
+        }
+    }
+
+    private fun initBrandableOptionsUI() {
+        if (!resources.getBoolean(R.bool.show_server_url_input)) {
+            hostUrlFrame.visibility = GONE
+            centeredRefreshButton.run {
+                isVisible = true
+                setOnClickListener { checkOcServer() }
+            }
+        }
+
+        if (resources.getString(R.string.server_url).isNotEmpty()) {
+            hostUrlInput.setText(R.string.server_url)
+            checkOcServer()
+        }
+
+        login_layout.run {
+            if (resources.getBoolean(R.bool.use_login_background_image)) {
+                login_background_image.visibility = VISIBLE
+            } else {
+                setBackgroundColor(resources.getColor(R.color.login_background_color))
+            }
+        }
+
+        welcome_link.run {
+            if (resources.getBoolean(R.bool.show_welcome_link)) {
+                visibility = VISIBLE
+                text = String.format(getString(R.string.auth_register), getString(R.string.app_name))
+                setOnClickListener {
+                    val openWelcomeLinkIntent =
+                        Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.welcome_link_url)))
+                    setResult(Activity.RESULT_CANCELED)
+                    startActivity(openWelcomeLinkIntent)
+                }
+            } else visibility = GONE
         }
     }
 }
