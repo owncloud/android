@@ -88,5 +88,5 @@ val remoteDataSourceModule = module {
     }
     factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
-    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext()) }
+    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext(), get()) }
 }

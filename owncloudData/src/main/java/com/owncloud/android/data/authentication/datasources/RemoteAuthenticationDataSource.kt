@@ -18,6 +18,9 @@
  */
 package com.owncloud.android.data.authentication.datasources
 
+import com.owncloud.android.domain.user.model.UserInfo
+
 interface RemoteAuthenticationDataSource {
-    fun login(serverPath: String, username: String, password: String)
+    // Returns a Pair with UserInfo and last permanent redirection
+    fun login(serverPath: String, username: String, password: String): Pair<UserInfo, String?>
 }

@@ -33,20 +33,6 @@ import org.koin.core.inject
  */
 class UseCaseHelper : KoinComponent {
     private val getUserInfoAsyncUseCase: GetUserInfoAsyncUseCase by inject()
-    private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase by inject()
-    private val loginAsyncUseCase: LoginAsyncUseCase by inject()
 
     fun getUserInfo(): UseCaseResult<UserInfo> = getUserInfoAsyncUseCase.execute(Unit)
-
-    fun getServerInfo(serverUrl: String): UseCaseResult<ServerInfo> =
-        getServerInfoAsyncUseCase.execute(GetServerInfoAsyncUseCase.Params(serverPath = serverUrl))
-
-    fun login(serverUrl: String, username: String, password: String) =
-        loginAsyncUseCase.execute(
-            LoginAsyncUseCase.Params(
-                serverPath = serverUrl,
-                username = username,
-                password = password
-            )
-        )
 }
