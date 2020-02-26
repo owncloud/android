@@ -43,7 +43,7 @@ public class AccountUtils {
 
     private static final String ODAV_PATH = "/remote.php/odav";
 
-    public static final int ACCOUNT_VERSION = 1;
+    static final int ACCOUNT_VERSION = 1;
 
     /**
      * Can be used to get the currently selected ownCloud {@link Account} in the
