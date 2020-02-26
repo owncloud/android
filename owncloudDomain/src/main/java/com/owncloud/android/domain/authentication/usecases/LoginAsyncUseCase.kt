@@ -25,18 +25,20 @@ import com.owncloud.android.domain.server.model.ServerInfo
 
 class LoginAsyncUseCase(
     private val authenticationRepository: AuthenticationRepository
-) : BaseUseCaseWithResult<Unit, LoginAsyncUseCase.Params>() {
+) : BaseUseCaseWithResult<String, LoginAsyncUseCase.Params>() {
 
-    override fun run(params: Params) {
+    override fun run(params: Params): String {
         require(params.serverInfo != null) { "Invalid server info" }
         require(params.username.isNotEmpty()) { "Invalid username" }
         require(params.password.isNotEmpty()) { "Invalid password" }
 
-        authenticationRepository.login(
+        val accountName = authenticationRepository.login(
             params.serverInfo,
             params.username,
             params.password
         )
+
+        return accountName
     }
 
     data class Params(

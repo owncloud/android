@@ -31,7 +31,7 @@ interface LocalAuthenticationDataSource {
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo?
-    )
+    ): String
 
     fun addOAuthAccountIfDoesNotExist(
         lastPermanentLocation: String?,

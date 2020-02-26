@@ -45,9 +45,10 @@ class OCLocalAuthenticationDataSource(
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo?
-    ) {
+    ): String {
         addNewAccount(lastPermanentLocation, serverInfo, userName, password).also {
             updateUserAndServerInfo(it, serverInfo, userInfo, userName)
+            return it.name
         }
     }
 
