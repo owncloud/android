@@ -71,7 +71,7 @@ class OCAuthenticationViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val useCaseResult = loginAsyncUseCase.execute(
                 LoginAsyncUseCase.Params(
-                    serverPath = serverInfo.value?.peekContent()?.getStoredData()?.baseUrl?: "",
+                    serverInfo = serverInfo.value?.peekContent()?.getStoredData(),
                     username = username,
                     password = password
                 )

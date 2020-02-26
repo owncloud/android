@@ -19,6 +19,8 @@
 
 package com.owncloud.android.domain.authentication
 
+import com.owncloud.android.domain.server.model.ServerInfo
+
 interface AuthenticationRepository {
-    fun login(serverUrl: String, username: String, password: String)
+    fun login(serverInfo: ServerInfo, username: String, password: String)
 }

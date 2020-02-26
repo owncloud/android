@@ -21,13 +21,22 @@ package com.owncloud.android.data.authentication.repository
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.domain.authentication.AuthenticationRepository
+import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.user.model.UserInfo
 
 class OCAuthenticationRepository(
     private val localAuthenticationDataSource: LocalAuthenticationDataSource,
     private val remoteAuthenticationDataSource: RemoteAuthenticationDataSource
 ) : AuthenticationRepository {
-    override fun login(serverUrl: String, username: String, password: String) {
-        remoteAuthenticationDataSource.login(serverPath = serverUrl, username = username, password = password)
+    override fun login(serverInfo: ServerInfo, username: String, password: String) {
+
+        val userInfoAndRedirectionPath: Pair<UserInfo, String?> =
+            remoteAuthenticationDataSource.login(
+                serverPath = serverInfo.baseUrl,
+                username = username,
+                password = password
+            )
+
         //TODO: Add account creation stuff
 //        localAuthenticationDataSource.addAccountIfDoesNotExist(
 //

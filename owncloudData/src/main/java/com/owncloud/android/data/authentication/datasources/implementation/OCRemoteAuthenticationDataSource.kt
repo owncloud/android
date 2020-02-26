@@ -22,13 +22,19 @@ import android.content.Context
 import android.net.Uri
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.executeRemoteOperation
+import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
+import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
+import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation
 
-class OCRemoteAuthenticationDataSource(private val context: Context) : RemoteAuthenticationDataSource {
-    override fun login(serverPath: String, username: String, password: String) {
+class OCRemoteAuthenticationDataSource(
+    private val context: Context,
+    private val remoteUserInfoMapper: RemoteUserInfoMapper
+) : RemoteAuthenticationDataSource {
+    override fun login(serverPath: String, username: String, password: String): Pair<UserInfo, String?> {
         val credentials = OwnCloudCredentialsFactory.newBasicCredentials(username, password)
         val url: Uri = Uri.parse(serverPath)
 
@@ -38,12 +44,21 @@ class OCRemoteAuthenticationDataSource(private val context: Context) : RemoteAut
         val operation = CheckPathExistenceRemoteOperation("/", true)
         executeRemoteOperation { operation.execute(client) }
 
+        val redirectionPath = operation.redirectionPath
         if (operation.wasRedirected()) {
-            val redirectionPath = operation.redirectionPath
             client.apply {
                 baseUri = Uri.parse(redirectionPath?.lastPermanentLocation)
                 setFollowRedirects(true)
             }
         }
+
+        // Get user info. It is needed to save the account into the account manager
+        lateinit var userInfo: UserInfo
+
+        executeRemoteOperation {
+            GetRemoteUserInfoOperation().execute(client)
+        }.let { userInfo = remoteUserInfoMapper.toModel(it)!! }
+
+        return Pair(userInfo, redirectionPath?.lastPermanentLocation)
     }
 }
