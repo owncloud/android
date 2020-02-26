@@ -39,6 +39,8 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
+import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstantsKt;
+import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthorizationService;
 import net.openid.appauth.AuthorizationServiceConfiguration;
@@ -97,17 +99,16 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 return e.getFailureBundle();
             }
 
-            final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
+            final Intent intent = new Intent(mContext, LoginActivity.class);
             intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
             intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
             intent.putExtra(KEY_REQUIRED_FEATURES, requiredFeatures);
             intent.putExtra(KEY_LOGIN_OPTIONS, options);
-            intent.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
+            intent.putExtra(AuthenticatorConstantsKt.EXTRA_ACTION, AuthenticatorConstantsKt.ACTION_CREATE);
 
             setIntentFlags(intent);
 
             bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-
         } else {
             // Return an error
             bundle.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);

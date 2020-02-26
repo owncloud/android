@@ -72,6 +72,10 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/Theme.ownCloud.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.FileDisplayActivity"
@@ -271,12 +275,6 @@
         <activity
             android:name=".presentation.ui.authentication.LoginActivity"
             android:theme="@style/Theme.ownCloud.Toolbar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-
     </application>
 </manifest>
