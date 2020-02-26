@@ -28,7 +28,7 @@ class OCAuthenticationRepository(
     private val localAuthenticationDataSource: LocalAuthenticationDataSource,
     private val remoteAuthenticationDataSource: RemoteAuthenticationDataSource
 ) : AuthenticationRepository {
-    override fun login(serverInfo: ServerInfo, username: String, password: String) {
+    override fun login(serverInfo: ServerInfo, username: String, password: String): String {
         val userInfoAndRedirectionPath: Pair<UserInfo, String?> =
             remoteAuthenticationDataSource.login(
                 serverPath = serverInfo.baseUrl,
@@ -36,12 +36,14 @@ class OCAuthenticationRepository(
                 password = password
             )
 
-        localAuthenticationDataSource.addAccountIfDoesNotExist(
+        val accountName = localAuthenticationDataSource.addAccountIfDoesNotExist(
             userInfoAndRedirectionPath.second,
             username,
             password,
             serverInfo,
             userInfoAndRedirectionPath.first
-        )
+        );
+
+        return accountName;
     }
 }

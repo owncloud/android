@@ -27,6 +27,7 @@
 package com.owncloud.android.presentation.ui.authentication
 
 import android.accounts.Account
+import android.accounts.AccountManager
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -35,13 +36,14 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.owncloud.android.MainApp
+import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
+import com.owncloud.android.authentication.AccountAuthenticatorActivity
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
@@ -54,12 +56,13 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.ui.dialog.LoadingDialog
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
+import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.account_setup.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
+class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
 
     private val authenticatorViewModel by viewModel<OCAuthenticationViewModel>()
 
@@ -121,7 +124,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         authenticatorViewModel.loginResult.observe(this, Observer { event ->
             when (event.peekContent()) {
-                is UIResult.Success -> loginIsSuccess()
+                is UIResult.Success -> loginIsSuccess(event.peekContent())
                 is UIResult.Loading -> loginIsLoading()
                 is UIResult.Error -> loginIsError(event.peekContent())
             }
@@ -230,8 +233,19 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         showOrHideBasicAuthFields(shouldBeVisible = false)
     }
 
-    private fun loginIsSuccess() {
+    private fun loginIsSuccess(uiResult: UIResult<String>) {
         dismissLoadingDialog()
+
+        // Return result to account authenticator, multiaccount does not work without this
+        val accountName = uiResult.getStoredData()
+        val intent = Intent()
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType)
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName)
+        setAccountAuthenticatorResult(intent.extras)
+        setResult(Activity.RESULT_OK, intent)
+
+        notifyDocumentProviderRoots(applicationContext)
+
         finish()
     }
 
@@ -239,7 +253,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         showLoadingDialog()
     }
 
-    private fun loginIsError(uiResult: UIResult<Unit>) {
+    private fun loginIsError(uiResult: UIResult<String>) {
         dismissLoadingDialog()
         when (uiResult.getThrowableOrNull()) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {

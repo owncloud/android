@@ -61,8 +61,8 @@ class OCAuthenticationViewModel(
         }
     }
 
-    private val _loginResult = MediatorLiveData<Event<UIResult<Unit>>>()
-    val loginResult: LiveData<Event<UIResult<Unit>>> = _loginResult
+    private val _loginResult = MediatorLiveData<Event<UIResult<String>>>()
+    val loginResult: LiveData<Event<UIResult<String>>> = _loginResult
 
     fun login(
         username: String,
