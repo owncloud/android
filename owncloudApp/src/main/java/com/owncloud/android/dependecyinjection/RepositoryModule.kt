@@ -47,5 +47,5 @@ val repositoryModule = module {
     factory<UserRepository> { OCUserRepository(get()) }
     factory<FileRepository> { OCFileRepository(get()) }
     factory<ServerInfoRepository> { OCServerInfoRepository(get()) }
-    factory<AuthenticationRepository> { OCAuthenticationRepository(get()) }
+    factory<AuthenticationRepository> { OCAuthenticationRepository(get(), get()) }
 }

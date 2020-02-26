@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author David González V
+ * @author David González Verdugo
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,19 +20,33 @@
 package com.owncloud.android.data.authentication.datasources
 
 import android.accounts.Account
-import android.net.Uri
+import android.content.Context
+import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.user.model.UserInfo
 
 interface LocalAuthenticationDataSource {
-    fun addAccount(
-        uri: Uri,
+    fun addAccountIfDoesNotExist(
+        lastPermanentLocation: String?,
         userName: String,
         password: String,
-        accountName: String,
-        accountType: String,
-        isOAuth: Boolean
+        serverInfo: ServerInfo,
+        userInfo: UserInfo?
     )
 
-    fun getAccounts() : List<Account>
-    fun getAccountsByType()
-    fun accountExists()
+    fun addOAuthAccountIfDoesNotExist(
+        lastPermanentLocation: String?,
+        userName: String,
+        authTokenType: String,
+        accessToken: String,
+        serverInfo: ServerInfo,
+        userInfo: UserInfo?,
+        refreshToken: String,
+        scope: String
+    )
+
+    fun getAccounts(): Array<Account>
+
+    fun accountExists(accountName: String?): Boolean
+
+    fun getCurrentOwnCloudAccount(context: Context): Account?
 }
