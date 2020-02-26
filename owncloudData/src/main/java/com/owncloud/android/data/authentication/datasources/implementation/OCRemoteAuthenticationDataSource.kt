@@ -29,7 +29,6 @@ import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperatio
 
 class OCRemoteAuthenticationDataSource(private val context: Context) : RemoteAuthenticationDataSource {
     override fun login(serverPath: String, username: String, password: String) {
-
         val credentials = OwnCloudCredentialsFactory.newBasicCredentials(username, password)
         val url: Uri = Uri.parse(serverPath)
 
