@@ -41,11 +41,11 @@ class OCRemoteAuthenticationDataSource(
         val client: OwnCloudClient =
             OwnCloudClientFactory.createOwnCloudClient(url, context, true).apply { setCredentials(credentials) }
 
-        val operation = CheckPathExistenceRemoteOperation("/", true)
-        executeRemoteOperation { operation.execute(client) }
+        val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation("/", true)
+        executeRemoteOperation { checkPathExistenceRemoteOperation.execute(client) }
 
-        val redirectionPath = operation.redirectionPath
-        if (operation.wasRedirected()) {
+        val redirectionPath = checkPathExistenceRemoteOperation.redirectionPath
+        if (checkPathExistenceRemoteOperation.wasRedirected()) {
             client.apply {
                 baseUri = Uri.parse(redirectionPath?.lastPermanentLocation)
                 setFollowRedirects(true)

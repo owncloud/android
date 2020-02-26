@@ -121,7 +121,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         authenticatorViewModel.loginResult.observe(this, Observer { event ->
             when (event.peekContent()) {
-                is UIResult.Success -> loginIsSuccess(event.peekContent())
+                is UIResult.Success -> loginIsSuccess()
                 is UIResult.Loading -> loginIsLoading()
                 is UIResult.Error -> loginIsError(event.peekContent())
             }
@@ -230,10 +230,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         showOrHideBasicAuthFields(shouldBeVisible = false)
     }
 
-    private fun loginIsSuccess(uiResult: UIResult<Unit>) {
+    private fun loginIsSuccess() {
         dismissLoadingDialog()
-        Toast.makeText(applicationContext, "Login success, time to save account", Toast.LENGTH_LONG).show()
-        auth_status_text.isVisible = false
+        finish()
     }
 
     private fun loginIsLoading() {
