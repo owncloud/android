@@ -99,7 +99,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 return e.getFailureBundle();
             }
 
-            final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
+            final Intent intent = new Intent(mContext, LoginActivity.class);
             intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
             intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
             intent.putExtra(KEY_REQUIRED_FEATURES, requiredFeatures);

@@ -31,7 +31,7 @@ interface LocalAuthenticationDataSource {
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo?
-    ): String
+    ): Account
 
     fun addOAuthAccountIfDoesNotExist(
         lastPermanentLocation: String?,
@@ -49,4 +49,6 @@ interface LocalAuthenticationDataSource {
     fun accountExists(accountName: String?): Boolean
 
     fun getCurrentOwnCloudAccount(context: Context): Account?
+
+    fun getUserData(account: Account, key: String): String
 }

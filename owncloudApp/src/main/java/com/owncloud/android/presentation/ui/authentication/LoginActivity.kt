@@ -85,7 +85,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
         // Get values from savedInstanceState
         savedInstanceState?.let {
-            authTokenType = it.getString(KEY_AUTH_TOKEN_TYPE)
+            authTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE)
         }
 
         // UI initialization
@@ -129,6 +129,17 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 is UIResult.Error -> loginIsError(event.peekContent())
             }
         })
+
+        authenticatorViewModel.userData.observe(this, Observer { event ->
+            when (event.peekContent()) {
+                is UIResult.Success -> {
+                }
+                is UIResult.Loading -> {
+                }
+                is UIResult.Error -> {
+                }
+            }
+        })
     }
 
     private fun checkOcServer() {
@@ -140,7 +151,11 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         loginButton.run {
             isVisible = account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
             setOnClickListener {
-                authenticatorViewModel.login(account_username.text.toString(), account_password.text.toString())
+                if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) { // OAuth
+//                    startOauthorization()
+                } else {  // Basic
+                    authenticatorViewModel.login(account_username.text.toString(), account_password.text.toString())
+                }
             }
         }
     }
@@ -176,6 +191,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
             when (authenticationMethod) {
                 AuthenticationMethod.BASIC_HTTP_AUTH -> {
+                    authTokenType = BASIC_TOKEN_TYPE
                     showOrHideBasicAuthFields(shouldBeVisible = true)
                     account_username.run {
                         doAfterTextChanged { updateLoginButtonState() }
@@ -190,6 +206,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 }
 
                 AuthenticationMethod.BEARER_TOKEN -> {
+                    authTokenType = OAUTH_TOKEN_TYPE
                     loginButton.visibility = VISIBLE
                 }
 
@@ -233,14 +250,14 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         showOrHideBasicAuthFields(shouldBeVisible = false)
     }
 
-    private fun loginIsSuccess(uiResult: UIResult<String>) {
+    private fun loginIsSuccess(uiResult: UIResult<Account>) {
         dismissLoadingDialog()
 
         // Return result to account authenticator, multiaccount does not work without this
-        val accountName = uiResult.getStoredData()
+        userAccount = uiResult.getStoredData()
         val intent = Intent()
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType)
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName)
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, userAccount?.name)
         setAccountAuthenticatorResult(intent.extras)
         setResult(Activity.RESULT_OK, intent)
 
@@ -253,7 +270,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         showLoadingDialog()
     }
 
-    private fun loginIsError(uiResult: UIResult<String>) {
+    private fun loginIsError(uiResult: UIResult<Account>) {
         dismissLoadingDialog()
         when (uiResult.getThrowableOrNull()) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {
@@ -368,5 +385,10 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 }
             } else visibility = GONE
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(KEY_AUTH_TOKEN_TYPE, authTokenType)
     }
 }
