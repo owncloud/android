@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author David González Verdugo
  * Copyright (C) 2020 ownCloud GmbH.
  *
@@ -23,29 +22,23 @@ package com.owncloud.android.domain.authentication.usecases
 import android.accounts.Account
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.authentication.AuthenticationRepository
-import com.owncloud.android.domain.server.model.ServerInfo
 
-class LoginAsyncUseCase(
+class GetUserDataUseCase(
     private val authenticationRepository: AuthenticationRepository
-) : BaseUseCaseWithResult<Account, LoginAsyncUseCase.Params>() {
+) : BaseUseCaseWithResult<String, GetUserDataUseCase.Params>() {
 
-    override fun run(params: Params): Account {
-        require(params.serverInfo != null) { "Invalid server info" }
-        require(params.username.isNotEmpty()) { "Invalid username" }
-        require(params.password.isNotEmpty()) { "Invalid password" }
+    override fun run(params: Params): String {
+        require(params.account != null) { "Invalid account" }
+        require(params.key.isNotEmpty()) { "Invalid key" }
 
-        val account = authenticationRepository.login(
-            params.serverInfo,
-            params.username,
-            params.password
+        return authenticationRepository.getUserData(
+            params.account,
+            params.key
         )
-
-        return account
     }
 
     data class Params(
-        val serverInfo: ServerInfo?,
-        val username: String,
-        val password: String
+        val account: Account?,
+        val key: String
     )
 }

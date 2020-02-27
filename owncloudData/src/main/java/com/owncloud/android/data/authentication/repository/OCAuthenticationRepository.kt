@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author David González Verdugo
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +19,7 @@
  */
 package com.owncloud.android.data.authentication.repository
 
+import android.accounts.Account
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.domain.authentication.AuthenticationRepository
@@ -28,7 +30,7 @@ class OCAuthenticationRepository(
     private val localAuthenticationDataSource: LocalAuthenticationDataSource,
     private val remoteAuthenticationDataSource: RemoteAuthenticationDataSource
 ) : AuthenticationRepository {
-    override fun login(serverInfo: ServerInfo, username: String, password: String): String {
+    override fun login(serverInfo: ServerInfo, username: String, password: String): Account {
         val userInfoAndRedirectionPath: Pair<UserInfo, String?> =
             remoteAuthenticationDataSource.login(
                 serverPath = serverInfo.baseUrl,
@@ -36,7 +38,7 @@ class OCAuthenticationRepository(
                 password = password
             )
 
-        val accountName = localAuthenticationDataSource.addAccountIfDoesNotExist(
+        val account = localAuthenticationDataSource.addAccountIfDoesNotExist(
             userInfoAndRedirectionPath.second,
             username,
             password,
@@ -44,6 +46,9 @@ class OCAuthenticationRepository(
             userInfoAndRedirectionPath.first
         );
 
-        return accountName;
+        return account;
     }
+
+    override fun getUserData(account: Account, key: String): String =
+        localAuthenticationDataSource.getUserData(account, key)
 }

@@ -45,11 +45,8 @@ class OCLocalAuthenticationDataSource(
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo?
-    ): String {
-        addNewAccount(lastPermanentLocation, serverInfo, userName, password).also {
-            updateUserAndServerInfo(it, serverInfo, userInfo, userName)
-            return it.name
-        }
+    ): Account = addNewAccount(lastPermanentLocation, serverInfo, userName, password).also {
+        updateUserAndServerInfo(it, serverInfo, userInfo, userName)
     }
 
     override fun addOAuthAccountIfDoesNotExist(
@@ -193,6 +190,8 @@ class OCLocalAuthenticationDataSource(
             defaultAccount = ocAccounts[0]
         }
 
-        return defaultAccount!!
+        return defaultAccount
     }
+
+    override fun getUserData(account: Account, key: String): String = accountManager.getUserData(account, key)
 }
