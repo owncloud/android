@@ -191,17 +191,6 @@
             android:theme="@style/Theme.ownCloud.Authenticator">
         </activity>
 
-        <activity android:name="net.openid.appauth.RedirectUriReceiverActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="${appAuthRedirectScheme}" />
-            </intent-filter>
-        </activity>
-
         <service android:name=".services.OperationsService" />
         <service android:name=".files.services.FileDownloader" />
         <service android:name=".files.services.FileUploader" />
