@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.viewmodels.authentication
 
-import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -66,10 +65,10 @@ class OCAuthenticationViewModel(
     private val _userData = MediatorLiveData<Event<UIResult<String>>>()
     val userData: LiveData<Event<UIResult<String>>> = _userData
 
-    fun getUserData(account: Account, key: String) {
+    fun getUserData(key: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val useCaseResult = getUserDataUseCase.execute(
-                GetUserDataUseCase.Params(account, key)
+                GetUserDataUseCase.Params(key)
             )
             Timber.d(useCaseResult.toString())
 
@@ -81,8 +80,8 @@ class OCAuthenticationViewModel(
         }
     }
 
-    private val _loginResult = MediatorLiveData<Event<UIResult<Account>>>()
-    val loginResult: LiveData<Event<UIResult<Account>>> = _loginResult
+    private val _loginResult = MediatorLiveData<Event<UIResult<String>>>()
+    val loginResult: LiveData<Event<UIResult<String>>> = _loginResult
 
     fun login(
         username: String,

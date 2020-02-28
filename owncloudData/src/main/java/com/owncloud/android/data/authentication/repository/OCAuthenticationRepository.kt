@@ -19,7 +19,6 @@
  */
 package com.owncloud.android.data.authentication.repository
 
-import android.accounts.Account
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.domain.authentication.AuthenticationRepository
@@ -30,7 +29,7 @@ class OCAuthenticationRepository(
     private val localAuthenticationDataSource: LocalAuthenticationDataSource,
     private val remoteAuthenticationDataSource: RemoteAuthenticationDataSource
 ) : AuthenticationRepository {
-    override fun login(serverInfo: ServerInfo, username: String, password: String): Account {
+    override fun login(serverInfo: ServerInfo, username: String, password: String): String {
         val userInfoAndRedirectionPath: Pair<UserInfo, String?> =
             remoteAuthenticationDataSource.login(
                 serverPath = serverInfo.baseUrl,
@@ -38,7 +37,7 @@ class OCAuthenticationRepository(
                 password = password
             )
 
-        val account = localAuthenticationDataSource.addAccountIfDoesNotExist(
+        val accountName = localAuthenticationDataSource.addAccountIfDoesNotExist(
             userInfoAndRedirectionPath.second,
             username,
             password,
@@ -46,9 +45,9 @@ class OCAuthenticationRepository(
             userInfoAndRedirectionPath.first
         );
 
-        return account;
+        return accountName;
     }
 
-    override fun getUserData(account: Account, key: String): String =
-        localAuthenticationDataSource.getUserData(account, key)
+    override fun getUserData(key: String): String =
+        localAuthenticationDataSource.getUserData(key)
 }

@@ -23,6 +23,6 @@ import android.accounts.Account
 import com.owncloud.android.domain.server.model.ServerInfo
 
 interface AuthenticationRepository {
-    fun login(serverInfo: ServerInfo, username: String, password: String): Account
-    fun getUserData(account: Account, key: String): String
+    fun login(serverInfo: ServerInfo, username: String, password: String): String
+    fun getUserData(key: String): String
 }
