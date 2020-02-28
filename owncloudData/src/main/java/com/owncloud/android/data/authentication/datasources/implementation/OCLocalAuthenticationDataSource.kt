@@ -46,12 +46,10 @@ class OCLocalAuthenticationDataSource(
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo?
-    ): String {
+    ): String =
         addNewAccount(lastPermanentLocation, serverInfo, userName, password).also {
             updateUserAndServerInfo(it, serverInfo, userInfo, userName)
-            return it.name
-        }
-    }
+        }.name
 
     override fun addOAuthAccountIfDoesNotExist(
         lastPermanentLocation: String?,
@@ -61,8 +59,8 @@ class OCLocalAuthenticationDataSource(
         serverInfo: ServerInfo,
         userInfo: UserInfo?,
         refreshToken: String,
-        scope: String
-    ) {
+        scope: String?
+    ): String =
         addNewAccount(lastPermanentLocation, serverInfo, userName).also {
             updateUserAndServerInfo(it, serverInfo, userInfo, userName)
 
@@ -70,9 +68,10 @@ class OCLocalAuthenticationDataSource(
 
             accountManager.setUserData(it, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2, "TRUE")
             accountManager.setUserData(it, AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
-            accountManager.setUserData(it, AccountUtils.Constants.KEY_OAUTH2_SCOPE, scope)
-        }
-    }
+            scope?.run{
+                accountManager.setUserData(it, AccountUtils.Constants.KEY_OAUTH2_SCOPE, this)
+            }
+        }.name
 
     /**
      * Add new account to account manager, shared preferences and returns account name

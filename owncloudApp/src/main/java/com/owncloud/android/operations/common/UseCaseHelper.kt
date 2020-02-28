@@ -19,9 +19,6 @@
 package com.owncloud.android.operations.common
 
 import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.authentication.usecases.LoginAsyncUseCase
-import com.owncloud.android.domain.server.model.ServerInfo
-import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import org.koin.core.KoinComponent

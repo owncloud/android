@@ -39,8 +39,8 @@ interface LocalAuthenticationDataSource {
         serverInfo: ServerInfo,
         userInfo: UserInfo?,
         refreshToken: String,
-        scope: String
-    )
+        scope: String?
+    ): String
 
     fun getUserData(key: String): String
 }

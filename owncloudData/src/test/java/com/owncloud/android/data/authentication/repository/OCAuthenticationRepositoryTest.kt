@@ -39,25 +39,25 @@ class OCAuthenticationRepositoryTest {
 
     @Test
     fun loginOk() {
-        every { remoteAuthenticationDataSource.login(any(), any(), any()) } returns Unit
+        every { remoteAuthenticationDataSource.loginOAuth(any(), any(), any()) } returns Unit
 
         ocAuthenticationRepository.login(OC_SERVER_INFO.baseUrl, "username", "password")
 
         verify(exactly = 1) {
-            remoteAuthenticationDataSource.login(OC_SERVER_INFO.baseUrl, "username", "password")
+            remoteAuthenticationDataSource.loginOAuth(OC_SERVER_INFO.baseUrl, "username", "password")
         }
     }
 
     @Test(expected = NoConnectionWithServerException::class)
     fun loginException() {
         every {
-            remoteAuthenticationDataSource.login(any(), any(), any())
+            remoteAuthenticationDataSource.loginOAuth(any(), any(), any())
         } throws NoConnectionWithServerException()
 
         ocAuthenticationRepository.login(OC_SERVER_INFO.baseUrl, "test", "test")
 
         verify(exactly = 1) {
-            remoteAuthenticationDataSource.login(any(), any(), any())
+            remoteAuthenticationDataSource.loginOAuth(any(), any(), any())
         }
     }
 }
