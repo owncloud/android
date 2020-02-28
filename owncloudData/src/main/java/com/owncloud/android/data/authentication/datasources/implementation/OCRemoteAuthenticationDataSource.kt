@@ -26,6 +26,7 @@ import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation
@@ -34,12 +35,19 @@ class OCRemoteAuthenticationDataSource(
     private val context: Context,
     private val remoteUserInfoMapper: RemoteUserInfoMapper
 ) : RemoteAuthenticationDataSource {
-    override fun login(serverPath: String, username: String, password: String): Pair<UserInfo, String?> {
-        val credentials = OwnCloudCredentialsFactory.newBasicCredentials(username, password)
+    override fun loginBasic(serverPath: String, username: String, password: String): Pair<UserInfo, String?> =
+        login(OwnCloudCredentialsFactory.newBasicCredentials(username, password), serverPath)
+
+    override fun loginOAuth(serverPath: String, username: String, accessToken: String): Pair<UserInfo, String?> =
+        login(OwnCloudCredentialsFactory.newBearerCredentials(username, accessToken), serverPath)
+
+    private fun login(ownCloudCredentials: OwnCloudCredentials, serverPath: String): Pair<UserInfo, String?> {
         val url: Uri = Uri.parse(serverPath)
 
         val client: OwnCloudClient =
-            OwnCloudClientFactory.createOwnCloudClient(url, context, true).apply { setCredentials(credentials) }
+            OwnCloudClientFactory.createOwnCloudClient(url, context, true).apply {
+                credentials = ownCloudCredentials
+            }
 
         val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation("/", true)
         executeRemoteOperation { checkPathExistenceRemoteOperation.execute(client) }

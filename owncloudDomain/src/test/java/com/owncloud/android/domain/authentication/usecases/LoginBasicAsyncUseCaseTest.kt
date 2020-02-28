@@ -22,17 +22,16 @@ import com.owncloud.android.domain.authentication.AuthenticationRepository
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class LoginAsyncUseCaseTest {
+class LoginBasicAsyncUseCaseTest {
     private val authRepository: AuthenticationRepository = spyk()
-    private val useCase = LoginAsyncUseCase(authRepository)
-    private val useCaseParams = LoginAsyncUseCase.Params(
+    private val useCase = LoginBasicAsyncUseCase(authRepository)
+    private val useCaseParams = LoginBasicAsyncUseCase.Params(
         serverPath = "https://demo.owncloud.com",
         username = "test",
         password = "test"
@@ -58,12 +57,12 @@ class LoginAsyncUseCaseTest {
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 0) { authRepository.login(any(), any(), any()) }
+        verify(exactly = 0) { authRepository.loginBasic(any(), any(), any()) }
     }
 
     @Test
     fun loginSuccess() {
-        every { authRepository.login(any(), any(), any()) } returns Unit
+        every { authRepository.loginBasic(any(), any(), any()) } returns Unit
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
@@ -72,12 +71,12 @@ class LoginAsyncUseCaseTest {
         assertNull(useCaseResult.getThrowableOrNull())
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { authRepository.login(any(), any(), any()) }
+        verify(exactly = 1) { authRepository.loginBasic(any(), any(), any()) }
     }
 
     @Test
     fun getServerInfoWithException() {
-        every { authRepository.login(any(), any(), any()) } throws Exception()
+        every { authRepository.loginBasic(any(), any(), any()) } throws Exception()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -87,6 +86,6 @@ class LoginAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is Exception)
 
-        verify(exactly = 1) { authRepository.login(any(), any(), any()) }
+        verify(exactly = 1) { authRepository.loginBasic(any(), any(), any()) }
     }
 }

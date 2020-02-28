@@ -20,21 +20,20 @@
 
 package com.owncloud.android.domain.authentication.usecases
 
-import android.accounts.Account
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.server.model.ServerInfo
 
-class LoginAsyncUseCase(
+class LoginBasicAsyncUseCase(
     private val authenticationRepository: AuthenticationRepository
-) : BaseUseCaseWithResult<String, LoginAsyncUseCase.Params>() {
+) : BaseUseCaseWithResult<String, LoginBasicAsyncUseCase.Params>() {
 
     override fun run(params: Params): String {
         require(params.serverInfo != null) { "Invalid server info" }
         require(params.username.isNotEmpty()) { "Invalid username" }
         require(params.password.isNotEmpty()) { "Invalid password" }
 
-        val accountName = authenticationRepository.login(
+        val accountName = authenticationRepository.loginBasic(
             params.serverInfo,
             params.username,
             params.password
