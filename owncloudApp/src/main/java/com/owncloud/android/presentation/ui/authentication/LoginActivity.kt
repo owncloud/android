@@ -152,7 +152,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
             isVisible = account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
             setOnClickListener {
                 if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) { // OAuth
-//                    startOauthorization()
+//                    startOAuthorization()
                 } else {  // Basic
                     authenticatorViewModel.login(account_username.text.toString(), account_password.text.toString())
                 }
@@ -250,14 +250,14 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         showOrHideBasicAuthFields(shouldBeVisible = false)
     }
 
-    private fun loginIsSuccess(uiResult: UIResult<Account>) {
+    private fun loginIsSuccess(uiResult: UIResult<String>) {
         dismissLoadingDialog()
 
         // Return result to account authenticator, multiaccount does not work without this
-        userAccount = uiResult.getStoredData()
+        val accountName = uiResult.getStoredData()
         val intent = Intent()
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType)
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, userAccount?.name)
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName)
         setAccountAuthenticatorResult(intent.extras)
         setResult(Activity.RESULT_OK, intent)
 
@@ -270,7 +270,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         showLoadingDialog()
     }
 
-    private fun loginIsError(uiResult: UIResult<Account>) {
+    private fun loginIsError(uiResult: UIResult<String>) {
         dismissLoadingDialog()
         when (uiResult.getThrowableOrNull()) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {

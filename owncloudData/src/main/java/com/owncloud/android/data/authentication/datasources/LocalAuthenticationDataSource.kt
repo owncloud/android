@@ -19,8 +19,6 @@
 
 package com.owncloud.android.data.authentication.datasources
 
-import android.accounts.Account
-import android.content.Context
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 
@@ -31,7 +29,7 @@ interface LocalAuthenticationDataSource {
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo?
-    ): Account
+    ): String
 
     fun addOAuthAccountIfDoesNotExist(
         lastPermanentLocation: String?,
@@ -44,11 +42,5 @@ interface LocalAuthenticationDataSource {
         scope: String
     )
 
-    fun getAccounts(): Array<Account>
-
-    fun accountExists(accountName: String?): Boolean
-
-    fun getCurrentOwnCloudAccount(context: Context): Account?
-
-    fun getUserData(account: Account, key: String): String
+    fun getUserData(key: String): String
 }

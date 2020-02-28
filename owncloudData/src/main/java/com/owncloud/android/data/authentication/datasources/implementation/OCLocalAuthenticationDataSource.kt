@@ -25,6 +25,7 @@ import android.content.Context
 import android.net.Uri
 import android.preference.PreferenceManager
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
+import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
@@ -45,8 +46,11 @@ class OCLocalAuthenticationDataSource(
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo?
-    ): Account = addNewAccount(lastPermanentLocation, serverInfo, userName, password).also {
-        updateUserAndServerInfo(it, serverInfo, userInfo, userName)
+    ): String {
+        addNewAccount(lastPermanentLocation, serverInfo, userName, password).also {
+            updateUserAndServerInfo(it, serverInfo, userInfo, userName)
+            return it.name
+        }
     }
 
     override fun addOAuthAccountIfDoesNotExist(
@@ -71,7 +75,7 @@ class OCLocalAuthenticationDataSource(
     }
 
     /**
-     * Add new account to account manager, shared preferences and returns it
+     * Add new account to account manager, shared preferences and returns account name
      */
     private fun addNewAccount(
         lastPermanentLocation: String?,
@@ -138,11 +142,7 @@ class OCLocalAuthenticationDataSource(
         }
     }
 
-    override fun getAccounts(): Array<Account> {
-        return accountManager.getAccountsByType(accountType)
-    }
-
-    override fun accountExists(accountName: String?): Boolean {
+    private fun accountExists(accountName: String?): Boolean {
         val ocAccounts: Array<Account> = getAccounts()
 
         if (accountName != null) {
@@ -167,7 +167,11 @@ class OCLocalAuthenticationDataSource(
         return false
     }
 
-    override fun getCurrentOwnCloudAccount(context: Context): Account? {
+    private fun getAccounts(): Array<Account> {
+        return accountManager.getAccountsByType(accountType)
+    }
+
+    private fun getCurrentOwnCloudAccount(context: Context): Account? {
         val ocAccounts = getAccounts()
         var defaultAccount: Account? = null
 
@@ -193,5 +197,8 @@ class OCLocalAuthenticationDataSource(
         return defaultAccount
     }
 
-    override fun getUserData(account: Account, key: String): String = accountManager.getUserData(account, key)
+    override fun getUserData(key: String): String {
+        val currentAccount = getCurrentOwnCloudAccount(context) ?: throw AccountNotFoundException()
+        return accountManager.getUserData(currentAccount, key)
+    }
 }

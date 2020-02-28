@@ -19,7 +19,6 @@
 
 package com.owncloud.android.domain.authentication.usecases
 
-import android.accounts.Account
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 
@@ -28,17 +27,14 @@ class GetUserDataUseCase(
 ) : BaseUseCaseWithResult<String, GetUserDataUseCase.Params>() {
 
     override fun run(params: Params): String {
-        require(params.account != null) { "Invalid account" }
         require(params.key.isNotEmpty()) { "Invalid key" }
 
         return authenticationRepository.getUserData(
-            params.account,
             params.key
         )
     }
 
     data class Params(
-        val account: Account?,
         val key: String
     )
 }
