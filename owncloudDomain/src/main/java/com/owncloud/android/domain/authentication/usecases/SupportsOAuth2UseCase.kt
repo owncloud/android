@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
+ * @author David González Verdugo
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,25 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.authentication
+package com.owncloud.android.domain.authentication.usecases
 
-import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.BaseUseCaseNoParams
+import com.owncloud.android.domain.authentication.AuthenticationRepository
 
-interface AuthenticationRepository {
-    fun loginBasic(
-        serverInfo: ServerInfo,
-        username: String,
-        password: String
-    ): String
+class SupportsOAuth2UseCase(
+    private val authenticationRepository: AuthenticationRepository
+) : BaseUseCaseNoParams<Boolean>() {
 
-    fun loginOAuth(
-        serverInfo: ServerInfo,
-        username: String,
-        authTokenType: String,
-        accessToken: String,
-        refreshToken: String,
-        scope: String?
-    ): String
-
-    fun supportsOAuth2UseCase(): Boolean
+    override fun run(): Boolean = authenticationRepository.supportsOAuth2UseCase()
 }

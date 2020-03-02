@@ -19,7 +19,7 @@
 
 package com.owncloud.android.dependecyinjection
 
-import com.owncloud.android.domain.authentication.usecases.GetUserDataUseCase
+import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
@@ -42,7 +42,7 @@ val useCaseModule = module {
     // Authentication
     factory { LoginBasicAsyncUseCase(get()) }
     factory { LoginOAuthAsyncUseCase(get()) }
-    factory { GetUserDataUseCase(get()) }
+    factory { SupportsOAuth2UseCase(get()) }
 
     // Capabilities
     factory { GetCapabilitiesAsLiveDataUseCase(get()) }

@@ -14,12 +14,12 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -95,7 +95,9 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         userAccount = intent.getParcelableExtra(EXTRA_ACCOUNT)
 
         // Get values from savedInstanceState
-        savedInstanceState?.let {
+        if (savedInstanceState == null) {
+            initAuthTokenType()
+        } else {
             authTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE)
         }
 
@@ -106,17 +108,6 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
 
         initBrandableOptionsUI()
-
-        instructions_message.run {
-            if (loginAction == ACTION_UPDATE_EXPIRED_TOKEN) {
-                text = if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.authTokenType) == authTokenType) {
-                    getString(R.string.auth_expired_oauth_token_toast)
-                } else {
-                    getString(R.string.auth_expired_basic_auth_toast)
-                }
-                visibility = VISIBLE
-            } else visibility = GONE
-        }
 
         thumbnail.setOnClickListener { checkOcServer() }
 
@@ -147,6 +138,21 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 is UIResult.Error -> loginIsError(event.peekContent())
             }
         })
+
+        authenticationViewModel.supportsOAuth2.observe(this, Observer { event ->
+            updateAuthTokenTypeAndInstructions(event.peekContent())
+        })
+    }
+
+    private fun initAuthTokenType() {
+        authTokenType = intent.extras.getString(KEY_AUTH_TOKEN_TYPE)
+        if (authTokenType == null) {
+            if (userAccount != null) {
+                authenticationViewModel.supportsOAuth2()
+            } else { // OAuth will be the default authentication method
+                authTokenType = ""
+            }
+        }
     }
 
     private fun checkOcServer() {
@@ -286,6 +292,22 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 isVisible = true
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
+        }
+    }
+
+    private fun updateAuthTokenTypeAndInstructions(uiResult: UIResult<Boolean?>) {
+        val supportsOAuth2 = uiResult.getStoredData()
+        authTokenType = if (supportsOAuth2 != null && supportsOAuth2) OAUTH_TOKEN_TYPE else BASIC_TOKEN_TYPE
+
+        instructions_message.run {
+            if (loginAction == ACTION_UPDATE_EXPIRED_TOKEN) {
+                text = if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) {
+                    getString(R.string.auth_expired_oauth_token_toast)
+                } else {
+                    getString(R.string.auth_expired_basic_auth_toast)
+                }
+                visibility = VISIBLE
+            } else visibility = GONE
         }
     }
 

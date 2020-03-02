@@ -17,24 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.authentication.usecases
+package com.owncloud.android.domain
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.authentication.AuthenticationRepository
+/**
+ * Same as [com.owncloud.android.domain.BaseUseCase] but with no params
+ */
+abstract class BaseUseCaseNoParams<out Type> {
+    protected abstract fun run(): Type
 
-class GetUserDataUseCase(
-    private val authenticationRepository: AuthenticationRepository
-) : BaseUseCaseWithResult<String, GetUserDataUseCase.Params>() {
-
-    override fun run(params: Params): String {
-        require(params.key.isNotEmpty()) { "Invalid key" }
-
-        return authenticationRepository.getUserData(
-            params.key
-        )
-    }
-
-    data class Params(
-        val key: String
-    )
+    fun execute(): Type = run()
 }
