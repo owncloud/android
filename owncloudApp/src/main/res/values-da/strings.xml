@@ -184,7 +184,7 @@
   <string name="media_err_timeout">Tiden udløb under forsøg på at afspille</string>
   <string name="media_err_invalid_progressive_playback">Mediefilen kan ikke streames</string>
   <string name="media_err_unknown">Mediefil kan ikke afspilles med tilgængelige medieafspiller</string>
-  <string name="media_err_security_ex">Sikkerhedsfejl ved forsøg på afspilning af </string>
+  <string name="media_err_security_ex">Sikkerhedsfejl ved forsøg på afspilning af %1$s</string>
   <string name="media_err_io_ex">Inputfejl ved forsøg på afspilning af %1$s</string>
   <string name="media_err_unexpected">Uventet fejl ved forsøg på afspilning af %1$s</string>
   <string name="media_rewind_description">Tilbagespolingsknap</string>
