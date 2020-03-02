@@ -136,8 +136,10 @@
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:minHeight="32dp"
-                android:text="@string/auth_testing_connection"
-                android:textColor="@color/login_connection_text_color" />
+                android:visibility="gone"
+                android:textColor="@color/login_connection_text_color"
+                tools:text="@string/auth_testing_connection"
+                tools:visibility="visible" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/account_username_container"

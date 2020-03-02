@@ -122,7 +122,6 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
         embeddedCheckServerButton.setOnClickListener { checkOcServer() }
 
-        server_status_text.isVisible = false
 
         loginButton.setOnClickListener {
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) { // OAuth
@@ -170,6 +169,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                     //If user modifies url, reset fields and force him to check url again
                     if (authenticationViewModel.serverInfo.value == null || baseUrl != hostUrlInput.text.toString()) {
                         showOrHideBasicAuthFields(shouldBeVisible = false)
+                        loginButton.isVisible = false
                         server_status_text.run {
                             text = ""
                             isVisible = false
@@ -206,6 +206,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 }
 
                 AuthenticationMethod.BEARER_TOKEN -> {
+                    showOrHideBasicAuthFields(shouldBeVisible = false)
                     authTokenType = OAUTH_TOKEN_TYPE
                     loginButton.visibility = VISIBLE
                 }
@@ -393,7 +394,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     private fun startOAuthorization() {
         server_status_text.run {
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
-            text = resources.getString(R.string.oauth_login_connection);
+            text = resources.getString(R.string.oauth_login_connection)
         }
 
         mAuthService = OAuthUtils.createAuthorizationService(this)
