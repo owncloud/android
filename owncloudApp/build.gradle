@@ -40,6 +40,7 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$androidTestVersion"
     androidTestImplementation "androidx.test:runner:$androidTestVersion"
     androidTestImplementation "androidx.test.ext:junit:$extJunitVersion"
+    androidTestImplementation "androidx.test:core-ktx:$androidTestVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoTestVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoTestVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoTestVersion"
@@ -124,6 +125,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     sourceSets {
