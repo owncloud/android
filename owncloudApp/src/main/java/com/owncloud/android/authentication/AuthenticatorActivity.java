@@ -1232,12 +1232,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 try {
 
                     if (BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
-
                         updateAccountAuthentication();
                         success = true;
 
                     } else {
-
                         success = updateAccount(username);
                     }
 

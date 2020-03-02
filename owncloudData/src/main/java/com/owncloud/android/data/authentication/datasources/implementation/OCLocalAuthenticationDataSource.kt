@@ -30,6 +30,7 @@ import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.lib.common.network.WebdavUtils
 import timber.log.Timber
 import java.util.Locale
@@ -68,7 +69,7 @@ class OCLocalAuthenticationDataSource(
 
             accountManager.setUserData(it, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2, "TRUE")
             accountManager.setUserData(it, AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
-            scope?.run{
+            scope?.run {
                 accountManager.setUserData(it, AccountUtils.Constants.KEY_OAUTH2_SCOPE, this)
             }
         }.name
@@ -196,8 +197,8 @@ class OCLocalAuthenticationDataSource(
         return defaultAccount
     }
 
-    override fun getUserData(key: String): String {
+    override fun supportsOAuth2(): Boolean {
         val currentAccount = getCurrentOwnCloudAccount(context) ?: throw AccountNotFoundException()
-        return accountManager.getUserData(currentAccount, key)
+        return accountManager.getUserData(currentAccount, KEY_SUPPORTS_OAUTH2) == "TRUE"
     }
 }

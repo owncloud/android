@@ -7,16 +7,16 @@
  * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -39,7 +39,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -53,6 +52,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
+import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
+import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -117,7 +118,7 @@ public class FileActivity extends DrawerActivity
     /**
      * Loads the ownCloud {@link Account} and main {@link OCFile} to be handled by the instance of
      * the {@link FileActivity}.
-     * <p>
+     *
      * Grants that a valid ownCloud {@link Account} is associated to the instance, or that the user
      * is requested to create a new one.
      */
@@ -342,8 +343,8 @@ public class FileActivity extends DrawerActivity
 
     /**
      * Invalidates the credentials stored for the current OC account and requests new credentials to the user,
-     * navigating to {@link AuthenticatorActivity}
-     * <p>
+     * navigating to {@link LoginActivity}
+     *
      * Equivalent to call requestCredentialsUpdate(null);
      */
     protected void requestCredentialsUpdate() {
@@ -352,7 +353,7 @@ public class FileActivity extends DrawerActivity
 
     /**
      * Invalidates the credentials stored for the given OC account and requests new credentials to the user,
-     * navigating to {@link AuthenticatorActivity}
+     * navigating to {@link LoginActivity}
      *
      * @param account Stored OC account to request credentials update for. If null, current account will
      *                be used.
@@ -364,11 +365,11 @@ public class FileActivity extends DrawerActivity
         }
 
         /// request credentials to user
-        Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
-        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+        Intent updateAccountCredentials = new Intent(this, LoginActivity.class);
+        updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACCOUNT, account);
         updateAccountCredentials.putExtra(
-                AuthenticatorActivity.EXTRA_ACTION,
-                AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
+                AuthenticatorConstants.EXTRA_ACTION,
+                AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN);
         updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS);
     }

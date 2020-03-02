@@ -77,6 +77,6 @@ class OCAuthenticationRepository(
         return accountName;
     }
 
-    override fun getUserData(key: String): String =
-        localAuthenticationDataSource.getUserData(key)
+    override fun supportsOAuth2UseCase(): Boolean =
+        localAuthenticationDataSource.supportsOAuth2()
 }

@@ -42,5 +42,5 @@ interface LocalAuthenticationDataSource {
         scope: String?
     ): String
 
-    fun getUserData(key: String): String
+    fun supportsOAuth2(): Boolean
 }

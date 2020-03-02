@@ -24,9 +24,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.domain.authentication.usecases.GetUserDataUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
+import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.utils.Event
@@ -39,7 +39,7 @@ class OCAuthenticationViewModel(
     private val loginBasicAsyncUseCase: LoginBasicAsyncUseCase,
     private val loginOAuthAsyncUseCase: LoginOAuthAsyncUseCase,
     private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase,
-    private val getUserDataUseCase: GetUserDataUseCase,
+    private val supportsOAuth2UseCase: SupportsOAuth2UseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -64,21 +64,16 @@ class OCAuthenticationViewModel(
         }
     }
 
-    private val _userData = MediatorLiveData<Event<UIResult<String>>>()
-    val userData: LiveData<Event<UIResult<String>>> = _userData
+    private val _supportsOAuth2 = MediatorLiveData<Event<UIResult<Boolean>>>()
+    val supportsOAuth2: LiveData<Event<UIResult<Boolean>>> = _supportsOAuth2
 
-    fun getUserData(key: String) {
+    fun supportsOAuth2() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val useCaseResult = getUserDataUseCase.execute(
-                GetUserDataUseCase.Params(key)
-            )
-            Timber.d(useCaseResult.toString())
+            val supportsOAuth2 = supportsOAuth2UseCase.execute()
 
-            if (useCaseResult.isSuccess) {
-                _userData.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
-            } else {
-                _userData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
-            }
+            Timber.d(supportsOAuth2.toString())
+
+            _supportsOAuth2.postValue(Event(UIResult.Success(supportsOAuth2)))
         }
     }
 

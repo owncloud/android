@@ -39,7 +39,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
-import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstantsKt;
+import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthorizationService;
@@ -104,7 +104,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
             intent.putExtra(KEY_REQUIRED_FEATURES, requiredFeatures);
             intent.putExtra(KEY_LOGIN_OPTIONS, options);
-            intent.putExtra(AuthenticatorConstantsKt.EXTRA_ACTION, AuthenticatorConstantsKt.ACTION_CREATE);
+            intent.putExtra(AuthenticatorConstants.EXTRA_ACTION, AuthenticatorConstants.ACTION_CREATE);
 
             setIntentFlags(intent);
 
@@ -134,7 +134,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             Timber.e(e, "Failed to validate account type %s", account.type);
             return e.getFailureBundle();
         }
-        Intent intent = new Intent(mContext, AuthenticatorActivity.class);
+        Intent intent = new Intent(mContext, LoginActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
                 response);
         intent.putExtra(KEY_ACCOUNT, account);
@@ -193,8 +193,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             return result;
         }
 
-        /// if not stored, return Intent to access the AuthenticatorActivity and UPDATE the token for the account
-        return prepareBundleToAccessAuthenticatorActivity(accountAuthenticatorResponse, account, authTokenType, options);
+        /// if not stored, return Intent to access the LoginActivity and UPDATE the token for the account
+        return prepareBundleToAccessLoginActivity(accountAuthenticatorResponse, account, authTokenType, options);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response,
                                     Account account, String authTokenType, Bundle options) {
-        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
+        final Intent intent = new Intent(mContext, LoginActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
                 response);
         intent.putExtra(KEY_ACCOUNT, account);
@@ -375,7 +375,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
                     } else if (authorizationException != null) {
                         Timber.e(authorizationException, "OAuth request to refresh access token failed");
-                        Bundle result = prepareBundleToAccessAuthenticatorActivity(accountAuthenticatorResponse, account,
+                        Bundle result = prepareBundleToAccessLoginActivity(accountAuthenticatorResponse, account,
                                 authTokenType, options);
                         accountAuthenticatorResponse.onResult(result);
                     }
@@ -384,23 +384,23 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     /**
-     * Return bundle with intent to access AuthenticatorActivity and UPDATE the token for the account
+     * Return bundle with intent to access LoginActivity and UPDATE the token for the account
      */
-    private Bundle prepareBundleToAccessAuthenticatorActivity(
+    private Bundle prepareBundleToAccessLoginActivity(
             AccountAuthenticatorResponse accountAuthenticatorResponse,
             Account account,
             String authTokenType,
             Bundle options
     ) {
-        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
+        final Intent intent = new Intent(mContext, LoginActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
                 accountAuthenticatorResponse);
         intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
         intent.putExtra(KEY_LOGIN_OPTIONS, options);
-        intent.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+        intent.putExtra(AuthenticatorConstants.EXTRA_ACCOUNT, account);
         intent.putExtra(
-                AuthenticatorActivity.EXTRA_ACTION,
-                AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN
+                AuthenticatorConstants.EXTRA_ACTION,
+                AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN
         );
 
         final Bundle bundle = new Bundle();
