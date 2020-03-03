@@ -29,8 +29,9 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/login_background_image"
-        android:visibility="invisible"
-        tools:visibility="visible"/>
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:ignore="ContentDescription" />
 
     <ScrollView
         android:id="@+id/scroll"

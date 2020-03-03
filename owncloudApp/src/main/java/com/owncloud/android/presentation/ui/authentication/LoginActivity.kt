@@ -58,6 +58,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.ui.dialog.LoadingDialog
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
@@ -68,12 +69,14 @@ import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationService.TokenResponseCallback
 import net.openid.appauth.TokenResponse
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
 
     private val authenticationViewModel by viewModel<OCAuthenticationViewModel>()
+    private val contextProvider by inject<ContextProvider>()
 
     private var loginAction: Byte = ACTION_CREATE
     private var authTokenType: String? = null
@@ -177,7 +180,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     }
 
     private fun initAuthTokenType() {
-        authTokenType = intent.extras.getString(KEY_AUTH_TOKEN_TYPE)
+        authTokenType = intent?.extras?.getString(KEY_AUTH_TOKEN_TYPE)
         if (authTokenType == null) {
             if (userAccount != null) {
                 authenticationViewModel.supportsOAuth2((userAccount as Account).name)
@@ -198,11 +201,11 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     private fun initAuthorizationPreFragment() {
         var presetUserName: String? = null
 
-        userAccount?.let{
+        userAccount?.let {
             presetUserName = AccountUtils.getUsernameForAccount(it)
         }
 
-        presetUserName?.let{
+        presetUserName?.let {
             account_username.setText(it)
         }
 
@@ -237,10 +240,10 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
             server_status_text.run {
                 if (isSecureConnection) {
-                    text = resources.getString(R.string.auth_secure_connection)
+                    text = getString(R.string.auth_secure_connection)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, 0, 0)
                 } else {
-                    text = resources.getString(R.string.auth_connection_established)
+                    text = getString(R.string.auth_connection_established)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_open, 0, 0, 0)
                 }
                 visibility = VISIBLE
@@ -270,7 +273,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
                 else -> {
                     server_status_text.run {
-                        text = resources.getString(R.string.auth_unsupported_auth_method)
+                        text = getString(R.string.auth_unsupported_auth_method)
                         setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
                         visibility = VISIBLE
                     }
@@ -281,7 +284,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
     private fun getServerInfoIsLoading() {
         server_status_text.run {
-            text = resources.getString(R.string.auth_testing_connection)
+            text = getString(R.string.auth_testing_connection)
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
             visibility = VISIBLE
         }
@@ -333,7 +336,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         when (uiResult.getThrowableOrNull()) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {
                 server_status_text.run {
-                    text = getString(R.string.error_no_network_connection)
+                    text = contextProvider.getString(R.string.error_no_network_connection)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
                 }
                 showOrHideBasicAuthFields(shouldBeVisible = false)
@@ -517,7 +520,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     }
 
     private fun initBrandableOptionsUI() {
-        if (!resources.getBoolean(R.bool.show_server_url_input)) {
+        if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
             hostUrlFrame.visibility = GONE
             centeredRefreshButton.run {
                 isVisible = true
@@ -525,13 +528,13 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
             }
         }
 
-        if (resources.getString(R.string.server_url).isNotEmpty()) {
-            hostUrlInput.setText(R.string.server_url)
+        if (contextProvider.getString(R.string.server_url).isNotEmpty()) {
+            hostUrlInput.setText(contextProvider.getString(R.string.server_url))
             checkOcServer()
         }
 
         login_layout.run {
-            if (resources.getBoolean(R.bool.use_login_background_image)) {
+            if (contextProvider.getBoolean(R.bool.use_login_background_image)) {
                 login_background_image.visibility = VISIBLE
             } else {
                 setBackgroundColor(resources.getColor(R.color.login_background_color))
@@ -539,7 +542,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         }
 
         welcome_link.run {
-            if (resources.getBoolean(R.bool.show_welcome_link)) {
+            if (contextProvider.getBoolean(R.bool.show_welcome_link)) {
                 visibility = VISIBLE
                 text = String.format(getString(R.string.auth_register), getString(R.string.app_name))
                 setOnClickListener {
@@ -557,9 +560,9 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             text =
                 if (authorizationException == AuthorizationException.AuthorizationRequestErrors.ACCESS_DENIED) {
-                    resources.getString(R.string.auth_oauth_error_access_denied)
+                    getString(R.string.auth_oauth_error_access_denied)
                 } else {
-                    resources.getString(R.string.auth_oauth_error)
+                    getString(R.string.auth_oauth_error)
                 }
         }
     }
