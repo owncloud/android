@@ -30,7 +30,13 @@ import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.accounts.AccountUtils.ACCOUNT_VERSION
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_SCOPE
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.lib.common.network.WebdavUtils
 import timber.log.Timber
@@ -42,18 +48,25 @@ class OCLocalAuthenticationDataSource(
     private val accountType: String
 ) : LocalAuthenticationDataSource {
 
-    override fun addAccountIfDoesNotExist(
+    override fun addBasicAccount(
         lastPermanentLocation: String?,
         userName: String,
         password: String,
         serverInfo: ServerInfo,
-        userInfo: UserInfo?
+        userInfo: UserInfo?,
+        updateIfAlreadyExists: Boolean
     ): String =
-        addNewAccount(lastPermanentLocation, serverInfo, userName, password).also {
+        addAccount(
+            lastPermanentLocation,
+            serverInfo,
+            userName,
+            password,
+            updateIfAlreadyExists
+        ).also {
             updateUserAndServerInfo(it, serverInfo, userInfo, userName)
         }.name
 
-    override fun addOAuthAccountIfDoesNotExist(
+    override fun addOAuthAccount(
         lastPermanentLocation: String?,
         userName: String,
         authTokenType: String,
@@ -61,28 +74,35 @@ class OCLocalAuthenticationDataSource(
         serverInfo: ServerInfo,
         userInfo: UserInfo?,
         refreshToken: String,
-        scope: String?
+        scope: String?,
+        updateIfAlreadyExists: Boolean
     ): String =
-        addNewAccount(lastPermanentLocation, serverInfo, userName).also {
+        addAccount(
+            lastPermanentLocation,
+            serverInfo,
+            userName,
+            updateIfAlreadyExists = updateIfAlreadyExists
+        ).also {
             updateUserAndServerInfo(it, serverInfo, userInfo, userName)
 
             accountManager.setAuthToken(it, authTokenType, accessToken)
 
-            accountManager.setUserData(it, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2, "TRUE")
-            accountManager.setUserData(it, AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
+            accountManager.setUserData(it, KEY_SUPPORTS_OAUTH2, "TRUE")
+            accountManager.setUserData(it, KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
             scope?.run {
-                accountManager.setUserData(it, AccountUtils.Constants.KEY_OAUTH2_SCOPE, this)
+                accountManager.setUserData(it, KEY_OAUTH2_SCOPE, this)
             }
         }.name
 
     /**
      * Add new account to account manager, shared preferences and returns account name
      */
-    private fun addNewAccount(
+    private fun addAccount(
         lastPermanentLocation: String?,
         serverInfo: ServerInfo,
         userName: String,
-        password: String = ""
+        password: String = "",
+        updateIfAlreadyExists: Boolean = false
     ): Account {
         if (lastPermanentLocation != null) {
             serverInfo.baseUrl = WebdavUtils.trimWebdavSuffix(lastPermanentLocation)
@@ -91,12 +111,17 @@ class OCLocalAuthenticationDataSource(
         val uri = Uri.parse(serverInfo.baseUrl)
 
         val accountName = AccountUtils.buildAccountName(uri, userName)
-        val newAccount = Account(accountName, accountType)
 
         if (accountExists(accountName)) {
-            Timber.d("The account already exists")
-            throw AccountNotNewException()
+            if (!updateIfAlreadyExists) {
+                Timber.d("The account already exists")
+                throw AccountNotNewException()
+            } else {
+                return getAccountByName(accountName)!! // Account won't be null, since we've already checked it exists
+            }
         } else {
+            val newAccount = Account(accountName, accountType)
+
             // with external authorizations, the password is never input in the app
             accountManager.addAccountExplicitly(newAccount, password, null)
 
@@ -122,21 +147,21 @@ class OCLocalAuthenticationDataSource(
         // include account version with the new account
         accountManager.setUserData(
             newAccount,
-            AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION,
-            AccountUtils.ACCOUNT_VERSION.toString()
+            KEY_OC_ACCOUNT_VERSION,
+            ACCOUNT_VERSION.toString()
         )
 
         accountManager.setUserData(
-            newAccount, AccountUtils.Constants.KEY_OC_VERSION, serverInfo.ownCloudVersion
+            newAccount, KEY_OC_VERSION, serverInfo.ownCloudVersion
         )
 
         accountManager.setUserData(
-            newAccount, AccountUtils.Constants.KEY_OC_BASE_URL, serverInfo.baseUrl
+            newAccount, KEY_OC_BASE_URL, serverInfo.baseUrl
         )
 
         if (userInfo != null) {
             accountManager.setUserData(
-                newAccount, AccountUtils.Constants.KEY_DISPLAY_NAME, userInfo.displayName
+                newAccount, KEY_DISPLAY_NAME, userInfo.displayName
             )
         } else {
             Timber.w("Couldn't get display name for %s", userName)

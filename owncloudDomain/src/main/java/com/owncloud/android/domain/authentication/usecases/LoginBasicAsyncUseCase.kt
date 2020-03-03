@@ -36,7 +36,8 @@ class LoginBasicAsyncUseCase(
         val accountName = authenticationRepository.loginBasic(
             params.serverInfo,
             params.username,
-            params.password
+            params.password,
+            params.updateAccountIfAlreadyExists
         )
 
         return accountName
@@ -45,6 +46,7 @@ class LoginBasicAsyncUseCase(
     data class Params(
         val serverInfo: ServerInfo?,
         val username: String,
-        val password: String
+        val password: String,
+        val updateAccountIfAlreadyExists: Boolean
     )
 }

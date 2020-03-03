@@ -35,8 +35,7 @@ fun <T, Params> ViewModel.runUseCaseWithResult(
     liveData: MediatorLiveData<Event<UIResult<T>>>,
     useCase: BaseUseCaseWithResult<T, Params>,
     useCaseParams: Params,
-    postSuccess: Boolean = true,
-    postError: Boolean = true
+    postSuccess: Boolean = true
 ) {
     viewModelScope.launch(coroutineContext) {
         if (showLoading) {
@@ -49,7 +48,7 @@ fun <T, Params> ViewModel.runUseCaseWithResult(
 
         if (useCaseResult.isSuccess && postSuccess) {
             liveData.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
-        } else if (useCaseResult.isError && postError) {
+        } else if (useCaseResult.isError) {
             liveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
         }
     }

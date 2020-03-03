@@ -61,7 +61,8 @@ class OCAuthenticationViewModel(
 
     fun loginBasic(
         username: String,
-        password: String
+        password: String,
+        updateAccountIfAlreadyExists: Boolean = false
     ) = runUseCaseWithResult(
         coroutineContext = coroutinesDispatcherProvider.io,
         liveData = _loginResult,
@@ -69,7 +70,8 @@ class OCAuthenticationViewModel(
         useCaseParams = LoginBasicAsyncUseCase.Params(
             serverInfo = serverInfo.value?.peekContent()?.getStoredData(),
             username = username,
-            password = password
+            password = password,
+            updateAccountIfAlreadyExists = updateAccountIfAlreadyExists
         )
     )
 
@@ -78,7 +80,8 @@ class OCAuthenticationViewModel(
         authTokenType: String,
         accessToken: String,
         refreshToken: String,
-        scope: String?
+        scope: String?,
+        updateAccountIfAlreadyExists: Boolean = false
     ) = runUseCaseWithResult(
         coroutineContext = coroutinesDispatcherProvider.io,
         liveData = _loginResult,
@@ -89,7 +92,8 @@ class OCAuthenticationViewModel(
             authTokenType = authTokenType,
             accessToken = accessToken,
             refreshToken = refreshToken,
-            scope = scope
+            scope = scope,
+            updateAccountIfAlreadyExists = updateAccountIfAlreadyExists
         )
     )
 

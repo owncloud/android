@@ -29,7 +29,12 @@ class OCAuthenticationRepository(
     private val localAuthenticationDataSource: LocalAuthenticationDataSource,
     private val remoteAuthenticationDataSource: RemoteAuthenticationDataSource
 ) : AuthenticationRepository {
-    override fun loginBasic(serverInfo: ServerInfo, username: String, password: String): String {
+    override fun loginBasic(
+        serverInfo: ServerInfo,
+        username: String,
+        password: String,
+        updateAccountIfAlreadyExists: Boolean
+    ): String {
         val userInfoAndRedirectionPath: Pair<UserInfo, String?> =
             remoteAuthenticationDataSource.loginBasic(
                 serverPath = serverInfo.baseUrl,
@@ -37,13 +42,14 @@ class OCAuthenticationRepository(
                 password = password
             )
 
-        val accountName = localAuthenticationDataSource.addAccountIfDoesNotExist(
+        val accountName = localAuthenticationDataSource.addBasicAccount(
             userInfoAndRedirectionPath.second,
             username,
             password,
             serverInfo,
-            userInfoAndRedirectionPath.first
-        );
+            userInfoAndRedirectionPath.first,
+            updateAccountIfAlreadyExists
+        )
 
         return accountName;
     }
@@ -54,7 +60,8 @@ class OCAuthenticationRepository(
         authTokenType: String,
         accessToken: String,
         refreshToken: String,
-        scope: String?
+        scope: String?,
+        updateAccountIfAlreadyExists: Boolean
     ): String {
         val userInfoAndRedirectionPath: Pair<UserInfo, String?> =
             remoteAuthenticationDataSource.loginOAuth(
@@ -63,7 +70,7 @@ class OCAuthenticationRepository(
                 accessToken = accessToken
             )
 
-        val accountName = localAuthenticationDataSource.addOAuthAccountIfDoesNotExist(
+        val accountName = localAuthenticationDataSource.addOAuthAccount(
             userInfoAndRedirectionPath.second,
             username,
             authTokenType,
@@ -71,7 +78,8 @@ class OCAuthenticationRepository(
             serverInfo,
             userInfoAndRedirectionPath.first,
             refreshToken,
-            scope
+            scope,
+            updateAccountIfAlreadyExists
         )
 
         return accountName;
