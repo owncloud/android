@@ -52,6 +52,7 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.extensions.parseError
+import com.owncloud.android.extensions.showErrorInToastShortLength
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
@@ -97,13 +98,17 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         // Get values from savedInstanceState
         if (savedInstanceState == null) {
             initAuthTokenType()
-            initServerPreFragment()
         } else {
             authTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE)
         }
 
         // UI initialization
         setContentView(R.layout.account_setup)
+
+        if (savedInstanceState == null) {
+            initServerPreFragment()
+            initAuthorizationPreFragment()
+        }
 
         login_layout.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
@@ -116,9 +121,20 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
         loginButton.setOnClickListener {
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) { // OAuth
-                startOAuthorization()
+                if (loginAction == ACTION_CREATE) {
+                    startOAuthorization()
+                } else {
+                    // TODO
+                }
             } else { // Basic
-                authenticationViewModel.loginBasic(account_username.text.toString(), account_password.text.toString())
+                if (loginAction == ACTION_CREATE) {
+                    authenticationViewModel.loginBasic(
+                        account_username.text.toString(),
+                        account_password.text.toString()
+                    )
+                } else {
+                    // TODO
+                }
             }
         }
 
@@ -140,11 +156,23 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         })
 
         authenticationViewModel.supportsOAuth2.observe(this, Observer { event ->
-            updateAuthTokenTypeAndInstructions(event.peekContent())
+            when (event.peekContent()) {
+                is UIResult.Success -> updateAuthTokenTypeAndInstructions(event.peekContent())
+                is UIResult.Error -> showErrorInToastShortLength(
+                    R.string.supports_oauth2_error,
+                    event.peekContent().getThrowableOrNull()
+                )
+            }
         })
 
         authenticationViewModel.baseUrl.observe(this, Observer { event ->
-            updateBaseUrlAndHostInput(event.peekContent())
+            when (event.peekContent()) {
+                is UIResult.Success -> updateBaseUrlAndHostInput(event.peekContent())
+                is UIResult.Error -> showErrorInToastShortLength(
+                    R.string.get_base_url_error,
+                    event.peekContent().getThrowableOrNull()
+                )
+            }
         })
     }
 
@@ -152,7 +180,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         authTokenType = intent.extras.getString(KEY_AUTH_TOKEN_TYPE)
         if (authTokenType == null) {
             if (userAccount != null) {
-                authenticationViewModel.supportsOAuth2()
+                authenticationViewModel.supportsOAuth2((userAccount as Account).name)
             } else { // OAuth will be the default authentication method
                 authTokenType = ""
             }
@@ -161,21 +189,32 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
     private fun initServerPreFragment() {
         if (userAccount != null) {
-            authenticationViewModel.getBaseUrl()
+            authenticationViewModel.getBaseUrl((userAccount as Account).name)
         } else {
             serverBaseUrl = getString(R.string.server_url).trim()
+        }
+    }
+
+    private fun initAuthorizationPreFragment() {
+        var presetUserName: String? = null
+
+        userAccount?.let{
+            presetUserName = AccountUtils.getUsernameForAccount(it)
+        }
+
+        presetUserName?.let{
+            account_username.setText(it)
+        }
+
+        if (loginAction != ACTION_CREATE) {
+            account_username.isEnabled = false
+            account_username.isFocusable = false
         }
     }
 
     private fun checkOcServer() {
         val uri = hostUrlInput.text.toString().trim()
         authenticationViewModel.getServerInfo(serverUrl = uri)
-    }
-
-    private fun updateLoginButtonVisibility() {
-        loginButton.run {
-            isVisible = account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
-        }
     }
 
     private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
@@ -307,6 +346,79 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         }
     }
 
+    /**
+     * OAuth step 1: Get authorization code
+     */
+    private fun startOAuthorization() {
+        server_status_text.run {
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
+            text = resources.getString(R.string.oauth_login_connection)
+        }
+
+        mAuthService = OAuthUtils.createAuthorizationService(this)
+
+        val authorizationRequest = OAuthUtils.createAuthorizationRequest(
+            serverBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_auth), // auth endpoint
+            serverBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_access), // token endpoint
+            getString(R.string.oauth2_client_id),
+            getString(R.string.oauth2_redirect_uri)
+        )
+
+        val completedIntent = Intent(this, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0)
+
+        mAuthService?.performAuthorizationRequest(authorizationRequest, pendingIntent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.let {
+            handleGetAuthorizationCodeResponse(it)
+        }
+    }
+
+    private fun handleGetAuthorizationCodeResponse(intent: Intent) {
+        val authorizationResponse = AuthorizationResponse.fromIntent(intent)
+        val authorizationException = AuthorizationException.fromIntent(intent)
+        if (authorizationResponse?.authorizationCode != null) {
+            exchangeAuthorizationCodeForTokens(authorizationResponse)
+        } else if (authorizationException != null) {
+            updateOAuthStatusIconAndText(authorizationException)
+            Timber.e(authorizationException, "OAuth request to get authorization code failed")
+        }
+    }
+
+    /**
+     * OAuth step 2: Exchange the received authorization code for access and refresh tokens
+     */
+    private fun exchangeAuthorizationCodeForTokens(authorizationResponse: AuthorizationResponse) {
+        val clientAuth = OAuthUtils.createClientSecretBasic(getString(R.string.oauth2_client_secret))
+        mAuthService?.performTokenRequest(
+            authorizationResponse.createTokenExchangeRequest(),
+            clientAuth,
+            handleExchangeAuthorizationCodeForTokensResponse()
+        )
+    }
+
+    private fun handleExchangeAuthorizationCodeForTokensResponse(): TokenResponseCallback =
+        TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
+            if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
+                authenticationViewModel.loginOAuth(
+                    tokenResponse.additionalParameters[AccountUtils.Constants.KEY_USER_ID]!!,
+                    OAUTH_TOKEN_TYPE,
+                    tokenResponse.accessToken as String,
+                    tokenResponse.refreshToken as String,
+                    tokenResponse.scope
+                )
+            } else if (authorizationException != null) {
+                updateOAuthStatusIconAndText(authorizationException)
+                Timber.e(
+                    authorizationException,
+                    "OAuth request to exchange authorization code for tokens failed"
+                )
+            }
+        }
+
     private fun updateAuthTokenTypeAndInstructions(uiResult: UIResult<Boolean?>) {
         val supportsOAuth2 = uiResult.getStoredData()
         authTokenType = if (supportsOAuth2 != null && supportsOAuth2) OAUTH_TOKEN_TYPE else BASIC_TOKEN_TYPE
@@ -335,6 +447,10 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 checkOcServer()
             }
         }
+    }
+
+    private fun updateAccount() {
+
     }
 
     /**
@@ -436,79 +552,6 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         }
     }
 
-    /**
-     * OAuth step 1: Get authorization code
-     */
-    private fun startOAuthorization() {
-        server_status_text.run {
-            setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
-            text = resources.getString(R.string.oauth_login_connection)
-        }
-
-        mAuthService = OAuthUtils.createAuthorizationService(this)
-
-        val authorizationRequest = OAuthUtils.createAuthorizationRequest(
-            serverBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_auth), // auth endpoint
-            serverBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_access), // token endpoint
-            getString(R.string.oauth2_client_id),
-            getString(R.string.oauth2_redirect_uri)
-        )
-
-        val completedIntent = Intent(this, LoginActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0)
-
-        mAuthService?.performAuthorizationRequest(authorizationRequest, pendingIntent)
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        intent?.let {
-            handleGetAuthorizationCodeResponse(it)
-        }
-    }
-
-    private fun handleGetAuthorizationCodeResponse(intent: Intent) {
-        val authorizationResponse = AuthorizationResponse.fromIntent(intent)
-        val authorizationException = AuthorizationException.fromIntent(intent)
-        if (authorizationResponse?.authorizationCode != null) {
-            exchangeAuthorizationCodeForTokens(authorizationResponse)
-        } else if (authorizationException != null) {
-            updateOAuthStatusIconAndText(authorizationException)
-            Timber.e(authorizationException, "OAuth request to get authorization code failed")
-        }
-    }
-
-    /**
-     * OAuth step 2: Exchange the received authorization code for access and refresh tokens
-     */
-    private fun exchangeAuthorizationCodeForTokens(authorizationResponse: AuthorizationResponse) {
-        val clientAuth = OAuthUtils.createClientSecretBasic(getString(R.string.oauth2_client_secret))
-        mAuthService?.performTokenRequest(
-            authorizationResponse.createTokenExchangeRequest(),
-            clientAuth,
-            handleExchangeAuthorizationCodeForTokensResponse()
-        )
-    }
-
-    private fun handleExchangeAuthorizationCodeForTokensResponse(): TokenResponseCallback =
-        TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
-            if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
-                authenticationViewModel.loginOAuth(
-                    tokenResponse.additionalParameters[AccountUtils.Constants.KEY_USER_ID]!!,
-                    OAUTH_TOKEN_TYPE,
-                    tokenResponse.accessToken as String,
-                    tokenResponse.refreshToken as String,
-                    tokenResponse.scope
-                )
-            } else if (authorizationException != null) {
-                updateOAuthStatusIconAndText(authorizationException)
-                Timber.e(
-                    authorizationException,
-                    "OAuth request to exchange authorization code for tokens failed"
-                )
-            }
-        }
-
     private fun updateOAuthStatusIconAndText(authorizationException: AuthorizationException) {
         server_status_text.run {
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
@@ -518,6 +561,12 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 } else {
                     resources.getString(R.string.auth_oauth_error)
                 }
+        }
+    }
+
+    private fun updateLoginButtonVisibility() {
+        loginButton.run {
+            isVisible = account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
         }
     }
 

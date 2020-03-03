@@ -19,12 +19,19 @@
 
 package com.owncloud.android.domain.authentication.usecases
 
-import com.owncloud.android.domain.BaseUseCaseNoParams
+import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 
 class GetBaseUrlUseCase(
     private val authenticationRepository: AuthenticationRepository
-) : BaseUseCaseNoParams<String>() {
+) : BaseUseCaseWithResult<String, GetBaseUrlUseCase.Params>() {
 
-    override fun run(): String = authenticationRepository.getBaseUrl()
+    override fun run(params: Params): String {
+        require(params.accountName.isNotEmpty()) { "Invalid account name" }
+        return authenticationRepository.getBaseUrl(params.accountName)
+    }
+
+    data class Params(
+        val accountName: String
+    )
 }

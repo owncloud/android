@@ -101,7 +101,7 @@ class OCLocalAuthenticationDataSource(
             accountManager.addAccountExplicitly(newAccount, password, null)
 
             /// add the new account as default in preferences, if there is none already
-            val defaultAccount: Account? = getCurrentOwnCloudAccount(context)
+            val defaultAccount: Account? = getCurrentAccount()
             if (defaultAccount == null) {
                 val editor = PreferenceManager
                     .getDefaultSharedPreferences(context).edit()
@@ -172,7 +172,7 @@ class OCLocalAuthenticationDataSource(
         return accountManager.getAccountsByType(accountType)
     }
 
-    private fun getCurrentOwnCloudAccount(context: Context): Account? {
+    private fun getCurrentAccount(): Account? {
         val ocAccounts = getAccounts()
         var defaultAccount: Account? = null
 
@@ -191,20 +191,30 @@ class OCLocalAuthenticationDataSource(
             }
         }
 
-        if (!ocAccounts.isNullOrEmpty()) { // take first account as fallback
-            defaultAccount = ocAccounts[0]
-        }
-
         return defaultAccount
     }
 
-    override fun supportsOAuth2(): Boolean {
-        val currentAccount = getCurrentOwnCloudAccount(context) ?: throw AccountNotFoundException()
-        return accountManager.getUserData(currentAccount, KEY_SUPPORTS_OAUTH2) == "TRUE"
+    private fun getAccountByName(accountName: String): Account? {
+        val ocAccounts = getAccounts()
+        var searchedAccount: Account? = null
+
+        for (account in ocAccounts) {
+            if (account.name == accountName) {
+                searchedAccount = account
+                break
+            }
+        }
+
+        return searchedAccount
     }
 
-    override fun getBaseUrl(): String {
-        val currentAccount = getCurrentOwnCloudAccount(context) ?: throw AccountNotFoundException()
-        return accountManager.getUserData(currentAccount, KEY_OC_BASE_URL)
+    override fun supportsOAuth2(accountName: String): Boolean {
+        val account = getAccountByName(accountName) ?: throw AccountNotFoundException()
+        return accountManager.getUserData(account, KEY_SUPPORTS_OAUTH2) == "TRUE"
+    }
+
+    override fun getBaseUrl(accountName: String): String {
+        val account = getAccountByName(accountName) ?: throw AccountNotFoundException()
+        return accountManager.getUserData(account, KEY_OC_BASE_URL)
     }
 }

@@ -42,7 +42,7 @@ interface LocalAuthenticationDataSource {
         scope: String?
     ): String
 
-    fun supportsOAuth2(): Boolean
+    fun supportsOAuth2(accountName: String): Boolean
 
-    fun getBaseUrl(): String
+    fun getBaseUrl(accountName: String): String
 }

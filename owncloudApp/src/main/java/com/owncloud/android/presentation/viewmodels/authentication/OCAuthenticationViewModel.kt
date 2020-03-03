@@ -122,26 +122,42 @@ class OCAuthenticationViewModel(
     private val _supportsOAuth2 = MediatorLiveData<Event<UIResult<Boolean>>>()
     val supportsOAuth2: LiveData<Event<UIResult<Boolean>>> = _supportsOAuth2
 
-    fun supportsOAuth2() {
+    fun supportsOAuth2(accountName: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val supportsOAuth2 = supportsOAuth2UseCase.execute()
+            val useCaseResult = supportsOAuth2UseCase.execute(
+                SupportsOAuth2UseCase.Params(
+                    accountName = accountName
+                )
+            )
 
             Timber.d("Supports OAuth2 result: $supportsOAuth2")
 
-            _supportsOAuth2.postValue(Event(UIResult.Success(supportsOAuth2)))
+            if (useCaseResult.isSuccess) {
+                _supportsOAuth2.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
+            } else {
+                _supportsOAuth2.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
+            }
         }
     }
 
     private val _baseUrl = MediatorLiveData<Event<UIResult<String>>>()
     val baseUrl: LiveData<Event<UIResult<String>>> = _baseUrl
 
-    fun getBaseUrl() {
+    fun getBaseUrl(accountName: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val baseUrl = getBaseUrlUseCase.execute()
+            val useCaseResult = getBaseUrlUseCase.execute(
+                GetBaseUrlUseCase.Params(
+                    accountName = accountName
+                )
+            )
 
             Timber.d("Get base url result: $baseUrl}")
 
-            _baseUrl.postValue(Event(UIResult.Success(baseUrl)))
+            if (useCaseResult.isSuccess) {
+                _baseUrl.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
+            } else {
+                _baseUrl.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
+            }
         }
     }
 }
