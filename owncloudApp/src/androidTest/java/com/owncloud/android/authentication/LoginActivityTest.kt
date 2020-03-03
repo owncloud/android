@@ -43,6 +43,7 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.mockk
@@ -59,7 +60,10 @@ import org.koin.dsl.module
 
 class LoginActivityTest {
 
+    private lateinit var activityScenario: ActivityScenario<LoginActivity>
+
     private lateinit var ocAuthenticationViewModel: OCAuthenticationViewModel
+    private lateinit var ocContextProvider: ContextProvider
 
     private lateinit var loginResultLiveData: MutableLiveData<Event<UIResult<String>>>
     private lateinit var serverInfoLiveData: MutableLiveData<Event<UIResult<ServerInfo>>>
@@ -67,9 +71,11 @@ class LoginActivityTest {
     @Before
     fun setUp() {
         ocAuthenticationViewModel = mockk(relaxed = true)
+        ocContextProvider = mockk(relaxed = true)
 
         loginResultLiveData = MutableLiveData()
         serverInfoLiveData = MutableLiveData()
+
         every { ocAuthenticationViewModel.loginResult } returns loginResultLiveData
         every { ocAuthenticationViewModel.serverInfo } returns serverInfoLiveData
 
@@ -82,6 +88,10 @@ class LoginActivityTest {
                     viewModel {
                         ocAuthenticationViewModel
                     }
+                    factory {
+                        ocContextProvider
+                    }
+
                 }
             )
         }
@@ -92,11 +102,27 @@ class LoginActivityTest {
         unmockkAll()
     }
 
-    private fun launchTest() {
+    /**
+     * Launch the test with default configuration
+     * At this moment:
+     * R.bool.show_server_url_input = true
+     * R.string.server_url = ""
+     * R.bool.use_login_background_image = true
+     * R.bool.show_welcome_link = true
+     */
+    private fun launchTest(
+        showServerUrlInput: Boolean = true,
+        serverUrl: String = "",
+        showLoginBackGroundImage: Boolean = true,
+        showWelcomeLink: Boolean = true
+    ) {
+        every { ocContextProvider.getBoolean(R.bool.show_server_url_input) } returns showServerUrlInput
+        every { ocContextProvider.getString(R.string.server_url) } returns serverUrl
+        every { ocContextProvider.getBoolean(R.bool.use_login_background_image) } returns showLoginBackGroundImage
+        every { ocContextProvider.getBoolean(R.bool.show_welcome_link) } returns showWelcomeLink
 
-        ActivityScenario.launch(LoginActivity::class.java)
+        activityScenario = ActivityScenario.launch(LoginActivity::class.java)
     }
-
 
     @Test
     fun initialViewStatus_notBrandedOptions() {
@@ -118,6 +144,83 @@ class LoginActivityTest {
         onView(withId(R.id.auth_status_text)).check(matches(withEffectiveVisibility(Visibility.GONE)))
         onView(withId(R.id.loginButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
         onView(withId(R.id.welcome_link)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun initialViewStatus_brandedOptions_serverInfoInSetup() {
+        launchTest(showServerUrlInput = false, serverUrl = OC_SERVER_INFO.baseUrl)
+
+        onView(withId(R.id.login_background_image)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.thumbnail)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.centeredRefreshButton)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.instructions_message)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.hostUrlFrame)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.hostUrlInput)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.embeddedCheckServerButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.embeddedRefreshButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.server_status_text)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_username_container)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_username)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_password_container)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_password)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.auth_status_text)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.loginButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.welcome_link)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+
+        onView(withId(R.id.thumbnail)).perform(click())
+
+        verify(exactly = 2) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+
+        onView(withId(R.id.centeredRefreshButton)).perform(click())
+
+        verify(exactly = 3) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+
+    }
+
+    @Test
+    fun initialViewStatus_brandedOptions_dontUseLoginBackgroundImage() {
+        launchTest(showLoginBackGroundImage = false)
+
+        onView(withId(R.id.login_background_image)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.thumbnail)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.centeredRefreshButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.instructions_message)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.hostUrlFrame)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.hostUrlInput)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.embeddedCheckServerButton)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.embeddedRefreshButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.server_status_text)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_username_container)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_username)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_password_container)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_password)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.auth_status_text)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.loginButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.welcome_link)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun initialViewStatus_brandedOptions_dontShowWelcomeLink() {
+        launchTest(showWelcomeLink = false)
+
+        onView(withId(R.id.login_background_image)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.thumbnail)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.centeredRefreshButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.instructions_message)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.hostUrlFrame)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.hostUrlInput)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.embeddedCheckServerButton)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.embeddedRefreshButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.server_status_text)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_username_container)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_username)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_password_container)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.account_password)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.auth_status_text)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.loginButton)).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.welcome_link)).check(matches(withEffectiveVisibility(Visibility.GONE)))
     }
 
     @Test
@@ -406,8 +509,8 @@ class LoginActivityTest {
             .check(matches(withEffectiveVisibility(Visibility.GONE)))
     }
 
-companion object {
-    val SERVER_INFO_BASIC = OC_SERVER_INFO
-    val SERVER_INFO_BEARER = OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BEARER_TOKEN)
-}
+    companion object {
+        val SERVER_INFO_BASIC = OC_SERVER_INFO
+        val SERVER_INFO_BEARER = OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BEARER_TOKEN)
+    }
 }
