@@ -21,7 +21,6 @@
 package com.owncloud.android.authentication
 
 import android.content.Context
-import android.content.res.Resources
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider

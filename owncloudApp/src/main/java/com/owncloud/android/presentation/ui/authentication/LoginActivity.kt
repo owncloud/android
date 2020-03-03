@@ -77,7 +77,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     private var loginAction: Byte = ACTION_CREATE
     private var authTokenType: String? = null
     private var userAccount: Account? = null
-    private var serverBaseUrl: String? = null
+    private lateinit var serverBaseUrl: String
 
     private var mAuthService: AuthorizationService? = null
 
@@ -97,6 +97,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         // Get values from savedInstanceState
         if (savedInstanceState == null) {
             initAuthTokenType()
+            initServerPreFragment()
         } else {
             authTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE)
         }
@@ -112,7 +113,6 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         thumbnail.setOnClickListener { checkOcServer() }
 
         embeddedCheckServerButton.setOnClickListener { checkOcServer() }
-
 
         loginButton.setOnClickListener {
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) { // OAuth
@@ -142,6 +142,10 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         authenticationViewModel.supportsOAuth2.observe(this, Observer { event ->
             updateAuthTokenTypeAndInstructions(event.peekContent())
         })
+
+        authenticationViewModel.baseUrl.observe(this, Observer { event ->
+            updateBaseUrlAndHostInput(event.peekContent())
+        })
     }
 
     private fun initAuthTokenType() {
@@ -152,6 +156,14 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
             } else { // OAuth will be the default authentication method
                 authTokenType = ""
             }
+        }
+    }
+
+    private fun initServerPreFragment() {
+        if (userAccount != null) {
+            authenticationViewModel.getBaseUrl()
+        } else {
+            serverBaseUrl = getString(R.string.server_url).trim()
         }
     }
 
@@ -308,6 +320,20 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 }
                 visibility = VISIBLE
             } else visibility = GONE
+        }
+    }
+
+    private fun updateBaseUrlAndHostInput(uiResult: UIResult<String>) {
+        if (uiResult.getStoredData() != null) {
+            serverBaseUrl = uiResult.getStoredData() as String
+
+            hostUrlInput.setText(serverBaseUrl)
+            hostUrlInput.isEnabled = false;
+            hostUrlInput.isFocusable = false;
+
+            if (loginAction != ACTION_CREATE && serverBaseUrl.isNotEmpty()) {
+                checkOcServer()
+            }
         }
     }
 

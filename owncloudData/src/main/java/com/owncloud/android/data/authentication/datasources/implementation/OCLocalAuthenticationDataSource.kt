@@ -30,6 +30,7 @@ import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.lib.common.network.WebdavUtils
 import timber.log.Timber
@@ -200,5 +201,10 @@ class OCLocalAuthenticationDataSource(
     override fun supportsOAuth2(): Boolean {
         val currentAccount = getCurrentOwnCloudAccount(context) ?: throw AccountNotFoundException()
         return accountManager.getUserData(currentAccount, KEY_SUPPORTS_OAUTH2) == "TRUE"
+    }
+
+    override fun getBaseUrl(): String {
+        val currentAccount = getCurrentOwnCloudAccount(context) ?: throw AccountNotFoundException()
+        return accountManager.getUserData(currentAccount, KEY_OC_BASE_URL)
     }
 }

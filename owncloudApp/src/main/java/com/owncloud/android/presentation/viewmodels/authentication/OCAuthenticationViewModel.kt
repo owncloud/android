@@ -24,6 +24,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
@@ -40,6 +41,7 @@ class OCAuthenticationViewModel(
     private val loginOAuthAsyncUseCase: LoginOAuthAsyncUseCase,
     private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase,
     private val supportsOAuth2UseCase: SupportsOAuth2UseCase,
+    private val getBaseUrlUseCase: GetBaseUrlUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -54,26 +56,13 @@ class OCAuthenticationViewModel(
             val useCaseResult = getServerInfoAsyncUseCase.execute(
                 GetServerInfoAsyncUseCase.Params(serverPath = serverUrl)
             )
-            Timber.d(useCaseResult.toString())
+            Timber.d("Get server info result: $useCaseResult")
 
             if (useCaseResult.isSuccess) {
                 _serverInfo.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
             } else {
                 _serverInfo.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
             }
-        }
-    }
-
-    private val _supportsOAuth2 = MediatorLiveData<Event<UIResult<Boolean>>>()
-    val supportsOAuth2: LiveData<Event<UIResult<Boolean>>> = _supportsOAuth2
-
-    fun supportsOAuth2() {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val supportsOAuth2 = supportsOAuth2UseCase.execute()
-
-            Timber.d(supportsOAuth2.toString())
-
-            _supportsOAuth2.postValue(Event(UIResult.Success(supportsOAuth2)))
         }
     }
 
@@ -127,6 +116,32 @@ class OCAuthenticationViewModel(
             } else {
                 _loginResult.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
             }
+        }
+    }
+
+    private val _supportsOAuth2 = MediatorLiveData<Event<UIResult<Boolean>>>()
+    val supportsOAuth2: LiveData<Event<UIResult<Boolean>>> = _supportsOAuth2
+
+    fun supportsOAuth2() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val supportsOAuth2 = supportsOAuth2UseCase.execute()
+
+            Timber.d("Supports OAuth2 result: $supportsOAuth2")
+
+            _supportsOAuth2.postValue(Event(UIResult.Success(supportsOAuth2)))
+        }
+    }
+
+    private val _baseUrl = MediatorLiveData<Event<UIResult<String>>>()
+    val baseUrl: LiveData<Event<UIResult<String>>> = _baseUrl
+
+    fun getBaseUrl() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val baseUrl = getBaseUrlUseCase.execute()
+
+            Timber.d("Get base url result: $baseUrl}")
+
+            _baseUrl.postValue(Event(UIResult.Success(baseUrl)))
         }
     }
 }
