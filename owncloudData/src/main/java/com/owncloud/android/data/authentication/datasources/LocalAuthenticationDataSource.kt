@@ -43,4 +43,6 @@ interface LocalAuthenticationDataSource {
     ): String
 
     fun supportsOAuth2(): Boolean
+
+    fun getBaseUrl(): String
 }
