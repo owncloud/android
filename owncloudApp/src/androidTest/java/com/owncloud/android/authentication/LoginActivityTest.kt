@@ -416,6 +416,25 @@ class LoginActivityTest {
     }
 
     @Test
+    fun checkServerInfo_isError_emptyUrl() {
+        launchTest()
+
+        onView(withId(R.id.hostUrlInput))
+            .check(matches(isDisplayed()))
+            .perform(typeText(""))
+
+        onView(withId(R.id.thumbnail))
+            .perform(click())
+
+        onView(withId(R.id.server_status_text))
+            .check(matches(isDisplayed()))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .check(matches(withText(R.string.auth_can_not_auth_against_server)))
+
+        verify(exactly = 0) { ocAuthenticationViewModel.getServerInfo(any()) }
+    }
+
+    @Test
     fun checkServerInfo_isError_ownCloudVersionNotSupported() {
         launchTest()
 

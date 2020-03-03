@@ -217,7 +217,14 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
     private fun checkOcServer() {
         val uri = hostUrlInput.text.toString().trim()
-        authenticationViewModel.getServerInfo(serverUrl = uri)
+        if (uri.isNotEmpty()) {
+            authenticationViewModel.getServerInfo(serverUrl = uri)
+        } else {
+            server_status_text.run {
+                text = getString(R.string.auth_can_not_auth_against_server).also { Timber.d(it) }
+                isVisible = true
+            }
+        }
     }
 
     private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
