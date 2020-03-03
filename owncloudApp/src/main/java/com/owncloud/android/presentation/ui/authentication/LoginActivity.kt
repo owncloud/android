@@ -124,20 +124,13 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
         loginButton.setOnClickListener {
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) { // OAuth
-                if (loginAction == ACTION_CREATE) {
-                    startOAuthorization()
-                } else {
-                    // TODO
-                }
+                startOAuthorization()
             } else { // Basic
-                if (loginAction == ACTION_CREATE) {
-                    authenticationViewModel.loginBasic(
-                        account_username.text.toString(),
-                        account_password.text.toString()
-                    )
-                } else {
-                    // TODO
-                }
+                authenticationViewModel.loginBasic(
+                    account_username.text.toString(),
+                    account_password.text.toString(),
+                    loginAction != ACTION_CREATE
+                )
             }
         }
 
@@ -324,8 +317,8 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         // Return result to account authenticator, multiaccount does not work without this
         val accountName = uiResult.getStoredData()
         val intent = Intent()
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType)
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName)
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType)
         setAccountAuthenticatorResult(intent.extras)
         setResult(Activity.RESULT_OK, intent)
 
@@ -418,7 +411,8 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                     OAUTH_TOKEN_TYPE,
                     tokenResponse.accessToken as String,
                     tokenResponse.refreshToken as String,
-                    tokenResponse.scope
+                    tokenResponse.scope,
+                    loginAction != ACTION_CREATE
                 )
             } else if (authorizationException != null) {
                 updateOAuthStatusIconAndText(authorizationException)

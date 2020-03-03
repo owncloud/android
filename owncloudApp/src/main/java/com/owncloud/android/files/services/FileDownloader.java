@@ -44,7 +44,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -55,6 +54,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.operations.DownloadFileOperation;
+import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
+import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
@@ -615,14 +616,13 @@ public class FileDownloader extends Service
                     .setProgress(0, 0, false);
 
             if (needsToUpdateCredentials) {
-
                 // let the user update credentials with one click
-                Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
-                updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT,
+                Intent updateAccountCredentials = new Intent(this, LoginActivity.class);
+                updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACCOUNT,
                         download.getAccount());
                 updateAccountCredentials.putExtra(
-                        AuthenticatorActivity.EXTRA_ACTION,
-                        AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN
+                        AuthenticatorConstants.EXTRA_ACTION,
+                        AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN
                 );
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);

@@ -23,15 +23,16 @@ import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 
 interface LocalAuthenticationDataSource {
-    fun addAccountIfDoesNotExist(
+    fun addBasicAccount(
         lastPermanentLocation: String?,
         userName: String,
         password: String,
         serverInfo: ServerInfo,
-        userInfo: UserInfo?
+        userInfo: UserInfo?,
+        updateIfAlreadyExists: Boolean
     ): String
 
-    fun addOAuthAccountIfDoesNotExist(
+    fun addOAuthAccount(
         lastPermanentLocation: String?,
         userName: String,
         authTokenType: String,
@@ -39,7 +40,8 @@ interface LocalAuthenticationDataSource {
         serverInfo: ServerInfo,
         userInfo: UserInfo?,
         refreshToken: String,
-        scope: String?
+        scope: String?,
+        updateIfAlreadyExists: Boolean
     ): String
 
     fun supportsOAuth2(accountName: String): Boolean

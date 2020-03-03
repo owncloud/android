@@ -49,7 +49,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
@@ -67,6 +66,8 @@ import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOp
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.RemoveChunksFolderOperation;
 import com.owncloud.android.operations.UploadFileOperation;
+import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
+import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
@@ -1037,13 +1038,13 @@ public class FileUploader extends Service
 
             if (needsToUpdateCredentials) {
                 // let the user update credentials with one click
-                Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
+                Intent updateAccountCredentials = new Intent(this, LoginActivity.class);
                 updateAccountCredentials.putExtra(
-                        AuthenticatorActivity.EXTRA_ACCOUNT, upload.getAccount()
+                        AuthenticatorConstants.EXTRA_ACCOUNT, upload.getAccount()
                 );
                 updateAccountCredentials.putExtra(
-                        AuthenticatorActivity.EXTRA_ACTION,
-                        AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN
+                        AuthenticatorConstants.EXTRA_ACTION,
+                        AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN
                 );
 
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
