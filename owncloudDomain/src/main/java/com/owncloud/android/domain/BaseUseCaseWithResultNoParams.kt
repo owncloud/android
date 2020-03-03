@@ -22,8 +22,13 @@ package com.owncloud.android.domain
 /**
  * Same as [com.owncloud.android.domain.BaseUseCase] but with no params
  */
-abstract class BaseUseCaseNoParams<out Type> {
+abstract class BaseUseCaseWithResultNoParams<out Type> {
     protected abstract fun run(): Type
 
-    fun execute(): Type = run()
+    fun execute(): UseCaseResult<Type> =
+        try {
+            UseCaseResult.Success(run())
+        } catch (throwable: Throwable) {
+            UseCaseResult.Error(throwable)
+        }
 }

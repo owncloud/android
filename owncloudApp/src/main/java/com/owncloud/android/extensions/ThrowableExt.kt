@@ -70,11 +70,14 @@ fun Throwable.parseError(
             else -> resources.getString(R.string.common_error_unknown)
         }
 
-        return if (reason.isEmpty()) {
-            genericErrorMessage
-        } else if (showJustReason) {
-            reason
-        } else
-            "$genericErrorMessage ${resources.getString(R.string.error_reason)} $reason"
+        return when {
+            reason.isEmpty() -> {
+                genericErrorMessage
+            }
+            showJustReason -> {
+                reason
+            }
+            else -> "$genericErrorMessage ${resources.getString(R.string.error_reason)} $reason"
+        }
     }
 }

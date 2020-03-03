@@ -37,7 +37,7 @@ interface AuthenticationRepository {
         scope: String?
     ): String
 
-    fun supportsOAuth2UseCase(): Boolean
+    fun supportsOAuth2UseCase(accountName: String): Boolean
 
-    fun getBaseUrl(): String
+    fun getBaseUrl(accountName: String): String
 }

@@ -20,16 +20,24 @@
 package com.owncloud.android.extensions
 
 import android.app.Activity
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
-fun Activity.showError(genericErrorMessage: String, throwable: Throwable?) =
+fun Activity.showErrorInSnackbar(genericErrorMessageId: Int, throwable: Throwable?) =
     throwable?.let {
-        showMessage(it.parseError(genericErrorMessage, resources))
+        showMessageInSnackbar(it.parseError(getString(genericErrorMessageId), resources))
     }
 
-fun Activity.showMessage(
+fun Activity.showMessageInSnackbar(
     message: CharSequence,
     duration: Int = Snackbar.LENGTH_LONG
-) {
-    Snackbar.make(findViewById(android.R.id.content), message, duration).show()
-}
+) = Snackbar.make(findViewById(android.R.id.content), message, duration).show()
+
+fun Activity.showErrorInToastShortLength(genericErrorMessageId: Int, throwable: Throwable?) =
+    throwable?.let {
+        Toast.makeText(
+            this,
+            it.parseError(getString(genericErrorMessageId), resources),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
