@@ -21,9 +21,7 @@ package com.owncloud.android.presentation.viewmodels.sharing
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -35,9 +33,11 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUse
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.runUseCaseWithResult
+import com.owncloud.android.extensions.runUseCaseWithResultAndUseCachedData
+import com.owncloud.android.extensions.runUseCaseWithResultOnlyError
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import kotlinx.coroutines.launch
 
 /**
  * View Model to keep a reference to the share repository and an up-to-date list of a shares
@@ -71,61 +71,37 @@ class OCShareViewModel(
         refreshSharesFromNetwork()
     }
 
-    private fun refreshSharesFromNetwork() {
-        viewModelScope.launch(coroutineDispatcherProvider.io) {
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                _shares.postValue(Event(UIResult.Loading(sharesLiveData.value)))
-            }
+    private fun refreshSharesFromNetwork() = runUseCaseWithResultAndUseCachedData(
+        coroutineContext = coroutineDispatcherProvider.io,
+        cachedData = sharesLiveData.value,
+        liveData = _shares,
+        useCase = refreshSharesFromServerAsyncUseCase,
+        useCaseParams = RefreshSharesFromServerAsyncUseCase.Params(
+            filePath = filePath,
+            accountName = accountName
+        )
+    )
 
-            val useCaseResult = refreshSharesFromServerAsyncUseCase.execute(
-                RefreshSharesFromServerAsyncUseCase.Params(
-                    filePath = filePath,
-                    accountName = accountName
-                )
-            )
-
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                if (!useCaseResult.isSuccess) {
-                    _shares.postValue(
-                        Event(UIResult.Error(useCaseResult.getThrowableOrNull(), sharesLiveData.value))
-                    )
-                }
-            }
-        }
-    }
-
-    private val _shareDeletionStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    private val _shareDeletionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
     val shareDeletionStatus: LiveData<Event<UIResult<Unit>>> = _shareDeletionStatus
 
     fun deleteShare(
         remoteId: Long
-    ) {
-        viewModelScope.launch(coroutineDispatcherProvider.io) {
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                _shareDeletionStatus.postValue(
-                    Event(UIResult.Loading())
-                )
-            }
-
-            val useCaseResult = deletePublicShareUseCase.execute(
-                DeleteShareAsyncUseCase.Params(
-                    remoteId
-                )
-            )
-
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                if (useCaseResult.isError) {
-                    _shareDeletionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
-                }
-            }
-        }
-    }
+    ) = runUseCaseWithResultOnlyError(
+        coroutineContext = coroutineDispatcherProvider.io,
+        showLoading = true,
+        liveData = _shareDeletionStatus,
+        useCase = deletePublicShareUseCase,
+        useCaseParams = DeleteShareAsyncUseCase.Params(
+            remoteId
+        )
+    )
 
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
      ******************************************************************************************************/
 
-    private val _privateShareCreationStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    private val _privateShareCreationStatus = MediatorLiveData<Event<UIResult<Unit>>>()
     val privateShareCreationStatus: LiveData<Event<UIResult<Unit>>> = _privateShareCreationStatus
 
     fun insertPrivateShare(
@@ -134,35 +110,19 @@ class OCShareViewModel(
         shareeName: String, // User or group name of the target sharee.
         permissions: Int,
         accountName: String
-    ) {
-        viewModelScope.launch(coroutineDispatcherProvider.io) {
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                _privateShareCreationStatus.postValue(
-                    Event(UIResult.Loading())
-                )
-            }
-
-            val useCaseResult = createPrivateShareUseCase.execute(
-                CreatePrivateShareAsyncUseCase.Params(
-                    filePath,
-                    shareType,
-                    shareeName,
-                    permissions,
-                    accountName
-                )
-            )
-
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                if (useCaseResult.isSuccess) {
-                    _privateShareCreationStatus.postValue(Event(UIResult.Success()))
-                } else {
-                    _privateShareCreationStatus.postValue(
-                        Event(UIResult.Error(useCaseResult.getThrowableOrNull()))
-                    )
-                }
-            }
-        }
-    }
+    ) = runUseCaseWithResult(
+        coroutineContext = coroutineDispatcherProvider.io,
+        showLoading = true,
+        liveData = _privateShareCreationStatus,
+        useCase = createPrivateShareUseCase,
+        useCaseParams = CreatePrivateShareAsyncUseCase.Params(
+            filePath,
+            shareType,
+            shareeName,
+            permissions,
+            accountName
+        )
+    )
 
     private val _privateShare = MediatorLiveData<Event<UIResult<OCShare>>>()
     val privateShare: LiveData<Event<UIResult<OCShare>>> = _privateShare
@@ -180,42 +140,30 @@ class OCShareViewModel(
         }
     }
 
-    private val _privateShareEditionStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    private val _privateShareEditionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
     val privateShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _privateShareEditionStatus
 
     fun updatePrivateShare(
         remoteId: Long,
         permissions: Int,
         accountName: String
-    ) {
-        viewModelScope.launch(coroutineDispatcherProvider.io) {
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                _privateShareEditionStatus.postValue(
-                    Event(UIResult.Loading())
-                )
-            }
-
-            val useCaseResult = editPrivateShareUseCase.execute(
-                EditPrivateShareAsyncUseCase.Params(
-                    remoteId,
-                    permissions,
-                    accountName
-                )
-            )
-
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                if (useCaseResult.isError) {
-                    _privateShareEditionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
-                }
-            }
-        }
-    }
+    ) = runUseCaseWithResultOnlyError(
+        coroutineContext = coroutineDispatcherProvider.io,
+        showLoading = true,
+        liveData = _privateShareEditionStatus,
+        useCase = editPrivateShareUseCase,
+        useCaseParams = EditPrivateShareAsyncUseCase.Params(
+            remoteId,
+            permissions,
+            accountName
+        )
+    )
 
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
      ******************************************************************************************************/
 
-    private val _publicShareCreationStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    private val _publicShareCreationStatus = MediatorLiveData<Event<UIResult<Unit>>>()
     val publicShareCreationStatus: LiveData<Event<UIResult<Unit>>> = _publicShareCreationStatus
 
     fun insertPublicShare(
@@ -226,37 +174,23 @@ class OCShareViewModel(
         expirationTimeInMillis: Long,
         publicUpload: Boolean,
         accountName: String
-    ) {
-        viewModelScope.launch(coroutineDispatcherProvider.io) {
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                _publicShareCreationStatus.postValue(
-                    Event(UIResult.Loading())
-                )
-            }
+    ) = runUseCaseWithResult(
+        coroutineContext = coroutineDispatcherProvider.io,
+        showLoading = true,
+        liveData = _publicShareCreationStatus,
+        useCase = createPublicShareUseCase,
+        useCaseParams = CreatePublicShareAsyncUseCase.Params(
+            filePath,
+            permissions,
+            name,
+            password,
+            expirationTimeInMillis,
+            publicUpload,
+            accountName
+        )
+    )
 
-            val useCaseResult = createPublicShareUseCase.execute(
-                CreatePublicShareAsyncUseCase.Params(
-                    filePath,
-                    permissions,
-                    name,
-                    password,
-                    expirationTimeInMillis,
-                    publicUpload,
-                    accountName
-                )
-            )
-
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                if (useCaseResult.isSuccess) {
-                    _publicShareCreationStatus.postValue(Event(UIResult.Success()))
-                } else {
-                    _publicShareCreationStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
-                }
-            }
-        }
-    }
-
-    private val _publicShareEditionStatus = MutableLiveData<Event<UIResult<Unit>>>()
+    private val _publicShareEditionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
     val publicShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _publicShareEditionStatus
 
     fun updatePublicShare(
@@ -267,31 +201,19 @@ class OCShareViewModel(
         permissions: Int,
         publicUpload: Boolean,
         accountName: String
-    ) {
-        viewModelScope.launch(coroutineDispatcherProvider.io) {
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                _publicShareEditionStatus.postValue(Event(UIResult.Loading()))
-            }
-
-            val useCaseResult = editPublicShareUseCase.execute(
-                EditPublicShareAsyncUseCase.Params(
-                    remoteId,
-                    name,
-                    password,
-                    expirationDateInMillis,
-                    permissions,
-                    publicUpload,
-                    accountName
-                )
-            )
-
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                if (useCaseResult.isSuccess) {
-                    _publicShareEditionStatus.postValue(Event(UIResult.Success()))
-                } else {
-                    _publicShareEditionStatus.postValue(Event(UIResult.Error(useCaseResult.getThrowableOrNull())))
-                }
-            }
-        }
-    }
+    ) = runUseCaseWithResult(
+        coroutineContext = coroutineDispatcherProvider.io,
+        showLoading = true,
+        liveData = _publicShareEditionStatus,
+        useCase = editPublicShareUseCase,
+        useCaseParams = EditPublicShareAsyncUseCase.Params(
+            remoteId,
+            name,
+            password,
+            expirationDateInMillis,
+            permissions,
+            publicUpload,
+            accountName
+        )
+    )
 }

@@ -23,7 +23,6 @@ package com.owncloud.android.presentation.viewmodels.authentication
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
@@ -31,10 +30,9 @@ import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class OCAuthenticationViewModel(
     private val loginBasicAsyncUseCase: LoginBasicAsyncUseCase,
@@ -50,21 +48,13 @@ class OCAuthenticationViewModel(
 
     fun getServerInfo(
         serverUrl: String
-    ) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            _serverInfo.postValue(Event(UIResult.Loading()))
-            val useCaseResult = getServerInfoAsyncUseCase.execute(
-                GetServerInfoAsyncUseCase.Params(serverPath = serverUrl)
-            )
-            Timber.d("Get server info result: $useCaseResult")
-
-            if (useCaseResult.isSuccess) {
-                _serverInfo.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
-            } else {
-                _serverInfo.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
-            }
-        }
-    }
+    ) = runUseCaseWithResult(
+        coroutineContext = coroutinesDispatcherProvider.io,
+        showLoading = true,
+        liveData = _serverInfo,
+        useCase = getServerInfoAsyncUseCase,
+        useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = serverUrl)
+    )
 
     private val _loginResult = MediatorLiveData<Event<UIResult<String>>>()
     val loginResult: LiveData<Event<UIResult<String>>> = _loginResult
@@ -72,24 +62,16 @@ class OCAuthenticationViewModel(
     fun loginBasic(
         username: String,
         password: String
-    ) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val useCaseResult = loginBasicAsyncUseCase.execute(
-                LoginBasicAsyncUseCase.Params(
-                    serverInfo = serverInfo.value?.peekContent()?.getStoredData(),
-                    username = username,
-                    password = password
-                )
-            )
-            Timber.d(useCaseResult.toString())
-
-            if (useCaseResult.isSuccess) {
-                _loginResult.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
-            } else {
-                _loginResult.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
-            }
-        }
-    }
+    ) = runUseCaseWithResult(
+        coroutineContext = coroutinesDispatcherProvider.io,
+        liveData = _loginResult,
+        useCase = loginBasicAsyncUseCase,
+        useCaseParams = LoginBasicAsyncUseCase.Params(
+            serverInfo = serverInfo.value?.peekContent()?.getStoredData(),
+            username = username,
+            password = password
+        )
+    )
 
     fun loginOAuth(
         username: String,
@@ -97,67 +79,45 @@ class OCAuthenticationViewModel(
         accessToken: String,
         refreshToken: String,
         scope: String?
-    ) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val useCaseResult = loginOAuthAsyncUseCase.execute(
-                LoginOAuthAsyncUseCase.Params(
-                    serverInfo = serverInfo.value?.peekContent()?.getStoredData(),
-                    username = username,
-                    authTokenType = authTokenType,
-                    accessToken = accessToken,
-                    refreshToken = refreshToken,
-                    scope = scope
-                )
-            )
-            Timber.d(useCaseResult.toString())
-
-            if (useCaseResult.isSuccess) {
-                _loginResult.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
-            } else {
-                _loginResult.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
-            }
-        }
-    }
+    ) = runUseCaseWithResult(
+        coroutineContext = coroutinesDispatcherProvider.io,
+        liveData = _loginResult,
+        useCase = loginOAuthAsyncUseCase,
+        useCaseParams = LoginOAuthAsyncUseCase.Params(
+            serverInfo = serverInfo.value?.peekContent()?.getStoredData(),
+            username = username,
+            authTokenType = authTokenType,
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+            scope = scope
+        )
+    )
 
     private val _supportsOAuth2 = MediatorLiveData<Event<UIResult<Boolean>>>()
     val supportsOAuth2: LiveData<Event<UIResult<Boolean>>> = _supportsOAuth2
 
-    fun supportsOAuth2(accountName: String) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val useCaseResult = supportsOAuth2UseCase.execute(
-                SupportsOAuth2UseCase.Params(
-                    accountName = accountName
-                )
-            )
-
-            Timber.d("Supports OAuth2 result: $supportsOAuth2")
-
-            if (useCaseResult.isSuccess) {
-                _supportsOAuth2.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
-            } else {
-                _supportsOAuth2.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
-            }
-        }
-    }
+    fun supportsOAuth2(
+        accountName: String
+    ) = runUseCaseWithResult(
+        coroutineContext = coroutinesDispatcherProvider.io,
+        liveData = _supportsOAuth2,
+        useCase = supportsOAuth2UseCase,
+        useCaseParams = SupportsOAuth2UseCase.Params(
+            accountName = accountName
+        )
+    )
 
     private val _baseUrl = MediatorLiveData<Event<UIResult<String>>>()
     val baseUrl: LiveData<Event<UIResult<String>>> = _baseUrl
 
-    fun getBaseUrl(accountName: String) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val useCaseResult = getBaseUrlUseCase.execute(
-                GetBaseUrlUseCase.Params(
-                    accountName = accountName
-                )
-            )
-
-            Timber.d("Get base url result: $baseUrl}")
-
-            if (useCaseResult.isSuccess) {
-                _baseUrl.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
-            } else {
-                _baseUrl.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
-            }
-        }
-    }
+    fun getBaseUrl(
+        accountName: String
+    ) = runUseCaseWithResult(
+        coroutineContext = coroutinesDispatcherProvider.io,
+        liveData = _baseUrl,
+        useCase = getBaseUrlUseCase,
+        useCaseParams = GetBaseUrlUseCase.Params(
+            accountName = accountName
+        )
+    )
 }
