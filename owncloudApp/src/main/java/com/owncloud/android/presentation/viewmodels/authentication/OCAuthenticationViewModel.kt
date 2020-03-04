@@ -49,7 +49,7 @@ class OCAuthenticationViewModel(
     fun getServerInfo(
         serverUrl: String
     ) = runUseCaseWithResult(
-        coroutineContext = coroutinesDispatcherProvider.io,
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
         showLoading = true,
         liveData = _serverInfo,
         useCase = getServerInfoAsyncUseCase,
@@ -64,7 +64,7 @@ class OCAuthenticationViewModel(
         password: String,
         updateAccountIfAlreadyExists: Boolean = false
     ) = runUseCaseWithResult(
-        coroutineContext = coroutinesDispatcherProvider.io,
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
         liveData = _loginResult,
         useCase = loginBasicAsyncUseCase,
         useCaseParams = LoginBasicAsyncUseCase.Params(
@@ -83,7 +83,7 @@ class OCAuthenticationViewModel(
         scope: String?,
         updateAccountIfAlreadyExists: Boolean = false
     ) = runUseCaseWithResult(
-        coroutineContext = coroutinesDispatcherProvider.io,
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
         liveData = _loginResult,
         useCase = loginOAuthAsyncUseCase,
         useCaseParams = LoginOAuthAsyncUseCase.Params(
@@ -103,7 +103,7 @@ class OCAuthenticationViewModel(
     fun supportsOAuth2(
         accountName: String
     ) = runUseCaseWithResult(
-        coroutineContext = coroutinesDispatcherProvider.io,
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
         liveData = _supportsOAuth2,
         useCase = supportsOAuth2UseCase,
         useCaseParams = SupportsOAuth2UseCase.Params(
@@ -117,7 +117,7 @@ class OCAuthenticationViewModel(
     fun getBaseUrl(
         accountName: String
     ) = runUseCaseWithResult(
-        coroutineContext = coroutinesDispatcherProvider.io,
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
         liveData = _baseUrl,
         useCase = getBaseUrlUseCase,
         useCaseParams = GetBaseUrlUseCase.Params(

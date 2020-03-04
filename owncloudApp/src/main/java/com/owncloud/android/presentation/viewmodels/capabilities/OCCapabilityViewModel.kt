@@ -59,7 +59,7 @@ class OCCapabilityViewModel(
     }
 
     fun refreshCapabilitiesFromNetwork() = runUseCaseWithResultAndUseCachedData(
-        coroutineContext = coroutineDispatcherProvider.io,
+        coroutineDispatcher = coroutineDispatcherProvider.io,
         cachedData = capabilitiesLiveData.value,
         liveData = _capabilities,
         useCase = refreshCapabilitiesFromServerAsyncUseCase,

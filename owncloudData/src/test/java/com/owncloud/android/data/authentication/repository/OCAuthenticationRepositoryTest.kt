@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author David González Verdugo
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,12 +20,23 @@
 package com.owncloud.android.data.authentication.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
+import com.owncloud.android.domain.exceptions.AccountNotFoundException
+import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.testutil.ACCESS_TOKEN
+import com.owncloud.android.testutil.AUTH_TOKEN_TYPE
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_REDIRECTION_PATH
 import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.REFRESH_TOKEN
+import com.owncloud.android.testutil.SCOPE
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
@@ -33,31 +45,222 @@ class OCAuthenticationRepositoryTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
+    private val localAuthenticationDataSource = mockk<LocalAuthenticationDataSource>(relaxed = true)
     private val remoteAuthenticationDataSource = mockk<RemoteAuthenticationDataSource>(relaxed = true)
     private val ocAuthenticationRepository: OCAuthenticationRepository =
-        OCAuthenticationRepository(remoteAuthenticationDataSource)
+        OCAuthenticationRepository(localAuthenticationDataSource, remoteAuthenticationDataSource)
 
     @Test
-    fun loginOk() {
-        every { remoteAuthenticationDataSource.loginOAuth(any(), any(), any()) } returns Unit
+    fun loginBasicOk() {
+        every { remoteAuthenticationDataSource.loginBasic(any(), any(), any()) } returns Pair(
+            OC_USER_INFO,
+            OC_REDIRECTION_PATH.lastPermanentLocation
+        )
 
-        ocAuthenticationRepository.login(OC_SERVER_INFO.baseUrl, "username", "password")
+        every {
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+        } returns OC_ACCOUNT_NAME
+
+        val accountName = ocAuthenticationRepository.loginBasic(
+            OC_SERVER_INFO,
+            "username",
+            "password",
+            false
+        )
 
         verify(exactly = 1) {
-            remoteAuthenticationDataSource.loginOAuth(OC_SERVER_INFO.baseUrl, "username", "password")
+            remoteAuthenticationDataSource.loginBasic(OC_SERVER_INFO.baseUrl, "username", "password")
+            localAuthenticationDataSource.addBasicAccount(
+                OC_REDIRECTION_PATH.lastPermanentLocation,
+                "username",
+                "password",
+                OC_SERVER_INFO,
+                OC_USER_INFO,
+                false
+            )
         }
+
+        assertEquals(OC_ACCOUNT_NAME, accountName)
     }
 
     @Test(expected = NoConnectionWithServerException::class)
-    fun loginException() {
+    fun loginBasicRemoteException() {
+        every {
+            remoteAuthenticationDataSource.loginBasic(any(), any(), any())
+        } throws NoConnectionWithServerException()
+
+        every {
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+        } returns OC_ACCOUNT_NAME
+
+        ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", false)
+
+        verify(exactly = 1) {
+            remoteAuthenticationDataSource.loginBasic(any(), any(), any())
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+        }
+    }
+
+    @Test(expected = AccountNotNewException::class)
+    fun loginBasicLocalException() {
+        every { remoteAuthenticationDataSource.loginBasic(any(), any(), any()) } returns Pair(
+            OC_USER_INFO,
+            OC_REDIRECTION_PATH.lastPermanentLocation
+        )
+
+        every {
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+        } throws AccountNotNewException()
+
+        ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", false)
+
+        verify(exactly = 1) {
+            remoteAuthenticationDataSource.loginBasic(any(), any(), any())
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    fun loginBasicOAuth() {
+        every { remoteAuthenticationDataSource.loginOAuth(any(), any(), any()) } returns Pair(
+            OC_USER_INFO,
+            OC_REDIRECTION_PATH.lastPermanentLocation
+        )
+
+        every {
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+        } returns OC_ACCOUNT_NAME
+
+        val accountName = ocAuthenticationRepository.loginOAuth(
+            OC_SERVER_INFO,
+            "username",
+            AUTH_TOKEN_TYPE,
+            ACCESS_TOKEN,
+            REFRESH_TOKEN,
+            SCOPE,
+            false
+        )
+
+        verify(exactly = 1) {
+            remoteAuthenticationDataSource.loginOAuth(OC_SERVER_INFO.baseUrl, "username", ACCESS_TOKEN)
+            localAuthenticationDataSource.addOAuthAccount(
+                OC_REDIRECTION_PATH.lastPermanentLocation,
+                "username",
+                AUTH_TOKEN_TYPE,
+                ACCESS_TOKEN,
+                OC_SERVER_INFO,
+                OC_USER_INFO,
+                REFRESH_TOKEN,
+                SCOPE,
+                false
+            )
+        }
+
+        assertEquals(OC_ACCOUNT_NAME, accountName)
+    }
+
+    @Test(expected = NoConnectionWithServerException::class)
+    fun loginOAuthRemoteException() {
         every {
             remoteAuthenticationDataSource.loginOAuth(any(), any(), any())
         } throws NoConnectionWithServerException()
 
-        ocAuthenticationRepository.login(OC_SERVER_INFO.baseUrl, "test", "test")
+        every {
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+        } returns OC_ACCOUNT_NAME
+
+        ocAuthenticationRepository.loginOAuth(
+            OC_SERVER_INFO,
+            "test",
+            AUTH_TOKEN_TYPE,
+            ACCESS_TOKEN,
+            REFRESH_TOKEN,
+            SCOPE,
+            false
+        )
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginOAuth(any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+        }
+    }
+
+    @Test(expected = AccountNotNewException::class)
+    fun loginOAuthLocalException() {
+        every { remoteAuthenticationDataSource.loginOAuth(any(), any(), any()) } returns Pair(
+            OC_USER_INFO,
+            OC_REDIRECTION_PATH.lastPermanentLocation
+        )
+
+        every {
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+        } throws AccountNotNewException()
+
+        ocAuthenticationRepository.loginOAuth(
+            OC_SERVER_INFO,
+            "test",
+            AUTH_TOKEN_TYPE,
+            ACCESS_TOKEN,
+            REFRESH_TOKEN,
+            SCOPE,
+            false
+        )
+
+        verify(exactly = 1) {
+            remoteAuthenticationDataSource.loginOAuth(any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    fun supportsOAuth2Ok() {
+        every {
+            localAuthenticationDataSource.supportsOAuth2(any())
+        } returns true
+
+        ocAuthenticationRepository.supportsOAuth2UseCase(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            localAuthenticationDataSource.supportsOAuth2(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test(expected = AccountNotFoundException::class)
+    fun supportsOAuth2Exception() {
+        every {
+            localAuthenticationDataSource.supportsOAuth2(any())
+        } throws AccountNotFoundException()
+
+        ocAuthenticationRepository.supportsOAuth2UseCase(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            localAuthenticationDataSource.supportsOAuth2(any())
+        }
+    }
+
+    @Test
+    fun getBaseUrlOk() {
+        every {
+            localAuthenticationDataSource.getBaseUrl(any())
+        } returns OC_SERVER_INFO.baseUrl
+
+        ocAuthenticationRepository.getBaseUrl(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            localAuthenticationDataSource.getBaseUrl(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test(expected = AccountNotFoundException::class)
+    fun getBaseUrlException() {
+        every {
+            localAuthenticationDataSource.getBaseUrl(any())
+        } throws AccountNotFoundException()
+
+        ocAuthenticationRepository.getBaseUrl(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            localAuthenticationDataSource.getBaseUrl(any())
         }
     }
 }

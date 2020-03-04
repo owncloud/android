@@ -25,19 +25,19 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
 
 fun <T, Params> ViewModel.runUseCaseWithResult(
-    coroutineContext: CoroutineContext,
+    coroutineDispatcher: CoroutineDispatcher,
     showLoading: Boolean = false,
     liveData: MediatorLiveData<Event<UIResult<T>>>,
     useCase: BaseUseCaseWithResult<T, Params>,
     useCaseParams: Params,
     postSuccess: Boolean = true
 ) {
-    viewModelScope.launch(coroutineContext) {
+    viewModelScope.launch(coroutineDispatcher) {
         if (showLoading) {
             liveData.postValue(Event(UIResult.Loading()))
         }
@@ -55,13 +55,13 @@ fun <T, Params> ViewModel.runUseCaseWithResult(
 }
 
 fun <T, U, Params> ViewModel.runUseCaseWithResultAndUseCachedData(
-    coroutineContext: CoroutineContext,
+    coroutineDispatcher: CoroutineDispatcher,
     cachedData: T?,
     liveData: MediatorLiveData<Event<UIResult<T>>>,
     useCase: BaseUseCaseWithResult<U, Params>,
     useCaseParams: Params
 ) {
-    viewModelScope.launch(coroutineContext) {
+    viewModelScope.launch(coroutineDispatcher) {
         liveData.postValue(Event(UIResult.Loading(cachedData)))
 
         val useCaseResult = useCase.execute(useCaseParams)
@@ -73,18 +73,3 @@ fun <T, U, Params> ViewModel.runUseCaseWithResultAndUseCachedData(
         }
     }
 }
-
-fun <T, Params> ViewModel.runUseCaseWithResultOnlyError(
-    coroutineContext: CoroutineContext,
-    showLoading: Boolean = false,
-    liveData: MediatorLiveData<Event<UIResult<T>>>,
-    useCase: BaseUseCaseWithResult<T, Params>,
-    useCaseParams: Params
-) = runUseCaseWithResult(
-    coroutineContext,
-    showLoading,
-    liveData,
-    useCase,
-    useCaseParams,
-    postSuccess = false
-)
