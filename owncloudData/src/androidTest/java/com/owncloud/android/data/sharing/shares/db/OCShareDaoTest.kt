@@ -20,7 +20,7 @@
 package com.owncloud.android.data.sharing.shares.db
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.filters.SmallTest
+import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
@@ -34,7 +34,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@SmallTest
+@MediumTest
 class OCShareDaoTest {
     @Rule
     @JvmField

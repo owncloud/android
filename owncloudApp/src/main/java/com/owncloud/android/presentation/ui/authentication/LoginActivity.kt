@@ -174,12 +174,8 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
     private fun initAuthTokenType() {
         authTokenType = intent?.extras?.getString(KEY_AUTH_TOKEN_TYPE)
-        if (authTokenType == null) {
-            if (userAccount != null) {
-                authenticationViewModel.supportsOAuth2((userAccount as Account).name)
-            } else { // OAuth will be the default authentication method
-                authTokenType = ""
-            }
+        if (authTokenType == null && userAccount != null) {
+            authenticationViewModel.supportsOAuth2((userAccount as Account).name)
         }
     }
 
