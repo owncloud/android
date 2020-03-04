@@ -46,9 +46,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountUtils {
-
-    public static final int ACCOUNT_VERSION = 1;
-
     /**
      * Constructs full url to host and webdav resource basing on host version
      *
@@ -331,5 +328,7 @@ public class AccountUtils {
          * OAuth2 scope
          */
         public static final String KEY_OAUTH2_SCOPE = "oc_oauth2_scope";
+
+        public static final int ACCOUNT_VERSION = 1;
     }
 }
