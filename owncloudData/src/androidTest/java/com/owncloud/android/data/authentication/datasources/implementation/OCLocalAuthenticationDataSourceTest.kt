@@ -1,0 +1,311 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author David González Verdugo
+ * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.owncloud.android.data.authentication.datasources.implementation
+
+import android.accounts.Account
+import android.accounts.AccountManager
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.filters.MediumTest
+import androidx.test.platform.app.InstrumentationRegistry
+import com.owncloud.android.domain.exceptions.AccountNotNewException
+import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.user.model.UserInfo
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_SCOPE
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
+import com.owncloud.android.testutil.ACCESS_TOKEN
+import com.owncloud.android.testutil.AUTH_TOKEN_TYPE
+import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_REDIRECTION_PATH
+import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.REFRESH_TOKEN
+import com.owncloud.android.testutil.SCOPE
+import io.mockk.every
+import io.mockk.mockkClass
+import io.mockk.verify
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+
+@MediumTest
+class OCLocalAuthenticationDataSourceTest {
+    @Rule
+    @JvmField
+    val instantExecutorRule = InstantTaskExecutorRule()
+
+    private lateinit var ocLocalAuthenticationDataSource: OCLocalAuthenticationDataSource
+    private val accountManager = mockkClass(AccountManager::class)
+
+    @Before
+    fun init() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+        ocLocalAuthenticationDataSource = OCLocalAuthenticationDataSource(
+            context,
+            accountManager,
+            OC_ACCOUNT.type
+        )
+    }
+
+    @Test
+    fun addBasicAccountOk() {
+        mockRegularAccountCreationFlow()
+
+        val newAccountName = ocLocalAuthenticationDataSource.addBasicAccount(
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            "admin",
+            "password",
+            OC_SERVER_INFO,
+            OC_USER_INFO,
+            false
+        )
+
+        val newAccount = Account("admin@demo.owncloud.com", "owncloud")
+
+        // One for checking if the account exists and another one for getting the new account
+        verifyAccountsByTypeAreGot(newAccount.type, 2)
+
+        verifyAccountIsExplicitlyAdded(newAccount, "password", 1)
+        verifyAccountInfoIsUpdated(newAccount, OC_SERVER_INFO, OC_USER_INFO, 1)
+
+        assertEquals(newAccount.name, newAccountName)
+    }
+
+    @Test(expected = AccountNotNewException::class)
+    fun addBasicAccountAlreadyExistsNoUpdate() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf(OC_ACCOUNT) // The account is already there
+
+        ocLocalAuthenticationDataSource.addBasicAccount(
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            "username",
+            "password",
+            OC_SERVER_INFO,
+            OC_USER_INFO,
+            false
+        )
+
+        // Just for checking if the account exists
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
+
+        // Account already exists so do not create it nor update it
+        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 0)
+    }
+
+    @Test()
+    fun addBasicAccountAlreadyExistsUpdate() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf(OC_ACCOUNT) // The account is already there
+
+        every {
+            accountManager.setUserData(any(), any(), any())
+        } returns Unit
+
+        ocLocalAuthenticationDataSource.addBasicAccount(
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            "username",
+            "password",
+            OC_SERVER_INFO,
+            OC_USER_INFO,
+            true
+        )
+
+        // One for checking if the account exists and another one for getting account to update
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 2)
+
+        // The account already exists so do not create it
+        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+
+        // The account already exists, so update it
+        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 1)
+    }
+
+    @Test
+    fun addOAuthAccountOk() {
+        mockRegularAccountCreationFlow()
+
+        every {
+            accountManager.setAuthToken(any(), any(), any())
+        } returns Unit
+
+        val newAccountName = ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            "admin",
+            AUTH_TOKEN_TYPE,
+            ACCESS_TOKEN,
+            OC_SERVER_INFO,
+            OC_USER_INFO,
+            REFRESH_TOKEN,
+            SCOPE,
+            false
+        )
+
+        val newAccount = Account("admin@demo.owncloud.com", "owncloud")
+
+        // One for checking if the account exists and another one for getting the new account
+        verifyAccountsByTypeAreGot(newAccount.type, 2)
+
+        verifyAccountIsExplicitlyAdded(newAccount, "", 1)
+        verifyAccountInfoIsUpdated(newAccount, OC_SERVER_INFO, OC_USER_INFO, 1)
+
+        // OAuth params are updated
+        verifyOAuthParamsAreUpdated(newAccount, ACCESS_TOKEN, "TRUE", REFRESH_TOKEN, SCOPE, 1)
+
+        assertEquals(newAccount.name, newAccountName)
+    }
+
+    @Test(expected = AccountNotNewException::class)
+    fun addOAuthAccountAlreadyExistsNoUpdate() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf(OC_ACCOUNT) // The account is already there
+
+        ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            "username",
+            AUTH_TOKEN_TYPE,
+            ACCESS_TOKEN,
+            OC_SERVER_INFO,
+            OC_USER_INFO,
+            REFRESH_TOKEN,
+            SCOPE,
+            false
+        )
+
+        // Just for checking if the account exists
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
+
+        // Account already exists so do not create it nor update it
+        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 0)
+        verifyOAuthParamsAreUpdated(OC_ACCOUNT, ACCESS_TOKEN, "TRUE", REFRESH_TOKEN, SCOPE, 0)
+    }
+
+    @Test()
+    fun addOAuthAccountAlreadyExistsUpdate() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf(OC_ACCOUNT) // The account is already there
+
+        every {
+            accountManager.setUserData(any(), any(), any())
+        } returns Unit
+
+        ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_REDIRECTION_PATH.lastPermanentLocation,
+            "username",
+            AUTH_TOKEN_TYPE,
+            ACCESS_TOKEN,
+            OC_SERVER_INFO,
+            OC_USER_INFO,
+            REFRESH_TOKEN,
+            SCOPE,
+            true
+        )
+
+        // One for checking if the account exists and another one for getting account to update
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 2)
+
+        // The account already exists so do not create it
+        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+
+        // The account already exists, so update it
+        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 1)
+        verifyOAuthParamsAreUpdated(OC_ACCOUNT, ACCESS_TOKEN, "TRUE", REFRESH_TOKEN, SCOPE, 1)
+    }
+
+    private fun mockRegularAccountCreationFlow() {
+        // Step 1: Get accounts to know if the current account exists
+        every {
+            accountManager.getAccountsByType("owncloud")
+        } returns arrayOf() // There's no accounts yet
+
+        // Step 2: Add new account
+        every {
+            accountManager.addAccountExplicitly(any(), any(), any())
+        } returns true
+
+        // Step 3: Update just created account
+        every {
+            accountManager.setUserData(any(), any(), any())
+        } returns Unit
+    }
+
+    private fun verifyAccountsByTypeAreGot(accountType: String, exactly: Int) {
+        verify(exactly = exactly) {
+            accountManager.getAccountsByType(accountType)
+        }
+    }
+
+    private fun verifyAccountIsExplicitlyAdded(
+        account: Account,
+        password: String,
+        exactly: Int
+    ) {
+        verify(exactly = exactly) {
+            accountManager.addAccountExplicitly(
+                account,
+                password,
+                null
+            )
+        }
+    }
+
+    private fun verifyAccountInfoIsUpdated(
+        account: Account,
+        serverInfo: ServerInfo,
+        userInfo: UserInfo,
+        exactly: Int
+    ) {
+        verify(exactly = exactly) {
+            // The account info is updated
+            accountManager.setUserData(account, KEY_OC_ACCOUNT_VERSION, ACCOUNT_VERSION.toString())
+            accountManager.setUserData(account, KEY_OC_VERSION, serverInfo.ownCloudVersion)
+            accountManager.setUserData(account, KEY_OC_BASE_URL, serverInfo.baseUrl)
+            accountManager.setUserData(account, KEY_DISPLAY_NAME, userInfo.displayName)
+        }
+    }
+
+    private fun verifyOAuthParamsAreUpdated(
+        account: Account,
+        accessToken: String,
+        supportsOAuth2: String,
+        refreshToken: String,
+        scope: String,
+        exactly: Int
+    ) {
+        verify(exactly = exactly) {
+            accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, accessToken)
+            accountManager.setUserData(account, KEY_SUPPORTS_OAUTH2, supportsOAuth2)
+            accountManager.setUserData(account, KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
+            accountManager.setUserData(account, KEY_OAUTH2_SCOPE, scope)
+        }
+    }
+}
