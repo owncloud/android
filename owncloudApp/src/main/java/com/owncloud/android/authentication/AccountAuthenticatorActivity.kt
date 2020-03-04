@@ -55,8 +55,8 @@ open class AccountAuthenticatorActivity : AppCompatActivity() {
      *
      * @param icicle the save instance data of this Activity, may be null
      */
-    override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         accountAuthenticatorResponse = intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
         accountAuthenticatorResponse?.onRequestContinued()
     }
