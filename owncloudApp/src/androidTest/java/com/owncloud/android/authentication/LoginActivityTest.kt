@@ -20,12 +20,16 @@
 
 package com.owncloud.android.authentication
 
+import android.accounts.AccountManager.KEY_ACCOUNT_NAME
+import android.accounts.AccountManager.KEY_ACCOUNT_TYPE
+import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.Visibility
@@ -37,9 +41,11 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
+import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.parseError
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
@@ -49,7 +55,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.hamcrest.CoreMatchers.not
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.koin.android.ext.koin.androidContext
@@ -57,6 +66,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import androidx.test.espresso.matcher.ViewMatchers.withText as withText1
 
 class LoginActivityTest {
 
@@ -64,25 +74,27 @@ class LoginActivityTest {
 
     private lateinit var ocAuthenticationViewModel: OCAuthenticationViewModel
     private lateinit var ocContextProvider: ContextProvider
+    private lateinit var context: Context
 
     private lateinit var loginResultLiveData: MutableLiveData<Event<UIResult<String>>>
     private lateinit var serverInfoLiveData: MutableLiveData<Event<UIResult<ServerInfo>>>
 
     @Before
     fun setUp() {
+        context = ApplicationProvider.getApplicationContext<Context>()
+
         ocAuthenticationViewModel = mockk(relaxed = true)
         ocContextProvider = mockk(relaxed = true)
 
         loginResultLiveData = MutableLiveData()
         serverInfoLiveData = MutableLiveData()
-
         every { ocAuthenticationViewModel.loginResult } returns loginResultLiveData
         every { ocAuthenticationViewModel.serverInfo } returns serverInfoLiveData
 
         stopKoin()
 
         startKoin {
-            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            context
             modules(
                 module(override = true) {
                     viewModel {
@@ -109,17 +121,20 @@ class LoginActivityTest {
      * R.string.server_url = ""
      * R.bool.use_login_background_image = true
      * R.bool.show_welcome_link = true
+     * R.string.account_type = "owncloud"
      */
     private fun launchTest(
         showServerUrlInput: Boolean = true,
         serverUrl: String = "",
         showLoginBackGroundImage: Boolean = true,
-        showWelcomeLink: Boolean = true
+        showWelcomeLink: Boolean = true,
+        accountType: String = "owncloud"
     ) {
         every { ocContextProvider.getBoolean(R.bool.show_server_url_input) } returns showServerUrlInput
         every { ocContextProvider.getString(R.string.server_url) } returns serverUrl
         every { ocContextProvider.getBoolean(R.bool.use_login_background_image) } returns showLoginBackGroundImage
         every { ocContextProvider.getBoolean(R.bool.show_welcome_link) } returns showWelcomeLink
+        every { ocContextProvider.getString(R.string.account_type) } returns accountType
 
         activityScenario = ActivityScenario.launch(LoginActivity::class.java)
     }
@@ -256,7 +271,7 @@ class LoginActivityTest {
 
         onView(withId(R.id.server_status_text))
             .check(matches(isDisplayed()))
-            .check(matches(withText(R.string.auth_testing_connection)))
+            .check(matches(withText1(R.string.auth_testing_connection)))
     }
 
     @Test
@@ -281,7 +296,7 @@ class LoginActivityTest {
         onView(withId(R.id.server_status_text))
             .check(matches(isDisplayed()))
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-            .check(matches(withText(R.string.auth_secure_connection)))
+            .check(matches(withText1(R.string.auth_secure_connection)))
     }
 
     @Test
@@ -292,7 +307,7 @@ class LoginActivityTest {
         onView(withId(R.id.server_status_text))
             .check(matches(isDisplayed()))
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-            .check(matches(withText(R.string.auth_connection_established)))
+            .check(matches(withText1(R.string.auth_connection_established)))
     }
 
     @Test
@@ -301,7 +316,7 @@ class LoginActivityTest {
 
         serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
 
-        checkBasicFieldsVisibility()
+        checkBasicFieldsVisibility(loginButtonShouldBeVisible = false)
     }
 
     @Test
@@ -336,7 +351,7 @@ class LoginActivityTest {
 
         serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
 
-        checkBasicFieldsVisibility()
+        checkBasicFieldsVisibility(loginButtonShouldBeVisible = false)
     }
 
     @Test
@@ -429,7 +444,7 @@ class LoginActivityTest {
         onView(withId(R.id.server_status_text))
             .check(matches(isDisplayed()))
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-            .check(matches(withText(R.string.auth_can_not_auth_against_server)))
+            .check(matches(withText1(R.string.auth_can_not_auth_against_server)))
 
         verify(exactly = 0) { ocAuthenticationViewModel.getServerInfo(any()) }
     }
@@ -437,13 +452,13 @@ class LoginActivityTest {
     @Test
     fun checkServerInfo_isError_ownCloudVersionNotSupported() {
         launchTest()
-
-        serverInfoLiveData.postValue(Event(UIResult.Error(OwncloudVersionNotSupportedException())))
+        val exception = OwncloudVersionNotSupportedException()
+        serverInfoLiveData.postValue(Event(UIResult.Error(exception)))
 
         onView(withId(R.id.server_status_text))
             .check(matches(isDisplayed()))
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-            .check(matches(withText(R.string.server_not_supported)))
+            .check(matches(withText1(R.string.server_not_supported)))
     }
 
     @Test
@@ -455,7 +470,7 @@ class LoginActivityTest {
         onView(withId(R.id.server_status_text))
             .check(matches(isDisplayed()))
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-            .check(matches(withText(R.string.error_no_network_connection)))
+            .check(matches(withText1(R.string.error_no_network_connection)))
     }
 
     @Test
@@ -467,31 +482,38 @@ class LoginActivityTest {
         onView(withId(R.id.server_status_text))
             .check(matches(isDisplayed()))
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-            .check(matches(withText(R.string.network_host_not_available)))
+            .check(matches(withText1(R.string.network_host_not_available)))
     }
 
-    private fun checkBasicFieldsVisibility() {
-        launchTest()
+    private fun checkBasicFieldsVisibility(
+        fieldsShouldBeVisible: Boolean = true,
+        loginButtonShouldBeVisible: Boolean = false
+    ) {
+        val visibilityMatcherFields =
+            withEffectiveVisibility(if (fieldsShouldBeVisible) Visibility.VISIBLE else Visibility.GONE)
+        val isDisplayedMatcherFields = if (fieldsShouldBeVisible) isDisplayed() else not(isDisplayed())
+
+        val visibilityMatcherLoginButton =
+            withEffectiveVisibility(if (loginButtonShouldBeVisible) Visibility.VISIBLE else Visibility.GONE)
 
         onView(withId(R.id.account_username))
-            .check(matches(isDisplayed()))
-            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .check(matches(isDisplayedMatcherFields))
+            .check(matches(visibilityMatcherFields))
             .check(matches(withText("")))
 
         onView(withId(R.id.account_password))
-            .check(matches(isDisplayed()))
-            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .check(matches(isDisplayedMatcherFields))
+            .check(matches(visibilityMatcherFields))
             .check(matches(withText("")))
 
         onView(withId(R.id.loginButton))
-            .check(matches(withEffectiveVisibility(Visibility.GONE)))
+            .check(matches(visibilityMatcherLoginButton))
 
         onView(withId(R.id.auth_status_text))
-            .check(matches(withEffectiveVisibility(Visibility.GONE)))
+            .check(matches(visibilityMatcherLoginButton))
     }
 
     private fun checkBearerFieldsVisibility() {
-        launchTest()
 
         onView(withId(R.id.account_username))
             .check(matches(withEffectiveVisibility(Visibility.GONE)))
@@ -513,7 +535,7 @@ class LoginActivityTest {
         onView(withId(R.id.server_status_text))
             .check(matches(isDisplayed()))
             .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-            .check(matches(withText(R.string.auth_unsupported_auth_method)))
+            .check(matches(withText1(R.string.auth_unsupported_auth_method)))
 
         onView(withId(R.id.account_username))
             .check(matches(withEffectiveVisibility(Visibility.GONE)))
@@ -526,6 +548,140 @@ class LoginActivityTest {
 
         onView(withId(R.id.auth_status_text))
             .check(matches(withEffectiveVisibility(Visibility.GONE)))
+    }
+
+    @Test
+    fun loginBasic_callLoginBasic() {
+        launchTest()
+
+        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
+
+        onView(withId(R.id.account_username))
+            .perform(typeText("username"))
+
+        onView(withId(R.id.account_password))
+            .perform(typeText("password"))
+
+        onView(withId(R.id.loginButton))
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        verify(exactly = 1) { ocAuthenticationViewModel.loginBasic("username", "password", false) }
+    }
+
+    @Test
+    fun loginBasic_showOrHideFields() {
+        launchTest()
+
+        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
+
+        onView(withId(R.id.account_username))
+            .perform(typeText("username"))
+
+        onView(withId(R.id.loginButton))
+            .check(matches(not(isDisplayed())))
+
+        onView(withId(R.id.account_password))
+            .perform(typeText("password"))
+
+        onView(withId(R.id.loginButton))
+            .check(matches(isDisplayed()))
+
+        onView(withId(R.id.account_username))
+            .perform(replaceText(""))
+
+        onView(withId(R.id.loginButton))
+            .check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun login_isLoading() {
+        launchTest()
+
+        loginResultLiveData.postValue(Event(UIResult.Loading()))
+
+        onView(withId(R.id.auth_status_text))
+            .check(matches(withText1(R.string.auth_trying_to_login)))
+            .check(matches(isDisplayed()))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun login_isSuccess_finishResultCode() {
+        launchTest()
+
+        loginResultLiveData.postValue(Event(UIResult.Success(data = "Account_name")))
+
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
+        val accountName: String? = activityScenario.result?.resultData?.extras?.getString(KEY_ACCOUNT_NAME)
+        val accountType: String? = activityScenario.result?.resultData?.extras?.getString(KEY_ACCOUNT_TYPE)
+
+        assertNotNull(accountName)
+        assertNotNull(accountType)
+        assertEquals("Account_name", accountName)
+        assertEquals("owncloud", accountType)
+    }
+
+    @Test
+    fun login_isSuccess_finishResultCodeBrandedAccountType() {
+        launchTest(accountType = "notOwnCloud")
+
+        loginResultLiveData.postValue(Event(UIResult.Success(data = "Account_name")))
+
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
+        val accountName: String? = activityScenario.result?.resultData?.extras?.getString(KEY_ACCOUNT_NAME)
+        val accountType: String? = activityScenario.result?.resultData?.extras?.getString(KEY_ACCOUNT_TYPE)
+
+        assertNotNull(accountName)
+        assertNotNull(accountType)
+        assertEquals("Account_name", accountName)
+        assertEquals("notOwnCloud", accountType)
+    }
+
+    @Test
+    fun login_isError_NoNetworkConnectionException() {
+        launchTest()
+
+        loginResultLiveData.postValue(Event(UIResult.Error(NoNetworkConnectionException())))
+
+        onView(withId(R.id.server_status_text))
+            .check(matches(withText1(R.string.error_no_network_connection)))
+
+        checkBasicFieldsVisibility(fieldsShouldBeVisible = false)
+    }
+
+    @Test
+    fun login_isError_ServerNotReachableException() {
+        launchTest()
+
+        loginResultLiveData.postValue(Event(UIResult.Error(ServerNotReachableException())))
+
+        onView(withId(R.id.server_status_text))
+            .check(matches(withText1(R.string.error_no_network_connection)))
+
+        checkBasicFieldsVisibility(fieldsShouldBeVisible = false)
+    }
+
+    @Test
+    fun login_isError_OtherException() {
+        launchTest()
+
+        val exception = UnauthorizedException()
+
+        loginResultLiveData.postValue(Event(UIResult.Error(exception)))
+
+        onView(withId(R.id.auth_status_text))
+            .check(
+                matches(
+                    withText(
+                        exception.parseError(
+                            context.getString(R.string.auth_error),
+                            context.resources
+                        ) as String
+                    )
+                )
+            )
+
     }
 
     companion object {

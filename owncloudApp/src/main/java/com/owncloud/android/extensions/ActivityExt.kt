@@ -33,11 +33,15 @@ fun Activity.showMessageInSnackbar(
     duration: Int = Snackbar.LENGTH_LONG
 ) = Snackbar.make(findViewById(android.R.id.content), message, duration).show()
 
-fun Activity.showErrorInToastShortLength(genericErrorMessageId: Int, throwable: Throwable?) =
+fun Activity.showErrorInToast(
+    genericErrorMessageId: Int,
+    throwable: Throwable?,
+    duration: Int = Toast.LENGTH_SHORT
+) =
     throwable?.let {
         Toast.makeText(
             this,
             it.parseError(getString(genericErrorMessageId), resources),
-            Toast.LENGTH_SHORT
+            duration
         ).show()
     }

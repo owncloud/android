@@ -39,7 +39,6 @@ import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
@@ -52,14 +51,13 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.extensions.parseError
-import com.owncloud.android.extensions.showErrorInToastShortLength
+import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.ui.dialog.LoadingDialog
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
@@ -154,7 +152,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         authenticationViewModel.supportsOAuth2.observe(this, Observer { event ->
             when (event.peekContent()) {
                 is UIResult.Success -> updateAuthTokenTypeAndInstructions(event.peekContent())
-                is UIResult.Error -> showErrorInToastShortLength(
+                is UIResult.Error -> showErrorInToast(
                     R.string.supports_oauth2_error,
                     event.peekContent().getThrowableOrNull()
                 )
@@ -164,7 +162,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         authenticationViewModel.baseUrl.observe(this, Observer { event ->
             when (event.peekContent()) {
                 is UIResult.Success -> updateBaseUrlAndHostInput(event.peekContent())
-                is UIResult.Error -> showErrorInToastShortLength(
+                is UIResult.Error -> showErrorInToast(
                     R.string.get_base_url_error,
                     event.peekContent().getThrowableOrNull()
                 )
@@ -308,13 +306,16 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     }
 
     private fun loginIsSuccess(uiResult: UIResult<String>) {
-        dismissLoadingDialog()
+        auth_status_text.run {
+            isVisible = false
+            text = ""
+        }
 
         // Return result to account authenticator, multiaccount does not work without this
         val accountName = uiResult.getStoredData()
         val intent = Intent()
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName)
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType)
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, contextProvider.getString(R.string.account_type))
         setAccountAuthenticatorResult(intent.extras)
         setResult(Activity.RESULT_OK, intent)
 
@@ -324,21 +325,24 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     }
 
     private fun loginIsLoading() {
-        showLoadingDialog()
+        auth_status_text.run {
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
+            isVisible = true
+            text = getString(R.string.auth_trying_to_login)
+        }
     }
 
     private fun loginIsError(uiResult: UIResult<String>) {
-        dismissLoadingDialog()
         when (uiResult.getThrowableOrNull()) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {
                 server_status_text.run {
-                    text = contextProvider.getString(R.string.error_no_network_connection)
+                    text = getString(R.string.error_no_network_connection)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
                 }
                 showOrHideBasicAuthFields(shouldBeVisible = false)
             }
             else -> auth_status_text.run {
-                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
+                text = uiResult.getThrowableOrNull()?.parseError(getString(R.string.auth_error), resources)
                 isVisible = true
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
@@ -436,8 +440,8 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     }
 
     private fun updateBaseUrlAndHostInput(uiResult: UIResult<String>) {
-        if (uiResult.getStoredData() != null) {
-            serverBaseUrl = uiResult.getStoredData() as String
+        uiResult.getStoredData()?.let { serverUrl ->
+            serverBaseUrl = serverUrl
 
             hostUrlInput.run {
                 setText(serverBaseUrl)
@@ -476,19 +480,6 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         Toast.makeText(this, R.string.ssl_validator_not_saved, Toast.LENGTH_LONG).show()
     }
 
-    // TODO: Create an extension to show or hide a loading dialog from an activity.
-    private fun showLoadingDialog() {
-        val dialog = LoadingDialog.newInstance(R.string.auth_trying_to_login, true)
-        dialog.show(supportFragmentManager, WAIT_DIALOG_TAG)
-    }
-
-    private fun dismissLoadingDialog() {
-        val frag = supportFragmentManager.findFragmentByTag(WAIT_DIALOG_TAG)
-        if (frag is DialogFragment) {
-            frag.dismiss()
-        }
-    }
-
     /* Show or hide Basic Auth fields and reset its values */
     private fun showOrHideBasicAuthFields(shouldBeVisible: Boolean) {
         account_username_container.run {
@@ -512,6 +503,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
             isVisible = false
             text = ""
         }
+        loginButton.isVisible = false
     }
 
     private fun initBrandableOptionsUI() {

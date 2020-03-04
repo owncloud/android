@@ -94,7 +94,7 @@ class OCCapabilityViewModelTest {
         ocCapabilityViewModel = OCCapabilityViewModel(
             accountName = testAccountName,
             getCapabilitiesAsLiveDataUseCase = getCapabilitiesAsLiveDataUseCase,
-            refreshCapabilitiesFromServerUseCase = refreshCapabilitiesFromServerUseCase,
+            refreshCapabilitiesFromServerAsyncUseCase = refreshCapabilitiesFromServerUseCase,
             coroutineDispatcherProvider = coroutineDispatcherProvider
         )
     }

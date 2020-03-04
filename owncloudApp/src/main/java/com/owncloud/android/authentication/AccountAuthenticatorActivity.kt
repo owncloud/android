@@ -53,7 +53,7 @@ open class AccountAuthenticatorActivity : AppCompatActivity() {
      * Retrieves the AccountAuthenticatorResponse from either the intent of the icicle, if the
      * icicle is non-zero.
      *
-     * @param icicle the save instance data of this Activity, may be null
+     * @param savedInstanceState the save instance data of this Activity, may be null
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
