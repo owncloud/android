@@ -35,7 +35,6 @@ import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServ
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.runUseCaseWithResult
 import com.owncloud.android.extensions.runUseCaseWithResultAndUseCachedData
-import com.owncloud.android.extensions.runUseCaseWithResultOnlyError
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 
@@ -72,7 +71,7 @@ class OCShareViewModel(
     }
 
     private fun refreshSharesFromNetwork() = runUseCaseWithResultAndUseCachedData(
-        coroutineContext = coroutineDispatcherProvider.io,
+        coroutineDispatcher = coroutineDispatcherProvider.io,
         cachedData = sharesLiveData.value,
         liveData = _shares,
         useCase = refreshSharesFromServerAsyncUseCase,
@@ -87,14 +86,15 @@ class OCShareViewModel(
 
     fun deleteShare(
         remoteId: Long
-    ) = runUseCaseWithResultOnlyError(
-        coroutineContext = coroutineDispatcherProvider.io,
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutineDispatcherProvider.io,
         showLoading = true,
         liveData = _shareDeletionStatus,
         useCase = deletePublicShareUseCase,
         useCaseParams = DeleteShareAsyncUseCase.Params(
             remoteId
-        )
+        ),
+        postSuccess = false
     )
 
     /******************************************************************************************************
@@ -111,7 +111,7 @@ class OCShareViewModel(
         permissions: Int,
         accountName: String
     ) = runUseCaseWithResult(
-        coroutineContext = coroutineDispatcherProvider.io,
+        coroutineDispatcher = coroutineDispatcherProvider.io,
         showLoading = true,
         liveData = _privateShareCreationStatus,
         useCase = createPrivateShareUseCase,
@@ -147,8 +147,8 @@ class OCShareViewModel(
         remoteId: Long,
         permissions: Int,
         accountName: String
-    ) = runUseCaseWithResultOnlyError(
-        coroutineContext = coroutineDispatcherProvider.io,
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutineDispatcherProvider.io,
         showLoading = true,
         liveData = _privateShareEditionStatus,
         useCase = editPrivateShareUseCase,
@@ -156,7 +156,8 @@ class OCShareViewModel(
             remoteId,
             permissions,
             accountName
-        )
+        ),
+        postSuccess = false
     )
 
     /******************************************************************************************************
@@ -175,7 +176,7 @@ class OCShareViewModel(
         publicUpload: Boolean,
         accountName: String
     ) = runUseCaseWithResult(
-        coroutineContext = coroutineDispatcherProvider.io,
+        coroutineDispatcher = coroutineDispatcherProvider.io,
         showLoading = true,
         liveData = _publicShareCreationStatus,
         useCase = createPublicShareUseCase,
@@ -202,7 +203,7 @@ class OCShareViewModel(
         publicUpload: Boolean,
         accountName: String
     ) = runUseCaseWithResult(
-        coroutineContext = coroutineDispatcherProvider.io,
+        coroutineDispatcher = coroutineDispatcherProvider.io,
         showLoading = true,
         liveData = _publicShareEditionStatus,
         useCase = editPublicShareUseCase,

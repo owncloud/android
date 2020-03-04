@@ -7,4 +7,4 @@ const val OC_ACCOUNT_NAME = "admin@server"
 /**
  * Accounts
  */
-val OC_ACCOUNT = Account("ownCloudTestAccount", "owncloud")
+val OC_ACCOUNT = Account("username@demo.owncloud.com", "owncloud")
