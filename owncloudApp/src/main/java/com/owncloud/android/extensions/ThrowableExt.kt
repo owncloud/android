@@ -39,6 +39,7 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.ServerResponseTimeoutException
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
+import java.util.Locale
 
 fun Throwable.parseError(
     genericErrorMessage: String,
@@ -71,13 +72,10 @@ fun Throwable.parseError(
         }
 
         return when {
-            reason.isEmpty() -> {
-                genericErrorMessage
-            }
             showJustReason -> {
                 reason
             }
-            else -> "$genericErrorMessage ${resources.getString(R.string.error_reason)} $reason"
+            else -> "$genericErrorMessage ${resources.getString(R.string.error_reason)} ${reason.toLowerCase(Locale.getDefault())}"
         }
     }
 }

@@ -50,6 +50,8 @@ import net.openid.appauth.GrantTypeValues;
 import net.openid.appauth.TokenRequest;
 import timber.log.Timber;
 
+import static com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants.KEY_AUTH_TOKEN_TYPE;
+
 /**
  * Authenticator for ownCloud accounts.
  *
@@ -62,7 +64,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      * Is used by android system to assign accounts to authenticators. Should be
      * used by application and all extensions.
      */
-    static final String KEY_AUTH_TOKEN_TYPE = "authTokenType";
     private static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
     private static final String KEY_LOGIN_OPTIONS = "loginOptions";
     public static final String KEY_ACCOUNT = "account";

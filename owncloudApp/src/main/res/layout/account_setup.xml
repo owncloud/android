@@ -192,9 +192,9 @@
                 android:contentDescription="@string/auth_unauthorized"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
-                android:text="@string/auth_unauthorized"
                 android:textColor="@color/login_credentials_text_color"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:text="@string/auth_unauthorized" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/loginButton"
