@@ -37,7 +37,7 @@
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Manage accounts</string>
   <string name="prefs_passcode">Passcode lock</string>
-  <string name="prefs_biometric">Fingerprint lock</string>
+  <string name="prefs_biometric">Biometric lock</string>
   <string name="prefs_biometric_summary">Enable passcode or pattern lock to enable this option</string>
   <string name="prefs_touches_with_other_visible_windows">Touches with other visible windows</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
@@ -224,8 +224,8 @@
   <string name="pass_code_wrong">Incorrect passcode</string>
   <string name="pass_code_removed">Passcode removed</string>
   <string name="pass_code_stored">Passcode stored</string>
-  <string name="biometric_not_hardware_detected">This device doesn\'t support fingerprint authentication</string>
-  <string name="biometric_not_enrolled">Register at least one fingerprint to use this feature</string>
+  <string name="biometric_not_hardware_detected">This device doesn\'t support biometric authentication</string>
+  <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
   <string name="media_notif_ticker">%1$s music player</string>
   <string name="media_state_playing">%1$s (playing)</string>
   <string name="media_state_loading">%1$s (loading)</string>
