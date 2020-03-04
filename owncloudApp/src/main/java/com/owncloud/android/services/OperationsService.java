@@ -6,16 +6,16 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * Copyright (C) 2020 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -53,7 +53,6 @@ import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
-import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RenameFileOperation;
@@ -84,7 +83,6 @@ public class OperationsService extends Service {
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
-    public static final String ACTION_GET_SERVER_INFO = "GET_SERVER_INFO";
     public static final String ACTION_GET_USER_NAME = "GET_USER_NAME";
     public static final String ACTION_RENAME = "RENAME";
     public static final String ACTION_REMOVE = "REMOVE";
@@ -280,16 +278,6 @@ public class OperationsService extends Service {
         }
 
         /**
-         * TODO - IMPORTANT: update implementation when more operations are moved into the service
-         *
-         * @return 'True' when an operation that enforces the user to wait for completion is
-         * in process.
-         */
-        public boolean isPerformingBlockingOperation() {
-            return (!mServiceHandler.mPendingOperations.isEmpty());
-        }
-
-        /**
          * Creates and adds to the queue a new operation, as described by operationIntent.
          *
          * Calls startService to make the operation is processed by the ServiceHandler.
@@ -408,15 +396,8 @@ public class OperationsService extends Service {
                             OwnCloudCredentials credentials = null;
                             ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
 
-                            if (currentOperation instanceof GetServerInfoOperation) { // Use clean client
-                                mOwnCloudClient = OwnCloudClientFactory.createOwnCloudClient(
-                                        ocAccount.getBaseUri(),
-                                        mService,
-                                        true);
-                            } else {
-                                mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
-                                        getClientFor(ocAccount, mService);
-                            }
+                            mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
+                                    getClientFor(ocAccount, mService);
 
                             mStorageManager = null;
                         }
@@ -486,11 +467,6 @@ public class OperationsService extends Service {
                 String action = operationIntent.getAction();
                 if (action != null) {
                     switch (action) {
-                        case ACTION_GET_SERVER_INFO:
-                            // check OC server and get basic information from it
-                            operation = new GetServerInfoOperation(serverUrl, OperationsService.this);
-
-                            break;
                         case ACTION_GET_USER_NAME:
                             // Get User Name
                             operation = new GetRemoteUserInfoOperation();
@@ -580,46 +556,6 @@ public class OperationsService extends Service {
         } else {
             return null;
         }
-    }
-
-    /**
-     * Sends a broadcast when a new operation is added to the queue.
-     *
-     * Local broadcasts are only delivered to activities in the same process, but can't be
-     * done sticky :\
-     *
-     * @param target Account or URL pointing to an OC server.
-     */
-    private void sendBroadcastNewOperation(Target target) {
-        Intent intent = new Intent(ACTION_OPERATION_ADDED);
-        if (target.mAccount != null) {
-            intent.putExtra(EXTRA_ACCOUNT, target.mAccount);
-        } else {
-            intent.putExtra(EXTRA_SERVER_URL, target.mServerUrl);
-        }
-        mLocalBroadcastManager.sendBroadcast(intent);
-    }
-
-    // TODO - maybe add a notification for real start of operations
-
-    /**
-     * Sends a LOCAL broadcast when an operations finishes in order to the interested activities c
-     * an update their view
-     *
-     * Local broadcasts are only delivered to activities in the same process.
-     *
-     * @param target Account or URL pointing to an OC server.
-     * @param result Result of the operation.
-     */
-    private void sendBroadcastOperationFinished(Target target, RemoteOperationResult result) {
-        Intent intent = new Intent(ACTION_OPERATION_FINISHED);
-        intent.putExtra(EXTRA_RESULT, result);
-        if (target.mAccount != null) {
-            intent.putExtra(EXTRA_ACCOUNT, target.mAccount);
-        } else {
-            intent.putExtra(EXTRA_SERVER_URL, target.mServerUrl);
-        }
-        mLocalBroadcastManager.sendBroadcast(intent);
     }
 
     /**

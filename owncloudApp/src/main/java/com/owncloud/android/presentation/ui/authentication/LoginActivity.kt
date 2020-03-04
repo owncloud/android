@@ -443,18 +443,16 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         if (uiResult.getStoredData() != null) {
             serverBaseUrl = uiResult.getStoredData() as String
 
-            hostUrlInput.setText(serverBaseUrl)
-            hostUrlInput.isEnabled = false;
-            hostUrlInput.isFocusable = false;
+            hostUrlInput.run {
+                setText(serverBaseUrl)
+                isEnabled = false
+                isFocusable = false
+            }
 
             if (loginAction != ACTION_CREATE && serverBaseUrl.isNotEmpty()) {
                 checkOcServer()
             }
         }
-    }
-
-    private fun updateAccount() {
-
     }
 
     /**
