@@ -21,7 +21,7 @@ package com.owncloud.android.data.user.datasources
 
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
-import com.owncloud.android.data.user.network.OCUserService
+import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.users.RemoteUserInfo
 import com.owncloud.android.testutil.OC_USER_INFO

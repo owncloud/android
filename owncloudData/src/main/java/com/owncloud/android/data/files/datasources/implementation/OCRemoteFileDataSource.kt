@@ -20,7 +20,7 @@
 package com.owncloud.android.data.files.datasources.implementation
 
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
-import com.owncloud.android.lib.resources.files.FileService
+import com.owncloud.android.lib.resources.files.services.FileService
 
 class OCRemoteFileDataSource(
     private val fileService: FileService

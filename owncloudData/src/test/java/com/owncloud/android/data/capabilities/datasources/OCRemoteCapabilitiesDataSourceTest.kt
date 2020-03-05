@@ -21,7 +21,7 @@
 package com.owncloud.android.data.capabilities.datasources
 
 import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.network.OCCapabilityService
+import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY

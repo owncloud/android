@@ -22,7 +22,7 @@ package com.owncloud.android.data.shares.datasources
 
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
-import com.owncloud.android.data.sharing.shares.network.OCShareService
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
 import com.owncloud.android.domain.exceptions.ShareForbiddenException
 import com.owncloud.android.domain.exceptions.ShareNotFoundException
 import com.owncloud.android.domain.sharing.shares.model.ShareType

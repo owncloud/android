@@ -20,7 +20,7 @@
 package com.owncloud.android.data.shares.datasources
 
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
-import com.owncloud.android.data.sharing.sharees.network.OCShareeService
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
