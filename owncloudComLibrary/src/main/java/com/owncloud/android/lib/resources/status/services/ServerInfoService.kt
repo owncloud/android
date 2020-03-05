@@ -21,11 +21,13 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.resources.files
+package com.owncloud.android.lib.resources.status.services
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.Service
+import com.owncloud.android.lib.resources.status.OwnCloudVersion
 
-interface FileService: Service {
+interface ServerInfoService {
     fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Boolean>
+
+    fun getRemoteStatus(path: String): RemoteOperationResult<OwnCloudVersion>
 }
