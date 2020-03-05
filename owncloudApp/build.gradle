@@ -15,7 +15,7 @@ dependencies {
     // Dependencies for app building
     implementation "androidx.legacy:legacy-support-v4:$androidX"
     implementation "androidx.annotation:annotation:1.1.0"
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.jakewharton:disklrucache:2.0.2'
     implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
@@ -53,7 +53,7 @@ dependencies {
         exclude module: 'objenesis'
     }
     androidTestImplementation 'com.github.tmurakami:dexopener:2.0.4'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
 
     // Image loading
     implementation('com.github.bumptech.glide:glide:4.6.1') {
@@ -66,7 +66,7 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
 
     // Convert Java Objects into JSON and back
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 

@@ -7,10 +7,10 @@ buildscript {
 
         // Android jetpack
         archLifecycleVersion = "2.1.0"
-        roomVersion = "2.2.2"
+        roomVersion = "2.2.4"
         appCompat = "1.1.0"
-        sqliteVersion = "2.0.1"
-        lifecycleLiveData = "2.0.0"
+        sqliteVersion = "2.1.0"
+        lifecycleLiveData = "2.2.0"
         biometricVersion="1.0.1"
 
         // Kotlin
@@ -35,9 +35,9 @@ buildscript {
         ktxVersion = "1.1.0"
 
         // KTX extensions
-        ktxCoreVersion = "1.1.0"
-        ktxViewModelVersion = "2.2.0-alpha01"
-        ktxFragmentVersion = "1.0.0"
+        ktxCoreVersion = "1.2.0"
+        ktxViewModelVersion = "2.2.0"
+        ktxFragmentVersion = "1.2.2"
         ktxLiveData = "2.1.0"
     }
 
