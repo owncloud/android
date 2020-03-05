@@ -23,7 +23,7 @@ import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.domain.user.model.UserInfo
-import com.owncloud.android.lib.resources.users.UserService
+import com.owncloud.android.lib.resources.users.services.UserService
 
 class OCRemoteUserDataSource(
     private val userService: UserService,

@@ -23,7 +23,7 @@ import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesData
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.lib.resources.status.CapabilityService
+import com.owncloud.android.lib.resources.status.services.CapabilityService
 
 class OCRemoteCapabilitiesDataSource(
     private val capabilityService: CapabilityService,

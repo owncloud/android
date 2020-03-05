@@ -25,7 +25,7 @@ import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedExcepti
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.status.ServerInfoService
+import com.owncloud.android.lib.resources.status.services.ServerInfoService
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 
 class OCRemoteServerInfoDataSource(

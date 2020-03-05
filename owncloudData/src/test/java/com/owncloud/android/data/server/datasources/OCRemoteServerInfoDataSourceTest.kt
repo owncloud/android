@@ -20,7 +20,7 @@
 package com.owncloud.android.data.server.datasources
 
 import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerInfoDataSource
-import com.owncloud.android.data.server.network.OCServerInfoService
+import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.lib.common.http.HttpConstants.HTTP_UNAUTHORIZED
 import com.owncloud.android.lib.common.operations.RemoteOperationResult

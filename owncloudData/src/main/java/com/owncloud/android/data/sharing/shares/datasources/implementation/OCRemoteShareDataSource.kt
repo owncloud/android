@@ -24,7 +24,7 @@ import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSourc
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.lib.resources.shares.ShareService
+import com.owncloud.android.lib.resources.shares.services.ShareService
 
 class OCRemoteShareDataSource(
     private val shareService: ShareService,
