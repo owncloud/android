@@ -121,7 +121,8 @@ class OCShareViewModel(
             shareeName,
             permissions,
             accountName
-        )
+        ),
+        postSuccessWithData = false
     )
 
     private val _privateShare = MediatorLiveData<Event<UIResult<OCShare>>>()
@@ -188,7 +189,8 @@ class OCShareViewModel(
             expirationTimeInMillis,
             publicUpload,
             accountName
-        )
+        ),
+        postSuccessWithData = false
     )
 
     private val _publicShareEditionStatus = MediatorLiveData<Event<UIResult<Unit>>>()
@@ -215,6 +217,7 @@ class OCShareViewModel(
             permissions,
             publicUpload,
             accountName
-        )
+        ),
+        postSuccessWithData = false
     )
 }
