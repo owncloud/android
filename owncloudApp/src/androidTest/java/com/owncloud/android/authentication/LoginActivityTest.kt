@@ -61,7 +61,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -424,7 +423,7 @@ class LoginActivityTest {
 
         onView(withId(R.id.hostUrlInput))
             .check(matches(isDisplayed()))
-            .perform(typeText("demo.owncloud.com"))
+            .perform(replaceText("demo.owncloud"))
 
         onView(withId(R.id.loginButton))
             .check(matches(withEffectiveVisibility(Visibility.GONE)))
@@ -675,13 +674,13 @@ class LoginActivityTest {
                 matches(
                     withText(
                         exception.parseError(
-                            context.getString(R.string.auth_error),
-                            context.resources
+                            "",
+                            context.resources,
+                            true
                         ) as String
                     )
                 )
             )
-
     }
 
     companion object {
