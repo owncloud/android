@@ -32,7 +32,7 @@ class LoginOAuthAsyncUseCase(
         require(params.username.isNotEmpty()) { "Invalid username" }
         require(params.authTokenType.isNotEmpty()) { "Invalid authorization token type" }
         require(params.accessToken.isNotEmpty()) { "Invalid access token" }
-        require(params.accessToken.isNotEmpty()) { "Invalid refresh token" }
+        require(params.refreshToken.isNotEmpty()) { "Invalid refresh token" }
 
         val accountName = authenticationRepository.loginOAuth(
             params.serverInfo,

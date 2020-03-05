@@ -19,6 +19,8 @@
 package com.owncloud.android.domain.authentication.usecases
 
 import com.owncloud.android.domain.authentication.AuthenticationRepository
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -30,62 +32,63 @@ import org.junit.Test
 
 class LoginBasicAsyncUseCaseTest {
     private val authRepository: AuthenticationRepository = spyk()
-    private val useCase = LoginBasicAsyncUseCase(authRepository)
-    private val useCaseParams = LoginBasicAsyncUseCase.Params(
-        serverPath = "https://demo.owncloud.com",
+    private val loginBasicUseCase = LoginBasicAsyncUseCase(authRepository)
+    private val loginBasicUseCaseParams = LoginBasicAsyncUseCase.Params(
+        serverInfo = OC_SERVER_INFO,
         username = "test",
-        password = "test"
+        password = "test",
+        updateAccountIfAlreadyExists = false
     )
 
     @Test
     fun invalidParams() {
-        var invalidUseCaseParams = useCaseParams.copy(serverPath = "")
-        var useCaseResult = useCase.execute(invalidUseCaseParams)
+        var invalidLoginBasicUseCaseParams = loginBasicUseCaseParams.copy(serverInfo = null)
+        var loginBasicUseCaseResult = loginBasicUseCase.execute(invalidLoginBasicUseCaseParams)
 
-        assertTrue(useCaseResult.isError)
-        assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
+        assertTrue(loginBasicUseCaseResult.isError)
+        assertTrue(loginBasicUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        invalidUseCaseParams = useCaseParams.copy(username = "")
-        useCaseResult = useCase.execute(invalidUseCaseParams)
+        invalidLoginBasicUseCaseParams = loginBasicUseCaseParams.copy(username = "")
+        loginBasicUseCaseResult = loginBasicUseCase.execute(invalidLoginBasicUseCaseParams)
 
-        assertTrue(useCaseResult.isError)
-        assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
+        assertTrue(loginBasicUseCaseResult.isError)
+        assertTrue(loginBasicUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        invalidUseCaseParams = useCaseParams.copy(password = "")
-        useCaseResult = useCase.execute(invalidUseCaseParams)
+        invalidLoginBasicUseCaseParams = loginBasicUseCaseParams.copy(password = "")
+        loginBasicUseCaseResult = loginBasicUseCase.execute(invalidLoginBasicUseCaseParams)
 
-        assertTrue(useCaseResult.isError)
-        assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
+        assertTrue(loginBasicUseCaseResult.isError)
+        assertTrue(loginBasicUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 0) { authRepository.loginBasic(any(), any(), any()) }
+        verify(exactly = 0) { authRepository.loginBasic(any(), any(), any(), any()) }
     }
 
     @Test
     fun loginSuccess() {
-        every { authRepository.loginBasic(any(), any(), any()) } returns Unit
-        val useCaseResult = useCase.execute(useCaseParams)
+        every { authRepository.loginBasic(any(), any(), any(), any()) } returns OC_ACCOUNT_NAME
+        val loginBasicUseCaseResult = loginBasicUseCase.execute(loginBasicUseCaseParams)
 
-        assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
+        assertTrue(loginBasicUseCaseResult.isSuccess)
+        assertFalse(loginBasicUseCaseResult.isError)
 
-        assertNull(useCaseResult.getThrowableOrNull())
-        assertEquals(Unit, useCaseResult.getDataOrNull())
+        assertNull(loginBasicUseCaseResult.getThrowableOrNull())
+        assertEquals(OC_ACCOUNT_NAME, loginBasicUseCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { authRepository.loginBasic(any(), any(), any()) }
+        verify(exactly = 1) { authRepository.loginBasic(any(), any(), any(), any()) }
     }
 
     @Test
     fun getServerInfoWithException() {
-        every { authRepository.loginBasic(any(), any(), any()) } throws Exception()
+        every { authRepository.loginBasic(any(), any(), any(), any()) } throws Exception()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val loginBasicUseCaseResult = loginBasicUseCase.execute(loginBasicUseCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
-        assertTrue(useCaseResult.isError)
+        assertFalse(loginBasicUseCaseResult.isSuccess)
+        assertTrue(loginBasicUseCaseResult.isError)
 
-        assertNull(useCaseResult.getDataOrNull())
-        assertTrue(useCaseResult.getThrowableOrNull() is Exception)
+        assertNull(loginBasicUseCaseResult.getDataOrNull())
+        assertTrue(loginBasicUseCaseResult.getThrowableOrNull() is Exception)
 
-        verify(exactly = 1) { authRepository.loginBasic(any(), any(), any()) }
+        verify(exactly = 1) { authRepository.loginBasic(any(), any(), any(), any()) }
     }
 }

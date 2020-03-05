@@ -24,6 +24,7 @@ import android.accounts.AccountManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
+import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
@@ -38,6 +39,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPO
 import com.owncloud.android.testutil.ACCESS_TOKEN
 import com.owncloud.android.testutil.AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_BASE_URL
 import com.owncloud.android.testutil.OC_REDIRECTION_PATH
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.OC_USER_INFO
@@ -109,13 +111,6 @@ class OCLocalAuthenticationDataSourceTest {
             OC_USER_INFO,
             false
         )
-
-        // Just for checking if the account exists
-        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
-
-        // Account already exists so do not create it nor update it
-        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
-        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 0)
     }
 
     @Test()
@@ -198,14 +193,6 @@ class OCLocalAuthenticationDataSourceTest {
             SCOPE,
             false
         )
-
-        // Just for checking if the account exists
-        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
-
-        // Account already exists so do not create it nor update it
-        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
-        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 0)
-        verifyOAuthParamsAreUpdated(OC_ACCOUNT, ACCESS_TOKEN, "TRUE", REFRESH_TOKEN, SCOPE, 0)
     }
 
     @Test()
@@ -216,6 +203,10 @@ class OCLocalAuthenticationDataSourceTest {
 
         every {
             accountManager.setUserData(any(), any(), any())
+        } returns Unit
+
+        every {
+            accountManager.setAuthToken(any(), any(), any())
         } returns Unit
 
         ocLocalAuthenticationDataSource.addOAuthAccount(
@@ -239,6 +230,60 @@ class OCLocalAuthenticationDataSourceTest {
         // The account already exists, so update it
         verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 1)
         verifyOAuthParamsAreUpdated(OC_ACCOUNT, ACCESS_TOKEN, "TRUE", REFRESH_TOKEN, SCOPE, 1)
+    }
+
+    @Test()
+    fun supportsOAuthOk() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf(OC_ACCOUNT)
+
+        every {
+            accountManager.getUserData(OC_ACCOUNT, KEY_SUPPORTS_OAUTH2)
+        } returns "TRUE"
+
+        val supportsOAuth2 = ocLocalAuthenticationDataSource.supportsOAuth2(OC_ACCOUNT.name)
+
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, exactly = 1)
+        verifyUserDataIsGot(OC_ACCOUNT, KEY_SUPPORTS_OAUTH2, 1)
+
+        assertEquals(true, supportsOAuth2)
+    }
+
+    @Test(expected = AccountNotFoundException::class)
+    fun supportsOAuthAccountNotFound() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf() // That account does not exist
+
+        ocLocalAuthenticationDataSource.supportsOAuth2(OC_ACCOUNT.name)
+    }
+
+    @Test()
+    fun getBaseUrlOk() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf(OC_ACCOUNT)
+
+        every {
+            accountManager.getUserData(OC_ACCOUNT, KEY_OC_BASE_URL)
+        } returns OC_BASE_URL
+
+        val baseUrl = ocLocalAuthenticationDataSource.getBaseUrl(OC_ACCOUNT.name)
+
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, exactly = 1)
+        verifyUserDataIsGot(OC_ACCOUNT, KEY_OC_BASE_URL, 1)
+
+        assertEquals(OC_BASE_URL, baseUrl)
+    }
+
+    @Test(expected = AccountNotFoundException::class)
+    fun getBaseUrlAccountNotFound() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf() // That account does not exist
+
+        ocLocalAuthenticationDataSource.getBaseUrl(OC_ACCOUNT.name)
     }
 
     private fun mockRegularAccountCreationFlow() {
@@ -306,6 +351,12 @@ class OCLocalAuthenticationDataSourceTest {
             accountManager.setUserData(account, KEY_SUPPORTS_OAUTH2, supportsOAuth2)
             accountManager.setUserData(account, KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
             accountManager.setUserData(account, KEY_OAUTH2_SCOPE, scope)
+        }
+    }
+
+    private fun verifyUserDataIsGot(account: Account, key: String, exactly: Int) {
+        verify(exactly = exactly) {
+            accountManager.getUserData(account, key)
         }
     }
 }
