@@ -185,7 +185,7 @@
                         android:visibility="gone"
                         app:hintEnabled="false"
                         app:passwordToggleEnabled="false"
-                        app:passwordToggleTint="@color/white">
+                        app:passwordToggleTint="@color/login_text_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/account_password"

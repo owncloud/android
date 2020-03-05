@@ -342,7 +342,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 showOrHideBasicAuthFields(shouldBeVisible = false)
             }
             else -> auth_status_text.run {
-                text = uiResult.getThrowableOrNull()?.parseError(getString(R.string.auth_error), resources)
+                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
                 isVisible = true
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
