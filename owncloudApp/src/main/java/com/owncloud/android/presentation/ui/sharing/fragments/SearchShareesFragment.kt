@@ -172,7 +172,7 @@ class SearchShareesFragment : Fragment(),
         )
 
         // Show data
-        val usersList = view!!.findViewById<ListView>(R.id.searchUsersListView)
+        val usersList = requireView().findViewById<ListView>(R.id.searchUsersListView)
 
         if (privateShares.isNotEmpty()) {
             usersList.visibility = View.VISIBLE
@@ -194,7 +194,7 @@ class SearchShareesFragment : Fragment(),
     override fun onStart() {
         super.onStart()
         // focus the search view and request the software keyboard be shown
-        val searchView = view!!.findViewById<View>(R.id.searchView)
+        val searchView = requireView().findViewById<View>(R.id.searchView)
         if (searchView.requestFocus()) {
             val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(searchView.findFocus(), InputMethodManager.SHOW_IMPLICIT)

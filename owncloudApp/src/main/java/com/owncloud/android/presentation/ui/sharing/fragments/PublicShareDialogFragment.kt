@@ -150,10 +150,10 @@ class PublicShareDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (arguments != null) {
-            file = arguments!!.getParcelable(ARG_FILE)
-            account = arguments!!.getParcelable(ARG_ACCOUNT)
-            publicShare = arguments!!.getParcelable(ARG_SHARE)
+        arguments?.let {
+            file = it.getParcelable(ARG_FILE)
+            account = it.getParcelable(ARG_ACCOUNT)
+            publicShare = it.getParcelable(ARG_SHARE)
         }
 
         check(file != null || publicShare != null) {
@@ -212,7 +212,7 @@ class PublicShareDialogFragment : DialogFragment() {
             }
 
         } else {
-            view.shareViaLinkNameValue?.setText(arguments!!.getString(ARG_DEFAULT_LINK_NAME, ""))
+            view.shareViaLinkNameValue?.setText(requireArguments().getString(ARG_DEFAULT_LINK_NAME, ""))
         }
 
         return view
@@ -235,7 +235,7 @@ class PublicShareDialogFragment : DialogFragment() {
         val publicLinkExpirationDateInMillis = expirationDateValueInMillis
 
         val publicLinkPermissions: Int
-        var publicUploadPermission: Boolean
+        val publicUploadPermission: Boolean
 
         when (shareViaLinkEditPermissionGroup?.checkedRadioButtonId) {
             R.id.shareViaLinkEditPermissionUploadFiles -> {

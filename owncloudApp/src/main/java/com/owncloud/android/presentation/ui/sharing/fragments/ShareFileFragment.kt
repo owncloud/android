@@ -42,7 +42,6 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.showError
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
@@ -196,9 +195,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate")
-        if (arguments != null) {
-            file = arguments!!.getParcelable(ARG_FILE)
-            account = arguments!!.getParcelable(ARG_ACCOUNT)
+        arguments?.let {
+            file = it.getParcelable(ARG_FILE)
+            account = it.getParcelable(ARG_ACCOUNT)
         }
     }
 
@@ -277,7 +276,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         super.onActivityCreated(savedInstanceState)
         Timber.d("onActivityCreated")
 
-        activity!!.setTitle(R.string.share_dialog_title)
+        activity?.setTitle(R.string.share_dialog_title)
 
         observeCapabilities() // Get capabilities to update some UI elements depending on them
         observeShares()
@@ -288,7 +287,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         try {
             listener = context as ShareFragmentListener?
         } catch (e: ClassCastException) {
-            throw ClassCastException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+            throw ClassCastException(activity.toString() + " must implement OnShareFragmentInteractionListener")
         }
     }
 
@@ -414,7 +413,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         // Update list of users/groups
         // TODO Refactoring: create a new {@link ShareUserListAdapter} instance with every call should not be needed
         userGroupsAdapter = ShareUserListAdapter(
-            context!!,
+            requireContext(),
             R.layout.share_user_item,
             privateShares,
             this
@@ -481,7 +480,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      */
     private fun updateListOfPublicLinks() {
         publicLinksAdapter = SharePublicLinkListAdapter(
-            context!!,
+            requireContext(),
             R.layout.share_public_link_item,
             publicLinks,
             this
@@ -531,9 +530,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      *
      */
     private fun hideSectionsDisabledInBuildTime(view: View) {
-        val shareViaLinkAllowed = activity!!.resources.getBoolean(R.bool.share_via_link_feature)
-        val shareWithUsersAllowed = activity!!.resources.getBoolean(R.bool.share_with_users_feature)
-        val shareWarningAllowed = activity!!.resources.getBoolean(R.bool.warning_sharing_public_link)
+        val shareViaLinkAllowed = requireActivity().resources.getBoolean(R.bool.share_via_link_feature)
+        val shareWithUsersAllowed = requireActivity().resources.getBoolean(R.bool.share_with_users_feature)
+        val shareWarningAllowed = requireActivity().resources.getBoolean(R.bool.warning_sharing_public_link)
 
         // Hide share via link section if it is not enabled
         if (!shareViaLinkAllowed) {
