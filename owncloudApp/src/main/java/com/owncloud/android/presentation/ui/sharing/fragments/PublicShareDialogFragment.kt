@@ -212,7 +212,7 @@ class PublicShareDialogFragment : DialogFragment() {
             }
 
         } else {
-            view.shareViaLinkNameValue?.setText(arguments?.getString(ARG_DEFAULT_LINK_NAME, ""))
+            view.shareViaLinkNameValue?.setText(requireArguments().getString(ARG_DEFAULT_LINK_NAME, ""))
         }
 
         return view
