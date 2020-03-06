@@ -98,7 +98,9 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
         // Get values from savedInstanceState
         if (savedInstanceState == null) {
-            initAuthTokenType()
+            if (authTokenType == null && userAccount != null) {
+                authenticationViewModel.supportsOAuth2((userAccount as Account).name)
+            }
         } else {
             authTokenType = savedInstanceState.getString(KEY_AUTH_TOKEN_TYPE)
         }
@@ -107,8 +109,22 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         setContentView(R.layout.account_setup)
 
         if (savedInstanceState == null) {
-            initServerPreFragment()
-            initAuthorizationPreFragment()
+            if (userAccount != null) {
+                authenticationViewModel.getBaseUrl((userAccount as Account).name)
+            } else {
+                serverBaseUrl = getString(R.string.server_url).trim()
+            }
+
+            userAccount?.let {
+                AccountUtils.getUsernameForAccount(it)?.let { username ->
+                    account_username.setText(username)
+                }
+            }
+
+            if (loginAction != ACTION_CREATE) {
+                account_username.isEnabled = false
+                account_username.isFocusable = false
+            }
         }
 
         login_layout.filterTouchesWhenObscured =
@@ -168,38 +184,6 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 )
             }
         })
-    }
-
-    private fun initAuthTokenType() {
-        authTokenType = intent?.extras?.getString(KEY_AUTH_TOKEN_TYPE)
-        if (authTokenType == null && userAccount != null) {
-            authenticationViewModel.supportsOAuth2((userAccount as Account).name)
-        }
-    }
-
-    private fun initServerPreFragment() {
-        if (userAccount != null) {
-            authenticationViewModel.getBaseUrl((userAccount as Account).name)
-        } else {
-            serverBaseUrl = getString(R.string.server_url).trim()
-        }
-    }
-
-    private fun initAuthorizationPreFragment() {
-        var presetUserName: String? = null
-
-        userAccount?.let {
-            presetUserName = AccountUtils.getUsernameForAccount(it)
-        }
-
-        presetUserName?.let {
-            account_username.setText(it)
-        }
-
-        if (loginAction != ACTION_CREATE) {
-            account_username.isEnabled = false
-            account_username.isFocusable = false
-        }
     }
 
     private fun checkOcServer() {
@@ -429,11 +413,12 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
 
         instructions_message.run {
             if (loginAction == ACTION_UPDATE_EXPIRED_TOKEN) {
-                text = if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) {
-                    getString(R.string.auth_expired_oauth_token_toast)
-                } else {
-                    getString(R.string.auth_expired_basic_auth_toast)
-                }
+                text =
+                    if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) {
+                        getString(R.string.auth_expired_oauth_token_toast)
+                    } else {
+                        getString(R.string.auth_expired_basic_auth_toast)
+                    }
                 visibility = VISIBLE
             } else visibility = GONE
         }

@@ -24,16 +24,20 @@ import android.accounts.AccountManager.KEY_ACCOUNT_NAME
 import android.accounts.AccountManager.KEY_ACCOUNT_TYPE
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.Visibility
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.isFocusable
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -47,9 +51,18 @@ import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
+import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_TOKEN
+import com.owncloud.android.presentation.ui.authentication.BASIC_TOKEN_TYPE
+import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
+import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
+import com.owncloud.android.presentation.ui.authentication.KEY_AUTH_TOKEN_TYPE
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.presentation.ui.authentication.OAUTH_TOKEN_TYPE
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.testutil.AUTH_TOKEN_TYPE
+import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.mockk
@@ -77,6 +90,8 @@ class LoginActivityTest {
 
     private lateinit var loginResultLiveData: MutableLiveData<Event<UIResult<String>>>
     private lateinit var serverInfoLiveData: MutableLiveData<Event<UIResult<ServerInfo>>>
+    private lateinit var supportsOauth2LiveData: MutableLiveData<Event<UIResult<Boolean>>>
+    private lateinit var baseUrlLiveData: MutableLiveData<Event<UIResult<String>>>
 
     @Before
     fun setUp() {
@@ -87,8 +102,13 @@ class LoginActivityTest {
 
         loginResultLiveData = MutableLiveData()
         serverInfoLiveData = MutableLiveData()
+        supportsOauth2LiveData = MutableLiveData()
+        baseUrlLiveData = MutableLiveData()
+
         every { ocAuthenticationViewModel.loginResult } returns loginResultLiveData
         every { ocAuthenticationViewModel.serverInfo } returns serverInfoLiveData
+        every { ocAuthenticationViewModel.supportsOAuth2 } returns supportsOauth2LiveData
+        every { ocAuthenticationViewModel.baseUrl } returns baseUrlLiveData
 
         stopKoin()
 
@@ -127,7 +147,8 @@ class LoginActivityTest {
         serverUrl: String = "",
         showLoginBackGroundImage: Boolean = true,
         showWelcomeLink: Boolean = true,
-        accountType: String = "owncloud"
+        accountType: String = "owncloud",
+        intent: Intent? = null
     ) {
         every { ocContextProvider.getBoolean(R.bool.show_server_url_input) } returns showServerUrlInput
         every { ocContextProvider.getString(R.string.server_url) } returns serverUrl
@@ -135,7 +156,11 @@ class LoginActivityTest {
         every { ocContextProvider.getBoolean(R.bool.show_welcome_link) } returns showWelcomeLink
         every { ocContextProvider.getString(R.string.account_type) } returns accountType
 
-        activityScenario = ActivityScenario.launch(LoginActivity::class.java)
+        activityScenario = if (intent == null) {
+            ActivityScenario.launch(LoginActivity::class.java)
+        } else {
+            ActivityScenario.launch(intent)
+        }
     }
 
     @Test
@@ -278,7 +303,7 @@ class LoginActivityTest {
         launchTest()
         onView(withId(R.id.hostUrlInput))
             .check(matches(isDisplayed()))
-            .perform(typeText("demo.owncloud.com"))
+            .perform(scrollTo(), typeText("demo.owncloud.com"))
 
         serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(isSecureConnection = true))))
 
@@ -556,7 +581,7 @@ class LoginActivityTest {
         serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
 
         onView(withId(R.id.account_username))
-            .perform(typeText("username"))
+            .perform(scrollTo(), typeText("username"))
 
         onView(withId(R.id.account_password))
             .perform(typeText("password"))
@@ -575,19 +600,19 @@ class LoginActivityTest {
         serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
 
         onView(withId(R.id.account_username))
-            .perform(typeText("username"))
+            .perform(scrollTo(), typeText("username"))
 
         onView(withId(R.id.loginButton))
             .check(matches(not(isDisplayed())))
 
         onView(withId(R.id.account_password))
-            .perform(typeText("password"))
+            .perform(scrollTo(), typeText("password"))
 
         onView(withId(R.id.loginButton))
             .check(matches(isDisplayed()))
 
         onView(withId(R.id.account_username))
-            .perform(replaceText(""))
+            .perform(scrollTo(), replaceText(""))
 
         onView(withId(R.id.loginButton))
             .check(matches(not(isDisplayed())))
@@ -681,6 +706,111 @@ class LoginActivityTest {
                     )
                 )
             )
+    }
+
+    @Test
+    fun intent_withSavedAccount_viewModelCalls() {
+        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+            putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
+        }
+
+        launchTest(intent = intentWithAccount)
+
+        verify(exactly = 1) { ocAuthenticationViewModel.supportsOAuth2(OC_ACCOUNT.name) }
+        verify(exactly = 1) { ocAuthenticationViewModel.getBaseUrl(OC_ACCOUNT.name) }
+    }
+
+    @Test
+    fun supportsOAuth_isSuccess_actionUpdateExpiredTokenOAuth() {
+        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+            putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
+            putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
+            putExtra(KEY_AUTH_TOKEN_TYPE, OAUTH_TOKEN_TYPE)
+        }
+
+        launchTest(intent = intentWithAccount)
+
+        supportsOauth2LiveData.postValue(Event(UIResult.Success(true)))
+
+        onView(withId(R.id.instructions_message))
+            .check(matches(withText(context.getString(R.string.auth_expired_oauth_token_toast))))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun supportsOAuth_isSuccess_actionUpdateToken() {
+        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+            putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
+            putExtra(EXTRA_ACTION, ACTION_UPDATE_TOKEN)
+            putExtra(KEY_AUTH_TOKEN_TYPE, AUTH_TOKEN_TYPE)
+        }
+
+        launchTest(intent = intentWithAccount)
+
+        supportsOauth2LiveData.postValue(Event(UIResult.Success(false)))
+
+        onView(withId(R.id.instructions_message))
+            .check(matches(withEffectiveVisibility(Visibility.GONE)))
+    }
+
+    @Test
+    fun supportsOAuth_isSuccess_actionUpdateExpiredTokenBasic() {
+        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+            putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
+            putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
+            putExtra(KEY_AUTH_TOKEN_TYPE, BASIC_TOKEN_TYPE)
+        }
+
+        launchTest(intent = intentWithAccount)
+
+        supportsOauth2LiveData.postValue(Event(UIResult.Success(false)))
+
+        onView(withId(R.id.instructions_message))
+            .check(matches(withText(context.getString(R.string.auth_expired_basic_auth_toast))))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun getBaseUrl_isSuccess_updatesBaseUrl() {
+        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+            putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
+        }
+
+        launchTest(intent = intentWithAccount)
+
+        baseUrlLiveData.postValue(Event(UIResult.Success(OC_SERVER_INFO.baseUrl)))
+
+        onView(withId(R.id.hostUrlInput))
+            .check(matches(withText(OC_SERVER_INFO.baseUrl)))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .check(matches(isDisplayed()))
+            .check(matches(not(isEnabled())))
+            .check(matches(not(isFocusable())))
+
+        verify(exactly = 0) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+    }
+
+    @Test
+    fun getBaseUrlAndActionNotCreate_isSuccess_updatesBaseUrl() {
+        val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
+            putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
+            putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
+        }
+
+        launchTest(intent = intentWithAccount)
+
+        baseUrlLiveData.postValue(Event(UIResult.Success(OC_SERVER_INFO.baseUrl)))
+
+        onView(withId(R.id.hostUrlInput))
+            .check(matches(withText(OC_SERVER_INFO.baseUrl)))
+            .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+            .check(matches(isDisplayed()))
+            .check(matches(not(isEnabled())))
+            .check(matches(not(isFocusable())))
+
+        verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
 
     companion object {
