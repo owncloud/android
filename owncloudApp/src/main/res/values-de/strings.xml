@@ -73,12 +73,16 @@
   <string name="passcode_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte PIN deaktivieren</string>
   <string name="pattern_no_longer_required">Muster wird nicht mehr verlangt</string>
   <string name="pattern_configure_your_pattern_explanation">Das Muster wird bei jedem Start der Anwendung verlangt</string>
+  <string name="pass_code_locked">Mit Passwort gesperrt</string>
+  <string name="pattern_locked">Mit Muster (Pattern) gesperrt</string>
   <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
   <string name="recommend_text">Ich möchte Dich zum Benutzen von %1$s auf Deinem Smartphone einladen!\nLade es hier herunter: %2$s</string>
   <string name="error_reason">weil</string>
   <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen</string>
+  <string name="server_not_supported">Deine Serverversion ist kleiner als 10 und wird daher nicht unterstützt. Bitte aktualisiere deinen Server auf eine neuere Version.</string>
   <string name="auth_failure_snackbar_action">Konto ändern</string>
+  <string name="auth_oauth_failure">Das Zugriffstoken ist abgelaufen oder ungültig geworden. Bitte melde dich erneut an, um wieder Zugriff zu erhalten</string>
   <string name="auth_oauth_failure_snackbar_action">Einloggen</string>
   <string name="auth_check_server">überprüfe den Server</string>
   <string name="auth_host_url">Serveradresse https://…</string>
@@ -103,6 +107,7 @@
   <string name="file_list_seconds_ago">Gerade eben</string>
   <string name="file_list_empty">Alles leer. Lade etwas hoch!</string>
   <string name="file_list_empty_available_offline">Es sind keine Offline-Dateien verfügbar.</string>
+  <string name="file_list_empty_shared_by_links">Es wurden keine Dateien per Link ausgeteilt.</string>
   <string name="file_list_loading">Lade…</string>
   <string name="file_list_no_app_for_file_type">Keine Applikationen für diesen Dateityp gefunden</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
@@ -285,6 +290,8 @@
   <string name="confirmation_remove_local">Nur lokal</string>
   <string name="confirmation_remove_account_alert">Möchtest du das Konto von %1$s wirklich löschen?</string>
   <string name="confirmation_remove_public_share_title">Link entfernen</string>
+  <string name="confirmation_remove_private_share_title">Private Freigabe entfernen</string>
+  <string name="confirmation_remove_share_message">Willst Du die Freigabe %1$s wirklich entfernen?</string>
   <string name="remove_success_msg">Erfolgreich gelöscht</string>
   <string name="remove_fail_msg">Der Löschvorgang konnte nicht beendet werden</string>
   <string name="rename_dialog_title">Gib einen neuen Namen ein</string>
@@ -355,8 +362,14 @@
   <string name="preview_image_error_unknown_format">Dieses Bild kann nicht angezeigt werden</string>
   <string name="error__upload__local_file_not_copied">%1$s konnte nicht in den lokalen %2$s Ordner kopiert werden</string>
   <string name="prefs_camera_picture_upload_path_title">Speicherpfad für hochgeladene Bilder</string>
+  <string name="get_shares_error">Es war nicht möglich, die Freigaben vom Server abzurufen.</string>
+  <string name="get_sharees_error">Es war nicht möglich, Benutzer und Gruppen vom Server abzurufen.</string>
+  <string name="get_capabilities_error">Es war nicht möglich, die Funktionalitäten des Servers abzurufen.</string>
   <string name="share_link_no_support_share_api">Entschuldigung, Freigaben sind auf Deinem Server nicht aktiviert. Bitte kontaktiere Deinen
 ⇥⇥Administrator.</string>
+  <string name="share_link_file_error">Es war nicht möglich, diese Datei oder diesen Ordner freizugeben</string>
+  <string name="unshare_link_file_error">Es war nicht möglich, die Freigabe der Datei oder des Ordners aufzuheben</string>
+  <string name="update_link_file_error">Es war nicht möglich, diese Datei oder diesen Ordner zu aktualisieren</string>
   <string name="share_link_password_title">Passwort eingeben</string>
   <string name="share_link_empty_password">Du musst ein Passwort eingeben</string>
   <string name="activity_chooser_send_file_title">Senden</string>
@@ -366,6 +379,7 @@
   <string name="clipboard_uxexpected_error">Unerwarteter Fehler beim Kopieren in die Zwischenablage</string>
   <string name="clipboard_label">Text von %1$s kopiert</string>
   <string name="error_cant_bind_to_operations_service">Kritischer Fehler: Operationen können nicht ausgeführt werden</string>
+  <string name="network_error_socket_exception">es ist ein Fehler beim Verbinden mit dem Server aufgetreten</string>
   <string name="network_error_socket_timeout_exception">Der Server braucht zu lange für eine Antwort.</string>
   <string name="network_error_connect_timeout_exception">Der Server braucht zu lange zum Verbinden.</string>
   <string name="network_host_not_available">Server konnte nicht erreicht werden</string>
@@ -536,4 +550,5 @@
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installiere zur sicheren Anmeldung einen Browser.</string>
+  <string name="common_not_found">nichts gefunden</string>
 </resources>
