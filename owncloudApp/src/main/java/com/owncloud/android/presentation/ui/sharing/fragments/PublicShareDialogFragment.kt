@@ -429,7 +429,7 @@ class PublicShareDialogFragment : DialogFragment() {
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: IllegalStateException) {
-            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+            throw IllegalStateException(activity.toString() + " must implement OnShareFragmentInteractionListener")
         }
     }
 
@@ -440,7 +440,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
     private fun observeCapabilities() {
         ocCapabilityViewModel.capabilities.observe(
-            this,
+            viewLifecycleOwner,
             EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Success -> {
@@ -454,7 +454,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
     private fun observePublicShareCreation() {
         ocShareViewModel.publicShareCreationStatus.observe(
-            this,
+            viewLifecycleOwner,
             EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Success -> {
@@ -474,7 +474,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
     private fun observePublicShareEdition() {
         ocShareViewModel.publicShareEditionStatus.observe(
-            this,
+            viewLifecycleOwner,
             EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Success -> {

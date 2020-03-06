@@ -145,7 +145,7 @@ class SearchShareesFragment : Fragment(),
 
     private fun observePrivateShares() {
         ocShareViewModel.shares.observe(
-            this,
+            viewLifecycleOwner,
             Event.EventObserver { uiResult ->
                 val privateShares = uiResult.getStoredData()?.filter { share ->
                     share.shareType == ShareType.USER ||

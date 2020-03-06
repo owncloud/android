@@ -135,7 +135,7 @@ class EditPrivateShareFragment : DialogFragment() {
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: IllegalStateException) {
-            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+            throw IllegalStateException(activity.toString() + " must implement OnShareFragmentInteractionListener")
         }
     }
 
@@ -367,7 +367,7 @@ class EditPrivateShareFragment : DialogFragment() {
 
     private fun observePrivateShareToEdit() {
         ocShareViewModel.privateShare.observe(
-            this,
+            viewLifecycleOwner,
             EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Success -> {
@@ -380,7 +380,7 @@ class EditPrivateShareFragment : DialogFragment() {
 
     private fun observePrivateShareEdition() {
         ocShareViewModel.privateShareEditionStatus.observe(
-            this,
+            viewLifecycleOwner,
             EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
