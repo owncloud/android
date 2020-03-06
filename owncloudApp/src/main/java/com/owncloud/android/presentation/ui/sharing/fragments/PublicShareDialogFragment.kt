@@ -235,7 +235,7 @@ class PublicShareDialogFragment : DialogFragment() {
         val publicLinkExpirationDateInMillis = expirationDateValueInMillis
 
         val publicLinkPermissions: Int
-        var publicUploadPermission: Boolean
+        val publicUploadPermission: Boolean
 
         when (shareViaLinkEditPermissionGroup?.checkedRadioButtonId) {
             R.id.shareViaLinkEditPermissionUploadFiles -> {

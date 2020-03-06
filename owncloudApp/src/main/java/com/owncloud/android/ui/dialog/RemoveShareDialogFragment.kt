@@ -50,8 +50,10 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        targetShare = arguments!!.getParcelable(ARG_TARGET_SHARE)
-        account = arguments!!.getParcelable(ARG_ACCOUNT)
+        arguments?.let {
+            targetShare = it.getParcelable(ARG_TARGET_SHARE)
+            account = it.getParcelable(ARG_ACCOUNT)
+        }
 
         setOnConfirmationListener(this)
 
@@ -63,7 +65,7 @@ class RemoveShareDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: IllegalStateException) {
-            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+            throw IllegalStateException(activity.toString() + " must implement OnShareFragmentInteractionListener")
         }
     }
 
