@@ -8,3 +8,9 @@ const val OC_ACCOUNT_NAME = "admin@server"
  * Accounts
  */
 val OC_ACCOUNT = Account("username@demo.owncloud.com", "owncloud")
+
+/**
+ * BasicCredentials
+ */
+const val OC_BASIC_USERNAME = "user"
+const val OC_BASIC_PASSWORD = "password"
