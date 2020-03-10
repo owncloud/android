@@ -33,8 +33,8 @@ class OCShareTest {
     fun testConstructor() {
         val item = OCShare(
             1,
-            7,
-            7,
+            "7",
+            "7",
             ShareType.USER,
             "",
             "/Photos/image.jpg",
@@ -53,8 +53,8 @@ class OCShareTest {
         )
 
         assertEquals(1, item.id)
-        assertEquals(7, item.fileSource)
-        assertEquals(7, item.itemSource)
+        assertEquals("7", item.fileSource)
+        assertEquals("7", item.itemSource)
         assertEquals(ShareType.USER, item.shareType)
         assertEquals("", item.shareWith)
         assertEquals("/Photos/image.jpg", item.path)
@@ -76,8 +76,8 @@ class OCShareTest {
     fun testEqualsOk() {
         val item1 = OCShare(
             id = 1,
-            fileSource = 7,
-            itemSource = 7,
+            fileSource = "7",
+            itemSource = "7",
             shareType = ShareType.USER,
             shareWith = "",
             path = "/Photos/image.jpg",
@@ -97,8 +97,8 @@ class OCShareTest {
 
         val item2 = OCShare(
             1,
-            7,
-            7,
+            "7",
+            "7",
             ShareType.USER,
             "",
             "/Photos/image.jpg",
@@ -123,8 +123,8 @@ class OCShareTest {
     @Test
     fun testEqualsDefaultValues() {
         val item1 = OCShare(
-            fileSource = 7,
-            itemSource = 7,
+            fileSource = "7",
+            itemSource = "7",
             shareType = ShareType.USER,
             shareWith = "",
             path = "/Photos/image.jpg",
@@ -143,8 +143,8 @@ class OCShareTest {
 
         val item2 = OCShare(
             null,
-            7,
-            7,
+            "7",
+            "7",
             ShareType.USER,
             "",
             "/Photos/image.jpg",
@@ -170,8 +170,8 @@ class OCShareTest {
     fun testEqualsKo() {
         val item1 = OCShare(
             id = 123,
-            fileSource = 7,
-            itemSource = 7,
+            fileSource = "7",
+            itemSource = "7",
             shareType = ShareType.USER,
             shareWith = "",
             path = "/Photos/image.jpg",
@@ -191,8 +191,8 @@ class OCShareTest {
 
         val item2 = OCShare(
             456,
-            7,
-            7,
+            "7",
+            "7",
             ShareType.USER,
             "",
             "/Photos/image.jpg",
@@ -217,8 +217,8 @@ class OCShareTest {
     fun testIsPasswordProtected() {
         val item1 = OCShare(
             id = 123,
-            fileSource = 7,
-            itemSource = 7,
+            fileSource = "7",
+            itemSource = "7",
             shareType = ShareType.PUBLIC_LINK,
             shareWith = "user@server",
             path = "/Photos/image.jpg",

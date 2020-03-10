@@ -29,8 +29,8 @@ class OCShareEntityTest {
     @Test
     fun testEqualsNamedParams() {
         val item1 = OCShareEntity(
-            fileSource = 7,
-            itemSource = 7,
+            fileSource = "7",
+            itemSource = "7",
             shareType = 0,
             shareWith = "",
             path = "/Photos/image2.jpg",
@@ -49,8 +49,8 @@ class OCShareEntityTest {
         )
 
         val item2 = OCShareEntity(
-            7,
-            7,
+            "7",
+            "7",
             0,
             "",
             "/Photos/image2.jpg",
@@ -77,8 +77,8 @@ class OCShareEntityTest {
     @Test
     fun testEqualsNamedParamsNullValues() {
         val item1 = OCShareEntity(
-            fileSource = 7,
-            itemSource = 7,
+            fileSource = "7",
+            itemSource = "7",
             shareType = 0,
             shareWith = null,
             path = "/Photos/image2.jpg",
@@ -97,8 +97,8 @@ class OCShareEntityTest {
         )
 
         val item2 = OCShareEntity(
-            7,
-            7,
+            "7",
+            "7",
             0,
             null,
             "/Photos/image2.jpg",
@@ -124,8 +124,8 @@ class OCShareEntityTest {
     @Test
     fun testNotEqualsNamedParams() {
         val item1 = OCShareEntity(
-            fileSource = 7,
-            itemSource = 7,
+            fileSource = "7",
+            itemSource = "7",
             shareType = 0,
             shareWith = "",
             path = "/Photos/image2.jpg",
@@ -144,8 +144,8 @@ class OCShareEntityTest {
         )
 
         val item2 = OCShareEntity(
-            7,
-            7,
+            "7",
+            "7",
             0,
             "",
             "/Photos/image2.jpg",
