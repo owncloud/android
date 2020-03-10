@@ -21,8 +21,6 @@ package com.owncloud.android.data.sharing.shares.db
 
 import android.content.ContentValues
 import android.database.Cursor
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -34,9 +32,9 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 @Entity(tableName = ProviderTableMeta.OCSHARES_TABLE_NAME)
 data class OCShareEntity(
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_FILE_SOURCE)
-    val fileSource: Long,
+    val fileSource: String,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ITEM_SOURCE)
-    val itemSource: Long,
+    val itemSource: String,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_TYPE)
     val shareType: Int,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH)
@@ -74,8 +72,8 @@ data class OCShareEntity(
 
         fun fromCursor(cursor: Cursor): OCShareEntity {
             return OCShareEntity(
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
                 cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)),
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)),
@@ -96,8 +94,8 @@ data class OCShareEntity(
 
         fun fromContentValues(values: ContentValues): OCShareEntity {
             return OCShareEntity(
-                values.getAsLong(ProviderTableMeta.OCSHARES_FILE_SOURCE),
-                values.getAsLong(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
+                values.getAsString(ProviderTableMeta.OCSHARES_FILE_SOURCE),
+                values.getAsString(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
                 values.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE),
                 values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH),
                 values.getAsString(ProviderTableMeta.OCSHARES_PATH),

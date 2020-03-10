@@ -26,8 +26,8 @@ import android.os.Parcelable
 @SuppressLint("ParcelCreator")
 data class OCShare(
     val id: Int? = null,
-    val fileSource: Long,
-    val itemSource: Long,
+    val fileSource: String,
+    val itemSource: String,
     val shareType: ShareType,
     val shareWith: String?,
     val path: String,
@@ -57,8 +57,8 @@ data class OCShare(
         dest?.writeString(sharedWithAdditionalInfo)
         dest?.writeString(name)
         dest?.writeString(shareLink)
-        dest?.writeLong(fileSource)
-        dest?.writeLong(itemSource)
+        dest?.writeString(fileSource)
+        dest?.writeString(itemSource)
         dest?.writeInt(shareType.value)
         dest?.writeInt(permissions)
         dest?.writeLong(sharedDate)

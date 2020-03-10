@@ -30,6 +30,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_TABLE_NAME
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
@@ -67,6 +68,17 @@ abstract class OwncloudDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_28_29 = object : Migration(28, 29) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.run {
+                    execSQL("DROP TABLE $OCSHARES_TABLE_NAME")
+                    execSQL(
+                        "CREATE TABLE IF NOT EXISTS `${OCSHARES_TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `file_source` TEXT NOT NULL, `item_source` TEXT NOT NULL, `share_type` INTEGER NOT NULL, `shate_with` TEXT, `path` TEXT NOT NULL, `permissions` INTEGER NOT NULL, `shared_date` INTEGER NOT NULL, `expiration_date` INTEGER NOT NULL, `token` TEXT, `shared_with_display_name` TEXT, `share_with_additional_info` TEXT, `is_directory` INTEGER NOT NULL, `user_id` INTEGER NOT NULL, `id_remote_shared` INTEGER NOT NULL, `owner_share` TEXT NOT NULL, `name` TEXT, `url` TEXT)"
+                    )
+                }
+            }
+        }
+
         fun getDatabase(
             context: Context
         ): OwncloudDatabase {
@@ -77,7 +89,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
                     context.applicationContext,
                     OwncloudDatabase::class.java,
                     ProviderMeta.NEW_DB_NAME
-                ).addMigrations(MIGRATION_27_28)
+                ).addMigrations(MIGRATION_27_28, MIGRATION_28_29)
                     .build()
                 INSTANCE = instance
                 instance
