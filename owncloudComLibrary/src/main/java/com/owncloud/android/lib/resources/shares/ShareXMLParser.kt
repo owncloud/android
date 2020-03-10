@@ -110,12 +110,16 @@ class ShareXMLParser {
             }
             val name = parser.name
             // read NODE_META and NODE_DATA
-            if (name.equals(NODE_META, ignoreCase = true)) {
-                readMeta(parser)
-            } else if (name.equals(NODE_DATA, ignoreCase = true)) {
-                shares = readData(parser)
-            } else {
-                skip(parser)
+            when {
+                name.equals(NODE_META, ignoreCase = true) -> {
+                    readMeta(parser)
+                }
+                name.equals(NODE_DATA, ignoreCase = true) -> {
+                    shares = readData(parser)
+                }
+                else -> {
+                    skip(parser)
+                }
             }
         }
         return shares
@@ -136,17 +140,19 @@ class ShareXMLParser {
             }
             val name = parser.name
 
-            if (name.equals(NODE_STATUS, ignoreCase = true)) {
-                status = readNode(parser, NODE_STATUS)
-
-            } else if (name.equals(NODE_STATUS_CODE, ignoreCase = true)) {
-                statusCode = Integer.parseInt(readNode(parser, NODE_STATUS_CODE))
-
-            } else if (name.equals(NODE_MESSAGE, ignoreCase = true)) {
-                message = readNode(parser, NODE_MESSAGE)
-
-            } else {
-                skip(parser)
+            when {
+                name.equals(NODE_STATUS, ignoreCase = true) -> {
+                    status = readNode(parser, NODE_STATUS)
+                }
+                name.equals(NODE_STATUS_CODE, ignoreCase = true) -> {
+                    statusCode = Integer.parseInt(readNode(parser, NODE_STATUS_CODE))
+                }
+                name.equals(NODE_MESSAGE, ignoreCase = true) -> {
+                    message = readNode(parser, NODE_MESSAGE)
+                }
+                else -> {
+                    skip(parser)
+                }
             }
         }
     }
@@ -169,27 +175,29 @@ class ShareXMLParser {
                 continue
             }
             val name = parser.name
-            if (name.equals(NODE_ELEMENT, ignoreCase = true)) {
-                readElement(parser, shares)
-
-            } else if (name.equals(NODE_ID, ignoreCase = true)) {// Parse Create XML Response
-                share = RemoteShare()
-                val value = readNode(parser, NODE_ID)
-                share.id = Integer.parseInt(value).toLong()
-
-            } else if (name.equals(NODE_URL, ignoreCase = true)) {
-                // NOTE: this field is received in all the public shares from OC 9.0.0
-                // in previous versions, it's received in the result of POST requests, but not
-                // in GET requests
-                share!!.shareType = ShareType.PUBLIC_LINK
-                val value = readNode(parser, NODE_URL)
-                share.shareLink = value
-
-            } else if (name.equals(NODE_TOKEN, ignoreCase = true)) {
-                share!!.token = readNode(parser, NODE_TOKEN)
-
-            } else {
-                skip(parser)
+            when {
+                name.equals(NODE_ELEMENT, ignoreCase = true) -> {
+                    readElement(parser, shares)
+                }
+                name.equals(NODE_ID, ignoreCase = true) -> {// Parse Create XML Response
+                    share = RemoteShare()
+                    val value = readNode(parser, NODE_ID)
+                    share.id = Integer.parseInt(value).toLong()
+                }
+                name.equals(NODE_URL, ignoreCase = true) -> {
+                    // NOTE: this field is received in all the public shares from OC 9.0.0
+                    // in previous versions, it's received in the result of POST requests, but not
+                    // in GET requests
+                    share!!.shareType = ShareType.PUBLIC_LINK
+                    val value = readNode(parser, NODE_URL)
+                    share.shareLink = value
+                }
+                name.equals(NODE_TOKEN, ignoreCase = true) -> {
+                    share!!.token = readNode(parser, NODE_TOKEN)
+                }
+                else -> {
+                    skip(parser)
+                }
             }
         }
 
@@ -240,7 +248,7 @@ class ShareXMLParser {
                 }
 
                 name.equals(NODE_ITEM_SOURCE, ignoreCase = true) -> {
-                    remoteShare.itemSource = java.lang.Long.parseLong(readNode(parser, NODE_ITEM_SOURCE))
+                    remoteShare.itemSource = readNode(parser, NODE_ITEM_SOURCE)
                 }
 
                 name.equals(NODE_PARENT, ignoreCase = true) -> {
@@ -257,7 +265,7 @@ class ShareXMLParser {
                 }
 
                 name.equals(NODE_FILE_SOURCE, ignoreCase = true) -> {
-                    remoteShare.fileSource = java.lang.Long.parseLong(readNode(parser, NODE_FILE_SOURCE))
+                    remoteShare.fileSource = readNode(parser, NODE_FILE_SOURCE)
                 }
 
                 name.equals(NODE_PATH, ignoreCase = true) -> {

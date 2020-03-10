@@ -24,8 +24,6 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-
 /**
  * Contains Constants for Share Operation
  *
