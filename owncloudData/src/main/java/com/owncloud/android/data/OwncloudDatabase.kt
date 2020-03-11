@@ -79,6 +79,12 @@ abstract class OwncloudDatabase : RoomDatabase() {
             }
         }
 
+        // Array of all migrations
+        val ALL_MIGRATIONS = arrayOf(
+            MIGRATION_27_28,
+            MIGRATION_28_29
+        )
+
         fun getDatabase(
             context: Context
         ): OwncloudDatabase {
@@ -89,7 +95,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
                     context.applicationContext,
                     OwncloudDatabase::class.java,
                     ProviderMeta.NEW_DB_NAME
-                ).addMigrations(MIGRATION_27_28, MIGRATION_28_29)
+                ).addMigrations(*ALL_MIGRATIONS)
                     .build()
                 INSTANCE = instance
                 instance
@@ -97,11 +103,12 @@ abstract class OwncloudDatabase : RoomDatabase() {
         }
 
         @VisibleForTesting
-        fun switchToInMemory(context: Context) {
+        fun switchToInMemory(context: Context, vararg migrations: Migration) {
             INSTANCE = Room.inMemoryDatabaseBuilder(
                 context.applicationContext,
                 OwncloudDatabase::class.java
-            ).build()
+            ).addMigrations(*migrations)
+                .build()
         }
     }
 }
