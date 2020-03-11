@@ -69,6 +69,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     private Handler mHandler;
 
+    /*Just for testing*/
+
     AccountAuthenticator(Context context) {
         super(context);
         mContext = context;
