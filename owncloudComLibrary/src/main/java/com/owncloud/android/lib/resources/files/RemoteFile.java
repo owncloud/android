@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2019 ownCloud GmbH.
+ *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -41,13 +40,10 @@ import at.bitfire.dav4android.property.owncloud.OCId;
 import at.bitfire.dav4android.property.owncloud.OCPermissions;
 import at.bitfire.dav4android.property.owncloud.OCPrivatelink;
 import at.bitfire.dav4android.property.owncloud.OCSize;
-import okhttp3.HttpUrl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
-
-import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0;
 
 /**
  * Contains the data of a Remote File from a WebDavEntry
@@ -115,7 +111,7 @@ public class RemoteFile implements Parcelable, Serializable {
     }
 
     public RemoteFile(final Response davResource, String userId) {
-        this(getRemotePathFromUrl(davResource.getHref(), userId));
+        this(RemoteFileUtil.Companion.getRemotePathFromUrl(davResource.getHref(), userId));
         final List<Property> properties = davResource.getProperties();
 
         for (Property property : properties) {
@@ -167,21 +163,6 @@ public class RemoteFile implements Parcelable, Serializable {
         readFromParcel(source);
     }
 
-    /**
-     * Retrieves a relative path from a remote file url
-     * <p>
-     * Example: url:port/remote.php/dav/files/username/Documents/text.txt => /Documents/text.txt
-     *
-     * @param url    remote file url
-     * @param userId file owner
-     * @return remote relative path of the file
-     */
-    private static String getRemotePathFromUrl(HttpUrl url, String userId) {
-        final String davFilesPath = WEBDAV_FILES_PATH_4_0 + userId;
-        final String absoluteDavPath = Uri.decode(url.encodedPath());
-        final String pathToOc = absoluteDavPath.split(davFilesPath)[0];
-        return absoluteDavPath.replace(pathToOc + davFilesPath, "");
-    }
 
     /**
      * Getters and Setters
