@@ -102,9 +102,9 @@ class OCSettingsSecurityTest {
     fun securityView() {
         onView(withText(R.string.prefs_passcode)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_pattern)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_fingerprint)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_fingerprint_summary)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_fingerprint)).check(matches(not(isEnabled())))
+        onView(withText(R.string.prefs_biometric)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_biometric_summary)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_touches_with_other_visible_windows_summary)).check(matches(isDisplayed()))
     }
@@ -146,13 +146,13 @@ class OCSettingsSecurityTest {
     @Test
     fun enablePasscodeEnablesFingerprint() {
         firstEnablePasscode()
-        onView(withText(R.string.prefs_fingerprint)).check(matches(isEnabled()))
+        onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
     }
 
     @Test
     fun enablePatternEnablesFingerprint() {
         firstEnablePattern()
-        onView(withText(R.string.prefs_fingerprint)).check(matches(isEnabled()))
+        onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
     }
 
     @Test
@@ -179,7 +179,7 @@ class OCSettingsSecurityTest {
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertFalse(mPrefPasscode.isChecked)
         onView(withText(R.string.pass_code_removed)).check(matches(isEnabled()))
-        onView(withText(R.string.prefs_fingerprint)).check(matches(not(isEnabled())))
+        onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
     }
 
     @Test
@@ -192,7 +192,7 @@ class OCSettingsSecurityTest {
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertFalse(mPrefPattern.isChecked)
         onView(withText(R.string.pattern_removed)).check(matches(isEnabled()))
-        onView(withText(R.string.prefs_fingerprint)).check(matches(not(isEnabled())))
+        onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
     }
 
     @Test
