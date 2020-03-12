@@ -36,7 +36,7 @@
   <string name="prefs_accounts">Notandaaðgangar</string>
   <string name="prefs_manage_accounts">Sýsla með notandaaðganga</string>
   <string name="prefs_passcode">Læsing með lykilkóða</string>
-  <string name="prefs_fingerprint">Fingrafaralæsing</string>
+  <string name="prefs_biometric">Fingrafaralæsing</string>
   <string name="prefs_camera_picture_upload">Innsendar myndir</string>
   <string name="prefs_camera_picture_upload_summary">Hlaða sjálfvirkt inn myndum teknum á myndavél</string>
   <string name="prefs_camera_video_upload">Innsend myndskeið</string>
@@ -202,9 +202,6 @@
   <string name="pass_code_wrong">Rangur lykilkóði</string>
   <string name="pass_code_removed">Fjarlægði lykilkóða</string>
   <string name="pass_code_stored">Geymdi lykilkóða</string>
-  <string name="fingerprint_hint">Snertiskynjari</string>
-  <string name="fingerprint_not_recognized">Fingrafar þekktist ekki, prófaðu aftur</string>
-  <string name="fingerprint_success">Fingrafar þekktist</string>
   <string name="media_notif_ticker">%1$s tónlistarspilari</string>
   <string name="media_state_playing">%1$s (afspilun)</string>
   <string name="media_state_loading">%1$s (hleð)</string>

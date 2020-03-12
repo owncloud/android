@@ -56,7 +56,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.authentication.FingerprintManager
+import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.FileDataStorageManager
@@ -649,7 +649,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            FingerprintManager.getFingerprintManager(this).bayPassUnlockOnce()
+            BiometricManager.getBiometricManager(this).bayPassUnlockOnce()
         }
         PassCodeManager.getPassCodeManager().bayPassUnlockOnce()
         PatternManager.getPatternManager().bayPassUnlockOnce()

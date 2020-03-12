@@ -37,8 +37,8 @@
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
-  <string name="prefs_fingerprint">Bloqueo de huella digital</string>
-  <string name="prefs_fingerprint_summary">Habilitar código de acceso o bloqueo de patrón para activar esta opción</string>
+  <string name="prefs_biometric">Autenticación biométrica</string>
+  <string name="prefs_biometric_summary">Habilitar código de acceso o bloqueo de patrón para activar esta opción</string>
   <string name="prefs_touches_with_other_visible_windows">Toques con otras ventanas visibles.</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permite los toques  cuando la vista está oculta por otra ventana visible. Habilítelo para utilizar aplicaciones de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>
@@ -56,7 +56,7 @@
   <string name="prefs_sync_calendar_contacts">Sincronice sus contactos, calendarios y tareas</string>
   <string name="prefs_sync_calendar_contacts_summary">Instalar DAVx⁵</string>
   <string name="prefs_recommend">Recomendar a un amigo</string>
-  <string name="prefs_feedback">Mensajes de retroalimentación</string>
+  <string name="prefs_feedback">Sugerencias</string>
   <string name="prefs_imprint">Imprimir</string>
   <string name="prefs_remember_last_share_location">Recordar ubicación de compartidos</string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
@@ -225,13 +225,8 @@
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
   <string name="pass_code_removed">Código de acceso borrado</string>
   <string name="pass_code_stored">Contraseña almacenada</string>
-  <string name="fingerprint_confirm">Confirma tu huella para continuar</string>
-  <string name="fingerprint_hint">Toca el sensor</string>
-  <string name="fingerprint_not_recognized">Huella no reconocida, prueba otra vez</string>
-  <string name="fingerprint_success">Huella reconocida</string>
-  <string name="fingerprint_not_hardware_detected">Este dispositivo no soporta autenticación por huella</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Registra al menos una huella para usar este complemento</string>
-  <string name="fingerprint_not_granted_permissions">No se han concedido permisos de acceso a huella</string>
+  <string name="biometric_not_hardware_detected">Este dispositivo no soporta autenticación biométrica</string>
+  <string name="biometric_not_enrolled">Registra al menos un método biométrico para usar este complemento</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>
@@ -550,4 +545,6 @@
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
   <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
   <string name="common_not_found">no se encontró</string>
+  <string name="biometric_prompt_subtitle">Accede usando autenticación biométrica</string>
+  <string name="biometric_prompt_title">Acceso biométrico</string>
 </resources>

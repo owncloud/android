@@ -178,8 +178,6 @@
   <string name="pass_code_wrong">Código incorreto</string>
   <string name="pass_code_removed">Código removido</string>
   <string name="pass_code_stored">Código guardado</string>
-  <string name="fingerprint_confirm">Confirme a sua impressão digital para continuar</string>
-  <string name="fingerprint_hint">Sensor de toque</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
   <string name="media_state_playing">%1$s (a reproduzir)</string>
   <string name="media_state_loading">%1$s (a carregar)</string>

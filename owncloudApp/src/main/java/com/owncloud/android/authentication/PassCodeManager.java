@@ -29,6 +29,7 @@ import android.preference.PreferenceManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.ui.activity.PassCodeActivity;
+import com.owncloud.android.authentication.BiometricManager;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -65,9 +66,9 @@ public class PassCodeManager {
 
         if (!sExemptOfPasscodeActivites.contains(activity.getClass()) && passCodeShouldBeRequested()) {
 
-            // Do not ask for passcode if fingerprint is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager(activity).
-                    isFingerPrintEnabled()) {
+            // Do not ask for passcode if biometric is enabled
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.getBiometricManager(activity).
+                    isBiometricEnabled()) {
                 mVisibleActivitiesCounter++;
                 return;
             }
@@ -89,7 +90,7 @@ public class PassCodeManager {
         }
     }
 
-    public void onFingerprintCancelled(Activity activity) {
+    public void onBiometricCancelled(Activity activity) {
         // Ask user for passcode
         checkPasscode(activity);
     }
@@ -97,7 +98,7 @@ public class PassCodeManager {
     private void checkPasscode(Activity activity) {
         Intent i = new Intent(MainApp.Companion.getAppContext(), PassCodeActivity.class);
         i.setAction(PassCodeActivity.ACTION_CHECK);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         activity.startActivity(i);
     }
 

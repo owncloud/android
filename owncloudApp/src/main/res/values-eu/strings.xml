@@ -28,7 +28,7 @@
   <string name="prefs_accounts">Kontuak</string>
   <string name="prefs_manage_accounts">Kontuak kudeatu</string>
   <string name="prefs_passcode">Pasahitza bidezko blokeoa</string>
-  <string name="prefs_fingerprint">Hatz-marka bidezko blokeoa</string>
+  <string name="prefs_biometric">Hatz-marka bidezko blokeoa</string>
   <string name="prefs_camera_picture_upload">Irudien igoerak</string>
   <string name="prefs_camera_picture_upload_summary">Automatikoki igo kamarak ateratako argazkiak</string>
   <string name="prefs_camera_video_upload">Bideoen igoerak</string>
@@ -190,10 +190,7 @@
   <string name="pass_code_wrong">Pasahitza ez da zuzena</string>
   <string name="pass_code_removed">Pasahitza ezabatuta</string>
   <string name="pass_code_stored">Pasahitza gordeta</string>
-  <string name="fingerprint_confirm">Baieztatu zure hatz-marka jarraitzeko</string>
-  <string name="fingerprint_not_recognized">Hatz-marka ezezaguna, saia zaitez berriro</string>
-  <string name="fingerprint_success">Hartz-marka ezaguna</string>
-  <string name="fingerprint_not_hardware_detected">Gailu honek ez du hatz-marka bidezko autentikazioa onartzen.</string>
+  <string name="biometric_not_hardware_detected">Gailu honek ez du hatz-marka bidezko autentikazioa onartzen.</string>
   <string name="media_notif_ticker">%1$s musika erreproduzigailua</string>
   <string name="media_state_playing">%1$s (jotzen)</string>
   <string name="media_state_loading">%1$s (kargatzen)</string>

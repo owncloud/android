@@ -37,8 +37,8 @@
   <string name="prefs_accounts">חשבונות</string>
   <string name="prefs_manage_accounts">ניהול חשבונות</string>
   <string name="prefs_passcode">נעילת סיסמא</string>
-  <string name="prefs_fingerprint">נעילת טביעת אצבע</string>
-  <string name="prefs_fingerprint_summary">הפעלת קוד סיסמא או נעילת דפוס במטרה לאפשר אפשרות זו</string>
+  <string name="prefs_biometric">נעילת טביעת אצבע</string>
+  <string name="prefs_biometric_summary">הפעלת קוד סיסמא או נעילת דפוס במטרה לאפשר אפשרות זו</string>
   <string name="prefs_touches_with_other_visible_windows">נוגע בחלונות גלויים אחרים</string>
   <string name="prefs_touches_with_other_visible_windows_summary">מאפשר מגע כאשר התצוגה מוסתרת על ידי חלון גלוי אחר. יש לאפשר זאת לשימוש ביישומי סינון קלים.</string>
   <string name="confirmation_touches_with_other_windows_title">האם באמת לאפשר תכונה זו?</string>
@@ -225,13 +225,8 @@
   <string name="pass_code_wrong">קוד שגוי</string>
   <string name="pass_code_removed">הקוד הוסר</string>
   <string name="pass_code_stored">הקוד נשמר</string>
-  <string name="fingerprint_confirm">יש לאשר את טביעת האצבע להמשך</string>
-  <string name="fingerprint_hint">גלאי מגע</string>
-  <string name="fingerprint_not_recognized">טביעת האצבע לא אומתה, יש לנסות שוב</string>
-  <string name="fingerprint_success">טביעת האצבע אומתה</string>
-  <string name="fingerprint_not_hardware_detected">התקן זה אינו תומך באימות על בסיס טביעת אצבע</string>
-  <string name="fingerprint_not_enrolled_fingerprints">יש לרשום לפחות טביעת אצבע אחת לשימוש בתכונה זו</string>
-  <string name="fingerprint_not_granted_permissions">הרשאות טביעת אצבע לא ניתנו</string>
+  <string name="biometric_not_hardware_detected">התקן זה אינו תומך באימות על בסיס טביעת אצבע</string>
+  <string name="biometric_not_enrolled">יש לרשום לפחות טביעת אצבע אחת לשימוש בתכונה זו</string>
   <string name="media_notif_ticker">נגנן המוזיקה %1$s</string>
   <string name="media_state_playing">%1$s (מתנגן)</string>
   <string name="media_state_loading">%1$s (בטעינה)</string>

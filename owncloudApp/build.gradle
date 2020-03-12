@@ -25,6 +25,7 @@ dependencies {
     implementation "androidx.browser:browser:1.2.0"
     implementation 'commons-io:commons-io:2.6'
     implementation "androidx.sqlite:sqlite:$sqliteVersion"
+    implementation "androidx.biometric:biometric:$biometricVersion"
 
     // Tests
     testImplementation project(':owncloudTestUtil')

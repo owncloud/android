@@ -19,16 +19,22 @@
 
 package com.owncloud.android.ui.activity;
 
-import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import com.owncloud.android.ui.dialog.FingerprintAuthDialogFragment;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.PassCodeManager;
+import com.owncloud.android.authentication.PatternManager;
 import timber.log.Timber;
 
 import javax.crypto.Cipher;
@@ -44,50 +50,107 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.concurrent.Executor;
 
-public class FingerprintActivity extends AppCompatActivity {
-
-    private static final String TAG_FINGERPRINT_FRAGMENT = "FINGERPRINT_LOCK";
+public class BiometricActivity extends AppCompatActivity {
 
     private static final String ANDROID_KEY_STORE = "AndroidKeyStore";
 
-    public final static String PREFERENCE_SET_FINGERPRINT = "set_fingerprint";
+    public final static String PREFERENCE_SET_BIOMETRIC = "set_biometric";
 
     private static final String KEY_NAME = "default_key";
 
     private KeyStore mKeyStore;
     private KeyGenerator mKeyGenerator;
     private Cipher mCipher;
-    private FingerprintManager.CryptoObject mCryptoObject;
+    private BiometricPrompt.CryptoObject mCryptoObject;
+    private BiometricActivity mActivity;
 
     /**
      * Initializes the activity.
-     *
+     * <p>
      * An intent with a valid ACTION is expected; if none is found, an
      * {@link IllegalArgumentException} will be thrown.
      *
-     * @param savedInstanceState    Previously saved state - irrelevant in this case
+     * @param savedInstanceState Previously saved state - irrelevant in this case
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mActivity = this;
+
         generateAndStoreKey();
 
         if (initCipher()) {
-            mCryptoObject = new FingerprintManager.CryptoObject(mCipher);
+            mCryptoObject = new BiometricPrompt.CryptoObject(mCipher);
         }
 
-        FingerprintAuthDialogFragment fingerprintAuthDialogFragment = new FingerprintAuthDialogFragment();
+        BiometricManager biometricManager = BiometricManager.from(this);
+        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS) {
+            showBiometricPrompt();
+        } else {
+            authError();
+        }
+    }
 
-        // Attach crypto object used during the fingerprint authentication process
-        fingerprintAuthDialogFragment.setCryptoObject(mCryptoObject);
+    private Handler handler = new Handler();
 
-        fingerprintAuthDialogFragment.show(getFragmentManager(), TAG_FINGERPRINT_FRAGMENT);
+    private Executor executor = new Executor() {
+        @Override
+        public void execute(Runnable command) {
+            handler.post(command);
+        }
+    };
+
+    private void showBiometricPrompt() {
+        BiometricPrompt.PromptInfo promptInfo =
+                new BiometricPrompt.PromptInfo.Builder()
+                        .setTitle(getString(R.string.biometric_prompt_title))
+                        .setSubtitle(getString(R.string.biometric_prompt_subtitle))
+                        .setNegativeButtonText(getString(android.R.string.cancel))
+                        .setConfirmationRequired(true)
+                        .setDeviceCredentialAllowed(false)
+                        .build();
+
+        BiometricPrompt biometricPrompt = new BiometricPrompt(BiometricActivity.this,
+                executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Timber.e("onAuthenticationError (" + errorCode + "): " + errString);
+                authError();
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                mActivity.finish();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Timber.e("onAuthenticationFailed");
+            }
+        });
+
+        // Displays the "log in" prompt.
+        biometricPrompt.authenticate(promptInfo, mCryptoObject);
+    }
+
+    private void authError() {
+        if (PassCodeManager.getPassCodeManager().isPassCodeEnabled()) {
+            PassCodeManager.getPassCodeManager().onBiometricCancelled(mActivity);
+        } else if (PatternManager.getPatternManager().isPatternEnabled()) {
+            PatternManager.getPatternManager().onBiometricCancelled(mActivity);
+        }
+
+        mActivity.finish();
     }
 
     /**
-     * Generate encryption key involved in fingerprint authentication process and store it securely on the device using
+     * Generate encryption key involved in biometric authentication process and store it securely on the device using
      * the Android Keystore system
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -102,7 +165,7 @@ public class FingerprintActivity extends AppCompatActivity {
         }
 
         try {
-            // Access Android KeyGenerator to create the encryption key involved in fingerprint authentication process
+            // Access Android KeyGenerator to create the encryption key involved in biometric authentication process
             mKeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE);
 
         } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
@@ -128,8 +191,8 @@ public class FingerprintActivity extends AppCompatActivity {
     }
 
     /**
-     * Init mCipher that will be used to create the encrypted FingerprintManager.CryptoObject instance. This
-     * CryptoObject will be used during the fingerprint authentication process
+     * Init mCipher that will be used to create the encrypted {@link BiometricPrompt.CryptoObject} instance. This
+     * CryptoObject will be used during the biometric authentication process
      *
      * @return true if mCipher is properly initialized, false otherwise
      */

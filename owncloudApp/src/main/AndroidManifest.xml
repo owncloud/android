@@ -272,6 +272,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity android:name=".ui.activity.PatternLockActivity" />
-        <activity android:name=".ui.activity.FingerprintActivity" />
+        <activity android:name=".ui.activity.BiometricActivity" />
     </application>
 </manifest>

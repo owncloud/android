@@ -37,8 +37,8 @@
   <string name="prefs_accounts">Llogari</string>
   <string name="prefs_manage_accounts">Administroni llogari</string>
   <string name="prefs_passcode">Kyçje me kodkalim</string>
-  <string name="prefs_fingerprint">Kyçje me shenja gishtash</string>
-  <string name="prefs_fingerprint_summary">Që të aktivizohet kjo mundësi, aktivizoni kyçje përmes kodkalimesh ose përmes rregullsish</string>
+  <string name="prefs_biometric">Kyçje me shenja gishtash</string>
+  <string name="prefs_biometric_summary">Që të aktivizohet kjo mundësi, aktivizoni kyçje përmes kodkalimesh ose përmes rregullsish</string>
   <string name="prefs_touches_with_other_visible_windows">Prekje me dritare të tjera të dukshme</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Lejo prekje kur pamja është zënë nga një tjetër dritare e dukshme. Aktivizojeni që të përdorni aplikacione filtrimi drite.</string>
   <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori?</string>
@@ -225,13 +225,8 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_removed">Kodkalimi u hoq</string>
   <string name="pass_code_stored">Kodkalimi u depozitua</string>
-  <string name="fingerprint_confirm">Që të vazhdohet, ripohoni shenjat tuaja të gishtave</string>
-  <string name="fingerprint_hint">Ndijues prekjesh</string>
-  <string name="fingerprint_not_recognized">Shenja gishtash jo të pranuara, riprovoni</string>
-  <string name="fingerprint_success">Shenjat e gishtave u njohën</string>
-  <string name="fingerprint_not_hardware_detected">Kjo pajisje nuk mbulon mirëfilltësim përmes shenja gishtash</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Që të përdorni këtë veçori, regjistroni të paktën një palë shenja gishtash</string>
-  <string name="fingerprint_not_granted_permissions">S\’janë akorduar leje shenjash gishtash</string>
+  <string name="biometric_not_hardware_detected">Kjo pajisje nuk mbulon mirëfilltësim përmes shenja gishtash</string>
+  <string name="biometric_not_enrolled">Që të përdorni këtë veçori, regjistroni të paktën një palë shenja gishtash</string>
   <string name="media_notif_ticker">Lojtësi %1$s i muzikës</string>
   <string name="media_state_playing">%1$s (po luhet)</string>
   <string name="media_state_loading">%1$s (po ngarkohet)</string>

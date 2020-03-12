@@ -47,7 +47,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.FingerprintManager;
+import com.owncloud.android.authentication.BiometricManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
@@ -121,8 +121,8 @@ public class Preferences extends PreferenceActivity {
     private PreferenceCategory mPrefSecurityCategory;
     private CheckBoxPreference mPasscode;
     private CheckBoxPreference mPattern;
-    private CheckBoxPreference mFingerprint;
-    private FingerprintManager mFingerprintManager;
+    private CheckBoxPreference mBiometric;
+    private BiometricManager mBiometricManager;
     private boolean patternSet;
     private boolean passcodeSet;
     private CheckBoxPreference mPrefTouchesWithOtherVisibleWindows;
@@ -173,7 +173,7 @@ public class Preferences extends PreferenceActivity {
         );
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mFingerprintManager = FingerprintManager.getFingerprintManager(this);
+            mBiometricManager = BiometricManager.getBiometricManager(this);
         }
 
         /*
@@ -279,7 +279,7 @@ public class Preferences extends PreferenceActivity {
         mPrefSecurityCategory = (PreferenceCategory) findPreference(PREFERENCE_SECURITY_CATEGORY);
         mPasscode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
         mPattern = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
-        mFingerprint = (CheckBoxPreference) findPreference(FingerprintActivity.PREFERENCE_SET_FINGERPRINT);
+        mBiometric = (CheckBoxPreference) findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC);
         mPrefTouchesWithOtherVisibleWindows =
                 (CheckBoxPreference) findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS);
 
@@ -319,31 +319,31 @@ public class Preferences extends PreferenceActivity {
             });
         }
 
-        // Fingerprint lock
+        // Biometric lock
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            mPrefSecurityCategory.removePreference(mFingerprint);
-        } else if (mFingerprint != null) {
-            // Disable Fingerprint lock if Passcode or Pattern locks are disabled
+            mPrefSecurityCategory.removePreference(mBiometric);
+        } else if (mBiometric != null) {
+            // Disable biometric lock if Passcode or Pattern locks are disabled
             if (mPasscode != null && mPattern != null && !mPasscode.isChecked() && !mPattern.isChecked()) {
-                mFingerprint.setEnabled(false);
-                mFingerprint.setSummary(R.string.prefs_fingerprint_summary);
+                mBiometric.setEnabled(false);
+                mBiometric.setSummary(R.string.prefs_biometric_summary);
             }
 
-            mFingerprint.setOnPreferenceChangeListener((preference, newValue) -> {
+            mBiometric.setOnPreferenceChangeListener((preference, newValue) -> {
                 Boolean incoming = (Boolean) newValue;
 
-                // Fingerprint not supported
-                if (incoming && mFingerprintManager != null && !mFingerprintManager.isHardwareDetected()) {
+                // Biometric not supported
+                if (incoming && mBiometricManager != null && !mBiometricManager.isHardwareDetected()) {
 
-                    showSnackMessage(R.string.fingerprint_not_hardware_detected);
+                    showSnackMessage(R.string.biometric_not_hardware_detected);
 
                     return false;
                 }
 
-                // No fingerprints enrolled yet
-                if (incoming && mFingerprintManager != null && !mFingerprintManager.hasEnrolledFingerprints()) {
+                // No biometric enrolled yet
+                if (incoming && mBiometricManager != null && !mBiometricManager.hasEnrolledBiometric()) {
 
-                    showSnackMessage(R.string.fingerprint_not_enrolled_fingerprints);
+                    showSnackMessage(R.string.biometric_not_enrolled);
 
                     return false;
                 }
@@ -653,14 +653,14 @@ public class Preferences extends PreferenceActivity {
         mPasscode.setChecked(passCodeState);
         boolean patternState = mAppPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
         mPattern.setChecked(patternState);
-        boolean fingerprintState = mAppPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false);
+        boolean biometricState = mAppPrefs.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mFingerprintManager != null &&
-                !mFingerprintManager.hasEnrolledFingerprints()) {
-            fingerprintState = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mBiometricManager != null &&
+                !mBiometricManager.hasEnrolledBiometric()) {
+            biometricState = false;
         }
 
-        mFingerprint.setChecked(fingerprintState);
+        mBiometric.setChecked(biometricState);
     }
 
     @Override
@@ -744,8 +744,8 @@ public class Preferences extends PreferenceActivity {
 
                 showSnackMessage(R.string.pass_code_stored);
 
-                // Allow to use Fingerprint lock since Passcode lock has been enabled
-                enableFingerprint();
+                // Allow to use biometric lock since Passcode lock has been enabled
+                enableBiometric();
             }
 
         } else if (requestCode == ACTION_CONFIRM_PASSCODE && resultCode == RESULT_OK) { // Disable passcode
@@ -754,8 +754,8 @@ public class Preferences extends PreferenceActivity {
                 mAppPrefs.edit().putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false).apply();
                 showSnackMessage(R.string.pass_code_removed);
 
-                // Do not allow to use Fingerprint lock since Passcode lock has been disabled
-                disableFingerprint(getString(R.string.prefs_fingerprint_summary));
+                // Do not allow to use biometric lock since Passcode lock has been disabled
+                disableBiometric(getString(R.string.prefs_biometric_summary));
             }
         } else if (requestCode == ACTION_REQUEST_PATTERN && resultCode == RESULT_OK) { // Enable pattern
             String patternValue = data.getStringExtra(PatternLockActivity.KEY_PATTERN);
@@ -766,16 +766,16 @@ public class Preferences extends PreferenceActivity {
                 editor.apply();
                 showSnackMessage(R.string.pattern_stored);
 
-                // Allow to use Fingerprint lock since Pattern lock has been enabled
-                enableFingerprint();
+                // Allow to use biometric lock since Pattern lock has been enabled
+                enableBiometric();
             }
         } else if (requestCode == ACTION_CONFIRM_PATTERN && resultCode == RESULT_OK) { // Disable pattern
             if (data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)) {
                 mAppPrefs.edit().putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false).apply();
                 showSnackMessage(R.string.pattern_removed);
 
-                // Do not allow to use Fingerprint lock since Pattern lock has been disabled
-                disableFingerprint(getString(R.string.prefs_fingerprint_summary));
+                // Do not allow to use biometric lock since Pattern lock has been disabled
+                disableBiometric(getString(R.string.prefs_biometric_summary));
             }
         }
     }
@@ -931,17 +931,17 @@ public class Preferences extends PreferenceActivity {
         mAppPrefs.edit().putString(PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH, mSourcePath).apply();
     }
 
-    private void enableFingerprint() {
-        mFingerprint.setEnabled(true);
-        mFingerprint.setSummary(null);
+    private void enableBiometric() {
+        mBiometric.setEnabled(true);
+        mBiometric.setSummary(null);
     }
 
-    private void disableFingerprint(String summary) {
-        if (mFingerprint.isChecked()) {
-            mFingerprint.setChecked(false);
+    private void disableBiometric(String summary) {
+        if (mBiometric.isChecked()) {
+            mBiometric.setChecked(false);
         }
-        mFingerprint.setEnabled(false);
-        mFingerprint.setSummary(summary);
+        mBiometric.setEnabled(false);
+        mBiometric.setSummary(summary);
     }
 
     /**

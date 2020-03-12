@@ -35,8 +35,8 @@
   <string name="prefs_accounts">Paskyros</string>
   <string name="prefs_manage_accounts">Tvarkyti paskyras</string>
   <string name="prefs_passcode">Užrakto kodas</string>
-  <string name="prefs_fingerprint">Kontrolinis kodas užraktas</string>
-  <string name="prefs_fingerprint_summary">Įveskite slaptą frazę ar modelio užrakinimą kad įjungti šią opciją</string>
+  <string name="prefs_biometric">Kontrolinis kodas užraktas</string>
+  <string name="prefs_biometric_summary">Įveskite slaptą frazę ar modelio užrakinimą kad įjungti šią opciją</string>
   <string name="prefs_camera_picture_upload">Nuotraukų įkėlimai</string>
   <string name="prefs_camera_picture_upload_summary">Automatiškai įkelti nuotraukas iš kameros</string>
   <string name="prefs_camera_video_upload">Video įkėlimai</string>
@@ -201,13 +201,8 @@
   <string name="pass_code_wrong">Neteisingas užraktas</string>
   <string name="pass_code_removed">Užraktas pašalintas</string>
   <string name="pass_code_stored">Užraktas išsaugotas</string>
-  <string name="fingerprint_confirm">Patvirtinkite savo piršto anspaudą</string>
-  <string name="fingerprint_hint">Lietimo sensorius</string>
-  <string name="fingerprint_not_recognized">Piršto anspaudas neatpažintas, bandykite dar kartą</string>
-  <string name="fingerprint_success">Piršto atspaudas atpažintas</string>
-  <string name="fingerprint_not_hardware_detected">Įrenginys nepalaiko piršto anspaudų</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Užregistruokite bent vieną piršto anspaudą šiam funkcionalumui</string>
-  <string name="fingerprint_not_granted_permissions">Piršto anspaudo leidimai nesuteikti</string>
+  <string name="biometric_not_hardware_detected">Įrenginys nepalaiko piršto anspaudų</string>
+  <string name="biometric_not_enrolled">Užregistruokite bent vieną piršto anspaudą šiam funkcionalumui</string>
   <string name="media_notif_ticker">%1$s muzikos grotuvas</string>
   <string name="media_state_playing">%1$s (grojama)</string>
   <string name="media_state_loading">%1$s (įkeliama)</string>
