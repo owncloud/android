@@ -77,7 +77,7 @@
         <item
             android:orderInCategory="0"
             android:id="@+id/nav_shared_by_link_files"
-            android:icon="@drawable/ic_shared_via_link"
+            android:icon="@drawable/shared_via_link"
             android:title="@string/drawer_item_shared_by_link_files"/>
     </group>
 
