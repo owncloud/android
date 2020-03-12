@@ -28,7 +28,7 @@
   <string name="prefs_accounts">حساب‌ها</string>
   <string name="prefs_manage_accounts">مدیریت حساب‌ها</string>
   <string name="prefs_passcode">قفل رمزعبور</string>
-  <string name="prefs_fingerprint">قفل اثر انگشت</string>
+  <string name="prefs_biometric">قفل اثر انگشت</string>
   <string name="prefs_log_title">فعّال کردن گزارش گیری</string>
   <string name="prefs_log_summary">برای ثبت مشکلات استفاده می‌شود</string>
   <string name="prefs_log_title_history">تاریخچهٔ گزارش گیری</string>
@@ -180,7 +180,6 @@
   <string name="pass_code_wrong">رمز نادرست</string>
   <string name="pass_code_removed">رمز حذف شد</string>
   <string name="pass_code_stored">رمز ذخیره شد</string>
-  <string name="fingerprint_success">اثر انگشت شناسایی شد</string>
   <string name="media_notif_ticker">%1$s پخش کننده موسیقی</string>
   <string name="media_state_playing">%1$s ( در حال پخش موسیقی )</string>
   <string name="media_state_loading">%1$s (درحال بارگذاری)</string>

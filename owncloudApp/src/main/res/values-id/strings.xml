@@ -37,8 +37,8 @@
   <string name="prefs_accounts">Akun</string>
   <string name="prefs_manage_accounts">Kelola akun</string>
   <string name="prefs_passcode">Kunci kode sandi</string>
-  <string name="prefs_fingerprint">Kunci sidik jari</string>
-  <string name="prefs_fingerprint_summary">Aktifkan kode sandi atau kunci pola untuk mengaktifkan opsi ini</string>
+  <string name="prefs_biometric">Kunci sidik jari</string>
+  <string name="prefs_biometric_summary">Aktifkan kode sandi atau kunci pola untuk mengaktifkan opsi ini</string>
   <string name="prefs_touches_with_other_visible_windows">Bersentuhan dengan jendela lainnya</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Perbolehkan sentuhan ketika penglihatan dikaburkan oleh jendela lain yang terlihat. Aktifkanlah untuk menggunakan aplikasi penyaring cahaya.</string>
   <string name="confirmation_touches_with_other_windows_title">Anda yakin ingin mengaktifkan fitur ini?</string>
@@ -218,13 +218,8 @@
   <string name="pass_code_wrong">Kode sandi salah</string>
   <string name="pass_code_removed">Kode sandi dihapus</string>
   <string name="pass_code_stored">Kode sandi disimpan</string>
-  <string name="fingerprint_confirm">Konfirmasikan sidik jari Anda untuk melanjutkan</string>
-  <string name="fingerprint_hint">Sensor sentuh</string>
-  <string name="fingerprint_not_recognized">Sidik jari tidak dikenali, coba lagi</string>
-  <string name="fingerprint_success">Sidik jari dikenali</string>
-  <string name="fingerprint_not_hardware_detected">Perangkat ini tidak mendukung otentikasi sidik jari</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Daftarkan setidaknya satu sidik jari untuk menggunakan fitur ini</string>
-  <string name="fingerprint_not_granted_permissions">Izin sidik jari tidak diberikan</string>
+  <string name="biometric_not_hardware_detected">Perangkat ini tidak mendukung otentikasi sidik jari</string>
+  <string name="biometric_not_enrolled">Daftarkan setidaknya satu sidik jari untuk menggunakan fitur ini</string>
   <string name="media_notif_ticker">Pemutar musik %1$s</string>
   <string name="media_state_playing">%1$s (dimainkan)</string>
   <string name="media_state_loading">%1$s (sedang dimuat)</string>

@@ -60,9 +60,9 @@ public class PatternManager {
     public void onActivityStarted(Activity activity) {
         if (!sExemptOfPatternActivites.contains(activity.getClass()) && patternShouldBeRequested()) {
 
-            // Do not ask for pattern if fingerprint is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager(activity).
-                    isFingerPrintEnabled()) {
+            // Do not ask for pattern if biometric is enabled
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.getBiometricManager(activity).
+                    isBiometricEnabled()) {
                 mVisibleActivitiesCounter++;
                 return;
             }
@@ -86,7 +86,7 @@ public class PatternManager {
         }
     }
 
-    public void onFingerprintCancelled(Activity activity) {
+    public void onBiometricCancelled(Activity activity) {
         // Ask user for pattern
         checkPattern(activity);
     }
