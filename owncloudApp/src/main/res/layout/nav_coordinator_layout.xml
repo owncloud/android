@@ -16,6 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,5 +28,20 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/nav_main_container" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_navigation_bar_height"
+        android:layout_gravity="bottom"
+        android:background="@color/actionbar_start_color"
+        android:visibility="visible"
+        app:itemIconTint="@color/primary_button_text_color"
+        app:itemTextColor="@color/primary_button_text_color"
+        app:labelVisibilityMode="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navbar_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

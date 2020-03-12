@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/all_files"
+        android:icon="@drawable/ic_folder_open"
+        android:title="@string/drawer_item_all_files" />
+    <item
+        android:id="@+id/uploads"
+        android:icon="@drawable/ic_uploads"
+        android:title="@string/drawer_item_uploads_list" />
+    <item
+        android:id="@+id/available_offline"
+        android:icon="@drawable/ic_available_offline"
+        android:title="@string/drawer_item_only_available_offline" />
+    <item
+        android:id="@+id/shared_by_link"
+        android:icon="@drawable/shared_via_link"
+        android:title="@string/drawer_item_shared_by_link_files" />
+</menu>
