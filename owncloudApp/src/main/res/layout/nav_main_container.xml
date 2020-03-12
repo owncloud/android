@@ -22,6 +22,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_color"
     android:baselineAligned="false"
+    android:layout_marginBottom="@dimen/bottom_navigation_bar_height"
     android:orientation="horizontal"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

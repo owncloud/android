@@ -215,10 +215,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         setupToolbar()
 
         // setup drawer
-        setupDrawer(
+        setupDrawer()
+
+        setupNavigationBottomBar(
             when {
                 onlySharedByLink -> R.id.nav_shared_by_link_files
-                onlyAvailableOffline -> R.id.nav_only_available_offline
+                onlyAvailableOffline -> R.id.nav_available_offline_files
                 else -> R.id.nav_all_files
             }
         )

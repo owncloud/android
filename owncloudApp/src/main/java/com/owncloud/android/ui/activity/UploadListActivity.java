@@ -86,7 +86,10 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         setupToolbar();
 
         // setup drawer
-        setupDrawer(R.id.nav_uploads);
+        setupDrawer();
+
+        // setup navigation bottom bar
+        setupNavigationBottomBar(R.id.nav_uploads);
 
         // Add fragment with a transaction for setting a tag
         if (savedInstanceState == null) {

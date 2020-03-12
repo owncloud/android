@@ -44,6 +44,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
@@ -90,17 +91,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * accounts for the (max) three displayed accounts in the drawer header.
      */
     private Account[] mAccountsWithAvatars = new Account[3];
-
-    /**
-     * Initializes the drawer, its content and highlights the menu item with the given id.
-     * This method needs to be called after the content view has been set.
-     *
-     * @param menuItemId the menu item to be checked/highlighted
-     */
-    protected void setupDrawer(int menuItemId) {
-        setupDrawer();
-        setDrawerMenuItemChecked(menuItemId);
-    }
 
     /**
      * Initializes the drawer and its content.
@@ -221,61 +211,35 @@ public abstract class DrawerActivity extends ToolbarActivity {
         }
 
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        mDrawerLayout.closeDrawers();
+                menuItem -> {
+                    mDrawerLayout.closeDrawers();
 
-                        switch (menuItem.getItemId()) {
-                            case R.id.nav_all_files:
-                                menuItem.setChecked(true);
-                                mCheckedMenuItem = menuItem.getItemId();
-                                allFilesOption();
-                                break;
-                            case R.id.nav_uploads:
-                                Intent uploadListIntent = new Intent(getApplicationContext(),
-                                        UploadListActivity.class);
-                                uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(uploadListIntent);
-                                break;
-                            case R.id.nav_only_available_offline:
-                                menuItem.setChecked(true);
-                                mCheckedMenuItem = menuItem.getItemId();
-                                onlyAvailableOfflineOption();
-                                break;
-                            case R.id.nav_shared_by_link_files:
-                                menuItem.setChecked(true);
-                                mCheckedMenuItem = menuItem.getItemId();
-                                sharedByLinkFilesOption();
-                                break;
-                            case R.id.nav_settings:
-                                Intent settingsIntent = new Intent(getApplicationContext(),
-                                        Preferences.class);
-                                startActivity(settingsIntent);
-                                break;
-                            case R.id.drawer_menu_account_add:
-                                createAccount(false);
-                                break;
-                            case R.id.drawer_menu_account_manage:
-                                Intent manageAccountsIntent = new Intent(getApplicationContext(),
-                                        ManageAccountsActivity.class);
-                                startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS);
-                                break;
-                            case R.id.drawer_menu_feedback:
-                                openFeedback();
-                                break;
-                            case R.id.drawer_menu_help:
-                                openHelp();
-                                break;
-                            case Menu.NONE:
-                                // account clicked
-                                accountClicked(menuItem.getTitle().toString());
-                            default:
-                                Timber.i("Unknown drawer menu item clicked: %s", menuItem.getTitle());
-                        }
-
-                        return true;
+                    switch (menuItem.getItemId()) {
+                        case R.id.nav_settings:
+                            Intent settingsIntent = new Intent(getApplicationContext(), Preferences.class);
+                            startActivity(settingsIntent);
+                            break;
+                        case R.id.drawer_menu_account_add:
+                            createAccount(false);
+                            break;
+                        case R.id.drawer_menu_account_manage:
+                            Intent manageAccountsIntent = new Intent(getApplicationContext(), ManageAccountsActivity.class);
+                            startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS);
+                            break;
+                        case R.id.drawer_menu_feedback:
+                            openFeedback();
+                            break;
+                        case R.id.drawer_menu_help:
+                            openHelp();
+                            break;
+                        case Menu.NONE:
+                            // account clicked
+                            accountClicked(menuItem.getTitle().toString());
+                        default:
+                            Timber.i("Unknown drawer menu item clicked: %s", menuItem.getTitle());
                     }
+
+                    return true;
                 });
 
         // handle correct state
@@ -285,6 +249,43 @@ public abstract class DrawerActivity extends ToolbarActivity {
         } else {
             navigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
         }
+    }
+
+    /**
+     * Initializes the bottom navigation bar, its content and highlights the menu item with the given id.
+     * This method needs to be called after the content view has been set.
+     *
+     * @param menuItemId the menu item to be checked/highlighted
+     */
+    protected void setupNavigationBottomBar(int menuItemId) {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        // Allow or disallow touches with other visible windows
+        bottomNavigationView.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        );
+
+        bottomNavigationView.setSelectedItemId(menuItemId);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.nav_all_files:
+                    allFilesOption();
+                    break;
+                case R.id.nav_uploads:
+                    Intent uploadListIntent = new Intent(getApplicationContext(), UploadListActivity.class);
+                    uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(uploadListIntent);
+                    break;
+                case R.id.nav_available_offline_files:
+                    onlyAvailableOfflineOption();
+                    break;
+                case R.id.nav_shared_by_link_files:
+                    sharedByLinkFilesOption();
+                    break;
+            }
+            return true;
+        });
+
     }
 
     private void openHelp() {
@@ -598,7 +599,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
             if (mIsAccountChooserActive) {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_up);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
-                mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, false);
                 if (mDrawerLogo != null && accountCount > USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD) {
                     mDrawerLogo.setVisibility(View.GONE);
@@ -606,7 +606,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
             } else {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_down);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
-                mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, true);
                 if (mDrawerLogo != null) {
                     mDrawerLogo.setVisibility(View.VISIBLE);

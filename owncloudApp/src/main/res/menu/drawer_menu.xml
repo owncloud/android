@@ -55,32 +55,6 @@
       standard menu
       all items in this group MUST have orderInCategory="0" set
     -->
-    <group
-        android:id="@+id/drawer_menu_standard"
-        android:checkableBehavior="single">
-        <item
-            android:orderInCategory="0"
-            android:id="@+id/nav_all_files"
-            android:icon="@drawable/ic_folder_open"
-            android:title="@string/drawer_item_all_files" />
-        <item
-            android:orderInCategory="0"
-            android:id="@+id/nav_uploads"
-            android:icon="@drawable/ic_uploads"
-            android:title="@string/drawer_item_uploads_list"/>
-        <item
-            android:orderInCategory="0"
-            android:id="@+id/nav_only_available_offline"
-            android:icon="@drawable/ic_available_offline"
-            android:title="@string/drawer_item_only_available_offline"/>
-
-        <item
-            android:orderInCategory="0"
-            android:id="@+id/nav_shared_by_link_files"
-            android:icon="@drawable/shared_via_link"
-            android:title="@string/drawer_item_shared_by_link_files"/>
-    </group>
-
     <group android:id="@+id/drawer_menu_settings_etc">
         <item
             android:orderInCategory="3"
