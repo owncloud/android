@@ -365,7 +365,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun createMinFragments() {
-        val listOfFiles = OCFileListFragment.newInstance(false, onlyAvailableOffline, onlySharedByLink, false, false, true)
+        val listOfFiles =
+            OCFileListFragment.newInstance(false, onlyAvailableOffline, onlySharedByLink, false, false, true)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
@@ -1822,7 +1823,15 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     override fun allFilesOption() {
         if (onlyAvailableOffline || onlySharedByLink) {
-            super.allFilesOption()
+            if (listOfFilesFragment != null) {
+                onlySharedByLink = false
+                onlyAvailableOffline = false
+                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
+                listOfFilesFragment!!.listAllFiles()
+                updateActionBarTitleAndHomeButton(null)
+            } else {
+                super.allFilesOption()
+            }
         } else {
             browseToRoot()
         }
@@ -1830,17 +1839,33 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     override fun onlyAvailableOfflineOption() {
         if (!onlyAvailableOffline) {
-            super.onlyAvailableOfflineOption()
+            if (listOfFilesFragment != null) {
+                onlyAvailableOffline = true
+                onlySharedByLink = false
+                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
+                listOfFilesFragment!!.listOnlyAvailableOffline()
+                updateActionBarTitleAndHomeButton(null)
+            } else {
+                super.onlyAvailableOfflineOption()
+            }
         } else {
-            browseToRoot()
+            allFilesOption()
         }
     }
 
     override fun sharedByLinkFilesOption() {
         if (!onlySharedByLink) {
-            super.sharedByLinkFilesOption()
+            if (listOfFilesFragment != null) {
+                onlySharedByLink = true
+                onlyAvailableOffline = false
+                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
+                listOfFilesFragment!!.listOnlySharedByLink()
+                updateActionBarTitleAndHomeButton(null)
+            } else {
+                super.sharedByLinkFilesOption()
+            }
         } else {
-            browseToRoot()
+            allFilesOption()
         }
     }
 

@@ -257,7 +257,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
      *
      * @param menuItemId the menu item to be checked/highlighted
      */
-    protected void setupNavigationBottomBar(int menuItemId) {
+    void setupNavigationBottomBar(int menuItemId) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
         // Allow or disallow touches with other visible windows
         bottomNavigationView.setFilterTouchesWhenObscured(

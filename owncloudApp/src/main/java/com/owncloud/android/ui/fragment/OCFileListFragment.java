@@ -26,7 +26,6 @@
 package com.owncloud.android.ui.fragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -39,7 +38,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -67,6 +65,7 @@ import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.activity.FileListOption;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
@@ -227,11 +226,43 @@ public class OCFileListFragment extends ExtendedListFragment implements
             mFile = savedInstanceState.getParcelable(KEY_FILE);
         }
 
+        updateListOfFiles(FileListOption.ALL_FILES);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
+        mSearchView.setOnQueryTextFocusChangeListener(this);
+        mSearchView.setOnQueryTextListener(this);
+    }
+
+    public void listAllFiles() {
+        updateListOfFiles(FileListOption.ALL_FILES);
+        listDirectory(true);
+    }
+
+    public void listOnlyAvailableOffline() {
+        updateListOfFiles(FileListOption.AV_OFFLINE);
+        listDirectory(true);
+    }
+
+    public void listOnlySharedByLink() {
+        updateListOfFiles(FileListOption.SHARED_BY_LINK);
+        listDirectory(true);
+    }
+
+    private void updateListOfFiles(
+            FileListOption fileListOption
+    ) {
         boolean justFolders = isShowingJustFolders();
         setFooterEnabled(!justFolders);
 
-        boolean onlyAvailableOffline = isShowingOnlyAvailableOffline();
-        boolean sharedByLinkFiles = isShowingSharedByLinkFiles();
+        boolean onlyAvailableOffline = fileListOption == FileListOption.AV_OFFLINE;
+        boolean sharedByLinkFiles = fileListOption == FileListOption.SHARED_BY_LINK;
+
         boolean folderPicker = isPickingAFolder();
 
         mFileListAdapter = new FileListListAdapter(
@@ -271,16 +302,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
         coordinatorLayout.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        mSearchView.setMaxWidth(Integer.MAX_VALUE);
-        mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
-        mSearchView.setOnQueryTextFocusChangeListener(this);
-        mSearchView.setOnQueryTextListener(this);
     }
 
     /**
@@ -334,48 +355,35 @@ public class OCFileListFragment extends ExtendedListFragment implements
                         getResources().getString(R.string.app_name)));
                 final BottomSheetBehavior uploadBottomSheetBehavior =
                         BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
-                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialog) {
-                        uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.getMeasuredHeight());
-                    }
-                });
+                dialog.setOnShowListener(dialog1 ->
+                        uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.getMeasuredHeight()));
                 dialog.show();
                 getFabMain().collapse();
                 recordMiniFabClick();
             }
         });
 
-        getFabUpload().setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showSnackMessage(R.string.actionbar_upload);
-                return true;
-            }
+        getFabUpload().setOnLongClickListener(v -> {
+            showSnackMessage(R.string.actionbar_upload);
+            return true;
         });
     }
 
     /**
-     * registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
+     * Registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
      * on the 'Create Dir' mini FAB for the linked action and {@link Snackbar} showing the underlying action.
      */
     private void registerFabMkDirListeners() {
-        getFabMkdir().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
-                dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
-                getFabMain().collapse();
-                recordMiniFabClick();
-            }
+        getFabMkdir().setOnClickListener(v -> {
+            CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+            dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
+            getFabMain().collapse();
+            recordMiniFabClick();
         });
 
-        getFabMkdir().setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showSnackMessage(R.string.actionbar_mkdir);
-                return true;
-            }
+        getFabMkdir().setOnLongClickListener(v -> {
+            showSnackMessage(R.string.actionbar_mkdir);
+            return true;
         });
     }
 
