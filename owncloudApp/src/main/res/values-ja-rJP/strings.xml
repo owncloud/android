@@ -34,6 +34,7 @@
   <string name="prefs_accounts">アカウント</string>
   <string name="prefs_manage_accounts">アカウント管理</string>
   <string name="prefs_passcode">パスコードロック</string>
+  <string name="prefs_biometric_summary">パスコードまたはパターンロックを有効にする</string>
   <string name="prefs_camera_picture_upload">ピクチャーアップロード</string>
   <string name="prefs_camera_picture_upload_summary">カメラで撮影した画像を自動アップロード</string>
   <string name="prefs_camera_video_upload">動画アップロード</string>

@@ -32,6 +32,7 @@
   <string name="prefs_accounts">Tilit</string>
   <string name="prefs_manage_accounts">Tilien hallinta</string>
   <string name="prefs_passcode">Suojakoodilukitus</string>
+  <string name="prefs_biometric_summary">Kytke suojakoodilukitus tai kuviolukitus käyttöön jotta voit käyttää tätä vaihtoehtoa</string>
   <string name="prefs_camera_picture_upload">Kuvien lähetys</string>
   <string name="prefs_camera_picture_upload_summary">Lähetä automaattisesti kameralla otetut kuvat</string>
   <string name="prefs_camera_video_upload">Videoiden lähetys</string>

@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerenciar contas</string>
   <string name="prefs_passcode">Bloqueio de senha</string>
+  <string name="prefs_biometric">Bloqueio biométrico</string>
   <string name="prefs_biometric_summary">Ativar senha ou bloqueio padrão para habilitar esta opção</string>
   <string name="prefs_touches_with_other_visible_windows">Toques com outras janelas visíveis</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques quando a visualização é obscurecida por outra janela visível. Ativá-lo para usar aplicativos de filtragem de luz.</string>
@@ -224,6 +225,10 @@
   <string name="pass_code_wrong">Código de acesso incorreto</string>
   <string name="pass_code_removed">Código de acesso removido</string>
   <string name="pass_code_stored">Código de acesso armazenado</string>
+  <string name="biometric_not_hardware_detected">Este dispositivo não suporta a autenticação biométrica</string>
+  <string name="biometric_not_enrolled">Registre pelo menos uma biométria para usar esse recurso</string>
+  <string name="biometric_prompt_title">Conexão biométrica</string>
+  <string name="biometric_prompt_subtitle">Conectar usando sua credencial biométrica</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
   <string name="media_state_playing">%1$s (reproduzindo)</string>
   <string name="media_state_loading">%1$s (carregando)</string>
