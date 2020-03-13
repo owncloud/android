@@ -239,7 +239,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     // sharedIcon
                     ImageView sharedIconV = view.findViewById(R.id.sharedIcon);
                     if (file.isSharedViaLink()) {
-                        sharedIconV.setImageResource(R.drawable.shared_via_link);
+                        sharedIconV.setImageResource(R.drawable.ic_shared_by_link);
                         sharedIconV.setVisibility(View.VISIBLE);
                         sharedIconV.bringToFront();
                     } else if (file.isSharedWithSharee() || file.isSharedWithMe()) {

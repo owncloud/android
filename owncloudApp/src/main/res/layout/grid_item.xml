@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_gravity="top|end"
-            android:src="@drawable/shared_via_link" />
+            android:src="@drawable/ic_shared_by_link" />
 
         <ImageView
             android:id="@+id/localFileIndicator"
