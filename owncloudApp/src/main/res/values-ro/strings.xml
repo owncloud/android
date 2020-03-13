@@ -35,7 +35,6 @@
   <string name="prefs_accounts">Conturi</string>
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>
-  <string name="prefs_biometric">Blocat cu amprentă</string>
   <string name="confirmation_touches_with_other_windows_title">Ești sigur că dorești activarea acestei funcții?</string>
   <string name="prefs_camera_picture_upload">Încărcări fotografii</string>
   <string name="prefs_camera_picture_upload_summary">Încarcă automat fotografiile create cu camera</string>
@@ -193,7 +192,6 @@
   <string name="pass_code_wrong">Parolă incorectă</string>
   <string name="pass_code_removed">Parolă ștearsă</string>
   <string name="pass_code_stored">Parolă stocată</string>
-  <string name="biometric_not_hardware_detected">Acest dispozitiv nu suportă autentificarea cu amprentă</string>
   <string name="media_notif_ticker">%1$s  player de muzică</string>
   <string name="media_state_playing">%1$s (cântă)</string>
   <string name="media_state_loading">%1$s (încarcă)</string>

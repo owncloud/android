@@ -37,7 +37,6 @@
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
-  <string name="prefs_biometric">Blocco con impronta digitale</string>
   <string name="prefs_biometric_summary">Abilita il blocco con pasword o la sequenza di blocco per attivare questa opzione.</string>
   <string name="prefs_touches_with_other_visible_windows">Tocca con altre finestre visibili</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Consenti tocchi quando la vista è oscurata da un\'altra finestra visibile. Abilitalo per utilizzare app di filtraggio della luce.</string>
@@ -218,8 +217,6 @@
   <string name="pass_code_wrong">Codice segreto non corretto</string>
   <string name="pass_code_removed">Codice segreto rimosso</string>
   <string name="pass_code_stored">Codice segreto memorizzato</string>
-  <string name="biometric_not_hardware_detected">Questo dispositivo non supporta l\'autenticazione a mezzo impronta digitale</string>
-  <string name="biometric_not_enrolled">Registra almeno una impronta per usare questa funzionalità</string>
   <string name="media_notif_ticker">Lettore musicale %1$s</string>
   <string name="media_state_playing">%1$s (in riproduzione)</string>
   <string name="media_state_loading">%1$s (in caricamento)</string>

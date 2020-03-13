@@ -28,7 +28,6 @@
   <string name="prefs_accounts">Kontoer</string>
   <string name="prefs_manage_accounts">Håndter kontoer</string>
   <string name="prefs_passcode">Passordlås</string>
-  <string name="prefs_biometric">Fingeravtrykkslås</string>
   <string name="prefs_biometric_summary">Aktiver passord eller mønsterlås for å aktivere dette alternativet</string>
   <string name="prefs_camera_picture_upload">Bilde opplastninger</string>
   <string name="prefs_camera_picture_upload_summary">Last opp bilder tatt med kamera automatisk</string>
@@ -191,8 +190,6 @@
   <string name="pass_code_wrong">Feil passord</string>
   <string name="pass_code_removed">Passord fjernet</string>
   <string name="pass_code_stored">Passord lagret</string>
-  <string name="biometric_not_hardware_detected">Denne enheten støtter ikke fingeravtrykksautentisering</string>
-  <string name="biometric_not_enrolled">Registrer minst ett fingeravtrykk for å bruke denne funksjonen</string>
   <string name="media_notif_ticker">%1$s musikkspiller</string>
   <string name="media_state_playing">%1$s (spiller)</string>
   <string name="media_state_loading">%1$s (laster)</string>

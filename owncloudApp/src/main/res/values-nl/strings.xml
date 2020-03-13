@@ -37,7 +37,6 @@
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Accounts beheren</string>
   <string name="prefs_passcode">Pincode slot</string>
-  <string name="prefs_biometric">Vingerafdrukvergrendeling</string>
   <string name="prefs_biometric_summary">Zet de toegangscode of de patroonvergrendeling aan om deze optie te activeren </string>
   <string name="prefs_touches_with_other_visible_windows_summary">Sta acties toe als het scherm wordt beinvloed door een andere app. Zet dit aan als je licht-filter apps gebruikt.</string>
   <string name="confirmation_touches_with_other_windows_title">Weet je zeker dat je deze functionaliteit wilt aanzetten?</string>
@@ -135,6 +134,7 @@ Download hier: %2$s</string>
   <string name="common_error">Fout</string>
   <string name="common_loading">Laden...</string>
   <string name="common_unknown">onbekend</string>
+  <string name="common_error_unknown">onbekende fout</string>
   <string name="common_pending">In behandeling</string>
   <string name="common_important">Belangrijk</string>
   <string name="about_title">Over</string>
@@ -220,8 +220,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_wrong">Onjuiste pincode</string>
   <string name="pass_code_removed">Pincode verwijderd</string>
   <string name="pass_code_stored">Pincode opgeslagen</string>
-  <string name="biometric_not_hardware_detected">Dit apparaat ondersteunt geen vingerafdruk-authenticatie</string>
-  <string name="biometric_not_enrolled">Registreer ten minste één vingerafdruk om deze functie te gebruiken</string>
   <string name="media_notif_ticker">%1$s muziekspeler</string>
   <string name="media_state_playing">%1$s (speelt)</string>
   <string name="media_state_loading">%1$s (laden)</string>

@@ -37,7 +37,6 @@
   <string name="prefs_accounts">Учётные записи</string>
   <string name="prefs_manage_accounts">Управление аккаунтами</string>
   <string name="prefs_passcode">Блокировка кодом</string>
-  <string name="prefs_biometric">Блокировка по отпечатку пальца</string>
   <string name="prefs_biometric_summary">Чтобы использовать эту настройку, включите блокировку по коду или графическому ключу</string>
   <string name="prefs_touches_with_other_visible_windows">Разрешить соприкосновения с другими видимыми окнами</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешить соприкосновения, когда просмотр перекрывается другим видимым окном. Разрешите, чтобы использовать лёгкие фильтрующие приложения.</string>
@@ -226,8 +225,6 @@
   <string name="pass_code_wrong">Некоррентный код</string>
   <string name="pass_code_removed">Код удален</string>
   <string name="pass_code_stored">Код сохранен</string>
-  <string name="biometric_not_hardware_detected">Это устройство не поддерживает аутентификацию по отпечатку пальца</string>
-  <string name="biometric_not_enrolled">Чтобы использовать эту возможность, зарегистрируйте хотя-бы один отпечаток пальца</string>
   <string name="media_notif_ticker">%1$s аудиоплеер</string>
   <string name="media_state_playing">%1$s (проигрывается)</string>
   <string name="media_state_loading">%1$s (загружается)</string>

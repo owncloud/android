@@ -37,7 +37,6 @@
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Bloqueo con clave</string>
-  <string name="prefs_biometric">Autenticación biométrica</string>
   <string name="prefs_biometric_summary">Habilitar la contraseña o patrón de bloqueo para utilizar esta opción</string>
   <string name="prefs_touches_with_other_visible_windows">En contacto con otras ventanas visibles</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir clicks mientras que la vista está oscurecida por otra ventana visible. Habilítalo para utilizar aplicaciones de filtro de luz.</string>
@@ -222,8 +221,6 @@
   <string name="pass_code_wrong">Contraseña incorrecta</string>
   <string name="pass_code_removed">Contraseña eliminada</string>
   <string name="pass_code_stored">Contraseña almacenada</string>
-  <string name="biometric_not_hardware_detected">El dispositivo no soporta identificación biométrica</string>
-  <string name="biometric_not_enrolled">Debes registrar al menos un método biométrico para utilizar esta funcionalidad</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>

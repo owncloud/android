@@ -36,7 +36,6 @@
   <string name="prefs_accounts">Računi</string>
   <string name="prefs_manage_accounts">Upravljanje z računi</string>
   <string name="prefs_passcode">Zakleni dostop s kodo PIN</string>
-  <string name="prefs_biometric">Zaklepanje z prstnim odtisom</string>
   <string name="prefs_camera_picture_upload">Hipno pošiljanje slik</string>
   <string name="prefs_camera_picture_upload_summary">Hipno pošiljanje slik, zajetih s kamero, na strežnik</string>
   <string name="prefs_camera_video_upload">Hipno pošiljanje posnetkov</string>

@@ -37,7 +37,6 @@
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
-  <string name="prefs_biometric">Zámek otisku prstů</string>
   <string name="prefs_biometric_summary">Nutné povolit bezpečnostní kód nebo gesto k povolení této možnosti</string>
   <string name="prefs_touches_with_other_visible_windows">Dotek s jinými viditelnými okny</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Povolit dotek s aplikacemi, které mohou překrýt toto okno. Nutné pro povolení při použití filtrů světla.</string>
@@ -223,8 +222,6 @@
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
   <string name="pass_code_removed">Bezpečnostní kód odstraněn</string>
   <string name="pass_code_stored">Bezpečnostní kód uložen</string>
-  <string name="biometric_not_hardware_detected">Toto zařízení nepodporuje autentizaci pomocí otisku prstů</string>
-  <string name="biometric_not_enrolled">Chcete-li tuto funkci použít, zaregistrujte si alespoň jeden otisk prstu</string>
   <string name="media_notif_ticker">Hudební přehrávač %1$s</string>
   <string name="media_state_playing">%1$s (přehrává)</string>
   <string name="media_state_loading">%1$s (načítá)</string>

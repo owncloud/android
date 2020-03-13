@@ -37,7 +37,6 @@
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
   <string name="prefs_passcode">PIN gesperrt</string>
-  <string name="prefs_biometric">Fingerabdrucksperre</string>
   <string name="prefs_biometric_summary">Passwort oder Wisch-Muster eingeben um diese Option zu aktivieren</string>
   <string name="prefs_touches_with_other_visible_windows">Berührungen mit anderen sichtbaren Fenstern</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen zulassen, wenn die Ansicht von einem anderen sichtbaren Fenster verdeckt wird. Aktivieren Sie es, um Lichtfilter-Apps zu verwenden.</string>
@@ -225,8 +224,6 @@
   <string name="pass_code_wrong">PIN nicht korrekt</string>
   <string name="pass_code_removed">PIN entfernt</string>
   <string name="pass_code_stored">PIN gespeichert</string>
-  <string name="biometric_not_hardware_detected">Dieses Gerät unterstützt keine Authentifizierung mittels Fingerabdruck</string>
-  <string name="biometric_not_enrolled">Registrieren Sie mindestens einen Fingerabruck, um dieses Feature zu benutzen</string>
   <string name="media_notif_ticker">%1$s Musikplayer</string>
   <string name="media_state_playing">%1$s (abspielend)</string>
   <string name="media_state_loading">%1$s (lädt)</string>

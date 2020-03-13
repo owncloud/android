@@ -37,7 +37,6 @@
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gérer les comptes</string>
   <string name="prefs_passcode">Code de sécurité</string>
-  <string name="prefs_biometric">Verrouillage par empreinte</string>
   <string name="prefs_biometric_summary">Activez un code de sécurité ou un motif afin d’activer cette option</string>
   <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Vous utilisez cette fonctionnalité sous votre propre responsabilité. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l’application.</string>
@@ -213,8 +212,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="pass_code_wrong">Code de sécurité incorrect</string>
   <string name="pass_code_removed">Code de sécurité supprimé</string>
   <string name="pass_code_stored">Code de sécurité enregistré</string>
-  <string name="biometric_not_hardware_detected">L’appareil ne supporte pas l’authentification par empreinte</string>
-  <string name="biometric_not_enrolled">Enregistrez au moins une empreinte pour accéder à cette fonctionnalité</string>
   <string name="media_notif_ticker">%1$s lecteur de musique</string>
   <string name="media_state_playing">%1$s (lecture)</string>
   <string name="media_state_loading">%1$s (chargement)</string>

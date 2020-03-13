@@ -34,8 +34,6 @@
   <string name="prefs_accounts">アカウント</string>
   <string name="prefs_manage_accounts">アカウント管理</string>
   <string name="prefs_passcode">パスコードロック</string>
-  <string name="prefs_biometric">指紋認証</string>
-  <string name="prefs_biometric_summary">パスコードまたはパターンロックを有効にする</string>
   <string name="prefs_camera_picture_upload">ピクチャーアップロード</string>
   <string name="prefs_camera_picture_upload_summary">カメラで撮影した画像を自動アップロード</string>
   <string name="prefs_camera_video_upload">動画アップロード</string>
@@ -197,7 +195,6 @@
   <string name="pass_code_wrong">パスコードが正しくありません</string>
   <string name="pass_code_removed">パスコードを削除しました</string>
   <string name="pass_code_stored">パスコードを保存しました</string>
-  <string name="biometric_not_hardware_detected">このデバイスでは指紋認証はサポートされていません。</string>
   <string name="media_notif_ticker">%1$s ミュージックプレーヤー</string>
   <string name="media_state_playing">%1$s (プレイ中)</string>
   <string name="media_state_loading">%1$s (読込中)</string>
