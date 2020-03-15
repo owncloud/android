@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Hesaplar</string>
   <string name="prefs_manage_accounts">Hesapları yönet</string>
   <string name="prefs_passcode">Parola kod kilidi</string>
+  <string name="prefs_biometric">Biyometrik kilit</string>
   <string name="prefs_biometric_summary">Bu özelliği etkinleştirmek için parola veya desen ile kilitlemeyi etkinleşir</string>
   <string name="prefs_touches_with_other_visible_windows">Diğer görünür pencerelerle birlikte dokunma</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Başka bir görünür pencere tarafından gizlendiğinde dokunmalara izin ver. Uygulamaları hafif filtrelemek için etkinleştir.</string>
@@ -224,6 +225,10 @@
   <string name="pass_code_wrong">Hatalı parola kodu</string>
   <string name="pass_code_removed">Parola kodu kaldırıldı</string>
   <string name="pass_code_stored">Parola kodu depolandı</string>
+  <string name="biometric_not_hardware_detected">Bu cihaz biyometrik kimlik doğrulamayı desteklemiyor</string>
+  <string name="biometric_not_enrolled">Bu özelliği kullanmak için en az bir biyometrik giriş kaydedilmeli</string>
+  <string name="biometric_prompt_title">Biyometrik giriş yap</string>
+  <string name="biometric_prompt_subtitle">Biyometrik kimlik bilgilerinizi kullanarak giriş yapın</string>
   <string name="media_notif_ticker">%1$s müzik çalar</string>
   <string name="media_state_playing">%1$s (oynatılıyor)</string>
   <string name="media_state_loading">%1$s (yükleniyor)</string>
