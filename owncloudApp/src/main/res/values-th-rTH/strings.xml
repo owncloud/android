@@ -37,6 +37,7 @@
   <string name="prefs_accounts">บัญชี</string>
   <string name="prefs_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="prefs_passcode">ล็อครหัสยืนยัน</string>
+  <string name="prefs_biometric">ล็อคด้วยไบโอเมตริกซ์</string>
   <string name="prefs_biometric_summary">เปิดใช้งานรหัสผ่านหรือรูปแบบล็อคเพื่อเปิดใช้งานตัวเลือกนี้</string>
   <string name="prefs_touches_with_other_visible_windows">แตะกับหน้าต่างอื่นที่มองเห็น</string>
   <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอปกรองแสง</string>
@@ -224,6 +225,10 @@
   <string name="pass_code_wrong">รหัสยืนยันไม่ถูกต้อง</string>
   <string name="pass_code_removed">ลบรหัสยืนยัน</string>
   <string name="pass_code_stored">รหัสยืนยันที่เก็บไว้</string>
+  <string name="biometric_not_hardware_detected">อุปกรณ์นี้ไม่รองรับการใช้งานไบโอเมตริกซ์</string>
+  <string name="biometric_not_enrolled">จำเป็นต้องเพิ่มอย่างน้อยหนึ่งไบโอเมตริกซ์เพื่อใช้เปิดการใช้งานฟีดเจอร์นี้</string>
+  <string name="biometric_prompt_title">เข้าสู่ระบบด้วยไบโอเมตริกซ์</string>
+  <string name="biometric_prompt_subtitle">เข้าสู่ระบบโดยใช้ไบโอเมตริกซ์ของคุณ</string>
   <string name="media_notif_ticker">เล่นเพลง %1$s</string>
   <string name="media_state_playing">%1$s (กำลังเล่น)</string>
   <string name="media_state_loading">%1$s (กำลังโหลด)</string>
