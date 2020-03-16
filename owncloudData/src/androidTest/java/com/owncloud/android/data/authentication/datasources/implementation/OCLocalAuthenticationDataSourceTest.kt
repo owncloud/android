@@ -36,15 +36,16 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_AC
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
-import com.owncloud.android.testutil.ACCESS_TOKEN
-import com.owncloud.android.testutil.AUTH_TOKEN_TYPE
+import com.owncloud.android.testutil.OC_ACCESS_TOKEN
 import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASE_URL
+import com.owncloud.android.testutil.OC_OAUTH_SUPPORTED_TRUE
 import com.owncloud.android.testutil.OC_REDIRECTION_PATH
+import com.owncloud.android.testutil.OC_REFRESH_TOKEN
+import com.owncloud.android.testutil.OC_SCOPE
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.OC_USER_INFO
-import com.owncloud.android.testutil.REFRESH_TOKEN
-import com.owncloud.android.testutil.SCOPE
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.verify
@@ -153,12 +154,12 @@ class OCLocalAuthenticationDataSourceTest {
         val newAccountName = ocLocalAuthenticationDataSource.addOAuthAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
             "admin",
-            AUTH_TOKEN_TYPE,
-            ACCESS_TOKEN,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
             OC_SERVER_INFO,
             OC_USER_INFO,
-            REFRESH_TOKEN,
-            SCOPE,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
             false
         )
 
@@ -171,7 +172,7 @@ class OCLocalAuthenticationDataSourceTest {
         verifyAccountInfoIsUpdated(newAccount, OC_SERVER_INFO, OC_USER_INFO, 1)
 
         // OAuth params are updated
-        verifyOAuthParamsAreUpdated(newAccount, ACCESS_TOKEN, "TRUE", REFRESH_TOKEN, SCOPE, 1)
+        verifyOAuthParamsAreUpdated(newAccount, OC_ACCESS_TOKEN, OC_OAUTH_SUPPORTED_TRUE, OC_REFRESH_TOKEN, OC_SCOPE, 1)
 
         assertEquals(newAccount.name, newAccountName)
     }
@@ -185,12 +186,12 @@ class OCLocalAuthenticationDataSourceTest {
         ocLocalAuthenticationDataSource.addOAuthAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
             "username",
-            AUTH_TOKEN_TYPE,
-            ACCESS_TOKEN,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
             OC_SERVER_INFO,
             OC_USER_INFO,
-            REFRESH_TOKEN,
-            SCOPE,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
             false
         )
     }
@@ -212,12 +213,12 @@ class OCLocalAuthenticationDataSourceTest {
         ocLocalAuthenticationDataSource.addOAuthAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
             "username",
-            AUTH_TOKEN_TYPE,
-            ACCESS_TOKEN,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
             OC_SERVER_INFO,
             OC_USER_INFO,
-            REFRESH_TOKEN,
-            SCOPE,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
             true
         )
 
@@ -229,7 +230,7 @@ class OCLocalAuthenticationDataSourceTest {
 
         // The account already exists, so update it
         verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 1)
-        verifyOAuthParamsAreUpdated(OC_ACCOUNT, ACCESS_TOKEN, "TRUE", REFRESH_TOKEN, SCOPE, 1)
+        verifyOAuthParamsAreUpdated(OC_ACCOUNT, OC_ACCESS_TOKEN, OC_OAUTH_SUPPORTED_TRUE, OC_REFRESH_TOKEN, OC_SCOPE, 1)
     }
 
     @Test()
@@ -240,11 +241,11 @@ class OCLocalAuthenticationDataSourceTest {
 
         every {
             accountManager.getUserData(OC_ACCOUNT, KEY_SUPPORTS_OAUTH2)
-        } returns "TRUE"
+        } returns OC_OAUTH_SUPPORTED_TRUE
 
         val supportsOAuth2 = ocLocalAuthenticationDataSource.supportsOAuth2(OC_ACCOUNT.name)
 
-        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, exactly = 1)
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
         verifyUserDataIsGot(OC_ACCOUNT, KEY_SUPPORTS_OAUTH2, 1)
 
         assertEquals(true, supportsOAuth2)
@@ -271,7 +272,7 @@ class OCLocalAuthenticationDataSourceTest {
 
         val baseUrl = ocLocalAuthenticationDataSource.getBaseUrl(OC_ACCOUNT.name)
 
-        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, exactly = 1)
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
         verifyUserDataIsGot(OC_ACCOUNT, KEY_OC_BASE_URL, 1)
 
         assertEquals(OC_BASE_URL, baseUrl)
@@ -347,7 +348,7 @@ class OCLocalAuthenticationDataSourceTest {
         exactly: Int
     ) {
         verify(exactly = exactly) {
-            accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, accessToken)
+            accountManager.setAuthToken(account, OC_AUTH_TOKEN_TYPE, accessToken)
             accountManager.setUserData(account, KEY_SUPPORTS_OAUTH2, supportsOAuth2)
             accountManager.setUserData(account, KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
             accountManager.setUserData(account, KEY_OAUTH2_SCOPE, scope)

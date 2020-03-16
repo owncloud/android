@@ -65,7 +65,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      * used by application and all extensions.
      */
     private static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
-    private static final String KEY_LOGIN_OPTIONS = "loginOptions";
     public static final String KEY_ACCOUNT = "account";
 
     private Context mContext;
@@ -104,7 +103,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
             intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
             intent.putExtra(KEY_REQUIRED_FEATURES, requiredFeatures);
-            intent.putExtra(KEY_LOGIN_OPTIONS, options);
             intent.putExtra(AuthenticatorConstants.EXTRA_ACTION, AuthenticatorConstants.ACTION_CREATE);
 
             setIntentFlags(intent);
@@ -139,7 +137,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
                 response);
         intent.putExtra(KEY_ACCOUNT, account);
-        intent.putExtra(KEY_LOGIN_OPTIONS, options);
 
         setIntentFlags(intent);
 
@@ -219,7 +216,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 response);
         intent.putExtra(KEY_ACCOUNT, account);
         intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
-        intent.putExtra(KEY_LOGIN_OPTIONS, options);
         setIntentFlags(intent);
 
         final Bundle bundle = new Bundle();
@@ -397,7 +393,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
                 accountAuthenticatorResponse);
         intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
-        intent.putExtra(KEY_LOGIN_OPTIONS, options);
         intent.putExtra(AuthenticatorConstants.EXTRA_ACCOUNT, account);
         intent.putExtra(
                 AuthenticatorConstants.EXTRA_ACTION,

@@ -27,6 +27,7 @@
 package com.owncloud.android.presentation.ui.authentication
 
 import android.accounts.Account
+import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.app.Activity
 import android.app.PendingIntent
@@ -37,13 +38,13 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountAuthenticatorActivity
 import com.owncloud.android.authentication.OAuthUtils
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
@@ -71,7 +72,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
+class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
 
     private val authenticationViewModel by viewModel<OCAuthenticationViewModel>()
     private val contextProvider by inject<ContextProvider>()
@@ -82,6 +83,10 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     private lateinit var serverBaseUrl: String
 
     private var mAuthService: AuthorizationService? = null
+
+    // For handling AbstractAccountAuthenticator responses
+    private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
+    private var resultBundle: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,6 +152,9 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
                 )
             }
         }
+
+        accountAuthenticatorResponse = intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
+        accountAuthenticatorResponse?.onRequestContinued()
 
         // LiveData observers
         authenticationViewModel.serverInfo.observe(this, Observer { event ->
@@ -300,7 +308,7 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
         val intent = Intent()
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName)
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, contextProvider.getString(R.string.account_type))
-        setAccountAuthenticatorResult(intent.extras)
+        resultBundle = intent.extras
         setResult(Activity.RESULT_OK, intent)
 
         notifyDocumentProviderRoots(applicationContext)
@@ -553,5 +561,20 @@ class LoginActivity : AccountAuthenticatorActivity(), SslUntrustedCertDialog.OnS
     override fun onDestroy() {
         super.onDestroy()
         mAuthService?.dispose()
+    }
+
+    override fun finish() {
+        if (accountAuthenticatorResponse != null) { // send the result bundle back if set, otherwise send an error.
+            if (resultBundle != null) {
+                accountAuthenticatorResponse?.onResult(resultBundle)
+            } else {
+                accountAuthenticatorResponse?.onError(
+                    AccountManager.ERROR_CODE_CANCELED,
+                    "canceled"
+                )
+            }
+            accountAuthenticatorResponse = null
+        }
+        super.finish()
     }
 }

@@ -56,56 +56,17 @@ val remoteDataSourceModule = module {
     single { OwnCloudAccount(get(), androidContext()) }
     single { SingleSessionManager.getDefaultSingleton().getClientFor(get(), androidContext()) }
 
-    single<CapabilityService> {
-        OCCapabilityService(
-            get()
-        )
-    }
-    single<ShareService> {
-        OCShareService(
-            get()
-        )
-    }
-    single<ShareeService> {
-        OCShareeService(
-            get()
-        )
-    }
-    single<UserService> {
-        OCUserService(
-            get()
-        )
-    }
-    single<FileService> {
-        OCFileService(
-            get()
-        )
-    }
+    single<CapabilityService> { OCCapabilityService(get()) }
+    single<ShareService> { OCShareService(get()) }
+    single<ShareeService> { OCShareeService(get()) }
+    single<UserService> { OCUserService(get()) }
+    single<FileService> { OCFileService(get()) }
     single<ServerInfoService> { OCServerInfoService() }
 
-    factory<RemoteCapabilitiesDataSource> {
-        OCRemoteCapabilitiesDataSource(
-            get(),
-            get()
-        )
-    }
-    factory<RemoteShareDataSource> {
-        OCRemoteShareDataSource(
-            get(),
-            get()
-        )
-    }
-    factory<RemoteShareeDataSource> {
-        OCRemoteShareeDataSource(
-            get()
-        )
-    }
-    factory<RemoteUserDataSource> {
-        OCRemoteUserDataSource(
-            get(),
-            get()
-        )
-    }
+    factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
+    factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
+    factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get()) }
+    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get()) }
     factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext(), get()) }

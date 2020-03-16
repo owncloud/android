@@ -19,12 +19,12 @@
 package com.owncloud.android.domain.authentication.usecases
 
 import com.owncloud.android.domain.authentication.AuthenticationRepository
-import com.owncloud.android.testutil.ACCESS_TOKEN
-import com.owncloud.android.testutil.AUTH_TOKEN_TYPE
+import com.owncloud.android.testutil.OC_ACCESS_TOKEN
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
+import com.owncloud.android.testutil.OC_REFRESH_TOKEN
+import com.owncloud.android.testutil.OC_SCOPE
 import com.owncloud.android.testutil.OC_SERVER_INFO
-import com.owncloud.android.testutil.REFRESH_TOKEN
-import com.owncloud.android.testutil.SCOPE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -40,10 +40,10 @@ class LoginOAuthAsyncUseCaseTest {
     private val loginOAuthUseCaseParams = LoginOAuthAsyncUseCase.Params(
         serverInfo = OC_SERVER_INFO,
         username = "test",
-        authTokenType = AUTH_TOKEN_TYPE,
-        accessToken = ACCESS_TOKEN,
-        refreshToken = REFRESH_TOKEN,
-        scope = SCOPE,
+        authTokenType = OC_AUTH_TOKEN_TYPE,
+        accessToken = OC_ACCESS_TOKEN,
+        refreshToken = OC_REFRESH_TOKEN,
+        scope = OC_SCOPE,
         updateAccountIfAlreadyExists = false
     )
 

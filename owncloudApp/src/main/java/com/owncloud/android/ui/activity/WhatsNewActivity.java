@@ -43,10 +43,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountAuthenticatorActivity;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.features.FeatureList;
 import com.owncloud.android.features.FeatureList.FeatureItem;
+import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.whatsnew.ProgressIndicator;
 
 /**
@@ -140,7 +140,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         boolean isBeta = MainApp.Companion.isBeta();
         boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG;
         return showWizard &&
-                ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
+                ((isFirstRun() && context instanceof LoginActivity) ||
                         (
                                 !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
                                         !(context instanceof PassCodeActivity) &&

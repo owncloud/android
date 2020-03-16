@@ -24,6 +24,7 @@ import android.accounts.AccountManager
 import android.content.Context
 import android.net.Uri
 import android.preference.PreferenceManager
+import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
@@ -38,6 +39,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_AC
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH_SUPPORTED_TRUE
 import com.owncloud.android.lib.common.network.WebdavUtils
 import timber.log.Timber
 import java.util.Locale
@@ -53,7 +55,7 @@ class OCLocalAuthenticationDataSource(
         userName: String,
         password: String,
         serverInfo: ServerInfo,
-        userInfo: UserInfo?,
+        userInfo: UserInfo,
         updateIfAlreadyExists: Boolean
     ): String =
         addAccount(
@@ -72,7 +74,7 @@ class OCLocalAuthenticationDataSource(
         authTokenType: String,
         accessToken: String,
         serverInfo: ServerInfo,
-        userInfo: UserInfo?,
+        userInfo: UserInfo,
         refreshToken: String,
         scope: String?,
         updateIfAlreadyExists: Boolean
@@ -87,7 +89,7 @@ class OCLocalAuthenticationDataSource(
 
             accountManager.setAuthToken(it, authTokenType, accessToken)
 
-            accountManager.setUserData(it, KEY_SUPPORTS_OAUTH2, "TRUE")
+            accountManager.setUserData(it, KEY_SUPPORTS_OAUTH2, OAUTH_SUPPORTED_TRUE)
             accountManager.setUserData(it, KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
             scope?.run {
                 accountManager.setUserData(it, KEY_OAUTH2_SCOPE, this)
@@ -104,8 +106,8 @@ class OCLocalAuthenticationDataSource(
         password: String = "",
         updateIfAlreadyExists: Boolean = false
     ): Account {
-        if (lastPermanentLocation != null) {
-            serverInfo.baseUrl = WebdavUtils.trimWebdavSuffix(lastPermanentLocation)
+        lastPermanentLocation?.let {
+            serverInfo.baseUrl = WebdavUtils.trimWebdavSuffix(it)
         }
 
         val uri = Uri.parse(serverInfo.baseUrl)
@@ -130,7 +132,7 @@ class OCLocalAuthenticationDataSource(
             if (defaultAccount == null) {
                 val editor = PreferenceManager
                     .getDefaultSharedPreferences(context).edit()
-                editor.putString("select_oc_account", accountName)
+                editor.putString(SELECTED_ACCOUNT, accountName)
                 editor.apply()
             }
 
@@ -141,7 +143,7 @@ class OCLocalAuthenticationDataSource(
     private fun updateUserAndServerInfo(
         newAccount: Account,
         serverInfo: ServerInfo,
-        userInfo: UserInfo?,
+        userInfo: UserInfo,
         userName: String
     ) {
         // include account version with the new account
@@ -168,28 +170,27 @@ class OCLocalAuthenticationDataSource(
         }
     }
 
-    private fun accountExists(accountName: String?): Boolean {
+    private fun accountExists(accountName: String): Boolean {
         val ocAccounts: Array<Account> = getAccounts()
 
-        if (accountName != null) {
-            var lastAtPos = accountName.lastIndexOf("@")
-            val hostAndPort = accountName.substring(lastAtPos + 1)
-            val username = accountName.substring(0, lastAtPos)
-            var otherHostAndPort: String
-            var otherUsername: String
-            val currentLocale: Locale = context.resources.configuration.locale
-            for (otherAccount in ocAccounts) {
-                lastAtPos = otherAccount.name.lastIndexOf("@")
-                otherHostAndPort = otherAccount.name.substring(lastAtPos + 1)
-                otherUsername = otherAccount.name.substring(0, lastAtPos)
-                if (otherHostAndPort == hostAndPort && otherUsername.toLowerCase(currentLocale) == username.toLowerCase(
-                        currentLocale
-                    )
-                ) {
-                    return true
-                }
+        var lastAtPos = accountName.lastIndexOf("@")
+        val hostAndPort = accountName.substring(lastAtPos + 1)
+        val username = accountName.substring(0, lastAtPos)
+        var otherHostAndPort: String
+        var otherUsername: String
+        val currentLocale: Locale = context.resources.configuration.locale
+        for (otherAccount in ocAccounts) {
+            lastAtPos = otherAccount.name.lastIndexOf("@")
+            otherHostAndPort = otherAccount.name.substring(lastAtPos + 1)
+            otherUsername = otherAccount.name.substring(0, lastAtPos)
+            if (otherHostAndPort == hostAndPort && otherUsername.toLowerCase(currentLocale) == username.toLowerCase(
+                    currentLocale
+                )
+            ) {
+                return true
             }
         }
+
         return false
     }
 
@@ -201,10 +202,8 @@ class OCLocalAuthenticationDataSource(
         val ocAccounts = getAccounts()
         var defaultAccount: Account? = null
 
-        val appPreferences = PreferenceManager
-            .getDefaultSharedPreferences(context)
-        val accountName = appPreferences
-            .getString("select_oc_account", null)
+        val appPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val accountName = appPreferences.getString(SELECTED_ACCOUNT, null)
 
         // account validation: the saved account MUST be in the list of ownCloud Accounts known by the AccountManager
         if (accountName != null) {
@@ -235,7 +234,7 @@ class OCLocalAuthenticationDataSource(
 
     override fun supportsOAuth2(accountName: String): Boolean {
         val account = getAccountByName(accountName) ?: throw AccountNotFoundException()
-        return accountManager.getUserData(account, KEY_SUPPORTS_OAUTH2) == "TRUE"
+        return accountManager.getUserData(account, KEY_SUPPORTS_OAUTH2) == OAUTH_SUPPORTED_TRUE
     }
 
     override fun getBaseUrl(accountName: String): String {

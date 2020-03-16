@@ -49,8 +49,8 @@ import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.presentation.ui.authentication.OAUTH_TOKEN_TYPE
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.testutil.AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASIC_PASSWORD
 import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_SERVER_INFO
@@ -530,7 +530,7 @@ class LoginActivityTest {
         val intentWithAccount = Intent(context, LoginActivity::class.java).apply {
             putExtra(EXTRA_ACCOUNT, OC_ACCOUNT)
             putExtra(EXTRA_ACTION, ACTION_UPDATE_TOKEN)
-            putExtra(KEY_AUTH_TOKEN_TYPE, AUTH_TOKEN_TYPE)
+            putExtra(KEY_AUTH_TOKEN_TYPE, OC_AUTH_TOKEN_TYPE)
         }
 
         launchTest(intent = intentWithAccount)
