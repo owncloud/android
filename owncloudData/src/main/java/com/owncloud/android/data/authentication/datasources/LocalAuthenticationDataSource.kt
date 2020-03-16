@@ -28,7 +28,7 @@ interface LocalAuthenticationDataSource {
         userName: String,
         password: String,
         serverInfo: ServerInfo,
-        userInfo: UserInfo?,
+        userInfo: UserInfo,
         updateIfAlreadyExists: Boolean
     ): String
 
@@ -38,7 +38,7 @@ interface LocalAuthenticationDataSource {
         authTokenType: String,
         accessToken: String,
         serverInfo: ServerInfo,
-        userInfo: UserInfo?,
+        userInfo: UserInfo,
         refreshToken: String,
         scope: String?,
         updateIfAlreadyExists: Boolean

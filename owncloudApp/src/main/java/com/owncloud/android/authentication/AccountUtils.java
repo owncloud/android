@@ -36,9 +36,12 @@ import timber.log.Timber;
 
 import java.util.Locale;
 
+import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.SELECTED_ACCOUNT;
+import static com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH_SUPPORTED_TRUE;
+
 public class AccountUtils {
 
-    static final int ACCOUNT_VERSION = 1;
+    private static final int ACCOUNT_VERSION = 1;
 
     /**
      * Can be used to get the currently selected ownCloud {@link Account} in the
@@ -53,10 +56,8 @@ public class AccountUtils {
         Account[] ocAccounts = getAccounts(context);
         Account defaultAccount = null;
 
-        SharedPreferences appPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        String accountName = appPreferences
-                .getString("select_oc_account", null);
+        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String accountName = appPreferences.getString(SELECTED_ACCOUNT, null);
 
         // account validation: the saved account MUST be in the list of ownCloud Accounts known by the AccountManager
         if (accountName != null) {
@@ -144,7 +145,7 @@ public class AccountUtils {
                 if (found) {
                     SharedPreferences.Editor appPrefs = PreferenceManager
                             .getDefaultSharedPreferences(context).edit();
-                    appPrefs.putString("select_oc_account", accountName);
+                    appPrefs.putString(SELECTED_ACCOUNT, accountName);
 
                     appPrefs.apply();
                     result = true;
@@ -210,9 +211,9 @@ public class AccountUtils {
                         );
 
                         String isOauthStr = accountMgr.getUserData(account, Constants.KEY_SUPPORTS_OAUTH2);
-                        boolean isOAuth = "TRUE".equals(isOauthStr);
+                        boolean isOAuth = OAUTH_SUPPORTED_TRUE.equals(isOauthStr);
                         if (isOAuth) {
-                            accountMgr.setUserData(newAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
+                            accountMgr.setUserData(newAccount, Constants.KEY_SUPPORTS_OAUTH2, OAUTH_SUPPORTED_TRUE);
                         }
 
                         // don't forget the account saved in preferences as the current one

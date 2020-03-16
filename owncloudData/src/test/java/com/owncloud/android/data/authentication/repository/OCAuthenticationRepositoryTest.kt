@@ -25,14 +25,14 @@ import com.owncloud.android.data.authentication.datasources.RemoteAuthentication
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
-import com.owncloud.android.testutil.ACCESS_TOKEN
-import com.owncloud.android.testutil.AUTH_TOKEN_TYPE
+import com.owncloud.android.testutil.OC_ACCESS_TOKEN
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_REDIRECTION_PATH
+import com.owncloud.android.testutil.OC_REFRESH_TOKEN
+import com.owncloud.android.testutil.OC_SCOPE
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.OC_USER_INFO
-import com.owncloud.android.testutil.REFRESH_TOKEN
-import com.owncloud.android.testutil.SCOPE
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -134,24 +134,24 @@ class OCAuthenticationRepositoryTest {
         val accountName = ocAuthenticationRepository.loginOAuth(
             OC_SERVER_INFO,
             "username",
-            AUTH_TOKEN_TYPE,
-            ACCESS_TOKEN,
-            REFRESH_TOKEN,
-            SCOPE,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
             false
         )
 
         verify(exactly = 1) {
-            remoteAuthenticationDataSource.loginOAuth(OC_SERVER_INFO.baseUrl, "username", ACCESS_TOKEN)
+            remoteAuthenticationDataSource.loginOAuth(OC_SERVER_INFO.baseUrl, "username", OC_ACCESS_TOKEN)
             localAuthenticationDataSource.addOAuthAccount(
                 OC_REDIRECTION_PATH.lastPermanentLocation,
                 "username",
-                AUTH_TOKEN_TYPE,
-                ACCESS_TOKEN,
+                OC_AUTH_TOKEN_TYPE,
+                OC_ACCESS_TOKEN,
                 OC_SERVER_INFO,
                 OC_USER_INFO,
-                REFRESH_TOKEN,
-                SCOPE,
+                OC_REFRESH_TOKEN,
+                OC_SCOPE,
                 false
             )
         }
@@ -172,10 +172,10 @@ class OCAuthenticationRepositoryTest {
         ocAuthenticationRepository.loginOAuth(
             OC_SERVER_INFO,
             "test",
-            AUTH_TOKEN_TYPE,
-            ACCESS_TOKEN,
-            REFRESH_TOKEN,
-            SCOPE,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
             false
         )
 
@@ -199,10 +199,10 @@ class OCAuthenticationRepositoryTest {
         ocAuthenticationRepository.loginOAuth(
             OC_SERVER_INFO,
             "test",
-            AUTH_TOKEN_TYPE,
-            ACCESS_TOKEN,
-            REFRESH_TOKEN,
-            SCOPE,
+            OC_AUTH_TOKEN_TYPE,
+            OC_ACCESS_TOKEN,
+            OC_REFRESH_TOKEN,
+            OC_SCOPE,
             false
         )
 
