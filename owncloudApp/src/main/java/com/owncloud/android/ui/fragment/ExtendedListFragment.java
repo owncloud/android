@@ -41,6 +41,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.owncloud.android.R;
 import com.owncloud.android.ui.ExtendedListView;
+import com.owncloud.android.ui.activity.FileListOption;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.utils.PreferenceUtils;
 import third_parties.in.srain.cube.GridViewWithHeaderAndFooter;
@@ -61,10 +62,8 @@ public class ExtendedListFragment extends Fragment
     private static final String KEY_IS_GRID_VISIBLE = "IS_GRID_VISIBLE";
 
     static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
-    static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
-            ".ONLY_AVAILABLE_OFFLINE";
-    static final String ARG_SHARED_BY_LINK_FILES = ExtendedListFragment.class.getCanonicalName() +
-            ".SHARED_BY_LINK_FILES";
+    static final String ARG_LIST_FILE_OPTION = ExtendedListFragment.class.getCanonicalName() +
+            ".LIST_FILE_OPTION";
     protected static final String ARG_PICKING_A_FOLDER = ExtendedListFragment.class.getCanonicalName() +
             ".ARG_PICKING_A_FOLDER";
 
@@ -479,12 +478,12 @@ public class ExtendedListFragment extends Fragment
 
     boolean isShowingOnlyAvailableOffline() {
         Bundle args = getArguments();
-        return ((args != null) && args.getBoolean(ARG_ONLY_AVAILABLE_OFFLINE, false));
+        return ((args != null) && args.getSerializable(ARG_LIST_FILE_OPTION) == FileListOption.AV_OFFLINE);
     }
 
     boolean isShowingSharedByLinkFiles() {
         Bundle args = getArguments();
-        return ((args != null) && args.getBoolean(ARG_SHARED_BY_LINK_FILES, false));
+        return ((args != null) && args.getSerializable(ARG_LIST_FILE_OPTION) == FileListOption.SHARED_BY_LINK);
     }
 
     boolean isPickingAFolder() {

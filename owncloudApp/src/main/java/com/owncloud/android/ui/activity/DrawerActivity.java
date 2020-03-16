@@ -264,7 +264,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
-        bottomNavigationView.setSelectedItemId(menuItemId);
+        //bottomNavigationView.setSelectedItemId(menuItemId);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {

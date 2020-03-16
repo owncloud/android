@@ -130,8 +130,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * Public factory method to create new {@link OCFileListFragment} instances.
      *
      * @param justFolders          When 'true', only folders will be shown to the user, not files.
-     * @param onlyAvailableOffline When 'true', only available offline files will be shown to the user.
-     * @param sharedByLinkFiles    When 'true', only share by link files will be shown to the user.
+     * @param fileListOption       File list option to show. All files by default.
      * @param pickingAFolder       When 'true', only folders will be clickable when selecting a folder when copying or
      *                             moving files or configuring upload path for camera uploads
      * @param hideFAB              When 'true', floating action button is hidden.
@@ -140,8 +139,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      */
     public static OCFileListFragment newInstance(
             boolean justFolders,
-            boolean onlyAvailableOffline,
-            boolean sharedByLinkFiles,
+            FileListOption fileListOption,
             boolean pickingAFolder,
             boolean hideFAB,
             boolean allowContextualMode
@@ -149,11 +147,13 @@ public class OCFileListFragment extends ExtendedListFragment implements
         OCFileListFragment frag = new OCFileListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_JUST_FOLDERS, justFolders);
-        args.putBoolean(ARG_ONLY_AVAILABLE_OFFLINE, onlyAvailableOffline);
-        args.putBoolean(ARG_SHARED_BY_LINK_FILES, sharedByLinkFiles);
-        if (onlyAvailableOffline || sharedByLinkFiles) {
+        if (fileListOption == null) {
+            fileListOption = FileListOption.ALL_FILES;
+        }
+        if (fileListOption != FileListOption.ALL_FILES) {
             hideFAB = true;
         }
+        args.putSerializable(ARG_LIST_FILE_OPTION, fileListOption);
         args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder);
         args.putBoolean(ARG_HIDE_FAB, hideFAB);
         args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
@@ -239,18 +239,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
         mSearchView.setOnQueryTextListener(this);
     }
 
-    public void listAllFiles() {
-        updateListOfFiles(FileListOption.ALL_FILES);
-        listDirectory(true);
-    }
-
-    public void listOnlyAvailableOffline() {
-        updateListOfFiles(FileListOption.AV_OFFLINE);
-        listDirectory(true);
-    }
-
-    public void listOnlySharedByLink() {
-        updateListOfFiles(FileListOption.SHARED_BY_LINK);
+    public void updateFileListOption(FileListOption newFileListOption){
+        updateListOfFiles(newFileListOption);
         listDirectory(true);
     }
 

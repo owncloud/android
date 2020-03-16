@@ -144,8 +144,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void createFragments() {
-        OCFileListFragment listOfFiles =  OCFileListFragment.newInstance(true, false,
-                false, true, true, false);
+        OCFileListFragment listOfFiles =  OCFileListFragment.newInstance(true, FileListOption.ALL_FILES, false, true, false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, listOfFiles, TAG_LIST_OF_FOLDERS);
         transaction.commit();
