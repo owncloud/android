@@ -139,7 +139,7 @@ public class AccountUtils {
         AccountManager am = AccountManager.get(context);
 
         String supportsOAuth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2);
-        boolean isOauth2 = supportsOAuth2 != null && supportsOAuth2.equals("TRUE");
+        boolean isOauth2 = supportsOAuth2 != null && supportsOAuth2.equals(Constants.OAUTH_SUPPORTED_TRUE);
 
         String username = AccountUtils.getUsernameForAccount(account);
 
@@ -293,6 +293,8 @@ public class AccountUtils {
          * Flag signaling if the ownCloud server can be accessed with OAuth2 access tokens.
          */
         public static final String KEY_SUPPORTS_OAUTH2 = "oc_supports_oauth2";
+
+        public static final String OAUTH_SUPPORTED_TRUE = "TRUE";
 
         /**
          * OC account cookies
