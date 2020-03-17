@@ -31,25 +31,34 @@ class OAuthServiceConfiguration {
     companion object {
         fun buildAuthorizationServiceConfiguration(
             context: Context,
-            onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback
+            onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback,
+            oidc: Boolean = false,
+            baseUrl: String = ""
         ) {
-            val serviceDiscoveryLocation =
-                Uri.parse(context.getString(R.string.oauth2_service_discovery_location)).buildUpon()
-                    .appendPath(AuthorizationServiceConfiguration.WELL_KNOWN_PATH)
-                    .appendPath(AuthorizationServiceConfiguration.OPENID_CONFIGURATION_RESOURCE)
-                    .build()
+            if (oidc) {
+                Timber.d("OIDC, getting the auth and token endpoints from the discovery document (well-known)")
 
-            if (context.resources.getBoolean(R.bool.use_oauth2_service_discovery_location)) {
-                Timber.d("Let's get the auth and token endpoints from the discovery document (well-known)")
+                val serviceDiscoveryLocation =
+                    Uri.parse(context.getString(R.string.oidc_service_discovery_location)).buildUpon()
+                        .appendPath(AuthorizationServiceConfiguration.WELL_KNOWN_PATH)
+                        .appendPath(AuthorizationServiceConfiguration.OPENID_CONFIGURATION_RESOURCE)
+                        .build()
+
                 AuthorizationServiceConfiguration.fetchFromUrl(
                     serviceDiscoveryLocation,
                     onGetAuthorizationServiceConfiguration,
                     OAuthConnectionBuilder(context)
                 )
             } else {
+                Timber.d("Trying normal OAuth instead")
+
                 val authorizationServiceConfiguration = AuthorizationServiceConfiguration(
-                    Uri.parse(context.getString(R.string.oauth2_url_endpoint_auth)),  // auth endpoint
-                    Uri.parse(context.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
+                    Uri.parse(
+                        "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_auth)}" // auth endpoint
+                    ),
+                    Uri.parse(
+                        "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_access)}" // token endpoint
+                    )
                 )
 
                 onGetAuthorizationServiceConfiguration.onFetchConfigurationCompleted(

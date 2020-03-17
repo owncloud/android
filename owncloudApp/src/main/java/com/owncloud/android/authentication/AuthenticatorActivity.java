@@ -208,6 +208,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private AuthorizationService mAuthService;
     private AuthStateManager mAuthStateManager;
 
+    private boolean mOIDCSupported = false;
+
     /**
      * {@inheritDoc}
      *
@@ -860,7 +862,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.Companion.getAccountType()).
                 equals(mAuthTokenType)) {
-            startOauthorization();
+            startOIDCOauthorization();
         } else {
             checkBasicAuthorization();
         }
@@ -889,13 +891,37 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * OAuth step 1: Get authorization code
+     * Firstly, try the OAuth authorization with Open Id Connect, checking whether there's an available .well-known url
+     * to use or not
      */
-    private void startOauthorization() {  // OAuth step 1: Get authorization code
+    private void startOIDCOauthorization() {
         // be gentle with the user
         mAuthStatusIcon = R.drawable.progress_small;
         mAuthStatusText = getResources().getString(R.string.oauth_login_connection);
         showAuthStatus();
 
+        OAuthServiceConfiguration.Companion.buildAuthorizationServiceConfiguration(
+                this,
+                (authorizationServiceConfiguration, authorizationException) -> {
+                    if (authorizationException != null) { // Try normal OAuth
+                        startNormalOauthorization();
+                    } else if (authorizationServiceConfiguration != null) {
+                        mOIDCSupported = true;
+                        performGetAuthorizationCodeRequest(authorizationServiceConfiguration);
+                        AuthState authState = new AuthState(authorizationServiceConfiguration);
+                        mAuthStateManager.replace(authState);
+                    }
+                },
+                true,
+                ""
+        );
+    }
+
+    /**
+     * OAuth step 1: Get authorization code
+     * If OIDC is not available, falling back to normal OAuth
+     */
+    private void startNormalOauthorization() {
         OAuthServiceConfiguration.Companion.buildAuthorizationServiceConfiguration(
                 this,
                 (authorizationServiceConfiguration, authorizationException) -> {
@@ -907,19 +933,22 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         AuthState authState = new AuthState(authorizationServiceConfiguration);
                         mAuthStateManager.replace(authState);
                     }
-                }
+                },
+                false,
+                mServerInfo.mBaseUrl
         );
     }
 
     private void performGetAuthorizationCodeRequest(AuthorizationServiceConfiguration authorizationServiceConfiguration) {
         String clientId = getString(R.string.oauth2_client_id);
         Uri redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri));
+        String scope = mOIDCSupported ? "openid offline_access email" : "";
         AuthorizationRequest.Builder builder = new AuthorizationRequest.Builder(
                 authorizationServiceConfiguration,
                 clientId,
                 ResponseTypeValues.CODE,
                 redirectUri
-        ).setScope("openid offline_access email");
+        ).setScope(scope);
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
         appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(this));
