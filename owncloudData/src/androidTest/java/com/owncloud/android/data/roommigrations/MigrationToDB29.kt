@@ -21,6 +21,7 @@
 package com.owncloud.android.data.roommigrations
 
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.filters.SmallTest
 import com.owncloud.android.data.OwncloudDatabase
@@ -28,7 +29,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_TABLE_N
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity.Companion.toContentValues
 import com.owncloud.android.testutil.OC_SHARE
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
@@ -40,40 +41,49 @@ class MigrationToDB29 : MigrationTest() {
 
     @Test
     fun migrationFrom27To29_containsCorrectData() {
-        helper.createDatabase(TEST_DB_NAME, DB_VERSION_27).run {
-            insertDataToTest(this)
-        }
-
-        helper.runMigrationsAndValidate(
-            TEST_DB_NAME, DB_VERSION_29, true, *OwncloudDatabase.ALL_MIGRATIONS
-        ).also { validateMigrationTo29(it) }
+        performMigrationTest(
+            previousVersion = DB_VERSION_27,
+            currentVersion = DB_VERSION_29,
+            insertData = { database -> insertDataToTest(database) },
+            validateMigration = { database -> validateMigrationTo29(database) },
+            listOfMigrations = OwncloudDatabase.ALL_MIGRATIONS
+        )
     }
 
     @Test
     fun migrationFrom28To29_containsCorrectData() {
-        helper.createDatabase(TEST_DB_NAME, DB_VERSION_28).run {
-            insertDataToTest(this)
-        }
-        helper.runMigrationsAndValidate(
-            TEST_DB_NAME, DB_VERSION_29, true, *OwncloudDatabase.ALL_MIGRATIONS
-        ).also { validateMigrationTo29(it) }
+        performMigrationTest(
+            previousVersion = DB_VERSION_28,
+            currentVersion = DB_VERSION_29,
+            insertData = { database -> insertDataToTest(database) },
+            validateMigration = { database -> validateMigrationTo29(database) },
+            listOfMigrations = OwncloudDatabase.ALL_MIGRATIONS
+        )
     }
 
     @Test
     fun startInVersion29_containsCorrectData() {
-        helper.createDatabase(
-            TEST_DB_NAME,
-            DB_VERSION_29
-        ).also { validateMigrationTo29(it) }
+        performMigrationTest(
+            previousVersion = DB_VERSION_29,
+            currentVersion = DB_VERSION_29,
+            insertData = { database -> insertDataToTest(database) },
+            recoverPreviousData = false,
+            validateMigration = { database -> validateMigrationTo29(database) },
+            listOfMigrations = OwncloudDatabase.ALL_MIGRATIONS
+        )
     }
 
     private fun insertDataToTest(database: SupportSQLiteDatabase) {
         database.run {
-            insert(OCSHARES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, toContentValues(shareMapper.toEntity(OC_SHARE)!!))
             insert(
                 OCSHARES_TABLE_NAME,
                 SQLiteDatabase.CONFLICT_NONE,
-                toContentValues(shareMapper.toEntity(OC_SHARE.copy(id = 499))!!)
+                shareMapper.toEntity(OC_SHARE)!!.toContentValues()
+            )
+            insert(
+                OCSHARES_TABLE_NAME,
+                SQLiteDatabase.CONFLICT_NONE,
+                shareMapper.toEntity(OC_SHARE.copy(id = 499))!!.toContentValues()
             )
             close()
         }
@@ -81,7 +91,7 @@ class MigrationToDB29 : MigrationTest() {
 
     private fun validateMigrationTo29(database: SupportSQLiteDatabase) {
         val count = getCount(database, OCSHARES_TABLE_NAME)
-        Assert.assertEquals(0, count)
+        assertEquals(0, count)
         database.close()
     }
 }

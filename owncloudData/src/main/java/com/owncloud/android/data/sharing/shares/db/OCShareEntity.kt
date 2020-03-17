@@ -114,8 +114,9 @@ data class OCShareEntity(
             )
         }
 
-        fun toContentValues(entity: OCShareEntity): ContentValues =
-            ContentValues().apply {
+        fun OCShareEntity.toContentValues(): ContentValues {
+            val entity: OCShareEntity = this
+            return ContentValues().apply {
                 put(ProviderTableMeta.OCSHARES_FILE_SOURCE, entity.fileSource)
                 put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, entity.itemSource)
                 put(ProviderTableMeta.OCSHARES_SHARE_TYPE, entity.shareType)
@@ -135,4 +136,4 @@ data class OCShareEntity(
                 put(ProviderTableMeta.OCSHARES_URL, entity.shareLink)
         }
     }
-}
+}}

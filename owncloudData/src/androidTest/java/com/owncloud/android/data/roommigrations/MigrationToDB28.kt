@@ -45,26 +45,23 @@ class MigrationToDB28 : MigrationTest() {
 
     @Test
     fun migrate27To28() {
-        helper.createDatabase(
-            TEST_DB_NAME,
-            DB_VERSION_27
-        ).run {
-            insertDataToTest(this)
-        }
-
-        helper.runMigrationsAndValidate(
-            TEST_DB_NAME,
-            DB_VERSION_28,
-            true,
-            OwncloudDatabase.MIGRATION_27_28
-        ).also { validateMigrationTo28(it) }
+        performMigrationTest(
+            previousVersion = DB_VERSION_27,
+            currentVersion = DB_VERSION_28,
+            insertData = { database -> insertDataToTest(database) },
+            validateMigration = { database -> validateMigrationTo28(database) },
+            listOfMigrations = arrayOf(OwncloudDatabase.MIGRATION_27_28)
+        )
     }
 
     @Test
     fun startInVersion28_containsCorrectData() {
-        helper.createDatabase(
-            TEST_DB_NAME,
-            DB_VERSION_28
+        performMigrationTest(
+            previousVersion = DB_VERSION_28,
+            currentVersion = DB_VERSION_28,
+            insertData = { database -> insertDataToTest(database) },
+            validateMigration = { database -> validateMigrationTo28(database) },
+            listOfMigrations = arrayOf(OwncloudDatabase.MIGRATION_27_28)
         )
     }
 
