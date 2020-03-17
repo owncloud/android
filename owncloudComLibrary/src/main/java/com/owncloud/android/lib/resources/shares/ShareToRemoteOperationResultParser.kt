@@ -2,7 +2,7 @@
  *   @author David A. Velasco
  *   @author David González Verdugo
  *   @author Christian Schabesberger
- *   Copyright (C) 2019 ownCloud GmbH.
+ *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal

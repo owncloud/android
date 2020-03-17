@@ -2,7 +2,7 @@
  *   @author masensio
  *   @author Semih Serhat Karakaya <karakayasemi@itu.edu.tr>
  *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
+ *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
