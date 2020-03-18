@@ -52,14 +52,6 @@ class OCRemoteAuthenticationDataSource(
         val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation("/", true)
         executeRemoteOperation { checkPathExistenceRemoteOperation.execute(client) }
 
-        val redirectionPath = checkPathExistenceRemoteOperation.redirectionPath
-        if (checkPathExistenceRemoteOperation.wasRedirected()) {
-            client.apply {
-                baseUri = Uri.parse(redirectionPath?.lastPermanentLocation)
-                setFollowRedirects(true)
-            }
-        }
-
         // Get user info. It is needed to save the account into the account manager
         lateinit var userInfo: UserInfo
 
@@ -67,6 +59,6 @@ class OCRemoteAuthenticationDataSource(
             GetRemoteUserInfoOperation().execute(client)
         }.let { userInfo = remoteUserInfoMapper.toModel(it)!! }
 
-        return Pair(userInfo, redirectionPath?.lastPermanentLocation)
+        return Pair(userInfo, client.baseUri.toString())
     }
 }
