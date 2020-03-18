@@ -114,6 +114,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         // UI initialization
         setContentView(R.layout.account_setup)
 
+        if (loginAction != ACTION_CREATE) {
+            account_username.isEnabled = false
+            account_username.isFocusable = false
+        }
+
         if (savedInstanceState == null) {
             if (userAccount != null) {
                 authenticationViewModel.getBaseUrl((userAccount as Account).name)
@@ -125,11 +130,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 AccountUtils.getUsernameForAccount(it)?.let { username ->
                     account_username.setText(username)
                 }
-            }
-
-            if (loginAction != ACTION_CREATE) {
-                account_username.isEnabled = false
-                account_username.isFocusable = false
             }
         }
 
