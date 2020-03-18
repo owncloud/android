@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0;
 import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_PATH_4_0_AND_LATER;
 
 public class WebdavUtils {
@@ -102,20 +103,6 @@ public class WebdavUtils {
             result = eTag;
         }
         return result;
-    }
-
-    public static String trimWebdavSuffix(String url) {
-        if (url == null) {
-            url = "";
-        } else {
-            if (url.endsWith("/")) {
-                url = url.substring(0, url.length() - 1);
-            }
-            if (url.toLowerCase().endsWith(WEBDAV_PATH_4_0_AND_LATER)) {
-                url = url.substring(0, url.length() - WEBDAV_PATH_4_0_AND_LATER.length());
-            }
-        }
-        return url;
     }
 
     public static String normalizeProtocolPrefix(String url, boolean isSslConn) {
