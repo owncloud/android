@@ -33,14 +33,12 @@ class LoginBasicAsyncUseCase(
         require(params.username.isNotEmpty()) { "Invalid username" }
         require(params.password.isNotEmpty()) { "Invalid password" }
 
-        val accountName = authenticationRepository.loginBasic(
+        return authenticationRepository.loginBasic(
             params.serverInfo,
             params.username,
             params.password,
             params.updateAccountIfAlreadyExists
         )
-
-        return accountName
     }
 
     data class Params(

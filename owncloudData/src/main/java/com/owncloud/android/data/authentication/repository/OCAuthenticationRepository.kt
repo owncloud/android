@@ -42,7 +42,7 @@ class OCAuthenticationRepository(
                 password = password
             )
 
-        val accountName = localAuthenticationDataSource.addBasicAccount(
+        return localAuthenticationDataSource.addBasicAccount(
             userInfoAndRedirectionPath.second,
             username,
             password,
@@ -50,8 +50,6 @@ class OCAuthenticationRepository(
             userInfoAndRedirectionPath.first,
             updateAccountIfAlreadyExists
         )
-
-        return accountName;
     }
 
     override fun loginOAuth(
@@ -70,7 +68,7 @@ class OCAuthenticationRepository(
                 accessToken = accessToken
             )
 
-        val accountName = localAuthenticationDataSource.addOAuthAccount(
+        return localAuthenticationDataSource.addOAuthAccount(
             userInfoAndRedirectionPath.second,
             username,
             authTokenType,
@@ -81,8 +79,6 @@ class OCAuthenticationRepository(
             scope,
             updateAccountIfAlreadyExists
         )
-
-        return accountName;
     }
 
     override fun supportsOAuth2UseCase(accountName: String): Boolean =

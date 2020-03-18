@@ -23,7 +23,6 @@ import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.lib.common.network.WebdavUtils.normalizeProtocolPrefix
-import com.owncloud.android.lib.common.network.WebdavUtils.trimWebdavSuffix
 
 class OCServerInfoRepository(
     private val remoteServerInfoDataSource: RemoteServerInfoDataSource
@@ -36,14 +35,14 @@ class OCServerInfoRepository(
         // Second step: get authentication method required by the server
         val authenticationMethod = remoteServerInfoDataSource.getAuthenticationMethod(
             normalizeProtocolPrefix(
-                trimWebdavSuffix(path),
+                path,
                 pairRemoteStatus.second
             )
         )
 
         return ServerInfo(
             ownCloudVersion = pairRemoteStatus.first.version,
-            baseUrl = normalizeProtocolPrefix(trimWebdavSuffix(path), pairRemoteStatus.second),
+            baseUrl = normalizeProtocolPrefix(path, pairRemoteStatus.second),
             authenticationMethod = authenticationMethod,
             isSecureConnection = pairRemoteStatus.second
         )

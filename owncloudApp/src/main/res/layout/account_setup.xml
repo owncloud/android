@@ -137,7 +137,7 @@
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:minHeight="32dp"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:textColor="@color/login_connection_text_color"
                 tools:text="@string/auth_testing_connection"
                 tools:visibility="visible" />

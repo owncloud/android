@@ -41,7 +41,6 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BA
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH_SUPPORTED_TRUE
-import com.owncloud.android.lib.common.network.WebdavUtils
 import timber.log.Timber
 import java.util.Locale
 
@@ -115,7 +114,7 @@ class OCLocalAuthenticationDataSource(
         }
 
         lastPermanentLocation?.let {
-            serverInfo.baseUrl = WebdavUtils.trimWebdavSuffix(it)
+            serverInfo.baseUrl = it
         }
 
         val uri = Uri.parse(serverInfo.baseUrl)
