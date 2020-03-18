@@ -22,6 +22,7 @@ package com.owncloud.android.data.server.datasources.implementation
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
+import com.owncloud.android.domain.exceptions.SpecificServiceUnavailableException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -42,7 +43,12 @@ class OCRemoteServerInfoDataSource(
             redirectionLocation = checkPathExistenceResult.redirectedLocation
         }
 
-        // Step 2: look for authentication methods
+        // Step 2: Check if server is available (If server is in maintenance for example, throw exception with specific message)
+        if (checkPathExistenceResult.httpCode == HttpConstants.HTTP_SERVICE_UNAVAILABLE) {
+            throw SpecificServiceUnavailableException(checkPathExistenceResult.httpPhrase)
+        }
+
+        // Step 3: look for authentication methods
         var authenticationMethod: AuthenticationMethod = AuthenticationMethod.NONE
         if (checkPathExistenceResult.httpCode == HttpConstants.HTTP_UNAUTHORIZED) {
             val authenticateHeaders = checkPathExistenceResult.authenticateHeaders
@@ -62,7 +68,7 @@ class OCRemoteServerInfoDataSource(
             remoteStatusResult
         }
 
-        if(!ownCloudVersion.isServerVersionSupported){
+        if (!ownCloudVersion.isServerVersionSupported) {
             throw OwncloudVersionNotSupportedException()
         }
 

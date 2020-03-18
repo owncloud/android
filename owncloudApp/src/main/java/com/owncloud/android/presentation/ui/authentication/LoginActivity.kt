@@ -34,8 +34,8 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import android.widget.Toast
@@ -219,7 +219,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         loginButton.isVisible = false
                         server_status_text.run {
                             text = ""
-                            isVisible = false
+                            visibility = INVISIBLE
                         }
                     }
                 }
@@ -335,7 +335,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 showOrHideBasicAuthFields(shouldBeVisible = false)
             }
             else -> {
-                server_status_text.visibility = GONE
+                server_status_text.visibility = INVISIBLE
                 auth_status_text.run {
                     text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
                     isVisible = true

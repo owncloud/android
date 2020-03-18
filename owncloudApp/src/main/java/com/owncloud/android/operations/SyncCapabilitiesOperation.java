@@ -19,9 +19,6 @@
 package com.owncloud.android.operations;
 
 import android.accounts.AccountManager;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -57,15 +54,11 @@ public class SyncCapabilitiesOperation extends SyncOperation<RemoteCapability> {
             Timber.w("Remote capabilities not available");
 
             // server version is important; this fallback will try to get it from status.php
-            // if capabilities API is not available. Check connectivity before calling getRemoteStatusOperation
-            ConnectivityManager cm =(ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            if (activeNetwork.isConnected()) {
-                GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation();
-                RemoteOperationResult<OwnCloudVersion> statusResult = getStatus.execute(client);
-                if (statusResult.isSuccess()) {
-                    serverVersion = statusResult.getData();
-                }
+            // if capabilities API is not available.
+            GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation();
+            RemoteOperationResult<OwnCloudVersion> statusResult = getStatus.execute(client);
+            if (statusResult.isSuccess()) {
+                serverVersion = statusResult.getData();
             }
         }
 
