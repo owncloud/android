@@ -34,6 +34,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
@@ -333,10 +334,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 }
                 showOrHideBasicAuthFields(shouldBeVisible = false)
             }
-            else -> auth_status_text.run {
-                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
-                isVisible = true
-                setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
+            else -> {
+                server_status_text.visibility = GONE
+                auth_status_text.run {
+                    text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
+                    isVisible = true
+                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
+                }
             }
         }
     }

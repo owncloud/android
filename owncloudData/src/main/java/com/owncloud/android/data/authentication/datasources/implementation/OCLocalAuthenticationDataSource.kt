@@ -28,6 +28,7 @@ import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
+import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.accounts.AccountUtils
@@ -97,7 +98,7 @@ class OCLocalAuthenticationDataSource(
         }.name
 
     /**
-     * Add new account to account manager, shared preferences and returns account name
+     * Add new account to account manager, shared preferences and returns account
      */
     private fun addAccount(
         lastPermanentLocation: String?,
@@ -106,6 +107,13 @@ class OCLocalAuthenticationDataSource(
         password: String = "",
         updateIfAlreadyExists: Boolean = false
     ): Account {
+        if (updateIfAlreadyExists) {
+            // Check if the entered user matches the user of the account to update
+            val currentAccount = getCurrentAccount()
+            val currentUserName = AccountUtils.getUsernameForAccount(currentAccount)
+            if (userName != currentUserName) throw AccountNotTheSameException()
+        }
+
         lastPermanentLocation?.let {
             serverInfo.baseUrl = WebdavUtils.trimWebdavSuffix(it)
         }
@@ -114,12 +122,13 @@ class OCLocalAuthenticationDataSource(
 
         val accountName = AccountUtils.buildAccountName(uri, userName)
 
-        if (accountExists(accountName)) {
+        val account = getAccountIfExists(accountName)
+        if (account != null) {
             if (!updateIfAlreadyExists) {
                 Timber.d("The account already exists")
                 throw AccountNotNewException()
             } else {
-                return getAccountByName(accountName)!! // Account won't be null, since we've already checked it exists
+                return account // Account won't be null, since we've already checked it exists
             }
         } else {
             val newAccount = Account(accountName, accountType)
@@ -161,16 +170,12 @@ class OCLocalAuthenticationDataSource(
             newAccount, KEY_OC_BASE_URL, serverInfo.baseUrl
         )
 
-        if (userInfo != null) {
-            accountManager.setUserData(
-                newAccount, KEY_DISPLAY_NAME, userInfo.displayName
-            )
-        } else {
-            Timber.w("Couldn't get display name for %s", userName)
-        }
+        accountManager.setUserData(
+            newAccount, KEY_DISPLAY_NAME, userInfo.displayName
+        )
     }
 
-    private fun accountExists(accountName: String): Boolean {
+    private fun getAccountIfExists(accountName: String): Account? {
         val ocAccounts: Array<Account> = getAccounts()
 
         var lastAtPos = accountName.lastIndexOf("@")
@@ -187,11 +192,11 @@ class OCLocalAuthenticationDataSource(
                     currentLocale
                 )
             ) {
-                return true
+                return otherAccount
             }
         }
 
-        return false
+        return null
     }
 
     private fun getAccounts(): Array<Account> {
@@ -218,27 +223,13 @@ class OCLocalAuthenticationDataSource(
         return defaultAccount
     }
 
-    private fun getAccountByName(accountName: String): Account? {
-        val ocAccounts = getAccounts()
-        var searchedAccount: Account? = null
-
-        for (account in ocAccounts) {
-            if (account.name == accountName) {
-                searchedAccount = account
-                break
-            }
-        }
-
-        return searchedAccount
-    }
-
     override fun supportsOAuth2(accountName: String): Boolean {
-        val account = getAccountByName(accountName) ?: throw AccountNotFoundException()
+        val account = getAccountIfExists(accountName) ?: throw AccountNotFoundException()
         return accountManager.getUserData(account, KEY_SUPPORTS_OAUTH2) == OAUTH_SUPPORTED_TRUE
     }
 
     override fun getBaseUrl(accountName: String): String {
-        val account = getAccountByName(accountName) ?: throw AccountNotFoundException()
+        val account = getAccountIfExists(accountName) ?: throw AccountNotFoundException()
         return accountManager.getUserData(account, KEY_OC_BASE_URL)
     }
 }
