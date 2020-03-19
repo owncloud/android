@@ -34,6 +34,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUs
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_SHARE
@@ -42,6 +43,7 @@ import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkClass
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -55,6 +57,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 @ExperimentalCoroutinesApi
 class OCShareViewModelTest {
@@ -68,6 +73,7 @@ class OCShareViewModelTest {
     private lateinit var createPublicShareAsyncUseCase: CreatePublicShareAsyncUseCase
     private lateinit var editPublicShareAsyncUseCase: EditPublicShareAsyncUseCase
     private lateinit var deletePublicShareAsyncUseCase: DeleteShareAsyncUseCase
+    private lateinit var ocContextProvider: ContextProvider
 
     private val filePath = "/Photos/image.jpg"
     private val testAccountName = OC_ACCOUNT_NAME
@@ -88,7 +94,20 @@ class OCShareViewModelTest {
 
     @Before
     fun setUp() {
+        ocContextProvider = mockk(relaxed = true)
+
+        //TODO: Add tests when is not connected
+        every { ocContextProvider.isConnected() } returns true
+
         Dispatchers.setMain(testCoroutineDispatcher)
+        startKoin {
+            modules(
+                module(override = true) {
+                    factory {
+                        ocContextProvider
+                    }
+                })
+        }
     }
 
     @After
@@ -96,6 +115,7 @@ class OCShareViewModelTest {
         Dispatchers.resetMain()
         testCoroutineDispatcher.cleanupTestCoroutines()
 
+        stopKoin()
         unmockkAll()
     }
 

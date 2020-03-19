@@ -23,58 +23,83 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.providers.ContextProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import timber.log.Timber
 
-fun <T, Params> ViewModel.runUseCaseWithResult(
-    coroutineDispatcher: CoroutineDispatcher,
-    showLoading: Boolean = false,
-    liveData: MediatorLiveData<Event<UIResult<T>>>,
-    useCase: BaseUseCaseWithResult<T, Params>,
-    useCaseParams: Params,
-    postSuccess: Boolean = true,
-    postSuccessWithData: Boolean = true
-) {
-    viewModelScope.launch(coroutineDispatcher) {
-        if (showLoading) {
-            liveData.postValue(Event(UIResult.Loading()))
-        }
+object ViewModelExt : KoinComponent {
 
-        val useCaseResult = useCase.execute(useCaseParams)
+    private val contextProvider: ContextProvider by inject()
 
-        Timber.d(useCaseResult.toString())
-
-        if (useCaseResult.isSuccess && postSuccess) {
-            if (postSuccessWithData) {
-                liveData.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
-            } else {
-                liveData.postValue(Event(UIResult.Success()))
+    fun <T, Params> ViewModel.runUseCaseWithResult(
+        coroutineDispatcher: CoroutineDispatcher,
+        requiresConnection: Boolean = true,
+        showLoading: Boolean = false,
+        liveData: MediatorLiveData<Event<UIResult<T>>>,
+        useCase: BaseUseCaseWithResult<T, Params>,
+        useCaseParams: Params,
+        postSuccess: Boolean = true,
+        postSuccessWithData: Boolean = true
+    ) {
+        viewModelScope.launch(coroutineDispatcher) {
+            if (showLoading) {
+                liveData.postValue(Event(UIResult.Loading()))
             }
-        } else if (useCaseResult.isError) {
-            liveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
+
+            // If usecase requires connection and is not connected, it is not needed to execute use case.
+            if (requiresConnection && !contextProvider.isConnected()) {
+                liveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
+                Timber.d("${useCase.javaClass.simpleName} will not be executed due to lack of network connection")
+                return@launch
+            }
+
+            val useCaseResult = useCase.execute(useCaseParams)
+
+            Timber.d(useCaseResult.toString())
+
+            if (useCaseResult.isSuccess && postSuccess) {
+                if (postSuccessWithData) {
+                    liveData.postValue(Event(UIResult.Success(useCaseResult.getDataOrNull())))
+                } else {
+                    liveData.postValue(Event(UIResult.Success()))
+                }
+            } else if (useCaseResult.isError) {
+                liveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
+            }
         }
     }
-}
 
-fun <T, U, Params> ViewModel.runUseCaseWithResultAndUseCachedData(
-    coroutineDispatcher: CoroutineDispatcher,
-    cachedData: T?,
-    liveData: MediatorLiveData<Event<UIResult<T>>>,
-    useCase: BaseUseCaseWithResult<U, Params>,
-    useCaseParams: Params
-) {
-    viewModelScope.launch(coroutineDispatcher) {
-        liveData.postValue(Event(UIResult.Loading(cachedData)))
+    fun <T, U, Params> ViewModel.runUseCaseWithResultAndUseCachedData(
+        coroutineDispatcher: CoroutineDispatcher,
+        requiresConnection: Boolean = true,
+        cachedData: T?,
+        liveData: MediatorLiveData<Event<UIResult<T>>>,
+        useCase: BaseUseCaseWithResult<U, Params>,
+        useCaseParams: Params
+    ) {
+        viewModelScope.launch(coroutineDispatcher) {
+            liveData.postValue(Event(UIResult.Loading(cachedData)))
 
-        val useCaseResult = useCase.execute(useCaseParams)
+            // If usecase requires connection and is not connected, it is not needed to execute use case.
+            if (requiresConnection && !contextProvider.isConnected()) {
+                liveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException(), data = cachedData)))
+                Timber.d("${useCase.javaClass.simpleName} will not be executed due to lack of network connection")
+                return@launch
+            }
 
-        Timber.d(useCaseResult.toString())
+            val useCaseResult = useCase.execute(useCaseParams)
 
-        if (useCaseResult.isError) {
-            liveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull(), data = cachedData)))
+            Timber.d(useCaseResult.toString())
+
+            if (useCaseResult.isError) {
+                liveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull(), data = cachedData)))
+            }
         }
     }
 }
