@@ -31,7 +31,8 @@
         android:scaleType="centerCrop"
         android:src="@drawable/login_background_image"
         android:visibility="invisible"
-        tools:visibility="visible"/>
+        tools:visibility="visible"
+        tools:ignore="ContentDescription" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -125,7 +126,8 @@
                             android:contentDescription="@string/auth_refresh_button"
                             android:padding="0dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_arrow_right" />
+                            android:src="@drawable/ic_arrow_right"
+                            android:tint="@color/login_text_color"/>
 
                         <ImageButton
                             android:id="@+id/embeddedRefreshButton"
@@ -153,6 +155,7 @@
                         android:minHeight="32dp"
                         android:visibility="gone"
                         android:textColor="@color/login_connection_text_color"
+                        app:drawableTint="@color/login_connection_text_color"
                         tools:text="@string/auth_testing_connection"
                         tools:visibility="visible" />
 
@@ -208,9 +211,10 @@
                         android:drawableStart="@android:drawable/stat_notify_sync"
                         android:drawablePadding="5dip"
                         android:gravity="center_vertical"
-                        android:text="@string/auth_unauthorized"
                         android:textColor="@color/login_text_color"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        app:drawableTint="@color/login_credentials_text_color"
+                        tools:text="@string/auth_unauthorized" />
 
                 </LinearLayout>
 
