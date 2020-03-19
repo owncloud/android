@@ -30,7 +30,7 @@ import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.extensions.runUseCaseWithResult
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 
@@ -104,6 +104,7 @@ class OCAuthenticationViewModel(
         accountName: String
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
+        requiresConnection = false,
         liveData = _supportsOAuth2,
         useCase = supportsOAuth2UseCase,
         useCaseParams = SupportsOAuth2UseCase.Params(
@@ -118,6 +119,7 @@ class OCAuthenticationViewModel(
         accountName: String
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
+        requiresConnection = false,
         liveData = _baseUrl,
         useCase = getBaseUrlUseCase,
         useCaseParams = GetBaseUrlUseCase.Params(

@@ -28,5 +28,6 @@ interface ContextProvider {
     fun getBoolean(id: Int): Boolean
     fun getString(id: Int): String
     fun getContext(): Context
+    fun isConnected(): Boolean
 
 }
