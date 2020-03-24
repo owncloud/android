@@ -2,6 +2,7 @@
 <resources>
   <string name="about_android">%1$s для Android</string>
   <string name="about_version">Версія %1$s</string>
+  <string name="actionbar_search">Пошук в цій папці</string>
   <string name="actionbar_sync">Оновити обліковий запис</string>
   <string name="actionbar_upload">Відвантажити</string>
   <string name="actionbar_upload_from_apps">Вміст із інших додатків</string>
