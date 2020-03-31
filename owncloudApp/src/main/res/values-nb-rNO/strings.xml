@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s for Android</string>
+  <string name="about_version">Versjon %1$s</string>
+  <string name="actionbar_search">Søk i denne mappen</string>
   <string name="actionbar_sync">Oppdater konto</string>
   <string name="actionbar_upload">Last opp</string>
   <string name="actionbar_upload_from_apps">Innhold fra andre applikasjoner</string>
@@ -13,6 +16,8 @@
   <string name="actionbar_descending">Synkende</string>
   <string name="actionbar_sort_title">Sorter etter</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Eldste - nyeste</string>
+  <string name="actionbar_sort_by_size">Minste - største</string>
   <string name="drawer_item_all_files">Alle filer</string>
   <string name="drawer_item_only_available_offline">Tilgjengelig frakoblet</string>
   <string name="drawer_item_shared_by_link_files">Delt med lenke</string>
@@ -20,6 +25,10 @@
   <string name="drawer_item_uploads_list">Opplastinger</string>
   <string name="drawer_close">Lukk</string>
   <string name="drawer_open">Åpne</string>
+  <string name="drawer_loading_quota">Laster kvote</string>
+  <string name="drawer_quota">%1$s av %2$s brukt (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s i bruk</string>
+  <string name="drawer_unavailable_used_storage">Ingen informasjon om brukt lagring tilgjengelig</string>
   <string name="drawer_feedback">Tilbakemelding</string>
   <string name="drawer_help">Hjelp</string>
   <string name="prefs_category_general">Generelt</string>
@@ -28,8 +37,8 @@
   <string name="prefs_accounts">Kontoer</string>
   <string name="prefs_manage_accounts">Håndter kontoer</string>
   <string name="prefs_passcode">Passordlås</string>
-  <string name="prefs_fingerprint">Fingeravtrykkslås</string>
-  <string name="prefs_fingerprint_summary">Aktiver passord eller mønsterlås for å aktivere dette alternativet</string>
+  <string name="prefs_biometric">Biometrisk lås</string>
+  <string name="prefs_biometric_summary">Aktiver passord eller mønsterlås for å aktivere dette alternativet</string>
   <string name="prefs_camera_picture_upload">Bilde opplastninger</string>
   <string name="prefs_camera_picture_upload_summary">Last opp bilder tatt med kamera automatisk</string>
   <string name="prefs_camera_video_upload">Video opplastninger</string>
@@ -61,6 +70,8 @@
   <string name="illegal_argument_exception_message">En gyldig ACTION må være med i intent sendt til</string>
   <string name="recommend_subject">Prøv %1$s på smarttelefonen din!</string>
   <string name="recommend_text">Jeg ønsker å invitere deg til å bruke %1$s på smarttelefonen din!\nLast ned her: %2$s</string>
+  <string name="auth_failure_snackbar">Autentisering feilet</string>
+  <string name="auth_failure_snackbar_action">Endre konto</string>
   <string name="auth_oauth_failure_snackbar_action">Logg inn</string>
   <string name="auth_check_server">Sjekk server</string>
   <string name="auth_host_url">Serveradresse https://...</string>
@@ -191,13 +202,6 @@
   <string name="pass_code_wrong">Feil passord</string>
   <string name="pass_code_removed">Passord fjernet</string>
   <string name="pass_code_stored">Passord lagret</string>
-  <string name="fingerprint_confirm">Bekreft ditt fingeravtrykk for å fortsette</string>
-  <string name="fingerprint_hint">Touch sensor</string>
-  <string name="fingerprint_not_recognized">Fingeravtrykk ikke gjenkjent, prøv igjen</string>
-  <string name="fingerprint_success">Fingeravtrykk gjenkjent</string>
-  <string name="fingerprint_not_hardware_detected">Denne enheten støtter ikke fingeravtrykksautentisering</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Registrer minst ett fingeravtrykk for å bruke denne funksjonen</string>
-  <string name="fingerprint_not_granted_permissions">Fingeravtrykkstillatelser ikke gitt</string>
   <string name="media_notif_ticker">%1$s musikkspiller</string>
   <string name="media_state_playing">%1$s (spiller)</string>
   <string name="media_state_loading">%1$s (laster)</string>

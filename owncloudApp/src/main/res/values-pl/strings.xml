@@ -37,8 +37,7 @@
   <string name="prefs_accounts">Konta</string>
   <string name="prefs_manage_accounts">Zarządzaj kontami</string>
   <string name="prefs_passcode">Blokada hasłem</string>
-  <string name="prefs_fingerprint">Blokada odciskiem palca</string>
-  <string name="prefs_fingerprint_summary">Wprowadź kod PIN lub wzór odblokowania aby odblokować tę opcję</string>
+  <string name="prefs_biometric_summary">Wprowadź kod PIN lub wzór odblokowania aby odblokować tę opcję</string>
   <string name="confirmation_touches_with_other_windows_title">Czy jesteś pewny, że chcesz włączyć tą funkcję?</string>
   <string name="prefs_camera_picture_upload">Wrzucanie obrazków</string>
   <string name="prefs_camera_picture_upload_summary">Automatycznie wrzuć obrazki zrobione przez kamerę</string>
@@ -220,13 +219,6 @@
   <string name="pass_code_wrong">Kod PIN nieprawidłowy</string>
   <string name="pass_code_removed">Kod PIN został usunięty</string>
   <string name="pass_code_stored">Kod PIN został zapisany</string>
-  <string name="fingerprint_confirm">Potwierdź odciskiem palca aby kontynuować</string>
-  <string name="fingerprint_hint">Czujnik dotykowy</string>
-  <string name="fingerprint_not_recognized">Nierozpoznany odcisk palca, spróbuj jeszcze raz</string>
-  <string name="fingerprint_success">Odcisk palca rozpoznany</string>
-  <string name="fingerprint_not_hardware_detected">To urządzenie nie obsługuje autoryzacji odciskiem palca</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Zarejestruj przynajmniej jeden odcisk palca aby skorzystać z tej funkcji</string>
-  <string name="fingerprint_not_granted_permissions">Nie przydzielono uprawnień dla odcisku palca</string>
   <string name="media_notif_ticker">%1$s odtwarzacz muzyki</string>
   <string name="media_state_playing">%1$s (odtwarzany)</string>
   <string name="media_state_loading">%1$s (wczytywany)</string>

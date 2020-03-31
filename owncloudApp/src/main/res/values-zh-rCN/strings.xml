@@ -37,8 +37,7 @@
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
-  <string name="prefs_fingerprint">指纹锁</string>
-  <string name="prefs_fingerprint_summary">使用密码或图案锁定以启用此选项</string>
+  <string name="prefs_biometric_summary">使用密码或图案锁定以启用此选项</string>
   <string name="confirmation_touches_with_other_windows_title">你确定要启用此功能吗？</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
   <string name="prefs_camera_picture_upload_summary">自动上传相机拍摄的图片</string>
@@ -215,13 +214,6 @@
   <string name="pass_code_wrong">错误的密码</string>
   <string name="pass_code_removed">移除的密码</string>
   <string name="pass_code_stored">存储的密码</string>
-  <string name="fingerprint_confirm">确认您的指纹以继续下一步</string>
-  <string name="fingerprint_hint">触摸传感器</string>
-  <string name="fingerprint_not_recognized">指纹无法识别，请重试</string>
-  <string name="fingerprint_success">指纹已识别</string>
-  <string name="fingerprint_not_hardware_detected">此设备不支持指纹验证</string>
-  <string name="fingerprint_not_enrolled_fingerprints">请至少录入一个指纹以使用此功能</string>
-  <string name="fingerprint_not_granted_permissions">指纹权限未授权</string>
   <string name="media_notif_ticker">%1$s 音乐播放器</string>
   <string name="media_state_playing">%1$s (播放中)</string>
   <string name="media_state_loading">%1$s (载入中)</string>

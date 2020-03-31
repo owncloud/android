@@ -37,8 +37,7 @@
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
-  <string name="prefs_fingerprint">Ujjlenyomat zár</string>
-  <string name="prefs_fingerprint_summary">Adjon meg zárolási jelszót vagy mintát a beállítás engedélyezéséhez</string>
+  <string name="prefs_biometric_summary">Adjon meg zárolási jelszót vagy mintát a beállítás engedélyezéséhez</string>
   <string name="prefs_touches_with_other_visible_windows">Érintkezik más látható ablakkal</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Engedélyezze az érintéseket, amikor a kép takarásban van egy másik ablak által.</string>
   <string name="confirmation_touches_with_other_windows_title">Biztos, hogy engedélyezi ezt a funkciót?</string>
@@ -221,13 +220,6 @@
   <string name="pass_code_wrong">Hibás jelszó</string>
   <string name="pass_code_removed">Jelszó eltávolítva</string>
   <string name="pass_code_stored">Jelszó eltárolva</string>
-  <string name="fingerprint_confirm">Erősítse meg az ujjlenyomatát a folytatáshoz</string>
-  <string name="fingerprint_hint">Érintésérzékelő</string>
-  <string name="fingerprint_not_recognized">Az ujjlenyomat nem felismerhető, próbálja újra</string>
-  <string name="fingerprint_success">Ujjlenyomat felismerve</string>
-  <string name="fingerprint_not_hardware_detected">Az eszköz nem támogatja az ujjlenyomatos hitelesítést</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Regisztráljon legalább egy ujjlenyomatot a funkció használatához</string>
-  <string name="fingerprint_not_granted_permissions">Az ujjlenyomat jogosultság nincs megadva</string>
   <string name="media_notif_ticker">%1$s zenelejátszó</string>
   <string name="media_state_playing">%1$s (lejátszás)</string>
   <string name="media_state_loading">%1$s (betöltés)</string>

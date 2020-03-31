@@ -37,8 +37,8 @@
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Accounts beheren</string>
   <string name="prefs_passcode">Pincode slot</string>
-  <string name="prefs_fingerprint">Vingerafdrukvergrendeling</string>
-  <string name="prefs_fingerprint_summary">Zet de toegangscode of de patroonvergrendeling aan om deze optie te activeren </string>
+  <string name="prefs_biometric">Biometrisch slot</string>
+  <string name="prefs_biometric_summary">Zet de toegangscode of de patroonvergrendeling aan om deze optie te activeren </string>
   <string name="prefs_touches_with_other_visible_windows_summary">Sta acties toe als het scherm wordt beinvloed door een andere app. Zet dit aan als je licht-filter apps gebruikt.</string>
   <string name="confirmation_touches_with_other_windows_title">Weet je zeker dat je deze functionaliteit wilt aanzetten?</string>
   <string name="prefs_camera_picture_upload">Afbeeldingen uploaden</string>
@@ -76,6 +76,7 @@
   <string name="recommend_subject">Probeer %1$s op uw smartphone!</string>
   <string name="recommend_text">Uitnodiging om %1$s op uw smartphone uit te proberen!
 Download hier: %2$s</string>
+  <string name="error_reason">omdat</string>
   <string name="auth_failure_snackbar">Authenticatie is mislukt</string>
   <string name="auth_failure_snackbar_action">Verander account</string>
   <string name="auth_oauth_failure">Het toegangstoken is verlopen of niet meer geldig. Log opnieuw in om weer toegang te krijgen.</string>
@@ -103,6 +104,7 @@ Download hier: %2$s</string>
   <string name="file_list_seconds_ago">seconden geleden</string>
   <string name="file_list_empty">Er bevindt zich hier niets. Upload een bestand!</string>
   <string name="file_list_empty_available_offline">Er zijn geen offline bestanden beschikbaar</string>
+  <string name="file_list_empty_shared_by_links">Er zijn geen bestanden gedeeld via een link</string>
   <string name="file_list_loading">Laden...</string>
   <string name="file_list_no_app_for_file_type">Geen app gevonden voor het bestandsformaat</string>
   <string name="local_file_list_empty">Er staan geen bestanden in deze map.</string>
@@ -135,6 +137,7 @@ Download hier: %2$s</string>
   <string name="common_error">Fout</string>
   <string name="common_loading">Laden...</string>
   <string name="common_unknown">onbekend</string>
+  <string name="common_error_unknown">onbekende fout</string>
   <string name="common_pending">In behandeling</string>
   <string name="common_important">Belangrijk</string>
   <string name="about_title">Over</string>
@@ -220,13 +223,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_wrong">Onjuiste pincode</string>
   <string name="pass_code_removed">Pincode verwijderd</string>
   <string name="pass_code_stored">Pincode opgeslagen</string>
-  <string name="fingerprint_confirm">Bevestig uw vingerafdruk om door te gaan</string>
-  <string name="fingerprint_hint">Touch sensor</string>
-  <string name="fingerprint_not_recognized">Vingerafdruk niet herkend, probeer opnieuw</string>
-  <string name="fingerprint_success">Vingerafdruk herkend</string>
-  <string name="fingerprint_not_hardware_detected">Dit apparaat ondersteunt geen vingerafdruk-authenticatie</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Registreer ten minste één vingerafdruk om deze functie te gebruiken</string>
-  <string name="fingerprint_not_granted_permissions">Vingerafdruk-autorisatie is niet toegestaan</string>
   <string name="media_notif_ticker">%1$s muziekspeler</string>
   <string name="media_state_playing">%1$s (speelt)</string>
   <string name="media_state_loading">%1$s (laden)</string>

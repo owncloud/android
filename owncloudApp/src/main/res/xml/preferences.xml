@@ -64,8 +64,8 @@
             android:key="set_pattern"
             android:title="@string/prefs_pattern" />
         <android.preference.CheckBoxPreference
-            android:key="set_fingerprint"
-            android:title="@string/prefs_fingerprint" />
+            android:key="set_biometric"
+            android:title="@string/prefs_biometric" />
         <android.preference.CheckBoxPreference
             android:key="touches_with_other_visible_windows"
             android:summary="@string/prefs_touches_with_other_visible_windows_summary"

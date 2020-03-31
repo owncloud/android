@@ -2,6 +2,7 @@
 <resources>
   <string name="about_android">%1$s для Android</string>
   <string name="about_version">Версія %1$s</string>
+  <string name="actionbar_search">Пошук в цій теці</string>
   <string name="actionbar_sync">Оновити обліковий запис</string>
   <string name="actionbar_upload">Відвантажити</string>
   <string name="actionbar_upload_from_apps">Вміст із інших додатків</string>
@@ -18,6 +19,7 @@
   <string name="actionbar_sort_by_date">Старіші - Новіші</string>
   <string name="actionbar_sort_by_size">Найменші - Найбільші</string>
   <string name="drawer_item_all_files">Усі файли</string>
+  <string name="drawer_item_only_available_offline">Доступний в автономному режимі</string>
   <string name="drawer_item_shared_by_link_files">Доступне за посиланням</string>
   <string name="drawer_item_settings">Налаштування</string>
   <string name="drawer_item_uploads_list">Завантажень</string>
@@ -35,7 +37,8 @@
   <string name="prefs_accounts">Облікові записи</string>
   <string name="prefs_manage_accounts">Управління обліковими записами</string>
   <string name="prefs_passcode">Захистити паролем</string>
-  <string name="prefs_fingerprint_summary">Увімкніть блокування паролем або графічним ключем щоб увімкнути це налаштування</string>
+  <string name="prefs_biometric_summary">Увімкніть блокування паролем або графічним ключем щоб увімкнути це налаштування</string>
+  <string name="confirmation_touches_with_other_windows_title">Ви впевнені, що хочете включити цю функцію?</string>
   <string name="prefs_camera_picture_upload">Завантаження зображень</string>
   <string name="prefs_camera_picture_upload_summary">Автоматично завантажувати зображення з камери</string>
   <string name="prefs_camera_video_upload">Завантаження відео</string>
@@ -46,14 +49,18 @@
   <string name="prefs_log_summary_history">Тут показані записи журналу</string>
   <string name="prefs_log_delete_history_button">Видалити історію</string>
   <string name="prefs_help">Допомога</string>
+  <string name="prefs_sync_calendar_contacts">Синхронізувати ваші контакти, календарі та завдання</string>
+  <string name="prefs_sync_calendar_contacts_summary">Встановити DAVx⁵</string>
   <string name="prefs_recommend">Порадити товаришу</string>
   <string name="prefs_feedback">Зворотній зв\'язок</string>
   <string name="prefs_imprint">Відбиток</string>
   <string name="prefs_remember_last_share_location">Запам\'ятати позицію</string>
   <string name="prefs_remember_last_upload_location_summary">Запам\'ятати останній опублікований шлях завантаження</string>
   <string name="prefs_pattern">Графічний ключ</string>
-  <string name="pattern_enter_pattern">Будь ласка, введіть ваш візерунок</string>
+  <string name="pattern_enter_pattern">Будь ласка, введіть ваш шаблон</string>
   <string name="pattern_configure_pattern">Введіть ваш візерунок</string>
+  <string name="pattern_incorrect_pattern">Невірний шаблон</string>
+  <string name="pattern_reenter_pattern">Будь ласка, повторіть ваш шаблон</string>
   <string name="recommend_subject">Спробуйте %1$s на своєму смартфоні!</string>
   <string name="recommend_text">Пропоную вам користуватися %1$s на вашому смартфоні!\nЗавантажити можна за посиланням: %2$s</string>
   <string name="auth_failure_snackbar">Автентифікація не виконана</string>
@@ -113,6 +120,7 @@
   <string name="common_error">Помилка</string>
   <string name="common_loading">Завантаження…</string>
   <string name="common_unknown">невідомо</string>
+  <string name="common_error_unknown">невідома помилка</string>
   <string name="common_pending">Очікування</string>
   <string name="common_important">Важливий</string>
   <string name="about_title">Про</string>
@@ -456,6 +464,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Термін дії *</string>
   <string name="share_via_link_expiration_date_explanation_label">Публічне посилання спливатиме не пізніше ніж за %1$d днів, після того, як буде створено</string>
   <string name="share_via_link_default_name_template">%1$s посилання</string>
+  <string name="share_via_link_empty_password">Порожній пароль</string>
   <string name="private_link_info">Це приватне посилання, його можуть використовувати лише люди, які мають доступ до файлу/папки. Використовуйте його як постійне посилання для себе або для того, щоб вказати іншим посилання на файли.</string>
   <string name="download_notification_channel_name">Завантаження</string>
   <string name="upload_notification_channel_name">Відвантаження</string>

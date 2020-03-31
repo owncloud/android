@@ -37,8 +37,7 @@
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
-  <string name="prefs_fingerprint">Bloqueo de huella digital</string>
-  <string name="prefs_fingerprint_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
+  <string name="prefs_biometric_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
   <string name="prefs_camera_picture_upload">Cargar imagenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar fotos automáticamente tomadas por la cámara</string>
   <string name="prefs_camera_video_upload">Cargar videos</string>
