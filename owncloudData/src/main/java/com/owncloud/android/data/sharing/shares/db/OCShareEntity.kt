@@ -68,6 +68,26 @@ data class OCShareEntity(
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
+    fun toContentValues(): ContentValues = ContentValues().apply {
+        put(ProviderTableMeta.OCSHARES_FILE_SOURCE, fileSource)
+        put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, itemSource)
+        put(ProviderTableMeta.OCSHARES_SHARE_TYPE, shareType)
+        put(ProviderTableMeta.OCSHARES_SHARE_WITH, shareWith)
+        put(ProviderTableMeta.OCSHARES_PATH, path)
+        put(ProviderTableMeta.OCSHARES_PERMISSIONS, permissions)
+        put(ProviderTableMeta.OCSHARES_SHARED_DATE, sharedDate)
+        put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, expirationDate)
+        put(ProviderTableMeta.OCSHARES_TOKEN, token)
+        put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME, sharedWithDisplayName)
+        put(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO, sharedWithAdditionalInfo)
+        put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, isFolder)
+        put(ProviderTableMeta.OCSHARES_USER_ID, userId)
+        put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteId)
+        put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, accountOwner)
+        put(ProviderTableMeta.OCSHARES_NAME, name)
+        put(ProviderTableMeta.OCSHARES_URL, shareLink)
+    }
+
     companion object {
 
         fun fromCursor(cursor: Cursor): OCShareEntity {
@@ -113,27 +133,5 @@ data class OCShareEntity(
                 values.getAsString(ProviderTableMeta.OCSHARES_URL)
             )
         }
-
-        fun OCShareEntity.toContentValues(): ContentValues {
-            val entity: OCShareEntity = this
-            return ContentValues().apply {
-                put(ProviderTableMeta.OCSHARES_FILE_SOURCE, entity.fileSource)
-                put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, entity.itemSource)
-                put(ProviderTableMeta.OCSHARES_SHARE_TYPE, entity.shareType)
-                put(ProviderTableMeta.OCSHARES_SHARE_WITH, entity.shareWith)
-                put(ProviderTableMeta.OCSHARES_PATH, entity.path)
-                put(ProviderTableMeta.OCSHARES_PERMISSIONS, entity.permissions)
-                put(ProviderTableMeta.OCSHARES_SHARED_DATE, entity.sharedDate)
-                put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, entity.expirationDate)
-                put(ProviderTableMeta.OCSHARES_TOKEN, entity.token)
-                put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME, entity.sharedWithDisplayName)
-                put(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO, entity.sharedWithAdditionalInfo)
-                put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, entity.isFolder)
-                put(ProviderTableMeta.OCSHARES_USER_ID, entity.userId)
-                put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, entity.remoteId)
-                put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, entity.accountOwner)
-                put(ProviderTableMeta.OCSHARES_NAME, entity.name)
-                put(ProviderTableMeta.OCSHARES_URL, entity.shareLink)
-        }
     }
-}}
+}

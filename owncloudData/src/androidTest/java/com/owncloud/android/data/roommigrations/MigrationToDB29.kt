@@ -21,13 +21,11 @@
 package com.owncloud.android.data.roommigrations
 
 import android.database.sqlite.SQLiteDatabase
-import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.filters.SmallTest
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_TABLE_NAME
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity.Companion.toContentValues
 import com.owncloud.android.testutil.OC_SHARE
 import org.junit.Assert.assertEquals
 import org.junit.Test
