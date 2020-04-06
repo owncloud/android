@@ -53,7 +53,7 @@ object ViewModelExt : KoinComponent {
             }
 
             // If usecase requires connection and is not connected, it is not needed to execute use case.
-            if (requiresConnection && !contextProvider.isConnected()) {
+            if (requiresConnection and !contextProvider.isConnected()) {
                 liveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
                 Timber.d("${useCase.javaClass.simpleName} will not be executed due to lack of network connection")
                 return@launch

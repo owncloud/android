@@ -66,6 +66,7 @@ class OCAuthenticationViewModel(
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
         liveData = _loginResult,
+        showLoading = true,
         useCase = loginBasicAsyncUseCase,
         useCaseParams = LoginBasicAsyncUseCase.Params(
             serverInfo = serverInfo.value?.peekContent()?.getStoredData(),
@@ -85,6 +86,7 @@ class OCAuthenticationViewModel(
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
         liveData = _loginResult,
+        showLoading = true,
         useCase = loginOAuthAsyncUseCase,
         useCaseParams = LoginOAuthAsyncUseCase.Params(
             serverInfo = serverInfo.value?.peekContent()?.getStoredData(),
