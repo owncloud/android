@@ -470,11 +470,12 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onCancelCertificate() {
         Timber.d("Server certificate is not trusted")
+        server_status_text.text = getString(R.string.ssl_certificate_not_trusted)
     }
 
     override fun onFailedSavingCertificate() {
         Timber.d("Server certificate could not be saved")
-        Toast.makeText(this, R.string.ssl_validator_not_saved, Toast.LENGTH_LONG).show()
+        server_status_text.text = getString(R.string.ssl_validator_not_saved)
     }
 
     /* Show or hide Basic Auth fields and reset its values */
