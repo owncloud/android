@@ -21,11 +21,15 @@ package com.owncloud.android.data.authentication.datasources.implementation
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
+import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
+import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
@@ -48,8 +52,10 @@ import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.OC_USER_INFO
 import io.mockk.every
 import io.mockk.mockkClass
+import io.mockk.mockkStatic
 import io.mockk.verify
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -62,6 +68,7 @@ class OCLocalAuthenticationDataSourceTest {
 
     private lateinit var ocLocalAuthenticationDataSource: OCLocalAuthenticationDataSource
     private val accountManager = mockkClass(AccountManager::class)
+    private val sharedPreferences = mockkClass(SharedPreferences::class, relaxed = true)
 
     @Before
     fun init() {
@@ -72,11 +79,14 @@ class OCLocalAuthenticationDataSourceTest {
             accountManager,
             OC_ACCOUNT.type
         )
+        mockkStatic(PreferenceManager::class)
+
     }
 
     @Test
     fun addBasicAccountOk() {
         mockRegularAccountCreationFlow()
+        mockSelectedAccountNameInPreferences()
 
         val newAccountName = ocLocalAuthenticationDataSource.addBasicAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
@@ -114,8 +124,8 @@ class OCLocalAuthenticationDataSourceTest {
         )
     }
 
-    @Test()
-    fun addBasicAccountAlreadyExistsUpdate() {
+    @Test
+    fun addBasicAccountAlreadyExistsUpdateSameUsername() {
         every {
             accountManager.getAccountsByType(OC_ACCOUNT.type)
         } returns arrayOf(OC_ACCOUNT) // The account is already there
@@ -123,6 +133,8 @@ class OCLocalAuthenticationDataSourceTest {
         every {
             accountManager.setUserData(any(), any(), any())
         } returns Unit
+
+        mockSelectedAccountNameInPreferences()
 
         ocLocalAuthenticationDataSource.addBasicAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
@@ -144,8 +156,44 @@ class OCLocalAuthenticationDataSourceTest {
     }
 
     @Test
+    fun addBasicAccountAlreadyExistsUpdateDifferentUsername() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf(OC_ACCOUNT) // The account is already there
+
+        every {
+            accountManager.setUserData(any(), any(), any())
+        } returns Unit
+
+        mockSelectedAccountNameInPreferences()
+
+        try {
+            ocLocalAuthenticationDataSource.addBasicAccount(
+                OC_REDIRECTION_PATH.lastPermanentLocation,
+                OC_ACCOUNT.name,
+                "password",
+                OC_SERVER_INFO,
+                OC_USER_INFO,
+                true
+            )
+        } catch (exception: Exception) {
+            assertTrue(exception is AccountNotTheSameException)
+        } finally {
+            // One for checking if the account exists
+            verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
+
+            // The account already exists so do not create a new one
+            verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+
+            // The account is not the same, so no update needed
+            verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 0)
+        }
+    }
+
+    @Test
     fun addOAuthAccountOk() {
         mockRegularAccountCreationFlow()
+        mockSelectedAccountNameInPreferences()
 
         every {
             accountManager.setAuthToken(any(), any(), any())
@@ -196,8 +244,8 @@ class OCLocalAuthenticationDataSourceTest {
         )
     }
 
-    @Test()
-    fun addOAuthAccountAlreadyExistsUpdate() {
+    @Test
+    fun addOAuthAccountAlreadyExistsUpdateSameUsername() {
         every {
             accountManager.getAccountsByType(OC_ACCOUNT.type)
         } returns arrayOf(OC_ACCOUNT) // The account is already there
@@ -209,6 +257,8 @@ class OCLocalAuthenticationDataSourceTest {
         every {
             accountManager.setAuthToken(any(), any(), any())
         } returns Unit
+
+        mockSelectedAccountNameInPreferences()
 
         ocLocalAuthenticationDataSource.addOAuthAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
@@ -233,7 +283,57 @@ class OCLocalAuthenticationDataSourceTest {
         verifyOAuthParamsAreUpdated(OC_ACCOUNT, OC_ACCESS_TOKEN, OC_OAUTH_SUPPORTED_TRUE, OC_REFRESH_TOKEN, OC_SCOPE, 1)
     }
 
-    @Test()
+    @Test
+    fun addOAuthAccountAlreadyExistsUpdateDifferentUsername() {
+        every {
+            accountManager.getAccountsByType(OC_ACCOUNT.type)
+        } returns arrayOf(OC_ACCOUNT) // The account is already there
+
+        every {
+            accountManager.setUserData(any(), any(), any())
+        } returns Unit
+
+        every {
+            accountManager.setAuthToken(any(), any(), any())
+        } returns Unit
+
+        mockSelectedAccountNameInPreferences()
+
+        try {
+            ocLocalAuthenticationDataSource.addOAuthAccount(
+                OC_REDIRECTION_PATH.lastPermanentLocation,
+                OC_ACCOUNT.name,
+                OC_AUTH_TOKEN_TYPE,
+                OC_ACCESS_TOKEN,
+                OC_SERVER_INFO,
+                OC_USER_INFO,
+                OC_REFRESH_TOKEN,
+                OC_SCOPE,
+                true
+            )
+        } catch (exception: Exception) {
+            assertTrue(exception is AccountNotTheSameException)
+        } finally {
+            // One for checking if the account exists
+            verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
+
+            // The account already exists so do not create it
+            verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+
+            // The account already exists, so update it
+            verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 0)
+            verifyOAuthParamsAreUpdated(
+                OC_ACCOUNT,
+                OC_ACCESS_TOKEN,
+                OC_OAUTH_SUPPORTED_TRUE,
+                OC_REFRESH_TOKEN,
+                OC_SCOPE,
+                0
+            )
+        }
+    }
+
+    @Test
     fun supportsOAuthOk() {
         every {
             accountManager.getAccountsByType(OC_ACCOUNT.type)
@@ -260,7 +360,7 @@ class OCLocalAuthenticationDataSourceTest {
         ocLocalAuthenticationDataSource.supportsOAuth2(OC_ACCOUNT.name)
     }
 
-    @Test()
+    @Test
     fun getBaseUrlOk() {
         every {
             accountManager.getAccountsByType(OC_ACCOUNT.type)
@@ -285,6 +385,18 @@ class OCLocalAuthenticationDataSourceTest {
         } returns arrayOf() // That account does not exist
 
         ocLocalAuthenticationDataSource.getBaseUrl(OC_ACCOUNT.name)
+    }
+
+    private fun mockSelectedAccountNameInPreferences(
+        selectedAccountName: String = OC_ACCOUNT.name
+    ) {
+        every {
+            sharedPreferences.getString(SELECTED_ACCOUNT, any())
+        } returns selectedAccountName
+
+        every {
+            PreferenceManager.getDefaultSharedPreferences(any())
+        } returns sharedPreferences
     }
 
     private fun mockRegularAccountCreationFlow() {
