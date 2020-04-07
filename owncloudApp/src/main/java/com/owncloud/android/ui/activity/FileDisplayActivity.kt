@@ -203,7 +203,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         // Check if only available offline option is set
         fileListOption =
-            intent.getSerializableExtra(EXTRA_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
+            intent.getParcelableExtra(EXTRA_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
 
         /// USER INTERFACE
 
@@ -1824,6 +1824,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (fileListOption != newFileListOption) {
             if (listOfFilesFragment != null) {
                 fileListOption = newFileListOption
+                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
                 listOfFilesFragment?.updateFileListOption(newFileListOption)
                 updateActionBarTitleAndHomeButton(null)
             } else {

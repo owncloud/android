@@ -33,6 +33,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Parcelable;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -474,7 +475,7 @@ public class FileActivity extends DrawerActivity
     public void onlyAvailableOfflineOption() {
         Intent intent = new Intent(this, FileDisplayActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(EXTRA_FILE_LIST_OPTION, FileListOption.AV_OFFLINE);
+        intent.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.AV_OFFLINE);
         startActivity(intent);
     }
 
@@ -482,7 +483,7 @@ public class FileActivity extends DrawerActivity
     public void sharedByLinkFilesOption() {
         Intent intent = new Intent(this, FileDisplayActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(EXTRA_FILE_LIST_OPTION, FileListOption.SHARED_BY_LINK);
+        intent.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.SHARED_BY_LINK);
         startActivity(intent);
     }
 

@@ -264,28 +264,33 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
-        //bottomNavigationView.setSelectedItemId(menuItemId);
-
+        bottomNavigationView.setSelectedItemId(menuItemId);
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.nav_all_files:
-                    allFilesOption();
-                    break;
-                case R.id.nav_uploads:
-                    Intent uploadListIntent = new Intent(getApplicationContext(), UploadListActivity.class);
-                    uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(uploadListIntent);
-                    break;
-                case R.id.nav_available_offline_files:
-                    onlyAvailableOfflineOption();
-                    break;
-                case R.id.nav_shared_by_link_files:
-                    sharedByLinkFilesOption();
-                    break;
+            if (bottomNavigationView.getSelectedItemId() != menuItem.getItemId()) {
+                navBarNavigationTo(menuItem.getItemId());
             }
             return true;
         });
+    }
 
+    private void navBarNavigationTo(int menuItemId) {
+
+        switch (menuItemId) {
+            case R.id.nav_all_files:
+                allFilesOption();
+                break;
+            case R.id.nav_uploads:
+                Intent uploadListIntent = new Intent(getApplicationContext(), UploadListActivity.class);
+                uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(uploadListIntent);
+                break;
+            case R.id.nav_available_offline_files:
+                onlyAvailableOfflineOption();
+                break;
+            case R.id.nav_shared_by_link_files:
+                sharedByLinkFilesOption();
+                break;
+        }
     }
 
     private void openHelp() {
@@ -522,14 +527,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
         }
     }
 
-    /**
-     * Method that gets called on drawer menu click for 'All Files'.
-     */
     public abstract void allFilesOption();
 
-    /**
-     * Method that gets called on drawer menu click for 'Available Offline'.
-     */
     public abstract void onlyAvailableOfflineOption();
 
     public abstract void sharedByLinkFilesOption();

@@ -86,6 +86,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.owncloud.android.ui.activity.FileActivity.EXTRA_FILE_LIST_OPTION;
+
 /**
  * A Fragment that lists all files and folders in a given path.
  * <p>
@@ -153,7 +155,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (fileListOption != FileListOption.ALL_FILES) {
             hideFAB = true;
         }
-        args.putSerializable(ARG_LIST_FILE_OPTION, fileListOption);
+        args.putParcelable(ARG_LIST_FILE_OPTION, fileListOption);
         args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder);
         args.putBoolean(ARG_HIDE_FAB, hideFAB);
         args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
@@ -225,8 +227,13 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (savedInstanceState != null) {
             mFile = savedInstanceState.getParcelable(KEY_FILE);
         }
+        FileListOption fileListOption = null;
+        if (getArguments() != null){
+             fileListOption = getArguments().getParcelable(ARG_LIST_FILE_OPTION);
+        }
 
-        updateListOfFiles(FileListOption.ALL_FILES);
+        if (fileListOption == null){ fileListOption = FileListOption.ALL_FILES; }
+        updateListOfFiles(fileListOption);
     }
 
     @Override
@@ -241,6 +248,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     public void updateFileListOption(FileListOption newFileListOption){
         updateListOfFiles(newFileListOption);
+        mFile = mContainerActivity.getStorageManager().getFileByPath(OCFile.ROOT_PATH);
         listDirectory(true);
     }
 
@@ -265,8 +273,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         );
         setListAdapter(mFileListAdapter);
 
-        Bundle args = getArguments();
-        mHideFab = (args != null) && args.getBoolean(ARG_HIDE_FAB, false);
+        mHideFab = fileListOption != FileListOption.ALL_FILES;
         if (mHideFab) {
             setFabEnabled(false);
         } else {
