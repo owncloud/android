@@ -36,6 +36,7 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -74,7 +75,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.upload_list_layout);
+        setContentView(R.layout.activity_main);
 
         // this activity has no file really bound, it's for mulitple accounts at the same time; should no inherit
         // from FileActivity; moreover, some behaviours inherited from FileActivity should be delegated to Fragments;
@@ -98,9 +99,11 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
     }
 
     private void createUploadListFragment() {
+        View leftFragmentContainer = findViewById(R.id.right_fragment_container);
+        leftFragmentContainer.setVisibility(View.GONE);
         UploadListFragment uploadList = new UploadListFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.upload_list_fragment, uploadList, TAG_UPLOAD_LIST_FRAGMENT);
+        transaction.add(R.id.left_fragment_container, uploadList, TAG_UPLOAD_LIST_FRAGMENT);
         transaction.commit();
     }
 

@@ -209,7 +209,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         /// USER INTERFACE
 
         // Inflate and set the layout view
-        setContentView(R.layout.files)
+        setContentView(R.layout.activity_main)
 
         // setup toolbar
         setupToolbar()
