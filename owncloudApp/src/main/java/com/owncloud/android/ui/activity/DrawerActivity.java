@@ -41,6 +41,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -148,8 +149,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         DisplayCutout displayCutout = v.getRootWindowInsets().getDisplayCutout();
 
                         if (displayCutout != null) {
-                            RelativeLayout rlDrawerActiveUser =
-                                    (RelativeLayout) findNavigationViewChildById(R.id.drawer_active_user);
+                            ConstraintLayout rlDrawerActiveUser =
+                                    (ConstraintLayout) findNavigationViewChildById(R.id.drawer_active_user);
 
                             int orientation = getResources().getConfiguration().orientation;
                             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
