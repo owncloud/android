@@ -25,32 +25,13 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
+        app:headerLayout="@layout/nav_drawer_header"
         app:menu="@menu/drawer_menu">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:padding="@dimen/standard_padding"
-            android:orientation="vertical"
-            android:background="@color/white">
-
-            <ProgressBar
-                android:id="@+id/account_quota_bar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:progress="25"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/account_quota_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/drawer_loading_quota" />
-
-        </LinearLayout>
+       <include layout="@layout/nav_drawer_footer"
+           android:layout_gravity="bottom"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
 
     </com.google.android.material.navigation.NavigationView>
 

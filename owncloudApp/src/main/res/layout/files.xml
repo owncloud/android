@@ -56,8 +56,8 @@
     </LinearLayout>
 
     <include
-        layout="@layout/drawer"
-        android:layout_width="240dp"
+        layout="@layout/nav_drawer_content"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start" />
 
