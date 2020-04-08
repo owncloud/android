@@ -335,7 +335,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 showOrHideBasicAuthFields(shouldBeVisible = false)
             }
             else -> {
-                server_status_text.visibility = INVISIBLE
+                server_status_text.isVisible = false
                 auth_status_text.run {
                     text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
                     isVisible = true
@@ -470,12 +470,18 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onCancelCertificate() {
         Timber.d("Server certificate is not trusted")
-        server_status_text.text = getString(R.string.ssl_certificate_not_trusted)
+        server_status_text.run {
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning, 0, 0, 0)
+            text = getString(R.string.ssl_certificate_not_trusted)
+        }
     }
 
     override fun onFailedSavingCertificate() {
         Timber.d("Server certificate could not be saved")
-        server_status_text.text = getString(R.string.ssl_validator_not_saved)
+        server_status_text.run {
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning, 0, 0, 0)
+            text = getString(R.string.ssl_validator_not_saved)
+        }
     }
 
     /* Show or hide Basic Auth fields and reset its values */
