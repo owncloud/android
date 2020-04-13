@@ -100,6 +100,7 @@ import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
+import kotlinx.android.synthetic.main.nav_coordinator_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -428,6 +429,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         transaction.commit()
     }
 
+    fun showOrHideBottomNavBar(show: Boolean) {
+        bottom_nav_view.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
     private fun updateFragmentsVisibility(existsSecondFragment: Boolean) {
         if (existsSecondFragment) {
             if (leftFragmentContainer?.visibility != View.GONE) {
@@ -435,11 +440,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
             if (rightFragmentContainer?.visibility != View.VISIBLE) {
                 rightFragmentContainer?.visibility = View.VISIBLE
+                showOrHideBottomNavBar(show = false)
             }
 
         } else {
             if (leftFragmentContainer?.visibility != View.VISIBLE) {
                 leftFragmentContainer?.visibility = View.VISIBLE
+                showOrHideBottomNavBar(show = true)
             }
             if (rightFragmentContainer?.visibility != View.GONE) {
                 rightFragmentContainer?.visibility = View.GONE

@@ -538,6 +538,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
             // hide FAB in multi selection mode
             setFabEnabled(false);
+            ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(false);
 
             return true;
         }
@@ -587,6 +588,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             if (!mHideFab) {
                 setFabEnabled(true);
             }
+            ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(true);
         }
 
         void storeStateIn(Bundle outState) {
