@@ -170,6 +170,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             syncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS)
             waitingToSend = savedInstanceState.getParcelable(KEY_WAITING_TO_SEND)
             filesUploadHelper = savedInstanceState.getParcelable(KEY_UPLOAD_HELPER)
+            fileListOption = savedInstanceState.getParcelable(KEY_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
             if (account != null) {
                 filesUploadHelper?.init(this, account.name)
             }
@@ -178,15 +179,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             syncInProgress = false
             waitingToSend = null
 
+            // Check if only available offline option is set
+            fileListOption = intent.getParcelableExtra(EXTRA_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
+
             filesUploadHelper = FilesUploadHelper(
                 this,
                 if (account == null) "" else account.name
             )
         }
-
-        // Check if only available offline option is set
-        fileListOption =
-            intent.getParcelableExtra(EXTRA_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
 
         /// USER INTERFACE
 
@@ -785,6 +785,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_WAITING_TO_PREVIEW, fileWaitingToPreview)
         outState.putBoolean(KEY_SYNC_IN_PROGRESS, syncInProgress)
+        outState.putParcelable(KEY_FILE_LIST_OPTION, fileListOption)
         //outState.putBoolean(KEY_REFRESH_SHARES_IN_PROGRESS,
         // mRefreshSharesInProgress);
         outState.putParcelable(KEY_WAITING_TO_SEND, waitingToSend)
@@ -1798,6 +1799,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         private const val KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS"
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
+        private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
 

@@ -77,6 +77,9 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
 
         setContentView(R.layout.activity_main);
 
+        View rightFragmentContainer = findViewById(R.id.right_fragment_container);
+        rightFragmentContainer.setVisibility(View.GONE);
+
         // this activity has no file really bound, it's for mulitple accounts at the same time; should no inherit
         // from FileActivity; moreover, some behaviours inherited from FileActivity should be delegated to Fragments;
         // but that's other story
@@ -102,8 +105,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
     }
 
     private void createUploadListFragment() {
-        View leftFragmentContainer = findViewById(R.id.right_fragment_container);
-        leftFragmentContainer.setVisibility(View.GONE);
         UploadListFragment uploadList = new UploadListFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, uploadList, TAG_UPLOAD_LIST_FRAGMENT);

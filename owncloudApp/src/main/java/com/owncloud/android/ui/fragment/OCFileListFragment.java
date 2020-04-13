@@ -86,8 +86,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.owncloud.android.ui.activity.FileActivity.EXTRA_FILE_LIST_OPTION;
-
 /**
  * A Fragment that lists all files and folders in a given path.
  * <p>
@@ -103,6 +101,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private final static String ARG_HIDE_FAB = MY_PACKAGE + ".HIDE_FAB";
 
     private static final String KEY_FILE = MY_PACKAGE + ".extra.FILE";
+    private static final String KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION";
     private static final String KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED";
 
     private static final String GRID_IS_PREFERED_PREFERENCE = "gridIsPrefered";
@@ -113,6 +112,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     private FileFragment.ContainerActivity mContainerActivity;
 
+    private FileListOption mFileListOption = null;
     private OCFile mFile = null;
     private FileListListAdapter mFileListAdapter;
 
@@ -131,12 +131,12 @@ public class OCFileListFragment extends ExtendedListFragment implements
     /**
      * Public factory method to create new {@link OCFileListFragment} instances.
      *
-     * @param justFolders          When 'true', only folders will be shown to the user, not files.
-     * @param fileListOption       File list option to show. All files by default.
-     * @param pickingAFolder       When 'true', only folders will be clickable when selecting a folder when copying or
-     *                             moving files or configuring upload path for camera uploads
-     * @param hideFAB              When 'true', floating action button is hidden.
-     * @param allowContextualMode  When 'true', contextual action mode is enabled long-pressing an item.
+     * @param justFolders         When 'true', only folders will be shown to the user, not files.
+     * @param fileListOption      File list option to show. All files by default.
+     * @param pickingAFolder      When 'true', only folders will be clickable when selecting a folder when copying or
+     *                            moving files or configuring upload path for camera uploads
+     * @param hideFAB             When 'true', floating action button is hidden.
+     * @param allowContextualMode When 'true', contextual action mode is enabled long-pressing an item.
      * @return New fragment with arguments set.
      */
     public static OCFileListFragment newInstance(
@@ -226,14 +226,17 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
         if (savedInstanceState != null) {
             mFile = savedInstanceState.getParcelable(KEY_FILE);
-        }
-        FileListOption fileListOption = null;
-        if (getArguments() != null){
-             fileListOption = getArguments().getParcelable(ARG_LIST_FILE_OPTION);
+            mFileListOption = savedInstanceState.getParcelable(KEY_FILE_LIST_OPTION);
         }
 
-        if (fileListOption == null){ fileListOption = FileListOption.ALL_FILES; }
-        updateListOfFiles(fileListOption);
+        if (mFileListOption == null && getArguments() != null && getArguments().getParcelable(ARG_LIST_FILE_OPTION) != null) {
+            mFileListOption = getArguments().getParcelable(ARG_LIST_FILE_OPTION);
+        }
+
+        if (mFileListOption == null) {
+            mFileListOption = FileListOption.ALL_FILES;
+        }
+        updateListOfFiles(mFileListOption);
     }
 
     @Override
@@ -246,8 +249,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
         mSearchView.setOnQueryTextListener(this);
     }
 
-    public void updateFileListOption(FileListOption newFileListOption){
+    public void updateFileListOption(FileListOption newFileListOption) {
         updateListOfFiles(newFileListOption);
+        mFileListOption = newFileListOption;
         mFile = mContainerActivity.getStorageManager().getFileByPath(OCFile.ROOT_PATH);
         listDirectory(true);
     }
@@ -562,7 +566,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, mEnableSelectAll, true, isShowingOnlyAvailableOffline(), isShowingSharedByLinkFiles());
+            mf.filter(menu, mEnableSelectAll, true, mFileListOption == FileListOption.AV_OFFLINE,
+                    mFileListOption == FileListOption.SHARED_BY_LINK);
             return true;
         }
 
@@ -643,6 +648,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(KEY_FILE, mFile);
+        outState.putParcelable(KEY_FILE_LIST_OPTION, mFileListOption);
 
         // If this fragment is used to show target folders where a selected file/folder can be
         // copied/moved, multiple choice is disabled
@@ -653,7 +659,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        if (isShowingOnlyAvailableOffline() || isShowingSharedByLinkFiles()) {
+        if (mFileListOption == FileListOption.AV_OFFLINE || mFileListOption == FileListOption.SHARED_BY_LINK) {
             super.onPrepareOptionsMenu(menu);
 
             MenuItem item = menu.findItem(R.id.action_sync_account);
@@ -698,11 +704,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
 
-            if (isShowingOnlyAvailableOffline() && !parentDir.isAvailableOffline()) {
+            if (mFileListOption == FileListOption.AV_OFFLINE && !parentDir.isAvailableOffline()) {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
-            if (isShowingSharedByLinkFiles() && !parentDir.isSharedViaLink()) {
+            if (mFileListOption == FileListOption.SHARED_BY_LINK && !parentDir.isSharedViaLink()) {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
@@ -929,7 +935,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(checkedFiles, false);
                 getListView().invalidateViews();
                 invalidateActionMode();
-                if (isShowingOnlyAvailableOffline()) {
+                if (mFileListOption == FileListOption.AV_OFFLINE) {
                     onRefresh();
                 }
                 return true;
@@ -1001,11 +1007,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
 
             // If available offline option and folder is not available offline -> list root
-            if (!directory.isAvailableOffline() && isShowingOnlyAvailableOffline()) {
+            if (mFileListOption == FileListOption.AV_OFFLINE && !directory.isAvailableOffline()) {
                 directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
-            if (!directory.isSharedViaLink() && isShowingSharedByLinkFiles()) {
+            if (mFileListOption == FileListOption.SHARED_BY_LINK && !directory.isSharedViaLink()) {
                 directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
