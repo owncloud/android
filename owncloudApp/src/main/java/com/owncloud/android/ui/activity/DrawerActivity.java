@@ -36,7 +36,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -305,7 +304,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
 
-        intent.setDataAndType(Uri.parse(feedbackMail), "text/plain");
+        intent.setData(Uri.parse(feedbackMail));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

@@ -79,7 +79,8 @@
         </activity>
         <activity
             android:name=".ui.activity.FileDisplayActivity"
-            android:theme="@style/Theme.ownCloud.Toolbar.Drawer">
+            android:theme="@style/Theme.ownCloud.Toolbar.Drawer"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".ui.activity.ManageAccountsActivity" />
         <activity
