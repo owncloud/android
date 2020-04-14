@@ -900,7 +900,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mAuthStatusText = getResources().getString(R.string.oauth_login_connection);
         showAuthStatus();
 
-        OAuthServiceConfiguration.Companion.buildAuthorizationServiceConfiguration(
+        OAuthServiceConfiguration.Companion.buildOIDCAuthorizationServiceConfig(
                 this,
                 (authorizationServiceConfiguration, authorizationException) -> {
                     if (authorizationException != null) { // Try normal OAuth
@@ -911,9 +911,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         AuthState authState = new AuthState(authorizationServiceConfiguration);
                         mAuthStateManager.replace(authState);
                     }
-                },
-                true,
-                ""
+                }
         );
     }
 
@@ -922,7 +920,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * If OIDC is not available, falling back to normal OAuth
      */
     private void startNormalOauthorization() {
-        OAuthServiceConfiguration.Companion.buildAuthorizationServiceConfiguration(
+        OAuthServiceConfiguration.Companion.buildOAuthorizationServiceConfig(
                 this,
                 (authorizationServiceConfiguration, authorizationException) -> {
                     if (authorizationException != null) {
@@ -934,7 +932,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         mAuthStateManager.replace(authState);
                     }
                 },
-                false,
                 mServerInfo.mBaseUrl
         );
     }

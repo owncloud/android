@@ -28,43 +28,48 @@ import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfiguratio
 import timber.log.Timber
 
 class OAuthServiceConfiguration {
+
     companion object {
-        fun buildAuthorizationServiceConfiguration(
+
+        fun buildOIDCAuthorizationServiceConfig(
+            context: Context,
+            onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback
+        ) {
+            Timber.d("OIDC, getting the auth and token endpoints from the discovery document (well-known)")
+
+            val serviceDiscoveryLocation =
+                Uri.parse(context.getString(R.string.oidc_service_discovery_location)).buildUpon()
+                    .appendPath(AuthorizationServiceConfiguration.WELL_KNOWN_PATH)
+                    .appendPath(AuthorizationServiceConfiguration.OPENID_CONFIGURATION_RESOURCE)
+                    .build()
+
+            AuthorizationServiceConfiguration.fetchFromUrl(
+                serviceDiscoveryLocation,
+                onGetAuthorizationServiceConfiguration,
+                OAuthConnectionBuilder(context)
+            )
+        }
+
+        fun buildOAuthorizationServiceConfig(
             context: Context,
             onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback,
-            oidc: Boolean = false,
             baseUrl: String = ""
         ) {
-            if (oidc) {
-                Timber.d("OIDC, getting the auth and token endpoints from the discovery document (well-known)")
+            Timber.d("Trying normal OAuth instead")
 
-                val serviceDiscoveryLocation =
-                    Uri.parse(context.getString(R.string.oidc_service_discovery_location)).buildUpon()
-                        .appendPath(AuthorizationServiceConfiguration.WELL_KNOWN_PATH)
-                        .appendPath(AuthorizationServiceConfiguration.OPENID_CONFIGURATION_RESOURCE)
-                        .build()
-
-                AuthorizationServiceConfiguration.fetchFromUrl(
-                    serviceDiscoveryLocation,
-                    onGetAuthorizationServiceConfiguration,
-                    OAuthConnectionBuilder(context)
+            val authorizationServiceConfiguration = AuthorizationServiceConfiguration(
+                Uri.parse(
+                    "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_auth)}" // auth endpoint
+                ),
+                Uri.parse(
+                    "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_access)}" // token endpoint
                 )
-            } else {
-                Timber.d("Trying normal OAuth instead")
+            )
 
-                val authorizationServiceConfiguration = AuthorizationServiceConfiguration(
-                    Uri.parse(
-                        "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_auth)}" // auth endpoint
-                    ),
-                    Uri.parse(
-                        "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_access)}" // token endpoint
-                    )
-                )
-
-                onGetAuthorizationServiceConfiguration.onFetchConfigurationCompleted(
-                    authorizationServiceConfiguration, null
-                )
-            }
+            onGetAuthorizationServiceConfiguration.onFetchConfigurationCompleted(
+                authorizationServiceConfiguration, null
+            )
         }
+
     }
 }
