@@ -210,6 +210,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private boolean mOIDCSupported = false;
 
+    private AuthorizationServiceConfiguration mAuthorizationServiceConfiguration = null;
+
     /**
      * {@inheritDoc}
      *
@@ -903,13 +905,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         OAuthServiceConfiguration.Companion.buildOIDCAuthorizationServiceConfig(
                 this,
                 (authorizationServiceConfiguration, authorizationException) -> {
-                    if (authorizationException != null) { // Try normal OAuth
+                    if (authorizationException != null) {
+                        Timber.e(authorizationException, "OIDC failed, try with normal OAuth");
                         startNormalOauthorization();
                     } else if (authorizationServiceConfiguration != null) {
                         mOIDCSupported = true;
                         performGetAuthorizationCodeRequest(authorizationServiceConfiguration);
-                        AuthState authState = new AuthState(authorizationServiceConfiguration);
-                        mAuthStateManager.replace(authState);
+                        mAuthorizationServiceConfiguration = authorizationServiceConfiguration;
                     }
                 }
         );
@@ -924,12 +926,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 this,
                 (authorizationServiceConfiguration, authorizationException) -> {
                     if (authorizationException != null) {
-                        updateOAuthStatusIconAndText(authorizationException);
                         Timber.e(authorizationException, "Failed to fetch configuration");
+                        updateOAuthStatusIconAndText(authorizationException);
                     } else if (authorizationServiceConfiguration != null) {
                         performGetAuthorizationCodeRequest(authorizationServiceConfiguration);
-                        AuthState authState = new AuthState(authorizationServiceConfiguration);
-                        mAuthStateManager.replace(authState);
+                        mAuthorizationServiceConfiguration = authorizationServiceConfiguration;
                     }
                 },
                 mServerInfo.mBaseUrl
@@ -1269,7 +1270,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 }
 
                 success = createAccount(result);
-
             } else {
 
                 try {
@@ -1427,6 +1427,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             setResult(RESULT_OK, intent);
 
             DocumentProviderUtils.Companion.notifyDocumentProviderRoots(getApplicationContext());
+
+            AuthState authState = new AuthState(mAuthorizationServiceConfiguration);
+            mAuthStateManager.replace(mAccount.name, authState);
 
             return true;
         }

@@ -320,12 +320,21 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 refreshToken);
 
         AuthStateManager authStateManager = AuthStateManager.getInstance(mContext);
-        AuthorizationServiceConfiguration authorizationServiceConfiguration = authStateManager.getCurrent().
+        AuthorizationServiceConfiguration authorizationServiceConfiguration = authStateManager.readState(account.name).
                 getAuthorizationServiceConfiguration();
 
         if (authorizationServiceConfiguration == null) {
-            Timber.d("No authorization configuration found for invalid token refresh");
-            return;
+            Timber.d("No authorization configuration found, falling back to hardcoded oauth2 endpoints");
+            // The code below is for users (already logged in) updating the app from previous versions, which do not have
+            // an authState that is configured when doing a fresh log in
+            String baseUrl = accountManager.getUserData(
+                    account,
+                    AccountUtils.Constants.KEY_OC_BASE_URL
+            );
+            authorizationServiceConfiguration = new AuthorizationServiceConfiguration(
+                Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
+                Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
+            );
         }
 
         String scope = accountManager.getUserData(

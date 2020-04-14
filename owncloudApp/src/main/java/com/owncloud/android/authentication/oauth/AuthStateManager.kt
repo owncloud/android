@@ -18,10 +18,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.AnyThread
 import net.openid.appauth.AuthState
-import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationResponse
-import net.openid.appauth.RegistrationResponse
-import net.openid.appauth.TokenResponse
 import org.json.JSONException
 import timber.log.Timber
 import java.lang.ref.WeakReference
@@ -34,99 +30,10 @@ import java.util.concurrent.locks.ReentrantLock
  * mutation.
  */
 class AuthStateManager private constructor(context: Context) {
-    private val prefs: SharedPreferences
-    private val prefsLock: ReentrantLock
-    private val currentAuthState: AtomicReference<AuthState>
-    @get:AnyThread val current: AuthState
-        get() {
-            if (currentAuthState.get() != null) {
-                return currentAuthState.get()
-            }
-            val state = readState()
-            return if (currentAuthState.compareAndSet(null, state)) {
-                state
-            } else {
-                currentAuthState.get()
-            }
-        }
-
-    @AnyThread
-    fun replace(state: AuthState): AuthState {
-        writeState(state)
-        currentAuthState.set(state)
-        return state
-    }
-
-    @AnyThread
-    fun updateAfterAuthorization(
-        authorizationResponse: AuthorizationResponse?,
-        authorizationException: AuthorizationException?
-    ): AuthState {
-        val current = current
-        current.update(authorizationResponse, authorizationException)
-        return replace(current)
-    }
-
-    @AnyThread
-    fun updateAfterTokenResponse(
-        tokenResponse: TokenResponse?,
-        authorizationException: AuthorizationException?
-    ): AuthState {
-        val current = current
-        current.update(tokenResponse, authorizationException)
-        return replace(current)
-    }
-
-    @AnyThread
-    fun updateAfterRegistration(
-        registrationResponse: RegistrationResponse?,
-        authorizationException: AuthorizationException?
-    ): AuthState {
-        val current = current
-        if (authorizationException != null) {
-            return current
-        }
-        current.update(registrationResponse)
-        return replace(current)
-    }
-
-    @AnyThread
-    private fun readState(): AuthState {
-        prefsLock.lock()
-        return try {
-            val currentState = prefs.getString(KEY_STATE, null) ?: return AuthState()
-            try {
-                AuthState.jsonDeserialize(currentState)
-            } catch (exception: JSONException) {
-                Timber.w("Failed to deserialize stored auth state - discarding")
-                AuthState()
-            }
-        } finally {
-            prefsLock.unlock()
-        }
-    }
-
-    @AnyThread
-    private fun writeState(authState: AuthState?) {
-        prefsLock.lock()
-        try {
-            val editor = prefs.edit()
-            if (authState == null) {
-                editor.remove(KEY_STATE)
-            } else {
-                editor.putString(KEY_STATE, authState.jsonSerializeString())
-            }
-            check(editor.commit()) { "Failed to write state to shared prefs" }
-        } finally {
-            prefsLock.unlock()
-        }
-    }
 
     companion object {
         private val INSTANCE_REF = AtomicReference(WeakReference<AuthStateManager?>(null))
-        private const val TAG = "AuthStateManager"
         private const val STORE_NAME = "AuthState"
-        private const val KEY_STATE = "state"
         @JvmStatic
         @AnyThread
         fun getInstance(context: Context): AuthStateManager {
@@ -139,9 +46,49 @@ class AuthStateManager private constructor(context: Context) {
         }
     }
 
+    private val prefs: SharedPreferences
+    private val prefsLock: ReentrantLock
+
     init {
         prefs = context.getSharedPreferences(STORE_NAME, Context.MODE_PRIVATE)
         prefsLock = ReentrantLock()
-        currentAuthState = AtomicReference()
+    }
+
+    @AnyThread
+    fun replace(accountName: String, state: AuthState): AuthState {
+        writeState(accountName, state)
+        return state
+    }
+
+    @AnyThread
+    fun readState(accountName: String): AuthState {
+        prefsLock.lock()
+        return try {
+            val currentState = prefs.getString(accountName, null) ?: return AuthState()
+            try {
+                AuthState.jsonDeserialize(currentState)
+            } catch (exception: JSONException) {
+                Timber.w("Failed to deserialize stored auth state - discarding")
+                AuthState()
+            }
+        } finally {
+            prefsLock.unlock()
+        }
+    }
+
+    @AnyThread
+    private fun writeState(accountName: String, authState: AuthState?) {
+        prefsLock.lock()
+        try {
+            val editor = prefs.edit()
+            if (authState == null) {
+                editor.remove(accountName)
+            } else {
+                editor.putString(accountName, authState.jsonSerializeString())
+            }
+            check(editor.commit()) { "Failed to write state to shared prefs" }
+        } finally {
+            prefsLock.unlock()
+        }
     }
 }

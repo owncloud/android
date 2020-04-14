@@ -70,6 +70,5 @@ class OAuthServiceConfiguration {
                 authorizationServiceConfiguration, null
             )
         }
-
     }
 }
