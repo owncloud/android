@@ -181,7 +181,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             syncInProgress = false
             waitingToSend = null
 
-            // Check if only available offline option is set
             fileListOption =
                 intent.getParcelableExtra(EXTRA_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
 
@@ -681,7 +680,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         } else {
             Timber.d("User clicked on 'Update' with no selection")
-            showMessageInSnackbar(findViewById(R.id.ListLayout), getString(R.string.filedisplay_no_file_selected))
+            showMessageInSnackbar(R.id.ListLayout, getString(R.string.filedisplay_no_file_selected))
         }
     }
 
@@ -887,7 +886,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     if (currentDir == null) {
                         // current folder was removed from the server
                         showMessageInSnackbar(
-                            findViewById(R.id.ListLayout),
+                            R.id.ListLayout,
                             String.format(
                                 getString(R.string.sync_current_folder_was_removed),
                                 synchFolderRemotePath
@@ -963,7 +962,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     if (synchResult.httpPhrase == "Error: Call to a member function getUID() on null") {
                         showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                     } else {
-                        showMessageInSnackbar(findViewById(R.id.ListLayout), synchResult.httpPhrase)
+                        showMessageInSnackbar(R.id.ListLayout, synchResult.httpPhrase)
                     }
                 } else {
                     showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
@@ -1043,7 +1042,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 if (renamedInUpload) {
                     val newName = File(uploadedRemotePath).name
                     showMessageInSnackbar(
-                        findViewById(R.id.ListLayout),
+                        R.id.ListLayout,
                         String.format(getString(R.string.filedetails_renamed_in_upload_msg), newName)
                     )
                     updateActionBarTitleAndHomeButton(file)
@@ -1351,7 +1350,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (listOfFilesFragment!!.isSingleItemChecked || result.isException || !result.isSuccess) {
             if (result.code != ResultCode.FORBIDDEN || result.code == ResultCode.FORBIDDEN && operation.isLastFileToRemove) {
                 showMessageInSnackbar(
-                    findViewById(R.id.ListLayout),
+                    R.id.ListLayout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
             }
@@ -1397,7 +1396,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else {
             try {
                 showMessageInSnackbar(
-                    findViewById(R.id.ListLayout),
+                    R.id.ListLayout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
 
@@ -1421,7 +1420,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else {
             try {
                 showMessageInSnackbar(
-                    findViewById(R.id.ListLayout),
+                    R.id.ListLayout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
 
@@ -1459,7 +1458,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         } else {
             showMessageInSnackbar(
-                findViewById(R.id.ListLayout),
+                R.id.ListLayout,
                 ErrorMessageAdapter.getResultMessage(result, operation, resources)
             )
 
@@ -1487,7 +1486,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
             } else if (secondFragment == null) {
                 showMessageInSnackbar(
-                    findViewById(R.id.ListLayout),
+                    R.id.ListLayout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
             }
@@ -1518,7 +1517,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else {
             try {
                 showMessageInSnackbar(
-                    findViewById(R.id.ListLayout),
+                    R.id.ListLayout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
             } catch (e: NotFoundException) {
