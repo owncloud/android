@@ -1230,10 +1230,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             chosenFile = file     // if no file is passed, current file decides
         }
         super.updateActionBarTitleAndHomeButton(chosenFile)
-        if (chosenFile?.remotePath == OCFile.ROOT_PATH && (fileListOption != FileListOption.ALL_FILES)) {
+        if (chosenFile?.remotePath == OCFile.ROOT_PATH && (!fileListOption.isAllFiles())) {
             val title =
-                if (fileListOption == FileListOption.AV_OFFLINE) resources.getString(R.string.drawer_item_only_available_offline)
-                else resources.getString(R.string.drawer_item_shared_by_link_files)
+                when {
+                    fileListOption.isAvailableOffline() -> resources.getString(R.string.drawer_item_only_available_offline)
+                    fileListOption.isSharedByLink() -> resources.getString(R.string.drawer_item_shared_by_link_files)
+                    else -> null // Should not happen -> will show R.string.app_name
+                }
             updateActionBarTitleAndHomeButtonByString(title)
         }
     }
@@ -1786,7 +1789,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 super.allFilesOption()
             }
         } else {
-            if (newFileListOption == FileListOption.ALL_FILES) {
+            if (newFileListOption.isAllFiles()) {
                 browseToRoot()
             } else {
                 allFilesOption()

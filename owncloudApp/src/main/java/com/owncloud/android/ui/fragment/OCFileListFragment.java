@@ -152,7 +152,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (fileListOption == null) {
             fileListOption = FileListOption.ALL_FILES;
         }
-        if (fileListOption != FileListOption.ALL_FILES) {
+        if (!fileListOption.isAllFiles()) {
             hideFAB = true;
         }
         args.putParcelable(ARG_LIST_FILE_OPTION, fileListOption);
@@ -262,22 +262,19 @@ public class OCFileListFragment extends ExtendedListFragment implements
         boolean justFolders = isShowingJustFolders();
         setFooterEnabled(!justFolders);
 
-        boolean onlyAvailableOffline = fileListOption == FileListOption.AV_OFFLINE;
-        boolean sharedByLinkFiles = fileListOption == FileListOption.SHARED_BY_LINK;
-
         boolean folderPicker = isPickingAFolder();
 
         mFileListAdapter = new FileListListAdapter(
                 justFolders,
-                onlyAvailableOffline,
-                sharedByLinkFiles,
+                fileListOption.isAvailableOffline(),
+                fileListOption.isSharedByLink(),
                 folderPicker,
                 getActivity(),
                 mContainerActivity
         );
         setListAdapter(mFileListAdapter);
 
-        mHideFab = fileListOption != FileListOption.ALL_FILES;
+        mHideFab = !fileListOption.isAllFiles();
         if (mHideFab) {
             setFabEnabled(false);
         } else {
@@ -566,8 +563,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, mEnableSelectAll, true, mFileListOption == FileListOption.AV_OFFLINE,
-                    mFileListOption == FileListOption.SHARED_BY_LINK);
+            mf.filter(menu, mEnableSelectAll, true, mFileListOption.isAvailableOffline(),
+                    mFileListOption.isSharedByLink());
             return true;
         }
 
@@ -659,7 +656,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        if (mFileListOption == FileListOption.AV_OFFLINE || mFileListOption == FileListOption.SHARED_BY_LINK) {
+        if (mFileListOption.isAvailableOffline() || mFileListOption.isSharedByLink()) {
             super.onPrepareOptionsMenu(menu);
 
             MenuItem item = menu.findItem(R.id.action_sync_account);
@@ -704,11 +701,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
 
-            if (mFileListOption == FileListOption.AV_OFFLINE && !parentDir.isAvailableOffline()) {
+            if (mFileListOption.isAvailableOffline() && !parentDir.isAvailableOffline()) {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
-            if (mFileListOption == FileListOption.SHARED_BY_LINK && !parentDir.isSharedViaLink()) {
+            if (mFileListOption.isSharedByLink() && !parentDir.isSharedViaLink()) {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
@@ -935,7 +932,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(checkedFiles, false);
                 getListView().invalidateViews();
                 invalidateActionMode();
-                if (mFileListOption == FileListOption.AV_OFFLINE) {
+                if (mFileListOption.isAvailableOffline()) {
                     onRefresh();
                 }
                 return true;
@@ -1007,11 +1004,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
 
             // If available offline option and folder is not available offline -> list root
-            if (mFileListOption == FileListOption.AV_OFFLINE && !directory.isAvailableOffline()) {
+            if (mFileListOption.isAvailableOffline() && !directory.isAvailableOffline()) {
                 directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
-            if (mFileListOption == FileListOption.SHARED_BY_LINK && !directory.isSharedViaLink()) {
+            if (mFileListOption.isSharedByLink() && !directory.isSharedViaLink()) {
                 directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 

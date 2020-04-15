@@ -21,7 +21,6 @@
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/bottom_navigation_bar_height"
     android:filterTouchesWhenObscured="true">
 
     <FrameLayout
