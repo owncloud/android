@@ -171,7 +171,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             syncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS)
             waitingToSend = savedInstanceState.getParcelable(KEY_WAITING_TO_SEND)
             filesUploadHelper = savedInstanceState.getParcelable(KEY_UPLOAD_HELPER)
-            fileListOption = savedInstanceState.getParcelable(KEY_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
+            fileListOption =
+                savedInstanceState.getParcelable(KEY_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
             if (account != null) {
                 filesUploadHelper?.init(this, account.name)
             }
@@ -181,7 +182,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             waitingToSend = null
 
             // Check if only available offline option is set
-            fileListOption = intent.getParcelableExtra(EXTRA_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
+            fileListOption =
+                intent.getParcelableExtra(EXTRA_FILE_LIST_OPTION) as? FileListOption ?: FileListOption.ALL_FILES
 
             filesUploadHelper = FilesUploadHelper(
                 this,
@@ -200,13 +202,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         // setup drawer
         setupDrawer()
 
-        setupNavigationBottomBar(
-            when (fileListOption) {
-                FileListOption.SHARED_BY_LINK -> R.id.nav_shared_by_link_files
-                FileListOption.AV_OFFLINE -> R.id.nav_available_offline_files
-                else -> R.id.nav_all_files
-            }
-        )
+        setupNavigationBottomBar(getMenuItemForFileListOption(fileListOption))
 
         leftFragmentContainer = findViewById(R.id.left_fragment_container)
         rightFragmentContainer = findViewById(R.id.right_fragment_container)
@@ -799,6 +795,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onResume() {
         Timber.v("onResume() start")
         super.onResume()
+
+        setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
 
         // refresh list of files
         refreshListOfFilesFragment(true)
@@ -1806,6 +1804,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     override fun sharedByLinkFilesOption() {
         navigateTo(FileListOption.SHARED_BY_LINK)
+    }
+
+    private fun getMenuItemForFileListOption(fileListOption: FileListOption?): Int = when (fileListOption) {
+        FileListOption.SHARED_BY_LINK -> R.id.nav_shared_by_link_files
+        FileListOption.AV_OFFLINE -> R.id.nav_available_offline_files
+        else -> R.id.nav_all_files
     }
 
     companion object {

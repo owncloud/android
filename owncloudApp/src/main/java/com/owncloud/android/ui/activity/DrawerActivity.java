@@ -222,7 +222,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
                             createAccount(false);
                             break;
                         case R.id.drawer_menu_account_manage:
-                            Intent manageAccountsIntent = new Intent(getApplicationContext(), ManageAccountsActivity.class);
+                            Intent manageAccountsIntent = new Intent(getApplicationContext(),
+                                    ManageAccountsActivity.class);
                             startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS);
                             break;
                         case R.id.drawer_menu_feedback:
@@ -250,6 +251,11 @@ public abstract class DrawerActivity extends ToolbarActivity {
         }
     }
 
+    void setCheckedItemAtBottomBar(int checkedMenuItem) {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        bottomNavigationView.getMenu().findItem(checkedMenuItem).setChecked(true);
+    }
+
     /**
      * Initializes the bottom navigation bar, its content and highlights the menu item with the given id.
      * This method needs to be called after the content view has been set.
@@ -263,7 +269,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
 
-        bottomNavigationView.setSelectedItemId(menuItemId);
+        setCheckedItemAtBottomBar(menuItemId);
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
             if (bottomNavigationView.getSelectedItemId() != menuItem.getItemId()) {
                 navBarNavigationTo(menuItem.getItemId());

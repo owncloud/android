@@ -26,6 +26,6 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-enum class FileListOption : Parcelable{
+enum class FileListOption : Parcelable {
     ALL_FILES, SHARED_BY_LINK, AV_OFFLINE
 }
