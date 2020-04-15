@@ -298,7 +298,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
         }
     }
 
-    @TargetApi(21)
     override fun renameDocument(documentId: String, displayName: String): String? {
         Timber.d("Trying to rename $documentId to $displayName")
         val docId = documentId.toLong()
@@ -533,7 +532,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun getStoreManagerFromFileId(id: Long): FileDataStorageManager? {
         // If file is found in current storage manager, return it
-        currentStorageManager?.getFileById(id)?.let { return currentStorageManager!! }
+        currentStorageManager?.getFileById(id)?.let { return currentStorageManager }
 
         //  Else, look for it in other ones
         var fileFromOtherStorageManager: OCFile?
@@ -554,7 +553,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun getFileByPathOrException(path: String): OCFile =
         getFileByPath(path) ?: throw FileNotFoundException("File $path not found")
 
-    private fun getFileByPath(path: String): OCFile? = getFileByPath(path)
+    private fun getFileByPath(path: String): OCFile? = currentStorageManager?.getFileByPath(path)
 
     companion object {
         private var rootIdToStorageManager: MutableMap<Long, FileDataStorageManager> = HashMap()

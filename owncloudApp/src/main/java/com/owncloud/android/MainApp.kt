@@ -176,7 +176,7 @@ class MainApp : MultiDexApplication() {
         private const val BETA_VERSION = "beta"
         private const val CLICKS_DEFAULT = 0
 
-        var appContext: Context? = null
+        lateinit var appContext: Context
             private set
         var isDeveloper: Boolean = false
             private set
@@ -187,13 +187,13 @@ class MainApp : MultiDexApplication() {
          */
 
         val accountType: String
-            get() = appContext!!.resources.getString(R.string.account_type)
+            get() = appContext.resources.getString(R.string.account_type)
 
         val versionCode: Int
             get() {
                 return try {
-                    val thisPackageName = appContext!!.packageName
-                    appContext!!.packageManager.getPackageInfo(thisPackageName, 0).versionCode
+                    val thisPackageName = appContext.packageName
+                    appContext.packageManager.getPackageInfo(thisPackageName, 0).versionCode
                 } catch (e: PackageManager.NameNotFoundException) {
                     0
                 }
@@ -201,25 +201,25 @@ class MainApp : MultiDexApplication() {
             }
 
         val authority: String
-            get() = appContext!!.resources.getString(R.string.authority)
+            get() = appContext.resources.getString(R.string.authority)
 
         val authTokenType: String
-            get() = appContext!!.resources.getString(R.string.authority)
+            get() = appContext.resources.getString(R.string.authority)
 
         val dataFolder: String
-            get() = appContext!!.resources.getString(R.string.data_folder)
+            get() = appContext.resources.getString(R.string.data_folder)
 
         // user agent
         // Mozilla/5.0 (Android) ownCloud-android/1.7.0
         val userAgent: String
             get() {
-                val appString = appContext!!.resources.getString(R.string.user_agent)
-                val packageName = appContext!!.packageName
+                val appString = appContext.resources.getString(R.string.user_agent)
+                val packageName = appContext.packageName
                 var version = ""
 
                 val pInfo: PackageInfo?
                 try {
-                    pInfo = appContext!!.packageManager.getPackageInfo(packageName, 0)
+                    pInfo = appContext.packageManager.getPackageInfo(packageName, 0)
                     if (pInfo != null) {
                         version = pInfo.versionName
                     }
@@ -234,8 +234,8 @@ class MainApp : MultiDexApplication() {
             get() {
                 var isBeta = false
                 try {
-                    val packageName = appContext!!.packageName
-                    val packageInfo = appContext!!.packageManager.getPackageInfo(packageName, 0)
+                    val packageName = appContext.packageName
+                    val packageInfo = appContext.packageManager.getPackageInfo(packageName, 0)
                     val versionName = packageInfo.versionName
                     if (versionName.contains(BETA_VERSION)) {
                         isBeta = true
@@ -250,7 +250,7 @@ class MainApp : MultiDexApplication() {
         fun initDependencyInjection() {
             stopKoin()
             startKoin {
-                androidContext(appContext!!)
+                androidContext(appContext)
                 modules(
                     listOf(
                         commonModule,
