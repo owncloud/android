@@ -44,7 +44,6 @@ data class RemoteCapability(
 
     // Files Sharing
     var filesSharingApiEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
-    var filesSharingSearchMinLength: Int? = DEFAULT_MIN_CHARACTERS_TO_SEARCH,
     var filesSharingPublicEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicPasswordEnforced: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
@@ -96,9 +95,5 @@ data class RemoteCapability(
                 }
             }
         }
-    }
-
-    companion object {
-        private const val DEFAULT_MIN_CHARACTERS_TO_SEARCH = 2
     }
 }

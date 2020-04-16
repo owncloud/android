@@ -79,7 +79,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                 return result
             }
 
-            Timber.d("Successful response: " + response!!)
+            Timber.d("Successful response: $response")
 
             // Parse the response
             val respJSON = JSONObject(response)
@@ -122,11 +122,6 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                         if (respFilesSharing.has(PROPERTY_API_ENABLED)) {
                             capability.filesSharingApiEnabled = CapabilityBooleanType.fromBooleanValue(
                                 respFilesSharing.getBoolean(PROPERTY_API_ENABLED)
-                            )
-                        }
-                        if (respFilesSharing.has(PROPERTY_SEARCH_MIN_LENGTH)) {
-                            capability.filesSharingSearchMinLength = respFilesSharing.getInt(
-                                PROPERTY_SEARCH_MIN_LENGTH
                             )
                         }
 
@@ -315,7 +310,6 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
         private const val PROPERTY_ENFORCED_READ_WRITE = "read_write"
         private const val PROPERTY_ENFORCED_UPLOAD_ONLY = "upload_only"
         private const val PROPERTY_DAYS = "days"
-        private const val PROPERTY_SEARCH_MIN_LENGTH = "search_min_length"
         private const val PROPERTY_SEND_MAIL = "send_mail"
         private const val PROPERTY_UPLOAD = "upload"
         private const val PROPERTY_UPLOAD_ONLY = "supports_upload_only"
