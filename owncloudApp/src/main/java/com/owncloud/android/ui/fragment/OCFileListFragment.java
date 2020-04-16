@@ -656,14 +656,12 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        if (mFileListOption.isAvailableOffline() || mFileListOption.isSharedByLink()) {
-            super.onPrepareOptionsMenu(menu);
+        super.onPrepareOptionsMenu(menu);
 
-            MenuItem item = menu.findItem(R.id.action_sync_account);
-            if (item != null) {
-                item.setVisible(false);
-                item.setEnabled(false);
-            }
+        MenuItem item = menu.findItem(R.id.action_sync_account);
+        if (item != null) {
+            item.setVisible(mFileListOption.isAllFiles());
+            item.setEnabled(mFileListOption.isAllFiles());
         }
         changeGridIcon(menu);   // this is enough if the option stays out of the action bar
     }
