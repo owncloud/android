@@ -49,15 +49,23 @@ class OCRemoteServerInfoDataSource(
         }
 
         // Step 3: look for authentication methods
-        var authenticationMethod: AuthenticationMethod = AuthenticationMethod.NONE
+        var authenticationMethod = AuthenticationMethod.NONE
         if (checkPathExistenceResult.httpCode == HttpConstants.HTTP_UNAUTHORIZED) {
             val authenticateHeaders = checkPathExistenceResult.authenticateHeaders
-            if (authenticateHeaders.startsWith(AuthenticationMethod.BASIC_HTTP_AUTH.toString())) {
+            var isBasic = false
+            authenticateHeaders.forEach { authenticateHeader ->
+                if (authenticateHeader.contains(AuthenticationMethod.BEARER_TOKEN.toString())) {
+                    return AuthenticationMethod.BEARER_TOKEN  // Bearer top priority
+                } else if (authenticateHeader.contains(AuthenticationMethod.BASIC_HTTP_AUTH.toString())) {
+                    isBasic = true
+                }
+            }
+
+            if (isBasic) {
                 authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH
-            } else if (authenticateHeaders.startsWith(AuthenticationMethod.BEARER_TOKEN.toString())) {
-                authenticationMethod = AuthenticationMethod.BEARER_TOKEN
             }
         }
+
         return authenticationMethod
     }
 
