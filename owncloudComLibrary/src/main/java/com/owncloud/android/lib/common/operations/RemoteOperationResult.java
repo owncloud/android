@@ -66,7 +66,7 @@ public class RemoteOperationResult<T>
     private Exception mException = null;
     private ResultCode mCode = ResultCode.UNKNOWN_ERROR;
     private String mRedirectedLocation;
-    private String mAuthenticate;
+    private List<String> mAuthenticate = new ArrayList<>();
     private String mLastPermanentLocation = null;
     private T mData = null;
 
@@ -253,7 +253,9 @@ public class RemoteOperationResult<T>
                     continue;
                 }
                 if ("www-authenticate".equals(header.getKey().toLowerCase())) {
-                    mAuthenticate = header.getValue().get(0).toLowerCase();
+                    for (String value: header.getValue()) {
+                        mAuthenticate.add(value.toLowerCase());
+                    }
                 }
             }
         }
@@ -494,7 +496,7 @@ public class RemoteOperationResult<T>
         return (mRedirectedLocation != null && !(mRedirectedLocation.toLowerCase().startsWith("https://")));
     }
 
-    public String getAuthenticateHeaders() {
+    public List<String> getAuthenticateHeaders() {
         return mAuthenticate;
     }
 
