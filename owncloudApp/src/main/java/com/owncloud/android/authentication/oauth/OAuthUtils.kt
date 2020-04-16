@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.authentication
+package com.owncloud.android.authentication.oauth
 
 import android.content.Context
 import android.net.Uri
@@ -27,8 +27,10 @@ import net.openid.appauth.AppAuthConfiguration
 import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationServiceConfiguration
+import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
 import net.openid.appauth.ClientSecretBasic
 import net.openid.appauth.ResponseTypeValues
+import timber.log.Timber
 
 class OAuthUtils {
     companion object {
@@ -36,6 +38,46 @@ class OAuthUtils {
             val appAuthConfigurationBuilder = AppAuthConfiguration.Builder()
             appAuthConfigurationBuilder.setConnectionBuilder(OAuthConnectionBuilder(context))
             return AuthorizationService(context, appAuthConfigurationBuilder.build())
+        }
+
+        fun buildOIDCAuthorizationServiceConfig(
+            context: Context,
+            onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback
+        ) {
+            Timber.d("OIDC, getting the auth and token endpoints from the discovery document (well-known)")
+
+            val serviceDiscoveryLocation =
+                Uri.parse(context.getString(R.string.oidc_service_discovery_location)).buildUpon()
+                    .appendPath(AuthorizationServiceConfiguration.WELL_KNOWN_PATH)
+                    .appendPath(AuthorizationServiceConfiguration.OPENID_CONFIGURATION_RESOURCE)
+                    .build()
+
+            AuthorizationServiceConfiguration.fetchFromUrl(
+                serviceDiscoveryLocation,
+                onGetAuthorizationServiceConfiguration,
+                OAuthConnectionBuilder(context)
+            )
+        }
+
+        fun buildOAuthorizationServiceConfig(
+            context: Context,
+            onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback,
+            baseUrl: String = ""
+        ) {
+            Timber.d("Trying normal OAuth instead")
+
+            val authorizationServiceConfiguration = AuthorizationServiceConfiguration(
+                Uri.parse(
+                    "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_auth)}" // auth endpoint
+                ),
+                Uri.parse(
+                    "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_access)}" // token endpoint
+                )
+            )
+
+            onGetAuthorizationServiceConfiguration.onFetchConfigurationCompleted(
+                authorizationServiceConfiguration, null
+            )
         }
 
         fun createAuthorizationRequest(

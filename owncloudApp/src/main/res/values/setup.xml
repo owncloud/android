@@ -82,7 +82,11 @@
     <!-- constants that must be respected by the authorization server; if changed, the app must be rebuild -->
     <string name="oauth2_redirect_uri">oc://android.owncloud.com</string>
 
-    <!-- values that should be provided by ownCloud server -->
+    <!-- values that should be provided by ownCloud server -->ç
+    <!-- Service discovery document for Open Id Connect, path before standard location (.well-known)
+         Needed for using OIDC for now, if it is not available, OAuth will be used instead -->
+    <string name="oidc_service_discovery_location">https://oidc-workshop.owncloud-demo.com</string>
+
     <!-- AUTHORIZATION ENDPOINT -->
     <string name="oauth2_url_endpoint_auth">index.php/apps/oauth2/authorize</string>
 

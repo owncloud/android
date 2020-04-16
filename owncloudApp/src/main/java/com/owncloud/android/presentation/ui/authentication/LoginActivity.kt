@@ -38,7 +38,6 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -46,7 +45,8 @@ import androidx.lifecycle.Observer
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
-import com.owncloud.android.authentication.OAuthUtils
+import com.owncloud.android.authentication.oauth.AuthStateManager
+import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
@@ -56,6 +56,7 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
@@ -64,10 +65,16 @@ import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.account_setup.*
+import net.openid.appauth.AppAuthConfiguration
+import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationException
+import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationService.TokenResponseCallback
+import net.openid.appauth.AuthorizationServiceConfiguration
+import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
+import net.openid.appauth.ResponseTypeValues
 import net.openid.appauth.TokenResponse
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -83,7 +90,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var userAccount: Account? = null
     private lateinit var serverBaseUrl: String
 
-    private var mAuthService: AuthorizationService? = null
+    private lateinit var authService: AuthorizationService
+    private lateinit var authStateManager: AuthStateManager
+    private var oidcSupported = false
+    private lateinit var authorizationServiceConfiguration: AuthorizationServiceConfiguration
 
     // For handling AbstractAccountAuthenticator responses
     private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
@@ -144,7 +154,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         loginButton.setOnClickListener {
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) { // OAuth
-                startOAuthorization()
+                startOIDCOauthorization()
             } else { // Basic
                 authenticationViewModel.loginBasic(
                     account_username.text.toString(),
@@ -193,6 +203,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 )
             }
         })
+
+        authStateManager = AuthStateManager.getInstance(this)
     }
 
     private fun checkOcServer() {
@@ -314,6 +326,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         notifyDocumentProviderRoots(applicationContext)
 
+        accountName?.let {
+            val authState = AuthState(authorizationServiceConfiguration)
+            authStateManager.replace(it, authState)
+        }
+
         finish()
     }
 
@@ -347,26 +364,77 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     /**
      * OAuth step 1: Get authorization code
+     * Firstly, try the OAuth authorization with Open Id Connect, checking whether there's an available .well-known url
+     * to use or not
      */
-    private fun startOAuthorization() {
+    private fun startOIDCOauthorization() {
         server_status_text.run {
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
             text = resources.getString(R.string.oauth_login_connection)
         }
 
-        mAuthService = OAuthUtils.createAuthorizationService(this)
+        val retrieveConfigurationCallback =
+            RetrieveConfigurationCallback { serviceConfiguration, exception ->
+                if (exception != null) {
+                    Timber.e(exception, "OIDC failed, try with normal OAuth");
+                    startNormalOauthorization();
+                } else if (serviceConfiguration != null) {
+                    oidcSupported = true;
+                    performGetAuthorizationCodeRequest(serviceConfiguration)
+                    authorizationServiceConfiguration = serviceConfiguration
+                }
+            }
 
-        val authorizationRequest = OAuthUtils.createAuthorizationRequest(
-            serverBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_auth), // auth endpoint
-            serverBaseUrl + "/" + getString(R.string.oauth2_url_endpoint_access), // token endpoint
-            getString(R.string.oauth2_client_id),
-            getString(R.string.oauth2_redirect_uri)
+        OAuthUtils.buildOIDCAuthorizationServiceConfig(
+            this,
+            retrieveConfigurationCallback
         )
+    }
 
+    /**
+     * OAuth step 1: Get authorization code
+     * If OIDC is not available, falling back to normal OAuth
+     */
+    private fun startNormalOauthorization() {
+        val retrieveConfigurationCallback =
+            RetrieveConfigurationCallback { serviceConfiguration, exception ->
+                if (exception != null) {
+                    Timber.e(exception, "Normal OAuth failed");
+                    updateOAuthStatusIconAndText(exception);
+                } else if (serviceConfiguration != null) {
+                    oidcSupported = true;
+                    performGetAuthorizationCodeRequest(serviceConfiguration)
+                    authorizationServiceConfiguration = serviceConfiguration
+                }
+            }
+
+        OAuthUtils.buildOIDCAuthorizationServiceConfig(
+            this,
+            retrieveConfigurationCallback
+        )
+    }
+
+    private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
+        val clientId = getString(R.string.oauth2_client_id);
+        val redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri));
+        val scope = if (oidcSupported) "openid offline_access email" else ""
+        val builder = AuthorizationRequest.Builder(
+            authorizationServiceConfiguration,
+            clientId,
+            ResponseTypeValues.CODE,
+            redirectUri
+        ).setScope(scope)
+
+        val request = builder.build();
         val completedIntent = Intent(this, LoginActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0)
 
-        mAuthService?.performAuthorizationRequest(authorizationRequest, pendingIntent)
+        val appAuthConfigurationBuilder = AppAuthConfiguration.Builder();
+        appAuthConfigurationBuilder.setConnectionBuilder(OAuthConnectionBuilder(this));
+
+        authService = AuthorizationService(this, appAuthConfigurationBuilder.build());
+
+        authService.performAuthorizationRequest(request, pendingIntent);
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -392,7 +460,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      */
     private fun exchangeAuthorizationCodeForTokens(authorizationResponse: AuthorizationResponse) {
         val clientAuth = OAuthUtils.createClientSecretBasic(getString(R.string.oauth2_client_secret))
-        mAuthService?.performTokenRequest(
+        authService.performTokenRequest(
             authorizationResponse.createTokenExchangeRequest(),
             clientAuth,
             handleExchangeAuthorizationCodeForTokensResponse()
@@ -571,7 +639,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onDestroy() {
         super.onDestroy()
-        mAuthService?.dispose()
+        authService.dispose()
     }
 
     override fun finish() {

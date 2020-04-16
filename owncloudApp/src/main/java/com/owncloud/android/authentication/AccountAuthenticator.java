@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.oauth.AuthStateManager;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
@@ -316,15 +317,24 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         Timber.d("Get OAuth2 refresh token from account: %s, to exchange it for new access and refresh tokens",
                 refreshToken);
 
-        String baseUrl = accountManager.getUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_BASE_URL
-        );
+        AuthStateManager authStateManager = AuthStateManager.getInstance(mContext);
+        AuthorizationServiceConfiguration authorizationServiceConfiguration = authStateManager.readState(account.name).
+                getAuthorizationServiceConfiguration();
 
-        AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-                Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
-                Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
-        );
+        if (authorizationServiceConfiguration == null) {
+            Timber.d("No authorization configuration found, falling back to hardcoded oauth2 endpoints");
+            // The code below is for users (already logged in) updating the app from previous versions, which do not have
+            // an authState that is configured when doing a fresh log in
+            String baseUrl = accountManager.getUserData(
+                    account,
+                    AccountUtils.Constants.KEY_OC_BASE_URL
+            );
+            authorizationServiceConfiguration = new AuthorizationServiceConfiguration(
+                    Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
+                    Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
+            );
+        }
+
 
         String scope = accountManager.getUserData(
                 account,
@@ -332,7 +342,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         );
 
         TokenRequest tokenRequest = new TokenRequest.Builder(
-                serviceConfiguration,
+                authorizationServiceConfiguration,
                 mContext.getString(R.string.oauth2_client_id)
         ).setGrantType(GrantTypeValues.REFRESH_TOKEN)
                 .setScope(scope)
