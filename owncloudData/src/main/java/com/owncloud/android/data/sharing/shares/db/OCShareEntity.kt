@@ -21,8 +21,6 @@ package com.owncloud.android.data.sharing.shares.db
 
 import android.content.ContentValues
 import android.database.Cursor
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -34,9 +32,9 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 @Entity(tableName = ProviderTableMeta.OCSHARES_TABLE_NAME)
 data class OCShareEntity(
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_FILE_SOURCE)
-    val fileSource: Long,
+    val fileSource: String,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ITEM_SOURCE)
-    val itemSource: Long,
+    val itemSource: String,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_TYPE)
     val shareType: Int,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH)
@@ -70,12 +68,32 @@ data class OCShareEntity(
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
+    fun toContentValues(): ContentValues = ContentValues().apply {
+        put(ProviderTableMeta.OCSHARES_FILE_SOURCE, fileSource)
+        put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, itemSource)
+        put(ProviderTableMeta.OCSHARES_SHARE_TYPE, shareType)
+        put(ProviderTableMeta.OCSHARES_SHARE_WITH, shareWith)
+        put(ProviderTableMeta.OCSHARES_PATH, path)
+        put(ProviderTableMeta.OCSHARES_PERMISSIONS, permissions)
+        put(ProviderTableMeta.OCSHARES_SHARED_DATE, sharedDate)
+        put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, expirationDate)
+        put(ProviderTableMeta.OCSHARES_TOKEN, token)
+        put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME, sharedWithDisplayName)
+        put(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO, sharedWithAdditionalInfo)
+        put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, isFolder)
+        put(ProviderTableMeta.OCSHARES_USER_ID, userId)
+        put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteId)
+        put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, accountOwner)
+        put(ProviderTableMeta.OCSHARES_NAME, name)
+        put(ProviderTableMeta.OCSHARES_URL, shareLink)
+    }
+
     companion object {
 
         fun fromCursor(cursor: Cursor): OCShareEntity {
             return OCShareEntity(
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
                 cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)),
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)),
@@ -96,8 +114,8 @@ data class OCShareEntity(
 
         fun fromContentValues(values: ContentValues): OCShareEntity {
             return OCShareEntity(
-                values.getAsLong(ProviderTableMeta.OCSHARES_FILE_SOURCE),
-                values.getAsLong(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
+                values.getAsString(ProviderTableMeta.OCSHARES_FILE_SOURCE),
+                values.getAsString(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
                 values.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE),
                 values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH),
                 values.getAsString(ProviderTableMeta.OCSHARES_PATH),
