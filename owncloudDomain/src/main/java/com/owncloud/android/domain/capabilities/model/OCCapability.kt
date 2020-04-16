@@ -29,7 +29,6 @@ data class OCCapability(
     val versionEdition: String?,
     val corePollInterval: Int,
     val filesSharingApiEnabled: CapabilityBooleanType,
-    val filesSharingSearchMinLength: Int? = null,
     val filesSharingPublicEnabled: CapabilityBooleanType,
     val filesSharingPublicPasswordEnforced: CapabilityBooleanType,
     val filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType,
@@ -73,7 +72,6 @@ enum class CapabilityBooleanType constructor(val value: Int) {
 
     companion object {
         const val capabilityBooleanTypeUnknownString = "-1"
-        const val capabilityBooleanTypeUnknownInt = -1
 
         fun fromValue(value: Int): CapabilityBooleanType =
             when (value) {

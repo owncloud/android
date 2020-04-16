@@ -24,7 +24,6 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.filters.SmallTest
-import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
@@ -32,7 +31,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TAB
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity.Companion.toContentValues
+import com.owncloud.android.data.migrations.MIGRATION_27_28
 import com.owncloud.android.testutil.OC_CAPABILITY
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -50,7 +49,7 @@ class MigrationToDB28 : MigrationTest() {
             currentVersion = DB_VERSION_28,
             insertData = { database -> insertDataToTest(database) },
             validateMigration = { database -> validateMigrationTo28(database) },
-            listOfMigrations = arrayOf(OwncloudDatabase.MIGRATION_27_28)
+            listOfMigrations = arrayOf(MIGRATION_27_28)
         )
     }
 
@@ -61,26 +60,27 @@ class MigrationToDB28 : MigrationTest() {
             currentVersion = DB_VERSION_28,
             insertData = { database -> insertDataToTest(database) },
             validateMigration = { database -> validateMigrationTo28(database) },
-            listOfMigrations = arrayOf(OwncloudDatabase.MIGRATION_27_28)
+            listOfMigrations = arrayOf()
         )
     }
 
     private fun insertDataToTest(database: SupportSQLiteDatabase) {
         database.run {
-            insert(CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cv)
-            insert(CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE, cvWithDefaultValues)
+            insert(CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE,
+                cvWithDefaultValues
+            )
             close()
         }
     }
 
     private fun validateMigrationTo28(database: SupportSQLiteDatabase) {
         val count = getCount(database, CAPABILITIES_TABLE_NAME)
-        assertEquals(2, count)
+        assertEquals(1, count)
         database.close()
     }
 
     companion object {
-        private val cvWithDefaultValues = ContentValues().apply {
+         val cvWithDefaultValues = ContentValues().apply {
             put(CAPABILITIES_ACCOUNT_NAME, "accountWithDefaultValues")
             put(CAPABILITIES_VERSION_MAYOR, OC_CAPABILITY.versionMayor)
             put(CAPABILITIES_VERSION_MINOR, OC_CAPABILITY.versionMinor)
@@ -88,7 +88,5 @@ class MigrationToDB28 : MigrationTest() {
             put(CAPABILITIES_CORE_POLLINTERVAL, OC_CAPABILITY.corePollInterval)
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, OC_CAPABILITY.filesSharingPublicExpireDateDays)
         }
-
-        private val cv = toContentValues(OC_CAPABILITY.copy(filesSharingSearchMinLength = null))
     }
 }

@@ -13,7 +13,6 @@ val OC_CAPABILITY =
         versionEdition = "1.0.0",
         corePollInterval = 0,
         filesSharingApiEnabled = CapabilityBooleanType.TRUE,
-        filesSharingSearchMinLength = 3,
         filesSharingPublicEnabled = CapabilityBooleanType.TRUE,
         filesSharingPublicPasswordEnforced = CapabilityBooleanType.FALSE,
         filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.FALSE,

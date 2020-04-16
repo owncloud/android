@@ -24,6 +24,7 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.filters.SmallTest
 import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_TABLE_NAME
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.testutil.OC_SHARE
@@ -65,14 +66,17 @@ class MigrationToDB29 : MigrationTest() {
             previousVersion = DB_VERSION_29,
             currentVersion = DB_VERSION_29,
             insertData = { database -> insertDataToTest(database) },
-            recoverPreviousData = false,
-            validateMigration = { database -> validateMigrationTo29(database) },
-            listOfMigrations = OwncloudDatabase.ALL_MIGRATIONS
+            validateMigration = { Unit },
+            listOfMigrations = arrayOf()
         )
     }
 
     private fun insertDataToTest(database: SupportSQLiteDatabase) {
         database.run {
+            insert(
+                CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE,
+                MigrationToDB28.cvWithDefaultValues
+            )
             insert(
                 OCSHARES_TABLE_NAME,
                 SQLiteDatabase.CONFLICT_NONE,
@@ -88,8 +92,10 @@ class MigrationToDB29 : MigrationTest() {
     }
 
     private fun validateMigrationTo29(database: SupportSQLiteDatabase) {
-        val count = getCount(database, OCSHARES_TABLE_NAME)
-        assertEquals(0, count)
+        val sharesCount = getCount(database, OCSHARES_TABLE_NAME)
+        assertEquals(0, sharesCount)
+        val capabilitiesCount = getCount(database, CAPABILITIES_TABLE_NAME)
+        assertEquals(1, capabilitiesCount)
         database.close()
     }
 }
