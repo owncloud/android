@@ -471,7 +471,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
             if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
                 authenticationViewModel.loginOAuth(
-                    tokenResponse.additionalParameters[AccountUtils.Constants.KEY_USER_ID]!!,
+                    tokenResponse.additionalParameters[AccountUtils.Constants.KEY_USER_ID]?.let {it} ?: "",
                     OAUTH_TOKEN_TYPE,
                     tokenResponse.accessToken as String,
                     tokenResponse.refreshToken as String,
