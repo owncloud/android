@@ -74,7 +74,6 @@
             android:theme="@style/Theme.ownCloud.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -185,24 +184,6 @@
                 android:resource="@xml/exposed_filepaths" />
         </provider>
 
-        <activity
-            android:name=".authentication.AuthenticatorActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.ownCloud.Authenticator">
-        </activity>
-
-        <activity android:name="net.openid.appauth.RedirectUriReceiverActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="${appAuthRedirectScheme}" />
-            </intent-filter>
-        </activity>
-
         <service android:name=".services.OperationsService" />
         <service android:name=".files.services.FileDownloader" />
         <service android:name=".files.services.FileUploader" />
@@ -273,5 +254,11 @@
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity android:name=".ui.activity.PatternLockActivity" />
         <activity android:name=".ui.activity.BiometricActivity" />
+        <activity
+            android:name=".presentation.ui.authentication.LoginActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.ownCloud.Toolbar">
+        </activity>
     </application>
 </manifest>

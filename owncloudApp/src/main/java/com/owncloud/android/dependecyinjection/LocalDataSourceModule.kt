@@ -19,7 +19,11 @@
 
 package com.owncloud.android.dependecyinjection
 
+import android.accounts.AccountManager
+import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
+import com.owncloud.android.data.authentication.datasources.implementation.OCLocalAuthenticationDataSource
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
@@ -37,10 +41,21 @@ val localDataSourceModule = module {
             get()
         )
     }
+
     factory<LocalShareDataSource> {
         OCLocalShareDataSource(
             get(),
             get()
+        )
+    }
+
+    single { AccountManager.get(androidContext())}
+
+    factory<LocalAuthenticationDataSource> {
+        OCLocalAuthenticationDataSource(
+            androidContext(),
+            get(),
+            accountType
         )
     }
 }

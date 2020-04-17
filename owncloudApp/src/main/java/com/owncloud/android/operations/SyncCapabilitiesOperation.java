@@ -54,8 +54,8 @@ public class SyncCapabilitiesOperation extends SyncOperation<RemoteCapability> {
             Timber.w("Remote capabilities not available");
 
             // server version is important; this fallback will try to get it from status.php
-            // if capabilities API is not available
-            GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation(MainApp.Companion.getAppContext());
+            // if capabilities API is not available.
+            GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation();
             RemoteOperationResult<OwnCloudVersion> statusResult = getStatus.execute(client);
             if (statusResult.isSuccess()) {
                 serverVersion = statusResult.getData();

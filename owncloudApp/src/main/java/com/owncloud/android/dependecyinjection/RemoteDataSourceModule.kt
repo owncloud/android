@@ -20,20 +20,34 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
+import com.owncloud.android.data.authentication.datasources.implementation.OCRemoteAuthenticationDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.network.OCCapabilityService
+import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
+import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
+import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerInfoDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
-import com.owncloud.android.data.sharing.sharees.network.OCShareeService
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
-import com.owncloud.android.data.sharing.shares.network.OCShareService
+import com.owncloud.android.data.user.datasources.RemoteUserDataSource
+import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.lib.resources.shares.ShareService
-import com.owncloud.android.lib.resources.shares.ShareeService
-import com.owncloud.android.lib.resources.status.CapabilityService
+import com.owncloud.android.lib.resources.files.services.FileService
+import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
+import com.owncloud.android.lib.resources.shares.services.ShareService
+import com.owncloud.android.lib.resources.shares.services.ShareeService
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
+import com.owncloud.android.lib.resources.status.services.CapabilityService
+import com.owncloud.android.lib.resources.status.services.ServerInfoService
+import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
+import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
+import com.owncloud.android.lib.resources.users.services.UserService
+import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -45,22 +59,15 @@ val remoteDataSourceModule = module {
     single<CapabilityService> { OCCapabilityService(get()) }
     single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
+    single<UserService> { OCUserService(get()) }
+    single<FileService> { OCFileService(get()) }
+    single<ServerInfoService> { OCServerInfoService() }
 
-    factory<RemoteCapabilitiesDataSource> {
-        OCRemoteCapabilitiesDataSource(
-            get(),
-            get()
-        )
-    }
-    factory<RemoteShareDataSource> {
-        OCRemoteShareDataSource(
-            get(),
-            get()
-        )
-    }
-    factory<RemoteShareeDataSource> {
-        OCRemoteShareeDataSource(
-            get()
-        )
-    }
+    factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
+    factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
+    factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get()) }
+    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get()) }
+    factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
+    factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
+    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext(), get()) }
 }

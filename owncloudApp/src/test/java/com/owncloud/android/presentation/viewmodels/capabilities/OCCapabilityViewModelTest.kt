@@ -28,6 +28,7 @@ import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDa
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
@@ -35,6 +36,7 @@ import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkClass
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -49,6 +51,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 @ExperimentalCoroutinesApi
 class OCCapabilityViewModelTest {
@@ -56,6 +61,7 @@ class OCCapabilityViewModelTest {
 
     private lateinit var getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase
     private lateinit var refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase
+    private lateinit var ocContextProvider: ContextProvider
 
     private val capabilitiesLiveData = MutableLiveData<OCCapability>()
 
@@ -75,6 +81,20 @@ class OCCapabilityViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testCoroutineDispatcher)
+        ocContextProvider = mockk(relaxed = true)
+
+        //TODO: Add tests when is not connected
+        every { ocContextProvider.isConnected() } returns true
+
+        Dispatchers.setMain(testCoroutineDispatcher)
+        startKoin {
+            modules(
+                module(override = true) {
+                    factory {
+                        ocContextProvider
+                    }
+                })
+        }
     }
 
     @After
@@ -82,6 +102,7 @@ class OCCapabilityViewModelTest {
         Dispatchers.resetMain()
         testCoroutineDispatcher.cleanupTestCoroutines()
 
+        stopKoin()
         unmockkAll()
     }
 
@@ -94,7 +115,7 @@ class OCCapabilityViewModelTest {
         ocCapabilityViewModel = OCCapabilityViewModel(
             accountName = testAccountName,
             getCapabilitiesAsLiveDataUseCase = getCapabilitiesAsLiveDataUseCase,
-            refreshCapabilitiesFromServerUseCase = refreshCapabilitiesFromServerUseCase,
+            refreshCapabilitiesFromServerAsyncUseCase = refreshCapabilitiesFromServerUseCase,
             coroutineDispatcherProvider = coroutineDispatcherProvider
         )
     }

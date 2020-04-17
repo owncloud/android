@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
@@ -240,20 +239,17 @@
     </style>
 
     <!-- Notifications -->
-    <style name="Theme.ownCloud.NotificationText.Title"
-        parent="@android:style/TextAppearance.StatusBar.EventContent.Title">
+    <style name="Theme.ownCloud.NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Theme.ownCloud.NotificationText.Content"
-        parent="@android:style/TextAppearance.StatusBar.EventContent">
+    <style name="Theme.ownCloud.NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent">
         <item name="android:textSize">16sp</item>
     </style>
 
     <!-- Authenticator Activity -->
-    <style name="Theme.ownCloud.Authenticator"
-        parent="Theme.ownCloud">
+    <style name="Theme.ownCloud.Authenticator" parent="Theme.ownCloud">
         <!-- properties for action mode -->
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/action_mode_background</item>
@@ -267,8 +263,12 @@
 
     <style name="EditText.Authenticator" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/login_text_color</item>
-        <item name="colorControlNormal">@color/login_text_color</item>
-        <item name="colorControlActivated">@color/login_text_color</item>
         <item name="android:textColorHint">@color/login_text_hint_color</item>
     </style>
+
+    <style name="Theme.ownCloud.Authenticator.EditText" parent="Theme.ownCloud.Authenticator">
+        <item name="colorControlNormal">@color/login_text_color</item>
+        <item name="colorControlActivated">@color/login_text_color</item>
+    </style>
+
 </resources>

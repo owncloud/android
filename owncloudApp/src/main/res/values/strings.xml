@@ -394,7 +394,7 @@
 
     <string name="error_cant_bind_to_operations_service">Critical error: cannot perform operations</string>
 
-    <string name="network_error_socket_exception">an error while connecting with the server</string>
+    <string name="network_error_socket_exception">An error occurred while connecting with the server.</string>
     <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
     <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
     <string name="network_host_not_available">Server could not be reached</string>
@@ -595,4 +595,7 @@
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
+
+    <string name="supports_oauth2_error">It was not possible to know if OAuth2 is supported</string>
+    <string name="get_base_url_error">It was not possible to know the server base url</string>
 </resources>

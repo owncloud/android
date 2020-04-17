@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
@@ -18,6 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -28,7 +29,9 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/login_background_image"
-        android:visibility="invisible" />
+        android:visibility="gone"
+        tools:ignore="ContentDescription"
+        tools:visibility="visible" />
 
     <ScrollView
         android:id="@+id/scroll"
@@ -81,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
-                >
+                android:focusable="true">
 
                 <EditText
                     android:id="@+id/hostUrlInput"
@@ -93,7 +96,7 @@
                     android:hint="@string/auth_host_url"
                     android:inputType="textUri"
                     android:paddingEnd="55dp"
-                    android:theme="@style/EditText.Authenticator">
+                    android:theme="@style/Theme.ownCloud.Authenticator.EditText">
 
                     <requestFocus />
                 </EditText>
@@ -108,7 +111,8 @@
                     android:contentDescription="@string/auth_refresh_button"
                     android:padding="0dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_arrow_right" />
+                    android:src="@drawable/ic_arrow_right"
+                    android:tint="@color/login_text_color" />
 
                 <ImageButton
                     android:id="@+id/embeddedRefreshButton"
@@ -134,31 +138,53 @@
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:minHeight="32dp"
-                android:text="@string/auth_testing_connection"
-                android:textColor="@color/login_connection_text_color" />
+                android:textColor="@color/login_connection_text_color"
+                android:visibility="invisible"
+                app:drawableTint="@color/login_connection_text_color"
+                tools:text="@string/auth_testing_connection"
+                tools:visibility="visible" />
 
-            <EditText
-                android:id="@+id/account_username"
-                style="@style/EditText.Authenticator"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_username_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/auth_username"
-                android:inputType="textNoSuggestions"
-                android:theme="@style/EditText.Authenticator"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:hintEnabled="false">
 
-            <EditText
-                android:id="@+id/account_password"
-                style="@style/EditText.Authenticator"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_username"
+                    style="@style/EditText.Authenticator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:hint="@string/auth_username"
+                    android:inputType="textNoSuggestions"
+                    android:theme="@style/Theme.ownCloud.Authenticator.EditText">
+
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_password_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawablePadding="5dp"
-                android:ems="10"
-                android:hint="@string/auth_password"
-                android:inputType="textPassword"
-                android:theme="@style/EditText.Authenticator"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="false"
+                app:passwordToggleTint="@color/login_text_color">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_password"
+                    style="@style/EditText.Authenticator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:hint="@string/auth_password"
+                    android:inputType="textPassword"
+                    android:theme="@style/Theme.ownCloud.Authenticator.EditText">
+
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/auth_status_text"
@@ -168,9 +194,10 @@
                 android:contentDescription="@string/auth_unauthorized"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
-                android:text="@string/auth_unauthorized"
                 android:textColor="@color/login_credentials_text_color"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:drawableTint="@color/login_credentials_text_color"
+                tools:text="@string/auth_unauthorized" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/loginButton"
@@ -180,7 +207,8 @@
                 android:contentDescription="@string/setup_btn_login"
                 android:text="@string/setup_btn_login"
                 android:theme="@style/Button.Authenticator"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -194,9 +222,8 @@
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/auth_register"
                     android:gravity="center"
-                    android:onClick="onRegisterClick"
-                    android:paddingBottom="5dp"
                     android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:text="@string/auth_register"
                     android:textColor="@color/login_text_color" />
             </LinearLayout>

@@ -41,8 +41,7 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.extensions.showError
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
@@ -315,7 +314,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             updateCapabilities(it)
                         }
                         event.getContentIfNotHandled()?.let {
-                            showError(getString(R.string.get_capabilities_error), uiResult.error)
+                            showErrorInSnackbar(R.string.get_capabilities_error, uiResult.error)
                         }
                         listener?.dismissLoading()
                     }
@@ -348,7 +347,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             updateShares(it)
                         }
                         event.getContentIfNotHandled()?.let {
-                            showError(getString(R.string.get_shares_error), uiResult.error)
+                            showErrorInSnackbar(R.string.get_shares_error, uiResult.error)
                         }
                         listener?.dismissLoading()
                     }

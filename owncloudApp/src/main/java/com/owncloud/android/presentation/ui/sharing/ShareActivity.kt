@@ -34,7 +34,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event.EventObserver
-import com.owncloud.android.extensions.showError
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.providers.sharing.UsersAndGroupsSearchProvider
@@ -141,7 +141,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
-                        showError(getString(R.string.share_link_file_error), uiResult.error)
+                        showErrorInSnackbar(R.string.share_link_file_error, uiResult.error)
                         dismissLoadingDialog()
                     }
                     is UIResult.Loading -> {
@@ -179,7 +179,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
-                        showError(getString(R.string.share_link_file_error), uiResult.error)
+                        showErrorInSnackbar(R.string.share_link_file_error, uiResult.error)
                         dismissLoadingDialog()
                     }
                     is UIResult.Loading -> {
@@ -252,7 +252,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 when (uiResult) {
                     is UIResult.Error -> {
                         dismissLoadingDialog()
-                        showError(getString(R.string.unshare_link_file_error), uiResult.error)
+                        showErrorInSnackbar(R.string.unshare_link_file_error, uiResult.error)
                     }
                     is UIResult.Loading -> {
                         showLoading()

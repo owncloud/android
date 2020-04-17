@@ -20,7 +20,7 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 
 class RemoteFileUtils {
     companion object {
@@ -63,9 +63,13 @@ class RemoteFileUtils {
             }
         }
 
-        private fun existsFile(client: OwnCloudClient, remotePath: String): Boolean {
-            val existsOperation = ExistenceCheckRemoteOperation(remotePath, false, false)
-            return existsOperation.execute(client).isSuccess
+        private fun existsFile(ownCloudClient: OwnCloudClient, remotePath: String): Boolean {
+            val existsOperation =
+                CheckPathExistenceRemoteOperation(
+                    remotePath,
+                    false
+                )
+            return existsOperation.execute(ownCloudClient).isSuccess
         }
     }
 }

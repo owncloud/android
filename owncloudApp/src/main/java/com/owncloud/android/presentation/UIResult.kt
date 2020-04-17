@@ -34,4 +34,10 @@ sealed class UIResult<out T> {
             is Success -> data
             is Error -> data  // Even when there's an error we still want to show database data
         }
+
+    fun getThrowableOrNull(): Throwable? =
+        when (this) {
+            is Error -> error
+            else -> null
+        }
 }

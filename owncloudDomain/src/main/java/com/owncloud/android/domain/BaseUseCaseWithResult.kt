@@ -20,7 +20,7 @@
 package com.owncloud.android.domain
 
 /**
- * Parent class for use cases that require network operations
+ * Parent class for use cases that need error handling
  */
 abstract class BaseUseCaseWithResult<out Type, in Params> {
     protected abstract fun run(params: Params): Type
