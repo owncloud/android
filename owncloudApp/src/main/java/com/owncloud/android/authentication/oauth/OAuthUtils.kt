@@ -22,32 +22,36 @@ package com.owncloud.android.authentication.oauth
 import android.content.Context
 import android.net.Uri
 import com.owncloud.android.R
+import com.owncloud.android.datamodel.OCFile.PATH_SEPARATOR
 import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder
-import net.openid.appauth.AppAuthConfiguration
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
 import net.openid.appauth.ClientSecretBasic
-import net.openid.appauth.ResponseTypeValues
 import timber.log.Timber
 
 class OAuthUtils {
     companion object {
-        fun createAuthorizationService(context: Context): AuthorizationService {
-            val appAuthConfigurationBuilder = AppAuthConfiguration.Builder()
-            appAuthConfigurationBuilder.setConnectionBuilder(OAuthConnectionBuilder(context))
-            return AuthorizationService(context, appAuthConfigurationBuilder.build())
-        }
-
         fun buildOIDCAuthorizationServiceConfig(
             context: Context,
+            serverBaseUrl: String,
             onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback
         ) {
             Timber.d("OIDC, getting the auth and token endpoints from the discovery document (well-known)")
 
+            val urlPathAfterProtocolIndex = serverBaseUrl.indexOf(
+                PATH_SEPARATOR, serverBaseUrl.indexOf(PATH_SEPARATOR) + 2
+            )
+
+            // OIDC Service Discovery Location is placed in urls like https://whatever and not https://whatever/others,
+            // so remove those subpaths
+            val urlToGetServiceDiscoveryLocation = if (urlPathAfterProtocolIndex != -1) {
+                serverBaseUrl.substring(0, urlPathAfterProtocolIndex)
+            } else {
+                serverBaseUrl
+            }
+
             val serviceDiscoveryLocation =
-                Uri.parse(context.getString(R.string.oidc_service_discovery_location)).buildUpon()
+                Uri.parse(urlToGetServiceDiscoveryLocation).buildUpon()
                     .appendPath(AuthorizationServiceConfiguration.WELL_KNOWN_PATH)
                     .appendPath(AuthorizationServiceConfiguration.OPENID_CONFIGURATION_RESOURCE)
                     .build()
@@ -78,27 +82,6 @@ class OAuthUtils {
             onGetAuthorizationServiceConfiguration.onFetchConfigurationCompleted(
                 authorizationServiceConfiguration, null
             )
-        }
-
-        fun createAuthorizationRequest(
-            authEndPoint: String,
-            tokenEndPoint: String,
-            clientId: String,
-            redirectUri: String
-        ): AuthorizationRequest {
-            val serviceConfiguration = AuthorizationServiceConfiguration(
-                Uri.parse(authEndPoint),  // auth endpoint
-                Uri.parse(tokenEndPoint)  // token endpoint
-            )
-
-            val builder = AuthorizationRequest.Builder(
-                serviceConfiguration,
-                clientId,
-                ResponseTypeValues.CODE,
-                Uri.parse(redirectUri)
-            )
-
-            return builder.build()
         }
 
         fun createClientSecretBasic(clientSecret: String) = ClientSecretBasic(clientSecret)

@@ -90,7 +90,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var userAccount: Account? = null
     private lateinit var serverBaseUrl: String
 
-    private lateinit var authService: AuthorizationService
+    private var authService: AuthorizationService? = null
     private lateinit var authStateManager: AuthStateManager
     private var oidcSupported = false
     private lateinit var authorizationServiceConfiguration: AuthorizationServiceConfiguration
@@ -387,6 +387,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         OAuthUtils.buildOIDCAuthorizationServiceConfig(
             this,
+            serverBaseUrl,
             retrieveConfigurationCallback
         )
     }
@@ -408,7 +409,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 }
             }
 
-        OAuthUtils.buildOIDCAuthorizationServiceConfig(
+        OAuthUtils.buildOAuthorizationServiceConfig(
             this,
             retrieveConfigurationCallback
         )
@@ -434,7 +435,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         authService = AuthorizationService(this, appAuthConfigurationBuilder.build());
 
-        authService.performAuthorizationRequest(request, pendingIntent);
+        authService?.performAuthorizationRequest(request, pendingIntent);
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -460,7 +461,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      */
     private fun exchangeAuthorizationCodeForTokens(authorizationResponse: AuthorizationResponse) {
         val clientAuth = OAuthUtils.createClientSecretBasic(getString(R.string.oauth2_client_secret))
-        authService.performTokenRequest(
+        authService?.performTokenRequest(
             authorizationResponse.createTokenExchangeRequest(),
             clientAuth,
             handleExchangeAuthorizationCodeForTokensResponse()
@@ -639,7 +640,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onDestroy() {
         super.onDestroy()
-        authService.dispose()
+        authService?.dispose()
     }
 
     override fun finish() {
