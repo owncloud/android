@@ -53,6 +53,7 @@ import static com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID
 public class OwnCloudClient extends HttpClient {
 
     public static final String WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
+    public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
     private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     public static final String STATUS_PATH = "/status.php";
 
@@ -230,7 +231,7 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public Uri getUserFilesWebDavUri() {
-        return mCredentials instanceof OwnCloudAnonymousCredentials
+        return (mCredentials instanceof OwnCloudAnonymousCredentials || mAccount == null)
                 ? Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0)
                 : Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0 + AccountUtils.getUserId(
                 mAccount.getSavedAccount(), getContext()

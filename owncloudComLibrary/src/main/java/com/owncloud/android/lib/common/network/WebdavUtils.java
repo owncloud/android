@@ -34,11 +34,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class WebdavUtils {
-    public static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat(
-            "dd.MM.yyyy hh:mm");
+import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0;
+import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_PATH_4_0_AND_LATER;
 
-    private static final SimpleDateFormat DATETIME_FORMATS[] = {
+public class WebdavUtils {
+
+    private static final SimpleDateFormat[] DATETIME_FORMATS = {
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US),
             new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US),
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", Locale.US),
@@ -50,11 +51,11 @@ public class WebdavUtils {
     };
 
     public static Date parseResponseDate(String date) {
-        Date returnDate = null;
-        SimpleDateFormat format = null;
-        for (int i = 0; i < DATETIME_FORMATS.length; ++i) {
+        Date returnDate;
+        SimpleDateFormat format;
+        for (SimpleDateFormat datetimeFormat : DATETIME_FORMATS) {
             try {
-                format = DATETIME_FORMATS[i];
+                format = datetimeFormat;
                 synchronized (format) {
                     returnDate = format.parse(date);
                 }
@@ -83,23 +84,6 @@ public class WebdavUtils {
     }
 
     /**
-     * @param rawEtag
-     * @return
-     */
-    public static String parseEtag(String rawEtag) {
-        if (rawEtag == null || rawEtag.length() == 0) {
-            return "";
-        }
-        if (rawEtag.endsWith("-gzip")) {
-            rawEtag = rawEtag.substring(0, rawEtag.length() - 5);
-        }
-        if (rawEtag.length() >= 2 && rawEtag.startsWith("\"") && rawEtag.endsWith("\"")) {
-            rawEtag = rawEtag.substring(1, rawEtag.length() - 1);
-        }
-        return rawEtag;
-    }
-
-    /**
      * @param httpBaseMethod from which to get the etag
      * @return etag from response
      */
@@ -120,4 +104,17 @@ public class WebdavUtils {
         }
         return result;
     }
+
+    public static String normalizeProtocolPrefix(String url, boolean isSslConn) {
+        if (!url.toLowerCase().startsWith("http://") &&
+                !url.toLowerCase().startsWith("https://")) {
+            if (isSslConn) {
+                return "https://" + url;
+            } else {
+                return "http://" + url;
+            }
+        }
+        return url;
+    }
+
 }

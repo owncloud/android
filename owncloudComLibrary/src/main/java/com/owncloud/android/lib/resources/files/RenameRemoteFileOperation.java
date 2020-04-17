@@ -123,9 +123,9 @@ public class RenameRemoteFileOperation extends RemoteOperation {
      * @return 'True' if the target path is already used by an existing file.
      */
     private boolean targetPathIsUsed(OwnCloudClient client) {
-        ExistenceCheckRemoteOperation existenceCheckRemoteOperation =
-                new ExistenceCheckRemoteOperation(mNewRemotePath, false, false);
-        RemoteOperationResult exists = existenceCheckRemoteOperation.run(client);
+        CheckPathExistenceRemoteOperation checkPathExistenceRemoteOperation =
+                new CheckPathExistenceRemoteOperation(mNewRemotePath, false);
+        RemoteOperationResult exists = checkPathExistenceRemoteOperation.execute(client);
         return exists.isSuccess();
     }
 }

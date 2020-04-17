@@ -46,7 +46,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountUtils {
-
     /**
      * Constructs full url to host and webdav resource basing on host version
      *
@@ -140,7 +139,7 @@ public class AccountUtils {
         AccountManager am = AccountManager.get(context);
 
         String supportsOAuth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2);
-        boolean isOauth2 = supportsOAuth2 != null && supportsOAuth2.equals("TRUE");
+        boolean isOauth2 = supportsOAuth2 != null && supportsOAuth2.equals(Constants.OAUTH_SUPPORTED_TRUE);
 
         String username = AccountUtils.getUsernameForAccount(account);
 
@@ -295,6 +294,8 @@ public class AccountUtils {
          */
         public static final String KEY_SUPPORTS_OAUTH2 = "oc_supports_oauth2";
 
+        public static final String OAUTH_SUPPORTED_TRUE = "TRUE";
+
         /**
          * OC account cookies
          */
@@ -329,5 +330,7 @@ public class AccountUtils {
          * OAuth2 scope
          */
         public static final String KEY_OAUTH2_SCOPE = "oc_oauth2_scope";
+
+        public static final int ACCOUNT_VERSION = 1;
     }
 }
