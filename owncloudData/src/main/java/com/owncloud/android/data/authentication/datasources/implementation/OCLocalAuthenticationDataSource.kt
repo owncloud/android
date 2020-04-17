@@ -59,13 +59,13 @@ class OCLocalAuthenticationDataSource(
         updateIfAlreadyExists: Boolean
     ): String =
         addAccount(
-            lastPermanentLocation,
-            serverInfo,
-            userName,
-            password,
-            updateIfAlreadyExists
+            lastPermanentLocation = lastPermanentLocation,
+            serverInfo = serverInfo,
+            userName = userInfo.id,
+            password = password,
+            updateIfAlreadyExists = updateIfAlreadyExists
         ).also {
-            updateUserAndServerInfo(it, serverInfo, userInfo, userName)
+            updateUserAndServerInfo(it, serverInfo, userInfo)
         }.name
 
     override fun addOAuthAccount(
@@ -80,12 +80,12 @@ class OCLocalAuthenticationDataSource(
         updateIfAlreadyExists: Boolean
     ): String =
         addAccount(
-            lastPermanentLocation,
-            serverInfo,
-            userName,
+            lastPermanentLocation = lastPermanentLocation,
+            serverInfo = serverInfo,
+            userName = userInfo.id,
             updateIfAlreadyExists = updateIfAlreadyExists
         ).also {
-            updateUserAndServerInfo(it, serverInfo, userInfo, userName)
+            updateUserAndServerInfo(it, serverInfo, userInfo)
 
             accountManager.setAuthToken(it, authTokenType, accessToken)
 
@@ -151,8 +151,7 @@ class OCLocalAuthenticationDataSource(
     private fun updateUserAndServerInfo(
         newAccount: Account,
         serverInfo: ServerInfo,
-        userInfo: UserInfo,
-        userName: String
+        userInfo: UserInfo
     ) {
         // include account version with the new account
         accountManager.setUserData(
