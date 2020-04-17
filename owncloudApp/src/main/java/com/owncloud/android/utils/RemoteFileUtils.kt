@@ -38,7 +38,7 @@ class RemoteFileUtils {
                 return remotePath
             }
             val pos = remotePath.lastIndexOf(".")
-            var suffix = ""
+            var suffix: String
             var extension = ""
             if (pos >= 0) {
                 extension = remotePath.substring(pos + 1)

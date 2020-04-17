@@ -1056,7 +1056,7 @@ class FileDataStorageManager {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 try {
-                    MainApp.appContext!!.sendBroadcast(intent)
+                    MainApp.appContext.sendBroadcast(intent)
                 } catch (fileUriExposedException: FileUriExposedException) {
                     val newIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
                     newIntent.data = FileProvider.getUriForFile(
@@ -1064,14 +1064,14 @@ class FileDataStorageManager {
                         mContext!!.resources.getString(R.string.file_provider_authority),
                         File(path)
                     )
-                    MainApp.appContext!!.sendBroadcast(newIntent)
+                    MainApp.appContext.sendBroadcast(newIntent)
                 }
 
             } else {
-                MainApp.appContext!!.sendBroadcast(intent)
+                MainApp.appContext.sendBroadcast(intent)
             }
 
-            MainApp.appContext!!.sendBroadcast(intent)
+            MainApp.appContext.sendBroadcast(intent)
         }
     }
 
