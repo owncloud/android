@@ -377,7 +377,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="clipboard_uxexpected_error">Produciuse un erro non agardado ao copiar no portapapeis</string>
   <string name="clipboard_label">Texto copiado dende %1$s</string>
   <string name="error_cant_bind_to_operations_service">Produciuse un erro crítico: non é posíbel realizar as operacións</string>
-  <string name="network_error_socket_exception">produciuse un erro ao conectar co servidor</string>
   <string name="network_error_socket_timeout_exception">O servidor tardou de máis en responder</string>
   <string name="network_error_connect_timeout_exception">O servidor tardou de máis en conectar</string>
   <string name="network_host_not_available">Non foi posíbel acadar o servidor</string>

@@ -376,7 +376,6 @@
   <string name="clipboard_uxexpected_error">Erro inesperado ao copiar para a área de transferência</string>
   <string name="clipboard_label">Texto copiado de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Erro crítico: não pode executar operações</string>
-  <string name="network_error_socket_exception">erro enquanto conectava com o servidor</string>
   <string name="network_error_socket_timeout_exception">O servidor demorou demais a responder</string>
   <string name="network_error_connect_timeout_exception">O servidor demorou muito para se conectar</string>
   <string name="network_host_not_available">Servidor não pôde ser alcançado</string>

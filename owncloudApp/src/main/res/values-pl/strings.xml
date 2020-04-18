@@ -361,7 +361,6 @@
   <string name="clipboard_uxexpected_error">Wystąpił błąd podczas kopiowania do schowka</string>
   <string name="clipboard_label">Skopiowano tekst z %1$s</string>
   <string name="error_cant_bind_to_operations_service">Błąd krytyczny: nie można wykonać operacji</string>
-  <string name="network_error_socket_exception">błąd połączenia z serwerem</string>
   <string name="network_error_socket_timeout_exception">Serwer zbyt długo nie odpowiadał</string>
   <string name="network_error_connect_timeout_exception">Zbyt długi czas łączenia z serwerem</string>
   <string name="network_host_not_available">Serwer jest nieosiągalny</string>

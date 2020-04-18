@@ -376,7 +376,6 @@
   <string name="clipboard_uxexpected_error">Panoya kopyalanırken beklenmeyen bir hata oluştu</string>
   <string name="clipboard_label">%1$s metni kopyalandı</string>
   <string name="error_cant_bind_to_operations_service">Ciddi hata: işlem gerçekleştirilemiyor</string>
-  <string name="network_error_socket_exception">sunucu ile bağlanılırken bir hata oluştu</string>
   <string name="network_error_socket_timeout_exception">Sunucu çok geç cevap veriyor</string>
   <string name="network_error_connect_timeout_exception">Sunucuya bağlanmak çok uzun sürdü</string>
   <string name="network_host_not_available">Sunucuya ulaşılamadı</string>

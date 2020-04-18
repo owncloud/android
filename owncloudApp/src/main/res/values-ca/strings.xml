@@ -366,7 +366,6 @@
   <string name="clipboard_uxexpected_error">Error inesperat quan es copiava al porta-retalls</string>
   <string name="clipboard_label">Text copiat des de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error crític: no es poden realitzar operacions</string>
-  <string name="network_error_socket_exception">un error durant la conexió amb el servidor</string>
   <string name="network_error_socket_timeout_exception">El servidor ha trigat massa en respondre</string>
   <string name="network_error_connect_timeout_exception">El servidor tarda massa en connectar</string>
   <string name="network_host_not_available">No es troba el servidor.</string>

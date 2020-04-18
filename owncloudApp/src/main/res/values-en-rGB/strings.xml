@@ -370,7 +370,6 @@
   <string name="clipboard_uxexpected_error">Unexpected error whilst copying to clipboard</string>
   <string name="clipboard_label">Text copied from %1$s</string>
   <string name="error_cant_bind_to_operations_service">Critical error: cannot perform operations</string>
-  <string name="network_error_socket_exception">an error while connecting with the server</string>
   <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
   <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
   <string name="network_host_not_available">Server could not be reached</string>

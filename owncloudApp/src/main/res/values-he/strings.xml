@@ -376,7 +376,6 @@
   <string name="clipboard_uxexpected_error">שגיאה לא צפויה בזמן העתקה ללוח הגזירים</string>
   <string name="clipboard_label">טקסט הועתק מ- %1$s</string>
   <string name="error_cant_bind_to_operations_service">שגיאה קריטית: לא ניתן לבצע את הפעולות</string>
-  <string name="network_error_socket_exception">שגיאה בזמן החיבור לשרת</string>
   <string name="network_error_socket_timeout_exception">לשרת לקח יותר מדי זמן להגיב</string>
   <string name="network_error_connect_timeout_exception">לשרת לקח זמן רב מדי להתחבר</string>
   <string name="network_host_not_available">לא ניתן לגשת לשרת</string>

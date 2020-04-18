@@ -309,7 +309,6 @@
   <string name="clipboard_uxexpected_error">Vyskytla sa neznáma chyba pri kopírovaní do Cliboardu</string>
   <string name="clipboard_label">Text bol skopírovaný %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritická chyba: operáciu nemožno vykonať</string>
-  <string name="network_error_socket_exception">Vyskytla sa chyba pri pripájaní na server</string>
   <string name="network_error_socket_timeout_exception">Serveru trvá odpoveď príliš dlho</string>
   <string name="network_error_connect_timeout_exception">Pripájanie na server príliš dlho</string>
   <string name="network_host_not_available">Nepodarilo sa pripojiť na Server</string>

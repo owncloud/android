@@ -354,7 +354,6 @@
   <string name="clipboard_uxexpected_error">复制到剪切板时出现了未预料的错误</string>
   <string name="clipboard_label">文本拷贝至 %1$s</string>
   <string name="error_cant_bind_to_operations_service">严重错误：无法执行操作</string>
-  <string name="network_error_socket_exception">在连接到服务器时有一个错误</string>
   <string name="network_error_socket_timeout_exception">看起来服务器不太给力</string>
   <string name="network_error_connect_timeout_exception">服务器连接时间过长</string>
   <string name="network_host_not_available">无法连接到服务器</string>

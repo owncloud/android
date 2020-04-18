@@ -367,7 +367,6 @@ správce systému.</string>
   <string name="clipboard_uxexpected_error">Neočekávaná chyba při kopírování do schránky</string>
   <string name="clipboard_label">Text zkopírován z %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritická chyba: operace nelze provést</string>
-  <string name="network_error_socket_exception">chyba při připojení k serveru</string>
   <string name="network_error_socket_timeout_exception">Serveru trvalo příliš dlouho odpovědět</string>
   <string name="network_error_connect_timeout_exception">Připojování k serveru trvalo příliš dlouho</string>
   <string name="network_host_not_available">Server je nedostupný</string>

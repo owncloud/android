@@ -365,7 +365,6 @@
   <string name="clipboard_uxexpected_error">Error inesperado al copiar al portapapeles</string>
   <string name="clipboard_label">Texto copiado desde %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error critico: no se puede realizar operaciones</string>
-  <string name="network_error_socket_exception">ha ocurrido un error al conectar con el servidor</string>
   <string name="network_error_socket_timeout_exception">El servidor tardó demasiado en responder</string>
   <string name="network_error_connect_timeout_exception">El servidor tomó demasiado tiempo para conectar</string>
   <string name="network_host_not_available">El servidor no ha podido ser alcanzado</string>

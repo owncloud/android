@@ -376,7 +376,6 @@
   <string name="clipboard_uxexpected_error">Unerwarteter Fehler beim Kopieren in die Zwischenablage</string>
   <string name="clipboard_label">Text von %1$s kopiert</string>
   <string name="error_cant_bind_to_operations_service">Kritischer Fehler: Operationen können nicht ausgeführt werden</string>
-  <string name="network_error_socket_exception">ein Fehler bei der Verbindung mit dem Server</string>
   <string name="network_error_socket_timeout_exception">Der Server braucht zu lange für eine Antwort.</string>
   <string name="network_error_connect_timeout_exception">Der Server braucht zu lange zum Verbinden.</string>
   <string name="network_host_not_available">Server konnte nicht erreicht werden</string>
