@@ -374,6 +374,7 @@
   <string name="clipboard_uxexpected_error">Gabim i panjohur teksa kopjohej në të papastër</string>
   <string name="clipboard_label">Tekst i kopjuar prej %1$s</string>
   <string name="error_cant_bind_to_operations_service">Gabim kritik: nuk mund të kryhen veprime</string>
+  <string name="network_error_socket_exception">Ndodhi një gabim teksa bëhej lidhja me shërbyesin.</string>
   <string name="network_error_socket_timeout_exception">Shërbyesit iu desh shumë kohë për përgjigje</string>
   <string name="network_error_connect_timeout_exception">Shërbyesit iu desh shumë kohë për t\’u lidhur</string>
   <string name="network_host_not_available">S\’u kap dot shërbyesi</string>
@@ -545,4 +546,6 @@
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
   <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
   <string name="common_not_found">s’u gjet</string>
+  <string name="supports_oauth2_error">S’qe e mundur të dihej nëse mbulohet OAuth2</string>
+  <string name="get_base_url_error">S’qe e mundur të dihej URL-ja bazë e shërbyesit</string>
 </resources>
