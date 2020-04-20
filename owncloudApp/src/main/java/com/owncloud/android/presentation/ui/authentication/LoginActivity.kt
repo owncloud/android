@@ -418,7 +418,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
         val clientId = getString(R.string.oauth2_client_id);
         val redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri));
-        val scope = if (oidcSupported) "openid offline_access email" else ""
+        val scope = if (oidcSupported) "openid offline_access email profile" else ""
         val builder = AuthorizationRequest.Builder(
             authorizationServiceConfiguration,
             clientId,

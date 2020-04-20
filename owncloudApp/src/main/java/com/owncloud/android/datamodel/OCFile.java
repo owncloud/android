@@ -243,7 +243,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * @return true if it is a folder
      */
     public boolean isFolder() {
-        return mMimeType != null && mMimeType.equals("DIR");
+        return mMimeType != null && (mMimeType.equals("DIR") || mMimeType.equals("httpd/unix-directory")) ;
     }
 
     /**
