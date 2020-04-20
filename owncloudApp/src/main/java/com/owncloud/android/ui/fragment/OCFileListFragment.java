@@ -1036,6 +1036,18 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 }
             }
 
+            if (count == 0) {
+                int emptyMessage;
+                if (mFileListOption == FileListOption.AV_OFFLINE) {
+                    emptyMessage = R.string.file_list_empty_available_offline;
+                } else if (mFileListOption == FileListOption.SHARED_BY_LINK) {
+                    emptyMessage = R.string.file_list_empty_shared_by_links;
+                } else {
+                    emptyMessage = R.string.file_list_empty;
+                }
+                setMessageForEmptyList(getString(emptyMessage));
+            }
+
             // decide grid vs list view
             OwnCloudVersion version = AccountUtils.getServerVersion(((FileActivity) mContainerActivity).getAccount());
             if (version != null && isGridViewPreferred(mFile)) {
