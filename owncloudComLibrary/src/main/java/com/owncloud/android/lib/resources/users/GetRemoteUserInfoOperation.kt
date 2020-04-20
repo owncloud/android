@@ -65,7 +65,7 @@ class GetRemoteUserInfoOperation : RemoteOperation<RemoteUserInfo>() {
                 result = RemoteOperationResult(ResultCode.OK)
                 result.data = commonResponse?.ocs?.data?.toRemoteUserInfo()
 
-                Timber.d("*** Get User Info completed and parsed to ${result.data}")
+                Timber.d("Get User Info completed and parsed to ${result.data}")
 
             } else {
                 result = RemoteOperationResult(getMethod)

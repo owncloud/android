@@ -64,9 +64,9 @@ data class CapabilityResponse(
         filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromBooleanValue(
             capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.enforced ?: false
         ),
-        filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(capabilities.filesCapabilities.bigfilechunking),
-        filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities.filesCapabilities.undelete),
-        filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities.filesCapabilities.versioning),
+        filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(capabilities.fileCapabilities.bigfilechunking),
+        filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities.fileCapabilities.undelete),
+        filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities.fileCapabilities.versioning),
         filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingFederation.incoming),
         filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingFederation.outgoing)
     )
@@ -79,7 +79,7 @@ data class Capabilities(
     @Json(name = "files_sharing")
     val fileSharingCapabilities: FileSharingCapabilities,
     @Json(name = "files")
-    val filesCapabilities: FilesCapabilities
+    val fileCapabilities: FileCapabilities
 )
 
 @JsonClass(generateAdapter = true)
@@ -145,7 +145,7 @@ data class FileSharingFederation(
 )
 
 @JsonClass(generateAdapter = true)
-data class FilesCapabilities(
+data class FileCapabilities(
     val bigfilechunking: Boolean,
     val undelete: Boolean,
     val versioning: Boolean

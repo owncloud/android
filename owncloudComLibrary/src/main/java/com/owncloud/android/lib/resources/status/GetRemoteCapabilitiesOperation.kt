@@ -56,7 +56,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
         var result: RemoteOperationResult<RemoteCapability>
 
         try {
-            val uriBuilder = client.baseUri.buildUpon().run {
+            val uriBuilder = client.baseUri.buildUpon().apply {
                 appendEncodedPath(OCS_ROUTE)    // avoid starting "/" in this method
                 appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
             }
@@ -79,7 +79,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                 result = RemoteOperationResult(OK)
                 result.data = commonResponse?.ocs?.data?.toRemoteCapability()
 
-                Timber.d("*** Get Capabilities completed and parsed to ${result.data}")
+                Timber.d("Get Capabilities completed and parsed to ${result.data}")
             } else {
                 result = RemoteOperationResult(getMethod)
                 Timber.e("Failed response while getting capabilities from the server status code: $status; response message: $response")
