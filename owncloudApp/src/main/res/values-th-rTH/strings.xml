@@ -374,6 +374,7 @@
   <string name="clipboard_uxexpected_error">เกิดข้อผิดพลาดขณะกำลังคัดลอกไปยังคลิปบอร์ด</string>
   <string name="clipboard_label">คัดลอกข้อความจาก %1$s แล้ว</string>
   <string name="error_cant_bind_to_operations_service">ข้อผิดพลาด: ไม่สามารถดำเนินการได้</string>
+  <string name="network_error_socket_exception">เกิดข้อผิดพลาดขณะกำลังเชื่อมต่อกับเซิร์ฟเวอร์</string>
   <string name="network_error_socket_timeout_exception">เซิร์ฟเวอร์ดังกล่าวใช้เวลาตอบสนองนานเกินไป</string>
   <string name="network_error_connect_timeout_exception">เซิร์ฟเวอร์ใช้เวลาเชื่อมต่อนานมาก</string>
   <string name="network_host_not_available">ไม่สามารถเข้าถึงเซิร์ฟเวอร์</string>
@@ -544,4 +545,6 @@
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
   <string name="common_not_found">ไม่พบข้อมูลใดๆ</string>
+  <string name="supports_oauth2_error">มันเป็นไปไม่ได้ที่จะรู้ว่ารองรับการใช้งาน OAuth2</string>
+  <string name="get_base_url_error">ไม่สามารถทราบ URL ของเซิร์ฟเวอร์</string>
 </resources>

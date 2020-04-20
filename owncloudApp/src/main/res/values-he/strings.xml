@@ -376,6 +376,7 @@
   <string name="clipboard_uxexpected_error">שגיאה לא צפויה בזמן העתקה ללוח הגזירים</string>
   <string name="clipboard_label">טקסט הועתק מ- %1$s</string>
   <string name="error_cant_bind_to_operations_service">שגיאה קריטית: לא ניתן לבצע את הפעולות</string>
+  <string name="network_error_socket_exception">שגיאה אירעה בזמן חיבור לשרת.</string>
   <string name="network_error_socket_timeout_exception">לשרת לקח יותר מדי זמן להגיב</string>
   <string name="network_error_connect_timeout_exception">לשרת לקח זמן רב מדי להתחבר</string>
   <string name="network_host_not_available">לא ניתן לגשת לשרת</string>
@@ -549,4 +550,6 @@
   <string name="welcome_feature_5_text">ניגון הסרטונים שלך ללא הורדה שלהם</string>
   <string name="no_borwser_installed_alert">לא הותקן דפדפן. יש להתקין דפדפן בכדי לאפשר חיבור מאובטח.</string>
   <string name="common_not_found">לא נמצא</string>
+  <string name="supports_oauth2_error">לא ניתן היה לדעת אם OAuth2 נתמך</string>
+  <string name="get_base_url_error">לא ניתן היה לדעת את נתיב הבסיס של השרת</string>
 </resources>
