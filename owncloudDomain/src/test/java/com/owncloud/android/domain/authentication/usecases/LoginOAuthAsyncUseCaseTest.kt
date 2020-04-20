@@ -55,12 +55,6 @@ class LoginOAuthAsyncUseCaseTest {
         assertTrue(loginOAuthUseCaseResult.isError)
         assertTrue(loginOAuthUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        invalidLoginOAuthUseCaseParams = loginOAuthUseCaseParams.copy(username = "")
-        loginOAuthUseCaseResult = loginOAuthAsyncUseCase.execute(invalidLoginOAuthUseCaseParams)
-
-        assertTrue(loginOAuthUseCaseResult.isError)
-        assertTrue(loginOAuthUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
-
         invalidLoginOAuthUseCaseParams = loginOAuthUseCaseParams.copy(authTokenType = "")
         loginOAuthUseCaseResult = loginOAuthAsyncUseCase.execute(invalidLoginOAuthUseCaseParams)
 
