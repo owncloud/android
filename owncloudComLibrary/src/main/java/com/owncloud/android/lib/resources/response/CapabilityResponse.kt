@@ -24,23 +24,61 @@
  */
 package com.owncloud.android.lib.resources.response
 
+import com.owncloud.android.lib.resources.status.RemoteCapability
+import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class CapabilityResponse(
-    @Json(name = NODE_SERVER_VERSION)
+    @Json(name = "version")
     val serverVersion: ServerVersion,
     val capabilities: Capabilities
-)
+) {
+    fun toRemoteCapability(): RemoteCapability = RemoteCapability(
+        versionMayor = serverVersion.major,
+        versionMinor = serverVersion.minor,
+        versionMicro = serverVersion.micro,
+        versionString = serverVersion.string,
+        versionEdition = serverVersion.edition,
+        corePollinterval = capabilities.coreCapabilities.pollinterval,
+        filesSharingApiEnabled = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingApiEnabled),
+        filesSharingResharing = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingReSharing),
+        filesSharingPublicEnabled = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.enabled),
+        filesSharingPublicUpload = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicUpload),
+        filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicUploadOnly),
+        filesSharingPublicMultiple = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicMultiple),
+        filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicPassword.enforced),
+        filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromBooleanValue(
+            capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicPassword.enforcedFor.enforcedReadOnly
+        ),
+        filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.fromBooleanValue(
+            capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicPassword.enforcedFor.enforcedReadWrite
+        ),
+        filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.fromBooleanValue(
+            capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicPassword.enforcedFor.enforcedUploadOnly
+        ),
+        filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.enabled),
+        filesSharingPublicExpireDateDays = capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.days
+            ?: 0,
+        filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromBooleanValue(
+            capabilities.fileSharingCapabilities.fileSharingPublic.fileSharingPublicExpireDate.enforced ?: false
+        ),
+        filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(capabilities.filesCapabilities.bigfilechunking),
+        filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities.filesCapabilities.undelete),
+        filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities.filesCapabilities.versioning),
+        filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingFederation.incoming),
+        filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities.fileSharingCapabilities.fileSharingFederation.outgoing)
+    )
+}
 
 @JsonClass(generateAdapter = true)
 data class Capabilities(
-    @Json(name = NODE_CORE)
+    @Json(name = "core")
     val coreCapabilities: CoreCapabilities,
-    @Json(name = NODE_FILES_SHARING)
+    @Json(name = "files_sharing")
     val fileSharingCapabilities: FileSharingCapabilities,
-    @Json(name = NODE_FILES)
+    @Json(name = "files")
     val filesCapabilities: FilesCapabilities
 )
 
@@ -51,47 +89,45 @@ data class CoreCapabilities(
 
 @JsonClass(generateAdapter = true)
 data class FileSharingCapabilities(
-    @Json(name = PROPERTY_FILES_SHARING_API_ENABLED)
+    @Json(name = "api_enabled")
     val fileSharingApiEnabled: Boolean,
-    @Json(name = PROPERTY_FILES_SHARING_SEARCH_MIN_LENGTH)
-    val fileSharingSearchMinLength: Int,
-    @Json(name = NODE_FILES_SHARING_PUBLIC)
+    @Json(name = "public")
     val fileSharingPublic: FileSharingPublic,
-    @Json(name = PROPERTY_FILES_SHARING_RESHARING)
+    @Json(name = "resharing")
     val fileSharingReSharing: Boolean,
-    @Json(name = NODE_FEDERATION)
+    @Json(name = "federation")
     val fileSharingFederation: FileSharingFederation
 )
 
 @JsonClass(generateAdapter = true)
 data class FileSharingPublic(
     val enabled: Boolean,
-    @Json(name = PROPERTY_FILES_SHARING_PUBLIC_UPLOAD)
+    @Json(name = "upload")
     val fileSharingPublicUpload: Boolean,
-    @Json(name = PROPERTY_FILES_SHARING_PUBLIC_UPLOAD_ONLY)
+    @Json(name = "supports_upload_only")
     val fileSharingPublicUploadOnly: Boolean,
-    @Json(name = PROPERTY_FILES_SHARING_PUBLIC_MULTIPLE)
+    @Json(name = "multiple")
     val fileSharingPublicMultiple: Boolean,
-    @Json(name = NODE_PASSWORD)
+    @Json(name = "password")
     val fileSharingPublicPassword: FileSharingPublicPassword,
-    @Json(name = NODE_EXPIRE_DATE)
+    @Json(name = "expire_date")
     val fileSharingPublicExpireDate: FileSharingPublicExpireDate
 )
 
 @JsonClass(generateAdapter = true)
 data class FileSharingPublicPassword(
     val enforced: Boolean,
-    @Json(name = NODE_FILES_SHARING_PUBLIC_PASSWORD_ENFORCED)
+    @Json(name = "enforced_for")
     val enforcedFor: FileSharingPublicPasswordEnforced
 )
 
 @JsonClass(generateAdapter = true)
 data class FileSharingPublicPasswordEnforced(
-    @Json(name = PROPERTY_FILES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY)
+    @Json(name = "read_only")
     val enforcedReadOnly: Boolean,
-    @Json(name = PROPERTY_FILES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE)
+    @Json(name = "read_write")
     val enforcedReadWrite: Boolean,
-    @Json(name = PROPERTY_FILES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY)
+    @Json(name = "upload_only")
     val enforcedUploadOnly: Boolean
 )
 
@@ -123,29 +159,3 @@ data class ServerVersion(
     var string: String = "",
     var edition: String = ""
 )
-
-private const val NODE_SERVER_VERSION = "version"
-
-private const val NODE_CORE = "core"
-
-private const val NODE_FILES_SHARING = "files_sharing"
-private const val PROPERTY_FILES_SHARING_API_ENABLED = "api_enabled"
-private const val PROPERTY_FILES_SHARING_SEARCH_MIN_LENGTH = "search_min_length"
-private const val PROPERTY_FILES_SHARING_RESHARING = "resharing"
-
-private const val NODE_FILES_SHARING_PUBLIC = "public"
-private const val PROPERTY_FILES_SHARING_PUBLIC_UPLOAD = "upload"
-private const val PROPERTY_FILES_SHARING_PUBLIC_UPLOAD_ONLY = "supports_upload_only"
-private const val PROPERTY_FILES_SHARING_PUBLIC_MULTIPLE = "multiple"
-
-private const val NODE_FEDERATION = "federation"
-
-private const val NODE_PASSWORD = "password"
-private const val NODE_FILES_SHARING_PUBLIC_PASSWORD_ENFORCED = "enforced_for"
-private const val PROPERTY_FILES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY = "read_only"
-private const val PROPERTY_FILES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE = "read_write"
-private const val PROPERTY_FILES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY = "upload_only"
-
-private const val NODE_EXPIRE_DATE = "expire_date"
-
-private const val NODE_FILES = "files"
