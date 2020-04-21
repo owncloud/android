@@ -56,6 +56,7 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH2_OIDC_SCOPE
 import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
@@ -421,7 +422,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
         val clientId = getString(R.string.oauth2_client_id);
         val redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri));
-        val scope = if (oidcSupported) "openid offline_access email profile" else ""
+        val scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
         val builder = AuthorizationRequest.Builder(
             authorizationServiceConfiguration,
             clientId,
@@ -479,7 +480,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     OAUTH_TOKEN_TYPE,
                     tokenResponse.accessToken as String,
                     tokenResponse.refreshToken as String,
-                    tokenResponse.scope,
+                    if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
                     loginAction != ACTION_CREATE
                 )
             } else if (authorizationException != null) {

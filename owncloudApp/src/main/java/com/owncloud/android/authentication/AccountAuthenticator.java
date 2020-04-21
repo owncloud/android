@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.oauth.AuthStateManager;
+import com.owncloud.android.authentication.oauth.OAuthUtils;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
@@ -349,7 +350,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 .setRefreshToken(refreshToken)
                 .build();
 
-        ClientAuthentication clientAuth = new ClientSecretBasic(mContext.getString(R.string.oauth2_client_secret));
+        ClientAuthentication clientAuth =
+                OAuthUtils.Companion.createClientSecretBasic(mContext.getString(R.string.oauth2_client_secret));
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
         appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(mContext));
@@ -360,8 +362,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 tokenRequest,
                 clientAuth,
                 (tokenResponse, authorizationException) -> {
-                    if (tokenResponse != null && tokenResponse.accessToken != null &&
-                            tokenResponse.refreshToken != null) {
+                    if (tokenResponse != null && tokenResponse.accessToken != null) {
                         String newAccessToken = tokenResponse.accessToken;
                         Timber.d("Set OAuth2 new access token in account: %s", newAccessToken);
                         accountManager.setAuthToken(account, authTokenType, newAccessToken);
@@ -372,12 +373,19 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                         result.putString(AccountManager.KEY_AUTHTOKEN, newAccessToken);
                         accountAuthenticatorResponse.onResult(result);
 
-                        String newRefreshToken = tokenResponse.refreshToken;
-                        Timber.d("Set OAuth2 new refresh token in account: %s", newRefreshToken);
+                        String refreshTokenToUseFromNowOn;
+
+                        if (tokenResponse.refreshToken != null) {
+                            refreshTokenToUseFromNowOn = tokenResponse.refreshToken;
+                        } else {
+                            refreshTokenToUseFromNowOn = refreshToken;
+                        }
+
+                        Timber.d("Set OAuth2 new refresh token in account: %s", refreshTokenToUseFromNowOn);
                         accountManager.setUserData(
                                 account,
                                 AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN,
-                                newRefreshToken
+                                refreshTokenToUseFromNowOn
                         );
 
                     } else if (authorizationException != null) {
