@@ -1785,27 +1785,15 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 listOfFilesFragment?.updateFileListOption(newFileListOption)
                 updateActionBarTitleAndHomeButton(null)
             } else {
-                super.allFilesOption()
+                super.navigateToOption(FileListOption.ALL_FILES)
             }
         } else {
-            if (newFileListOption.isAllFiles()) {
-                browseToRoot()
-            } else {
-                allFilesOption()
-            }
+            browseToRoot()
         }
     }
 
-    override fun allFilesOption() {
-        navigateTo(FileListOption.ALL_FILES)
-    }
-
-    override fun onlyAvailableOfflineOption() {
-        navigateTo(FileListOption.AV_OFFLINE)
-    }
-
-    override fun sharedByLinkFilesOption() {
-        navigateTo(FileListOption.SHARED_BY_LINK)
+    override fun navigateToOption(fileListOption: FileListOption) {
+        navigateTo(fileListOption)
     }
 
     private fun getMenuItemForFileListOption(fileListOption: FileListOption?): Int = when (fileListOption) {

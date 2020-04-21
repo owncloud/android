@@ -1,4 +1,4 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author Andy Scherzinger
@@ -271,29 +271,29 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
         setCheckedItemAtBottomBar(menuItemId);
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
-            if (bottomNavigationView.getSelectedItemId() != menuItem.getItemId()) {
-                navBarNavigationTo(menuItem.getItemId());
-            }
+            navBarNavigationTo(menuItem.getItemId(), bottomNavigationView.getSelectedItemId() == menuItem.getItemId());
             return true;
         });
     }
 
-    private void navBarNavigationTo(int menuItemId) {
+    private void navBarNavigationTo(int menuItemId, boolean isCurrentOptionActive) {
 
         switch (menuItemId) {
             case R.id.nav_all_files:
-                allFilesOption();
+                navigateToOption(FileListOption.ALL_FILES);
                 break;
             case R.id.nav_uploads:
-                Intent uploadListIntent = new Intent(getApplicationContext(), UploadListActivity.class);
-                uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(uploadListIntent);
+                if (!isCurrentOptionActive) {
+                    Intent uploadListIntent = new Intent(getApplicationContext(), UploadListActivity.class);
+                    uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(uploadListIntent);
+                }
                 break;
             case R.id.nav_available_offline_files:
-                onlyAvailableOfflineOption();
+                navigateToOption(FileListOption.AV_OFFLINE);
                 break;
             case R.id.nav_shared_by_link_files:
-                sharedByLinkFilesOption();
+                navigateToOption(FileListOption.SHARED_BY_LINK);
                 break;
         }
     }
@@ -532,11 +532,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
         }
     }
 
-    public abstract void allFilesOption();
-
-    public abstract void onlyAvailableOfflineOption();
-
-    public abstract void sharedByLinkFilesOption();
+    public abstract void navigateToOption(FileListOption fileListOption);
 
     /**
      * Updates title bar and home buttons (state and icon).
