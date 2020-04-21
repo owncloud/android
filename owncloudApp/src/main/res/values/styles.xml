@@ -63,6 +63,7 @@
     <!-- Extends Theme.ownCloud.Toolbar for Drawer activities including Drawer -->
     <style name="Theme.ownCloud.Toolbar.Drawer">
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 
     <!-- Extends Theme.ownCloud to make LEGACY ActionBar both OVERLAY and TRANSPARENT -->

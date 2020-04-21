@@ -23,8 +23,7 @@
     android:layout_height="match_parent"
     android:filterTouchesWhenObscured="true">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="top">
@@ -49,7 +48,6 @@
             android:id="@+id/swipe_containing_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:footerDividersEnabled="false"
             android:visibility="gone">
 
@@ -94,7 +92,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/standard_margin"
         android:layout_marginEnd="@dimen/standard_margin"
-        android:layout_marginRight="@dimen/standard_margin"
         android:visibility="gone"
         fab:fab_addButtonColorNormal="@color/primary_button_background_color"
         fab:fab_addButtonColorPressed="@color/owncloud_blue"

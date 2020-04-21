@@ -116,7 +116,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     /**
-     *  Called when the ownCloud {@link Account} associated to the Activity was just updated.
+     * Called when the ownCloud {@link Account} associated to the Activity was just updated.
      */
     @Override
     protected void onAccountSet(boolean stateWasRecovered) {
@@ -144,8 +144,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void createFragments() {
-        OCFileListFragment listOfFiles =  OCFileListFragment.newInstance(true, false,
-                false, true, true, false);
+        OCFileListFragment listOfFiles =  OCFileListFragment.newInstance(true, FileListOption.ALL_FILES, false, true, false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, listOfFiles, TAG_LIST_OF_FOLDERS);
         transaction.commit();
@@ -182,7 +181,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * Updates action bar and second fragment, if in dual pane mode.
      */
     @Override
@@ -384,11 +383,11 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     /**
-     * Updates the view associated to the activity after the finish of an operation trying 
+     * Updates the view associated to the activity after the finish of an operation trying
      * to create a new folder.
      *
-     * @param operation     Creation operation performed.
-     * @param result        Result of the creation.
+     * @param operation Creation operation performed.
+     * @param result    Result of the creation.
      */
     private void onCreateFolderOperationFinish(
             CreateFolderOperation operation, RemoteOperationResult result
@@ -455,7 +454,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                             OCFileListFragment fileListFragment = getListOfFilesFragment();
                             if (fileListFragment != null) {
                                 fileListFragment.listDirectory(currentDir);
-                           }
+                            }
                         }
                         setFile(currentFile);
                     }
@@ -497,7 +496,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
      * Shows the information of the {@link OCFile} received as a
      * parameter in the second fragment.
      *
-     * @param file          {@link OCFile} whose details will be shown
+     * @param file {@link OCFile} whose details will be shown
      */
     @Override
     public void showDetails(OCFile file) {

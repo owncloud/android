@@ -54,6 +54,7 @@ import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.activity.FileListOption;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -475,14 +476,8 @@ public class PreviewImageActivity extends FileActivity implements
     }
 
     @Override
-    public void allFilesOption() {
+    public void navigateToOption(FileListOption fileListOption) {
         backToDisplayActivity();
-        super.allFilesOption();
-    }
-
-    @Override
-    public void onlyAvailableOfflineOption() {
-        backToDisplayActivity();
-        super.onlyAvailableOfflineOption();
+        super.navigateToOption(fileListOption);
     }
 }

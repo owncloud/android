@@ -61,11 +61,9 @@ public class ExtendedListFragment extends Fragment
     private static final String KEY_IS_GRID_VISIBLE = "IS_GRID_VISIBLE";
 
     static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
-    static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
-            ".ONLY_AVAILABLE_OFFLINE";
-    static final String ARG_SHARED_BY_LINK_FILES = ExtendedListFragment.class.getCanonicalName() +
-            ".SHARED_BY_LINK_FILES";
-    protected static final String ARG_PICKING_A_FOLDER = ExtendedListFragment.class.getCanonicalName() +
+    static final String ARG_LIST_FILE_OPTION = ExtendedListFragment.class.getCanonicalName() +
+            ".LIST_FILE_OPTION";
+    static final String ARG_PICKING_A_FOLDER = ExtendedListFragment.class.getCanonicalName() +
             ".ARG_PICKING_A_FOLDER";
 
     private ProgressBar mProgressBar;
@@ -475,16 +473,6 @@ public class ExtendedListFragment extends Fragment
     boolean isShowingJustFolders() {
         Bundle args = getArguments();
         return ((args != null) && args.getBoolean(ARG_JUST_FOLDERS, false));
-    }
-
-    boolean isShowingOnlyAvailableOffline() {
-        Bundle args = getArguments();
-        return ((args != null) && args.getBoolean(ARG_ONLY_AVAILABLE_OFFLINE, false));
-    }
-
-    boolean isShowingSharedByLinkFiles() {
-        Bundle args = getArguments();
-        return ((args != null) && args.getBoolean(ARG_SHARED_BY_LINK_FILES, false));
     }
 
     boolean isPickingAFolder() {

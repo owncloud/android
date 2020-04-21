@@ -36,12 +36,12 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.UploadResult;
@@ -74,7 +74,10 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.upload_list_layout);
+        setContentView(R.layout.activity_main);
+
+        View rightFragmentContainer = findViewById(R.id.right_fragment_container);
+        rightFragmentContainer.setVisibility(View.GONE);
 
         // this activity has no file really bound, it's for mulitple accounts at the same time; should no inherit
         // from FileActivity; moreover, some behaviours inherited from FileActivity should be delegated to Fragments;
@@ -85,7 +88,10 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         setupToolbar();
 
         // setup drawer
-        setupDrawer(R.id.nav_uploads);
+        setupDrawer();
+
+        // setup navigation bottom bar
+        setupNavigationBottomBar(R.id.nav_uploads);
 
         // Add fragment with a transaction for setting a tag
         if (savedInstanceState == null) {
@@ -100,7 +106,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
     private void createUploadListFragment() {
         UploadListFragment uploadList = new UploadListFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.upload_list_fragment, uploadList, TAG_UPLOAD_LIST_FRAGMENT);
+        transaction.add(R.id.left_fragment_container, uploadList, TAG_UPLOAD_LIST_FRAGMENT);
         transaction.commit();
     }
 
@@ -171,19 +177,10 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         }
     }
 
-    /**
-     * Same as openFileWithDefault() but user cannot save default app.
-     *
-     * @param ocFile
-     */
-    private void openFileWithDefaultNoDefault(OCFile ocFile) {
-        getFileOperationsHelper().openFile(ocFile);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retval = true;
-        UploadsStorageManager storageManager = null;
+        UploadsStorageManager storageManager;
         UploadListFragment uploadListFragment =
                 (UploadListFragment) getSupportFragmentManager().findFragmentByTag(TAG_UPLOAD_LIST_FRAGMENT);
         switch (item.getItemId()) {
@@ -303,7 +300,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                 }
             } else {
                 Timber.d("UploadListActivity not connected to Upload service. component: " + component + " service: " + service);
-                return;
             }
         }
 
@@ -330,10 +326,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
 
             uploadListFragment.updateUploads();
         }
-    }
-
-    protected String getDefaultTitle() {
-        return getString(R.string.uploads_view_title);
     }
 
     /**

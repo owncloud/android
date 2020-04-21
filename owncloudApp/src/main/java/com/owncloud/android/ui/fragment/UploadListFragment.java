@@ -19,7 +19,6 @@
  */
 package com.owncloud.android.ui.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,17 +46,6 @@ public class UploadListFragment extends ExpandableListFragment {
 
     private ExpandableUploadListAdapter mAdapter;
 
-    /** Is binder ready in the Activity? */
-    private boolean mBinderReady = false;
-
-    public void setBinderReady(boolean ready) {
-        mBinderReady = ready;
-    }
-
-    public boolean isBinderReady() {
-        return mBinderReady;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
@@ -74,24 +62,6 @@ public class UploadListFragment extends ExpandableListFragment {
         mRefreshListLayout.setRefreshing(false);
 
         mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mContainerActivity = (ContainerActivity) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement "
-                    + UploadListFragment.ContainerActivity.class.getSimpleName());
-        }
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        Timber.d("onActivityCreated() start");
-        super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -135,8 +105,6 @@ public class UploadListFragment extends ExpandableListFragment {
     }
 
     public void binderReady() {
-        setBinderReady(true);
-
         if (mAdapter != null) {
             mAdapter.addBinder();
         }
@@ -147,5 +115,4 @@ public class UploadListFragment extends ExpandableListFragment {
             mAdapter.refreshView();
         }
     }
-
 }

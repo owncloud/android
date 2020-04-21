@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ownCloud Android client application
+
+  Copyright (C) 2020 ownCloud GmbH.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_all_files"
+        android:icon="@drawable/ic_folder"
+        android:title="@string/bottom_nav_files" />
+    <item
+        android:id="@+id/nav_uploads"
+        android:icon="@drawable/ic_uploads"
+        android:title="@string/bottom_nav_uploads" />
+    <item
+        android:id="@+id/nav_available_offline_files"
+        android:icon="@drawable/ic_available_offline"
+        android:title="@string/bottom_nav_offline" />
+    <item
+        android:id="@+id/nav_shared_by_link_files"
+        android:icon="@drawable/ic_shared_by_link"
+        android:title="@string/bottom_nav_links" />
+</menu>
