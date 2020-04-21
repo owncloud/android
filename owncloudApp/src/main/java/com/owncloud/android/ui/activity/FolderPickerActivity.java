@@ -144,7 +144,8 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void createFragments() {
-        OCFileListFragment listOfFiles =  OCFileListFragment.newInstance(true, FileListOption.ALL_FILES, false, true, false);
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(true, FileListOption.ALL_FILES, false, true,
+                false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, listOfFiles, TAG_LIST_OF_FOLDERS);
         transaction.commit();
@@ -161,8 +162,12 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             if (!mSyncInProgress) {
                 // In case folder list is empty
                 message = R.string.file_list_empty_moving;
-                listFragment.getProgressBar().setVisibility(View.GONE);
-                listFragment.getShadowView().setVisibility(View.VISIBLE);
+                if (listFragment.getProgressBar() != null) {
+                    listFragment.getProgressBar().setVisibility(View.GONE);
+                }
+                if (listFragment.getShadowView() != null) {
+                    listFragment.getShadowView().setVisibility(View.VISIBLE);
+                }
             }
             listFragment.setMessageForEmptyList(getString(message));
         } else {
