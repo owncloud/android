@@ -52,7 +52,6 @@ class OCLocalAuthenticationDataSource(
 
     override fun addBasicAccount(
         lastPermanentLocation: String?,
-        userName: String,
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo,
@@ -70,7 +69,6 @@ class OCLocalAuthenticationDataSource(
 
     override fun addOAuthAccount(
         lastPermanentLocation: String?,
-        userName: String,
         authTokenType: String,
         accessToken: String,
         serverInfo: ServerInfo,

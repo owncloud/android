@@ -2,12 +2,13 @@ package com.owncloud.android.testutil
 
 import android.accounts.Account
 
-const val OC_ACCOUNT_NAME = "admin@server"
+const val OC_ACCOUNT_ID = "username"
+const val OC_ACCOUNT_NAME = "$OC_ACCOUNT_ID@demo.owncloud.com"
 
 /**
  * Accounts
  */
-val OC_ACCOUNT = Account("username@demo.owncloud.com", "owncloud")
+val OC_ACCOUNT = Account(OC_ACCOUNT_NAME, "owncloud")
 
 /**
  * BasicCredentials
