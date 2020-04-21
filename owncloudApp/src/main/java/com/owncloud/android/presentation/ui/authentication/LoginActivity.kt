@@ -93,7 +93,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var authService: AuthorizationService? = null
     private lateinit var authStateManager: AuthStateManager
     private var oidcSupported = false
-    private lateinit var authorizationServiceConfiguration: AuthorizationServiceConfiguration
+    private var authorizationServiceConfiguration: AuthorizationServiceConfiguration? = null
 
     // For handling AbstractAccountAuthenticator responses
     private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
@@ -326,9 +326,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         notifyDocumentProviderRoots(applicationContext)
 
-        accountName?.let {
-            val authState = AuthState(authorizationServiceConfiguration)
-            authStateManager.replace(it, authState)
+        authorizationServiceConfiguration?.let { authServiceConfig ->
+            accountName?.let {
+                val authState = AuthState(authServiceConfig)
+                authStateManager.replace(it, authState)
+            }
         }
 
         finish()
@@ -472,7 +474,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
             if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
                 authenticationViewModel.loginOAuth(
-                    tokenResponse.additionalParameters[AccountUtils.Constants.KEY_USER_ID]?.let {it} ?: "",
+                    tokenResponse.additionalParameters[AccountUtils.Constants.KEY_USER_ID]?.let { it } ?: "",
                     OAUTH_TOKEN_TYPE,
                     tokenResponse.accessToken as String,
                     tokenResponse.refreshToken as String,
