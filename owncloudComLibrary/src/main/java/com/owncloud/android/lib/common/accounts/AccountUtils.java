@@ -330,6 +330,7 @@ public class AccountUtils {
          * OAuth2 scope
          */
         public static final String KEY_OAUTH2_SCOPE = "oc_oauth2_scope";
+        public static final String OAUTH2_OIDC_SCOPE = "openid offline_access email profile";
 
         public static final int ACCOUNT_VERSION = 1;
     }
