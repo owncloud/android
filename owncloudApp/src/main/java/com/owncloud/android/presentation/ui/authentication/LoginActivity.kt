@@ -413,7 +413,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         OAuthUtils.buildOAuthorizationServiceConfig(
             this,
-            retrieveConfigurationCallback
+            retrieveConfigurationCallback,
+            serverBaseUrl
         )
     }
 
