@@ -53,6 +53,10 @@
   <string name="prefs_imprint">pie de imprenta</string>
   <string name="prefs_remember_last_share_location">Recordar la ubicación de los archivos compartidos</string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Archivos</string>
+  <string name="bottom_nav_uploads">Cargas</string>
+  <string name="bottom_nav_links">Enlaces</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="auth_oauth_failure_snackbar_action">Iniciar sesión</string>
@@ -318,6 +322,7 @@
   <string name="clipboard_uxexpected_error">Error inesperado al copiar al portapapeles</string>
   <string name="clipboard_label">Texto copiado de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error crítico: no es posible realizar operaciones</string>
+  <string name="network_error_socket_exception">Ocurrió un error al conectarse con el servidor.</string>
   <string name="network_error_socket_timeout_exception">El servidor ha tardado demasiado en responder</string>
   <string name="network_error_connect_timeout_exception">El servidor esta tardando demasiado en conectarse</string>
   <string name="network_host_not_available">No se pudo acceder al servidor</string>

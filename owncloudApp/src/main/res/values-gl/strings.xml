@@ -76,6 +76,11 @@
   <string name="pass_code_locked">Bloqueado con código de seguridade</string>
   <string name="pattern_locked">Bloqueado con patrón</string>
   <string name="illegal_argument_exception_message">É necesaria unha ACCIÓN válida na intención pasada a</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Ficheiros</string>
+  <string name="bottom_nav_uploads">Envios</string>
+  <string name="bottom_nav_offline">Desconectado</string>
+  <string name="bottom_nav_links">Ligazóns</string>
   <string name="recommend_subject">Tente %1$s no seu teléfono intelixente!</string>
   <string name="recommend_text">Quero convidalo a empregar %1$s no seu teléfono intelixente!
 Descárgueo de aquí: %2$s</string>

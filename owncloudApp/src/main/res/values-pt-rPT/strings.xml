@@ -44,6 +44,10 @@
   <string name="prefs_imprint">Marca</string>
   <string name="prefs_remember_last_share_location">Lembrar localização de partilha</string>
   <string name="prefs_remember_last_upload_location_summary">Lembrar a última localização de partilha dos carregamentos</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Ficheiros</string>
+  <string name="bottom_nav_uploads">Carregamentos</string>
+  <string name="bottom_nav_links">Hiperligações</string>
   <string name="recommend_subject">Experimente %1$s no seu telemóvel!</string>
   <string name="recommend_text">Eu quero convidá-lo a usar %1$s no seu telemóvel!\nTransfere  aqui: %2$s</string>
   <string name="auth_failure_snackbar">A autenticação falhou</string>
@@ -308,6 +312,7 @@
   <string name="clipboard_uxexpected_error">Erro inesperado ao copiar para a área de transferência</string>
   <string name="clipboard_label">Texto copiado a partir de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Erro crítico: não é possível executar as operações</string>
+  <string name="network_error_socket_exception">Ocorreu um erro durante a ligação ao servidor.</string>
   <string name="network_error_socket_timeout_exception">O servidor demorou muito tempo a responder</string>
   <string name="network_error_connect_timeout_exception">A ligação ao servidor está a demorar mais que o previsto</string>
   <string name="network_host_not_available">Não foi possível alcançar o servidor</string>

@@ -42,6 +42,10 @@
   <string name="prefs_imprint">Imprint</string>
   <string name="prefs_remember_last_share_location">Kom ihåg plats för delat</string>
   <string name="prefs_remember_last_upload_location_summary">Kom ihåg senaste uppladdningsplats vid dela</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Filer</string>
+  <string name="bottom_nav_uploads">Uppladdningar</string>
+  <string name="bottom_nav_links">Länkar</string>
   <string name="recommend_subject">Prova %1$s på din smartphone!</string>
   <string name="recommend_text">Jag skullje vilja bjuda in dig till att prova %1$s på din smartphone!\nLadda ner appen från Google Play här: %2$s</string>
   <string name="auth_oauth_failure_snackbar_action">Logga in</string>
@@ -301,6 +305,7 @@
   <string name="clipboard_uxexpected_error">Oväntat fel vid kopiering till utklipp</string>
   <string name="clipboard_label">Text kopierad från %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritiskt fel: kan inte utföra åtgärden</string>
+  <string name="network_error_socket_exception">Ett fel uppstod vid anslutning till servern.</string>
   <string name="network_error_socket_timeout_exception">Servern svarar inte</string>
   <string name="network_error_connect_timeout_exception">Anslutningstiden till servern överskreds</string>
   <string name="network_host_not_available">Kunde inte nå servern</string>

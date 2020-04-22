@@ -76,6 +76,11 @@
   <string name="pass_code_locked">ล็อคด้วยรหัสผ่าน</string>
   <string name="pattern_locked">ล็อคด้วยรูปแบบ</string>
   <string name="illegal_argument_exception_message">ต้องใช้การกระทำที่ถูกต้องเพื่อ</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">ไฟล์</string>
+  <string name="bottom_nav_uploads">อัปโหลด</string>
+  <string name="bottom_nav_offline">ออฟไลน์</string>
+  <string name="bottom_nav_links">ลิงก์</string>
   <string name="recommend_subject">ลองใช้ %1$s บนสมาร์ทโฟนของคุณ!</string>
   <string name="recommend_text">ฉันอยากจะขอเชิญให้คุณใช้ %1$s บนสมาร์ทโฟนของคุณ!\nดาวน์โหลดที่นี่: %2$s</string>
   <string name="error_reason">เพราะว่า</string>

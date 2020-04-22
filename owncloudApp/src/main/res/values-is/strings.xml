@@ -61,6 +61,7 @@
   <string name="pattern_not_same_pattern">Mynstrin eru ekki eins</string>
   <string name="pattern_stored">Mynstur geymt</string>
   <string name="pattern_removed">Mynstur fjarlægt</string>
+  <!--Bottom navigation bar-->
   <string name="recommend_subject">Prófaðu %1$s á snjallsímanum þínum!</string>
   <string name="recommend_text">Ég vil gjarnan bjóða þér að nota %1$s á snjallsímanum þínum!\nSæktu það hér: %2$s</string>
   <string name="auth_failure_snackbar">Auðkenning mistókst</string>
@@ -335,6 +336,7 @@
   <string name="clipboard_uxexpected_error">Óvænt villa kom upp við afritun á klippispjald</string>
   <string name="clipboard_label">Texti afritaður úr %1$s</string>
   <string name="error_cant_bind_to_operations_service">Alvarleg villa: get ekki framkvæmt aðgerðir</string>
+  <string name="network_error_socket_exception">Villa kom upp við að tengjast við þjóninn.</string>
   <string name="network_error_socket_timeout_exception">Þjónninn var of lengi að svara</string>
   <string name="network_error_connect_timeout_exception">Þjónninn var of lengi að tengjast</string>
   <string name="network_host_not_available">Ekki tókst að ná sambandi við þjón</string>

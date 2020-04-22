@@ -76,6 +76,11 @@
   <string name="pass_code_locked">Bloqueado com senha</string>
   <string name="pattern_locked">Bloqueado com padrão</string>
   <string name="illegal_argument_exception_message">Uma AÇÃO válida é necessária no intento passado para</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Arquivos</string>
+  <string name="bottom_nav_uploads">Enviados</string>
+  <string name="bottom_nav_offline">Desconectado</string>
+  <string name="bottom_nav_links">Linques</string>
   <string name="recommend_subject">Tentar %1$s em seu smartfone!</string>
   <string name="recommend_text">Gostaria de convida-lo a usar %1$s em seu smartphone!\nBaixe aqui: %2$s</string>
   <string name="error_reason">porque</string>

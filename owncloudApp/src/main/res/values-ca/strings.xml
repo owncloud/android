@@ -73,6 +73,10 @@
   <string name="pass_code_locked">Bloquejat amb codi</string>
   <string name="pattern_locked">Bloquejat amb patró</string>
   <string name="illegal_argument_exception_message">Una ACCIÓ vàlida es requereix per passar a</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Arxius</string>
+  <string name="bottom_nav_uploads">Càrrega</string>
+  <string name="bottom_nav_links">Enllaços</string>
   <string name="recommend_subject">Proveu %1$s a un telèfon avançat!</string>
   <string name="recommend_text">Vull invitar-te a utilitzar %1$s al teu smartphone!\nDescarrega-ho aqui: %2$s</string>
   <string name="error_reason">ja que</string>
@@ -366,6 +370,7 @@
   <string name="clipboard_uxexpected_error">Error inesperat quan es copiava al porta-retalls</string>
   <string name="clipboard_label">Text copiat des de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error crític: no es poden realitzar operacions</string>
+  <string name="network_error_socket_exception">Hi ha hagut un error mentre es connectava al servidor.</string>
   <string name="network_error_socket_timeout_exception">El servidor ha trigat massa en respondre</string>
   <string name="network_error_connect_timeout_exception">El servidor tarda massa en connectar</string>
   <string name="network_host_not_available">No es troba el servidor.</string>

@@ -68,6 +68,10 @@
   <string name="pattern_stored">Vzor bol uložený.</string>
   <string name="pattern_removed">Vzor bol odstránený</string>
   <string name="pattern_already_set">Vzor a heslo nemôžu byť, zapnuté na raz, prosím vypni najskôr vzor.</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Súbory</string>
+  <string name="bottom_nav_uploads">Nahrávania</string>
+  <string name="bottom_nav_links">Linky</string>
   <string name="recommend_subject">Skúste %1$s na vašom telefóne!</string>
   <string name="recommend_text">Chcel by som vám odporučiť %1$s na vašom smartfóne!\nSťahujte tu: %2$s</string>
   <string name="auth_oauth_failure_snackbar_action">Prihlásenie</string>
@@ -309,6 +313,7 @@
   <string name="clipboard_uxexpected_error">Vyskytla sa neznáma chyba pri kopírovaní do Cliboardu</string>
   <string name="clipboard_label">Text bol skopírovaný %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritická chyba: operáciu nemožno vykonať</string>
+  <string name="network_error_socket_exception">Pri pokuse o pripojenie na server nastala chyba.</string>
   <string name="network_error_socket_timeout_exception">Serveru trvá odpoveď príliš dlho</string>
   <string name="network_error_connect_timeout_exception">Pripájanie na server príliš dlho</string>
   <string name="network_host_not_available">Nepodarilo sa pripojiť na Server</string>

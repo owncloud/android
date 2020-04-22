@@ -76,6 +76,11 @@
   <string name="pass_code_locked">Kyçur përmes kodkalimi</string>
   <string name="pattern_locked">Kyçur përmes rregullsie</string>
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Kartela</string>
+  <string name="bottom_nav_uploads">Ngarkime</string>
+  <string name="bottom_nav_offline">Jashtë linje</string>
+  <string name="bottom_nav_links">Lidhje</string>
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
   <string name="error_reason">ngaqë</string>

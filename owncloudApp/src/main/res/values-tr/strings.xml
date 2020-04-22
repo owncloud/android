@@ -76,6 +76,11 @@
   <string name="pass_code_locked">Parola kodu ile kilitlendi</string>
   <string name="pattern_locked">Desenle kilitlendi</string>
   <string name="illegal_argument_exception_message">Geçilen Niyette geçerli bir EYLEM gerekli</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Dosyalar</string>
+  <string name="bottom_nav_uploads">Yüklemeler</string>
+  <string name="bottom_nav_offline">Çevrimdışı</string>
+  <string name="bottom_nav_links">Bağlantılar</string>
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
   <string name="error_reason">çünkü</string>
@@ -376,6 +381,7 @@
   <string name="clipboard_uxexpected_error">Panoya kopyalanırken beklenmeyen bir hata oluştu</string>
   <string name="clipboard_label">%1$s metni kopyalandı</string>
   <string name="error_cant_bind_to_operations_service">Ciddi hata: işlem gerçekleştirilemiyor</string>
+  <string name="network_error_socket_exception">Sunucuya bağlanılırken bir hata oluştu.</string>
   <string name="network_error_socket_timeout_exception">Sunucu çok geç cevap veriyor</string>
   <string name="network_error_connect_timeout_exception">Sunucuya bağlanmak çok uzun sürdü</string>
   <string name="network_host_not_available">Sunucuya ulaşılamadı</string>

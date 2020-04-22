@@ -57,6 +57,10 @@
   <string name="pattern_removed">패턴 제거됨</string>
   <string name="pattern_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 패턴을 비활성화하시오</string>
   <string name="passcode_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 비밀번호를 비활성화하시오</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">파일</string>
+  <string name="bottom_nav_uploads">업로드</string>
+  <string name="bottom_nav_links">링크</string>
   <string name="recommend_subject">%1$s을(를) 스마트폰에서 사용해 보세요!</string>
   <string name="recommend_text">%1$s을(를) 스마트폰에서 사용해 보는 것을 추천합니다!\n다운로드 링크: %2$s</string>
   <string name="auth_failure_snackbar">인증 실패</string>
@@ -323,6 +327,7 @@
   <string name="clipboard_uxexpected_error">클립보드에 복사하는 중 예기치 않은 오류</string>
   <string name="clipboard_label">%1$s에서 텍스트를 복사함</string>
   <string name="error_cant_bind_to_operations_service">치명적 오류: 작업을 수행할 수 없음</string>
+  <string name="network_error_socket_exception">서버에 연결하는 중 오류가 발생했습니다.</string>
   <string name="network_error_socket_timeout_exception">서버 응답 시간이 초과됨</string>
   <string name="network_error_connect_timeout_exception">서버 연결이 너무 오래 지연 되었습니다</string>
   <string name="network_host_not_available">서버에 접근할 수 없습니다</string>

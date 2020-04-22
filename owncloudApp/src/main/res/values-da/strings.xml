@@ -44,6 +44,10 @@
   <string name="prefs_imprint">Aftryk</string>
   <string name="prefs_remember_last_share_location">Husk delt placering</string>
   <string name="prefs_remember_last_upload_location_summary">Husk seneste delte placering for overførsel</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Filer</string>
+  <string name="bottom_nav_uploads">Uploade filer</string>
+  <string name="bottom_nav_links">Links</string>
   <string name="recommend_subject">Prøv %1$s på din smartphone!</string>
   <string name="recommend_text">Jeg ønsker at invitere dig til at bruge %1$s på din smartphone!\nHent den her: %2$s</string>
   <string name="auth_oauth_failure_snackbar_action">Log ind</string>
@@ -311,6 +315,7 @@
   <string name="clipboard_uxexpected_error">Uventet fejl under kopiering til udklipsholder</string>
   <string name="clipboard_label">Tekst kopieret fra %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritisk fejl: kan ikke udføre handlingerne</string>
+  <string name="network_error_socket_exception">Der opstod en fejl under tilslutningen til serveren.</string>
   <string name="network_error_socket_timeout_exception">Serveren var for længe om at svare</string>
   <string name="network_error_connect_timeout_exception">Serveren var for længe om at forbinde</string>
   <string name="network_host_not_available">Serveren kunne ikke forbindes til</string>

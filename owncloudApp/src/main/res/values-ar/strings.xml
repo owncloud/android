@@ -73,6 +73,11 @@
   <string name="pattern_no_longer_required">لن يُطلب النمط بعد الآن</string>
   <string name="pattern_configure_your_pattern_explanation">سيُطلب النمط في كل مرة يُشغل فيها التطبيق</string>
   <string name="illegal_argument_exception_message">هناك حاجة إلى إجراء صحيح في الهدف الممرر إلى</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">ملفات</string>
+  <string name="bottom_nav_uploads">تحميلات</string>
+  <string name="bottom_nav_offline">غير متصل</string>
+  <string name="bottom_nav_links">ارتباطات</string>
   <string name="recommend_subject">جرب %1$s على هاتفك الذكي!</string>
   <string name="recommend_text">أود أن أدعوك إلى استخدام %1$s على هاتفك الذكي!\nالتنزيل من هنا: %2$s</string>
   <string name="auth_failure_snackbar">المصادقة فشلت</string>
@@ -354,6 +359,7 @@
   <string name="clipboard_uxexpected_error">حدث خطأ غير متوقع أثناء النسخ إلى الحافظة</string>
   <string name="clipboard_label">تم نسخ النص من %1$s</string>
   <string name="error_cant_bind_to_operations_service">خطأ فادح: لا يمكن تنفيذ العمليات</string>
+  <string name="network_error_socket_exception">حدث خطأ أثناء الاتصال بالخادم</string>
   <string name="network_error_socket_timeout_exception">استغرق الخادم وقتًا طويلاً للغاية للاستجابة</string>
   <string name="network_error_connect_timeout_exception">استغرق الخادم وقتًا طويلاً للغاية للاتصال</string>
   <string name="network_host_not_available">تعذر الوصول إلى الخادم</string>

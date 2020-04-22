@@ -66,6 +66,10 @@
   <string name="passcode_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le code de sécurité</string>
   <string name="pattern_no_longer_required">La saisie du motif ne vous sera plus demandée</string>
   <string name="pattern_configure_your_pattern_explanation">La saisie du motif sera requise à chaque ouverture de l’application</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Fichiers</string>
+  <string name="bottom_nav_uploads">Téléversements</string>
+  <string name="bottom_nav_links">Liens</string>
   <string name="recommend_subject">Essayez %1$s sur votre smartphone !</string>
   <string name="recommend_text">J\'aimerais vous inviter à utiliser %1$s sur votre smartphone !
 Téléchargez-le ici : %2$s</string>
@@ -350,6 +354,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="clipboard_uxexpected_error">Erreur inattendue lors de la copie vers le presse-papiers</string>
   <string name="clipboard_label">Texte copié depuis %1$s</string>
   <string name="error_cant_bind_to_operations_service">Erreur critique : impossible de réaliser les opérations</string>
+  <string name="network_error_socket_exception">Une erreur est survenue pendant la connexion au serveur.</string>
   <string name="network_error_socket_timeout_exception">Le serveur a pris trop de temps à répondre</string>
   <string name="network_error_connect_timeout_exception">Le serveur a pris trop de temps pour se connecter</string>
   <string name="network_host_not_available">Le serveur n\'a pas pu être joint</string>

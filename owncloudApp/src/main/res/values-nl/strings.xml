@@ -73,6 +73,7 @@
   <string name="pattern_configure_your_pattern_explanation">Telkens wanneer de app is gestart zal er om een patroon worden gevraagd</string>
   <string name="pass_code_locked">Vergrendeld met wachtwoord</string>
   <string name="pattern_locked">Vergrendeld met patroon</string>
+  <!--Bottom navigation bar-->
   <string name="recommend_subject">Probeer %1$s op uw smartphone!</string>
   <string name="recommend_text">Uitnodiging om %1$s op uw smartphone uit te proberen!
 Download hier: %2$s</string>
@@ -362,6 +363,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="clipboard_uxexpected_error">Onverwachte fout bij het kopiëren naar het klembord</string>
   <string name="clipboard_label">Tekst gekopieerd vanaf %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritieke fout: kan de acties niet uitvoeren</string>
+  <string name="network_error_socket_exception">Er trad een fout op bij het verbinden met de server.</string>
   <string name="network_error_socket_timeout_exception">De server had te lang nodig om te reageren</string>
   <string name="network_error_connect_timeout_exception">De server had te lang nodig om te verbinden</string>
   <string name="network_host_not_available">Server kon niet worden bereikt</string>

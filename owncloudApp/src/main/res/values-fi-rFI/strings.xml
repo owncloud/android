@@ -61,6 +61,10 @@
   <string name="passcode_already_set">Kuvio- ja suojakoodilukitus eivät voi olla samanaikaisesti käytössä. Ole hyvä ja poista suojakoodilukistus ensin käytöstä.</string>
   <string name="pattern_no_longer_required">Kuviota ei enää kysytä</string>
   <string name="pattern_configure_your_pattern_explanation">Kuvio kysytään joka kerta kun sovellus käynnistetään</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Tiedostot</string>
+  <string name="bottom_nav_uploads">Lähetykset</string>
+  <string name="bottom_nav_links">Linkit</string>
   <string name="recommend_subject">Kokeile %1$sia älypuhelimellasi!</string>
   <string name="recommend_text">Kutsun sinut käyttämään %1$sia älypuhelimellasi!\nLataa se tästä: %2$s</string>
   <string name="auth_failure_snackbar">Tunnistautuminen epäonnistui</string>
@@ -320,6 +324,7 @@
   <string name="clipboard_uxexpected_error">Odottamaton virhe kopioitaessa leikepöydälle.</string>
   <string name="clipboard_label">Teksti koioitiin kohteesta %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kriittinen virhe: toimintoja ei voi suorittaa</string>
+  <string name="network_error_socket_exception">Virhe palvelimeen yhdistäessä</string>
   <string name="network_error_socket_timeout_exception">Palvelimen vastaus viipyy liian kauan</string>
   <string name="network_error_connect_timeout_exception">Palvelimeen yhdistäminen kesti liian kauan</string>
   <string name="network_host_not_available">Palvelinta ei tavoitettu</string>

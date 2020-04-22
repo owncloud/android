@@ -75,6 +75,11 @@
   <string name="pass_code_locked">Κλείδωμα με κωδικό</string>
   <string name="pattern_locked">Κλείδωμα με μοτίβο</string>
   <string name="illegal_argument_exception_message">Μια έγκυρη ΕΝΕΡΓΕΙΑ είναι απαραίτητη για την πρόθεση να περάσει σε</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Αρχεία</string>
+  <string name="bottom_nav_uploads">Μεταφορτώσεις</string>
+  <string name="bottom_nav_offline">Εκτός σύνδεσης</string>
+  <string name="bottom_nav_links">Σύνδεσμοι</string>
   <string name="recommend_subject">Δοκιμάστε %1$s στο κινητό σας!</string>
   <string name="recommend_text">Θα ήθελα να σε προσκαλέσω να χρησιμοποιήσεις το %1$s στο κινητό σου!\nΛήψη εδώ: %2$s</string>
   <string name="auth_failure_snackbar">Αποτυχία πιστοποίησης</string>
@@ -358,6 +363,7 @@
   <string name="clipboard_uxexpected_error">Απρόσμενο σφάλμα κατά την αντιγραφή στο πρόχειρο</string>
   <string name="clipboard_label">Το κείμενο αντιγράφτηκε από %1$s</string>
   <string name="error_cant_bind_to_operations_service">Κρίσιμο σφάλμα: αδυναμία εκτέλεσης λειτουργιών</string>
+  <string name="network_error_socket_exception">Ένα σφάλμα προέκυψε κατά τη σύνδεση με το διακομιστή.</string>
   <string name="network_error_socket_timeout_exception">Ο διακομιστής αργεί πολύ να απαντήσει</string>
   <string name="network_error_connect_timeout_exception">Ο διακομιστής αργεί πολύ να συνδεθεί</string>
   <string name="network_host_not_available">Δεν ήταν δυνατή η πρόσβαση στον διακομιστή</string>

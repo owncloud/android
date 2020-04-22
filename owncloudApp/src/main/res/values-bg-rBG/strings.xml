@@ -75,6 +75,7 @@
   <string name="pass_code_locked">Заключване с парола</string>
   <string name="pattern_locked">Заключване със схема</string>
   <string name="illegal_argument_exception_message">Необходимо е валидно ДЕЙСТВИЕ в целта, предадена на</string>
+  <!--Bottom navigation bar-->
   <string name="recommend_subject">Опитай %1$s на смартфона си!</string>
   <string name="recommend_text">Бих желал да те поканя да ползваш %1$s на своя смартфон!\nИзтеглия я от тук:%2$s</string>
   <string name="error_reason">защото</string>
@@ -369,6 +370,7 @@
   <string name="clipboard_uxexpected_error">Неизвеста грешка при опит за копиране в клипборда</string>
   <string name="clipboard_label">Текста е копиран от %1$s</string>
   <string name="error_cant_bind_to_operations_service">Критична грешка: операциите не могат да бъдат изпълнени</string>
+  <string name="network_error_socket_exception">Настъпи грешка при свързването със сървъра.</string>
   <string name="network_error_socket_timeout_exception">Сървърът се забави прекалено много с отговора</string>
   <string name="network_error_connect_timeout_exception">Свързването със сървъра отне твърде много време</string>
   <string name="network_host_not_available">Сървърът не може да бъде намерен</string>

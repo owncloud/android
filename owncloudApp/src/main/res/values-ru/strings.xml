@@ -76,6 +76,11 @@
   <string name="pass_code_locked">Заблокировано кодом</string>
   <string name="pattern_locked">Заблокировано графическим ключом</string>
   <string name="illegal_argument_exception_message">Допустимое ДЕЙСТВИЕ требуется для передачи в намерениях</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Файлы</string>
+  <string name="bottom_nav_uploads">Закачки</string>
+  <string name="bottom_nav_offline">Нет сети</string>
+  <string name="bottom_nav_links">Ссылки</string>
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>
@@ -377,6 +382,7 @@
   <string name="clipboard_uxexpected_error">Неожиданная ошибка во время копирования в буфер обмена</string>
   <string name="clipboard_label">Текст скопирован из %1$s</string>
   <string name="error_cant_bind_to_operations_service">Критическая ошибка: невозможно выполнить действия</string>
+  <string name="network_error_socket_exception">При подключении к серверу возникла ошибка</string>
   <string name="network_error_socket_timeout_exception">Сервер слишком долго не отвечает</string>
   <string name="network_error_connect_timeout_exception">Слишком много времени ушло на подключение к серверу</string>
   <string name="network_host_not_available">Сервер не доступен по сети</string>

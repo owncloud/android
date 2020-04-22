@@ -61,6 +61,10 @@
   <string name="pattern_configure_pattern">Введіть ваш візерунок</string>
   <string name="pattern_incorrect_pattern">Невірний шаблон</string>
   <string name="pattern_reenter_pattern">Будь ласка, повторіть ваш шаблон</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Файли</string>
+  <string name="bottom_nav_uploads">Відвантаження</string>
+  <string name="bottom_nav_links">Посилання</string>
   <string name="recommend_subject">Спробуйте %1$s на своєму смартфоні!</string>
   <string name="recommend_text">Пропоную вам користуватися %1$s на вашому смартфоні!\nЗавантажити можна за посиланням: %2$s</string>
   <string name="auth_failure_snackbar">Автентифікація не виконана</string>
@@ -332,6 +336,7 @@
   <string name="clipboard_uxexpected_error">Неочікувана помилка під час копіювання в буфер</string>
   <string name="clipboard_label">Скопійований текст з %1$s</string>
   <string name="error_cant_bind_to_operations_service">Критична помилка: виконання операції неможливе</string>
+  <string name="network_error_socket_exception">Виникла помилка при підключені до сервера.</string>
   <string name="network_error_socket_timeout_exception">Сервер занадто довго не відповідає</string>
   <string name="network_error_connect_timeout_exception">Сервер занадто довго не підключається</string>
   <string name="network_host_not_available">Немає доступу до серверу</string>

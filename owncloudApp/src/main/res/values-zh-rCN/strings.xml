@@ -70,6 +70,11 @@
   <string name="pattern_no_longer_required">不再询问输入图案锁</string>
   <string name="pattern_configure_your_pattern_explanation">每次启动app时均需要输入图案解锁</string>
   <string name="illegal_argument_exception_message">需要一个有效的 ACTION 传递意图</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">文件</string>
+  <string name="bottom_nav_uploads">上传</string>
+  <string name="bottom_nav_offline">离线</string>
+  <string name="bottom_nav_links">链接</string>
   <string name="recommend_subject">在您的智能手机上试用 %1$s！</string>
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
   <string name="auth_failure_snackbar">认证失败</string>
@@ -354,6 +359,7 @@
   <string name="clipboard_uxexpected_error">复制到剪切板时出现了未预料的错误</string>
   <string name="clipboard_label">文本拷贝至 %1$s</string>
   <string name="error_cant_bind_to_operations_service">严重错误：无法执行操作</string>
+  <string name="network_error_socket_exception">连接到服务器时发生了一个错误。</string>
   <string name="network_error_socket_timeout_exception">看起来服务器不太给力</string>
   <string name="network_error_connect_timeout_exception">服务器连接时间过长</string>
   <string name="network_host_not_available">无法连接到服务器</string>

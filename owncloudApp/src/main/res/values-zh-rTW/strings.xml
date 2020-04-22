@@ -42,6 +42,7 @@
   <string name="prefs_imprint">法律聲明</string>
   <string name="prefs_remember_last_share_location">記住分享位置</string>
   <string name="prefs_remember_last_upload_location_summary">記住上次分享上傳位置</string>
+  <!--Bottom navigation bar-->
   <string name="recommend_subject">在您的手機中試用%1$s!</string>
   <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
   <string name="auth_oauth_failure_snackbar_action">登入</string>
@@ -303,6 +304,7 @@
   <string name="clipboard_uxexpected_error">在複製的剪貼簿時發生了未知的錯誤</string>
   <string name="clipboard_label">文字已由 %1$s 複製</string>
   <string name="error_cant_bind_to_operations_service">嚴重錯誤: 無法執行運算</string>
+  <string name="network_error_socket_exception">在與伺服器連線時發生了錯誤.</string>
   <string name="network_error_socket_timeout_exception">伺服器回應逾時</string>
   <string name="network_error_connect_timeout_exception">伺服器連接逾時</string>
   <string name="forbidden_permissions">您沒有權限 %s</string>

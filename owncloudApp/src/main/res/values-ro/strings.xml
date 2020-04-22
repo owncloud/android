@@ -53,6 +53,7 @@
   <string name="prefs_remember_last_share_location">Reține contribuie locația</string>
   <string name="prefs_remember_last_upload_location_summary">Reține locația fișierului încărcat precedent</string>
   <string name="pass_code_locked">Blocat cu cod</string>
+  <!--Bottom navigation bar-->
   <string name="recommend_subject">Încearcă %1$s pe smartphone-ul tău!</string>
   <string name="recommend_text">Te invit să folosești %1$s pe smartphone-ul tău!\nDescarcă aici: %2$s</string>
   <string name="auth_failure_snackbar">Autentificare nereușită</string>
@@ -323,6 +324,7 @@
   <string name="clipboard_uxexpected_error">Eroare neașteptată în timpul copierii in memorie</string>
   <string name="clipboard_label">Textul a fost copiat de la %1$s</string>
   <string name="error_cant_bind_to_operations_service">Eroare critică: nu se pot executa operațiunile</string>
+  <string name="network_error_socket_exception">A apărut o eroare în timp ce se conecta la server</string>
   <string name="network_error_socket_timeout_exception">Server-ului i-a luat prea mult timp sa raspunda</string>
   <string name="network_error_connect_timeout_exception">Conectarea la server a durat prea mult</string>
   <string name="network_host_not_available">Serverul nu a putut fi găsit</string>

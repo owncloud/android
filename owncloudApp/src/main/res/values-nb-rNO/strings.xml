@@ -68,6 +68,10 @@
   <string name="pattern_no_longer_required">Det vil ikke bli spurt om mønsteret mer</string>
   <string name="pattern_configure_your_pattern_explanation">Det vil bli spurt om mønsteret hver gang appen startes</string>
   <string name="illegal_argument_exception_message">En gyldig ACTION må være med i intent sendt til</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Filer</string>
+  <string name="bottom_nav_uploads">Last opp</string>
+  <string name="bottom_nav_links">Lenker</string>
   <string name="recommend_subject">Prøv %1$s på smarttelefonen din!</string>
   <string name="recommend_text">Jeg ønsker å invitere deg til å bruke %1$s på smarttelefonen din!\nLast ned her: %2$s</string>
   <string name="auth_failure_snackbar">Autentisering feilet</string>
@@ -336,6 +340,7 @@
   <string name="clipboard_uxexpected_error">Uventet feil under kopiering til utklippstavlen</string>
   <string name="clipboard_label">Tekst kopiert fra %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritisk feil: kan ikke utføre operasjonene</string>
+  <string name="network_error_socket_exception">En feil oppstod ved oppretting av forbindelse til serveren.</string>
   <string name="network_error_socket_timeout_exception">Serveren brukte for lang tid på å svare</string>
   <string name="network_error_connect_timeout_exception">Tjeneren brukte for lang tid på å koble til</string>
   <string name="network_host_not_available">Tjeneren kunne ikke nås</string>

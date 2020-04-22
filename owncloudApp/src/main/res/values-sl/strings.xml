@@ -51,6 +51,7 @@
   <string name="prefs_imprint">Natis</string>
   <string name="prefs_remember_last_share_location">Zapomni si mesto souporabe</string>
   <string name="prefs_remember_last_upload_location_summary">Zapomni si zadnje mesto za pošiljanje v oblak</string>
+  <!--Bottom navigation bar-->
   <string name="recommend_subject">Poskusite z uporabo %1$s na pametnem telefonu!</string>
   <string name="recommend_text">Želim ti predstaviti %1$s na pametnem telefonu!\nPrejmeš ga lahko na: %2$s</string>
   <string name="auth_oauth_failure_snackbar_action">Prijava</string>
@@ -317,6 +318,7 @@
   <string name="clipboard_uxexpected_error">Prišlo je do napake med kopiranjem v odložišče</string>
   <string name="clipboard_label">Besedilo je kopirano iz %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritična napaka: opravil ni možno izvesti</string>
+  <string name="network_error_socket_exception">Med povezovanjem s strežnikom je prišlo do napake.</string>
   <string name="network_error_socket_timeout_exception">Odziv s strežnika je časovno pretekel</string>
   <string name="network_error_connect_timeout_exception">Povezovanje s strežnikom je preteklo</string>
   <string name="network_host_not_available">Povezava s strežnikom trenutno ni mogoča</string>

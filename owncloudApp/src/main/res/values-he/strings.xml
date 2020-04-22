@@ -76,6 +76,7 @@
   <string name="pass_code_locked">נעילה על בסיס סיסמא</string>
   <string name="pattern_locked">נעילה על בסיס תבנית</string>
   <string name="illegal_argument_exception_message">פעולה חוקית נדרשת להעברה</string>
+  <!--Bottom navigation bar-->
   <string name="recommend_subject">לבדיקה %1$s בטלפון החכם שלך!</string>
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
   <string name="error_reason">כיוון ש-</string>

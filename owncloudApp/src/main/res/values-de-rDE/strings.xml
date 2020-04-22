@@ -76,6 +76,11 @@
   <string name="pass_code_locked">Gesperrt mit Passcode</string>
   <string name="pattern_locked">Gesperrt mit Muster</string>
   <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Dateien</string>
+  <string name="bottom_nav_uploads">Hochgeladenes</string>
+  <string name="bottom_nav_offline">Offline</string>
+  <string name="bottom_nav_links">Links</string>
   <string name="recommend_subject">%1$s auf Ihrem Smartphone ausprobieren!</string>
   <string name="recommend_text">Ich möchte Sie einladen, %1$s auf Ihrem Smartphone zu verwenden!\nHier herunterladen: %2$s</string>
   <string name="error_reason">weil</string>
@@ -376,6 +381,7 @@
   <string name="clipboard_uxexpected_error">Unerwarteter Fehler beim Kopieren in die Zwischenablage</string>
   <string name="clipboard_label">Text von %1$s kopiert</string>
   <string name="error_cant_bind_to_operations_service">Kritischer Fehler: Operationen können nicht ausgeführt werden</string>
+  <string name="network_error_socket_exception">Es ist ein Fehler bei der Verbindung mit dem Server aufgetreten.</string>
   <string name="network_error_socket_timeout_exception">Der Server braucht zu lange für eine Antwort.</string>
   <string name="network_error_connect_timeout_exception">Der Server braucht zu lange zum Verbinden.</string>
   <string name="network_host_not_available">Server konnte nicht erreicht werden</string>

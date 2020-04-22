@@ -75,6 +75,9 @@
   <string name="pass_code_locked">Bloqueado con código de acceso</string>
   <string name="pattern_locked">Bloqueado con patrón</string>
   <string name="illegal_argument_exception_message">Se necesita una ACCION válida para poder pasar a</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Archivos</string>
+  <string name="bottom_nav_uploads">Cargas</string>
   <string name="recommend_subject">¡Intento %1$s en tu teléfono inteligente!</string>
   <string name="recommend_text">Quiero invitarte a usar %1$s en tu teléfono inteligente!\nDescárgalo aquí: %2$s</string>
   <string name="error_reason">porque</string>
@@ -365,6 +368,7 @@
   <string name="clipboard_uxexpected_error">Error inesperado al copiar al portapapeles</string>
   <string name="clipboard_label">Texto copiado desde %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error critico: no se puede realizar operaciones</string>
+  <string name="network_error_socket_exception">Un error ocurrió mientras se conectaba con el Servidor.</string>
   <string name="network_error_socket_timeout_exception">El servidor tardó demasiado en responder</string>
   <string name="network_error_connect_timeout_exception">El servidor tomó demasiado tiempo para conectar</string>
   <string name="network_host_not_available">El servidor no ha podido ser alcanzado</string>
