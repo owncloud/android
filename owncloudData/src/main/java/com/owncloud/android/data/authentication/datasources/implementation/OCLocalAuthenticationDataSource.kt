@@ -24,6 +24,8 @@ import android.accounts.AccountManager
 import android.content.Context
 import android.net.Uri
 import android.preference.PreferenceManager
+import com.owncloud.android.data.authentication.KEY_OAUTH2_REFRESH_TOKEN
+import com.owncloud.android.data.authentication.KEY_OAUTH2_SCOPE
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
@@ -34,8 +36,6 @@ import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_SCOPE
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION

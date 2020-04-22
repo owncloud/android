@@ -51,6 +51,8 @@ import net.openid.appauth.GrantTypeValues;
 import net.openid.appauth.TokenRequest;
 import timber.log.Timber;
 
+import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_OAUTH2_REFRESH_TOKEN;
+import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_OAUTH2_SCOPE;
 import static com.owncloud.android.datamodel.OCFile.PATH_SEPARATOR;
 import static com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants.KEY_AUTH_TOKEN_TYPE;
 
@@ -307,7 +309,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         // Prepare everything to perform the token request
         String refreshToken = accountManager.getUserData(
                 account,
-                AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
+                KEY_OAUTH2_REFRESH_TOKEN
         );
 
         if (refreshToken == null || refreshToken.isEmpty()) {
@@ -339,7 +341,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         String scope = accountManager.getUserData(
                 account,
-                AccountUtils.Constants.KEY_OAUTH2_SCOPE
+                KEY_OAUTH2_SCOPE
         );
 
         TokenRequest tokenRequest = new TokenRequest.Builder(
@@ -384,7 +386,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                         Timber.d("Set OAuth2 new refresh token in account: %s", refreshTokenToUseFromNowOn);
                         accountManager.setUserData(
                                 account,
-                                AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN,
+                                KEY_OAUTH2_REFRESH_TOKEN,
                                 refreshTokenToUseFromNowOn
                         );
 

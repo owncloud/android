@@ -56,8 +56,9 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH2_OIDC_SCOPE
 import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder
+import com.owncloud.android.data.authentication.KEY_USER_ID
+import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
@@ -479,7 +480,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
             if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
                 authenticationViewModel.loginOAuth(
-                    tokenResponse.additionalParameters[AccountUtils.Constants.KEY_USER_ID] ?: "",
+                    tokenResponse.additionalParameters[KEY_USER_ID] ?: "",
                     OAUTH_TOKEN_TYPE,
                     tokenResponse.accessToken as String,
                     tokenResponse.refreshToken as String,
