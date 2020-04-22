@@ -292,6 +292,8 @@ public class AccountUtils {
         /**
          * Flag signaling if the ownCloud server can be accessed with OAuth2 access tokens.
          */
+
+        // TODO Please review this constants, move them out of the library, the rest of OAuth variables are in data layer
         public static final String KEY_SUPPORTS_OAUTH2 = "oc_supports_oauth2";
 
         public static final String OAUTH_SUPPORTED_TRUE = "TRUE";
@@ -315,22 +317,6 @@ public class AccountUtils {
          * User's display name
          */
         public static final String KEY_DISPLAY_NAME = "oc_display_name";
-
-        /**
-         * OAuth2 user id
-         **/
-        public static final String KEY_USER_ID = "user_id";
-
-        /**
-         * OAuth2 refresh token
-         **/
-        public static final String KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token";
-
-        /**
-         * OAuth2 scope
-         */
-        public static final String KEY_OAUTH2_SCOPE = "oc_oauth2_scope";
-        public static final String OAUTH2_OIDC_SCOPE = "openid offline_access email profile";
 
         public static final int ACCOUNT_VERSION = 1;
     }
