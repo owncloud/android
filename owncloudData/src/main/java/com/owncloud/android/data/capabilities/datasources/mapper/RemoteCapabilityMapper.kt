@@ -37,7 +37,6 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 versionEdition = remote.versionEdition,
                 corePollInterval = remote.corePollinterval,
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(remote.filesSharingApiEnabled.value),
-                filesSharingSearchMinLength = remote.filesSharingSearchMinLength,
                 filesSharingPublicEnabled = CapabilityBooleanType.fromValue(remote.filesSharingPublicEnabled.value),
                 filesSharingPublicPasswordEnforced =
                 CapabilityBooleanType.fromValue(remote.filesSharingPublicPasswordEnforced.value),
@@ -80,7 +79,6 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 versionEdition = model.versionEdition!!,
                 corePollinterval = model.corePollInterval,
                 filesSharingApiEnabled = RemoteCapabilityBooleanType.fromValue(model.filesSharingApiEnabled.value)!!,
-                filesSharingSearchMinLength = model.filesSharingSearchMinLength,
                 filesSharingPublicEnabled = RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicEnabled.value)!!,
                 filesSharingPublicPasswordEnforced =
                 RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicPasswordEnforced.value)!!,
@@ -111,5 +109,4 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesVersioning = RemoteCapabilityBooleanType.fromValue(model.filesVersioning.value)!!
             )
         }
-
 }

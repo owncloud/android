@@ -68,7 +68,6 @@ public class ProviderMeta {
         public static final String CAPABILITIES_VERSION_EDITION = "version_edition";
         public static final String CAPABILITIES_CORE_POLLINTERVAL = "core_pollinterval";
         public static final String CAPABILITIES_SHARING_API_ENABLED = "sharing_api_enabled";
-        public static final String CAPABILITIES_SHARING_SEARCH_MIN_LENGTH = "search_min_length";
         public static final String CAPABILITIES_SHARING_PUBLIC_ENABLED = "sharing_public_enabled";
         public static final String CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED = "sharing_public_password_enforced";
         public static final String CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY =

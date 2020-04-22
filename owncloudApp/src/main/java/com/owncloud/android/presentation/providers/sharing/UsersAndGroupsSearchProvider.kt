@@ -134,12 +134,6 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             )
         )
 
-        val minCharactersToSearch = capabilities?.filesSharingSearchMinLength ?: DEFAULT_MIN_CHARACTERS_TO_SEARCH
-
-        if (userQuery.length < minCharactersToSearch) { // Do not search
-            return MatrixCursor(COLUMNS)
-        }
-
         val getShareesAsyncUseCase: GetShareesAsyncUseCase by inject()
 
         val getShareesResult = getShareesAsyncUseCase.execute(

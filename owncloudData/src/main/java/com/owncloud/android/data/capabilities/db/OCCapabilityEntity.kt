@@ -50,8 +50,6 @@ data class OCCapabilityEntity(
     val corePollInterval: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_API_ENABLED, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingApiEnabled: Int,
-    @ColumnInfo(name = CAPABILITIES_SHARING_SEARCH_MIN_LENGTH)
-    val filesSharingSearchMinLength: Int?,
     @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_ENABLED, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingPublicEnabled: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED, defaultValue = capabilityBooleanTypeUnknownString)
@@ -103,7 +101,6 @@ data class OCCapabilityEntity(
             cursor.getString(cursor.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_API_ENABLED)),
-            cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_SEARCH_MIN_LENGTH)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_ENABLED)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY)),
@@ -125,37 +122,6 @@ data class OCCapabilityEntity(
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_FILES_VERSIONING))
         )
 
-        fun fromContentValues(values: ContentValues) = OCCapabilityEntity(
-            values.getAsString(CAPABILITIES_ACCOUNT_NAME),
-            values.getAsInteger(CAPABILITIES_VERSION_MAYOR),
-            values.getAsInteger(CAPABILITIES_VERSION_MINOR),
-            values.getAsInteger(CAPABILITIES_VERSION_MICRO),
-            values.getAsString(CAPABILITIES_VERSION_STRING),
-            values.getAsString(CAPABILITIES_VERSION_EDITION),
-            values.getAsInteger(CAPABILITIES_CORE_POLLINTERVAL),
-            values.getAsInteger(CAPABILITIES_SHARING_API_ENABLED),
-            values.getAsInteger(CAPABILITIES_SHARING_SEARCH_MIN_LENGTH),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_ENABLED),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_SEND_MAIL),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_UPLOAD),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_MULTIPLE),
-            values.getAsInteger(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY),
-            values.getAsInteger(CAPABILITIES_SHARING_USER_SEND_MAIL),
-            values.getAsInteger(CAPABILITIES_SHARING_RESHARING),
-            values.getAsInteger(CAPABILITIES_SHARING_FEDERATION_OUTGOING),
-            values.getAsInteger(CAPABILITIES_SHARING_FEDERATION_INCOMING),
-            values.getAsInteger(CAPABILITIES_FILES_BIGFILECHUNKING),
-            values.getAsInteger(CAPABILITIES_FILES_UNDELETE),
-            values.getAsInteger(CAPABILITIES_FILES_VERSIONING)
-        )
-
         fun toContentValues(capability: OCCapability) = ContentValues().apply {
             capability.accountName?.let { put(CAPABILITIES_ACCOUNT_NAME, it) }
             put(CAPABILITIES_VERSION_MAYOR, capability.versionMayor)
@@ -165,7 +131,6 @@ data class OCCapabilityEntity(
             capability.versionEdition?.let { put(CAPABILITIES_VERSION_EDITION, it) }
             put(CAPABILITIES_CORE_POLLINTERVAL, capability.corePollInterval)
             put(CAPABILITIES_SHARING_API_ENABLED, capability.filesSharingApiEnabled.value)
-            capability.filesSharingSearchMinLength?.let { put(CAPABILITIES_SHARING_SEARCH_MIN_LENGTH, it) }
             put(CAPABILITIES_SHARING_PUBLIC_ENABLED, capability.filesSharingPublicEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED, capability.filesSharingPublicPasswordEnforced.value)
             put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY, capability.filesSharingPublicPasswordEnforcedReadOnly.value)
