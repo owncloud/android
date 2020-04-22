@@ -23,7 +23,6 @@ import android.content.Context
 import android.net.Uri
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile.PATH_SEPARATOR
-import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
 import net.openid.appauth.ClientSecretBasic
@@ -65,17 +64,17 @@ class OAuthUtils {
 
         fun buildOAuthorizationServiceConfig(
             context: Context,
-            onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback,
-            baseUrl: String = ""
+            serverBaseUrl: String = "",
+            onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback
         ) {
             Timber.d("Trying normal OAuth instead")
 
             val authorizationServiceConfiguration = AuthorizationServiceConfiguration(
-                Uri.parse(
-                    "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_auth)}" // auth endpoint
+                Uri.parse( // auth endpoint
+                    "$serverBaseUrl$PATH_SEPARATOR${context.getString(R.string.oauth2_url_endpoint_auth)}"
                 ),
-                Uri.parse(
-                    "$baseUrl/${context.getString(R.string.oauth2_url_endpoint_access)}" // token endpoint
+                Uri.parse( // token endpoint
+                    "$serverBaseUrl$PATH_SEPARATOR${context.getString(R.string.oauth2_url_endpoint_access)}"
                 )
             )
 

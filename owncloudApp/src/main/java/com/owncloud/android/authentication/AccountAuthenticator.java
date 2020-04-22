@@ -40,18 +40,18 @@ import com.owncloud.android.authentication.oauth.AuthStateManager;
 import com.owncloud.android.authentication.oauth.OAuthUtils;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
+import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthorizationService;
 import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ClientAuthentication;
-import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.GrantTypeValues;
 import net.openid.appauth.TokenRequest;
 import timber.log.Timber;
 
+import static com.owncloud.android.datamodel.OCFile.PATH_SEPARATOR;
 import static com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants.KEY_AUTH_TOKEN_TYPE;
 
 /**
@@ -331,8 +331,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     AccountUtils.Constants.KEY_OC_BASE_URL
             );
             authorizationServiceConfiguration = new AuthorizationServiceConfiguration(
-                    Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
-                    Uri.parse(baseUrl + "/" + mContext.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
+                    Uri.parse(baseUrl + PATH_SEPARATOR + mContext.getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
+                    Uri.parse(baseUrl + PATH_SEPARATOR + mContext.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
             );
         }
 

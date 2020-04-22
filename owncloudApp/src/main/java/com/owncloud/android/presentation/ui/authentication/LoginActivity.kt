@@ -57,7 +57,7 @@ import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH2_OIDC_SCOPE
-import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder
+import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
@@ -379,10 +379,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val retrieveConfigurationCallback =
             RetrieveConfigurationCallback { serviceConfiguration, exception ->
                 if (exception != null) {
-                    Timber.e(exception, "OIDC failed, try with normal OAuth");
-                    startNormalOauthorization();
+                    Timber.e(exception, "OIDC failed, try with normal OAuth")
+                    startNormalOauthorization()
                 } else if (serviceConfiguration != null) {
-                    oidcSupported = true;
+                    oidcSupported = true
                     performGetAuthorizationCodeRequest(serviceConfiguration)
                     authorizationServiceConfiguration = serviceConfiguration
                 }
@@ -403,10 +403,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val retrieveConfigurationCallback =
             RetrieveConfigurationCallback { serviceConfiguration, exception ->
                 if (exception != null) {
-                    Timber.e(exception, "Normal OAuth failed");
-                    updateOAuthStatusIconAndText(exception);
+                    Timber.e(exception, "Normal OAuth failed")
+                    updateOAuthStatusIconAndText(exception)
                 } else if (serviceConfiguration != null) {
-                    oidcSupported = true;
                     performGetAuthorizationCodeRequest(serviceConfiguration)
                     authorizationServiceConfiguration = serviceConfiguration
                 }
@@ -414,14 +413,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         OAuthUtils.buildOAuthorizationServiceConfig(
             this,
-            retrieveConfigurationCallback,
-            serverBaseUrl
+            serverBaseUrl,
+            retrieveConfigurationCallback
         )
     }
 
     private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
-        val clientId = getString(R.string.oauth2_client_id);
-        val redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri));
+        val clientId = getString(R.string.oauth2_client_id)
+        val redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri))
         val scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
         val builder = AuthorizationRequest.Builder(
             authorizationServiceConfiguration,
@@ -430,16 +429,20 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             redirectUri
         ).setScope(scope)
 
-        val request = builder.build();
+        val request = builder.build()
         val completedIntent = Intent(this, LoginActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0)
 
-        val appAuthConfigurationBuilder = AppAuthConfiguration.Builder();
-        appAuthConfigurationBuilder.setConnectionBuilder(OAuthConnectionBuilder(this));
+        val appAuthConfigurationBuilder = AppAuthConfiguration.Builder()
+        appAuthConfigurationBuilder.setConnectionBuilder(
+            OAuthConnectionBuilder(
+                this
+            )
+        )
 
-        authService = AuthorizationService(this, appAuthConfigurationBuilder.build());
+        authService = AuthorizationService(this, appAuthConfigurationBuilder.build())
 
-        authService?.performAuthorizationRequest(request, pendingIntent);
+        authService?.performAuthorizationRequest(request, pendingIntent)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -476,7 +479,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
             if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
                 authenticationViewModel.loginOAuth(
-                    tokenResponse.additionalParameters[AccountUtils.Constants.KEY_USER_ID]?.let { it } ?: "",
+                    tokenResponse.additionalParameters[AccountUtils.Constants.KEY_USER_ID] ?: "",
                     OAUTH_TOKEN_TYPE,
                     tokenResponse.accessToken as String,
                     tokenResponse.refreshToken as String,
