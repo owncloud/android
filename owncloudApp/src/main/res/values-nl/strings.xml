@@ -74,6 +74,9 @@
   <string name="pass_code_locked">Vergrendeld met wachtwoord</string>
   <string name="pattern_locked">Vergrendeld met patroon</string>
   <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Bestanden</string>
+  <string name="bottom_nav_uploads">Uploads</string>
+  <string name="bottom_nav_links">Links</string>
   <string name="recommend_subject">Probeer %1$s op uw smartphone!</string>
   <string name="recommend_text">Uitnodiging om %1$s op uw smartphone uit te proberen!
 Download hier: %2$s</string>

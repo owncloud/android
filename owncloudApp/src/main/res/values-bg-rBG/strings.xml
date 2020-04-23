@@ -76,6 +76,8 @@
   <string name="pattern_locked">Заключване със схема</string>
   <string name="illegal_argument_exception_message">Необходимо е валидно ДЕЙСТВИЕ в целта, предадена на</string>
   <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Файлове</string>
+  <string name="bottom_nav_uploads">Качвания</string>
   <string name="recommend_subject">Опитай %1$s на смартфона си!</string>
   <string name="recommend_text">Бих желал да те поканя да ползваш %1$s на своя смартфон!\nИзтеглия я от тук:%2$s</string>
   <string name="error_reason">защото</string>

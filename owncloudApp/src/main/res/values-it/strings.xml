@@ -74,6 +74,10 @@
   <string name="pattern_configure_your_pattern_explanation">La sequenza sarà richiesta ogni volta che la app sarà avviata</string>
   <string name="illegal_argument_exception_message">Una AZIONE valida è necessaria per l\'intenzione di passare a</string>
   <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">File</string>
+  <string name="bottom_nav_uploads">Upload</string>
+  <string name="bottom_nav_offline">Offline</string>
+  <string name="bottom_nav_links">Collegamenti</string>
   <string name="recommend_subject">Prova %1$s sul tuo smartphone!</string>
   <string name="recommend_text">Vorrei invitarti a usare %1$s sul tuo smartphone!\nScarica qui: %2$s</string>
   <string name="auth_failure_snackbar">Autenticazione fallita</string>

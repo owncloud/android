@@ -74,6 +74,9 @@
   <string name="pass_code_locked">Uzamčeno bezpečnostním kódem</string>
   <string name="pattern_locked">Uzamčeno gestem</string>
   <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Soubory</string>
+  <string name="bottom_nav_uploads">Nahrání</string>
+  <string name="bottom_nav_links">Odkazy</string>
   <string name="recommend_subject">Zkuste %1$s na svém chytrém telefonu!</string>
   <string name="recommend_text">Chtěl bych vás pozvat k používání %1$s na vašem chytrém telefonu!\nKe stažení zde: %2$s</string>
   <string name="error_reason">protože</string>

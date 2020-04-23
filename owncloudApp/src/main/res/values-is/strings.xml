@@ -62,6 +62,10 @@
   <string name="pattern_stored">Mynstur geymt</string>
   <string name="pattern_removed">Mynstur fjarlægt</string>
   <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Skrár</string>
+  <string name="bottom_nav_uploads">Innsendingar</string>
+  <string name="bottom_nav_offline">Ónettengt</string>
+  <string name="bottom_nav_links">Tenglar</string>
   <string name="recommend_subject">Prófaðu %1$s á snjallsímanum þínum!</string>
   <string name="recommend_text">Ég vil gjarnan bjóða þér að nota %1$s á snjallsímanum þínum!\nSæktu það hér: %2$s</string>
   <string name="auth_failure_snackbar">Auðkenning mistókst</string>

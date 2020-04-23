@@ -72,6 +72,9 @@
   <string name="pass_code_locked">Zablokowanie hasłem</string>
   <string name="pattern_locked">Zablokowanie wzorem</string>
   <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Pliki</string>
+  <string name="bottom_nav_uploads">Wrzucone</string>
+  <string name="bottom_nav_links">Linki</string>
   <string name="recommend_subject">Wypróbuj %1$s na swoim smartphonie!</string>
   <string name="recommend_text">Chciałbym zaprosić Cię do używania %1$s na swoim smartfonie!\nŚciągnij tutaj: %2$s</string>
   <string name="error_reason">ponieważ</string>

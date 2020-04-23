@@ -43,6 +43,8 @@
   <string name="prefs_remember_last_share_location">記住分享位置</string>
   <string name="prefs_remember_last_upload_location_summary">記住上次分享上傳位置</string>
   <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">檔案</string>
+  <string name="bottom_nav_uploads">上傳</string>
   <string name="recommend_subject">在您的手機中試用%1$s!</string>
   <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
   <string name="auth_oauth_failure_snackbar_action">登入</string>
