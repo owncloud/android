@@ -121,34 +121,5 @@ data class OCCapabilityEntity(
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_FILES_UNDELETE)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_FILES_VERSIONING))
         )
-
-        fun toContentValues(capability: OCCapability) = ContentValues().apply {
-            capability.accountName?.let { put(CAPABILITIES_ACCOUNT_NAME, it) }
-            put(CAPABILITIES_VERSION_MAYOR, capability.versionMayor)
-            put(CAPABILITIES_VERSION_MINOR, capability.versionMinor)
-            put(CAPABILITIES_VERSION_MICRO, capability.versionMicro)
-            capability.versionString?.let { put(CAPABILITIES_VERSION_STRING, it) }
-            capability.versionEdition?.let { put(CAPABILITIES_VERSION_EDITION, it) }
-            put(CAPABILITIES_CORE_POLLINTERVAL, capability.corePollInterval)
-            put(CAPABILITIES_SHARING_API_ENABLED, capability.filesSharingApiEnabled.value)
-            put(CAPABILITIES_SHARING_PUBLIC_ENABLED, capability.filesSharingPublicEnabled.value)
-            put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED, capability.filesSharingPublicPasswordEnforced.value)
-            put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY, capability.filesSharingPublicPasswordEnforcedReadOnly.value)
-            put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE, capability.filesSharingPublicPasswordEnforcedReadWrite.value)
-            put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY, capability.filesSharingPublicPasswordEnforcedUploadOnly.value)
-            put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED, capability.filesSharingPublicExpireDateEnabled.value)
-            put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, capability.filesSharingPublicExpireDateDays)
-            put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED, capability.filesSharingPublicExpireDateEnforced.value)
-            put(CAPABILITIES_SHARING_PUBLIC_SEND_MAIL, capability.filesSharingPublicSendMail.value)
-            put(CAPABILITIES_SHARING_PUBLIC_UPLOAD, capability.filesSharingPublicUpload.value)
-            put(CAPABILITIES_SHARING_PUBLIC_MULTIPLE, capability.filesSharingPublicMultiple.value)
-            put(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY, capability.filesSharingPublicSupportsUploadOnly.value)
-            put(CAPABILITIES_SHARING_RESHARING, capability.filesSharingResharing.value)
-            put(CAPABILITIES_SHARING_FEDERATION_OUTGOING, capability.filesSharingFederationOutgoing.value)
-            put(CAPABILITIES_SHARING_FEDERATION_INCOMING, capability.filesSharingFederationIncoming.value)
-            put(CAPABILITIES_FILES_BIGFILECHUNKING, capability.filesBigFileChunking.value)
-            put(CAPABILITIES_FILES_UNDELETE, capability.filesUndelete.value)
-            put(CAPABILITIES_FILES_VERSIONING, capability.filesVersioning.value)
-        }
     }
 }

@@ -39,16 +39,16 @@ import kotlinx.android.synthetic.main.share_public_link_item.view.*
 class SharePublicLinkListAdapter(
     private val mContext: Context,
     resource: Int,
-    private var publicLinks: List<OCShare>?,
+    private var publicLinks: List<OCShare>,
     private val listener: SharePublicLinkAdapterListener
 ) : ArrayAdapter<OCShare>(mContext, resource) {
     init {
-        publicLinks = publicLinks?.sortedBy { it.name }
+        publicLinks = publicLinks.sortedBy { it.name }
     }
 
-    override fun getCount(): Int = publicLinks?.size ?: 0
+    override fun getCount(): Int = publicLinks.size
 
-    override fun getItem(position: Int): OCShare? = publicLinks!![position]
+    override fun getItem(position: Int): OCShare? = publicLinks[position]
 
     override fun getItemId(position: Int): Long = 0
 
@@ -59,20 +59,20 @@ class SharePublicLinkListAdapter(
         // Allow or disallow touches with other visible windows
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
 
-        if (publicLinks != null && publicLinks?.size!! > position) {
-            val share = publicLinks!![position]
+        if (publicLinks.size > position) {
+            val share = publicLinks[position]
 
             // If there's no name, set the token as name
             view.publicLinkName.text = if (share.name.isNullOrEmpty()) share.token else share.name
 
             // bind listener to get link
-            view.getPublicLinkButton.setOnClickListener { listener.copyOrSendPublicLink(publicLinks!![position]) }
+            view.getPublicLinkButton.setOnClickListener { listener.copyOrSendPublicLink(publicLinks[position]) }
 
             // bind listener to delete
-            view.deletePublicLinkButton.setOnClickListener { listener.removeShare(publicLinks!![position]) }
+            view.deletePublicLinkButton.setOnClickListener { listener.removeShare(publicLinks[position]) }
 
             // bind listener to edit
-            view.editPublicLinkButton.setOnClickListener { listener.editPublicShare(publicLinks!![position]) }
+            view.editPublicLinkButton.setOnClickListener { listener.editPublicShare(publicLinks[position]) }
         }
 
         return view
