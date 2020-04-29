@@ -78,14 +78,18 @@ public abstract class DavMethod extends HttpBaseMethod {
                         .build();
 
             } else if (mResponse != null) {
-                ResponseBody responseBody = ResponseBody.create(
-                        mResponse.body().contentType(),
-                        httpException.getResponseBody()
-                );
+                // The check below should be included in okhttp library, method ResponseBody.create(
+                // TODO check most recent versions of okhttp to see if this is already fixed and try to update if so
+                if (mResponse.body().contentType() != null) {
+                    ResponseBody responseBody = ResponseBody.create(
+                            mResponse.body().contentType(),
+                            httpException.getResponseBody()
+                    );
 
-                mResponse = mResponse.newBuilder()
-                        .body(responseBody)
-                        .build();
+                    mResponse = mResponse.newBuilder()
+                            .body(responseBody)
+                            .build();
+                }
             }
 
             return httpException.getCode();
