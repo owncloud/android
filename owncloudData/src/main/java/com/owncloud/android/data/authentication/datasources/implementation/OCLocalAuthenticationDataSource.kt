@@ -24,6 +24,8 @@ import android.accounts.AccountManager
 import android.content.Context
 import android.net.Uri
 import android.preference.PreferenceManager
+import com.owncloud.android.data.authentication.KEY_OAUTH2_REFRESH_TOKEN
+import com.owncloud.android.data.authentication.KEY_OAUTH2_SCOPE
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
@@ -34,8 +36,6 @@ import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_SCOPE
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
@@ -52,25 +52,23 @@ class OCLocalAuthenticationDataSource(
 
     override fun addBasicAccount(
         lastPermanentLocation: String?,
-        userName: String,
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo,
         updateIfAlreadyExists: Boolean
     ): String =
         addAccount(
-            lastPermanentLocation,
-            serverInfo,
-            userName,
-            password,
-            updateIfAlreadyExists
+            lastPermanentLocation = lastPermanentLocation,
+            serverInfo = serverInfo,
+            userName = userInfo.id,
+            password = password,
+            updateIfAlreadyExists = updateIfAlreadyExists
         ).also {
-            updateUserAndServerInfo(it, serverInfo, userInfo, userName)
+            updateUserAndServerInfo(it, serverInfo, userInfo)
         }.name
 
     override fun addOAuthAccount(
         lastPermanentLocation: String?,
-        userName: String,
         authTokenType: String,
         accessToken: String,
         serverInfo: ServerInfo,
@@ -80,12 +78,12 @@ class OCLocalAuthenticationDataSource(
         updateIfAlreadyExists: Boolean
     ): String =
         addAccount(
-            lastPermanentLocation,
-            serverInfo,
-            userName,
+            lastPermanentLocation = lastPermanentLocation,
+            serverInfo = serverInfo,
+            userName = userInfo.id,
             updateIfAlreadyExists = updateIfAlreadyExists
         ).also {
-            updateUserAndServerInfo(it, serverInfo, userInfo, userName)
+            updateUserAndServerInfo(it, serverInfo, userInfo)
 
             accountManager.setAuthToken(it, authTokenType, accessToken)
 
@@ -151,8 +149,7 @@ class OCLocalAuthenticationDataSource(
     private fun updateUserAndServerInfo(
         newAccount: Account,
         serverInfo: ServerInfo,
-        userInfo: UserInfo,
-        userName: String
+        userInfo: UserInfo
     ) {
         // include account version with the new account
         accountManager.setUserData(

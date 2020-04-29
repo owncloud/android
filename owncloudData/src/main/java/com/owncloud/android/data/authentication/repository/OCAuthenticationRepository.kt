@@ -44,7 +44,6 @@ class OCAuthenticationRepository(
 
         return localAuthenticationDataSource.addBasicAccount(
             userInfoAndRedirectionPath.second,
-            username,
             password,
             serverInfo,
             userInfoAndRedirectionPath.first,
@@ -70,7 +69,6 @@ class OCAuthenticationRepository(
 
         return localAuthenticationDataSource.addOAuthAccount(
             userInfoAndRedirectionPath.second,
-            username,
             authTokenType,
             accessToken,
             serverInfo,

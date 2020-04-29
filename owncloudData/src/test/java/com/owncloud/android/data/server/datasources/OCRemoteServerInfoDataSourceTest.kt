@@ -45,6 +45,8 @@ class OCRemoteServerInfoDataSourceTest {
     private val OC_OWNCLOUD_VERSION = OwnCloudVersion("10.3.2")
     private val basicAuthHeader = "basic realm=\"owncloud\", charset=\"utf-8\""
     private val bearerHeader = "bearer realm=\"owncloud\""
+    private val authHeadersBasic = listOf(basicAuthHeader)
+    private val authHeaderBearer = listOf(basicAuthHeader, bearerHeader)
     private val redirectedLocation = "http://demo.owncloud.demo.com"
 
     @Before
@@ -65,7 +67,7 @@ class OCRemoteServerInfoDataSourceTest {
                 data = true,
                 isSuccess = true,
                 resultCode = OK_SSL,
-                authenticationHeader = basicAuthHeader,
+                authenticationHeader = authHeadersBasic,
                 httpCode = HTTP_UNAUTHORIZED
             )
 
@@ -170,9 +172,9 @@ class OCRemoteServerInfoDataSourceTest {
 
     private fun prepareAuthorizationMethodToBeRetrieved(expectedAuthenticationMethod: AuthenticationMethod) {
         val expectedAuthHeader = when (expectedAuthenticationMethod) {
-            AuthenticationMethod.BEARER_TOKEN -> bearerHeader
-            AuthenticationMethod.BASIC_HTTP_AUTH -> basicAuthHeader
-            else -> null
+            AuthenticationMethod.BEARER_TOKEN -> authHeaderBearer
+            AuthenticationMethod.BASIC_HTTP_AUTH -> authHeadersBasic
+            else -> listOf()
         }
 
         val checkPathExistenceResultMocked: RemoteOperationResult<Boolean> =

@@ -26,6 +26,8 @@ import android.preference.PreferenceManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
+import com.owncloud.android.data.authentication.KEY_OAUTH2_REFRESH_TOKEN
+import com.owncloud.android.data.authentication.KEY_OAUTH2_SCOPE
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
@@ -34,14 +36,13 @@ import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OAUTH2_SCOPE
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.testutil.OC_ACCESS_TOKEN
 import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_ACCOUNT_ID
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASE_URL
 import com.owncloud.android.testutil.OC_OAUTH_SUPPORTED_TRUE
@@ -90,7 +91,6 @@ class OCLocalAuthenticationDataSourceTest {
 
         val newAccountName = ocLocalAuthenticationDataSource.addBasicAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
-            "admin",
             "password",
             OC_SERVER_INFO,
             OC_USER_INFO,
@@ -116,10 +116,9 @@ class OCLocalAuthenticationDataSourceTest {
 
         ocLocalAuthenticationDataSource.addBasicAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
-            "username",
             "password",
             OC_SERVER_INFO,
-            OC_USER_INFO,
+            OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             false
         )
     }
@@ -138,10 +137,9 @@ class OCLocalAuthenticationDataSourceTest {
 
         ocLocalAuthenticationDataSource.addBasicAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
-            "username",
             "password",
             OC_SERVER_INFO,
-            OC_USER_INFO,
+            OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             true
         )
 
@@ -170,7 +168,6 @@ class OCLocalAuthenticationDataSourceTest {
         try {
             ocLocalAuthenticationDataSource.addBasicAccount(
                 OC_REDIRECTION_PATH.lastPermanentLocation,
-                OC_ACCOUNT.name,
                 "password",
                 OC_SERVER_INFO,
                 OC_USER_INFO,
@@ -201,7 +198,6 @@ class OCLocalAuthenticationDataSourceTest {
 
         val newAccountName = ocLocalAuthenticationDataSource.addOAuthAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
-            "admin",
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
             OC_SERVER_INFO,
@@ -233,11 +229,10 @@ class OCLocalAuthenticationDataSourceTest {
 
         ocLocalAuthenticationDataSource.addOAuthAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
-            "username",
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
             OC_SERVER_INFO,
-            OC_USER_INFO,
+            OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_REFRESH_TOKEN,
             OC_SCOPE,
             false
@@ -262,11 +257,10 @@ class OCLocalAuthenticationDataSourceTest {
 
         ocLocalAuthenticationDataSource.addOAuthAccount(
             OC_REDIRECTION_PATH.lastPermanentLocation,
-            "username",
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
             OC_SERVER_INFO,
-            OC_USER_INFO,
+            OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_REFRESH_TOKEN,
             OC_SCOPE,
             true
@@ -302,7 +296,6 @@ class OCLocalAuthenticationDataSourceTest {
         try {
             ocLocalAuthenticationDataSource.addOAuthAccount(
                 OC_REDIRECTION_PATH.lastPermanentLocation,
-                OC_ACCOUNT.name,
                 OC_AUTH_TOKEN_TYPE,
                 OC_ACCESS_TOKEN,
                 OC_SERVER_INFO,

@@ -29,7 +29,6 @@ class LoginOAuthAsyncUseCase(
 
     override fun run(params: Params): String {
         require(params.serverInfo != null) { "Invalid server info" }
-        require(params.username.isNotEmpty()) { "Invalid username" }
         require(params.authTokenType.isNotEmpty()) { "Invalid authorization token type" }
         require(params.accessToken.isNotEmpty()) { "Invalid access token" }
         require(params.refreshToken.isNotEmpty()) { "Invalid refresh token" }

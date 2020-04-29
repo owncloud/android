@@ -58,7 +58,7 @@ class OCAuthenticationRepositoryTest {
         )
 
         every {
-            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any())
         } returns OC_ACCOUNT_NAME
 
         val accountName = ocAuthenticationRepository.loginBasic(
@@ -72,7 +72,6 @@ class OCAuthenticationRepositoryTest {
             remoteAuthenticationDataSource.loginBasic(OC_SERVER_INFO.baseUrl, "username", "password")
             localAuthenticationDataSource.addBasicAccount(
                 OC_REDIRECTION_PATH.lastPermanentLocation,
-                "username",
                 "password",
                 OC_SERVER_INFO,
                 OC_USER_INFO,
@@ -90,14 +89,14 @@ class OCAuthenticationRepositoryTest {
         } throws NoConnectionWithServerException()
 
         every {
-            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any())
         } returns OC_ACCOUNT_NAME
 
         ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", false)
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginBasic(any(), any(), any())
-            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any())
         }
     }
 
@@ -109,14 +108,14 @@ class OCAuthenticationRepositoryTest {
         )
 
         every {
-            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any())
         } throws AccountNotNewException()
 
         ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", false)
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginBasic(any(), any(), any())
-            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any())
         }
     }
 
@@ -128,7 +127,7 @@ class OCAuthenticationRepositoryTest {
         )
 
         every {
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any())
         } returns OC_ACCOUNT_NAME
 
         val accountName = ocAuthenticationRepository.loginOAuth(
@@ -145,7 +144,6 @@ class OCAuthenticationRepositoryTest {
             remoteAuthenticationDataSource.loginOAuth(OC_SERVER_INFO.baseUrl, "username", OC_ACCESS_TOKEN)
             localAuthenticationDataSource.addOAuthAccount(
                 OC_REDIRECTION_PATH.lastPermanentLocation,
-                "username",
                 OC_AUTH_TOKEN_TYPE,
                 OC_ACCESS_TOKEN,
                 OC_SERVER_INFO,
@@ -166,7 +164,7 @@ class OCAuthenticationRepositoryTest {
         } throws NoConnectionWithServerException()
 
         every {
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any())
         } returns OC_ACCOUNT_NAME
 
         ocAuthenticationRepository.loginOAuth(
@@ -181,7 +179,7 @@ class OCAuthenticationRepositoryTest {
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginOAuth(any(), any(), any())
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any())
         }
     }
 
@@ -193,7 +191,7 @@ class OCAuthenticationRepositoryTest {
         )
 
         every {
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any())
         } throws AccountNotNewException()
 
         ocAuthenticationRepository.loginOAuth(
@@ -208,7 +206,7 @@ class OCAuthenticationRepositoryTest {
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginOAuth(any(), any(), any())
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any())
         }
     }
 

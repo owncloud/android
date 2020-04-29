@@ -20,3 +20,19 @@
 package com.owncloud.android.data.authentication
 
 const val SELECTED_ACCOUNT = "select_oc_account"
+
+/**
+ * OAuth2 user id
+ */
+const val KEY_USER_ID = "user_id"
+
+/**
+ * OAuth2 refresh token
+ */
+const val KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token"
+
+/**
+ * OAuth2 scope
+ */
+const val KEY_OAUTH2_SCOPE = "oc_oauth2_scope"
+const val OAUTH2_OIDC_SCOPE = "openid offline_access email profile"

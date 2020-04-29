@@ -29,7 +29,7 @@ fun <T> createRemoteOperationResultMock(
     httpPhrase: String? = null,
     resultCode: RemoteOperationResult.ResultCode? = null,
     exception: Exception? = null,
-    authenticationHeader: String? = null,
+    authenticationHeader: List<String> = listOf(),
     httpCode: Int? = null,
     redirectedLocation: String? = null
 ): RemoteOperationResult<T> {
@@ -51,7 +51,7 @@ fun <T> createRemoteOperationResultMock(
         every { remoteOperationResult.exception } returns exception
     }
 
-    if (authenticationHeader != null) {
+    if (authenticationHeader.isNotEmpty()) {
         every { remoteOperationResult.authenticateHeaders } returns authenticationHeader
     }
 
