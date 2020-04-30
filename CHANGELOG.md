@@ -1,3 +1,16 @@
+## 2.15 beta v1 (May 2020)
+- Login rearchitecture
+- Support for OpenId Connect
+- Biometrical lock
+- UI improvements, including:
+  + New bottom navigation bar
+- Support for usernames with '+'
+- End of support for Android KitKat
+- End of support for servers older than 10 version
+- Bug fixes, including:
+  + Fix crash when changing orientation in some operations
+  + Fix OAuth2 token is not renewed after being revoked
+
 ## 2.14.2 (January 2020)
 - Fix crash triggered when trying to connect to server secured with self signed certificate
 
