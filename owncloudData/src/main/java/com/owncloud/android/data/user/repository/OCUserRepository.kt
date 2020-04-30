@@ -22,9 +22,13 @@ package com.owncloud.android.data.user.repository
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.domain.user.model.UserInfo
+import com.owncloud.android.domain.user.model.UserQuota
 
 class OCUserRepository(
     private val remoteUserDataSource: RemoteUserDataSource
 ) : UserRepository {
     override fun getUserInfo(): UserInfo = remoteUserDataSource.getUserInfo()
+    override fun getUserQuota(): UserQuota {
+        TODO("Not yet implemented")
+    }
 }

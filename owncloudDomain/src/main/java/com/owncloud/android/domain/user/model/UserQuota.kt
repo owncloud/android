@@ -16,13 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.domain.user.model
 
-package com.owncloud.android.domain.user
-
-import com.owncloud.android.domain.user.model.UserInfo
-import com.owncloud.android.domain.user.model.UserQuota
-
-interface UserRepository {
-    fun getUserInfo(): UserInfo
-    fun getUserQuota(): UserQuota
-}
+data class UserQuota(
+    val free: Long,
+    val relative: Double,
+    val total: Long,
+    val used: Long
+)
