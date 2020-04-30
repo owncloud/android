@@ -20,14 +20,12 @@
 
 package com.owncloud.android.data.capabilities.db
 
-import android.content.ContentValues
 import android.database.Cursor
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.*
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.Companion.capabilityBooleanTypeUnknownString
-import com.owncloud.android.domain.capabilities.model.OCCapability
 
 /**
  * Represents one record of the Capabilities table.
@@ -66,16 +64,12 @@ data class OCCapabilityEntity(
     val filesSharingPublicExpireDateDays: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingPublicExpireDateEnforced: Int,
-    @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_SEND_MAIL, defaultValue = capabilityBooleanTypeUnknownString)
-    val filesSharingPublicSendMail: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_UPLOAD, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingPublicUpload: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_MULTIPLE, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingPublicMultiple: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingPublicSupportsUploadOnly: Int,
-    @ColumnInfo(name = CAPABILITIES_SHARING_USER_SEND_MAIL, defaultValue = capabilityBooleanTypeUnknownString)
-    val filesSharingUserSendMail: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_RESHARING, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingResharing: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_FEDERATION_OUTGOING, defaultValue = capabilityBooleanTypeUnknownString)
@@ -109,11 +103,9 @@ data class OCCapabilityEntity(
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED)),
-            cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_SEND_MAIL)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_UPLOAD)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_MULTIPLE)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY)),
-            cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_USER_SEND_MAIL)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_RESHARING)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_FEDERATION_OUTGOING)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_FEDERATION_INCOMING)),

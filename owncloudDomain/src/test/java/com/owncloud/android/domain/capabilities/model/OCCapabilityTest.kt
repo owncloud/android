@@ -59,8 +59,6 @@ class OCCapabilityTest {
             FALSE,
             FALSE,
             FALSE,
-            FALSE,
-            FALSE,
             FALSE
         )
 
@@ -81,11 +79,9 @@ class OCCapabilityTest {
         assertEquals(FALSE, item.filesSharingPublicExpireDateEnabled)
         assertEquals(0, item.filesSharingPublicExpireDateDays)
         assertEquals(FALSE, item.filesSharingPublicExpireDateEnforced)
-        assertEquals(FALSE, item.filesSharingPublicSendMail)
         assertEquals(FALSE, item.filesSharingPublicUpload)
         assertEquals(FALSE, item.filesSharingPublicMultiple)
         assertEquals(FALSE, item.filesSharingPublicSupportsUploadOnly)
-        assertEquals(FALSE, item.filesSharingUserSendMail)
         assertEquals(FALSE, item.filesSharingResharing)
         assertEquals(FALSE, item.filesSharingFederationOutgoing)
         assertEquals(FALSE, item.filesSharingFederationIncoming)
@@ -114,11 +110,9 @@ class OCCapabilityTest {
             filesSharingPublicExpireDateEnabled = FALSE,
             filesSharingPublicExpireDateDays = 0,
             filesSharingPublicExpireDateEnforced = FALSE,
-            filesSharingPublicSendMail = FALSE,
             filesSharingPublicUpload = FALSE,
             filesSharingPublicMultiple = FALSE,
             filesSharingPublicSupportsUploadOnly = FALSE,
-            filesSharingUserSendMail = FALSE,
             filesSharingResharing = FALSE,
             filesSharingFederationOutgoing = FALSE,
             filesSharingFederationIncoming = FALSE,
@@ -144,8 +138,6 @@ class OCCapabilityTest {
             FALSE,
             FALSE,
             0,
-            FALSE,
-            FALSE,
             FALSE,
             FALSE,
             FALSE,
@@ -182,11 +174,9 @@ class OCCapabilityTest {
             filesSharingPublicExpireDateEnabled = FALSE,
             filesSharingPublicExpireDateDays = 0,
             filesSharingPublicExpireDateEnforced = FALSE,
-            filesSharingPublicSendMail = FALSE,
             filesSharingPublicUpload = FALSE,
             filesSharingPublicMultiple = FALSE,
             filesSharingPublicSupportsUploadOnly = FALSE,
-            filesSharingUserSendMail = FALSE,
             filesSharingResharing = FALSE,
             filesSharingFederationOutgoing = FALSE,
             filesSharingFederationIncoming = FALSE,
@@ -212,8 +202,6 @@ class OCCapabilityTest {
             FALSE,
             FALSE,
             0,
-            FALSE,
-            FALSE,
             FALSE,
             FALSE,
             FALSE,

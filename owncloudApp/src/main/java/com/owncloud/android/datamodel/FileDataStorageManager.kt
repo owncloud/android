@@ -739,7 +739,7 @@ class FileDataStorageManager {
                         sortOrder = "$FILE_PATH ASC "
                     )
                 } catch (e: RemoteException) {
-                    Timber.e(e.message)
+                    Timber.e(e)
                     null
                 }
 
@@ -923,7 +923,7 @@ class FileDataStorageManager {
                 sortOrder = null
             )
         } catch (e: RemoteException) {
-            Timber.e(e.message)
+            Timber.e(e)
             return ret
         }
 
@@ -1246,11 +1246,9 @@ class FileDataStorageManager {
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED, capability.filesSharingPublicExpireDateEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, capability.filesSharingPublicExpireDateDays)
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED, capability.filesSharingPublicExpireDateEnforced.value)
-            put(CAPABILITIES_SHARING_PUBLIC_SEND_MAIL, capability.filesSharingPublicSendMail.value)
             put(CAPABILITIES_SHARING_PUBLIC_UPLOAD, capability.filesSharingPublicUpload.value)
             put(CAPABILITIES_SHARING_PUBLIC_MULTIPLE, capability.filesSharingPublicMultiple.value)
             put(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY, capability.filesSharingPublicSupportsUploadOnly.value)
-            put(CAPABILITIES_SHARING_USER_SEND_MAIL, capability.filesSharingUserSendMail.value)
             put(CAPABILITIES_SHARING_RESHARING, capability.filesSharingResharing.value)
             put(CAPABILITIES_SHARING_FEDERATION_OUTGOING, capability.filesSharingFederationOutgoing.value)
             put(CAPABILITIES_SHARING_FEDERATION_INCOMING, capability.filesSharingFederationIncoming.value)
@@ -1396,13 +1394,6 @@ class FileDataStorageManager {
                         )
                     )
                 ),
-                filesSharingPublicSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_SEND_MAIL
-                        )
-                    )
-                ),
                 filesSharingPublicUpload = CapabilityBooleanType.fromValue(
                     c.getInt(
                         c.getColumnIndex(
@@ -1421,13 +1412,6 @@ class FileDataStorageManager {
                     c.getInt(
                         c.getColumnIndex(
                             CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-                        )
-                    )
-                ),
-                filesSharingUserSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_USER_SEND_MAIL
                         )
                     )
                 ),
