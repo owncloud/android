@@ -29,13 +29,13 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UserProfile;
 import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.domain.UseCaseResult;
+import com.owncloud.android.domain.exceptions.FileNotFoundException;
 import com.owncloud.android.domain.user.model.UserInfo;
+import com.owncloud.android.domain.user.model.UserQuota;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation;
-import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation;
-import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation.RemoteQuota;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.operations.common.UseCaseHelper;
 import timber.log.Timber;
@@ -98,20 +98,17 @@ public class GetUserProfileOperation extends SyncOperation {
                 );
 
                 /// get quota
-                GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation();
-
-                final RemoteOperationResult<RemoteQuota> quotaOperationResult =
-                        getRemoteUserQuotaOperation.execute(client);
-
-                if (quotaOperationResult.isSuccess()) {
-
-                    RemoteQuota remoteQuota = quotaOperationResult.getData();
+                UseCaseResult<UserQuota> quotaUseCaseResult = useCaseHelper.getUserQuota();
+                if (quotaUseCaseResult.getDataOrNull() != null) {
+                    // store display name with account data
+                    UserQuota userQuotaResult = quotaUseCaseResult.getDataOrNull();
+                    Timber.d("User info recovered from UseCaseHelper:GetUserQuota -> %s", userQuotaResult.toString());
 
                     UserProfile.UserQuota userQuota = new UserProfile.UserQuota(
-                            remoteQuota.getFree(),
-                            remoteQuota.getRelative(),
-                            remoteQuota.getTotal(),
-                            remoteQuota.getUsed()
+                            userQuotaResult.getFree(),
+                            userQuotaResult.getRelative(),
+                            userQuotaResult.getTotal(),
+                            userQuotaResult.getUsed()
                     );
 
                     userProfile.setQuota(userQuota);
@@ -157,7 +154,7 @@ public class GetUserProfileOperation extends SyncOperation {
                     return result;
 
                 } else {
-                    return quotaOperationResult;
+                    return new RemoteOperationResult<>(RemoteOperationResult.ResultCode.UNKNOWN_ERROR);
                 }
             } else {
                 return new RemoteOperationResult<>(RemoteOperationResult.ResultCode.UNKNOWN_ERROR);

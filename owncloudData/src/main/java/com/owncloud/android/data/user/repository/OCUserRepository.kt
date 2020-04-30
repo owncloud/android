@@ -28,7 +28,5 @@ class OCUserRepository(
     private val remoteUserDataSource: RemoteUserDataSource
 ) : UserRepository {
     override fun getUserInfo(): UserInfo = remoteUserDataSource.getUserInfo()
-    override fun getUserQuota(): UserQuota {
-        TODO("Not yet implemented")
-    }
+    override fun getUserQuota(): UserQuota = remoteUserDataSource.getUserQuota()
 }

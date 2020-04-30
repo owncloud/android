@@ -22,12 +22,15 @@ package com.owncloud.android.data.user.datasources.implementation
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
+import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.domain.user.model.UserInfo
+import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.lib.resources.users.services.UserService
 
 class OCRemoteUserDataSource(
     private val userService: UserService,
-    private val remoteUserInfoMapper: RemoteUserInfoMapper
+    private val remoteUserInfoMapper: RemoteUserInfoMapper,
+    private val remoteUserQuotaMapper: RemoteUserQuotaMapper
 ) : RemoteUserDataSource {
 
     override fun getUserInfo(): UserInfo {
@@ -36,4 +39,9 @@ class OCRemoteUserDataSource(
         }.let { return remoteUserInfoMapper.toModel(it)!! }
     }
 
+    override fun getUserQuota(): UserQuota {
+        executeRemoteOperation {
+            userService.getUserQuota()
+        }.let { return remoteUserQuotaMapper.toModel(it)!! }
+    }
 }
