@@ -1091,11 +1091,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, "
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER, "     // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, "     // boolean
@@ -1434,16 +1432,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
-            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL] =
-                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL] =
-                ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_RESHARING] =
                 ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING] =

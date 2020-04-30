@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 29;
+    public static final int DB_VERSION = 30;
 
     private ProviderMeta() {
     }
@@ -82,11 +82,9 @@ public class ProviderMeta {
                 "sharing_public_expire_date_days";
         public static final String CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED =
                 "sharing_public_expire_date_enforced";
-        public static final String CAPABILITIES_SHARING_PUBLIC_SEND_MAIL = "sharing_public_send_mail";
         public static final String CAPABILITIES_SHARING_PUBLIC_UPLOAD = "sharing_public_upload";
         public static final String CAPABILITIES_SHARING_PUBLIC_MULTIPLE = "sharing_public_multiple";
         public static final String CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY = "supports_upload_only";
-        public static final String CAPABILITIES_SHARING_USER_SEND_MAIL = "sharing_user_send_mail";
         public static final String CAPABILITIES_SHARING_RESHARING = "sharing_resharing";
         public static final String CAPABILITIES_SHARING_FEDERATION_OUTGOING = "sharing_federation_outgoing";
         public static final String CAPABILITIES_SHARING_FEDERATION_INCOMING = "sharing_federation_incoming";
