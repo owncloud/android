@@ -87,8 +87,8 @@ data class RemoteCapability(
                 }
             }
 
-            fun fromBooleanValue(boolValue: Boolean): CapabilityBooleanType {
-                return if (boolValue) {
+            fun fromBooleanValue(boolValue: Boolean?): CapabilityBooleanType {
+                return if (boolValue != null && boolValue) {
                     TRUE
                 } else {
                     FALSE
