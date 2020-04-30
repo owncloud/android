@@ -20,7 +20,9 @@
 package com.owncloud.android.data.user.datasources
 
 import com.owncloud.android.domain.user.model.UserInfo
+import com.owncloud.android.domain.user.model.UserQuota
 
 interface RemoteUserDataSource {
     fun getUserInfo(): UserInfo
+    fun getUserQuota(): UserQuota
 }
