@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
+  <string name="prefs_biometric">Biometrický zámek</string>
   <string name="prefs_biometric_summary">Nutné povolit bezpečnostní kód nebo gesto k povolení této možnosti</string>
   <string name="prefs_touches_with_other_visible_windows">Dotek s jinými viditelnými okny</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Povolit dotek s aplikacemi, které mohou překrýt toto okno. Nutné pro povolení při použití filtrů světla.</string>
@@ -76,6 +77,7 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Soubory</string>
   <string name="bottom_nav_uploads">Nahrání</string>
+  <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Odkazy</string>
   <string name="recommend_subject">Zkuste %1$s na svém chytrém telefonu!</string>
   <string name="recommend_text">Chtěl bych vás pozvat k používání %1$s na vašem chytrém telefonu!\nKe stažení zde: %2$s</string>
@@ -226,6 +228,9 @@
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
   <string name="pass_code_removed">Bezpečnostní kód odstraněn</string>
   <string name="pass_code_stored">Bezpečnostní kód uložen</string>
+  <string name="biometric_not_hardware_detected">Toto zařízení nepodoporuje biometrickou autentizaci</string>
+  <string name="biometric_prompt_title">Biometrické přihlášení</string>
+  <string name="biometric_prompt_subtitle">Přihlásit se s použitím biometrických přihlašovacích údajů</string>
   <string name="media_notif_ticker">Hudební přehrávač %1$s</string>
   <string name="media_state_playing">%1$s (přehrává)</string>
   <string name="media_state_loading">%1$s (načítá)</string>
@@ -357,6 +362,7 @@
   <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
   <string name="get_shares_error">Nepodařilo se stáhnout ze serveru seznam sdílení</string>
   <string name="get_sharees_error">Nepodařilo se stáhnout ze serveru seznam uživatelů a skupin</string>
+  <string name="get_capabilities_error">Nebylo možné získat možnosti ze serveru</string>
   <string name="share_link_no_support_share_api">Je nám líto, ale sdílení není na vašem serveru povoleno. Kontaktujte svého
 správce systému.</string>
   <string name="share_link_file_error">Nepodařilo se sdílet tento soubor nebo složku</string>
@@ -454,6 +460,7 @@ správce systému.</string>
   <string name="share_via_link_password_title">Zabezpečeno</string>
   <string name="share_via_link_edit_permission_read_only_label">Stáhnout / zobrazit</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Stáhnout / zobrazit / nahrát</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Pouze nahrát</string>
   <string name="share_get_public_link_button">Vytvořit odkaz</string>
   <string name="share_with_title">Sdílet s</string>
   <string name="share_with_edit_title">Sdílet s %1$s</string>
@@ -518,6 +525,7 @@ správce systému.</string>
   <string name="media_service_notification_channel_description">Přehrát přehrávač hudby</string>
   <string name="file_sync_notification_channel_name">Synchronizace souborů</string>
   <string name="file_sync_notification_channel_description">Zobrazit výsledek synchronizace souborů</string>
+  <string name="clicks_to_be_developer">Jste %1$dkliků daleko od povolení vývojářských nastavení</string>
   <string name="rate_dialog_title">Ohodnoťte %1$s aplikaci!</string>
   <string name="rate_dialog_description">Pokud se Vám aplikace líbí, mohli byste si najít chvilku a ohodnotit ji? Váš názor je pro nás důležitý.</string>
   <string name="button_no_thanks_name">NE, DĚKUJI</string>
@@ -543,4 +551,6 @@ správce systému.</string>
   <string name="welcome_feature_5_text">Přehrávejte videa bez nutnosti stažení na disk</string>
   <string name="no_borwser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
   <string name="common_not_found">nebylo nalezeno</string>
+  <string name="supports_oauth2_error">Nebylo možné zjistit, zda-li je OAuth2 podporováno</string>
+  <string name="get_base_url_error">Nebylo možné zjistit základní URL adresu serveru</string>
 </resources>
