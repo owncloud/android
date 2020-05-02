@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Bloqueo con clave</string>
+  <string name="prefs_biometric">Bloqueo biométrico</string>
   <string name="prefs_biometric_summary">Habilitar la contraseña o patrón de bloqueo para utilizar esta opción</string>
   <string name="prefs_touches_with_other_visible_windows">En contacto con otras ventanas visibles</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir clicks mientras que la vista está oscurecida por otra ventana visible. Habilítalo para utilizar aplicaciones de filtro de luz.</string>
@@ -78,10 +79,13 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
   <string name="bottom_nav_uploads">Cargas</string>
+  <string name="bottom_nav_offline">Fuera de línea</string>
+  <string name="bottom_nav_links">Vínculos</string>
   <string name="recommend_subject">¡Intento %1$s en tu teléfono inteligente!</string>
   <string name="recommend_text">Quiero invitarte a usar %1$s en tu teléfono inteligente!\nDescárgalo aquí: %2$s</string>
   <string name="error_reason">porque</string>
   <string name="auth_failure_snackbar">Fallo al identificar</string>
+  <string name="server_not_supported">La versión de tu servidor es menor a 10 por lo que no está soportado, por favor actualizá el servidor a una versión mas nueva.</string>
   <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
   <string name="auth_oauth_failure">El tóken de acceso ha expirado o se ha vuelto inválido. Ingresa nuevamente para conseguir el acceso</string>
   <string name="auth_oauth_failure_snackbar_action">Entrar</string>
@@ -108,6 +112,7 @@
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">No hay nada. ¡Subí contenido!</string>
   <string name="file_list_empty_available_offline">No hay archivos disponibles sin conexión.</string>
+  <string name="file_list_empty_shared_by_links">Ningún archivo ha sido compartido por vínculo.</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">No se ha encontrado una aplicación para este tipo de archivo</string>
   <string name="local_file_list_empty">No existen archivos en esta carpeta.</string>
@@ -208,6 +213,11 @@
   <string name="sync_fail_in_favourites_content">%1$d archivos no pudieron ser sincronizados (%2$d conflictos)</string>
   <string name="sync_foreign_files_forgotten_ticker">Algunos archivos locales fueron olvidados</string>
   <string name="sync_foreign_files_forgotten_content">%1$d archivos en la carpeta %2$s no pudieron ser copiados</string>
+  <string name="sync_foreign_files_forgotten_explanation">Desde la versión 1.3.16, los archivos subidos desde este dispositivo se copian a un directorio local %1$s para prevenir la pérdida de datos cuando un único archivo es sincronizado con múltiples cuentas. 
+
+Debido a este cambio, todos los archivos subidos en versiones previas de esta aplicación fueron copiados al directorio %2$s. No obstante, debido a un error, esta operación no pudo ser completada durante la sincronización de la cuenta. Podés dejar los archivos así y borrar el enlace a %3$s, o mover el/los archivos al directorio %1$s y conservar el enlace a %4$s. 
+
+Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %5$s a los que están vinculados.</string>
   <string name="sync_current_folder_was_removed">El directorio %1$s ya no existe</string>
   <string name="foreign_files_move">Mover todos</string>
   <string name="foreign_files_success">Todos los archivos fueron movidos</string>
@@ -224,6 +234,10 @@
   <string name="pass_code_wrong">Contraseña incorrecta</string>
   <string name="pass_code_removed">Contraseña eliminada</string>
   <string name="pass_code_stored">Contraseña almacenada</string>
+  <string name="biometric_not_hardware_detected">Este dispositivo no soporta autenticación biométrica.</string>
+  <string name="biometric_not_enrolled">Registra al menos un dato biométrico para usar esta funcionalidad.</string>
+  <string name="biometric_prompt_title">Inicio de sesión biométrico</string>
+  <string name="biometric_prompt_subtitle">Iniciá sesión usando tu credencial biométrica</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>
@@ -341,6 +355,8 @@
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Está seguro que desea inhabilitar esta funcionalidad? Las imágenes pendientes no serán subidas</string>
   <string name="confirmation_disable_videos_upload_message">¿Está seguro que quiere deshabilitar esta funcionalidad? Los videos pendientes no serán subidos</string>
+  <string name="proper_pics_folder_warning_camera_upload">Por favor asegurate que la carpeta seleccionada es donde la cámara que estas usando guarda las fotos sacadas. De otro modo, esta funcionalidad no será capaz de detectar tus fotos. Tené en cuenta que las fotos serán subidas al menos 15 minutos después de haber sido tomadas.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Por favor asegurate de que la carpeta seleccionada es donde la cámara que estas usando guardas los videos grabados. De otro modo, esta funcionalidad no será capaz de detectar tus videos. Tené en cuenta que los videos serán subidos al menos 15 minutos después de haber sido grabados.</string>
   <string name="conflict_title">Conflicto con el archivo</string>
   <string name="conflict_description">Hay un conflicto con el archivo %1$s, presione para resolverlo</string>
   <string name="conflict_message">¿Qué archivos desea mantener? Si selecciona ambas versiones, al archivo local se le agregará un número a su nombre.</string>
@@ -475,6 +491,7 @@
   <string name="action_switch_grid_view">Vista de grilla</string>
   <string name="action_switch_list_view">Vista de lista</string>
   <string name="manage_space_title">Administrar espacio</string>
+  <string name="manage_space_description">Los ajustes, certificados de base de datos y servidor de %1$s serán elminados permanentemente. \n\nLos Archivos descargados no serán tocados.\n\nEste proceso puede tardar en completarse.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>
   <string name="manage_space_error">Algunos archivos no pueden ser eliminados.</string>
   <string name="permission_storage_access">Se requieren permisos adicionales para subir o descargar archivos.</string>
@@ -487,9 +504,12 @@
   <string name="prefs_privacy_policy">Política de privacidad</string>
   <string name="privacy_policy_error">Ha ocurrido un error:</string>
   <string name="service_unavailable">El servidor no está disponible.</string>
+  <string name="streaming_certificate_error">La transmisión no se puede iniciar porque el certificado de tu servidor no es de confianza. La descarga del archivo comenzará automáticamente</string>
   <string name="streaming_unrecognized_input">El formato de video no está soportado</string>
   <string name="streaming_file_not_found_error">El archivo de video no está más disponible en el servidor</string>
+  <string name="streaming_crossed_redirection">La transmisión no está permitida a través de redirecciones cruzadas</string>
   <string name="previewing_video_common_error">El video no puede ser reproducido</string>
+  <string name="previewing_video_not_supported">La vista previa del video no está soportada en tu versión de Android. La descarga del archivo comenzará automáticamente.</string>
   <string name="streaming_position_not_available">\"Posición no disponible\"</string>
   <string name="error_no_network_connection">El dispositivo no está conectado a una red</string>
   <string name="share_no_public_links">Aún no se han creado enlaces públicos</string>
@@ -498,8 +518,10 @@
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Contraseña *</string>
   <string name="share_via_link_expiration_date_enforced_label">Vencimiento *</string>
+  <string name="share_via_link_expiration_date_explanation_label">El enlace público expirará no antes de %1$d días después de su creación</string>
   <string name="share_via_link_default_name_template">Enlace %1$s</string>
   <string name="share_via_link_empty_password">La contraseña está en blanco</string>
+  <string name="private_link_info">Este es un vínculo privado, solo las personas que tienen acceso al archivo/carpeta pueden usarlo. Usalo como un enlace permanente para vos o para dirigir a otros a archivos dentro recursos compartidos.</string>
   <string name="file_private_link_error">El enlace privado no está disponible para este archivo</string>
   <string name="download_notification_channel_name">Descargas</string>
   <string name="download_notification_channel_description">Ver el nombre del archivo descargado y su progreso</string>
@@ -509,6 +531,7 @@
   <string name="media_service_notification_channel_description">Ver reproductor de música</string>
   <string name="file_sync_notification_channel_name">Sincronizar archivo</string>
   <string name="file_sync_notification_channel_description">Ver el resultado de la sincronización</string>
+  <string name="clicks_to_be_developer">Estas a %1$d clics de habilitar los menúes de desarrollador</string>
   <string name="rate_dialog_title">Calificar aplicación %1$s!</string>
   <string name="rate_dialog_description">Si estás disfrutando esta aplicación, podrías tomarte un momento para calificarla? Tu opinión es muy importante para nosotros.</string>
   <string name="button_no_thanks_name">NO GRACIAS</string>
@@ -531,4 +554,7 @@
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
   <string name="no_borwser_installed_alert">No hay un navegador instalado. Por favor instale un navegador para poder realizar un ingreso seguro.</string>
+  <string name="common_not_found">no fue encontrado</string>
+  <string name="supports_oauth2_error">No fue posible verificar si OAuth2 está soportado</string>
+  <string name="get_base_url_error">No fue posible recuperar la URL base del servidor</string>
 </resources>
