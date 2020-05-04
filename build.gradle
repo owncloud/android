@@ -7,7 +7,7 @@ buildscript {
 
         // Android jetpack
         archLifecycleVersion = "2.1.0"
-        roomVersion = "2.2.4"
+        roomVersion = "2.2.5"
         appCompat = "1.1.0"
         sqliteVersion = "2.1.0"
         lifecycleLiveData = "2.2.0"
@@ -37,7 +37,7 @@ buildscript {
         // KTX extensions
         ktxCoreVersion = "1.2.0"
         ktxViewModelVersion = "2.2.0"
-        ktxFragmentVersion = "1.2.2"
+        ktxFragmentVersion = "1.2.4"
         ktxLiveData = "2.1.0"
     }
 
