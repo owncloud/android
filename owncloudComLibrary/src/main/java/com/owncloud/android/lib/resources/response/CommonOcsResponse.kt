@@ -21,22 +21,26 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
-package com.owncloud.android.lib.resources.users
+package com.owncloud.android.lib.resources.response
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+// Response retrieved by OCS Rest API, used to obtain capabilities, shares and user info among others.
+// More info: https://doc.owncloud.com/server/developer_manual/core/apis/ocs-capabilities.html
 @JsonClass(generateAdapter = true)
-data class UserInfoResponse(
-    val id: String,
-    @Json(name = "display-name")
-    val displayName: String,
-    val email: String?
+data class CommonOcsResponse<T>(
+    val ocs: OCSResponse<T>
 )
 
-fun UserInfoResponse.toRemoteUserInfo() =
-    RemoteUserInfo(
-        id = id,
-        displayName = displayName,
-        email = email
-    )
+@JsonClass(generateAdapter = true)
+data class OCSResponse<T>(
+    val meta: MetaData,
+    val data: T
+)
+
+@JsonClass(generateAdapter = true)
+data class MetaData(
+    val status: String,
+    val statuscode: Int,
+    val message: String?
+)
