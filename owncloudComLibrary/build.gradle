@@ -29,8 +29,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
 
-        versionCode = 10000401
-        versionName = "1.0.4.1"
+        versionCode = 10000402
+        versionName = "1.0.5-beta.1"
 
         // This is pretty ugly but manifest placeholders don't seem to work very well when using different modules
         // See https://github.com/openid/AppAuth-Android/issues/325
