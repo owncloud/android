@@ -27,11 +27,13 @@ import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
 import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.every
 import io.mockk.mockkClass
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -131,10 +133,7 @@ class OCLocalShareDataSourceTest {
 
     @Test
     fun insertPrivateShares() {
-        val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
-        privateSharesAsLiveData.value = privateShares
-
-        every { ocSharesDao.insert(privateSharesAsLiveData.value!![0]) } returns 10
+        every { ocSharesDao.insert(privateShares[0]) } returns 10
 
         val insertedShareId = ocLocalSharesDataSource.insert(
             OC_PRIVATE_SHARE.copy(
@@ -148,10 +147,7 @@ class OCLocalShareDataSourceTest {
 
     @Test
     fun updatePrivateShare() {
-        val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
-        privateSharesAsLiveData.value = privateShares
-
-        every { ocSharesDao.update(privateSharesAsLiveData.value!![1]) } returns 3
+        every { ocSharesDao.update(privateShares[1]) } returns 3
 
         val updatedShareId = ocLocalSharesDataSource.update(
             OC_PRIVATE_SHARE.copy(
@@ -219,11 +215,8 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun insertPublicShares() {
-        val publicSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
-        publicSharesAsLiveData.value = publicShares
-
-        every { ocSharesDao.insert(publicSharesAsLiveData.value!![0]) } returns 7
+    fun insertPublicShare() {
+        every { ocSharesDao.insert(publicShares[0]) } returns 7
 
         val insertedShareId = ocLocalSharesDataSource.insert(
             OC_PUBLIC_SHARE.copy(
@@ -237,11 +230,20 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun updatePublicShares() {
-        val publicSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
-        publicSharesAsLiveData.value = publicShares
+    fun insertPublicShares() {
+        val expectedValues = listOf<Long>(1, 2)
+        every { ocSharesDao.insert(publicShares) } returns expectedValues
 
-        every { ocSharesDao.update(publicSharesAsLiveData.value!![1]) } returns 8
+        val retrievedValues = ocLocalSharesDataSource.insert(
+            publicShares.map { ocShareMapper.toModel(it)!! }
+        )
+
+        assertEquals(expectedValues, retrievedValues)
+    }
+
+    @Test
+    fun updatePublicShares() {
+        every { ocSharesDao.update(publicShares[1]) } returns 8
 
         val updatedShareId = ocLocalSharesDataSource.update(
             OC_PUBLIC_SHARE.copy(
@@ -257,6 +259,26 @@ class OCLocalShareDataSourceTest {
     /**************************************************************************************************************
      *************************************************** COMMON ***************************************************
      **************************************************************************************************************/
+
+    @Test
+    fun replaceShares() {
+        val expectedValues = listOf<Long>(1, 2)
+        every { ocSharesDao.replaceShares(publicShares) } returns expectedValues
+
+        val retrievedValues = ocLocalSharesDataSource.replaceShares(
+            publicShares.map { ocShareMapper.toModel(it)!! }
+        )
+
+        assertEquals(expectedValues, retrievedValues)
+    }
+
+    @Test
+    fun deleteSharesForFile() {
+        every { ocSharesDao.deleteSharesForFile("file", OC_ACCOUNT_NAME) } returns Unit
+        ocLocalSharesDataSource.deleteSharesForFile("file", OC_ACCOUNT_NAME)
+
+        verify { ocSharesDao.deleteSharesForFile("file", OC_ACCOUNT_NAME) }
+    }
 
     @Test
     fun deleteShare() {

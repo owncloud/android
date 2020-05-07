@@ -20,13 +20,16 @@
 package com.owncloud.android.data.server.datasources
 
 import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerInfoDataSource
-import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
+import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
+import com.owncloud.android.domain.exceptions.SpecificServiceUnavailableException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
+import com.owncloud.android.lib.common.http.HttpConstants.HTTP_SERVICE_UNAVAILABLE
 import com.owncloud.android.lib.common.http.HttpConstants.HTTP_UNAUTHORIZED
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK_NO_SSL
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK_SSL
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -42,7 +45,7 @@ class OCRemoteServerInfoDataSourceTest {
 
     private val ocInfoService: OCServerInfoService = mockk()
 
-    private val OC_OWNCLOUD_VERSION = OwnCloudVersion("10.3.2")
+    private val ocOwncloudVersion = OwnCloudVersion("10.3.2")
     private val basicAuthHeader = "basic realm=\"owncloud\", charset=\"utf-8\""
     private val bearerHeader = "bearer realm=\"owncloud\""
     private val authHeadersBasic = listOf(basicAuthHeader)
@@ -126,6 +129,15 @@ class OCRemoteServerInfoDataSourceTest {
         verify { ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
+    @Test(expected = SpecificServiceUnavailableException::class)
+    fun getAuthenticationMethodNotAvailable() {
+        prepareAuthorizationMethodToBeRetrieved(
+            expectedAuthenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH,
+            isServerAvailable = false
+        )
+        ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl)
+    }
+
     @Test(expected = Exception::class)
     fun getAuthenticationMethodException() {
         every {
@@ -137,7 +149,7 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test
     fun getRemoteStatusIsSecureConnection() {
-        val expectedValue = Pair(OC_OWNCLOUD_VERSION, true)
+        val expectedValue = Pair(ocOwncloudVersion, true)
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         val currentValue = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
@@ -150,7 +162,7 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test
     fun getRemoteStatusIsNotSecureConnection() {
-        val expectedValue = Pair(OC_OWNCLOUD_VERSION, false)
+        val expectedValue = Pair(ocOwncloudVersion, false)
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         val currentValue = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
@@ -159,6 +171,14 @@ class OCRemoteServerInfoDataSourceTest {
         assertEquals(expectedValue, currentValue)
 
         verify { ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+    }
+
+    @Test(expected = OwncloudVersionNotSupportedException::class)
+    fun getRemoteStatusOwncloudVersionNotSupported() {
+        val expectedValue = Pair(OwnCloudVersion("9.0.0"), false)
+        prepareRemoteStatusToBeRetrieved(expectedValue)
+
+        ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
     }
 
     @Test(expected = Exception::class)
@@ -170,7 +190,10 @@ class OCRemoteServerInfoDataSourceTest {
         ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
     }
 
-    private fun prepareAuthorizationMethodToBeRetrieved(expectedAuthenticationMethod: AuthenticationMethod) {
+    private fun prepareAuthorizationMethodToBeRetrieved(
+        expectedAuthenticationMethod: AuthenticationMethod,
+        isServerAvailable: Boolean = true
+    ) {
         val expectedAuthHeader = when (expectedAuthenticationMethod) {
             AuthenticationMethod.BEARER_TOKEN -> authHeaderBearer
             AuthenticationMethod.BASIC_HTTP_AUTH -> authHeadersBasic
@@ -183,7 +206,7 @@ class OCRemoteServerInfoDataSourceTest {
                 isSuccess = true,
                 resultCode = OK_SSL,
                 authenticationHeader = expectedAuthHeader,
-                httpCode = HTTP_UNAUTHORIZED
+                httpCode = if (isServerAvailable) HTTP_UNAUTHORIZED else HTTP_SERVICE_UNAVAILABLE
             )
 
         every {
@@ -199,7 +222,7 @@ class OCRemoteServerInfoDataSourceTest {
 
         val remoteStatusResultMocked: RemoteOperationResult<OwnCloudVersion> =
             createRemoteOperationResultMock(
-                data = OC_OWNCLOUD_VERSION,
+                data = expectedPair.first,
                 isSuccess = true,
                 resultCode = expectedResultCode
             )

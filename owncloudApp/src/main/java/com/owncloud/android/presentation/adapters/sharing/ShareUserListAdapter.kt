@@ -32,24 +32,23 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.utils.PreferenceUtils
-import java.util.ArrayList
 
 /**
  * Adapter to show a user/group in Share With List
  */
 class ShareUserListAdapter(
     private val mContext: Context, resource: Int,
-    private var shares: List<OCShare>?,
+    private var shares: List<OCShare>,
     private val listener: ShareUserAdapterListener
 ) : ArrayAdapter<OCShare>(mContext, resource) {
 
     init {
-        shares = ArrayList(shares?.sortedWith(compareBy { it.sharedWithDisplayName }))
+        shares = shares.sortedBy { it.sharedWithDisplayName }
     }
 
-    override fun getCount(): Int = shares!!.size
+    override fun getCount(): Int = shares.size
 
-    override fun getItem(position: Int): OCShare? = shares!![position]
+    override fun getItem(position: Int): OCShare? = shares[position]
 
     override fun getItemId(position: Int): Long = 0
 
@@ -61,8 +60,8 @@ class ShareUserListAdapter(
         // Allow or disallow touches with other visible windows
         view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
 
-        if (shares != null && shares?.size!! > position) {
-            val share = shares!![position]
+        if (shares.size > position) {
+            val share = shares[position]
 
             val userName = view.findViewById<TextView>(R.id.userOrGroupName)
             val iconView = view.findViewById<ImageView>(R.id.icon)
@@ -71,11 +70,11 @@ class ShareUserListAdapter(
                 name
             else
                 name + " (" + share.sharedWithAdditionalInfo + ")"
-            var icon = context.resources.getDrawable(R.drawable.ic_user)
+            var icon = context.resources.getDrawable(R.drawable.ic_user, null)
             iconView.tag = R.drawable.ic_user
             if (share.shareType == ShareType.GROUP) {
                 name = context.getString(R.string.share_group_clarification, name)
-                icon = context.resources.getDrawable(R.drawable.ic_group)
+                icon = context.resources.getDrawable(R.drawable.ic_group, null)
                 iconView.tag = R.drawable.ic_group
             }
             userName.text = name
@@ -83,11 +82,11 @@ class ShareUserListAdapter(
 
             /// bind listener to edit privileges
             val editShareButton = view.findViewById<ImageView>(R.id.editShareButton)
-            editShareButton.setOnClickListener { listener.editShare(shares!![position]) }
+            editShareButton.setOnClickListener { listener.editShare(shares[position]) }
 
             /// bind listener to unshare
             val unshareButton = view.findViewById<ImageView>(R.id.unshareButton)
-            unshareButton.setOnClickListener { listener.unshareButtonPressed(shares!![position]) }
+            unshareButton.setOnClickListener { listener.unshareButtonPressed(shares[position]) }
 
         }
         return view

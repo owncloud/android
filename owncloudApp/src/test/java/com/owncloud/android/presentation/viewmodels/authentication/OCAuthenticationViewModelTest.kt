@@ -132,7 +132,7 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
     @Test
     fun loginBasicOk() {
         every { loginBasicAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
-        ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, false)
+        ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, true)
 
         assertEmittedValues(
             expectedValues = listOf<Event<UIResult<String>>>(

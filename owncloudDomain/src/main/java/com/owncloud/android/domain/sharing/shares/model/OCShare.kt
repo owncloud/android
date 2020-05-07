@@ -19,11 +19,10 @@
 
 package com.owncloud.android.domain.sharing.shares.model
 
-import android.annotation.SuppressLint
-import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-@SuppressLint("ParcelCreator")
+@Parcelize
 data class OCShare(
     val id: Int? = null,
     val fileSource: String,
@@ -46,28 +45,7 @@ data class OCShare(
 ) : Parcelable {
 
     val isPasswordProtected: Boolean
-        get() = shareType == ShareType.PUBLIC_LINK && shareWith?.isNotEmpty()!!
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(id!!)
-        dest?.writeString(shareWith)
-        dest?.writeString(path)
-        dest?.writeString(token)
-        dest?.writeString(sharedWithDisplayName)
-        dest?.writeString(sharedWithAdditionalInfo)
-        dest?.writeString(name)
-        dest?.writeString(shareLink)
-        dest?.writeString(fileSource)
-        dest?.writeString(itemSource)
-        dest?.writeInt(shareType.value)
-        dest?.writeInt(permissions)
-        dest?.writeLong(sharedDate)
-        dest?.writeLong(expirationDate)
-        dest?.writeInt(if (isFolder) 1 else 0)
-        dest?.writeLong(userId)
-    }
-
-    override fun describeContents(): Int = this.hashCode()
+        get() = shareType == ShareType.PUBLIC_LINK && !shareWith.isNullOrEmpty()
 }
 
 /**

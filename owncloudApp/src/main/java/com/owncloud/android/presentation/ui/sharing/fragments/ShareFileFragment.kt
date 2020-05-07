@@ -91,7 +91,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * List of private shares bound to the file
      */
-    private var privateShares: List<OCShare>? = null
+    private var privateShares: List<OCShare> = listOf()
 
     /**
      * Adapter to show private shares
@@ -420,7 +420,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
 
         // Show data
-        if (!privateShares.isNullOrEmpty()) {
+        if (privateShares.isNotEmpty()) {
             shareNoUsers?.visibility = View.GONE
             shareUsersList?.visibility = View.VISIBLE
             shareUsersList?.adapter = userGroupsAdapter
