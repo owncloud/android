@@ -78,8 +78,8 @@
   <string name="illegal_argument_exception_message">Se necesita una ACCIÓN válida</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
-  <string name="bottom_nav_uploads">Cargas</string>
-  <string name="bottom_nav_offline">Desconectado</string>
+  <string name="bottom_nav_uploads">Subidas</string>
+  <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Enlaces</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
