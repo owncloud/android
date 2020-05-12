@@ -29,8 +29,8 @@ class UserQuotaEntityTest {
     fun testConstructor() {
         val item = UserQuotaEntity(
             "accountName",
-            800,
-            200
+            200,
+            800
         )
 
         assertEquals("accountName", item.accountName)
@@ -42,8 +42,8 @@ class UserQuotaEntityTest {
     fun testEqualsOk() {
         val item1 = UserQuotaEntity(
             accountName = "accountName",
-            available = 800,
-            used = 200
+            available = 200,
+            used = 800
         )
 
         val item2 = UserQuotaEntity(
@@ -66,8 +66,8 @@ class UserQuotaEntityTest {
 
         val item2 = UserQuotaEntity(
             "accountName2",
-            800,
-            200
+            200,
+            800
         )
 
         assertFalse(item1 == item2)
