@@ -32,13 +32,17 @@ import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.migrations.MIGRATION_27_28
 import com.owncloud.android.data.migrations.MIGRATION_28_29
 import com.owncloud.android.data.migrations.MIGRATION_29_30
+import com.owncloud.android.data.migrations.MIGRATION_30_31
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.data.user.db.UserDao
+import com.owncloud.android.data.user.db.UserQuotaEntity
 
 @Database(
     entities = [
         OCShareEntity::class,
-        OCCapabilityEntity::class
+        OCCapabilityEntity::class,
+        UserQuotaEntity::class
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
@@ -46,16 +50,17 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 abstract class OwncloudDatabase : RoomDatabase() {
     abstract fun shareDao(): OCShareDao
     abstract fun capabilityDao(): OCCapabilityDao
+    abstract fun userQuotaDao(): UserDao
 
     companion object {
         @Volatile
         private var INSTANCE: OwncloudDatabase? = null
 
-        // Array of all migrations
         val ALL_MIGRATIONS = arrayOf(
             MIGRATION_27_28,
             MIGRATION_28_29,
-            MIGRATION_29_30
+            MIGRATION_29_30,
+            MIGRATION_30_31
         )
 
         fun getDatabase(

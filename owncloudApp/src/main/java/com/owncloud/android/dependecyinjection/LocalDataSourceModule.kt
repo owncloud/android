@@ -28,34 +28,20 @@ import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataS
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
+import com.owncloud.android.data.user.datasources.LocalUserDataSource
+import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
-    single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
-    single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
-
-    factory<LocalCapabilitiesDataSource> {
-        OCLocalCapabilitiesDataSource(
-            get(),
-            get()
-        )
-    }
-
-    factory<LocalShareDataSource> {
-        OCLocalShareDataSource(
-            get(),
-            get()
-        )
-    }
-
     single { AccountManager.get(androidContext())}
 
-    factory<LocalAuthenticationDataSource> {
-        OCLocalAuthenticationDataSource(
-            androidContext(),
-            get(),
-            accountType
-        )
-    }
+    single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).userQuotaDao() }
+
+    factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), accountType) }
+    factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get(), get()) }
+    factory<LocalUserDataSource> { OCLocalUserDataSource(get(), get()) }
+    factory<LocalShareDataSource> { OCLocalShareDataSource(get(), get()) }
 }

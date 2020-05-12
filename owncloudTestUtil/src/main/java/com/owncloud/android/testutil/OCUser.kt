@@ -16,19 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.testutil
 
-package com.owncloud.android.data.user.repository
-
-import com.owncloud.android.data.user.datasources.LocalUserDataSource
-import com.owncloud.android.data.user.datasources.RemoteUserDataSource
-import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.model.UserQuota
 
-class OCUserRepository(
-    private val localUserDataSource: LocalUserDataSource,
-    private val remoteUserDataSource: RemoteUserDataSource
-) : UserRepository {
-    override fun getUserInfo(): UserInfo = remoteUserDataSource.getUserInfo()
-    override fun getUserQuota(accountName: String): UserQuota = remoteUserDataSource.getUserQuota().also { localUserDataSource.saveQuotaForAccount(accountName, it) }
-}
+val OC_USER_INFO = UserInfo(
+    id = "admin",
+    displayName = "adminOc",
+    email = null
+)
+
+val OC_USER_QUOTA = UserQuota(
+    used = 80_000,
+    available = 200_000
+)

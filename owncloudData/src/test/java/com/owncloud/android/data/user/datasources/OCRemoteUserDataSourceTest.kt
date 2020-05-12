@@ -21,10 +21,13 @@ package com.owncloud.android.data.user.datasources
 
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
-import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
+import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation
 import com.owncloud.android.lib.resources.users.RemoteUserInfo
+import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.OC_USER_QUOTA
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
@@ -38,16 +41,23 @@ class OCRemoteUserDataSourceTest {
 
     private val ocUserService: OCUserService = mockk()
     private val remoteUserInfoMapper = RemoteUserInfoMapper()
+    private val remoteUserQuotaMapper = RemoteUserQuotaMapper()
 
     private val remoteUserInfo = RemoteUserInfo(
         id = OC_USER_INFO.id,
         displayName = OC_USER_INFO.displayName,
         email = OC_USER_INFO.email
     )
+    private val remoteQuota = GetRemoteUserQuotaOperation.RemoteQuota(
+        used = OC_USER_QUOTA.used,
+        free = OC_USER_QUOTA.available,
+        relative = OC_USER_QUOTA.getRelative(),
+        total = OC_USER_QUOTA.getTotal()
+    )
 
     @Before
     fun init() {
-        ocRemoteUserDataSource = OCRemoteUserDataSource(ocUserService, remoteUserInfoMapper)
+        ocRemoteUserDataSource = OCRemoteUserDataSource(ocUserService, remoteUserInfoMapper, remoteUserQuotaMapper)
     }
 
     @Test
@@ -73,5 +83,28 @@ class OCRemoteUserDataSourceTest {
         } throws Exception()
 
         ocRemoteUserDataSource.getUserInfo()
+    }
+    @Test
+    fun getUserQuotaOk() {
+        val getUserQuotaResult: RemoteOperationResult<GetRemoteUserQuotaOperation.RemoteQuota> =
+            createRemoteOperationResultMock(data = remoteQuota, isSuccess = true)
+
+        every {
+            ocUserService.getUserQuota()
+        } returns getUserQuotaResult
+
+        val userQuota = ocRemoteUserDataSource.getUserQuota()
+
+        assertNotNull(userQuota)
+        assertEquals(OC_USER_QUOTA, userQuota)
+    }
+
+    @Test(expected = Exception::class)
+    fun getUserQuotaException() {
+        every {
+            ocUserService.getUserQuota()
+        } throws Exception()
+
+        ocRemoteUserDataSource.getUserQuota()
     }
 }

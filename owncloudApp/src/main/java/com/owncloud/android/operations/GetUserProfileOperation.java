@@ -98,14 +98,14 @@ public class GetUserProfileOperation extends SyncOperation {
                 );
 
                 /// get quota
-                UseCaseResult<UserQuota> quotaUseCaseResult = useCaseHelper.getUserQuota();
+                UseCaseResult<UserQuota> quotaUseCaseResult = useCaseHelper.getUserQuota(storedAccount.name);
                 if (quotaUseCaseResult.getDataOrNull() != null) {
                     // store display name with account data
                     UserQuota userQuotaResult = quotaUseCaseResult.getDataOrNull();
                     Timber.d("User info recovered from UseCaseHelper:GetUserQuota -> %s", userQuotaResult.toString());
 
                     UserProfile.UserQuota userQuota = new UserProfile.UserQuota(
-                            userQuotaResult.getFree(),
+                            userQuotaResult.getAvailable(),
                             userQuotaResult.getRelative(),
                             userQuotaResult.getTotal(),
                             userQuotaResult.getUsed()
