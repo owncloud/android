@@ -45,18 +45,6 @@ public class UserProfile {
         return mAccountName;
     }
 
-    public String getUserId() {
-        return mUserId;
-    }
-
-    public String getDisplayName() {
-        return mDisplayName;
-    }
-
-    public String getEmail() {
-        return mEmail;
-    }
-
     @Nullable
     public UserAvatar getAvatar() {
         return mAvatar;

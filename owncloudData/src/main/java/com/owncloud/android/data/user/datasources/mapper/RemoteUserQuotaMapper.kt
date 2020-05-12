@@ -27,9 +27,7 @@ class RemoteUserQuotaMapper : RemoteMapper<UserQuota, GetRemoteUserQuotaOperatio
     override fun toModel(remote: GetRemoteUserQuotaOperation.RemoteQuota?): UserQuota? =
         remote?.let {
             UserQuota(
-                free = it.free,
-                relative = it.relative,
-                total = it.total,
+                available = it.free,
                 used = it.used
             )
         }

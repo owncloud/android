@@ -35,5 +35,6 @@ class UseCaseHelper : KoinComponent {
     private val getUserQuotaAsyncUseCase: GetUserQuotaAsyncUseCase by inject()
 
     fun getUserInfo(): UseCaseResult<UserInfo> = getUserInfoAsyncUseCase.execute(Unit)
-    fun getUserQuota(): UseCaseResult<UserQuota> = getUserQuotaAsyncUseCase.execute(Unit)
+    fun getUserQuota(accountName: String): UseCaseResult<UserQuota> =
+        getUserQuotaAsyncUseCase.execute(GetUserQuotaAsyncUseCase.Params(accountName))
 }
