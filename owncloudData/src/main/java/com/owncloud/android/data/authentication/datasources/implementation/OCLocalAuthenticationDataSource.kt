@@ -36,6 +36,7 @@ import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_ID
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
@@ -51,6 +52,7 @@ class OCLocalAuthenticationDataSource(
 ) : LocalAuthenticationDataSource {
 
     override fun addBasicAccount(
+        userName: String,
         lastPermanentLocation: String?,
         password: String,
         serverInfo: ServerInfo,
@@ -60,7 +62,7 @@ class OCLocalAuthenticationDataSource(
         addAccount(
             lastPermanentLocation = lastPermanentLocation,
             serverInfo = serverInfo,
-            userName = userInfo.id,
+            userName = userName,
             password = password,
             updateIfAlreadyExists = updateIfAlreadyExists
         ).also {
@@ -68,6 +70,7 @@ class OCLocalAuthenticationDataSource(
         }.name
 
     override fun addOAuthAccount(
+        userName: String,
         lastPermanentLocation: String?,
         authTokenType: String,
         accessToken: String,
@@ -80,7 +83,7 @@ class OCLocalAuthenticationDataSource(
         addAccount(
             lastPermanentLocation = lastPermanentLocation,
             serverInfo = serverInfo,
-            userName = userInfo.id,
+            userName = userName,
             updateIfAlreadyExists = updateIfAlreadyExists
         ).also {
             updateUserAndServerInfo(it, serverInfo, userInfo)
@@ -168,6 +171,10 @@ class OCLocalAuthenticationDataSource(
 
         accountManager.setUserData(
             newAccount, KEY_DISPLAY_NAME, userInfo.displayName
+        )
+
+        accountManager.setUserData(
+            newAccount, KEY_ID, userInfo.id
         )
     }
 

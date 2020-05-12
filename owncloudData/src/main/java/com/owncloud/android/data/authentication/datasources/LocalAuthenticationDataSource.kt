@@ -24,6 +24,7 @@ import com.owncloud.android.domain.user.model.UserInfo
 
 interface LocalAuthenticationDataSource {
     fun addBasicAccount(
+        userName: String,
         lastPermanentLocation: String?,
         password: String,
         serverInfo: ServerInfo,
@@ -32,6 +33,7 @@ interface LocalAuthenticationDataSource {
     ): String
 
     fun addOAuthAccount(
+        userName: String,
         lastPermanentLocation: String?,
         authTokenType: String,
         accessToken: String,
