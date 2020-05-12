@@ -19,6 +19,7 @@
 package com.owncloud.android.domain.server.usecases
 
 import com.owncloud.android.domain.server.ServerInfoRepository
+import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase.Companion.charToTrim
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.spyk
@@ -33,11 +34,26 @@ class GetServerInfoAsyncUseCaseTest {
     private val serverInfoRepository: ServerInfoRepository = spyk()
     private val useCase = GetServerInfoAsyncUseCase((serverInfoRepository))
     private val useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = "http://demo.owncloud.com")
+    private val useCaseParamsWithSlash = useCaseParams.copy(serverPath = useCaseParams.serverPath.plus(charToTrim))
 
     @Test
     fun getServerInfoSuccess() {
         every { serverInfoRepository.getServerInfo(useCaseParams.serverPath) } returns OC_SERVER_INFO
         val useCaseResult = useCase.execute(useCaseParams)
+
+        assertTrue(useCaseResult.isSuccess)
+        assertFalse(useCaseResult.isError)
+
+        assertNull(useCaseResult.getThrowableOrNull())
+        assertEquals(OC_SERVER_INFO, useCaseResult.getDataOrNull())
+
+        verify(exactly = 1) { serverInfoRepository.getServerInfo(useCaseParams.serverPath) }
+    }
+
+    @Test
+    fun getServerInfoSuccessSlashTrim() {
+        every { serverInfoRepository.getServerInfo(useCaseParams.serverPath) } returns OC_SERVER_INFO
+        val useCaseResult = useCase.execute(useCaseParamsWithSlash)
 
         assertTrue(useCaseResult.isSuccess)
         assertFalse(useCaseResult.isError)
