@@ -42,6 +42,9 @@ data class RemoteCapability(
     // Core PollInterval
     var corePollinterval: Int = 0,
 
+    // Dav Capabilities
+    val chunkingVersion: String = "",
+
     // Files Sharing
     var filesSharingApiEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
