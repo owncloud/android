@@ -43,8 +43,10 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPO
 import com.owncloud.android.testutil.OC_ACCESS_TOKEN
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_ACCOUNT_ID
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASE_URL
+import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_OAUTH_SUPPORTED_TRUE
 import com.owncloud.android.testutil.OC_REDIRECTION_PATH
 import com.owncloud.android.testutil.OC_REFRESH_TOKEN
@@ -90,6 +92,7 @@ class OCLocalAuthenticationDataSourceTest {
         mockSelectedAccountNameInPreferences()
 
         val newAccountName = ocLocalAuthenticationDataSource.addBasicAccount(
+            OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
             "password",
             OC_SERVER_INFO,
@@ -97,7 +100,7 @@ class OCLocalAuthenticationDataSourceTest {
             false
         )
 
-        val newAccount = Account("admin@demo.owncloud.com", "owncloud")
+        val newAccount = Account(OC_ACCOUNT_NAME, "owncloud")
 
         // One for checking if the account exists and another one for getting the new account
         verifyAccountsByTypeAreGot(newAccount.type, 2)
@@ -115,6 +118,7 @@ class OCLocalAuthenticationDataSourceTest {
         } returns arrayOf(OC_ACCOUNT) // The account is already there
 
         ocLocalAuthenticationDataSource.addBasicAccount(
+            OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
             "password",
             OC_SERVER_INFO,
@@ -136,6 +140,7 @@ class OCLocalAuthenticationDataSourceTest {
         mockSelectedAccountNameInPreferences()
 
         ocLocalAuthenticationDataSource.addBasicAccount(
+            OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
             "password",
             OC_SERVER_INFO,
@@ -167,6 +172,7 @@ class OCLocalAuthenticationDataSourceTest {
 
         try {
             ocLocalAuthenticationDataSource.addBasicAccount(
+                OC_BASIC_USERNAME,
                 OC_REDIRECTION_PATH.lastPermanentLocation,
                 "password",
                 OC_SERVER_INFO,
@@ -197,6 +203,7 @@ class OCLocalAuthenticationDataSourceTest {
         } returns Unit
 
         val newAccountName = ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
@@ -207,7 +214,7 @@ class OCLocalAuthenticationDataSourceTest {
             false
         )
 
-        val newAccount = Account("admin@demo.owncloud.com", "owncloud")
+        val newAccount = Account(OC_ACCOUNT_NAME, "owncloud")
 
         // One for checking if the account exists and another one for getting the new account
         verifyAccountsByTypeAreGot(newAccount.type, 2)
@@ -228,6 +235,7 @@ class OCLocalAuthenticationDataSourceTest {
         } returns arrayOf(OC_ACCOUNT) // The account is already there
 
         ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
@@ -256,6 +264,7 @@ class OCLocalAuthenticationDataSourceTest {
         mockSelectedAccountNameInPreferences()
 
         ocLocalAuthenticationDataSource.addOAuthAccount(
+            OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
@@ -295,6 +304,7 @@ class OCLocalAuthenticationDataSourceTest {
 
         try {
             ocLocalAuthenticationDataSource.addOAuthAccount(
+                OC_BASIC_USERNAME,
                 OC_REDIRECTION_PATH.lastPermanentLocation,
                 OC_AUTH_TOKEN_TYPE,
                 OC_ACCESS_TOKEN,
