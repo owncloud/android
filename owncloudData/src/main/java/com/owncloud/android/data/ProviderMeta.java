@@ -67,6 +67,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_VERSION_STRING = "version_string";
         public static final String CAPABILITIES_VERSION_EDITION = "version_edition";
         public static final String CAPABILITIES_CORE_POLLINTERVAL = "core_pollinterval";
+        public static final String CAPABILITIES_DAV_CHUNKING_VERSION = "dav_chunking_version";
         public static final String CAPABILITIES_SHARING_API_ENABLED = "sharing_api_enabled";
         public static final String CAPABILITIES_SHARING_PUBLIC_ENABLED = "sharing_public_enabled";
         public static final String CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED = "sharing_public_password_enforced";

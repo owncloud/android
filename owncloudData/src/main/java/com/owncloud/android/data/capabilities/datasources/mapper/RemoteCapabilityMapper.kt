@@ -36,6 +36,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 versionString = remote.versionString,
                 versionEdition = remote.versionEdition,
                 corePollInterval = remote.corePollinterval,
+                davChunkingVersion = remote.chunkingVersion,
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(remote.filesSharingApiEnabled.value),
                 filesSharingPublicEnabled = CapabilityBooleanType.fromValue(remote.filesSharingPublicEnabled.value),
                 filesSharingPublicPasswordEnforced =
@@ -75,6 +76,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 versionMicro = model.versionMicro,
                 versionString = model.versionString!!,
                 versionEdition = model.versionEdition!!,
+                chunkingVersion = model.davChunkingVersion,
                 corePollinterval = model.corePollInterval,
                 filesSharingApiEnabled = RemoteCapabilityBooleanType.fromValue(model.filesSharingApiEnabled.value)!!,
                 filesSharingPublicEnabled = RemoteCapabilityBooleanType.fromValue(model.filesSharingPublicEnabled.value)!!,

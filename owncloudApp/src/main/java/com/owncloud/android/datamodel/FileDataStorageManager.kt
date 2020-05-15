@@ -1333,6 +1333,7 @@ class FileDataStorageManager {
                 versionString = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_STRING)),
                 versionEdition = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
                 corePollInterval = c.getInt(c.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
+                davChunkingVersion = "",
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(
                     c.getInt(
                         c.getColumnIndex(

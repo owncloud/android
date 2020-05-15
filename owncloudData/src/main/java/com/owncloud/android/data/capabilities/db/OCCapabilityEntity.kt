@@ -46,6 +46,8 @@ data class OCCapabilityEntity(
     val versionEdition: String?,
     @ColumnInfo(name = CAPABILITIES_CORE_POLLINTERVAL)
     val corePollInterval: Int,
+    @ColumnInfo(name = CAPABILITIES_DAV_CHUNKING_VERSION)
+    val davChunkingVersion: String,
     @ColumnInfo(name = CAPABILITIES_SHARING_API_ENABLED, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingApiEnabled: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_PUBLIC_ENABLED, defaultValue = capabilityBooleanTypeUnknownString)
@@ -94,6 +96,7 @@ data class OCCapabilityEntity(
             cursor.getString(cursor.getColumnIndex(CAPABILITIES_VERSION_STRING)),
             cursor.getString(cursor.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
+            cursor.getString(cursor.getColumnIndex(CAPABILITIES_DAV_CHUNKING_VERSION)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_API_ENABLED)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_ENABLED)),
             cursor.getInt(cursor.getColumnIndex(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)),

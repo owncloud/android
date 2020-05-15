@@ -28,6 +28,7 @@ data class OCCapability(
     val versionString: String?,
     val versionEdition: String?,
     val corePollInterval: Int,
+    val davChunkingVersion: String,
     val filesSharingApiEnabled: CapabilityBooleanType,
     val filesSharingPublicEnabled: CapabilityBooleanType,
     val filesSharingPublicPasswordEnforced: CapabilityBooleanType,

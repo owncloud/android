@@ -12,6 +12,7 @@ val OC_CAPABILITY =
         versionString = "1.0.0",
         versionEdition = "1.0.0",
         corePollInterval = 0,
+        davChunkingVersion = "1.0",
         filesSharingApiEnabled = CapabilityBooleanType.TRUE,
         filesSharingPublicEnabled = CapabilityBooleanType.TRUE,
         filesSharingPublicPasswordEnforced = CapabilityBooleanType.FALSE,
