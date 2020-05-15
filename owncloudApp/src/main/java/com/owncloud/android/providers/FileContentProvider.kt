@@ -1007,6 +1007,22 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
 
+            if (oldVersion < 30 && newVersion >= 30) {
+                Timber.i("SQL : Entering in the #30 ADD chunking capability")
+                db.beginTransaction()
+                try {
+                    db.execSQL(
+                        "ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                                " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION + " TEXT " +
+                                " DEFAULT NULL"
+                    )
+                    db.setTransactionSuccessful()
+                    upgraded = true
+                } finally {
+                    db.endTransaction()
+                }
+            }
+
             if (!upgraded) {
                 Timber.i("SQL : OUT of the ADD in onUpgrade; oldVersion == $oldVersion, newVersion == $newVersion")
             }
@@ -1082,6 +1098,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     + ProviderTableMeta.CAPABILITIES_VERSION_STRING + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
+                    + ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
@@ -1414,6 +1431,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 ProviderTableMeta.CAPABILITIES_VERSION_EDITION
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL] =
                 ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION] =
+                ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED] =
                 ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED] =

@@ -47,7 +47,12 @@ data class OCCapability(
     val filesBigFileChunking: CapabilityBooleanType,
     val filesUndelete: CapabilityBooleanType,
     val filesVersioning: CapabilityBooleanType
-)
+) {
+    fun isChunkingAllowed(): Boolean {
+        val doubleChunkingVersion = davChunkingVersion.toDoubleOrNull()
+        return (filesBigFileChunking.isTrue && doubleChunkingVersion != null && doubleChunkingVersion >= 1.0)
+    }
+}
 
 /**
  * Enum for Boolean Type in capabilities, with values:

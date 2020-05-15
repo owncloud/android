@@ -55,6 +55,7 @@ import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -387,6 +388,15 @@ public class FileUploader extends Service
             String uploadKey;
             UploadFileOperation newUploadFileOperation;
             try {
+                FileDataStorageManager storageManager = new FileDataStorageManager(
+                        getApplicationContext(),
+                        account,
+                        getContentResolver()
+                );
+                OCCapability capabilitiesForAccount = storageManager.getCapability(account.name);
+                boolean isChunkingAllowed =
+                        capabilitiesForAccount != null && capabilitiesForAccount.isChunkingAllowed();
+                Timber.d("Chunking is allowed: %s", isChunkingAllowed);
                 for (OCFile ocFile : files) {
 
                     OCUpload ocUpload = new OCUpload(ocFile, account);
@@ -400,7 +410,7 @@ public class FileUploader extends Service
                     ocUpload.setUploadStatus(UploadStatus.UPLOAD_IN_PROGRESS);
 
                     if (new File(ocFile.getStoragePath()).length() >
-                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE && isChunkingAllowed) {
                         ocUpload.setTransferId(
                                 SecurityUtils.stringToMD5Hash(ocFile.getRemotePath()) + System.currentTimeMillis());
                         newUploadFileOperation = new ChunkedUploadFileOperation(
@@ -817,7 +827,8 @@ public class FileUploader extends Service
 
             /// Check account existence
             if (!AccountUtils.exists(mCurrentUpload.getAccount().name, this)) {
-                Timber.w("Account " + mCurrentUpload.getAccount().name + " does not exist anymore -> cancelling all its uploads");
+                Timber.w("Account " + mCurrentUpload.getAccount().name + " does not exist anymore -> cancelling all " +
+                        "its uploads");
                 cancelUploadsForAccount(mCurrentUpload.getAccount());
                 return;
             }

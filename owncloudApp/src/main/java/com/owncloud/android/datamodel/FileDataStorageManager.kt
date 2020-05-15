@@ -1228,6 +1228,7 @@ class FileDataStorageManager {
             put(CAPABILITIES_VERSION_STRING, capability.versionString)
             put(CAPABILITIES_VERSION_EDITION, capability.versionEdition)
             put(CAPABILITIES_CORE_POLLINTERVAL, capability.corePollinterval)
+            put(CAPABILITIES_DAV_CHUNKING_VERSION, capability.chunkingVersion)
             put(CAPABILITIES_SHARING_API_ENABLED, capability.filesSharingApiEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_ENABLED, capability.filesSharingPublicEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED, capability.filesSharingPublicPasswordEnforced.value)
@@ -1333,7 +1334,7 @@ class FileDataStorageManager {
                 versionString = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_STRING)),
                 versionEdition = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
                 corePollInterval = c.getInt(c.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
-                davChunkingVersion = "",
+                davChunkingVersion = c.getString(c.getColumnIndex(CAPABILITIES_DAV_CHUNKING_VERSION)) ?: "",
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(
                     c.getInt(
                         c.getColumnIndex(
