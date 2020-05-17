@@ -499,8 +499,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="confirmation_remove_folders_alert">Confirma que quere eliminar os elementos seleccionados e o seu contido?</string>
   <string name="failed_upload_quota_exceeded_text">Non hai espazo abondo na conta</string>
   <string name="auth_forbidden">Autenticación non permitida</string>
-  <string name="actionbar_privacy_policy">Política de privacidade</string>
-  <string name="prefs_privacy_policy">Política de privacidade</string>
+  <string name="actionbar_privacy_policy">Directiva de privacidade</string>
+  <string name="prefs_privacy_policy">Directiva de privacidade</string>
   <string name="privacy_policy_error">Produciuse un erro:</string>
   <string name="service_unavailable">O servidor non é accesíbel</string>
   <string name="streaming_certificate_error">Non é posíbel iniciar o fluxo porque o certificado do servidor non é de confianza. A descarga do ficheiro comezará automaticamente</string>
