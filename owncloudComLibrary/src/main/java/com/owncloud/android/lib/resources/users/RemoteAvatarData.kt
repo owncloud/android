@@ -1,4 +1,5 @@
 /* ownCloud Android Library is available under MIT license
+ *
  *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,19 +20,11 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
- *
  */
+package com.owncloud.android.lib.resources.users
 
-package com.owncloud.android.lib.resources.users.services
-
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.Service
-import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation
-import com.owncloud.android.lib.resources.users.RemoteAvatarData
-import com.owncloud.android.lib.resources.users.RemoteUserInfo
-
-interface UserService : Service {
-    fun getUserInfo(): RemoteOperationResult<RemoteUserInfo>
-    fun getUserQuota(): RemoteOperationResult<GetRemoteUserQuotaOperation.RemoteQuota>
-    fun getUserAvatar(dimension: Int): RemoteOperationResult<RemoteAvatarData>
-}
+data class RemoteAvatarData(
+    val avatarData: ByteArray = byteArrayOf(),
+    val mimeType: String = "",
+    val eTag: String = ""
+)
