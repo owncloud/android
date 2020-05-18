@@ -19,7 +19,7 @@
 package com.owncloud.android.domain.server.usecases
 
 import com.owncloud.android.domain.server.ServerInfoRepository
-import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase.Companion.charToTrim
+import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase.Companion.TRAILING_SLASH
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.spyk
@@ -34,7 +34,7 @@ class GetServerInfoAsyncUseCaseTest {
     private val serverInfoRepository: ServerInfoRepository = spyk()
     private val useCase = GetServerInfoAsyncUseCase((serverInfoRepository))
     private val useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = "http://demo.owncloud.com")
-    private val useCaseParamsWithSlash = useCaseParams.copy(serverPath = useCaseParams.serverPath.plus(charToTrim))
+    private val useCaseParamsWithSlash = useCaseParams.copy(serverPath = useCaseParams.serverPath.plus(TRAILING_SLASH))
 
     @Test
     fun getServerInfoSuccess() {

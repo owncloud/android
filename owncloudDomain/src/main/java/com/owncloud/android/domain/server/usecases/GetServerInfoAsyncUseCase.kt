@@ -27,13 +27,13 @@ class GetServerInfoAsyncUseCase(
     private val serverInfoRepository: ServerInfoRepository
 ) : BaseUseCaseWithResult<ServerInfo, GetServerInfoAsyncUseCase.Params>() {
     override fun run(params: Params): ServerInfo =
-        serverInfoRepository.getServerInfo(params.serverPath.trimEnd(charToTrim))
+        serverInfoRepository.getServerInfo(params.serverPath.trimEnd(TRAILING_SLASH))
 
     data class Params(
         val serverPath: String
     )
 
     companion object {
-        const val charToTrim = '/'
+        const val TRAILING_SLASH = '/'
     }
 }

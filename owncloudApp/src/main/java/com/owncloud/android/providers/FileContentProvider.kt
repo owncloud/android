@@ -49,11 +49,11 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.Executors
-import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager

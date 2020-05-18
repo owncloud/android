@@ -81,7 +81,7 @@ class MigrationToDB28 : MigrationTest() {
 
     companion object {
          val cvWithDefaultValues = ContentValues().apply {
-            put(CAPABILITIES_ACCOUNT_NAME, "accountWithDefaultValues")
+            put(CAPABILITIES_ACCOUNT_NAME, OC_CAPABILITY.accountName)
             put(CAPABILITIES_VERSION_MAYOR, OC_CAPABILITY.versionMayor)
             put(CAPABILITIES_VERSION_MINOR, OC_CAPABILITY.versionMinor)
             put(CAPABILITIES_VERSION_MICRO, OC_CAPABILITY.versionMicro)

@@ -106,12 +106,12 @@ class MigrationToDB30 : MigrationTest() {
 
     companion object {
         val cvWithDefaultValues = ContentValues().apply {
-            put(CAPABILITIES_ACCOUNT_NAME, "accountWithDefaultValues")
+            put(CAPABILITIES_ACCOUNT_NAME, OC_CAPABILITY.accountName)
             put(CAPABILITIES_VERSION_MAYOR, OC_CAPABILITY.versionMayor)
             put(CAPABILITIES_VERSION_MINOR, OC_CAPABILITY.versionMinor)
             put(CAPABILITIES_VERSION_MICRO, OC_CAPABILITY.versionMicro)
             put(CAPABILITIES_CORE_POLLINTERVAL, OC_CAPABILITY.corePollInterval)
-            put(CAPABILITIES_DAV_CHUNKING_VERSION, "1.0")
+            put(CAPABILITIES_DAV_CHUNKING_VERSION, OC_CAPABILITY.davChunkingVersion)
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, OC_CAPABILITY.filesSharingPublicExpireDateDays)
         }
     }
