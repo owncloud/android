@@ -36,6 +36,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation;
+import com.owncloud.android.lib.resources.users.RemoteAvatarData;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.operations.common.UseCaseHelper;
 import timber.log.Timber;
@@ -118,11 +119,11 @@ public class GetUserProfileOperation extends SyncOperation {
 
                     GetRemoteUserAvatarOperation getAvatarOperation = new GetRemoteUserAvatarOperation(dimension);
 
-                    RemoteOperationResult<GetRemoteUserAvatarOperation.ResultData> avatarOperationResult =
+                    RemoteOperationResult<RemoteAvatarData> avatarOperationResult =
                             getAvatarOperation.execute(client);
 
                     if (avatarOperationResult.isSuccess()) {
-                        GetRemoteUserAvatarOperation.ResultData avatar = avatarOperationResult.getData();
+                        RemoteAvatarData avatar = avatarOperationResult.getData();
 
                         byte[] avatarData = avatar.getAvatarData();
                         String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
@@ -132,7 +133,7 @@ public class GetUserProfileOperation extends SyncOperation {
                         );
 
                         UserProfile.UserAvatar userAvatar = new UserProfile.UserAvatar(
-                                avatarKey, avatar.getMimeType(), avatar.getEtag()
+                                avatarKey, avatar.getMimeType(), avatar.getETag()
                         );
                         userProfile.setAvatar(userAvatar);
 

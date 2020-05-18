@@ -19,6 +19,7 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCRemoteAuthenticationDataSource
@@ -59,7 +60,7 @@ val remoteDataSourceModule = module {
     single<CapabilityService> { OCCapabilityService(get()) }
     single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
-    single<UserService> { OCUserService(get()) }
+    single<UserService> { OCUserService(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt()) }
     single<FileService> { OCFileService(get()) }
     single<ServerInfoService> { OCServerInfoService() }
 
