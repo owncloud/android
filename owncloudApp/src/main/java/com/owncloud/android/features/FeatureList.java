@@ -40,6 +40,15 @@ public class FeatureList {
     static final private boolean SHOW_ON_FIRST_RUN = true;
     static final private boolean SHOW_ON_UPGRADE = false;
 
+    static final private int VERSION_CODE_BETA_2_15_1 = 21400201;
+    static final private FeatureItem INCONSISTENT_VERSION = new FeatureItem(
+            R.drawable.whats_new_warning,
+            R.string.welcome_feature_6_title,
+            R.string.welcome_feature_6_text,
+            "2.14.2",
+            "0",
+            SHOW_ON_UPGRADE);
+
     static final private FeatureItem[] featuresList = {
             // Basic features showed on first install
             new FeatureItem(R.drawable.whats_new_files, R.string.welcome_feature_1_title,
@@ -62,6 +71,11 @@ public class FeatureList {
         List<FeatureItem> features = new LinkedList<>();
 
         Timber.d("Getting filtered features");
+
+        boolean reinstallRecommended = lastSeenVersionCode == VERSION_CODE_BETA_2_15_1;
+        if (reinstallRecommended){
+            features.add(INCONSISTENT_VERSION);
+        }
 
         for (FeatureItem item : get()) {
             final int itemVersionCode = isBeta ? item.getBetaVersionNumber() : item.getVersionNumber();
@@ -170,16 +184,15 @@ public class FeatureList {
                 };
     }
 
-    static int versionCodeFromString(String version) {
-        String v[] = version.split(Pattern.quote("."));
+    private static int versionCodeFromString(String version) {
+        String[] v = version.split(Pattern.quote("."));
         if (v.length != 3) {
             Timber.d("Version string is incorrect %s", version);
             return 0;
         }
-        int result = Integer.parseInt(v[0]) * (int) (10e6) +
+
+        return Integer.parseInt(v[0]) * (int) (10e6) +
                 Integer.parseInt(v[1]) * (int) (10e4) +
                 Integer.parseInt(v[2]) * 100;
-
-        return result;
     }
 }
