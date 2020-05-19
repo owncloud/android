@@ -41,26 +41,28 @@ public class FeatureList {
     static final private boolean SHOW_ON_UPGRADE = false;
 
     static final private int VERSION_CODE_BETA_2_15_1 = 21400201;
+    static final private String DEFAULT_WIZARD_VERSION_NAME = "2.7.0";
+    static final private String INDIFFERENT = "0";
     static final private FeatureItem INCONSISTENT_VERSION = new FeatureItem(
             R.drawable.whats_new_warning,
             R.string.welcome_feature_6_title,
             R.string.welcome_feature_6_text,
-            "2.14.2",
-            "0",
+            INDIFFERENT,
+            INDIFFERENT,
             SHOW_ON_UPGRADE);
 
     static final private FeatureItem[] featuresList = {
             // Basic features showed on first install
             new FeatureItem(R.drawable.whats_new_files, R.string.welcome_feature_1_title,
-                    R.string.welcome_feature_1_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_1_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_share, R.string.welcome_feature_2_title,
-                    R.string.welcome_feature_2_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_2_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
-                    R.string.welcome_feature_3_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_3_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
-                    R.string.welcome_feature_4_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_4_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
-                    R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN)
+                    R.string.welcome_feature_5_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN)
     };
 
     static public FeatureItem[] get() {
@@ -73,7 +75,7 @@ public class FeatureList {
         Timber.d("Getting filtered features");
 
         boolean reinstallRecommended = lastSeenVersionCode == VERSION_CODE_BETA_2_15_1;
-        if (reinstallRecommended){
+        if (reinstallRecommended) {
             features.add(INCONSISTENT_VERSION);
         }
 
