@@ -33,5 +33,5 @@ import com.owncloud.android.lib.resources.users.RemoteUserInfo
 interface UserService : Service {
     fun getUserInfo(): RemoteOperationResult<RemoteUserInfo>
     fun getUserQuota(): RemoteOperationResult<GetRemoteUserQuotaOperation.RemoteQuota>
-    fun getUserAvatar(dimension: Int): RemoteOperationResult<RemoteAvatarData>
+    fun getUserAvatar(): RemoteOperationResult<RemoteAvatarData>
 }
