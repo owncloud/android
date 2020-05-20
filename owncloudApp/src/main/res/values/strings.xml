@@ -600,7 +600,7 @@
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
     <string name="welcome_feature_6_title">Reinstall recommended</string>
-    <string name="welcome_feature_6_text">You have upgraded from an unstable version. Please, reinstall the app in order to avoid undesirable behaviours.</string>
+    <string name="welcome_feature_6_text">You have upgraded from a beta version. Please, reinstall the app in order to avoid undesirable behaviours.</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
 
