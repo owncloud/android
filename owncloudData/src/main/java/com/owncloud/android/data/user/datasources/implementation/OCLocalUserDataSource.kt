@@ -18,11 +18,11 @@ class OCLocalUserDataSource(
         userQuotaMapper.toModel(userDao.getQuotaForAccount(accountName))
 
     override fun saveAvatarForAccount(accountName: String, userAvatar: UserAvatar) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun getAvatarForAccount(accountName: String): UserAvatar? {
-        TODO("Not yet implemented")
+        return null//TODO("Not yet implemented")
     }
 
 }
