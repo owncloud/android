@@ -17,14 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.user.datasources
+package com.owncloud.android.data.user.datasources.mapper
 
+import com.owncloud.android.domain.mappers.RemoteMapper
 import com.owncloud.android.domain.user.model.UserAvatar
-import com.owncloud.android.domain.user.model.UserInfo
-import com.owncloud.android.domain.user.model.UserQuota
+import com.owncloud.android.lib.resources.users.RemoteAvatarData
 
-interface RemoteUserDataSource {
-    fun getUserInfo(): UserInfo
-    fun getUserQuota(): UserQuota
-    fun getUserAvatar(): UserAvatar
+class RemoteUserAvatarMapper : RemoteMapper<UserAvatar, RemoteAvatarData> {
+    override fun toModel(remote: RemoteAvatarData?): UserAvatar? =
+        remote?.let {
+            UserAvatar(
+                avatarData = it.avatarData,
+                eTag = it.eTag,
+                mimeType = it.mimeType
+            )
+        }
+
+    // Not needed
+    override fun toRemote(model: UserAvatar?): RemoteAvatarData? = null
 }

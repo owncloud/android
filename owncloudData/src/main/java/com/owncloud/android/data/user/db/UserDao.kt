@@ -35,6 +35,13 @@ abstract class UserDao {
         private const val DELETE_QUOTA =
             "DELETE FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME} " +
                     "WHERE accountName = :accountName"
+        private const val SELECT_AVATAR =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.USER_AVATARS_TABLE_NAME} " +
+                    "WHERE accountName = :accountName"
+        private const val DELETE_AVATAR =
+            "DELETE FROM ${ProviderMeta.ProviderTableMeta.USER_AVATARS_TABLE_NAME} " +
+                    "WHERE accountName = :accountName"
     }
 
     @Query(SELECT_QUOTA)
@@ -48,4 +55,14 @@ abstract class UserDao {
     @Query(DELETE_QUOTA)
     abstract fun deleteQuotaForAccount(accountName: String)
 
+    @Query(SELECT_AVATAR)
+    abstract fun getAvatarForAccount(
+        accountName: String
+    ): UserAvatarEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insert(userAvatarEntity: UserAvatarEntity)
+
+    @Query(DELETE_AVATAR)
+    abstract fun deleteAvatarForAccount(accountName: String)
 }
