@@ -16,15 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.domain.user.model
 
-package com.owncloud.android.data.user.datasources
-
-import com.owncloud.android.domain.user.model.UserAvatar
-import com.owncloud.android.domain.user.model.UserInfo
-import com.owncloud.android.domain.user.model.UserQuota
-
-interface RemoteUserDataSource {
-    fun getUserInfo(): UserInfo
-    fun getUserQuota(): UserQuota
-    fun getUserAvatar(): UserAvatar
-}
+data class UserAvatar(
+    val avatarData: ByteArray = byteArrayOf(),
+    val mimeType: String = "",
+    val eTag: String = ""
+)

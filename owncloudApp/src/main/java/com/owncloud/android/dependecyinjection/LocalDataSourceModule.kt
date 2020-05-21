@@ -38,7 +38,7 @@ val localDataSourceModule = module {
 
     single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
-    single { OwncloudDatabase.getDatabase(androidContext()).userQuotaDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get(), get()) }

@@ -16,15 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.user.db
 
-package com.owncloud.android.data.user.datasources
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.USER_AVATARS_TABLE_NAME
 
-import com.owncloud.android.domain.user.model.UserAvatar
-import com.owncloud.android.domain.user.model.UserInfo
-import com.owncloud.android.domain.user.model.UserQuota
-
-interface RemoteUserDataSource {
-    fun getUserInfo(): UserInfo
-    fun getUserQuota(): UserQuota
-    fun getUserAvatar(): UserAvatar
-}
+/**
+ * Represents one record of the UserQuota table.
+ */
+@Entity(tableName = USER_AVATARS_TABLE_NAME)
+data class UserAvatarEntity(
+    @PrimaryKey
+    val accountName: String,
+    val cachedKey: String,
+    val mimeType: String,
+    val eTag: String
+)
