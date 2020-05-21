@@ -30,6 +30,7 @@ import com.owncloud.android.datamodel.UserProfile;
 import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.domain.UseCaseResult;
 import com.owncloud.android.domain.exceptions.FileNotFoundException;
+import com.owncloud.android.domain.user.model.UserAvatar;
 import com.owncloud.android.domain.user.model.UserInfo;
 import com.owncloud.android.domain.user.model.UserQuota;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -114,28 +115,26 @@ public class GetUserProfileOperation extends SyncOperation {
 
                     userProfile.setQuota(userQuota);
 
-                    /// get avatar (optional for success)
                     int dimension = getAvatarDimension();
 
-                    GetRemoteUserAvatarOperation getAvatarOperation = new GetRemoteUserAvatarOperation(dimension);
+                    /// get avatar (optional for success)
+                    UseCaseResult<UserAvatar> avatarUseCaseResult = useCaseHelper.getUserAvatar(storedAccount.name);
+                    if (avatarUseCaseResult.getDataOrNull() != null) {
+                        // store display name with account data
+                        UserAvatar userAvatar = avatarUseCaseResult.getDataOrNull();
+                        Timber.d("User info recovered from UseCaseHelper:GetUserAvatar -> %s", userAvatar.toString());
 
-                    RemoteOperationResult<RemoteAvatarData> avatarOperationResult =
-                            getAvatarOperation.execute(client);
-
-                    if (avatarOperationResult.isSuccess()) {
-                        RemoteAvatarData avatar = avatarOperationResult.getData();
-
-                        byte[] avatarData = avatar.getAvatarData();
+                        byte[] avatarData = userAvatar.getAvatarData();
                         String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
                                 storedAccount.name,
                                 avatarData,
                                 dimension
                         );
 
-                        UserProfile.UserAvatar userAvatar = new UserProfile.UserAvatar(
-                                avatarKey, avatar.getMimeType(), avatar.getETag()
+                        UserProfile.UserAvatar useAvatar = new UserProfile.UserAvatar(
+                                avatarKey, userAvatar.getMimeType(), userAvatar.getETag()
                         );
-                        userProfile.setAvatar(userAvatar);
+                        userProfile.setAvatar(useAvatar);
 
                     } else if (avatarOperationResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
                         Timber.i("No avatar available, removing cached copy");
