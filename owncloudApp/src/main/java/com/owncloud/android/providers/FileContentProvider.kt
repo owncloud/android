@@ -49,11 +49,11 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.Executors
-import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
@@ -1007,6 +1007,22 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
 
+            if (oldVersion < 30 && newVersion >= 30) {
+                Timber.i("SQL : Entering in the #30 ADD chunking capability")
+                db.beginTransaction()
+                try {
+                    db.execSQL(
+                        "ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                                " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION + " TEXT " +
+                                " DEFAULT NULL"
+                    )
+                    db.setTransactionSuccessful()
+                    upgraded = true
+                } finally {
+                    db.endTransaction()
+                }
+            }
+
             if (!upgraded) {
                 Timber.i("SQL : OUT of the ADD in onUpgrade; oldVersion == $oldVersion, newVersion == $newVersion")
             }
@@ -1082,6 +1098,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     + ProviderTableMeta.CAPABILITIES_VERSION_STRING + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
+                    + ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
@@ -1091,11 +1108,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, "
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER, "     // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, "     // boolean
@@ -1416,6 +1431,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 ProviderTableMeta.CAPABILITIES_VERSION_EDITION
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL] =
                 ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION] =
+                ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED] =
                 ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED] =
@@ -1434,16 +1451,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
-            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL] =
-                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL] =
-                ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_RESHARING] =
                 ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING] =

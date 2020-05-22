@@ -20,11 +20,11 @@
 package com.owncloud.android.domain.capabilities.model
 
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.Companion.fromBooleanValue
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.Companion.fromValue
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.FALSE
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.TRUE
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.UNKNOWN
-import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.Companion.fromValue
-
+import com.owncloud.android.testutil.OC_CAPABILITY
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -42,6 +42,7 @@ class OCCapabilityTest {
             "1.0.0",
             "1.0.0",
             0,
+            "1.0",
             TRUE,
             TRUE,
             FALSE,
@@ -50,8 +51,6 @@ class OCCapabilityTest {
             FALSE,
             FALSE,
             0,
-            FALSE,
-            FALSE,
             FALSE,
             FALSE,
             FALSE,
@@ -72,6 +71,7 @@ class OCCapabilityTest {
         assertEquals("1.0.0", item.versionString)
         assertEquals("1.0.0", item.versionEdition)
         assertEquals(0, item.corePollInterval)
+        assertEquals("1.0", item.davChunkingVersion)
         assertEquals(TRUE, item.filesSharingApiEnabled)
         assertEquals(TRUE, item.filesSharingPublicEnabled)
         assertEquals(FALSE, item.filesSharingPublicPasswordEnforced)
@@ -81,11 +81,9 @@ class OCCapabilityTest {
         assertEquals(FALSE, item.filesSharingPublicExpireDateEnabled)
         assertEquals(0, item.filesSharingPublicExpireDateDays)
         assertEquals(FALSE, item.filesSharingPublicExpireDateEnforced)
-        assertEquals(FALSE, item.filesSharingPublicSendMail)
         assertEquals(FALSE, item.filesSharingPublicUpload)
         assertEquals(FALSE, item.filesSharingPublicMultiple)
         assertEquals(FALSE, item.filesSharingPublicSupportsUploadOnly)
-        assertEquals(FALSE, item.filesSharingUserSendMail)
         assertEquals(FALSE, item.filesSharingResharing)
         assertEquals(FALSE, item.filesSharingFederationOutgoing)
         assertEquals(FALSE, item.filesSharingFederationIncoming)
@@ -105,6 +103,7 @@ class OCCapabilityTest {
             versionString = "1.0.0",
             versionEdition = "1.0.0",
             corePollInterval = 0,
+            davChunkingVersion = "1.0",
             filesSharingApiEnabled = TRUE,
             filesSharingPublicEnabled = TRUE,
             filesSharingPublicPasswordEnforced = FALSE,
@@ -114,11 +113,9 @@ class OCCapabilityTest {
             filesSharingPublicExpireDateEnabled = FALSE,
             filesSharingPublicExpireDateDays = 0,
             filesSharingPublicExpireDateEnforced = FALSE,
-            filesSharingPublicSendMail = FALSE,
             filesSharingPublicUpload = FALSE,
             filesSharingPublicMultiple = FALSE,
             filesSharingPublicSupportsUploadOnly = FALSE,
-            filesSharingUserSendMail = FALSE,
             filesSharingResharing = FALSE,
             filesSharingFederationOutgoing = FALSE,
             filesSharingFederationIncoming = FALSE,
@@ -136,6 +133,7 @@ class OCCapabilityTest {
             "1.0.0",
             "1.0.0",
             0,
+            "1.0",
             TRUE,
             TRUE,
             FALSE,
@@ -144,8 +142,6 @@ class OCCapabilityTest {
             FALSE,
             FALSE,
             0,
-            FALSE,
-            FALSE,
             FALSE,
             FALSE,
             FALSE,
@@ -173,6 +169,7 @@ class OCCapabilityTest {
             versionString = "1.0.0",
             versionEdition = "1.0.0",
             corePollInterval = 0,
+            davChunkingVersion = "1.0",
             filesSharingApiEnabled = TRUE,
             filesSharingPublicEnabled = TRUE,
             filesSharingPublicPasswordEnforced = FALSE,
@@ -182,11 +179,9 @@ class OCCapabilityTest {
             filesSharingPublicExpireDateEnabled = FALSE,
             filesSharingPublicExpireDateDays = 0,
             filesSharingPublicExpireDateEnforced = FALSE,
-            filesSharingPublicSendMail = FALSE,
             filesSharingPublicUpload = FALSE,
             filesSharingPublicMultiple = FALSE,
             filesSharingPublicSupportsUploadOnly = FALSE,
-            filesSharingUserSendMail = FALSE,
             filesSharingResharing = FALSE,
             filesSharingFederationOutgoing = FALSE,
             filesSharingFederationIncoming = FALSE,
@@ -204,6 +199,7 @@ class OCCapabilityTest {
             "1.0.0",
             "1.0.0",
             0,
+            "1.0",
             TRUE,
             TRUE,
             FALSE,
@@ -212,8 +208,6 @@ class OCCapabilityTest {
             FALSE,
             FALSE,
             0,
-            FALSE,
-            FALSE,
             FALSE,
             FALSE,
             FALSE,
@@ -252,5 +246,23 @@ class OCCapabilityTest {
         assertEquals(false, capabilityUnknown.isTrue)
         assertEquals(true, capabilityFalse.isFalse)
         assertEquals(true, capabilityTrue.isTrue)
+    }
+
+    @Test
+    fun isChunkingAvailable() {
+        val item1 = OC_CAPABILITY.copy(davChunkingVersion = "", filesBigFileChunking = TRUE)
+        assertEquals(false, item1.isChunkingAllowed())
+
+        val item2 = OC_CAPABILITY.copy(davChunkingVersion = "0", filesBigFileChunking = TRUE)
+        assertEquals(false, item2.isChunkingAllowed())
+
+        val item3 = OC_CAPABILITY.copy(davChunkingVersion = "notADouble", filesBigFileChunking = TRUE)
+        assertEquals(false, item3.isChunkingAllowed())
+
+        val item4 = OC_CAPABILITY.copy(davChunkingVersion = "1.0", filesBigFileChunking = TRUE)
+        assertEquals(true, item4.isChunkingAllowed())
+
+        val item5 = OC_CAPABILITY.copy(davChunkingVersion = "1.0", filesBigFileChunking = FALSE)
+        assertEquals(false, item5.isChunkingAllowed())
     }
 }

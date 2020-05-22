@@ -739,7 +739,7 @@ class FileDataStorageManager {
                         sortOrder = "$FILE_PATH ASC "
                     )
                 } catch (e: RemoteException) {
-                    Timber.e(e.message)
+                    Timber.e(e)
                     null
                 }
 
@@ -923,7 +923,7 @@ class FileDataStorageManager {
                 sortOrder = null
             )
         } catch (e: RemoteException) {
-            Timber.e(e.message)
+            Timber.e(e)
             return ret
         }
 
@@ -1228,6 +1228,7 @@ class FileDataStorageManager {
             put(CAPABILITIES_VERSION_STRING, capability.versionString)
             put(CAPABILITIES_VERSION_EDITION, capability.versionEdition)
             put(CAPABILITIES_CORE_POLLINTERVAL, capability.corePollinterval)
+            put(CAPABILITIES_DAV_CHUNKING_VERSION, capability.chunkingVersion)
             put(CAPABILITIES_SHARING_API_ENABLED, capability.filesSharingApiEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_ENABLED, capability.filesSharingPublicEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED, capability.filesSharingPublicPasswordEnforced.value)
@@ -1246,11 +1247,9 @@ class FileDataStorageManager {
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED, capability.filesSharingPublicExpireDateEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, capability.filesSharingPublicExpireDateDays)
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED, capability.filesSharingPublicExpireDateEnforced.value)
-            put(CAPABILITIES_SHARING_PUBLIC_SEND_MAIL, capability.filesSharingPublicSendMail.value)
             put(CAPABILITIES_SHARING_PUBLIC_UPLOAD, capability.filesSharingPublicUpload.value)
             put(CAPABILITIES_SHARING_PUBLIC_MULTIPLE, capability.filesSharingPublicMultiple.value)
             put(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY, capability.filesSharingPublicSupportsUploadOnly.value)
-            put(CAPABILITIES_SHARING_USER_SEND_MAIL, capability.filesSharingUserSendMail.value)
             put(CAPABILITIES_SHARING_RESHARING, capability.filesSharingResharing.value)
             put(CAPABILITIES_SHARING_FEDERATION_OUTGOING, capability.filesSharingFederationOutgoing.value)
             put(CAPABILITIES_SHARING_FEDERATION_INCOMING, capability.filesSharingFederationIncoming.value)
@@ -1335,6 +1334,7 @@ class FileDataStorageManager {
                 versionString = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_STRING)),
                 versionEdition = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
                 corePollInterval = c.getInt(c.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
+                davChunkingVersion = c.getString(c.getColumnIndex(CAPABILITIES_DAV_CHUNKING_VERSION)) ?: "",
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(
                     c.getInt(
                         c.getColumnIndex(
@@ -1396,13 +1396,6 @@ class FileDataStorageManager {
                         )
                     )
                 ),
-                filesSharingPublicSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_SEND_MAIL
-                        )
-                    )
-                ),
                 filesSharingPublicUpload = CapabilityBooleanType.fromValue(
                     c.getInt(
                         c.getColumnIndex(
@@ -1421,13 +1414,6 @@ class FileDataStorageManager {
                     c.getInt(
                         c.getColumnIndex(
                             CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-                        )
-                    )
-                ),
-                filesSharingUserSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_USER_SEND_MAIL
                         )
                     )
                 ),

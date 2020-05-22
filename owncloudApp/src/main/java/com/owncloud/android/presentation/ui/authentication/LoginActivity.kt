@@ -442,7 +442,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         )
 
         authService = AuthorizationService(this, appAuthConfigurationBuilder.build())
-
+        Timber.d("Sends an authorization request to the authorization service using a custom tab or browser instance.")
+        Timber.d("Authorization service: $authService")
         authService?.performAuthorizationRequest(request, pendingIntent)
     }
 

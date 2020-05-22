@@ -28,6 +28,7 @@ data class OCCapability(
     val versionString: String?,
     val versionEdition: String?,
     val corePollInterval: Int,
+    val davChunkingVersion: String,
     val filesSharingApiEnabled: CapabilityBooleanType,
     val filesSharingPublicEnabled: CapabilityBooleanType,
     val filesSharingPublicPasswordEnforced: CapabilityBooleanType,
@@ -37,18 +38,21 @@ data class OCCapability(
     val filesSharingPublicExpireDateEnabled: CapabilityBooleanType,
     val filesSharingPublicExpireDateDays: Int,
     val filesSharingPublicExpireDateEnforced: CapabilityBooleanType,
-    val filesSharingPublicSendMail: CapabilityBooleanType,
     val filesSharingPublicUpload: CapabilityBooleanType,
     val filesSharingPublicMultiple: CapabilityBooleanType,
     val filesSharingPublicSupportsUploadOnly: CapabilityBooleanType,
-    val filesSharingUserSendMail: CapabilityBooleanType,
     val filesSharingResharing: CapabilityBooleanType,
     val filesSharingFederationOutgoing: CapabilityBooleanType,
     val filesSharingFederationIncoming: CapabilityBooleanType,
     val filesBigFileChunking: CapabilityBooleanType,
     val filesUndelete: CapabilityBooleanType,
     val filesVersioning: CapabilityBooleanType
-)
+) {
+    fun isChunkingAllowed(): Boolean {
+        val doubleChunkingVersion = davChunkingVersion.toDoubleOrNull()
+        return (filesBigFileChunking.isTrue && doubleChunkingVersion != null && doubleChunkingVersion >= 1.0)
+    }
+}
 
 /**
  * Enum for Boolean Type in capabilities, with values:

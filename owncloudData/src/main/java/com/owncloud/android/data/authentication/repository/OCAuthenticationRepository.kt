@@ -43,11 +43,12 @@ class OCAuthenticationRepository(
             )
 
         return localAuthenticationDataSource.addBasicAccount(
-            userInfoAndRedirectionPath.second,
-            password,
-            serverInfo,
-            userInfoAndRedirectionPath.first,
-            updateAccountIfAlreadyExists
+            userName = username,
+            lastPermanentLocation = userInfoAndRedirectionPath.second,
+            password = password,
+            serverInfo = serverInfo,
+            userInfo = userInfoAndRedirectionPath.first,
+            updateIfAlreadyExists = updateAccountIfAlreadyExists
         )
     }
 
@@ -68,14 +69,15 @@ class OCAuthenticationRepository(
             )
 
         return localAuthenticationDataSource.addOAuthAccount(
-            userInfoAndRedirectionPath.second,
-            authTokenType,
-            accessToken,
-            serverInfo,
-            userInfoAndRedirectionPath.first,
-            refreshToken,
-            scope,
-            updateAccountIfAlreadyExists
+            userName = if (username.isNotBlank()) username else userInfoAndRedirectionPath.first.id,
+            lastPermanentLocation = userInfoAndRedirectionPath.second,
+            authTokenType = authTokenType,
+            accessToken = accessToken,
+            serverInfo = serverInfo,
+            userInfo = userInfoAndRedirectionPath.first,
+            refreshToken = refreshToken,
+            scope = scope,
+            updateIfAlreadyExists = updateAccountIfAlreadyExists
         )
     }
 

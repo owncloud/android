@@ -62,5 +62,6 @@ open class MigrationTest {
         const val DB_VERSION_27 = 27
         const val DB_VERSION_28 = 28
         const val DB_VERSION_29 = 29
+        const val DB_VERSION_30 = 30
     }
 }
