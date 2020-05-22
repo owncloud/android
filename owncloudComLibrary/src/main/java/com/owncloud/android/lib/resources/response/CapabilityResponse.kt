@@ -42,6 +42,7 @@ data class CapabilityResponse(
         versionString = serverVersion?.string ?: "",
         versionEdition = serverVersion?.edition ?: "",
         corePollinterval = capabilities?.coreCapabilities?.pollinterval ?: 0,
+        chunkingVersion = capabilities?.davCapabilities?.chunking ?: "",
         filesSharingApiEnabled = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingApiEnabled),
         filesSharingResharing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingReSharing),
         filesSharingPublicEnabled = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingPublic?.enabled),
@@ -79,7 +80,9 @@ data class Capabilities(
     @Json(name = "files_sharing")
     val fileSharingCapabilities: FileSharingCapabilities?,
     @Json(name = "files")
-    val fileCapabilities: FileCapabilities?
+    val fileCapabilities: FileCapabilities?,
+    @Json(name = "dav")
+    val davCapabilities: DavCapabilities?
 )
 
 @JsonClass(generateAdapter = true)
@@ -149,6 +152,11 @@ data class FileCapabilities(
     val bigfilechunking: Boolean?,
     val undelete: Boolean?,
     val versioning: Boolean?
+)
+
+@JsonClass(generateAdapter = true)
+data class DavCapabilities(
+    val chunking: String?
 )
 
 @JsonClass(generateAdapter = true)

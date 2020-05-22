@@ -42,6 +42,9 @@ data class RemoteCapability(
     // Core PollInterval
     var corePollinterval: Int = 0,
 
+    // Dav Capabilities
+    val chunkingVersion: String = "",
+
     // Files Sharing
     var filesSharingApiEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
@@ -52,11 +55,9 @@ data class RemoteCapability(
     var filesSharingPublicExpireDateEnabled: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicExpireDateDays: Int = 0,
     var filesSharingPublicExpireDateEnforced: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
-    var filesSharingPublicSendMail: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicUpload: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicMultiple: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingPublicSupportsUploadOnly: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
-    var filesSharingUserSendMail: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingResharing: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingFederationOutgoing: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingFederationIncoming: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
