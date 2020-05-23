@@ -39,9 +39,12 @@ jobs:
           disable-animations: true
           arch: x86_64
           profile: Nexus 6
-          script: ./gradlew cAT
-      - uses: actions/upload-artifact@v1
+          script: |
+            adb logcat -c
+            adb logcat *:E &
+            ./gradlew cAT
+      - uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: owncloudApp-Espresso-test-report
-          path: ./**/build/reports/androidTests/connected/*
+          path: ${{ github.workspace }}/owncloudApp/build/reports/androidTests/connected/*
