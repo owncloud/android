@@ -37,7 +37,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUse
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
-import com.owncloud.android.domain.user.usecases.GetUserQuotaAsyncUseCase
+import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -65,7 +65,7 @@ val useCaseModule = module {
 
     // User
     factory { GetUserInfoAsyncUseCase(get()) }
-    factory { GetUserQuotaAsyncUseCase(get()) }
+    factory { RefreshUserQuotaFromServerAsyncUseCase(get()) }
 
     // Server
     factory { GetServerInfoAsyncUseCase(get()) }
