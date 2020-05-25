@@ -22,9 +22,9 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.domain.user.model.UserQuota
 
-class GetUserQuotaAsyncUseCase(
+class RefreshUserQuotaFromServerAsyncUseCase(
     private val userRepository: UserRepository
-) : BaseUseCaseWithResult<UserQuota, GetUserQuotaAsyncUseCase.Params>() {
+) : BaseUseCaseWithResult<UserQuota, RefreshUserQuotaFromServerAsyncUseCase.Params>() {
     override fun run(params: Params): UserQuota =
         userRepository.getUserQuota(params.accountName)
 
