@@ -38,7 +38,7 @@ import java.net.URL
 class GetRemoteUserAvatarOperation(private val avatarDimension: Int) :
     RemoteOperation<RemoteAvatarData>() {
     override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteAvatarData> {
-        lateinit var inputStream: InputStream
+        var inputStream: InputStream? = null
         lateinit var getMethod: GetMethod
 
         lateinit var result: RemoteOperationResult<RemoteAvatarData>
@@ -71,7 +71,7 @@ class GetRemoteUserAvatarOperation(private val avatarDimension: Int) :
                 Timber.d("Avatar size: Bytes received ${bytesArray.size} of $contentLength")
 
                 // find out etag
-                val etag = WebdavUtils.getEtagFromResponse(getMethod);
+                val etag = WebdavUtils.getEtagFromResponse(getMethod)
                 if (etag.isEmpty()) {
                     Timber.w("Could not read Etag from avatar")
                 }
@@ -87,14 +87,14 @@ class GetRemoteUserAvatarOperation(private val avatarDimension: Int) :
 
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Timber.e(e, "Exception while getting OC user avatar");
+            Timber.e(e, "Exception while getting OC user avatar")
 
         } finally {
             try {
-                client.exhaustResponse(inputStream);
-                inputStream.close()
+                client.exhaustResponse(inputStream)
+                inputStream?.close()
             } catch (i: IOException) {
-                Timber.e(i, "Unexpected exception closing input stream");
+                Timber.e(i, "Unexpected exception closing input stream")
             }
         }
 
