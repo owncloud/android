@@ -58,27 +58,18 @@ class GetRemoteUserQuotaOperation : RemoteOperation<RemoteQuota>() {
             val status = client.executeHttpMethod(propfindMethod)
             if (isSuccess(status)) {
                 val remoteQuota = readData(propfindMethod.root.properties)
-                result = RemoteOperationResult(ResultCode.OK)
-
-                // Add data to the result
-                if (result.isSuccess) {
-                    result.data = remoteQuota
+                result = RemoteOperationResult<RemoteQuota>(ResultCode.OK).apply {
+                    data = remoteQuota
                 }
+                Timber.i("Get quota completed: ${result.data} and message: ${result.logMessage}")
+
             } else { // synchronization failed
                 result = RemoteOperationResult(propfindMethod)
+                Timber.e("Get quota without success: ${result.logMessage}")
             }
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-        } finally {
-            if (result.isSuccess) {
-                Timber.i("Get quota completed: ${result.data} and message: ${result.logMessage}")
-            } else {
-                if (result.isException) {
-                    Timber.e(result.exception, "Get quota: ${result.logMessage}")
-                } else {
-                    Timber.e("Get quota without success: ${result.logMessage}")
-                }
-            }
+            Timber.e(result.exception, "Get quota: ${result.logMessage}")
         }
         return result
     }
