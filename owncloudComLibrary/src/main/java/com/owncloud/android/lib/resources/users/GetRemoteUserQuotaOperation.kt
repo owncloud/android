@@ -47,32 +47,31 @@ import kotlin.math.roundToLong
  * @author David González Verdugo
  */
 class GetRemoteUserQuotaOperation : RemoteOperation<RemoteQuota>() {
-    override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteQuota> {
-        lateinit var result: RemoteOperationResult<RemoteQuota>
+    override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteQuota> =
         try {
             val propfindMethod = PropfindMethod(
                 URL(client.userFilesWebDavUri.toString()),
                 DavConstants.DEPTH_0,
                 DavUtils.getQuotaPropSet()
             )
-            val status = client.executeHttpMethod(propfindMethod)
-            if (isSuccess(status)) {
-                val remoteQuota = readData(propfindMethod.root.properties)
-                result = RemoteOperationResult<RemoteQuota>(ResultCode.OK).apply {
-                    data = remoteQuota
+            with(client.executeHttpMethod(propfindMethod)) {
+                if (isSuccess(this)) {
+                    RemoteOperationResult<RemoteQuota>(ResultCode.OK).apply {
+                        data = readData(propfindMethod.root.properties)
+                    }.also {
+                        Timber.i("Get quota completed: ${it.data} and message: ${it.logMessage}")
+                    }
+                } else { // synchronization failed
+                    RemoteOperationResult<RemoteQuota>(propfindMethod).also {
+                        Timber.e("Get quota without success: ${it.logMessage}")
+                    }
                 }
-                Timber.i("Get quota completed: ${result.data} and message: ${result.logMessage}")
-
-            } else { // synchronization failed
-                result = RemoteOperationResult(propfindMethod)
-                Timber.e("Get quota without success: ${result.logMessage}")
             }
         } catch (e: Exception) {
-            result = RemoteOperationResult(e)
-            Timber.e(result.exception, "Get quota: ${result.logMessage}")
+            RemoteOperationResult<RemoteQuota>(e).also {
+                Timber.e(it.exception, "Get quota: ${it.logMessage}")
+            }
         }
-        return result
-    }
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_MULTI_STATUS || status == HttpConstants.HTTP_OK
 
