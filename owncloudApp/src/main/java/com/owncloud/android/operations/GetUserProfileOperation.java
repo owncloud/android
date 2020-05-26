@@ -102,7 +102,7 @@ public class GetUserProfileOperation extends SyncOperation {
                 if (quotaUseCaseResult.getDataOrNull() != null) {
                     // store display name with account data
                     UserQuota userQuotaResult = quotaUseCaseResult.getDataOrNull();
-                    Timber.d("User info recovered from UseCaseHelper:GetUserQuota -> %s", userQuotaResult.toString());
+                    Timber.d("User quota recovered from UseCaseHelper:GetUserQuota -> %s", userQuotaResult.toString());
 
                     UserProfile.UserQuota userQuota = new UserProfile.UserQuota(
                             userQuotaResult.getAvailable(),

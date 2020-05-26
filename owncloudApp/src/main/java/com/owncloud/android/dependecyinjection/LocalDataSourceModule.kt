@@ -42,6 +42,6 @@ val localDataSourceModule = module {
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get(), get()) }
-    factory<LocalUserDataSource> { OCLocalUserDataSource(get(), get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get(), get()) }
+    factory<LocalUserDataSource> { OCLocalUserDataSource(get(), get()) }
 }

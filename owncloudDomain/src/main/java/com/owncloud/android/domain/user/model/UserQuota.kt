@@ -33,5 +33,9 @@ data class UserQuota(
         (relativeQuota * 100).roundToLong() / 100.0
     } else 0.0
 
-    fun getTotal() = if (isLimited()) available + used else 0
+    fun getTotal() = if (isLimited()) {
+        available + used
+    } else {
+        0
+    }
 }
