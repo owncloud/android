@@ -32,9 +32,9 @@ import org.koin.core.inject
  */
 class UseCaseHelper : KoinComponent {
     private val getUserInfoAsyncUseCase: GetUserInfoAsyncUseCase by inject()
-    private val getUserQuotaAsyncUseCase: RefreshUserQuotaFromServerAsyncUseCase by inject()
+    private val refreshUserQuotaFromServerAsyncUseCase: RefreshUserQuotaFromServerAsyncUseCase by inject()
 
     fun getUserInfo(): UseCaseResult<UserInfo> = getUserInfoAsyncUseCase.execute(Unit)
     fun getUserQuota(accountName: String): UseCaseResult<UserQuota> =
-        getUserQuotaAsyncUseCase.execute(RefreshUserQuotaFromServerAsyncUseCase.Params(accountName))
+        refreshUserQuotaFromServerAsyncUseCase.execute(RefreshUserQuotaFromServerAsyncUseCase.Params(accountName))
 }

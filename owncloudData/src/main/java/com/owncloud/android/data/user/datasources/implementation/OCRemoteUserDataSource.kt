@@ -33,15 +33,14 @@ class OCRemoteUserDataSource(
     private val remoteUserQuotaMapper: RemoteUserQuotaMapper
 ) : RemoteUserDataSource {
 
-    override fun getUserInfo(): UserInfo {
+    override fun getUserInfo(): UserInfo =
         executeRemoteOperation {
             userService.getUserInfo()
-        }.let { return remoteUserInfoMapper.toModel(it)!! }
-    }
+        }.let { remoteUserInfoMapper.toModel(it)!! }
 
-    override fun getUserQuota(): UserQuota {
+    override fun getUserQuota(): UserQuota =
         executeRemoteOperation {
             userService.getUserQuota()
-        }.let { return remoteUserQuotaMapper.toModel(it)!! }
-    }
+        }.let { remoteUserQuotaMapper.toModel(it)!! }
+
 }

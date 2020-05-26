@@ -102,7 +102,7 @@ public class GetUserProfileOperation extends SyncOperation {
                 if (quotaUseCaseResult.getDataOrNull() != null) {
                     // store display name with account data
                     UserQuota userQuotaResult = quotaUseCaseResult.getDataOrNull();
-                    Timber.d("User info recovered from UseCaseHelper:GetUserQuota -> %s", userQuotaResult.toString());
+                    Timber.d("User quota recovered from UseCaseHelper:GetUserQuota -> %s", userQuotaResult.toString());
 
                     UserProfile.UserQuota userQuota = new UserProfile.UserQuota(
                             userQuotaResult.getAvailable(),
@@ -136,7 +136,7 @@ public class GetUserProfileOperation extends SyncOperation {
                         );
                         userProfile.setAvatar(userAvatar);
 
-                    } else if (quotaUseCaseResult.getThrowableOrNull() instanceof FileNotFoundException) {
+                    } else if (avatarOperationResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
                         Timber.i("No avatar available, removing cached copy");
                         userProfilesRepository.deleteAvatar(storedAccount.name);
                         ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);

@@ -30,5 +30,6 @@ class OCUserRepository(
     private val remoteUserDataSource: RemoteUserDataSource
 ) : UserRepository {
     override fun getUserInfo(): UserInfo = remoteUserDataSource.getUserInfo()
-    override fun getUserQuota(accountName: String): UserQuota = remoteUserDataSource.getUserQuota().also { localUserDataSource.saveQuotaForAccount(accountName, it) }
+    override fun getUserQuota(accountName: String): UserQuota =
+        remoteUserDataSource.getUserQuota().also { localUserDataSource.saveQuotaForAccount(accountName, it) }
 }
