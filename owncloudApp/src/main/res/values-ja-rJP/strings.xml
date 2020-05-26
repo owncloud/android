@@ -64,6 +64,7 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">ファイル</string>
   <string name="bottom_nav_uploads">アップロード</string>
+  <string name="bottom_nav_offline">オフライン</string>
   <string name="bottom_nav_links">リンク</string>
   <string name="recommend_subject">スマートフォンで %1$s を試してください！</string>
   <string name="recommend_text">スマートフォンで %1$s を利用してみませんか！
