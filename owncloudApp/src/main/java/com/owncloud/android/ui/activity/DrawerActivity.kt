@@ -42,6 +42,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
+import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
@@ -49,9 +50,9 @@ import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.datamodel.ThumbnailsCacheManager.GetAvatarTask
-import com.owncloud.android.datamodel.UserProfilesRepository
 import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.activity_main.*
@@ -59,6 +60,11 @@ import kotlinx.android.synthetic.main.nav_coordinator_layout.*
 import kotlinx.android.synthetic.main.nav_drawer_content.*
 import kotlinx.android.synthetic.main.nav_drawer_footer.*
 import kotlinx.android.synthetic.main.nav_drawer_header.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import kotlin.math.ceil
 
@@ -67,6 +73,8 @@ import kotlin.math.ceil
  * generation.
  */
 abstract class DrawerActivity : ToolbarActivity() {
+
+    private val drawerViewModel by viewModel<DrawerViewModel>()
 
     private var menuAccountAvatarRadiusDimension = 0f
     private var currentAccountAvatarRadiusDimension = 0f
@@ -344,28 +352,42 @@ abstract class DrawerActivity : ToolbarActivity() {
                 populateDrawerOwnCloudAccounts()
 
                 // activate second/end account avatar
-                if (accountsWithAvatars[1] != null) {
-                    DisplayUtils.showAccountAvatar(
-                        accountsWithAvatars[1],
-                        findNavigationViewChildById(R.id.drawer_account_end) as ImageView,
-                        otherAccountAvatarRadiusDimension,
-                        false
-                    )
-                    accountEndAccountAvatar?.visibility = View.VISIBLE
-                } else {
+                accountsWithAvatars[1]?.let {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        // not just accessibility support, used to know what account is bound to each imageView
+                        accountEndAccountAvatar?.contentDescription = it.name
+                        val drawable = drawerViewModel.getStoredAvatar(
+                            account = it,
+                            displayRadius = otherAccountAvatarRadiusDimension
+                        )
+                        if (drawable != null) {
+                            accountEndAccountAvatar?.setImageDrawable(drawable)
+                        } else {
+                            accountEndAccountAvatar?.setImageResource(R.drawable.ic_account_circle)
+                        }
+                    }
+                }
+                if (accountsWithAvatars[1] == null) {
                     accountEndAccountAvatar?.visibility = View.GONE
                 }
 
                 // activate third/middle account avatar
-                if (accountsWithAvatars[2] != null) {
-                    DisplayUtils.showAccountAvatar(
-                        accountsWithAvatars[2],
-                        findNavigationViewChildById(R.id.drawer_account_middle) as ImageView,
-                        otherAccountAvatarRadiusDimension,
-                        false
-                    )
-                    accountMiddleAccountAvatar?.visibility = View.VISIBLE
-                } else {
+                accountsWithAvatars[2]?.let {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        // not just accessibility support, used to know what account is bound to each imageView
+                        accountMiddleAccountAvatar?.contentDescription = it.name
+                        val drawable = drawerViewModel.getStoredAvatar(
+                            account = it,
+                            displayRadius = otherAccountAvatarRadiusDimension
+                        )
+                        if (drawable != null) {
+                            accountMiddleAccountAvatar?.setImageDrawable(drawable)
+                        } else {
+                            accountMiddleAccountAvatar?.setImageResource(R.drawable.ic_account_circle)
+                        }
+                    }
+                }
+                if (accountsWithAvatars[2] == null) {
                     accountMiddleAccountAvatar?.visibility = View.GONE
                 }
             } else {
@@ -389,8 +411,17 @@ abstract class DrawerActivity : ToolbarActivity() {
             if (getAccount().name != account.name) {
                 val accountMenuItem: MenuItem =
                     nav_view.menu.add(R.id.drawer_menu_accounts, Menu.NONE, MENU_ORDER_ACCOUNT, account.name)
-                val task = GetAvatarTask(accountMenuItem, account, menuAccountAvatarRadiusDimension, false)
-                task.execute()
+                CoroutineScope(Dispatchers.IO).launch {
+                    val drawable = drawerViewModel.getStoredAvatar(
+                        account = account,
+                        displayRadius = menuAccountAvatarRadiusDimension
+                    )
+                    if (drawable != null) {
+                        accountMenuItem.icon = drawable
+                    } else {
+                        accountMenuItem.setIcon(R.drawable.ic_account_circle)
+                    }
+                }
             }
         }
 
@@ -414,37 +445,45 @@ abstract class DrawerActivity : ToolbarActivity() {
      * Updates the quota in the drawer
      */
     private fun updateQuota() {
+        Timber.d("Update Quota")
         val account = AccountUtils.getCurrentOwnCloudAccount(this) ?: return
-        val userQuota = UserProfilesRepository.getUserProfilesRepository().getQuota(account.name) ?: return
+        drawerViewModel.getStoredQuota(account.name)
+        drawerViewModel.userQuota.observe(this, Observer { event ->
+            when (event.peekContent()) {
+                is UIResult.Success -> {
+                    event.peekContent().getStoredData()?.let { userQuota ->
+                        when {
+                            userQuota.available < 0 -> { // Pending, unknown or unlimited free storage
+                                account_quota_bar?.visibility = View.VISIBLE
+                                account_quota_bar?.progress = 0
+                                account_quota_text?.text = String.format(
+                                    getString(R.string.drawer_unavailable_free_storage),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this)
+                                )
+                            }
+                            userQuota.available == 0L -> { // Quota 0, guest users
+                                account_quota_bar?.visibility = View.GONE
+                                account_quota_text?.text = getString(R.string.drawer_unavailable_used_storage)
+                            }
+                            else -> { // Limited quota
+                                account_quota_bar?.visibility = View.VISIBLE
 
-        if (account_quota_bar != null && account_quota_text != null) {
-            when {
-                userQuota.free < 0 -> { // Pending, unknown or unlimited free storage
-                    account_quota_bar.visibility = View.VISIBLE
-                    account_quota_bar.progress = 0
-                    account_quota_text.text = String.format(
-                        getString(R.string.drawer_unavailable_free_storage),
-                        DisplayUtils.bytesToHumanReadable(userQuota.used, this)
-                    )
+                                // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
+                                account_quota_bar?.progress = ceil(userQuota.getRelative()).toInt()
+                                account_quota_text?.text = String.format(
+                                    getString(R.string.drawer_quota),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this),
+                                    java.lang.String.valueOf(userQuota.getRelative())
+                                )
+                            }
+                        }
+                    }
                 }
-                userQuota.free == 0L -> { // Quota 0, guest users
-                    account_quota_bar.visibility = View.GONE
-                    account_quota_text.text = getString(R.string.drawer_unavailable_used_storage)
-                }
-                else -> { // Limited quota
-                    account_quota_bar.visibility = View.VISIBLE
-
-                    // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
-                    account_quota_bar.progress = ceil(userQuota.relative).toInt()
-                    account_quota_text.text = String.format(
-                        getString(R.string.drawer_quota),
-                        DisplayUtils.bytesToHumanReadable(userQuota.used, this),
-                        DisplayUtils.bytesToHumanReadable(userQuota.total, this),
-                        java.lang.String.valueOf(userQuota.relative)
-                    )
-                }
+                is UIResult.Loading -> account_quota_text?.text = getString(R.string.drawer_loading_quota)
+                is UIResult.Error -> account_quota_text?.text = getString(R.string.drawer_unavailable_used_storage)
             }
-        }
+        })
     }
 
     /**
@@ -467,7 +506,7 @@ abstract class DrawerActivity : ToolbarActivity() {
      * @param account the account to be set in the drawer
      */
     protected fun setAccountInDrawer(account: Account) {
-        if (drawer_layout != null && account != null) {
+        if (drawer_layout != null) {
             drawer_username_full?.text = account.name
             try {
                 val oca = OwnCloudAccount(account, this)
@@ -476,13 +515,22 @@ abstract class DrawerActivity : ToolbarActivity() {
                 Timber.w("Couldn't read display name of account; using account name instead")
                 drawer_username?.text = AccountUtils.getUsernameOfAccount(account.name)
             }
-            DisplayUtils.showAccountAvatar(
-                account,
-                findNavigationViewChildById(R.id.drawer_current_account) as ImageView,
-                currentAccountAvatarRadiusDimension,
-                false
-            )
-            updateQuota()
+            CoroutineScope(Dispatchers.IO).launch {
+                val drawable = drawerViewModel.getStoredAvatar(
+                    account = account,
+                    displayRadius = currentAccountAvatarRadiusDimension
+                )
+                withContext(Dispatchers.Main) {
+                    val currentAccount: ImageView? =
+                        findNavigationViewChildById(R.id.drawer_current_account) as ImageView?
+                    if (drawable != null) {
+                        currentAccount?.setImageDrawable(drawable)
+                    } else {
+                        currentAccount?.setImageResource(R.drawable.ic_account_circle)
+                    }
+                }
+            }
+            //updateQuota()
         }
     }
 
@@ -683,3 +731,4 @@ abstract class DrawerActivity : ToolbarActivity() {
         private const val USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD = 4
     }
 }
+

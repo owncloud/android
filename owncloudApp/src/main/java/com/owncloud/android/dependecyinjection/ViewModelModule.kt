@@ -21,11 +21,15 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
+import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
+
+    viewModel { DrawerViewModel(get(), get(), get()) }
+
     viewModel { (accountName: String) ->
         OCCapabilityViewModel(accountName, get(), get(), get())
     }

@@ -25,6 +25,7 @@ import com.owncloud.android.data.authentication.datasources.RemoteAuthentication
 import com.owncloud.android.data.authentication.datasources.implementation.OCRemoteAuthenticationDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
+import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
@@ -33,8 +34,12 @@ import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSou
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
+import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
+import com.owncloud.android.data.user.datasources.mapper.RemoteUserAvatarMapper
+import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
+import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.resources.files.services.FileService
@@ -71,4 +76,10 @@ val remoteDataSourceModule = module {
     factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext(), get()) }
+
+    factory { RemoteCapabilityMapper() }
+    factory { RemoteShareMapper() }
+    factory { RemoteUserInfoMapper() }
+    factory { RemoteUserQuotaMapper() }
+    factory { RemoteUserAvatarMapper() }
 }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 31,
-    "identityHash": "b8ca0150fc10f2034d497250e35bf062",
+    "identityHash": "183e8fbe6435af6907a1b27c7530de3f",
     "entities": [
       {
         "tableName": "ocshares",
@@ -350,12 +350,50 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "user_avatars",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`accountName` TEXT NOT NULL, `cachedKey` TEXT NOT NULL, `mimeType` TEXT NOT NULL, `eTag` TEXT NOT NULL, PRIMARY KEY(`accountName`))",
+        "fields": [
+          {
+            "fieldPath": "accountName",
+            "columnName": "accountName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cachedKey",
+            "columnName": "cachedKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mimeType",
+            "columnName": "mimeType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eTag",
+            "columnName": "eTag",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "accountName"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b8ca0150fc10f2034d497250e35bf062')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '183e8fbe6435af6907a1b27c7530de3f')"
     ]
   }
 }
