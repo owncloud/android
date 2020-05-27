@@ -26,8 +26,6 @@ import android.content.res.Resources;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
-import com.owncloud.android.datamodel.UserProfile;
-import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.domain.UseCaseResult;
 import com.owncloud.android.domain.exceptions.FileNotFoundException;
 import com.owncloud.android.domain.user.model.UserAvatar;
@@ -36,8 +34,6 @@ import com.owncloud.android.domain.user.model.UserQuota;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation;
-import com.owncloud.android.lib.resources.users.RemoteAvatarData;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.operations.common.UseCaseHelper;
 import timber.log.Timber;
@@ -67,11 +63,9 @@ public class GetUserProfileOperation extends SyncOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        UserProfile userProfile;
 
         try {
             /// get display name
-            UserProfilesRepository userProfilesRepository = UserProfilesRepository.getUserProfilesRepository();
             UseCaseHelper useCaseHelper = new UseCaseHelper();
             UseCaseResult<UserInfo> useCaseResult = useCaseHelper.getUserInfo();
             if (useCaseResult.getDataOrNull() != null) {
@@ -91,29 +85,12 @@ public class GetUserProfileOperation extends SyncOperation {
                         userInfo.getId()
                 );
 
-                // map user info into UserProfile instance
-                userProfile = new UserProfile(
-                        storedAccount.name,
-                        userInfo.getId(),
-                        userInfo.getDisplayName(),
-                        userInfo.getEmail()
-                );
-
                 /// get quota
                 UseCaseResult<UserQuota> quotaUseCaseResult = useCaseHelper.getUserQuota(storedAccount.name);
                 if (quotaUseCaseResult.getDataOrNull() != null) {
                     // store display name with account data
                     UserQuota userQuotaResult = quotaUseCaseResult.getDataOrNull();
                     Timber.d("User quota recovered from UseCaseHelper:GetUserQuota -> %s", userQuotaResult.toString());
-
-                    UserProfile.UserQuota userQuota = new UserProfile.UserQuota(
-                            userQuotaResult.getAvailable(),
-                            userQuotaResult.getRelative(),
-                            userQuotaResult.getTotal(),
-                            userQuotaResult.getUsed()
-                    );
-
-                    userProfile.setQuota(userQuota);
 
                     int dimension = getAvatarDimension();
 
@@ -122,7 +99,6 @@ public class GetUserProfileOperation extends SyncOperation {
                     if (avatarUseCaseResult.getDataOrNull() != null) {
                         // store display name with account data
                         UserAvatar userAvatar = avatarUseCaseResult.getDataOrNull();
-                        Timber.d("User info recovered from UseCaseHelper:GetUserAvatar -> %s", userAvatar.toString());
 
                         byte[] avatarData = userAvatar.getAvatarData();
                         String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
@@ -131,27 +107,16 @@ public class GetUserProfileOperation extends SyncOperation {
                                 dimension
                         );
 
-                        UserProfile.UserAvatar useAvatar = new UserProfile.UserAvatar(
-                                avatarKey, userAvatar.getMimeType(), userAvatar.getETag()
-                        );
-                        userProfile.setAvatar(useAvatar);
+                        Timber.d("User avatar saved into cache -> %s", avatarKey);
 
-                    } else if (avatarOperationResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
+                    } else if (avatarUseCaseResult.getThrowableOrNull() instanceof FileNotFoundException) {
                         Timber.i("No avatar available, removing cached copy");
-                        userProfilesRepository.deleteAvatar(storedAccount.name);
                         ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);
 
                     }   // others are ignored, including 304 (not modified), so the avatar is only stored
                     // if changed in the server :D
 
-                    /// store userProfile
-                    userProfilesRepository.update(userProfile);
-
-                    RemoteOperationResult<UserProfile> result =
-                            new RemoteOperationResult<>(RemoteOperationResult.ResultCode.OK);
-                    result.setData(userProfile);
-
-                    return result;
+                    return new RemoteOperationResult<>(RemoteOperationResult.ResultCode.OK);
 
                 } else {
                     return new RemoteOperationResult<>(RemoteOperationResult.ResultCode.UNKNOWN_ERROR);

@@ -22,6 +22,7 @@ import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.model.UserQuota
+import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
@@ -36,10 +37,14 @@ class UseCaseHelper : KoinComponent {
     private val getUserInfoAsyncUseCase: GetUserInfoAsyncUseCase by inject()
     private val refreshUserQuotaFromServerAsyncUseCase: RefreshUserQuotaFromServerAsyncUseCase by inject()
     private val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
+    private val getStoredQuotaUseCase: GetStoredQuotaUseCase by inject()
+
 
     fun getUserInfo(): UseCaseResult<UserInfo> = getUserInfoAsyncUseCase.execute(Unit)
     fun getUserQuota(accountName: String): UseCaseResult<UserQuota> =
         refreshUserQuotaFromServerAsyncUseCase.execute(RefreshUserQuotaFromServerAsyncUseCase.Params(accountName))
     fun getUserAvatar(accountName: String): UseCaseResult<UserAvatar> =
         getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(accountName))
+    fun getStoredQuota(accountName: String): UseCaseResult<UserQuota?> =
+        getStoredQuotaUseCase.execute(GetStoredQuotaUseCase.Params(accountName))
 }

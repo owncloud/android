@@ -400,27 +400,6 @@ public class ThumbnailsCacheManager {
             mFetchFromServer = fetchFromServer;
         }
 
-        /**
-         * Builds an instance to show the avatar corresponding to the received account in an {@link MenuItem}.
-         *
-         * @param menuItem        The {@ImageView} to bind the avatar to.
-         * @param account         OC account which avatar will be shown.
-         * @param displayRadius   The radius of the circle where the avatar will be clipped into.
-         * @param fetchFromServer When 'true', if there is no avatar stored in the cache, it's fetched from
-         *                        the server. When 'false', server is not accessed, the fallback avatar is
-         *                        generated instead. USE WITH CARE, probably to be removed in the future.
-         */
-        public GetAvatarTask(MenuItem menuItem, Account account, float displayRadius, boolean fetchFromServer) {
-            if (account == null) {
-                throw new IllegalArgumentException("Received NULL account");
-            }
-            mImageViewReference = null;
-            mMenuItemReference = new WeakReference<>(menuItem);
-            mAccount = account;
-            mDisplayRadius = displayRadius;
-            mFetchFromServer = fetchFromServer;
-        }
-
         @Override
         protected Drawable doInBackground(Object... params) {
             Drawable thumbnail = null;

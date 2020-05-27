@@ -36,6 +36,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
@@ -65,9 +66,10 @@ val useCaseModule = module {
     factory { DeleteShareAsyncUseCase(get()) }
 
     // User
-    factory { GetUserAvatarAsyncUseCase(get()) }
+    factory { GetStoredQuotaUseCase(get()) }
     factory { GetUserInfoAsyncUseCase(get()) }
     factory { RefreshUserQuotaFromServerAsyncUseCase(get()) }
+    factory { GetUserAvatarAsyncUseCase(get()) }
 
     // Server
     factory { GetServerInfoAsyncUseCase(get()) }
