@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import com.owncloud.android.MainApp;
@@ -41,7 +42,7 @@ public class PatternManager {
     private int mVisibleActivitiesCounter = 0;
 
     static {
-        sExemptOfPatternActivites = new HashSet<Class>();
+        sExemptOfPatternActivites = new HashSet<>();
         sExemptOfPatternActivites.add(PatternLockActivity.class);
     }
 
@@ -72,7 +73,7 @@ public class PatternManager {
     }
 
     private void setUnlockTimestamp() {
-        timeStamp = System.currentTimeMillis();
+        timeStamp = SystemClock.elapsedRealtime();
     }
 
     public void onActivityStopped(Activity activity) {
@@ -100,7 +101,7 @@ public class PatternManager {
 
     private boolean patternShouldBeRequested() {
         int PATTERN_TIMEOUT = 1000;
-        if ((System.currentTimeMillis() - timeStamp) > PATTERN_TIMEOUT &&
+        if ((SystemClock.elapsedRealtime() - timeStamp) > PATTERN_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0
         ) {
             return isPatternEnabled();

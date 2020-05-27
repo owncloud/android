@@ -25,11 +25,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.ui.activity.PassCodeActivity;
-import com.owncloud.android.authentication.BiometricManager;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -103,11 +103,11 @@ public class PassCodeManager {
     }
 
     private void setUnlockTimestamp() {
-        mTimestamp = System.currentTimeMillis();
+        mTimestamp = SystemClock.elapsedRealtime();
     }
 
     private boolean passCodeShouldBeRequested() {
-        if ((System.currentTimeMillis() - mTimestamp) > PASS_CODE_TIMEOUT &&
+        if ((SystemClock.elapsedRealtime() - mTimestamp) > PASS_CODE_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0) {
             return isPassCodeEnabled();
         }

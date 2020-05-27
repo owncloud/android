@@ -68,6 +68,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsPictureInPicture="false"
         android:theme="@style/Theme.ownCloud.Toolbar"
+        android:allowBackup="false"
         tools:targetApi="n">
         <activity
             android:name=".ui.activity.SplashActivity"
