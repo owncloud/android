@@ -397,6 +397,24 @@ class LoginActivityTest {
     }
 
     @Test
+    fun loginBasic_callLoginBasic_trimUsername() {
+        launchTest()
+
+        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
+
+        R.id.account_username.typeText("  $OC_BASIC_USERNAME  ")
+
+        R.id.account_password.typeText(OC_BASIC_PASSWORD)
+
+        R.id.loginButton.let {
+            it.isDisplayed(true)
+            it.click()
+        }
+
+        verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, false) }
+    }
+
+    @Test
     fun loginBasic_showOrHideFields() {
         launchTest()
 

@@ -159,7 +159,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 startOIDCOauthorization()
             } else { // Basic
                 authenticationViewModel.loginBasic(
-                    account_username.text.toString(),
+                    account_username.text.toString().trim(),
                     account_password.text.toString(),
                     loginAction != ACTION_CREATE
                 )
