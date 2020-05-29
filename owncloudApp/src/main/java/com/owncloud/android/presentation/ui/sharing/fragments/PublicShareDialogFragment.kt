@@ -150,10 +150,10 @@ class PublicShareDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (arguments != null) {
-            file = arguments!!.getParcelable(ARG_FILE)
-            account = arguments!!.getParcelable(ARG_ACCOUNT)
-            publicShare = arguments!!.getParcelable(ARG_SHARE)
+        arguments?.let {
+            file = it.getParcelable(ARG_FILE)
+            account = it.getParcelable(ARG_ACCOUNT)
+            publicShare = it.getParcelable(ARG_SHARE)
         }
 
         check(file != null || publicShare != null) {
@@ -196,7 +196,7 @@ class PublicShareDialogFragment : DialogFragment() {
                 else -> view.shareViaLinkEditPermissionReadOnly.isChecked = true
             }
 
-            if (publicShare?.isPasswordProtected!!) {
+            publicShare?.isPasswordProtected?.let {
                 setPasswordSwitchChecked(view, true)
                 view.shareViaLinkPasswordValue?.visibility = View.VISIBLE
                 view.shareViaLinkPasswordValue?.hint = getString(R.string.share_via_link_default_password)
@@ -212,7 +212,7 @@ class PublicShareDialogFragment : DialogFragment() {
             }
 
         } else {
-            view.shareViaLinkNameValue?.setText(arguments!!.getString(ARG_DEFAULT_LINK_NAME, ""))
+            view.shareViaLinkNameValue?.setText(arguments?.getString(ARG_DEFAULT_LINK_NAME, ""))
         }
 
         return view
@@ -429,7 +429,7 @@ class PublicShareDialogFragment : DialogFragment() {
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: IllegalStateException) {
-            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+            throw IllegalStateException(activity?.toString() + " must implement OnShareFragmentInteractionListener")
         }
     }
 
@@ -518,10 +518,10 @@ class PublicShareDialogFragment : DialogFragment() {
                 shareViaLinkPasswordValue?.requestFocus()
 
                 // Show keyboard to fill in the password
-                val mgr = activity!!.getSystemService(
+                val mgr = activity?.getSystemService(
                     Context.INPUT_METHOD_SERVICE
-                ) as InputMethodManager
-                mgr.showSoftInput(shareViaLinkPasswordValue, InputMethodManager.SHOW_IMPLICIT)
+                ) as InputMethodManager?
+                mgr?.showSoftInput(shareViaLinkPasswordValue, InputMethodManager.SHOW_IMPLICIT)
 
             } else {
                 shareViaLinkPasswordValue?.visibility = View.GONE
@@ -610,11 +610,9 @@ class PublicShareDialogFragment : DialogFragment() {
 
         override fun onCancelDatePicker() {
 
-            val expirationToggle = view!!.findViewById<SwitchCompat>(R.id.shareViaLinkExpirationSwitch)
-
             // If the date has not been set yet, uncheck the toggle
-            if (expirationToggle.isChecked && shareViaLinkExpirationValue?.text === "") {
-                expirationToggle.isChecked = false
+            if (shareViaLinkExpirationSwitch.isChecked && shareViaLinkExpirationSwitch?.text === "") {
+                shareViaLinkExpirationSwitch.isChecked = false
             }
         }
     }
@@ -637,7 +635,9 @@ class PublicShareDialogFragment : DialogFragment() {
      * - set the default value for expiration date if defined (only if creating a new share).
      */
     private fun updateInputFormAccordingToServerCapabilities() {
-        val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
+        val serverVersion = capabilities?.versionString?.let {
+            OwnCloudVersion(it)
+        }
 
         // Show keyboard to fill the public share name
         dialog?.window?.setSoftInputMode(
@@ -654,7 +654,7 @@ class PublicShareDialogFragment : DialogFragment() {
         //  - Upload only capability is set
         //  - Allow editing capability is set
         if (!(isSharedFolder &&
-                    serverVersion.isPublicSharingWriteOnlySupported &&
+                    serverVersion?.isPublicSharingWriteOnlySupported == true &&
                     capabilities?.filesSharingPublicSupportsUploadOnly == CapabilityBooleanType.TRUE &&
                     capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE)
         ) {
@@ -662,7 +662,7 @@ class PublicShareDialogFragment : DialogFragment() {
         }
 
         // Show default date enforced by the server, if any
-        if (!updating() && capabilities?.filesSharingPublicExpireDateDays!! > 0) {
+        if (!updating() && capabilities?.filesSharingPublicExpireDateDays ?: 0 > 0) {
             setExpirationDateSwitchChecked(checked = true)
 
             val formattedDate = SimpleDateFormat.getDateInstance().format(
