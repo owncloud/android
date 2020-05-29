@@ -326,6 +326,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="log_send_mail_subject">%1$s Androidi rakenduse logid</string>
   <string name="log_progress_dialog_text">Andmete laadimine...</string>
   <string name="actionbar_select_all">Vali kõik</string>
+  <string name="actionbar_select_inverse">Pööra valik ümber</string>
   <string name="actionbar_move">Tõsta ümber</string>
   <string name="file_list_empty_moving">Siin pole midagi. Sa võid lisada kausta!</string>
   <string name="folder_picker_choose_button_text">Vali</string>
@@ -410,6 +411,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="share_via_link_password_enforced_label">Parool *</string>
   <string name="share_via_link_expiration_date_enforced_label">Aegumine *</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
+  <string name="share_via_link_empty_password">Parool on tühi</string>
   <string name="download_notification_channel_name">Allalaadimised</string>
   <string name="upload_notification_channel_name">Üleslaadimised</string>
   <string name="media_service_notification_channel_name">Muusikapleier</string>
@@ -429,4 +431,5 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="welcome_feature_4_title">Kaamera üleslaadimised</string>
   <string name="welcome_feature_5_title">Video voogedastus</string>
   <string name="welcome_feature_5_text">Esita videod ilma neid alla laadimata</string>
+  <string name="common_not_found">seda ei leitud</string>
 </resources>
