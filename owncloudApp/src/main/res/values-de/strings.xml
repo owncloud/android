@@ -78,7 +78,7 @@
   <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Dateien</string>
-  <string name="bottom_nav_uploads">Hochgeladenes</string>
+  <string name="bottom_nav_uploads">Hochgeladen</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Links</string>
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
@@ -551,6 +551,8 @@
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
+  <string name="welcome_feature_6_title">Neuinstallation empfohlen</string>
+  <string name="welcome_feature_6_text">Sie haben ein Upgrade von einer Beta-Version durchgeführt. Bitte installieren Sie die Anwendung neu, um unerwünschte Verhaltensweisen zu vermeiden.</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installiere zur sicheren Anmeldung einen Browser.</string>
   <string name="common_not_found">nichts gefunden</string>
   <string name="supports_oauth2_error">Es war nicht möglich herauszufinden, ob OAuth2 unterstützt wird.</string>
