@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.RequiresApi;
@@ -110,12 +111,12 @@ import java.util.Set;
     }
 
     private void setUnlockTimestamp() {
-        mTimestamp = System.currentTimeMillis();
+        mTimestamp = SystemClock.elapsedRealtime();
     }
 
     private boolean biometricShouldBeRequested() {
 
-        if ((System.currentTimeMillis() - mTimestamp) > BIOMETRIC_TIMEOUT && mVisibleActivitiesCounter <= 0) {
+        if ((SystemClock.elapsedRealtime() - mTimestamp) > BIOMETRIC_TIMEOUT && mVisibleActivitiesCounter <= 0) {
             return isBiometricEnabled();
         }
 
