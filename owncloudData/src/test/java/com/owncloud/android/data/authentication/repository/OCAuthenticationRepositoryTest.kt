@@ -65,7 +65,7 @@ class OCAuthenticationRepositoryTest {
             OC_SERVER_INFO,
             "username",
             "password",
-            false
+            null
         )
 
         verify(exactly = 1) {
@@ -76,7 +76,7 @@ class OCAuthenticationRepositoryTest {
                 "password",
                 OC_SERVER_INFO,
                 OC_USER_INFO,
-                false
+                null
             )
         }
 
@@ -93,7 +93,7 @@ class OCAuthenticationRepositoryTest {
             localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
         } returns OC_ACCOUNT_NAME
 
-        ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", false)
+        ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", null)
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginBasic(any(), any(), any())
@@ -112,7 +112,7 @@ class OCAuthenticationRepositoryTest {
             localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
         } throws AccountNotNewException()
 
-        ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", false)
+        ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", null)
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginBasic(any(), any(), any())
@@ -138,7 +138,7 @@ class OCAuthenticationRepositoryTest {
             OC_ACCESS_TOKEN,
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            false
+            null
         )
 
         verify(exactly = 1) {
@@ -152,7 +152,7 @@ class OCAuthenticationRepositoryTest {
                 OC_USER_INFO,
                 OC_REFRESH_TOKEN,
                 OC_SCOPE,
-                false
+                null
             )
         }
 
@@ -176,7 +176,7 @@ class OCAuthenticationRepositoryTest {
             OC_ACCESS_TOKEN,
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            false
+            null
         )
 
         verify(exactly = 1) {
@@ -203,7 +203,7 @@ class OCAuthenticationRepositoryTest {
             OC_ACCESS_TOKEN,
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            false
+            null
         )
 
         verify(exactly = 1) {

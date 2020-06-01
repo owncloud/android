@@ -26,7 +26,7 @@ interface AuthenticationRepository {
         serverInfo: ServerInfo,
         username: String,
         password: String,
-        updateAccountIfAlreadyExists: Boolean
+        updateAccountWithUsername: String?
     ): String
 
     fun loginOAuth(
@@ -36,7 +36,7 @@ interface AuthenticationRepository {
         accessToken: String,
         refreshToken: String,
         scope: String?,
-        updateAccountIfAlreadyExists: Boolean
+        updateAccountWithUsername: String?
     ): String
 
     fun supportsOAuth2UseCase(accountName: String): Boolean

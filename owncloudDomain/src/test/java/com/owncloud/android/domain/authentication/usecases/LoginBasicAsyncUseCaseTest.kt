@@ -37,7 +37,7 @@ class LoginBasicAsyncUseCaseTest {
         serverInfo = OC_SERVER_INFO,
         username = "test",
         password = "test",
-        updateAccountIfAlreadyExists = false
+        updateAccountWithUsername= null
     )
 
     @Test

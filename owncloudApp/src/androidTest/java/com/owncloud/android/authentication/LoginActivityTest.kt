@@ -50,6 +50,7 @@ import com.owncloud.android.presentation.ui.authentication.OAUTH_TOKEN_TYPE
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASIC_PASSWORD
 import com.owncloud.android.testutil.OC_BASIC_USERNAME
@@ -393,7 +394,7 @@ class LoginActivityTest {
             it.click()
         }
 
-        verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, false) }
+        verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }
     }
 
     @Test
@@ -411,7 +412,7 @@ class LoginActivityTest {
             it.click()
         }
 
-        verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, false) }
+        verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }
     }
 
     @Test

@@ -57,14 +57,14 @@ class OCLocalAuthenticationDataSource(
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo,
-        updateIfAlreadyExists: Boolean
+        updateAccountWithUsername: String?
     ): String =
         addAccount(
             lastPermanentLocation = lastPermanentLocation,
             serverInfo = serverInfo,
             userName = userName,
             password = password,
-            updateIfAlreadyExists = updateIfAlreadyExists
+            updateAccountWithUsername = updateAccountWithUsername
         ).also {
             updateUserAndServerInfo(it, serverInfo, userInfo)
         }.name
@@ -78,13 +78,13 @@ class OCLocalAuthenticationDataSource(
         userInfo: UserInfo,
         refreshToken: String,
         scope: String?,
-        updateIfAlreadyExists: Boolean
+        updateAccountWithUsername: String?
     ): String =
         addAccount(
             lastPermanentLocation = lastPermanentLocation,
             serverInfo = serverInfo,
             userName = userName,
-            updateIfAlreadyExists = updateIfAlreadyExists
+            updateAccountWithUsername = updateAccountWithUsername
         ).also {
             updateUserAndServerInfo(it, serverInfo, userInfo)
 
@@ -105,14 +105,8 @@ class OCLocalAuthenticationDataSource(
         serverInfo: ServerInfo,
         userName: String,
         password: String = "",
-        updateIfAlreadyExists: Boolean = false
+        updateAccountWithUsername: String?
     ): Account {
-        if (updateIfAlreadyExists) {
-            // Check if the entered user matches the user of the account to update
-            val currentAccount = getCurrentAccount()
-            val currentUserName = AccountUtils.getUsernameForAccount(currentAccount)
-            if (userName != currentUserName) throw AccountNotTheSameException()
-        }
 
         lastPermanentLocation?.let {
             serverInfo.baseUrl = it
@@ -122,9 +116,14 @@ class OCLocalAuthenticationDataSource(
 
         val accountName = AccountUtils.buildAccountName(uri, userName)
 
+        // Check if the entered user matches the user of the account to update
+        if (!updateAccountWithUsername.isNullOrBlank() && accountName != updateAccountWithUsername) {
+            throw AccountNotTheSameException()
+        }
+
         val account = getAccountIfExists(accountName)
         if (account != null) {
-            if (!updateIfAlreadyExists) {
+            if (updateAccountWithUsername.isNullOrBlank()) {
                 Timber.d("The account already exists")
                 throw AccountNotNewException()
             } else {

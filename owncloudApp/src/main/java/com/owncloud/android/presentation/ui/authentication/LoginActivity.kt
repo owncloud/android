@@ -46,7 +46,10 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.authentication.oauth.AuthStateManager
+import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder
 import com.owncloud.android.authentication.oauth.OAuthUtils
+import com.owncloud.android.data.authentication.KEY_USER_ID
+import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
@@ -56,9 +59,6 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder
-import com.owncloud.android.data.authentication.KEY_USER_ID
-import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
@@ -161,7 +161,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 authenticationViewModel.loginBasic(
                     account_username.text.toString().trim(),
                     account_password.text.toString(),
-                    loginAction != ACTION_CREATE
+                    if (loginAction != ACTION_CREATE) userAccount?.name else null
                 )
             }
         }
@@ -486,7 +486,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     tokenResponse.accessToken as String,
                     tokenResponse.refreshToken as String,
                     if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
-                    loginAction != ACTION_CREATE
+                    if (loginAction != ACTION_CREATE) userAccount?.name else null
                 )
             } else if (authorizationException != null) {
                 updateOAuthStatusIconAndText(authorizationException)
