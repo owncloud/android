@@ -65,15 +65,15 @@ public class GetUserProfileOperation extends SyncOperation {
     protected RemoteOperationResult run(OwnCloudClient client) {
 
         try {
+            Account storedAccount = client.getAccount().getSavedAccount();
             /// get display name
             UseCaseHelper useCaseHelper = new UseCaseHelper();
-            UseCaseResult<UserInfo> useCaseResult = useCaseHelper.getUserInfo();
+            UseCaseResult<UserInfo> useCaseResult = useCaseHelper.getUserInfo(storedAccount.name);
             if (useCaseResult.getDataOrNull() != null) {
                 // store display name with account data
                 AccountManager accountManager = AccountManager.get(MainApp.Companion.getAppContext());
                 UserInfo userInfo = useCaseResult.getDataOrNull();
                 Timber.d("User info recovered from UseCaseHelper:GetUserInfo -> %s", userInfo.toString());
-                Account storedAccount = getStorageManager().getAccount();
                 accountManager.setUserData(
                         storedAccount,
                         AccountUtils.Constants.KEY_DISPLAY_NAME,    // keep also there, for the moment

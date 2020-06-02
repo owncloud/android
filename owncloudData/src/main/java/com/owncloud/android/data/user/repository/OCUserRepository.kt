@@ -30,9 +30,9 @@ class OCUserRepository(
     private val localUserDataSource: LocalUserDataSource,
     private val remoteUserDataSource: RemoteUserDataSource
 ) : UserRepository {
-    override fun getUserInfo(): UserInfo = remoteUserDataSource.getUserInfo()
+    override fun getUserInfo(accountName: String): UserInfo = remoteUserDataSource.getUserInfo(accountName)
     override fun getUserQuota(accountName: String): UserQuota =
-        remoteUserDataSource.getUserQuota().also {
+        remoteUserDataSource.getUserQuota(accountName).also {
             localUserDataSource.saveQuotaForAccount(accountName, it)
         }
 
@@ -40,7 +40,5 @@ class OCUserRepository(
         localUserDataSource.getQuotaForAccount(accountName)
 
     override fun getUserAvatar(accountName: String): UserAvatar =
-        remoteUserDataSource.getUserAvatar().also {
-            localUserDataSource.saveAvatarForAccount(accountName, it)
-        }
+        remoteUserDataSource.getUserAvatar(accountName)
 }
