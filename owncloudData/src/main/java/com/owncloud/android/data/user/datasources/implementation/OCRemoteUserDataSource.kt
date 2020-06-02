@@ -19,6 +19,7 @@
 
 package com.owncloud.android.data.user.datasources.implementation
 
+import com.owncloud.android.data.ClientHandler
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserAvatarMapper
@@ -28,27 +29,33 @@ import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.lib.resources.users.services.UserService
+import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 
 class OCRemoteUserDataSource(
-    private val userService: UserService,
+    private val clientHandler: ClientHandler,
     private val remoteUserInfoMapper: RemoteUserInfoMapper,
     private val remoteUserQuotaMapper: RemoteUserQuotaMapper,
-    private val remoteUserAvatarMapper: RemoteUserAvatarMapper
+    private val remoteUserAvatarMapper: RemoteUserAvatarMapper,
+    private val avatarDimension: Int
 ) : RemoteUserDataSource {
 
-    override fun getUserInfo(): UserInfo =
+    override fun getUserInfo(accountName: String): UserInfo =
         executeRemoteOperation {
-            userService.getUserInfo()
+            getUserService(accountName).getUserInfo()
         }.let { remoteUserInfoMapper.toModel(it)!! }
 
-    override fun getUserQuota(): UserQuota =
+    override fun getUserQuota(accountName: String): UserQuota =
         executeRemoteOperation {
-            userService.getUserQuota()
+            getUserService(accountName).getUserQuota()
         }.let { remoteUserQuotaMapper.toModel(it)!! }
 
-    override fun getUserAvatar(): UserAvatar =
+    override fun getUserAvatar(accountName: String): UserAvatar =
         executeRemoteOperation {
-            userService.getUserAvatar()
+            getUserService(accountName = accountName).getUserAvatar()
         }.let { remoteUserAvatarMapper.toModel(it)!! }
 
+    private fun getUserService(accountName: String? = ""): UserService {
+        val owncloudClient = clientHandler.getClientForAccount(accountName = accountName)
+        return OCUserService(client = owncloudClient, avatarDimension = avatarDimension)
+    }
 }

@@ -530,7 +530,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                     }
                 }
             }
-            //updateQuota()
+            updateQuota()
         }
     }
 

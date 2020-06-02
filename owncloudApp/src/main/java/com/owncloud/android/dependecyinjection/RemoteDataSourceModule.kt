@@ -21,6 +21,7 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.ClientHandler
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCRemoteAuthenticationDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
@@ -52,8 +53,6 @@ import com.owncloud.android.lib.resources.status.services.CapabilityService
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
 import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
-import com.owncloud.android.lib.resources.users.services.UserService
-import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -62,17 +61,19 @@ val remoteDataSourceModule = module {
     single { OwnCloudAccount(get(), androidContext()) }
     single { SingleSessionManager.getDefaultSingleton().getClientFor(get(), androidContext()) }
 
+    single { ClientHandler(get(), get()) }
+
     single<CapabilityService> { OCCapabilityService(get()) }
     single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
-    single<UserService> { OCUserService(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt()) }
     single<FileService> { OCFileService(get()) }
     single<ServerInfoService> { OCServerInfoService() }
 
     factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get()) }
-    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), get(), get()) }
+    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), get(), get(), androidContext().resources.getDimension(
+        R.dimen.file_avatar_size).toInt()) }
     factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext(), get()) }

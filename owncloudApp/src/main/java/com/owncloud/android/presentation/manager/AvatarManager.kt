@@ -23,6 +23,10 @@ import android.accounts.Account
 import android.graphics.drawable.Drawable
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.exceptions.FileNotFoundException
+import com.owncloud.android.domain.user.model.UserAvatar
+import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.ui.DefaultAvatarTextDrawable
 import com.owncloud.android.utils.BitmapUtils
 import kotlinx.coroutines.Dispatchers
@@ -38,14 +42,12 @@ import timber.log.Timber
  *
  * If this is not possible either, a predefined user icon is bound instead.
  */
-class AvatarManager{
+class AvatarManager {
 
     suspend fun getAvatarForAccount(
         account: Account,
-        fetchFromServer: Boolean,
         displayRadius: Float
-    ): Drawable? =
-        withContext(Dispatchers.IO) {
+    ): Drawable? {
             var avatarDrawable: Drawable? = null
             val imageKey = "a_${account.name}"
 
@@ -65,6 +67,6 @@ class AvatarManager{
                     Timber.e(e, "Error calculating RGB value for active account icon.")
                 }
             }
-            return@withContext avatarDrawable
+            return avatarDrawable
         }
 }

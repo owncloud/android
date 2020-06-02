@@ -37,14 +37,10 @@ class UseCaseHelper : KoinComponent {
     private val getUserInfoAsyncUseCase: GetUserInfoAsyncUseCase by inject()
     private val refreshUserQuotaFromServerAsyncUseCase: RefreshUserQuotaFromServerAsyncUseCase by inject()
     private val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
-    private val getStoredQuotaUseCase: GetStoredQuotaUseCase by inject()
 
-
-    fun getUserInfo(): UseCaseResult<UserInfo> = getUserInfoAsyncUseCase.execute(Unit)
+    fun getUserInfo(accountName: String): UseCaseResult<UserInfo> = getUserInfoAsyncUseCase.execute(GetUserInfoAsyncUseCase.Params(accountName))
     fun getUserQuota(accountName: String): UseCaseResult<UserQuota> =
         refreshUserQuotaFromServerAsyncUseCase.execute(RefreshUserQuotaFromServerAsyncUseCase.Params(accountName))
     fun getUserAvatar(accountName: String): UseCaseResult<UserAvatar> =
         getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(accountName))
-    fun getStoredQuota(accountName: String): UseCaseResult<UserQuota?> =
-        getStoredQuotaUseCase.execute(GetStoredQuotaUseCase.Params(accountName))
 }
