@@ -420,6 +420,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
+        Timber.d("A browser should be opened now to authenticate this user.")
         val clientId = getString(R.string.oauth2_client_id)
         val redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri))
         val scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
@@ -469,6 +470,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      * OAuth step 2: Exchange the received authorization code for access and refresh tokens
      */
     private fun exchangeAuthorizationCodeForTokens(authorizationResponse: AuthorizationResponse) {
+        server_status_text.text = getString(R.string.auth_getting_authorization)
+        Timber.d("Exchange authorization code for tokens")
         val clientAuth = OAuthUtils.createClientSecretBasic(getString(R.string.oauth2_client_secret))
         authService?.performTokenRequest(
             authorizationResponse.createTokenExchangeRequest(),
@@ -480,6 +483,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun handleExchangeAuthorizationCodeForTokensResponse(): TokenResponseCallback =
         TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
             if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
+                Timber.d("Tokens received, trying to login, creating account and adding it to account manager")
                 authenticationViewModel.loginOAuth(
                     tokenResponse.additionalParameters[KEY_USER_ID] ?: "",
                     OAUTH_TOKEN_TYPE,
