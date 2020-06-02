@@ -1001,15 +1001,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 directory = storageManager.getFileById(directory.getParentId());
             }
 
-            // If available offline option and folder is not available offline -> list root
-            if (mFileListOption.isAvailableOffline() && !directory.isAvailableOffline()) {
-                directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
-            }
-
-            if (mFileListOption.isSharedByLink() && !directory.isSharedViaLink()) {
-                directory = storageManager.getFileByPath(OCFile.ROOT_PATH);
-            }
-
             mFileListAdapter.swapDirectory(directory, storageManager);
             if (mFile == null || !mFile.equals(directory)) {
                 mCurrentListView.setSelection(0);
