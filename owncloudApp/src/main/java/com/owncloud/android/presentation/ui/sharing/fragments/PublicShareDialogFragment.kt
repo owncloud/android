@@ -611,7 +611,7 @@ class PublicShareDialogFragment : DialogFragment() {
         override fun onCancelDatePicker() {
 
             // If the date has not been set yet, uncheck the toggle
-            if (shareViaLinkExpirationSwitch.isChecked && shareViaLinkExpirationSwitch?.text === "") {
+            if (shareViaLinkExpirationSwitch.isChecked && shareViaLinkExpirationValue?.text.isNullOrBlank()) {
                 shareViaLinkExpirationSwitch.isChecked = false
             }
         }
