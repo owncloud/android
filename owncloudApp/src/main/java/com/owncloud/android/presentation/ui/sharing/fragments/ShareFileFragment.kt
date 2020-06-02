@@ -298,7 +298,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     private fun observeCapabilities() {
         ocCapabilityViewModel.capabilities.observe(
-            this,
+            viewLifecycleOwner,
             Observer { event ->
                 val uiResult = event.peekContent()
                 val capabilities = uiResult.getStoredData()
@@ -331,7 +331,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     private fun observeShares() {
         ocShareViewModel.shares.observe(
-            this,
+            viewLifecycleOwner,
             Observer { event ->
                 val uiResult = event.peekContent()
                 val shares = uiResult.getStoredData()

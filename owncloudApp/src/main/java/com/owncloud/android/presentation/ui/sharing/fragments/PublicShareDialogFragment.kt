@@ -569,7 +569,7 @@ class PublicShareDialogFragment : DialogFragment() {
                 )
                 dialog.setDatePickerListener(this)
                 dialog.show(
-                    activity!!.supportFragmentManager,
+                    requireActivity().supportFragmentManager,
                     ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
                 )
             } else {
@@ -593,7 +593,7 @@ class PublicShareDialogFragment : DialogFragment() {
             )
             dialog.setDatePickerListener(this)
             dialog.show(
-                activity!!.supportFragmentManager,
+                requireActivity().supportFragmentManager,
                 ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
             )
         }
