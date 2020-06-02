@@ -38,6 +38,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -59,7 +60,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_coordinator_layout.*
 import kotlinx.android.synthetic.main.nav_drawer_content.*
 import kotlinx.android.synthetic.main.nav_drawer_footer.*
-import kotlinx.android.synthetic.main.nav_drawer_header.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -150,7 +150,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 override fun onViewDetachedFromWindow(v: View) {}
             })
             setupDrawerContent(nav_view)
-            findNavigationViewChildById(R.id.drawer_active_user).setOnClickListener { toggleAccountList() }
+            findNavigationViewChildById(R.id.drawer_active_user)?.setOnClickListener { toggleAccountList() }
         }
         drawerToggle =
             object : ActionBarDrawerToggle(this, drawer_layout, R.string.drawer_open, R.string.drawer_close) {
@@ -507,13 +507,14 @@ abstract class DrawerActivity : ToolbarActivity() {
      */
     protected fun setAccountInDrawer(account: Account) {
         if (drawer_layout != null) {
-            drawer_username_full?.text = account.name
+            (findNavigationViewChildById(R.id.drawer_username_full) as AppCompatTextView?)?.text = account.name
             try {
                 val oca = OwnCloudAccount(account, this)
-                drawer_username.text = oca.displayName
+                (findNavigationViewChildById(R.id.drawer_username) as AppCompatTextView?)?.text = oca.displayName
             } catch (e: Exception) {
                 Timber.w("Couldn't read display name of account; using account name instead")
-                drawer_username?.text = AccountUtils.getUsernameOfAccount(account.name)
+                (findNavigationViewChildById(R.id.drawer_username) as AppCompatTextView?)?.text =
+                    AccountUtils.getUsernameOfAccount(account.name)
             }
             CoroutineScope(Dispatchers.IO).launch {
                 val drawable = drawerViewModel.getStoredAvatar(
@@ -673,8 +674,8 @@ abstract class DrawerActivity : ToolbarActivity() {
      * @param id the view's id
      * @return The view if found or `null` otherwise.
      */
-    private fun findNavigationViewChildById(id: Int): View {
-        return (findViewById<View>(R.id.nav_view) as NavigationView).getHeaderView(0).findViewById(id)
+    private fun findNavigationViewChildById(id: Int): View? {
+        return (findViewById<View>(R.id.nav_view) as NavigationView?)?.getHeaderView(0)?.findViewById(id)
     }
 
     override fun onAccountCreationSuccessful(future: AccountManagerFuture<Bundle?>?) {
