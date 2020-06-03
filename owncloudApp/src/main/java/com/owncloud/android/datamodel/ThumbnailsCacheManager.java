@@ -36,6 +36,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.util.Pair;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -111,7 +112,7 @@ public class ThumbnailsCacheManager {
         }
     }
 
-    private static void addBitmapToCache(String key, Bitmap bitmap) {
+    public static void addBitmapToCache(String key, Bitmap bitmap) {
         synchronized (mThumbnailsDiskCacheLock) {
             if (mThumbnailCache != null) {
                 mThumbnailCache.put(key, bitmap);
@@ -119,7 +120,7 @@ public class ThumbnailsCacheManager {
         }
     }
 
-    private static void removeBitmapFromCache(String key) {
+    public static void removeBitmapFromCache(String key) {
         synchronized (mThumbnailsDiskCacheLock) {
             if (mThumbnailCache != null) {
                 mThumbnailCache.removeKey(key);

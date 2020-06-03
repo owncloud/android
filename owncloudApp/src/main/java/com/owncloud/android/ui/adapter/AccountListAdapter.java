@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.extensions.ImageViewExt;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.ui.activity.BaseActivity;
 import com.owncloud.android.utils.DisplayUtils;
@@ -101,11 +102,12 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                 );
 
                 try {
-                    DisplayUtils.showAccountAvatar(
-                            account,
+                    ImageViewExt imageViewExt = ImageViewExt.INSTANCE;
+                    imageViewExt.loadAvatarForAccountJava(
                             viewHolder.imageViewItem,
-                            mAccountAvatarRadiusDimension,
-                            true
+                            account,
+                            true,
+                            mAccountAvatarRadiusDimension
                     );
                 } catch (Exception e) {
                     Timber.e(e, "Error calculating RGB value for account list item.");

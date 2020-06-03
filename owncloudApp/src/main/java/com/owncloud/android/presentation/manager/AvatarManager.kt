@@ -20,17 +20,20 @@
 package com.owncloud.android.presentation.manager
 
 import android.accounts.Account
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.media.ThumbnailUtils
 import com.owncloud.android.MainApp.Companion.appContext
+import com.owncloud.android.R
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.user.model.UserAvatar
-import com.owncloud.android.domain.user.model.UserQuota
+import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.ui.DefaultAvatarTextDrawable
 import com.owncloud.android.utils.BitmapUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import timber.log.Timber
 
 /**
@@ -42,31 +45,77 @@ import timber.log.Timber
  *
  * If this is not possible either, a predefined user icon is bound instead.
  */
-class AvatarManager {
+class AvatarManager : KoinComponent {
 
-    suspend fun getAvatarForAccount(
+    fun getAvatarForAccount(
         account: Account,
+        fetchIfNotCached: Boolean,
         displayRadius: Float
     ): Drawable? {
-            var avatarDrawable: Drawable? = null
-            val imageKey = "a_${account.name}"
+        var avatarDrawable: Drawable? = null
+        val imageKey = "a_${account.name}"
 
-            // Check disk cache in background thread
-            val avatarBitmap = ThumbnailsCacheManager.getBitmapFromDiskCache(imageKey)
-
-            if (avatarBitmap != null) {
-                Timber.i("Avatar retrieved from cache with imageKey: $imageKey")
-                avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, avatarBitmap)
-            } else {
-                // generate placeholder from user name
-                try {
-                    Timber.i("Avatar with imageKey $imageKey is not available in cache. Generating one...")
-                    avatarDrawable = DefaultAvatarTextDrawable.createAvatar(account.name, displayRadius)
-                } catch (e: Exception) {
-                    // nothing to do, return null to apply default icon
-                    Timber.e(e, "Error calculating RGB value for active account icon.")
-                }
-            }
+        // Check disk cache in background thread
+        val avatarBitmap = ThumbnailsCacheManager.getBitmapFromDiskCache(imageKey)
+        avatarBitmap?.let {
+            Timber.i("Avatar retrieved from cache with imageKey: $imageKey")
+            avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, it)
             return avatarDrawable
         }
+
+        if (fetchIfNotCached) {
+            val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
+            val useCaseResult = getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(accountName = account.name))
+            handleAvatarUseCaseResult(useCaseResult = useCaseResult, imageKey = imageKey)?.let { return it }
+        }
+
+        // generate placeholder from user name
+        try {
+            Timber.i("Avatar with imageKey $imageKey is not available in cache. Generating one...")
+            avatarDrawable = DefaultAvatarTextDrawable.createAvatar(account.name, displayRadius)
+            return avatarDrawable
+        } catch (e: Exception) {
+            // nothing to do, return null to apply default icon
+            Timber.e(e, "Error calculating RGB value for active account icon.")
+        }
+        return avatarDrawable
+    }
+
+    /**
+     * Converts size of file icon from dp to pixel
+     *
+     * @return int
+     */
+    private fun getAvatarDimension(): Int {
+        // Converts dp to pixel
+        val r = appContext.resources
+        return Math.round(r.getDimension(R.dimen.file_avatar_size))
+    }
+
+    fun handleAvatarUseCaseResult(
+        imageKey: String,
+        useCaseResult: UseCaseResult<UserAvatar>
+    ): Drawable? {
+        Timber.d("Is success: ${useCaseResult.isSuccess}")
+
+        if (useCaseResult.isSuccess) {
+            val userAvatar = useCaseResult.getDataOrNull()
+            userAvatar?.let {
+                var bitmap = BitmapFactory.decodeByteArray(it.avatarData, 0, it.avatarData.size)
+                bitmap = ThumbnailUtils.extractThumbnail(bitmap, getAvatarDimension(), getAvatarDimension())
+                // Add avatar to cache
+                bitmap?.let {
+                    ThumbnailsCacheManager.addBitmapToCache(imageKey, bitmap)
+                    Timber.d("User avatar saved into cache -> %s", bitmap)
+                    val avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, bitmap)
+                    return avatarDrawable
+                }
+            }
+
+        } else if (useCaseResult.getThrowableOrNull() is FileNotFoundException) {
+            Timber.i("No avatar available, removing cached copy")
+            ThumbnailsCacheManager.removeBitmapFromCache(imageKey)
+        }
+        return null
+    }
 }
