@@ -36,6 +36,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.operations.common.UseCaseHelper;
+import com.owncloud.android.presentation.manager.AvatarManager;
 import timber.log.Timber;
 
 /**
@@ -92,29 +93,10 @@ public class GetUserProfileOperation extends SyncOperation {
                     UserQuota userQuotaResult = quotaUseCaseResult.getDataOrNull();
                     Timber.d("User quota recovered from UseCaseHelper:GetUserQuota -> %s", userQuotaResult.toString());
 
-                    int dimension = getAvatarDimension();
-
                     /// get avatar (optional for success)
                     UseCaseResult<UserAvatar> avatarUseCaseResult = useCaseHelper.getUserAvatar(storedAccount.name);
-                    if (avatarUseCaseResult.getDataOrNull() != null) {
-                        // store display name with account data
-                        UserAvatar userAvatar = avatarUseCaseResult.getDataOrNull();
-
-                        byte[] avatarData = userAvatar.getAvatarData();
-                        String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
-                                storedAccount.name,
-                                avatarData,
-                                dimension
-                        );
-
-                        Timber.d("User avatar saved into cache -> %s", avatarKey);
-
-                    } else if (avatarUseCaseResult.getThrowableOrNull() instanceof FileNotFoundException) {
-                        Timber.i("No avatar available, removing cached copy");
-                        ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);
-
-                    }   // others are ignored, including 304 (not modified), so the avatar is only stored
-                    // if changed in the server :D
+                    AvatarManager avatarManager = new AvatarManager();
+                    avatarManager.handleAvatarUseCaseResult("a_"+ storedAccount.name, avatarUseCaseResult);
 
                     return new RemoteOperationResult<>(RemoteOperationResult.ResultCode.OK);
 
@@ -128,16 +110,5 @@ public class GetUserProfileOperation extends SyncOperation {
             Timber.e(e, "Exception while getting user profile: ");
             return new RemoteOperationResult(e);
         }
-    }
-
-    /**
-     * Converts size of file icon from dp to pixel
-     *
-     * @return int
-     */
-    private int getAvatarDimension() {
-        // Converts dp to pixel
-        Resources r = MainApp.Companion.getAppContext().getResources();
-        return Math.round(r.getDimension(R.dimen.file_avatar_size));
     }
 }

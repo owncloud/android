@@ -51,6 +51,8 @@ import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.extensions.ImageViewExt.loadAvatarForAccount
+import com.owncloud.android.extensions.MenuItemExt.loadAvatarForAccount
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
@@ -60,10 +62,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_coordinator_layout.*
 import kotlinx.android.synthetic.main.nav_drawer_content.*
 import kotlinx.android.synthetic.main.nav_drawer_footer.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import kotlin.math.ceil
@@ -353,19 +351,10 @@ abstract class DrawerActivity : ToolbarActivity() {
 
                 // activate second/end account avatar
                 accountsWithAvatars[1]?.let {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        // not just accessibility support, used to know what account is bound to each imageView
-                        accountEndAccountAvatar?.contentDescription = it.name
-                        val drawable = drawerViewModel.getStoredAvatar(
-                            account = it,
-                            displayRadius = otherAccountAvatarRadiusDimension
-                        )
-                        if (drawable != null) {
-                            accountEndAccountAvatar?.setImageDrawable(drawable)
-                        } else {
-                            accountEndAccountAvatar?.setImageResource(R.drawable.ic_account_circle)
-                        }
-                    }
+                    accountEndAccountAvatar?.loadAvatarForAccount(
+                        account = it,
+                        displayRadius = otherAccountAvatarRadiusDimension
+                    )
                 }
                 if (accountsWithAvatars[1] == null) {
                     accountEndAccountAvatar?.visibility = View.GONE
@@ -373,19 +362,10 @@ abstract class DrawerActivity : ToolbarActivity() {
 
                 // activate third/middle account avatar
                 accountsWithAvatars[2]?.let {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        // not just accessibility support, used to know what account is bound to each imageView
-                        accountMiddleAccountAvatar?.contentDescription = it.name
-                        val drawable = drawerViewModel.getStoredAvatar(
-                            account = it,
-                            displayRadius = otherAccountAvatarRadiusDimension
-                        )
-                        if (drawable != null) {
-                            accountMiddleAccountAvatar?.setImageDrawable(drawable)
-                        } else {
-                            accountMiddleAccountAvatar?.setImageResource(R.drawable.ic_account_circle)
-                        }
-                    }
+                    accountMiddleAccountAvatar?.loadAvatarForAccount(
+                        account = it,
+                        displayRadius = otherAccountAvatarRadiusDimension
+                    )
                 }
                 if (accountsWithAvatars[2] == null) {
                     accountMiddleAccountAvatar?.visibility = View.GONE
@@ -411,17 +391,11 @@ abstract class DrawerActivity : ToolbarActivity() {
             if (getAccount().name != account.name) {
                 val accountMenuItem: MenuItem =
                     nav_view.menu.add(R.id.drawer_menu_accounts, Menu.NONE, MENU_ORDER_ACCOUNT, account.name)
-                CoroutineScope(Dispatchers.IO).launch {
-                    val drawable = drawerViewModel.getStoredAvatar(
-                        account = account,
-                        displayRadius = menuAccountAvatarRadiusDimension
-                    )
-                    if (drawable != null) {
-                        accountMenuItem.icon = drawable
-                    } else {
-                        accountMenuItem.setIcon(R.drawable.ic_account_circle)
-                    }
-                }
+                accountMenuItem.loadAvatarForAccount(
+                    account = account,
+                    fetchIfNotCached = false,
+                    displayRadius = menuAccountAvatarRadiusDimension
+                )
             }
         }
 
@@ -516,21 +490,11 @@ abstract class DrawerActivity : ToolbarActivity() {
                 (findNavigationViewChildById(R.id.drawer_username) as AppCompatTextView?)?.text =
                     AccountUtils.getUsernameOfAccount(account.name)
             }
-            CoroutineScope(Dispatchers.IO).launch {
-                val drawable = drawerViewModel.getStoredAvatar(
-                    account = account,
-                    displayRadius = currentAccountAvatarRadiusDimension
-                )
-                withContext(Dispatchers.Main) {
-                    val currentAccount: ImageView? =
-                        findNavigationViewChildById(R.id.drawer_current_account) as ImageView?
-                    if (drawable != null) {
-                        currentAccount?.setImageDrawable(drawable)
-                    } else {
-                        currentAccount?.setImageResource(R.drawable.ic_account_circle)
-                    }
-                }
-            }
+
+            (findNavigationViewChildById(R.id.drawer_current_account) as ImageView?)?.loadAvatarForAccount(
+                account = account,
+                displayRadius = currentAccountAvatarRadiusDimension
+            )
             updateQuota()
         }
     }
