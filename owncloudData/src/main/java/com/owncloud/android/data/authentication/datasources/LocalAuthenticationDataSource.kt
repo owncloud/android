@@ -29,7 +29,7 @@ interface LocalAuthenticationDataSource {
         password: String,
         serverInfo: ServerInfo,
         userInfo: UserInfo,
-        updateIfAlreadyExists: Boolean
+        updateAccountWithUsername: String?
     ): String
 
     fun addOAuthAccount(
@@ -41,7 +41,7 @@ interface LocalAuthenticationDataSource {
         userInfo: UserInfo,
         refreshToken: String,
         scope: String?,
-        updateIfAlreadyExists: Boolean
+        updateAccountWithUsername: String?
     ): String
 
     fun supportsOAuth2(accountName: String): Boolean

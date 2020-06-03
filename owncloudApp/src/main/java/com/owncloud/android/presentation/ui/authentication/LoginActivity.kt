@@ -46,7 +46,10 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.authentication.oauth.AuthStateManager
+import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder
 import com.owncloud.android.authentication.oauth.OAuthUtils
+import com.owncloud.android.data.authentication.KEY_USER_ID
+import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
@@ -56,9 +59,6 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder
-import com.owncloud.android.data.authentication.KEY_USER_ID
-import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
@@ -159,9 +159,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 startOIDCOauthorization()
             } else { // Basic
                 authenticationViewModel.loginBasic(
-                    account_username.text.toString(),
+                    account_username.text.toString().trim(),
                     account_password.text.toString(),
-                    loginAction != ACTION_CREATE
+                    if (loginAction != ACTION_CREATE) userAccount?.name else null
                 )
             }
         }
@@ -420,6 +420,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
+        Timber.d("A browser should be opened now to authenticate this user.")
         val clientId = getString(R.string.oauth2_client_id)
         val redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri))
         val scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
@@ -469,6 +470,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      * OAuth step 2: Exchange the received authorization code for access and refresh tokens
      */
     private fun exchangeAuthorizationCodeForTokens(authorizationResponse: AuthorizationResponse) {
+        server_status_text.text = getString(R.string.auth_getting_authorization)
+        Timber.d("Exchange authorization code for tokens")
         val clientAuth = OAuthUtils.createClientSecretBasic(getString(R.string.oauth2_client_secret))
         authService?.performTokenRequest(
             authorizationResponse.createTokenExchangeRequest(),
@@ -480,13 +483,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun handleExchangeAuthorizationCodeForTokensResponse(): TokenResponseCallback =
         TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
             if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
+                Timber.d("Tokens received, trying to login, creating account and adding it to account manager")
                 authenticationViewModel.loginOAuth(
                     tokenResponse.additionalParameters[KEY_USER_ID] ?: "",
                     OAUTH_TOKEN_TYPE,
                     tokenResponse.accessToken as String,
                     tokenResponse.refreshToken as String,
                     if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
-                    loginAction != ACTION_CREATE
+                    if (loginAction != ACTION_CREATE) userAccount?.name else null
                 )
             } else if (authorizationException != null) {
                 updateOAuthStatusIconAndText(authorizationException)

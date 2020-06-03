@@ -599,8 +599,10 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_6_title">Reinstall recommended</string>
-    <string name="welcome_feature_6_text">You have upgraded from a beta version. Please, reinstall the app in order to avoid undesirable behaviours.</string>
+    <string name="welcome_feature_6_title">New bottom navigation bar</string>
+    <string name="welcome_feature_6_text">Easier and faster access to your available offline files and links</string>
+    <string name="welcome_feature_7_title">Support for OpenID Connect</string>
+    <string name="welcome_feature_7_text">Connect to your ownCloud servers in a more secure way with OpenID Connect</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
 

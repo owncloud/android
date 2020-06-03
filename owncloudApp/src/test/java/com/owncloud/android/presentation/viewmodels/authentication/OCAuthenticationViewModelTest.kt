@@ -32,6 +32,7 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_ACCESS_TOKEN
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASE_URL
 import com.owncloud.android.testutil.OC_BASIC_PASSWORD
@@ -132,7 +133,7 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
     @Test
     fun loginBasicOk() {
         every { loginBasicAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
-        ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, true)
+        ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, OC_ACCOUNT_NAME)
 
         assertEmittedValues(
             expectedValues = listOf<Event<UIResult<String>>>(
@@ -145,7 +146,7 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
     @Test
     fun loginBasicException() {
         every { loginBasicAsyncUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
-        ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, false)
+        ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null)
 
         assertEmittedValues(
             expectedValues = listOf<Event<UIResult<String>>>(
@@ -159,7 +160,7 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
     fun loginOAuthOk() {
         every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
         ocAuthenticationViewModel.loginOAuth(
-            OC_BASIC_USERNAME, OC_AUTH_TOKEN_TYPE, OC_ACCESS_TOKEN, OC_REFRESH_TOKEN, OC_SCOPE, false
+            OC_BASIC_USERNAME, OC_AUTH_TOKEN_TYPE, OC_ACCESS_TOKEN, OC_REFRESH_TOKEN, OC_SCOPE, null
         )
 
         assertEmittedValues(
@@ -174,7 +175,7 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
     fun loginOAuthException() {
         every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
         ocAuthenticationViewModel.loginOAuth(
-            OC_BASIC_USERNAME, OC_AUTH_TOKEN_TYPE, OC_ACCESS_TOKEN, OC_REFRESH_TOKEN, OC_SCOPE, false
+            OC_BASIC_USERNAME, OC_AUTH_TOKEN_TYPE, OC_ACCESS_TOKEN, OC_REFRESH_TOKEN, OC_SCOPE, null
         )
 
         assertEmittedValues(

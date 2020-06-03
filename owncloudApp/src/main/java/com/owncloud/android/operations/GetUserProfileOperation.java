@@ -145,7 +145,7 @@ public class GetUserProfileOperation extends SyncOperation {
                         );
                         userProfile.setAvatar(userAvatar);
 
-                    } else if (quotaOperationResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
+                    } else if (avatarOperationResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
                         Timber.i("No avatar available, removing cached copy");
                         userProfilesRepository.deleteAvatar(storedAccount.name);
                         ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);

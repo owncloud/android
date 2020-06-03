@@ -33,7 +33,7 @@ class OCAuthenticationRepository(
         serverInfo: ServerInfo,
         username: String,
         password: String,
-        updateAccountIfAlreadyExists: Boolean
+        updateAccountWithUsername: String?
     ): String {
         val userInfoAndRedirectionPath: Pair<UserInfo, String?> =
             remoteAuthenticationDataSource.loginBasic(
@@ -48,7 +48,7 @@ class OCAuthenticationRepository(
             password = password,
             serverInfo = serverInfo,
             userInfo = userInfoAndRedirectionPath.first,
-            updateIfAlreadyExists = updateAccountIfAlreadyExists
+            updateAccountWithUsername = updateAccountWithUsername
         )
     }
 
@@ -59,7 +59,7 @@ class OCAuthenticationRepository(
         accessToken: String,
         refreshToken: String,
         scope: String?,
-        updateAccountIfAlreadyExists: Boolean
+        updateAccountWithUsername: String?
     ): String {
         val userInfoAndRedirectionPath: Pair<UserInfo, String?> =
             remoteAuthenticationDataSource.loginOAuth(
@@ -77,7 +77,7 @@ class OCAuthenticationRepository(
             userInfo = userInfoAndRedirectionPath.first,
             refreshToken = refreshToken,
             scope = scope,
-            updateIfAlreadyExists = updateAccountIfAlreadyExists
+            updateAccountWithUsername = updateAccountWithUsername
         )
     }
 

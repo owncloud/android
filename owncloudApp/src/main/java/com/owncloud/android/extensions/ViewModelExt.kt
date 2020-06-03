@@ -61,7 +61,7 @@ object ViewModelExt : KoinComponent {
 
             val useCaseResult = useCase.execute(useCaseParams)
 
-            Timber.d(useCaseResult.toString())
+            Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $useCaseResult")
 
             if (useCaseResult.isSuccess && postSuccess) {
                 if (postSuccessWithData) {
@@ -95,7 +95,7 @@ object ViewModelExt : KoinComponent {
 
             val useCaseResult = useCase.execute(useCaseParams)
 
-            Timber.d(useCaseResult.toString())
+            Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $useCaseResult")
 
             if (useCaseResult.isError) {
                 liveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull(), data = cachedData)))

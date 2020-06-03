@@ -97,7 +97,7 @@ class OCLocalAuthenticationDataSourceTest {
             "password",
             OC_SERVER_INFO,
             OC_USER_INFO,
-            false
+            null
         )
 
         val newAccount = Account(OC_ACCOUNT_NAME, "owncloud")
@@ -123,7 +123,7 @@ class OCLocalAuthenticationDataSourceTest {
             "password",
             OC_SERVER_INFO,
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
-            false
+            null
         )
     }
 
@@ -145,11 +145,11 @@ class OCLocalAuthenticationDataSourceTest {
             "password",
             OC_SERVER_INFO,
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
-            true
+            OC_ACCOUNT_NAME
         )
 
-        // One for checking if the account exists and another one for getting account to update
-        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 2)
+        // One for getting account to update
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
 
         // The account already exists so do not create it
         verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
@@ -160,9 +160,6 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test
     fun addBasicAccountAlreadyExistsUpdateDifferentUsername() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf(OC_ACCOUNT) // The account is already there
 
         every {
             accountManager.setUserData(any(), any(), any())
@@ -177,14 +174,11 @@ class OCLocalAuthenticationDataSourceTest {
                 "password",
                 OC_SERVER_INFO,
                 OC_USER_INFO,
-                true
+                "NotTheSameAccount"
             )
         } catch (exception: Exception) {
             assertTrue(exception is AccountNotTheSameException)
         } finally {
-            // One for checking if the account exists
-            verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
-
             // The account already exists so do not create a new one
             verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
 
@@ -211,7 +205,7 @@ class OCLocalAuthenticationDataSourceTest {
             OC_USER_INFO,
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            false
+            null
         )
 
         val newAccount = Account(OC_ACCOUNT_NAME, "owncloud")
@@ -243,7 +237,7 @@ class OCLocalAuthenticationDataSourceTest {
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            false
+            null
         )
     }
 
@@ -272,11 +266,11 @@ class OCLocalAuthenticationDataSourceTest {
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            true
+            OC_ACCOUNT_NAME
         )
 
-        // One for checking if the account exists and another one for getting account to update
-        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 2)
+        // One for getting account to update
+        verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
 
         // The account already exists so do not create it
         verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
@@ -288,9 +282,6 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test
     fun addOAuthAccountAlreadyExistsUpdateDifferentUsername() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf(OC_ACCOUNT) // The account is already there
 
         every {
             accountManager.setUserData(any(), any(), any())
@@ -312,14 +303,11 @@ class OCLocalAuthenticationDataSourceTest {
                 OC_USER_INFO,
                 OC_REFRESH_TOKEN,
                 OC_SCOPE,
-                true
+                "AccountNotTheSame"
             )
         } catch (exception: Exception) {
             assertTrue(exception is AccountNotTheSameException)
         } finally {
-            // One for checking if the account exists
-            verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
-
             // The account already exists so do not create it
             verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
 

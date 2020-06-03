@@ -40,16 +40,9 @@ public class FeatureList {
     static final private boolean SHOW_ON_FIRST_RUN = true;
     static final private boolean SHOW_ON_UPGRADE = false;
 
-    static final private int VERSION_CODE_BETA_2_15_1 = 21400201;
     static final private String DEFAULT_WIZARD_VERSION_NAME = "2.7.0";
+    static final private String RELEASE_2_15_0 = "2.15.0";
     static final private String INDIFFERENT = "0";
-    static final private FeatureItem INCONSISTENT_VERSION = new FeatureItem(
-            R.drawable.whats_new_warning,
-            R.string.welcome_feature_6_title,
-            R.string.welcome_feature_6_text,
-            INDIFFERENT,
-            INDIFFERENT,
-            SHOW_ON_UPGRADE);
 
     static final private FeatureItem[] featuresList = {
             // Basic features showed on first install
@@ -62,7 +55,11 @@ public class FeatureList {
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
                     R.string.welcome_feature_4_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
-                    R.string.welcome_feature_5_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN)
+                    R.string.welcome_feature_5_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
+            new FeatureItem(R.drawable.whats_new_nav_bar, R.string.welcome_feature_6_title,
+                    R.string.welcome_feature_6_text, RELEASE_2_15_0, INDIFFERENT, SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_oidc, R.string.welcome_feature_7_title,
+                    R.string.welcome_feature_7_text, RELEASE_2_15_0, INDIFFERENT, SHOW_ON_UPGRADE)
     };
 
     static public FeatureItem[] get() {
@@ -73,11 +70,6 @@ public class FeatureList {
         List<FeatureItem> features = new LinkedList<>();
 
         Timber.d("Getting filtered features");
-
-        boolean reinstallRecommended = lastSeenVersionCode == VERSION_CODE_BETA_2_15_1;
-        if (reinstallRecommended) {
-            features.add(INCONSISTENT_VERSION);
-        }
 
         for (FeatureItem item : get()) {
             final int itemVersionCode = isBeta ? item.getBetaVersionNumber() : item.getVersionNumber();

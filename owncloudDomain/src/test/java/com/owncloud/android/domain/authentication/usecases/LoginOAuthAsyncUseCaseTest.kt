@@ -44,7 +44,7 @@ class LoginOAuthAsyncUseCaseTest {
         accessToken = OC_ACCESS_TOKEN,
         refreshToken = OC_REFRESH_TOKEN,
         scope = OC_SCOPE,
-        updateAccountIfAlreadyExists = false
+        updateAccountWithUsername = null
     )
 
     @Test

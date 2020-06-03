@@ -37,7 +37,7 @@ class LoginBasicAsyncUseCase(
             params.serverInfo,
             params.username,
             params.password,
-            params.updateAccountIfAlreadyExists
+            params.updateAccountWithUsername
         )
     }
 
@@ -45,6 +45,6 @@ class LoginBasicAsyncUseCase(
         val serverInfo: ServerInfo?,
         val username: String,
         val password: String,
-        val updateAccountIfAlreadyExists: Boolean
+        val updateAccountWithUsername: String?
     )
 }

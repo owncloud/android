@@ -40,7 +40,7 @@ class LoginOAuthAsyncUseCase(
             params.accessToken,
             params.refreshToken,
             params.scope,
-            params.updateAccountIfAlreadyExists
+            params.updateAccountWithUsername
         )
 
         return accountName
@@ -53,6 +53,6 @@ class LoginOAuthAsyncUseCase(
         val accessToken: String,
         val refreshToken: String,
         val scope: String?,
-        val updateAccountIfAlreadyExists: Boolean
+        val updateAccountWithUsername: String?
     )
 }
