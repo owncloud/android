@@ -64,23 +64,23 @@ val remoteDataSourceModule = module {
     single { ClientHandler(get(), get()) }
 
     single<CapabilityService> { OCCapabilityService(get()) }
-    single<ShareService> { OCShareService(get()) }
-    single<ShareeService> { OCShareeService(get()) }
     single<FileService> { OCFileService(get()) }
     single<ServerInfoService> { OCServerInfoService() }
+    single<ShareService> { OCShareService(get()) }
+    single<ShareeService> { OCShareeService(get()) }
 
+    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext(), get()) }
     factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
+    factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
+    factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get()) }
     factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), get(), get(), androidContext().resources.getDimension(
         R.dimen.file_avatar_size).toInt()) }
-    factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
-    factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
-    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext(), get()) }
 
     factory { RemoteCapabilityMapper() }
     factory { RemoteShareMapper() }
+    factory { RemoteUserAvatarMapper() }
     factory { RemoteUserInfoMapper() }
     factory { RemoteUserQuotaMapper() }
-    factory { RemoteUserAvatarMapper() }
 }
