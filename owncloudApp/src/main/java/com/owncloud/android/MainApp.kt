@@ -5,7 +5,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,14 +28,14 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.preference.PreferenceManager
 import android.view.WindowManager
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import com.owncloud.android.authentication.FingerprintManager
+import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
 import com.owncloud.android.dependecyinjection.localDataSourceModule
 import com.owncloud.android.dependecyinjection.remoteDataSourceModule
@@ -43,19 +43,17 @@ import com.owncloud.android.dependecyinjection.repositoryModule
 import com.owncloud.android.dependecyinjection.useCaseModule
 import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfiguration
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry
-import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider
-import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.ui.activity.FingerprintActivity
+import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.common.utils.LoggingHelper
+import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import timber.log.Timber
+import java.io.File
 
 /**
  * Main Application of the project
@@ -74,38 +72,20 @@ class MainApp : MultiDexApplication() {
 
         OwnCloudClient.setContext(appContext)
 
-        OwnCloudClientManagerFactory.setUserAgent(userAgent)
-
-        OwnCloudClientManagerFactory.setDefaultPolicy(
-            Policy.SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
-        )
-
-        val oauth2Provider = OwnCloudOAuth2Provider()
-        oauth2Provider.authorizationCodeEndpointPath = getString(R.string.oauth2_url_endpoint_auth)
-        oauth2Provider.accessTokenEndpointPath = getString(R.string.oauth2_url_endpoint_access)
-        oauth2Provider.clientConfiguration = OAuth2ClientConfiguration(
-            getString(R.string.oauth2_client_id),
-            getString(R.string.oauth2_client_secret),
-            getString(R.string.oauth2_redirect_uri)
-        )
-
-        OAuth2ProvidersRegistry.getInstance().registerProvider(
-            OwnCloudOAuth2Provider.NAME,
-            oauth2Provider
-        )
+        SingleSessionManager.setUserAgent(userAgent)
 
         // initialise thumbnails cache on background thread
         ThumbnailsCacheManager.InitDiskCacheTask().execute()
 
-        // register global protection with pass code, pattern lock and fingerprint lock
+        // register global protection with pass code, pattern lock and biometric lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                Log_OC.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
+                Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
                 val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
                 val patternCodeEnabled = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
                 if (!isDeveloper) {
-                    // To enable FingerPrint you need to enable passCode or pattern, so no need to add check to if
+                    // To enable biometric you need to enable passCode or pattern, so no need to add check to if
                     if (passCodeEnabled || patternCodeEnabled) {
                         activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
                     } else {
@@ -117,50 +97,52 @@ class MainApp : MultiDexApplication() {
                 // have finished
                 if (activity !is PassCodeActivity &&
                     activity !is PatternLockActivity &&
-                    activity !is FingerprintActivity
+                    activity !is BiometricActivity
                 ) {
                     WhatsNewActivity.runIfNeeded(activity)
                 }
+
+                PreferenceManager.migrateFingerprintToBiometricKey(applicationContext);
             }
 
             override fun onActivityStarted(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onStart() starting")
+                Timber.v("${activity.javaClass.simpleName} onStart() starting")
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity)
                 PatternManager.getPatternManager().onActivityStarted(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    FingerprintManager.getFingerprintManager(activity).onActivityStarted(activity)
+                    BiometricManager.getBiometricManager(activity).onActivityStarted(activity)
                 }
             }
 
             override fun onActivityResumed(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onResume() starting")
+                Timber.v("${activity.javaClass.simpleName} onResume() starting")
             }
 
             override fun onActivityPaused(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onPause() ending")
+                Timber.v("${activity.javaClass.simpleName} onPause() ending")
             }
 
             override fun onActivityStopped(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onStop() ending")
+                Timber.v("${activity.javaClass.simpleName} onStop() ending")
                 PassCodeManager.getPassCodeManager().onActivityStopped(activity)
                 PatternManager.getPatternManager().onActivityStopped(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    FingerprintManager.getFingerprintManager(activity).onActivityStopped(activity)
+                    BiometricManager.getBiometricManager(activity).onActivityStopped(activity)
                 }
                 if (activity is PassCodeActivity ||
                     activity is PatternLockActivity ||
-                    activity is FingerprintActivity
+                    activity is BiometricActivity
                 ) {
                     WhatsNewActivity.runIfNeeded(activity)
                 }
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                Log_OC.v("${activity.javaClass.simpleName} onSaveInstanceState(Bundle) starting")
+                Timber.v("${activity.javaClass.simpleName} onSaveInstanceState(Bundle) starting")
             }
 
             override fun onActivityDestroyed(activity: Activity) {
-                Log_OC.v("${activity.javaClass.simpleName} onDestroy() ending")
+                Timber.v("${activity.javaClass.simpleName} onDestroy() ending")
             }
         })
 
@@ -181,10 +163,10 @@ class MainApp : MultiDexApplication() {
             val dataFolder = dataFolder
 
             // Set folder for store logs
-            Log_OC.setLogDataFolder(dataFolder)
-
-            Log_OC.startLogging(Environment.getExternalStorageDirectory().absolutePath)
-            Log_OC.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
+            LoggingHelper.startLogging(
+                File(Environment.getExternalStorageDirectory().absolutePath + File.separator + dataFolder), dataFolder
+            )
+            Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
         }
     }
 
@@ -194,7 +176,7 @@ class MainApp : MultiDexApplication() {
         private const val BETA_VERSION = "beta"
         private const val CLICKS_DEFAULT = 0
 
-        var appContext: Context? = null
+        lateinit var appContext: Context
             private set
         var isDeveloper: Boolean = false
             private set
@@ -205,13 +187,13 @@ class MainApp : MultiDexApplication() {
          */
 
         val accountType: String
-            get() = appContext!!.resources.getString(R.string.account_type)
+            get() = appContext.resources.getString(R.string.account_type)
 
         val versionCode: Int
             get() {
                 return try {
-                    val thisPackageName = appContext!!.packageName
-                    appContext!!.packageManager.getPackageInfo(thisPackageName, 0).versionCode
+                    val thisPackageName = appContext.packageName
+                    appContext.packageManager.getPackageInfo(thisPackageName, 0).versionCode
                 } catch (e: PackageManager.NameNotFoundException) {
                     0
                 }
@@ -219,30 +201,30 @@ class MainApp : MultiDexApplication() {
             }
 
         val authority: String
-            get() = appContext!!.resources.getString(R.string.authority)
+            get() = appContext.resources.getString(R.string.authority)
 
         val authTokenType: String
-            get() = appContext!!.resources.getString(R.string.authority)
+            get() = appContext.resources.getString(R.string.authority)
 
         val dataFolder: String
-            get() = appContext!!.resources.getString(R.string.data_folder)
+            get() = appContext.resources.getString(R.string.data_folder)
 
         // user agent
         // Mozilla/5.0 (Android) ownCloud-android/1.7.0
         val userAgent: String
             get() {
-                val appString = appContext!!.resources.getString(R.string.user_agent)
-                val packageName = appContext!!.packageName
+                val appString = appContext.resources.getString(R.string.user_agent)
+                val packageName = appContext.packageName
                 var version = ""
 
                 val pInfo: PackageInfo?
                 try {
-                    pInfo = appContext!!.packageManager.getPackageInfo(packageName, 0)
+                    pInfo = appContext.packageManager.getPackageInfo(packageName, 0)
                     if (pInfo != null) {
                         version = pInfo.versionName
                     }
                 } catch (e: PackageManager.NameNotFoundException) {
-                    Log_OC.e("Trying to get packageName", e.cause)
+                    Timber.e(e, "Trying to get packageName")
                 }
 
                 return String.format(appString, version)
@@ -252,14 +234,14 @@ class MainApp : MultiDexApplication() {
             get() {
                 var isBeta = false
                 try {
-                    val packageName = appContext!!.packageName
-                    val packageInfo = appContext!!.packageManager.getPackageInfo(packageName, 0)
+                    val packageName = appContext.packageName
+                    val packageInfo = appContext.packageManager.getPackageInfo(packageName, 0)
                     val versionName = packageInfo.versionName
                     if (versionName.contains(BETA_VERSION)) {
                         isBeta = true
                     }
                 } catch (e: PackageManager.NameNotFoundException) {
-                    e.printStackTrace()
+                    Timber.e(e)
                 }
 
                 return isBeta
@@ -268,7 +250,7 @@ class MainApp : MultiDexApplication() {
         fun initDependencyInjection() {
             stopKoin()
             startKoin {
-                androidContext(appContext!!)
+                androidContext(appContext)
                 modules(
                     listOf(
                         commonModule,

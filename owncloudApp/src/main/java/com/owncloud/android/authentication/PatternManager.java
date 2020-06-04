@@ -3,7 +3,7 @@
  *
  * @author Shashvat Kedia
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import com.owncloud.android.MainApp;
@@ -41,7 +42,7 @@ public class PatternManager {
     private int mVisibleActivitiesCounter = 0;
 
     static {
-        sExemptOfPatternActivites = new HashSet<Class>();
+        sExemptOfPatternActivites = new HashSet<>();
         sExemptOfPatternActivites.add(PatternLockActivity.class);
     }
 
@@ -60,9 +61,9 @@ public class PatternManager {
     public void onActivityStarted(Activity activity) {
         if (!sExemptOfPatternActivites.contains(activity.getClass()) && patternShouldBeRequested()) {
 
-            // Do not ask for pattern if fingerprint is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager(activity).
-                    isFingerPrintEnabled()) {
+            // Do not ask for pattern if biometric is enabled
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.getBiometricManager(activity).
+                    isBiometricEnabled()) {
                 mVisibleActivitiesCounter++;
                 return;
             }
@@ -72,7 +73,7 @@ public class PatternManager {
     }
 
     private void setUnlockTimestamp() {
-        timeStamp = System.currentTimeMillis();
+        timeStamp = SystemClock.elapsedRealtime();
     }
 
     public void onActivityStopped(Activity activity) {
@@ -86,7 +87,7 @@ public class PatternManager {
         }
     }
 
-    public void onFingerprintCancelled(Activity activity) {
+    public void onBiometricCancelled(Activity activity) {
         // Ask user for pattern
         checkPattern(activity);
     }
@@ -94,12 +95,13 @@ public class PatternManager {
     private void checkPattern(Activity activity) {
         Intent i = new Intent(MainApp.Companion.getAppContext(), PatternLockActivity.class);
         i.setAction(PatternLockActivity.ACTION_CHECK);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         activity.startActivity(i);
     }
 
     private boolean patternShouldBeRequested() {
         int PATTERN_TIMEOUT = 1000;
-        if ((System.currentTimeMillis() - timeStamp) > PATTERN_TIMEOUT &&
+        if ((SystemClock.elapsedRealtime() - timeStamp) > PATTERN_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0
         ) {
             return isPatternEnabled();

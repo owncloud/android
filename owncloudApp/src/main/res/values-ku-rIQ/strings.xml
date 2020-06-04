@@ -3,8 +3,6 @@
   <string name="actionbar_upload">بارکردن</string>
   <string name="actionbar_upload_files">په‌ڕگەکان</string>
   <string name="actionbar_settings">ده‌ستكاری</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">بیکەوە</string>
   <string name="drawer_help">یارمەتی</string>
   <string name="prefs_category_general">گشتی</string>
@@ -35,5 +33,4 @@
   <string name="share_confirm_public_link_button">پاشکه‌وتکردن</string>
   <string name="share_via_link_password_label">وشەی تێپەربو</string>
   <string name="share_search">بگەڕێ</string>
-  <!--Welcome to oC intro features-->
 </resources>

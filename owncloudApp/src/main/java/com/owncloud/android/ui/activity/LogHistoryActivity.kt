@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David González Verdugo
- *   Copyright (C) 2019 ownCloud GmbH.
+ *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -27,7 +27,6 @@ import com.owncloud.android.R
 import info.hannes.logcat.BothLogsFragment
 import info.hannes.logcat.LogcatFragment
 import info.hannes.timber.fileLoggingTree
-import timber.log.Timber
 
 class LogHistoryActivity : ToolbarActivity() {
 

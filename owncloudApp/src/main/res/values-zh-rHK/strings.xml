@@ -7,8 +7,6 @@
   <string name="actionbar_settings">設定</string>
   <string name="actionbar_see_details">詳述</string>
   <string name="actionbar_send_file">傳送</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_settings">設定</string>
   <string name="drawer_open">開啟</string>
   <string name="drawer_feedback">反饋</string>
@@ -82,5 +80,4 @@
   <string name="share_privilege_can_edit">可編輯</string>
   <string name="share_privilege_can_edit_create">新增</string>
   <string name="share_privilege_can_edit_delete">刪除</string>
-  <!--Welcome to oC intro features-->
 </resources>

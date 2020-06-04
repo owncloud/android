@@ -3,7 +3,7 @@
  *
  * @author David A. Velasco
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,8 +32,6 @@ import com.owncloud.android.utils.RemoteFileUtils;
  * Operation moving an {@link OCFile} to a different folder.
  */
 public class MoveFileOperation extends SyncOperation {
-
-    //private static final String TAG = MoveFileOperation.class.getSimpleName();
 
     protected String mSrcPath;
     protected String mTargetParentPath;

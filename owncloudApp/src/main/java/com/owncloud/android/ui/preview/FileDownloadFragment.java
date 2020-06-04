@@ -3,7 +3,7 @@
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,18 +33,15 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 /**
  * This Fragment is used to monitor the progress of a file downloading.
  */
 public class FileDownloadFragment extends FileFragment implements OnClickListener {
-
-    private static final String TAG = FileDownloadFragment.class.getSimpleName();
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
@@ -130,7 +127,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         View rootView = inflater.inflate(R.layout.file_download_fragment, container, false);
 
         mProgressBar = rootView.findViewById(R.id.progressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         (rootView.findViewById(R.id.cancelBtn)).setOnClickListener(this);
 
@@ -183,7 +179,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
                 break;
             }
             default:
-                Log_OC.e(TAG, "Incorrect view clicked!");
+                Timber.e("Incorrect view clicked!");
         }
     }
 

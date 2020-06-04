@@ -9,7 +9,7 @@
  * @author David González Verdugo
  * <p>
  * Copyright (C) 2012 Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,32 +49,33 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.RemoveChunksFolderOperation;
 import com.owncloud.android.operations.UploadFileOperation;
+import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
+import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.SecurityUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -101,8 +102,6 @@ import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAM
 public class FileUploader extends Service
         implements OnDatatransferProgressListener, OnAccountsUpdateListener,
         UploadFileOperation.OnRenameListener {
-
-    private static final String TAG = FileUploader.class.getSimpleName();
 
     private static final String UPLOADS_ADDED_MESSAGE = "UPLOADS_ADDED";
     private static final String UPLOAD_START_MESSAGE = "UPLOAD_START";
@@ -162,7 +161,7 @@ public class FileUploader extends Service
     //since there can be only one instance of an Android service, there also just one db connection.
     private UploadsStorageManager mUploadsStorageManager = null;
 
-    private IndexedForest<UploadFileOperation> mPendingUploads = new IndexedForest<UploadFileOperation>();
+    private IndexedForest<UploadFileOperation> mPendingUploads = new IndexedForest<>();
 
     private LocalBroadcastManager mLocalBroadcastManager;
 
@@ -199,7 +198,7 @@ public class FileUploader extends Service
     @Override
     public void onCreate() {
         super.onCreate();
-        Log_OC.d(TAG, "Creating service");
+        Timber.d("Creating service");
 
         mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
 
@@ -256,7 +255,7 @@ public class FileUploader extends Service
      */
     @Override
     public void onDestroy() {
-        Log_OC.v(TAG, "Destroying service");
+        Timber.v("Destroying service");
         mBinder = null;
         mServiceHandler = null;
         mServiceLooper.quit();
@@ -279,7 +278,7 @@ public class FileUploader extends Service
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log_OC.d(TAG, "Starting command with id " + startId);
+        Timber.d("Starting command with id %s", startId);
 
         int createdBy = intent.getIntExtra(KEY_CREATED_BY, UploadFileOperation.CREATED_BY_USER);
         boolean isCameraUploadFile =
@@ -291,7 +290,7 @@ public class FileUploader extends Service
 
         if ((isCameraUploadFile || isAvailableOfflineFile || isRequestedFromWifiBackEvent) &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log_OC.d(TAG, "Starting FileUploader service in foreground");
+            Timber.d("Starting FileUploader service in foreground");
             mNotificationBuilder
                     .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.notification_icon);
@@ -316,21 +315,19 @@ public class FileUploader extends Service
         AbstractList<String> requestedUploads = new Vector<>();
 
         if (!intent.hasExtra(KEY_ACCOUNT)) {
-            Log_OC.e(TAG, "Not enough information provided in intent");
+            Timber.e("Not enough information provided in intent");
             return Service.START_NOT_STICKY;
         }
 
         Account account = intent.getParcelableExtra(KEY_ACCOUNT);
-        Log_OC.d(TAG, "Account to upload the file to: " + account);
+        Timber.d("Account to upload the file to: %s", account);
         if (!AccountUtils.exists(account.name, getApplicationContext())) {
             return Service.START_NOT_STICKY;
         }
-        OwnCloudVersion ocv = AccountUtils.getServerVersion(account);
-        boolean chunked = ocv.isChunkedUploadSupported();
 
         if (!retry) {
             if (!(intent.hasExtra(KEY_LOCAL_FILE) || intent.hasExtra(KEY_FILE))) {
-                Log_OC.e(TAG, "Not enough information provided in intent");
+                Timber.e("Not enough information provided in intent");
                 return Service.START_NOT_STICKY;
             }
 
@@ -354,20 +351,20 @@ public class FileUploader extends Service
             boolean isCreateRemoteFolder = intent.getBooleanExtra(KEY_CREATE_REMOTE_FOLDER, false);
 
             if (intent.hasExtra(KEY_FILE) && files == null) {
-                Log_OC.e(TAG, "Incorrect array for OCFiles provided in upload intent");
+                Timber.e("Incorrect array for OCFiles provided in upload intent");
                 return Service.START_NOT_STICKY;
 
             } else if (!intent.hasExtra(KEY_FILE)) {
                 if (localPaths == null) {
-                    Log_OC.e(TAG, "Incorrect array for local paths provided in upload intent");
+                    Timber.e("Incorrect array for local paths provided in upload intent");
                     return Service.START_NOT_STICKY;
                 }
                 if (remotePaths == null) {
-                    Log_OC.e(TAG, "Incorrect array for remote paths provided in upload intent");
+                    Timber.e("Incorrect array for remote paths provided in upload intent");
                     return Service.START_NOT_STICKY;
                 }
                 if (localPaths.length != remotePaths.length) {
-                    Log_OC.e(TAG, "Different number of remote paths and local paths!");
+                    Timber.e("Different number of remote paths and local paths!");
                     return Service.START_NOT_STICKY;
                 }
 
@@ -380,7 +377,7 @@ public class FileUploader extends Service
                             getApplicationContext()
                     );
                     if (files[i] == null) {
-                        Log_OC.e(TAG, "obtainNewOCFileToUpload() returned null for remotePaths[i]:" + remotePaths[i]
+                        Timber.e("obtainNewOCFileToUpload() returned null for remotePaths[i]:" + remotePaths[i]
                                 + " and localPaths[i]:" + localPaths[i]);
                         return Service.START_NOT_STICKY;
                     }
@@ -391,6 +388,15 @@ public class FileUploader extends Service
             String uploadKey;
             UploadFileOperation newUploadFileOperation;
             try {
+                FileDataStorageManager storageManager = new FileDataStorageManager(
+                        getApplicationContext(),
+                        account,
+                        getContentResolver()
+                );
+                OCCapability capabilitiesForAccount = storageManager.getCapability(account.name);
+                boolean isChunkingAllowed =
+                        capabilitiesForAccount != null && capabilitiesForAccount.isChunkingAllowed();
+                Timber.d("Chunking is allowed: %s", isChunkingAllowed);
                 for (OCFile ocFile : files) {
 
                     OCUpload ocUpload = new OCUpload(ocFile, account);
@@ -403,8 +409,8 @@ public class FileUploader extends Service
                     ocUpload.setWhileChargingOnly(isWhileChargingOnly);*/
                     ocUpload.setUploadStatus(UploadStatus.UPLOAD_IN_PROGRESS);
 
-                    if (chunked && new File(ocFile.getStoragePath()).length() >
-                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+                    if (new File(ocFile.getStoragePath()).length() >
+                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE && isChunkingAllowed) {
                         ocUpload.setTransferId(
                                 SecurityUtils.stringToMD5Hash(ocFile.getRemotePath()) + System.currentTimeMillis());
                         newUploadFileOperation = new ChunkedUploadFileOperation(
@@ -451,29 +457,29 @@ public class FileUploader extends Service
                 }
 
             } catch (IllegalArgumentException e) {
-                Log_OC.e(TAG, "Not enough information provided in intent: " + e.getMessage());
+                Timber.e(e, "Not enough information provided in intent: %s", e.getMessage());
                 return START_NOT_STICKY;
 
             } catch (IllegalStateException e) {
-                Log_OC.e(TAG, "Bad information provided in intent: " + e.getMessage());
+                Timber.e(e, "Bad information provided in intent: %s", e.getMessage());
                 return START_NOT_STICKY;
 
             } catch (Exception e) {
-                Log_OC.e(TAG, "Unexpected exception while processing upload intent", e);
+                Timber.e(e, "Unexpected exception while processing upload intent");
                 return START_NOT_STICKY;
 
             }
             // *** TODO REWRITE: block inserted to request A retry; too many code copied, no control exception ***/
         } else {
             if (!intent.hasExtra(KEY_ACCOUNT) || !intent.hasExtra(KEY_RETRY_UPLOAD)) {
-                Log_OC.e(TAG, "Not enough information provided in intent: no KEY_RETRY_UPLOAD_KEY");
+                Timber.e("Not enough information provided in intent: no KEY_RETRY_UPLOAD_KEY");
                 return START_NOT_STICKY;
             }
             OCUpload upload = intent.getParcelableExtra(KEY_RETRY_UPLOAD);
 
             UploadFileOperation newUploadFileOperation;
 
-            if (chunked && upload.getFileSize() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+            if (upload.getFileSize() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
                 upload.setTransferId(
                         SecurityUtils.stringToMD5Hash(upload.getRemotePath()) + System.currentTimeMillis());
                 newUploadFileOperation = new ChunkedUploadFileOperation(
@@ -570,7 +576,7 @@ public class FileUploader extends Service
          * {@link FileUploaderBinder} instance
          */
         private Map<String, WeakReference<OnDatatransferProgressListener>> mBoundListeners =
-                new HashMap<String, WeakReference<OnDatatransferProgressListener>>();
+                new HashMap<>();
 
         /**
          * Cancels a pending or current upload of a remote file.
@@ -625,10 +631,10 @@ public class FileUploader extends Service
          * @param account ownCloud account.
          */
         public void cancel(Account account) {
-            Log_OC.d(TAG, "Account= " + account.name);
+            Timber.d("Account= %s", account.name);
 
             if (mCurrentUpload != null) {
-                Log_OC.d(TAG, "Current Upload Account= " + mCurrentUpload.getAccount().name);
+                Timber.d("Current Upload Account= %s", mCurrentUpload.getAccount().name);
                 if (mCurrentUpload.getAccount().name.equals(account.name)) {
                     mCurrentUpload.cancel();
                 }
@@ -802,7 +808,7 @@ public class FileUploader extends Service
                     mService.uploadFile(it.next());
                 }
             }
-            Log_OC.d(TAG, "Stopping command after id " + msg.arg1);
+            Timber.d("Stopping command after id %s", msg.arg1);
             mService.stopForeground(true);
             mService.stopSelf(msg.arg1);
         }
@@ -821,11 +827,8 @@ public class FileUploader extends Service
 
             /// Check account existence
             if (!AccountUtils.exists(mCurrentUpload.getAccount().name, this)) {
-                Log_OC.w(
-                        TAG,
-                        "Account " + mCurrentUpload.getAccount().name +
-                                " does not exist anymore -> cancelling all its uploads"
-                );
+                Timber.w("Account " + mCurrentUpload.getAccount().name + " does not exist anymore -> cancelling all " +
+                        "its uploads");
                 cancelUploadsForAccount(mCurrentUpload.getAccount());
                 return;
             }
@@ -856,14 +859,14 @@ public class FileUploader extends Service
                         mCurrentAccount,
                         this
                 );
-                mUploadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                mUploadClient = SingleSessionManager.getDefaultSingleton().
                         getClientFor(ocAccount, this);
 
                 /// perform the upload
                 uploadResult = mCurrentUpload.execute(mUploadClient, mStorageManager);
 
             } catch (Exception e) {
-                Log_OC.e(TAG, "Error uploading", e);
+                Timber.e(e, "Error uploading");
                 uploadResult = new RemoteOperationResult(e);
 
             } finally {
@@ -873,7 +876,7 @@ public class FileUploader extends Service
                             mCurrentAccount.name,
                             mCurrentUpload.getOldFile().getRemotePath()
                     );
-                    /** TODO: grant that name is also updated for mCurrentUpload.getOCUploadId */
+                    /* TODO: grant that name is also updated for mCurrentUpload.getOCUploadId */
 
                 } else {
                     removeResult = mPendingUploads.removePayload(
@@ -882,7 +885,7 @@ public class FileUploader extends Service
                     );
                 }
 
-                if (!uploadResult.isSuccess()) {
+                if (uploadResult != null && !uploadResult.isSuccess()) {
                     TransferRequester requester = new TransferRequester();
                     int jobId = mPendingUploads.buildKey(
                             mCurrentAccount.name,
@@ -901,14 +904,12 @@ public class FileUploader extends Service
                             uploadResult = new RemoteOperationResult(
                                     ResultCode.NO_NETWORK_CONNECTION);
                         } else {
-                            Log_OC.v(
-                                    TAG,
-                                    String.format(
-                                            "Exception in upload, network is OK, no retry scheduled for %1s in %2s",
-                                            mCurrentUpload.getRemotePath(),
-                                            mCurrentAccount.name
-                                    )
+                            String stringToLog = String.format(
+                                    "Exception in upload, network is OK, no retry scheduled for %1s in %2s",
+                                    mCurrentUpload.getRemotePath(),
+                                    mCurrentAccount.name
                             );
+                            Timber.v(stringToLog);
                         }
                     } else if (uploadResult.getCode() == ResultCode.DELAYED_FOR_WIFI) {
                         // if failed due to the upload is delayed for wifi, schedule automatic retry as well
@@ -920,20 +921,19 @@ public class FileUploader extends Service
                         );
                     }
                 } else {
-                    Log_OC.v(
-                            TAG,
-                            String.format(
-                                    "Success OR fail without exception for %1s in %2s",
-                                    mCurrentUpload.getRemotePath(),
-                                    mCurrentAccount.name
-                            )
+                    String stringToLog = String.format(
+                            "Success OR fail without exception for %1s in %2s",
+                            mCurrentUpload.getRemotePath(),
+                            mCurrentAccount.name
                     );
+                    Timber.v(stringToLog);
                 }
 
-                mUploadsStorageManager.updateDatabaseUploadResult(uploadResult, mCurrentUpload);
-
-                /// notify result
-                notifyUploadResult(mCurrentUpload, uploadResult);
+                if (uploadResult != null) {
+                    mUploadsStorageManager.updateDatabaseUploadResult(uploadResult, mCurrentUpload);
+                    /// notify result
+                    notifyUploadResult(mCurrentUpload, uploadResult);
+                }
 
                 sendBroadcastUploadFinished(mCurrentUpload, uploadResult, removeResult.second);
             }
@@ -948,7 +948,7 @@ public class FileUploader extends Service
         RemoteOperationResult result = remoteChunksFolderOperation.execute(mUploadClient);
 
         if (!result.isSuccess()) {
-            Log_OC.e(TAG, "Error deleting chunks folder after cancelling chunked upload");
+            Timber.e("Error deleting chunks folder after cancelling chunked upload");
         }
     }
 
@@ -958,7 +958,7 @@ public class FileUploader extends Service
      * @param upload Upload operation starting.
      */
     private void notifyUploadStart(UploadFileOperation upload) {
-        Log_OC.d(TAG, "Notifying upload start");
+        Timber.d("Notifying upload start");
 
         // / create status notification with a progress bar
         mLastPercent = 0;
@@ -1014,7 +1014,7 @@ public class FileUploader extends Service
      */
     private void notifyUploadResult(UploadFileOperation upload,
                                     RemoteOperationResult uploadResult) {
-        Log_OC.d(TAG, "NotifyUploadResult with resultCode: " + uploadResult.getCode());
+        Timber.d("NotifyUploadResult with resultCode: %s", uploadResult.getCode());
         // / cancelled operation or success -> silent removal of progress notification
         getNotificationManager().cancel(R.string.uploader_upload_in_progress_ticker);
 
@@ -1049,13 +1049,13 @@ public class FileUploader extends Service
 
             if (needsToUpdateCredentials) {
                 // let the user update credentials with one click
-                Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
+                Intent updateAccountCredentials = new Intent(this, LoginActivity.class);
                 updateAccountCredentials.putExtra(
-                        AuthenticatorActivity.EXTRA_ACCOUNT, upload.getAccount()
+                        AuthenticatorConstants.EXTRA_ACCOUNT, upload.getAccount()
                 );
                 updateAccountCredentials.putExtra(
-                        AuthenticatorActivity.EXTRA_ACTION,
-                        AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN
+                        AuthenticatorConstants.EXTRA_ACTION,
+                        AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN
                 );
 
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

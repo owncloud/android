@@ -37,8 +37,8 @@
     <string name="prefs_accounts">Accounts</string>
     <string name="prefs_manage_accounts">Manage accounts</string>
     <string name="prefs_passcode">Passcode lock</string>
-    <string name="prefs_fingerprint">Fingerprint lock</string>
-    <string name="prefs_fingerprint_summary">Enable passcode or pattern lock to enable this option</string>
+    <string name="prefs_biometric">Biometric lock</string>
+    <string name="prefs_biometric_summary">Enable passcode or pattern lock to enable this option</string>
     <string name="prefs_touches_with_other_visible_windows">Touches with other visible windows</string>
     <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
     <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
@@ -77,11 +77,18 @@
     <string name="pattern_locked">Locked with pattern</string>
     <string name="illegal_argument_exception_message">A valid ACTION is needed in the Intent passed to</string>
 
+    <!-- Bottom navigation bar -->
+    <string name="bottom_nav_files">Files</string>
+    <string name="bottom_nav_uploads">Uploads</string>
+    <string name="bottom_nav_offline">Offline</string>
+    <string name="bottom_nav_links">Links</string>
+
     <string name="recommend_subject">Try %1$s on your smartphone!</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
 
     <string name="error_reason">because</string>
     <string name="auth_failure_snackbar">Authentication failed</string>
+    <string name="server_not_supported">Your server version is lower than 10 so is not supported, please upgrade your server to newer version</string>
     <string name="auth_failure_snackbar_action">Change account</string>
     <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access</string>
     <string name="auth_oauth_failure_snackbar_action">Sign in</string>
@@ -228,13 +235,10 @@
     <string name="pass_code_removed">Passcode removed</string>
     <string name="pass_code_stored">Passcode stored</string>
 
-    <string name="fingerprint_confirm">Confirm your fingerprint to continue</string>
-    <string name="fingerprint_hint">Touch sensor</string>
-    <string name="fingerprint_not_recognized">Fingerprint not recognized, try again</string>
-    <string name="fingerprint_success">Fingerprint recognized</string>
-    <string name="fingerprint_not_hardware_detected">This device doesn\'t support fingerprint authentication</string>
-    <string name="fingerprint_not_enrolled_fingerprints">Register at least one fingerprint to use this feature</string>
-    <string name="fingerprint_not_granted_permissions">Fingerprint permissions not granted</string>
+    <string name="biometric_not_hardware_detected">This device doesn\'t support biometric authentication</string>
+    <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
+    <string name="biometric_prompt_title">Biometric log in</string>
+    <string name="biometric_prompt_subtitle">Log in using your biometric credential</string>
 
     <string name="media_notif_ticker">%1$s music player</string>
     <string name="media_state_playing">%1$s (playing)</string>
@@ -396,7 +400,7 @@
 
     <string name="error_cant_bind_to_operations_service">Critical error: cannot perform operations</string>
 
-    <string name="network_error_socket_exception">an error while connecting with the server</string>
+    <string name="network_error_socket_exception">An error occurred while connecting with the server.</string>
     <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
     <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
     <string name="network_host_not_available">Server could not be reached</string>
@@ -595,20 +599,13 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_6_title">Search in current folder</string>
-    <string name="welcome_feature_6_text">Filter your files by name</string>
-    <string name="welcome_feature_7_title">Select all</string>
-    <string name="welcome_feature_7_text">Select all files at once</string>
-    <string name="welcome_feature_8_title">Available offline</string>
-    <string name="welcome_feature_8_text">Your files automatically synchronized</string>
-    <string name="welcome_feature_9_title">Document provider</string>
-    <string name="welcome_feature_9_text">Access and edit your ownCloud files from other apps</string>
-    <string name="welcome_feature_10_title">Logs with search for everyone</string>
-    <string name="welcome_feature_10_text">Send us your logs to make the app work better</string>
-    <string name="welcome_feature_11_title">End of support for servers lower than 10</string>
-    <string name="welcome_feature_11_text">Please upgrade your server or the coming app versions will not work for you</string>
-    <string name="welcome_feature_12_title">End of support for Android 4.4 devices</string>
-    <string name="welcome_feature_12_text">The coming app versions will not appear in Google Play for devices lower than Android 5</string>
+    <string name="welcome_feature_6_title">New bottom navigation bar</string>
+    <string name="welcome_feature_6_text">Easier and faster access to your available offline files and links</string>
+    <string name="welcome_feature_7_title">Support for OpenID Connect</string>
+    <string name="welcome_feature_7_text">Connect to your ownCloud servers in a more secure way with OpenID Connect</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
+
+    <string name="supports_oauth2_error">It was not possible to know if OAuth2 is supported</string>
+    <string name="get_base_url_error">It was not possible to know the server base url</string>
 </resources>

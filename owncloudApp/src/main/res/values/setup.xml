@@ -83,6 +83,7 @@
     <string name="oauth2_redirect_uri">oc://android.owncloud.com</string>
 
     <!-- values that should be provided by ownCloud server -->
+
     <!-- AUTHORIZATION ENDPOINT -->
     <string name="oauth2_url_endpoint_auth">index.php/apps/oauth2/authorize</string>
 

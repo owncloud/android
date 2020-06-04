@@ -3,7 +3,7 @@
  *
  *   @author David González Verdugo
  *   @author Abel García de Prada
- *   Copyright (C) 2019 ownCloud GmbH.
+ *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -27,11 +27,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_SEARCH_MIN_LENGTH
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.migrations.MIGRATION_27_28
+import com.owncloud.android.data.migrations.MIGRATION_28_29
+import com.owncloud.android.data.migrations.MIGRATION_29_30
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 
@@ -51,21 +51,12 @@ abstract class OwncloudDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: OwncloudDatabase? = null
 
-        val MIGRATION_27_28 = object : Migration(27, 28) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.run {
-                    execSQL(
-                        "CREATE TABLE IF NOT EXISTS `${CAPABILITIES_TABLE_NAME}2` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `account` TEXT, `version_mayor` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `sharing_api_enabled` INTEGER NOT NULL DEFAULT -1, `search_min_length` INTEGER, `sharing_public_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_write` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_public_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_send_mail` INTEGER NOT NULL DEFAULT -1, `sharing_public_upload` INTEGER NOT NULL DEFAULT -1, `sharing_public_multiple` INTEGER NOT NULL DEFAULT -1, `supports_upload_only` INTEGER NOT NULL DEFAULT -1, `sharing_user_send_mail` INTEGER NOT NULL DEFAULT -1, `sharing_resharing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_outgoing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_incoming` INTEGER NOT NULL DEFAULT -1, `files_bigfilechunking` INTEGER NOT NULL DEFAULT -1, `files_undelete` INTEGER NOT NULL DEFAULT -1, `files_versioning` INTEGER NOT NULL DEFAULT -1)"
-                    )
-                    execSQL("ALTER TABLE $CAPABILITIES_TABLE_NAME ADD COLUMN $CAPABILITIES_SHARING_SEARCH_MIN_LENGTH INTEGER")
-                    execSQL(
-                        "INSERT INTO `${CAPABILITIES_TABLE_NAME}2` SELECT id, account, version_mayor, version_minor, version_micro, version_string, version_edition,core_pollinterval, IFNULL(sharing_api_enabled, -1), search_min_length, IFNULL(sharing_public_enabled, -1), IFNULL(sharing_public_password_enforced, -1),IFNULL(sharing_public_password_enforced_read_only, -1),IFNULL(sharing_public_password_enforced_read_write, -1),IFNULL(sharing_public_password_enforced_public_only, -1),IFNULL(sharing_public_expire_date_enabled, -1),IFNULL(sharing_public_expire_date_days, 0),IFNULL(sharing_public_expire_date_enforced, -1),IFNULL(sharing_public_send_mail, -1),IFNULL(sharing_public_upload, -1),IFNULL(sharing_public_multiple, -1), IFNULL(supports_upload_only, -1), IFNULL(sharing_user_send_mail, -1),IFNULL(sharing_resharing, -1),IFNULL(sharing_federation_outgoing, -1),IFNULL(sharing_federation_incoming, -1),IFNULL(files_bigfilechunking, -1),IFNULL(files_undelete, -1),IFNULL(files_versioning, -1)  FROM $CAPABILITIES_TABLE_NAME"
-                    )
-                    execSQL("DROP TABLE $CAPABILITIES_TABLE_NAME")
-                    execSQL("ALTER TABLE ${CAPABILITIES_TABLE_NAME}2 RENAME TO $CAPABILITIES_TABLE_NAME")
-                }
-            }
-        }
+        // Array of all migrations
+        val ALL_MIGRATIONS = arrayOf(
+            MIGRATION_27_28,
+            MIGRATION_28_29,
+            MIGRATION_29_30
+        )
 
         fun getDatabase(
             context: Context
@@ -77,7 +68,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
                     context.applicationContext,
                     OwncloudDatabase::class.java,
                     ProviderMeta.NEW_DB_NAME
-                ).addMigrations(MIGRATION_27_28)
+                ).addMigrations(*ALL_MIGRATIONS)
                     .build()
                 INSTANCE = instance
                 instance
@@ -85,11 +76,12 @@ abstract class OwncloudDatabase : RoomDatabase() {
         }
 
         @VisibleForTesting
-        fun switchToInMemory(context: Context) {
+        fun switchToInMemory(context: Context, vararg migrations: Migration) {
             INSTANCE = Room.inMemoryDatabaseBuilder(
                 context.applicationContext,
                 OwncloudDatabase::class.java
-            ).build()
+            ).addMigrations(*migrations)
+                .build()
         }
     }
 }

@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -19,12 +19,20 @@
 
 package com.owncloud.android.dependecyinjection
 
-import com.owncloud.android.domain.capabilities.CapabilityRepository
-import com.owncloud.android.domain.sharing.sharees.ShareeRepository
-import com.owncloud.android.domain.sharing.shares.ShareRepository
+import com.owncloud.android.data.authentication.repository.OCAuthenticationRepository
 import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
+import com.owncloud.android.data.server.repository.OCServerInfoRepository
+import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
+import com.owncloud.android.data.user.repository.OCUserRepository
+import com.owncloud.android.domain.authentication.AuthenticationRepository
+import com.owncloud.android.domain.capabilities.CapabilityRepository
+import com.owncloud.android.domain.server.ServerInfoRepository
+import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.sharing.sharees.ShareeRepository
+import com.owncloud.android.domain.sharing.shares.ShareRepository
+import com.owncloud.android.domain.user.UserRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -36,4 +44,8 @@ val repositoryModule = module {
     }
     factory<ShareRepository> { OCShareRepository(get(), get()) }
     factory<ShareeRepository> { OCShareeRepository(get()) }
+    factory<UserRepository> { OCUserRepository(get()) }
+    factory<FileRepository> { OCFileRepository(get()) }
+    factory<ServerInfoRepository> { OCServerInfoRepository(get()) }
+    factory<AuthenticationRepository> { OCAuthenticationRepository(get(), get()) }
 }

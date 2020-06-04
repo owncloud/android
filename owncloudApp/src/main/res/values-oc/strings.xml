@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Triar</string>
   <string name="actionbar_sort_title">Triar</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Totes los fichièrs</string>
   <string name="drawer_item_settings">Paramètres</string>
   <string name="drawer_item_uploads_list">Cargaments</string>
@@ -69,7 +67,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="uploader_error_message_source_file_not_copied">Una error s\'es produita al moment de la còpia d\'aqueste fichièr dens un dorsièr temporari. Perfavor assajatz un aut cop.</string>
   <string name="file_list_seconds_ago">i a qualques segondas</string>
   <string name="file_list_empty">I a pas res aicí ! Mandatz doncas quicòm :)</string>
-  <string name="file_list_loading">Cargament...</string>
+  <string name="file_list_loading">Cargament…</string>
   <string name="local_file_list_empty">Cap de fichièr es pas present dins aqueste dorsièr.</string>
   <string name="local_file_list_empty_just_folders">I a pas de dorsièrs dins aqueste dorsièr.</string>
   <string name="upload_list_empty">Cap de mandadís pas disponible.</string>
@@ -184,8 +182,8 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="media_rewind_description">Boton de rembobinatge</string>
   <string name="media_play_pause_description">Boton de lectura o de pausa</string>
   <string name="media_forward_description">Boton d\'avança rapida</string>
-  <string name="auth_getting_authorization">Contraròtle d\'autorizacion...</string>
-  <string name="auth_trying_to_login">Temptativa de connexion...</string>
+  <string name="auth_getting_authorization">Contraròtle d\'autorizacion…</string>
+  <string name="auth_trying_to_login">Temptativa de connexion…</string>
   <string name="auth_no_net_conn_title">Pas de connexion ret</string>
   <string name="auth_nossl_plain_ok_title">Connexion securizada pas disponibla</string>
   <string name="auth_connection_established">Connexion establida</string>
@@ -270,9 +268,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="preview_image_error_unknown_format">Aqueste imatge pòt pas èsser afichada</string>
   <string name="error__upload__local_file_not_copied">%1$s a pas pogut èsser copiat dins lo dorsièr local %2$s</string>
   <string name="share_link_no_support_share_api">O planhèm, lo partiment es pas disponible sus vòstre servidor. Contactatz vòstre administrator.</string>
-  <string name="share_link_file_no_exist">Impossible de partejar. Verificatz que lo fichièr es plan present</string>
   <string name="share_link_file_error">Una error s\'es produita al moment de la temptativa de partiment d\'aqueste fichièr o repertòri</string>
-  <string name="unshare_link_file_no_exist">Impossible de suprimir lo partiment. Verificatz que lo fichièr es ben present</string>
   <string name="unshare_link_file_error">Una error s\'es produita al moment de la temptativa d’anullacion del partiment d\'aqueste fichièr o repertòri</string>
   <string name="share_link_password_title">Sasissètz un senhal</string>
   <string name="share_link_empty_password">Vos cal sasir un senhal</string>
@@ -298,7 +294,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="actionbar_logger">Jornals</string>
   <string name="log_send_history_button">Mandar l\'istoric</string>
   <string name="log_send_mail_subject">Jornals de l\'aplicacion Android %1$s</string>
-  <string name="log_progress_dialog_text">Cargament de las donadas...</string>
+  <string name="log_progress_dialog_text">Cargament de las donadas…</string>
     <string name="actionbar_move">Desplaçar</string>
   <string name="file_list_empty_moving">I a pas res aicí. Podètz apondre un dorsièr !</string>
   <string name="folder_picker_choose_button_text">Causir</string>
@@ -332,8 +328,8 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="prefs_camera_upload_source_path_title">Dorsièr de l\'aparelh fòto (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Requesit</string>
   <string name="prefs_camera_upload_source_path_title_optional">Opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Lo fichièr original serà...</string>
-  <string name="prefs_camera_upload_behaviour_title">Lo fichièr original serà...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Lo fichièr original serà…</string>
+  <string name="prefs_camera_upload_behaviour_title">Lo fichièr original serà…</string>
   <string name="upload_copy_files">Copiar lo fichièr</string>
   <string name="upload_move_files">Desplaçar lo fichièr</string>
   <string name="pref_behaviour_entries_keep_file">gardat dins lo dorsièr original</string>
@@ -348,7 +344,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="share_via_link_password_label">Senhal</string>
   <string name="share_via_link_password_title">Securizat</string>
   <string name="share_get_public_link_button">Obténer lo ligam</string>
-  <string name="share_with_title">Partejar amb...</string>
+  <string name="share_with_title">Partejar amb…</string>
   <string name="share_with_edit_title">Partejar amb %1$s</string>
   <string name="share_search">Recercar</string>
   <string name="search_users_and_groups_hint">Recercar d\'utilizaires e de gropes</string>
@@ -374,5 +370,4 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
     <item quantity="one">%d seleccionat</item>
     <item quantity="other">%d seleccionats</item>
   </plurals>
-  <!--Welcome to oC intro features-->
 </resources>

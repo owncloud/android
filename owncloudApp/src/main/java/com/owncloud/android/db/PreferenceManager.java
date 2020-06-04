@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Shashvat Kedia
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,11 +25,13 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.util.Log;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.ui.activity.BiometricActivity;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
@@ -60,6 +62,21 @@ public abstract class PreferenceManager {
     private static final String PREF__CAMERA_UPLOADS_SOURCE = "camera_uploads_source_path";
 
     public static final String PREF__CAMERA_UPLOADS_DEFAULT_PATH = "/CameraUpload";
+
+    public static final String PREF__LEGACY_FINGERPRINT = "set_fingerprint";
+
+    public static void migrateFingerprintToBiometricKey(Context context) {
+        SharedPreferences sharedPref = getDefaultSharedPreferences(context);
+
+        // Check if legacy fingerprint key exists, delete it and migrate its value to the new key
+        if (sharedPref.contains(PREF__LEGACY_FINGERPRINT)) {
+            boolean currentFingerprintValue = sharedPref.getBoolean(PREF__LEGACY_FINGERPRINT, false);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.remove(PREF__LEGACY_FINGERPRINT);
+            editor.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, currentFingerprintValue);
+            editor.apply();
+        }
+    }
 
     public static boolean cameraPictureUploadEnabled(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false);
@@ -227,7 +244,7 @@ public abstract class PreferenceManager {
         appPreferences.apply();
     }
 
-    private static SharedPreferences getDefaultSharedPreferences(Context context) {
+    public static SharedPreferences getDefaultSharedPreferences(Context context) {
         return android.preference.PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
     }
 

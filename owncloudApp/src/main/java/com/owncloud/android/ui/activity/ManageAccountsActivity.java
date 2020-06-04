@@ -3,7 +3,7 @@
  *
  * @author Andy Scherzinger
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,17 +43,18 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
+import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,7 +69,6 @@ public class ManageAccountsActivity extends FileActivity
         AccountManagerCallback<Boolean>,
         ComponentsGetter {
 
-    private static final String TAG = ManageAccountsActivity.class.getSimpleName();
     public static final String KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED";
     public static final String KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED";
 
@@ -196,7 +196,7 @@ public class ManageAccountsActivity extends FileActivity
      */
     private ArrayList<AccountListItem> getAccountListItems() {
         Account[] accountList = AccountManager.get(this).getAccountsByType(MainApp.Companion.getAccountType());
-        ArrayList<AccountListItem> adapterAccountList = new ArrayList<AccountListItem>(accountList.length);
+        ArrayList<AccountListItem> adapterAccountList = new ArrayList<>(accountList.length);
         for (Account account : accountList) {
             adapterAccountList.add(new AccountListItem(account));
         }
@@ -233,10 +233,10 @@ public class ManageAccountsActivity extends FileActivity
 
     @Override
     public void changePasswordOfAccount(Account account) {
-        Intent updateAccountCredentials = new Intent(ManageAccountsActivity.this, AuthenticatorActivity.class);
-        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
-        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION,
-                AuthenticatorActivity.ACTION_UPDATE_TOKEN);
+        Intent updateAccountCredentials = new Intent(ManageAccountsActivity.this, LoginActivity.class);
+        updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACCOUNT, account);
+        updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACTION,
+                AuthenticatorConstants.ACTION_UPDATE_TOKEN);
         startActivity(updateAccountCredentials);
     }
 
@@ -269,9 +269,9 @@ public class ManageAccountsActivity extends FileActivity
                                     }
                                 });
                             } catch (OperationCanceledException e) {
-                                Log_OC.d(TAG, "Account creation canceled");
+                                Timber.e(e, "Account creation canceled");
                             } catch (Exception e) {
-                                Log_OC.e(TAG, "Account creation finished in exception: ", e);
+                                Timber.e(e, "Account creation finished in exception");
                             }
                         }
                     }
@@ -407,7 +407,7 @@ public class ManageAccountsActivity extends FileActivity
                 mDownloaderBinder = (FileDownloader.FileDownloaderBinder) service;
 
             } else if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
-                Log_OC.d(TAG, "Upload service connected");
+                Timber.d("Upload service connected");
                 mUploaderBinder = (FileUploader.FileUploaderBinder) service;
             }
         }
@@ -415,10 +415,10 @@ public class ManageAccountsActivity extends FileActivity
         @Override
         public void onServiceDisconnected(ComponentName component) {
             if (component.equals(new ComponentName(ManageAccountsActivity.this, FileDownloader.class))) {
-                Log_OC.d(TAG, "Download service suddenly disconnected");
+                Timber.d("Download service suddenly disconnected");
                 mDownloaderBinder = null;
             } else if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
-                Log_OC.d(TAG, "Upload service suddenly disconnected");
+                Timber.d("Upload service suddenly disconnected");
                 mUploaderBinder = null;
             }
         }

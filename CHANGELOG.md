@@ -1,3 +1,52 @@
+## 2.15 (June 2020)
+- Login rearchitecture
+- Support for OpenId Connect
+- Native biometrical lock
+- UI improvements, including:
+  + New bottom navigation bar
+- Support for usernames with '+' (Available since oC 10.4.1)
+- Chunking adaption to oCIS
+- End of support for Android KitKat (4.4)
+- End of support for servers older than 10 version
+- Bug fixes, including:
+  + Fix crash when changing orientation in some operations
+  + Fix OAuth2 token is not renewed after being revoked
+  + Fix ocasional crash when opening share by link
+  + Fix navigation loop in shared by link and Av. Offline options
+
+## 2.15 beta v2 (May 2020)
+- Login rearchitecture
+- Support for OpenId Connect
+- Native biometrical lock
+- UI improvements, including:
+  + New bottom navigation bar
+- Support for usernames with '+' (Available since oC 10.4.1)
+- Chunking adaption to oCIS
+- End of support for Android KitKat (4.4)
+- End of support for servers older than 10 version
+- Bug fixes, including:
+  + Fix crash when changing orientation in some operations
+  + Fix OAuth2 token is not renewed after being revoked
+
+## 2.15 beta v1 (May 2020)
+- Login rearchitecture
+- Support for OpenId Connect
+- Native biometrical lock
+- UI improvements, including:
+  + New bottom navigation bar
+- Support for usernames with '+' (Available since oC 10.4.1)
+- End of support for Android KitKat (4.4)
+- End of support for servers older than 10 version
+- Bug fixes, including:
+  + Fix crash when changing orientation in some operations
+  + Fix OAuth2 token is not renewed after being revoked
+
+## 2.14.2 (January 2020)
+- Fix crash triggered when trying to connect to server secured with self signed certificate
+
+## 2.14.1 (December 2019)
+- Some improvements in wizard
+
 ## 2.14 (December 2019)
 - Splash screen
 - Shortcut to shared by link files from side menu (contribution)

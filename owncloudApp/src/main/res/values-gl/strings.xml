@@ -37,8 +37,8 @@
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Xestionar as contas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
-  <string name="prefs_fingerprint">Bloqueo por pegada</string>
-  <string name="prefs_fingerprint_summary">Activar o código de seguridade ou patrón de bloqueo para activar esta opción</string>
+  <string name="prefs_biometric">Bloqueo da biometría</string>
+  <string name="prefs_biometric_summary">Activar o código de seguridade ou patrón de bloqueo para activar esta opción</string>
   <string name="prefs_touches_with_other_visible_windows">Toques con outras xanelas visíbeis</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques cando a vista estea escurecida por outra xanela visíbel. Activar o emprego de aplis de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Confirma que quere activar esta característica?</string>
@@ -73,12 +73,20 @@
   <string name="passcode_already_set">Non é posíbel activar os bloqueos de patrón e de código de seguridade ao mesmo tempo, primeiro desactive o código de seguridade</string>
   <string name="pattern_no_longer_required">Xa non se pedirá o patrón</string>
   <string name="pattern_configure_your_pattern_explanation">Solicitaráselle o patrón cada vez que inicie a aplicación</string>
+  <string name="pass_code_locked">Bloqueado con código de seguridade</string>
   <string name="pattern_locked">Bloqueado con patrón</string>
   <string name="illegal_argument_exception_message">É necesaria unha ACCIÓN válida na intención pasada a</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Ficheiros</string>
+  <string name="bottom_nav_uploads">Envios</string>
+  <string name="bottom_nav_offline">Desconectado</string>
+  <string name="bottom_nav_links">Ligazóns</string>
   <string name="recommend_subject">Tente %1$s no seu teléfono intelixente!</string>
   <string name="recommend_text">Quero convidalo a empregar %1$s no seu teléfono intelixente!
 Descárgueo de aquí: %2$s</string>
+  <string name="error_reason">por mor</string>
   <string name="auth_failure_snackbar">Produciuse un fallo na autenticación.</string>
+  <string name="server_not_supported">A súa versión do servidor é inferior a 10, polo que non é compatíbel, actualice o servidor a versión máis recente</string>
   <string name="auth_failure_snackbar_action">Cambiar a conta</string>
   <string name="auth_oauth_failure">A marca de acceso caducou ou non é válida. Inicie sesión de novo para recuperar o acceso</string>
   <string name="auth_oauth_failure_snackbar_action">Rexistrarse</string>
@@ -105,6 +113,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">Aquí non hai nada. Envíe algo!</string>
   <string name="file_list_empty_available_offline">Non hai ficheiros dispoñíbeis sen conexión.</string>
+  <string name="file_list_empty_shared_by_links">Aínda non hai ficheiros compartidos por ligazón.</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">Non se atopou unha aplicación para este tipo de ficheiro</string>
   <string name="local_file_list_empty">Non hai ficheiros neste cartafol.</string>
@@ -137,7 +146,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="common_error">Erro</string>
   <string name="common_loading">Cargando...</string>
   <string name="common_unknown">descoñecido</string>
-  <string name="common_error_unknown">Produciuse un erro descoñecido</string>
+  <string name="common_error_unknown">erro descoñecido</string>
   <string name="common_pending">Pendentes</string>
   <string name="common_important">Importante</string>
   <string name="about_title">Sobre</string>
@@ -222,14 +231,10 @@ Descárgueo de aquí: %2$s</string>
   <string name="pass_code_wrong">Código de seguridade incorrecto</string>
   <string name="pass_code_removed">Retirouse o código de seguridade</string>
   <string name="pass_code_stored">O código de seguridade foi almacenado</string>
-  <string name="pass_code_locked">Bloqueado con código de seguridade</string>
-  <string name="fingerprint_confirm">Confirme a súa pegada para continuar</string>
-  <string name="fingerprint_hint">Sensor táctil</string>
-  <string name="fingerprint_not_recognized">Non se recoñeceu a pegada, ténteo de novo</string>
-  <string name="fingerprint_success">A pegada foi recoñecida</string>
-  <string name="fingerprint_not_hardware_detected">O dispositivo non admite a autenticación por pegada</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Rexistre polo menos unha pegada para empregar esta cracterística</string>
-  <string name="fingerprint_not_granted_permissions">Non se concederon permisos de pegada</string>
+  <string name="biometric_not_hardware_detected">Este dispositivo non admite a autenticación biométrica</string>
+  <string name="biometric_not_enrolled">Rexístrese polo menos unha biometría para usar esta característica</string>
+  <string name="biometric_prompt_title">Acceso biométrico</string>
+  <string name="biometric_prompt_subtitle">Acceda empregando a súa credencial biométrica</string>
   <string name="media_notif_ticker">%1$s reprodutor musical</string>
   <string name="media_state_playing">%1$s (reproducindo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>
@@ -288,7 +293,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="confirmation_remove_local">Só local</string>
   <string name="confirmation_remove_account_alert">Confirma que quere eliminar a conta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Retirar a ligazón</string>
-  <string name="confirmation_remove_share_message">Confirma que quere retirar %1$s?</string>
+  <string name="confirmation_remove_private_share_title">Retirar a compartición privada</string>
+  <string name="confirmation_remove_share_message">Confirma que quere retirar %1$s  compartición(s)?</string>
   <string name="remove_success_msg">Retirado correctamente</string>
   <string name="remove_fail_msg">Non foi posíbel retiralo</string>
   <string name="rename_dialog_title">Introducir un novo nome</string>
@@ -359,17 +365,14 @@ Descárgueo de aquí: %2$s</string>
   <string name="preview_image_error_unknown_format">Esta imaxe non pode ser amosada</string>
   <string name="error__upload__local_file_not_copied">Non foi posíbel copiar %1$s no cartafol local %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de envío de imaxes</string>
-  <string name="get_shares_error">Produciuse un erro ao tentar recuperar comparticións</string>
-  <string name="get_sharees_error">Produciuse un erro ao tentar recuperar usuarios e grupos</string>
-  <string name="get_capabilities_error">Produciuse un erro ao tentar recuperar funcións</string>
+  <string name="get_shares_error">Non foi posíbel recuperar as comparticións do servidor</string>
+  <string name="get_sharees_error">Non foi posíbel recuperar os usuarios e grupos do servidor</string>
+  <string name="get_capabilities_error">Non foi posíbel recuperar as capacidades do servidor</string>
   <string name="share_link_no_support_share_api">O seu servidor non ten activada a opción de compartir. Póñase en contacto co
 		administrador.</string>
-  <string name="share_link_file_no_exist">Non foi posíbel compartir. Comprobe que existe o ficheiro</string>
-  <string name="share_link_file_error">Produciuse un erro ao tentar compartir este ficheiro ou cartafol.</string>
-  <string name="unshare_link_file_no_exist">Non foi posíbel deixar de compartir. Comprobe que existe o ficheiro</string>
-  <string name="unshare_link_file_error">Produciuse un erro ao tentar deixar de compartir este ficheiro ou cartafol</string>
-  <string name="update_link_file_no_exist">Non foi posíbel actualizar. Comprobe que existe o ficheiro</string>
-  <string name="update_link_file_error">Produciuse un erro ao tentar actualizar o recurso compartido</string>
+  <string name="share_link_file_error">Non foi posíbel compartir este ficheiro ou cartafol</string>
+  <string name="unshare_link_file_error">Non foi posíbel deixar de compartir este ficheiro ou cartafol</string>
+  <string name="update_link_file_error">Non foi posíbel actualizar este ficheiro ou cartafol</string>
   <string name="share_link_password_title">Escriba un contrasinal</string>
   <string name="share_link_empty_password">Ten que escribir un contrasinal</string>
   <string name="activity_chooser_send_file_title">Enviar</string>
@@ -496,8 +499,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="confirmation_remove_folders_alert">Confirma que quere eliminar os elementos seleccionados e o seu contido?</string>
   <string name="failed_upload_quota_exceeded_text">Non hai espazo abondo na conta</string>
   <string name="auth_forbidden">Autenticación non permitida</string>
-  <string name="actionbar_privacy_policy">Política de privacidade</string>
-  <string name="prefs_privacy_policy">Política de privacidade</string>
+  <string name="actionbar_privacy_policy">Directiva de privacidade</string>
+  <string name="prefs_privacy_policy">Directiva de privacidade</string>
   <string name="privacy_policy_error">Produciuse un erro:</string>
   <string name="service_unavailable">O servidor non é accesíbel</string>
   <string name="streaming_certificate_error">Non é posíbel iniciar o fluxo porque o certificado do servidor non é de confianza. A descarga do ficheiro comezará automaticamente</string>
@@ -549,15 +552,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_4_text">As súas imaxes ou vídeos enviaranse automaticamente</string>
   <string name="welcome_feature_5_title">Fluxo de vídeo</string>
   <string name="welcome_feature_5_text">Reproduza os seus vídeos sen descargalos</string>
-  <string name="welcome_feature_6_title">Buscar no cartafol actual</string>
-  <string name="welcome_feature_6_text">Filtrar os seus ficheiros polo seu nome</string>
-  <string name="welcome_feature_7_title">Seleccionar todo</string>
-  <string name="welcome_feature_7_text">Seleccionar todos os ficheiros de vez</string>
-  <string name="welcome_feature_8_title">Dispoñíbel sen conexión</string>
-  <string name="welcome_feature_8_text">Os seus ficheiros sincronizados automaticamente </string>
-  <string name="welcome_feature_9_title">Fornecedor de documentos</string>
-  <string name="welcome_feature_9_text">Acceda e edite os seus ficheiros ownCloud dende doutras aplicacións</string>
-  <string name="welcome_feature_10_title">Rexistros con busca para todos</string>
-  <string name="welcome_feature_10_text">Envíenos os seus rexistros para que a aplicación funcione mellor</string>
   <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
+  <string name="common_not_found">non foi atopado</string>
+  <string name="supports_oauth2_error">Non foi posible saber se OAuth2 é compatíbel</string>
+  <string name="get_base_url_error">Non foi posíbel saber cal é o URL base do servidor</string>
 </resources>

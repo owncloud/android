@@ -6,7 +6,7 @@
  * @author Christian Schabesberger
  * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,6 +25,7 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.accounts.AuthenticatorException;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -32,13 +33,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Parcelable;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -49,16 +50,18 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
+import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
+import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
+import timber.log.Timber;
 
 /**
  * Activity with common behaviour for activities handling {@link OCFile}s in ownCloud {@link Account}s .
@@ -70,9 +73,7 @@ public class FileActivity extends DrawerActivity
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
     public static final String EXTRA_FROM_NOTIFICATION =
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
-    public static final String EXTRA_ONLY_AVAILABLE_OFFLINE = "ONLY_AVAILABLE_OFFLINE";
-    public static final String EXTRA_SHARED_BY_LINK_FILES = "SHARED_BY_LINK_FILES";
-    public static final String TAG = FileActivity.class.getSimpleName();
+    public static final String EXTRA_FILE_LIST_OPTION = "EXTRA_FILE_LIST_OPTION";
 
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
@@ -272,8 +273,7 @@ public class FileActivity extends DrawerActivity
      */
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
-        Log_OC.d(TAG, "Received result of operation in FileActivity - common behaviour for all the "
-                + "FileActivities ");
+        Timber.d("Received result of operation in FileActivity - common behaviour for all the FileActivities");
 
         mFileOperationsHelper.setOpIdWaitingFor(Long.MAX_VALUE);
 
@@ -316,12 +316,22 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-    protected void showRequestAccountChangeNotice() {
-        Snackbar.make(findViewById(android.R.id.content), R.string.auth_failure_snackbar, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.auth_failure_snackbar_action, v ->
-                        startActivity(
-                                new Intent(FileActivity.this, ManageAccountsActivity.class)))
-                .show();
+    protected void showRequestAccountChangeNotice(String errorMessage, boolean mustChange) {
+        if (mustChange) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.auth_failure_snackbar_action)
+                    .setMessage(errorMessage)
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> startActivity(
+                            new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                    .setIcon(R.drawable.common_error_grey)
+                    .setCancelable(false)
+                    .show();
+        } else {
+            Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.auth_failure_snackbar_action, v ->
+                            startActivity(new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                    .show();
+        }
     }
 
     protected void showRequestRegainAccess() {
@@ -333,7 +343,7 @@ public class FileActivity extends DrawerActivity
 
     /**
      * Invalidates the credentials stored for the current OC account and requests new credentials to the user,
-     * navigating to {@link AuthenticatorActivity}
+     * navigating to {@link LoginActivity}
      *
      * Equivalent to call requestCredentialsUpdate(null);
      */
@@ -343,7 +353,7 @@ public class FileActivity extends DrawerActivity
 
     /**
      * Invalidates the credentials stored for the given OC account and requests new credentials to the user,
-     * navigating to {@link AuthenticatorActivity}
+     * navigating to {@link LoginActivity}
      *
      * @param account Stored OC account to request credentials update for. If null, current account will
      *                be used.
@@ -355,11 +365,11 @@ public class FileActivity extends DrawerActivity
         }
 
         /// request credentials to user
-        Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
-        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+        Intent updateAccountCredentials = new Intent(this, LoginActivity.class);
+        updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACCOUNT, account);
         updateAccountCredentials.putExtra(
-                AuthenticatorActivity.EXTRA_ACTION,
-                AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
+                AuthenticatorConstants.EXTRA_ACTION,
+                AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN);
         updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS);
     }
@@ -421,21 +431,18 @@ public class FileActivity extends DrawerActivity
         @Override
         public void onServiceConnected(ComponentName component, IBinder service) {
             if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
-                Log_OC.d(TAG, "Operations service connected");
+                Timber.d("Operations service connected");
                 mOperationsServiceBinder = (OperationsServiceBinder) service;
                 if (mResumed) {
                     doOnResumeAndBound();
                 }
-
-            } else {
-                return;
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName component) {
             if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
-                Log_OC.d(TAG, "Operations service disconnected");
+                Timber.d("Operations service disconnected");
                 mOperationsServiceBinder = null;
                 // TODO whatever could be waiting for the service is unbound
             }
@@ -460,24 +467,25 @@ public class FileActivity extends DrawerActivity
     }
 
     @Override
-    public void allFilesOption() {
-        restart();
-    }
-
-    @Override
-    public void onlyAvailableOfflineOption() {
-        Intent intent = new Intent(this, FileDisplayActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(EXTRA_ONLY_AVAILABLE_OFFLINE, true);
-        startActivity(intent);
-    }
-
-    @Override
-    public void sharedByLinkFilesOption() {
-        Intent intent = new Intent(this, FileDisplayActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(EXTRA_SHARED_BY_LINK_FILES, true);
-        startActivity(intent);
+    public void navigateToOption(FileListOption fileListOption) {
+        Intent intent;
+        switch (fileListOption) {
+            case ALL_FILES:
+                restart();
+                break;
+            case SHARED_BY_LINK:
+                intent = new Intent(this, FileDisplayActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.SHARED_BY_LINK);
+                startActivity(intent);
+                break;
+            case AV_OFFLINE:
+                intent = new Intent(this, FileDisplayActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.AV_OFFLINE);
+                startActivity(intent);
+                break;
+        }
     }
 
     protected OCFile getCurrentDir() {

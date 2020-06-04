@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -51,23 +50,22 @@ import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.activity.FileListOption;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 /**
- *  Holds a swiping galley where image files contained in an ownCloud directory are shown
+ * Holds a swiping galley where image files contained in an ownCloud directory are shown
  */
 public class PreviewImageActivity extends FileActivity implements
         FileFragment.ContainerActivity,
         ViewPager.OnPageChangeListener, OnRemoteOperationListener {
-
-    public static final String TAG = PreviewImageActivity.class.getSimpleName();
 
     private static final int INITIAL_HIDE_DELAY = 0; // immediate hide
 
@@ -115,9 +113,7 @@ public class PreviewImageActivity extends FileActivity implements
                     }
                 });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.owncloud_blue_dark_transparent));
-        }
+        getWindow().setStatusBarColor(getResources().getColor(R.color.owncloud_blue_dark_transparent));
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
@@ -228,7 +224,9 @@ public class PreviewImageActivity extends FileActivity implements
         return new PreviewImageServiceConnection();
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
     private class PreviewImageServiceConnection implements ServiceConnection {
 
         @Override
@@ -236,12 +234,12 @@ public class PreviewImageActivity extends FileActivity implements
 
             if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileDownloader.class))) {
-                Log_OC.d(TAG, "onServiceConnected, FileDownloader");
+                Timber.d("onServiceConnected, FileDownloader");
                 mDownloaderBinder = (FileDownloaderBinder) service;
 
             } else if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileUploader.class))) {
-                Log_OC.d(TAG, "onServiceConnected, FileUploader");
+                Timber.d("onServiceConnected, FileUploader");
                 mUploaderBinder = (FileUploaderBinder) service;
             }
 
@@ -253,11 +251,11 @@ public class PreviewImageActivity extends FileActivity implements
         public void onServiceDisconnected(ComponentName component) {
             if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileDownloader.class))) {
-                Log_OC.d(TAG, "Download service suddenly disconnected");
+                Timber.d("Download service suddenly disconnected");
                 mDownloaderBinder = null;
             } else if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileUploader.class))) {
-                Log_OC.d(TAG, "Upload service suddenly disconnected");
+                Timber.d("Upload service suddenly disconnected");
                 mUploaderBinder = null;
             }
         }
@@ -322,11 +320,11 @@ public class PreviewImageActivity extends FileActivity implements
      * This method will be invoked when a new page becomes selected. Animation is not necessarily
      * complete.
      *
-     *  @param  position        Position index of the new selected page
+     * @param position Position index of the new selected page
      */
     @Override
     public void onPageSelected(int position) {
-        Log_OC.d(TAG, "onPageSelected " + position);
+        Timber.d("onPageSelected %s", position);
 
         if (getOperationsServiceBinder() != null) {
             mSavedPosition = position;
@@ -356,10 +354,10 @@ public class PreviewImageActivity extends FileActivity implements
     }
 
     /**
-     * Called when the scroll state changes. Useful for discovering when the user begins dragging, 
+     * Called when the scroll state changes. Useful for discovering when the user begins dragging,
      * when the pager is automatically settling to the current page. when it is fully stopped/idle.
      *
-     * @param   state       The new scroll state (SCROLL_STATE_IDLE, _DRAGGING, _SETTLING
+     * @param state The new scroll state (SCROLL_STATE_IDLE, _DRAGGING, _SETTLING
      */
     @Override
     public void onPageScrollStateChanged(int state) {
@@ -369,13 +367,12 @@ public class PreviewImageActivity extends FileActivity implements
      * This method will be invoked when the current page is scrolled, either as part of a
      * programmatically initiated smooth scroll or a user initiated touch scroll.
      *
-     * @param   position                Position index of the first page currently being displayed. 
-     *                                  Page position+1 will be visible if positionOffset is
-     *                                  nonzero.
-     *
-     * @param   positionOffset          Value from [0, 1) indicating the offset from the page
-     *                                  at position.
-     * @param   positionOffsetPixels    Value in pixels indicating the offset from position. 
+     * @param position             Position index of the first page currently being displayed.
+     *                             Page position+1 will be visible if positionOffset is
+     *                             nonzero.
+     * @param positionOffset       Value from [0, 1) indicating the offset from the page
+     *                             at position.
+     * @param positionOffsetPixels Value in pixels indicating the offset from position.
      */
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -383,7 +380,7 @@ public class PreviewImageActivity extends FileActivity implements
 
     /**
      * Class waiting for broadcast events from the {@link FileDownloader} service.
-     *
+     * <p>
      * Updates the UI when a download is started or finished, provided that it is relevant for the
      * folder displayed in the gallery.
      */
@@ -479,14 +476,8 @@ public class PreviewImageActivity extends FileActivity implements
     }
 
     @Override
-    public void allFilesOption() {
+    public void navigateToOption(FileListOption fileListOption) {
         backToDisplayActivity();
-        super.allFilesOption();
-    }
-
-    @Override
-    public void onlyAvailableOfflineOption(){
-        backToDisplayActivity();
-        super.onlyAvailableOfflineOption();
+        super.navigateToOption(fileListOption);
     }
 }

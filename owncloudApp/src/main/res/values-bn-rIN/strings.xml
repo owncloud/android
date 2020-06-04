@@ -4,8 +4,6 @@
   <string name="actionbar_upload_files">ফাইলস</string>
   <string name="actionbar_mkdir">নতুন ফোল্ডার</string>
   <string name="actionbar_settings">সেটিংস</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">খোলা</string>
   <string name="prefs_imprint">অঙ্কিত করা</string>
   <string name="sync_string_files">ফাইলস</string>
@@ -20,5 +18,4 @@
   <string name="share_cancel_public_link_button">বাতিল করা</string>
   <string name="share_confirm_public_link_button">সেভ</string>
   <string name="share_search">অনুসন্ধান</string>
-  <!--Welcome to oC intro features-->
 </resources>

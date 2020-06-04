@@ -8,42 +8,26 @@
 # Java class files
 *.class
 
-# generated files
-bin/
-build/
-*.iml
-gen/
-target/
-
 # Local configuration files (sdk path, etc)
 local.properties
-oc_framework/local.properties
-oc_framework-test-project/local.properties
-tests/local.properties
-lint.xml
 
 # Mac .DS_Store files
 .DS_Store
 
 # Proguard README
 proguard-project.txt
-oc_framework/proguard-project.txt
-oc_framework-test-project/proguard-project.txt
-tests/proguard-project.txt
 
 # Android Studio and Gradle specific entries
 .gradle
-.idea
 *.iml
 build
 
 # android sdk captures folder
 captures
 
-!.idea/
+# ignore lint html and xml output
+lint-*ml
+
 .idea/*
 !.idea/codeStyles/
-
-!Project.xml
-!codeStyleConfig.xml
 

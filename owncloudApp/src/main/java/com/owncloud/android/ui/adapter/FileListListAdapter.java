@@ -10,7 +10,7 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -74,6 +74,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private boolean mJustFolders;
     private boolean mOnlyAvailableOffline;
     private boolean mSharedByLinkFiles;
+    private boolean mFolderPicker;
 
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
@@ -85,13 +86,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             boolean justFolders,
             boolean onlyAvailableOffline,
             boolean sharedByLinkFiles,
+            boolean folderPicker,
             Context context,
             ComponentsGetter transferServiceGetter
     ) {
-
         mJustFolders = justFolders;
         mOnlyAvailableOffline = onlyAvailableOffline;
         mSharedByLinkFiles = sharedByLinkFiles;
+        mFolderPicker = folderPicker;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
 
@@ -114,7 +116,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     @Override
     public boolean isEnabled(int position) {
-        return true;
+        // Disable click for files when selecting a folder in copying and moving operations
+        return !mFolderPicker || mFiles.get(position).isFolder();
     }
 
     @Override
@@ -236,7 +239,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     // sharedIcon
                     ImageView sharedIconV = view.findViewById(R.id.sharedIcon);
                     if (file.isSharedViaLink()) {
-                        sharedIconV.setImageResource(R.drawable.shared_via_link);
+                        sharedIconV.setImageResource(R.drawable.ic_shared_by_link);
                         sharedIconV.setVisibility(View.VISIBLE);
                         sharedIconV.bringToFront();
                     } else if (file.isSharedWithSharee() || file.isSharedWithMe()) {

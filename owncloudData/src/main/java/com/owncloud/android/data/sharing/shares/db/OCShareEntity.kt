@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,8 +21,6 @@ package com.owncloud.android.data.sharing.shares.db
 
 import android.content.ContentValues
 import android.database.Cursor
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -34,9 +32,9 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 @Entity(tableName = ProviderTableMeta.OCSHARES_TABLE_NAME)
 data class OCShareEntity(
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_FILE_SOURCE)
-    val fileSource: Long,
+    val fileSource: String,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ITEM_SOURCE)
-    val itemSource: Long,
+    val itemSource: String,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_TYPE)
     val shareType: Int,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_SHARE_WITH)
@@ -67,67 +65,35 @@ data class OCShareEntity(
     val name: String?,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_URL)
     val shareLink: String?
-) : Parcelable {
+) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
-    constructor(parcel: Parcel) : this(
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readInt(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readInt(),
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readByte() != 0.toByte(),
-        parcel.readLong(),
-        parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
-    ) {
-        id = parcel.readInt()
+    fun toContentValues(): ContentValues = ContentValues().apply {
+        put(ProviderTableMeta.OCSHARES_FILE_SOURCE, fileSource)
+        put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, itemSource)
+        put(ProviderTableMeta.OCSHARES_SHARE_TYPE, shareType)
+        put(ProviderTableMeta.OCSHARES_SHARE_WITH, shareWith)
+        put(ProviderTableMeta.OCSHARES_PATH, path)
+        put(ProviderTableMeta.OCSHARES_PERMISSIONS, permissions)
+        put(ProviderTableMeta.OCSHARES_SHARED_DATE, sharedDate)
+        put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, expirationDate)
+        put(ProviderTableMeta.OCSHARES_TOKEN, token)
+        put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME, sharedWithDisplayName)
+        put(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO, sharedWithAdditionalInfo)
+        put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, isFolder)
+        put(ProviderTableMeta.OCSHARES_USER_ID, userId)
+        put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteId)
+        put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, accountOwner)
+        put(ProviderTableMeta.OCSHARES_NAME, name)
+        put(ProviderTableMeta.OCSHARES_URL, shareLink)
     }
 
     companion object {
 
-        /**
-         * Generated - should be refreshed every time the class changes!!
-         */
-        private const val serialVersionUID = 4124975224281327921L
-
-        private val TAG = OCShareEntity::class.java.simpleName
-
-        const val DEFAULT_PERMISSION = -1
-        const val READ_PERMISSION_FLAG = 1
-        const val UPDATE_PERMISSION_FLAG = 2
-        const val CREATE_PERMISSION_FLAG = 4
-        const val DELETE_PERMISSION_FLAG = 8
-        const val SHARE_PERMISSION_FLAG = 16
-        const val MAXIMUM_PERMISSIONS_FOR_FILE = READ_PERMISSION_FLAG +
-                UPDATE_PERMISSION_FLAG +
-                SHARE_PERMISSION_FLAG
-        const val MAXIMUM_PERMISSIONS_FOR_FOLDER = MAXIMUM_PERMISSIONS_FOR_FILE +
-                CREATE_PERMISSION_FLAG +
-                DELETE_PERMISSION_FLAG
-        const val FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9 = READ_PERMISSION_FLAG + UPDATE_PERMISSION_FLAG
-        const val FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9 = READ_PERMISSION_FLAG +
-                UPDATE_PERMISSION_FLAG +
-                SHARE_PERMISSION_FLAG
-        const val FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 = READ_PERMISSION_FLAG +
-                UPDATE_PERMISSION_FLAG +
-                CREATE_PERMISSION_FLAG +
-                DELETE_PERMISSION_FLAG
-        const val FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 =
-            FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 + SHARE_PERMISSION_FLAG
-
         fun fromCursor(cursor: Cursor): OCShareEntity {
             return OCShareEntity(
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_FILE_SOURCE)),
+                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ITEM_SOURCE)),
                 cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)),
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)),
@@ -148,8 +114,8 @@ data class OCShareEntity(
 
         fun fromContentValues(values: ContentValues): OCShareEntity {
             return OCShareEntity(
-                values.getAsLong(ProviderTableMeta.OCSHARES_FILE_SOURCE),
-                values.getAsLong(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
+                values.getAsString(ProviderTableMeta.OCSHARES_FILE_SOURCE),
+                values.getAsString(ProviderTableMeta.OCSHARES_ITEM_SOURCE),
                 values.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE),
                 values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH),
                 values.getAsString(ProviderTableMeta.OCSHARES_PATH),
@@ -167,40 +133,5 @@ data class OCShareEntity(
                 values.getAsString(ProviderTableMeta.OCSHARES_URL)
             )
         }
-
-        /**
-         * Parcelable Methods
-         */
-        @JvmField
-        val CREATOR: Parcelable.Creator<OCShareEntity> = object : Parcelable.Creator<OCShareEntity> {
-            override fun createFromParcel(source: Parcel): OCShareEntity {
-                return OCShareEntity(source)
-            }
-
-            override fun newArray(size: Int): Array<OCShareEntity?> {
-                return arrayOfNulls(size)
-            }
-        }
-    }
-
-    override fun describeContents(): Int = this.hashCode()
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(id)
-        dest?.writeString(shareWith)
-        dest?.writeString(path)
-        dest?.writeString(token)
-        dest?.writeString(sharedWithDisplayName)
-        dest?.writeString(sharedWithAdditionalInfo)
-        dest?.writeString(name)
-        dest?.writeString(shareLink)
-        dest?.writeLong(fileSource)
-        dest?.writeLong(itemSource)
-        dest?.writeInt(shareType)
-        dest?.writeInt(permissions)
-        dest?.writeLong(sharedDate)
-        dest?.writeLong(expirationDate)
-        dest?.writeInt(if (isFolder) 1 else 0)
-        dest?.writeLong(userId)
     }
 }

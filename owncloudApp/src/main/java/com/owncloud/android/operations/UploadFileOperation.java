@@ -3,7 +3,7 @@
  *
  * @author David A. Velasco
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,17 +35,17 @@ import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.RemoteFileUtils;
 import com.owncloud.android.utils.UriUtils;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,7 +55,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -96,8 +95,6 @@ public class UploadFileOperation extends SyncOperation {
         return newFile;
     }
 
-    private static final String TAG = UploadFileOperation.class.getSimpleName();
-
     private Account mAccount;
     /**
      * OCFile which is to be uploaded.
@@ -121,8 +118,7 @@ public class UploadFileOperation extends SyncOperation {
      * Local path to file which is to be uploaded (before any possible renaming or moving).
      */
     private String mOriginalStoragePath;
-    protected Set<OnDatatransferProgressListener> mDataTransferListeners =
-            new HashSet<OnDatatransferProgressListener>();
+    protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     private OnRenameListener mRenameUploadListener;
 
     protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
@@ -286,13 +282,13 @@ public class UploadFileOperation extends SyncOperation {
 
             /// Check that connectivity conditions are met and delays the upload otherwise
             if (delayForWifi()) {
-                Log_OC.d(TAG, "Upload delayed until WiFi is available: " + getRemotePath());
+                Timber.d("Upload delayed until WiFi is available: %s", getRemotePath());
                 return new RemoteOperationResult(ResultCode.DELAYED_FOR_WIFI);
             }
 
             /// check if the file continues existing before schedule the operation
             if (!originalFile.exists()) {
-                Log_OC.d(TAG, mOriginalStoragePath.toString() + " not exists anymore");
+                Timber.d("%s not exists anymore", mOriginalStoragePath);
                 return new RemoteOperationResult(ResultCode.LOCAL_FILE_NOT_FOUND);
             }
 
@@ -311,13 +307,13 @@ public class UploadFileOperation extends SyncOperation {
             mFile.setParentId(parent.getFileId());
 
             /// automatic rename of file to upload in case of name collision in server
-            Log_OC.d(TAG, "Checking name collision in server");
+            Timber.d("Checking name collision in server");
             if (!mForceOverwrite) {
                 String remotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, mRemotePath);
-                mWasRenamed = !remotePath.equals(mRemotePath);
+                mWasRenamed = !mRemotePath.equals(remotePath);
                 if (mWasRenamed) {
                     createNewOCFile(remotePath);
-                    Log_OC.d(TAG, "File renamed as " + remotePath);
+                    Timber.d("File renamed as %s", remotePath);
                 }
                 mRemotePath = remotePath;
                 mRenameUploadListener.onRenameUpload();
@@ -367,21 +363,19 @@ public class UploadFileOperation extends SyncOperation {
                 result = new RemoteOperationResult(ResultCode.UNKNOWN_ERROR);
             }
             if (result.isSuccess()) {
-                Log_OC.i(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath + ": " +
+                Timber.i("Upload of " + mOriginalStoragePath + " to " + mRemotePath + ": " +
                         result.getLogMessage());
             } else {
                 if (result.getException() != null) {
                     if (result.isCancelled()) {
-                        Log_OC.w(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath +
-                                ": " + result.getLogMessage());
+                        Timber.w("Upload of " + mOriginalStoragePath + " to " + mRemotePath + ": " + result.getLogMessage());
                     } else {
-                        Log_OC.e(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath +
-                                ": " + result.getLogMessage(), result.getException());
+                        Timber.e(result.getException(), "Upload of " + mOriginalStoragePath + " to " + mRemotePath +
+                                ": " + result.getLogMessage());
                     }
 
                 } else {
-                    Log_OC.e(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath +
-                            ": " + result.getLogMessage());
+                    Timber.e("Upload of " + mOriginalStoragePath + " to " + mRemotePath + ": " + result.getLogMessage());
                 }
             }
         }
@@ -398,6 +392,7 @@ public class UploadFileOperation extends SyncOperation {
 
     /**
      * Upload file to server
+     *
      * @param client
      * @param temporalFile file copied locally before uploading the file
      * @param originalFile local file to upload
@@ -414,9 +409,8 @@ public class UploadFileOperation extends SyncOperation {
             mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(), mFile.getRemotePath(),
                     mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
 
-            Iterator<OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
-            while (listener.hasNext()) {
-                mUploadOperation.addDatatransferProgressListener(listener.next());
+            for (OnDatatransferProgressListener dataTransferListener : mDataTransferListeners) {
+                mUploadOperation.addDatatransferProgressListener(dataTransferListener);
             }
 
             if (mCancellationRequested.get()) {
@@ -478,7 +472,7 @@ public class UploadFileOperation extends SyncOperation {
      * Checks origin of current upload and network type to decide if should be delayed, according to
      * current user preferences.
      *
-     * @return      'True' if the upload was delayed until WiFi connectivity is available, 'false' otherwise.
+     * @return 'True' if the upload was delayed until WiFi connectivity is available, 'false' otherwise.
      */
     private boolean delayForWifi() {
         boolean delayCameraUploadsPicture = (
@@ -496,7 +490,7 @@ public class UploadFileOperation extends SyncOperation {
     /**
      * Checks the existence of the folder where the current file will be uploaded both
      * in the remote server and in the local database.
-     *
+     * <p>
      * If the upload is set to enforce the creation of the folder, the method tries to
      * create it both remote and locally.
      *
@@ -505,8 +499,8 @@ public class UploadFileOperation extends SyncOperation {
      * will be uploaded.
      */
     private RemoteOperationResult grantFolderExistence(String pathToGrant, OwnCloudClient client) {
-        RemoteOperation operation = new ExistenceCheckRemoteOperation(pathToGrant, false, false);
-        RemoteOperationResult result = operation.execute(client);
+        RemoteOperation checkPathExistenceOperation = new CheckPathExistenceRemoteOperation(pathToGrant, false);
+        RemoteOperationResult result = checkPathExistenceOperation.execute(client);
         if (!result.isSuccess() && result.getCode() == ResultCode.FILE_NOT_FOUND && mRemoteFolderToBeCreated) {
             SyncOperation syncOp = new CreateFolderOperation(pathToGrant, true);
             result = syncOp.execute(client, getStorageManager());
@@ -546,6 +540,7 @@ public class UploadFileOperation extends SyncOperation {
     /**
      * Create a new OCFile mFile with new remote path. This is required if forceOverwrite==false.
      * New file is stored as mFile, original as mOldFile.
+     *
      * @param newRemotePath new remote path
      */
     private void createNewOCFile(String newRemotePath) {
@@ -576,13 +571,13 @@ public class UploadFileOperation extends SyncOperation {
     public void cancel() {
         if (mUploadOperation == null) {
             if (mUploadStarted.get()) {
-                Log_OC.d(TAG, "Cancelling upload during upload preparations.");
+                Timber.d("Cancelling upload during upload preparations.");
                 mCancellationRequested.set(true);
             } else {
-                Log_OC.e(TAG, "No upload in progress. This should not happen.");
+                Timber.e("No upload in progress. This should not happen.");
             }
         } else {
-            Log_OC.d(TAG, "Cancelling upload during actual upload operation.");
+            Timber.d("Cancelling upload during actual upload operation.");
             mUploadOperation.cancel();
         }
     }
@@ -599,13 +594,13 @@ public class UploadFileOperation extends SyncOperation {
      * TODO rewrite with homogeneous fail handling, remove dependency on {@link RemoteOperationResult},
      * TODO     use Exceptions instead
      *
-     * @param   sourceFile      Source file to copy.
-     * @param   targetFile      Target location to copy the file.
-     * @return  {@link RemoteOperationResult}
+     * @param sourceFile Source file to copy.
+     * @param targetFile Target location to copy the file.
+     * @return {@link RemoteOperationResult}
      * @throws IOException
      */
     private RemoteOperationResult copy(File sourceFile, File targetFile) throws IOException {
-        Log_OC.d(TAG, "Copying local file");
+        Timber.d("Copying local file");
 
         RemoteOperationResult result = null;
 
@@ -614,21 +609,21 @@ public class UploadFileOperation extends SyncOperation {
             return result;  // error condition when the file should be copied
 
         } else {
-            Log_OC.d(TAG, "Creating temporal folder");
+            Timber.d("Creating temporal folder");
             File temporalParent = targetFile.getParentFile();
             temporalParent.mkdirs();
             if (!temporalParent.isDirectory()) {
                 throw new IOException(
                         "Unexpected error: parent directory could not be created");
             }
-            Log_OC.d(TAG, "Creating temporal file");
+            Timber.d("Creating temporal file");
             targetFile.createNewFile();
             if (!targetFile.isFile()) {
                 throw new IOException(
                         "Unexpected error: target file could not be created");
             }
 
-            Log_OC.d(TAG, "Copying file contents");
+            Timber.d("Copying file contents");
             InputStream in = null;
             OutputStream out = null;
 
@@ -667,16 +662,16 @@ public class UploadFileOperation extends SyncOperation {
                         in.close();
                     }
                 } catch (Exception e) {
-                    Log_OC.d(TAG, "Weird exception while closing input stream for " +
-                            mOriginalStoragePath + " (ignoring)", e);
+                    Timber.e(e, "Weird exception while closing input stream for " + mOriginalStoragePath + " " +
+                            "(ignoring)");
                 }
                 try {
                     if (out != null) {
                         out.close();
                     }
                 } catch (Exception e) {
-                    Log_OC.d(TAG, "Weird exception while closing output stream for " +
-                            targetFile.getAbsolutePath() + " (ignoring)", e);
+                    Timber.e(e, "Weird exception while closing output stream for " + targetFile.getAbsolutePath() +
+                            " (ignoring)");
                 }
             }
         }
@@ -686,12 +681,11 @@ public class UploadFileOperation extends SyncOperation {
     /**
      * TODO rewrite with homogeneous fail handling, remove dependency on {@link RemoteOperationResult},
      * TODO     use Exceptions instead
-     *
+     * <p>
      * TODO refactor both this and 'copy' in a single method
      *
-     * @param   sourceFile      Source file to move.
-     * @param   targetFile      Target location to move the file.
-     * @return  {@link RemoteOperationResult}
+     * @param sourceFile Source file to move.
+     * @param targetFile Target location to move the file.
      * @throws IOException
      */
     private void move(File sourceFile, File targetFile) throws IOException {
@@ -731,11 +725,10 @@ public class UploadFileOperation extends SyncOperation {
 
     /**
      * Saves a OC File after a successful upload.
-     *
+     * <p>
      * A PROPFIND is necessary to keep the props in the local database
      * synchronized with the server, specially the modification time and Etag
      * (where available)
-     *
      */
     private void saveUploadedFile(OwnCloudClient client) {
         OCFile file = mFile;
@@ -755,7 +748,7 @@ public class UploadFileOperation extends SyncOperation {
             updateOCFile(file, result.getData());
             file.setLastSyncDateForProperties(syncDate);
         } else {
-            Log_OC.e(TAG, "Error reading properties of file after successful upload; this is gonna hurt...");
+            Timber.e("Error reading properties of file after successful upload; this is gonna hurt...");
         }
 
         if (mWasRenamed) {

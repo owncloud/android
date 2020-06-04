@@ -37,8 +37,8 @@
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Accounts beheren</string>
   <string name="prefs_passcode">Pincode slot</string>
-  <string name="prefs_fingerprint">Vingerafdrukvergrendeling</string>
-  <string name="prefs_fingerprint_summary">Zet de toegangscode of de patroonvergrendeling aan om deze optie te activeren </string>
+  <string name="prefs_biometric">Biometrisch slot</string>
+  <string name="prefs_biometric_summary">Zet de toegangscode of de patroonvergrendeling aan om deze optie te activeren </string>
   <string name="prefs_touches_with_other_visible_windows_summary">Sta acties toe als het scherm wordt beinvloed door een andere app. Zet dit aan als je licht-filter apps gebruikt.</string>
   <string name="confirmation_touches_with_other_windows_title">Weet je zeker dat je deze functionaliteit wilt aanzetten?</string>
   <string name="prefs_camera_picture_upload">Afbeeldingen uploaden</string>
@@ -71,10 +71,16 @@
   <string name="passcode_already_set">Patroon- en toegangscodes kunnen niet tegelijkertijd actief zijn, deactiveer eerst de toegangscode</string>
   <string name="pattern_no_longer_required">Het patroon zal niet meer worden gevraagd</string>
   <string name="pattern_configure_your_pattern_explanation">Telkens wanneer de app is gestart zal er om een patroon worden gevraagd</string>
+  <string name="pass_code_locked">Vergrendeld met wachtwoord</string>
   <string name="pattern_locked">Vergrendeld met patroon</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Bestanden</string>
+  <string name="bottom_nav_uploads">Uploads</string>
+  <string name="bottom_nav_links">Links</string>
   <string name="recommend_subject">Probeer %1$s op uw smartphone!</string>
   <string name="recommend_text">Uitnodiging om %1$s op uw smartphone uit te proberen!
 Download hier: %2$s</string>
+  <string name="error_reason">omdat</string>
   <string name="auth_failure_snackbar">Authenticatie is mislukt</string>
   <string name="auth_failure_snackbar_action">Verander account</string>
   <string name="auth_oauth_failure">Het toegangstoken is verlopen of niet meer geldig. Log opnieuw in om weer toegang te krijgen.</string>
@@ -102,6 +108,7 @@ Download hier: %2$s</string>
   <string name="file_list_seconds_ago">seconden geleden</string>
   <string name="file_list_empty">Er bevindt zich hier niets. Upload een bestand!</string>
   <string name="file_list_empty_available_offline">Er zijn geen offline bestanden beschikbaar</string>
+  <string name="file_list_empty_shared_by_links">Er zijn geen bestanden gedeeld via een link</string>
   <string name="file_list_loading">Laden...</string>
   <string name="file_list_no_app_for_file_type">Geen app gevonden voor het bestandsformaat</string>
   <string name="local_file_list_empty">Er staan geen bestanden in deze map.</string>
@@ -134,7 +141,7 @@ Download hier: %2$s</string>
   <string name="common_error">Fout</string>
   <string name="common_loading">Laden...</string>
   <string name="common_unknown">onbekend</string>
-  <string name="common_error_unknown">Onbekende fout</string>
+  <string name="common_error_unknown">onbekende fout</string>
   <string name="common_pending">In behandeling</string>
   <string name="common_important">Belangrijk</string>
   <string name="about_title">Over</string>
@@ -220,14 +227,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_wrong">Onjuiste pincode</string>
   <string name="pass_code_removed">Pincode verwijderd</string>
   <string name="pass_code_stored">Pincode opgeslagen</string>
-  <string name="pass_code_locked">Vergrendeld met wachtwoord</string>
-  <string name="fingerprint_confirm">Bevestig uw vingerafdruk om door te gaan</string>
-  <string name="fingerprint_hint">Touch sensor</string>
-  <string name="fingerprint_not_recognized">Vingerafdruk niet herkend, probeer opnieuw</string>
-  <string name="fingerprint_success">Vingerafdruk herkend</string>
-  <string name="fingerprint_not_hardware_detected">Dit apparaat ondersteunt geen vingerafdruk-authenticatie</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Registreer ten minste één vingerafdruk om deze functie te gebruiken</string>
-  <string name="fingerprint_not_granted_permissions">Vingerafdruk-autorisatie is niet toegestaan</string>
   <string name="media_notif_ticker">%1$s muziekspeler</string>
   <string name="media_state_playing">%1$s (speelt)</string>
   <string name="media_state_loading">%1$s (laden)</string>
@@ -270,7 +269,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="auth_wtf_reenter_URL">Onverwachte toestand; voer a.u.b. nogmaals de server-URL in</string>
   <string name="auth_expired_oauth_token_toast">Uw autorisatie is verstreken. Autoriseer opnieuw.</string>
   <string name="auth_expired_basic_auth_toast">Voer uw huidige wachtwoord in</string>
-    <string name="auth_connecting_auth_server">Verbinden met authenticatieserver...</string>
+  <string name="auth_connecting_auth_server">Verbinden met authenticatieserver...</string>
   <string name="auth_unsupported_auth_method">De server ondersteunt deze authenticatiemethode niet</string>
   <string name="auth_unsupported_multiaccount">%1$s ondersteunt het gebruik van meerdere accounts niet</string>
   <string name="auth_fail_get_user_name">Uw server geeft geen goede userid terug, neem contact op met uw beheerder
@@ -286,7 +285,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="confirmation_remove_local">Alleen lokaal</string>
   <string name="confirmation_remove_account_alert">Wilt u werkelijk account %1$s verwijderen?</string>
   <string name="confirmation_remove_public_share_title">Verwijderen link</string>
-  <string name="confirmation_remove_share_message">Wilt u %1$s werkelijk verwijderen?</string>
   <string name="remove_success_msg">Succesvol verwijderd</string>
   <string name="remove_fail_msg">Verwijdering kon niet voltooid worden</string>
   <string name="rename_dialog_title">Voer een nieuwe naam in</string>
@@ -357,16 +355,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="preview_image_error_unknown_format">Deze afbeelding kan niet worden getoond</string>
   <string name="error__upload__local_file_not_copied">%1$s kon niet worden gekopieerd naar de %2$s lokale map</string>
   <string name="prefs_camera_picture_upload_path_title">Afbeelding upload bestemming</string>
-  <string name="get_shares_error">Een probleem is ontstaan tijdens het ophalen van shares</string>
-  <string name="get_sharees_error">Een probleem is ontstaan tijdens het ophalen van gebruikers en groepen</string>
   <string name="share_link_no_support_share_api">Sorry, delen is niet mogelijk op uw server. Neem contact op met uw
 		beheerder.</string>
-  <string name="share_link_file_no_exist">Kan dit niet delen. Controleer of dit bestand wel bestaat.</string>
-  <string name="share_link_file_error">Er trad een fout op bij uw poging dit bestand of deze map te delen</string>
-  <string name="unshare_link_file_no_exist">Kan delen niet beëindigen. Ga na of het bestand bestaat</string>
-  <string name="unshare_link_file_error">Er trad een fout op bij uw poging het delen van dit bestand of deze map te beëindigen</string>
-  <string name="update_link_file_no_exist">Kan niet bijwerken. Ga na of het bestand bestaat</string>
-  <string name="update_link_file_error">Er trad een fout op bij uw poging de share bij te werken</string>
   <string name="share_link_password_title">Vul het wachtwoord in</string>
   <string name="share_link_empty_password">U moet een wachtwoord opgeven</string>
   <string name="activity_chooser_send_file_title">Versturen</string>
@@ -544,14 +534,5 @@ Neem contact op met uw beheerder</string>
   <string name="welcome_feature_4_text">Uw afbeeldingen/video\'s automatisch uploaden</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
-  <string name="welcome_feature_6_title">Zoek in huidige map</string>
-  <string name="welcome_feature_6_text">Filter je bestanden bij naam</string>
-  <string name="welcome_feature_7_title">Alles selecteren</string>
-  <string name="welcome_feature_7_text">Selecteer alle bestanden</string>
-  <string name="welcome_feature_8_title">Beschikbaar off-line</string>
-  <string name="welcome_feature_8_text">Je bestanden automatisch gesynchroniseerd</string>
-  <string name="welcome_feature_9_title">Document provider</string>
-  <string name="welcome_feature_9_text">Krijg toegang en bewerk je bestanden vanuit andere apps</string>
-  <string name="welcome_feature_10_text">Stuur uw logs om de app te verbeteren.</string>
   <string name="no_borwser_installed_alert">Geen browser geinstalleerd. Installeer een browser om een veilige login mogelijk te maken.</string>
 </resources>

@@ -37,8 +37,7 @@
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
-  <string name="prefs_fingerprint">Bloqueo de huella digital</string>
-  <string name="prefs_fingerprint_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
+  <string name="prefs_biometric_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
   <string name="prefs_camera_picture_upload">Cargar imagenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar fotos automáticamente tomadas por la cámara</string>
   <string name="prefs_camera_video_upload">Cargar videos</string>
@@ -54,6 +53,10 @@
   <string name="prefs_imprint">pie de imprenta</string>
   <string name="prefs_remember_last_share_location">Recordar la ubicación de los archivos compartidos</string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Archivos</string>
+  <string name="bottom_nav_uploads">Cargas</string>
+  <string name="bottom_nav_links">Enlaces</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="auth_oauth_failure_snackbar_action">Iniciar sesión</string>
@@ -110,7 +113,6 @@
   <string name="common_error">Error</string>
   <string name="common_loading">Cargando...</string>
   <string name="common_unknown">desconocido</string>
-  <string name="common_error_unknown">Error desconocido</string>
   <string name="common_pending">Pendiente</string>
   <string name="common_important">Importante</string>
   <string name="about_title">Acerca de</string>
@@ -227,7 +229,7 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor introduzca su dirección de correo de nuevo</string>
   <string name="auth_expired_oauth_token_toast">Su autorización ha expirado. Por favor, autorice de nuevo</string>
   <string name="auth_expired_basic_auth_toast">Por favor introduzca su contraseña actual</string>
-    <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
+  <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
   <string name="auth_unsupported_auth_method">El servidor no soporta este método de autenticación</string>
   <string name="auth_unsupported_multiaccount">%1$s no soporta cuentas múltiples</string>
   <string name="auth_fail_get_user_name">Su servidor no está retornando una identificación de usuario correcta; contacte a un administrador
@@ -243,7 +245,6 @@
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">Realmente quiere eliminar la cuenta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Eliminar enlace</string>
-  <string name="confirmation_remove_share_message">¿Realmente desea eliminar %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -312,12 +313,6 @@
   <string name="prefs_camera_picture_upload_path_title">Ruta de carga de imagenes</string>
   <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su
 		administrador.</string>
-  <string name="share_link_file_no_exist">No se puede compartir. Revise si el archivo existe</string>
-  <string name="share_link_file_error">Ocurrió un error al tratar de compartir este archivo o carpeta</string>
-  <string name="unshare_link_file_no_exist">No se puede dejar de compartir. Revise si el archivo existe</string>
-  <string name="unshare_link_file_error">Ocurrió un error al tratar de ya no compartir este archivo o carpeta</string>
-  <string name="update_link_file_no_exist">No se puede actualizar. Revise si el archivo existe</string>
-  <string name="update_link_file_error">Un error ha ocurrido mientras se intentaba actualizar el comparto</string>
   <string name="share_link_password_title">Introduzca una contraseña</string>
   <string name="share_link_empty_password">Debe introducir una contraseña</string>
   <string name="activity_chooser_send_file_title">Enviar</string>
@@ -350,7 +345,7 @@
   <string name="log_send_no_mail_app">Aplicación para enviar registros no encontrada. Por favor instale una aplicación de correo.</string>
   <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
   <string name="actionbar_select_all">Seleccionar todo</string>
-    <string name="actionbar_move">Mover</string>
+  <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Aquí no hay nada. ¡Puede agregar una carpeta!</string>
   <string name="folder_picker_choose_button_text">Elegir</string>
   <string name="move_file_not_found">No se puede mover. Revise si el archivo existe</string>
@@ -472,6 +467,4 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">Cargas de la cámara</string>
-  <string name="welcome_feature_7_title">Seleccionar todo</string>
-  <string name="welcome_feature_8_title">Disponible sin conexión</string>
 </resources>

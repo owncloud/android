@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  * <p>
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -37,12 +37,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 public class RateMeDialog extends DialogFragment {
-    private static final String TAG = RateMeDialog.class.getName();
-
     private Dialog dialog;
 
     private static final String ARG_CANCELABLE = RateMeDialog.class.getCanonicalName() + ".ARG_CANCELABLE";
@@ -61,8 +59,8 @@ public class RateMeDialog extends DialogFragment {
     /**
      * Public factory method to get dialog instances.
      *
-     * @param packageName   The package name of the application
-     * @param cancelable    If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
+     * @param packageName The package name of the application
+     * @param cancelable  If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
      * @return New dialog instance, ready to show.
      */
     public static RateMeDialog newInstance(String packageName, boolean cancelable) {
@@ -92,7 +90,7 @@ public class RateMeDialog extends DialogFragment {
         titleView.setText(String.format(getString(R.string.rate_dialog_title), getString(R.string.app_name)));
 
         rateNowButton.setOnClickListener(rateNowButtonView -> {
-            Log_OC.d(TAG, "Rate now button was pressed");
+            Timber.d("Rate now button was pressed");
             String packageName = null;
             if (getArguments() != null) {
                 packageName = getArguments().getString(APP_PACKAGE_NAME);
@@ -102,13 +100,8 @@ public class RateMeDialog extends DialogFragment {
 
             /// To count with Play market back stack, After pressing back button,
             /// to taken back to our application, we need to add following flags to intent.
-            int flags = Intent.FLAG_ACTIVITY_NO_HISTORY |
-                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-            } else {
-                flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
-            }
+            int flags =
+                    Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
             goToMarket.addFlags(flags);
 
             try {
@@ -121,7 +114,7 @@ public class RateMeDialog extends DialogFragment {
         });
 
         laterButton.setOnClickListener(laterButtonView -> {
-            Log_OC.d(TAG, "Rate later button was pressed");
+            Timber.d("Rate later button was pressed");
             SharedPreferences preferences = getActivity().getSharedPreferences
                     (AppRater.APP_RATER_PREF_TITLE, 0);
             SharedPreferences.Editor editor = preferences.edit();
@@ -131,7 +124,7 @@ public class RateMeDialog extends DialogFragment {
         });
 
         noThanksButton.setOnClickListener(noThanksButtonView -> {
-            Log_OC.d(TAG, "Button to not show the rate dialog anymore was pressed");
+            Timber.d("Button to not show the rate dialog anymore was pressed");
             SharedPreferences preferences = getActivity().getSharedPreferences
                     (AppRater.APP_RATER_PREF_TITLE, 0);
             SharedPreferences.Editor editor = preferences.edit();

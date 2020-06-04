@@ -1,56 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activityPatternLockLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_horizontal"
+    android:layout_centerVertical="true"
+    android:gravity="center"
+    android:orientation="vertical"
     android:padding="@dimen/standard_padding">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/header_pattern"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:text="@string/pattern_enter_pattern"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/explanation_pattern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:text="@string/pattern_configure_your_pattern_explanation"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/header_pattern"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pattern_enter_pattern"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
+    <com.andrognito.patternlockview.PatternLockView
+        android:id="@+id/pattern_lock_view"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:focusable="true"
+        app:correctStateColor="@color/primary"
+        app:dotCount="3"
+        app:normalStateColor="@color/primary"
+        app:wrongStateColor="@color/primary">
 
-        <TextView
-            android:id="@+id/explanation_pattern"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/pattern_configure_your_pattern_explanation"
-            android:textAppearance="@android:style/TextAppearance.Small"
-            android:textSize="14sp" />
+        <requestFocus />
+    </com.andrognito.patternlockview.PatternLockView>
 
-        <com.andrognito.patternlockview.PatternLockView
-            android:id="@+id/pattern_lock_view"
-            android:layout_width="280dp"
-            android:layout_height="280dp"
-            android:focusable="true"
-            app:correctStateColor="@color/primary"
-            app:dotCount="3"
-            app:normalStateColor="@color/primary"
-            app:wrongStateColor="@color/primary">
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancel_pattern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@android:string/cancel"
+        android:theme="@style/Button.Primary" />
 
-            <requestFocus />
-        </com.andrognito.patternlockview.PatternLockView>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/cancel_pattern"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@android:string/cancel"
-            android:theme="@style/Button.Primary" />
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

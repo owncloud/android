@@ -20,9 +20,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.owncloud.android">
 
-    <uses-sdk
-        tools:overrideLibrary="android.support.customtabs" />
-
     <!--
          GET_ACCOUNTS is needed for API < 23.
         For API >= 23 results in the addition of CONTACTS group to the list of permissions that may be
@@ -71,19 +68,20 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsPictureInPicture="false"
         android:theme="@style/Theme.ownCloud.Toolbar"
+        android:allowBackup="false"
         tools:targetApi="n">
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/Theme.ownCloud.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.FileDisplayActivity"
-            android:theme="@style/Theme.ownCloud.Toolbar.Drawer">
+            android:theme="@style/Theme.ownCloud.Toolbar.Drawer"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".ui.activity.ManageAccountsActivity" />
         <activity
@@ -188,23 +186,6 @@
                 android:resource="@xml/exposed_filepaths" />
         </provider>
 
-        <activity
-            android:name=".authentication.AuthenticatorActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.ownCloud.Authenticator">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="oc"
-                    android:host="android.owncloud.com" />
-            </intent-filter>
-        </activity>
-
         <service android:name=".services.OperationsService" />
         <service android:name=".files.services.FileDownloader" />
         <service android:name=".files.services.FileUploader" />
@@ -274,6 +255,12 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity android:name=".ui.activity.PatternLockActivity" />
-        <activity android:name=".ui.activity.FingerprintActivity" />
+        <activity android:name=".ui.activity.BiometricActivity" />
+        <activity
+            android:name=".presentation.ui.authentication.LoginActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.ownCloud.Toolbar">
+        </activity>
     </application>
 </manifest>

@@ -4,7 +4,7 @@
  * @author LukeOwncloud
  * @author Christian Schabesberger
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,24 +21,22 @@
 package com.owncloud.android.ui.errorhandling;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.ui.activity.BaseActivity;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 public class ErrorShowActivity extends BaseActivity {
-
-    private static final String TAG = ErrorShowActivity.class.getSimpleName();
 
     TextView mError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG, "ErrorShowActivity was called. See above for StackTrace.");
+        Timber.e("ErrorShowActivity was called. See above for StackTrace.");
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         setContentView(R.layout.errorhandling_showerror);
 

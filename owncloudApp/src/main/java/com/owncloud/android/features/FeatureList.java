@@ -3,8 +3,8 @@
  *
  * @author Bartosz Przybylski
  * @author Christian Schabesberger
- * Copyright (C) 2019 Bartosz Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 Bartosz Przybylski
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,7 +26,7 @@ import android.os.Parcelable;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,26 +40,26 @@ public class FeatureList {
     static final private boolean SHOW_ON_FIRST_RUN = true;
     static final private boolean SHOW_ON_UPGRADE = false;
 
-    private static final String TAG = FeatureList.class.getSimpleName();
+    static final private String DEFAULT_WIZARD_VERSION_NAME = "2.7.0";
+    static final private String RELEASE_2_15_0 = "2.15.0";
+    static final private String INDIFFERENT = "0";
 
-    static final private FeatureItem featuresList[] = {
+    static final private FeatureItem[] featuresList = {
             // Basic features showed on first install
             new FeatureItem(R.drawable.whats_new_files, R.string.welcome_feature_1_title,
-                    R.string.welcome_feature_1_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_1_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_share, R.string.welcome_feature_2_title,
-                    R.string.welcome_feature_2_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_2_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
-                    R.string.welcome_feature_3_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_3_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
-                    R.string.welcome_feature_4_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_4_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
-                    R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
-
-            // Features introduced in 2.14.0
-            new FeatureItem(R.drawable.whats_new_no_more_10, R.string.welcome_feature_11_title,
-                    R.string.welcome_feature_11_text, "2.14.0", "0", SHOW_ON_UPGRADE),
-            new FeatureItem(R.drawable.whats_new_no_more_4_4, R.string.welcome_feature_12_title,
-                    R.string.welcome_feature_12_text, "2.14.0", "0", SHOW_ON_UPGRADE)
+                    R.string.welcome_feature_5_text, DEFAULT_WIZARD_VERSION_NAME, INDIFFERENT, SHOW_ON_FIRST_RUN),
+            new FeatureItem(R.drawable.whats_new_nav_bar, R.string.welcome_feature_6_title,
+                    R.string.welcome_feature_6_text, RELEASE_2_15_0, INDIFFERENT, SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_oidc, R.string.welcome_feature_7_title,
+                    R.string.welcome_feature_7_text, RELEASE_2_15_0, INDIFFERENT, SHOW_ON_UPGRADE)
     };
 
     static public FeatureItem[] get() {
@@ -69,7 +69,7 @@ public class FeatureList {
     static public FeatureItem[] getFiltered(final int lastSeenVersionCode, final boolean isFirstRun, boolean isBeta) {
         List<FeatureItem> features = new LinkedList<>();
 
-        Log_OC.d(TAG, "Getting filtered features");
+        Timber.d("Getting filtered features");
 
         for (FeatureItem item : get()) {
             final int itemVersionCode = isBeta ? item.getBetaVersionNumber() : item.getVersionNumber();
@@ -85,7 +85,7 @@ public class FeatureList {
     }
 
     static public class FeatureItem implements Parcelable {
-        public static final int DO_NOT_SHOW = -1;
+        private static final int DO_NOT_SHOW = -1;
         private int image;
         private int titleText;
         private int contentText;
@@ -93,8 +93,8 @@ public class FeatureList {
         private int betaVersion;
         private boolean showOnInitialRun;
 
-        public FeatureItem(int image, int titleText, int contentText, String version, String betaVersion,
-                           boolean showOnInitialRun) {
+        private FeatureItem(int image, int titleText, int contentText, String version, String betaVersion,
+                            boolean showOnInitialRun) {
             this.image = image;
             this.titleText = titleText;
             this.contentText = contentText;
@@ -127,15 +127,15 @@ public class FeatureList {
             return contentText;
         }
 
-        public int getVersionNumber() {
+        private int getVersionNumber() {
             return versionNumber;
         }
 
-        public int getBetaVersionNumber() {
+        private int getBetaVersionNumber() {
             return betaVersion;
         }
 
-        public boolean shouldShowOnFirstRun() {
+        private boolean shouldShowOnFirstRun() {
             return showOnInitialRun;
         }
 
@@ -178,16 +178,15 @@ public class FeatureList {
                 };
     }
 
-    static int versionCodeFromString(String version) {
-        String v[] = version.split(Pattern.quote("."));
+    private static int versionCodeFromString(String version) {
+        String[] v = version.split(Pattern.quote("."));
         if (v.length != 3) {
-            Log_OC.d(TAG, "Version string is incorrect " + version);
+            Timber.d("Version string is incorrect %s", version);
             return 0;
         }
-        int result = Integer.parseInt(v[0]) * (int) (10e6) +
+
+        return Integer.parseInt(v[0]) * (int) (10e6) +
                 Integer.parseInt(v[1]) * (int) (10e4) +
                 Integer.parseInt(v[2]) * 100;
-
-        return result;
     }
 }

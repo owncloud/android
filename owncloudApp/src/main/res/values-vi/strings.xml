@@ -15,8 +15,6 @@
   <string name="actionbar_descending">Giảm dần</string>
   <string name="actionbar_sort_title">Sắp xếp theo</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tất cả tệp tin</string>
   <string name="drawer_item_settings">Thiết lập</string>
   <string name="drawer_item_uploads_list">Tải lên</string>
@@ -68,7 +66,7 @@
   <string name="uploader_error_message_source_file_not_copied">Có lỗi khi copy file sang thư mục tạm. Mời thử lại</string>
   <string name="file_list_seconds_ago">vài giây trước</string>
   <string name="file_list_empty">Không có gì ở đây .Hãy tải lên một cái gì đó !</string>
-  <string name="file_list_loading">Đang tải...</string>
+  <string name="file_list_loading">Đang tải…</string>
   <string name="file_list_no_app_for_file_type">Không có ứng dụng để mở file</string>
   <string name="local_file_list_empty">Không có file nào trong thư mục này</string>
   <string name="local_file_list_empty_just_folders">Không có thư mục con trong thư mục này</string>
@@ -97,7 +95,7 @@
     <string name="common_back">Trở lại</string>
   <string name="common_save_exit">Lưu &amp; thoát</string>
   <string name="common_error">Lỗi</string>
-  <string name="common_loading">Đang tải...</string>
+  <string name="common_loading">Đang tải…</string>
   <string name="common_unknown"> Chưa biết</string>
   <string name="common_error_unknown">Lỗi chưa biết</string>
   <string name="common_pending">Đang chờ</string>
@@ -105,9 +103,9 @@
   <string name="change_password">Đổi mật khẩu</string>
   <string name="delete_account">Xóa tài khoản</string>
   <string name="create_account">Tạo tài khoản</string>
-  <string name="upload_chooser_title">Tải lên từ ...</string>
+  <string name="upload_chooser_title">Tải lên từ …</string>
   <string name="uploader_info_dirname">Tên thư mục</string>
-  <string name="uploader_upload_in_progress_ticker">Đang tải lên ...</string>
+  <string name="uploader_upload_in_progress_ticker">Đang tải lên …</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Đang tải lên %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Tải lên thành công</string>
   <string name="uploader_upload_succeeded_content_single">%1$s đã được tải lên</string>
@@ -132,7 +130,7 @@
   <string name="uploads_view_upload_status_failed_connection_error">Lỗi kết nối</string>
   <string name="uploads_view_upload_status_failed_permission_error">Lỗi quyền truy cập</string>
   <string name="uploads_view_upload_status_unknown_fail">Lỗi chưa biết</string>
-  <string name="downloader_download_in_progress_ticker">Đang tải về ...</string>
+  <string name="downloader_download_in_progress_ticker">Đang tải về …</string>
   <string name="downloader_download_in_progress_content">%1$d%% Đang tải về %2$s</string>
   <string name="downloader_download_succeeded_ticker">Tải về thành công</string>
   <string name="downloader_download_failed_ticker">Tải về thất bại</string>
@@ -203,7 +201,7 @@
   <string name="wait_a_moment">Chờ một lúc</string>
   <string name="filedisplay_unexpected_bad_get_content">Vấn đề bất ngờ ; hãy thử ứng dụng khác để chọn tập tin</string>
   <string name="filedisplay_no_file_selected">Không có tập tin nào được chọn</string>
-  <string name="activity_chooser_title">Gửi liên kết đến...</string>
+  <string name="activity_chooser_title">Gửi liên kết đến…</string>
   <string name="oauth_check_onoff">Đăng nhập bằng oAuth2.</string>
   <string name="ssl_validator_reason_cert_not_trusted">Chứng chỉ này không đáng tin cậy</string>
   <string name="ssl_validator_reason_cert_expired">Chứng chỉ đã hết hạn</string>
@@ -257,5 +255,4 @@
   <string name="share_privilege_can_edit_change">thay đôi</string>
   <string name="share_privilege_can_edit_delete">xóa</string>
   <string name="share_warning_about_forwarding_public_links">Bất cứ ai liên kết đều có quyền truy cập tệp tin/thư mục</string>
-  <!--Welcome to oC intro features-->
 </resources>

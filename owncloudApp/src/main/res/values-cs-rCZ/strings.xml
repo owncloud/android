@@ -37,14 +37,16 @@
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
-  <string name="prefs_fingerprint">Zámek otisku prstů</string>
+  <string name="prefs_biometric">Biometrický zámek</string>
+  <string name="prefs_biometric_summary">Nutné povolit bezpečnostní kód nebo gesto k povolení této možnosti</string>
+  <string name="prefs_touches_with_other_visible_windows">Dotek s jinými viditelnými okny</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Povolit dotek s aplikacemi, které mohou překrýt toto okno. Nutné pro povolení při použití filtrů světla.</string>
   <string name="confirmation_touches_with_other_windows_title">Jste si jisti, že chcete povolit tuto funkci?</string>
+  <string name="confirmation_touches_with_other_windows_message">Použití na vlastní zodpovědnost. Překrývající aplikace se může pokusit ukrást vaše údaje.</string>
   <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
   <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
   <string name="prefs_camera_video_upload">Nahrání videa</string>
-  <string name="prefs_camera_video_upload_summary">
-Automaticky nahrát video snímané kamerou
-</string>
+  <string name="prefs_camera_video_upload_summary">Automaticky nahrát video snímané kamerou</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
   <string name="prefs_log_title_history">Historie logování</string>
@@ -58,10 +60,32 @@ Automaticky nahrát video snímané kamerou
   <string name="prefs_imprint">Imprint</string>
   <string name="prefs_remember_last_share_location">Zapamatovat umístění sdílení</string>
   <string name="prefs_remember_last_upload_location_summary">Zapamatovat poslední umístění pro nahrání sdílených souborů</string>
+  <string name="prefs_pattern">Zámek gestem</string>
+  <string name="pattern_enter_pattern">Prosím, zadejte gesto</string>
+  <string name="pattern_configure_pattern">Zadejte gesto</string>
+  <string name="pattern_remove_pattern">Odstranit gesto</string>
+  <string name="pattern_incorrect_pattern">Nesprávné gesto</string>
+  <string name="pattern_reenter_pattern">Prosím, zadejte gesto znovu</string>
+  <string name="pattern_not_same_pattern">Gesta nejsou shodná</string>
+  <string name="pattern_stored">Gesto uloženo</string>
+  <string name="pattern_removed">Gesto odstraněno</string>
+  <string name="pattern_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte gesto</string>
+  <string name="passcode_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte bezpečnostní kód</string>
+  <string name="pattern_configure_your_pattern_explanation">Gesto bude vyžadováno při každém startu aplikace</string>
+  <string name="pass_code_locked">Uzamčeno bezpečnostním kódem</string>
+  <string name="pattern_locked">Uzamčeno gestem</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Soubory</string>
+  <string name="bottom_nav_uploads">Nahrání</string>
+  <string name="bottom_nav_offline">Offline</string>
+  <string name="bottom_nav_links">Odkazy</string>
   <string name="recommend_subject">Zkuste %1$s na svém chytrém telefonu!</string>
   <string name="recommend_text">Chtěl bych vás pozvat k používání %1$s na vašem chytrém telefonu!\nKe stažení zde: %2$s</string>
+  <string name="error_reason">protože</string>
   <string name="auth_failure_snackbar">Ověření selhalo</string>
+  <string name="server_not_supported">Verze serveru je menší než 10, prosíme o aktualizace na novější verzi</string>
   <string name="auth_failure_snackbar_action">Změna účtu</string>
+  <string name="auth_oauth_failure">Přístupový token vypršel nebo je neplatný. Znovu se přihlaste pro udělení přístupu</string>
   <string name="auth_oauth_failure_snackbar_action">Přihlásit</string>
   <string name="auth_check_server">Ověřit server</string>
   <string name="auth_host_url">Adresa serveru https://...</string>
@@ -86,6 +110,7 @@ Automaticky nahrát video snímané kamerou
   <string name="file_list_seconds_ago">před pár sekundami</string>
   <string name="file_list_empty">Žádný obsah. Nahrajte něco!</string>
   <string name="file_list_empty_available_offline">Nejsou dostupné žádné offline soubory.</string>
+  <string name="file_list_empty_shared_by_links">Žádné soubory nejsou v odkazu sdíleny.</string>
   <string name="file_list_loading">Načítání...</string>
   <string name="file_list_no_app_for_file_type">Pro typ souboru nebyla nalezena aplikace</string>
   <string name="local_file_list_empty">V tomto adresáři nejsou žádné soubory.</string>
@@ -118,7 +143,7 @@ Automaticky nahrát video snímané kamerou
   <string name="common_error">Chyba</string>
   <string name="common_loading">Načítání...</string>
   <string name="common_unknown">neznámý</string>
-  <string name="common_error_unknown">Neznámá chyba</string>
+  <string name="common_error_unknown">neznámá chyba</string>
   <string name="common_pending">Nevyřízené</string>
   <string name="common_important">Důležité</string>
   <string name="about_title">O aplikaci</string>
@@ -203,13 +228,9 @@ Automaticky nahrát video snímané kamerou
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
   <string name="pass_code_removed">Bezpečnostní kód odstraněn</string>
   <string name="pass_code_stored">Bezpečnostní kód uložen</string>
-  <string name="fingerprint_confirm">Ověřte otisk prstu a pokračujte</string>
-  <string name="fingerprint_hint">Dotekový senzor</string>
-  <string name="fingerprint_not_recognized">Otisk prstu nerozeznán, zkuste prosím znovu</string>
-  <string name="fingerprint_success">Otisk prstu rozeznán</string>
-  <string name="fingerprint_not_hardware_detected">Toto zařízení nepodporuje autentizaci pomocí otisku prstů</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Chcete-li tuto funkci použít, zaregistrujte si alespoň jeden otisk prstu</string>
-  <string name="fingerprint_not_granted_permissions">Nemáte oprávnění k otistu prstu</string>
+  <string name="biometric_not_hardware_detected">Toto zařízení nepodoporuje biometrickou autentizaci</string>
+  <string name="biometric_prompt_title">Biometrické přihlášení</string>
+  <string name="biometric_prompt_subtitle">Přihlásit se s použitím biometrických přihlašovacích údajů</string>
   <string name="media_notif_ticker">Hudební přehrávač %1$s</string>
   <string name="media_state_playing">%1$s (přehrává)</string>
   <string name="media_state_loading">%1$s (načítá)</string>
@@ -267,7 +288,8 @@ Automaticky nahrát video snímané kamerou
   <string name="confirmation_remove_local">Pouze místní</string>
   <string name="confirmation_remove_account_alert">Opravdu chcete odstranit účet %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Odstranění odkazu</string>
-  <string name="confirmation_remove_share_message">Opravdu chcete odstranit %1$s ?</string>
+  <string name="confirmation_remove_private_share_title">Odstranit soukromé sdílení</string>
+  <string name="confirmation_remove_share_message">Opravdu chcete zrušit %1$s sdílení?</string>
   <string name="remove_success_msg">Úspěšně odstraněno</string>
   <string name="remove_fail_msg">Odstranění nelze dokončit</string>
   <string name="rename_dialog_title">Zadejte nový název</string>
@@ -278,7 +300,7 @@ Automaticky nahrát video snímané kamerou
   <string name="sync_file_nothing_to_do_msg">Obsah souboru je již synchronizován</string>
   <string name="create_dir_fail_msg">Adresář nemohl být vytvořen</string>
   <string name="filename_forbidden_characters">Zakázané znaky: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Jméno souboru obsahuje aelspoň jeden neplatný znak</string>
+  <string name="filename_forbidden_charaters_from_server">Jméno souboru obsahuje alespoň jeden neplatný znak</string>
   <string name="filename_empty">Název nemůže být prázdný</string>
   <string name="wait_a_moment">Počkejte chvíli</string>
   <string name="wait_checking_credentials">Ověřování uložených přihlašovacích údajů</string>
@@ -338,14 +360,14 @@ Automaticky nahrát video snímané kamerou
   <string name="preview_image_error_unknown_format">Obrázek nelze zobrazit</string>
   <string name="error__upload__local_file_not_copied">%1$s nelze zkopírovat do místního adresáře %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
+  <string name="get_shares_error">Nepodařilo se stáhnout ze serveru seznam sdílení</string>
+  <string name="get_sharees_error">Nepodařilo se stáhnout ze serveru seznam uživatelů a skupin</string>
+  <string name="get_capabilities_error">Nebylo možné získat možnosti ze serveru</string>
   <string name="share_link_no_support_share_api">Je nám líto, ale sdílení není na vašem serveru povoleno. Kontaktujte svého
 správce systému.</string>
-  <string name="share_link_file_no_exist">Nelze sdílet. Zkontrolujte prosím že soubor existuje</string>
-  <string name="share_link_file_error">Při pokusu o sdílení tohoto souboru či adresáře nastala chyba</string>
-  <string name="unshare_link_file_no_exist">Nelze ukončit sdílení. Zkontrolujte prosím že soubor existuje</string>
-  <string name="unshare_link_file_error">Při pokusu o zrušení sdílení tohoto souboru či adresáře nastala chyba</string>
-  <string name="update_link_file_no_exist">Nelze aktulizovat. Ověřte že soubor existuje</string>
-  <string name="update_link_file_error">Došlo k chybě při pokusu o aktualizaci sdílení</string>
+  <string name="share_link_file_error">Nepodařilo se sdílet tento soubor nebo složku</string>
+  <string name="unshare_link_file_error">Nepodařilo se ukončit sdílení tohoto souboru nebo složky</string>
+  <string name="update_link_file_error">Nepodařilo se aktualizovat tento soubor nebo složku</string>
   <string name="share_link_password_title">Zadejte heslo</string>
   <string name="share_link_empty_password">Musíte zadat heslo</string>
   <string name="activity_chooser_send_file_title">Odeslat</string>
@@ -379,6 +401,7 @@ správce systému.</string>
   <string name="log_send_mail_subject">%1$s logy aplikace pro Android</string>
   <string name="log_progress_dialog_text">Načítání dat…</string>
   <string name="actionbar_select_all">Vybrat vše</string>
+  <string name="actionbar_select_inverse">Vybrat obráceně</string>
   <string name="actionbar_move">Přesunout</string>
   <string name="file_list_empty_moving">Zde nic není. Můžete přidat adresář!</string>
   <string name="folder_picker_choose_button_text">Vybrat</string>
@@ -437,6 +460,7 @@ správce systému.</string>
   <string name="share_via_link_password_title">Zabezpečeno</string>
   <string name="share_via_link_edit_permission_read_only_label">Stáhnout / zobrazit</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Stáhnout / zobrazit / nahrát</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Pouze nahrát</string>
   <string name="share_get_public_link_button">Vytvořit odkaz</string>
   <string name="share_with_title">Sdílet s</string>
   <string name="share_with_edit_title">Sdílet s %1$s</string>
@@ -454,9 +478,9 @@ správce systému.</string>
   <string name="share_privilege_can_edit_delete">smazat</string>
   <string name="edit_share_unshare">Ukončit sdílení</string>
   <string name="edit_share_done">dokončeno</string>
-  <string name="action_retry_uploads">Opakování selhalo</string>
-  <string name="action_clear_failed_uploads">Vyčištění selhalo</string>
-  <string name="action_clear_successful_uploads">Vyčištění úspěšné</string>
+  <string name="action_retry_uploads">Opakovat neúspěšné</string>
+  <string name="action_clear_failed_uploads">Vyčištit neúspěšné</string>
+  <string name="action_clear_successful_uploads">Vyčištit úspěšné</string>
   <string name="action_clear_finished_uploads">Vyčistit všechny ukončené</string>
   <string name="action_switch_grid_view">Zobrazení v mřížce</string>
   <string name="action_switch_list_view">Zobrazení v seznamu</string>
@@ -486,10 +510,11 @@ správce systému.</string>
   <string name="share_no_link_in_this_share">Toto sdílení nemá žádný odkaz</string>
   <string name="share_warning_about_forwarding_public_links">Kdokoliv, kdo má odkaz, může přistupovat k tomuto souboru/složce</string>
   <string name="share_via_link_default_password">*****</string>
-  <string name="share_via_link_password_enforced_label">Heslo</string>
-  <string name="share_via_link_expiration_date_enforced_label">Konec platnosti</string>
+  <string name="share_via_link_password_enforced_label">Heslo *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Konec platnosti *</string>
   <string name="share_via_link_expiration_date_explanation_label">Platnost tohoto veřejného odkazu skončí nejpozději %1$d dní po jeho vytvoření</string>
   <string name="share_via_link_default_name_template">%1$s odkaz</string>
+  <string name="share_via_link_empty_password">Heslo není vyplněno</string>
   <string name="private_link_info">Toto je soukromý odkaz, pouze osoby s přístupem k souboru/složce jej mohou použít. Použijte jej jako trvalý odkaz pro sebe nebo přejděte k souborům v rámci sdílených souborů</string>
   <string name="file_private_link_error">Soukromý odkaz není pro tento soubor k dispozici</string>
   <string name="download_notification_channel_name">Stažení</string>
@@ -500,6 +525,7 @@ správce systému.</string>
   <string name="media_service_notification_channel_description">Přehrát přehrávač hudby</string>
   <string name="file_sync_notification_channel_name">Synchronizace souborů</string>
   <string name="file_sync_notification_channel_description">Zobrazit výsledek synchronizace souborů</string>
+  <string name="clicks_to_be_developer">Jste %1$dkliků daleko od povolení vývojářských nastavení</string>
   <string name="rate_dialog_title">Ohodnoťte %1$s aplikaci!</string>
   <string name="rate_dialog_description">Pokud se Vám aplikace líbí, mohli byste si najít chvilku a ohodnotit ji? Váš názor je pro nás důležitý.</string>
   <string name="button_no_thanks_name">NE, DĚKUJI</string>
@@ -523,11 +549,8 @@ správce systému.</string>
   <string name="welcome_feature_4_text">Obrázky/videa se automaticky nahrály</string>
   <string name="welcome_feature_5_title">Přehrávání videa</string>
   <string name="welcome_feature_5_text">Přehrávejte videa bez nutnosti stažení na disk</string>
-  <string name="welcome_feature_6_title">Hledat v tomto adresáři</string>
-  <string name="welcome_feature_6_text">Filtrovat soubory podle jména</string>
-  <string name="welcome_feature_7_title">Vybrat vše</string>
-  <string name="welcome_feature_7_text">Vybrat všechny soubory najednou</string>
-  <string name="welcome_feature_8_title">Dostupné offline</string>
-  <string name="welcome_feature_8_text">Soubory se automaticky aktualizovaly</string>
   <string name="no_borwser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
+  <string name="common_not_found">nebylo nalezeno</string>
+  <string name="supports_oauth2_error">Nebylo možné zjistit, zda-li je OAuth2 podporováno</string>
+  <string name="get_base_url_error">Nebylo možné zjistit základní URL adresu serveru</string>
 </resources>

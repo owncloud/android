@@ -4,7 +4,7 @@
  * @author Bartosz Przybylski
  * @author Abel García de Prada
  * Copyright (C) 2015  Bartosz Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,9 +49,7 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
             flags = flags or Document.FLAG_DIR_SUPPORTS_CREATE
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            flags = flags or Document.FLAG_SUPPORTS_RENAME
-        }
+        flags = flags or Document.FLAG_SUPPORTS_RENAME
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             flags = flags or Document.FLAG_SUPPORTS_COPY

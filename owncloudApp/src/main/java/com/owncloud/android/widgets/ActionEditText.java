@@ -4,7 +4,7 @@
  * @author Bartek Przybylski
  * @author Christian Schabesberger
  * Copyright (C) 2012 Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,6 +32,7 @@ import android.view.MotionEvent;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import com.owncloud.android.R;
+import timber.log.Timber;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -116,14 +117,8 @@ public class ActionEditText extends AppCompatEditText {
                                 badgeClickCallback, paramtypes);
                         method.invoke(getContext(), this, s);
 
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                    } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+                        Timber.e(e);
                     }
 
                     invalidate();

@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,7 +20,7 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 
 class RemoteFileUtils {
     companion object {
@@ -38,7 +38,7 @@ class RemoteFileUtils {
                 return remotePath
             }
             val pos = remotePath.lastIndexOf(".")
-            var suffix = ""
+            var suffix: String
             var extension = ""
             if (pos >= 0) {
                 extension = remotePath.substring(pos + 1)
@@ -63,9 +63,13 @@ class RemoteFileUtils {
             }
         }
 
-        private fun existsFile(client: OwnCloudClient, remotePath: String): Boolean {
-            val existsOperation = ExistenceCheckRemoteOperation(remotePath, false, false)
-            return existsOperation.execute(client).isSuccess
+        private fun existsFile(ownCloudClient: OwnCloudClient, remotePath: String): Boolean {
+            val existsOperation =
+                CheckPathExistenceRemoteOperation(
+                    remotePath,
+                    false
+                )
+            return existsOperation.execute(ownCloudClient).isSuccess
         }
     }
 }

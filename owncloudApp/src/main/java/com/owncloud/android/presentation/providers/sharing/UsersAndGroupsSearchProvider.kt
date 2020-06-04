@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,11 +41,11 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.parseError
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.util.HashMap
 import java.util.Locale
 
@@ -83,7 +83,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             return true
 
         } catch (t: Throwable) {
-            Log_OC.e("TAG", "Fail creating provider", t)
+            Timber.e(t, "Fail creating provider")
             return false
         }
     }
@@ -110,7 +110,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        Log_OC.d(TAG, "query received in thread " + Thread.currentThread().name)
+        Timber.d("query received in thread ${Thread.currentThread().name}")
         return when (uriMatcher.match(uri)) {
             SEARCH -> searchForUsersOrGroups(uri)
             else -> null
@@ -133,12 +133,6 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                 accountName = account.name
             )
         )
-
-        val minCharactersToSearch = capabilities?.filesSharingSearchMinLength ?: DEFAULT_MIN_CHARACTERS_TO_SEARCH
-
-        if (userQuery.length < minCharactersToSearch) { // Do not search
-            return MatrixCursor(COLUMNS)
-        }
 
         val getShareesAsyncUseCase: GetShareesAsyncUseCase by inject()
 
@@ -200,7 +194,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                             "$userName ($shareWithAdditionalInfo)"
 
                     } catch (e: JSONException) {
-                        Log_OC.e(TAG, "Exception while parsing shareWithAdditionalInfo", e)
+                        Timber.e(e, "Exception while parsing shareWithAdditionalInfo")
                     }
 
                     when (type) {
@@ -212,12 +206,12 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                         ShareType.FEDERATED.value -> {
                             if (federatedShareAllowed) {
                                 icon = R.drawable.ic_user
-                                if (userName == shareWith) {
-                                    displayName = context.getString(R.string.share_remote_clarification, userName)
+                                displayName = if (userName == shareWith) {
+                                    context.getString(R.string.share_remote_clarification, userName)
                                 } else {
                                     val uriSplitted =
                                         shareWith.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                                    displayName = context.getString(
+                                    context.getString(
                                         R.string.share_known_remote_clarification, userName,
                                         uriSplitted[uriSplitted.size - 1]
                                     )
@@ -241,7 +235,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                     }
                 }
             } catch (e: JSONException) {
-                Log_OC.e(TAG, "Exception while parsing data of users/groups", e)
+                Timber.e(e, "Exception while parsing data of users/groups")
             }
         }
 
@@ -266,7 +260,6 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
     /**
      * Show error genericErrorMessage
      *
-     * @param resource Resource with the failure information.
      */
     private fun showErrorMessage(genericErrorMessage: String, throwable: Throwable?) {
         val errorMessage = throwable?.parseError(genericErrorMessage, context.resources)
@@ -284,7 +277,6 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
     }
 
     companion object {
-        private val TAG = UsersAndGroupsSearchProvider::class.java.simpleName
 
         private val COLUMNS = arrayOf(
             BaseColumns._ID,

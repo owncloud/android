@@ -6,7 +6,7 @@
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -34,18 +34,14 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.extensions.showError
-import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.SharePublicLinkListAdapter
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
@@ -57,13 +53,12 @@ import kotlinx.android.synthetic.main.share_file_layout.*
 import kotlinx.android.synthetic.main.share_file_layout.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 import java.util.Locale
 
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
  * a public link.
- *
- * A simple [Fragment] subclass.
  *
  * Activities that contain this fragment must implement the
  * [ShareFragmentListener] interface
@@ -96,7 +91,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     /**
      * List of private shares bound to the file
      */
-    private var privateShares: List<OCShare>? = null
+    private var privateShares: List<OCShare> = listOf()
 
     /**
      * Adapter to show private shares
@@ -117,8 +112,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      * Capabilities of the server
      */
     private var capabilities: OCCapability? = null
-
-    private var serverVersion: OwnCloudVersion? = null
 
     private// Array with numbers already set in public link names
     // Inspect public links for default names already used
@@ -144,7 +137,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                     try {
                         usedNumbers.add(Integer.parseInt(number))
                     } catch (e: Exception) {
-                        Log_OC.e(TAG, "Wrong capture of number in share named " + share.name, e)
+                        Timber.e(e, "Wrong capture of number in share named ${share.name}")
                         return ""
                     }
                 }
@@ -201,11 +194,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log_OC.d(TAG, "onCreate")
+        Timber.d("onCreate")
         if (arguments != null) {
             file = arguments!!.getParcelable(ARG_FILE)
             account = arguments!!.getParcelable(ARG_ACCOUNT)
-            serverVersion = arguments!!.getParcelable(ARG_SERVER_VERSION)
         }
     }
 
@@ -216,7 +208,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log_OC.d(TAG, "onCreateView")
+        Timber.d("onCreateView")
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.share_file_layout, container, false)
@@ -253,16 +245,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             view.getPrivateLinkButton?.visibility = View.VISIBLE
         }
 
-        val shareWithUsersEnable = serverVersion != null && serverVersion!!.isSearchUsersSupported
-
-        // Change the sharing text depending on the server version (at least version 8.2 is needed
-        // for sharing with other users)
-        if (!shareWithUsersEnable) {
-            view.shareNoUsers?.setText(R.string.share_incompatible_version)
-            view.shareNoUsers?.gravity = View.TEXT_ALIGNMENT_CENTER
-            view.addUserButton?.visibility = View.GONE
-        }
-
         // Hide share features sections that are not enabled
         hideSectionsDisabledInBuildTime(view)
 
@@ -278,21 +260,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             true
         }
 
-        val shareWithUsersEnable = serverVersion != null && serverVersion!!.isSearchUsersSupported
-
         addUserButton?.setOnClickListener {
-            if (shareWithUsersEnable) {
-                // Show Search Fragment
-                listener?.showSearchUsersAndGroups()
-            } else {
-                val message = getString(R.string.share_sharee_unavailable)
-                val snackbar = Snackbar.make(
-                    activity!!.findViewById(android.R.id.content),
-                    message,
-                    Snackbar.LENGTH_LONG
-                )
-                snackbar.show()
-            }
+            // Show Search Fragment
+            listener?.showSearchUsersAndGroups()
         }
 
         //  Add Public Link Button
@@ -304,7 +274,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Log_OC.d(TAG, "onActivityCreated")
+        Timber.d("onActivityCreated")
 
         activity!!.setTitle(R.string.share_dialog_title)
 
@@ -344,7 +314,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             updateCapabilities(it)
                         }
                         event.getContentIfNotHandled()?.let {
-                            showError(getString(R.string.get_capabilities_error), uiResult.error)
+                            showErrorInSnackbar(R.string.get_capabilities_error, uiResult.error)
                         }
                         listener?.dismissLoading()
                     }
@@ -377,7 +347,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
                             updateShares(it)
                         }
                         event.getContentIfNotHandled()?.let {
-                            showError(getString(R.string.get_shares_error), uiResult.error)
+                            showErrorInSnackbar(R.string.get_shares_error, uiResult.error)
                         }
                         listener?.dismissLoading()
                     }
@@ -450,7 +420,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
 
         // Show data
-        if (!privateShares.isNullOrEmpty()) {
+        if (privateShares.isNotEmpty()) {
             shareNoUsers?.visibility = View.GONE
             shareUsersList?.visibility = View.VISIBLE
             shareUsersList?.adapter = userGroupsAdapter
@@ -466,13 +436,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
     override fun unshareButtonPressed(share: OCShare) {
         // Unshare
-        Log_OC.d(TAG, "Removing private share with " + share.sharedWithDisplayName)
+        Timber.d("Removing private share with ${share.sharedWithDisplayName}")
         removeShare(share)
     }
 
     override fun editShare(share: OCShare) {
         // move to fragment to edit share
-        Log_OC.d(TAG, "Editing " + share.sharedWithDisplayName)
+        Timber.d("Editing ${share.sharedWithDisplayName}")
         listener?.showEditPrivateShare(share)
     }
 
@@ -544,19 +514,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      *
      * @return true if should be enabled, false otherwise
      */
-    private fun enableMultiplePublicSharing(): Boolean {
-        if (capabilities == null) return true
-
-        val serverVersion = OwnCloudVersion(capabilities?.versionString!!)
-
-        return when {
-            // Server version <= 9.x, multiple public sharing not supported
-            !serverVersion.isMultiplePublicSharingSupported -> false
-            // Server version >= 10, multiple public sharing supported but disabled
-            capabilities?.filesSharingPublicMultiple == CapabilityBooleanType.FALSE -> false
-            else -> true
-        }
-    }
+    private fun enableMultiplePublicSharing() = capabilities?.filesSharingPublicMultiple?.isTrue ?: false
 
     override fun editPublicShare(share: OCShare) {
         listener?.showEditPublicShare(share)
@@ -593,8 +551,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     companion object {
-
-        private val TAG = ShareFileFragment::class.java.simpleName
         private const val DEFAULT_NAME_SUFFIX = " (%1\$d)"
 
         private const val QUOTE_START = "\\Q"
@@ -609,7 +565,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
          */
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
-        private const val ARG_SERVER_VERSION = "SERVER_VERSION"
 
         private const val UNUSED_NUMBER = -1
         private const val USED_NUMBER_SECOND = 2
@@ -623,14 +578,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
          */
         fun newInstance(
             fileToShare: OCFile,
-            account: Account,
-            serverVersion: OwnCloudVersion? = AccountUtils.getServerVersion(account)
+            account: Account
         ): ShareFileFragment {
             val fragment = ShareFileFragment()
             val args = Bundle()
             args.putParcelable(ARG_FILE, fileToShare)
             args.putParcelable(ARG_ACCOUNT, account)
-            args.putParcelable(ARG_SERVER_VERSION, serverVersion)
             fragment.arguments = args
             return fragment
         }

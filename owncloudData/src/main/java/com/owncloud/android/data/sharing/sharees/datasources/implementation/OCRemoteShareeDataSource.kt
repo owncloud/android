@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,7 +21,7 @@ package com.owncloud.android.data.sharing.sharees.datasources.implementation
 
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
-import com.owncloud.android.lib.resources.shares.ShareeService
+import com.owncloud.android.lib.resources.shares.services.ShareeService
 import org.json.JSONObject
 import java.util.ArrayList
 

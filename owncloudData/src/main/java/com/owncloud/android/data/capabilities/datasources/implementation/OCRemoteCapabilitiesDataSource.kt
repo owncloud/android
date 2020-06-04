@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,7 +23,7 @@ import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesData
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.lib.resources.status.CapabilityService
+import com.owncloud.android.lib.resources.status.services.CapabilityService
 
 class OCRemoteCapabilitiesDataSource(
     private val capabilityService: CapabilityService,

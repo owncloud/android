@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -19,6 +19,7 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -32,4 +33,6 @@ val viewModelModule = module {
     viewModel { (filePath: String, accountName: String) ->
         OCShareViewModel(filePath, accountName, get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
+
+    viewModel { OCAuthenticationViewModel(get(), get(), get(), get(), get(), get()) }
 }

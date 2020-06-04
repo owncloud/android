@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
-  Copyright (C) 2019 ownCloud GmbH.
+  Copyright (C) 2020 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -45,7 +45,7 @@
             android:id="@+id/userOrGroupName"
             android:layout_marginTop="@dimen/standard_half_margin"
             android:layout_marginBottom="@dimen/standard_half_margin"
-            android:layout_marginLeft="@dimen/standard_half_margin"
+            android:layout_marginStart="@dimen/standard_half_margin"
             android:textColor="@color/textColor"
             android:singleLine="true"
             android:ellipsize="middle"

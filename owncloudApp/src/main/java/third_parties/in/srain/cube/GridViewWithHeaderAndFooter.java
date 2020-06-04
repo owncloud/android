@@ -22,7 +22,6 @@ import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,9 +42,6 @@ import java.util.ArrayList;
  * See {@link GridViewWithHeaderAndFooter#addFooterView(View, Object, boolean)}
  */
 public class GridViewWithHeaderAndFooter extends GridView {
-
-    public static boolean DEBUG = false;
-
     /**
      * A class that represents a fixed view in a list, for example a header at the top
      * or a footer at the bottom.
@@ -68,7 +64,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
     private View mViewForMeasureRowHeight = null;
     private int mRowHeight = -1;
-    private static final String LOG_TAG = "grid-view-header-footer";
 
     private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<>();
     private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<>();
@@ -254,24 +249,11 @@ public class GridViewWithHeaderAndFooter extends GridView {
     }
 
     private int getNumColumnsCompatible() {
-       return super.getNumColumns();
+        return super.getNumColumns();
     }
 
-    @TargetApi(16)
     private int getColumnWidthCompatible() {
-        if (Build.VERSION.SDK_INT >= 16) {
-            return super.getColumnWidth();
-        } else {
-            try {
-                Field numColumns = getClass().getSuperclass().getDeclaredField("mColumnWidth");
-                numColumns.setAccessible(true);
-                return numColumns.getInt(this);
-            } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        return super.getColumnWidth();
     }
 
     @Override
@@ -592,9 +574,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (DEBUG) {
-                Log.d(LOG_TAG, String.format("getView: %s, reused: %s", position, convertView == null));
-            }
             // Header (negative positions will throw an ArrayIndexOutOfBoundsException)
             int numHeadersAndPlaceholders = getHeadersCount() * mNumColumns;
             if (position < numHeadersAndPlaceholders) {
@@ -695,10 +674,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
                     type = adapterViewTypeStart + mHeaderViewInfos.size() + 1 + (footerPosition / mNumColumns + 1);
                 }
             }
-            if (DEBUG) {
-                Log.d(LOG_TAG, String.format("getItemViewType: pos: %s, result: %s", position, type,
-                        mCachePlaceHoldView, mCacheFirstHeaderView));
-            }
             return type;
         }
 
@@ -716,9 +691,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
                     offset += 1;
                 }
                 count += offset;
-            }
-            if (DEBUG) {
-                Log.d(LOG_TAG, String.format("getViewTypeCount: %s", count));
             }
             return count;
         }
@@ -773,34 +745,6 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
 
         setSelection(position);
-        //setSelectionInt(position);
-
-        /*if (!isInTouchMode()) {
-            position = super.lookForSelectablePosition(position, true);
-            if (position >= 0) {
-                setNextSelectedPositionInt(position);
-            }
-        } else {
-            mResurrectToPosition = position;
-        }*/
-
-        /*
-        if (position >= 0) {
-            mLayoutMode = LAYOUT_SPECIFIC;
-            mSpecificTop = mListPadding.top + y;
-
-            if (mNeedSync) {
-                mSyncPosition = position;
-                mSyncRowId = getAdapter().getItemId(position);
-            }
-
-            if (mPositionScroller != null) {
-                mPositionScroller.stop();
-            }
-
-            requestLayout();
-        }
-        */
     }
 
 }

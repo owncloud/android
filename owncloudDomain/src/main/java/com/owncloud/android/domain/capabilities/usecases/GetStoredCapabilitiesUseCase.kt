@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,7 +21,7 @@ package com.owncloud.android.domain.capabilities.usecases
 
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.sharing.shares.usecases.BaseUseCase
+import com.owncloud.android.domain.BaseUseCase
 
 class GetStoredCapabilitiesUseCase(
     private val capabilityRepository: CapabilityRepository

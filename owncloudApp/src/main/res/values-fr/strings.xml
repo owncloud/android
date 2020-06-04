@@ -37,8 +37,7 @@
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gérer les comptes</string>
   <string name="prefs_passcode">Code de sécurité</string>
-  <string name="prefs_fingerprint">Verrouillage par empreinte</string>
-  <string name="prefs_fingerprint_summary">Activez un code de sécurité ou un motif afin d’activer cette option</string>
+  <string name="prefs_biometric_summary">Activez un code de sécurité ou un motif afin d’activer cette option</string>
   <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Vous utilisez cette fonctionnalité sous votre propre responsabilité. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l’application.</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
@@ -67,6 +66,10 @@
   <string name="passcode_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le code de sécurité</string>
   <string name="pattern_no_longer_required">La saisie du motif ne vous sera plus demandée</string>
   <string name="pattern_configure_your_pattern_explanation">La saisie du motif sera requise à chaque ouverture de l’application</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Fichiers</string>
+  <string name="bottom_nav_uploads">Téléversements</string>
+  <string name="bottom_nav_links">Liens</string>
   <string name="recommend_subject">Essayez %1$s sur votre smartphone !</string>
   <string name="recommend_text">J\'aimerais vous inviter à utiliser %1$s sur votre smartphone !
 Téléchargez-le ici : %2$s</string>
@@ -128,7 +131,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="common_error">Erreur</string>
   <string name="common_loading">Chargement...</string>
   <string name="common_unknown">Inconnu</string>
-  <string name="common_error_unknown">Erreur inconnue </string>
   <string name="common_pending">En attente</string>
   <string name="common_important">Important</string>
   <string name="about_title">À propos</string>
@@ -214,12 +216,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="pass_code_wrong">Code de sécurité incorrect</string>
   <string name="pass_code_removed">Code de sécurité supprimé</string>
   <string name="pass_code_stored">Code de sécurité enregistré</string>
-  <string name="fingerprint_confirm">Confirmez votre empreinte pour continuer</string>
-  <string name="fingerprint_not_recognized">Empreinte non reconnue, essayez à nouveau</string>
-  <string name="fingerprint_success">Empreinte reconnue</string>
-  <string name="fingerprint_not_hardware_detected">L’appareil ne supporte pas l’authentification par empreinte</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Enregistrez au moins une empreinte pour accéder à cette fonctionnalité</string>
-  <string name="fingerprint_not_granted_permissions">L’utilisation d’empreinte n’est pas permise</string>
   <string name="media_notif_ticker">%1$s lecteur de musique</string>
   <string name="media_state_playing">%1$s (lecture)</string>
   <string name="media_state_loading">%1$s (chargement)</string>
@@ -262,7 +258,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="auth_wtf_reenter_URL">Problème inattendu ; veuillez saisir à nouveau l\'adresse du serveur</string>
   <string name="auth_expired_oauth_token_toast">Votre autorisation a expiré. Merci de vous authentifier à nouveau</string>
   <string name="auth_expired_basic_auth_toast">Veuillez saisir votre mot de passe</string>
-    <string name="auth_connecting_auth_server">Connexion au serveur d\'authentification …</string>
+  <string name="auth_connecting_auth_server">Connexion au serveur d\'authentification …</string>
   <string name="auth_unsupported_auth_method">Le serveur ne prend pas en charge pas cette méthode d\'authentification</string>
   <string name="auth_unsupported_multiaccount">%1$s ne prend pas en charge les comptes multiples</string>
   <string name="auth_fail_get_user_name">Votre serveur a retourné un identifiant d\'utilisateur incorrect. Veuillez prendre contact avec votre administrateur
@@ -278,7 +274,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="confirmation_remove_local">Local seulement</string>
   <string name="confirmation_remove_account_alert">Voulez-vous vraiment supprimer le compte %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Supprimer le lien</string>
-  <string name="confirmation_remove_share_message">Voulez-vous vraiment supprimer %1$s ?</string>
   <string name="remove_success_msg">Suppression effectuée avec succès</string>
   <string name="remove_fail_msg">Suppression impossible</string>
   <string name="rename_dialog_title">Entrez un nouveau nom</string>
@@ -349,15 +344,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="preview_image_error_unknown_format">Cette image ne peut pas être affichée</string>
   <string name="error__upload__local_file_not_copied">%1$s n\'a pas pu être copié dans le dossier local %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
-  <string name="get_shares_error">Une erreur est survenue pendant la récupération des partages</string>
-  <string name="get_sharees_error">Une erreur est survenue pendant la récupération des utilisateurs et des groupes</string>
   <string name="share_link_no_support_share_api">Désolé, le partage n\'est pas disponible sur votre serveur. Veuillez contacter votre administrateur.</string>
-  <string name="share_link_file_no_exist">Impossible de partager. Vérifiez que le fichier est bien présent</string>
-  <string name="share_link_file_error">Une erreur est survenue lors de la tentative de partage de ce fichier ou répertoire</string>
-  <string name="unshare_link_file_no_exist">Impossible de supprimer le partage. Vérifiez que le fichier est bien présent</string>
-  <string name="unshare_link_file_error">Une erreur est survenue lors de la tentative d’annulation du partage de ce fichier ou répertoire</string>
-  <string name="update_link_file_no_exist">Actualisation impossible. Veuillez vérifier que ce fichier existe</string>
-  <string name="update_link_file_error">Une erreur est survenue lors de la mise à jour du partage</string>
   <string name="share_link_password_title">Saisissez un mot de passe</string>
   <string name="share_link_empty_password">Vous devez saisir un mot de passe</string>
   <string name="activity_chooser_send_file_title">Envoyer</string>
@@ -535,12 +522,5 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
   <string name="welcome_feature_5_title">Streaming vidéo</string>
   <string name="welcome_feature_5_text">Lire vos vidéos sans les télécharger</string>
-  <string name="welcome_feature_6_title">Rechercher dans le dossier actuel</string>
-  <string name="welcome_feature_6_text">Filtrez vos fichiers par nom</string>
-  <string name="welcome_feature_7_title">Tout sélectionner</string>
-  <string name="welcome_feature_8_title">Disponible hors-ligne</string>
-  <string name="welcome_feature_8_text">Vos fichiers ont été synchronisés automatiquement</string>
-  <string name="welcome_feature_9_text">Accédez et modifiez vos fichiers ownCloud depuis d’autres applications</string>
-  <string name="welcome_feature_10_text">Envoyez nous vos journaux d’activité afin que nous puissions améliorer l’application</string>
   <string name="no_borwser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
 </resources>

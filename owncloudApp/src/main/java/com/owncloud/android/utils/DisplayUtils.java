@@ -5,7 +5,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -157,7 +157,6 @@ public class DisplayUtils {
      * @param toASCII if true converts from Unicode to ASCII, if false converts from ASCII to Unicode
      * @return the URL containing the converted domain name
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public static String convertIdn(String url, boolean toASCII) {
 
         String urlNoDots = url;
@@ -197,7 +196,6 @@ public class DisplayUtils {
                 DateUtils.WEEK_IN_MILLIS, 0);
     }
 
-    @SuppressWarnings("deprecation")
     public static CharSequence getRelativeDateTimeString(
             Context c, long time, long minResolution, long transitionResolution, int flags
     ) {
@@ -254,36 +252,6 @@ public class DisplayUtils {
             display.getSize(size);
         }
         return size;
-    }
-
-    /**
-     * sets the coloring of the given progress bar to color_accent.
-     *
-     * @param progressBar the progress bar to be colored
-     */
-    public static void colorPreLollipopHorizontalProgressBar(ProgressBar progressBar) {
-        if (progressBar != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            int color = progressBar.getResources().getColor(R.color.color_accent);
-            progressBar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            progressBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        }
-    }
-
-    /**
-     * sets the coloring of the given seek bar to color_accent.
-     *
-     * @param seekBar the seek bar to be colored
-     */
-    public static void colorPreLollipopHorizontalSeekBar(SeekBar seekBar) {
-        if (seekBar != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            colorPreLollipopHorizontalProgressBar(seekBar);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                int color = seekBar.getResources().getColor(R.color.color_accent);
-                seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-                seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            }
-        }
     }
 
     /**

@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,12 +22,12 @@ package com.owncloud.android.extensions
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 
-fun Fragment.showError(genericErrorMessage: String, throwable: Throwable?) =
+fun Fragment.showErrorInSnackbar(genericErrorMessageId: Int, throwable: Throwable?) =
     throwable?.let {
-        showMessage(it.parseError(genericErrorMessage, resources))
+        showMessageInSnackbar(it.parseError(getString(genericErrorMessageId), resources))
     }
 
-fun Fragment.showMessage(
+fun Fragment.showMessageInSnackbar(
     message: CharSequence,
     duration: Int = Snackbar.LENGTH_LONG
 ) {

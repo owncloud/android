@@ -8,7 +8,7 @@
  * @author Christian Schabesberger
  * @author Abel García de Prada
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,19 +49,19 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.Executors
-import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
+import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
@@ -77,7 +77,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
     private lateinit var uriMatcher: UriMatcher
 
     override fun delete(uri: Uri, where: String?, whereArgs: Array<String>?): Int {
-        //Log_OC.d(TAG, "Deleting " + uri + " at provider " + this);
         val count: Int
         val db = dbHelper.writableDatabase
         db.beginTransaction()
@@ -102,12 +101,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         when (uriMatcher.match(uri)) {
             SINGLE_FILE -> {
                 val c = query(uri, null, where, whereArgs, null)
-                var remoteId : String? = ""
+                var remoteId: String? = ""
                 if (c.moveToFirst()) {
                     remoteId = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID))
                     c.close()
                 }
-                Log_OC.d(TAG, "Removing FILE $remoteId")
+                Timber.d("Removing FILE $remoteId")
 
                 count = db.delete(
                     ProviderTableMeta.FILE_TABLE_NAME,
@@ -160,7 +159,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 )
             }
             ROOT_DIRECTORY ->
-                //Log_OC.d(TAG, "Removing ROOT!");
                 count = db.delete(ProviderTableMeta.FILE_TABLE_NAME, where, whereArgs)
             SHARES -> count = OwncloudDatabase.getDatabase(context).shareDao().deleteShare(uri.pathSegments[1].toLong())
             CAPABILITIES -> count = db.delete(ProviderTableMeta.CAPABILITIES_TABLE_NAME, where, whereArgs)
@@ -206,11 +204,11 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 val doubleCheck = query(uri, projection, where, whereArgs, null)
                 // ugly patch; serious refactorization is needed to reduce work in
                 // FileDataStorageManager and bring it to FileContentProvider
-                if (!doubleCheck.moveToFirst()) {
+                return if (!doubleCheck.moveToFirst()) {
                     doubleCheck.close()
                     val fileId = db.insert(ProviderTableMeta.FILE_TABLE_NAME, null, values)
                     if (fileId <= 0) throw SQLException("ERROR $uri")
-                    return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_FILE, fileId)
+                    ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_FILE, fileId)
                 } else {
                     // file is already inserted; race condition, let's avoid a duplicated entry
                     val insertedFileUri = ContentUris.withAppendedId(
@@ -218,7 +216,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         doubleCheck.getLong(doubleCheck.getColumnIndex(ProviderTableMeta._ID))
                     )
                     doubleCheck.close()
-                    return insertedFileUri
+                    insertedFileUri
                 }
             }
             SHARES -> {
@@ -498,10 +496,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
     @Throws(OperationApplicationException::class)
     override fun applyBatch(operations: ArrayList<ContentProviderOperation>): Array<ContentProviderResult?> {
-        Log_OC.d(
-            "FileContentProvider", "applying batch in provider " + this +
-                    " (temporary: " + isTemporary + ")"
-        )
+        Timber.d("applying batch in provider $this (temporary: $isTemporary)")
         val results = arrayOfNulls<ContentProviderResult>(operations.size)
         var i = 0
 
@@ -516,7 +511,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         } finally {
             db.endTransaction()
         }
-        Log_OC.d("FileContentProvider", "applied batch in provider $this")
+        Timber.d("applied batch in provider $this")
         return results
     }
 
@@ -530,7 +525,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
         override fun onCreate(db: SQLiteDatabase) {
             // files table
-            Log_OC.i("SQL", "Entering in onCreate")
+            Timber.i("SQL : Entering in onCreate")
             createFilesTable(db)
 
             // Create capabilities table
@@ -550,10 +545,10 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         }
 
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            Log_OC.i("SQL", "Entering in onUpgrade")
+            Timber.i("SQL : Entering in onUpgrade")
             var upgraded = false
             if (oldVersion == 1 && newVersion >= 2) {
-                Log_OC.i("SQL", "Entering in the #1 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #1 ADD in onUpgrade")
                 db.execSQL(
                     "ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME +
                             " ADD COLUMN " + ProviderTableMeta.FILE_KEEP_IN_SYNC + " INTEGER " +
@@ -562,7 +557,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 upgraded = true
             }
             if (oldVersion < 3 && newVersion >= 3) {
-                Log_OC.i("SQL", "Entering in the #2 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #2 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -585,7 +580,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
             if (oldVersion < 4 && newVersion >= 4) {
-                Log_OC.i("SQL", "Entering in the #3 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #3 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -608,7 +603,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 5 && newVersion >= 5) {
-                Log_OC.i("SQL", "Entering in the #4 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #4 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -624,7 +619,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 6 && newVersion >= 6) {
-                Log_OC.i("SQL", "Entering in the #5 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #5 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -649,7 +644,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 7 && newVersion >= 7) {
-                Log_OC.i("SQL", "Entering in the #7 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #7 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -671,7 +666,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 8 && newVersion >= 8) {
-                Log_OC.i("SQL", "Entering in the #8 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #8 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -687,7 +682,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 9 && newVersion >= 9) {
-                Log_OC.i("SQL", "Entering in the #9 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #9 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -703,13 +698,13 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 10 && newVersion >= 10) {
-                Log_OC.i("SQL", "Entering in the #10 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #10 ADD in onUpgrade")
                 updateAccountName(db)
                 upgraded = true
             }
 
             if (oldVersion < 11 && newVersion >= 11) {
-                Log_OC.i("SQL", "Entering in the #11 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #11 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -725,7 +720,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 12 && newVersion >= 12) {
-                Log_OC.i("SQL", "Entering in the #12 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #12 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -741,7 +736,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 13 && newVersion >= 13) {
-                Log_OC.i("SQL", "Entering in the #13 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #13 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     // Create capabilities table
@@ -754,7 +749,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 14 && newVersion >= 14) {
-                Log_OC.i("SQL", "Entering in the #14 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #14 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     // drop old instant_upload table
@@ -769,7 +764,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 15 && newVersion >= 15) {
-                Log_OC.i("SQL", "Entering in the #15 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #15 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     // Create user profiles table
@@ -782,7 +777,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 16 && newVersion >= 16) {
-                Log_OC.i("SQL", "Entering in the #16 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #16 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -797,7 +792,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
             if (oldVersion < 17 && newVersion >= 17) {
-                Log_OC.i("SQL", "Entering in the #17 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #17 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -814,7 +809,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
             if (oldVersion < 18 && newVersion >= 18) {
-                Log_OC.i("SQL", "Entering in the #18 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #18 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -830,7 +825,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
             if (oldVersion < 19 && newVersion >= 19) {
 
-                Log_OC.i("SQL", "Entering in the #19 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #19 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -846,7 +841,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
             if (oldVersion < 20 && newVersion >= 20) {
 
-                Log_OC.i("SQL", "Entering in the #20 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #20 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -862,7 +857,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 21 && newVersion >= 21) {
-                Log_OC.i("SQL", "Entering in the #21 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #21 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -878,7 +873,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 22 && newVersion >= 22) {
-                Log_OC.i("SQL", "Entering in the #22 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #22 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     createCameraUploadsSyncTable(db)
@@ -890,7 +885,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 23 && newVersion >= 23) {
-                Log_OC.i("SQL", "Entering in the #23 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #23 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     createUserQuotaTable(db)
@@ -902,7 +897,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 24 && newVersion >= 24) {
-                Log_OC.i("SQL", "Entering in the #24 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #24 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -918,7 +913,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 25 && newVersion >= 25) {
-                Log_OC.i("SQL", "Entering in the #25 ADD in onUpgrade")
+                Timber.i("SQL : Entering in the #25 ADD in onUpgrade")
                 db.beginTransaction()
                 try {
                     db.execSQL(
@@ -956,7 +951,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 26 && newVersion >= 26) {
-                Log_OC.i("SQL", "Entering in #26 to migrate shares from SQLite to Room")
+                Timber.i("SQL : Entering in #26 to migrate shares from SQLite to Room")
                 val cursor = db.query(
                     ProviderTableMeta.OCSHARES_TABLE_NAME,
                     null,
@@ -986,7 +981,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 27 && newVersion >= 27) {
-                Log_OC.i("SQL", "Entering in #27 to migrate capabilities from SQLite to Room")
+                Timber.i("SQL : Entering in #27 to migrate capabilities from SQLite to Room")
                 val cursor = db.query(
                     ProviderTableMeta.CAPABILITIES_TABLE_NAME,
                     null,
@@ -998,8 +993,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 )
 
                 if (cursor.moveToFirst()) {
-                    val ocLocalCapabilitiesDataSource : OCLocalCapabilitiesDataSource by inject()
-                    val ocCapabilityMapper : OCCapabilityMapper by inject()
+                    val ocLocalCapabilitiesDataSource: OCLocalCapabilitiesDataSource by inject()
+                    val ocCapabilityMapper: OCCapabilityMapper by inject()
 
                     // Insert capability to the new capabilities table in new database
                     executors.diskIO().execute {
@@ -1012,11 +1007,24 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
 
+            if (oldVersion < 30 && newVersion >= 30) {
+                Timber.i("SQL : Entering in the #30 ADD chunking capability")
+                db.beginTransaction()
+                try {
+                    db.execSQL(
+                        "ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                                " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION + " TEXT " +
+                                " DEFAULT NULL"
+                    )
+                    db.setTransactionSuccessful()
+                    upgraded = true
+                } finally {
+                    db.endTransaction()
+                }
+            }
+
             if (!upgraded) {
-                Log_OC.i(
-                    "SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
-                            ", newVersion == " + newVersion
-                )
+                Timber.i("SQL : OUT of the ADD in onUpgrade; oldVersion == $oldVersion, newVersion == $newVersion")
             }
         }
     }
@@ -1090,6 +1098,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     + ProviderTableMeta.CAPABILITIES_VERSION_STRING + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
+                    + ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION + " TEXT, "
                     + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
@@ -1099,11 +1108,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, "
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER, "     // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
                     + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, "     // boolean
@@ -1182,7 +1189,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
      * @param db Database where table of files is included.
      */
     private fun updateAccountName(db: SQLiteDatabase) {
-        Log_OC.d("SQL", "THREAD:  " + Thread.currentThread().name)
+        Timber.d("SQL : THREAD:  ${Thread.currentThread().name}")
         val ama = AccountManager.get(context)
         try {
             // get accounts from AccountManager ;  we can't be sure if accounts in it are updated or not although
@@ -1214,10 +1221,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         arrayOf(oldAccountName)
                     )
 
-                    Log_OC.d(
-                        "SQL", "Updated account in database: old name == " + oldAccountName +
-                                ", new name == " + newAccountName + " (" + num + " rows updated )"
-                    )
+                    Timber.d("SQL : Updated account in database: old name == $oldAccountName, new name == $newAccountName ($num rows updated )")
 
                     // update path for downloaded files
                     updateDownloadedFiles(db, newAccountName, oldAccountName)
@@ -1225,13 +1229,13 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     db.setTransactionSuccessful()
 
                 } catch (e: SQLException) {
-                    Log_OC.e(TAG, "SQL Exception upgrading account names or paths in database", e)
+                    Timber.e(e, "SQL Exception upgrading account names or paths in database")
                 } finally {
                     db.endTransaction()
                 }
             }
         } catch (e: Exception) {
-            Log_OC.e(TAG, "Exception upgrading account names or paths in database", e)
+            Timber.e(e, "Exception upgrading account names or paths in database")
         }
 
     }
@@ -1289,10 +1293,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         arrayOf(oldPath)
                     )
 
-                    Log_OC.v(
-                        "SQL", "Updated path of downloaded file: old file name == " + oldPath +
-                                ", new file name == " + newPath
-                    )
+                    Timber.v("SQL : Updated path of downloaded file: old file name == $oldPath, new file name == $newPath")
 
                 } while (it.moveToNext())
             }
@@ -1333,11 +1334,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             c!!.moveToFirst() // do something with the cursor, or deletion doesn't happen; true story
 
         } catch (e: Exception) {
-            Log_OC.e(
-                TAG,
-                "Something wrong trimming successful uploads, database could grow more than expected",
-                e
-            )
+            Timber.e(e, "Something wrong trimming successful uploads, database could grow more than expected")
 
         } finally {
             c?.close()
@@ -1354,8 +1351,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         private const val UPLOADS = 6
         private const val CAMERA_UPLOADS_SYNC = 7
         private const val QUOTAS = 8
-
-        private val TAG = FileContentProvider::class.java.simpleName
 
         private const val MAX_SUCCESSFUL_UPLOADS = "30"
 
@@ -1436,6 +1431,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 ProviderTableMeta.CAPABILITIES_VERSION_EDITION
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL] =
                 ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
+            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION] =
+                ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED] =
                 ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED] =
@@ -1454,16 +1451,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
-            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL] =
-                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY] =
                 ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-            capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL] =
-                ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_RESHARING] =
                 ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
             capabilityProjectionMap[ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING] =

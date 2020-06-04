@@ -4,7 +4,7 @@
  * @author masensio
  * @author David A. Velasco
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,12 +20,12 @@
  */
 package com.owncloud.android.ui.adapter;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
+import timber.log.Timber;
 
 import javax.security.auth.x500.X500Principal;
 import java.security.MessageDigest;
@@ -42,11 +42,7 @@ import java.util.Map;
  */
 public class X509CertificateViewAdapter implements SslUntrustedCertDialog.CertificateViewAdapter {
 
-    //private final static String TAG = X509CertificateViewAdapter.class.getSimpleName();
-
     private X509Certificate mCertificate = null;
-
-    private static final String TAG = X509CertificateViewAdapter.class.getSimpleName();
 
     public X509CertificateViewAdapter(X509Certificate certificate) {
         mCertificate = certificate;
@@ -104,7 +100,7 @@ public class X509CertificateViewAdapter implements SslUntrustedCertDialog.Certif
             }
 
         } catch (CertificateEncodingException e) {
-            Log.e(TAG, "Problem while trying to decode the certificate.");
+            Timber.e(e, "Problem while trying to decode the certificate.");
         }
 
     }

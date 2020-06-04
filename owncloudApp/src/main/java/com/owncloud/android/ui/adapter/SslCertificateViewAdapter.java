@@ -4,7 +4,7 @@
  * @author masensio
  * @author David A. Velasco
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -34,8 +34,6 @@ import java.util.Date;
  * TODO
  */
 public class SslCertificateViewAdapter implements SslUntrustedCertDialog.CertificateViewAdapter {
-
-    //private final static String TAG = SslCertificateViewAdapter.class.getSimpleName();
 
     private SslCertificate mCertificate;
 

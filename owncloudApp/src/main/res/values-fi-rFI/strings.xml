@@ -32,8 +32,7 @@
   <string name="prefs_accounts">Tilit</string>
   <string name="prefs_manage_accounts">Tilien hallinta</string>
   <string name="prefs_passcode">Suojakoodilukitus</string>
-  <string name="prefs_fingerprint">Sormenjälkilukitus</string>
-  <string name="prefs_fingerprint_summary">Kytke suojakoodilukitus tai kuviolukitus käyttöön jotta voit käyttää tätä vaihtoehtoa</string>
+  <string name="prefs_biometric_summary">Kytke suojakoodilukitus tai kuviolukitus käyttöön jotta voit käyttää tätä vaihtoehtoa</string>
   <string name="prefs_camera_picture_upload">Kuvien lähetys</string>
   <string name="prefs_camera_picture_upload_summary">Lähetä automaattisesti kameralla otetut kuvat</string>
   <string name="prefs_camera_video_upload">Videoiden lähetys</string>
@@ -62,6 +61,10 @@
   <string name="passcode_already_set">Kuvio- ja suojakoodilukitus eivät voi olla samanaikaisesti käytössä. Ole hyvä ja poista suojakoodilukistus ensin käytöstä.</string>
   <string name="pattern_no_longer_required">Kuviota ei enää kysytä</string>
   <string name="pattern_configure_your_pattern_explanation">Kuvio kysytään joka kerta kun sovellus käynnistetään</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Tiedostot</string>
+  <string name="bottom_nav_uploads">Lähetykset</string>
+  <string name="bottom_nav_links">Linkit</string>
   <string name="recommend_subject">Kokeile %1$sia älypuhelimellasi!</string>
   <string name="recommend_text">Kutsun sinut käyttämään %1$sia älypuhelimellasi!\nLataa se tästä: %2$s</string>
   <string name="auth_failure_snackbar">Tunnistautuminen epäonnistui</string>
@@ -118,7 +121,6 @@
   <string name="common_error">Virhe</string>
   <string name="common_loading">Ladataan…</string>
   <string name="common_unknown">tuntematon</string>
-  <string name="common_error_unknown">Tuntematon virhe</string>
   <string name="common_pending">Odottaa</string>
   <string name="common_important">Tärkeä</string>
   <string name="about_title">Tietoja</string>
@@ -192,12 +194,6 @@
   <string name="pass_code_wrong">Virheellinen suojakoodi</string>
   <string name="pass_code_removed">Suojakoodi poistettu</string>
   <string name="pass_code_stored">Suojakoodi tallennettu</string>
-  <string name="fingerprint_confirm">Vahvista sormenjälkesi jatkaaksesi</string>
-  <string name="fingerprint_hint">Kosketa sormenjälkilukijaa</string>
-  <string name="fingerprint_not_recognized">Sormenjälkeä ei tunnistettu, yritä uudelleen</string>
-  <string name="fingerprint_success">Sormenjälki tunnistettiin</string>
-  <string name="fingerprint_not_hardware_detected">Laitteesi ei tue sormenjäljellä tunnistautumista</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Rekisteröi vähintään yksi sormenjälki käyttääksesi tätä ominaisuutta</string>
   <string name="media_notif_ticker">%1$s-musiikkisoitin</string>
   <string name="media_state_playing">%1$s (toistetaan)</string>
   <string name="media_state_loading">%1$s (ladataan)</string>
@@ -236,7 +232,7 @@
   <string name="auth_wtf_reenter_URL">Odottamaton tila; anna palvelimen osoite uudelleen</string>
   <string name="auth_expired_oauth_token_toast">Valtuutus vanhentui. Valtuuta uudelleen</string>
   <string name="auth_expired_basic_auth_toast">Anna nykyinen salasana</string>
-    <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
+  <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
   <string name="auth_unsupported_auth_method">Palvelin ei tue tätä tunnistautumistapaa</string>
   <string name="auth_unsupported_multiaccount">%1$s ei tue useita tilejä</string>
   <string name="auth_fail_get_user_name">Palvelimesi ei palauta oikeaa käyttäjä-ID:tä, ota yhteyttä järjestelmänvalvojaan
@@ -252,7 +248,6 @@
   <string name="confirmation_remove_local">Vain paikallinen</string>
   <string name="confirmation_remove_account_alert">Haluatko varmasti poistaa tilin %1$s?</string>
   <string name="confirmation_remove_public_share_title">Poista linkki</string>
-  <string name="confirmation_remove_share_message">Haluatko varmasti poistaa kohteen %1$s?</string>
   <string name="remove_success_msg">Poistettu onnistuneesti</string>
   <string name="remove_fail_msg">Poistamista ei voitu suorittaa loppuun asti</string>
   <string name="rename_dialog_title">Anna uusi nimi</string>
@@ -320,12 +315,6 @@
   <string name="prefs_camera_picture_upload_path_title">Kansio lähetetyille kuville</string>
   <string name="share_link_no_support_share_api">Jakaminen ei ole käytössä palvelimellasi. Ota yhteys
 		ylläpitäjään.</string>
-  <string name="share_link_file_no_exist">Jakaminen epäonnistui. Varmista, että tiedosto on olemassa</string>
-  <string name="share_link_file_error">Virhe tiedoston tai kansion jakamista yrittäessä</string>
-  <string name="unshare_link_file_no_exist">Jakamisen lopettaminen epäonnistui. Tarkista onko tiedosto olemassa</string>
-  <string name="unshare_link_file_error">Tiedoston tai kansion jakamista lopettaessa tapahtui virhe</string>
-  <string name="update_link_file_no_exist">Päivittäminen epäonnistui. Tarkista onko tiedosto olemassa</string>
-  <string name="update_link_file_error">Jakoa päivittäessä tapahtui virhe</string>
   <string name="share_link_password_title">Anna salasana</string>
   <string name="share_link_empty_password">Salasana on pakko antaa</string>
   <string name="activity_chooser_send_file_title">Lähetä</string>
@@ -359,7 +348,7 @@
   <string name="log_send_mail_subject">%1$sin Android-sovelluksen lokit</string>
   <string name="log_progress_dialog_text">Ladataan tietoja…</string>
   <string name="actionbar_select_all">Valitse kaikki</string>
-    <string name="actionbar_move">Siirrä</string>
+  <string name="actionbar_move">Siirrä</string>
   <string name="file_list_empty_moving">Täällä ei ole mitään. Voit lisätä kansion!</string>
   <string name="folder_picker_choose_button_text">Valitse</string>
   <string name="move_file_not_found">Siirto ei onnistu. Tarkista, ettei tiedostoa ole jo olemassa</string>
@@ -487,6 +476,5 @@
   <string name="welcome_feature_4_text">Kuvasi/videosi lähetetään automaattisesti</string>
   <string name="welcome_feature_5_title">Videoiden striimaus</string>
   <string name="welcome_feature_5_text">Toista videosi lataamatta niitä</string>
-  <string name="welcome_feature_7_title">Valitse kaikki</string>
   <string name="no_borwser_installed_alert">Selainta ei asennettu. Ole hyvä ja asenna selain jotta turvallinen kirjautuminen on mahdollista.</string>
 </resources>

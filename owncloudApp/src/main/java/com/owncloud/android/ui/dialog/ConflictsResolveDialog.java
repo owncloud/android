@@ -4,7 +4,7 @@
  * @author Bartek Przybylski
  * @author Christian Schabesberger
  * Copyright (C) 2012 Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -44,7 +44,7 @@ public class ConflictsResolveDialog extends DialogFragment {
         SERVER
     }
 
-    OnConflictDecisionMadeListener mListener;
+    private OnConflictDecisionMadeListener mListener;
 
     public static ConflictsResolveDialog newInstance(String path, OnConflictDecisionMadeListener listener) {
         ConflictsResolveDialog f = new ConflictsResolveDialog();
@@ -57,11 +57,10 @@ public class ConflictsResolveDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String remotepath = getArguments().getString("remotepath");
         return new AlertDialog.Builder(getActivity())
                 .setIcon(R.drawable.ic_warning)
                 .setTitle(R.string.conflict_title)
-                .setMessage(String.format(getString(R.string.conflict_message), remotepath))
+                .setMessage(getString(R.string.conflict_message))
                 .setPositiveButton(R.string.conflict_use_local_version,
                         (dialog, which) -> {
                             if (mListener != null) {

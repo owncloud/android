@@ -5,8 +5,6 @@
   <string name="actionbar_upload_files">கோப்புகள்</string>
   <string name="actionbar_settings">அமைப்புகள்</string>
   <string name="actionbar_see_details">விவரங்கள்</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">திறக்க</string>
   <string name="drawer_help">உதவி</string>
   <string name="prefs_category_general">பொதுவான</string>
@@ -42,7 +40,7 @@
   <string name="create_account">கணக்கை உருவாக்குக</string>
   <string name="upload_chooser_title">பதிவேற்றல் படிவம்</string>
   <string name="uploader_info_dirname">கோப்புறை பெயர்</string>
-  <string name="uploader_upload_in_progress_ticker">பதிவேற்றல்...</string>
+  <string name="uploader_upload_in_progress_ticker">பதிவேற்றல்…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% பதிவேற்றல்g %2$s</string>
   <string name="uploader_upload_succeeded_ticker">வெற்றிகரமாக பதிவேற்றப்பட்டது</string>
   <string name="uploader_upload_failed_ticker">பதிவேற்றல் தோல்வியுற்றது</string>
@@ -114,5 +112,4 @@
   <string name="share_privilege_can_edit">தொகுக்க முடியும்</string>
   <string name="share_privilege_can_edit_create">உருவவாக்கல்</string>
   <string name="share_privilege_can_edit_delete">நீக்குக</string>
-  <!--Welcome to oC intro features-->
 </resources>

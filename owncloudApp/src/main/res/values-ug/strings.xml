@@ -5,8 +5,6 @@
   <string name="actionbar_mkdir">يېڭى قىسقۇچ</string>
   <string name="actionbar_settings">تەڭشەكلەر</string>
   <string name="actionbar_send_file">يوللا</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">ئاچ</string>
   <string name="drawer_feedback">قايتۇرما ئىنكاس</string>
   <string name="drawer_help">ياردەم</string>
@@ -51,5 +49,4 @@
   <string name="share_via_link_password_label">ئىم</string>
   <string name="share_search">ئىزدە</string>
   <string name="share_privilege_can_edit_delete">ئۆچۈر</string>
-  <!--Welcome to oC intro features-->
 </resources>

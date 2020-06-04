@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,8 +28,8 @@ data class OCCapability(
     val versionString: String?,
     val versionEdition: String?,
     val corePollInterval: Int,
+    val davChunkingVersion: String,
     val filesSharingApiEnabled: CapabilityBooleanType,
-    val filesSharingSearchMinLength: Int? = null,
     val filesSharingPublicEnabled: CapabilityBooleanType,
     val filesSharingPublicPasswordEnforced: CapabilityBooleanType,
     val filesSharingPublicPasswordEnforcedReadOnly: CapabilityBooleanType,
@@ -38,18 +38,21 @@ data class OCCapability(
     val filesSharingPublicExpireDateEnabled: CapabilityBooleanType,
     val filesSharingPublicExpireDateDays: Int,
     val filesSharingPublicExpireDateEnforced: CapabilityBooleanType,
-    val filesSharingPublicSendMail: CapabilityBooleanType,
     val filesSharingPublicUpload: CapabilityBooleanType,
     val filesSharingPublicMultiple: CapabilityBooleanType,
     val filesSharingPublicSupportsUploadOnly: CapabilityBooleanType,
-    val filesSharingUserSendMail: CapabilityBooleanType,
     val filesSharingResharing: CapabilityBooleanType,
     val filesSharingFederationOutgoing: CapabilityBooleanType,
     val filesSharingFederationIncoming: CapabilityBooleanType,
     val filesBigFileChunking: CapabilityBooleanType,
     val filesUndelete: CapabilityBooleanType,
     val filesVersioning: CapabilityBooleanType
-)
+) {
+    fun isChunkingAllowed(): Boolean {
+        val doubleChunkingVersion = davChunkingVersion.toDoubleOrNull()
+        return (filesBigFileChunking.isTrue && doubleChunkingVersion != null && doubleChunkingVersion >= 1.0)
+    }
+}
 
 /**
  * Enum for Boolean Type in capabilities, with values:
@@ -73,7 +76,6 @@ enum class CapabilityBooleanType constructor(val value: Int) {
 
     companion object {
         const val capabilityBooleanTypeUnknownString = "-1"
-        const val capabilityBooleanTypeUnknownInt = -1
 
         fun fromValue(value: Int): CapabilityBooleanType =
             when (value) {

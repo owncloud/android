@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,7 +27,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 
 /**
@@ -35,7 +35,7 @@ import com.owncloud.android.operations.common.SyncOperation;
  */
 public class CheckCurrentCredentialsOperation extends SyncOperation<Account> {
 
-    private Account mAccount = null;
+    private Account mAccount;
 
     public CheckCurrentCredentialsOperation(Account account) {
         if (account == null) {
@@ -50,9 +50,8 @@ public class CheckCurrentCredentialsOperation extends SyncOperation<Account> {
             return new RemoteOperationResult<>(new IllegalStateException(
                     "Account to validate is not the account connected to!"));
         } else {
-            RemoteOperation check = new ExistenceCheckRemoteOperation(OCFile.ROOT_PATH, false,
-                    false);
-            final RemoteOperationResult existenceCheckResult = check.execute(client);
+            RemoteOperation checkPathExistenceOperation = new CheckPathExistenceRemoteOperation(OCFile.ROOT_PATH, false);
+            final RemoteOperationResult existenceCheckResult = checkPathExistenceOperation.execute(client);
             final RemoteOperationResult<Account> result
                     = new RemoteOperationResult<>(existenceCheckResult.getCode());
             result.setData(mAccount);

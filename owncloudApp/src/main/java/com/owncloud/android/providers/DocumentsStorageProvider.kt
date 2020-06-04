@@ -7,7 +7,7 @@
  * @author Abel García de Prada
  * @author Shashvat Kedia
  * Copyright (C) 2015  Bartosz Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -45,7 +45,6 @@ import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.files.FileUtils
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
@@ -61,6 +60,7 @@ import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.notifications.NotificationUtils
 import com.owncloud.android.utils.FileStorageUtils
+import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -83,7 +83,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         mode: String,
         signal: CancellationSignal?
     ): ParcelFileDescriptor? {
-        Log_OC.d(TAG, "Trying to open $documentId in mode $mode")
+        Timber.d("Trying to open $documentId in mode $mode")
 
         // If documentId == NONEXISTENT_DOCUMENT_ID only Upload is needed because file does not exist in our database yet.
         var ocFile: OCFile
@@ -128,10 +128,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         try {
             return ParcelFileDescriptor.open(fileToOpen, accessMode, handler) {
                 // Update the file with the cloud server. The client is done writing.
-                Log_OC.d(
-                    TAG,
-                    "A file with id $documentId has been closed! Time to synchronize it with server."
-                )
+                Timber.d("A file with id $documentId has been closed! Time to synchronize it with server.")
                 // If only needs to upload that file
                 if (uploadOnly) {
                     ocFile.fileLength = fileToOpen.length()
@@ -211,7 +208,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun queryDocument(documentId: String, projection: Array<String>?): Cursor {
-        Log_OC.d(TAG, "Query Document: $documentId")
+        Timber.d("Query Document: $documentId")
         if (documentId == NONEXISTENT_DOCUMENT_ID) return FileCursor(projection).apply {
             addFile(fileToUpload)
         }
@@ -288,10 +285,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         mimeType: String,
         displayName: String
     ): String {
-        Log_OC.d(
-            TAG,
-            "Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName"
-        )
+        Timber.d("Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName")
         val parentDocId = parentDocumentId.toLong()
         updateCurrentStorageManagerIfNeeded(parentDocId)
 
@@ -304,9 +298,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
         }
     }
 
-    @TargetApi(21)
     override fun renameDocument(documentId: String, displayName: String): String? {
-        Log_OC.d(TAG, "Trying to rename $documentId to $displayName")
+        Timber.d("Trying to rename $documentId to $displayName")
         val docId = documentId.toLong()
 
         updateCurrentStorageManagerIfNeeded(docId)
@@ -326,7 +319,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun deleteDocument(documentId: String) {
-        Log_OC.d(TAG, "Trying to delete $documentId")
+        Timber.d("Trying to delete $documentId")
         val docId = documentId.toLong()
 
         updateCurrentStorageManagerIfNeeded(docId)
@@ -344,7 +337,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun copyDocument(sourceDocumentId: String, targetParentDocumentId: String): String {
-        Log_OC.d(TAG, "Trying to copy $sourceDocumentId to $targetParentDocumentId")
+        Timber.d("Trying to copy $sourceDocumentId to $targetParentDocumentId")
 
         val sourceDocId = sourceDocumentId.toLong()
         updateCurrentStorageManagerIfNeeded(sourceDocId)
@@ -375,7 +368,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     override fun moveDocument(
         sourceDocumentId: String, sourceParentDocumentId: String, targetParentDocumentId: String
     ): String {
-        Log_OC.d(TAG, "Trying to move $sourceDocumentId to $targetParentDocumentId")
+        Timber.d("Trying to move $sourceDocumentId to $targetParentDocumentId")
 
         val sourceDocId = sourceDocumentId.toLong()
         updateCurrentStorageManagerIfNeeded(sourceDocId)
@@ -414,11 +407,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun createFolder(parentDocument: OCFile, displayName: String): String {
         val newPath = parentDocument.remotePath + displayName + OCFile.PATH_SEPARATOR
-        val serverWithForbiddenChars = isVersionWithForbiddenCharacters()
-        if (!FileUtils.isValidName(displayName, serverWithForbiddenChars)) {
+
+        if (!FileUtils.isValidName(displayName)) {
             throw UnsupportedOperationException("Folder $displayName contains at least one invalid character")
         }
-        Log_OC.d(TAG, "Trying to create folder with path $newPath")
+        Timber.d("Trying to create folder with path $newPath")
 
         CreateFolderOperation(newPath, false).apply {
             execute(currentStorageManager, context).also { result ->
@@ -462,7 +455,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             return
         }
         for (data in rootIdToStorageManager.values) {
-            if (data.account?.name == rootId) {
+            if (data.account.name == rootId) {
                 currentStorageManager = data
             }
         }
@@ -477,14 +470,13 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     private fun syncDirectoryWithServer(parentDocumentId: String) {
-        Log_OC.d(TAG, "Trying to sync $parentDocumentId with server")
+        Timber.d("Trying to sync $parentDocumentId with server")
         val folderId = parentDocumentId.toLong()
 
         getFileByIdOrException(folderId)
 
         val refreshFolderOperation = RefreshFolderOperation(
             getFileById(folderId),
-            false,
             false,
             getAccountFromFileId(folderId),
             context
@@ -520,17 +512,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return result
     }
 
-    /**
-     * @return 'True' if the server doesn't need to check forbidden characters
-     */
-    private fun isVersionWithForbiddenCharacters(): Boolean {
-        currentStorageManager?.account?.let {
-            val serverVersion = AccountUtils.getServerVersion(currentStorageManager?.account)
-            return serverVersion != null && serverVersion.isVersionWithForbiddenCharacters
-        }
-        return false
-    }
-
     private fun notifyChangeInFolder(folderToNotify: String) {
         context?.contentResolver?.notifyChange(toNotifyUri(toUri(folderToNotify)), null)
     }
@@ -551,7 +532,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun getStoreManagerFromFileId(id: Long): FileDataStorageManager? {
         // If file is found in current storage manager, return it
-        currentStorageManager?.getFileById(id)?.let { return currentStorageManager!! }
+        currentStorageManager?.getFileById(id)?.let { return currentStorageManager }
 
         //  Else, look for it in other ones
         var fileFromOtherStorageManager: OCFile?
@@ -562,10 +543,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             if (otherStorageManager == currentStorageManager) continue
             fileFromOtherStorageManager = otherStorageManager?.getFileById(id)
             if (fileFromOtherStorageManager != null) {
-                Log_OC.d(
-                    TAG,
-                    "File with id $id found in storage manager: ${otherStorageManager}"
-                )
+                Timber.d("File with id $id found in storage manager: $otherStorageManager")
                 break
             }
         }
@@ -578,7 +556,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun getFileByPath(path: String): OCFile? = currentStorageManager?.getFileByPath(path)
 
     companion object {
-        private val TAG = DocumentsStorageProvider::class.java.toString()
         private var rootIdToStorageManager: MutableMap<Long, FileDataStorageManager> = HashMap()
         const val NONEXISTENT_DOCUMENT_ID = "-1"
     }

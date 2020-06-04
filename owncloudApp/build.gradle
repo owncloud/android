@@ -22,9 +22,10 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompat"
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "androidx.browser:browser:$androidX"
+    implementation "androidx.browser:browser:1.2.0"
     implementation 'commons-io:commons-io:2.6'
     implementation "androidx.sqlite:sqlite:$sqliteVersion"
+    implementation "androidx.biometric:biometric:$biometricVersion"
 
     // Tests
     testImplementation project(':owncloudTestUtil')
@@ -40,6 +41,7 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$androidTestVersion"
     androidTestImplementation "androidx.test:runner:$androidTestVersion"
     androidTestImplementation "androidx.test.ext:junit:$extJunitVersion"
+    androidTestImplementation "androidx.test:core-ktx:$androidTestVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoTestVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoTestVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoTestVersion"
@@ -104,8 +106,8 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 21400000
-        versionName = "2.14"
+        versionCode = 21500000
+        versionName = "2.15"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
@@ -117,11 +119,17 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+        manifestPlaceholders = [appAuthRedirectScheme: 'oc']
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     sourceSets {
@@ -130,8 +138,11 @@ android {
     }
 
     lintOptions {
-        abortOnError false
-        disable 'MissingTranslation'
+        abortOnError true
+        ignoreWarnings false
+
+        xmlReport false
+        htmlOutput file("../lint-app-report.html")
     }
 
     packagingOptions {

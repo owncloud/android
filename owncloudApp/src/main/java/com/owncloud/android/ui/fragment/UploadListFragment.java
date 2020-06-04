@@ -3,7 +3,7 @@
  *
  * @author LukeOwncloud
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -19,7 +19,6 @@
  */
 package com.owncloud.android.ui.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,16 +28,15 @@ import android.widget.ListView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCUpload;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;
+import timber.log.Timber;
 
 /**
  * A Fragment that lists all files and folders in a given LOCAL path.
  *
  */
 public class UploadListFragment extends ExpandableListFragment {
-    static private String TAG = UploadListFragment.class.getSimpleName();
 
     /**
      * Reference to the Activity which this fragment is attached to. For
@@ -47,17 +45,6 @@ public class UploadListFragment extends ExpandableListFragment {
     private UploadListFragment.ContainerActivity mContainerActivity;
 
     private ExpandableUploadListAdapter mAdapter;
-
-    /** Is binder ready in the Activity? */
-    private boolean mBinderReady = false;
-
-    public void setBinderReady(boolean ready) {
-        mBinderReady = ready;
-    }
-
-    public boolean isBinderReady() {
-        return mBinderReady;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,26 +65,8 @@ public class UploadListFragment extends ExpandableListFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mContainerActivity = (ContainerActivity) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement "
-                    + UploadListFragment.ContainerActivity.class.getSimpleName());
-        }
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        Log_OC.d(TAG, "onActivityCreated() start");
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @Override
     public void onStart() {
-        Log_OC.d(TAG, "onStart() start");
+        Timber.v("onStart() start");
         super.onStart();
         mAdapter = new ExpandableUploadListAdapter((FileActivity) getActivity());
         setListAdapter(mAdapter);
@@ -111,7 +80,7 @@ public class UploadListFragment extends ExpandableListFragment {
             // notify the click to container Activity
             handled = mContainerActivity.onUploadItemClick(OCUpload);
         } else {
-            Log_OC.w(TAG, "Null object in ListAdapter!!");
+            Timber.w("Null object in ListAdapter!!");
         }
         return handled;
     }
@@ -136,8 +105,6 @@ public class UploadListFragment extends ExpandableListFragment {
     }
 
     public void binderReady() {
-        setBinderReady(true);
-
         if (mAdapter != null) {
             mAdapter.addBinder();
         }
@@ -148,5 +115,4 @@ public class UploadListFragment extends ExpandableListFragment {
             mAdapter.refreshView();
         }
     }
-
 }

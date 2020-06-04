@@ -3,7 +3,7 @@
  *
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,14 +39,13 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -60,7 +59,6 @@ import java.util.Scanner;
 public class PreviewTextFragment extends FileFragment {
     private static final String EXTRA_FILE = "FILE";
     private static final String EXTRA_ACCOUNT = "ACCOUNT";
-    private static final String TAG = PreviewTextFragment.class.getSimpleName();
 
     private Account mAccount;
     private ProgressBar mProgressBar;
@@ -108,7 +106,7 @@ public class PreviewTextFragment extends FileFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        Log_OC.e(TAG, "onCreateView");
+        Timber.v("onCreateView");
 
         View ret = inflater.inflate(R.layout.preview_text_fragment, container, false);
         ret.setFilterTouchesWhenObscured(
@@ -116,7 +114,6 @@ public class PreviewTextFragment extends FileFragment {
         );
 
         mProgressBar = ret.findViewById(R.id.syncProgressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mTextPreview = ret.findViewById(R.id.text_preview);
 
         return ret;
@@ -167,7 +164,7 @@ public class PreviewTextFragment extends FileFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log_OC.e(TAG, "onStart");
+        Timber.v("onStart");
 
         mProgressController.startListeningProgressFor(getFile(), mAccount);
         loadAndShowTextPreview();
@@ -221,13 +218,13 @@ public class PreviewTextFragment extends FileFragment {
                     throw exc;
                 }
             } catch (IOException e) {
-                Log_OC.e(TAG, e.getMessage(), e);
+                Timber.e(e);
             } finally {
                 if (inputStream != null) {
                     try {
                         inputStream.close();
                     } catch (IOException e) {
-                        Log_OC.e(TAG, e.getMessage(), e);
+                        Timber.e(e);
                     }
                 }
                 if (sc != null) {
@@ -416,7 +413,7 @@ public class PreviewTextFragment extends FileFragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log_OC.e(TAG, "onStop");
+        Timber.v("onStop");
         if (mTextLoadTask != null) {
             mTextLoadTask.cancel(Boolean.TRUE);
             mTextLoadTask.dismissLoadingDialog();

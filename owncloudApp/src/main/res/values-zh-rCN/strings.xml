@@ -37,8 +37,7 @@
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
-  <string name="prefs_fingerprint">指纹锁</string>
-  <string name="prefs_fingerprint_summary">使用密码或图案锁定以启用此选项</string>
+  <string name="prefs_biometric_summary">使用密码或图案锁定以启用此选项</string>
   <string name="confirmation_touches_with_other_windows_title">你确定要启用此功能吗？</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
   <string name="prefs_camera_picture_upload_summary">自动上传相机拍摄的图片</string>
@@ -71,6 +70,11 @@
   <string name="pattern_no_longer_required">不再询问输入图案锁</string>
   <string name="pattern_configure_your_pattern_explanation">每次启动app时均需要输入图案解锁</string>
   <string name="illegal_argument_exception_message">需要一个有效的 ACTION 传递意图</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">文件</string>
+  <string name="bottom_nav_uploads">上传</string>
+  <string name="bottom_nav_offline">离线</string>
+  <string name="bottom_nav_links">链接</string>
   <string name="recommend_subject">在您的智能手机上试用 %1$s！</string>
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
   <string name="auth_failure_snackbar">认证失败</string>
@@ -215,13 +219,6 @@
   <string name="pass_code_wrong">错误的密码</string>
   <string name="pass_code_removed">移除的密码</string>
   <string name="pass_code_stored">存储的密码</string>
-  <string name="fingerprint_confirm">确认您的指纹以继续下一步</string>
-  <string name="fingerprint_hint">触摸传感器</string>
-  <string name="fingerprint_not_recognized">指纹无法识别，请重试</string>
-  <string name="fingerprint_success">指纹已识别</string>
-  <string name="fingerprint_not_hardware_detected">此设备不支持指纹验证</string>
-  <string name="fingerprint_not_enrolled_fingerprints">请至少录入一个指纹以使用此功能</string>
-  <string name="fingerprint_not_granted_permissions">指纹权限未授权</string>
   <string name="media_notif_ticker">%1$s 音乐播放器</string>
   <string name="media_state_playing">%1$s (播放中)</string>
   <string name="media_state_loading">%1$s (载入中)</string>
@@ -264,7 +261,7 @@
   <string name="auth_wtf_reenter_URL">未知状态，请重新输入服务器地址</string>
   <string name="auth_expired_oauth_token_toast">你的授权已经过期。请重新授权。</string>
   <string name="auth_expired_basic_auth_toast">请输入当前的密码</string>
-    <string name="auth_connecting_auth_server">连接认证服务器...</string>
+  <string name="auth_connecting_auth_server">连接认证服务器...</string>
   <string name="auth_unsupported_auth_method">服务器不支持这种验证方式</string>
   <string name="auth_unsupported_multiaccount">%1$s不支持多个账户</string>
   <string name="auth_fail_get_user_name">您的服务器没有返回一个正确的用户 id，请联系管理员
@@ -280,7 +277,6 @@
   <string name="confirmation_remove_local">仅本地</string>
   <string name="confirmation_remove_account_alert">你确定要删除账户 %1$s 吗？</string>
   <string name="confirmation_remove_public_share_title">移除链接</string>
-  <string name="confirmation_remove_share_message">你确定要删除 %1$s 吗？</string>
   <string name="remove_success_msg">成功删除</string>
   <string name="remove_fail_msg">无法完成删除</string>
   <string name="rename_dialog_title">请输出新的名字</string>
@@ -351,15 +347,9 @@
   <string name="preview_image_error_unknown_format">无法显示图片</string>
   <string name="error__upload__local_file_not_copied">无法复制 %1$s 到本地目录 %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">图片上传路径</string>
-  <string name="get_shares_error">尝试获取共享时发生错误</string>
-  <string name="get_sharees_error">尝试获取用户和用户组时发生错误</string>
   <string name="share_link_no_support_share_api">抱歉，共享功能未启用。请联系管理员。</string>
-  <string name="share_link_file_no_exist">无法共享。请检查文件是否存在</string>
-  <string name="share_link_file_error">共享文件或目录出错</string>
-  <string name="unshare_link_file_no_exist">无法取消共享。请检查文件是否存在</string>
-  <string name="unshare_link_file_error">解除文件或目录共享时出错</string>
-  <string name="update_link_file_no_exist">无法上传，请检查文件是否存在</string>
-  <string name="update_link_file_error">更新共享时发生错误</string>
+  <string name="share_link_file_error">分享这个文件或文件夹是不可能的</string>
+  <string name="unshare_link_file_error">取消分享这个文件或文件夹是不可能的</string>
   <string name="share_link_password_title">输入密码</string>
   <string name="share_link_empty_password">您必须输入密码</string>
   <string name="activity_chooser_send_file_title">发送</string>
@@ -394,7 +384,7 @@
   <string name="log_progress_dialog_text">载入数据...</string>
   <string name="actionbar_select_all">全部选择</string>
   <string name="actionbar_select_inverse">反向选择</string>
-    <string name="actionbar_move">移动</string>
+  <string name="actionbar_move">移动</string>
   <string name="file_list_empty_moving">这里还什么都没有。上传些东西吧！</string>
   <string name="folder_picker_choose_button_text">选择</string>
   <string name="move_file_not_found">无法移动。请检查文件是否存在</string>
@@ -537,14 +527,5 @@
   <string name="welcome_feature_4_text">你的照片/视频将会自动上传</string>
   <string name="welcome_feature_5_title">流媒体视频</string>
   <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
-  <string name="welcome_feature_6_title">在当前文件夹内搜索</string>
-  <string name="welcome_feature_6_text">按文件名筛选文件</string>
-  <string name="welcome_feature_7_title">全部选择</string>
-  <string name="welcome_feature_7_text">一下子选中全部文件</string>
-  <string name="welcome_feature_8_title">离线可用</string>
-  <string name="welcome_feature_8_text">文件自动同步</string>
-  <string name="welcome_feature_9_title">文档提供者</string>
-  <string name="welcome_feature_9_text">从其他应用访问和编辑你的ownCloud文件</string>
-  <string name="welcome_feature_10_text">发送您的日志让owncloud变得更好</string>
   <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
 </resources>

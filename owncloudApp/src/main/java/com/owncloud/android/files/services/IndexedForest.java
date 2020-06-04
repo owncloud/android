@@ -3,7 +3,7 @@
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,7 +23,7 @@ package com.owncloud.android.files.services;
 import android.util.Pair;
 
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 import java.io.File;
 import java.util.HashSet;
@@ -223,7 +223,7 @@ public class IndexedForest<V> {
         Iterator<String> it = mMap.keySet().iterator();
         while (it.hasNext()) {
             String key = it.next();
-            Log_OC.d("IndexedForest", "Number of pending downloads= " + mMap.size());
+            Timber.d("Number of pending downloads= %s", mMap.size());
             if (key.startsWith(accountName)) {
                 mMap.remove(key);
             }

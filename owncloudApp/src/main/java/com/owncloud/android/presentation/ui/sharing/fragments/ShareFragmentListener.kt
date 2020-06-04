@@ -4,7 +4,7 @@
  * @author masensio
  * @author David A. Velasco
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 
 /**
  * This interface must be implemented by activities that contain this
- * fragment to allow an interaction in fragments handling [OCShareEntity]s
+ * fragment to allow an interaction in fragments handling [OCShare]s
  * to be communicated to the parent activity and potentially other fragments
  * contained in that activity.
  *

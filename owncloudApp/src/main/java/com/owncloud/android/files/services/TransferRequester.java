@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * <p>
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -36,33 +36,30 @@ import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PowerUtils;
+import timber.log.Timber;
 
 import java.net.SocketTimeoutException;
 
 import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE;
 import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO;
 
-/**
+/*
  * Facade to start operations in transfer services without the verbosity of Android Intents.
  */
 
 /**
  * Facade class providing methods to ease requesting commands to transfer services {@link FileUploader} and
  * {@link FileDownloader}.
- *
+ * <p>
  * Protects client objects from the verbosity of {@link android.content.Intent}s.
- *
+ * <p>
  * TODO add methods for {@link FileDownloader}, right now it's just about uploads
  */
 
 public class TransferRequester {
-
-    private static final String TAG = TransferRequester.class.getName();
-
     /**
      * Call to upload several new files
      */
@@ -90,11 +87,10 @@ public class TransferRequester {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Since in Android O the apps in background are not allowed to start background
             // services and camera uploads feature may try to do it, this is the way to proceed
-            Log_OC.d(TAG, "Start to upload some files from foreground/background, " +
-                    "startForeground() will be called soon");
+            Timber.d("Start to upload some files from foreground/background, startForeground() will be called soon");
             context.startForegroundService(intent);
         } else {
-            Log_OC.d(TAG, "Start to upload some files from foreground");
+            Timber.d("Start to upload some files from foreground");
             context.startService(intent);
         }
     }
@@ -133,11 +129,10 @@ public class TransferRequester {
         // services and available offline feature may try to do it, this is the way to proceed
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && requestedFromAvOfflineJobService) {
             intent.putExtra(FileUploader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
-            Log_OC.d(TAG, "Start to upload some already uploaded files from foreground/background, " +
-                    "startForeground() will be called soon");
+            Timber.d("Start to upload some already uploaded files from foreground/background, startForeground() will be called soon");
             context.startForegroundService(intent);
         } else {
-            Log_OC.d(TAG, "Start to upload some already uploaded files from foreground");
+            Timber.d("Start to upload some already uploaded files from foreground");
             context.startService(intent);
         }
     }
@@ -171,13 +166,13 @@ public class TransferRequester {
     /**
      * Retry a subset of all the stored failed uploads.
      *
-     * @param context           Caller {@link Context}
-     * @param account           If not null, only failed uploads to this OC account will be retried; otherwise,
-     *                          uploads of all accounts will be retried.
-     * @param uploadResult      If not null, only failed uploads with the result specified will be retried;
-     *                          otherwise, failed uploads due to any result will be retried.
-     * @param requestedFromWifiBackEvent  true if the retry was requested because wifi connection was back,
-     *                                    false otherwise
+     * @param context                    Caller {@link Context}
+     * @param account                    If not null, only failed uploads to this OC account will be retried; otherwise,
+     *                                   uploads of all accounts will be retried.
+     * @param uploadResult               If not null, only failed uploads with the result specified will be retried;
+     *                                   otherwise, failed uploads due to any result will be retried.
+     * @param requestedFromWifiBackEvent true if the retry was requested because wifi connection was back,
+     *                                   false otherwise
      */
     public void retryFailedUploads(Context context, Account account, UploadResult uploadResult,
                                    boolean requestedFromWifiBackEvent) {
@@ -201,9 +196,9 @@ public class TransferRequester {
     /**
      * Private implementation of retry.
      *
-     * @param context           Caller {@link Context}
-     * @param account           OC account where the upload will be retried.
-     * @param upload            Persisted upload to retry.
+     * @param context                    Caller {@link Context}
+     * @param account                    OC account where the upload will be retried.
+     * @param upload                     Persisted upload to retry.
      * @param requestedFromWifiBackEvent true if the retry was requested because wifi connection was back,
      *                                   false otherwise
      */
@@ -222,11 +217,10 @@ public class TransferRequester {
                 if (requestedFromWifiBackEvent) {
                     intent.putExtra(FileUploader.KEY_REQUESTED_FROM_WIFI_BACK_EVENT, true);
                 }
-                Log_OC.d(TAG, "Retry some uploads from foreground/background, " +
-                        "startForeground() will be called soon");
+                Timber.d("Retry some uploads from foreground/background, startForeground() will be called soon");
                 context.startForegroundService(intent);
             } else {
-                Log_OC.d(TAG, "Retry some uploads from foreground");
+                Timber.d("Retry some uploads from foreground");
                 context.startService(intent);
             }
         }
@@ -235,8 +229,8 @@ public class TransferRequester {
     /**
      * Return 'true' when conditions for a scheduled retry are met.
      *
-     * @param context       Caller {@link Context}
-     * @return              'true' when conditions for a scheduled retry are met, 'false' otherwise.
+     * @param context Caller {@link Context}
+     * @return 'true' when conditions for a scheduled retry are met, 'false' otherwise.
      */
     boolean shouldScheduleRetry(Context context, Exception exception) {
         return (
@@ -251,10 +245,10 @@ public class TransferRequester {
      * Schedule a future retry of an upload, to be done when a connection via an unmetered network (free Wifi)
      * is available.
      *
-     * @param context           Caller {@link Context}.
-     * @param jobId             Identifier to set to the retry job.
-     * @param accountName       Local name of the OC account where the upload will be retried.
-     * @param remotePath        Full path of the file to upload, relative to root of the OC account.
+     * @param context     Caller {@link Context}.
+     * @param jobId       Identifier to set to the retry job.
+     * @param accountName Local name of the OC account where the upload will be retried.
+     * @param remotePath  Full path of the file to upload, relative to root of the OC account.
      */
     void scheduleUpload(Context context, int jobId, String accountName, String remotePath) {
         boolean scheduled = scheduleTransfer(
@@ -266,14 +260,7 @@ public class TransferRequester {
         );
 
         if (scheduled) {
-            Log_OC.d(
-                    TAG,
-                    String.format(
-                            "Scheduled upload retry for %1s in %2s",
-                            remotePath,
-                            accountName
-                    )
-            );
+            Timber.d("Scheduled upload retry for %1s in %2s", remotePath, accountName);
         }
     }
 
@@ -281,10 +268,10 @@ public class TransferRequester {
      * Schedule a future retry of a download, to be done when a connection via an unmetered network (free Wifi)
      * is available.
      *
-     * @param context           Caller {@link Context}.
-     * @param jobId             Identifier to set to the retry job.
-     * @param accountName       Local name of the OC account where the download will be retried.
-     * @param remotePath        Full path of the file to download, relative to root of the OC account.
+     * @param context     Caller {@link Context}.
+     * @param jobId       Identifier to set to the retry job.
+     * @param accountName Local name of the OC account where the download will be retried.
+     * @param remotePath  Full path of the file to download, relative to root of the OC account.
      */
     void scheduleDownload(Context context, int jobId, String accountName, String remotePath) {
         boolean scheduled = scheduleTransfer(
@@ -296,14 +283,7 @@ public class TransferRequester {
         );
 
         if (scheduled) {
-            Log_OC.d(
-                    TAG,
-                    String.format(
-                            "Scheduled download retry for %1s in %2s",
-                            remotePath,
-                            accountName
-                    )
-            );
+            Timber.d("Scheduled download retry for %1s in %2s", remotePath, accountName);
         }
     }
 
@@ -311,12 +291,12 @@ public class TransferRequester {
      * Schedule a future transfer of an upload, to be done when a connection via an unmetered network (free Wifi)
      * is available.
      *
-     * @param context                   Caller {@link Context}.
-     * @param scheduledRetryService     Class of the appropriate retry service, either to retry downloads
-     *                                  or to retry uploads.
-     * @param jobId                     Identifier to set to the retry job.
-     * @param accountName               Local name of the OC account where the upload will be retried.
-     * @param remotePath                Full path of the file to upload, relative to root of the OC account.
+     * @param context               Caller {@link Context}.
+     * @param scheduledRetryService Class of the appropriate retry service, either to retry downloads
+     *                              or to retry uploads.
+     * @param jobId                 Identifier to set to the retry job.
+     * @param accountName           Local name of the OC account where the upload will be retried.
+     * @param remotePath            Full path of the file to upload, relative to root of the OC account.
      */
     private boolean scheduleTransfer(
             Context context,
@@ -325,12 +305,6 @@ public class TransferRequester {
             String accountName,
             String remotePath
     ) {
-
-        // JobShceduler requires Android >= 5.0 ; do not remove this protection while minSdkVersion is lower
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return false;
-        }
-
         ComponentName serviceComponent = new ComponentName(
                 context,
                 scheduledRetryService
@@ -361,9 +335,10 @@ public class TransferRequester {
 
     /**
      * Retrieve the type of network connection required to schedule the last upload for an account
+     *
      * @param context
      * @param accountName
-     * @param remotePath to upload the file
+     * @param remotePath  to upload the file
      * @return 2 if only wifi is required, 1 if any internet connection is required (wifi or cellular)
      */
     private int getRequiredNetworkType(Context context, String accountName, String remotePath) {

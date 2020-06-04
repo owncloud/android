@@ -5,6 +5,7 @@
 :app-name: ownCloud Android App
 :create-self-signed-ssl-cert: https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04
 :enable-ssl-url: http://info.ssl.com/article.aspx?id=10241
+:oauth2-app-url: https://marketplace.owncloud.com/apps/oauth2
 :owncloud-mobile-download-url: http://owncloud.org/install/#mobile
 :play-store-url: https://play.google.com/store/apps/details?id=com.owncloud.android
 
@@ -80,6 +81,12 @@ The options are:
 * xref:current-uploads[Current Uploads]
 * xref:all-files[All Files]
 * xref:application-settings[Application Settings]
+
+[NOTE]
+====
+ownCloud server must have {oauth2-app-url}[the OAuth2 app] installed, configured, and enabled to use Two-Factor Authentication.
+Please contact your ownCloud administrator for more details.
+====
 
 == Manage Users Accounts
 

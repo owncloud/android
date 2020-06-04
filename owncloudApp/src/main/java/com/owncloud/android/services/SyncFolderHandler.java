@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  * <p>
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,29 +33,26 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.IndexedForest;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
+import timber.log.Timber;
 
 import java.io.IOException;
 
 /**
  * SyncFolder worker. Performs the pending operations in the order they were requested.
- *
+ * <p>
  * Created with the Looper of a new thread, started in
  * {@link com.owncloud.android.services.OperationsService#onCreate()}.
  */
 class SyncFolderHandler extends Handler {
 
-    private static final String TAG = SyncFolderHandler.class.getSimpleName();
-
     OperationsService mService;
 
-    private IndexedForest<SynchronizeFolderOperation> mPendingOperations =
-            new IndexedForest<SynchronizeFolderOperation>();
+    private IndexedForest<SynchronizeFolderOperation> mPendingOperations = new IndexedForest<>();
 
     private OwnCloudClient mOwnCloudClient = null;
     private Account mCurrentAccount = null;
@@ -78,8 +75,8 @@ class SyncFolderHandler extends Handler {
      * Returns True when the folder located in 'remotePath' in the ownCloud account 'account', or any of its
      * descendants, is being synchronized (or waiting for it).
      *
-     * @param account       ownCloud account where the remote folder is stored.
-     * @param remotePath    The path to a folder that could be in the queue of synchronizations.
+     * @param account    ownCloud account where the remote folder is stored.
+     * @param remotePath The path to a folder that could be in the queue of synchronizations.
      */
     public boolean isSynchronizing(Account account, String remotePath) {
         if (account == null || remotePath == null) {
@@ -92,7 +89,7 @@ class SyncFolderHandler extends Handler {
     public void handleMessage(Message msg) {
         Pair<Account, String> itemSyncKey = (Pair<Account, String>) msg.obj;
         doOperation(itemSyncKey.first, itemSyncKey.second);
-        Log_OC.d(TAG, "Stopping after command with id " + msg.arg1);
+        Timber.d("Stopping after command with id %s", msg.arg1);
         mService.stopSelf(msg.arg1);
     }
 
@@ -119,27 +116,24 @@ class SyncFolderHandler extends Handler {
 
                 // always get client from client manager, to get fresh credentials in case of update
                 OwnCloudAccount ocAccount = new OwnCloudAccount(account, mService);
-                mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
                         getClientFor(ocAccount, mService);
 
                 result = mCurrentSyncOperation.execute(mOwnCloudClient, mStorageManager);
 
-            } catch (AccountsException e) {
-                Log_OC.e(TAG, "Error while trying to get authorization", e);
-            } catch (IOException e) {
-                Log_OC.e(TAG, "Error while trying to get authorization", e);
+            } catch (AccountsException | IOException e) {
+                Timber.e(e, "Error while trying to get authorization");
             } finally {
                 mPendingOperations.removePayload(account.name, remotePath);
 
                 mService.dispatchResultToOperationListeners(mCurrentSyncOperation, result);
 
-                sendBroadcastFinishedSyncFolder(account, remotePath, result.isSuccess());
+                sendBroadcastFinishedSyncFolder(account, remotePath, result != null && result.isSuccess());
             }
         }
     }
 
-    public void add(Account account, String remotePath,
-                    SynchronizeFolderOperation syncFolderOperation) {
+    public void add(Account account, String remotePath, SynchronizeFolderOperation syncFolderOperation) {
         Pair<String, String> putResult =
                 mPendingOperations.putIfAbsent(account.name, remotePath, syncFolderOperation);
         if (putResult != null) {
@@ -150,12 +144,12 @@ class SyncFolderHandler extends Handler {
     /**
      * Cancels a pending or current sync' operation.
      *
-     * @param account       ownCloud {@link Account} where the remote file is stored.
-     * @param file          A file in the queue of pending synchronizations
+     * @param account ownCloud {@link Account} where the remote file is stored.
+     * @param file    A file in the queue of pending synchronizations
      */
     public void cancel(Account account, OCFile file) {
         if (account == null || file == null) {
-            Log_OC.e(TAG, "Cannot cancel with NULL parameters");
+            Timber.e("Cannot cancel with NULL parameters");
             return;
         }
         Pair<SynchronizeFolderOperation, String> removeResult =
@@ -171,8 +165,6 @@ class SyncFolderHandler extends Handler {
                 mCurrentSyncOperation.cancel();
             }
         }
-
-        //sendBroadcastFinishedSyncFolder(account, file.getRemotePath());
     }
 
     /**
@@ -183,8 +175,7 @@ class SyncFolderHandler extends Handler {
         Intent added = new Intent(FileDownloader.getDownloadAddedMessage());
         added.putExtra(Extras.EXTRA_ACCOUNT_NAME, account.name);
         added.putExtra(Extras.EXTRA_REMOTE_PATH, remotePath);
-        added.putExtra(Extras.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name)
-                + remotePath);
+        added.putExtra(Extras.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name) + remotePath);
         mLocalBroadcastManager.sendBroadcast(added);
     }
 
@@ -192,13 +183,11 @@ class SyncFolderHandler extends Handler {
      * TODO review this method when "folder synchronization" replaces "folder download";
      * this is a fast and ugly patch.
      */
-    private void sendBroadcastFinishedSyncFolder(Account account, String remotePath,
-                                                 boolean success) {
+    private void sendBroadcastFinishedSyncFolder(Account account, String remotePath, boolean success) {
         Intent finished = new Intent(FileDownloader.getDownloadFinishMessage());
         finished.putExtra(Extras.EXTRA_ACCOUNT_NAME, account.name);
         finished.putExtra(Extras.EXTRA_REMOTE_PATH, remotePath);
-        finished.putExtra(Extras.EXTRA_FILE_PATH,
-                FileStorageUtils.getSavePath(account.name) + remotePath);
+        finished.putExtra(Extras.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name) + remotePath);
         finished.putExtra(Extras.EXTRA_DOWNLOAD_RESULT, success);
         mLocalBroadcastManager.sendBroadcast(finished);
     }

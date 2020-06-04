@@ -6,7 +6,7 @@
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -34,8 +34,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event.EventObserver
-import com.owncloud.android.extensions.showError
-import com.owncloud.android.lib.common.utils.Log_OC
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.providers.sharing.UsersAndGroupsSearchProvider
@@ -50,6 +49,7 @@ import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.utils.showDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 /**
  * Activity for sharing files
@@ -104,10 +104,11 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     // Private share creation needs to be handled from here since is is carried out through intents
     override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
         when (intent.action) {
             Intent.ACTION_SEARCH -> {  // Verify the action and get the query
                 val query = intent.getStringExtra(SearchManager.QUERY)
-                Log_OC.w(TAG, "Ignored Intent requesting to query for $query")
+                Timber.w("Ignored Intent requesting to query for $query")
             }
             UsersAndGroupsSearchProvider.suggestIntentAction -> {
                 val data = intent.data
@@ -118,7 +119,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     data?.authority
                 )
             }
-            else -> Log_OC.e(TAG, "Unexpected intent $intent")
+            else -> Timber.e("Unexpected intent $intent")
         }
     }
 
@@ -140,7 +141,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
-                        showError(getString(R.string.share_link_file_error), uiResult.error)
+                        showErrorInSnackbar(R.string.share_link_file_error, uiResult.error)
                         dismissLoadingDialog()
                     }
                     is UIResult.Loading -> {
@@ -155,26 +156,20 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // check if the Share is FERERATED
         val isFederated = ShareType.FEDERATED == shareType
 
-        when {
-            file.isSharedWithMe -> return RemoteShare.READ_PERMISSION_FLAG    // minimum permissions
-            isFederated -> {
-                val serverVersion = com.owncloud.android.authentication.AccountUtils.getServerVersion(account)
-                return if (serverVersion != null && serverVersion.isNotReshareableFederatedSupported) {
-                    if (file.isFolder)
-                        RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9
-                    else
-                        RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9
+        return when {
+            file.isSharedWithMe -> RemoteShare.READ_PERMISSION_FLAG    // minimum permissions
+            isFederated ->
+                if (file.isFolder) {
+                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER
                 } else {
-                    if (file.isFolder)
-                        RemoteShare.FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9
-                    else
-                        RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9
+                    RemoteShare.FEDERATED_PERMISSIONS_FOR_FILE
                 }
-            }
-            else -> return if (file.isFolder)
-                RemoteShare.MAXIMUM_PERMISSIONS_FOR_FOLDER
-            else
-                RemoteShare.MAXIMUM_PERMISSIONS_FOR_FILE
+            else ->
+                if (file.isFolder) {
+                    RemoteShare.MAXIMUM_PERMISSIONS_FOR_FOLDER
+                } else {
+                    RemoteShare.MAXIMUM_PERMISSIONS_FOR_FILE
+                }
         }
     }
 
@@ -184,7 +179,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             EventObserver { uiResult ->
                 when (uiResult) {
                     is UIResult.Error -> {
-                        showError(getString(R.string.share_link_file_error), uiResult.error)
+                        showErrorInSnackbar(R.string.share_link_file_error, uiResult.error)
                         dismissLoadingDialog()
                     }
                     is UIResult.Loading -> {
@@ -257,7 +252,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                 when (uiResult) {
                     is UIResult.Error -> {
                         dismissLoadingDialog()
-                        showError(getString(R.string.unshare_link_file_error), uiResult.error)
+                        showErrorInSnackbar(R.string.unshare_link_file_error, uiResult.error)
                     }
                     is UIResult.Loading -> {
                         showLoading()
@@ -303,8 +298,6 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     companion object {
-        private val TAG = ShareActivity::class.java.simpleName
-
         const val TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT"
         const val TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT"
         const val TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT"

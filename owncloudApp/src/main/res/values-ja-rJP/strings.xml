@@ -34,8 +34,7 @@
   <string name="prefs_accounts">アカウント</string>
   <string name="prefs_manage_accounts">アカウント管理</string>
   <string name="prefs_passcode">パスコードロック</string>
-  <string name="prefs_fingerprint">指紋認証</string>
-  <string name="prefs_fingerprint_summary">パスコードまたはパターンロックを有効にする</string>
+  <string name="prefs_biometric_summary">パスコードまたはパターンロックを有効にする</string>
   <string name="prefs_camera_picture_upload">ピクチャーアップロード</string>
   <string name="prefs_camera_picture_upload_summary">カメラで撮影した画像を自動アップロード</string>
   <string name="prefs_camera_video_upload">動画アップロード</string>
@@ -62,6 +61,11 @@
   <string name="pattern_removed">パターンを削除しました</string>
   <string name="pattern_already_set">同じタイミングでパターンとパスコードを有効化することはできません。最初に無効化してください。</string>
   <string name="passcode_already_set">同じタイミングでパターンとパスコードを有効化することはできません。最初に無効化してください。</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">ファイル</string>
+  <string name="bottom_nav_uploads">アップロード</string>
+  <string name="bottom_nav_offline">オフライン</string>
+  <string name="bottom_nav_links">リンク</string>
   <string name="recommend_subject">スマートフォンで %1$s を試してください！</string>
   <string name="recommend_text">スマートフォンで %1$s を利用してみませんか！
 ここからダウンロードしてください: %2$s</string>
@@ -119,7 +123,6 @@
   <string name="common_error">エラー</string>
   <string name="common_loading">読込中...</string>
   <string name="common_unknown">不明</string>
-  <string name="common_error_unknown">不明なエラー</string>
   <string name="common_pending">中断</string>
   <string name="common_important">重要</string>
   <string name="about_title">について</string>
@@ -198,11 +201,6 @@
   <string name="pass_code_wrong">パスコードが正しくありません</string>
   <string name="pass_code_removed">パスコードを削除しました</string>
   <string name="pass_code_stored">パスコードを保存しました</string>
-  <string name="fingerprint_hint">タッチセンサー</string>
-  <string name="fingerprint_not_recognized">指紋認証に失敗しました。再度やり直してください。</string>
-  <string name="fingerprint_success">指紋認証に成功しました</string>
-  <string name="fingerprint_not_hardware_detected">このデバイスでは指紋認証はサポートされていません。</string>
-  <string name="fingerprint_not_granted_permissions">指紋認証は許可されていません。</string>
   <string name="media_notif_ticker">%1$s ミュージックプレーヤー</string>
   <string name="media_state_playing">%1$s (プレイ中)</string>
   <string name="media_state_loading">%1$s (読込中)</string>
@@ -245,7 +243,7 @@
   <string name="auth_wtf_reenter_URL">予期せぬ状態；別のサーバーアドレスを入力してみてください</string>
   <string name="auth_expired_oauth_token_toast">認証情報は有効期限切れです。再度認証を行ってください。</string>
   <string name="auth_expired_basic_auth_toast">現在のパスワードを入力してください</string>
-    <string name="auth_connecting_auth_server">認証サーバーに接続中...</string>
+  <string name="auth_connecting_auth_server">認証サーバーに接続中...</string>
   <string name="auth_unsupported_auth_method">サーバーはこの認証方式をサポートしていません</string>
   <string name="auth_unsupported_multiaccount">%1$s は複数アカウントをサポートしていません</string>
   <string name="auth_fail_get_user_name">サーバーが正しいユーザーIDを返しませんでした。管理者に問い合わせてください。
@@ -261,7 +259,6 @@
   <string name="confirmation_remove_local">ローカルのみ</string>
   <string name="confirmation_remove_account_alert">本当にアカウント %1$s を削除しますか？</string>
   <string name="confirmation_remove_public_share_title">リンクを削除</string>
-  <string name="confirmation_remove_share_message">本当に %1$s を削除しますか？</string>
   <string name="remove_success_msg">削除に成功しました</string>
   <string name="remove_fail_msg">削除を完了できませんでした</string>
   <string name="rename_dialog_title">新しい名前を入力</string>
@@ -331,12 +328,6 @@
   <string name="prefs_camera_picture_upload_path_title">ピクチャーアップロードパス</string>
   <string name="share_link_no_support_share_api">すみませんが、サーバーで共有が有効になっていません。
 		管理者に問い合わせてください。</string>
-  <string name="share_link_file_no_exist">共有できません。ファイルがあるか確認してください。</string>
-  <string name="share_link_file_error">このファイルまたはフォルダーを共有する際にエラーが発生しました</string>
-  <string name="unshare_link_file_no_exist">共有を解除できません。ファイルがあるか確認してください。</string>
-  <string name="unshare_link_file_error">このファイルまたはフォルダーの共有を解除する際にエラーが発生しました</string>
-  <string name="update_link_file_no_exist">更新できません。ファイルがあるか確認してください。</string>
-  <string name="update_link_file_error">共有を更新する際にエラーが発生しました</string>
   <string name="share_link_password_title">パスワードを入力</string>
   <string name="share_link_empty_password">パスワードを入力しなければなりません</string>
   <string name="activity_chooser_send_file_title">送信</string>
@@ -369,7 +360,7 @@
   <string name="log_send_mail_subject">%1$s アンドロイドアプリログ</string>
   <string name="log_progress_dialog_text">読込中 ...</string>
   <string name="actionbar_select_all">すべて選択</string>
-    <string name="actionbar_move">移動</string>
+  <string name="actionbar_move">移動</string>
   <string name="file_list_empty_moving">何もありません。フォルダーを追加してください。</string>
   <string name="folder_picker_choose_button_text">選択</string>
   <string name="move_file_not_found">移動できません。ファイルがあるか確認してください。</string>
@@ -491,7 +482,5 @@
   <string name="welcome_feature_skip_button">スキップ</string>
   <string name="welcome_feature_3_title">複数アカウント</string>
   <string name="welcome_feature_4_title">カメラアップロード</string>
-  <string name="welcome_feature_7_title">すべて選択</string>
-  <string name="welcome_feature_8_title">オフラインが利用可能です</string>
   <string name="no_borwser_installed_alert">ブラウザーがインストールされていません。安全なログインを許可するためにブラウザーをインストールしてください。</string>
 </resources>

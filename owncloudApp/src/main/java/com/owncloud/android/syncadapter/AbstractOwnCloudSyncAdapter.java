@@ -4,7 +4,7 @@
  * @author sassman
  * @author David A. Velasco
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2016 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,7 +32,7 @@ import android.content.Context;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 
 import java.io.IOException;
@@ -99,7 +99,7 @@ public abstract class AbstractOwnCloudSyncAdapter extends
     protected void initClientForCurrentAccount() throws OperationCanceledException,
             AuthenticatorException, IOException, AccountNotFoundException {
         OwnCloudAccount ocAccount = new OwnCloudAccount(account, getContext());
-        mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+        mClient = SingleSessionManager.getDefaultSingleton().
                 getClientFor(ocAccount, getContext());
     }
 

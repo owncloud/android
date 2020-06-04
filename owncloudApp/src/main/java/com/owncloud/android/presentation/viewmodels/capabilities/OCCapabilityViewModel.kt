@@ -3,7 +3,7 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,14 +23,13 @@ package com.owncloud.android.presentation.viewmodels.capabilities
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResultAndUseCachedData
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import kotlinx.coroutines.launch
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
@@ -38,7 +37,7 @@ import kotlinx.coroutines.launch
 class OCCapabilityViewModel(
     private val accountName: String,
     getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
-    private val refreshCapabilitiesFromServerUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
+    private val refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -59,27 +58,13 @@ class OCCapabilityViewModel(
         refreshCapabilitiesFromNetwork()
     }
 
-    fun refreshCapabilitiesFromNetwork() {
-        viewModelScope.launch(coroutineDispatcherProvider.io) {
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                _capabilities.postValue(
-                    Event(UIResult.Loading(capabilitiesLiveData.value))
-                )
-            }
-
-            val useCaseResult = refreshCapabilitiesFromServerUseCase.execute(
-                RefreshCapabilitiesFromServerAsyncUseCase.Params(
-                    accountName = accountName
-                )
-            )
-
-            viewModelScope.launch(coroutineDispatcherProvider.main) {
-                if (useCaseResult.isError) {
-                    _capabilities.postValue(
-                        Event(UIResult.Error(useCaseResult.getThrowableOrNull(), capabilitiesLiveData.value))
-                    )
-                }
-            }
-        }
-    }
+    fun refreshCapabilitiesFromNetwork() = runUseCaseWithResultAndUseCachedData(
+        coroutineDispatcher = coroutineDispatcherProvider.io,
+        cachedData = capabilitiesLiveData.value,
+        liveData = _capabilities,
+        useCase = refreshCapabilitiesFromServerAsyncUseCase,
+        useCaseParams = RefreshCapabilitiesFromServerAsyncUseCase.Params(
+            accountName = accountName
+        )
+    )
 }

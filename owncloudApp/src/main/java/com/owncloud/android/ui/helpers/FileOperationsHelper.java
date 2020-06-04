@@ -6,7 +6,7 @@
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
  * @author Shashvat Kedia
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -38,23 +38,21 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import timber.log.Timber;
 
 import java.util.Collection;
 import java.util.List;
 
 public class FileOperationsHelper {
 
-    private static final String TAG = FileOperationsHelper.class.getSimpleName();
-
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
 
-    private FileActivity mFileActivity = null;
+    private FileActivity mFileActivity;
 
     /// Identifier of operation in progress which result shouldn't be lost 
     private long mWaitingForOpId = Long.MAX_VALUE;
@@ -103,7 +101,7 @@ public class FileOperationsHelper {
             }
 
             List<ResolveInfo> launchables = mFileActivity.getPackageManager().
-                    queryIntentActivities(openFileWithIntent, PackageManager.GET_INTENT_FILTERS);
+                    queryIntentActivities(openFileWithIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
             if (launchables != null && launchables.size() > 0) {
                 try {
@@ -126,7 +124,7 @@ public class FileOperationsHelper {
             }
 
         } else {
-            Log_OC.e(TAG, "Trying to open a NULL OCFile");
+            Timber.e("Trying to open a NULL OCFile");
         }
     }
 
@@ -170,48 +168,6 @@ public class FileOperationsHelper {
     }
 
     /**
-     * @return 'True' if the server supports the Share API
-     */
-    public boolean isSharedSupported() {
-        if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
-            return (serverVersion != null && serverVersion.isSharedSupported());
-        }
-        return false;
-    }
-
-    /**
-     * Helper method to remove an existing share, no matter if public or private.
-     * Starts a request to do it in {@link OperationsService}
-     *
-     * @param share The {@link OCShare} to remove (unshare).
-     */
-    public void removeShare(OCShare share) {
-        Intent unshareService = new Intent(mFileActivity, OperationsService.class);
-        unshareService.setAction(OperationsService.ACTION_UNSHARE);
-        unshareService.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
-        unshareService.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-
-        queueShareIntent(unshareService);
-    }
-
-    private void queueShareIntent(Intent shareIntent) {
-        if (isSharedSupported()) {
-            // Unshare the file
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().
-                    queueNewOperation(shareIntent);
-
-            mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-
-        } else {
-            // Show a Message
-            mFileActivity.showSnackMessage(
-                    mFileActivity.getString(R.string.share_link_no_support_share_api)
-            );
-        }
-    }
-
-    /**
      * Show an instance of {@link com.owncloud.android.domain.sharing.shares.model.ShareType} for sharing or unsharing
      * the {@link OCFile} received as parameter.
      *
@@ -223,17 +179,6 @@ public class FileOperationsHelper {
         intent.putExtra(FileActivity.EXTRA_ACCOUNT, mFileActivity.getAccount());
         mFileActivity.startActivity(intent);
 
-    }
-
-    /**
-     * @return 'True' if the server supports the Search Users API
-     */
-    public boolean isSearchUserSupported() {
-        if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
-            return (serverVersion != null && serverVersion.isSearchUsersSupported());
-        }
-        return false;
     }
 
     public void sendDownloadedFile(OCFile file) {
@@ -253,7 +198,7 @@ public class FileOperationsHelper {
             chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
 
         } else {
-            Log_OC.e(TAG, "Trying to send a NULL OCFile");
+            Timber.e("Trying to send a NULL OCFile");
         }
     }
 
@@ -312,11 +257,9 @@ public class FileOperationsHelper {
 
             if (success) {
                 // Schedule job to check to watch for local changes in available offline files and sync them
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    AvailableOfflineHandler availableOfflineHandler =
-                            new AvailableOfflineHandler(mFileActivity, mFileActivity.getAccount().name);
-                    availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
-                }
+                AvailableOfflineHandler availableOfflineHandler =
+                        new AvailableOfflineHandler(mFileActivity, mFileActivity.getAccount().name);
+                availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
 
                 /// immediate content synchronization
                 if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE == file.getAvailableOfflineStatus()) {
@@ -453,18 +396,6 @@ public class FileOperationsHelper {
 
     public void setOpIdWaitingFor(long waitingForOpId) {
         mWaitingForOpId = waitingForOpId;
-    }
-
-    /**
-     * @return 'True' if the server doesn't need to check forbidden characters
-     */
-    public boolean isVersionWithForbiddenCharacters() {
-        if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion =
-                    AccountUtils.getServerVersion(mFileActivity.getAccount());
-            return (serverVersion != null && serverVersion.isVersionWithForbiddenCharacters());
-        }
-        return false;
     }
 
     /**

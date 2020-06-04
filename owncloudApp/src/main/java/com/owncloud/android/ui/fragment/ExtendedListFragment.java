@@ -5,7 +5,7 @@
  * @author Abel García de Prada
  * @author Shashvat Kedia
  * Copyright (C) 2012 Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,7 +23,6 @@
 package com.owncloud.android.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,25 +34,24 @@ import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.ExtendedListView;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.utils.PreferenceUtils;
 import third_parties.in.srain.cube.GridViewWithHeaderAndFooter;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 
 public class ExtendedListFragment extends Fragment
         implements OnItemClickListener, OnEnforceableRefreshListener {
 
-    protected static final String TAG = ExtendedListFragment.class.getSimpleName();
-
-    protected static final String KEY_SAVED_LIST_POSITION = "SAVED_LIST_POSITION";
+    private static final String KEY_SAVED_LIST_POSITION = "SAVED_LIST_POSITION";
 
     private static final String KEY_INDEXES = "INDEXES";
     private static final String KEY_FIRST_POSITIONS = "FIRST_POSITIONS";
@@ -62,19 +60,19 @@ public class ExtendedListFragment extends Fragment
     private static final String KEY_EMPTY_LIST_MESSAGE = "EMPTY_LIST_MESSAGE";
     private static final String KEY_IS_GRID_VISIBLE = "IS_GRID_VISIBLE";
 
-    protected static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
-    protected static final String ARG_ONLY_AVAILABLE_OFFLINE = ExtendedListFragment.class.getCanonicalName() +
-            ".ONLY_AVAILABLE_OFFLINE";
-    protected static final String ARG_SHARED_BY_LINK_FILES = ExtendedListFragment.class.getCanonicalName() +
-            ".SHARED_BY_LINK_FILES";
+    static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
+    static final String ARG_LIST_FILE_OPTION = ExtendedListFragment.class.getCanonicalName() +
+            ".LIST_FILE_OPTION";
+    static final String ARG_PICKING_A_FOLDER = ExtendedListFragment.class.getCanonicalName() +
+            ".ARG_PICKING_A_FOLDER";
 
     private ProgressBar mProgressBar;
     private View mShadowView;
 
-    protected SwipeRefreshLayout mRefreshListLayout;
+    SwipeRefreshLayout mRefreshListLayout;
     private SwipeRefreshLayout mRefreshGridLayout;
-    protected SwipeRefreshLayout mRefreshEmptyLayout;
-    protected TextView mEmptyListMessage;
+    SwipeRefreshLayout mRefreshEmptyLayout;
+    TextView mEmptyListMessage;
 
     private FloatingActionsMenu mFabMain;
     private FloatingActionButton mFabUpload;
@@ -88,7 +86,7 @@ public class ExtendedListFragment extends Fragment
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = null;
 
-    protected AbsListView mCurrentListView;
+    AbsListView mCurrentListView;
     private ExtendedListView mListView;
     private View mListFooterView;
     private GridViewWithHeaderAndFooter mGridView;
@@ -96,7 +94,7 @@ public class ExtendedListFragment extends Fragment
 
     private ListAdapter mAdapter;
 
-    protected void setListAdapter(ListAdapter listAdapter) {
+    void setListAdapter(ListAdapter listAdapter) {
         mAdapter = listAdapter;
         mCurrentListView.setAdapter(listAdapter);
         mCurrentListView.invalidateViews();
@@ -106,11 +104,11 @@ public class ExtendedListFragment extends Fragment
         return mCurrentListView;
     }
 
-    public FloatingActionButton getFabUpload() {
+    FloatingActionButton getFabUpload() {
         return mFabUpload;
     }
 
-    public FloatingActionButton getFabMkdir() {
+    FloatingActionButton getFabMkdir() {
         return mFabMkdir;
     }
 
@@ -118,7 +116,7 @@ public class ExtendedListFragment extends Fragment
         return mFabMain;
     }
 
-    public void switchToGridView() {
+    void switchToGridView() {
         if (!isGridEnabled()) {
             mListView.setAdapter(null);
             mRefreshListLayout.setVisibility(View.GONE);
@@ -128,7 +126,7 @@ public class ExtendedListFragment extends Fragment
         }
     }
 
-    public void switchToListView() {
+    void switchToListView() {
         if (isGridEnabled()) {
             mGridView.setAdapter(null);
             mRefreshGridLayout.setVisibility(View.GONE);
@@ -143,10 +141,8 @@ public class ExtendedListFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log_OC.d(TAG, "onCreateView");
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Timber.v("onCreateView");
         View v = inflater.inflate(R.layout.list_fragment, null);
 
         mProgressBar = v.findViewById(R.id.syncProgressBar);
@@ -194,10 +190,10 @@ public class ExtendedListFragment extends Fragment
             }
             int referencePosition = savedInstanceState.getInt(KEY_SAVED_LIST_POSITION);
             if (isGridEnabled()) {
-                Log_OC.v(TAG, "Setting grid position " + referencePosition);
+                Timber.v("Setting grid position %s", referencePosition);
                 mGridView.setSelection(referencePosition);
             } else {
-                Log_OC.v(TAG, "Setting and centering around list position " + referencePosition);
+                Timber.v("Setting and centering around list position %s", referencePosition);
                 mListView.setAndCenterSelection(referencePosition);
             }
         }
@@ -219,17 +215,17 @@ public class ExtendedListFragment extends Fragment
             setMessageForEmptyList(savedInstanceState.getString(KEY_EMPTY_LIST_MESSAGE));
 
         } else {
-            mIndexes = new ArrayList<Integer>();
-            mFirstPositions = new ArrayList<Integer>();
-            mTops = new ArrayList<Integer>();
+            mIndexes = new ArrayList<>();
+            mFirstPositions = new ArrayList<>();
+            mTops = new ArrayList<>();
             mHeightCell = 0;
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log_OC.d(TAG, "onSaveInstanceState()");
+        Timber.v("onSaveInstanceState()");
         savedInstanceState.putBoolean(KEY_IS_GRID_VISIBLE, isGridEnabled());
         savedInstanceState.putInt(KEY_SAVED_LIST_POSITION, getReferencePosition());
         savedInstanceState.putIntegerArrayList(KEY_INDEXES, mIndexes);
@@ -270,8 +266,7 @@ public class ExtendedListFragment extends Fragment
             final int firstPosition = mFirstPositions.remove(mFirstPositions.size() - 1);
             int top = mTops.remove(mTops.size() - 1);
 
-            Log_OC.v(TAG, "Setting selection to position: " + firstPosition + "; top: "
-                    + top + "; index: " + index);
+            Timber.v("Setting selection to position: " + firstPosition + "; top: " + top + "; index: " + index);
 
             if (mCurrentListView == mListView) {
                 if (mHeightCell * index <= mListView.getHeight()) {
@@ -424,7 +419,7 @@ public class ExtendedListFragment extends Fragment
                 try {
                     mGridView.addFooterView(mGridFooterView, null, false);
                 } catch (IllegalStateException ie) {
-                    Log.w(TAG, "Could not add footer to grid view, because it exists");
+                    Timber.w("Could not add footer to grid view, because it exists");
                 }
             }
             mGridFooterView.invalidate();
@@ -468,7 +463,7 @@ public class ExtendedListFragment extends Fragment
     }
 
     public void setProgressBarAsIndeterminate(boolean indeterminate) {
-        Log_OC.d(TAG, "Setting progress visibility to " + indeterminate);
+        Timber.d("Setting progress visibility to %s", indeterminate);
         mShadowView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.setIndeterminate(indeterminate);
@@ -480,13 +475,8 @@ public class ExtendedListFragment extends Fragment
         return ((args != null) && args.getBoolean(ARG_JUST_FOLDERS, false));
     }
 
-    boolean isShowingOnlyAvailableOffline() {
+    boolean isPickingAFolder() {
         Bundle args = getArguments();
-        return ((args != null) && args.getBoolean(ARG_ONLY_AVAILABLE_OFFLINE, false));
-    }
-
-    boolean isShowingSharedByLinkFiles() {
-        Bundle args = getArguments();
-        return ((args != null) && args.getBoolean(ARG_SHARED_BY_LINK_FILES, false));
+        return ((args != null) && args.getBoolean(ARG_PICKING_A_FOLDER, false));
     }
 }

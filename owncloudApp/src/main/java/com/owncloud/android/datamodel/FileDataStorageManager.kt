@@ -7,7 +7,7 @@
  * @author Abel García de Prada
  *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -51,9 +51,9 @@ import com.owncloud.android.datamodel.OCFile.ROOT_PATH
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.*
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.lib.common.utils.Log_OC
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.utils.FileStorageUtils
+import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -66,10 +66,8 @@ import java.util.Vector
 
 class FileDataStorageManager {
 
-    var contentResolver: ContentResolver? = null
-        private set
+    private var contentResolver: ContentResolver? = null
     private var contentProviderClient: ContentProviderClient? = null
-        private set
     var account: Account
     private var mContext: Context? = null
 
@@ -121,11 +119,11 @@ class FileDataStorageManager {
                     }
                 } while (cursorOnKeptInSync.moveToNext())
             } else {
-                Log_OC.d(TAG, "No available offline files found")
+                Timber.d("No available offline files found")
             }
 
         } catch (e: Exception) {
-            Log_OC.e(TAG, "Exception retrieving all the available offline files", e)
+            Timber.e(e, "Exception retrieving all the available offline files")
 
         } finally {
             cursorOnKeptInSync?.close()
@@ -166,11 +164,11 @@ class FileDataStorageManager {
                         result.add(file)
                     } while (cursorOnKeptInSync.moveToNext())
                 } else {
-                    Log_OC.d(TAG, "No available offline files found")
+                    Timber.d("No available offline files found")
                 }
 
             } catch (e: Exception) {
-                Log_OC.e(TAG, "Exception retrieving all the available offline files", e)
+                Timber.e(e, "Exception retrieving all the available offline files")
 
             } finally {
                 cursorOnKeptInSync?.close()
@@ -181,9 +179,9 @@ class FileDataStorageManager {
 
     val sharedByLinkFilesFromCurrentAccount: Vector<OCFile>
         get() {
-            val allSharedFiles = Vector<OCFile>();
-            val result = Vector<OCFile>();
-            var cursorOnShared: Cursor? = null;
+            val allSharedFiles = Vector<OCFile>()
+            val result = Vector<OCFile>()
+            var cursorOnShared: Cursor? = null
             try {
                 cursorOnShared = contentResolver?.query(
                     CONTENT_URI,
@@ -193,33 +191,33 @@ class FileDataStorageManager {
                     null
                 )
                 if (cursorOnShared != null && cursorOnShared.moveToFirst()) {
-                    var file: OCFile?;
+                    var file: OCFile?
                     do {
-                        file = createFileInstance(cursorOnShared);
-                        allSharedFiles.add(file);
-                    } while (cursorOnShared.moveToNext());
+                        file = createFileInstance(cursorOnShared)
+                        allSharedFiles.add(file)
+                    } while (cursorOnShared.moveToNext())
                 }
             } catch (exception: Exception) {
-                Log_OC.e(TAG, "Exception retrieving all the shared by link files", exception);
+                Timber.e(exception, "Exception retrieving all the shared by link files")
             } finally {
                 cursorOnShared?.close()
             }
 
             if (allSharedFiles.isNotEmpty()) {
-                val allSharedDirs = Vector<Long>();
+                val allSharedDirs = Vector<Long>()
                 for (file in allSharedFiles) {
                     if (file.isFolder) {
-                        allSharedDirs.add(file.fileId);
+                        allSharedDirs.add(file.fileId)
                     }
                 }
                 for (file in allSharedFiles) {
                     if (file.isFolder || (!file.isFolder && !allSharedDirs.contains(file.parentId))) {
-                        result.add(file);
+                        result.add(file)
                     }
                 }
             }
-            result.sort();
-            return result;
+            result.sort()
+            return result
         }
 
     fun getFileByPath(path: String): OCFile? {
@@ -341,9 +339,9 @@ class FileDataStorageManager {
                     contentValues = cv,
                     where = "$_ID=?",
                     selectionArgs = arrayOf(file.fileId.toString())
-                ).let { Log_OC.d(TAG, "Rows updated: $it") }
+                ).let { Timber.d("Rows updated: $it") }
             } catch (e: Exception) {
-                Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
+                Timber.e(e, "Fail to insert insert file to database ${e.message}")
             }
 
         } else {
@@ -354,7 +352,7 @@ class FileDataStorageManager {
                 try {
                     performInsert(CONTENT_URI_FILE, cv)
                 } catch (e: RemoteException) {
-                    Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}", e)
+                    Timber.e(e, "Fail to insert insert file to database ${e.message}")
                     null
                 }
             resultUri?.let {
@@ -379,10 +377,7 @@ class FileDataStorageManager {
     fun saveFolder(
         folder: OCFile, updatedFiles: Collection<OCFile>, filesToRemove: Collection<OCFile>
     ) {
-        Log_OC.d(
-            TAG, "Saving folder ${folder.remotePath} with ${updatedFiles.size} children and " +
-                    "${filesToRemove.size} files to remove"
-        )
+        Timber.d("Saving folder ${folder.remotePath} with ${updatedFiles.size} children and ${filesToRemove.size} files to remove")
 
         val operations = ArrayList<ContentProviderOperation>(updatedFiles.size)
 
@@ -494,7 +489,7 @@ class FileDataStorageManager {
 
         // apply operations in batch
         var results: Array<ContentProviderResult>? = null
-        Log_OC.d(TAG, "Sending ${operations.size} operations to FileContentProvider")
+        Timber.d("Sending ${operations.size} operations to FileContentProvider")
         try {
             results =
                 if (contentResolver != null) {
@@ -504,10 +499,10 @@ class FileDataStorageManager {
                 }
 
         } catch (e: OperationApplicationException) {
-            Log_OC.e(TAG, "Exception in batch of operations ${e.message}", e)
+            Timber.e(e, "Exception in batch of operations ${e.message}")
 
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Exception in batch of operations ${e.message}", e)
+            Timber.e(e, "Exception in batch of operations ${e.message}")
         }
 
         // update new id in file objects for insertions
@@ -598,7 +593,7 @@ class FileDataStorageManager {
             }
 
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Fail updating available offline status", e)
+            Timber.e(e, "Fail updating available offline status")
             return false
         }
 
@@ -620,7 +615,7 @@ class FileDataStorageManager {
                         try {
                             performDelete(fileUri, where, whereArgs)
                         } catch (e: RemoteException) {
-                            e.printStackTrace()
+                            Timber.e(e)
                             0
                         }
                     success = success and (deleted > 0)
@@ -666,7 +661,7 @@ class FileDataStorageManager {
         return try {
             performDelete(url = folderUri, where = where, selectionArgs = whereArgs) > 0
         } catch (e: RemoteException) {
-            e.printStackTrace()
+            Timber.e(e)
             false
         }
     }
@@ -744,7 +739,7 @@ class FileDataStorageManager {
                         sortOrder = "$FILE_PATH ASC "
                     )
                 } catch (e: RemoteException) {
-                    Log_OC.e(TAG, e.message)
+                    Timber.e(e)
                     null
                 }
 
@@ -808,7 +803,7 @@ class FileDataStorageManager {
                     }
 
                 } catch (e: Exception) {
-                    Log_OC.e(TAG, "Fail to update ${file.fileId} and descendants in database", e)
+                    Timber.e(e, "Fail to update ${file.fileId} and descendants in database")
                 }
 
             }
@@ -868,7 +863,7 @@ class FileDataStorageManager {
                 copied = copyFile(localFile, targetFile)
             }
 
-            Log_OC.d(TAG, "Local file COPIED : $copied")
+            Timber.d("Local file COPIED : $copied")
         }
     }
 
@@ -894,7 +889,7 @@ class FileDataStorageManager {
                 try {
                     input.close()
                 } catch (e: IOException) {
-                    e.printStackTrace(System.err)
+                    Timber.e(e)
                 }
 
             }
@@ -902,7 +897,7 @@ class FileDataStorageManager {
                 try {
                     out.close()
                 } catch (e: IOException) {
-                    e.printStackTrace(System.err)
+                    Timber.e(e)
                 }
 
             }
@@ -916,7 +911,7 @@ class FileDataStorageManager {
 
         val reqUri = Uri.withAppendedPath(CONTENT_URI_DIR, parentId.toString())
 
-        val selection: String = "$FILE_PARENT=?"
+        val selection = "$FILE_PARENT=?"
         val selectionArgs: Array<String> = arrayOf(parentId.toString())
 
         val c: Cursor? = try {
@@ -928,7 +923,7 @@ class FileDataStorageManager {
                 sortOrder = null
             )
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, e.message)
+            Timber.e(e)
             return ret
         }
 
@@ -991,7 +986,7 @@ class FileDataStorageManager {
                     sortOrder = null
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Couldn't determine file existence, assuming non existence: ${e.message}", e)
+                Timber.e(e, "Couldn't determine file existence, assuming non existence: ${e.message}")
                 return false
             }
         return c?.let {
@@ -1011,7 +1006,7 @@ class FileDataStorageManager {
                 sortOrder = null
             )
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Could not get file details: ${e.message}", e)
+            Timber.e(e, "Could not get file details: ${e.message}")
             null
         }
 
@@ -1061,7 +1056,7 @@ class FileDataStorageManager {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 try {
-                    MainApp.appContext!!.sendBroadcast(intent)
+                    MainApp.appContext.sendBroadcast(intent)
                 } catch (fileUriExposedException: FileUriExposedException) {
                     val newIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
                     newIntent.data = FileProvider.getUriForFile(
@@ -1069,14 +1064,14 @@ class FileDataStorageManager {
                         mContext!!.resources.getString(R.string.file_provider_authority),
                         File(path)
                     )
-                    MainApp.appContext!!.sendBroadcast(newIntent)
+                    MainApp.appContext.sendBroadcast(newIntent)
                 }
 
             } else {
-                MainApp.appContext!!.sendBroadcast(intent)
+                MainApp.appContext.sendBroadcast(intent)
             }
 
-            MainApp.appContext!!.sendBroadcast(intent)
+            MainApp.appContext.sendBroadcast(intent)
         }
     }
 
@@ -1106,7 +1101,7 @@ class FileDataStorageManager {
                     )
             }
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Exception deleting media file in MediaStore ${e.message}", e)
+            Timber.e(e, "Exception deleting media file in MediaStore ${e.message}")
         }
     }
 
@@ -1126,11 +1121,11 @@ class FileDataStorageManager {
                     selectionArgs = arrayOf(file.fileId.toString())
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
+                Timber.e(e, "Failed saving conflict in database ${e.message}")
                 0
             }
 
-        Log_OC.d(TAG, "Number of files updated with CONFLICT: $updated")
+        Timber.d("Number of files updated with CONFLICT: $updated")
 
         if (updated > 0) {
             if (eTagInConflict != null) {
@@ -1160,7 +1155,7 @@ class FileDataStorageManager {
                             selectionArgs = ancestorIds.toTypedArray()
                         )
                     } catch (e: RemoteException) {
-                        Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
+                        Timber.e(e, "Failed saving conflict in database ${e.message}")
                     }
                 } // else file is ROOT folder, no parent to set in conflict
 
@@ -1173,7 +1168,7 @@ class FileDataStorageManager {
                 }
                 parentPath = parentPath.substring(0, parentPath.lastIndexOf(PATH_SEPARATOR) + 1)
 
-                Log_OC.d(TAG, "checking parents to remove conflict; STARTING with $parentPath")
+                Timber.d("checking parents to remove conflict; STARTING with $parentPath")
                 while (parentPath.isNotEmpty()) {
 
                     val whereForDescendantsInConflict = FILE_ETAG_IN_CONFLICT + " IS NOT NULL AND " +
@@ -1190,12 +1185,12 @@ class FileDataStorageManager {
                                 sortOrder = null
                             )
                         } catch (e: RemoteException) {
-                            Log_OC.e(TAG, "Failed querying for descendants in conflict ${e.message}", e)
+                            Timber.e(e, "Failed querying for descendants in conflict ${e.message}")
                             null
                         }
 
                     if (descendantsInConflict == null || descendantsInConflict.count == 0) {
-                        Log_OC.d(TAG, "NO MORE conflicts in $parentPath")
+                        Timber.d("NO MORE conflicts in $parentPath")
 
                         try {
                             performUpdate(
@@ -1205,18 +1200,18 @@ class FileDataStorageManager {
                                 selectionArgs = arrayOf(account.name, parentPath)
                             )
                         } catch (e: RemoteException) {
-                            Log_OC.e(TAG, "Failed saving conflict in database ${e.message}", e)
+                            Timber.e(e, "Failed saving conflict in database ${e.message}")
                         }
 
                     } else {
-                        Log_OC.d(TAG, "STILL ${descendantsInConflict.count} in $parentPath")
+                        Timber.d("STILL ${descendantsInConflict.count} in $parentPath")
                     }
 
                     descendantsInConflict?.close()
 
                     parentPath = parentPath.substring(0, parentPath.length - 1)  // trim last /
                     parentPath = parentPath.substring(0, parentPath.lastIndexOf(PATH_SEPARATOR) + 1)
-                    Log_OC.d(TAG, "checking parents to remove conflict; NEXT $parentPath")
+                    Timber.d("checking parents to remove conflict; NEXT $parentPath")
                 }
             }
         }
@@ -1233,6 +1228,7 @@ class FileDataStorageManager {
             put(CAPABILITIES_VERSION_STRING, capability.versionString)
             put(CAPABILITIES_VERSION_EDITION, capability.versionEdition)
             put(CAPABILITIES_CORE_POLLINTERVAL, capability.corePollinterval)
+            put(CAPABILITIES_DAV_CHUNKING_VERSION, capability.chunkingVersion)
             put(CAPABILITIES_SHARING_API_ENABLED, capability.filesSharingApiEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_ENABLED, capability.filesSharingPublicEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED, capability.filesSharingPublicPasswordEnforced.value)
@@ -1251,11 +1247,9 @@ class FileDataStorageManager {
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED, capability.filesSharingPublicExpireDateEnabled.value)
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS, capability.filesSharingPublicExpireDateDays)
             put(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED, capability.filesSharingPublicExpireDateEnforced.value)
-            put(CAPABILITIES_SHARING_PUBLIC_SEND_MAIL, capability.filesSharingPublicSendMail.value)
             put(CAPABILITIES_SHARING_PUBLIC_UPLOAD, capability.filesSharingPublicUpload.value)
             put(CAPABILITIES_SHARING_PUBLIC_MULTIPLE, capability.filesSharingPublicMultiple.value)
             put(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY, capability.filesSharingPublicSupportsUploadOnly.value)
-            put(CAPABILITIES_SHARING_USER_SEND_MAIL, capability.filesSharingUserSendMail.value)
             put(CAPABILITIES_SHARING_RESHARING, capability.filesSharingResharing.value)
             put(CAPABILITIES_SHARING_FEDERATION_OUTGOING, capability.filesSharingFederationOutgoing.value)
             put(CAPABILITIES_SHARING_FEDERATION_INCOMING, capability.filesSharingFederationIncoming.value)
@@ -1273,14 +1267,14 @@ class FileDataStorageManager {
                     selectionArgs = arrayOf(account.name)
                 )
             } catch (e: RemoteException) {
-                Log_OC.e(TAG, "Fail to insert insert file to database ${e.message}")
+                Timber.e("Fail to insert insert file to database ${e.message}")
             }
         } else {
             val resultUri: Uri? =
                 try {
                     performInsert(CONTENT_URI_CAPABILITIES, cv)
                 } catch (e: RemoteException) {
-                    Log_OC.e(TAG, "Fail to insert insert capability to database ${e.message}")
+                    Timber.e("Fail to insert insert capability to database ${e.message}")
                     null
                 }
             resultUri?.let {
@@ -1311,7 +1305,7 @@ class FileDataStorageManager {
                 sortOrder = null
             )
         } catch (e: RemoteException) {
-            Log_OC.e(TAG, "Couldn't determine capability existence, assuming non existence: ${e.message}")
+            Timber.e("Couldn't determine capability existence, assuming non existence: ${e.message}")
             null
         }
 
@@ -1340,6 +1334,7 @@ class FileDataStorageManager {
                 versionString = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_STRING)),
                 versionEdition = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
                 corePollInterval = c.getInt(c.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
+                davChunkingVersion = c.getString(c.getColumnIndex(CAPABILITIES_DAV_CHUNKING_VERSION)) ?: "",
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(
                     c.getInt(
                         c.getColumnIndex(
@@ -1401,13 +1396,6 @@ class FileDataStorageManager {
                         )
                     )
                 ),
-                filesSharingPublicSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_SEND_MAIL
-                        )
-                    )
-                ),
                 filesSharingPublicUpload = CapabilityBooleanType.fromValue(
                     c.getInt(
                         c.getColumnIndex(
@@ -1426,13 +1414,6 @@ class FileDataStorageManager {
                     c.getInt(
                         c.getColumnIndex(
                             CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-                        )
-                    )
-                ),
-                filesSharingUserSendMail = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_USER_SEND_MAIL
                         )
                     )
                 ),
@@ -1544,7 +1525,6 @@ class FileDataStorageManager {
     }
 
     companion object {
-        private val TAG = FileDataStorageManager::class.java.simpleName
         const val ROOT_PARENT_ID = 0
         private const val pathAudio = "audio/"
         private const val pathVideo = "video/"

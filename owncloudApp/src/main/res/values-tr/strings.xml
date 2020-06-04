@@ -37,8 +37,8 @@
   <string name="prefs_accounts">Hesaplar</string>
   <string name="prefs_manage_accounts">Hesapları yönet</string>
   <string name="prefs_passcode">Parola kod kilidi</string>
-  <string name="prefs_fingerprint">Parmak izi kilidi</string>
-  <string name="prefs_fingerprint_summary">Bu özelliği etkinleştirmek için parola veya desen ile kilitlemeyi etkinleşir</string>
+  <string name="prefs_biometric">Biyometrik kilit</string>
+  <string name="prefs_biometric_summary">Bu özelliği etkinleştirmek için parola veya desen ile kilitlemeyi etkinleşir</string>
   <string name="prefs_touches_with_other_visible_windows">Diğer görünür pencerelerle birlikte dokunma</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Başka bir görünür pencere tarafından gizlendiğinde dokunmalara izin ver. Uygulamaları hafif filtrelemek için etkinleştir.</string>
   <string name="confirmation_touches_with_other_windows_title">Bu özelliği etkinleştirmek istediğinizden emin misiniz?</string>
@@ -73,11 +73,21 @@
   <string name="passcode_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, lütfen öncelikle parolayı devre dışı bırakınız.</string>
   <string name="pattern_no_longer_required">Desen artık sorulmayacak</string>
   <string name="pattern_configure_your_pattern_explanation">Uygulama her açılışında desen sorulacak</string>
+  <string name="pass_code_locked">Parola kodu ile kilitlendi</string>
   <string name="pattern_locked">Desenle kilitlendi</string>
+  <string name="illegal_argument_exception_message">Geçilen Niyette geçerli bir EYLEM gerekli</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Dosyalar</string>
+  <string name="bottom_nav_uploads">Yüklemeler</string>
+  <string name="bottom_nav_offline">Çevrimdışı</string>
+  <string name="bottom_nav_links">Bağlantılar</string>
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
+  <string name="error_reason">çünkü</string>
   <string name="auth_failure_snackbar">Kimlik doğrulaması başarısız oldu.</string>
+  <string name="server_not_supported">Sunucu sürümünüz 10\'dan daha düşük olduğu için desteklenmiyor, lütfen sunucunu daha yeni bir sürüme yükseltiniz.</string>
   <string name="auth_failure_snackbar_action">Hesabı değiştir</string>
+  <string name="auth_oauth_failure">Erişim belirtecinin süresi doldu veya geçersiz hale geldi. Tekrar erişim kazanmak için tekrar oturum açın.</string>
   <string name="auth_oauth_failure_snackbar_action">Oturum aç</string>
   <string name="auth_check_server">Sunucuyu denetle</string>
   <string name="auth_host_url">Sunucu adresi https://…</string>
@@ -102,6 +112,7 @@
   <string name="file_list_seconds_ago">saniyeler önce</string>
   <string name="file_list_empty">Burada hiçbir şey yok. Bir şeyler yükleyin!</string>
   <string name="file_list_empty_available_offline">Erişilebilir hiçbir çevrimdışı dosya yok.</string>
+  <string name="file_list_empty_shared_by_links">Bağlantı ile paylaşılan hiçbir dosya yok.</string>
   <string name="file_list_loading">Yükleniyor...</string>
   <string name="file_list_no_app_for_file_type">Dosya türü için hiçbir uygulama bulunamadı</string>
   <string name="local_file_list_empty">Bu klasörde dosya yok.</string>
@@ -134,7 +145,7 @@
   <string name="common_error">Hata</string>
   <string name="common_loading">Yükleniyor...</string>
   <string name="common_unknown">bilinmiyor</string>
-  <string name="common_error_unknown">Bilinmeyen hata</string>
+  <string name="common_error_unknown">bilinmeyen hata</string>
   <string name="common_pending">Bekliyor</string>
   <string name="common_important">Önemli</string>
   <string name="about_title">Hakkında</string>
@@ -157,6 +168,7 @@
   <string name="uploader_upload_text_filename_hint">Dosya adı</string>
   <string name="uploader_upload_camera_upload_files">Kamera yükleme dosyaları yükleniyor</string>
   <string name="uploader_upload_available_offline_files">Erişilebilir çevrimdışı dosyalar yükleniyor</string>
+  <string name="uploader_upload_requested_from_wifi_files">Wifi dosyalarından yükleme istendi</string>
   <string name="ssl_certificate_not_trusted">Sunucu sertifikası güvenilir değil</string>
   <string name="uploads_view_title">Yüklemeler</string>
   <string name="uploads_view_group_current_uploads">Geçerli</string>
@@ -218,13 +230,10 @@
   <string name="pass_code_wrong">Hatalı parola kodu</string>
   <string name="pass_code_removed">Parola kodu kaldırıldı</string>
   <string name="pass_code_stored">Parola kodu depolandı</string>
-  <string name="fingerprint_confirm">Devam etmek için parmak izinizi onaylayın</string>
-  <string name="fingerprint_hint">Dokunma sensörü</string>
-  <string name="fingerprint_not_recognized">Parmak izi tanınmadı, yeniden deneyin</string>
-  <string name="fingerprint_success">Parmak izi tanındı</string>
-  <string name="fingerprint_not_hardware_detected">Bu cihaz parmak izi kimlik doğrulamasını desteklemiyor</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Bu özelliği kullanmak için en azından bir parmak izi kaydedin</string>
-  <string name="fingerprint_not_granted_permissions">Parmak izi izinleri verilmemiş</string>
+  <string name="biometric_not_hardware_detected">Bu cihaz biyometrik kimlik doğrulamayı desteklemiyor</string>
+  <string name="biometric_not_enrolled">Bu özelliği kullanmak için en az bir biyometrik giriş kaydedilmeli</string>
+  <string name="biometric_prompt_title">Biyometrik giriş yap</string>
+  <string name="biometric_prompt_subtitle">Biyometrik kimlik bilgilerinizi kullanarak giriş yapın</string>
   <string name="media_notif_ticker">%1$s müzik çalar</string>
   <string name="media_state_playing">%1$s (oynatılıyor)</string>
   <string name="media_state_loading">%1$s (yükleniyor)</string>
@@ -283,7 +292,8 @@
   <string name="confirmation_remove_local">Sadece yerel</string>
   <string name="confirmation_remove_account_alert">%1$s hesabını gerçekten kaldırmak istiyor musunuz?</string>
   <string name="confirmation_remove_public_share_title">Bağlantıyı sil</string>
-  <string name="confirmation_remove_share_message">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
+  <string name="confirmation_remove_private_share_title">Özel paylaşımı kaldır</string>
+  <string name="confirmation_remove_share_message">Gerçekten %1$s paylaşımını kaldırmak istiyor musunuz?</string>
   <string name="remove_success_msg">Kaldırma başarılı</string>
   <string name="remove_fail_msg">Kaldırma başarısız</string>
   <string name="rename_dialog_title">Yeni bir isim girin</string>
@@ -300,7 +310,7 @@
   <string name="wait_checking_credentials">Kayıtlı kimlik bilgileri kontrol ediliyor</string>
   <string name="filedisplay_unexpected_bad_get_content">Beklenmedik sorun; lütfen dosya seçmek için farklı bir uygulama kullanın</string>
   <string name="filedisplay_no_file_selected">Hiçbir dosya seçilmedi</string>
-  <string name="activity_chooser_title">Bağlantıyı gönder</string>
+  <string name="activity_chooser_title">Bağlantıyı şuna gönder</string>
   <string name="wait_for_tmp_copy_from_private_storage">Dosya özel depolamadan kopyalanıyor</string>
   <string name="oauth_check_onoff">oAuth2 ile oturum aç</string>
   <string name="oauth_login_connection">OAuth2 sunucusuna bağlanıyor...</string>
@@ -354,17 +364,14 @@
   <string name="preview_image_error_unknown_format">Bu resim gösterilemiyor</string>
   <string name="error__upload__local_file_not_copied">%1$s, %2$s yerel klasörüne kopyalanamadı</string>
   <string name="prefs_camera_picture_upload_path_title">Resim yükleme yolu</string>
-  <string name="get_shares_error">Paylaşımları almaya çalışırken bir hata oluştu</string>
-  <string name="get_sharees_error">Kullanıcıları ve grupları almaya çalışırken bir hata oluştu</string>
-  <string name="get_capabilities_error">Yetenekleri almaya çalışırken bir hata oluştu</string>
+  <string name="get_shares_error">Paylaşımlar sunucudan alınamadı</string>
+  <string name="get_sharees_error">Sunucudan kullanıcılar ve gruplar alınamadı</string>
+  <string name="get_capabilities_error">Yetenekler sunucudan alınamadı</string>
   <string name="share_link_no_support_share_api">Üzgünüz, paylaşım sunucunuzda etkin değil. Lütfen yöneticinizle
                 iletişime geçin.</string>
-  <string name="share_link_file_no_exist">Paylaşma başarısız. Lütfen dosyanın mevcut olup olmadığını denetleyin</string>
-  <string name="share_link_file_error">Bu dosya veya klasörü paylaşmaya çalışılırken bir hata oluştu</string>
-  <string name="unshare_link_file_no_exist">Paylaşımı kaldırma başarısız. Lütfen dosyanın mevcut olup olmadığını denetleyin</string>
-  <string name="unshare_link_file_error">Bu dosya veya klasör paylaşımı kaldırılmaya çalışılırken bir hata oluştu</string>
-  <string name="update_link_file_no_exist">Güncelleme yapılamıyor. Lütfen dosyanın mevcut olup olmadığını kontrol edin.</string>
-  <string name="update_link_file_error">Paylaşım güncellenmeye çalışırken bir hata oluştu</string>
+  <string name="share_link_file_error">Bu dosya veya klasör paylaşılamadı</string>
+  <string name="unshare_link_file_error">Bu dosya veya klasör paylaşımdan kaldırılamadı</string>
+  <string name="update_link_file_error">Bu dosya veya klasör güncellenemedi</string>
   <string name="share_link_password_title">Bir parola girin</string>
   <string name="share_link_empty_password">Bir parola girmelisiniz</string>
   <string name="activity_chooser_send_file_title">Gönder</string>
@@ -434,6 +441,8 @@
   <string name="prefs_camera_upload_source_path_title">Kamera klasörü (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">gerekli</string>
   <string name="prefs_camera_upload_source_path_title_optional">isteğe bağlı</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Orjinal dosya şu olacak</string>
+  <string name="prefs_camera_upload_behaviour_title">şu olacak</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>
   <string name="pref_behaviour_entries_keep_file">özgün klasöründe tutuldu</string>
@@ -507,10 +516,10 @@
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Parola *</string>
   <string name="share_via_link_expiration_date_enforced_label">Bitiş *</string>
-  <string name="share_via_link_expiration_date_explanation_label">Herkese açık bağlantının, oluşturulduktan en geç %1$d gün sonra süresi dolacak</string>
+  <string name="share_via_link_expiration_date_explanation_label">Herkese açık bağlantının süresi, oluşturulduktan en geç %1$d gün sonra dolacak</string>
   <string name="share_via_link_default_name_template">%1$s bağlantı</string>
   <string name="share_via_link_empty_password">Parola boş</string>
-  <string name="private_link_info">Bu özel bir bağlantıdır, sadece dosyaya/klasöre erişimi olanlar kullanabilir. Paylaşımlarda, kendinize veya başkalarına kalıcı bağlantı olarak kullanın.</string>
+  <string name="private_link_info">Bu bir özel bağlantıdır, bunu sadece dosyaya/klasöre erişimi olan kişiler kullanabilir. Bu bağlantıyı, kendiniz için kalıcı bir bağlantı olarak veya başkalarına paylaşım içindeki dosyaları gösterebilmek için kullanın.</string>
   <string name="file_private_link_error">Bu dosya için özel bağlantı mevcut değil</string>
   <string name="download_notification_channel_name">İndirmeler</string>
   <string name="download_notification_channel_description">İndirilen dosyanın adını ve durumunu gör</string>
@@ -542,15 +551,6 @@
   <string name="welcome_feature_4_text">Resimleriniz/videolarınız otomatik yüklendi</string>
   <string name="welcome_feature_5_title">Video akışı</string>
   <string name="welcome_feature_5_text">Videolarınızı onları indirmeden oynatın</string>
-  <string name="welcome_feature_6_title">Mevcut klasörde ara</string>
-  <string name="welcome_feature_6_text">Dosyalarınızı ada göre filtreleyin</string>
-  <string name="welcome_feature_7_title">Tümünü seç</string>
-  <string name="welcome_feature_7_text">Tüm dosyaları tek seferde seçin</string>
-  <string name="welcome_feature_8_title">Çevrimdışı kullanılabilir</string>
-  <string name="welcome_feature_8_text">Dosyalarınız otomatik olarak eşitlendi</string>
-  <string name="welcome_feature_9_title">Belge sağlayıcı</string>
-  <string name="welcome_feature_9_text">Diğer uygulamalardan ownCloud dosyalarınıza erişin ve düzenleyin</string>
-  <string name="welcome_feature_10_title">Herkesin arama kayıtları</string>
-  <string name="welcome_feature_10_text">Uygulamanın daha iyi çalışmasını sağlamak için kayıtlarınızı bize gönderin</string>
   <string name="no_borwser_installed_alert">Yüklü tarayıcı yok. Lütfen güvenli bağlantıyı sağlamak için bir tarayıcı yükleyin.</string>
+  <string name="common_not_found">bulunamadı</string>
 </resources>

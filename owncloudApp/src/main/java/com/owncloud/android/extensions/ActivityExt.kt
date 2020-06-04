@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,16 +20,33 @@
 package com.owncloud.android.extensions
 
 import android.app.Activity
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
-fun Activity.showError(genericErrorMessage: String, throwable: Throwable?) =
+fun Activity.showErrorInSnackbar(genericErrorMessageId: Int, throwable: Throwable?) =
     throwable?.let {
-        showMessage(it.parseError(genericErrorMessage, resources))
+        showMessageInSnackbar(
+            message = it.parseError(getString(genericErrorMessageId), resources)
+        )
     }
 
-fun Activity.showMessage(
+fun Activity.showMessageInSnackbar(
+    layoutId: Int = android.R.id.content,
     message: CharSequence,
     duration: Int = Snackbar.LENGTH_LONG
 ) {
-    Snackbar.make(findViewById(android.R.id.content), message, duration).show()
+    Snackbar.make(findViewById(layoutId), message, duration).show()
 }
+
+fun Activity.showErrorInToast(
+    genericErrorMessageId: Int,
+    throwable: Throwable?,
+    duration: Int = Toast.LENGTH_SHORT
+) =
+    throwable?.let {
+        Toast.makeText(
+            this,
+            it.parseError(getString(genericErrorMessageId), resources),
+            duration
+        ).show()
+    }

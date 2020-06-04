@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/shared_via_link"
+            android:src="@drawable/ic_shared_by_link"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/custom_checkbox"
             app:layout_constraintStart_toStartOf="parent"

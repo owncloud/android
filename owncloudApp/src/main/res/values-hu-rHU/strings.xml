@@ -37,9 +37,10 @@
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
-  <string name="prefs_fingerprint">Ujjlenyomat zár</string>
-  <string name="prefs_fingerprint_summary">Adjon meg zárolási jelszót vagy mintát a beállítás engedélyezéséhez</string>
+  <string name="prefs_biometric_summary">Adjon meg zárolási jelszót vagy mintát a beállítás engedélyezéséhez</string>
   <string name="prefs_touches_with_other_visible_windows">Érintkezik más látható ablakkal</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Engedélyezze az érintéseket, amikor a kép takarásban van egy másik ablak által.</string>
+  <string name="confirmation_touches_with_other_windows_title">Biztos, hogy engedélyezi ezt a funkciót?</string>
   <string name="prefs_camera_picture_upload">Képfeltöltések</string>
   <string name="prefs_camera_picture_upload_summary">A fényképezőgép által készített képek automatikus feltöltése</string>
   <string name="prefs_camera_video_upload">Videófeltöltések</string>
@@ -70,11 +71,17 @@
   <string name="passcode_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a jelszót</string>
   <string name="pattern_no_longer_required">A minta többé nem lesz bekérve</string>
   <string name="pattern_configure_your_pattern_explanation">A minta az app minden egyes indításakor be lesz kérve</string>
+  <string name="pass_code_locked">Jelszóval zárolva</string>
+  <string name="pattern_locked">Mintával zárolva</string>
   <string name="illegal_argument_exception_message">Érvényes MŰVELET szükséges</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Fájlkezelő</string>
+  <string name="bottom_nav_uploads">Feltöltések</string>
   <string name="recommend_subject">Próbálja ki a(z) %1$s appot az okostelefonján!</string>
   <string name="recommend_text">Szeretnélek meghívni, hogy használd a(z) %1$s alkalmazást az okostelefonodon!\nTöltsd le innen: %2$s</string>
   <string name="auth_failure_snackbar">Sikertelen bejelentkezés</string>
   <string name="auth_failure_snackbar_action">Fiók módosítása</string>
+  <string name="auth_oauth_failure">A hozzáférési token lejárt, vagy érvényét vesztette. Jelentkezzen be újra, hogy hozzáférést nyerjen</string>
   <string name="auth_oauth_failure_snackbar_action">Bejelentkezés</string>
   <string name="auth_check_server">Kiszolgáló ellenőrzése</string>
   <string name="auth_host_url">Kiszolgálócím https://...</string>
@@ -99,6 +106,7 @@
   <string name="file_list_seconds_ago">másodperce</string>
   <string name="file_list_empty">Itt nincs semmi. Töltsön fel valamit!</string>
   <string name="file_list_empty_available_offline">Nincsen elérhető offline fájl.</string>
+  <string name="file_list_empty_shared_by_links">Nem lettek fájlok linkkel megosztva.</string>
   <string name="file_list_loading">Betöltés…</string>
   <string name="file_list_no_app_for_file_type">Nem található alkalmazás a fájltípushoz</string>
   <string name="local_file_list_empty">Nincs fájl ebben a mappában.</string>
@@ -131,7 +139,6 @@
   <string name="common_error">Hiba</string>
   <string name="common_loading">Betöltés…</string>
   <string name="common_unknown">ismeretlen</string>
-  <string name="common_error_unknown">Ismeretlen hiba</string>
   <string name="common_pending">Folyamatban</string>
   <string name="common_important">Fontos</string>
   <string name="about_title">Névjegy</string>
@@ -179,6 +186,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Várakozás a wifi kapcsolatra</string>
   <string name="uploads_view_later_waiting_to_upload">Várakozás a feltöltésre</string>
   <string name="uploads_view_unsupported_media_type">Nem támogatott médiatípus</string>
+  <string name="downloader_download_in_progress_ticker">Letöltés...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Letöltés: %2$s</string>
   <string name="downloader_download_succeeded_ticker">A letöltés sikeres</string>
   <string name="downloader_download_succeeded_content">%1$s letöltve </string>
@@ -215,13 +223,6 @@
   <string name="pass_code_wrong">Hibás jelszó</string>
   <string name="pass_code_removed">Jelszó eltávolítva</string>
   <string name="pass_code_stored">Jelszó eltárolva</string>
-  <string name="fingerprint_confirm">Erősítse meg az ujjlenyomatát a folytatáshoz</string>
-  <string name="fingerprint_hint">Érintésérzékelő</string>
-  <string name="fingerprint_not_recognized">Az ujjlenyomat nem felismerhető, próbálja újra</string>
-  <string name="fingerprint_success">Ujjlenyomat felismerve</string>
-  <string name="fingerprint_not_hardware_detected">Az eszköz nem támogatja az ujjlenyomatos hitelesítést</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Regisztráljon legalább egy ujjlenyomatot a funkció használatához</string>
-  <string name="fingerprint_not_granted_permissions">Az ujjlenyomat jogosultság nincs megadva</string>
   <string name="media_notif_ticker">%1$s zenelejátszó</string>
   <string name="media_state_playing">%1$s (lejátszás)</string>
   <string name="media_state_loading">%1$s (betöltés)</string>
@@ -264,7 +265,7 @@
   <string name="auth_wtf_reenter_URL">Váratlan állapot; adja meg újra a kiszolgálócímet</string>
   <string name="auth_expired_oauth_token_toast">A jogosultsága lejárt. Jelentkezzen be újra</string>
   <string name="auth_expired_basic_auth_toast">Adja meg az aktuális jelszót</string>
-    <string name="auth_connecting_auth_server">Csatlakozás a hitelesítési kiszolgálóhoz…</string>
+  <string name="auth_connecting_auth_server">Csatlakozás a hitelesítési kiszolgálóhoz…</string>
   <string name="auth_unsupported_auth_method">A kiszolgáló nem támogatja ezt a hitelesítési módszert</string>
   <string name="auth_unsupported_multiaccount">A(z) %1$s nem támogat egyszerre több fiókot</string>
   <string name="auth_fail_get_user_name">A kiszolgáló nem ad vissza helyes felhasználói azonosítót, lépjen kapcsolatba egy rendszergazdával
@@ -280,7 +281,6 @@
   <string name="confirmation_remove_local">Csak a helyi példányt</string>
   <string name="confirmation_remove_account_alert">Biztos eltávolítja a fiókot: %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Hivatkozás eltávolítása</string>
-  <string name="confirmation_remove_share_message">Biztos eltávolítja: %1$s?</string>
   <string name="remove_success_msg">Eltávolítás sikeres</string>
   <string name="remove_fail_msg">Az eltávolítás meghiúsult</string>
   <string name="rename_dialog_title">Adjon meg egy új nevet</string>
@@ -339,7 +339,10 @@
   <string name="confirmation_disable_camera_uploads_title">Megerősítés</string>
   <string name="confirmation_disable_pictures_upload_message">Biztos letiltja ezt a funkciót? A függőben lévő képek nem lesznek feltöltve</string>
   <string name="confirmation_disable_videos_upload_message">Biztos letiltja ezt a funkciót? A függőben lévő videók nem lesznek feltöltve</string>
+  <string name="proper_pics_folder_warning_camera_upload">Ellenőrizze, hogy a kijelölt mappa megegyezik azzal, ahová a kamera a képeket menti. Ellenkező esetben ez a funkció nem lesz képes felismerni a képeket. Tartsa észben, hogy a képek legalább 15 perccel az elkészülés után kerülnek feltöltésre.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Ellenőrizze, hogy a kijelölt mappa megegyezik azzal, ahová a kamera a videókat menti. Ellenkező esetben ez a funkció nem lesz képes felismerni a videókat. Tartsa észben, hogy a videók legalább 15 perccel az elkészülés után kerülnek feltöltésre.</string>
   <string name="conflict_title">Fájlütközés</string>
+  <string name="conflict_description">A következő fájlban konfliktus található %1$s, érintsd meg, hogy megold</string>
   <string name="conflict_message">Mely fájlokat tartja meg? Ha mindkét verziót kiválasztja, akkor a helyi fájl nevéhez hozzá lesz adva egy szám.</string>
   <string name="conflict_keep_both">Mindkettő megtartása</string>
   <string name="conflict_use_local_version">helyi verzió</string>
@@ -350,12 +353,6 @@
   <string name="prefs_camera_picture_upload_path_title">Képfeltöltési útvonal</string>
   <string name="share_link_no_support_share_api">Sajnáljuk, a megosztás nem engedélyezett ezen a kiszolgálón. Vegye fel a kapcsolatot a
 		rendszergazdával.</string>
-  <string name="share_link_file_no_exist">Nem sikerült megosztani. Ellenőrizze, hogy létezik-e a fájl</string>
-  <string name="share_link_file_error">Hiba történt a fájl vagy mappa megosztásakor</string>
-  <string name="unshare_link_file_no_exist">A megosztás nem kapcsolható ki. Ellenőrizze, hogy létezik-e a fájl</string>
-  <string name="unshare_link_file_error">Hiba történt a fájl vagy mappa megosztásának visszavonásakor</string>
-  <string name="update_link_file_no_exist">Nem sikerült frissíteni. Ellenőrizze, hogy létezik-e a fájl</string>
-  <string name="update_link_file_error">Hiba történt a megosztás frissítése közben</string>
   <string name="share_link_password_title">Adjon meg egy jelszót</string>
   <string name="share_link_empty_password">Adjon meg egy jelszót</string>
   <string name="activity_chooser_send_file_title">Küldés</string>
@@ -389,7 +386,8 @@
   <string name="log_send_mail_subject">%1$s Android-alkalmazások naplói</string>
   <string name="log_progress_dialog_text">Adatok betöltése...</string>
   <string name="actionbar_select_all">Összes kijelölése</string>
-    <string name="actionbar_move">Mozgatás</string>
+  <string name="actionbar_select_inverse">Fordított kijelölés</string>
+  <string name="actionbar_move">Mozgatás</string>
   <string name="file_list_empty_moving">Itt nincs semmi! Adj hozzá egy mappát!</string>
   <string name="folder_picker_choose_button_text">Választ</string>
   <string name="move_file_not_found">Nem lehet áttenni. Ellenőrizze, hogy létezik-e a fájl</string>
@@ -424,6 +422,8 @@
   <string name="prefs_camera_upload_source_path_title">Kamera mappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">kötelező</string>
   <string name="prefs_camera_upload_source_path_title_optional">választható</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Eredeti fájl lesz</string>
+  <string name="prefs_camera_upload_behaviour_title">Eredeti fájl lesz ...</string>
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>
   <string name="pref_behaviour_entries_keep_file">eredeti mappában tárolva</string>
@@ -445,6 +445,7 @@
   <string name="share_via_link_password_title">biztosított</string>
   <string name="share_via_link_edit_permission_read_only_label">Letöltés / Megjelenítés</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Letöltés / Megjelenítés / Feltöltés</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Csak feltöltés (Húzza ide)</string>
   <string name="share_get_public_link_button">A link</string>
   <string name="share_with_title">Kivel osztom meg</string>
   <string name="share_with_edit_title">Oszd%1$s</string>
@@ -531,14 +532,5 @@
   <string name="welcome_feature_4_text">Fényképek/videok automatikusan feltöltve</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Videók lejátszása letöltésük nélkül</string>
-  <string name="welcome_feature_6_title">Jelenlegi mappa keresése</string>
-  <string name="welcome_feature_6_text">Fájlok szűrése név szerint</string>
-  <string name="welcome_feature_7_title">Összes kijelölése</string>
-  <string name="welcome_feature_7_text">Minden fájl kiválasztása</string>
-  <string name="welcome_feature_8_title">Offline elérhető</string>
-  <string name="welcome_feature_8_text">Fájljait automatikusan szinkronizáltuk</string>
-  <string name="welcome_feature_9_title">Dokumentum szolgáltató</string>
-  <string name="welcome_feature_9_text">Érje el és szerkessze ownCloud fájljait más appokból</string>
-  <string name="welcome_feature_10_text">Küldje el nekünk logjait, hogy az app fejlesztésében segítsen</string>
   <string name="no_borwser_installed_alert">Nincs böngésző telepítve. Telepítsen böngészőt a biztonságos bejelentkezés lehetővé tételéhez</string>
 </resources>

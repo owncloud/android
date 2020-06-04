@@ -5,17 +5,17 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2019 ownCloud GmbH.
- * 
+ * Copyright (C) 2020 ownCloud GmbH.
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * 
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,7 +23,6 @@ package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -52,19 +51,17 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.utils.DisplayUtils;
+import timber.log.Timber;
 
 /**
  * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
@@ -103,8 +100,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     private boolean mAutoplay;
     private long mPlaybackPosition;
-
-    private static final String TAG = PreviewVideoFragment.class.getSimpleName();
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
@@ -167,12 +162,11 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        Log_OC.v(TAG, "onCreateView");
+        Timber.v("onCreateView");
 
         View view = inflater.inflate(R.layout.video_preview, container, false);
 
         mProgressBar = view.findViewById(R.id.syncProgressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mProgressBar.setVisibility(View.GONE);
 
         simpleExoPlayerView = view.findViewById(R.id.video_player);
@@ -190,7 +184,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log_OC.v(TAG, "onActivityCreated");
+        Timber.v("onActivityCreated");
 
         OCFile file;
         if (savedInstanceState == null) {
@@ -226,7 +220,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onStart() {
         super.onStart();
-        Log_OC.v(TAG, "onStart");
+        Timber.v("onStart");
 
         OCFile file = getFile();
 
@@ -238,7 +232,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        Log_OC.v(TAG, "onResume");
+        Timber.v("onResume");
 
         preparePlayer();
 
@@ -251,14 +245,14 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onPause() {
         super.onPause();
-        Log_OC.v(TAG, "onPause");
+        Timber.v("onPause");
 
         releasePlayer();
     }
 
     @Override
     public void onStop() {
-        Log_OC.v(TAG, "onStop");
+        Timber.v("onStop");
 
         super.onStop();
     }
@@ -269,7 +263,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log_OC.v(TAG, "onSaveInstanceState");
+        Timber.v("onSaveInstanceState");
 
         outState.putParcelable(PreviewVideoFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewVideoFragment.EXTRA_ACCOUNT, mAccount);
@@ -281,7 +275,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log_OC.v(TAG, "onActivityResult " + this);
+        Timber.v("onActivityResult %s", this);
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
@@ -446,26 +440,19 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
         // Video streaming is only supported at Jelly Bean or higher Android versions (>= API 16)
-        if (Util.SDK_INT >= 16) {
 
-            // Create the player
-            player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector,
-                    new DefaultLoadControl());
+        // Create the player
+        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector,
+                new DefaultLoadControl());
 
-            player.addListener(this);
+        player.addListener(this);
 
-            // Bind the player to the view.
-            simpleExoPlayerView.setPlayer(player);
+        // Bind the player to the view.
+        simpleExoPlayerView.setPlayer(player);
 
-            // Prepare video player asynchronously
-            new PrepareVideoPlayerAsyncTask(getActivity(), this,
-                    getFile(), mAccount, mainHandler).execute();
-        } else {
-
-            // Show dialog with error and starts file download
-            showAlertDialog(new PreviewVideoError(getString(R.string.previewing_video_not_supported),
-                    true, false));
-        }
+        // Prepare video player asynchronously
+        new PrepareVideoPlayerAsyncTask(getActivity(), this,
+                getFile(), mAccount, mainHandler).execute();
     }
 
     /**
@@ -475,7 +462,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
      */
     @Override
     public void OnPrepareVideoPlayerTaskCallback(MediaSource mediaSource) {
-        Log_OC.v(TAG, "playerPrepared");
+        Timber.v("playerPrepared");
         player.prepare(mediaSource);
     }
 
@@ -485,7 +472,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             updateResumePosition();
             player.release();
             trackSelector = null;
-            Log_OC.v(TAG, "playerReleased");
+            Timber.v("playerReleased");
         }
     }
 
@@ -498,7 +485,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onPlayerError(ExoPlaybackException error) {
 
-        Log_OC.v(TAG, "Error in video player, what = " + error);
+        Timber.e(error, "Error in video player");
 
         showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError(error, getContext()));
     }
@@ -601,7 +588,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log_OC.v(TAG, "onConfigurationChanged " + this);
+        Timber.v("onConfigurationChanged %s", this);
     }
 
     /**

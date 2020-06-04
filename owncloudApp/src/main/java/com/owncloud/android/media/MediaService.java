@@ -3,7 +3,7 @@
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -45,9 +45,9 @@ import androidx.core.app.NotificationCompat;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,8 +60,6 @@ import java.io.IOException;
  */
 public class MediaService extends Service implements OnCompletionListener, OnPreparedListener,
         OnErrorListener, AudioManager.OnAudioFocusChangeListener {
-
-    private static final String TAG = MediaService.class.getSimpleName();
 
     private static final String MY_PACKAGE = MediaService.class.getPackage() != null ?
             MediaService.class.getPackage().getName() : "com.owncloud.android.media";
@@ -233,7 +231,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     @Override
     public void onCreate() {
         super.onCreate();
-        Log_OC.d(TAG, "Creating ownCloud media service");
+        Timber.d("Creating ownCloud media service");
 
         mWifiLock = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).
                 createWifiLock(WifiManager.WIFI_MODE_FULL, MEDIA_WIFI_LOCK_TAG);
@@ -513,25 +511,25 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             }
 
         } catch (SecurityException e) {
-            Log_OC.e(TAG, "SecurityException playing " + mAccount.name + mFile.getRemotePath(), e);
+            Timber.e(e, "SecurityException playing " + mAccount.name + mFile.getRemotePath());
             Toast.makeText(this, String.format(getString(R.string.media_err_security_ex), mFile.getFileName()),
                     Toast.LENGTH_LONG).show();
             processStopRequest(true);
 
         } catch (IOException e) {
-            Log_OC.e(TAG, "IOException playing " + mAccount.name + mFile.getRemotePath(), e);
+            Timber.e(e, "IOException playing " + mAccount.name + mFile.getRemotePath());
             Toast.makeText(this, String.format(getString(R.string.media_err_io_ex), mFile.getFileName()),
                     Toast.LENGTH_LONG).show();
             processStopRequest(true);
 
         } catch (IllegalStateException e) {
-            Log_OC.e(TAG, "IllegalStateException " + mAccount.name + mFile.getRemotePath(), e);
+            Timber.e(e, "IllegalStateException " + mAccount.name + mFile.getRemotePath());
             Toast.makeText(this, String.format(getString(R.string.media_err_unexpected), mFile.getFileName()),
                     Toast.LENGTH_LONG).show();
             processStopRequest(true);
 
         } catch (IllegalArgumentException e) {
-            Log_OC.e(TAG, "IllegalArgumentException " + mAccount.name + mFile.getRemotePath(), e);
+            Timber.e(e, "IllegalArgumentException " + mAccount.name + mFile.getRemotePath());
             Toast.makeText(this, String.format(getString(R.string.media_err_unexpected), mFile.getFileName()),
                     Toast.LENGTH_LONG).show();
             processStopRequest(true);
@@ -552,7 +550,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
     /** Called when media player is done playing current song. */
     public void onCompletion(MediaPlayer player) {
-        Toast.makeText(this, String.format(getString(R.string.media_event_done, mFile.getFileName())),
+        Toast.makeText(this, String.format(getString(R.string.media_event_done), mFile.getFileName()),
                 Toast.LENGTH_LONG).show();
         if (mMediaController != null) {
             // somebody is still bound to the service
@@ -652,7 +650,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
      * Warns the user about the error and resets the media player.
      */
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log_OC.e(TAG, "Error in audio playback, what = " + what + ", extra = " + extra);
+        Timber.e("Error in audio playback, what = " + what + ", extra = " + extra);
 
         String message = getMessageForMediaError(this, what, extra);
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -774,7 +772,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         @Override
         public void onEvent(int event, String path) {
             if (path != null && path.equals(mFile.getFileName())) {
-                Log_OC.d(TAG, "Media file deleted or moved out of sight, stopping playback");
+                Timber.d("Media file deleted or moved out of sight, stopping playback");
                 processStopRequest(true);
             }
         }

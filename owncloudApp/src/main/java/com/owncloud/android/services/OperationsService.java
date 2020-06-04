@@ -5,17 +5,17 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2019 ownCloud GmbH.
- * 
+ * Copyright (C) 2020 ownCloud GmbH.
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * 
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,8 +24,6 @@ package com.owncloud.android.services;
 
 import android.accounts.Account;
 import android.accounts.AccountsException;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
@@ -44,43 +42,34 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
-import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import timber.log.Timber;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 public class OperationsService extends Service {
 
-    private static final String TAG = OperationsService.class.getSimpleName();
-
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     public static final String EXTRA_SERVER_URL = "SERVER_URL";
-    public static final String EXTRA_OAUTH2_AUTHORIZATION_CODE = "OAUTH2_AUTHORIZATION_CODE";
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
     public static final String EXTRA_NEWNAME = "NEWNAME";
     public static final String EXTRA_REMOVE_ONLY_LOCAL = "REMOVE_LOCAL_COPY";
@@ -88,17 +77,12 @@ public class OperationsService extends Service {
     public static final String EXTRA_RESULT = "RESULT";
     public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
-    public static final String EXTRA_SHARE_PERMISSIONS = "SHARE_PERMISSIONS";
-    public static final String EXTRA_SHARE_ID = "SHARE_ID";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
     public static final String EXTRA_SYNC_REGULAR_FILES = "SYNC_REGULAR_FILES";
     public static final String EXTRA_IS_LAST_FILE_TO_REMOVE = "EXTRA_IS_LAST_FILE_TO_REMOVE";
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
-    public static final String ACTION_UNSHARE = "UNSHARE";
-    public static final String ACTION_GET_SERVER_INFO = "GET_SERVER_INFO";
-    public static final String ACTION_OAUTH2_GET_ACCESS_TOKEN = "OAUTH2_GET_ACCESS_TOKEN";
     public static final String ACTION_GET_USER_NAME = "GET_USER_NAME";
     public static final String ACTION_RENAME = "RENAME";
     public static final String ACTION_REMOVE = "REMOVE";
@@ -109,14 +93,11 @@ public class OperationsService extends Service {
     public static final String ACTION_COPY_FILE = "COPY_FILE";
     public static final String ACTION_CHECK_CURRENT_CREDENTIALS = "CHECK_CURRENT_CREDENTIALS";
 
-    public static final String ACTION_OPERATION_ADDED = OperationsService.class.getName() +
-            ".OPERATION_ADDED";
-    public static final String ACTION_OPERATION_FINISHED = OperationsService.class.getName() +
-            ".OPERATION_FINISHED";
+    public static final String ACTION_OPERATION_ADDED = OperationsService.class.getName() + ".OPERATION_ADDED";
+    public static final String ACTION_OPERATION_FINISHED = OperationsService.class.getName() + ".OPERATION_FINISHED";
 
     private ConcurrentMap<Integer, Pair<RemoteOperation, RemoteOperationResult>>
-            mUndispatchedFinishedOperations =
-            new ConcurrentHashMap<>();
+            mUndispatchedFinishedOperations = new ConcurrentHashMap<>();
 
     private static class Target {
         public Uri mServerUrl;
@@ -143,11 +124,10 @@ public class OperationsService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log_OC.d(TAG, "Creating service");
+        Timber.d("Creating service");
 
-        /// First worker thread for most of operations 
-        HandlerThread thread = new HandlerThread("Operations thread",
-                Process.THREAD_PRIORITY_BACKGROUND);
+        /// First worker thread for most of operations
+        HandlerThread thread = new HandlerThread("Operations thread", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
         mOperationsHandler = new ServiceHandler(thread.getLooper(), this);
         mOperationsBinder = new OperationsServiceBinder(mOperationsHandler);
@@ -163,20 +143,20 @@ public class OperationsService extends Service {
 
     /**
      * Entry point to add a new operation to the queue of operations.
-     * 
+     *
      * New operations are added calling to startService(), resulting in a call to this method.
      * This ensures the service will keep on working although the caller activity goes away.
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log_OC.d(TAG, "Starting command with id " + startId);
+        Timber.d("Starting command with id %s", startId);
 
         // WIP: for the moment, only SYNC_FOLDER is expected here;
         // the rest of the operations are requested through the Binder
         if (ACTION_SYNC_FOLDER.equals(intent.getAction())) {
 
             if (!intent.hasExtra(EXTRA_ACCOUNT) || !intent.hasExtra(EXTRA_REMOTE_PATH)) {
-                Log_OC.e(TAG, "Not enough information provided in intent");
+                Timber.e("Not enough information provided in intent");
                 return START_NOT_STICKY;
             }
             Account account = intent.getParcelableExtra(EXTRA_ACCOUNT);
@@ -186,8 +166,7 @@ public class OperationsService extends Service {
 
             Pair<Target, RemoteOperation> itemToQueue = newOperation(intent);
             if (itemToQueue != null) {
-                mSyncFolderHandler.add(account, remotePath,
-                        (SynchronizeFolderOperation) itemToQueue.second);
+                mSyncFolderHandler.add(account, remotePath, (SynchronizeFolderOperation) itemToQueue.second);
                 Message msg = mSyncFolderHandler.obtainMessage();
                 msg.arg1 = startId;
                 msg.obj = itemSyncKey;
@@ -205,18 +184,9 @@ public class OperationsService extends Service {
 
     @Override
     public void onDestroy() {
-        Log_OC.v(TAG, "Destroying service");
+        Timber.v("Destroying service");
         // Saving cookies
-        try {
-            OwnCloudClientManagerFactory.getDefaultSingleton().
-                    saveAllClients(this, MainApp.Companion.getAccountType());
-
-            // TODO - get rid of these exceptions
-        } catch (
-                AccountNotFoundException | AuthenticatorException |
-                        OperationCanceledException | IOException e) {
-            e.printStackTrace();
-        }
+        SingleSessionManager.getDefaultSingleton().saveAllClients(this, MainApp.Companion.getAccountType());
 
         mUndispatchedFinishedOperations.clear();
 
@@ -254,18 +224,17 @@ public class OperationsService extends Service {
      * <p/>
      * It provides by itself the available operations.
      */
-    public class OperationsServiceBinder extends Binder /* implements OnRemoteOperationListener */ {
+    public class OperationsServiceBinder extends Binder {
 
         /**
          * Map of listeners that will be reported about the end of operations from a
          * {@link OperationsServiceBinder} instance
          */
-        private final ConcurrentMap<OnRemoteOperationListener, Handler> mBoundListeners =
-                new ConcurrentHashMap<>();
+        private final ConcurrentMap<OnRemoteOperationListener, Handler> mBoundListeners = new ConcurrentHashMap<>();
 
-        private ServiceHandler mServiceHandler = null;
+        private ServiceHandler mServiceHandler;
 
-        public OperationsServiceBinder(ServiceHandler serviceHandler) {
+        OperationsServiceBinder(ServiceHandler serviceHandler) {
             mServiceHandler = serviceHandler;
         }
 
@@ -279,8 +248,7 @@ public class OperationsService extends Service {
             mSyncFolderHandler.cancel(account, file);
         }
 
-        public void clearListeners() {
-
+        void clearListeners() {
             mBoundListeners.clear();
         }
 
@@ -291,8 +259,7 @@ public class OperationsService extends Service {
          * @param callbackHandler {@link Handler} to access the listener without
          *                        breaking Android threading protection.
          */
-        public void addOperationListener(OnRemoteOperationListener listener,
-                                         Handler callbackHandler) {
+        public void addOperationListener(OnRemoteOperationListener listener, Handler callbackHandler) {
             synchronized (mBoundListeners) {
                 mBoundListeners.put(listener, callbackHandler);
             }
@@ -311,18 +278,8 @@ public class OperationsService extends Service {
         }
 
         /**
-         * TODO - IMPORTANT: update implementation when more operations are moved into the service
-         *
-         * @return 'True' when an operation that enforces the user to wait for completion is
-         * in process.
-         */
-        public boolean isPerformingBlockingOperation() {
-            return (!mServiceHandler.mPendingOperations.isEmpty());
-        }
-
-        /**
          * Creates and adds to the queue a new operation, as described by operationIntent.
-         * 
+         *
          * Calls startService to make the operation is processed by the ServiceHandler.
          *
          * @param operationIntent Intent describing a new operation to queue and execute.
@@ -342,23 +299,21 @@ public class OperationsService extends Service {
             }
         }
 
-        public boolean dispatchResultIfFinished(int operationId,
-                                                OnRemoteOperationListener listener) {
+        public boolean dispatchResultIfFinished(int operationId, OnRemoteOperationListener listener) {
             Pair<RemoteOperation, RemoteOperationResult> undispatched =
                     mUndispatchedFinishedOperations.remove(operationId);
             if (undispatched != null) {
                 listener.onRemoteOperationFinish(undispatched.first, undispatched.second);
                 return true;
-                //Log_OC.e(TAG, "Sending callback later");
             } else {
-                return (!mServiceHandler.mPendingOperations.isEmpty());
+                return !mServiceHandler.mPendingOperations.isEmpty();
             }
         }
 
         /**
          * Returns True when the file described by 'file' in the ownCloud account 'account' is
          * downloading or waiting to download.
-         * 
+         *
          * If 'file' is a directory, returns 'true' if some of its descendant files is downloading
          * or waiting to download.
          *
@@ -374,7 +329,7 @@ public class OperationsService extends Service {
 
     /**
      * Operations worker. Performs the pending operations in the order they were requested.
-     * 
+     *
      * Created with the Looper of a new thread, started in {@link OperationsService#onCreate()}.
      */
     private static class ServiceHandler extends Handler {
@@ -383,9 +338,8 @@ public class OperationsService extends Service {
 
         OperationsService mService;
 
-        private ConcurrentLinkedQueue<Pair<Target, RemoteOperation>> mPendingOperations =
+        private final ConcurrentLinkedQueue<Pair<Target, RemoteOperation>> mPendingOperations =
                 new ConcurrentLinkedQueue<>();
-        private RemoteOperation mCurrentOperation = null;
         private Target mLastTarget = null;
         private OwnCloudClient mOwnCloudClient = null;
         private FileDataStorageManager mStorageManager;
@@ -401,7 +355,7 @@ public class OperationsService extends Service {
         @Override
         public void handleMessage(Message msg) {
             nextOperation();
-            Log_OC.d(TAG, "Stopping after command with id " + msg.arg1);
+            Timber.d("Stopping after command with id %s", msg.arg1);
             mService.stopSelf(msg.arg1);
         }
 
@@ -409,9 +363,6 @@ public class OperationsService extends Service {
          * Performs the next operation in the queue
          */
         private void nextOperation() {
-
-            //Log_OC.e(TAG, "nextOperation init" );
-
             Pair<Target, RemoteOperation> next;
             synchronized (mPendingOperations) {
                 next = mPendingOperations.peek();
@@ -419,7 +370,7 @@ public class OperationsService extends Service {
 
             if (next != null) {
 
-                mCurrentOperation = next.second;
+                RemoteOperation currentOperation = next.second;
                 RemoteOperationResult result;
                 try {
                     /// prepare client object to send the request to the ownCloud server
@@ -428,7 +379,7 @@ public class OperationsService extends Service {
                         OwnCloudAccount ocAccount;
                         if (mLastTarget.mAccount != null) {
                             ocAccount = new OwnCloudAccount(mLastTarget.mAccount, mService);
-                            mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                            mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
 
                             OwnCloudVersion version = com.owncloud.android.authentication.AccountUtils.getServerVersion(
@@ -444,35 +395,34 @@ public class OperationsService extends Service {
                         } else {
                             OwnCloudCredentials credentials = null;
                             ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
-                            mOwnCloudClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+
+                            mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
+
                             mStorageManager = null;
                         }
                     }
 
                     /// perform the operation
-                    if (mCurrentOperation instanceof SyncOperation) {
-                        result = ((SyncOperation) mCurrentOperation).execute(mOwnCloudClient,
-                                mStorageManager);
+                    if (currentOperation instanceof SyncOperation) {
+                        result = ((SyncOperation) currentOperation).execute(mOwnCloudClient, mStorageManager);
                     } else {
-                        result = mCurrentOperation.execute(mOwnCloudClient);
+                        result = currentOperation.execute(mOwnCloudClient);
                     }
 
                 } catch (AccountsException | IOException e) {
                     if (mLastTarget.mAccount == null) {
-                        Log_OC.e(TAG, "Error while trying to get authorization for a NULL account",
-                                e);
+                        Timber.e(e, "Error while trying to get authorization for a NULL account");
                     } else {
-                        Log_OC.e(TAG, "Error while trying to get authorization for " +
-                                mLastTarget.mAccount.name, e);
+                        Timber.e(e, "Error while trying to get authorization for %s", mLastTarget.mAccount.name);
                     }
                     result = new RemoteOperationResult(e);
 
                 } catch (Exception e) {
                     if (mLastTarget.mAccount == null) {
-                        Log_OC.e(TAG, "Unexpected error for a NULL account", e);
+                        Timber.e(e, "Unexpected error for a NULL account");
                     } else {
-                        Log_OC.e(TAG, "Unexpected error for " + mLastTarget.mAccount.name, e);
+                        Timber.e(e, "Unexpected error for %s", mLastTarget.mAccount.name);
                     }
                     result = new RemoteOperationResult(e);
 
@@ -482,14 +432,14 @@ public class OperationsService extends Service {
                     }
                 }
 
-                mService.dispatchResultToOperationListeners(mCurrentOperation, result);
+                mService.dispatchResultToOperationListeners(currentOperation, result);
             }
         }
     }
 
     /**
      * Creates a new operation, as described by operationIntent.
-     * 
+     *
      * TODO - move to ServiceHandler (probably)
      *
      * @param operationIntent Intent describing a new operation to queue and execute.
@@ -502,7 +452,7 @@ public class OperationsService extends Service {
         try {
             if (!operationIntent.hasExtra(EXTRA_ACCOUNT) &&
                     !operationIntent.hasExtra(EXTRA_SERVER_URL)) {
-                Log_OC.e(TAG, "Not enough information provided in intent");
+                Timber.e("Not enough information provided in intent");
 
             } else {
                 Account account = operationIntent.getParcelableExtra(EXTRA_ACCOUNT);
@@ -515,91 +465,89 @@ public class OperationsService extends Service {
                 );
 
                 String action = operationIntent.getAction();
-                if (action.equals(ACTION_GET_SERVER_INFO)) {
-                    // check OC server and get basic information from it
-                    operation = new GetServerInfoOperation(serverUrl, OperationsService.this);
+                if (action != null) {
+                    switch (action) {
+                        case ACTION_GET_USER_NAME:
+                            // Get User Name
+                            operation = new GetRemoteUserInfoOperation();
 
-                } else if (action.equals(ACTION_OAUTH2_GET_ACCESS_TOKEN)) {
-                    // CREATE ACCESS TOKEN to the OAuth server
-                    String code = operationIntent.getStringExtra(EXTRA_OAUTH2_AUTHORIZATION_CODE);
+                            break;
+                        case ACTION_RENAME: {
+                            // Rename file or folder
+                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                            String newName = operationIntent.getStringExtra(EXTRA_NEWNAME);
+                            operation = new RenameFileOperation(remotePath, newName);
 
-                    OAuth2Provider oAuth2Provider = OAuth2ProvidersRegistry.getInstance().getProvider();
-                    OAuth2RequestBuilder builder = oAuth2Provider.getOperationBuilder();
-                    builder.setGrantType(OAuth2GrantType.AUTHORIZATION_CODE);
-                    builder.setRequest(OAuth2RequestBuilder.OAuthRequest.CREATE_ACCESS_TOKEN);
-                    builder.setAuthorizationCode(code);
+                            break;
+                        }
+                        case ACTION_REMOVE: {
+                            // Remove file or folder
+                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                            boolean onlyLocalCopy = operationIntent.getBooleanExtra(EXTRA_REMOVE_ONLY_LOCAL, false);
+                            operation = new RemoveFileOperation(remotePath, onlyLocalCopy,
+                                    operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE, false));
 
-                    operation = builder.buildOperation();
+                            break;
+                        }
+                        case ACTION_CREATE_FOLDER: {
+                            // Create Folder
+                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                            boolean createFullPath = operationIntent.getBooleanExtra(EXTRA_CREATE_FULL_PATH, true);
+                            operation = new CreateFolderOperation(remotePath, createFullPath);
 
-                } else if (action.equals(ACTION_GET_USER_NAME)) {
-                    // Get User Name
-                    operation = new GetRemoteUserInfoOperation();
+                            break;
+                        }
+                        case ACTION_SYNC_FILE: {
+                            // Sync file
+                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                            operation = new SynchronizeFileOperation(remotePath, account, getApplicationContext());
 
-                } else if (action.equals(ACTION_RENAME)) {
-                    // Rename file or folder
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    String newName = operationIntent.getStringExtra(EXTRA_NEWNAME);
-                    operation = new RenameFileOperation(remotePath, newName);
+                            break;
+                        }
+                        case ACTION_SYNC_FOLDER: {
+                            // Sync folder (all its descendant files are sync'ed)
+                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                            boolean pushOnly = operationIntent.getBooleanExtra(EXTRA_PUSH_ONLY, false);
+                            boolean syncContentOfRegularFiles =
+                                    operationIntent.getBooleanExtra(EXTRA_SYNC_REGULAR_FILES, false);
+                            operation = new SynchronizeFolderOperation(
+                                    this,                       // TODO remove this dependency from construction time
+                                    remotePath,
+                                    account,
+                                    System.currentTimeMillis(),  // TODO remove this dependency from construction time
+                                    pushOnly,
+                                    false,
+                                    syncContentOfRegularFiles
+                            );
 
-                } else if (action.equals(ACTION_REMOVE)) {
-                    // Remove file or folder
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    boolean onlyLocalCopy = operationIntent.getBooleanExtra(EXTRA_REMOVE_ONLY_LOCAL,
-                            false);
-                    operation = new RemoveFileOperation(remotePath, onlyLocalCopy,
-                            operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE, false));
+                            break;
+                        }
+                        case ACTION_MOVE_FILE: {
+                            // Move file/folder
+                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                            String newParentPath = operationIntent.getStringExtra(EXTRA_NEW_PARENT_PATH);
+                            operation = new MoveFileOperation(remotePath, newParentPath);
 
-                } else if (action.equals(ACTION_CREATE_FOLDER)) {
-                    // Create Folder
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    boolean createFullPath = operationIntent.getBooleanExtra(EXTRA_CREATE_FULL_PATH,
-                            true);
-                    operation = new CreateFolderOperation(remotePath, createFullPath);
+                            break;
+                        }
+                        case ACTION_COPY_FILE: {
+                            // Copy file/folder
+                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                            String newParentPath = operationIntent.getStringExtra(EXTRA_NEW_PARENT_PATH);
+                            operation = new CopyFileOperation(remotePath, newParentPath);
 
-                } else if (action.equals(ACTION_SYNC_FILE)) {
-                    // Sync file
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    operation = new SynchronizeFileOperation(
-                            remotePath, account, getApplicationContext()
-                    );
+                            break;
+                        }
+                        case ACTION_CHECK_CURRENT_CREDENTIALS:
+                            // Check validity of currently stored credentials for a given account
+                            operation = new CheckCurrentCredentialsOperation(account);
 
-                } else if (action.equals(ACTION_SYNC_FOLDER)) {
-                    // Sync folder (all its descendant files are sync'ed)
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    boolean pushOnly = operationIntent.getBooleanExtra(EXTRA_PUSH_ONLY, false);
-                    boolean syncContentOfRegularFiles =
-                            operationIntent.getBooleanExtra(EXTRA_SYNC_REGULAR_FILES, false);
-                    operation = new SynchronizeFolderOperation(
-                            this,                       // TODO remove this dependency from construction time
-                            remotePath,
-                            account,
-                            System.currentTimeMillis(),  // TODO remove this dependency from construction time
-                            pushOnly,
-                            false,
-                            syncContentOfRegularFiles
-                    );
-
-                } else if (action.equals(ACTION_MOVE_FILE)) {
-                    // Move file/folder
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    String newParentPath = operationIntent.getStringExtra(EXTRA_NEW_PARENT_PATH);
-                    operation = new MoveFileOperation(remotePath, newParentPath);
-
-                } else if (action.equals(ACTION_COPY_FILE)) {
-                    // Copy file/folder
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    String newParentPath = operationIntent.getStringExtra(EXTRA_NEW_PARENT_PATH);
-                    operation = new CopyFileOperation(remotePath, newParentPath);
-
-                } else if (action.equals(ACTION_CHECK_CURRENT_CREDENTIALS)) {
-                    // Check validity of currently stored credentials for a given account
-                    operation = new CheckCurrentCredentialsOperation(account);
-
+                            break;
+                    }
                 }
             }
-
         } catch (IllegalArgumentException e) {
-            Log_OC.e(TAG, "Bad information provided in intent: " + e.getMessage());
+            Timber.e(e, "Bad information provided in intent: %s", e.getMessage());
             operation = null;
         }
 
@@ -608,49 +556,6 @@ public class OperationsService extends Service {
         } else {
             return null;
         }
-    }
-
-    /**
-     * Sends a broadcast when a new operation is added to the queue.
-     * 
-     * Local broadcasts are only delivered to activities in the same process, but can't be
-     * done sticky :\
-     *
-     * @param target    Account or URL pointing to an OC server.
-     * @param operation Added operation.
-     */
-    private void sendBroadcastNewOperation(Target target, RemoteOperation operation) {
-        Intent intent = new Intent(ACTION_OPERATION_ADDED);
-        if (target.mAccount != null) {
-            intent.putExtra(EXTRA_ACCOUNT, target.mAccount);
-        } else {
-            intent.putExtra(EXTRA_SERVER_URL, target.mServerUrl);
-        }
-        mLocalBroadcastManager.sendBroadcast(intent);
-    }
-
-    // TODO - maybe add a notification for real start of operations
-
-    /**
-     * Sends a LOCAL broadcast when an operations finishes in order to the interested activities c
-     * an update their view
-     * 
-     * Local broadcasts are only delivered to activities in the same process.
-     *
-     * @param target    Account or URL pointing to an OC server.
-     * @param operation Finished operation.
-     * @param result    Result of the operation.
-     */
-    private void sendBroadcastOperationFinished(Target target, RemoteOperation operation,
-                                                RemoteOperationResult result) {
-        Intent intent = new Intent(ACTION_OPERATION_FINISHED);
-        intent.putExtra(EXTRA_RESULT, result);
-        if (target.mAccount != null) {
-            intent.putExtra(EXTRA_ACCOUNT, target.mAccount);
-        } else {
-            intent.putExtra(EXTRA_SERVER_URL, target.mServerUrl);
-        }
-        mLocalBroadcastManager.sendBroadcast(intent);
     }
 
     /**
@@ -663,26 +568,17 @@ public class OperationsService extends Service {
             final RemoteOperation operation, final RemoteOperationResult result
     ) {
         int count = 0;
-        Iterator<OnRemoteOperationListener> listeners =
-                mOperationsBinder.mBoundListeners.keySet().iterator();
-        while (listeners.hasNext()) {
-            final OnRemoteOperationListener listener = listeners.next();
+        for (OnRemoteOperationListener listener : mOperationsBinder.mBoundListeners.keySet()) {
             final Handler handler = mOperationsBinder.mBoundListeners.get(listener);
             if (handler != null) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onRemoteOperationFinish(operation, result);
-                    }
-                });
+                handler.post(() -> listener.onRemoteOperationFinish(operation, result));
                 count += 1;
             }
         }
         if (count == 0) {
-            Pair<RemoteOperation, RemoteOperationResult> undispatched =
-                    new Pair<>(operation, result);
+            Pair<RemoteOperation, RemoteOperationResult> undispatched = new Pair<>(operation, result);
             mUndispatchedFinishedOperations.put(operation.hashCode(), undispatched);
         }
-        Log_OC.d(TAG, "Called " + count + " listeners");
+        Timber.d("Called " + count + " listeners");
     }
 }

@@ -1,11 +1,11 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author Andy Scherzinger
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Shashvat Kedia
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,7 +28,6 @@ import android.accounts.AccountManagerFuture;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.DisplayCutout;
@@ -37,12 +36,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
@@ -53,9 +54,9 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UserProfile;
 import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import timber.log.Timber;
 
 /**
  * Base class to handle setup of the drawer implementation including user switching and avatar fetching and fallback
@@ -63,7 +64,6 @@ import com.owncloud.android.utils.PreferenceUtils;
  */
 public abstract class DrawerActivity extends ToolbarActivity {
 
-    private static final String TAG = DrawerActivity.class.getSimpleName();
     private static final String KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE";
     private static final String KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM";
     private static final int ACTION_MANAGE_ACCOUNTS = 101;
@@ -90,19 +90,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * accounts for the (max) three displayed accounts in the drawer header.
      */
     private Account[] mAccountsWithAvatars = new Account[3];
-
-    private TextView mAccountQuotaText;
-
-    /**
-     * Initializes the drawer, its content and highlights the menu item with the given id.
-     * This method needs to be called after the content view has been set.
-     *
-     * @param menuItemId the menu item to be checked/highlighted
-     */
-    protected void setupDrawer(int menuItemId) {
-        setupDrawer();
-        setDrawerMenuItemChecked(menuItemId);
-    }
 
     /**
      * Initializes the drawer and its content.
@@ -143,12 +130,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
             mAccountMiddleAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_middle);
             mAccountEndAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_end);
 
-            // on pre lollipop the light theme adds a black tint to icons with white coloring
-            // ruining the generic avatars, so tinting for icons is deactivated pre lollipop
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                mNavigationView.setItemIconTintList(null);
-            }
-
             //Notch support
             mNavigationView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
@@ -157,14 +138,14 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         DisplayCutout displayCutout = v.getRootWindowInsets().getDisplayCutout();
 
                         if (displayCutout != null) {
-                            RelativeLayout rlDrawerActiveUser =
-                                    (RelativeLayout) findNavigationViewChildById(R.id.drawer_active_user);
+                            ConstraintLayout rlDrawerActiveUser =
+                                    (ConstraintLayout) findNavigationViewChildById(R.id.drawer_active_user);
 
                             int orientation = getResources().getConfiguration().orientation;
                             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                                 int displayCutoutDP = (displayCutout.getSafeInsetTop()) /
-                                                (getResources().getDisplayMetrics().densityDpi /
-                                                        DisplayMetrics.DENSITY_DEFAULT);
+                                        (getResources().getDisplayMetrics().densityDpi /
+                                                DisplayMetrics.DENSITY_DEFAULT);
                                 rlDrawerActiveUser.getLayoutParams().height =
                                         (int) getResources().getDimension(R.dimen.nav_drawer_header_height) +
                                                 displayCutoutDP;
@@ -175,6 +156,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         }
                     }
                 }
+
                 @Override
                 public void onViewDetachedFromWindow(View v) {
                 }
@@ -183,12 +165,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             setupDrawerContent(mNavigationView);
 
             findNavigationViewChildById(R.id.drawer_active_user)
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            toggleAccountList();
-                        }
-                    });
+                    .setOnClickListener(onClick -> toggleAccountList());
         }
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
@@ -233,61 +210,36 @@ public abstract class DrawerActivity extends ToolbarActivity {
         }
 
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        mDrawerLayout.closeDrawers();
+                menuItem -> {
+                    mDrawerLayout.closeDrawers();
 
-                        switch (menuItem.getItemId()) {
-                            case R.id.nav_all_files:
-                                menuItem.setChecked(true);
-                                mCheckedMenuItem = menuItem.getItemId();
-                                allFilesOption();
-                                break;
-                            case R.id.nav_uploads:
-                                Intent uploadListIntent = new Intent(getApplicationContext(),
-                                        UploadListActivity.class);
-                                uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(uploadListIntent);
-                                break;
-                            case R.id.nav_only_available_offline:
-                                menuItem.setChecked(true);
-                                mCheckedMenuItem = menuItem.getItemId();
-                                onlyAvailableOfflineOption();
-                                break;
-                            case R.id.nav_shared_by_link_files:
-                                menuItem.setChecked(true);
-                                mCheckedMenuItem = menuItem.getItemId();
-                                sharedByLinkFilesOption();
-                                break;
-                            case R.id.nav_settings:
-                                Intent settingsIntent = new Intent(getApplicationContext(),
-                                        Preferences.class);
-                                startActivity(settingsIntent);
-                                break;
-                            case R.id.drawer_menu_account_add:
-                                createAccount(false);
-                                break;
-                            case R.id.drawer_menu_account_manage:
-                                Intent manageAccountsIntent = new Intent(getApplicationContext(),
-                                        ManageAccountsActivity.class);
-                                startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS);
-                                break;
-                            case R.id.drawer_menu_feedback:
-                                openFeedback();
-                                break;
-                            case R.id.drawer_menu_help:
-                                openHelp();
-                                break;
-                            case Menu.NONE:
-                                // account clicked
-                                accountClicked(menuItem.getTitle().toString());
-                            default:
-                                Log_OC.i(TAG, "Unknown drawer menu item clicked: " + menuItem.getTitle());
-                        }
-
-                        return true;
+                    switch (menuItem.getItemId()) {
+                        case R.id.nav_settings:
+                            Intent settingsIntent = new Intent(getApplicationContext(), Preferences.class);
+                            startActivity(settingsIntent);
+                            break;
+                        case R.id.drawer_menu_account_add:
+                            createAccount(false);
+                            break;
+                        case R.id.drawer_menu_account_manage:
+                            Intent manageAccountsIntent = new Intent(getApplicationContext(),
+                                    ManageAccountsActivity.class);
+                            startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS);
+                            break;
+                        case R.id.drawer_menu_feedback:
+                            openFeedback();
+                            break;
+                        case R.id.drawer_menu_help:
+                            openHelp();
+                            break;
+                        case Menu.NONE:
+                            // account clicked
+                            accountClicked(menuItem.getTitle().toString());
+                        default:
+                            Timber.i("Unknown drawer menu item clicked: %s", menuItem.getTitle());
                     }
+
+                    return true;
                 });
 
         // handle correct state
@@ -296,6 +248,53 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
         } else {
             navigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
+        }
+    }
+
+    void setCheckedItemAtBottomBar(int checkedMenuItem) {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        bottomNavigationView.getMenu().findItem(checkedMenuItem).setChecked(true);
+    }
+
+    /**
+     * Initializes the bottom navigation bar, its content and highlights the menu item with the given id.
+     * This method needs to be called after the content view has been set.
+     *
+     * @param menuItemId the menu item to be checked/highlighted
+     */
+    void setupNavigationBottomBar(int menuItemId) {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        // Allow or disallow touches with other visible windows
+        bottomNavigationView.setFilterTouchesWhenObscured(
+                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        );
+
+        setCheckedItemAtBottomBar(menuItemId);
+        bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
+            navBarNavigationTo(menuItem.getItemId(), bottomNavigationView.getSelectedItemId() == menuItem.getItemId());
+            return true;
+        });
+    }
+
+    private void navBarNavigationTo(int menuItemId, boolean isCurrentOptionActive) {
+
+        switch (menuItemId) {
+            case R.id.nav_all_files:
+                navigateToOption(FileListOption.ALL_FILES);
+                break;
+            case R.id.nav_uploads:
+                if (!isCurrentOptionActive) {
+                    Intent uploadListIntent = new Intent(getApplicationContext(), UploadListActivity.class);
+                    uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(uploadListIntent);
+                }
+                break;
+            case R.id.nav_available_offline_files:
+                navigateToOption(FileListOption.AV_OFFLINE);
+                break;
+            case R.id.nav_shared_by_link_files:
+                navigateToOption(FileListOption.SHARED_BY_LINK);
+                break;
         }
     }
 
@@ -309,7 +308,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
         String feedbackMail = (String) getText(R.string.mail_feedback);
         String feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getText(R.string.drawer_feedback);
         Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
 
         intent.setData(Uri.parse(feedbackMail));
@@ -444,19 +442,19 @@ public abstract class DrawerActivity extends ToolbarActivity {
         mNavigationView.getMenu().removeGroup(R.id.drawer_menu_accounts);
 
         // add all accounts to list
-        for (int i = 0; i < accounts.length; i++) {
-            if (!getAccount().name.equals(accounts[i].name)) {
+        for (Account account : accounts) {
+            if (!getAccount().name.equals(account.name)) {
 
                 MenuItem accountMenuItem = mNavigationView.getMenu().add(
                         R.id.drawer_menu_accounts,
                         Menu.NONE,
                         MENU_ORDER_ACCOUNT,
-                        accounts[i].name
+                        account.name
                 );
                 ThumbnailsCacheManager.GetAvatarTask task =
                         new ThumbnailsCacheManager.GetAvatarTask(
                                 accountMenuItem,
-                                accounts[i],
+                                account,
                                 mMenuAccountAvatarRadiusDimension,
                                 false
                         );
@@ -526,7 +524,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         String.format(getString(R.string.drawer_quota),
                                 DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this),
                                 DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this),
-                                userQuota.getRelative()
+                                String.valueOf(userQuota.getRelative())
                         )
                 );
 
@@ -534,17 +532,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
         }
     }
 
-    /**
-     * Method that gets called on drawer menu click for 'All Files'.
-     */
-    public abstract void allFilesOption();
-
-    /**
-     * Method that gets called on drawer menu click for 'Available Offline'.
-     */
-    public abstract void onlyAvailableOfflineOption();
-
-    public abstract void sharedByLinkFilesOption();
+    public abstract void navigateToOption(FileListOption fileListOption);
 
     /**
      * Updates title bar and home buttons (state and icon).
@@ -576,7 +564,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 username.setText(oca.getDisplayName());
 
             } catch (Exception e) {
-                Log_OC.w(TAG, "Couldn't read display name of account; using account name instead");
+                Timber.w("Couldn't read display name of account; using account name instead");
 
                 username.setText(AccountUtils.getUsernameOfAccount(account.name));
             }
@@ -611,7 +599,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
             if (mIsAccountChooserActive) {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_up);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
-                mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, false);
                 if (mDrawerLogo != null && accountCount > USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD) {
                     mDrawerLogo.setVisibility(View.GONE);
@@ -619,7 +606,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
             } else {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_down);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
-                mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, true);
                 if (mDrawerLogo != null) {
                     mDrawerLogo.setVisibility(View.VISIBLE);
@@ -639,7 +625,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             mNavigationView.getMenu().findItem(menuItemId).setChecked(true);
             mCheckedMenuItem = menuItemId;
         } else {
-            Log_OC.w(TAG, "setDrawerMenuItemChecked has been called with invalid menu-item-ID");
+            Timber.w("setDrawerMenuItemChecked has been called with invalid menu-item-ID");
         }
     }
 
@@ -699,7 +685,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (mDrawerToggle != null) {
             mDrawerToggle.onConfigurationChanged(newConfig);
@@ -793,13 +779,13 @@ public abstract class DrawerActivity extends ToolbarActivity {
     /**
      * Adds other listeners to react on changes of the drawer layout.
      *
-     * @param listener      Object interested in changes of the drawer layout.
+     * @param listener Object interested in changes of the drawer layout.
      */
     public void addDrawerListener(DrawerLayout.DrawerListener listener) {
         if (mDrawerLayout != null) {
             mDrawerLayout.addDrawerListener(listener);
         } else {
-            Log_OC.e(TAG, "Drawer layout not ready to add drawer listener");
+            Timber.e("Drawer layout not ready to add drawer listener");
         }
     }
 }

@@ -12,8 +12,6 @@
   <string name="actionbar_sort">Դասակարգել</string>
   <string name="actionbar_sort_title">Դասակարգել ըստ</string>
   <string name="actionbar_sort_by_name">Ա-Ֆ</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Բոլոր ֆայլերը</string>
   <string name="drawer_item_settings">Կարգավորումներ</string>
   <string name="drawer_item_uploads_list">Բեռնումներ</string>
@@ -62,9 +60,9 @@
   <string name="change_password">Փոխել գաղտնաբառը</string>
   <string name="delete_account">Ջնջել հաշիվը</string>
   <string name="create_account">Ստեղծել հաշիվ</string>
-  <string name="upload_chooser_title">Բեռնել...</string>
+  <string name="upload_chooser_title">Բեռնել…</string>
   <string name="uploader_info_dirname">Պանակի անուն</string>
-  <string name="uploader_upload_in_progress_ticker">Բեռնում եմ...</string>
+  <string name="uploader_upload_in_progress_ticker">Բեռնում եմ…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Բեռնում եմ %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Բեռնումը հաջողվեց</string>
   <string name="uploader_upload_succeeded_content_single">%1$s բեռնվեց</string>
@@ -86,7 +84,7 @@
   <string name="uploads_view_upload_status_conflict">Հակասություն</string>
   <string name="uploads_view_upload_status_unknown_fail">Անհայտ սխալ</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Սպասում եմ wifi կապին</string>
-  <string name="downloader_download_in_progress_ticker">Ներբեռնում եմ...</string>
+  <string name="downloader_download_in_progress_ticker">Ներբեռնում եմ…</string>
   <string name="downloader_download_in_progress_content">%1$d%% Ներբեռնում եմ %2$s</string>
   <string name="downloader_download_succeeded_ticker">Բեռնումն հաջողվեց</string>
   <string name="downloader_download_succeeded_content">%1$s բեռնվեց</string>
@@ -197,5 +195,4 @@
     <item quantity="one">%d նշված</item>
     <item quantity="other">%d նշված</item>
   </plurals>
-  <!--Welcome to oC intro features-->
 </resources>

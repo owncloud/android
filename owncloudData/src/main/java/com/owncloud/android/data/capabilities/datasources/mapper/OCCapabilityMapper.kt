@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -36,8 +36,8 @@ class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
                 versionString = entity.versionString,
                 versionEdition = entity.versionEdition,
                 corePollInterval = entity.corePollInterval,
+                davChunkingVersion = entity.davChunkingVersion,
                 filesSharingApiEnabled = CapabilityBooleanType.fromValue(entity.filesSharingApiEnabled),
-                filesSharingSearchMinLength = entity.filesSharingSearchMinLength,
                 filesSharingPublicEnabled = CapabilityBooleanType.fromValue(entity.filesSharingPublicEnabled),
                 filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforced),
                 filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromValue(entity.filesSharingPublicPasswordEnforcedReadOnly),
@@ -46,11 +46,9 @@ class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
                 filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromValue(entity.filesSharingPublicExpireDateEnabled),
                 filesSharingPublicExpireDateDays = entity.filesSharingPublicExpireDateDays,
                 filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromValue(entity.filesSharingPublicExpireDateEnforced),
-                filesSharingPublicSendMail = CapabilityBooleanType.fromValue(entity.filesSharingPublicSendMail),
                 filesSharingPublicUpload = CapabilityBooleanType.fromValue(entity.filesSharingPublicUpload),
                 filesSharingPublicMultiple = CapabilityBooleanType.fromValue(entity.filesSharingPublicMultiple),
                 filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromValue(entity.filesSharingPublicSupportsUploadOnly),
-                filesSharingUserSendMail = CapabilityBooleanType.fromValue(entity.filesSharingUserSendMail),
                 filesSharingResharing = CapabilityBooleanType.fromValue(entity.filesSharingResharing),
                 filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(entity.filesSharingFederationOutgoing),
                 filesSharingFederationIncoming = CapabilityBooleanType.fromValue(entity.filesSharingFederationIncoming),
@@ -70,8 +68,8 @@ class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
                 versionString = model.versionString,
                 versionEdition = model.versionEdition,
                 corePollInterval = model.corePollInterval,
+                davChunkingVersion = model.davChunkingVersion,
                 filesSharingApiEnabled = model.filesSharingApiEnabled.value,
-                filesSharingSearchMinLength = model.filesSharingSearchMinLength,
                 filesSharingPublicEnabled = model.filesSharingPublicEnabled.value,
                 filesSharingPublicPasswordEnforced = model.filesSharingPublicPasswordEnforced.value,
                 filesSharingPublicPasswordEnforcedReadOnly = model.filesSharingPublicPasswordEnforcedReadOnly.value,
@@ -80,11 +78,9 @@ class OCCapabilityMapper : Mapper<OCCapability, OCCapabilityEntity> {
                 filesSharingPublicExpireDateEnabled = model.filesSharingPublicExpireDateEnabled.value,
                 filesSharingPublicExpireDateDays = model.filesSharingPublicExpireDateDays,
                 filesSharingPublicExpireDateEnforced = model.filesSharingPublicExpireDateEnforced.value,
-                filesSharingPublicSendMail = model.filesSharingPublicSendMail.value,
                 filesSharingPublicUpload = model.filesSharingPublicUpload.value,
                 filesSharingPublicMultiple = model.filesSharingPublicMultiple.value,
                 filesSharingPublicSupportsUploadOnly = model.filesSharingPublicSupportsUploadOnly.value,
-                filesSharingUserSendMail = model.filesSharingUserSendMail.value,
                 filesSharingResharing = model.filesSharingResharing.value,
                 filesSharingFederationOutgoing = model.filesSharingFederationOutgoing.value,
                 filesSharingFederationIncoming = model.filesSharingFederationIncoming.value,

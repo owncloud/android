@@ -23,11 +23,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
+import timber.log.Timber;
 
 public class ConnectivityUtils {
-
-    private final static String TAG = ConnectivityUtils.class.getName();
 
     public static boolean isAppConnectedViaWiFi(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -35,7 +33,7 @@ public class ConnectivityUtils {
                 cm != null && cm.getActiveNetworkInfo() != null
                         && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI
                         && cm.getActiveNetworkInfo().getState() == NetworkInfo.State.CONNECTED;
-        Log_OC.d(TAG, "is AppConnectedViaWifi returns " + result);
+        Timber.d("isAppConnectedViaWifi returns %s", result);
         return result;
     }
 

@@ -3,8 +3,6 @@
   <string name="actionbar_upload">උඩුගත කිරීම</string>
   <string name="actionbar_upload_files">ගොනු</string>
   <string name="actionbar_settings">සිටුවම්</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">විවෘත කරන්න</string>
   <string name="drawer_help">උදව්</string>
   <string name="prefs_category_general">සාමාන්‍යයෙන්</string>
@@ -43,7 +41,7 @@
   <string name="uploader_upload_succeeded_ticker">උඩුගත කිරීම සාර්ථකයි</string>
   <string name="uploader_upload_failed_ticker">උඩුගත කිරීම අසාර්ථකයි</string>
   <string name="uploads_view_upload_status_failed_permission_error">අනුමැතියේ දෝෂයක්</string>
-  <string name="downloader_download_in_progress_ticker">බාගතවේ...</string>
+  <string name="downloader_download_in_progress_ticker">බාගතවේ…</string>
   <string name="downloader_download_succeeded_ticker">බාගත කිරීම සාර්ථකයි</string>
   <string name="downloader_download_failed_ticker">බාගත කිරීම අසාර්ථකයි</string>
   <string name="common_choose_account">ගිණුම තෝරන්න</string>
@@ -79,5 +77,4 @@
   <string name="share_privilege_can_edit">සංස්කරණය කළ හැක</string>
   <string name="share_privilege_can_edit_create">සදන්න</string>
   <string name="share_privilege_can_edit_delete">මකන්න</string>
-  <!--Welcome to oC intro features-->
 </resources>

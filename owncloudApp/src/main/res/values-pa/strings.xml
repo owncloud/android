@@ -13,8 +13,6 @@
   <string name="actionbar_send_file">ਭੇਜੋ</string>
   <string name="actionbar_sort">ਛਾਂਟੋ</string>
   <string name="actionbar_sort_title">ਦੁਆਰਾ ਕ੍ਰਮਬੱਧ</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">ਸਾਰੀਆਂ ਫਾਈਲਾਂ</string>
   <string name="drawer_item_settings">ਸੈਟਿੰਗ</string>
   <string name="drawer_item_uploads_list">ਅੱਪਲੋਡਜ਼</string>
@@ -72,16 +70,16 @@
     <string name="common_back">ਪਿੱਛੇ</string>
   <string name="common_save_exit">ਸੰਭਾਲੋ ਅਤੇ ਬੰਦ ਕਰੋ</string>
   <string name="common_error">ਗਲਤੀ</string>
-  <string name="common_loading">...ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
+  <string name="common_loading">…ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
   <string name="common_unknown">ਅਣਜਾਣ</string>
   <string name="common_error_unknown">ਅਣਜਾਣ ਗਲਤੀ</string>
   <string name="about_title">ਇਸ ਬਾਰੇ</string>
   <string name="change_password">ਪਾਸਵਰਡ ਬਦਲੋ</string>
   <string name="delete_account">ਅਕਾਊਂਟ ਹਟਾਓ</string>
   <string name="create_account">ਅਕਾਊਂਟ ਬਣਾਓ</string>
-  <string name="upload_chooser_title">... ਤੋਂ ਅੱਪਲੋਡ</string>
+  <string name="upload_chooser_title">… ਤੋਂ ਅੱਪਲੋਡ</string>
   <string name="uploader_info_dirname">ਫੋਲਡਰ ਨਾਂ</string>
-  <string name="uploader_upload_in_progress_ticker">... ਅੱਪਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
+  <string name="uploader_upload_in_progress_ticker">… ਅੱਪਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
   <string name="uploader_upload_in_progress_content">%1$d%% ਅੱਪਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ %2$s</string>
   <string name="uploader_upload_succeeded_ticker">ਅੱਪਲੋਡ ਸਫ਼ਲ ਹੈ</string>
   <string name="uploader_upload_succeeded_content_single">%1$s ਅੱਪਲੋਡਿਡ</string>
@@ -102,7 +100,7 @@
   <string name="uploads_view_upload_status_conflict">ਅਪਵਾਦ</string>
   <string name="uploads_view_upload_status_service_interrupted">ਐਪ ਬੰਦ ਕੀਤੀ ਗਈ ਸੀ</string>
   <string name="uploads_view_upload_status_unknown_fail">ਅਣਜਾਣ ਗਲਤੀ</string>
-  <string name="downloader_download_in_progress_ticker">... ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
+  <string name="downloader_download_in_progress_ticker">… ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
   <string name="downloader_not_downloaded_yet">ਹਾਲੇ ਡਾਊਨਲੋਡ ਨਹੀਂ</string>
   <string name="common_choose_account">ਅਕਾਊਂਟ ਚੁਣੋ</string>
   <string name="sync_fail_content_unauthorized">%1$s ਲਈ ਗਲਤ ਪਾਸਵਰਡ</string>
@@ -180,5 +178,4 @@
   <string name="edit_share_unshare">ਸਾਂਝਾ ਕਰਨਾ ਬੰਦ ਕਰੋ</string>
   <string name="manage_space_title">ਜਗ੍ਹਾਂ ਪ੍ਰਬੰਧਨ</string>
   <string name="manage_space_clear_data">ਡਾਟਾ ਸਾਫ਼ ਕਰੋ</string>
-  <!--Welcome to oC intro features-->
 </resources>

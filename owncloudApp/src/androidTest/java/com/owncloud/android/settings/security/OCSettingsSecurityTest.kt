@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Jesus Recio (@jesmrec)
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -63,19 +63,19 @@ class OCSettingsSecurityTest {
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private val KEY_CHECK_RESULT = "KEY_CHECK_RESULT"
-    private val KEY_PASSCODE = "KEY_PASSCODE"
-    private val KEY_PATTERN = "KEY_PATTERN"
-    private val KEY_CHECK_PATTERN_RESULT = "KEY_CHECK_PATTERN_RESULT"
+    private val keyCheckResult = "KEY_CHECK_RESULT"
+    private val keyPassCode = "KEY_PASSCODE"
+    private val keyPattern = "KEY_PATTERN"
+    private val keyCheckPatternResult = "KEY_CHECK_PATTERN_RESULT"
 
-    private val PASSCODE_VALUE = "1111"
-    private val PATTERN_VALUE = "1234"
+    private val passCodeValue = "1111"
+    private val patternValue = "1234"
 
     @Before
     fun setUp() {
         //Only interested in "More" section, so we can get rid of the other categories. SmoothScroll is not
         //working fine to reach the bottom of the screen, so this approach was taken to display the section
-        val preferenceScreen = activityRule.activity.getPreferenceScreen() as PreferenceScreen
+        val preferenceScreen = activityRule.activity.preferenceScreen as PreferenceScreen
         val cameraUploadsCategory =
             activityRule.activity.findPreference("camera_uploads_category") as PreferenceCategory
         val moreCategory =
@@ -102,9 +102,9 @@ class OCSettingsSecurityTest {
     fun securityView() {
         onView(withText(R.string.prefs_passcode)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_pattern)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_fingerprint)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_fingerprint_summary)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_fingerprint)).check(matches(not(isEnabled())))
+        onView(withText(R.string.prefs_biometric)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_biometric_summary)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_touches_with_other_visible_windows_summary)).check(matches(isDisplayed()))
     }
@@ -124,9 +124,9 @@ class OCSettingsSecurityTest {
     @Test
     fun passcodeLockEnabled() {
         val result = Intent()
-        result.putExtra(KEY_PASSCODE, PASSCODE_VALUE)
+        result.putExtra(keyPassCode, passCodeValue)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult);
+        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertTrue(mPrefPasscode.isChecked)
         onView(withText(R.string.pass_code_stored)).check(matches(isDisplayed()))
@@ -135,7 +135,7 @@ class OCSettingsSecurityTest {
     @Test
     fun patternLockEnabled() {
         val result = Intent()
-        result.putExtra(KEY_PATTERN, PATTERN_VALUE)
+        result.putExtra(keyPattern, patternValue)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())
@@ -146,13 +146,13 @@ class OCSettingsSecurityTest {
     @Test
     fun enablePasscodeEnablesFingerprint() {
         firstEnablePasscode()
-        onView(withText(R.string.prefs_fingerprint)).check(matches(isEnabled()))
+        onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
     }
 
     @Test
     fun enablePatternEnablesFingerprint() {
         firstEnablePattern()
-        onView(withText(R.string.prefs_fingerprint)).check(matches(isEnabled()))
+        onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
     }
 
     @Test
@@ -173,26 +173,26 @@ class OCSettingsSecurityTest {
     fun disablePasscode() {
         firstEnablePasscode()
         val result = Intent()
-        result.putExtra(KEY_CHECK_RESULT, true)
+        result.putExtra(keyCheckResult, true)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_CHECK_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertFalse(mPrefPasscode.isChecked)
         onView(withText(R.string.pass_code_removed)).check(matches(isEnabled()))
-        onView(withText(R.string.prefs_fingerprint)).check(matches(not(isEnabled())))
+        onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
     }
 
     @Test
     fun disablePattern() {
         firstEnablePattern()
         val result = Intent()
-        result.putExtra(KEY_CHECK_PATTERN_RESULT, true)
+        result.putExtra(keyCheckPatternResult, true)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_CHECK_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertFalse(mPrefPattern.isChecked)
         onView(withText(R.string.pattern_removed)).check(matches(isEnabled()))
-        onView(withText(R.string.prefs_fingerprint)).check(matches(not(isEnabled())))
+        onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
     }
 
     @Test
@@ -228,15 +228,15 @@ class OCSettingsSecurityTest {
 
     private fun firstEnablePasscode() {
         val result = Intent()
-        result.putExtra(KEY_PASSCODE, PASSCODE_VALUE)
+        result.putExtra(keyPassCode, passCodeValue)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult);
+        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
     }
 
     private fun firstEnablePattern() {
         val result = Intent()
-        result.putExtra(KEY_PATTERN, PATTERN_VALUE)
+        result.putExtra(keyPattern, patternValue)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())

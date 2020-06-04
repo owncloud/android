@@ -3,7 +3,7 @@
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import com.owncloud.android.MainApp;
@@ -65,9 +66,9 @@ public class PassCodeManager {
 
         if (!sExemptOfPasscodeActivites.contains(activity.getClass()) && passCodeShouldBeRequested()) {
 
-            // Do not ask for passcode if fingerprint is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager(activity).
-                    isFingerPrintEnabled()) {
+            // Do not ask for passcode if biometric is enabled
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.getBiometricManager(activity).
+                    isBiometricEnabled()) {
                 mVisibleActivitiesCounter++;
                 return;
             }
@@ -89,7 +90,7 @@ public class PassCodeManager {
         }
     }
 
-    public void onFingerprintCancelled(Activity activity) {
+    public void onBiometricCancelled(Activity activity) {
         // Ask user for passcode
         checkPasscode(activity);
     }
@@ -97,16 +98,16 @@ public class PassCodeManager {
     private void checkPasscode(Activity activity) {
         Intent i = new Intent(MainApp.Companion.getAppContext(), PassCodeActivity.class);
         i.setAction(PassCodeActivity.ACTION_CHECK);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         activity.startActivity(i);
     }
 
     private void setUnlockTimestamp() {
-        mTimestamp = System.currentTimeMillis();
+        mTimestamp = SystemClock.elapsedRealtime();
     }
 
     private boolean passCodeShouldBeRequested() {
-        if ((System.currentTimeMillis() - mTimestamp) > PASS_CODE_TIMEOUT &&
+        if ((SystemClock.elapsedRealtime() - mTimestamp) > PASS_CODE_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0) {
             return isPassCodeEnabled();
         }

@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Jesus Recio (@jesmrec)
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,11 +39,10 @@ class OCSettingsPatternLockTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(PatternLockActivity::class.java, true, false)
-    val errorMessage = "PatternLock Activity error"
-    val intent = Intent()
+    private val intent = Intent()
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private val PATTERN_TOSAVE = "1234"
+    private val patternToSave = "1234"
 
     @After
     fun tearDown() {
@@ -75,8 +74,8 @@ class OCSettingsPatternLockTest {
     }
 
     private fun storePattern() {
-        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        appPrefs.putString(PatternLockActivity.KEY_PATTERN, PATTERN_TOSAVE)
+        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
+        appPrefs.putString(PatternLockActivity.KEY_PATTERN, patternToSave)
         appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
         appPrefs.apply()
     }

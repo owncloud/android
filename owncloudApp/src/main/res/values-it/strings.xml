@@ -37,8 +37,8 @@
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
-  <string name="prefs_fingerprint">Blocco con impronta digitale</string>
-  <string name="prefs_fingerprint_summary">Abilita il blocco con pasword o la sequenza di blocco per attivare questa opzione.</string>
+  <string name="prefs_biometric">Blocco biometrico</string>
+  <string name="prefs_biometric_summary">Abilita il blocco con pasword o la sequenza di blocco per attivare questa opzione.</string>
   <string name="prefs_touches_with_other_visible_windows">Tocca con altre finestre visibili</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Consenti tocchi quando la vista è oscurata da un\'altra finestra visibile. Abilitalo per utilizzare app di filtraggio della luce.</string>
   <string name="confirmation_touches_with_other_windows_title">Sei sicuro di voler abilitare queste funzione?</string>
@@ -73,11 +73,21 @@
   <string name="passcode_already_set">I blocchi con sequenza e password non possono essere abilitati allo stesso tempo, disabilita la password prima</string>
   <string name="pattern_no_longer_required">La sequenza non sarà più richiesta</string>
   <string name="pattern_configure_your_pattern_explanation">La sequenza sarà richiesta ogni volta che la app sarà avviata</string>
+  <string name="pass_code_locked">Bloccato con codice</string>
+  <string name="pattern_locked">Bloccato con disegno</string>
   <string name="illegal_argument_exception_message">Una AZIONE valida è necessaria per l\'intenzione di passare a</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">File</string>
+  <string name="bottom_nav_uploads">Upload</string>
+  <string name="bottom_nav_offline">Offline</string>
+  <string name="bottom_nav_links">Collegamenti</string>
   <string name="recommend_subject">Prova %1$s sul tuo smartphone!</string>
   <string name="recommend_text">Vorrei invitarti a usare %1$s sul tuo smartphone!\nScarica qui: %2$s</string>
+  <string name="error_reason">perchè</string>
   <string name="auth_failure_snackbar">Autenticazione fallita</string>
+  <string name="server_not_supported">La versione del tuo server è inferiore a 10, quindi non è supportata, aggiorna il tuo server alla versione più recente</string>
   <string name="auth_failure_snackbar_action">Cambia account</string>
+  <string name="auth_oauth_failure">Il token di accesso è scaduto o non è più valido. Accedi di nuovo per riottenere l\'accesso</string>
   <string name="auth_oauth_failure_snackbar_action">Accedi</string>
   <string name="auth_check_server">Controlla il server</string>
   <string name="auth_host_url">Indirizzo server https://...</string>
@@ -102,6 +112,7 @@
   <string name="file_list_seconds_ago">secondi fa</string>
   <string name="file_list_empty">Non c\'è niente qui. Carica qualcosa!</string>
   <string name="file_list_empty_available_offline">Non ci sono file offline disponibili.</string>
+  <string name="file_list_empty_shared_by_links">Nessun file è stato condiviso tramite link.</string>
   <string name="file_list_loading">Caricamento in corso...</string>
   <string name="file_list_no_app_for_file_type">Nessuna applicazione trovata per questo tipo di file</string>
   <string name="local_file_list_empty">Non ci sono file in questa cartella.</string>
@@ -219,13 +230,10 @@
   <string name="pass_code_wrong">Codice segreto non corretto</string>
   <string name="pass_code_removed">Codice segreto rimosso</string>
   <string name="pass_code_stored">Codice segreto memorizzato</string>
-  <string name="fingerprint_confirm">Conferma la tua impronta digitale per continuare</string>
-  <string name="fingerprint_hint">Tocca il sensore</string>
-  <string name="fingerprint_not_recognized">Impronta non riconosciuta, prova di nuovo</string>
-  <string name="fingerprint_success">Impronta riconosciuta</string>
-  <string name="fingerprint_not_hardware_detected">Questo dispositivo non supporta l\'autenticazione a mezzo impronta digitale</string>
-  <string name="fingerprint_not_enrolled_fingerprints">Registra almeno una impronta per usare questa funzionalità</string>
-  <string name="fingerprint_not_granted_permissions">Permesso per impronta digitale non garantito</string>
+  <string name="biometric_not_hardware_detected">Questo dispositivo non supporta l\'autenticazione biometrica</string>
+  <string name="biometric_not_enrolled">Registrare almeno un impronta per utilizzare questa funzione</string>
+  <string name="biometric_prompt_title">Accesso biometrico</string>
+  <string name="biometric_prompt_subtitle">Accedi utilizzando le tue credenziali biometriche</string>
   <string name="media_notif_ticker">Lettore musicale %1$s</string>
   <string name="media_state_playing">%1$s (in riproduzione)</string>
   <string name="media_state_loading">%1$s (in caricamento)</string>
@@ -268,7 +276,7 @@
   <string name="auth_wtf_reenter_URL">Stato inatteso; digita nuovamente l\'indirizzo del server</string>
   <string name="auth_expired_oauth_token_toast">Autorizzazione scaduta. Richiedi l\'autorizzazione</string>
   <string name="auth_expired_basic_auth_toast">Digita la password attuale</string>
-    <string name="auth_connecting_auth_server">Connessione al server di autenticazione in corso...</string>
+  <string name="auth_connecting_auth_server">Connessione al server di autenticazione in corso...</string>
   <string name="auth_unsupported_auth_method">Il server non supporta questo metodo di autenticazione</string>
   <string name="auth_unsupported_multiaccount">%1$s non supporta account multipli</string>
   <string name="auth_fail_get_user_name">Il tuo server non ha restituito un id utente corretto, contatta un amministratore
@@ -284,7 +292,8 @@
   <string name="confirmation_remove_local">Solo localmente</string>
   <string name="confirmation_remove_account_alert">Vuoi davvero rimuovere l\'account %1$s?</string>
   <string name="confirmation_remove_public_share_title">Rimuovi collegamento</string>
-  <string name="confirmation_remove_share_message">Vuoi davvero rimuovere %1$s?</string>
+  <string name="confirmation_remove_private_share_title">Rimuovi la condivisione privata</string>
+  <string name="confirmation_remove_share_message">Vuoi veramente rimuovere la condivisione %1$s ?</string>
   <string name="remove_success_msg">Rimozione effettuata con successo</string>
   <string name="remove_fail_msg">La rimozione non può essere completata</string>
   <string name="rename_dialog_title">Digita un nuovo nome</string>
@@ -355,15 +364,14 @@
   <string name="preview_image_error_unknown_format">Questa immagine non può essere mostrata</string>
   <string name="error__upload__local_file_not_copied">%1$s non può essere copiato nella cartella locale %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Percorso caricamento immagini</string>
-  <string name="get_shares_error">Si è verificato un errore durante il tentativo di recuperare le condivisioni</string>
+  <string name="get_shares_error">Non è stato possibile recuperare le condivisioni dal server</string>
+  <string name="get_sharees_error">Non è stato possibile recuperare utenti e gruppi dal server</string>
+  <string name="get_capabilities_error">Non è stato possibile recuperare le funzionalità dal server</string>
   <string name="share_link_no_support_share_api">Spiacenti, la condivisione non è abilitata sul tuo server. Contatta il tuo
 		amministratore.</string>
-  <string name="share_link_file_no_exist">Impossibile condividere. Assicurati che il file esista</string>
-  <string name="share_link_file_error">Si è verificato un errore durante il tentativo di condivisione del file o della cartella</string>
-  <string name="unshare_link_file_no_exist">Impossibile rimuovere dalla condivisione. Assicurati che il file esista</string>
-  <string name="unshare_link_file_error">Si è verificato un errore durante il tentativo di rimuovere la condivisione del file o della cartella</string>
-  <string name="update_link_file_no_exist">Impossibile aggiornare. Assicurati che il file esista</string>
-  <string name="update_link_file_error">Si è verificato un errore durante il tentativo di aggiornare la condivisione.</string>
+  <string name="share_link_file_error">Non è stato possibile condividere questo file o cartella</string>
+  <string name="unshare_link_file_error">Non è stato possibile annullare la condivisione di questo file o cartella</string>
+  <string name="update_link_file_error">Non è stato possibile aggiornare questo file o cartella</string>
   <string name="share_link_password_title">Digita una password</string>
   <string name="share_link_empty_password">Devi digitare una password</string>
   <string name="activity_chooser_send_file_title">Invia</string>
@@ -398,7 +406,7 @@
   <string name="log_progress_dialog_text">Caricamento dati in corso...</string>
   <string name="actionbar_select_all">Seleziona tutto</string>
   <string name="actionbar_select_inverse">Seleziona inverso</string>
-    <string name="actionbar_move">Sposta</string>
+  <string name="actionbar_move">Sposta</string>
   <string name="file_list_empty_moving">Qui non c\'è niente. Puoi aggiungere una cartella.</string>
   <string name="folder_picker_choose_button_text">Scegli</string>
   <string name="move_file_not_found">Impossibile spostare. Assicurati che il file esista</string>
@@ -522,6 +530,7 @@ Il Download del file inizierà automaticamente</string>
   <string name="media_service_notification_channel_description">Visualizza il lettore musicale</string>
   <string name="file_sync_notification_channel_name">Sincronizzazione dei file</string>
   <string name="file_sync_notification_channel_description">Visualizza i risultati della sincronizzazione</string>
+  <string name="clicks_to_be_developer">TU %1$d clicca qui per abilitare il menu da sviluppatore</string>
   <string name="rate_dialog_title">Vota %1$s questa app!</string>
   <string name="rate_dialog_description">Se questa app ti soddisfa, puoi spendere quale istante per votarla ? Il tuo voto è molto importante per noi.</string>
   <string name="button_no_thanks_name">NO, GRAZIE</string>
@@ -543,14 +552,8 @@ Il Download del file inizierà automaticamente</string>
   <string name="welcome_feature_4_text">Le tue foto e video saranno automaticamente inviati al server</string>
   <string name="welcome_feature_5_title">Flusso video</string>
   <string name="welcome_feature_5_text">Guarda i tuoi filmati senza doverli scaricare</string>
-  <string name="welcome_feature_6_title">Cerca nella cartella attuale</string>
-  <string name="welcome_feature_6_text">Filtra i file per nome</string>
-  <string name="welcome_feature_7_title">Seleziona tutto</string>
-  <string name="welcome_feature_7_text">Seleziona tutti i file</string>
-  <string name="welcome_feature_8_title">Disponibile non in linea</string>
-  <string name="welcome_feature_8_text">I tuoi file sincronizzati automaticamente</string>
-  <string name="welcome_feature_9_title">Fornitore di documenti</string>
-  <string name="welcome_feature_9_text">Accedi e modifica i tuoi file da altre app</string>
-  <string name="welcome_feature_10_text">Inviaci i tuoi log per rendere l\'app migliore</string>
   <string name="no_borwser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
+  <string name="common_not_found">non è stato trovato</string>
+  <string name="supports_oauth2_error">Non è stato possibile sapere se OAuth2 è supportato</string>
+  <string name="get_base_url_error">Non è stato possibile conoscere l\'URL di base del server</string>
 </resources>

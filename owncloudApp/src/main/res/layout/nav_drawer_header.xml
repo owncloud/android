@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ownCloud Android client application
+
+  Copyright (C) 2020 ownCloud GmbH.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_active_user"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_drawer_header_height"
+    android:background="@color/drawer_header_color">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/drawer_header_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/standard_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/drawer_current_account"
+            android:layout_width="@dimen/nav_drawer_header_avatar"
+            android:layout_height="@dimen/nav_drawer_header_avatar"
+            android:layout_marginBottom="@dimen/standard_half_margin"
+            android:src="@drawable/ic_account_circle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/drawer_username"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/drawer_account_middle"
+            android:layout_width="@dimen/nav_drawer_header_avatar_other_accounts_size"
+            android:layout_height="@dimen/nav_drawer_header_avatar_other_accounts_size"
+            android:layout_marginEnd="@dimen/nav_drawer_header_avatar_second_account_margin"
+            android:onClick="onAccountDrawerClick"
+            android:src="@drawable/ic_account_circle"
+            app:layout_constraintEnd_toEndOf="@id/drawer_account_end"
+            app:layout_constraintTop_toTopOf="@id/drawer_current_account" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/drawer_account_end"
+            android:layout_width="@dimen/nav_drawer_header_avatar_other_accounts_size"
+            android:layout_height="@dimen/nav_drawer_header_avatar_other_accounts_size"
+            android:layout_alignTop="@id/drawer_current_account"
+            android:onClick="onAccountDrawerClick"
+            android:src="@drawable/ic_account_circle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/drawer_current_account" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/drawer_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/drawer_username_full"
+            app:layout_constraintEnd_toStartOf="@id/drawer_account_chooser_toogle"
+            app:layout_constraintStart_toStartOf="@id/drawer_current_account"
+            tools:text="@string/app_name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/drawer_username_full"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/drawer_username"
+            app:layout_constraintStart_toStartOf="@id/drawer_username"
+            tools:text="@string/app_name" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/drawer_account_chooser_toogle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_half_padding"
+            android:contentDescription="@string/drawer_manage_accounts"
+            android:src="@drawable/ic_down"
+            app:layout_constraintBottom_toBottomOf="@id/drawer_username_full"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/drawer_username"
+            app:layout_constraintTop_toTopOf="@id/drawer_username" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

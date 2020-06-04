@@ -36,7 +36,6 @@
   <string name="prefs_accounts">Notandaaðgangar</string>
   <string name="prefs_manage_accounts">Sýsla með notandaaðganga</string>
   <string name="prefs_passcode">Læsing með lykilkóða</string>
-  <string name="prefs_fingerprint">Fingrafaralæsing</string>
   <string name="prefs_camera_picture_upload">Innsendar myndir</string>
   <string name="prefs_camera_picture_upload_summary">Hlaða sjálfvirkt inn myndum teknum á myndavél</string>
   <string name="prefs_camera_video_upload">Innsend myndskeið</string>
@@ -62,6 +61,11 @@
   <string name="pattern_not_same_pattern">Mynstrin eru ekki eins</string>
   <string name="pattern_stored">Mynstur geymt</string>
   <string name="pattern_removed">Mynstur fjarlægt</string>
+  <!--Bottom navigation bar-->
+  <string name="bottom_nav_files">Skrár</string>
+  <string name="bottom_nav_uploads">Innsendingar</string>
+  <string name="bottom_nav_offline">Ónettengt</string>
+  <string name="bottom_nav_links">Tenglar</string>
   <string name="recommend_subject">Prófaðu %1$s á snjallsímanum þínum!</string>
   <string name="recommend_text">Ég vil gjarnan bjóða þér að nota %1$s á snjallsímanum þínum!\nSæktu það hér: %2$s</string>
   <string name="auth_failure_snackbar">Auðkenning mistókst</string>
@@ -121,7 +125,6 @@
   <string name="common_error">Villa</string>
   <string name="common_loading">Hleð inn…</string>
   <string name="common_unknown">óþekkt</string>
-  <string name="common_error_unknown">Óþekkt villa</string>
   <string name="common_pending">Í bið</string>
   <string name="common_important">Mikilvægt</string>
   <string name="about_title">Um hugbúnaðinn</string>
@@ -203,9 +206,6 @@
   <string name="pass_code_wrong">Rangur lykilkóði</string>
   <string name="pass_code_removed">Fjarlægði lykilkóða</string>
   <string name="pass_code_stored">Geymdi lykilkóða</string>
-  <string name="fingerprint_hint">Snertiskynjari</string>
-  <string name="fingerprint_not_recognized">Fingrafar þekktist ekki, prófaðu aftur</string>
-  <string name="fingerprint_success">Fingrafar þekktist</string>
   <string name="media_notif_ticker">%1$s tónlistarspilari</string>
   <string name="media_state_playing">%1$s (afspilun)</string>
   <string name="media_state_loading">%1$s (hleð)</string>
@@ -264,7 +264,6 @@
   <string name="confirmation_remove_local">Einungis staðvært</string>
   <string name="confirmation_remove_account_alert">Ertu viss um að þú viljir fjarlægja %1$s aðganginn?</string>
   <string name="confirmation_remove_public_share_title">Fjarlægja tengil</string>
-  <string name="confirmation_remove_share_message">Ertu viss um að þú viljir fjarlægja %1$s?</string>
   <string name="remove_success_msg">Fjarlæging tókst</string>
   <string name="remove_fail_msg">Fjarlæging mistókst</string>
   <string name="rename_dialog_title">Settu inn nýtt nafn</string>
@@ -332,12 +331,6 @@
   <string name="prefs_camera_picture_upload_path_title">Innsendingarslóð fyrir myndir</string>
   <string name="share_link_no_support_share_api">Því miður, deiling gagna er ekki virk á þjóninum. Hafðu samband við
 		kerfisstjóra.</string>
-  <string name="share_link_file_no_exist">Get ekki deilt. Athugaðu hvort skráin sé til</string>
-  <string name="share_link_file_error">Villa kom upp við að reyna að deila þessari skrá eða möppu</string>
-  <string name="unshare_link_file_no_exist">Get ekki hætt deilingu. Athugaðu hvort skráin sé til</string>
-  <string name="unshare_link_file_error">Villa kom upp við að reyna að hætta deilingu á þessari skrá eða möppu</string>
-  <string name="update_link_file_no_exist">Get ekki uppfært. Athugaðu hvort skráin sé til</string>
-  <string name="update_link_file_error">Villa kom upp við að reyna að uppfæra sameignina</string>
   <string name="share_link_password_title">Settu inn lykilorð</string>
   <string name="share_link_empty_password">Þú verður að setja inn lykilorð</string>
   <string name="activity_chooser_send_file_title">Senda</string>
@@ -507,10 +500,4 @@
   <string name="welcome_feature_3_text">Tengst við öll ownCloud tölvuskýin þín</string>
   <string name="welcome_feature_4_title">Innsendingar úr myndavél</string>
   <string name="welcome_feature_5_title">Streyming myndskeiða</string>
-  <string name="welcome_feature_6_title">Leita í fyrirliggjandi möppu</string>
-  <string name="welcome_feature_6_text">Síaðu skrárnar þínar eftir heiti þeirra</string>
-  <string name="welcome_feature_7_title">Velja allt</string>
-  <string name="welcome_feature_7_text">Veldu allar skrár í einu</string>
-  <string name="welcome_feature_8_title">Tiltækt án nettengingar</string>
-  <string name="welcome_feature_8_text">Skrárnar þínar eru sjálfvirkt samstilltar</string>
 </resources>

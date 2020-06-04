@@ -10,8 +10,6 @@
   <string name="actionbar_settings">নিয়ামকসমূহ</string>
   <string name="actionbar_see_details">বিস্তারিত</string>
   <string name="actionbar_send_file">পাঠাও</string>
-  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-  <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_open">খোল</string>
   <string name="drawer_feedback">মতামত</string>
   <string name="drawer_help">সহায়িকা</string>
@@ -68,7 +66,7 @@
   <string name="uploads_view_group_finished_uploads">আপলোড করা হয়েছে</string>
   <string name="uploads_view_upload_status_succeeded">সুসম্পন্ন</string>
   <string name="uploads_view_upload_status_unknown_fail">অজানা জটিলতা</string>
-  <string name="downloader_download_in_progress_ticker">ডাউনলোড চলছে...</string>
+  <string name="downloader_download_in_progress_ticker">ডাউনলোড চলছে…</string>
   <string name="downloader_download_in_progress_content">%1$d%% ডাউনলোড করছে %2$s</string>
   <string name="downloader_download_succeeded_ticker">ডাউনলোড সফল</string>
   <string name="downloader_download_failed_ticker">ডাউনলোড হয়নি</string>
@@ -216,5 +214,4 @@
   <string name="share_privilege_can_edit">সম্পাদনা করতে পারবেন</string>
   <string name="share_privilege_can_edit_create">তৈরী করুন</string>
   <string name="share_privilege_can_edit_delete">মুছে ফেল</string>
-  <!--Welcome to oC intro features-->
 </resources>
