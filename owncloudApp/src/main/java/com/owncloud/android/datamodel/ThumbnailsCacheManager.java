@@ -32,11 +32,9 @@ import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.view.MenuItem;
 import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.util.Pair;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -46,7 +44,6 @@ import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.ui.DefaultAvatarTextDrawable;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
 import com.owncloud.android.utils.BitmapUtils;
 import timber.log.Timber;
@@ -357,198 +354,6 @@ public class ThumbnailsCacheManager {
             return thumbnail;
         }
 
-    }
-
-    /**
-     * Show the avatar corresponding to the received account in an {@link ImageView} ir {@link MenuItem}.
-     * <p>
-     * The avatar is loaded if available in the cache and bound to the received UI element. The avatar is not
-     * fetched from the server if not available, unless the parameter 'fetchFromServer' is set to 'true'.
-     * <p>
-     * If there is no avatar stored and cannot be fetched, a colored icon is generated with the first
-     * letter of the account username.
-     * <p>
-     * If this is not possible either, a predefined user icon is bound instead.
-     */
-    public static class GetAvatarTask extends AsyncTask<Object, Void, Drawable> {
-        private final WeakReference<ImageView> mImageViewReference;
-        private final WeakReference<MenuItem> mMenuItemReference;
-        private Account mAccount;
-        private float mDisplayRadius;
-        private boolean mFetchFromServer;
-
-        private String mUsername;
-        private OwnCloudClient mClient;
-
-        /**
-         * Builds an instance to show the avatar corresponding to the received account in an {@link ImageView}.
-         *
-         * @param imageView       The {@link ImageView} to bind the avatar to.
-         * @param account         OC account which avatar will be shown.
-         * @param displayRadius   The radius of the circle where the avatar will be clipped into.
-         * @param fetchFromServer When 'true', if there is no avatar stored in the cache, it's fetched from
-         *                        the server. When 'false', server is not accessed, the fallback avatar is
-         *                        generated instead. USE WITH CARE, probably to be removed in the future.
-         */
-        public GetAvatarTask(ImageView imageView, Account account, float displayRadius, boolean fetchFromServer) {
-            if (account == null) {
-                throw new IllegalArgumentException("Received NULL account");
-            }
-            mMenuItemReference = null;
-            mImageViewReference = new WeakReference<>(imageView);
-            mAccount = account;
-            mDisplayRadius = displayRadius;
-            mFetchFromServer = fetchFromServer;
-        }
-
-        @Override
-        protected Drawable doInBackground(Object... params) {
-            Drawable thumbnail = null;
-
-            try {
-                OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount,
-                        MainApp.Companion.getAppContext());
-                mClient = SingleSessionManager.getDefaultSingleton().
-                        getClientFor(ocAccount, MainApp.Companion.getAppContext());
-
-                mUsername = mAccount.name;
-                thumbnail = doAvatarInBackground();
-
-            } catch (Throwable t) {
-                // the app should never break due to a problem with avatars
-                Timber.e(t, "Generation of avatar for " + mUsername + " failed");
-                if (t instanceof OutOfMemoryError) {
-                    System.gc();
-                }
-            }
-
-            return thumbnail;
-        }
-
-        @Override
-        protected void onPostExecute(Drawable avatar) {
-            if (mImageViewReference != null) {
-                ImageView imageView = mImageViewReference.get();
-                if (imageView != null) {
-                    if (avatar != null) {
-                        imageView.setImageDrawable(avatar);
-                    } else {
-                        // really needed?
-                        imageView.setImageResource(
-                                R.drawable.ic_account_circle
-                        );
-                    }
-                }
-            } else if (mMenuItemReference != null) {
-                MenuItem menuItem = mMenuItemReference.get();
-                if (menuItem != null) {
-                    if (avatar != null) {
-                        menuItem.setIcon(avatar);
-                    } else {
-                        // really needed
-                        menuItem.setIcon(
-                                R.drawable.ic_account_circle
-                        );
-                    }
-                }
-            }
-        }
-
-        /**
-         * Converts size of file icon from dp to pixel
-         *
-         * @return int
-         */
-        private int getAvatarDimension() {
-            // Converts dp to pixel
-            Resources r = MainApp.Companion.getAppContext().getResources();
-            return Math.round(r.getDimension(R.dimen.file_avatar_size));
-        }
-
-        private Drawable doAvatarInBackground() {
-
-            Drawable avatarDrawable = null;
-
-            final String imageKey = "a_" + mUsername;
-
-            // Check disk cache in background thread
-            Bitmap avatarBitmap = getBitmapFromDiskCache(imageKey);
-
-            if (avatarBitmap != null) {
-                avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(
-                        MainApp.Companion.getAppContext().getResources(),
-                        avatarBitmap
-                );
-
-            } else {
-                // Not found in disk cache
-                if (mFetchFromServer) {
-                    int px = getAvatarDimension();
-
-                    // Download avatar from server
-                    OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
-                    if (mClient != null && serverOCVersion != null) {
-                        GetMethod get;
-                        try {
-                            String uri = mClient.getBaseUri() + "" +
-                                    "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
-                            Timber.d("URI: %s", uri);
-                            get = new GetMethod(new URL(uri));
-                            int status = mClient.executeHttpMethod(get);
-                            if (status == HttpConstants.HTTP_OK) {
-                                InputStream inputStream = get.getResponseBodyAsStream();
-                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                avatarBitmap = ThumbnailUtils.extractThumbnail(bitmap, px, px);
-
-                                // Add avatar to cache
-                                if (avatarBitmap != null) {
-                                    addBitmapToCache(imageKey, avatarBitmap);
-                                }
-                            } else {
-                                mClient.exhaustResponse(get.getResponseBodyAsStream());
-                            }
-                        } catch (Exception e) {
-                            Timber.e(e, "Error downloading avatar");
-                        }
-                    }
-                }
-                if (avatarBitmap != null) {
-                    avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(
-                            MainApp.Companion.getAppContext().getResources(),
-                            avatarBitmap
-                    );
-
-                } else {
-                    // generate placeholder from user name
-                    try {
-                        avatarDrawable = DefaultAvatarTextDrawable.createAvatar(mUsername, mDisplayRadius);
-
-                    } catch (Exception e) {
-                        // nothing to do, return null to apply default icon
-                        Timber.e(e, "Error calculating RGB value for active account icon.");
-                    }
-                }
-            }
-            return avatarDrawable;
-        }
-
-    }
-
-    public static String addAvatarToCache(String accountName, byte[] avatarData, int dimension) {
-        final String imageKey = "a_" + accountName;
-
-        Bitmap bitmap = BitmapFactory.decodeByteArray(avatarData, 0, avatarData.length);
-        bitmap = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension);
-        // Add avatar to cache
-        if (bitmap != null) {
-            addBitmapToCache(imageKey, bitmap);
-        }
-        return imageKey;
-    }
-
-    public static void removeAvatarFromCache(String accountName) {
-        final String imageKey = "a_" + accountName;
-        removeBitmapFromCache(imageKey);
     }
 
     public static boolean cancelPotentialThumbnailWork(Object file, ImageView imageView) {

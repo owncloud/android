@@ -21,13 +21,9 @@ package com.owncloud.android.operations;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.res.Resources;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.R;
-import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.domain.UseCaseResult;
-import com.owncloud.android.domain.exceptions.FileNotFoundException;
 import com.owncloud.android.domain.user.model.UserAvatar;
 import com.owncloud.android.domain.user.model.UserInfo;
 import com.owncloud.android.domain.user.model.UserQuota;
@@ -96,7 +92,7 @@ public class GetUserProfileOperation extends SyncOperation {
                     /// get avatar (optional for success)
                     UseCaseResult<UserAvatar> avatarUseCaseResult = useCaseHelper.getUserAvatar(storedAccount.name);
                     AvatarManager avatarManager = new AvatarManager();
-                    avatarManager.handleAvatarUseCaseResult("a_"+ storedAccount.name, avatarUseCaseResult);
+                    avatarManager.handleAvatarUseCaseResult(storedAccount, avatarUseCaseResult);
 
                     return new RemoteOperationResult<>(RemoteOperationResult.ResultCode.OK);
 

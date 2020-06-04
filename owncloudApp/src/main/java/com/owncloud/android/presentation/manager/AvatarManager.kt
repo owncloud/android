@@ -35,6 +35,7 @@ import com.owncloud.android.utils.BitmapUtils
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
+import kotlin.math.roundToInt
 
 /**
  * The avatar is loaded if available in the cache and bound to the received UI element. The avatar is not
@@ -52,33 +53,34 @@ class AvatarManager : KoinComponent {
         fetchIfNotCached: Boolean,
         displayRadius: Float
     ): Drawable? {
-        var avatarDrawable: Drawable? = null
-        val imageKey = "a_${account.name}"
+        val imageKey = getImageKeyForAccount(account)
 
         // Check disk cache in background thread
         val avatarBitmap = ThumbnailsCacheManager.getBitmapFromDiskCache(imageKey)
         avatarBitmap?.let {
             Timber.i("Avatar retrieved from cache with imageKey: $imageKey")
-            avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, it)
-            return avatarDrawable
+            return BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, it)
         }
 
+        // Avatar not found in disk caché, fetch from server.
         if (fetchIfNotCached) {
+            Timber.i("Avatar with imageKey $imageKey is not available in cache. Fetching from server...")
             val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
-            val useCaseResult = getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(accountName = account.name))
-            handleAvatarUseCaseResult(useCaseResult = useCaseResult, imageKey = imageKey)?.let { return it }
+            val useCaseResult =
+                getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(accountName = account.name))
+            handleAvatarUseCaseResult(useCaseResult = useCaseResult, account = account)?.let { return it }
         }
 
         // generate placeholder from user name
         try {
             Timber.i("Avatar with imageKey $imageKey is not available in cache. Generating one...")
-            avatarDrawable = DefaultAvatarTextDrawable.createAvatar(account.name, displayRadius)
-            return avatarDrawable
+            return DefaultAvatarTextDrawable.createAvatar(account.name, displayRadius)
+
         } catch (e: Exception) {
             // nothing to do, return null to apply default icon
             Timber.e(e, "Error calculating RGB value for active account icon.")
         }
-        return avatarDrawable
+        return null
     }
 
     /**
@@ -86,29 +88,40 @@ class AvatarManager : KoinComponent {
      *
      * @return int
      */
-    private fun getAvatarDimension(): Int {
-        // Converts dp to pixel
-        val r = appContext.resources
-        return Math.round(r.getDimension(R.dimen.file_avatar_size))
-    }
+    private fun getAvatarDimension(): Int = appContext.resources.getDimension(R.dimen.file_avatar_size).roundToInt()
 
+    private fun getImageKeyForAccount(account: Account) = "a_${account.name}"
+
+    /**
+     * If [GetUserAvatarAsyncUseCase] is success, add avatar to cache and return a circular drawable.
+     * If there is no avatar available in server, remove it from cache.
+     */
     fun handleAvatarUseCaseResult(
-        imageKey: String,
+        account: Account,
         useCaseResult: UseCaseResult<UserAvatar>
     ): Drawable? {
-        Timber.d("Is success: ${useCaseResult.isSuccess}")
+        Timber.d("Fetch avatar use case is success: ${useCaseResult.isSuccess}")
+        val imageKey = getImageKeyForAccount(account)
 
         if (useCaseResult.isSuccess) {
             val userAvatar = useCaseResult.getDataOrNull()
             userAvatar?.let {
-                var bitmap = BitmapFactory.decodeByteArray(it.avatarData, 0, it.avatarData.size)
-                bitmap = ThumbnailUtils.extractThumbnail(bitmap, getAvatarDimension(), getAvatarDimension())
-                // Add avatar to cache
-                bitmap?.let {
-                    ThumbnailsCacheManager.addBitmapToCache(imageKey, bitmap)
-                    Timber.d("User avatar saved into cache -> %s", bitmap)
-                    val avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, bitmap)
-                    return avatarDrawable
+                try {
+                    var bitmap = BitmapFactory.decodeByteArray(it.avatarData, 0, it.avatarData.size)
+                    bitmap = ThumbnailUtils.extractThumbnail(bitmap, getAvatarDimension(), getAvatarDimension())
+                    // Add avatar to cache
+                    bitmap?.let {
+                        ThumbnailsCacheManager.addBitmapToCache(imageKey, bitmap)
+                        Timber.d("User avatar saved into cache -> %s", imageKey)
+                        return BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, bitmap)
+                    }
+                } catch (t: Throwable) {
+                    // the app should never break due to a problem with avatars
+                    Timber.e(t, "Generation of avatar for $imageKey failed")
+                    if (t is OutOfMemoryError) {
+                        System.gc()
+                    }
+                    null
                 }
             }
 
