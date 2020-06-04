@@ -135,7 +135,7 @@ class EditPrivateShareFragment : DialogFragment() {
         try {
             listener = activity as ShareFragmentListener?
         } catch (e: IllegalStateException) {
-            throw IllegalStateException(activity!!.toString() + " must implement OnShareFragmentInteractionListener")
+            throw IllegalStateException(requireActivity().toString() + " must implement OnShareFragmentInteractionListener")
         }
     }
 
