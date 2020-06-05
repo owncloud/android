@@ -48,7 +48,7 @@ class UserDaoTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         OwncloudDatabase.switchToInMemory(context)
         val db: OwncloudDatabase = OwncloudDatabase.getDatabase(context)
-        userDao = db.userQuotaDao()
+        userDao = db.userDao()
     }
 
     /******************************************************************************************************

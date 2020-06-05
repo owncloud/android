@@ -26,12 +26,14 @@ import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.resources.users.services.UserService
+import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 
-class ClientHandler(
+class ClientManager(
     private val accountManager: AccountManager,
     val context: Context
 ) {
-    fun getClientForAccount(
+    private fun getClientForAccount(
         accountName: String?
     ): OwnCloudClient {
         val account: Account? = if (accountName.isNullOrBlank()) {
@@ -61,5 +63,10 @@ class ClientHandler(
         }
 
         return defaultAccount
+    }
+
+    fun getUserService(accountName: String? = ""): UserService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCUserService(client = ownCloudClient)
     }
 }
