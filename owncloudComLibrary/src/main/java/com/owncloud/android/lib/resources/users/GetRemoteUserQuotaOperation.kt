@@ -92,7 +92,7 @@ class GetRemoteUserQuotaOperation : RemoteOperation<RemoteQuota>() {
                 quotaUsed = property.quotaUsedBytes
             }
         }
-
+        Timber.d("Quota used: $quotaUsed, QuotaAvailable: $quotaAvailable")
         // If there's a special case, quota available will contain a negative code
         // -1, PENDING: Not computed yet, e.g. external storage mounted but folder sizes need scanning
         // -2, UNKNOWN: Storage not accessible, e.g. external storage with no API to ask for the free space
@@ -106,8 +106,11 @@ class GetRemoteUserQuotaOperation : RemoteOperation<RemoteQuota>() {
             )
         } else {
             val totalQuota = quotaAvailable + quotaUsed
-            val relativeQuota = (quotaUsed * 100).toDouble() / totalQuota
-            val roundedRelativeQuota = (relativeQuota * 100).roundToLong() / 100.0
+            val roundedRelativeQuota = if (totalQuota > 0) {
+                val relativeQuota = (quotaUsed * 100).toDouble() / totalQuota
+                (relativeQuota * 100).roundToLong() / 100.0
+            } else 0.0
+
             RemoteQuota(quotaAvailable, quotaUsed, totalQuota, roundedRelativeQuota)
         }
     }
