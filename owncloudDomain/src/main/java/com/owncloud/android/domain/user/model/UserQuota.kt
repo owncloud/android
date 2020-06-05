@@ -28,7 +28,7 @@ data class UserQuota(
     @VisibleForTesting
     fun isLimited() = available > 0
 
-    fun getRelative() = if (isLimited()) {
+    fun getRelative() = if (isLimited() && getTotal() > 0) {
         val relativeQuota = (used * 100).toDouble() / getTotal()
         (relativeQuota * 100).roundToLong() / 100.0
     } else 0.0

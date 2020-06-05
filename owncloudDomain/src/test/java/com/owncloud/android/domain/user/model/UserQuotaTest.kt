@@ -138,6 +138,16 @@ class UserQuotaTest {
     }
 
     @Test
+    fun testQuotaRelativeTotalIs0() {
+        val item = UserQuota(
+            available = 0,
+            used = 0
+        )
+
+        assertEquals(0.0, item.getRelative(), 0.0001)
+    }
+
+    @Test
     fun testQuotaRelativeTwoDecimals() {
         val item = UserQuota(
             available = 75_000,
