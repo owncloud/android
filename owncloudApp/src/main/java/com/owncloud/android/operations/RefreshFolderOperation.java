@@ -154,13 +154,8 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     }
 
     private void syncUserProfile() {
-        GetUserProfileOperation update = new GetUserProfileOperation();
-        RemoteOperationResult result = update.execute(getStorageManager(), mContext);
-        if (!result.isSuccess()) {
-            Timber.w("Couldn't update user profile from server");
-        } else {
-            Timber.i("Got user profile");
-        }
+        SyncProfileOperation syncProfileOperation = new SyncProfileOperation(getStorageManager().getAccount());
+        syncProfileOperation.syncUserProfile();
     }
 
     /**
