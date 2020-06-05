@@ -19,12 +19,11 @@
 
 package com.owncloud.android.data.user.datasources
 
-import com.owncloud.android.data.ClientHandler
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserAvatarMapper
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
-import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation
 import com.owncloud.android.lib.resources.users.RemoteAvatarData
@@ -45,12 +44,13 @@ import org.junit.Test
 class OCRemoteUserDataSourceTest {
     private lateinit var ocRemoteUserDataSource: OCRemoteUserDataSource
 
-    private val clientHandler: ClientHandler = mockk(relaxed = true)
-    private val ocClient: OwnCloudClient = mockk(relaxed = true)
+    private val clientManager: ClientManager = mockk(relaxed = true)
     private val ocUserService: OCUserService = mockk()
     private val remoteUserInfoMapper = RemoteUserInfoMapper()
     private val remoteUserQuotaMapper = RemoteUserQuotaMapper()
     private val remoteUserAvatarMapper = RemoteUserAvatarMapper()
+
+    private val avatarDimension = 128
 
     private val remoteUserInfo = RemoteUserInfo(
         id = OC_USER_INFO.id,
@@ -63,14 +63,23 @@ class OCRemoteUserDataSourceTest {
         relative = OC_USER_QUOTA.getRelative(),
         total = OC_USER_QUOTA.getTotal()
     )
-    private val remoteAvatar = RemoteAvatarData()
+    private val remoteAvatar = RemoteAvatarData(
+        avatarData = OC_USER_AVATAR.avatarData,
+        eTag = OC_USER_AVATAR.eTag,
+        mimeType = OC_USER_AVATAR.mimeType
+    )
 
     @Before
     fun init() {
-        every { clientHandler.getClientForAccount(OC_ACCOUNT_NAME) } returns ocClient
+        every { clientManager.getUserService(any()) } returns ocUserService
 
-        ocRemoteUserDataSource = OCRemoteUserDataSource(clientHandler, remoteUserInfoMapper, remoteUserQuotaMapper, remoteUserAvatarMapper, 128)
-
+        ocRemoteUserDataSource = OCRemoteUserDataSource(
+            remoteUserInfoMapper,
+            remoteUserQuotaMapper,
+            remoteUserAvatarMapper,
+            clientManager,
+            avatarDimension
+        )
     }
 
     @Test
@@ -128,7 +137,7 @@ class OCRemoteUserDataSourceTest {
             createRemoteOperationResultMock(data = remoteAvatar, isSuccess = true)
 
         every {
-            ocUserService.getUserAvatar()
+            ocUserService.getUserAvatar(avatarDimension)
         } returns getUserAvatarResult
 
         val userAvatar = ocRemoteUserDataSource.getUserAvatar(OC_ACCOUNT_NAME)
@@ -140,7 +149,7 @@ class OCRemoteUserDataSourceTest {
     @Test(expected = Exception::class)
     fun getUserAvatarException() {
         every {
-            ocUserService.getUserAvatar()
+            ocUserService.getUserAvatar(avatarDimension)
         } throws Exception()
 
         ocRemoteUserDataSource.getUserAvatar(OC_ACCOUNT_NAME)

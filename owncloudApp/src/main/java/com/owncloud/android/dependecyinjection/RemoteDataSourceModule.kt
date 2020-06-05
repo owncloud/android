@@ -21,7 +21,7 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.data.ClientHandler
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCRemoteAuthenticationDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
@@ -61,7 +61,7 @@ val remoteDataSourceModule = module {
     single { OwnCloudAccount(get(), androidContext()) }
     single { SingleSessionManager.getDefaultSingleton().getClientFor(get(), androidContext()) }
 
-    single { ClientHandler(get(), get()) }
+    single { ClientManager(get(), get()) }
 
     single<CapabilityService> { OCCapabilityService(get()) }
     single<FileService> { OCFileService(get()) }
@@ -76,7 +76,8 @@ val remoteDataSourceModule = module {
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get()) }
     factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), get(), get(), androidContext().resources.getDimension(
-        R.dimen.file_avatar_size).toInt()) }
+                R.dimen.file_avatar_size
+            ).toInt()) }
 
     factory { RemoteCapabilityMapper() }
     factory { RemoteShareMapper() }
