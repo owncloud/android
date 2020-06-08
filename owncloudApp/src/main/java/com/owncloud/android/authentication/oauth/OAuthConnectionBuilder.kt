@@ -26,9 +26,6 @@ class OAuthConnectionBuilder(val context: Context) : ConnectionBuilder {
     /**
      * The singleton instance of the default connection builder.
      */
-    private val CONNECTION_TIMEOUT_MS = TimeUnit.SECONDS.toMillis(15).toInt()
-    private val READ_TIMEOUT_MS = TimeUnit.SECONDS.toMillis(10).toInt()
-    private val HTTPS_SCHEME = "https"
 
     @Throws(IOException::class)
     override fun openConnection(uri: Uri): HttpURLConnection {
@@ -42,16 +39,22 @@ class OAuthConnectionBuilder(val context: Context) : ConnectionBuilder {
                 )
                 val sslContext: SSLContext
                 sslContext = try {
-                    SSLContext.getInstance("TLSv1.2")
-                } catch (tlsv12Exception: NoSuchAlgorithmException) {
+                    Timber.w("$TLS_v1_3 is supported in this device;")
+                    SSLContext.getInstance(TLS_v1_3)
+                } catch (tlsv13Exception: NoSuchAlgorithmException) {
                     try {
-                        Timber.w("TLSv1.2 is not supported in this device; falling through TLSv1.1")
-                        SSLContext.getInstance("TLSv1.1")
-                    } catch (tlsv11Exception: NoSuchAlgorithmException) {
-                        Timber.w("TLSv1.1 is not supported in this device; falling through TLSv1.0")
-                        SSLContext.getInstance("TLSv1")
-                        // should be available in any device; see reference of supported protocols in
-                        // http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
+                        Timber.w("$TLS_v1_3 is not supported in this device; falling through $TLS_v1_2")
+                        SSLContext.getInstance(TLS_v1_2)
+                    } catch (tlsv12Exception: NoSuchAlgorithmException) {
+                        try {
+                            Timber.w("$TLS_v1_2 is not supported in this device; falling through $TLS_v1_1")
+                            SSLContext.getInstance(TLS_v1_1)
+                        } catch (tlsv11Exception: NoSuchAlgorithmException) {
+                            Timber.w("$TLS_v1_1 is not supported in this device; falling through $TLS_v1")
+                            SSLContext.getInstance(TLS_v1)
+                            // should be available in any device; see reference of supported protocols in
+                            // http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
+                        }
                     }
                 }
                 sslContext.init(null, arrayOf<TrustManager>(trustManager), null)
@@ -69,5 +72,15 @@ class OAuthConnectionBuilder(val context: Context) : ConnectionBuilder {
             readTimeout = READ_TIMEOUT_MS
             instanceFollowRedirects = false
         }
+    }
+
+    companion object {
+        private val CONNECTION_TIMEOUT_MS = TimeUnit.SECONDS.toMillis(15).toInt()
+        private val READ_TIMEOUT_MS = TimeUnit.SECONDS.toMillis(10).toInt()
+        private const val HTTPS_SCHEME = "https"
+        private const val TLS_v1 = "TLSv1"
+        private const val TLS_v1_1 = "TLSv1.1"
+        private const val TLS_v1_2 = "TLSv1.2"
+        private const val TLS_v1_3 = "TLSv1.3"
     }
 }
