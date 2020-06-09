@@ -23,11 +23,11 @@ allOpen {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         versionCode = 10000500
         versionName = "1.0.5"
