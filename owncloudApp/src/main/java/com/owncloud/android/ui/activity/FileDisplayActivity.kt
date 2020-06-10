@@ -468,9 +468,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val drawerOpen = isDrawerOpen()
-        menu.findItem(R.id.action_sync_account).isVisible = !drawerOpen
-        menu.findItem(R.id.action_switch_view).isVisible = !drawerOpen
+        menu.findItem(R.id.action_sync_account).isVisible = !isDrawerOpen()
+        menu.findItem(R.id.action_switch_view).isVisible = !isDrawerOpen()
 
         return super.onPrepareOptionsMenu(menu)
     }
@@ -740,7 +739,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     override fun onBackPressed() {
         val isFabOpen = isFabOpen
-        val isDrawerOpen = isDrawerOpen()
 
         /*
          * BackPressed priority/hierarchy:
@@ -748,13 +746,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
          *    2. close FAB if open (only if drawer isn't open)
          *    3. navigate up (only if drawer and FAB aren't open)
          */
-        if (isDrawerOpen && isFabOpen) {
+        if (isDrawerOpen() && isFabOpen) {
             // close drawer first
             super.onBackPressed()
-        } else if (isDrawerOpen && !isFabOpen) {
+        } else if (isDrawerOpen() && !isFabOpen) {
             // close drawer
             super.onBackPressed()
-        } else if (!isDrawerOpen && isFabOpen) {
+        } else if (!isDrawerOpen() && isFabOpen) {
             // close fab
             listOfFilesFragment?.fabMain?.collapse()
         } else {

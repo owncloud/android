@@ -68,7 +68,7 @@ class AvatarManager : KoinComponent {
             val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
             val useCaseResult =
                 getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(accountName = account.name))
-            handleAvatarUseCaseResult(useCaseResult = useCaseResult, account = account)?.let { return it }
+            handleAvatarUseCaseResult(account, useCaseResult)?.let { return it }
         }
 
         // generate placeholder from user name
