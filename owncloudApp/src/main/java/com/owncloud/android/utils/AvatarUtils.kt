@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.extensions
+
+package com.owncloud.android.utils
 
 import android.accounts.Account
+import android.view.MenuItem
 import android.widget.ImageView
 import com.owncloud.android.R
 import com.owncloud.android.presentation.manager.AvatarManager
@@ -29,7 +31,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-object ImageViewExt : KoinComponent {
+class AvatarUtils : KoinComponent{
 
     private val avatarManager: AvatarManager by inject()
 
@@ -49,7 +51,33 @@ object ImageViewExt : KoinComponent {
      *                        the server. When 'false', server is not accessed, the fallback avatar is
      *                        generated instead.
      */
-    fun ImageView.loadAvatarForAccount(
+    fun loadAvatarForAccount(
+        imageView: ImageView,
+        account: Account,
+        fetchIfNotCached: Boolean = false,
+        displayRadius: Float
+    ) {
+        //TODO: Tech debt: Move this to a viewModel and use its viewModelScope instead
+        CoroutineScope(Dispatchers.IO).launch {
+            val drawable = avatarManager.getAvatarForAccount(
+                account = account,
+                fetchIfNotCached = fetchIfNotCached,
+                displayRadius = displayRadius
+            )
+            withContext(Dispatchers.Main) {
+                // Not just accessibility support, used to know what account is bound to each imageView
+                imageView.contentDescription = account.name
+                if (drawable != null) {
+                    imageView.setImageDrawable(drawable)
+                } else {
+                    imageView.setImageResource(R.drawable.ic_account_circle)
+                }
+            }
+        }
+    }
+
+    fun loadAvatarForAccount(
+        menuItem: MenuItem,
         account: Account,
         fetchIfNotCached: Boolean = false,
         displayRadius: Float
@@ -61,23 +89,12 @@ object ImageViewExt : KoinComponent {
                 displayRadius = displayRadius
             )
             withContext(Dispatchers.Main) {
-                // Not just accessibility support, used to know what account is bound to each imageView
-                this@loadAvatarForAccount.contentDescription = account.name
                 if (drawable != null) {
-                    this@loadAvatarForAccount.setImageDrawable(drawable)
+                    menuItem.icon = drawable
                 } else {
-                    this@loadAvatarForAccount.setImageResource(R.drawable.ic_account_circle)
+                    menuItem.setIcon(R.drawable.ic_account_circle)
                 }
             }
         }
-    }
-
-    fun loadAvatarForAccountJava(
-        imageView: ImageView,
-        account: Account,
-        fetchIfNotCached: Boolean,
-        displayRadius: Float
-    ) {
-        imageView.loadAvatarForAccount(account, fetchIfNotCached, displayRadius)
     }
 }
