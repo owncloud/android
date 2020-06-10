@@ -22,25 +22,14 @@
 
 package com.owncloud.android.utils;
 
-import android.accounts.Account;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.os.Build;
 import android.text.format.DateUtils;
-import android.view.Display;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
 
 import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 
 import java.math.BigDecimal;
 import java.net.IDN;

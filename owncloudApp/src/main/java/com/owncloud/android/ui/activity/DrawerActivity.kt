@@ -47,11 +47,10 @@ import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.extensions.ImageViewExt.loadAvatarForAccount
-import com.owncloud.android.extensions.MenuItemExt.loadAvatarForAccount
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
+import com.owncloud.android.utils.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.activity_main.*
@@ -95,40 +94,39 @@ abstract class DrawerActivity : ToolbarActivity() {
         drawer_layout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         nav_view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
-        if (nav_view != null) {
-            // Set background header image and logo, if any
-            if (resources.getBoolean(R.bool.use_drawer_background_header)) {
-                nav_view.getHeaderView(0).drawer_header_background?.setImageResource(R.drawable.drawer_header_background)
-            }
-            if (resources.getBoolean(R.bool.use_drawer_logo)) {
-                drawer_logo?.setImageResource(R.drawable.drawer_logo)
-            }
+        // Set background header image and logo, if any
+        if (resources.getBoolean(R.bool.use_drawer_background_header)) {
+            nav_view.getHeaderView(0).drawer_header_background?.setImageResource(R.drawable.drawer_header_background)
+        }
+        if (resources.getBoolean(R.bool.use_drawer_logo)) {
+            drawer_logo?.setImageResource(R.drawable.drawer_logo)
+        }
 
-            nav_view.getHeaderView(0).drawer_account_chooser_toogle?.setImageResource(R.drawable.ic_down)
-            isAccountChooserActive = false
+        nav_view.getHeaderView(0).drawer_account_chooser_toogle?.setImageResource(R.drawable.ic_down)
+        isAccountChooserActive = false
 
-            //Notch support
-            nav_view.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-                override fun onViewAttachedToWindow(v: View) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        v.rootWindowInsets.displayCutout?.let {
-                            nav_view.getHeaderView(0).drawer_active_user?.layoutParams?.height =
-                                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                    val displayCutoutDP =
-                                        it.safeInsetTop / (resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
-                                    resources.getDimension(R.dimen.nav_drawer_header_height).toInt() + displayCutoutDP
-                                } else {
-                                    resources.getDimension(R.dimen.nav_drawer_header_height).toInt()
-                                }
-                        }
+        //Notch support
+        nav_view.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(v: View) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    v.rootWindowInsets.displayCutout?.let {
+                        nav_view.getHeaderView(0).drawer_active_user?.layoutParams?.height =
+                            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                val displayCutoutDP =
+                                    it.safeInsetTop / (resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+                                resources.getDimension(R.dimen.nav_drawer_header_height).toInt() + displayCutoutDP
+                            } else {
+                                resources.getDimension(R.dimen.nav_drawer_header_height).toInt()
+                            }
                     }
                 }
+            }
 
-                override fun onViewDetachedFromWindow(v: View) {}
-            })
-            setupDrawerContent(nav_view)
-            nav_view.getHeaderView(0).drawer_active_user?.setOnClickListener { toggleAccountList() }
-        }
+            override fun onViewDetachedFromWindow(v: View) {}
+        })
+        setupDrawerContent(nav_view)
+        nav_view.getHeaderView(0).drawer_active_user?.setOnClickListener { toggleAccountList() }
+
         drawerToggle =
             object : ActionBarDrawerToggle(this, drawer_layout, R.string.drawer_open, R.string.drawer_close) {
                 /** Called when a drawer has settled in a completely closed state.  */
@@ -251,7 +249,7 @@ abstract class DrawerActivity : ToolbarActivity() {
      * @param accountName The account name to be set
      */
     private fun accountClicked(accountName: String) {
-        if (drawerViewModel.getCurrentAccount(this).name != accountName) {
+        if (drawerViewModel.getCurrentAccount(this)?.name != accountName) {
             if (drawerViewModel.setCurrentAccount(applicationContext, accountName)) {
                 // Refresh dependencies to be used in selected account
                 initDependencyInjection()
@@ -320,33 +318,39 @@ abstract class DrawerActivity : ToolbarActivity() {
         if (nav_view != null && drawer_layout != null) {
             if (accounts.isNotEmpty()) {
                 repopulateAccountList(accounts)
-                setAccountInDrawer(drawerViewModel.getCurrentAccount(this))
+                setAccountInDrawer(drawerViewModel.getCurrentAccount(this) ?: accounts[0])
                 populateDrawerOwnCloudAccounts()
 
                 // activate second/end account avatar
-                accountsWithAvatars[1]?.let {
-                    nav_view.getHeaderView(0).drawer_account_end?.loadAvatarForAccount(
-                        account = it,
-                        displayRadius = otherAccountAvatarRadiusDimension
-                    )
+                accountsWithAvatars[1]?.let { account ->
+                    nav_view.getHeaderView(0).drawer_account_end?.let {
+                        AvatarUtils().loadAvatarForAccount(
+                            imageView = it,
+                            account = account,
+                            displayRadius = otherAccountAvatarRadiusDimension
+                        )
+                    }
                 }
                 if (accountsWithAvatars[1] == null) {
-                    nav_view.getHeaderView(0).drawer_account_end?.visibility = View.GONE
+                    nav_view.getHeaderView(0).drawer_account_end?.isVisible = false
                 }
 
                 // activate third/middle account avatar
-                accountsWithAvatars[2]?.let {
-                    nav_view.getHeaderView(0).drawer_account_middle?.loadAvatarForAccount(
-                        account = it,
-                        displayRadius = otherAccountAvatarRadiusDimension
-                    )
+                accountsWithAvatars[2]?.let { account ->
+                    nav_view.getHeaderView(0).drawer_account_middle?.let {
+                        AvatarUtils().loadAvatarForAccount(
+                            imageView = it,
+                            account = account,
+                            displayRadius = otherAccountAvatarRadiusDimension
+                        )
+                    }
                 }
                 if (accountsWithAvatars[2] == null) {
-                    nav_view.getHeaderView(0).drawer_account_middle?.visibility = View.GONE
+                    nav_view.getHeaderView(0).drawer_account_middle?.isVisible = false
                 }
             } else {
-                nav_view.getHeaderView(0).drawer_account_end?.visibility = View.GONE
-                nav_view.getHeaderView(0).drawer_account_middle?.visibility = View.GONE
+                nav_view.getHeaderView(0).drawer_account_end?.isVisible = false
+                nav_view.getHeaderView(0).drawer_account_middle?.isVisible = false
             }
         }
     }
@@ -364,7 +368,8 @@ abstract class DrawerActivity : ToolbarActivity() {
         accounts.filter { it.name != account.name }.forEach {
             val accountMenuItem: MenuItem =
                 nav_view.menu.add(R.id.drawer_menu_accounts, Menu.NONE, MENU_ORDER_ACCOUNT, it.name)
-            accountMenuItem.loadAvatarForAccount(
+            AvatarUtils().loadAvatarForAccount(
+                menuItem = accountMenuItem,
                 account = it,
                 fetchIfNotCached = false,
                 displayRadius = menuAccountAvatarRadiusDimension
@@ -392,7 +397,7 @@ abstract class DrawerActivity : ToolbarActivity() {
      */
     private fun updateQuota() {
         Timber.d("Update Quota")
-        val account = AccountUtils.getCurrentOwnCloudAccount(this) ?: return
+        val account = drawerViewModel.getCurrentAccount(this) ?: return
         drawerViewModel.getStoredQuota(account.name)
         drawerViewModel.userQuota.observe(this, Observer { event ->
             when (event.peekContent()) {
@@ -400,22 +405,26 @@ abstract class DrawerActivity : ToolbarActivity() {
                     event.peekContent().getStoredData()?.let { userQuota ->
                         when {
                             userQuota.available < 0 -> { // Pending, unknown or unlimited free storage
-                                account_quota_bar?.visibility = View.VISIBLE
-                                account_quota_bar?.progress = 0
+                                account_quota_bar?.run {
+                                    isVisible = true
+                                    progress = 0
+                                }
                                 account_quota_text?.text = String.format(
                                     getString(R.string.drawer_unavailable_free_storage),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, this)
                                 )
+
                             }
                             userQuota.available == 0L -> { // Quota 0, guest users
-                                account_quota_bar?.visibility = View.GONE
+                                account_quota_bar?.isVisible = false
                                 account_quota_text?.text = getString(R.string.drawer_unavailable_used_storage)
                             }
                             else -> { // Limited quota
-                                account_quota_bar?.visibility = View.VISIBLE
-
                                 // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
-                                account_quota_bar?.progress = ceil(userQuota.getRelative()).toInt()
+                                account_quota_bar?.run {
+                                    progress = ceil(userQuota.getRelative()).toInt()
+                                    isVisible = true
+                                }
                                 account_quota_text?.text = String.format(
                                     getString(R.string.drawer_quota),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, this),
@@ -462,11 +471,14 @@ abstract class DrawerActivity : ToolbarActivity() {
                 nav_view.getHeaderView(0).drawer_username?.text = AccountUtils.getUsernameOfAccount(account.name)
             }
 
-            nav_view.getHeaderView(0).drawer_current_account?.loadAvatarForAccount(
-                account = account,
-                displayRadius = currentAccountAvatarRadiusDimension
-            )
-            updateQuota()
+            nav_view.getHeaderView(0).drawer_current_account?.let {
+                AvatarUtils().loadAvatarForAccount(
+                    imageView = it,
+                    account = account,
+                    displayRadius = currentAccountAvatarRadiusDimension
+                )
+                updateQuota()
+            }
         }
     }
 
@@ -642,4 +654,3 @@ abstract class DrawerActivity : ToolbarActivity() {
         private const val USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD = 4
     }
 }
-

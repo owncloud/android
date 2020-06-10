@@ -57,7 +57,7 @@ class DrawerViewModel(
         return AccountUtils.getAccounts(context).asList()
     }
 
-    fun getCurrentAccount(context: Context): Account {
+    fun getCurrentAccount(context: Context): Account? {
         return AccountUtils.getCurrentOwnCloudAccount(context)
     }
 
