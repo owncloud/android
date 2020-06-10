@@ -30,24 +30,29 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.files.FileUtils.PATH_SEPARATOR
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 
-class GetRemoteUserAvatarOperation(private val avatarDimension: Int) :
-    RemoteOperation<RemoteAvatarData>() {
+/**
+ * Gets avatar about the user logged in, if available
+ *
+ * @author David A. Velasco
+ * @author David González Verdugo
+ */
+class GetRemoteUserAvatarOperation(private val avatarDimension: Int) : RemoteOperation<RemoteAvatarData>() {
     override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteAvatarData> {
         var inputStream: InputStream? = null
-        lateinit var getMethod: GetMethod
+        var result: RemoteOperationResult<RemoteAvatarData>
 
-        lateinit var result: RemoteOperationResult<RemoteAvatarData>
         try {
             val endPoint =
-                client.baseUri.toString() + NON_OFFICIAL_AVATAR_PATH + client.credentials.username + "/" + avatarDimension
+                client.baseUri.toString() + NON_OFFICIAL_AVATAR_PATH + client.credentials.username + PATH_SEPARATOR + avatarDimension
             Timber.d("avatar URI: %s", endPoint)
 
-            getMethod = GetMethod(URL(endPoint))
+            val getMethod = GetMethod(URL(endPoint))
 
             val status = client.executeHttpMethod(getMethod)
 
