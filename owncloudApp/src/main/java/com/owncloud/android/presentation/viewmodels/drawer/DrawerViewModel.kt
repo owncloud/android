@@ -20,9 +20,14 @@
 
 package com.owncloud.android.presentation.viewmodels.drawer
 
+import android.accounts.Account
+import android.accounts.AccountManager
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.MainApp
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.utils.Event
@@ -47,4 +52,16 @@ class DrawerViewModel(
         useCase = getStoredQuotaUseCase,
         useCaseParams = GetStoredQuotaUseCase.Params(accountName = accountName)
     )
+
+    fun getAccounts(context: Context): List<Account> {
+        return AccountUtils.getAccounts(context).asList()
+    }
+
+    fun getCurrentAccount(context: Context): Account {
+        return AccountUtils.getCurrentOwnCloudAccount(context)
+    }
+
+    fun setCurrentAccount(context: Context, accountName: String): Boolean {
+        return AccountUtils.setCurrentOwnCloudAccount(context, accountName)
+    }
 }

@@ -49,18 +49,16 @@ class SyncProfileOperation(
     fun syncUserProfile() {
         try {
             CoroutineScope(Dispatchers.IO).launch {
-                // GetUserInfoAsyncUseCase
                 val getUserInfoAsyncUseCase: GetUserInfoAsyncUseCase by inject()
                 val userInfoResult = getUserInfoAsyncUseCase.execute(GetUserInfoAsyncUseCase.Params(account.name))
                 userInfoResult.getDataOrNull()?.let { userInfo ->
                     Timber.d("User info synchronized for account ${account.name}")
 
-                    // Store display name and id with account data
-                    val accountManager = AccountManager.get(appContext)
-                    accountManager.setUserData(account, AccountUtils.Constants.KEY_DISPLAY_NAME, userInfo.displayName)
-                    accountManager.setUserData(account, AccountUtils.Constants.KEY_ID, userInfo.id)
+                    AccountManager.get(appContext).run {
+                        setUserData(account, AccountUtils.Constants.KEY_DISPLAY_NAME, userInfo.displayName)
+                        setUserData(account, AccountUtils.Constants.KEY_ID, userInfo.id)
+                    }
 
-                    // RefreshUserQuotaFromServerAsyncUseCase
                     val refreshUserQuotaFromServerAsyncUseCase: RefreshUserQuotaFromServerAsyncUseCase by inject()
                     val userQuotaResult =
                         refreshUserQuotaFromServerAsyncUseCase.execute(
@@ -71,7 +69,6 @@ class SyncProfileOperation(
                     userQuotaResult.getDataOrNull()?.let {
                         Timber.d("User quota synchronized for account ${account.name}")
 
-                        // GetUserAvatarAsyncUseCase
                         val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
                         val userAvatarResult =
                             getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(account.name))
