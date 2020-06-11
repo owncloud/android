@@ -318,7 +318,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         if (nav_view != null && drawer_layout != null) {
             if (accounts.isNotEmpty()) {
                 repopulateAccountList(accounts)
-                setAccountInDrawer(drawerViewModel.getCurrentAccount(this) ?: accounts[0])
+                setAccountInDrawer(drawerViewModel.getCurrentAccount(this) ?: accounts.first())
                 populateDrawerOwnCloudAccounts()
 
                 // activate second/end account avatar
@@ -464,8 +464,8 @@ abstract class DrawerActivity : ToolbarActivity() {
         if (drawer_layout != null) {
             nav_view.getHeaderView(0).drawer_username_full.text = account.name
             try {
-                val oca = OwnCloudAccount(account, this)
-                nav_view.getHeaderView(0).drawer_username.text = oca.displayName
+                val ocAccount = OwnCloudAccount(account, this)
+                nav_view.getHeaderView(0).drawer_username.text = ocAccount.displayName
             } catch (e: Exception) {
                 Timber.w("Couldn't read display name of account; using account name instead")
                 nav_view.getHeaderView(0).drawer_username?.text = AccountUtils.getUsernameOfAccount(account.name)
