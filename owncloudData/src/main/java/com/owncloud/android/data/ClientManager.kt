@@ -29,7 +29,6 @@ import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.resources.users.services.UserService
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 
-@Suppress("NAME_SHADOWING")
 class ClientManager(
     private val accountManager: AccountManager,
     val context: Context
@@ -53,15 +52,12 @@ class ClientManager(
         val accountName = appPreferences.getString(SELECTED_ACCOUNT, null)
 
         // account validation: the saved account MUST be in the list of ownCloud Accounts known by the AccountManager
-        accountName?.let {
-            ocAccounts.firstOrNull { it.name == accountName }?.let { return it }
+        accountName?.let { selectedAccountName ->
+            ocAccounts.firstOrNull { it.name == selectedAccountName }?.let { return it }
         }
 
-        if (ocAccounts.isNotEmpty()) {
-            // take first account as fallback
-            return ocAccounts[0]
-        }
-        return null
+        // take first account as fallback
+        return ocAccounts.firstOrNull()
     }
 
     fun getUserService(accountName: String? = ""): UserService {

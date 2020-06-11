@@ -31,7 +31,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class AvatarUtils : KoinComponent{
+class AvatarUtils : KoinComponent {
 
     private val avatarManager: AvatarManager by inject()
 
