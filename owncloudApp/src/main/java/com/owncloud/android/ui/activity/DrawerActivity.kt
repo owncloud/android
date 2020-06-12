@@ -31,7 +31,6 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -111,13 +110,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     v.rootWindowInsets.displayCutout?.let {
                         nav_view.getHeaderView(0).drawer_active_user?.layoutParams?.height =
-                            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                val displayCutoutDP =
-                                    it.safeInsetTop / (resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
-                                resources.getDimension(R.dimen.nav_drawer_header_height).toInt() + displayCutoutDP
-                            } else {
-                                resources.getDimension(R.dimen.nav_drawer_header_height).toInt()
-                            }
+                            DisplayUtils.getDrawerHeaderHeight(it.safeInsetTop, resources)
                     }
                 }
             }
