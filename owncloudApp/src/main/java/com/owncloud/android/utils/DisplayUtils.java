@@ -23,7 +23,10 @@
 package com.owncloud.android.utils;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
 
 import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
@@ -239,4 +242,13 @@ public class DisplayUtils {
         snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.white));
     }
 
+    public static int getDrawerHeaderHeight(int displayCutout, Resources resources) {
+        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            int displayCutoutDP =
+                    displayCutout / (resources.getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+            return (int) resources.getDimension(R.dimen.nav_drawer_header_height) + displayCutoutDP;
+        } else {
+            return (int) resources.getDimension(R.dimen.nav_drawer_header_height);
+        }
+    }
 }
