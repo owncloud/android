@@ -71,16 +71,21 @@ public class HttpClient {
                 SSLContext sslContext;
 
                 try {
-                    sslContext = SSLContext.getInstance("TLSv1.2");
-                } catch (NoSuchAlgorithmException tlsv12Exception) {
+                    sslContext = SSLContext.getInstance("TLSv1.3");
+                } catch (NoSuchAlgorithmException tlsv13Exception) {
                     try {
-                        Timber.w("TLSv1.2 is not supported in this device; falling through TLSv1.1");
-                        sslContext = SSLContext.getInstance("TLSv1.1");
-                    } catch (NoSuchAlgorithmException tlsv11Exception) {
-                        Timber.w("TLSv1.1 is not supported in this device; falling through TLSv1.0");
-                        sslContext = SSLContext.getInstance("TLSv1");
-                        // should be available in any device; see reference of supported protocols in
-                        // http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
+                        Timber.w("TLSv1.3 is not supported in this device; falling through TLSv1.2");
+                        sslContext = SSLContext.getInstance("TLSv1.2");
+                    } catch (NoSuchAlgorithmException tlsv12Exception) {
+                        try {
+                            Timber.w("TLSv1.2 is not supported in this device; falling through TLSv1.1");
+                            sslContext = SSLContext.getInstance("TLSv1.1");
+                        } catch (NoSuchAlgorithmException tlsv11Exception) {
+                            Timber.w("TLSv1.1 is not supported in this device; falling through TLSv1.0");
+                            sslContext = SSLContext.getInstance("TLSv1");
+                            // should be available in any device; see reference of supported protocols in
+                            // http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
+                        }
                     }
                 }
 
