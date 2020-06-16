@@ -274,14 +274,14 @@ abstract class DrawerActivity : ToolbarActivity() {
      * closes the drawer.
      */
     open fun closeDrawer() {
-        drawer_layout.closeDrawer(GravityCompat.START)
+        drawer_layout?.closeDrawer(GravityCompat.START)
     }
 
     /**
      * opens the drawer.
      */
     open fun openDrawer() {
-        drawer_layout.openDrawer(GravityCompat.START)
+        drawer_layout?.openDrawer(GravityCompat.START)
     }
 
     /**
@@ -291,7 +291,7 @@ abstract class DrawerActivity : ToolbarActivity() {
      * [DrawerLayout.LOCK_MODE_LOCKED_CLOSED] or [DrawerLayout.LOCK_MODE_LOCKED_OPEN].
      */
     open fun setDrawerLockMode(lockMode: Int) {
-        drawer_layout.setDrawerLockMode(lockMode)
+        drawer_layout?.setDrawerLockMode(lockMode)
     }
 
     /**
@@ -628,7 +628,7 @@ abstract class DrawerActivity : ToolbarActivity() {
      * @param listener Object interested in changes of the drawer layout.
      */
     open fun addDrawerListener(listener: DrawerListener) {
-        drawer_layout.addDrawerListener(listener)
+        drawer_layout?.addDrawerListener(listener)
     }
 
     abstract fun navigateToOption(fileListOption: FileListOption)
