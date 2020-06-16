@@ -67,6 +67,7 @@
         android:resizeableActivity="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsPictureInPicture="false"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.ownCloud.Toolbar"
         android:allowBackup="false"
         tools:targetApi="n">

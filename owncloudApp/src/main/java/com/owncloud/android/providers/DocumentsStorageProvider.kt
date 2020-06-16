@@ -25,7 +25,6 @@
 package com.owncloud.android.providers
 
 import android.accounts.Account
-import android.annotation.TargetApi
 import android.content.Intent
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
@@ -37,6 +36,7 @@ import android.os.ParcelFileDescriptor
 import android.preference.PreferenceManager
 import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
@@ -463,7 +463,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun initiateStorageMap() {
         for (account in AccountUtils.getAccounts(context)) {
-            val storageManager = FileDataStorageManager(context, account, context.contentResolver)
+            val storageManager = FileDataStorageManager(MainApp.appContext, account, MainApp.appContext.contentResolver)
             val rootDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
             rootIdToStorageManager[rootDir!!.fileId] = storageManager
         }
