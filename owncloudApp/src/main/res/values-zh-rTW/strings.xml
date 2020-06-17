@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s用於安卓系統</string>
+  <string name="about_version">版本%1$s</string>
+  <string name="actionbar_search">搜尋這個資料夾
+</string>
   <string name="actionbar_sync">更新檔案列表</string>
   <string name="actionbar_upload">上傳檔案</string>
   <string name="actionbar_upload_from_apps">其他應用程序的內容</string>
@@ -10,8 +14,11 @@
   <string name="actionbar_see_details">詳細資料</string>
   <string name="actionbar_send_file">寄出</string>
   <string name="actionbar_sort">排序</string>
+  <string name="actionbar_descending">降序</string>
   <string name="actionbar_sort_title">排序依照</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">最舊-最新</string>
+  <string name="actionbar_sort_by_size">最小-最大</string>
   <string name="drawer_item_all_files">所有檔案</string>
   <string name="drawer_item_only_available_offline">離線可使用</string>
   <string name="drawer_item_shared_by_link_files">由連結分享</string>
@@ -19,6 +26,7 @@
   <string name="drawer_item_uploads_list">上傳</string>
   <string name="drawer_close"> 關閉</string>
   <string name="drawer_open">開啟</string>
+  <string name="drawer_loading_quota">裝貨配額</string>
   <string name="drawer_feedback">反饋</string>
   <string name="drawer_help">說明</string>
   <string name="prefs_category_general">一般</string>
@@ -45,8 +53,12 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">檔案</string>
   <string name="bottom_nav_uploads">上傳</string>
+  <string name="bottom_nav_offline">下線</string>
+  <string name="bottom_nav_links">連結</string>
   <string name="recommend_subject">在您的手機中試用%1$s!</string>
   <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
+  <string name="error_reason">因為</string>
+  <string name="auth_failure_snackbar_action">更改帳號</string>
   <string name="auth_oauth_failure_snackbar_action">登入</string>
   <string name="auth_check_server">檢查伺服器</string>
   <string name="auth_host_url">伺服器位址 https://...</string>
@@ -100,6 +112,7 @@
   <string name="common_error">錯誤</string>
   <string name="common_loading">載入中…</string>
   <string name="common_unknown">未知</string>
+  <string name="common_error_unknown">未知的錯誤</string>
   <string name="common_pending">等候中</string>
   <string name="common_important">重要</string>
   <string name="about_title">關於</string>
