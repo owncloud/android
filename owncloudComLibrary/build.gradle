@@ -4,9 +4,9 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-allopen'
 
 dependencies {
-    api 'com.squareup.okhttp3:okhttp:3.12.0'
+    api 'com.squareup.okhttp3:okhttp:4.6.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    api 'com.gitlab.ownclouders:dav4android:oc_support_1.0.1'
+    api 'com.gitlab.ownclouders:dav4android:oc_support_2.1'
     api 'com.github.hannesa2:Logcat:1.6.0'
     api 'net.openid:appauth:0.7.1'
 

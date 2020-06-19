@@ -1,7 +1,7 @@
 package com.owncloud.android.lib.common.http.methods.webdav;
 
-import at.bitfire.dav4android.Property;
-import at.bitfire.dav4android.PropertyUtils;
+import at.bitfire.dav4jvm.Property;
+import at.bitfire.dav4jvm.PropertyUtils;
 
 public class DavUtils {
 

@@ -41,7 +41,7 @@ class RemoteFileUtil {
          */
         fun getRemotePathFromUrl(url: HttpUrl, userId: String): String? {
             val davFilesPath = OwnCloudClient.WEBDAV_FILES_PATH_4_0 + userId
-            val absoluteDavPath = Uri.decode(url.encodedPath())
+            val absoluteDavPath = Uri.decode(url.encodedPath)
             val pathToOc = absoluteDavPath.split(davFilesPath)[0]
             return absoluteDavPath.replace(pathToOc + davFilesPath, "")
         }

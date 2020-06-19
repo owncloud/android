@@ -24,10 +24,10 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
-import at.bitfire.dav4android.Constants;
-import at.bitfire.dav4android.DavOCResource;
-import at.bitfire.dav4android.exception.HttpException;
-import at.bitfire.dav4android.exception.RedirectException;
+import at.bitfire.dav4jvm.Dav4jvm;
+import at.bitfire.dav4jvm.DavOCResource;
+import at.bitfire.dav4jvm.exception.HttpException;
+import at.bitfire.dav4jvm.exception.RedirectException;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import okhttp3.HttpUrl;
@@ -52,7 +52,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         mDavResource = new DavOCResource(
                 mOkHttpClient,
                 HttpUrl.parse(url.toString()),
-                Constants.INSTANCE.getLog());
+                Dav4jvm.INSTANCE.getLog());
     }
 
     @Override
@@ -107,7 +107,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         mDavResource = new DavOCResource(
                 mOkHttpClient,
                 HttpUrl.parse(mRequest.url().toString()),
-                Constants.INSTANCE.getLog());
+                Dav4jvm.INSTANCE.getLog());
     }
 
     @Override
@@ -116,7 +116,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         mDavResource = new DavOCResource(
                 mOkHttpClient,
                 HttpUrl.parse(mRequest.url().toString()),
-                Constants.INSTANCE.getLog());
+                Dav4jvm.INSTANCE.getLog());
     }
 
     @Override
@@ -125,7 +125,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         mDavResource = new DavOCResource(
                 mOkHttpClient,
                 HttpUrl.parse(mRequest.url().toString()),
-                Constants.INSTANCE.getLog());
+                Dav4jvm.INSTANCE.getLog());
     }
 
     @Override
@@ -134,7 +134,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         mDavResource = new DavOCResource(
                 mOkHttpClient,
                 HttpUrl.parse(mRequest.url().toString()),
-                Constants.INSTANCE.getLog());
+                Dav4jvm.INSTANCE.getLog());
     }
 
     @Override
@@ -152,7 +152,7 @@ public abstract class DavMethod extends HttpBaseMethod {
         mDavResource = new DavOCResource(
                 mOkHttpClient,
                 HttpUrl.parse(mRequest.url().toString()),
-                Constants.INSTANCE.getLog());
+                Dav4jvm.INSTANCE.getLog());
     }
 
     @Override

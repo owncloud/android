@@ -27,19 +27,9 @@ package com.owncloud.android.lib.resources.files;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import at.bitfire.dav4android.Property;
-import at.bitfire.dav4android.Response;
-import at.bitfire.dav4android.property.CreationDate;
-import at.bitfire.dav4android.property.GetContentLength;
-import at.bitfire.dav4android.property.GetContentType;
-import at.bitfire.dav4android.property.GetETag;
-import at.bitfire.dav4android.property.GetLastModified;
-import at.bitfire.dav4android.property.QuotaAvailableBytes;
-import at.bitfire.dav4android.property.QuotaUsedBytes;
-import at.bitfire.dav4android.property.owncloud.OCId;
-import at.bitfire.dav4android.property.owncloud.OCPermissions;
-import at.bitfire.dav4android.property.owncloud.OCPrivatelink;
-import at.bitfire.dav4android.property.owncloud.OCSize;
+import at.bitfire.dav4jvm.Property;
+import at.bitfire.dav4jvm.Response;
+import at.bitfire.dav4jvm.property.*;
 
 import java.io.File;
 import java.io.Serializable;

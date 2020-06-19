@@ -24,7 +24,7 @@
 
 package com.owncloud.android.lib.common.http.methods.webdav;
 
-import at.bitfire.dav4android.exception.HttpException;
+import at.bitfire.dav4jvm.exception.HttpException;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import kotlin.Unit;
 

@@ -44,11 +44,11 @@ ownCloud Android Library is available under MIT license. See the file LICENSE.md
 
 #### Third party libraries
 
-ownCloud Android Library uses OkHttp version 3.10, licensed under Apache License and version 2.0. Besides, it uses Dav4Android, licensed under Mozilla Public License, v. 2.0
+ownCloud Android Library uses OkHttp version 4.6.0, licensed under Apache License and version 2.0. Besides, it uses Dav4Android, licensed under Mozilla Public License, v. 2.0
    
 
 ### Compatibility
 
-ownCloud Android Library is valid for Android systems from version Android 2.2 (android:minSdkVersion="8" android:targetSdkVersion="19").
+ownCloud Android Library is valid for Android systems from version Android 5 (android:minSdkVersion="21" android:targetSdkVersion="29").
 
 ownCloud Android library supports ownCloud server from version 4.5.

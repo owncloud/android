@@ -29,7 +29,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.net.Uri;
 
-import at.bitfire.dav4android.exception.HttpException;
+import at.bitfire.dav4jvm.exception.HttpException;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
