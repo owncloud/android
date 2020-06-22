@@ -19,21 +19,36 @@
 
 package com.owncloud.android.data.user.datasources.implementation
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
+import com.owncloud.android.data.user.datasources.mapper.RemoteUserAvatarMapper
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
+import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
+import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.model.UserInfo
-import com.owncloud.android.lib.resources.users.services.UserService
+import com.owncloud.android.domain.user.model.UserQuota
 
 class OCRemoteUserDataSource(
-    private val userService: UserService,
-    private val remoteUserInfoMapper: RemoteUserInfoMapper
+    private val remoteUserInfoMapper: RemoteUserInfoMapper,
+    private val remoteUserQuotaMapper: RemoteUserQuotaMapper,
+    private val remoteUserAvatarMapper: RemoteUserAvatarMapper,
+    private val clientManager: ClientManager,
+    private val avatarDimension: Int
 ) : RemoteUserDataSource {
 
-    override fun getUserInfo(): UserInfo {
+    override fun getUserInfo(accountName: String): UserInfo =
         executeRemoteOperation {
-            userService.getUserInfo()
-        }.let { return remoteUserInfoMapper.toModel(it)!! }
-    }
+            clientManager.getUserService(accountName).getUserInfo()
+        }.let { remoteUserInfoMapper.toModel(it)!! }
 
+    override fun getUserQuota(accountName: String): UserQuota =
+        executeRemoteOperation {
+            clientManager.getUserService(accountName).getUserQuota()
+        }.let { remoteUserQuotaMapper.toModel(it)!! }
+
+    override fun getUserAvatar(accountName: String): UserAvatar =
+        executeRemoteOperation {
+            clientManager.getUserService(accountName = accountName).getUserAvatar(avatarDimension)
+        }.let { remoteUserAvatarMapper.toModel(it)!! }
 }

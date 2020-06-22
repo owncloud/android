@@ -16,18 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.user.db
 
-package com.owncloud.android.domain.user.usecases
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.user.UserRepository
-import com.owncloud.android.domain.user.model.UserInfo
-
-class GetUserInfoAsyncUseCase(
-    private val userRepository: UserRepository
-) : BaseUseCaseWithResult<UserInfo, GetUserInfoAsyncUseCase.Params>() {
-    override fun run(params: Params): UserInfo =
-        userRepository.getUserInfo(params.accountName)
-
-    data class Params(val accountName: String)
-}
+/**
+ * Represents one record of the UserQuota table.
+ */
+@Entity(tableName = USER_QUOTAS_TABLE_NAME)
+data class UserQuotaEntity(
+    @PrimaryKey
+    val accountName: String,
+    val used: Long,
+    val available: Long
+)

@@ -16,18 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.owncloud.android.domain.user.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.user.UserRepository
-import com.owncloud.android.domain.user.model.UserInfo
+import com.owncloud.android.domain.user.model.UserQuota
 
-class GetUserInfoAsyncUseCase(
+class RefreshUserQuotaFromServerAsyncUseCase(
     private val userRepository: UserRepository
-) : BaseUseCaseWithResult<UserInfo, GetUserInfoAsyncUseCase.Params>() {
-    override fun run(params: Params): UserInfo =
-        userRepository.getUserInfo(params.accountName)
+) : BaseUseCaseWithResult<UserQuota, RefreshUserQuotaFromServerAsyncUseCase.Params>() {
+    override fun run(params: Params): UserQuota =
+        userRepository.getUserQuota(params.accountName)
 
     data class Params(val accountName: String)
 }

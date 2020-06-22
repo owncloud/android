@@ -16,18 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.user.datasources
 
-package com.owncloud.android.domain.user.usecases
+import com.owncloud.android.domain.user.model.UserQuota
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.user.UserRepository
-import com.owncloud.android.domain.user.model.UserInfo
+interface LocalUserDataSource {
+    fun saveQuotaForAccount(
+        accountName: String,
+        userQuota: UserQuota
+    )
 
-class GetUserInfoAsyncUseCase(
-    private val userRepository: UserRepository
-) : BaseUseCaseWithResult<UserInfo, GetUserInfoAsyncUseCase.Params>() {
-    override fun run(params: Params): UserInfo =
-        userRepository.getUserInfo(params.accountName)
+    fun getQuotaForAccount(
+        accountName: String
+    ): UserQuota?
 
-    data class Params(val accountName: String)
+    fun deleteQuotaForAccount(
+        accountName: String
+    )
 }

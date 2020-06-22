@@ -21,7 +21,7 @@ package com.owncloud.android.domain.user.usecases
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
-import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.OC_USER_QUOTA
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -31,26 +31,26 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class GetUserInfoAsyncUseCaseTest {
+class RefreshUserQuotaFromServerAsyncUseCaseTest {
     private val userRepository: UserRepository = spyk()
-    private val useCase = GetUserInfoAsyncUseCase(userRepository)
-    private val useCaseParams = GetUserInfoAsyncUseCase.Params(OC_ACCOUNT_NAME)
+    private val useCase = RefreshUserQuotaFromServerAsyncUseCase((userRepository))
+    private val useCaseParams = RefreshUserQuotaFromServerAsyncUseCase.Params(accountName = OC_ACCOUNT_NAME)
 
     @Test
     fun getUserInfoSuccess() {
-        every { userRepository.getUserInfo(OC_ACCOUNT_NAME) } returns OC_USER_INFO
+        every { userRepository.getUserQuota(OC_ACCOUNT_NAME) } returns OC_USER_QUOTA
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertFalse(useCaseResult.isError)
-        assertEquals(OC_USER_INFO, useCaseResult.getDataOrNull())
+        assertEquals(OC_USER_QUOTA, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { userRepository.getUserInfo(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { userRepository.getUserQuota(OC_ACCOUNT_NAME) }
     }
 
     @Test
     fun getUserInfoWithUnauthorizedException() {
-        every { userRepository.getUserInfo(OC_ACCOUNT_NAME) } throws UnauthorizedException()
+        every { userRepository.getUserQuota(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -60,6 +60,6 @@ class GetUserInfoAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { userRepository.getUserInfo(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { userRepository.getUserQuota(OC_ACCOUNT_NAME) }
     }
 }

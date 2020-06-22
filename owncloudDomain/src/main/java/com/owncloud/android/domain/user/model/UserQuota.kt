@@ -16,18 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.domain.user.model
 
-package com.owncloud.android.domain.user.usecases
+import androidx.annotation.VisibleForTesting
+import kotlin.math.roundToLong
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.user.UserRepository
-import com.owncloud.android.domain.user.model.UserInfo
+data class UserQuota(
+    val available: Long,
+    val used: Long
+) {
+    @VisibleForTesting
+    fun isLimited() = available > 0
 
-class GetUserInfoAsyncUseCase(
-    private val userRepository: UserRepository
-) : BaseUseCaseWithResult<UserInfo, GetUserInfoAsyncUseCase.Params>() {
-    override fun run(params: Params): UserInfo =
-        userRepository.getUserInfo(params.accountName)
+    fun getRelative() = if (isLimited() && getTotal() > 0) {
+        val relativeQuota = (used * 100).toDouble() / getTotal()
+        (relativeQuota * 100).roundToLong() / 100.0
+    } else 0.0
 
-    data class Params(val accountName: String)
+    fun getTotal() = if (isLimited()) {
+        available + used
+    } else {
+        0
+    }
 }

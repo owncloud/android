@@ -20,9 +20,9 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
-import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
+import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
@@ -36,7 +36,10 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
+import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
+import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -63,7 +66,10 @@ val useCaseModule = module {
     factory { DeleteShareAsyncUseCase(get()) }
 
     // User
+    factory { GetStoredQuotaUseCase(get()) }
     factory { GetUserInfoAsyncUseCase(get()) }
+    factory { RefreshUserQuotaFromServerAsyncUseCase(get()) }
+    factory { GetUserAvatarAsyncUseCase(get()) }
 
     // Server
     factory { GetServerInfoAsyncUseCase(get()) }

@@ -42,14 +42,12 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
@@ -83,7 +81,6 @@ public class OperationsService extends Service {
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
-    public static final String ACTION_GET_USER_NAME = "GET_USER_NAME";
     public static final String ACTION_RENAME = "RENAME";
     public static final String ACTION_REMOVE = "REMOVE";
     public static final String ACTION_CREATE_FOLDER = "CREATE_FOLDER";
@@ -467,11 +464,6 @@ public class OperationsService extends Service {
                 String action = operationIntent.getAction();
                 if (action != null) {
                     switch (action) {
-                        case ACTION_GET_USER_NAME:
-                            // Get User Name
-                            operation = new GetRemoteUserInfoOperation();
-
-                            break;
                         case ACTION_RENAME: {
                             // Rename file or folder
                             String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);

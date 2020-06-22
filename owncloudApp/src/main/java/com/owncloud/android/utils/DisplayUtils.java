@@ -22,25 +22,17 @@
 
 package com.owncloud.android.utils;
 
-import android.accounts.Account;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.os.Build;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.text.format.DateUtils;
-import android.view.Display;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
+import android.util.DisplayMetrics;
 
 import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 
 import java.math.BigDecimal;
 import java.net.IDN;
@@ -240,21 +232,6 @@ public class DisplayUtils {
     }
 
     /**
-     * Gets the screen size in pixels in a backwards compatible way
-     *
-     * @param caller Activity calling; needed to get access to the {@link android.view.WindowManager}
-     * @return Size in pixels of the screen, or default {@link Point} if caller is null
-     */
-    public static Point getScreenSize(Activity caller) {
-        Point size = new Point();
-        if (caller != null) {
-            Display display = caller.getWindowManager().getDefaultDisplay();
-            display.getSize(size);
-        }
-        return size;
-    }
-
-    /**
      * set the owncloud standard colors for the snackbar.
      *
      * @param context  the context relevant for setting the color according to the context's theme
@@ -265,38 +242,13 @@ public class DisplayUtils {
         snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.white));
     }
 
-    /**
-     * Show the avatar corresponding to the received account in an {@ImageView}.
-     * <p>
-     * The avatar is shown if available locally in {@link ThumbnailsCacheManager}. The avatar is not
-     * fetched from the server if not available.
-     * <p>
-     * If there is no avatar stored, a colored icon is generated with the first letter of the account username.
-     * <p>
-     * If this is not possible either, a predefined user icon is shown instead.
-     *
-     * @param account         OC account which avatar will be shown.
-     * @param displayView     The image view to set the avatar on.
-     * @param displayRadius   The radius of the circle where the avatar will be clipped into.
-     * @param fetchFromServer When 'true', if there is no avatar stored in the cache, it's fetched from
-     *                        the server. When 'false', server is not accessed, the fallback avatar is
-     *                        generated instead. USE WITH CARE, probably to be removed in the future.
-     */
-    public static void showAccountAvatar(
-            Account account,
-            ImageView displayView,
-            float displayRadius,
-            boolean fetchFromServer
-    ) {
-        if (account != null) {
-            // not just accessibility support, used to know what account is bound to each imageView
-            displayView.setContentDescription(account.name);
-
-            final ThumbnailsCacheManager.GetAvatarTask task =
-                    new ThumbnailsCacheManager.GetAvatarTask(
-                            displayView, account, displayRadius, fetchFromServer
-                    );
-            task.execute();
+    public static int getDrawerHeaderHeight(int displayCutout, Resources resources) {
+        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            int displayCutoutDP =
+                    displayCutout / (resources.getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+            return (int) resources.getDimension(R.dimen.nav_drawer_header_height) + displayCutoutDP;
+        } else {
+            return (int) resources.getDimension(R.dimen.nav_drawer_header_height);
         }
     }
 }

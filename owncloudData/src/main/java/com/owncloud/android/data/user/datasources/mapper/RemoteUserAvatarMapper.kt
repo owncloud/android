@@ -17,17 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.user.usecases
+package com.owncloud.android.data.user.datasources.mapper
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.user.UserRepository
-import com.owncloud.android.domain.user.model.UserInfo
+import com.owncloud.android.domain.mappers.RemoteMapper
+import com.owncloud.android.domain.user.model.UserAvatar
+import com.owncloud.android.lib.resources.users.RemoteAvatarData
 
-class GetUserInfoAsyncUseCase(
-    private val userRepository: UserRepository
-) : BaseUseCaseWithResult<UserInfo, GetUserInfoAsyncUseCase.Params>() {
-    override fun run(params: Params): UserInfo =
-        userRepository.getUserInfo(params.accountName)
+class RemoteUserAvatarMapper : RemoteMapper<UserAvatar, RemoteAvatarData> {
+    override fun toModel(remote: RemoteAvatarData?): UserAvatar? =
+        remote?.let {
+            UserAvatar(
+                avatarData = it.avatarData,
+                eTag = it.eTag,
+                mimeType = it.mimeType
+            )
+        }
 
-    data class Params(val accountName: String)
+    // Not needed
+    override fun toRemote(model: UserAvatar?): RemoteAvatarData? = null
 }
