@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author David González Verdugo
  * @author Abel García de Prada
  * Copyright (C) 2020 ownCloud GmbH.
  *
@@ -17,31 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.files.datasources.mapper
 
-package com.owncloud.android.domain.files.model
+import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.mappers.Mapper
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+class OCFileMapper : Mapper<OCFile, OCFileEntity> {
+    override fun toModel(entity: OCFileEntity?): OCFile? {
+        TODO("Not yet implemented")
+    }
 
-//TODO: Add new attributes on demand. Let's try to perform a clean up :)
-@Parcelize
-data class OCFile(
-    val id: Long? = null,
-    val parentId: Long? = null,
-    val owner: String,
-    val length: Long,
-    val creationTimestamp: Long,
-    val modifiedTimestamp: Long,
-    val remotePath: String,
-    val mimeType: String,
-    val etag: String,
-    val permissions: String,
-    val remoteId: String,
-    val privateLink: String
-) : Parcelable {
-
-    companion object {
-        const val PATH_SEPARATOR = "/"
-        const val ROOT_PATH = PATH_SEPARATOR
+    override fun toEntity(model: OCFile?): OCFileEntity? {
+        TODO("Not yet implemented")
     }
 }
