@@ -30,6 +30,7 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCRemot
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
+import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.datasource.impl.RemoteOAuthDataSourceImpl
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
@@ -75,7 +76,7 @@ val remoteDataSourceModule = module {
 
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
     factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
-    factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
+    factory<RemoteFileDataSource> { OCRemoteFileDataSource(get(), get()) }
     factory<RemoteOAuthDataSource> { RemoteOAuthDataSourceImpl(get(), get()) }
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
@@ -85,6 +86,7 @@ val remoteDataSourceModule = module {
     }
 
     factory { RemoteCapabilityMapper() }
+    factory { RemoteFileMapper() }
     factory { RemoteShareMapper() }
     factory { RemoteShareeMapper() }
 }
