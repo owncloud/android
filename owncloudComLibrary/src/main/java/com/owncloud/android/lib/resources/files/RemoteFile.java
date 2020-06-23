@@ -91,6 +91,7 @@ public class RemoteFile implements Parcelable, Serializable {
     private String mPrivateLink;
     private boolean mSharedByLink;
     private boolean mSharedWithSharee;
+    private String mOwner;
 
     public RemoteFile() {
         resetData();
@@ -303,6 +304,14 @@ public class RemoteFile implements Parcelable, Serializable {
 
     public boolean isSharedByLink() {
         return mSharedByLink;
+    }
+
+    public String getOwner() {
+        return mOwner;
+    }
+
+    public void setOwner(String owner) {
+        mOwner = owner;
     }
 
     /**

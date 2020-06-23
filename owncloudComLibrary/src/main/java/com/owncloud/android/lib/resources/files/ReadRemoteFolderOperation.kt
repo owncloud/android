@@ -70,11 +70,15 @@ class ReadRemoteFolderOperation(
                 val mFolderAndFiles = ArrayList<RemoteFile>()
 
                 // parse data from remote folder
-                mFolderAndFiles.add(RemoteFile(propfindMethod.root, AccountUtils.getUserId(mAccount, mContext)))
+                val remoteFolder = RemoteFile(propfindMethod.root, AccountUtils.getUserId(mAccount, mContext)).apply {
+                    owner = mAccount.name
+                }
+                mFolderAndFiles.add(remoteFolder)
 
                 // loop to update every child
                 propfindMethod.members.forEach { resource ->
                     val file = RemoteFile(resource, AccountUtils.getUserId(mAccount, mContext))
+                    file.owner = mAccount.name
                     mFolderAndFiles.add(file)
                 }
 
