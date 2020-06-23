@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author David González Verdugo
  * @author Abel García de Prada
  * Copyright (C) 2020 ownCloud GmbH.
  *
@@ -17,18 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.files.db
 
-package com.owncloud.android.domain.files.model
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.owncloud.android.data.ProviderMeta
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
-//TODO: Add new attributes on demand. Let's try to perform a clean up :)
-@Parcelize
-data class OCFile(
-    val id: Long? = null,
-    val parentId: Long? = null,
+@Entity(
+    tableName = ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME
+)
+data class OCFileEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
     val owner: String,
+    val parentId: Long? = null,
     val length: Long,
     val creationTimestamp: Long,
     val modifiedTimestamp: Long,
@@ -38,7 +39,7 @@ data class OCFile(
     val permissions: String,
     val remoteId: String,
     val privateLink: String
-) : Parcelable {
+) {
 
     companion object {
         const val PATH_SEPARATOR = "/"

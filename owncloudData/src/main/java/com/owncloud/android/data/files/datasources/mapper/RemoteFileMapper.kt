@@ -26,6 +26,7 @@ class RemoteFileMapper : RemoteMapper<OCFile, RemoteFile> {
     override fun toModel(remote: RemoteFile?): OCFile? =
         remote?.let {
             OCFile(
+                owner = it.owner,
                 remoteId = it.remoteId,
                 remotePath = it.remotePath,
                 length = it.length,
