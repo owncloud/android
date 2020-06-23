@@ -21,6 +21,7 @@ package com.owncloud.android.data.files.repository
 
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.files.model.OCFile
 
 class OCFileRepository(
     private val remoteFileDataSource: RemoteFileDataSource
@@ -30,4 +31,8 @@ class OCFileRepository(
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
         remoteFileDataSource.getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId)
+
+    override fun refreshFolder(remotePath: String): List<OCFile> {
+        return remoteFileDataSource.refreshFolder(remotePath)
+    }
 }
