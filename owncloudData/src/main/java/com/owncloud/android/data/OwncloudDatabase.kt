@@ -29,6 +29,8 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.data.migrations.MIGRATION_27_28
 import com.owncloud.android.data.migrations.MIGRATION_28_29
 import com.owncloud.android.data.migrations.MIGRATION_29_30
@@ -42,16 +44,18 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
 
 @Database(
     entities = [
-        OCShareEntity::class,
         OCCapabilityEntity::class,
+        OCFileEntity::class,
+        OCShareEntity::class,
         UserQuotaEntity::class
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
 )
 abstract class OwncloudDatabase : RoomDatabase() {
-    abstract fun shareDao(): OCShareDao
     abstract fun capabilityDao(): OCCapabilityDao
+    abstract fun fileDao(): FileDao
+    abstract fun shareDao(): OCShareDao
     abstract fun userDao(): UserDao
 
     companion object {

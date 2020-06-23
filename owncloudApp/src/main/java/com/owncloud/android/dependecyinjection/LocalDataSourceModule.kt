@@ -28,6 +28,9 @@ import com.owncloud.android.data.authentication.datasources.implementation.OCLoc
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
+import com.owncloud.android.data.files.datasources.LocalFileDataSource
+import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
+import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
@@ -43,10 +46,12 @@ val localDataSourceModule = module {
     single { AccountManager.get(androidContext()) }
 
     single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).fileDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
 
     factory { OCCapabilityMapper() }
+    factory { OCFileMapper() }
     factory { OCShareMapper() }
     factory { UserQuotaMapper() }
 
@@ -54,6 +59,7 @@ val localDataSourceModule = module {
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get(), get()) }
+    factory<LocalFileDataSource> { OCLocalFileDataSource(get(), get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get(), get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get(), get()) }
 }
