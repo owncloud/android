@@ -1,6 +1,7 @@
 /**
  * ownCloud Android client application
  *
+ * @author David González Verdugo
  * @author Abel García de Prada
  * Copyright (C) 2020 ownCloud GmbH.
  *
@@ -17,12 +18,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.files.datasources
+package com.owncloud.android.domain.files.model
 
-import com.owncloud.android.domain.files.model.OCFile
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-interface RemoteFileDataSource {
-    fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean
+//TODO: Add new attributes on demand. Let's try to perform a clean up :)
+@Parcelize
+data class OCFile(
+    val id: Long? = null,
+    val parentId: Long? = null,
+    val length: Long,
+    val creationTimestamp: Long,
+    val modifiedTimestamp: Long,
+    val remotePath: String,
+    val mimeType: String,
+    val etag: String,
+    val permissions: String,
+    val remoteId: String,
+    val privateLink: String
+) : Parcelable {
 
-    fun refreshFolder(remotePath: String): List<OCFile>
+    companion object {
+        const val PATH_SEPARATOR = "/"
+        const val ROOT_PATH = PATH_SEPARATOR
+    }
 }

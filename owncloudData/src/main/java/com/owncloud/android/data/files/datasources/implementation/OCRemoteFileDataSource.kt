@@ -20,12 +20,19 @@
 package com.owncloud.android.data.files.datasources.implementation
 
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.lib.resources.files.services.FileService
 
 class OCRemoteFileDataSource(
-    private val fileService: FileService
+    private val fileService: FileService,
+    private val remoteFileMapper: RemoteFileMapper
 ) : RemoteFileDataSource {
     override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean =
         fileService.checkPathExistence(path = path, isUserLogged = checkUserCredentials).data
+
+    override fun refreshFolder(remotePath: String): List<OCFile> =
+        // Assert not null, service should return an empty list if no files there.
+        fileService.refreshFolder(remotePath).data.map { remoteFileMapper.toModel(it)!! }
 
 }

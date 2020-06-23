@@ -33,10 +33,12 @@ import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.resources.files.services.implementation.OCFileService;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -259,9 +261,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         if (mCancellationRequested.get()) {
             throw new OperationCancelledException();
         }
-
-        ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
-        return readFolderOperation.execute(client);
+        OCFileService ocFileService  = new OCFileService(client);
+        return ocFileService.refreshFolder(mRemotePath);
     }
 
     /**
