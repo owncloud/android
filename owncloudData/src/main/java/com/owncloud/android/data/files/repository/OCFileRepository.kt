@@ -19,12 +19,14 @@
 
 package com.owncloud.android.data.files.repository
 
+import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
 class OCFileRepository(
-    private val remoteFileDataSource: RemoteFileDataSource
+    private val remoteFileDataSource: RemoteFileDataSource,
+    private val localFileDataSource: LocalFileDataSource
 ) : FileRepository {
     override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
         remoteFileDataSource.checkPathExistence(path, userLogged)
@@ -33,6 +35,8 @@ class OCFileRepository(
         remoteFileDataSource.getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId)
 
     override fun refreshFolder(remotePath: String): List<OCFile> {
-        return remoteFileDataSource.refreshFolder(remotePath)
+        return remoteFileDataSource.refreshFolder(remotePath).also {
+            localFileDataSource.saveFiles(it)
+        }
     }
 }
