@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 33;
+    public static final int DB_VERSION = 34;
 
     private ProviderMeta() {
     }
@@ -39,6 +39,7 @@ public class ProviderMeta {
     static public class ProviderTableMeta implements BaseColumns {
         public static final String OCSHARES_TABLE_NAME = "ocshares";
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
+        public static final String OCFILES_TABLE_NAME = "files";
         public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
 
         // Columns of ocshares table
