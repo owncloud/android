@@ -30,6 +30,9 @@ import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataS
 import com.owncloud.android.data.folderbackup.datasources.implementation.FolderBackupLocalDataSourceImpl
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
+import com.owncloud.android.data.files.datasources.LocalFileDataSource
+import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
+import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
@@ -45,15 +48,19 @@ val localDataSourceModule = module {
     single { AccountManager.get(androidContext()) }
 
     single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).fileDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
+
+    factory { OCFileMapper() }
 
     single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
     single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }
+    factory<LocalFileDataSource> { OCLocalFileDataSource(get(), get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
     factory<FolderBackupLocalDataSource> { FolderBackupLocalDataSourceImpl(get()) }
