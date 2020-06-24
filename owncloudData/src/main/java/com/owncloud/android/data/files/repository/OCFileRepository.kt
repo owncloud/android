@@ -33,7 +33,10 @@ class OCFileRepository(
 
     override fun refreshFolder(remotePath: String): List<OCFile> {
         return remoteFileDataSource.refreshFolder(remotePath).also {
-            localFileDataSource.saveFiles(it)
+            localFileDataSource.saveFilesInFolder(
+                folder = it.first(),
+                listOfFiles = it.drop(1)
+            )
         }
     }
 }
