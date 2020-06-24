@@ -26,8 +26,6 @@ import com.owncloud.android.data.ProviderMeta
     tableName = ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME
 )
 data class OCFileEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long,
     val owner: String,
     val parentId: Long? = null,
     val length: Long,
@@ -40,6 +38,8 @@ data class OCFileEntity(
     val remoteId: String,
     val privateLink: String
 ) {
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
 
     companion object {
         const val PATH_SEPARATOR = "/"
