@@ -60,6 +60,15 @@ import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
+import info.hannes.edgedetection.utils.createPdf
+import info.hannes.edgedetection.utils.decodeBitmapFromFile
+import info.hannes.edgedetection.utils.rotate
+import info.hannes.edgedetection.utils.store
+import info.hannes.edgedetection.utils.viewPdf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -202,6 +211,16 @@ class PreviewImageFragment : FileFragment() {
             val hasWritePermission = safeFile.hasWritePermission
             menu.filterMenuOptions(menuOptions, hasWritePermission)
         }
+
+        menu.findItem(R.id.action_send_pdf)?.apply {
+            isVisible = true
+            isEnabled = true
+        }
+
+        menu.findItem(R.id.action_rotate)?.apply {
+            isVisible = true
+            isEnabled = true
+        }
     }
 
     /**
@@ -240,6 +259,27 @@ class PreviewImageFragment : FileFragment() {
             }
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
+                true
+            }
+            R.id.action_send_pdf -> {
+                requireContext().externalCacheDir?.let { path ->
+                    requireContext().viewPdf(File(file.storagePath).createPdf(path))
+                }
+                true
+            }
+            R.id.action_rotate -> {
+                CoroutineScope(Dispatchers.Main).launch {
+                    // obtain result by running given block on IO thread
+                    // suspends coroutine until it's ready (without blocking the main thread)
+                    val bitmapRotate = withContext(Dispatchers.IO) {
+                        val rotatedBitmap = file.storagePath?.decodeBitmapFromFile()?.rotate(90f)
+                        rotatedBitmap?.store(File(file.storagePath), requireContext())
+                        rotatedBitmap
+                    }
+                    // executed on main thread
+                    Timber.d("set rotate bitmap ${Thread.currentThread().name} bitmapRotate=$bitmapRotate")
+                    binding.photoView.setImageBitmap(bitmapRotate)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

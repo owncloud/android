@@ -690,6 +690,7 @@
     <string name="no_browser_installed_alert">No browser installed. Please install a browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
     <string name="scan_document">Scan document</string>
+    <string name="scan_edge">Scan edge document</string>
 
     <string name="supports_oauth2_error">It was not possible to know if OAuth2 is supported.</string>
     <string name="get_base_url_error">It was not possible to know the server base URL.</string>
@@ -788,4 +789,7 @@
     <string name="password_policy_min_special_character">At least %1$d of the special characters: \"%2$s\"</string>
     <string name="password_policy_error_password_banned">Unfortunately, your password is commonly used. Please, pick a harder-to-guess password for your safety.</string>
 
+
+    <string name="rotate">Rotate</string>
+    <string name="send_as_pdf">Send as PDF</string>
 </resources>

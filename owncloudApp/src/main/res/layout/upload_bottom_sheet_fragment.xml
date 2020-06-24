@@ -58,4 +58,14 @@
         app:layout_constraintTop_toBottomOf="@id/upload_from_camera_item_view"
         app:title="@string/scan_document" />
 
+    <com.owncloud.android.presentation.common.BottomSheetFragmentItemView
+        android:id="@+id/scan_edge_upload_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemIcon="@drawable/ic_bottom_sheets_scanner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scan_document_upload_linear_layout"
+        app:title="@string/scan_edge" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

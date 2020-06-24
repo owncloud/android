@@ -73,6 +73,7 @@ dependencies {
     implementation libs.timber
 
     implementation 'com.github.hannesa2:CVScanner:1.11'
+    implementation 'com.github.hannesa2:edgeDetect:1.0'
 
     // Tests
     testImplementation project(":owncloudTestUtil")

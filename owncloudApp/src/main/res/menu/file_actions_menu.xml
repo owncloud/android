@@ -33,6 +33,26 @@
         app:showAsAction="never"
         tools:ignore="AppCompatResource" />
     <item
+        android:id="@+id/action_rotate"
+        android:title="@string/rotate"
+        android:visible="false"
+        android:icon="@drawable/ic_action_rotate"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_send_pdf"
+        android:title="@string/send_as_pdf"
+        android:icon="@drawable/ic_send_pdf"
+        android:visible="false"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_send_file"
+        android:title="@string/actionbar_send_file"
+        android:icon="@drawable/ic_send_white"
+        app:showAsAction="never"
+        android:orderInCategory="1" />
+    <item
         android:id="@+id/action_share_file"
         android:title="@string/action_share"
         android:icon="@drawable/ic_share_generic_white"
@@ -78,12 +98,6 @@
         android:id="@+id/action_copy"
         android:title="@android:string/copy"
         android:icon="@drawable/ic_action_copy"
-        app:showAsAction="never"
-        android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_send_file"
-        android:title="@string/actionbar_send_file"
-        android:icon="@drawable/ic_send_white"
         app:showAsAction="never"
         android:orderInCategory="1" />
     <item
