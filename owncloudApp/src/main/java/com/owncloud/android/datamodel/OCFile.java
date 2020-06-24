@@ -54,9 +54,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     private final static String PERMISSION_SHARED_WITH_ME = "S";    // TODO move to better location
 
-    public static final String PATH_SEPARATOR = "/";
-    public static final String ROOT_PATH = PATH_SEPARATOR;
-    private final static int FILE_ID_LENGTH = 8;
+    public static final String ROOT_PATH = File.separator;
 
     public enum AvailableOfflineStatus {
 
@@ -135,14 +133,14 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     /**
      * Create new {@link OCFile} with given path.
      *
-     * The path received must be URL-decoded. Path separator must be OCFile.PATH_SEPARATOR, and it must be the first
+     * The path received must be URL-decoded. Path separator must be File.separator, and it must be the first
      * character in 'path'.
      *
      * @param path The remote path of the file.
      */
     public OCFile(String path) {
         resetData();
-        if (path == null || path.length() <= 0 || !path.startsWith(PATH_SEPARATOR)) {
+        if (path == null || path.length() <= 0 || !path.startsWith(File.separator)) {
             throw new IllegalArgumentException("Trying to create a OCFile with a non valid remote path: " + path);
         }
         mRemotePath = path;
@@ -403,13 +401,13 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      */
     public void setFileName(String name) {
         Timber.d("OCFile name changing from %s", mRemotePath);
-        if (name != null && name.length() > 0 && !name.contains(PATH_SEPARATOR) &&
+        if (name != null && name.length() > 0 && !name.contains(File.separator) &&
                 !mRemotePath.equals(ROOT_PATH)) {
             String parent = (new File(getRemotePath())).getParent();
-            parent = (parent.endsWith(PATH_SEPARATOR)) ? parent : parent + PATH_SEPARATOR;
+            parent = (parent.endsWith(File.separator)) ? parent : parent + File.separator;
             mRemotePath = parent + name;
             if (isFolder()) {
-                mRemotePath += PATH_SEPARATOR;
+                mRemotePath += File.separator;
             }
             Timber.d("OCFile name changed to %s", mRemotePath);
         }

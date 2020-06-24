@@ -29,6 +29,8 @@ import com.owncloud.android.lib.resources.files.CopyRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.RemoteFileUtils;
 
+import java.io.File;
+
 /**
  * Operation copying an {@link OCFile} to a different folder.
  *
@@ -50,8 +52,8 @@ public class CopyFileOperation extends SyncOperation {
     public CopyFileOperation(String srcPath, String targetParentPath) {
         mSrcPath = srcPath;
         mTargetParentPath = targetParentPath;
-        if (!mTargetParentPath.endsWith(OCFile.PATH_SEPARATOR)) {
-            mTargetParentPath += OCFile.PATH_SEPARATOR;
+        if (!mTargetParentPath.endsWith(File.separator)) {
+            mTargetParentPath += File.separator;
         }
 
         mFile = null;
@@ -81,7 +83,7 @@ public class CopyFileOperation extends SyncOperation {
         String finalRemotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, targetRemotePath);
 
         if (mFile.isFolder()) {
-            finalRemotePath += OCFile.PATH_SEPARATOR;
+            finalRemotePath += File.separator;
         }
         CopyRemoteFileOperation operation = new CopyRemoteFileOperation(
                 mSrcPath,

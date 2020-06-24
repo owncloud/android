@@ -42,6 +42,8 @@ import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.PreferenceUtils;
 
+import java.io.File;
+
 /**
  * Dialog to input the name for a new folder to create.
  * <p>
@@ -123,7 +125,7 @@ public class CreateFolderDialogFragment extends DialogFragment implements Dialog
             }
 
             String path = mParentFolder.getRemotePath();
-            path += newFolderName + OCFile.PATH_SEPARATOR;
+            path += newFolderName + File.separator;
             ((ComponentsGetter) requireActivity()).getFileOperationsHelper().createFolder(path, false);
         }
     }

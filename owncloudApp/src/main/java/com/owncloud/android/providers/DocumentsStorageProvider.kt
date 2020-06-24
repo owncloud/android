@@ -357,7 +357,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 //Returns the document id of the document copied at the target destination
                 var newPath = targetParentFile.remotePath + sourceFile.fileName
                 if (sourceFile.isFolder) {
-                    newPath += OCFile.PATH_SEPARATOR
+                    newPath += File.separator
                 }
                 val newFile = getFileByPathOrException(newPath)
                 return newFile.fileId.toString()
@@ -387,7 +387,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 checkOperationResult(result, targetParentFile.fileId.toString())
                 //Returns the document id of the document moved to the target destination
                 var newPath = targetParentFile.remotePath + sourceFile.fileName
-                if (sourceFile.isFolder) newPath += OCFile.PATH_SEPARATOR
+                if (sourceFile.isFolder) newPath += File.separator
                 val newFile = getFileByPathOrException(newPath)
                 return newFile.fileId.toString()
             }
@@ -406,7 +406,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     private fun createFolder(parentDocument: OCFile, displayName: String): String {
-        val newPath = parentDocument.remotePath + displayName + OCFile.PATH_SEPARATOR
+        val newPath = parentDocument.remotePath + displayName + File.separator
 
         if (!FileUtils.isValidName(displayName)) {
             throw UnsupportedOperationException("Folder $displayName contains at least one invalid character")

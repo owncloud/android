@@ -45,10 +45,65 @@ import androidx.core.util.Pair
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.*
-import com.owncloud.android.datamodel.OCFile.PATH_SEPARATOR
+import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
+import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
+import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.fromValue
 import com.owncloud.android.datamodel.OCFile.ROOT_PATH
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.*
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_UNDELETE
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_VERSIONING
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_EDITION
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_STRING
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_CAPABILITIES
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_DIR
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_FILE
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_CONTENT_LENGTH
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_CONTENT_TYPE
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_CREATION
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ETAG
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ETAG_IN_CONFLICT
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_IS_DOWNLOADING
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_KEEP_IN_SYNC
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_MODIFIED
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_NAME
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PARENT
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PATH
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PERMISSIONS
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PRIVATE_LINK
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_REMOTE_ID
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_SHARED_VIA_LINK
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_SHARED_WITH_SHAREE
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_STORAGE_PATH
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_TREE_ETAG
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBNAIL
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta._ID
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.lib.resources.status.RemoteCapability
@@ -1163,10 +1218,10 @@ class FileDataStorageManager {
                 /// update conflict in ancestor folders
                 // (not directly unset; maybe there are more conflicts below them)
                 var parentPath = file.remotePath
-                if (parentPath.endsWith(PATH_SEPARATOR)) {
+                if (parentPath.endsWith(File.separator)) {
                     parentPath = parentPath.substring(0, parentPath.length - 1)
                 }
-                parentPath = parentPath.substring(0, parentPath.lastIndexOf(PATH_SEPARATOR) + 1)
+                parentPath = parentPath.substring(0, parentPath.lastIndexOf(File.separator) + 1)
 
                 Timber.d("checking parents to remove conflict; STARTING with $parentPath")
                 while (parentPath.isNotEmpty()) {
@@ -1210,7 +1265,7 @@ class FileDataStorageManager {
                     descendantsInConflict?.close()
 
                     parentPath = parentPath.substring(0, parentPath.length - 1)  // trim last /
-                    parentPath = parentPath.substring(0, parentPath.lastIndexOf(PATH_SEPARATOR) + 1)
+                    parentPath = parentPath.substring(0, parentPath.lastIndexOf(File.separator) + 1)
                     Timber.d("checking parents to remove conflict; NEXT $parentPath")
                 }
             }
