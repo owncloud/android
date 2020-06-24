@@ -68,11 +68,10 @@ public class RenameRemoteFileOperation extends RemoteOperation {
         mNewName = newName;
 
         String parent = (new File(mOldRemotePath)).getParent();
-        parent = (parent.endsWith(FileUtils.PATH_SEPARATOR)) ? parent : parent +
-                FileUtils.PATH_SEPARATOR;
+        parent = (parent.endsWith(File.separator)) ? parent : parent + File.separator;
         mNewRemotePath = parent + mNewName;
         if (isFolder) {
-            mNewRemotePath += FileUtils.PATH_SEPARATOR;
+            mNewRemotePath += File.separator;
         }
     }
 

@@ -47,7 +47,6 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
@@ -151,14 +150,14 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     }
 
     private void startRefresh() {
-        ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
+        ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(File.separator);
         refreshOperation.execute(mClient, this, mHandler);
     }
 
     private void startUpload() {
         File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
         File fileToUpload = upFolder.listFiles()[0];
-        String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
+        String remotePath = File.separator + fileToUpload.getName();
         String mimeType = getString(R.string.sample_file_mimetype);
 
         // Get the last modification date of the file from the file system
@@ -174,7 +173,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     private void startRemoteDeletion() {
         File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
         File fileToUpload = upFolder.listFiles()[0];
-        String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
+        String remotePath = File.separator + fileToUpload.getName();
 
         RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
         removeOperation.execute(mClient, this, mHandler);
@@ -185,7 +184,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         downFolder.mkdir();
         File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
         File fileToUpload = upFolder.listFiles()[0];
-        String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
+        String remotePath = File.separator + fileToUpload.getName();
 
         DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remotePath,
                 downFolder.getAbsolutePath());

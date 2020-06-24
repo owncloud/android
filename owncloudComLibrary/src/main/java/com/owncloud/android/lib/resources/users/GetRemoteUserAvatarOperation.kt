@@ -30,8 +30,8 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.files.FileUtils.PATH_SEPARATOR
 import timber.log.Timber
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -49,7 +49,7 @@ class GetRemoteUserAvatarOperation(private val avatarDimension: Int) : RemoteOpe
 
         try {
             val endPoint =
-                client.baseUri.toString() + NON_OFFICIAL_AVATAR_PATH + client.credentials.username + PATH_SEPARATOR + avatarDimension
+                client.baseUri.toString() + NON_OFFICIAL_AVATAR_PATH + client.credentials.username + File.separator + avatarDimension
             Timber.d("avatar URI: %s", endPoint)
 
             val getMethod = GetMethod(URL(endPoint))

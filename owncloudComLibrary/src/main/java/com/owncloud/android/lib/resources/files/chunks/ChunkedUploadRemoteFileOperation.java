@@ -82,14 +82,12 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
         }
 
         long offset = 0;
-        String uriPrefix = client.getUploadsWebDavUri() + FileUtils.PATH_SEPARATOR + String.valueOf(mTransferId);
+        String uriPrefix = client.getUploadsWebDavUri() + File.separator + mTransferId;
         long totalLength = fileToUpload.length();
         long chunkCount = (long) Math.ceil((double) totalLength / CHUNK_SIZE);
 
         for (int chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++, offset += CHUNK_SIZE) {
-            mPutMethod = new PutMethod(
-                    new URL(uriPrefix + FileUtils.PATH_SEPARATOR + chunkIndex)
-            );
+            mPutMethod = new PutMethod(new URL(uriPrefix + File.separator + chunkIndex));
 
             if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
                 mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");

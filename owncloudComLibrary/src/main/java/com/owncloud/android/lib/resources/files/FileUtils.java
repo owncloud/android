@@ -29,12 +29,11 @@ import timber.log.Timber;
 import java.io.File;
 
 public class FileUtils {
-    public static final String PATH_SEPARATOR = "/";
     public static final String FINAL_CHUNKS_FILE = ".file";
 
     static String getParentPath(String remotePath) {
         String parentPath = new File(remotePath).getParent();
-        parentPath = parentPath.endsWith(PATH_SEPARATOR) ? parentPath : parentPath + PATH_SEPARATOR;
+        parentPath = parentPath.endsWith(File.separator) ? parentPath : parentPath + File.separator;
         return parentPath;
     }
 
@@ -42,14 +41,12 @@ public class FileUtils {
      * Validate the fileName to detect if contains any forbidden character: / , \ , < , > ,
      * : , " , | , ? , *
      *
-     * @param fileName
-     * @return
      */
     public static boolean isValidName(String fileName) {
         boolean result = true;
 
         Timber.d("fileName =======%s", fileName);
-        if (fileName.contains(PATH_SEPARATOR)) {
+        if (fileName.contains(File.separator)) {
             result = false;
         }
         return result;
