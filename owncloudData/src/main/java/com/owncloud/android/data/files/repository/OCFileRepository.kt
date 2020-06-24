@@ -31,8 +31,8 @@ class OCFileRepository(
     override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
         remoteFileDataSource.checkPathExistence(path, userLogged)
 
-    override fun refreshFolder(remotePath: String): List<OCFile> {
-        return remoteFileDataSource.refreshFolder(remotePath).also {
+    override fun refreshFolder(remotePath: String) {
+        remoteFileDataSource.refreshFolder(remotePath).also {
             localFileDataSource.saveFilesInFolder(
                 folder = it.first(),
                 listOfFiles = it.drop(1)
