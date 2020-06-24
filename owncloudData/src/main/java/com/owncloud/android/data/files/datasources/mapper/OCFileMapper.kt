@@ -23,11 +23,38 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.mappers.Mapper
 
 class OCFileMapper : Mapper<OCFile, OCFileEntity> {
-    override fun toModel(entity: OCFileEntity?): OCFile? {
-        TODO("Not yet implemented")
-    }
+    override fun toModel(entity: OCFileEntity?): OCFile? =
+        entity?.let {
+            OCFile(
+                id = it.id,
+                parentId = it.parentId,
+                remotePath = it.remotePath,
+                owner = it.owner,
+                permissions = it.permissions,
+                remoteId = it.remoteId,
+                privateLink = it.privateLink,
+                creationTimestamp = it.creationTimestamp,
+                modifiedTimestamp = it.modifiedTimestamp,
+                etag = it.etag,
+                mimeType = it.mimeType,
+                length = it.length
+            )
+        }
 
-    override fun toEntity(model: OCFile?): OCFileEntity? {
-        TODO("Not yet implemented")
-    }
+    override fun toEntity(model: OCFile?): OCFileEntity? =
+        model?.let {
+                OCFileEntity(
+                    parentId = it.parentId,
+                    remotePath = it.remotePath,
+                    owner = it.owner,
+                    permissions = it.permissions,
+                    remoteId = it.remoteId,
+                    privateLink = it.privateLink,
+                    creationTimestamp = it.creationTimestamp,
+                    modifiedTimestamp = it.modifiedTimestamp,
+                    etag = it.etag,
+                    mimeType = it.mimeType,
+                    length = it.length
+                )
+        }
 }
