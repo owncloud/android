@@ -22,5 +22,5 @@ package com.owncloud.android.data.files.datasources
 import com.owncloud.android.domain.files.model.OCFile
 
 interface LocalFileDataSource {
-    fun saveFiles(listOfFiles: List<OCFile>)
+    fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
 }
