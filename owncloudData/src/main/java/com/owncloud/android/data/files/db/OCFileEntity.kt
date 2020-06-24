@@ -26,16 +26,16 @@ import com.owncloud.android.data.ProviderMeta
     tableName = ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME
 )
 data class OCFileEntity(
+    var parentId: Long? = null,
     val owner: String,
-    val parentId: Long? = null,
+    val remotePath: String,
+    val remoteId: String,
     val length: Long,
     val creationTimestamp: Long,
     val modifiedTimestamp: Long,
-    val remotePath: String,
     val mimeType: String,
     val etag: String,
     val permissions: String,
-    val remoteId: String,
     val privateLink: String
 ) {
     @PrimaryKey(autoGenerate = true)
