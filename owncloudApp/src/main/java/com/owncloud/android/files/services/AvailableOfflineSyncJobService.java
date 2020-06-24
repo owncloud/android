@@ -33,7 +33,6 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.SynchronizeFileOperation;
-import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 import timber.log.Timber;
 
@@ -70,9 +69,8 @@ public class AvailableOfflineSyncJobService extends JobService {
         @Override
         protected JobParameters doInBackground(JobParameters... jobParams) {
 
-            String accountName = jobParams[0].getExtras().getString(Extras.EXTRA_ACCOUNT_NAME);
-
-            Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
+            Account account =
+                    AccountUtils.getCurrentOwnCloudAccount(mAvailableOfflineJobService.getApplicationContext());
 
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
                     mAvailableOfflineJobService, account, mAvailableOfflineJobService.getContentResolver()
@@ -131,6 +129,10 @@ public class AvailableOfflineSyncJobService extends JobService {
             }
 
             Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
+            if (account == null) {
+                Timber.w("Account '" + accountName + "' not found in account manager. Aborting Sync operation...");
+                return;
+            }
 
             FileDataStorageManager storageManager =
                     new FileDataStorageManager(
