@@ -25,5 +25,5 @@ interface FileRepository {
     fun checkPathExistence(path: String, userLogged: Boolean): Boolean
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
 
-    fun refreshFolder(remotePath: String): List<OCFile>
+    fun refreshFolder(remotePath: String)
 }
