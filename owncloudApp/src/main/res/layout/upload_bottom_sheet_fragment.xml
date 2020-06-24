@@ -9,14 +9,14 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/upload_to_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/upload_to"
             android:textColor="@color/grey"
-            android:id="@+id/upload_to_text_view"
             android:textSize="15sp" />
 
         <LinearLayout
@@ -62,23 +62,43 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/scan_document_upload_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/scan_document_upload_linear_layout"
-            android:orientation="horizontal"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:src="@drawable/ic_bottom_sheets_scanner"/>
+                android:src="@drawable/ic_bottom_sheets_scanner" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="@string/scan_document"/>
+                android:text="@string/scan_document" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/scan_edge_upload_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/ic_bottom_sheets_scanner" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/scan_edge" />
 
         </LinearLayout>
 

@@ -34,8 +34,9 @@ dependencies {
     implementation "androidx.biometric:biometric:$biometricVersion"
 
     implementation 'com.github.hannesa2:CVScanner:1.0'
+    implementation 'com.github.hannesa2:LiveEdgeDetection:1.3.2'
 
-    // Tests
+// Tests
     testImplementation project(':owncloudTestUtil')
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
