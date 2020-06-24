@@ -43,7 +43,7 @@ abstract class FileDao {
     ): OCFileEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocFileEntity: OCFileEntity)
+    abstract fun insert(ocFileEntity: OCFileEntity): Long
 
     @Query(DELETE_FILE_WITH_ID)
     abstract fun deleteFileWithId(id: Long)
