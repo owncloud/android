@@ -23,12 +23,9 @@ import com.owncloud.android.domain.files.model.OCFile
 
 class RefreshFolderFromServerAsyncUseCase(
     private val fileRepository: FileRepository
-) : BaseUseCaseWithResult<List<OCFile>, RefreshFolderFromServerAsyncUseCase.Params>() {
-    override fun run(params: Params): List<OCFile> =
-        fileRepository.refreshFolder(params.remotePath)
+) : BaseUseCaseWithResult<Unit, RefreshFolderFromServerAsyncUseCase.Params>() {
+    override fun run(params: Params) = fileRepository.refreshFolder(params.remotePath)
 
-    data class Params(
-        val remotePath: String
-    )
+    data class Params(val remotePath: String)
 
 }
