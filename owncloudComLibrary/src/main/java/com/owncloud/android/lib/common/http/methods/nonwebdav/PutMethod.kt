@@ -21,29 +21,22 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.nonwebdav
 
-package com.owncloud.android.lib.common.http.methods.nonwebdav;
-
-import java.io.IOException;
-import java.net.URL;
+import java.io.IOException
+import java.net.URL
 
 /**
- * OkHttp post calls wrapper
+ * OkHttp put calls wrapper
  *
  * @author David González Verdugo
  */
-public class PostMethod extends HttpMethod {
-
-    public PostMethod(URL url) {
-        super(url);
-    }
-
-    @Override
-    public int onExecute() throws IOException {
+class PutMethod(url: URL?) : HttpMethod(url) {
+    @Throws(IOException::class)
+    override fun onExecute(): Int {
         mRequest = mRequest.newBuilder()
-                .post(mRequestBody)
-                .build();
-
-        return super.onExecute();
+            .put(mRequestBody)
+            .build()
+        return super.onExecute()
     }
 }

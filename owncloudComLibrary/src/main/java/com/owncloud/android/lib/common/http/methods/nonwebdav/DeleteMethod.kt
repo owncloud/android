@@ -21,29 +21,22 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.nonwebdav
 
-package com.owncloud.android.lib.common.http.methods.nonwebdav;
-
-import java.io.IOException;
-import java.net.URL;
+import java.io.IOException
+import java.net.URL
 
 /**
  * OkHttp delete calls wrapper
  *
  * @author David González Verdugo
  */
-public class DeleteMethod extends HttpMethod {
-
-    public DeleteMethod(URL url) {
-        super(url);
-    }
-
-    @Override
-    public int onExecute() throws IOException {
+class DeleteMethod(url: URL?) : HttpMethod(url) {
+    @Throws(IOException::class)
+    override fun onExecute(): Int {
         mRequest = mRequest.newBuilder()
-                .delete()
-                .build();
-
-        return super.onExecute();
+            .delete()
+            .build()
+        return super.onExecute()
     }
 }
