@@ -21,13 +21,11 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.webdav
 
-package com.owncloud.android.lib.common.http.methods.webdav;
-
-import com.owncloud.android.lib.common.http.HttpConstants;
-import kotlin.Unit;
-
-import java.net.URL;
+import com.owncloud.android.lib.common.http.HttpConstants
+import okhttp3.Response
+import java.net.URL
 
 /**
  * Move calls wrapper
@@ -35,27 +33,23 @@ import java.net.URL;
  * @author Christian Schabesberger
  * @author David González Verdugo
  */
-public class MoveMethod extends DavMethod {
-    final String destinationUrl;
-    final boolean forceOverride;
-
-    public MoveMethod(URL url, String destinationUrl, boolean forceOverride) {
-        super(url);
-        this.destinationUrl = destinationUrl;
-        this.forceOverride = forceOverride;
-    }
-
-    @Override
-    public int onExecute() throws Exception {
+class MoveMethod(
+    url: URL?,
+    private val destinationUrl: String,
+    private val forceOverride: Boolean
+) :
+    DavMethod(url) {
+    @Throws(Exception::class)
+    public override fun onExecute(): Int {
         mDavResource.move(
-                destinationUrl,
-                forceOverride,
-                super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
-                super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER), response -> {
-                    mResponse = response;
-                    return Unit.INSTANCE;
-                });
-
-        return super.getStatusCode();
+            destinationUrl,
+            forceOverride,
+            super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
+            super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER)
+        ) { response: Response ->
+            mResponse = response
+        }
+        return super.getStatusCode()
     }
+
 }

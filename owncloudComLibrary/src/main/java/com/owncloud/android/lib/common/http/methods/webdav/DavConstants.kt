@@ -21,13 +21,12 @@
  *   THE SOFTWARE.
  *
  */
-
-package com.owncloud.android.lib.common.http.methods.webdav;
+package com.owncloud.android.lib.common.http.methods.webdav
 
 /**
  * @author David González Verdugo
  */
-public class DavConstants {
-    public static final int DEPTH_0 = 0;
-    public static final int DEPTH_1 = 1;
+object DavConstants {
+    const val DEPTH_0 = 0
+    const val DEPTH_1 = 1
 }

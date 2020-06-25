@@ -21,41 +21,23 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.webdav
 
-package com.owncloud.android.lib.common.http.methods.webdav;
-
-import at.bitfire.dav4jvm.exception.HttpException;
-import com.owncloud.android.lib.common.http.HttpConstants;
-import kotlin.Unit;
-
-import java.io.IOException;
-import java.net.URL;
+import okhttp3.Response
+import java.net.URL
 
 /**
- * Put calls wrapper
+ * MkCol calls wrapper
  *
+ * @author Christian Schabesberger
  * @author David González Verdugo
  */
-public class PutMethod extends DavMethod {
-
-    public PutMethod(URL url) {
-        super(url);
-    }
-
-    ;
-
-    @Override
-    public int onExecute() throws IOException, HttpException {
-        mDavResource.put(
-                mRequestBody,
-                super.getRequestHeader(HttpConstants.IF_MATCH_HEADER),
-                super.getRequestHeader(HttpConstants.CONTENT_TYPE_HEADER),
-                super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
-                super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER), response -> {
-                    mResponse = response;
-                    return Unit.INSTANCE;
-                });
-
-        return super.getStatusCode();
+class MkColMethod(url: URL?) : DavMethod(url) {
+    @Throws(Exception::class)
+    public override fun onExecute(): Int {
+        mDavResource.mkCol(null) { response: Response ->
+            mResponse = response
+        }
+        return super.getStatusCode()
     }
 }

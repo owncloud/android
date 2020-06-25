@@ -21,31 +21,28 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.webdav
 
-package com.owncloud.android.lib.common.http.methods.webdav;
-
-import kotlin.Unit;
-
-import java.net.URL;
+import okhttp3.Response
+import java.net.URL
 
 /**
- * MkCol calls wrapper
+ * Copy calls wrapper
  *
  * @author Christian Schabesberger
  * @author David González Verdugo
  */
-public class MkColMethod extends DavMethod {
-    public MkColMethod(URL url) {
-        super(url);
+class CopyMethod(
+    val url: URL?,
+    private val destinationUrl: String,
+    private val forceOverride: Boolean
+) : DavMethod(url) {
+    @Throws(Exception::class)
+    public override fun onExecute(): Int {
+        mDavResource.copy(destinationUrl, forceOverride) { response: Response ->
+            mResponse = response
+        }
+        return super.getStatusCode()
     }
 
-    @Override
-    public int onExecute() throws Exception {
-        mDavResource.mkCol(null, response -> {
-            mResponse = response;
-            return Unit.INSTANCE;
-        });
-
-        return super.getStatusCode();
-    }
 }
