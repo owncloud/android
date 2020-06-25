@@ -8,7 +8,7 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.1.1
+      - uses: actions/checkout@v2.3.1
         with:
           submodules: true
           fetch-depth: 0 # 0 indicates all history
@@ -17,17 +17,39 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Decrypt keystore
+        run: ./signing/decrypt.sh
+        env:
+          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Build with Gradle
-        run: ./gradlew build
-      - name: Archive App Lint report
-        uses: actions/upload-artifact@v1
+        run: ./gradlew assembleDebug
+  Check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
         with:
-          name: Owncloud-Lint-report
+          submodules: true
+          fetch-depth: 0
+      - name: Install JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Install Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.0.7
+      - name: Code checks
+        run: ./gradlew check --stacktrace
+      - name: Archive Lint report
+        uses: actions/upload-artifact@v1
+        if: ${{ always() }}
+        with:
+          name: ownCloud-Lint-report
           path: lint-app-report.html
   Espresso:
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v2.1.1
+      - uses: actions/checkout@v2.3.1
         with:
           submodules: true
           fetch-depth: 0 # 0 indicates all history
@@ -37,7 +59,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Android Emulator test
-        uses: ReactiveCircus/android-emulator-runner@v2.8.0
+        uses: ReactiveCircus/android-emulator-runner@v2.11.0
         with:
           api-level: 28
           disable-animations: true
