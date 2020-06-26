@@ -25,8 +25,6 @@ package com.owncloud.android.ui.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
@@ -43,6 +41,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.LayoutRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
@@ -54,13 +55,9 @@ import com.owncloud.android.files.services.CameraUploadsHandler;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import org.jetbrains.annotations.NotNull;
+import timber.log.Timber;
 
 import java.io.File;
-
-import androidx.annotation.LayoutRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatDelegate;
-import timber.log.Timber;
 
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH;
 
@@ -154,16 +151,8 @@ public class Preferences extends PreferenceActivity {
                     setContentDescription(getString(R.string.actionbar_settings));
         }
 
-        // Load package info
-        String temp;
-        try {
-            PackageInfo pkg = getPackageManager().getPackageInfo(getPackageName(), 0);
-            temp = pkg.versionName;
-        } catch (NameNotFoundException e) {
-            temp = "";
-            Timber.e(e, "Error while showing about dialog");
-        }
-        final String appVersion = temp + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.COMMIT_SHA1;
+        final String appVersion =
+                BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.COMMIT_SHA1;
 
         // Register context menu for list of preferences.
         registerForContextMenu(getListView());
