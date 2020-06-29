@@ -40,21 +40,6 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         mPassword = password != null ? password : "";
     }
 
-    public OwnCloudBasicCredentials(String username, String password, boolean preemptiveMode) {
-        mUsername = username != null ? username : "";
-        mPassword = password != null ? password : "";
-    }
-
-    @Override
-    public void applyTo(OwnCloudClient client) {
-        // Clear previous basic credentials
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
-
-        HttpClient.addHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER,
-                Credentials.basic(mUsername, mPassword, UTF_8));
-    }
-
     @Override
     public String getUsername() {
         return mUsername;
@@ -63,6 +48,11 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
     @Override
     public String getAuthToken() {
         return mPassword;
+    }
+
+    @Override
+    public String getHeaderAuth() {
+        return Credentials.basic(mUsername, mPassword, Util.UTF_8);
     }
 
     @Override

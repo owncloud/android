@@ -31,10 +31,10 @@ import java.net.URL
  *
  * @author David González Verdugo
  */
-class DeleteMethod(url: URL?) : HttpMethod(url) {
+class DeleteMethod(url: URL) : HttpMethod(url) {
     @Throws(IOException::class)
     override fun onExecute(): Int {
-        mRequest = mRequest.newBuilder()
+        request = request.newBuilder()
             .delete()
             .build()
         return super.onExecute()

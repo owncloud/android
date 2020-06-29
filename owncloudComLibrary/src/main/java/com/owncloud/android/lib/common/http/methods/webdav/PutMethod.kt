@@ -33,18 +33,18 @@ import java.net.URL
  *
  * @author David González Verdugo
  */
-class PutMethod(url: URL?) : DavMethod(url) {
+class PutMethod(
+    url: URL
+) : DavMethod(url) {
     @Throws(IOException::class, HttpException::class)
     public override fun onExecute(): Int {
         mDavResource.put(
-            mRequestBody,
+            requestBody!!,
             super.getRequestHeader(HttpConstants.IF_MATCH_HEADER),
-            super.getRequestHeader(HttpConstants.CONTENT_TYPE_HEADER),
-            super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
-            super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER)
-        ) { response: Response ->
-            mResponse = response
+            getRequestHeadersAsHashMap()
+        ) { callBackResponse ->
+            response = callBackResponse
         }
-        return super.getStatusCode()
+        return super.statusCode
     }
 }

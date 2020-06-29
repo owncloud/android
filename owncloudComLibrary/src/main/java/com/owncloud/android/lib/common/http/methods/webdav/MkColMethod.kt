@@ -32,12 +32,15 @@ import java.net.URL
  * @author Christian Schabesberger
  * @author David González Verdugo
  */
-class MkColMethod(url: URL?) : DavMethod(url) {
+class MkColMethod(url: URL) : DavMethod(url) {
     @Throws(Exception::class)
     public override fun onExecute(): Int {
-        mDavResource.mkCol(null) { response: Response ->
-            mResponse = response
+        mDavResource.mkCol(
+            xmlBody = null,
+            listOfHeaders = super.getRequestHeadersAsHashMap()
+        ) { callBackResponse: Response ->
+            response = callBackResponse
         }
-        return super.getStatusCode()
+        return super.statusCode
     }
 }

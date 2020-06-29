@@ -33,16 +33,19 @@ import java.net.URL
  * @author David González Verdugo
  */
 class CopyMethod(
-    val url: URL?,
+    val url: URL,
     private val destinationUrl: String,
     private val forceOverride: Boolean
 ) : DavMethod(url) {
     @Throws(Exception::class)
     public override fun onExecute(): Int {
-        mDavResource.copy(destinationUrl, forceOverride) { response: Response ->
-            mResponse = response
+        mDavResource.copy(
+            destinationUrl,
+            forceOverride,
+            super.getRequestHeadersAsHashMap()
+        ) { callBackResponse: Response ->
+            response = callBackResponse
         }
-        return super.getStatusCode()
+        return super.statusCode
     }
-
 }

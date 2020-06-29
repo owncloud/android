@@ -73,9 +73,9 @@ class RemoveRemoteShareOperation(private val remoteShareId: Long) : RemoteOperat
                 val parser = ShareToRemoteOperationResultParser(
                     ShareXMLParser()
                 )
-                result = parser.parse(deleteMethod.responseBodyAsString)
+                result = parser.parse(deleteMethod.responseBodyString)
 
-                Timber.d("Unshare " + remoteShareId + ": " + result.logMessage)
+                Timber.d("Unshare $remoteShareId: ${result.logMessage}")
 
             } else {
                 result = RemoteOperationResult(deleteMethod)
@@ -83,7 +83,7 @@ class RemoveRemoteShareOperation(private val remoteShareId: Long) : RemoteOperat
 
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Timber.e(e, "Unshare Link Exception " + result.logMessage)
+            Timber.e(e, "Unshare Link Exception ${result.logMessage}")
         }
 
         return result

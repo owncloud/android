@@ -37,7 +37,7 @@ import java.util.ArrayList
  * @author David González Verdugo
  */
 class PropfindMethod(
-    url: URL?,
+    url: URL,
     // request
     val depth: Int,
     private val mPropertiesToRequest: Array<Property.Name>
@@ -53,6 +53,7 @@ class PropfindMethod(
         mDavResource.propfind(
             depth = depth,
             reqProp = *mPropertiesToRequest,
+            listOfHeaders = super.getRequestHeadersAsHashMap(),
             callback = { response: Response, hrefRelation: HrefRelation? ->
                 when (hrefRelation) {
                     HrefRelation.MEMBER -> mMembers.add(response)
@@ -62,8 +63,8 @@ class PropfindMethod(
                     else -> {
                     }
                 }
-            }, rawCallback = { response: okhttp3.Response ->
-                mResponse = response
+            }, rawCallback = { callBackResponse: okhttp3.Response ->
+                response = callBackResponse
             })
         return statusCode
     }

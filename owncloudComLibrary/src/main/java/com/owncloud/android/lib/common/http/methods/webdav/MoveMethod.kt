@@ -34,22 +34,20 @@ import java.net.URL
  * @author David González Verdugo
  */
 class MoveMethod(
-    url: URL?,
+    url: URL,
     private val destinationUrl: String,
     private val forceOverride: Boolean
-) :
-    DavMethod(url) {
+) : DavMethod(url) {
     @Throws(Exception::class)
     public override fun onExecute(): Int {
         mDavResource.move(
             destinationUrl,
             forceOverride,
-            super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
-            super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER)
-        ) { response: Response ->
-            mResponse = response
+            super.getRequestHeadersAsHashMap()
+        ) { callBackResponse: Response ->
+            response = callBackResponse
         }
-        return super.getStatusCode()
+        return super.statusCode
     }
 
 }

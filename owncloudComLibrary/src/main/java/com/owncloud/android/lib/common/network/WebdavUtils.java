@@ -34,9 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0;
-import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_PATH_4_0_AND_LATER;
-
 public class WebdavUtils {
 
     private static final SimpleDateFormat[] DATETIME_FORMATS = {

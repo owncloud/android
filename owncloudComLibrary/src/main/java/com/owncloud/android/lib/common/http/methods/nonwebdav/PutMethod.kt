@@ -23,6 +23,7 @@
  */
 package com.owncloud.android.lib.common.http.methods.nonwebdav
 
+import okhttp3.RequestBody
 import java.io.IOException
 import java.net.URL
 
@@ -31,11 +32,12 @@ import java.net.URL
  *
  * @author David González Verdugo
  */
-class PutMethod(url: URL?) : HttpMethod(url) {
+class PutMethod(url: URL, private val putRequestBody: RequestBody) : HttpMethod(url) {
     @Throws(IOException::class)
     override fun onExecute(): Int {
-        mRequest = mRequest.newBuilder()
-            .put(mRequestBody)
+        requestBody = putRequestBody
+        request = request.newBuilder()
+            .put(putRequestBody)
             .build()
         return super.onExecute()
     }

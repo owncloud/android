@@ -21,6 +21,7 @@ package com.owncloud.android.lib.resources.status.services.implementation
 
 import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.getAnonymousCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
@@ -38,6 +39,6 @@ class OCServerInfoService : ServerInfoService {
         GetRemoteStatusOperation().execute(createClientFromPath(path))
 
     private fun createClientFromPath(path: String): OwnCloudClient {
-        return OwnCloudClient(Uri.parse(path))
+        return OwnCloudClient(Uri.parse(path)).apply { credentials = getAnonymousCredentials() }
     }
 }

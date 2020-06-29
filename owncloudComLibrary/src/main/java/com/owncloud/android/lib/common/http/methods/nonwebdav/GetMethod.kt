@@ -31,10 +31,10 @@ import java.net.URL
  *
  * @author David González Verdugo
  */
-class GetMethod(url: URL?) : HttpMethod(url) {
+class GetMethod(url: URL) : HttpMethod(url) {
     @Throws(IOException::class)
     override fun onExecute(): Int {
-        mRequest = mRequest.newBuilder()
+        request = request.newBuilder()
             .get()
             .build()
         return super.onExecute()

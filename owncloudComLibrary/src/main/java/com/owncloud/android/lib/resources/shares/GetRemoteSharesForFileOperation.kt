@@ -86,10 +86,10 @@ class GetRemoteSharesForFileOperation(
                 )
                 parser.ownCloudVersion = client.ownCloudVersion
                 parser.serverBaseUri = client.baseUri
-                result = parser.parse(getMethod.responseBodyAsString)
+                result = parser.parse(getMethod.responseBodyString)
 
                 if (result.isSuccess) {
-                    Timber.d("Got " + result.data.shares.size + " shares")
+                    Timber.d("Got ${result.data.shares.size} shares")
                 }
             } else {
                 result = RemoteOperationResult(getMethod)
