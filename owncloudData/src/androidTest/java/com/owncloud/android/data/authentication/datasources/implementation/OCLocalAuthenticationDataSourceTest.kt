@@ -134,6 +134,10 @@ class OCLocalAuthenticationDataSourceTest {
         } returns arrayOf(OC_ACCOUNT) // The account is already there
 
         every {
+            accountManager.setPassword(any(), any())
+        } returns Unit
+
+        every {
             accountManager.setUserData(any(), any(), any())
         } returns Unit
 

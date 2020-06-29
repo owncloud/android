@@ -33,6 +33,7 @@ import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
+import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
@@ -42,6 +43,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BA
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH_SUPPORTED_TRUE
+import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials
 import timber.log.Timber
 import java.util.Locale
 
@@ -65,8 +67,14 @@ class OCLocalAuthenticationDataSource(
             userName = userName,
             password = password,
             updateAccountWithUsername = updateAccountWithUsername
-        ).also {
-            updateUserAndServerInfo(it, serverInfo, userInfo)
+        ).also { account ->
+            updateAccountWithUsername?.let {
+                accountManager.setPassword(account, password)
+                SingleSessionManager.getDefaultSingleton().refreshCredentialsForAccount(
+                    account.name, OwnCloudBasicCredentials(userName, password)
+                )
+            }
+            updateUserAndServerInfo(account, serverInfo, userInfo)
         }.name
 
     override fun addOAuthAccount(
