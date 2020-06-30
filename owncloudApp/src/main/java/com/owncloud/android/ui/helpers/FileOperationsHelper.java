@@ -32,13 +32,11 @@ import android.webkit.MimeTypeMap;
 
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -257,8 +255,7 @@ public class FileOperationsHelper {
 
             if (success) {
                 // Schedule job to check to watch for local changes in available offline files and sync them
-                AvailableOfflineHandler availableOfflineHandler =
-                        new AvailableOfflineHandler(mFileActivity, mFileActivity.getAccount().name);
+                AvailableOfflineHandler availableOfflineHandler = new AvailableOfflineHandler(mFileActivity);
                 availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
 
                 /// immediate content synchronization

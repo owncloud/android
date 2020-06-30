@@ -40,11 +40,9 @@ public class AvailableOfflineHandler {
     // configuration
     private static final int JOB_ID_AVAILABLE_OFFLINE = 2;
 
-    private String mAccountName;
     private JobScheduler mJobScheduler;
 
-    public AvailableOfflineHandler(Context context, String accountName) {
-        mAccountName = accountName;
+    public AvailableOfflineHandler(Context context) {
         mJobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
     }
 
@@ -66,8 +64,6 @@ public class AvailableOfflineHandler {
         PersistableBundle extras = new PersistableBundle();
 
         extras.putInt(Extras.EXTRA_AVAILABLE_OFFLINE_SYNC_JOB_ID, JOB_ID_AVAILABLE_OFFLINE);
-
-        extras.putString(Extras.EXTRA_ACCOUNT_NAME, mAccountName);
 
         builder.setExtras(extras);
 
