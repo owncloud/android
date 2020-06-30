@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -18,14 +18,19 @@
  */
 package com.owncloud.android.testutil
 
-import com.owncloud.android.domain.server.model.AuthenticationMethod
-import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.files.model.OCFile
 
-const val OC_BASE_URL = "https://demo.owncloud.com"
-
-val OC_SERVER_INFO = ServerInfo(
-    authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH,
-    baseUrl = "https://demo.owncloud.com",
-    ownCloudVersion = "10.3.2.1",
-    isSecureConnection = false
+val OC_FILE = OCFile(
+        id = 122,
+        parentId = 123,
+        remotePath = "/Photos",
+        owner = OC_ACCOUNT_NAME,
+        permissions = "RDNVCK",
+        remoteId = "00000003oci9p7er2hay",
+        privateLink = "http://server.url/f/3",
+        creationTimestamp = 0,
+        modifiedTimestamp = 1593510589000,
+        etag = "5efb0c13c688f",
+        mimeType = "DIR",
+        length = 123123123
 )
