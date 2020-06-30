@@ -25,14 +25,11 @@
 package com.owncloud.android.lib.resources.shares
 
 import android.util.Xml
-
 import com.owncloud.android.lib.common.network.WebdavUtils
-import com.owncloud.android.lib.resources.files.FileUtils
-
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
-
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.util.ArrayList
@@ -330,9 +327,9 @@ class ShareXMLParser {
 
     private fun fixPathForFolder(share: RemoteShare) {
         if (share.isFolder && share.path.isNotEmpty() &&
-            !share.path.endsWith(FileUtils.PATH_SEPARATOR)
+            !share.path.endsWith(File.separator)
         ) {
-            share.path = share.path + FileUtils.PATH_SEPARATOR
+            share.path = share.path + File.separator
         }
     }
 

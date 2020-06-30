@@ -41,6 +41,7 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import okhttp3.Cookie;
 import timber.log.Timber;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -249,7 +250,7 @@ public class AccountUtils {
                             .domain(serverUri.getHost())
                             .path(
                                     serverUri.getPath().equals("")
-                                            ? FileUtils.PATH_SEPARATOR
+                                            ? File.separator
                                             : serverUri.getPath()
                             )
                             .build());

@@ -41,6 +41,7 @@ import at.bitfire.dav4android.property.owncloud.OCPermissions;
 import at.bitfire.dav4android.property.owncloud.OCPrivatelink;
 import at.bitfire.dav4android.property.owncloud.OCSize;
 
+import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -92,13 +93,13 @@ public class RemoteFile implements Parcelable, Serializable {
     /**
      * Create new {@link RemoteFile} with given path.
      * <p>
-     * The path received must be URL-decoded. Path separator must be OCFile.PATH_SEPARATOR, and it must be the first character in 'path'.
+     * The path received must be URL-decoded. Path separator must be File.separator, and it must be the first character in 'path'.
      *
      * @param path The remote path of the file.
      */
     public RemoteFile(String path) {
         resetData();
-        if (path == null || path.length() <= 0 || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
+        if (path == null || path.length() <= 0 || !path.startsWith(File.separator)) {
             throw new IllegalArgumentException("Trying to create a OCFile with a non valid remote path: " + path);
         }
         mRemotePath = path;
