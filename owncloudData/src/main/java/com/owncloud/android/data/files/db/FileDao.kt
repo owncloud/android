@@ -22,6 +22,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.owncloud.android.data.ProviderMeta
 
 @Dao
@@ -32,6 +33,13 @@ abstract class FileDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME} " +
                     "WHERE id = :id"
+
+        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_ID =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME} " +
+                    "WHERE owner = :owner " +
+                    "AND remoteId = :remoteId"
+
         private const val DELETE_FILE_WITH_ID =
             "DELETE FROM ${ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME} " +
                     "WHERE id = :id"
@@ -42,8 +50,33 @@ abstract class FileDao {
         id: Long
     ): OCFileEntity?
 
+    @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_ID)
+    abstract fun getFileFromOwnerAndRemoteId(
+        owner: String,
+        remoteId: String
+    ): OCFileEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocFileEntity: OCFileEntity): Long
+
+    @Transaction
+    open fun mergeRemoteAndLocalFile(
+        ocFileEntity: OCFileEntity
+    ): Long {
+        val localFile: OCFileEntity? = getFileFromOwnerAndRemoteId(
+            owner = ocFileEntity.owner,
+            remoteId = ocFileEntity.remoteId
+        )
+        if (localFile == null) {
+            return insert(ocFileEntity)
+        } else {
+            // TODO: Handle conflicts, we will replace for the moment
+            return insert(ocFileEntity.apply {
+                id = localFile.id
+                parentId = localFile.parentId
+            })
+        }
+    }
 
     @Query(DELETE_FILE_WITH_ID)
     abstract fun deleteFileWithId(id: Long)
