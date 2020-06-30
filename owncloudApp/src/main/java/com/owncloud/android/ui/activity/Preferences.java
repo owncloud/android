@@ -187,8 +187,8 @@ public class Preferences extends PreferenceActivity {
         if (mPrefCameraPictureUploadsPath != null) {
 
             mPrefCameraPictureUploadsPath.setOnPreferenceClickListener(preference -> {
-                if (!mUploadPath.endsWith(OCFile.PATH_SEPARATOR)) {
-                    mUploadPath += OCFile.PATH_SEPARATOR;
+                if (!mUploadPath.endsWith(File.separator)) {
+                    mUploadPath += File.separator;
                 }
                 Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
                 intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, mUploadPath);
@@ -219,8 +219,8 @@ public class Preferences extends PreferenceActivity {
         mPrefCameraVideoUploadsPath = findPreference(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH);
         if (mPrefCameraVideoUploadsPath != null) {
             mPrefCameraVideoUploadsPath.setOnPreferenceClickListener(preference -> {
-                if (!mUploadVideoPath.endsWith(OCFile.PATH_SEPARATOR)) {
-                    mUploadVideoPath += OCFile.PATH_SEPARATOR;
+                if (!mUploadVideoPath.endsWith(File.separator)) {
+                    mUploadVideoPath += File.separator;
                 }
                 Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
                 intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, mUploadVideoPath);

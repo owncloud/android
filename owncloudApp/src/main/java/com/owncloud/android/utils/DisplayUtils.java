@@ -34,6 +34,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.net.IDN;
 import java.text.DateFormat;
@@ -225,7 +226,7 @@ public class DisplayUtils {
     public static String getPathWithoutLastSlash(String path) {
 
         // Remove last slash from path
-        if (path.length() > 1 && path.charAt(path.length() - 1) == OCFile.PATH_SEPARATOR.charAt(0)) {
+        if (path.length() > 1 && path.charAt(path.length() - 1) == File.separator.charAt(0)) {
             path = path.substring(0, path.length() - 1);
         }
         return path;

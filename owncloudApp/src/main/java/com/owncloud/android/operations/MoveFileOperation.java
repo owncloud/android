@@ -28,6 +28,8 @@ import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.RemoteFileUtils;
 
+import java.io.File;
+
 /**
  * Operation moving an {@link OCFile} to a different folder.
  */
@@ -46,8 +48,8 @@ public class MoveFileOperation extends SyncOperation {
     public MoveFileOperation(String srcPath, String targetParentPath) {
         mSrcPath = srcPath;
         mTargetParentPath = targetParentPath;
-        if (!mTargetParentPath.endsWith(OCFile.PATH_SEPARATOR)) {
-            mTargetParentPath += OCFile.PATH_SEPARATOR;
+        if (!mTargetParentPath.endsWith(File.separator)) {
+            mTargetParentPath += File.separator;
         }
 
         mFile = null;
@@ -76,7 +78,7 @@ public class MoveFileOperation extends SyncOperation {
         // Check if target remote path already exists on server or add suffix (2), (3) ... otherwise
         String finalRemotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, targetRemotePath);
         if (mFile.isFolder()) {
-            finalRemotePath += OCFile.PATH_SEPARATOR;
+            finalRemotePath += File.separator;
         }
         MoveRemoteFileOperation operation = new MoveRemoteFileOperation(
                 mSrcPath,

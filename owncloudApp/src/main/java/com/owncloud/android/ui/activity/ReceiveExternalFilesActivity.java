@@ -342,7 +342,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 mUploadPath = "";   // first element in mParents is root dir, represented by "";
                 // init mUploadPath with "/" results in a "//" prefix
                 for (String p : mParents) {
-                    mUploadPath += p + OCFile.PATH_SEPARATOR;
+                    mUploadPath += p + File.separator;
                 }
                 if (!isPlainTextUpload()) {
                     Timber.d("Uploading file to dir %s", mUploadPath);

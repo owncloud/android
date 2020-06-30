@@ -115,8 +115,8 @@ public class IndexedForest<V> {
             boolean linked = false;
             while (!OCFile.ROOT_PATH.equals(currentPath) && !linked) {
                 parentPath = new File(currentPath).getParent();
-                if (!parentPath.endsWith(OCFile.PATH_SEPARATOR)) {
-                    parentPath += OCFile.PATH_SEPARATOR;
+                if (!parentPath.endsWith(File.separator)) {
+                    parentPath += File.separator;
                 }
                 parentKey = buildKey(accountName, parentPath);
                 parentNode = mMap.get(parentKey);

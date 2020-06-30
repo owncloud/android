@@ -51,9 +51,10 @@ import net.openid.appauth.GrantTypeValues;
 import net.openid.appauth.TokenRequest;
 import timber.log.Timber;
 
+import java.io.File;
+
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_OAUTH2_REFRESH_TOKEN;
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_OAUTH2_SCOPE;
-import static com.owncloud.android.datamodel.OCFile.PATH_SEPARATOR;
 import static com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants.KEY_AUTH_TOKEN_TYPE;
 
 /**
@@ -333,8 +334,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     AccountUtils.Constants.KEY_OC_BASE_URL
             );
             authorizationServiceConfiguration = new AuthorizationServiceConfiguration(
-                    Uri.parse(baseUrl + PATH_SEPARATOR + mContext.getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
-                    Uri.parse(baseUrl + PATH_SEPARATOR + mContext.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
+                    Uri.parse(baseUrl + File.separator + mContext.getString(R.string.oauth2_url_endpoint_auth)), // auth endpoint
+                    Uri.parse(baseUrl + File.separator + mContext.getString(R.string.oauth2_url_endpoint_access)) // token endpoint
             );
         }
 

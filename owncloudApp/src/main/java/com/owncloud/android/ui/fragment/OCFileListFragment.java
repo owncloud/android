@@ -684,8 +684,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
             String parentPath = null;
             if (mFile.getParentId() != FileDataStorageManager.ROOT_PARENT_ID) {
                 parentPath = new File(mFile.getRemotePath()).getParent();
-                parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath :
-                        parentPath + OCFile.PATH_SEPARATOR;
+                parentPath = parentPath.endsWith(File.separator) ? parentPath :
+                        parentPath + File.separator;
                 parentDir = storageManager.getFileByPath(parentPath);
                 moveCount++;
             } else {
@@ -693,8 +693,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
             while (parentDir == null) {
                 parentPath = new File(parentPath).getParent();
-                parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath :
-                        parentPath + OCFile.PATH_SEPARATOR;
+                parentPath = parentPath.endsWith(File.separator) ? parentPath :
+                        parentPath + File.separator;
                 parentDir = storageManager.getFileByPath(parentPath);
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
@@ -1135,8 +1135,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 do {
                     if (fileToTest.getParentId() != FileDataStorageManager.ROOT_PARENT_ID) {
                         parentPath = new File(fileToTest.getRemotePath()).getParent();
-                        parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath :
-                                parentPath + OCFile.PATH_SEPARATOR;
+                        parentPath = parentPath.endsWith(File.separator) ? parentPath :
+                                parentPath + File.separator;
                         parentDir = storageManager.getFileByPath(parentPath);
                     } else {
                         parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
@@ -1144,8 +1144,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
                     while (parentDir == null) {
                         parentPath = new File(parentPath).getParent();
-                        parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath :
-                                parentPath + OCFile.PATH_SEPARATOR;
+                        parentPath = parentPath.endsWith(File.separator) ? parentPath :
+                                parentPath + File.separator;
                         parentDir = storageManager.getFileByPath(parentPath);
                     }
                     fileToTest = parentDir;

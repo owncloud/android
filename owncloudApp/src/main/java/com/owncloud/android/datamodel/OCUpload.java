@@ -113,7 +113,7 @@ public class OCUpload implements Parcelable {
         if (localPath == null || !localPath.startsWith(File.separator)) {
             throw new IllegalArgumentException("Local path must be an absolute path in the local file system");
         }
-        if (remotePath == null || !remotePath.startsWith(OCFile.PATH_SEPARATOR)) {
+        if (remotePath == null || !remotePath.startsWith(File.separator)) {
             throw new IllegalArgumentException("Remote path must be an absolute path in the local file system");
         }
         if (accountName == null || accountName.length() < 1) {
