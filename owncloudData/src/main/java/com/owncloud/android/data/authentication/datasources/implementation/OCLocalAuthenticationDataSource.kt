@@ -44,6 +44,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VE
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH_SUPPORTED_TRUE
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials
+import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import timber.log.Timber
 import java.util.Locale
 
@@ -97,6 +98,12 @@ class OCLocalAuthenticationDataSource(
             updateUserAndServerInfo(it, serverInfo, userInfo)
 
             accountManager.setAuthToken(it, authTokenType, accessToken)
+
+            updateAccountWithUsername?.let { userName ->
+                SingleSessionManager.getDefaultSingleton().refreshCredentialsForAccount(
+                    it.name, OwnCloudBearerCredentials(userName, accessToken)
+                )
+            }
 
             accountManager.setUserData(it, KEY_SUPPORTS_OAUTH2, OAUTH_SUPPORTED_TRUE)
             accountManager.setUserData(it, KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
