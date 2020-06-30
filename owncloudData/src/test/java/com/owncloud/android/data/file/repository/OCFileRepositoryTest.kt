@@ -19,9 +19,11 @@
 
 package com.owncloud.android.data.file.repository
 
+import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.mockk
@@ -31,7 +33,15 @@ import org.junit.Test
 class OCFileRepositoryTest {
 
     private val remoteFileDataSource = mockk<RemoteFileDataSource>(relaxed = true)
-    private val ocFileRepository: OCFileRepository = OCFileRepository(remoteFileDataSource)
+    private val localFileDataSource = mockk<LocalFileDataSource>(relaxed = true)
+    private val ocFileRepository: OCFileRepository = OCFileRepository(remoteFileDataSource, localFileDataSource)
+
+    private val folderToFetch = OC_FILE
+    private val listOfFilesRetrieved = listOf(
+        folderToFetch,
+        OC_FILE.copy(remoteId = "one"),
+        OC_FILE.copy(remoteId = "two")
+    )
 
     @Test
     fun checkPathExistenceExists() {
@@ -46,12 +56,50 @@ class OCFileRepositoryTest {
 
     @Test(expected = NoConnectionWithServerException::class)
     fun checkPathExistenceExistsNoConnection() {
-        every { remoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, false) } throws NoConnectionWithServerException()
+        every {
+            remoteFileDataSource.checkPathExistence(
+                OC_SERVER_INFO.baseUrl,
+                false
+            )
+        } throws NoConnectionWithServerException()
 
         ocFileRepository.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
 
         verify(exactly = 1) {
             remoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
+        }
+    }
+
+    @Test
+    fun refreshFolderOk() {
+        every {
+            remoteFileDataSource.refreshFolder(folderToFetch.remotePath)
+        } returns listOfFilesRetrieved
+
+        ocFileRepository.refreshFolder(folderToFetch.remotePath)
+
+        verify(exactly = 1) {
+            remoteFileDataSource.refreshFolder(folderToFetch.remotePath)
+            localFileDataSource.saveFilesInFolder(
+                listOfFiles = listOfFilesRetrieved.drop(1),
+                folder = listOfFilesRetrieved.first()
+            )
+        }
+    }
+
+    @Test(expected = NoConnectionWithServerException::class)
+    fun refreshFolderNoConnection() {
+        every {
+            remoteFileDataSource.refreshFolder(folderToFetch.remotePath)
+        } throws NoConnectionWithServerException()
+
+        ocFileRepository.refreshFolder(folderToFetch.remotePath)
+
+        verify(exactly = 1) {
+            remoteFileDataSource.refreshFolder(OC_FILE.remotePath)
+        }
+        verify(exactly = 0) {
+            localFileDataSource.saveFilesInFolder(any(), any())
         }
     }
 }
