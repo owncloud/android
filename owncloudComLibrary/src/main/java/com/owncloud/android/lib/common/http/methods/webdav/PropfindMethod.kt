@@ -23,10 +23,10 @@
  */
 package com.owncloud.android.lib.common.http.methods.webdav
 
-import at.bitfire.dav4android.Property
-import at.bitfire.dav4android.Response
-import at.bitfire.dav4android.Response.HrefRelation
-import at.bitfire.dav4android.exception.DavException
+import at.bitfire.dav4jvm.Property
+import at.bitfire.dav4jvm.Response
+import at.bitfire.dav4jvm.Response.HrefRelation
+import at.bitfire.dav4jvm.exception.DavException
 import java.io.IOException
 import java.net.URL
 import java.util.ArrayList

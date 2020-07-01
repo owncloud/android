@@ -1,17 +1,18 @@
 package com.owncloud.android.lib.common.http.methods.webdav
 
-import at.bitfire.dav4android.DavResource
-import at.bitfire.dav4android.DavResponseCallback
-import at.bitfire.dav4android.IF_MATCH_HEADER
-import at.bitfire.dav4android.Property
-import at.bitfire.dav4android.QuotedStringUtils
-import at.bitfire.dav4android.XmlUtils
-import at.bitfire.dav4android.exception.DavException
-import at.bitfire.dav4android.exception.HttpException
+import at.bitfire.dav4jvm.DavResource
+import at.bitfire.dav4jvm.DavResponseCallback
+import at.bitfire.dav4jvm.IF_MATCH_HEADER
+import at.bitfire.dav4jvm.Property
+import at.bitfire.dav4jvm.QuotedStringUtils
+import at.bitfire.dav4jvm.XmlUtils
+import at.bitfire.dav4jvm.exception.DavException
+import at.bitfire.dav4jvm.exception.HttpException
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
 import java.io.StringWriter
@@ -162,9 +163,9 @@ class OCDavResource(
         listOfHeaders: HashMap<String, String?>?,
         callback: (response: Response) -> Unit
     ) {
-        val rqBody = if (xmlBody != null) RequestBody.create(MIME_XML, xmlBody) else null
+        val requestBody = xmlBody?.toRequestBody(MIME_XML)
         val requestBuilder = Request.Builder()
-            .method("MKCOL", rqBody)
+            .method("MKCOL", requestBody)
             .url(location)
         listOfHeaders?.forEach { (name, value) ->
             value?.let {
@@ -264,7 +265,7 @@ class OCDavResource(
         }.use { response ->
             callback(response)
             checkStatus(response)
-            if (response.code() == 207)
+            if (response.code == 207)
             /* If an error occurs deleting a member resource (a resource other than
                the resource identified in the Request-URI), then the response can be
                a 207 (Multi-Status). […] (RFC 4918 9.6.1. DELETE for Collections) */
@@ -316,7 +317,7 @@ class OCDavResource(
 
         val requestBuilder = Request.Builder()
             .url(location)
-            .method("PROPFIND", RequestBody.create(MIME_XML, writer.toString()))
+            .method("PROPFIND", writer.toString().toRequestBody(MIME_XML))
             .header("Depth", if (depth >= 0) depth.toString() else "infinity")
 
         listOfHeaders?.forEach { (name, value) ->

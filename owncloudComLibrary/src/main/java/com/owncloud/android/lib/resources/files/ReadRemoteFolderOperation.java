@@ -29,6 +29,8 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.DavConstants;
+import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
+import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -120,7 +122,6 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
     }
 
     private boolean isSuccess(int status) {
-        return status == HttpConstants.HTTP_MULTI_STATUS ||
-                status == HttpConstants.HTTP_OK;
+        return status == HttpConstants.HTTP_MULTI_STATUS || status == HttpConstants.HTTP_OK;
     }
 }

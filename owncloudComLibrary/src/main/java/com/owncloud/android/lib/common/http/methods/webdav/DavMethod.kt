@@ -23,15 +23,16 @@
  */
 package com.owncloud.android.lib.common.http.methods.webdav
 
-import at.bitfire.dav4android.Constants.log
-import at.bitfire.dav4android.exception.HttpException
-import at.bitfire.dav4android.exception.RedirectException
+import at.bitfire.dav4jvm.Dav4jvm.log
+import at.bitfire.dav4jvm.exception.HttpException
+import at.bitfire.dav4jvm.exception.RedirectException
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Protocol
 import okhttp3.Response
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.concurrent.TimeUnit
@@ -45,7 +46,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
     protected var mDavResource: OCDavResource
 
     init {
-        val httpUrl = HttpUrl.parse(url.toString()) ?: throw MalformedURLException()
+        val httpUrl = url.toHttpUrlOrNull() ?: throw MalformedURLException()
         mDavResource = OCDavResource(
             okHttpClient,
             httpUrl,
@@ -76,11 +77,9 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
             } else {
                 // The check below should be included in okhttp library, method ResponseBody.create(
                 // TODO check most recent versions of okhttp to see if this is already fixed and try to update if so
-                if (response.body()?.contentType() != null) {
-                    val responseBody = ResponseBody.create(
-                        response.body()?.contentType(),
-                        httpException.responseBody?:""
-                    )
+                if (response.body?.contentType() != null) {
+                    val responseBody = (httpException.responseBody ?: ""
+                            ).toResponseBody(response.body?.contentType())
                     response = response.newBuilder()
                         .body(responseBody)
                         .build()

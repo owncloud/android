@@ -4,6 +4,7 @@ import com.owncloud.android.lib.common.http.HttpClient
 import okhttp3.Call
 import okhttp3.Headers
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit
 
 abstract class HttpBaseMethod constructor(url: URL) {
     var okHttpClient: OkHttpClient
-    var httpUrl: HttpUrl = HttpUrl.parse(url.toString()) ?: throw MalformedURLException()
+    var httpUrl: HttpUrl = url.toHttpUrlOrNull() ?: throw MalformedURLException()
     var request: Request
     var requestBody: RequestBody? = null
     lateinit var response: Response
@@ -47,7 +48,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
 
     // Headers
     val requestHeaders: Headers
-        get() = request.headers()
+        get() = request.headers
 
     fun getRequestHeader(name: String): String? {
         return request.header(name)
@@ -84,14 +85,14 @@ abstract class HttpBaseMethod constructor(url: URL) {
      *** Response ***
      ****************/
     val statusCode: Int
-        get() = response.code()
+        get() = response.code
 
     val statusMessage: String
-        get() = response.message()
+        get() = response.message
 
     // Headers
     open fun getResponseHeaders(): Headers? {
-        return response.headers()
+        return response.headers
     }
 
     open fun getResponseHeader(headerName: String): String? {
@@ -100,14 +101,14 @@ abstract class HttpBaseMethod constructor(url: URL) {
 
     // Body
     fun getResponseBodyAsString(): String? {
-        if (responseBodyString == null && response.body() != null) {
-            responseBodyString = response.body()?.string()
+        if (responseBodyString == null && response.body != null) {
+            responseBodyString = response.body?.string()
         }
         return responseBodyString
     }
 
     open fun getResponseBodyAsStream(): InputStream? {
-        return response.body()?.byteStream()
+        return response.body?.byteStream()
     }
 
     /*************************
@@ -153,7 +154,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     }
 
     open val isAborted: Boolean
-        get() = call?.isCanceled ?: false
+        get() = call?.isCanceled() ?: false
 
     //////////////////////////////
     //         For override

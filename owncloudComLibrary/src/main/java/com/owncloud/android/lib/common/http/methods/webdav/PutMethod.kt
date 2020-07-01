@@ -23,7 +23,7 @@
  */
 package com.owncloud.android.lib.common.http.methods.webdav
 
-import at.bitfire.dav4android.exception.HttpException
+import at.bitfire.dav4jvm.exception.HttpException
 import com.owncloud.android.lib.common.http.HttpConstants
 import java.io.IOException
 import java.net.URL

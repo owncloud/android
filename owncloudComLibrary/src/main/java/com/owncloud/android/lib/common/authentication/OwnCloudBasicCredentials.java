@@ -23,9 +23,6 @@
  */
 package com.owncloud.android.lib.common.authentication;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpClient;
-import com.owncloud.android.lib.common.http.HttpConstants;
 import okhttp3.Credentials;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -52,7 +49,7 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
     @Override
     public String getHeaderAuth() {
-        return Credentials.basic(mUsername, mPassword, Util.UTF_8);
+        return Credentials.basic(mUsername, mPassword, UTF_8);
     }
 
     @Override
