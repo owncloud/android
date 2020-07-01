@@ -97,7 +97,7 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
 
     private RemoteOperationResult moveChunksFileToFinalDestination(String fileLastModifTimestamp, long fileLength) {
         SyncOperation syncOperation = new MoveChunksFileOperation(
-                String.valueOf(mTransferId + FileUtils.PATH_SEPARATOR + FileUtils.FINAL_CHUNKS_FILE),
+                String.valueOf(mTransferId + File.separator + FileUtils.FINAL_CHUNKS_FILE),
                 mFile.getRemotePath(),
                 fileLastModifTimestamp,
                 fileLength

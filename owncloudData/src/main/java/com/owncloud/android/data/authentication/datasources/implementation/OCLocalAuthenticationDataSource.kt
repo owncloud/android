@@ -33,6 +33,7 @@ import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
+import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
@@ -42,6 +43,8 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BA
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH_SUPPORTED_TRUE
+import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials
+import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import timber.log.Timber
 import java.util.Locale
 
@@ -65,8 +68,14 @@ class OCLocalAuthenticationDataSource(
             userName = userName,
             password = password,
             updateAccountWithUsername = updateAccountWithUsername
-        ).also {
-            updateUserAndServerInfo(it, serverInfo, userInfo)
+        ).also { account ->
+            updateAccountWithUsername?.let {
+                accountManager.setPassword(account, password)
+                SingleSessionManager.getDefaultSingleton().refreshCredentialsForAccount(
+                    account.name, OwnCloudBasicCredentials(userName, password)
+                )
+            }
+            updateUserAndServerInfo(account, serverInfo, userInfo)
         }.name
 
     override fun addOAuthAccount(
@@ -89,6 +98,12 @@ class OCLocalAuthenticationDataSource(
             updateUserAndServerInfo(it, serverInfo, userInfo)
 
             accountManager.setAuthToken(it, authTokenType, accessToken)
+
+            updateAccountWithUsername?.let { userName ->
+                SingleSessionManager.getDefaultSingleton().refreshCredentialsForAccount(
+                    it.name, OwnCloudBearerCredentials(userName, accessToken)
+                )
+            }
 
             accountManager.setUserData(it, KEY_SUPPORTS_OAUTH2, OAUTH_SUPPORTED_TRUE)
             accountManager.setUserData(it, KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
