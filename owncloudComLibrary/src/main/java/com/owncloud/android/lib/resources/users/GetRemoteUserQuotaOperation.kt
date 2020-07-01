@@ -26,9 +26,9 @@
 */
 package com.owncloud.android.lib.resources.users
 
-import at.bitfire.dav4android.Property
-import at.bitfire.dav4android.property.QuotaAvailableBytes
-import at.bitfire.dav4android.property.QuotaUsedBytes
+import at.bitfire.dav4jvm.Property
+import at.bitfire.dav4jvm.property.QuotaAvailableBytes
+import at.bitfire.dav4jvm.property.QuotaUsedBytes
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.DavConstants
