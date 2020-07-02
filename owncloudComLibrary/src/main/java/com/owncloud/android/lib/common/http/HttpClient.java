@@ -26,7 +26,6 @@ package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
 
-import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
@@ -56,7 +55,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class HttpClient {
     private static OkHttpClient sOkHttpClient;
-    private static HttpInterceptor sOkHttpInterceptor;
     private static Context sContext;
     private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
 
@@ -112,7 +110,6 @@ public class HttpClient {
                 };
 
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
-                        .addInterceptor(getOkHttpInterceptor())
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
                         .readTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                         .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -130,13 +127,6 @@ public class HttpClient {
             }
         }
         return sOkHttpClient;
-    }
-
-    private static HttpInterceptor getOkHttpInterceptor() {
-        if (sOkHttpInterceptor == null) {
-            sOkHttpInterceptor = new HttpInterceptor();
-        }
-        return sOkHttpInterceptor;
     }
 
     public Context getContext() {

@@ -73,7 +73,7 @@ class RemoveRemoteShareOperation(private val remoteShareId: Long) : RemoteOperat
                 val parser = ShareToRemoteOperationResultParser(
                     ShareXMLParser()
                 )
-                result = parser.parse(deleteMethod.responseBodyString)
+                result = parser.parse(deleteMethod.getResponseBodyAsString())
 
                 Timber.d("Unshare $remoteShareId: ${result.logMessage}")
 

@@ -289,8 +289,7 @@ class OCDavResource(
     @Throws(IOException::class, HttpException::class, DavException::class)
     fun propfind(
         depth: Int,
-        vararg reqProp:
-        Property.Name,
+        vararg reqProp: Property.Name,
         listOfHeaders: HashMap<String, String?>?,
         callback: DavResponseCallback,
         rawCallback: (response: Response) -> Unit

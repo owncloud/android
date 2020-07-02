@@ -20,7 +20,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     var request: Request
     var requestBody: RequestBody? = null
     lateinit var response: Response
-    var responseBodyString: String? = null
+    private var responseBodyString: String? = null
 
     var call: Call? = null
 
