@@ -61,7 +61,7 @@ dependencies {
     api project(':owncloud-android-library:owncloudComLibrary')
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // Room
     implementation "androidx.room:room-runtime:$roomVersion"

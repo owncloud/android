@@ -68,7 +68,7 @@ dependencies {
     // Convert Java Objects into JSON and back
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$archLifecycleVersion"

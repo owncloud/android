@@ -113,7 +113,7 @@ public class ThumbnailsCacheManager {
         }
     }
 
-    private static void addBitmapToCache(String key, Bitmap bitmap) {
+    public static void addBitmapToCache(String key, Bitmap bitmap) {
         synchronized (mThumbnailsDiskCacheLock) {
             if (mThumbnailCache != null) {
                 mThumbnailCache.put(key, bitmap);
@@ -121,7 +121,7 @@ public class ThumbnailsCacheManager {
         }
     }
 
-    private static void removeBitmapFromCache(String key) {
+    public static void removeBitmapFromCache(String key) {
         synchronized (mThumbnailsDiskCacheLock) {
             if (mThumbnailCache != null) {
                 mThumbnailCache.removeKey(key);
