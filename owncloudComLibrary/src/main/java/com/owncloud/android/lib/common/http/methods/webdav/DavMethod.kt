@@ -24,6 +24,7 @@
 package com.owncloud.android.lib.common.http.methods.webdav
 
 import at.bitfire.dav4jvm.Dav4jvm.log
+import at.bitfire.dav4jvm.DavOCResource
 import at.bitfire.dav4jvm.exception.HttpException
 import at.bitfire.dav4jvm.exception.RedirectException
 import com.owncloud.android.lib.common.http.HttpConstants
@@ -43,11 +44,11 @@ import java.util.concurrent.TimeUnit
  * @author David González Verdugo
  */
 abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
-    protected var mDavResource: OCDavResource
+    protected var mDavResource: DavOCResource
 
     init {
         val httpUrl = url.toHttpUrlOrNull() ?: throw MalformedURLException()
-        mDavResource = OCDavResource(
+        mDavResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -95,7 +96,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
     // Connection parameters
     override fun setReadTimeout(readTimeout: Long, timeUnit: TimeUnit) {
         super.setReadTimeout(readTimeout, timeUnit)
-        mDavResource = OCDavResource(
+        mDavResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -107,7 +108,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
         timeUnit: TimeUnit
     ) {
         super.setConnectionTimeout(connectionTimeout, timeUnit)
-        mDavResource = OCDavResource(
+        mDavResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -116,7 +117,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
 
     override fun setFollowRedirects(followRedirects: Boolean) {
         super.setFollowRedirects(followRedirects)
-        mDavResource = OCDavResource(
+        mDavResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -125,7 +126,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
 
     override fun setUrl(url: HttpUrl) {
         super.setUrl(url)
-        mDavResource = OCDavResource(
+        mDavResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -134,7 +135,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
 
     override fun setRequestHeader(name: String, value: String) {
         super.setRequestHeader(name, value)
-        mDavResource = OCDavResource(
+        mDavResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -150,7 +151,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
     //////////////////////////////
     override fun setRetryOnConnectionFailure(retryOnConnectionFailure: Boolean) {
         super.setRetryOnConnectionFailure(retryOnConnectionFailure)
-        mDavResource = OCDavResource(
+        mDavResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
