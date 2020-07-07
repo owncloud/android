@@ -181,6 +181,19 @@ class OCRemoteServerInfoDataSourceTest {
         ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
     }
 
+    @Test
+    fun getRemoteStatusOwncloudVersionHidden() {
+        val expectedValue = Pair(OwnCloudVersion(""), false)
+        prepareRemoteStatusToBeRetrieved(expectedValue)
+
+        ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
+
+        val remoteStatus = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
+
+        assertEquals(true, remoteStatus.first.isVersionHidden)
+        verify { ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+    }
+
     @Test(expected = Exception::class)
     fun getRemoteStatusException() {
         every {
