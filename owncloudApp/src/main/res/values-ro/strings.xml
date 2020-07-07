@@ -25,9 +25,11 @@
   <string name="drawer_item_uploads_list">Încărcări</string>
   <string name="drawer_close">Închide</string>
   <string name="drawer_open">Deschide</string>
+  <string name="drawer_loading_quota">Încărcare spațiu</string>
+  <string name="drawer_quota">%1$sdin %2$s folosit (%3$s%%˘)</string>
   <string name="drawer_unavailable_free_storage">%1$s în folosință</string>
-  <string name="drawer_unavailable_used_storage">Nu sunt disponibile informații despre spațiul utilizat</string>
-  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_unavailable_used_storage">Nu există informații despre spatiul utilizat.</string>
+  <string name="drawer_feedback">Păreri</string>
   <string name="drawer_help">Ajutor</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Mai mult</string>
@@ -35,10 +37,12 @@
   <string name="prefs_accounts">Conturi</string>
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>
+  <string name="prefs_biometric">Blocare biometrică</string>
   <string name="confirmation_touches_with_other_windows_title">Ești sigur că dorești activarea acestei funcții?</string>
   <string name="prefs_camera_picture_upload">Încărcări fotografii</string>
   <string name="prefs_camera_picture_upload_summary">Încarcă automat fotografiile create cu camera</string>
   <string name="prefs_camera_video_upload">Încărcări videoclipuri</string>
+  <string name="prefs_camera_video_upload_summary">Încarcă automat clipurile video înregistrate cu camera</string>
   <string name="prefs_log_title">Activează înregistrarea / jurnalizarea activităților</string>
   <string name="prefs_log_summary">Acesta este folosit pentru a înregistra problemele</string>
   <string name="prefs_log_title_history">Istoric activități jurnalizate</string>
@@ -52,13 +56,25 @@
   <string name="prefs_imprint">Imprint</string>
   <string name="prefs_remember_last_share_location">Reține contribuie locația</string>
   <string name="prefs_remember_last_upload_location_summary">Reține locația fișierului încărcat precedent</string>
+  <string name="prefs_pattern">Model pentru blocare</string>
+  <string name="pattern_enter_pattern">Te rog introdu modelul</string>
+  <string name="pattern_configure_pattern">Introdu modelul</string>
+  <string name="pattern_remove_pattern">Șterge modelul</string>
+  <string name="pattern_incorrect_pattern">Model incorect</string>
+  <string name="pattern_reenter_pattern">Te rog reintrodu modelul</string>
+  <string name="pattern_not_same_pattern">Modelele nu sunt identice</string>
+  <string name="pattern_stored">Modelul a fost salvat</string>
+  <string name="pattern_removed">Modelul a fost șters</string>
   <string name="pass_code_locked">Blocat cu cod</string>
+  <string name="pattern_locked">Blocat cu model</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fișiere</string>
   <string name="bottom_nav_uploads">Încărcări</string>
+  <string name="bottom_nav_offline">Fără conexiune</string>
   <string name="bottom_nav_links">Link-uri</string>
   <string name="recommend_subject">Încearcă %1$s pe smartphone-ul tău!</string>
   <string name="recommend_text">Te invit să folosești %1$s pe smartphone-ul tău!\nDescarcă aici: %2$s</string>
+  <string name="error_reason">pentru că</string>
   <string name="auth_failure_snackbar">Autentificare nereușită</string>
   <string name="auth_failure_snackbar_action">Modifică contul</string>
   <string name="auth_oauth_failure_snackbar_action">Înregistraţi-vă</string>
@@ -115,6 +131,7 @@
   <string name="common_error">Eroare</string>
   <string name="common_loading">Se încarcă...</string>
   <string name="common_unknown">necunoscut</string>
+  <string name="common_error_unknown">eroare necunoscută</string>
   <string name="common_pending">În așteptare</string>
   <string name="common_important">Important</string>
   <string name="about_title">Despre</string>
@@ -196,6 +213,8 @@
   <string name="pass_code_wrong">Parolă incorectă</string>
   <string name="pass_code_removed">Parolă ștearsă</string>
   <string name="pass_code_stored">Parolă stocată</string>
+  <string name="biometric_prompt_title">Autentificare biometrică</string>
+  <string name="biometric_prompt_subtitle">Autentificare folosind datele biometrice</string>
   <string name="media_notif_ticker">%1$s  player de muzică</string>
   <string name="media_state_playing">%1$s (cântă)</string>
   <string name="media_state_loading">%1$s (încarcă)</string>
@@ -253,6 +272,7 @@
   <string name="confirmation_remove_local">Doar local</string>
   <string name="confirmation_remove_account_alert">Ești sigur că dorești să ștergi contul %1$s?</string>
   <string name="confirmation_remove_public_share_title">Șterge legătura</string>
+  <string name="confirmation_remove_private_share_title">Șterge partajarea privată</string>
   <string name="remove_success_msg">Eliminat cu succes</string>
   <string name="remove_fail_msg">Eliminarea nu a reușit</string>
   <string name="rename_dialog_title">Introduceţi un nou nume</string>
@@ -485,4 +505,5 @@ Te rog ia legătura cu administratorul</string>
   <string name="welcome_feature_4_title">Încărcări de pe cameră</string>
   <string name="welcome_feature_4_text">Fotografiile/videoclipurile tale au fost încărcate automat</string>
   <string name="welcome_feature_5_text">Rulează videoclipurile tale fără a le descărca</string>
+  <string name="common_not_found">nu a fost găsit</string>
 </resources>
