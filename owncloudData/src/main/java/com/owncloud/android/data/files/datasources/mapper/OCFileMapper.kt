@@ -43,18 +43,18 @@ class OCFileMapper : Mapper<OCFile, OCFileEntity> {
 
     override fun toEntity(model: OCFile?): OCFileEntity? =
         model?.let {
-                OCFileEntity(
-                    parentId = it.parentId,
-                    remotePath = it.remotePath,
-                    owner = it.owner,
-                    permissions = it.permissions,
-                    remoteId = it.remoteId,
-                    privateLink = it.privateLink,
-                    creationTimestamp = it.creationTimestamp,
-                    modifiedTimestamp = it.modifiedTimestamp,
-                    etag = it.etag,
-                    mimeType = it.mimeType,
-                    length = it.length
-                )
+            OCFileEntity(
+                parentId = it.parentId,
+                remotePath = it.remotePath,
+                owner = it.owner,
+                permissions = it.permissions,
+                remoteId = it.remoteId,
+                privateLink = it.privateLink,
+                creationTimestamp = it.creationTimestamp,
+                modifiedTimestamp = it.modifiedTimestamp,
+                etag = it.etag,
+                mimeType = it.mimeType,
+                length = it.length
+            )
         }
 }
