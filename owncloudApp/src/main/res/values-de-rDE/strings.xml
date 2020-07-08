@@ -552,11 +552,11 @@
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Geben Sie Ihre Videos wieder, ohne sie herunterzuladen</string>
   <string name="welcome_feature_6_title">Neue, untere Navigationsleiste</string>
-  <string name="welcome_feature_6_text">Einfacherer und schneller Zugriff auf Ihre verfügbaren Offline-Dateien und Links.</string>
+  <string name="welcome_feature_6_text">Einfacherer und schnellerer Zugriff auf Ihre verfügbaren Offline-Dateien und Links.</string>
   <string name="welcome_feature_7_title">Unterstützung von OpenID Connect</string>
   <string name="welcome_feature_7_text">Verbinden Sie sich mit Ihren ownCloud-Servern in einer sichereren Weise mit OpenID Connect</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
   <string name="common_not_found">es wurde nicht gefunden</string>
-  <string name="supports_oauth2_error">Es ist nicht möglich, herauszufinden ob OAuth2 unterstützt wird</string>
-  <string name="get_base_url_error">Es ist nicht möglich, die Basis-URL des Servers zu kennen.</string>
+  <string name="supports_oauth2_error">Es war nicht möglich, herauszufinden ob OAuth2 vom Server unterstützt wird</string>
+  <string name="get_base_url_error">Es war nicht möglich die Serveradresse zu ermitteln.</string>
 </resources>
