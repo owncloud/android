@@ -32,10 +32,12 @@ import java.net.URL
  *
  * @author David González Verdugo
  */
-class PostMethod(url: URL, private val postRequestBody: RequestBody) : HttpMethod(url) {
+class PostMethod(
+    url: URL,
+    private val postRequestBody: RequestBody
+) : HttpMethod(url) {
     @Throws(IOException::class)
     override fun onExecute(): Int {
-        requestBody = postRequestBody
         request = request.newBuilder()
             .post(postRequestBody)
             .build()

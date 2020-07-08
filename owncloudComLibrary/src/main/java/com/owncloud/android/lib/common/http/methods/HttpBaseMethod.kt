@@ -7,7 +7,6 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.Response
 import java.io.InputStream
 import java.net.MalformedURLException
@@ -18,7 +17,6 @@ abstract class HttpBaseMethod constructor(url: URL) {
     var okHttpClient: OkHttpClient
     var httpUrl: HttpUrl = url.toHttpUrlOrNull() ?: throw MalformedURLException()
     var request: Request
-    var requestBody: RequestBody? = null
     abstract var response: Response
 
     var call: Call? = null
@@ -45,17 +43,13 @@ abstract class HttpBaseMethod constructor(url: URL) {
      *** Requests ***
      ****************/
 
-    // Headers
-    val requestHeaders: Headers
-        get() = request.headers
-
     fun getRequestHeader(name: String): String? {
         return request.header(name)
     }
 
     fun getRequestHeadersAsHashMap(): HashMap<String, String?> {
         val headers: HashMap<String, String?> = HashMap()
-        val superHeaders: Set<String> = requestHeaders.names()
+        val superHeaders: Set<String> = request.headers.names()
         superHeaders.forEach {
             headers[it] = getRequestHeader(it)
         }

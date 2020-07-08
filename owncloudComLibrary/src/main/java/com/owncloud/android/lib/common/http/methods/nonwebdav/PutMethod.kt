@@ -38,7 +38,6 @@ class PutMethod(
 ) : HttpMethod(url) {
     @Throws(IOException::class)
     override fun onExecute(): Int {
-        requestBody = putRequestBody
         request = request.newBuilder()
             .put(putRequestBody)
             .build()

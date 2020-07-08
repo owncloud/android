@@ -25,6 +25,7 @@ package com.owncloud.android.lib.common.http.methods.webdav
 
 import at.bitfire.dav4jvm.exception.HttpException
 import com.owncloud.android.lib.common.http.HttpConstants
+import okhttp3.RequestBody
 import java.io.IOException
 import java.net.URL
 
@@ -34,12 +35,13 @@ import java.net.URL
  * @author David González Verdugo
  */
 class PutMethod(
-    url: URL
+    url: URL,
+    private val putRequestBody: RequestBody
 ) : DavMethod(url) {
     @Throws(IOException::class, HttpException::class)
     public override fun onExecute(): Int {
         davResource.put(
-            requestBody!!,
+            putRequestBody,
             super.getRequestHeader(HttpConstants.IF_MATCH_HEADER),
             getRequestHeadersAsHashMap()
         ) { callBackResponse ->
