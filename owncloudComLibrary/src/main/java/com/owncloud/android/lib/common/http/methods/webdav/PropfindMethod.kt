@@ -29,7 +29,6 @@ import at.bitfire.dav4jvm.Response.HrefRelation
 import at.bitfire.dav4jvm.exception.DavException
 import java.io.IOException
 import java.net.URL
-import java.util.ArrayList
 
 /**
  * Propfind calls wrapper
@@ -38,29 +37,26 @@ import java.util.ArrayList
  */
 class PropfindMethod(
     url: URL,
-    // request
-    val depth: Int,
-    private val mPropertiesToRequest: Array<Property.Name>
+    private val depth: Int,
+    private val propertiesToRequest: Array<Property.Name>
 ) : DavMethod(url) {
 
     // response
-    private val mMembers: MutableList<Response>
+    val members: MutableList<Response>
     var root: Response?
         private set
 
     @Throws(IOException::class, DavException::class)
     public override fun onExecute(): Int {
-        mDavResource.propfind(
+        davResource.propfind(
             depth = depth,
-            reqProp = *mPropertiesToRequest,
+            reqProp = *propertiesToRequest,
             listOfHeaders = super.getRequestHeadersAsHashMap(),
             callback = { response: Response, hrefRelation: HrefRelation? ->
                 when (hrefRelation) {
-                    HrefRelation.MEMBER -> mMembers.add(response)
+                    HrefRelation.MEMBER -> members.add(response)
                     HrefRelation.SELF -> this.root = response
                     HrefRelation.OTHER -> {
-                    }
-                    else -> {
                     }
                 }
             }, rawCallback = { callBackResponse: okhttp3.Response ->
@@ -69,11 +65,8 @@ class PropfindMethod(
         return statusCode
     }
 
-    val members: List<Response>
-        get() = mMembers
-
     init {
-        mMembers = ArrayList()
+        members = arrayListOf()
         this.root = null
     }
 }

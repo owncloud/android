@@ -39,7 +39,7 @@ class CopyMethod(
 ) : DavMethod(url) {
     @Throws(Exception::class)
     public override fun onExecute(): Int {
-        mDavResource.copy(
+        davResource.copy(
             destinationUrl,
             forceOverride,
             super.getRequestHeadersAsHashMap()

@@ -32,7 +32,10 @@ import java.net.URL
  *
  * @author David González Verdugo
  */
-class PutMethod(url: URL, private val putRequestBody: RequestBody) : HttpMethod(url) {
+class PutMethod(
+    url: URL,
+    private val putRequestBody: RequestBody
+) : HttpMethod(url) {
     @Throws(IOException::class)
     override fun onExecute(): Int {
         requestBody = putRequestBody

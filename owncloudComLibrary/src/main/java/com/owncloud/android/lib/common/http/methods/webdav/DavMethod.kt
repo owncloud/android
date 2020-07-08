@@ -44,11 +44,13 @@ import java.util.concurrent.TimeUnit
  * @author David González Verdugo
  */
 abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
-    protected var mDavResource: DavOCResource
+    protected var davResource: DavOCResource
+
+    override lateinit var response: Response
 
     init {
         val httpUrl = url.toHttpUrlOrNull() ?: throw MalformedURLException()
-        mDavResource = DavOCResource(
+        davResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -56,7 +58,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
     }
 
     override fun abort() {
-        mDavResource.cancelCall()
+        davResource.cancelCall()
     }
 
     @Throws(Exception::class)
@@ -79,8 +81,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
                 // The check below should be included in okhttp library, method ResponseBody.create(
                 // TODO check most recent versions of okhttp to see if this is already fixed and try to update if so
                 if (response.body?.contentType() != null) {
-                    val responseBody = (httpException.responseBody ?: ""
-                            ).toResponseBody(response.body?.contentType())
+                    val responseBody = (httpException.responseBody ?: "").toResponseBody(response.body?.contentType())
                     response = response.newBuilder()
                         .body(responseBody)
                         .build()
@@ -96,7 +97,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
     // Connection parameters
     override fun setReadTimeout(readTimeout: Long, timeUnit: TimeUnit) {
         super.setReadTimeout(readTimeout, timeUnit)
-        mDavResource = DavOCResource(
+        davResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -108,7 +109,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
         timeUnit: TimeUnit
     ) {
         super.setConnectionTimeout(connectionTimeout, timeUnit)
-        mDavResource = DavOCResource(
+        davResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -117,7 +118,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
 
     override fun setFollowRedirects(followRedirects: Boolean) {
         super.setFollowRedirects(followRedirects)
-        mDavResource = DavOCResource(
+        davResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -126,7 +127,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
 
     override fun setUrl(url: HttpUrl) {
         super.setUrl(url)
-        mDavResource = DavOCResource(
+        davResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -135,15 +136,11 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
 
     override fun setRequestHeader(name: String, value: String) {
         super.setRequestHeader(name, value)
-        mDavResource = DavOCResource(
+        davResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
         )
-    }
-
-    fun getRetryOnConnectionFailure(): Boolean {
-        return false //TODO: implement me
     }
 
     //////////////////////////////
@@ -151,7 +148,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
     //////////////////////////////
     override fun setRetryOnConnectionFailure(retryOnConnectionFailure: Boolean) {
         super.setRetryOnConnectionFailure(retryOnConnectionFailure)
-        mDavResource = DavOCResource(
+        davResource = DavOCResource(
             okHttpClient,
             httpUrl,
             log
@@ -159,6 +156,6 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
     }
 
     override val isAborted: Boolean
-        get() = mDavResource.isCallAborted()
+        get() = davResource.isCallAborted()
 
 }

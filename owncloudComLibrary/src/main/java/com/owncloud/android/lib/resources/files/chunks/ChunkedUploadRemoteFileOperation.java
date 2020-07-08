@@ -29,7 +29,6 @@ import com.owncloud.android.lib.common.http.methods.webdav.PutMethod;
 import com.owncloud.android.lib.common.network.ChunkFromFileRequestBody;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 import okhttp3.MediaType;
 import timber.log.Timber;

@@ -38,7 +38,7 @@ class PutMethod(
 ) : DavMethod(url) {
     @Throws(IOException::class, HttpException::class)
     public override fun onExecute(): Int {
-        mDavResource.put(
+        davResource.put(
             requestBody!!,
             super.getRequestHeader(HttpConstants.IF_MATCH_HEADER),
             getRequestHeadersAsHashMap()

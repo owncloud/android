@@ -23,7 +23,6 @@
  */
 package com.owncloud.android.lib.common.http.methods.webdav
 
-import com.owncloud.android.lib.common.http.HttpConstants
 import okhttp3.Response
 import java.net.URL
 
@@ -40,7 +39,7 @@ class MoveMethod(
 ) : DavMethod(url) {
     @Throws(Exception::class)
     public override fun onExecute(): Int {
-        mDavResource.move(
+        davResource.move(
             destinationUrl,
             forceOverride,
             super.getRequestHeadersAsHashMap()

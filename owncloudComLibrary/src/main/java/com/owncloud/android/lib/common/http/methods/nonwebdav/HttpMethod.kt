@@ -23,18 +23,21 @@
  */
 package com.owncloud.android.lib.common.http.methods.nonwebdav
 
-import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
-
-import java.io.IOException;
-import java.net.URL;
+import com.owncloud.android.lib.common.http.methods.HttpBaseMethod
+import okhttp3.Response
+import java.net.URL
 
 /**
  * Wrapper to perform OkHttp calls
  *
  * @author David González Verdugo
  */
-abstract class HttpMethod(url: URL) : HttpBaseMethod(url) {
-    @Throws(IOException::class)
+abstract class HttpMethod(
+    url: URL
+) : HttpBaseMethod(url) {
+
+    override lateinit var response: Response
+
     public override fun onExecute(): Int {
         call = okHttpClient.newCall(request)
         call?.let { response = it.execute() }

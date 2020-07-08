@@ -19,8 +19,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     var httpUrl: HttpUrl = url.toHttpUrlOrNull() ?: throw MalformedURLException()
     var request: Request
     var requestBody: RequestBody? = null
-    lateinit var response: Response
-    private var responseBodyString: String? = null
+    abstract var response: Response
 
     var call: Call? = null
 
@@ -100,12 +99,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     }
 
     // Body
-    fun getResponseBodyAsString(): String? {
-        if (responseBodyString == null && response.body != null) {
-            responseBodyString = response.body?.string()
-        }
-        return responseBodyString
-    }
+    fun getResponseBodyAsString(): String? = response.body?.string()
 
     open fun getResponseBodyAsStream(): InputStream? {
         return response.body?.byteStream()

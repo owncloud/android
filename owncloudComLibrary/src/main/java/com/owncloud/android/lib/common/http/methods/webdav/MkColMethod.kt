@@ -35,7 +35,7 @@ import java.net.URL
 class MkColMethod(url: URL) : DavMethod(url) {
     @Throws(Exception::class)
     public override fun onExecute(): Int {
-        mDavResource.mkCol(
+        davResource.mkCol(
             xmlBody = null,
             listOfHeaders = super.getRequestHeadersAsHashMap()
         ) { callBackResponse: Response ->

@@ -45,6 +45,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
 
     private X509TrustManager mStandardTrustManager;
     private KeyStore mKnownServersKeyStore;
+
     /**
      * Constructor for AdvancedX509TrustManager
      *
@@ -66,7 +67,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
      * @return The first X509TrustManager found in factory.
      */
     private X509TrustManager findX509TrustManager(TrustManagerFactory factory) {
-        TrustManager tms[] = factory.getTrustManagers();
+        TrustManager[] tms = factory.getTrustManagers();
         for (TrustManager tm : tms) {
             if (tm instanceof X509TrustManager) {
                 return (X509TrustManager) tm;

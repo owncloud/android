@@ -44,9 +44,9 @@ import java.util.Set;
  */
 public class FileRequestBody extends RequestBody implements ProgressiveDataTransferer {
 
+    final Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     protected File mFile;
     private MediaType mContentType;
-    final Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
 
     public FileRequestBody(File file, MediaType contentType) {
         mFile = file;
