@@ -490,7 +490,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="action_switch_grid_view">Ver como grella</string>
   <string name="action_switch_list_view">Ver como lista</string>
   <string name="manage_space_title">Administrar o espazo</string>
-  <string name="manage_space_description">Van ser eliminados permanentemente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
+  <string name="manage_space_description">Van ser eliminados de xeito permanente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
   <string name="manage_space_clear_data">Limpar os datos</string>
   <string name="manage_space_error">Algúns ficheiros non puideron seren eliminados.</string>
   <string name="permission_storage_access">Requirense permisos adicionais para enviar e descargar ficheiros.</string>

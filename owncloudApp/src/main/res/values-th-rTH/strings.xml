@@ -78,7 +78,7 @@
   <string name="illegal_argument_exception_message">ต้องใช้การกระทำที่ถูกต้องเพื่อ</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">ไฟล์</string>
-  <string name="bottom_nav_uploads">อัปโหลด</string>
+  <string name="bottom_nav_uploads">อัปโหลดไฟล์</string>
   <string name="bottom_nav_offline">ออฟไลน์</string>
   <string name="bottom_nav_links">ลิงก์</string>
   <string name="recommend_subject">ลองใช้ %1$s บนสมาร์ทโฟนของคุณ!</string>
@@ -96,7 +96,7 @@
   <string name="auth_register">ใหม่จนถึง %1$s?</string>
   <string name="sync_string_files">ไฟล์</string>
   <string name="setup_btn_login">เข้าสู่ระบบ</string>
-  <string name="uploader_btn_upload_text">อัปโหลด</string>
+  <string name="uploader_btn_upload_text">อัปโหลดไฟล์</string>
   <string name="uploader_top_message">เลือกโฟลเดอร์ที่ต้องการอัปโหลด</string>
   <string name="uploader_wrn_no_account_title">ไม่พบบัญชีที่ต้องการ</string>
   <string name="uploader_wrn_no_account_text">ไม่มีบัญชีผู้ใช้ %1$s ในอุปกรณ์ของคุณ กรุณาตั้งค่าบัญชีผู้ใช้ก่อน</string>
@@ -137,7 +137,7 @@
   <string name="action_share">แชร์</string>
   <string name="common_yes">ตกลง</string>
   <string name="common_no">ไม่ตกลง</string>
-  <string name="common_remove_upload">เลิิกอัปโหลด</string>
+  <string name="common_remove_upload">เลิกอัปโหลด</string>
   <string name="common_retry_upload">อัปโหลดใหม่อีกครั้ง</string>
   <string name="common_cancel_sync">ยกเลิกการผสานข้อมูล</string>
   <string name="common_back">ย้อนกลับ</string>
@@ -170,7 +170,7 @@
   <string name="uploader_upload_available_offline_files">กำลังอัปโหลดไฟล์ออฟไลน์ที่มีอยู่</string>
   <string name="uploader_upload_requested_from_wifi_files">กำลังร้องขอการอัปโหลดไฟล์จาก wifi</string>
   <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
-  <string name="uploads_view_title">อัปโหลด</string>
+  <string name="uploads_view_title">อัปโหลดไฟล์</string>
   <string name="uploads_view_group_current_uploads">ปัจจุบัน</string>
   <string name="uploads_view_group_failed_uploads">ล้มเหลว (แตะเพื่อลองอีกครั้ง)</string>
   <string name="uploads_view_group_finished_uploads">อัปโหลดแล้ว</string>
@@ -521,7 +521,7 @@
   <string name="file_private_link_error">ลิงก์ส่วนตัวใช้ไม่ได้กับไฟล์นี้</string>
   <string name="download_notification_channel_name">ดาวน์โหลด</string>
   <string name="download_notification_channel_description">ดูชื่อไฟล์และความคืบหน้าในการดาวน์โหลด</string>
-  <string name="upload_notification_channel_name">อัปโหลด</string>
+  <string name="upload_notification_channel_name">อัปโหลดไฟล์</string>
   <string name="upload_notification_channel_description">ดูรายชื่อไฟล์และคืบหน้าที่อัปโหลดแล้ว</string>
   <string name="media_service_notification_channel_name">เครื่องเล่นเพลง</string>
   <string name="media_service_notification_channel_description">ดูเครื่องเล่นเพลง</string>
