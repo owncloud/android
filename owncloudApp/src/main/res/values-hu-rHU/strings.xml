@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
+  <string name="prefs_biometric">Biometrikus azonosítás</string>
   <string name="prefs_biometric_summary">Adjon meg zárolási jelszót vagy mintát a beállítás engedélyezéséhez</string>
   <string name="prefs_touches_with_other_visible_windows">Érintkezik más látható ablakkal</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Engedélyezze az érintéseket, amikor a kép takarásban van egy másik ablak által.</string>
@@ -77,9 +78,11 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fájlkezelő</string>
   <string name="bottom_nav_uploads">Feltöltések</string>
+  <string name="bottom_nav_links">Hivatkozások</string>
   <string name="recommend_subject">Próbálja ki a(z) %1$s appot az okostelefonján!</string>
   <string name="recommend_text">Szeretnélek meghívni, hogy használd a(z) %1$s alkalmazást az okostelefonodon!\nTöltsd le innen: %2$s</string>
   <string name="auth_failure_snackbar">Sikertelen bejelentkezés</string>
+  <string name="server_not_supported">Önnek a 10-es verziónál régebbi szerver verziója van, ami nem támogatott. Kérjük frissítse a szervert, egy újabb verzióra.</string>
   <string name="auth_failure_snackbar_action">Fiók módosítása</string>
   <string name="auth_oauth_failure">A hozzáférési token lejárt, vagy érvényét vesztette. Jelentkezzen be újra, hogy hozzáférést nyerjen</string>
   <string name="auth_oauth_failure_snackbar_action">Bejelentkezés</string>
@@ -139,6 +142,7 @@
   <string name="common_error">Hiba</string>
   <string name="common_loading">Betöltés…</string>
   <string name="common_unknown">ismeretlen</string>
+  <string name="common_error_unknown">ismeretlen hiba</string>
   <string name="common_pending">Folyamatban</string>
   <string name="common_important">Fontos</string>
   <string name="about_title">Névjegy</string>
