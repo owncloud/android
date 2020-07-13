@@ -85,12 +85,13 @@ public class ShareLinkToDialog extends DialogFragment {
         PackageManager pm = getActivity().getPackageManager();
         List<ResolveInfo> activities = pm.queryIntentActivities(mIntent,
                 PackageManager.MATCH_DEFAULT_ONLY);
+
         Iterator<ResolveInfo> it = activities.iterator();
         ResolveInfo resolveInfo;
         while (it.hasNext()) {
             resolveInfo = it.next();
             if (packagesToExcludeList.contains(resolveInfo.activityInfo.packageName.toLowerCase())) {
-                it.remove();
+                 it.remove();
             }
         }
 
@@ -105,8 +106,13 @@ public class ShareLinkToDialog extends DialogFragment {
             }
         }
 
+
+
         Collections.sort(activities, new ResolveInfo.DisplayNameComparator(pm));
         mAdapter = new ActivityAdapter(getActivity(), pm, activities);
+
+
+
 
         return createSelector(sendAction);
 
@@ -136,6 +142,8 @@ public class ShareLinkToDialog extends DialogFragment {
 
                         // Send the file
                         getActivity().startActivity(mIntent);
+
+
                     }
                 })
                 .create();
@@ -171,5 +179,4 @@ public class ShareLinkToDialog extends DialogFragment {
             icon.setImageDrawable(getItem(position).loadIcon(mPackageManager));
         }
     }
-
 }

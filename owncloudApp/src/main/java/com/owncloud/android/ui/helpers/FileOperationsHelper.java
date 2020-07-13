@@ -24,10 +24,18 @@
 package com.owncloud.android.ui.helpers;
 
 import android.accounts.Account;
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
+import android.os.Parcelable;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import androidx.fragment.app.DialogFragment;
@@ -43,9 +51,14 @@ import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import com.owncloud.android.ui.dialog.ShareLinkToShareSheet;
 import timber.log.Timber;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class FileOperationsHelper {
@@ -418,6 +431,7 @@ public class FileOperationsHelper {
      * @param link link to share
      */
     private void shareLink(String link) {
+
         Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
         intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
         intentToShareLink.setType("text/plain");
@@ -442,9 +456,20 @@ public class FileOperationsHelper {
                     )
             );
         }
+        //////////
+//        String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
+//        DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
+//        chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+        //////////
+//test on android below
+        ShareLinkToShareSheet shareLinkToShareSheet = ShareLinkToShareSheet.Companion.getInstance(intentToShareLink, mFileActivity, componentName -> {
+                    return componentName.getPackageName().equals(mFileActivity.getPackageName());
+                });
+        shareLinkToShareSheet.show();
 
-        String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-        DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
-        chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
     }
+
+
+
 }
+
