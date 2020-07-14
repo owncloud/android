@@ -99,7 +99,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
         super.setReadTimeout(readTimeout, timeUnit)
         davResource = DavOCResource(
             okHttpClient,
-            httpUrl,
+            request.url,
             log
         )
     }
@@ -111,7 +111,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
         super.setConnectionTimeout(connectionTimeout, timeUnit)
         davResource = DavOCResource(
             okHttpClient,
-            httpUrl,
+            request.url,
             log
         )
     }
@@ -120,7 +120,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
         super.setFollowRedirects(followRedirects)
         davResource = DavOCResource(
             okHttpClient,
-            httpUrl,
+            request.url,
             log
         )
     }
@@ -129,7 +129,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
         super.setUrl(url)
         davResource = DavOCResource(
             okHttpClient,
-            httpUrl,
+            request.url,
             log
         )
     }
@@ -138,7 +138,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
         super.setRequestHeader(name, value)
         davResource = DavOCResource(
             okHttpClient,
-            httpUrl,
+            request.url,
             log
         )
     }
@@ -150,7 +150,7 @@ abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
         super.setRetryOnConnectionFailure(retryOnConnectionFailure)
         davResource = DavOCResource(
             okHttpClient,
-            httpUrl,
+            request.url,
             log
         )
     }
