@@ -206,10 +206,13 @@ public class FileOperationsHelper {
             sendIntent.putExtra(Intent.ACTION_SEND, true);      // Send Action
 
             // Show dialog, without the own app
-            String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-            DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude);
-            chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+            ShareLinkToShareSheet shareLinkToShareSheet = ShareLinkToShareSheet.Companion.getInstance(sendIntent, mFileActivity, componentName -> {
+                return componentName.getPackageName().equals(mFileActivity.getPackageName());
+            });
+            shareLinkToShareSheet.show();
 
+
+            //
         } else {
             Timber.e("Trying to send a NULL OCFile");
         }
