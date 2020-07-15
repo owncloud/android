@@ -25,6 +25,7 @@ import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
@@ -52,6 +53,10 @@ class OCRemoteAuthenticationDataSource(
         val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation("/", true)
         executeRemoteOperation { checkPathExistenceRemoteOperation.execute(client) }
 
+        val userBaseUri =
+            checkPathExistenceRemoteOperation.redirectionPath?.lastPermanentLocation?.trimEnd(*WEBDAV_FILES_PATH_4_0.toCharArray())
+                ?: client.baseUri.toString()
+
         // Get user info. It is needed to save the account into the account manager
         lateinit var userInfo: UserInfo
 
@@ -59,6 +64,9 @@ class OCRemoteAuthenticationDataSource(
             GetRemoteUserInfoOperation().execute(client)
         }.let { userInfo = remoteUserInfoMapper.toModel(it)!! }
 
-        return Pair(userInfo, client.baseUri.toString())
+        return Pair(
+            userInfo,
+            userBaseUri
+        )
     }
 }
