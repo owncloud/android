@@ -18,19 +18,19 @@ class ShareLinkToShareSheet() {
 
     private var intentToShareLink: Intent? = null
 
-    private var mFileActivity: Activity? = null
-    private var mComponentNameFilter: ComponentNameFilter? = null
+    private var fileActivity: Activity? = null
+    private var componentNameFilter: ComponentNameFilter? = null
 
     companion object {
         fun getInstance(
             intentToShareLink: Intent,
-            mFileActivity: Activity,
-            mComponentNameFilter: ComponentNameFilter
+            fileActivity: Activity,
+            componentNameFilter: ComponentNameFilter
         ): ShareLinkToShareSheet {
 
             val shareLinkToShareSheet = ShareLinkToShareSheet()
-            shareLinkToShareSheet.mFileActivity = mFileActivity
-            shareLinkToShareSheet.mComponentNameFilter = mComponentNameFilter
+            shareLinkToShareSheet.fileActivity = fileActivity
+            shareLinkToShareSheet.componentNameFilter = componentNameFilter
             shareLinkToShareSheet.intentToShareLink = intentToShareLink
 
             return shareLinkToShareSheet
@@ -40,7 +40,7 @@ class ShareLinkToShareSheet() {
     private fun getIntentChooser(): Intent {
 
         val resolveInfoList =
-            mFileActivity?.baseContext?.packageManager?.queryIntentActivities(intentToShareLink, PackageManager.MATCH_DEFAULT_ONLY)
+            fileActivity?.baseContext?.packageManager?.queryIntentActivities(intentToShareLink, PackageManager.MATCH_DEFAULT_ONLY)
 
         val chooserIntent: Intent
         val targetIntents: MutableList<Intent>
@@ -52,18 +52,18 @@ class ShareLinkToShareSheet() {
         } else {
             R.string.activity_chooser_title
         }
-        val chooserTitle = mFileActivity?.resources?.getString(titleId)
+        val chooserTitle = fileActivity?.resources?.getString(titleId)
 
 
         resolveInfoList?.let {
-            val excludedComponentNames = getExcludedComponentNames(resolveInfoList, mComponentNameFilter!!)
+            val excludedComponentNames = getExcludedComponentNames(resolveInfoList, componentNameFilter!!)
 
             // add activity for copy to clipboard
             if (!sendAction && !getCopyToClipboardResolveInfoList().isNullOrEmpty()) {
                 resolveInfoList.add(getCopyToClipboardResolveInfoList()?.get(0))
             }
 
-            Collections.sort(resolveInfoList, ResolveInfo.DisplayNameComparator(mFileActivity?.baseContext?.packageManager))
+            Collections.sort(resolveInfoList, ResolveInfo.DisplayNameComparator(fileActivity?.baseContext?.packageManager))
             targetIntents = getTargetIntents(intentToShareLink!!, resolveInfoList, excludedComponentNames)
 
             // deal with M list separate problem
@@ -129,12 +129,12 @@ class ShareLinkToShareSheet() {
     }
 
     fun show() {
-        mFileActivity?.startActivity(getIntentChooser())
+        fileActivity?.startActivity(getIntentChooser())
     }
     private fun getCopyToClipboardResolveInfoList(): MutableList<ResolveInfo>? {
-        val copyToClipboardIntent = Intent(mFileActivity, CopyToClipboardActivity::class.java)
+        val copyToClipboardIntent = Intent(fileActivity, CopyToClipboardActivity::class.java)
         val copyToClipboard: MutableList<ResolveInfo>? =
-            mFileActivity?.baseContext?.packageManager?.queryIntentActivities(copyToClipboardIntent, 0)
+            fileActivity?.baseContext?.packageManager?.queryIntentActivities(copyToClipboardIntent, 0)
         return copyToClipboard
     }
 
