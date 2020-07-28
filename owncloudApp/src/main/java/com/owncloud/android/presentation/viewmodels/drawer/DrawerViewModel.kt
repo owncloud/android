@@ -21,12 +21,10 @@
 package com.owncloud.android.presentation.viewmodels.drawer
 
 import android.accounts.Account
-import android.accounts.AccountManager
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.MainApp
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase

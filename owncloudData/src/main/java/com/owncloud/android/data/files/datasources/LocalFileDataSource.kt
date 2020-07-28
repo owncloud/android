@@ -16,16 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.testutil
 
-import com.owncloud.android.domain.server.model.AuthenticationMethod
-import com.owncloud.android.domain.server.model.ServerInfo
+package com.owncloud.android.data.files.datasources
 
-const val OC_BASE_URL = "https://demo.owncloud.com"
+import com.owncloud.android.domain.files.model.OCFile
 
-val OC_SERVER_INFO = ServerInfo(
-    authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH,
-    baseUrl = "https://demo.owncloud.com",
-    ownCloudVersion = "10.3.2.1",
-    isSecureConnection = false
-)
+interface LocalFileDataSource {
+    fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
+}

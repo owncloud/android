@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.testutil
+package com.owncloud.android.domain.files
 
-import com.owncloud.android.domain.server.model.AuthenticationMethod
-import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.files.model.OCFile
 
-const val OC_BASE_URL = "https://demo.owncloud.com"
+class RefreshFolderFromServerAsyncUseCase(
+    private val fileRepository: FileRepository
+) : BaseUseCaseWithResult<Unit, RefreshFolderFromServerAsyncUseCase.Params>() {
+    override fun run(params: Params) = fileRepository.refreshFolder(params.remotePath)
 
-val OC_SERVER_INFO = ServerInfo(
-    authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH,
-    baseUrl = "https://demo.owncloud.com",
-    ownCloudVersion = "10.3.2.1",
-    isSecureConnection = false
-)
+    data class Params(val remotePath: String)
+
+}

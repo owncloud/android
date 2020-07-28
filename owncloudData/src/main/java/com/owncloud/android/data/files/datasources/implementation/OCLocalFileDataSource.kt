@@ -16,23 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.owncloud.android.data.files.datasources.implementation
 
-import com.owncloud.android.data.files.datasources.RemoteFileDataSource
-import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
+import com.owncloud.android.data.files.datasources.LocalFileDataSource
+import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
+import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.lib.resources.files.services.FileService
 
-class OCRemoteFileDataSource(
-    private val fileService: FileService,
-    private val remoteFileMapper: RemoteFileMapper
-) : RemoteFileDataSource {
-    override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean =
-        fileService.checkPathExistence(path = path, isUserLogged = checkUserCredentials).data
+class OCLocalFileDataSource(
+    private val fileDao: FileDao,
+    private val ocFileMapper: OCFileMapper
+) : LocalFileDataSource {
+    override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
+        // Insert first folder container
+        // TODO: If it is root, add 0 as parent Id
+        val folderId = fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(folder)!!)
 
-    override fun refreshFolder(remotePath: String): List<OCFile> =
-        // Assert not null, service should return an empty list if no files there.
-        fileService.refreshFolder(remotePath).data.map { remoteFileMapper.toModel(it)!! }
-
+        // Then, insert files inside
+        listOfFiles.forEach {
+            // Add parent id to each file
+            fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(it)!!.apply { parentId = folderId })
+        }
+    }
 }

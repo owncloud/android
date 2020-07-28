@@ -19,6 +19,10 @@
 
 package com.owncloud.android.data.files.datasources
 
+import com.owncloud.android.domain.files.model.OCFile
+
 interface RemoteFileDataSource {
     fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean
+
+    fun refreshFolder(remotePath: String): List<OCFile>
 }

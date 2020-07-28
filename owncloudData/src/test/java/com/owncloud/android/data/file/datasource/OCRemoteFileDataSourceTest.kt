@@ -20,6 +20,7 @@
 package com.owncloud.android.data.file.datasource
 
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
+import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.testutil.OC_SERVER_INFO
@@ -37,10 +38,11 @@ class OCRemoteFileDataSourceTest {
     private lateinit var ocRemoteFileDataSource: OCRemoteFileDataSource
 
     private val ocFileService: OCFileService = mockk()
+    private val remoteFileMapper = RemoteFileMapper()
 
     @Before
     fun init() {
-        ocRemoteFileDataSource = OCRemoteFileDataSource(ocFileService)
+        ocRemoteFileDataSource = OCRemoteFileDataSource(ocFileService, remoteFileMapper)
     }
 
     @Test
