@@ -31,17 +31,17 @@ abstract class FileDao {
     companion object {
         private const val SELECT_FILE_WITH_ID =
             "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME} " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE id = :id"
 
         private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_ID =
             "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME} " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE owner = :owner " +
                     "AND remoteId = :remoteId"
 
         private const val DELETE_FILE_WITH_ID =
-            "DELETE FROM ${ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME} " +
+            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE id = :id"
     }
 
