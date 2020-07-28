@@ -56,7 +56,8 @@ public class CreateFolderOperation extends SyncOperation {
     protected RemoteOperationResult run(OwnCloudClient client) {
         CreateRemoteFolderOperation createRemoteFolderOperation = new CreateRemoteFolderOperation(
                 mRemotePath,
-                mCreateFullPath
+                mCreateFullPath,
+                false
         );
         RemoteOperationResult result = createRemoteFolderOperation.execute(client);
 
