@@ -24,5 +24,7 @@ import com.owncloud.android.domain.files.model.OCFile
 interface RemoteFileDataSource {
     fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean
 
+    fun createFolder(remotePath: String, createFullPath: Boolean, isChunksFolder: Boolean)
+
     fun refreshFolder(remotePath: String): List<OCFile>
 }
