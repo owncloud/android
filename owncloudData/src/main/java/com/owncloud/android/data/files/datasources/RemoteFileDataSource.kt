@@ -25,5 +25,7 @@ interface RemoteFileDataSource {
     fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
 
+    fun createFolder(remotePath: String, createFullPath: Boolean, isChunksFolder: Boolean)
+
     fun refreshFolder(remotePath: String): List<OCFile>
 }
