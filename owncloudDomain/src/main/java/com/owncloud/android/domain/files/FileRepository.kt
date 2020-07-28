@@ -19,11 +19,11 @@
 
 package com.owncloud.android.domain.files
 
-import com.owncloud.android.domain.files.model.OCFile
-
 interface FileRepository {
     fun checkPathExistence(path: String, userLogged: Boolean): Boolean
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
+
+    fun createFolder(remotePath: String, createFullPath: Boolean, isChunksFolder: Boolean)
 
     fun refreshFolder(remotePath: String)
 }

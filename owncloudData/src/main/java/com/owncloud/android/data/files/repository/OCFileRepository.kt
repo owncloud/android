@@ -33,6 +33,14 @@ class OCFileRepository(
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
         remoteFileDataSource.getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId)
 
+    override fun createFolder(remotePath: String, createFullPath: Boolean, isChunksFolder: Boolean) {
+        remoteFileDataSource.createFolder(
+            remotePath = remotePath,
+            createFullPath = createFullPath,
+            isChunksFolder = isChunksFolder
+        )
+    }
+
     override fun refreshFolder(remotePath: String) {
         remoteFileDataSource.refreshFolder(remotePath).also {
             localFileDataSource.saveFilesInFolder(
