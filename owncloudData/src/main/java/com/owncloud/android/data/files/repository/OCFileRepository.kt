@@ -22,7 +22,6 @@ package com.owncloud.android.data.files.repository
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.domain.files.FileRepository
-import com.owncloud.android.domain.files.model.OCFile
 
 class OCFileRepository(
     private val remoteFileDataSource: RemoteFileDataSource,
@@ -30,6 +29,14 @@ class OCFileRepository(
 ) : FileRepository {
     override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
         remoteFileDataSource.checkPathExistence(path, userLogged)
+
+    override fun createFolder(remotePath: String, createFullPath: Boolean, isChunksFolder: Boolean) {
+        remoteFileDataSource.createFolder(
+            remotePath = remotePath,
+            createFullPath = createFullPath,
+            isChunksFolder = isChunksFolder
+        )
+    }
 
     override fun refreshFolder(remotePath: String) {
         remoteFileDataSource.refreshFolder(remotePath).also {
