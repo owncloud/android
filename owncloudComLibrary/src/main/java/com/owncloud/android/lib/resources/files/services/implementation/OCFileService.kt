@@ -41,7 +41,8 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String> =
         GetUrlToOpenInWebRemoteOperation(openWithWebEndpoint = openWebEndpoint, fileId = fileId).execute(client)
 
-    override fun refreshFolder(remotePath: String): RemoteOperationResult<ArrayList<RemoteFile>> {
-        return ReadRemoteFolderOperation(remotePath = remotePath).execute(client)
-    }
+    override fun refreshFolder(remotePath: String): RemoteOperationResult<ArrayList<RemoteFile>> =
+        ReadRemoteFolderOperation(
+            remotePath = remotePath
+        ).execute(client)
 }
