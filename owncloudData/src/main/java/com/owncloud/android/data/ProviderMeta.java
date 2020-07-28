@@ -39,7 +39,7 @@ public class ProviderMeta {
     static public class ProviderTableMeta implements BaseColumns {
         public static final String OCSHARES_TABLE_NAME = "ocshares";
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
-        public static final String OCFILES_TABLE_NAME = "files";
+        public static final String FILES_TABLE_NAME = "files";
         public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
 
         // Columns of ocshares table
