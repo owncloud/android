@@ -23,7 +23,7 @@ import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta
 
 @Entity(
-    tableName = ProviderMeta.ProviderTableMeta.OCFILES_TABLE_NAME
+    tableName = ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME
 )
 data class OCFileEntity(
     var parentId: Long? = null,
