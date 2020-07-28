@@ -21,7 +21,7 @@ package com.owncloud.android.operations;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.chunks.CreateRemoteChunkFolderOperation;
+import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
 import timber.log.Timber;
 
 public class CreateChunksFolderOperation extends CreateFolderOperation {
@@ -29,7 +29,7 @@ public class CreateChunksFolderOperation extends CreateFolderOperation {
     /**
      * Constructor
      *
-     * @param remotePath         Path in which create the chunks folder in server
+     * @param remotePath Path in which create the chunks folder in server
      */
     public CreateChunksFolderOperation(String remotePath) {
         super(remotePath, false);
@@ -37,12 +37,13 @@ public class CreateChunksFolderOperation extends CreateFolderOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        CreateRemoteChunkFolderOperation createRemoteChunkFolderOperation = new CreateRemoteChunkFolderOperation(
+        CreateRemoteFolderOperation createRemoteFolderOperation = new CreateRemoteFolderOperation(
                 mRemotePath,
-                mCreateFullPath
+                mCreateFullPath,
+                true
         );
 
-        RemoteOperationResult result = createRemoteChunkFolderOperation.execute(client);
+        RemoteOperationResult result = createRemoteFolderOperation.execute(client);
 
         if (result.isSuccess()) {
             Timber.w("Remote chunks folder " + mRemotePath + " was created");
