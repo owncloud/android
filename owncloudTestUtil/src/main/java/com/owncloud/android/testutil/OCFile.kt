@@ -21,16 +21,16 @@ package com.owncloud.android.testutil
 import com.owncloud.android.domain.files.model.OCFile
 
 val OC_FILE = OCFile(
-        id = 122,
-        parentId = 123,
-        remotePath = "/Photos",
-        owner = OC_ACCOUNT_NAME,
-        permissions = "RDNVCK",
-        remoteId = "00000003oci9p7er2hay",
-        privateLink = "http://server.url/f/3",
-        creationTimestamp = 0,
-        modifiedTimestamp = 1593510589000,
-        etag = "5efb0c13c688f",
-        mimeType = "DIR",
-        length = 123123123
+    id = 122,
+    parentId = 123,
+    remotePath = "/Photos",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2hay",
+    privateLink = "http://server.url/f/3",
+    creationTimestamp = 0,
+    modifiedTimestamp = 1593510589000,
+    etag = "5efb0c13c688f",
+    mimeType = "DIR",
+    length = 123123123
 )
