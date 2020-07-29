@@ -30,11 +30,11 @@ class OCFileRepository(
     override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
         remoteFileDataSource.checkPathExistence(path, userLogged)
 
-    override fun createFolder(remotePath: String, createFullPath: Boolean, isChunksFolder: Boolean) {
+    override fun createFolder(remotePath: String) {
         remoteFileDataSource.createFolder(
             remotePath = remotePath,
-            createFullPath = createFullPath,
-            isChunksFolder = isChunksFolder
+            createFullPath = false,
+            isChunksFolder = false
         )
     }
 
