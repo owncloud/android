@@ -16,14 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.domain.files.usecases
 
-package com.owncloud.android.domain.files
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.files.FileRepository
 
-interface FileRepository {
-    fun checkPathExistence(path: String, userLogged: Boolean): Boolean
-    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
+class RefreshFolderFromServerAsyncUseCase(
+    private val fileRepository: FileRepository
+) : BaseUseCaseWithResult<Unit, RefreshFolderFromServerAsyncUseCase.Params>() {
+    override fun run(params: Params) = fileRepository.refreshFolder(params.remotePath)
 
-    fun createFolder(remotePath: String)
+    data class Params(val remotePath: String)
 
-    fun refreshFolder(remotePath: String)
 }
