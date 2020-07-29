@@ -20,7 +20,6 @@ package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
-import com.owncloud.android.domain.files.RefreshFolderFromServerAsyncUseCase
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -29,7 +28,8 @@ import org.junit.Test
 
 class RefreshFolderFromServerAsyncUseCaseTest {
     private val fileRepository: FileRepository = spyk()
-    private val useCase = RefreshFolderFromServerAsyncUseCase(fileRepository)
+    private val useCase =
+        RefreshFolderFromServerAsyncUseCase(fileRepository)
     private val useCaseParams = RefreshFolderFromServerAsyncUseCase.Params("/Photos")
 
     @Test
