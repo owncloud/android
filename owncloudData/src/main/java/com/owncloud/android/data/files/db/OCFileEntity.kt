@@ -29,14 +29,14 @@ data class OCFileEntity(
     var parentId: Long? = null,
     val owner: String,
     val remotePath: String,
-    val remoteId: String,
+    val remoteId: String?,
     val length: Long,
-    val creationTimestamp: Long,
+    val creationTimestamp: Long?,
     val modifiedTimestamp: Long,
     val mimeType: String,
-    val etag: String,
-    val permissions: String,
-    val privateLink: String
+    val etag: String?,
+    val permissions: String?,
+    val privateLink: String?
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
