@@ -40,6 +40,13 @@ data class OCFile(
     val privateLink: String
 ) : Parcelable {
 
+    /**
+     * Use this to find out if this file is a folder.
+     *
+     * @return true if it is a folder
+     */
+    fun isFolder() = mimeType == "DIR" || mimeType == "httpd/unix-directory"
+
     companion object {
         const val PATH_SEPARATOR = "/"
         const val ROOT_PATH = PATH_SEPARATOR
