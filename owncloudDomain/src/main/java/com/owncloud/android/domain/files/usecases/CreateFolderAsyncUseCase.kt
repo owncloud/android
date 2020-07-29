@@ -41,7 +41,7 @@ class CreateFolderAsyncUseCase(
         }
 
         val remotePath = params.parentFile.remotePath.plus(folderNameTrimmed).plus(OCFile.PATH_SEPARATOR)
-        return fileRepository.createFolder(remotePath)
+        return fileRepository.createFolder(remotePath = remotePath, parentFolder = params.parentFile)
     }
 
     data class Params(val folderName: String, val parentFile: OCFile)
