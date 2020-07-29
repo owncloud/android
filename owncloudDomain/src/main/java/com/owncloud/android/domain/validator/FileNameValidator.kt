@@ -16,16 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.domain.files
+package com.owncloud.android.domain.validator
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.files.model.OCFile
+import java.util.regex.Pattern
 
-class RefreshFolderFromServerAsyncUseCase(
-    private val fileRepository: FileRepository
-) : BaseUseCaseWithResult<Unit, RefreshFolderFromServerAsyncUseCase.Params>() {
-    override fun run(params: Params) = fileRepository.refreshFolder(params.remotePath)
+class FileNameValidator {
 
-    data class Params(val remotePath: String)
+    fun validate(string: String): Boolean = FILE_NAME_REGEX.containsMatchIn(string)
 
+    companion object {
+        private val FILE_NAME_REGEX = Pattern.compile("'\'|/").toRegex()
+    }
 }
