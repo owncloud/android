@@ -29,7 +29,8 @@ import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
-import com.owncloud.android.domain.files.RefreshFolderFromServerAsyncUseCase
+import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -64,6 +65,7 @@ val useCaseModule = module {
     factory { RefreshCapabilitiesFromServerAsyncUseCase(get()) }
 
     // Files
+    factory { CreateFolderAsyncUseCase(get()) }
     factory { RefreshFolderFromServerAsyncUseCase(get()) }
 
     // Sharing
