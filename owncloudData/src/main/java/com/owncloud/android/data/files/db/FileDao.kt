@@ -34,11 +34,11 @@ abstract class FileDao {
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE id = :id"
 
-        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_ID =
+        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH =
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE owner = :owner " +
-                    "AND remoteId = :remoteId"
+                    "AND remotePath = :remotePath"
 
         private const val DELETE_FILE_WITH_ID =
             "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
@@ -50,10 +50,10 @@ abstract class FileDao {
         id: Long
     ): OCFileEntity?
 
-    @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_ID)
+    @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH)
     abstract fun getFileFromOwnerAndRemoteId(
         owner: String,
-        remoteId: String
+        remotePath: String
     ): OCFileEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -65,7 +65,7 @@ abstract class FileDao {
     ): Long {
         val localFile: OCFileEntity? = getFileFromOwnerAndRemoteId(
             owner = ocFileEntity.owner,
-            remoteId = ocFileEntity.remoteId
+            remotePath = ocFileEntity.remotePath
         )
         if (localFile == null) {
             return insert(ocFileEntity)

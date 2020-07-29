@@ -17,12 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.files
+package com.owncloud.android.domain.files.model
 
-import com.owncloud.android.domain.files.model.OCFile
-
-interface FileRepository {
-    fun checkPathExistence(path: String, userLogged: Boolean): Boolean
-    fun createFolder(remotePath: String, parentFolder: OCFile)
-    fun refreshFolder(remotePath: String)
-}
+const val MIME_DIR= "DIR"
+const val MIME_DIR_UNIX= "httpd/unix-directory"
