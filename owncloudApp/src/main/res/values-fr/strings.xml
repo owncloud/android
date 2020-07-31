@@ -437,6 +437,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="share_via_link_password_title">Sécurisé</string>
   <string name="share_via_link_edit_permission_read_only_label">Télécharger / Voir</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Télécharger / Voir / Téléverser</string>
+  <string name="share_via_link_edit_permission_upload_only_label">Téléversement seulement (Glisser le fichier)</string>
   <string name="share_get_public_link_button">Obtenir le lien</string>
   <string name="share_with_title">Partager avec</string>
   <string name="share_with_edit_title">Partager avec %1$s</string>
@@ -523,4 +524,5 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_5_title">Streaming vidéo</string>
   <string name="welcome_feature_5_text">Lire vos vidéos sans les télécharger</string>
   <string name="no_borwser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
+  <string name="get_base_url_error">Il est impossible de trouver l\'adresse du serveur</string>
 </resources>
