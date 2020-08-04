@@ -102,4 +102,32 @@ class OCFileRepositoryTest {
             localFileDataSource.saveFilesInFolder(any(), any())
         }
     }
+
+    @Test
+    fun createFolder() {
+        every { remoteFileDataSource.createFolder(OC_FILE.remotePath, false, false) } returns Unit
+
+        ocFileRepository.createFolder(OC_FILE.remotePath, OC_FILE)
+
+        verify(exactly = 1) {
+            remoteFileDataSource.createFolder(any(), false, false)
+            localFileDataSource.saveFilesInFolder(any(), OC_FILE)
+        }
+    }
+
+    @Test(expected = NoConnectionWithServerException::class)
+    fun createFolderNoConnection() {
+        every {
+            remoteFileDataSource.createFolder(OC_FILE.remotePath, false, false)
+        } throws NoConnectionWithServerException()
+
+        ocFileRepository.createFolder(OC_FILE.remotePath, OC_FILE)
+
+        verify(exactly = 1) {
+            remoteFileDataSource.createFolder(any(), false, false)
+        }
+        verify(exactly = 0) {
+            localFileDataSource.saveFilesInFolder(any(), OC_FILE)
+        }
+    }
 }
