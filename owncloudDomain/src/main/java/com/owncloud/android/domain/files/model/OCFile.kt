@@ -48,7 +48,7 @@ data class OCFile(
     fun isFolder() = mimeType == MIME_DIR || mimeType == MIME_DIR_UNIX
 
     companion object {
-        const val PATH_SEPARATOR = "/"
+        const val PATH_SEPARATOR = '/'
         const val ROOT_PATH = PATH_SEPARATOR
     }
 }
