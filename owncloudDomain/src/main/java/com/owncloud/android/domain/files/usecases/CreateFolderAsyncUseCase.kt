@@ -32,7 +32,7 @@ class CreateFolderAsyncUseCase(
     override fun run(params: Params) {
 
         val folderNameTrimmed = params.folderName.trim()
-        require(folderNameTrimmed.isNotBlank() || fileNameValidator.validate(folderNameTrimmed)) {
+        require(folderNameTrimmed.isNotBlank() && fileNameValidator.validate(folderNameTrimmed)) {
             "Invalid name"
         }
 
