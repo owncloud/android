@@ -21,8 +21,9 @@ package com.owncloud.android.data.file.datasource
 
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
 import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
-import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -32,7 +33,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import java.lang.Exception
 
 class OCRemoteFileDataSourceTest {
     private lateinit var ocRemoteFileDataSource: OCRemoteFileDataSource
@@ -86,5 +86,31 @@ class OCRemoteFileDataSourceTest {
         } throws Exception()
 
         ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
+    }
+
+    @Test
+    fun createFolderSuccess() {
+        val createFolderRemoteResult: RemoteOperationResult<Unit> =
+            createRemoteOperationResultMock(data = Unit, isSuccess = true)
+
+        every {
+            ocFileService.createFolder(remotePath = OC_FILE.remotePath, createFullPath = false, isChunkFolder = false)
+        } returns createFolderRemoteResult
+
+        val createFolderResult = ocRemoteFileDataSource.createFolder(OC_FILE.remotePath, false, false)
+
+        assertNotNull(createFolderResult)
+        assertEquals(createFolderRemoteResult.data, createFolderResult)
+
+        verify { ocFileService.createFolder(any(), any(), any()) }
+    }
+
+    @Test(expected = Exception::class)
+    fun createFolderException() {
+        every {
+            ocFileService.createFolder(OC_FILE.remotePath, false, false)
+        } throws Exception()
+
+        ocRemoteFileDataSource.createFolder(OC_FILE.remotePath, false, false)
     }
 }

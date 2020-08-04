@@ -22,9 +22,10 @@ import java.util.regex.Pattern
 
 class FileNameValidator {
 
-    fun validate(string: String): Boolean = FILE_NAME_REGEX.containsMatchIn(string)
+    fun validate(string: String): Boolean = !FILE_NAME_REGEX.containsMatchIn(string)
 
     companion object {
-        private val FILE_NAME_REGEX = Pattern.compile("'\'|/").toRegex()
+        // Regex to check both slashes '/' and '\'
+        private val FILE_NAME_REGEX = Pattern.compile(".*[/\\\\].*").toRegex()
     }
 }
