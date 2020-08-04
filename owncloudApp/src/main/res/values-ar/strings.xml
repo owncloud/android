@@ -552,6 +552,10 @@
   <string name="welcome_feature_4_text">تم تحميل صورك/مقاطع الفيديو تلقائيًا</string>
   <string name="welcome_feature_5_title">بث الفيديو</string>
   <string name="welcome_feature_5_text">شغِّل مقاطع الفيديو دون تنزيلها</string>
+  <string name="welcome_feature_6_title">شريط تنقل سفلي جديد</string>
+  <string name="welcome_feature_6_text">وصول أسهل وأسرع إلى الملفات والروابط المتاحة دون اتصال</string>
+  <string name="welcome_feature_7_title">دعم لـ OpenID Connect</string>
+  <string name="welcome_feature_7_text">اتصل بخوادم  ownCloud الخاصة بك بطريقة أكثر أمانًا باستخدام OpenID Connect</string>
   <string name="no_borwser_installed_alert">لم يتم تثبيت متصفح. يُرجى تثبيت متصفح للسماح بعملية تسجيل دخول آمنة.</string>
   <string name="common_not_found">لم يتم العثور عليه</string>
   <string name="supports_oauth2_error">لا يمكن معرفة ما إذا كان OAuth2 مدعومًا أم لا</string>
