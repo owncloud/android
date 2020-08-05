@@ -56,6 +56,7 @@ class CreateRemoteFolderOperation(
             result = createParentFolder(FileUtils.getParentPath(remotePath), client)
 
             if (result.isSuccess) {
+                // Second and last try
                 result = createFolder(client)
             }
         }
@@ -65,25 +66,32 @@ class CreateRemoteFolderOperation(
     private fun createFolder(client: OwnCloudClient): RemoteOperationResult<Unit> {
         var result: RemoteOperationResult<Unit>
         try {
-            val webDavUri = if (isChunksFolder) client.uploadsWebDavUri else client.userFilesWebDavUri
-            val mkcol = MkColMethod(URL(webDavUri.toString() + WebdavUtils.encodePath(remotePath))).apply {
+            val webDavUri = if (isChunksFolder) {
+                client.uploadsWebDavUri
+            } else {
+                client.userFilesWebDavUri
+            }
+
+            val mkCol = MkColMethod(
+                URL(webDavUri.toString() + WebdavUtils.encodePath(remotePath))
+            ).apply {
                 setReadTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
                 setConnectionTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             }
 
-            val status = client.executeHttpMethod(mkcol)
+            val status = client.executeHttpMethod(mkCol)
             result =
                 if (status == HttpConstants.HTTP_CREATED) {
-                    RemoteOperationResult<Unit>(ResultCode.OK)
+                    RemoteOperationResult(ResultCode.OK)
                 } else {
-                    RemoteOperationResult<Unit>(mkcol)
+                    RemoteOperationResult(mkCol)
                 }
 
             Timber.d("Create directory $remotePath: ${result.logMessage}")
-            client.exhaustResponse(mkcol.getResponseBodyAsStream())
+            client.exhaustResponse(mkCol.getResponseBodyAsStream())
 
         } catch (e: Exception) {
-            result = RemoteOperationResult<Unit>(e)
+            result = RemoteOperationResult(e)
             Timber.e(e, "Create directory $remotePath: ${result.logMessage}")
         }
         return result
