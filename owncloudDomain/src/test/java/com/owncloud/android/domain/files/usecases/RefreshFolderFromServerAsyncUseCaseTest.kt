@@ -28,8 +28,7 @@ import org.junit.Test
 
 class RefreshFolderFromServerAsyncUseCaseTest {
     private val fileRepository: FileRepository = spyk()
-    private val useCase =
-        RefreshFolderFromServerAsyncUseCase(fileRepository)
+    private val useCase = RefreshFolderFromServerAsyncUseCase(fileRepository)
     private val useCaseParams = RefreshFolderFromServerAsyncUseCase.Params("/Photos")
 
     @Test
