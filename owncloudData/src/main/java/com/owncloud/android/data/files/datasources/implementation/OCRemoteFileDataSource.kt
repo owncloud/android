@@ -29,13 +29,24 @@ class OCRemoteFileDataSource(
     private val fileService: FileService,
     private val remoteFileMapper: RemoteFileMapper
 ) : RemoteFileDataSource {
-    override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean =
-        fileService.checkPathExistence(path = path, isUserLogged = checkUserCredentials).data
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
         executeRemoteOperation { fileService.getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId) }
 
-    override fun createFolder(remotePath: String, createFullPath: Boolean, isChunksFolder: Boolean): Unit =
+    override fun checkPathExistence(
+        path: String,
+        checkUserCredentials: Boolean
+    ): Boolean =
+        fileService.checkPathExistence(
+            path = path,
+            isUserLogged = checkUserCredentials
+        ).data
+
+    override fun createFolder(
+        remotePath: String,
+        createFullPath: Boolean,
+        isChunksFolder: Boolean
+    ): Unit =
         fileService.createFolder(
             remotePath = remotePath,
             createFullPath = createFullPath,
@@ -44,5 +55,8 @@ class OCRemoteFileDataSource(
 
     override fun refreshFolder(remotePath: String): List<OCFile> =
         // Assert not null, service should return an empty list if no files there.
-        fileService.refreshFolder(remotePath).data.map { remoteFileMapper.toModel(it)!! }
+        fileService.refreshFolder(
+            remotePath = remotePath
+        ).data.map { remoteFileMapper.toModel(it)!! }
+
 }
