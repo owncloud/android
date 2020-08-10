@@ -133,8 +133,7 @@ public class FileDownloader extends Service
             getNotificationManager().createNotificationChannel(notificationChannel);
         }
 
-        HandlerThread thread = new HandlerThread("FileDownloaderThread",
-                Process.THREAD_PRIORITY_BACKGROUND);
+        HandlerThread thread = new HandlerThread("FileDownloaderThread", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper, this);
