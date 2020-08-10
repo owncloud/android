@@ -81,7 +81,7 @@ public class FileDownloader extends Service
 
     private static final String DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED";
     private static final String DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH";
-    private static final String DOWNLOAD_NOTIFICATION_CHANNEL_ID = "DOWNLOAD_NOTIFICATION_CHANNEL";
+    public static final String DOWNLOAD_NOTIFICATION_CHANNEL_ID = "DOWNLOAD_NOTIFICATION_CHANNEL";
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;

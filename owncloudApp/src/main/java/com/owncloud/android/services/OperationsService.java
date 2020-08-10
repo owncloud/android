@@ -28,6 +28,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -36,10 +37,11 @@ import android.os.Message;
 import android.os.Process;
 import android.util.Pair;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.core.app.NotificationCompat;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -57,6 +59,7 @@ import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.ui.notifications.NotificationUtils;
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -109,8 +112,7 @@ public class OperationsService extends Service {
     private OperationsServiceBinder mOperationsBinder;
 
     private SyncFolderHandler mSyncFolderHandler;
-
-    private LocalBroadcastManager mLocalBroadcastManager;
+    private NotificationCompat.Builder mNotificationBuilder;
 
     /**
      * Service initialization
@@ -131,8 +133,8 @@ public class OperationsService extends Service {
         thread.start();
         mSyncFolderHandler = new SyncFolderHandler(thread.getLooper(), this);
 
-        // create manager for local broadcasts
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
+        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
+        mNotificationBuilder.setChannelId(FileDownloader.DOWNLOAD_NOTIFICATION_CHANNEL_ID);
     }
 
     /**
@@ -171,6 +173,16 @@ public class OperationsService extends Service {
             Message msg = mOperationsHandler.obtainMessage();
             msg.arg1 = startId;
             mOperationsHandler.sendMessage(msg);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            /*
+             * We have to call this within five seconds after the service is created with startForegroundService when:
+             * - Checking available offline files in background
+             * - Retry downloads in background, e.g. when recovering wifi connection
+             */
+            Timber.d("Starting FileDownloader service in foreground");
+            startForeground(1, mNotificationBuilder.build());
         }
 
         return START_NOT_STICKY;
