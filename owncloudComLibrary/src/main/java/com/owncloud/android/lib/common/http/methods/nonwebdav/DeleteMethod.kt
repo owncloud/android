@@ -21,37 +21,22 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.nonwebdav
 
-package com.owncloud.android.lib.common.http.methods.webdav;
-
-import kotlin.Unit;
-
-import java.net.URL;
+import java.io.IOException
+import java.net.URL
 
 /**
- * Copy calls wrapper
+ * OkHttp delete calls wrapper
  *
- * @author Christian Schabesberger
  * @author David González Verdugo
  */
-public class CopyMethod extends DavMethod {
-
-    final String destinationUrl;
-    final boolean forceOverride;
-
-    public CopyMethod(URL url, String destinationUrl, boolean forceOverride) {
-        super(url);
-        this.destinationUrl = destinationUrl;
-        this.forceOverride = forceOverride;
-    }
-
-    @Override
-    public int onExecute() throws Exception {
-        mDavResource.copy(destinationUrl, forceOverride, response -> {
-            mResponse = response;
-            return Unit.INSTANCE;
-        });
-
-        return super.getStatusCode();
+class DeleteMethod(url: URL) : HttpMethod(url) {
+    @Throws(IOException::class)
+    override fun onExecute(): Int {
+        request = request.newBuilder()
+            .delete()
+            .build()
+        return super.onExecute()
     }
 }

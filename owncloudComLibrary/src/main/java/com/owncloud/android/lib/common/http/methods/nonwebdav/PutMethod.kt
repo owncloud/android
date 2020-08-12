@@ -21,41 +21,26 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.nonwebdav
 
-package com.owncloud.android.lib.common.http.methods.webdav;
-
-import com.owncloud.android.lib.common.http.HttpConstants;
-import kotlin.Unit;
-
-import java.net.URL;
+import okhttp3.RequestBody
+import java.io.IOException
+import java.net.URL
 
 /**
- * Move calls wrapper
+ * OkHttp put calls wrapper
  *
- * @author Christian Schabesberger
  * @author David González Verdugo
  */
-public class MoveMethod extends DavMethod {
-    final String destinationUrl;
-    final boolean forceOverride;
-
-    public MoveMethod(URL url, String destinationUrl, boolean forceOverride) {
-        super(url);
-        this.destinationUrl = destinationUrl;
-        this.forceOverride = forceOverride;
-    }
-
-    @Override
-    public int onExecute() throws Exception {
-        mDavResource.move(
-                destinationUrl,
-                forceOverride,
-                super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
-                super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER), response -> {
-                    mResponse = response;
-                    return Unit.INSTANCE;
-                });
-
-        return super.getStatusCode();
+class PutMethod(
+    url: URL,
+    private val putRequestBody: RequestBody
+) : HttpMethod(url) {
+    @Throws(IOException::class)
+    override fun onExecute(): Int {
+        request = request.newBuilder()
+            .put(putRequestBody)
+            .build()
+        return super.onExecute()
     }
 }

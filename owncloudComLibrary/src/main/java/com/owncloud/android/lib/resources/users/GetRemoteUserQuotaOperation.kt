@@ -26,9 +26,9 @@
 */
 package com.owncloud.android.lib.resources.users
 
-import at.bitfire.dav4android.Property
-import at.bitfire.dav4android.property.QuotaAvailableBytes
-import at.bitfire.dav4android.property.QuotaUsedBytes
+import at.bitfire.dav4jvm.Property
+import at.bitfire.dav4jvm.property.QuotaAvailableBytes
+import at.bitfire.dav4jvm.property.QuotaUsedBytes
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.DavConstants
@@ -52,12 +52,12 @@ class GetRemoteUserQuotaOperation : RemoteOperation<RemoteQuota>() {
             val propfindMethod = PropfindMethod(
                 URL(client.userFilesWebDavUri.toString()),
                 DavConstants.DEPTH_0,
-                DavUtils.getQuotaPropSet()
+                DavUtils.quotaPropSet
             )
             with(client.executeHttpMethod(propfindMethod)) {
                 if (isSuccess(this)) {
                     RemoteOperationResult<RemoteQuota>(ResultCode.OK).apply {
-                        data = readData(propfindMethod.root.properties)
+                        data = readData(propfindMethod.root?.properties)
                     }.also {
                         Timber.i("Get quota completed: ${it.data} and message: ${it.logMessage}")
                     }
@@ -81,9 +81,16 @@ class GetRemoteUserQuotaOperation : RemoteOperation<RemoteQuota>() {
      * @param properties WebDAV properties containing quota data
      * @return new [RemoteQuota] instance representing the data read from the server
      */
-    private fun readData(properties: List<Property>): RemoteQuota {
+    private fun readData(properties: List<Property>?): RemoteQuota {
         var quotaAvailable: Long = 0
         var quotaUsed: Long = 0
+
+        if (properties == null) {
+            // Should not happen
+            Timber.d("Unable to get quota")
+            return RemoteQuota(0, 0, 0, 0.0)
+        }
+
         for (property in properties) {
             if (property is QuotaAvailableBytes) {
                 quotaAvailable = property.quotaAvailableBytes

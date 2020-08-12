@@ -98,7 +98,7 @@ class GetRemoteShareesOperation
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
 
             val status = client.executeHttpMethod(getMethod)
-            val response = getMethod.responseBodyAsString
+            val response = getMethod.getResponseBodyAsString()
 
             if (isSuccess(status)) {
                 Timber.d("Successful response: $response")

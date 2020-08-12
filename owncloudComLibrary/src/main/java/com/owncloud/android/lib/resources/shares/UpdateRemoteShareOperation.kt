@@ -143,9 +143,7 @@ class UpdateRemoteShareOperation
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH)
             uriBuilder.appendEncodedPath(remoteId.toString())
 
-            val putMethod = PutMethod(URL(uriBuilder.build().toString()))
-
-            putMethod.setRequestBody(formBodyBuilder.build())
+            val putMethod = PutMethod(URL(uriBuilder.build().toString()), formBodyBuilder.build())
 
             putMethod.setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8)
             putMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
@@ -158,12 +156,12 @@ class UpdateRemoteShareOperation
             )
 
             if (!isSuccess(status)) {
-                return parser.parse(putMethod.responseBodyAsString)
+                return parser.parse(putMethod.getResponseBodyAsString())
             }
 
             parser.ownCloudVersion = client.ownCloudVersion
             parser.serverBaseUri = client.baseUri
-            result = parser.parse(putMethod.responseBodyAsString)
+            result = parser.parse(putMethod.getResponseBodyAsString())
 
             if (result.isSuccess && retrieveShareDetails) {
                 // retrieve more info - PUT only returns the index of the new share

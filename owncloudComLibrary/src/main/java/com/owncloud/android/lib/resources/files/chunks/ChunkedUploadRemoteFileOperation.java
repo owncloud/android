@@ -29,7 +29,6 @@ import com.owncloud.android.lib.common.http.methods.webdav.PutMethod;
 import com.owncloud.android.lib.common.network.ChunkFromFileRequestBody;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 import okhttp3.MediaType;
 import timber.log.Timber;
@@ -87,11 +86,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
         long chunkCount = (long) Math.ceil((double) totalLength / CHUNK_SIZE);
 
         for (int chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++, offset += CHUNK_SIZE) {
-            mPutMethod = new PutMethod(new URL(uriPrefix + File.separator + chunkIndex));
-
-            if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
-                mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
-            }
 
             ((ChunkFromFileRequestBody) mFileRequestBody).setOffset(offset);
 
@@ -99,14 +93,18 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 result = new RemoteOperationResult<>(new OperationCancelledException());
                 break;
             } else {
+                mPutMethod = new PutMethod(new URL(uriPrefix + File.separator + chunkIndex), mFileRequestBody);
+
+                if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
+                    mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
+                }
+
                 if (chunkIndex == chunkCount - 1) {
                     // Added a high timeout to the last chunk due to when the last chunk
                     // arrives to the server with the last PUT, all chunks get assembled
                     // within that PHP request, so last one takes longer.
                     mPutMethod.setReadTimeout(LAST_CHUNK_TIMEOUT, TimeUnit.MILLISECONDS);
                 }
-
-                mPutMethod.setRequestBody(mFileRequestBody);
 
                 status = client.executeHttpMethod(mPutMethod);
 

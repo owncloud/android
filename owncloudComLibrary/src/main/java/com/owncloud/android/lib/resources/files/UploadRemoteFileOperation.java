@@ -84,10 +84,6 @@ public class UploadRemoteFileOperation extends RemoteOperation {
         RemoteOperationResult result;
 
         try {
-            mPutMethod = new PutMethod(
-                    new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)));
-
-            mPutMethod.setRetryOnConnectionFailure(false);
 
             if (mCancellationRequested.get()) {
                 // the operation was cancelled before getting it's turn to be executed in the queue of uploads
@@ -125,14 +121,17 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             mFileRequestBody.addDatatransferProgressListeners(mDataTransferListeners);
         }
 
+        mPutMethod = new PutMethod(
+                new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)), mFileRequestBody);
+
+        mPutMethod.setRetryOnConnectionFailure(false);
+
         if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
             mPutMethod.addRequestHeader(HttpConstants.IF_MATCH_HEADER, mRequiredEtag);
         }
 
         mPutMethod.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, String.valueOf(fileToUpload.length()));
         mPutMethod.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
-
-        mPutMethod.setRequestBody(mFileRequestBody);
 
         int status = client.executeHttpMethod(mPutMethod);
 

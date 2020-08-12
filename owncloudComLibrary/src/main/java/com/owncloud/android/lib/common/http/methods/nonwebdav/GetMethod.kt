@@ -21,29 +21,22 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.nonwebdav
 
-package com.owncloud.android.lib.common.http.methods.nonwebdav;
-
-import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
-
-import java.io.IOException;
-import java.net.URL;
+import java.io.IOException
+import java.net.URL
 
 /**
- * Wrapper to perform OkHttp calls
+ * OkHttp get calls wrapper
  *
  * @author David González Verdugo
  */
-public abstract class HttpMethod extends HttpBaseMethod {
-
-    public HttpMethod(URL url) {
-        super(url);
-    }
-
-    @Override
-    public int onExecute() throws IOException {
-        mCall = mOkHttpClient.newCall(mRequest);
-        mResponse = mCall.execute();
-        return super.getStatusCode();
+class GetMethod(url: URL) : HttpMethod(url) {
+    @Throws(IOException::class)
+    override fun onExecute(): Int {
+        request = request.newBuilder()
+            .get()
+            .build()
+        return super.onExecute()
     }
 }

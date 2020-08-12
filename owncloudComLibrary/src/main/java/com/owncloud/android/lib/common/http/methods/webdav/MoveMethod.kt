@@ -21,13 +21,32 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.webdav
 
-package com.owncloud.android.lib.common.http.methods.webdav;
+import okhttp3.Response
+import java.net.URL
 
 /**
+ * Move calls wrapper
+ *
+ * @author Christian Schabesberger
  * @author David González Verdugo
  */
-public class DavConstants {
-    public static final int DEPTH_0 = 0;
-    public static final int DEPTH_1 = 1;
+class MoveMethod(
+    url: URL,
+    private val destinationUrl: String,
+    private val forceOverride: Boolean
+) : DavMethod(url) {
+    @Throws(Exception::class)
+    public override fun onExecute(): Int {
+        davResource.move(
+            destinationUrl,
+            forceOverride,
+            super.getRequestHeadersAsHashMap()
+        ) { callBackResponse: Response ->
+            response = callBackResponse
+        }
+        return super.statusCode
+    }
+
 }

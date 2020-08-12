@@ -27,8 +27,8 @@ package com.owncloud.android.lib.common.operations;
 import android.accounts.Account;
 import android.accounts.AccountsException;
 
-import at.bitfire.dav4android.exception.DavException;
-import at.bitfire.dav4android.exception.HttpException;
+import at.bitfire.dav4jvm.exception.DavException;
+import at.bitfire.dav4jvm.exception.HttpException;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;

@@ -53,7 +53,7 @@ class GetRemoteUserInfoOperation : RemoteOperation<RemoteUserInfo>() {
         try {
             val getMethod = GetMethod(URL(client.baseUri.toString() + OCS_ROUTE))
             val status = client.executeHttpMethod(getMethod)
-            val response = getMethod.responseBodyAsString
+            val response = getMethod.getResponseBodyAsString() ?: ""
             if (status == HttpConstants.HTTP_OK) {
                 Timber.d("Successful response $response")
 

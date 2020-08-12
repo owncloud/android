@@ -24,7 +24,7 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import at.bitfire.dav4android.Response;
+import at.bitfire.dav4jvm.Response;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
@@ -122,7 +122,6 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
     }
 
     private boolean isSuccess(int status) {
-        return status == HttpConstants.HTTP_MULTI_STATUS ||
-                status == HttpConstants.HTTP_OK;
+        return status == HttpConstants.HTTP_MULTI_STATUS || status == HttpConstants.HTTP_OK;
     }
 }

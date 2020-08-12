@@ -21,29 +21,31 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.webdav
 
-package com.owncloud.android.lib.common.http.methods.nonwebdav;
-
-import java.io.IOException;
-import java.net.URL;
+import okhttp3.Response
+import java.net.URL
 
 /**
- * OkHttp get calls wrapper
+ * Copy calls wrapper
  *
+ * @author Christian Schabesberger
  * @author David González Verdugo
  */
-public class GetMethod extends HttpMethod {
-
-    public GetMethod(URL url) {
-        super(url);
-    }
-
-    @Override
-    public int onExecute() throws IOException {
-        mRequest = mRequest.newBuilder()
-                .get()
-                .build();
-
-        return super.onExecute();
+class CopyMethod(
+    val url: URL,
+    private val destinationUrl: String,
+    private val forceOverride: Boolean
+) : DavMethod(url) {
+    @Throws(Exception::class)
+    public override fun onExecute(): Int {
+        davResource.copy(
+            destinationUrl,
+            forceOverride,
+            super.getRequestHeadersAsHashMap()
+        ) { callBackResponse: Response ->
+            response = callBackResponse
+        }
+        return super.statusCode
     }
 }

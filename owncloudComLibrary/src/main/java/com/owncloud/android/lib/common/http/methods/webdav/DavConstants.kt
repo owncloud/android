@@ -21,41 +21,12 @@
  *   THE SOFTWARE.
  *
  */
-
-package com.owncloud.android.lib.common.http.methods.webdav;
-
-import at.bitfire.dav4android.exception.HttpException;
-import com.owncloud.android.lib.common.http.HttpConstants;
-import kotlin.Unit;
-
-import java.io.IOException;
-import java.net.URL;
+package com.owncloud.android.lib.common.http.methods.webdav
 
 /**
- * Put calls wrapper
- *
  * @author David González Verdugo
  */
-public class PutMethod extends DavMethod {
-
-    public PutMethod(URL url) {
-        super(url);
-    }
-
-    ;
-
-    @Override
-    public int onExecute() throws IOException, HttpException {
-        mDavResource.put(
-                mRequestBody,
-                super.getRequestHeader(HttpConstants.IF_MATCH_HEADER),
-                super.getRequestHeader(HttpConstants.CONTENT_TYPE_HEADER),
-                super.getRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER),
-                super.getRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER), response -> {
-                    mResponse = response;
-                    return Unit.INSTANCE;
-                });
-
-        return super.getStatusCode();
-    }
+object DavConstants {
+    const val DEPTH_0 = 0
+    const val DEPTH_1 = 1
 }

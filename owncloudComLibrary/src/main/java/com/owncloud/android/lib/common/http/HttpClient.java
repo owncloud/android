@@ -26,9 +26,6 @@ package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
 
-import com.owncloud.android.lib.common.SingleSessionManager;
-import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
-import com.owncloud.android.lib.common.http.interceptors.RequestHeaderInterceptor;
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
@@ -58,7 +55,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class HttpClient {
     private static OkHttpClient sOkHttpClient;
-    private static HttpInterceptor sOkHttpInterceptor;
     private static Context sContext;
     private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
 
@@ -114,7 +110,6 @@ public class HttpClient {
                 };
 
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
-                        .addInterceptor(getOkHttpInterceptor())
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
                         .readTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                         .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -132,36 +127,6 @@ public class HttpClient {
             }
         }
         return sOkHttpClient;
-    }
-
-    private static HttpInterceptor getOkHttpInterceptor() {
-        if (sOkHttpInterceptor == null) {
-            sOkHttpInterceptor = new HttpInterceptor();
-            addHeaderForAllRequests(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
-            addHeaderForAllRequests(HttpConstants.PARAM_SINGLE_COOKIE_HEADER, "true");
-            addHeaderForAllRequests(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
-        }
-        return sOkHttpInterceptor;
-    }
-
-    /**
-     * Add header that will be included for all the requests from now on
-     *
-     * @param headerName
-     * @param headerValue
-     */
-    public static void addHeaderForAllRequests(String headerName, String headerValue) {
-        HttpInterceptor httpInterceptor = getOkHttpInterceptor();
-
-        if (getOkHttpInterceptor() != null) {
-            httpInterceptor.addRequestInterceptor(
-                    new RequestHeaderInterceptor(headerName, headerValue)
-            );
-        }
-    }
-
-    public static void deleteHeaderForAllRequests(String headerName) {
-        getOkHttpInterceptor().deleteRequestHeaderInterceptor(headerName);
     }
 
     public Context getContext() {

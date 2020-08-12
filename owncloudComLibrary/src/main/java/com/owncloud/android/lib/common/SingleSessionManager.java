@@ -130,7 +130,6 @@ public class SingleSessionManager {
                 Timber.v("reusing client for session %s", sessionName);
             }
 
-            keepCredentialsUpdated(client);
             keepCookiesUpdated(context, account, client);
             keepUriUpdated(account, client);
         }
@@ -175,10 +174,6 @@ public class SingleSessionManager {
         }
 
         Timber.d("All sessions saved");
-    }
-
-    private void keepCredentialsUpdated(OwnCloudClient reusedClient) {
-        reusedClient.applyCredentials();
     }
 
     private void keepCookiesUpdated(Context context, OwnCloudAccount account, OwnCloudClient reusedClient) {

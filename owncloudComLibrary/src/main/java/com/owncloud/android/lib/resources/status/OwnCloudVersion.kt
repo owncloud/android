@@ -38,6 +38,8 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
     var isVersionValid: Boolean = false
         set
 
+    var isVersionHidden: Boolean = false
+
     val version: String
         get() = if (isVersionValid) {
             toString()
@@ -55,6 +57,7 @@ class OwnCloudVersion(version: String) : Comparable<OwnCloudVersion>, Parcelable
         var versionToParse = version
         mVersion = 0
         isVersionValid = false
+        isVersionHidden = version.isBlank()
         val countDots = versionToParse.length - versionToParse.replace(".", "").length
 
         // Complete the version. Version must have 3 dots

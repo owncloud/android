@@ -108,7 +108,7 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
             }
 
             if (isSuccess(status)) {
-                val respJSON = JSONObject(getMethod.responseBodyAsString)
+                val respJSON = JSONObject(getMethod.getResponseBodyAsString())
                 if (!respJSON.getBoolean(NODE_INSTALLED)) {
                     latestResult = RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
                 } else {

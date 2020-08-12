@@ -21,29 +21,26 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.common.http.methods.webdav
 
-package com.owncloud.android.lib.common.http.methods.nonwebdav;
-
-import java.io.IOException;
-import java.net.URL;
+import okhttp3.Response
+import java.net.URL
 
 /**
- * OkHttp post calls wrapper
+ * MkCol calls wrapper
  *
+ * @author Christian Schabesberger
  * @author David González Verdugo
  */
-public class PostMethod extends HttpMethod {
-
-    public PostMethod(URL url) {
-        super(url);
-    }
-
-    @Override
-    public int onExecute() throws IOException {
-        mRequest = mRequest.newBuilder()
-                .post(mRequestBody)
-                .build();
-
-        return super.onExecute();
+class MkColMethod(url: URL) : DavMethod(url) {
+    @Throws(Exception::class)
+    public override fun onExecute(): Int {
+        davResource.mkCol(
+            xmlBody = null,
+            listOfHeaders = super.getRequestHeadersAsHashMap()
+        ) { callBackResponse: Response ->
+            response = callBackResponse
+        }
+        return super.statusCode
     }
 }

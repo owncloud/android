@@ -58,7 +58,7 @@ class GetRemoteUserAvatarOperation(private val avatarDimension: Int) : RemoteOpe
 
             if (isSuccess(status)) {
                 // find out size of file to read
-                val contentLength = getMethod.getResponseHeader(HttpConstants.CONTENT_LENGTH_HEADER).toInt()
+                val contentLength = getMethod.getResponseHeader(HttpConstants.CONTENT_LENGTH_HEADER)?.toInt()
 
                 // find out MIME-type!
                 val mimeType = getMethod.getResponseHeader(HttpConstants.CONTENT_TYPE_HEADER)
@@ -69,8 +69,8 @@ class GetRemoteUserAvatarOperation(private val avatarDimension: Int) : RemoteOpe
                 }
 
                 /// download will be performed to a buffer
-                inputStream = getMethod.responseBodyAsStream
-                val bytesArray = inputStream.readBytes()
+                inputStream = getMethod.getResponseBodyAsStream()
+                val bytesArray = inputStream?.readBytes()?: byteArrayOf()
 
                 // TODO check total bytes transferred?
                 Timber.d("Avatar size: Bytes received ${bytesArray.size} of $contentLength")
@@ -87,7 +87,7 @@ class GetRemoteUserAvatarOperation(private val avatarDimension: Int) : RemoteOpe
 
             } else {
                 result = RemoteOperationResult(getMethod)
-                client.exhaustResponse(getMethod.responseBodyAsStream)
+                client.exhaustResponse(getMethod.getResponseBodyAsStream())
             }
 
         } catch (e: Exception) {

@@ -55,14 +55,12 @@ public class OwnCloudCredentialsFactory {
         }
 
         @Override
-        public void applyTo(OwnCloudClient client) {
-            // Clear previous basic credentials
-            HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
-            HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
+        public String getAuthToken() {
+            return "";
         }
 
         @Override
-        public String getAuthToken() {
+        public String getHeaderAuth() {
             return "";
         }
 

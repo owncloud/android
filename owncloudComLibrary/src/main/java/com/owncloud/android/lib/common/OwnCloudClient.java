@@ -29,7 +29,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.net.Uri;
 
-import at.bitfire.dav4android.exception.HttpException;
+import at.bitfire.dav4jvm.exception.HttpException;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
@@ -89,11 +89,6 @@ public class OwnCloudClient extends HttpClient {
         if (!(mCredentials instanceof OwnCloudAnonymousCredentials)) {
             mCredentials = OwnCloudCredentialsFactory.getAnonymousCredentials();
         }
-        mCredentials.applyTo(this);
-    }
-
-    void applyCredentials() {
-        mCredentials.applyTo(this);
     }
 
     public int executeHttpMethod(HttpBaseMethod method) throws Exception {
@@ -102,8 +97,17 @@ public class OwnCloudClient extends HttpClient {
         int status;
 
         do {
-            setRequestId(method);
+            String requestId = RandomUtils.generateRandomUUID();
 
+            // Header to allow tracing requests in apache and ownCloud logs
+            Timber.d("Executing in request with id %s", requestId);
+            method.setRequestHeader(HttpConstants.OC_X_REQUEST_ID, requestId);
+            method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
+            method.setRequestHeader(HttpConstants.PARAM_SINGLE_COOKIE_HEADER, "true");
+            method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
+            if (mCredentials.getHeaderAuth() != null) {
+                method.setRequestHeader(HttpConstants.AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
+            }
             status = method.execute();
 
             if (mFollowRedirects) {
@@ -125,8 +129,17 @@ public class OwnCloudClient extends HttpClient {
         int status;
 
         do {
-            setRequestId(method);
+            String requestId = RandomUtils.generateRandomUUID();
 
+            // Header to allow tracing requests in apache and ownCloud logs
+            Timber.d("Executing in request with id %s", requestId);
+            method.setRequestHeader(OC_X_REQUEST_ID, requestId);
+            method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
+            method.setRequestHeader(HttpConstants.PARAM_SINGLE_COOKIE_HEADER, "true");
+            method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
+            if (mCredentials.getHeaderAuth() != null) {
+                method.setRequestHeader(HttpConstants.AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
+            }
             status = method.execute();
 
             repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
@@ -136,19 +149,6 @@ public class OwnCloudClient extends HttpClient {
         } while (repeatWithFreshCredentials);
 
         return status;
-    }
-
-    private void setRequestId(HttpBaseMethod method) {
-        // Clean previous request id. This is a bit hacky but is the only way to add request headers in WebDAV
-        // methods by using Dav4Android
-        deleteHeaderForAllRequests(OC_X_REQUEST_ID);
-
-        String requestId = RandomUtils.generateRandomUUID();
-
-        // Header to allow tracing requests in apache and ownCloud logs
-        addHeaderForAllRequests(OC_X_REQUEST_ID, requestId);
-
-        Timber.d("Executing in request with id %s", requestId);
     }
 
     public RedirectionPath followRedirection(HttpBaseMethod method) throws Exception {
@@ -215,9 +215,6 @@ public class OwnCloudClient extends HttpClient {
     public void exhaustResponse(InputStream responseBodyAsStream) {
         if (responseBodyAsStream != null) {
             try {
-                while (responseBodyAsStream.read(sExhaustBuffer) >= 0) {
-                    ;
-                }
                 responseBodyAsStream.close();
 
             } catch (IOException io) {
@@ -273,7 +270,6 @@ public class OwnCloudClient extends HttpClient {
     public void setCredentials(OwnCloudCredentials credentials) {
         if (credentials != null) {
             mCredentials = credentials;
-            mCredentials.applyTo(this);
         } else {
             clearCredentials();
         }

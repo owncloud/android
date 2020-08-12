@@ -23,8 +23,6 @@
  */
 package com.owncloud.android.lib.common.authentication;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 
 public class OwnCloudBearerCredentials implements OwnCloudCredentials {
@@ -38,16 +36,6 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
     }
 
     @Override
-    public void applyTo(OwnCloudClient client) {
-        // Clear previous credentials
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
-
-        HttpClient.addHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER,
-                HttpConstants.BEARER_AUTHORIZATION_KEY + mAccessToken);
-    }
-
-    @Override
     public String getUsername() {
         // not relevant for authentication, but relevant for informational purposes
         return mUsername;
@@ -56,6 +44,11 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
     @Override
     public String getAuthToken() {
         return mAccessToken;
+    }
+
+    @Override
+    public String getHeaderAuth() {
+        return HttpConstants.BEARER_AUTHORIZATION_KEY + mAccessToken;
     }
 
     @Override

@@ -23,11 +23,9 @@
  */
 package com.owncloud.android.lib.common.authentication;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpClient;
-import com.owncloud.android.lib.common.http.HttpConstants;
 import okhttp3.Credentials;
-import okhttp3.internal.Util;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
@@ -39,21 +37,6 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         mPassword = password != null ? password : "";
     }
 
-    public OwnCloudBasicCredentials(String username, String password, boolean preemptiveMode) {
-        mUsername = username != null ? username : "";
-        mPassword = password != null ? password : "";
-    }
-
-    @Override
-    public void applyTo(OwnCloudClient client) {
-        // Clear previous basic credentials
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER);
-        HttpClient.deleteHeaderForAllRequests(HttpConstants.COOKIE_HEADER);
-
-        HttpClient.addHeaderForAllRequests(HttpConstants.AUTHORIZATION_HEADER,
-                Credentials.basic(mUsername, mPassword, Util.UTF_8));
-    }
-
     @Override
     public String getUsername() {
         return mUsername;
@@ -62,6 +45,11 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
     @Override
     public String getAuthToken() {
         return mPassword;
+    }
+
+    @Override
+    public String getHeaderAuth() {
+        return Credentials.basic(mUsername, mPassword, UTF_8);
     }
 
     @Override
