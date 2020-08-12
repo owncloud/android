@@ -196,7 +196,7 @@ class PublicShareDialogFragment : DialogFragment() {
                 else -> view.shareViaLinkEditPermissionReadOnly.isChecked = true
             }
 
-            publicShare?.isPasswordProtected?.let {
+            if (publicShare?.isPasswordProtected == true) {
                 setPasswordSwitchChecked(view, true)
                 view.shareViaLinkPasswordValue?.visibility = View.VISIBLE
                 view.shareViaLinkPasswordValue?.hint = getString(R.string.share_via_link_default_password)

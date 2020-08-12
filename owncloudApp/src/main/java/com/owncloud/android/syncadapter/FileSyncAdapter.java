@@ -38,7 +38,7 @@ import android.os.Bundle;
 import androidx.core.app.NotificationCompat;
 import androidx.core.util.Pair;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import at.bitfire.dav4android.exception.DavException;
+import at.bitfire.dav4jvm.exception.DavException;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;

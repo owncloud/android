@@ -1,3 +1,13 @@
+## 2.15.1 (July 2020)
+- Android 10: TLS 1.3 supported
+- Update network libraries to more recent versions, OkHttp + dav4jvm (old dav4Android)
+- Rearchitecture of avatar and quota features
+- Bug fixes, including:
+  + Fixed some authentication problems regarding password edition
+  + Fixed available offline bad behaviour when the amount of files is huge
+  + Fixed a crash related with FileDataStorageManager
+  + Fixed problem related with server setting `version.hide` to allow users login if such setting is enabled.
+
 ## 2.15 (June 2020)
 - Login rearchitecture
 - Support for OpenId Connect
