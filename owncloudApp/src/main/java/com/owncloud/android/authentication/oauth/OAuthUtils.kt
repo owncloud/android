@@ -22,11 +22,11 @@ package com.owncloud.android.authentication.oauth
 import android.content.Context
 import android.net.Uri
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile.PATH_SEPARATOR
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
 import net.openid.appauth.ClientSecretBasic
 import timber.log.Timber
+import java.io.File
 
 class OAuthUtils {
     companion object {
@@ -38,7 +38,7 @@ class OAuthUtils {
             Timber.d("OIDC, getting the auth and token endpoints from the discovery document (well-known)")
 
             val urlPathAfterProtocolIndex = serverBaseUrl.indexOf(
-                PATH_SEPARATOR, serverBaseUrl.indexOf(PATH_SEPARATOR) + 2
+                File.separator, serverBaseUrl.indexOf(File.separator) + 2
             )
 
             // OIDC Service Discovery Location is placed in urls like https://whatever and not https://whatever/others,
@@ -71,10 +71,10 @@ class OAuthUtils {
 
             val authorizationServiceConfiguration = AuthorizationServiceConfiguration(
                 Uri.parse( // auth endpoint
-                    "$serverBaseUrl$PATH_SEPARATOR${context.getString(R.string.oauth2_url_endpoint_auth)}"
+                    "$serverBaseUrl${File.separator}${context.getString(R.string.oauth2_url_endpoint_auth)}"
                 ),
                 Uri.parse( // token endpoint
-                    "$serverBaseUrl$PATH_SEPARATOR${context.getString(R.string.oauth2_url_endpoint_access)}"
+                    "$serverBaseUrl${File.separator}${context.getString(R.string.oauth2_url_endpoint_access)}"
                 )
             )
 

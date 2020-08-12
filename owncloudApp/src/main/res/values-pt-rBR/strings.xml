@@ -551,6 +551,10 @@
   <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
   <string name="welcome_feature_5_title">Transmissão de vídeo</string>
   <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
+  <string name="welcome_feature_6_title">Novo botão na barra de navegação</string>
+  <string name="welcome_feature_6_text">Fácil e rápido acesso aos seus arquivos e linques disponibilizados quando não estiver conectado</string>
+  <string name="welcome_feature_7_title">Suporte para o OpenID Connect</string>
+  <string name="welcome_feature_7_text">Faça conexão ao seus servidores ownCloud usando um caminho mais seguro com o OpenID Connect</string>
   <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
   <string name="common_not_found">não foi encontrado</string>
   <string name="supports_oauth2_error">Não foi possível  saber se OAuth2 é suportada</string>

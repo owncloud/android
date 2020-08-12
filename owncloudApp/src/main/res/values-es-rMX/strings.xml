@@ -38,27 +38,39 @@
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
   <string name="prefs_biometric_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
+  <string name="confirmation_touches_with_other_windows_title">¿Está seguro/a que desea habilitar esta función?</string>
   <string name="prefs_camera_picture_upload">Cargar imagenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar fotos automáticamente tomadas por la cámara</string>
   <string name="prefs_camera_video_upload">Cargar videos</string>
-  <string name="prefs_camera_video_upload_summary">Cargar videos atuomáticamente tomadas por la cámara</string>
+  <string name="prefs_camera_video_upload_summary">Cargar automáticamente los videos tomadas por la cámara</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
   <string name="prefs_log_summary_history">Esto muestra los registros grabados</string>
   <string name="prefs_log_delete_history_button">Eliminar Historial</string>
   <string name="prefs_help">Ayuda</string>
+  <string name="prefs_sync_calendar_contacts">Sincronice sus contactos, calendario y tareas</string>
+  <string name="prefs_sync_calendar_contacts_summary">Instalar DAVx⁵</string>
   <string name="prefs_recommend">Recomendar a un amigo</string>
   <string name="prefs_feedback">Mensajes de retroalimentación</string>
   <string name="prefs_imprint">pie de imprenta</string>
   <string name="prefs_remember_last_share_location">Recordar la ubicación de los archivos compartidos</string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
+  <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
+  <string name="pattern_not_same_pattern">Los patrones introducidos son diferentes</string>
+  <string name="pattern_stored">Patrón almacenado</string>
+  <string name="pattern_removed">Patrón eliminado</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
   <string name="bottom_nav_uploads">Cargas</string>
+  <string name="bottom_nav_offline">Desconectado</string>
   <string name="bottom_nav_links">Enlaces</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
+  <string name="error_reason">porque</string>
+  <string name="auth_failure_snackbar">Fallo en autenticación</string>
+  <string name="server_not_supported">La versión de tu servidor es inferior a la 10 así que ya no está soportado, actualiza tu servidor a una versión más nueva.</string>
+  <string name="auth_oauth_failure">The token de acceso ha expirado o ya no es válido. Inicie sesión de nuevo para obtener acceso</string>
   <string name="auth_oauth_failure_snackbar_action">Iniciar sesión</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Dirección del servidor https://…</string>
@@ -86,7 +98,8 @@
   <string name="file_list_no_app_for_file_type">No se ha encontrado ninguna aplicación para el tipo de archivo</string>
   <string name="local_file_list_empty">No hay archivos en esta carpeta.</string>
   <string name="local_file_list_empty_just_folders">No hay archivos en esta carpeta</string>
-  <string name="upload_list_empty">Sin datos para subir.</string>
+  <string name="local_file_list_search_with_no_matches">No hay coincidencias para esta búsqueda</string>
+  <string name="upload_list_empty">No hay subidas disponibles</string>
   <string name="file_list_folder">carpeta</string>
   <string name="file_list_folders">carpetas</string>
   <string name="file_list_file">fichero</string>
@@ -136,6 +149,7 @@
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_failed_uploads">Fallido (presiona para reintentarlo)</string>
   <string name="uploads_view_group_finished_uploads">Subidos</string>
+  <string name="uploads_view_group_file_count">%d archivos</string>
   <string name="uploads_view_upload_status_succeeded">Completada</string>
   <string name="uploads_view_upload_status_cancelled">Cancelado</string>
   <string name="uploads_view_upload_status_paused">Pausado</string>
@@ -189,6 +203,7 @@
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
   <string name="pass_code_removed">Código de acceso borrado</string>
   <string name="pass_code_stored">Contraseña almacenada</string>
+  <string name="biometric_not_hardware_detected">Este dispositivo no tiene soporte para autenticación biométrica</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>
@@ -261,6 +276,7 @@
   <string name="wait_checking_credentials">Comprobando las credenciales guardadas</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, pruebe otra app para seleccionar el archivo</string>
   <string name="filedisplay_no_file_selected">No hay ficheros seleccionados.</string>
+  <string name="activity_chooser_title">Enviar enlace a</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copiando el archivo desde el almacenamiento privado.</string>
   <string name="oauth_check_onoff">Ingresar con oAuth2</string>
   <string name="oauth_login_connection">Conectando al servidor OAuth2</string>
@@ -451,6 +467,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Caducidad *</string>
   <string name="share_via_link_expiration_date_explanation_label">El enlace público expirará no más tarde de %1$d días después de su creación</string>
   <string name="share_via_link_default_name_template">%1$s enlace</string>
+  <string name="share_via_link_empty_password">La contraseña está vacía</string>
   <string name="private_link_info">Este es un enlace privado, solo las personas que tienen acceso al archivo/carpeta pueden usarlo. Úsalo como un enlace permanente para ti mismo o para señalar a otros a los archivos dentro de las acciones.</string>
   <string name="file_private_link_error">El enlace privado no está disponible para este archivo</string>
   <string name="download_notification_channel_name">Descargas</string>
@@ -461,10 +478,21 @@
   <string name="media_service_notification_channel_description">Ver reproductor de música</string>
   <string name="file_sync_notification_channel_name">Sincronización de archivos</string>
   <string name="file_sync_notification_channel_description">Ver resultados de la sincronización de archivos</string>
+  <string name="rate_dialog_title">Calificar %1$s app!</string>
+  <string name="button_no_thanks_name">NO, GRACIAS</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionados</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_skip_button">Omitir</string>
+  <string name="welcome_feature_1_title">Gestionar todos tus archivos sincronizados</string>
+  <string name="welcome_feature_2_title">Compartir archivos y carpetas</string>
+  <string name="welcome_feature_2_text">Puedes compartir en privado o públicamente</string>
+  <string name="welcome_feature_3_text">Conectar a todos tus servidores ownCloud</string>
   <string name="welcome_feature_4_title">Cargas de la cámara</string>
+  <string name="welcome_feature_5_title">Video streaming</string>
+  <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
+  <string name="welcome_feature_7_title">Soporte para OpenID Connect</string>
+  <string name="common_not_found">no se encontró</string>
 </resources>

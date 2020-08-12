@@ -33,6 +33,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.ui.activity.BaseActivity;
+import com.owncloud.android.utils.AvatarUtils;
 import com.owncloud.android.utils.DisplayUtils;
 import timber.log.Timber;
 
@@ -89,7 +90,8 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                     OwnCloudAccount oca = new OwnCloudAccount(account, mContext);
                     viewHolder.nameViewItem.setText(oca.getDisplayName());
                 } catch (Exception e) {
-                    Timber.w("Account not found right after being read :\\ ; using account name instead of display name");
+                    Timber.w("Account not found right after being read :\\ ; using account name instead of display " +
+                            "name");
                     viewHolder.nameViewItem.setText(
                             AccountUtils.getUsernameOfAccount(account.name)
                     );
@@ -101,11 +103,12 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                 );
 
                 try {
-                    DisplayUtils.showAccountAvatar(
-                            account,
+                    AvatarUtils avatarUtils = new AvatarUtils();
+                    avatarUtils.loadAvatarForAccount(
                             viewHolder.imageViewItem,
-                            mAccountAvatarRadiusDimension,
-                            true
+                            account,
+                            true,
+                            mAccountAvatarRadiusDimension
                     );
                 } catch (Exception e) {
                     Timber.e(e, "Error calculating RGB value for account list item.");

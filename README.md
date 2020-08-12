@@ -6,7 +6,12 @@
  
 ## Join development!
 
-**Build status:** master ![](https://api.travis-ci.org/owncloud/android.svg?branch=master) stable ![](https://api.travis-ci.org/owncloud/android.svg?branch=stable)
+**Build status:** <br>
+
+|master (unit tests and app instrumented tests)| ![](https://app.bitrise.io/app/fa5ae3e8d031601f/status.svg?token=EP5etVT9wHG6V1No3yd8fQ&branch=master)|
+| :----- | :------ |
+|**master (data instrumented tests)**| ![](https://app.bitrise.io/app/78c929113947bc8c/status.svg?token=riaFMnOs2HGHcbTWPxlrbA&branch=master)|
+|**stable**| ![](https://app.bitrise.io/app/fa5ae3e8d031601f/status.svg?token=EP5etVT9wHG6V1No3yd8fQ&branch=stable)|
 
 **Start contributing:** Make sure you read [SETUP.md](https://github.com/owncloud/android/blob/master/SETUP.md) when you start working on this project. Basically: Fork this repository and contribute back using pull requests to the master branch.
 Easy starting points are also reviewing [pull requests](https://github.com/owncloud/android/pulls) and working on [junior jobs](https://github.com/owncloud/android/issues?q=is%3Aopen+is%3Aissue+label%3A%22Junior+Job%22).

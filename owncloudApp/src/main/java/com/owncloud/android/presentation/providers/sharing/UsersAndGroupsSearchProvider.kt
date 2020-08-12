@@ -35,6 +35,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.BaseColumns
 import android.widget.Toast
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
@@ -62,7 +63,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
         try {
-            suggestAuthority = context.resources.getString(R.string.search_suggest_authority)
+            suggestAuthority = context?.resources?.getString(R.string.search_suggest_authority)
 
             // init share types
             shareTypes[suggestAuthority!! + DATA_USER_SUFFIX] = ShareType.USER
@@ -78,7 +79,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             )
 
             // init intent action
-            suggestIntentAction = context.resources.getString(R.string.search_suggest_intent_action)
+            suggestIntentAction = context?.resources?.getString(R.string.search_suggest_intent_action)
 
             return true
 
@@ -145,10 +146,12 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         )
 
         if (getShareesResult.isError) {
-            showErrorMessage(
-                context.resources.getString(R.string.get_sharees_error),
-                getShareesResult.getThrowableOrNull()
-            )
+            context?.let {
+                showErrorMessage(
+                    it.resources.getString(R.string.get_sharees_error),
+                    getShareesResult.getThrowableOrNull()
+                )
+            }
         }
 
         val names = getShareesResult.getDataOrNull()
@@ -199,7 +202,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
                     when (type) {
                         ShareType.GROUP.value -> {
-                            displayName = context.getString(R.string.share_group_clarification, userName)
+                            displayName = context?.getString(R.string.share_group_clarification, userName)
                             icon = R.drawable.ic_group
                             dataUri = Uri.withAppendedPath(groupBaseUri, shareWith)
                         }
@@ -207,11 +210,11 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                             if (federatedShareAllowed) {
                                 icon = R.drawable.ic_user
                                 displayName = if (userName == shareWith) {
-                                    context.getString(R.string.share_remote_clarification, userName)
+                                    context?.getString(R.string.share_remote_clarification, userName)
                                 } else {
                                     val uriSplitted =
                                         shareWith.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                                    context.getString(
+                                    context?.getString(
                                         R.string.share_known_remote_clarification, userName,
                                         uriSplitted[uriSplitted.size - 1]
                                     )
@@ -259,17 +262,16 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
     /**
      * Show error genericErrorMessage
-     *
      */
     private fun showErrorMessage(genericErrorMessage: String, throwable: Throwable?) {
-        val errorMessage = throwable?.parseError(genericErrorMessage, context.resources)
+        val errorMessage = throwable?.parseError(genericErrorMessage, MainApp.appContext.resources)
         val handler = Handler(Looper.getMainLooper())
         // The Toast must be shown in the main thread to grant that will be hidden correctly; otherwise
         // the thread may die before, an exception will occur, and the genericErrorMessage will be left on the screen
         // until the app dies
         handler.post {
             Toast.makeText(
-                context.applicationContext,
+                context?.applicationContext,
                 errorMessage,
                 Toast.LENGTH_SHORT
             ).show()

@@ -1,16 +1,16 @@
 buildscript {
     ext {
         // SDK
-        sdkCompileVersion = 28
+        sdkCompileVersion = 29
         sdkMinVersion = 21
-        sdkTargetVersion = 28
+        sdkTargetVersion = 29
 
         // Android jetpack
         archLifecycleVersion = "2.1.0"
-        roomVersion = "2.2.2"
+        roomVersion = "2.2.5"
         appCompat = "1.1.0"
-        sqliteVersion = "2.0.1"
-        lifecycleLiveData = "2.0.0"
+        sqliteVersion = "2.1.0"
+        lifecycleLiveData = "2.2.0"
         biometricVersion="1.0.1"
 
         // Kotlin
@@ -35,9 +35,9 @@ buildscript {
         ktxVersion = "1.1.0"
 
         // KTX extensions
-        ktxCoreVersion = "1.1.0"
-        ktxViewModelVersion = "2.2.0-alpha01"
-        ktxFragmentVersion = "1.0.0"
+        ktxCoreVersion = "1.3.0"
+        ktxViewModelVersion = "2.2.0"
+        ktxFragmentVersion = "1.2.4"
         ktxLiveData = "2.1.0"
     }
 
@@ -47,7 +47,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
     }

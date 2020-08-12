@@ -19,8 +19,12 @@
 package com.owncloud.android.data.user.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_USER_AVATAR
 import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.OC_USER_QUOTA
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -33,27 +37,73 @@ class OCUserRepositoryTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private val remoteUserDataSource = mockk<RemoteUserDataSource>(relaxed = true)
-    private val ocUserRepository: OCUserRepository = OCUserRepository(remoteUserDataSource)
+    private val localUserDataSource = mockk<LocalUserDataSource>(relaxed = true)
+    private val ocUserRepository: OCUserRepository = OCUserRepository(localUserDataSource, remoteUserDataSource)
 
     @Test
     fun getUserInfo() {
-        every { remoteUserDataSource.getUserInfo() } returns OC_USER_INFO
+        every { remoteUserDataSource.getUserInfo(OC_ACCOUNT_NAME) } returns OC_USER_INFO
 
-        ocUserRepository.getUserInfo()
+        ocUserRepository.getUserInfo(OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteUserDataSource.getUserInfo()
+            remoteUserDataSource.getUserInfo(OC_ACCOUNT_NAME)
         }
     }
 
     @Test(expected = Exception::class)
-    fun checkPathExistenceExistsNoConnection() {
-        every { remoteUserDataSource.getUserInfo() }  throws Exception()
+    fun getUserInfoException() {
+        every { remoteUserDataSource.getUserInfo(OC_ACCOUNT_NAME) }  throws Exception()
 
-        ocUserRepository.getUserInfo()
+        ocUserRepository.getUserInfo(OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteUserDataSource.getUserInfo()
+            remoteUserDataSource.getUserInfo(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
+    fun getUserQuota() {
+        every { remoteUserDataSource.getUserQuota(OC_ACCOUNT_NAME) } returns OC_USER_QUOTA
+
+        ocUserRepository.getUserQuota(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            remoteUserDataSource.getUserQuota(OC_ACCOUNT_NAME)
+            localUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun getUserQuotaException() {
+        every { remoteUserDataSource.getUserQuota(OC_ACCOUNT_NAME) }  throws Exception()
+
+        ocUserRepository.getUserQuota(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            remoteUserDataSource.getUserQuota(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
+    fun getUserAvatar() {
+        every { remoteUserDataSource.getUserAvatar(OC_ACCOUNT_NAME) } returns OC_USER_AVATAR
+
+        ocUserRepository.getUserAvatar(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            remoteUserDataSource.getUserAvatar(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun getUserAvatarException() {
+        every { remoteUserDataSource.getUserAvatar(OC_ACCOUNT_NAME) }  throws Exception()
+
+        ocUserRepository.getUserAvatar(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            remoteUserDataSource.getUserAvatar(OC_ACCOUNT_NAME)
         }
     }
 }

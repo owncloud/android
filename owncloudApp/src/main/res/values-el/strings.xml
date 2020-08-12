@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Λογαριασμοί</string>
   <string name="prefs_manage_accounts">Διαχείριση λογαριασμών</string>
   <string name="prefs_passcode">Κλείδωμα με κωδικό</string>
+  <string name="prefs_biometric">Βιομετρικό κλείδωμα</string>
   <string name="prefs_biometric_summary">Ενεργοποιήστε τον κωδικό ή το μοτίβο κλειδώματος για να ενεργοποιήσετε αυτήν την επιλογή</string>
   <string name="prefs_touches_with_other_visible_windows">Άγγιγμα με άλλα ορατά παράθυρα</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Επιτρέψτε το άγγιγμα όταν η προβολή καλύπτεται από άλλο ορατό παράθυρο. Ενεργοποιήστε τη χρήση εφαρμογών φιλτραρίσματος φωτός.</string>
@@ -82,6 +83,7 @@
   <string name="bottom_nav_links">Σύνδεσμοι</string>
   <string name="recommend_subject">Δοκιμάστε %1$s στο κινητό σας!</string>
   <string name="recommend_text">Θα ήθελα να σε προσκαλέσω να χρησιμοποιήσεις το %1$s στο κινητό σου!\nΛήψη εδώ: %2$s</string>
+  <string name="error_reason">επειδή</string>
   <string name="auth_failure_snackbar">Αποτυχία πιστοποίησης</string>
   <string name="auth_failure_snackbar_action">Αλλαγή λογριασμού</string>
   <string name="auth_oauth_failure_snackbar_action">Συνδεθείτε</string>
@@ -108,6 +110,7 @@
   <string name="file_list_seconds_ago">δευτερόλεπτα πριν</string>
   <string name="file_list_empty">Δεν υπάρχει τίποτα εδώ. Μεταφορτώστε κάτι!</string>
   <string name="file_list_empty_available_offline">Δεν υπάρχουν διαθέσιμα αρχεία εκτός σύνδεση.</string>
+  <string name="file_list_empty_shared_by_links">Δεν έχουν κοινοποιηθεί αρχεία μέσω συνδέσμου.</string>
   <string name="file_list_loading">Γίνεται φόρτωση...</string>
   <string name="file_list_no_app_for_file_type">Δεν βρέθηκε καμία εφαρμογή για τύπο αρχείου</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>
@@ -140,6 +143,7 @@
   <string name="common_error">Σφάλμα</string>
   <string name="common_loading">Γίνεται φόρτωση...</string>
   <string name="common_unknown">άγνωστο</string>
+  <string name="common_error_unknown">άγνωστο σφάλμα</string>
   <string name="common_pending">Εκκρεμεί</string>
   <string name="common_important">Σημαντικό </string>
   <string name="about_title">Περί</string>
@@ -224,6 +228,7 @@
   <string name="pass_code_wrong">Εσφαλμένος κωδικός</string>
   <string name="pass_code_removed">Ο κωδικός αφαιρέθηκε</string>
   <string name="pass_code_stored">Ο κωδικός αποθηκεύτηκε</string>
+  <string name="biometric_prompt_title">Βιομετρική είσοδος</string>
   <string name="media_notif_ticker">%1$s αναπαραγωγή μουσικής</string>
   <string name="media_state_playing">%1$s (αναπαραγωγή)</string>
   <string name="media_state_loading">%1$s (φόρτωση)</string>
@@ -352,8 +357,13 @@
   <string name="preview_image_error_unknown_format">Αυτή η εικόνα δεν μπορεί να προβληθεί</string>
   <string name="error__upload__local_file_not_copied">Το %1$s δεν μπόρεσε να αντιγραφεί στον τοπικό φάκελο %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Διαδρομή μεταφόρτωσης εικόνων</string>
+  <string name="get_shares_error">Δεν ήταν δυνατή η ανάκτηση των κοινόχρηστων στοιχείων από τον διακομιστή</string>
+  <string name="get_sharees_error">Δεν ήταν δυνατή η ανάκτηση χρηστών και ομάδων από διακομιστή</string>
+  <string name="get_capabilities_error">Δεν ήταν δυνατή η ανάκτηση των δυνατοτήτων από το διακομιστή</string>
   <string name="share_link_no_support_share_api">Λυπούμαστε, ο διαμοιρασμός δεν επιτρέπεται στο διακομιστή σας. Παρακαλούμε επικοινωνήστε με το
 		διαχειριστή σας.</string>
+  <string name="share_link_file_error">Δεν ήταν δυνατός ο διαμοιρασμός αυτού του αρχείου ή φακέλου</string>
+  <string name="update_link_file_error">Δεν ήταν δυνατή η ενημέρωση αυτού του αρχείου ή φακέλου</string>
   <string name="share_link_password_title">Εισάγετε συνθηματικό</string>
   <string name="share_link_empty_password">Πρέπει να εισάγετε συνθηματικό</string>
   <string name="activity_chooser_send_file_title">Αποστολή</string>
@@ -533,5 +543,8 @@
   <string name="welcome_feature_4_text">Οι φωτογραφίες  / τα βίντεο σας μεταφορτώθηκαν αυτόματα</string>
   <string name="welcome_feature_5_title">Ροή βίντεο</string>
   <string name="welcome_feature_5_text">Αναπαράγετε τα βίντεό σας χωρίς να κάνετε λήψη</string>
+  <string name="welcome_feature_7_title">Υποστήριξη για το OpenID Connect</string>
+  <string name="welcome_feature_7_text">Συνδεθείτε στους διακομιστές ownCloud σας με πιο ασφαλή τρόπο με το OpenID Connect</string>
   <string name="no_borwser_installed_alert">Δεν είναι εγκατεστημένος περιηγητής. Παρακαλούμε εγκαταστήστε ένα περιηγητή έτσι ώστε να επιτρέπεται η ασφαλής σύνδεση.</string>
+  <string name="common_not_found">δεν βρέθηκε</string>
 </resources>

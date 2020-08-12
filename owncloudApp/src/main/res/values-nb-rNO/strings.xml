@@ -39,9 +39,10 @@
   <string name="prefs_passcode">Passordlås</string>
   <string name="prefs_biometric">Biometrisk lås</string>
   <string name="prefs_biometric_summary">Aktiver passord eller mønsterlås for å aktivere dette alternativet</string>
-  <string name="prefs_camera_picture_upload">Bilde opplastninger</string>
+  <string name="confirmation_touches_with_other_windows_title">Er du sikker på at du vil aktivere dette?</string>
+  <string name="prefs_camera_picture_upload">Bilde-opplastninger</string>
   <string name="prefs_camera_picture_upload_summary">Last opp bilder tatt med kamera automatisk</string>
-  <string name="prefs_camera_video_upload">Video opplastninger</string>
+  <string name="prefs_camera_video_upload">Video-opplastninger</string>
   <string name="prefs_camera_video_upload_summary">Automatisk last opp videoer tatt med kamera</string>
   <string name="prefs_log_title">Aktiver loggføring</string>
   <string name="prefs_log_summary">Denne er brukt til å loggføre problemer</string>
@@ -49,6 +50,8 @@
   <string name="prefs_log_summary_history">Denne viser de lagrede loggene</string>
   <string name="prefs_log_delete_history_button">Slett historikk</string>
   <string name="prefs_help">Hjelp</string>
+  <string name="prefs_sync_calendar_contacts">Synkroniser kontakter, kalendere og oppgaver</string>
+  <string name="prefs_sync_calendar_contacts_summary">Installer DAVx⁵</string>
   <string name="prefs_recommend">Anbefal for en venn</string>
   <string name="prefs_feedback">Tilbakemelding</string>
   <string name="prefs_imprint">Avtrykk</string>
@@ -67,15 +70,21 @@
   <string name="passcode_already_set">Mønsterlås og passordlås kan ikke være aktiv samtidig. Deaktivert passord først</string>
   <string name="pattern_no_longer_required">Det vil ikke bli spurt om mønsteret mer</string>
   <string name="pattern_configure_your_pattern_explanation">Det vil bli spurt om mønsteret hver gang appen startes</string>
+  <string name="pass_code_locked">Låst med passord</string>
+  <string name="pattern_locked">Låst med mønster</string>
   <string name="illegal_argument_exception_message">En gyldig ACTION må være med i intent sendt til</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Filer</string>
   <string name="bottom_nav_uploads">Last opp</string>
+  <string name="bottom_nav_offline">Frakoblet</string>
   <string name="bottom_nav_links">Lenker</string>
   <string name="recommend_subject">Prøv %1$s på smarttelefonen din!</string>
   <string name="recommend_text">Jeg ønsker å invitere deg til å bruke %1$s på smarttelefonen din!\nLast ned her: %2$s</string>
+  <string name="error_reason">fordi</string>
   <string name="auth_failure_snackbar">Autentisering feilet</string>
+  <string name="server_not_supported">Din server-versjon er lavere enn 10, og derfor ikke støttet. Vennligst oppgrader serveren til en nyere versjon.</string>
   <string name="auth_failure_snackbar_action">Endre konto</string>
+  <string name="auth_oauth_failure">Access token har utløpt eller blitt ugyldig. Logg inn på nytt for å få tilbake tilgangen</string>
   <string name="auth_oauth_failure_snackbar_action">Logg inn</string>
   <string name="auth_check_server">Sjekk server</string>
   <string name="auth_host_url">Serveradresse https://...</string>
@@ -99,10 +108,13 @@
   <string name="uploader_error_message_source_file_not_copied">Det skjedde en feil under kopiering av filen til en foreløpig mappe. Prøv å sende igjen.</string>
   <string name="file_list_seconds_ago">for få sekunder siden</string>
   <string name="file_list_empty">Ingenting her. Last opp noe!</string>
+  <string name="file_list_empty_available_offline">Det er ingen filer som er tilgengelige frakoblet.</string>
+  <string name="file_list_empty_shared_by_links">Ingen filer har blitt delt med link.</string>
   <string name="file_list_loading">Laster...</string>
   <string name="file_list_no_app_for_file_type">Ingen apper funnet for filtypen</string>
   <string name="local_file_list_empty">Det er ingen filer i denne mappen.</string>
   <string name="local_file_list_empty_just_folders">Det er ingen mapper i denne mappen.</string>
+  <string name="local_file_list_search_with_no_matches">Ingen treff på dette søket</string>
   <string name="upload_list_empty">Ingen opplastinger tilgjengelig.</string>
   <string name="file_list_folder">mappe</string>
   <string name="file_list_folders">mapper</string>
@@ -130,13 +142,16 @@
   <string name="common_error">Feil</string>
   <string name="common_loading">Laster...</string>
   <string name="common_unknown">ukjent</string>
+  <string name="common_error_unknown">ukjent feil</string>
   <string name="common_pending">Venter</string>
   <string name="common_important">Viktig</string>
   <string name="about_title">Om</string>
   <string name="change_password">Endre passord</string>
   <string name="delete_account">Fjern konto</string>
   <string name="create_account">Opprett konto</string>
+  <string name="upload_chooser_title">Last opp fra</string>
   <string name="uploader_info_dirname">Mappenavn</string>
+  <string name="uploader_upload_in_progress_ticker">Laster opp...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Laster opp %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Opplasting fullført</string>
   <string name="uploader_upload_succeeded_content_single">%1$s lastet opp</string>
@@ -148,11 +163,15 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Filnavn må ikke være tomt</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Filnavn må ikke være mer enn %d tegn</string>
   <string name="uploader_upload_text_filename_hint">Filnavn</string>
+  <string name="uploader_upload_camera_upload_files">Laster opp kamera-filer</string>
+  <string name="uploader_upload_available_offline_files">Laster opp filer som er tilgjengelig frakoblet</string>
   <string name="ssl_certificate_not_trusted">Tjenersertifikatet er ikke til å stole på</string>
   <string name="uploads_view_title">Opplastinger</string>
   <string name="uploads_view_group_current_uploads">Nåværende</string>
   <string name="uploads_view_group_failed_uploads">Feilet (trykk for å prøve igjen)</string>
   <string name="uploads_view_group_finished_uploads">Opplastet</string>
+  <string name="uploads_view_group_file_count">%d filer</string>
+  <string name="uploads_view_group_file_count_single">%d fil</string>
   <string name="uploads_view_upload_status_succeeded">Ferdig</string>
   <string name="uploads_view_upload_status_cancelled">Avbrutt</string>
   <string name="uploads_view_upload_status_paused">Pauset</string>
@@ -170,6 +189,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Venter på trådløstilkobling</string>
   <string name="uploads_view_later_waiting_to_upload">Venter på å laste op</string>
   <string name="uploads_view_unsupported_media_type">Mediatypen er ikke støttet</string>
+  <string name="downloader_download_in_progress_ticker">Laster ned...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Laster ned %2$s</string>
   <string name="downloader_download_succeeded_ticker">Nedlasting fullført</string>
   <string name="downloader_download_succeeded_content">%1$s lastet ned</string>
@@ -206,6 +226,10 @@
   <string name="pass_code_wrong">Feil passord</string>
   <string name="pass_code_removed">Passord fjernet</string>
   <string name="pass_code_stored">Passord lagret</string>
+  <string name="biometric_not_hardware_detected">Denne enheten støtter ikke autentisering ved biometri</string>
+  <string name="biometric_not_enrolled">Registrer minst 1 biometri for å bruke dette</string>
+  <string name="biometric_prompt_title">Biometrisk innlogging</string>
+  <string name="biometric_prompt_subtitle">Logg inn med din biometri</string>
   <string name="media_notif_ticker">%1$s musikkspiller</string>
   <string name="media_state_playing">%1$s (spiller)</string>
   <string name="media_state_loading">%1$s (laster)</string>
@@ -227,6 +251,7 @@
   <string name="media_forward_description">Spol fremover</string>
   <string name="upload_from_camera_title">Bilde fra kamera</string>
   <string name="auth_getting_authorization">Henter godkjenning...</string>
+  <string name="auth_trying_to_login">Prøver å logge inn...</string>
   <string name="auth_no_net_conn_title">Ingen nettverkstilkobling</string>
   <string name="auth_nossl_plain_ok_title">Sikker tilkobling ikke tilgjengelig.</string>
   <string name="auth_connection_established">Tilkobling opprettet</string>
@@ -279,6 +304,7 @@
   <string name="wait_checking_credentials">Sjekker lagrede påloggingsdetaljer</string>
   <string name="filedisplay_unexpected_bad_get_content">Uforventet problem; vennligst velg filen fra en annen applikasjon</string>
   <string name="filedisplay_no_file_selected">Ingen fil ble valgt</string>
+  <string name="activity_chooser_title">Send link til</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopierer fil fra privat lager</string>
   <string name="oauth_check_onoff">Logg inn med oAuth2</string>
   <string name="oauth_login_connection">Kobler til OAuth2-server...</string>
@@ -320,7 +346,10 @@
   <string name="confirmation_disable_camera_uploads_title">Bekreft</string>
   <string name="confirmation_disable_pictures_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende bildene vil ikke bli opplastet</string>
   <string name="confirmation_disable_videos_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende videoene vil ikke bli lastet opp</string>
+  <string name="proper_pics_folder_warning_camera_upload">Sørg for å velge mappen som kameraet ditt lagrer bildene i. Hvis ikke vil programmet ikke være i stand til å detektere bildene dine. Vær obs på at når du tar bilder vil det ta minst 15 minutter før de blir lastet opp.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Sørg for å velge mappen som kameraet ditt lagrer videoene dine i. Hvis ikke vil programmet ikke være i stand til å detektere videoene. Vær obs på at når du er ferdig å ta opp en video vil det ta minst 15 minutter før de blir lastet opp.</string>
   <string name="conflict_title">Filkonflikt</string>
+  <string name="conflict_description">Det er en konflikt i fil %1$s, trykk for å løse den</string>
   <string name="conflict_message">Hvilke filer ønsker du å beholder? Hvis du velger begge versjonene, får den lokale filen lagt til et tall i navnet.</string>
   <string name="conflict_keep_both">Behold begge</string>
   <string name="conflict_use_local_version">lokal versjon</string>
@@ -331,6 +360,9 @@
   <string name="prefs_camera_picture_upload_path_title">Bilde opplastings-sti</string>
   <string name="share_link_no_support_share_api">Beklager, deling er ikke skrudd på for din tjener. Ta kontakt med
 		administratoren.</string>
+  <string name="share_link_file_error">Det var ikke mulig å dele denne filen eller mappen</string>
+  <string name="unshare_link_file_error">Det var ikke mulig å omgjøre delingen av denne filen eller mappen</string>
+  <string name="update_link_file_error">Det var ikke mulig å oppdatere denne filen eller mappen</string>
   <string name="share_link_password_title">Skriv inn ett passord</string>
   <string name="share_link_empty_password">Du må skrive inn ett passord</string>
   <string name="activity_chooser_send_file_title">Send</string>
@@ -399,6 +431,8 @@
   <string name="prefs_camera_upload_source_path_title">Kamera-mappe (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">obligatorisk</string>
   <string name="prefs_camera_upload_source_path_title_optional">valgfri</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Den originale filen vil bli</string>
+  <string name="prefs_camera_upload_behaviour_title">Den originale filen vil bli</string>
   <string name="upload_copy_files">Kopier fil</string>
   <string name="upload_move_files">Flytt fil</string>
   <string name="pref_behaviour_entries_keep_file">beholdt i opprinnelig mappe</string>
@@ -473,6 +507,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Utløp *</string>
   <string name="share_via_link_expiration_date_explanation_label">Den offentlige linken utløper senest %1$d dager etter den ble opprettet</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
+  <string name="share_via_link_empty_password">Passordfeltet er tomt</string>
   <string name="private_link_info">Privat lenke: Bare personer som har tilgang til filen/mappen kan bruke den. Bruk dette som en permanent lenke for din egen bruk eller for å lede andre til filer innenfor delinger</string>
   <string name="file_private_link_error">Privat link er ikke tilgjengelig for denne fil</string>
   <string name="download_notification_channel_name">Last ned</string>
@@ -483,6 +518,7 @@
   <string name="media_service_notification_channel_description">Se musikk spiller</string>
   <string name="file_sync_notification_channel_name">Fil synkronisering</string>
   <string name="file_sync_notification_channel_description">Se resultat av fil synkronisering</string>
+  <string name="clicks_to_be_developer">Du er %1$d klikk unna å aktivere utvikler-menyer</string>
   <string name="button_no_thanks_name">NEI TAKK</string>
   <string name="button_later_name">SENERE</string>
   <plurals name="items_selected_count">
@@ -501,4 +537,5 @@
   <string name="welcome_feature_4_text">Dine bilder/videoer lastes opp automatisk</string>
   <string name="welcome_feature_5_title">Video strømming</string>
   <string name="welcome_feature_5_text">Spill av videoene dine uten å laste dem ned</string>
+  <string name="welcome_feature_6_text">Enklere og raskere tilgang til dine filer og lenker som er tilgjengelige frakoblet</string>
 </resources>

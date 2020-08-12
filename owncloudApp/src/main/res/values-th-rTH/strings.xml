@@ -61,11 +61,11 @@
   <string name="prefs_remember_last_share_location">จดจำตำแหน่งที่ใช้ร่วมกัน</string>
   <string name="prefs_remember_last_upload_location_summary">จดจำตำแหน่งล่าสุดที่ใช้ร่วมกัน</string>
   <string name="prefs_pattern">รูปแบบการล็อค</string>
-  <string name="pattern_enter_pattern">โปรดใส่รูปแบบของคุณ</string>
+  <string name="pattern_enter_pattern">โปรดกรอกรูปแบบของคุณ</string>
   <string name="pattern_configure_pattern">รูปแบบของคุณ</string>
   <string name="pattern_remove_pattern">ลบรูปแบบของคุณ</string>
   <string name="pattern_incorrect_pattern">รูปแบบไม่ถูกต้อง</string>
-  <string name="pattern_reenter_pattern">โปรดใส่รูปแบบของคุณอีกครั้ง</string>
+  <string name="pattern_reenter_pattern">โปรดกรอกรูปแบบของคุณอีกครั้ง</string>
   <string name="pattern_not_same_pattern">รูปแบบไม่เหมือนกัน</string>
   <string name="pattern_stored">รูปแบบที่เก็บไว้</string>
   <string name="pattern_removed">ลบรูปแบบแล้ว</string>
@@ -78,7 +78,7 @@
   <string name="illegal_argument_exception_message">ต้องใช้การกระทำที่ถูกต้องเพื่อ</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">ไฟล์</string>
-  <string name="bottom_nav_uploads">อัปโหลด</string>
+  <string name="bottom_nav_uploads">อัปโหลดไฟล์</string>
   <string name="bottom_nav_offline">ออฟไลน์</string>
   <string name="bottom_nav_links">ลิงก์</string>
   <string name="recommend_subject">ลองใช้ %1$s บนสมาร์ทโฟนของคุณ!</string>
@@ -96,7 +96,7 @@
   <string name="auth_register">ใหม่จนถึง %1$s?</string>
   <string name="sync_string_files">ไฟล์</string>
   <string name="setup_btn_login">เข้าสู่ระบบ</string>
-  <string name="uploader_btn_upload_text">อัปโหลด</string>
+  <string name="uploader_btn_upload_text">อัปโหลดไฟล์</string>
   <string name="uploader_top_message">เลือกโฟลเดอร์ที่ต้องการอัปโหลด</string>
   <string name="uploader_wrn_no_account_title">ไม่พบบัญชีที่ต้องการ</string>
   <string name="uploader_wrn_no_account_text">ไม่มีบัญชีผู้ใช้ %1$s ในอุปกรณ์ของคุณ กรุณาตั้งค่าบัญชีผู้ใช้ก่อน</string>
@@ -137,7 +137,7 @@
   <string name="action_share">แชร์</string>
   <string name="common_yes">ตกลง</string>
   <string name="common_no">ไม่ตกลง</string>
-  <string name="common_remove_upload">เลิิกอัปโหลด</string>
+  <string name="common_remove_upload">เลิกอัปโหลด</string>
   <string name="common_retry_upload">อัปโหลดใหม่อีกครั้ง</string>
   <string name="common_cancel_sync">ยกเลิกการผสานข้อมูล</string>
   <string name="common_back">ย้อนกลับ</string>
@@ -162,7 +162,7 @@
   <string name="uploader_upload_failed_content_single">ไม่สามารถดำเนินการอัปโหลด %1$s ให้เสร็จสมบูรณ์ได้</string>
   <string name="uploader_upload_failed_credentials_error">อัปโหลดล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
-  <string name="uploader_upload_text_dialog_title">ใส่ชื่อไฟล์ใหม่</string>
+  <string name="uploader_upload_text_dialog_title">กรอกชื่อไฟล์ใหม่</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">ชื่อไฟล์ต้องไม่ว่างเปล่า</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">ชื่อไฟล์ต้องมีอักขระไม่เกิน %d ตัว</string>
   <string name="uploader_upload_text_filename_hint">ชื่อไฟล์</string>
@@ -170,7 +170,7 @@
   <string name="uploader_upload_available_offline_files">กำลังอัปโหลดไฟล์ออฟไลน์ที่มีอยู่</string>
   <string name="uploader_upload_requested_from_wifi_files">กำลังร้องขอการอัปโหลดไฟล์จาก wifi</string>
   <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
-  <string name="uploads_view_title">อัปโหลด</string>
+  <string name="uploads_view_title">อัปโหลดไฟล์</string>
   <string name="uploads_view_group_current_uploads">ปัจจุบัน</string>
   <string name="uploads_view_group_failed_uploads">ล้มเหลว (แตะเพื่อลองอีกครั้ง)</string>
   <string name="uploads_view_group_finished_uploads">อัปโหลดแล้ว</string>
@@ -222,7 +222,7 @@
   <string name="foreign_files_remote_text">รีโมท: %1$s</string>
   <string name="upload_query_move_foreign_files">มีพื้นที่เหลือไม่เพียงพอสำหรับคัดลอกไฟล์ที่คุณเลือกไปไว้ในโฟลเดอร์ %1$s คุณต้องการย้ายไฟล์ดังกล่าวแทน?</string>
   <string name="pass_code_enter_pass_code">กรุณากรอกรหัสผ่านของคุณ</string>
-  <string name="pass_code_configure_your_pass_code">ใส่รหัสยืนยันของคุณ</string>
+  <string name="pass_code_configure_your_pass_code">กรอกรหัสยืนยันของคุณ</string>
   <string name="pass_code_configure_your_pass_code_explanation">จะมีการร้องขอรหัสยืนยันทุกครั้งเมื่อเริ่มต้นใช้แอปฯ</string>
   <string name="pass_code_reenter_your_pass_code">กรุณากรอกรหัสผ่านของคุณใหม่อีกครั้ง</string>
   <string name="pass_code_remove_your_pass_code">ลบรหัสยืนยันของคุณ</string>
@@ -304,7 +304,7 @@
   <string name="create_dir_fail_msg">ไม่สามารถสร้างโฟลเดอร์</string>
   <string name="filename_forbidden_characters">ห้ามใช้ตัวอักษรดังนี้: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_charaters_from_server">มีชื่อแฟ้มอย่างน้อยหนึ่งตัวอักษรที่ไม่ถูกต้อง</string>
-  <string name="filename_empty">ต้องใส่ชื่อไฟล์</string>
+  <string name="filename_empty">จำเป็นต้องตั้งชื่อไฟล์</string>
   <string name="wait_a_moment">กรุณารอสักครู่</string>
   <string name="wait_checking_credentials">กำลังตรวจสอบหนังสือรับรองที่เก็บไว้</string>
   <string name="filedisplay_unexpected_bad_get_content">มีปัญหาเกิดขึ้น กรุณาเลือกไฟล์จากแอปฯอื่น</string>
@@ -371,7 +371,7 @@
   <string name="unshare_link_file_error">ไม่สามารถยกเลิกการแชร์ไฟล์หรือโฟลเดอร์นี้ได้</string>
   <string name="update_link_file_error">ไม่สามารถอัปเดตไฟล์หรือโฟลเดอร์นี้ได้</string>
   <string name="share_link_password_title">ป้อนรหัสผ่าน</string>
-  <string name="share_link_empty_password">คุณจะต้องใส่รหัสผ่าน</string>
+  <string name="share_link_empty_password">คุณจะต้องกรอกรหัสผ่าน</string>
   <string name="activity_chooser_send_file_title">ส่ง</string>
   <string name="copy_link">คัดลอกลิงก์</string>
   <string name="clipboard_text_copied">คัดลอกไปยังคลิปบอร์ด</string>
@@ -521,7 +521,7 @@
   <string name="file_private_link_error">ลิงก์ส่วนตัวใช้ไม่ได้กับไฟล์นี้</string>
   <string name="download_notification_channel_name">ดาวน์โหลด</string>
   <string name="download_notification_channel_description">ดูชื่อไฟล์และความคืบหน้าในการดาวน์โหลด</string>
-  <string name="upload_notification_channel_name">อัปโหลด</string>
+  <string name="upload_notification_channel_name">อัปโหลดไฟล์</string>
   <string name="upload_notification_channel_description">ดูรายชื่อไฟล์และคืบหน้าที่อัปโหลดแล้ว</string>
   <string name="media_service_notification_channel_name">เครื่องเล่นเพลง</string>
   <string name="media_service_notification_channel_description">ดูเครื่องเล่นเพลง</string>
@@ -548,6 +548,10 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัปโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
+  <string name="welcome_feature_6_title">แถบนำทางด้านล่างแบบใหม่</string>
+  <string name="welcome_feature_6_text">เข้าถึงไฟล์และลิงก์ออฟไลน์ที่ง่ายและเร็วขึ้น</string>
+  <string name="welcome_feature_7_title">รองรับ OpenID Connect</string>
+  <string name="welcome_feature_7_text">เพื่อความปลอดภัยเชื่อมต่อกับเซิร์ฟเวอร์ ownCloud ด้วย OpenID Connect </string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
   <string name="common_not_found">ไม่พบข้อมูลใดๆ</string>
   <string name="supports_oauth2_error">มันเป็นไปไม่ได้ที่จะรู้ว่ารองรับการใช้งาน OAuth2</string>

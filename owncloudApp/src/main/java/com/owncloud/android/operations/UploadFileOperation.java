@@ -294,8 +294,8 @@ public class UploadFileOperation extends SyncOperation {
 
             /// check the existence of the parent folder for the file to upload
             String remoteParentPath = new File(getRemotePath()).getParent();
-            remoteParentPath = remoteParentPath.endsWith(OCFile.PATH_SEPARATOR) ?
-                    remoteParentPath : remoteParentPath + OCFile.PATH_SEPARATOR;
+            remoteParentPath = remoteParentPath.endsWith(File.separator) ?
+                    remoteParentPath : remoteParentPath + File.separator;
             result = grantFolderExistence(remoteParentPath, client);
 
             if (!result.isSuccess()) {
@@ -521,8 +521,8 @@ public class UploadFileOperation extends SyncOperation {
 
     private OCFile createLocalFolder(String remotePath) {
         String parentPath = new File(remotePath).getParent();
-        parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ?
-                parentPath : parentPath + OCFile.PATH_SEPARATOR;
+        parentPath = parentPath.endsWith(File.separator) ?
+                parentPath : parentPath + File.separator;
         OCFile parent = getStorageManager().getFileByPath(parentPath);
         if (parent == null) {
             parent = createLocalFolder(parentPath);

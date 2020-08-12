@@ -76,7 +76,7 @@ class OCRemoteServerInfoDataSource(
             remoteStatusResult
         }
 
-        if (!ownCloudVersion.isServerVersionSupported) {
+        if (!ownCloudVersion.isServerVersionSupported && !ownCloudVersion.isVersionHidden) {
             throw OwncloudVersionNotSupportedException()
         }
 

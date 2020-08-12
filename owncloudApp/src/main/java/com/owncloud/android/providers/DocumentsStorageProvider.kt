@@ -25,7 +25,6 @@
 package com.owncloud.android.providers
 
 import android.accounts.Account
-import android.annotation.TargetApi
 import android.content.Intent
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
@@ -37,6 +36,7 @@ import android.os.ParcelFileDescriptor
 import android.preference.PreferenceManager
 import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
@@ -357,7 +357,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 //Returns the document id of the document copied at the target destination
                 var newPath = targetParentFile.remotePath + sourceFile.fileName
                 if (sourceFile.isFolder) {
-                    newPath += OCFile.PATH_SEPARATOR
+                    newPath += File.separator
                 }
                 val newFile = getFileByPathOrException(newPath)
                 return newFile.fileId.toString()
@@ -387,7 +387,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 checkOperationResult(result, targetParentFile.fileId.toString())
                 //Returns the document id of the document moved to the target destination
                 var newPath = targetParentFile.remotePath + sourceFile.fileName
-                if (sourceFile.isFolder) newPath += OCFile.PATH_SEPARATOR
+                if (sourceFile.isFolder) newPath += File.separator
                 val newFile = getFileByPathOrException(newPath)
                 return newFile.fileId.toString()
             }
@@ -406,7 +406,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     private fun createFolder(parentDocument: OCFile, displayName: String): String {
-        val newPath = parentDocument.remotePath + displayName + OCFile.PATH_SEPARATOR
+        val newPath = parentDocument.remotePath + displayName + File.separator
 
         if (!FileUtils.isValidName(displayName)) {
             throw UnsupportedOperationException("Folder $displayName contains at least one invalid character")
@@ -463,7 +463,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun initiateStorageMap() {
         for (account in AccountUtils.getAccounts(context)) {
-            val storageManager = FileDataStorageManager(context, account, context.contentResolver)
+            val storageManager = FileDataStorageManager(MainApp.appContext, account, MainApp.appContext.contentResolver)
             val rootDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
             rootIdToStorageManager[rootDir!!.fileId] = storageManager
         }

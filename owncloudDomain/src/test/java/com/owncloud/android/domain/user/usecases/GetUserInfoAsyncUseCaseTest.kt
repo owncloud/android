@@ -20,6 +20,7 @@ package com.owncloud.android.domain.user.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.user.UserRepository
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_INFO
 import io.mockk.every
 import io.mockk.spyk
@@ -32,24 +33,24 @@ import org.junit.Test
 
 class GetUserInfoAsyncUseCaseTest {
     private val userRepository: UserRepository = spyk()
-    private val useCase = GetUserInfoAsyncUseCase((userRepository))
-    private val useCaseParams = Unit
+    private val useCase = GetUserInfoAsyncUseCase(userRepository)
+    private val useCaseParams = GetUserInfoAsyncUseCase.Params(OC_ACCOUNT_NAME)
 
     @Test
     fun getUserInfoSuccess() {
-        every { userRepository.getUserInfo() } returns OC_USER_INFO
+        every { userRepository.getUserInfo(OC_ACCOUNT_NAME) } returns OC_USER_INFO
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertFalse(useCaseResult.isError)
         assertEquals(OC_USER_INFO, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { userRepository.getUserInfo() }
+        verify(exactly = 1) { userRepository.getUserInfo(OC_ACCOUNT_NAME) }
     }
 
     @Test
     fun getUserInfoWithUnauthorizedException() {
-        every { userRepository.getUserInfo() } throws UnauthorizedException()
+        every { userRepository.getUserInfo(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -59,6 +60,6 @@ class GetUserInfoAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { userRepository.getUserInfo() }
+        verify(exactly = 1) { userRepository.getUserInfo(OC_ACCOUNT_NAME) }
     }
 }

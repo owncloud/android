@@ -74,12 +74,12 @@ The third party software included and used by this project is:
     Included in the ownCloud client APK.
     See https://github.com/google/gson
 
- * OkHttp, version 3.10
+ * OkHttp, version 4.6.0
    Licensed under Apache License, Version 2.0.
    Included in the ownCloud client APK.
    See https://github.com/square/okhttp
 
- * Dav4Android
+ * Dav4Jvm
    Licensed under Mozilla Public License, Version 2.0.
    Included in the ownCloud client APK.
-   See https://gitlab.com/bitfireAT/dav4android
+   See https://gitlab.com/bitfireAT/dav4jvm

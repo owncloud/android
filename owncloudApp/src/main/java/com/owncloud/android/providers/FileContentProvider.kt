@@ -160,7 +160,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
             ROOT_DIRECTORY ->
                 count = db.delete(ProviderTableMeta.FILE_TABLE_NAME, where, whereArgs)
-            SHARES -> count = OwncloudDatabase.getDatabase(context).shareDao().deleteShare(uri.pathSegments[1].toLong())
+            SHARES -> count =
+                OwncloudDatabase.getDatabase(MainApp.appContext).shareDao().deleteShare(uri.pathSegments[1].toLong())
             CAPABILITIES -> count = db.delete(ProviderTableMeta.CAPABILITIES_TABLE_NAME, where, whereArgs)
             UPLOADS -> count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs)
             CAMERA_UPLOADS_SYNC -> count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs)
@@ -178,7 +179,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         }
     }
 
-    override fun insert(uri: Uri, values: ContentValues): Uri? {
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
         val newUri: Uri?
         val db = dbHelper.writableDatabase
         db.beginTransaction()
@@ -192,15 +193,21 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return newUri
     }
 
-    private fun insert(db: SQLiteDatabase, uri: Uri, values: ContentValues): Uri {
+    private fun insert(db: SQLiteDatabase, uri: Uri, values: ContentValues?): Uri {
         when (uriMatcher.match(uri)) {
             ROOT_DIRECTORY, SINGLE_FILE -> {
-                val remotePath = values.getAsString(ProviderTableMeta.FILE_PATH)
-                val accountName = values.getAsString(ProviderTableMeta.FILE_ACCOUNT_OWNER)
+                val remotePath = values?.getAsString(ProviderTableMeta.FILE_PATH)
+                val accountName = values?.getAsString(ProviderTableMeta.FILE_ACCOUNT_OWNER)
                 val projection =
                     arrayOf(ProviderTableMeta._ID, ProviderTableMeta.FILE_PATH, ProviderTableMeta.FILE_ACCOUNT_OWNER)
                 val where = "${ProviderTableMeta.FILE_PATH}=? AND ${ProviderTableMeta.FILE_ACCOUNT_OWNER}=?"
-                val whereArgs = arrayOf(remotePath, accountName)
+                val whereArgs = arrayOf<String>()
+
+                arrayListOf<String>().apply {
+                    remotePath?.let { add(it) }
+                    accountName?.let { add(it) }
+                }.toArray(whereArgs)
+
                 val doubleCheck = query(uri, projection, where, whereArgs, null)
                 // ugly patch; serious refactorization is needed to reduce work in
                 // FileDataStorageManager and bring it to FileContentProvider
@@ -220,12 +227,15 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
             SHARES -> {
-                val shareId = OwncloudDatabase.getDatabase(context).shareDao().insert(
-                    OCShareEntity.fromContentValues(values)
-                )
+                val shareId = values?.let {
+                    OwncloudDatabase.getDatabase(MainApp.appContext).shareDao().insert(
+                        OCShareEntity.fromContentValues(it)
+                    )
+                } ?: 0
 
                 if (shareId <= 0) throw SQLException("ERROR $uri")
                 return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_SHARE, shareId)
+
             }
 
             CAPABILITIES -> {
@@ -341,7 +351,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     ).create()
 
                 // To use full SQL queries within Room
-                val newDb: SupportSQLiteDatabase = OwncloudDatabase.getDatabase(context).openHelper.writableDatabase
+                val newDb: SupportSQLiteDatabase =
+                    OwncloudDatabase.getDatabase(MainApp.appContext).openHelper.writableDatabase
                 return newDb.query(supportSqlQuery)
             }
             CAPABILITIES -> {
@@ -445,7 +456,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         }
     }
 
-    override fun update(uri: Uri, values: ContentValues, selection: String?, selectionArgs: Array<String>?): Int {
+    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
         val count: Int
         val db = dbHelper.writableDatabase
         db.beginTransaction()
@@ -462,7 +473,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
     private fun update(
         db: SQLiteDatabase,
         uri: Uri,
-        values: ContentValues,
+        values: ContentValues?,
         selection: String?,
         selectionArgs: Array<String>?
     ): Int {
@@ -471,8 +482,10 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         }
         when (uriMatcher.match(uri)) {
             DIRECTORY -> return 0 //updateFolderSize(db, selectionArgs[0]);
-            SHARES -> return OwncloudDatabase.getDatabase(context!!).shareDao()
-                .update(OCShareEntity.fromContentValues(values)).toInt()
+            SHARES -> return values?.let {
+                OwncloudDatabase.getDatabase(context!!).shareDao()
+                    .update(OCShareEntity.fromContentValues(it)).toInt()
+            } ?: 0
             CAPABILITIES -> return db.update(
                 ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs
             )
@@ -515,7 +528,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return results
     }
 
-    private inner class DataBaseHelper internal constructor(context: Context) :
+    private inner class DataBaseHelper internal constructor(context: Context?) :
         SQLiteOpenHelper(
             context,
             ProviderMeta.DB_NAME,

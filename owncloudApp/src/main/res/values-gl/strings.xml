@@ -88,7 +88,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="auth_failure_snackbar">Produciuse un fallo na autenticación.</string>
   <string name="server_not_supported">A súa versión do servidor é inferior a 10, polo que non é compatíbel, actualice o servidor a versión máis recente</string>
   <string name="auth_failure_snackbar_action">Cambiar a conta</string>
-  <string name="auth_oauth_failure">A marca de acceso caducou ou non é válida. Inicie sesión de novo para recuperar o acceso</string>
+  <string name="auth_oauth_failure">O testemuño de acceso caducou ou non é válido. Inicie sesión de novo para recuperar o acceso</string>
   <string name="auth_oauth_failure_snackbar_action">Rexistrarse</string>
   <string name="auth_check_server">Comprobar servidor</string>
   <string name="auth_host_url">Enderezo do servidor https://…</string>
@@ -490,7 +490,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="action_switch_grid_view">Ver como grella</string>
   <string name="action_switch_list_view">Ver como lista</string>
   <string name="manage_space_title">Administrar o espazo</string>
-  <string name="manage_space_description">Van ser eliminados permanentemente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
+  <string name="manage_space_description">Van ser eliminados de xeito permanente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
   <string name="manage_space_clear_data">Limpar os datos</string>
   <string name="manage_space_error">Algúns ficheiros non puideron seren eliminados.</string>
   <string name="permission_storage_access">Requirense permisos adicionais para enviar e descargar ficheiros.</string>
@@ -552,6 +552,10 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_4_text">As súas imaxes ou vídeos enviaranse automaticamente</string>
   <string name="welcome_feature_5_title">Fluxo de vídeo</string>
   <string name="welcome_feature_5_text">Reproduza os seus vídeos sen descargalos</string>
+  <string name="welcome_feature_6_title">Nova barra de navegación inferior</string>
+  <string name="welcome_feature_6_text">Acceso máis sinxelo e rápido aos seus ficheiros e ligazóns dispoñíbeis sen conexión</string>
+  <string name="welcome_feature_7_title">Compatibilidade con OpenID Connect</string>
+  <string name="welcome_feature_7_text">Conéctese aos seus servidores ownCloud dun xeito máis seguro con OpenID Connect</string>
   <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
   <string name="common_not_found">non foi atopado</string>
   <string name="supports_oauth2_error">Non foi posible saber se OAuth2 é compatíbel</string>

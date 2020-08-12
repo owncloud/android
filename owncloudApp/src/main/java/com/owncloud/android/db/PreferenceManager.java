@@ -118,14 +118,14 @@ public abstract class PreferenceManager {
         );
         String uploadPath = prefs.getString(
                 PREF__CAMERA_PICTURE_UPLOADS_PATH,
-                PREF__CAMERA_UPLOADS_DEFAULT_PATH + OCFile.PATH_SEPARATOR
+                PREF__CAMERA_UPLOADS_DEFAULT_PATH + File.separator
         );
         result.setUploadPathForPictures(
                 uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
         );
         uploadPath = prefs.getString(
                 PREF__CAMERA_VIDEO_UPLOADS_PATH,
-                PREF__CAMERA_UPLOADS_DEFAULT_PATH + OCFile.PATH_SEPARATOR
+                PREF__CAMERA_UPLOADS_DEFAULT_PATH + File.separator
         );
         result.setUploadPathForVideos(
                 uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator

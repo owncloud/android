@@ -196,7 +196,7 @@ class PublicShareDialogFragment : DialogFragment() {
                 else -> view.shareViaLinkEditPermissionReadOnly.isChecked = true
             }
 
-            publicShare?.isPasswordProtected?.let {
+            if (publicShare?.isPasswordProtected == true) {
                 setPasswordSwitchChecked(view, true)
                 view.shareViaLinkPasswordValue?.visibility = View.VISIBLE
                 view.shareViaLinkPasswordValue?.hint = getString(R.string.share_via_link_default_password)
@@ -235,7 +235,7 @@ class PublicShareDialogFragment : DialogFragment() {
         val publicLinkExpirationDateInMillis = expirationDateValueInMillis
 
         val publicLinkPermissions: Int
-        var publicUploadPermission: Boolean
+        val publicUploadPermission: Boolean
 
         when (shareViaLinkEditPermissionGroup?.checkedRadioButtonId) {
             R.id.shareViaLinkEditPermissionUploadFiles -> {
@@ -569,7 +569,7 @@ class PublicShareDialogFragment : DialogFragment() {
                 )
                 dialog.setDatePickerListener(this)
                 dialog.show(
-                    activity!!.supportFragmentManager,
+                    requireActivity().supportFragmentManager,
                     ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
                 )
             } else {
@@ -593,7 +593,7 @@ class PublicShareDialogFragment : DialogFragment() {
             )
             dialog.setDatePickerListener(this)
             dialog.show(
-                activity!!.supportFragmentManager,
+                requireActivity().supportFragmentManager,
                 ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
             )
         }
