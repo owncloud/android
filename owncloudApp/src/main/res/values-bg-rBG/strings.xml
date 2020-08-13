@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Профили</string>
   <string name="prefs_manage_accounts">Управление на профилите</string>
   <string name="prefs_passcode">Заключваща парола</string>
+  <string name="prefs_biometric">Биометрично заключване</string>
   <string name="prefs_biometric_summary">Активирайте парола или схема за заключване за да активирате тази опция</string>
   <string name="prefs_touches_with_other_visible_windows">Докосване с други видими прозорци</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешаване на докосвания, когато изгледът е затъмнен от друг видим прозорец. Разрешете да използва приложения за филтриране на светлината.</string>
@@ -78,6 +79,8 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Файлове</string>
   <string name="bottom_nav_uploads">Качвания</string>
+  <string name="bottom_nav_offline">Офлайн</string>
+  <string name="bottom_nav_links">Връзки</string>
   <string name="recommend_subject">Опитай %1$s на смартфона си!</string>
   <string name="recommend_text">Бих желал да те поканя да ползваш %1$s на своя смартфон!\nИзтеглия я от тук:%2$s</string>
   <string name="error_reason">защото</string>
@@ -227,6 +230,10 @@
   <string name="pass_code_wrong">Грешна парола</string>
   <string name="pass_code_removed">Паролата е премахната</string>
   <string name="pass_code_stored">Паролата е запаметена</string>
+  <string name="biometric_not_hardware_detected">Това устройство не поддържа биометрична автенификация.</string>
+  <string name="biometric_not_enrolled">Регистрирайте поне един брой биометрични данни за да използвате тази  функция</string>
+  <string name="biometric_prompt_title">Биометричен вход</string>
+  <string name="biometric_prompt_subtitle">Вход чрез биометрични данни</string>
   <string name="media_notif_ticker">%1$s музикален плеър</string>
   <string name="media_state_playing">%1$s (изпълнява се)</string>
   <string name="media_state_loading">%1$s (се зарежда)</string>
@@ -544,6 +551,12 @@
   <string name="welcome_feature_4_text">Вашите снимки/видеоклипове се качват автоматично</string>
   <string name="welcome_feature_5_title">Видео поток</string>
   <string name="welcome_feature_5_text">Възпроизвеждайте видеоклиповете си без да ги изтегляте</string>
+  <string name="welcome_feature_6_title">Нова долна навигационна лента</string>
+  <string name="welcome_feature_6_text">Бърз и лесен достъп до вашите налични офлайн файлове и връзки</string>
+  <string name="welcome_feature_7_title">Поддръжа за OpenID Connect</string>
+  <string name="welcome_feature_7_text">Свържете вашите ownCloud сървъри по по-сигурен начин с OpenID Connect</string>
   <string name="no_borwser_installed_alert">Не е инсталиран браузър. Моля, инсталирайте браузър за да имате достъп до сигурно влизане.</string>
   <string name="common_not_found">не беше намерен</string>
+  <string name="supports_oauth2_error">Не беше възможно да се разбере дали OAuth2 се поддържа</string>
+  <string name="get_base_url_error">Не беше възможно да се открие базовият URL адрес на сървъра</string>
 </resources>
