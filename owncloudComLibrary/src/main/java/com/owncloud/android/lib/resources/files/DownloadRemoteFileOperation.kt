@@ -61,10 +61,10 @@ class DownloadRemoteFileOperation(
     override fun run(client: OwnCloudClient): RemoteOperationResult<Any> {
         var result: RemoteOperationResult<Any>
 
-        /// download will be performed to a temporal file, then moved to the final location
+        // download will be performed to a temporal file, then moved to the final location
         val tmpFile = File(tmpPath)
 
-        /// perform the download
+        // perform the download
         try {
             tmpFile.mkdirs()
             result = downloadFile(client, tmpFile)
@@ -145,15 +145,15 @@ class DownloadRemoteFileOperation(
                     // TODO some kind of error control!
                 }
 
-            } else if (status != FORBIDDEN_ERROR && status != SERVICE_UNAVAILABLE_ERROR) {
+            } else if (status != HttpConstants.HTTP_FORBIDDEN && status != HttpConstants.HTTP_SERVICE_UNAVAILABLE) {
                 client.exhaustResponse(getMethod.getResponseBodyAsStream())
             } // else, body read by RemoteOperationResult constructor
 
             result =
                 if (isSuccess(status)) {
-                    RemoteOperationResult<Any>(RemoteOperationResult.ResultCode.OK)
+                    RemoteOperationResult(RemoteOperationResult.ResultCode.OK)
                 } else {
-                    RemoteOperationResult<Any>(getMethod)
+                    RemoteOperationResult(getMethod)
                 }
         } finally {
             fos?.close()
@@ -179,11 +179,6 @@ class DownloadRemoteFileOperation(
 
     fun cancel() {
         mCancellationRequested.set(true) // atomic set; there is no need of synchronizing it
-    }
-
-    companion object {
-        private const val FORBIDDEN_ERROR = 403
-        private const val SERVICE_UNAVAILABLE_ERROR = 503
     }
 
 }
