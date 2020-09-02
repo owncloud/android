@@ -62,7 +62,6 @@ import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.RemoveChunksFolderOperation;
@@ -211,8 +210,7 @@ public class FileUploader extends Service
             String description = getString(R.string.upload_notification_channel_description);
             // Set importance low: show the notification everywhere but with no sound
             int importance = NotificationManager.IMPORTANCE_LOW;
-            notificationChannel = new NotificationChannel(UPLOAD_NOTIFICATION_CHANNEL_ID,
-                    name, importance);
+            notificationChannel = new NotificationChannel(UPLOAD_NOTIFICATION_CHANNEL_ID, name, importance);
             // Configure the notification channel.
             notificationChannel.setDescription(description);
             getNotificationManager().createNotificationChannel(notificationChannel);
