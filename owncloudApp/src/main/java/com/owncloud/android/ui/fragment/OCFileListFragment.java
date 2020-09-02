@@ -980,6 +980,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * @param directory File to be listed
      */
     public void listDirectory(OCFile directory) {
+        if (mContainerActivity == null) {
+            Timber.e("No container activity attached");
+            return;
+        }
+
         FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
         if (storageManager != null) {
 
