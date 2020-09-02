@@ -72,6 +72,11 @@ public class AvailableOfflineSyncJobService extends JobService {
             Account account =
                     AccountUtils.getCurrentOwnCloudAccount(mAvailableOfflineJobService.getApplicationContext());
 
+            if (mAvailableOfflineJobService.getContentResolver() == null) {
+                Timber.w("Content resolver is null, do not sync av. offline files.");
+                return jobParams[0];
+            }
+
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
                     mAvailableOfflineJobService, account, mAvailableOfflineJobService.getContentResolver()
             );
