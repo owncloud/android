@@ -66,7 +66,7 @@ class DownloadRemoteFileOperation(
 
         // perform the download
         try {
-            tmpFile.mkdirs()
+            tmpFile.parentFile?.mkdirs()
             result = downloadFile(client, tmpFile)
             Timber.i("Download of $remotePath to $tmpPath: ${result.logMessage}")
         } catch (e: Exception) {
