@@ -1040,7 +1040,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 Timber.i("SQL : Entering in the #32 DROP quotas and avatars table and use room database")
                 db.beginTransaction()
                 try {
-                    // Drop old quotas table from old database
+                    // Drop quotas and avatars from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.USER_QUOTAS_TABLE_NAME + ";")
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.USER_AVATARS__TABLE_NAME + ";")
                     db.setTransactionSuccessful()
