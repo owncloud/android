@@ -1036,6 +1036,20 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
 
+            if (oldVersion < 32 && newVersion >= 32) {
+                Timber.i("SQL : Entering in the #32 DROP quotas and avatars table and use room database")
+                db.beginTransaction()
+                try {
+                    // Drop quotas and avatars from old database
+                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.USER_QUOTAS_TABLE_NAME + ";")
+                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.USER_AVATARS__TABLE_NAME + ";")
+                    db.setTransactionSuccessful()
+                    upgraded = true
+                } finally {
+                    db.endTransaction()
+                }
+            }
+
             if (!upgraded) {
                 Timber.i("SQL : OUT of the ADD in onUpgrade; oldVersion == $oldVersion, newVersion == $newVersion")
             }
