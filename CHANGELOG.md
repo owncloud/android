@@ -1,3 +1,11 @@
+## 2.15.2 (September 2020)
+- Update logcat library
+- Bug fixes, including:
+  + Fixed a crash when browsing up
+  + Fixed a crash when logging camera upload request
+  + Fixed a crash related with available offline files
+  + Fixed a crash related with database migration
+
 ## 2.15.1 (July 2020)
 - Android 10: TLS 1.3 supported
 - Update network libraries to more recent versions, OkHttp + dav4jvm (old dav4Android)

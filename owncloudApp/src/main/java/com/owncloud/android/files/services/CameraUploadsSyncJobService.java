@@ -213,7 +213,11 @@ public class CameraUploadsSyncJobService extends JobService {
             // Update timestamps once the first picture/video has been enqueued
             updateTimestamps(isImage, isVideo, localFile.lastModified());
 
-            Timber.i("Requested upload of %1s to %2s in %3s", localPath, remotePath, mAccount.name);
+            if (mAccount != null) {
+                Timber.i("Requested upload of %1s to %2s in %3s", localPath, remotePath, mAccount.name);
+            } else {
+                Timber.w("Requested upload of %1s to %2s with no account!!", localPath, remotePath);
+            }
         }
 
         /**

@@ -42,10 +42,8 @@ class OCSettingsPrivacyPolicyTest {
     @JvmField
     val activityRule = ActivityTestRule(PrivacyPolicyActivity::class.java, true, true)
 
-    private val introductionID = "introduction"
-    private val contentID = "content"
-    private val introductionText = "Privacy & Legal"
-    private val contentText = "Privacy Policy"
+    private val introductionID = "et-main-area"
+    private val introductionText = "Imprint"
 
     @Before
     fun setUp() {
@@ -65,7 +63,5 @@ class OCSettingsPrivacyPolicyTest {
     fun privacyPolicyLoaded() {
         onWebView().withElement(findElement(Locator.ID, introductionID))
             .check(webMatches(getText(), containsString(introductionText)))
-        onWebView().withElement(findElement(Locator.ID, contentID))
-            .check(webMatches(getText(), containsString(contentText)))
     }
 }
