@@ -45,6 +45,7 @@ import androidx.core.util.Pair
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.datamodel.OCCapabilityMapper.createCapabilityInstance
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.*
 import com.owncloud.android.datamodel.OCFile.ROOT_PATH
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.*
@@ -1333,141 +1334,6 @@ class FileDataStorageManager {
                 capability = createCapabilityInstance(cursor)
             }
             cursor.close()
-        }
-        return capability
-    }
-
-    private fun createCapabilityInstance(c: Cursor?): OCCapability? {
-        var capability: OCCapability? = null
-        if (c != null) {
-            capability = OCCapability(
-                accountName = c.getString(c.getColumnIndex(CAPABILITIES_ACCOUNT_NAME)),
-                versionMayor = c.getInt(c.getColumnIndex(CAPABILITIES_VERSION_MAYOR)),
-                versionMinor = c.getInt(c.getColumnIndex(CAPABILITIES_VERSION_MINOR)),
-                versionMicro = c.getInt(c.getColumnIndex(CAPABILITIES_VERSION_MICRO)),
-                versionString = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_STRING)),
-                versionEdition = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
-                corePollInterval = c.getInt(c.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
-                davChunkingVersion = c.getString(c.getColumnIndex(CAPABILITIES_DAV_CHUNKING_VERSION)) ?: "",
-                filesSharingApiEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_API_ENABLED
-                        )
-                    )
-                ),
-                filesSharingPublicEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_ENABLED
-                        )
-                    )
-                ),
-                filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED
-                        )
-                    )
-                ),
-                filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY
-                        )
-                    )
-                ),
-                filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE
-                        )
-                    )
-                ),
-                filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY
-                        )
-                    )
-                ),
-                filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED
-                        )
-                    )
-                ),
-                filesSharingPublicExpireDateDays = c.getInt(
-                    c.getColumnIndex(
-                        CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
-                    )
-                ),
-                filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
-                        )
-                    )
-                ),
-                filesSharingPublicUpload = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_UPLOAD
-                        )
-                    )
-                ),
-                filesSharingPublicMultiple = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_MULTIPLE
-                        )
-                    )
-                ),
-                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-                        )
-                    )
-                ),
-                filesSharingResharing = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_RESHARING
-                        )
-                    )
-                ),
-                filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_FEDERATION_OUTGOING
-                        )
-                    )
-                ),
-                filesSharingFederationIncoming = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_FEDERATION_INCOMING
-                        )
-                    )
-                ),
-                filesBigFileChunking = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_FILES_BIGFILECHUNKING
-                        )
-                    )
-                ),
-                filesUndelete = CapabilityBooleanType.fromValue(c.getInt(c.getColumnIndex(CAPABILITIES_FILES_UNDELETE))),
-                filesVersioning = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_FILES_VERSIONING
-                        )
-                    )
-                )
-            )
         }
         return capability
     }
