@@ -45,65 +45,9 @@ import androidx.core.util.Pair
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.fromValue
+import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.*
 import com.owncloud.android.datamodel.OCFile.ROOT_PATH
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_UNDELETE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_VERSIONING
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_EDITION
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_STRING
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_CAPABILITIES
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_DIR
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_FILE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_CONTENT_LENGTH
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_CONTENT_TYPE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_CREATION
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ETAG
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ETAG_IN_CONFLICT
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_IS_DOWNLOADING
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_KEEP_IN_SYNC
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_MODIFIED
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_NAME
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PARENT
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PATH
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PERMISSIONS
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PRIVATE_LINK
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_REMOTE_ID
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_SHARED_VIA_LINK
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_SHARED_WITH_SHAREE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_STORAGE_PATH
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_TREE_ETAG
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBNAIL
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta._ID
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.*
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.lib.resources.status.RemoteCapability
@@ -684,7 +628,7 @@ class FileDataStorageManager {
                             // maybe unnecessary, but should be checked TODO remove if unnecessary
                             file.storagePath = null
                             saveFile(file)
-                            saveConflict(file, null)
+                            resolveConflict(file)
                         }
                     }
                 }
@@ -1160,18 +1104,26 @@ class FileDataStorageManager {
         }
     }
 
+    /**
+     * Resolves previously set conflicts.
+     * safe blanket: sync'ing a not in-conflict file will clean wrong conflict markers in ancestors
+     */
+    fun resolveConflict(file: OCFile) {
+        saveConflict(file, null)
+    }
+
     fun saveConflict(file: OCFile, eTagInConflictFromParameter: String?) {
         var eTagInConflict = eTagInConflictFromParameter
         if (!file.isDown) {
             eTagInConflict = null
         }
-        val cv = ContentValues()
-        cv.put(FILE_ETAG_IN_CONFLICT, eTagInConflict)
+        val contentValues = ContentValues()
+        contentValues.put(FILE_ETAG_IN_CONFLICT, eTagInConflict)
         val updated =
             try {
                 performUpdate(
                     uri = CONTENT_URI_FILE,
-                    contentValues = cv,
+                    contentValues = contentValues,
                     where = "$_ID=?",
                     selectionArgs = arrayOf(file.fileId.toString())
                 )
@@ -1181,95 +1133,102 @@ class FileDataStorageManager {
             }
 
         Timber.d("Number of files updated with CONFLICT: $updated")
-
         if (updated > 0) {
             if (eTagInConflict != null) {
-                /// set conflict in all ancestor folders
-
-                var parentId = file.parentId
-                val ancestorIds = HashSet<String>()
-                while (parentId != ROOT_PARENT_ID.toLong()) {
-                    ancestorIds.add(parentId.toString())
-                    parentId = getFileById(parentId)!!.parentId
-                }
-
-                if (ancestorIds.size > 0) {
-                    val whereBuffer = StringBuffer()
-                    whereBuffer.append(_ID).append(" IN (")
-                    for (i in 0 until ancestorIds.size - 1) {
-                        whereBuffer.append("?,")
-                    }
-                    whereBuffer.append("?")
-                    whereBuffer.append(")")
-
-                    try {
-                        performUpdate(
-                            uri = CONTENT_URI_FILE,
-                            contentValues = cv,
-                            where = whereBuffer.toString(),
-                            selectionArgs = ancestorIds.toTypedArray()
-                        )
-                    } catch (e: RemoteException) {
-                        Timber.e(e, "Failed saving conflict in database ${e.message}")
-                    }
-                } // else file is ROOT folder, no parent to set in conflict
-
+                updateConflictInSubFolder(file, contentValues)
             } else {
-                /// update conflict in ancestor folders
-                // (not directly unset; maybe there are more conflicts below them)
-                var parentPath = file.remotePath
-                if (parentPath.endsWith(File.separator)) {
-                    parentPath = parentPath.substring(0, parentPath.length - 1)
-                }
-                parentPath = parentPath.substring(0, parentPath.lastIndexOf(File.separator) + 1)
-
-                Timber.d("checking parents to remove conflict; STARTING with $parentPath")
-                while (parentPath.isNotEmpty()) {
-
-                    val whereForDescendantsInConflict = FILE_ETAG_IN_CONFLICT + " IS NOT NULL AND " +
-                            FILE_CONTENT_TYPE + " != 'DIR' AND " +
-                            FILE_ACCOUNT_OWNER + " = ? AND " +
-                            FILE_PATH + " LIKE ?"
-                    val descendantsInConflict: Cursor? =
-                        try {
-                            performQuery(
-                                uri = CONTENT_URI_FILE,
-                                projection = arrayOf(_ID),
-                                selection = whereForDescendantsInConflict,
-                                selectionArgs = arrayOf(account.name, "$parentPath%"),
-                                sortOrder = null
-                            )
-                        } catch (e: RemoteException) {
-                            Timber.e(e, "Failed querying for descendants in conflict ${e.message}")
-                            null
-                        }
-
-                    if (descendantsInConflict == null || descendantsInConflict.count == 0) {
-                        Timber.d("NO MORE conflicts in $parentPath")
-
-                        try {
-                            performUpdate(
-                                uri = CONTENT_URI_FILE,
-                                contentValues = cv,
-                                where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
-                                selectionArgs = arrayOf(account.name, parentPath)
-                            )
-                        } catch (e: RemoteException) {
-                            Timber.e(e, "Failed saving conflict in database ${e.message}")
-                        }
-
-                    } else {
-                        Timber.d("STILL ${descendantsInConflict.count} in $parentPath")
-                    }
-
-                    descendantsInConflict?.close()
-
-                    parentPath = parentPath.substring(0, parentPath.length - 1)  // trim last /
-                    parentPath = parentPath.substring(0, parentPath.lastIndexOf(File.separator) + 1)
-                    Timber.d("checking parents to remove conflict; NEXT $parentPath")
-                }
+                updateConflictInAncestorFolder(file, contentValues)
             }
         }
+    }
+
+    private fun updateConflictInSubFolder(file: OCFile, contentValues: ContentValues?) {
+        // set conflict in all ancestor folders
+
+        var parentId = file.parentId
+        val ancestorIds = HashSet<String>()
+        while (parentId != ROOT_PARENT_ID.toLong()) {
+            ancestorIds.add(parentId.toString())
+            parentId = getFileById(parentId)!!.parentId
+        }
+
+        if (ancestorIds.size > 0) {
+            val whereBuffer = StringBuffer()
+            whereBuffer.append(_ID).append(" IN (")
+            for (i in 0 until ancestorIds.size - 1) {
+                whereBuffer.append("?,")
+            }
+            whereBuffer.append("?)")
+
+            try {
+                performUpdate(
+                    uri = CONTENT_URI_FILE,
+                    contentValues = contentValues,
+                    where = whereBuffer.toString(),
+                    selectionArgs = ancestorIds.toTypedArray()
+                )
+            } catch (e: RemoteException) {
+                Timber.e(e, "Failed saving conflict in database ${e.message}")
+            }
+        } // else file is ROOT folder, no parent to set in conflict
+    }
+
+    private fun updateConflictInAncestorFolder(file: OCFile, contentValues: ContentValues?) {
+        /// update conflict in ancestor folders
+        // (not directly unset; maybe there are more conflicts below them)
+        var parentPath = getParentPath(file.remotePath)
+        Timber.d("checking parents to remove conflict; STARTING with $parentPath")
+        while (parentPath.isNotEmpty()) {
+
+            val whereForDescendantsInConflict = FILE_ETAG_IN_CONFLICT + " IS NOT NULL AND " +
+                    FILE_CONTENT_TYPE + " != 'DIR' AND " +
+                    FILE_ACCOUNT_OWNER + " = ? AND " +
+                    FILE_PATH + " LIKE ?"
+            val descendantsInConflict: Cursor? =
+                try {
+                    performQuery(
+                        uri = CONTENT_URI_FILE,
+                        projection = arrayOf(_ID),
+                        selection = whereForDescendantsInConflict,
+                        selectionArgs = arrayOf(account.name, "$parentPath%"),
+                        sortOrder = null
+                    )
+                } catch (e: RemoteException) {
+                    Timber.e(e, "Failed querying for descendants in conflict ${e.message}")
+                    null
+                }
+
+            if (descendantsInConflict == null || descendantsInConflict.count == -1) {
+                Timber.d("NO MORE conflicts in $parentPath")
+
+                try {
+                    performUpdate(
+                        uri = CONTENT_URI_FILE,
+                        contentValues = contentValues,
+                        where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
+                        selectionArgs = arrayOf(account.name, parentPath)
+                    )
+                } catch (e: RemoteException) {
+                    Timber.e(e, "Failed saving conflict in database ${e.message}")
+                }
+
+            } else {
+                Timber.d("STILL ${descendantsInConflict.count} in $parentPath")
+            }
+
+            descendantsInConflict?.close()
+
+            parentPath = getParentPath(parentPath)
+            Timber.d("checking parents to remove conflict; NEXT $parentPath")
+        }
+    }
+
+    fun getParentPath(childPath: String): String {
+        var parentPath = childPath
+        if (parentPath.endsWith(File.separator)) {
+            parentPath = parentPath.substring(0, parentPath.length - 1)
+        }
+        return parentPath.substring(0, parentPath.lastIndexOf(File.separator) + 1)
     }
 
     fun saveCapabilities(capability: RemoteCapability): RemoteCapability {

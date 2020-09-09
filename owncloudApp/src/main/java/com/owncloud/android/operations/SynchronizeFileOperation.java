@@ -213,7 +213,7 @@ public class SynchronizeFileOperation extends SyncOperation {
 
                 // safe blanket: sync'ing a not in-conflict file will clean wrong conflict markers in ancestors
                 if (result.getCode() != ResultCode.SYNC_CONFLICT) {
-                    getStorageManager().saveConflict(mLocalFile, null);
+                    getStorageManager().resolveConflict(mLocalFile);
                 }
             }
         }
