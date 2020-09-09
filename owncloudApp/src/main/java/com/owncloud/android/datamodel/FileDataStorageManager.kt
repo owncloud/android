@@ -45,11 +45,10 @@ import androidx.core.util.Pair
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.OCCapabilityMapper.createCapabilityInstance
+import com.owncloud.android.datamodel.mapper.OCCapabilityMapper.createCapabilityInstance
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.*
 import com.owncloud.android.datamodel.OCFile.ROOT_PATH
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.*
-import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.utils.FileStorageUtils

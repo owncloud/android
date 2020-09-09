@@ -1,4 +1,4 @@
-package com.owncloud.android.datamodel
+package com.owncloud.android.datamodel.mapper
 
 import android.database.Cursor
 import com.owncloud.android.db.ProviderMeta
