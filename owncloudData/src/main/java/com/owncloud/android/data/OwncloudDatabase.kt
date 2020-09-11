@@ -21,6 +21,7 @@
 
 package com.owncloud.android.data
 
+import MIGRATION_35_36
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.Database
@@ -77,6 +78,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
             MIGRATION_32_33,
             MIGRATION_33_34,
             MIGRATION_34_35,
+            MIGRATION_35_36,
         )
 
         fun getDatabase(
