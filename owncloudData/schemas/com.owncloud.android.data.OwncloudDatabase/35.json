@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 35,
-    "identityHash": "844929a1a87d215b2d997c462e12d7c3",
+    "identityHash": "613a0513f7471c904a95e1738036818f",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -261,13 +261,13 @@
       },
       {
         "tableName": "files",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `owner` TEXT NOT NULL, `parentId` INTEGER, `length` INTEGER NOT NULL, `creationTimestamp` INTEGER NOT NULL, `modifiedTimestamp` INTEGER NOT NULL, `remotePath` TEXT NOT NULL, `mimeType` TEXT NOT NULL, `etag` TEXT NOT NULL, `permissions` TEXT NOT NULL, `remoteId` TEXT NOT NULL, `privateLink` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`parentId` INTEGER, `owner` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `remoteId` TEXT, `length` INTEGER NOT NULL, `creationTimestamp` INTEGER, `modifiedTimestamp` INTEGER NOT NULL, `mimeType` TEXT NOT NULL, `etag` TEXT, `permissions` TEXT, `privateLink` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
-            "fieldPath": "id",
-            "columnName": "id",
+            "fieldPath": "parentId",
+            "columnName": "parentId",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "owner",
@@ -276,9 +276,15 @@
             "notNull": true
           },
           {
-            "fieldPath": "parentId",
-            "columnName": "parentId",
-            "affinity": "INTEGER",
+            "fieldPath": "remotePath",
+            "columnName": "remotePath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remoteId",
+            "columnName": "remoteId",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -291,18 +297,12 @@
             "fieldPath": "creationTimestamp",
             "columnName": "creationTimestamp",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "modifiedTimestamp",
             "columnName": "modifiedTimestamp",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "remotePath",
-            "columnName": "remotePath",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -315,24 +315,24 @@
             "fieldPath": "etag",
             "columnName": "etag",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "permissions",
             "columnName": "permissions",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "remoteId",
-            "columnName": "remoteId",
-            "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "privateLink",
             "columnName": "privateLink",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -485,7 +485,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '844929a1a87d215b2d997c462e12d7c3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '613a0513f7471c904a95e1738036818f')"
     ]
   }
 }
