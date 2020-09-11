@@ -23,4 +23,5 @@ import com.owncloud.android.domain.files.model.OCFile
 
 interface LocalFileDataSource {
     fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
+    fun getFileById(fileId: Long): OCFile?
 }
