@@ -26,6 +26,6 @@ interface FileRepository {
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
 
     fun createFolder(remotePath: String, parentFolder: OCFile)
-    fun refreshFolder(remotePath: String)
     fun getFileById(fileId: Long): OCFile?
+    fun refreshFolder(remotePath: String)
 }
