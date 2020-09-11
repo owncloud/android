@@ -28,23 +28,6 @@ import com.owncloud.android.data.ProviderMeta
 @Dao
 abstract class FileDao {
 
-    companion object {
-        private const val SELECT_FILE_WITH_ID =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE id = :id"
-
-        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :owner " +
-                    "AND remotePath = :remotePath"
-
-        private const val DELETE_FILE_WITH_ID =
-            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE id = :id"
-    }
-
     @Query(SELECT_FILE_WITH_ID)
     abstract fun getFileById(
         id: Long
@@ -80,4 +63,21 @@ abstract class FileDao {
 
     @Query(DELETE_FILE_WITH_ID)
     abstract fun deleteFileWithId(id: Long)
+
+    companion object {
+        private const val SELECT_FILE_WITH_ID =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE id = :id"
+
+        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE owner = :owner " +
+                    "AND remotePath = :remotePath"
+
+        private const val DELETE_FILE_WITH_ID =
+            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE id = :id"
+    }
 }

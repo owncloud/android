@@ -8,9 +8,8 @@ class GetFileByIdUseCase(
     private val fileRepository: FileRepository
 ) : BaseUseCaseWithResult<OCFile?, GetFileByIdUseCase.Params>() {
 
-    override fun run(params: Params): OCFile? {
-        return fileRepository.getFileById(params.fileId)
-    }
+    override fun run(params: Params): OCFile? =
+        fileRepository.getFileById(params.fileId)
 
     data class Params(val fileId: Long)
 

@@ -50,10 +50,10 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     // Authentication
+    factory { GetBaseUrlUseCase(get()) }
     factory { LoginBasicAsyncUseCase(get()) }
     factory { LoginOAuthAsyncUseCase(get()) }
     factory { SupportsOAuth2UseCase(get()) }
-    factory { GetBaseUrlUseCase(get()) }
 
     // OAuth
     factory { OIDCDiscoveryUseCase(get()) }
@@ -67,25 +67,25 @@ val useCaseModule = module {
 
     // Files
     factory { CreateFolderAsyncUseCase(get()) }
-    factory { RefreshFolderFromServerAsyncUseCase(get()) }
     factory { GetFileByIdUseCase(get()) }
+    factory { RefreshFolderFromServerAsyncUseCase(get()) }
 
     // Sharing
+    factory { CreatePrivateShareAsyncUseCase(get()) }
+    factory { CreatePublicShareAsyncUseCase(get()) }
+    factory { DeleteShareAsyncUseCase(get()) }
+    factory { EditPrivateShareAsyncUseCase(get()) }
+    factory { EditPublicShareAsyncUseCase(get()) }
+    factory { GetShareAsLiveDataUseCase(get()) }
     factory { GetShareesAsyncUseCase(get()) }
     factory { GetSharesAsLiveDataUseCase(get()) }
-    factory { GetShareAsLiveDataUseCase(get()) }
     factory { RefreshSharesFromServerAsyncUseCase(get()) }
-    factory { CreatePrivateShareAsyncUseCase(get()) }
-    factory { EditPrivateShareAsyncUseCase(get()) }
-    factory { CreatePublicShareAsyncUseCase(get()) }
-    factory { EditPublicShareAsyncUseCase(get()) }
-    factory { DeleteShareAsyncUseCase(get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }
+    factory { GetUserAvatarAsyncUseCase(get()) }
     factory { GetUserInfoAsyncUseCase(get()) }
     factory { RefreshUserQuotaFromServerAsyncUseCase(get()) }
-    factory { GetUserAvatarAsyncUseCase(get()) }
 
     // Server
     factory { GetServerInfoAsyncUseCase(get()) }

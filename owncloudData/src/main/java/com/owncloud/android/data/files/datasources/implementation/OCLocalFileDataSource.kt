@@ -27,6 +27,10 @@ class OCLocalFileDataSource(
     private val fileDao: FileDao,
     private val ocFileMapper: OCFileMapper
 ) : LocalFileDataSource {
+
+    override fun getFileById(fileId: Long): OCFile? =
+        ocFileMapper.toModel(fileDao.getFileById(fileId))
+
     override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
         // Insert first folder container
         // TODO: If it is root, add 0 as parent Id
@@ -39,7 +43,4 @@ class OCLocalFileDataSource(
         }
     }
 
-    override fun getFileById(fileId: Long): OCFile? {
-        return ocFileMapper.toModel(fileDao.getFileById(fileId))
-    }
 }
