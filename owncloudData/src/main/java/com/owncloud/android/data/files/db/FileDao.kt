@@ -46,7 +46,7 @@ abstract class FileDao {
     }
 
     @Query(SELECT_FILE_WITH_ID)
-    abstract fun getFileWithId(
+    abstract fun getFileById(
         id: Long
     ): OCFileEntity?
 
