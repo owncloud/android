@@ -28,13 +28,14 @@ import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class OCFileRepositoryTest {
 
     private val remoteFileDataSource = mockk<RemoteFileDataSource>(relaxed = true)
     private val localFileDataSource = mockk<LocalFileDataSource>(relaxed = true)
-    private val ocFileRepository: OCFileRepository = OCFileRepository(remoteFileDataSource, localFileDataSource)
+    private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource)
 
     private val folderToFetch = OC_FILE
     private val listOfFilesRetrieved = listOf(
@@ -128,6 +129,54 @@ class OCFileRepositoryTest {
         }
         verify(exactly = 0) {
             localFileDataSource.saveFilesInFolder(any(), OC_FILE)
+        }
+    }
+
+    @Test
+    fun getFileByIdSuccess() {
+        every { localFileDataSource.getFileById(OC_FILE.id!!) } returns OC_FILE
+
+        val ocFile = ocFileRepository.getFileById(OC_FILE.id!!)
+
+        assertEquals(OC_FILE, ocFile)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFileById(OC_FILE.id!!)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun getFileByIdException() {
+        every { localFileDataSource.getFileById(OC_FILE.id!!) } throws Exception()
+
+        ocFileRepository.getFileById(OC_FILE.id!!)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFileById(OC_FILE.id!!)
+        }
+    }
+
+    @Test
+    fun getFileByRemotePathAndOwnerSuccess() {
+        every { localFileDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner) } returns OC_FILE
+
+        ocFileRepository.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun getFileByRemotePathAndOwnerException() {
+        every {
+            localFileDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+        } throws Exception()
+
+        ocFileRepository.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
         }
     }
 }
