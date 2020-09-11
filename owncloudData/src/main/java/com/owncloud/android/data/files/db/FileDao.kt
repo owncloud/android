@@ -34,7 +34,7 @@ abstract class FileDao {
     ): OCFileEntity?
 
     @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH)
-    abstract fun getFileFromOwnerAndRemoteId(
+    abstract fun getFileByOwnerAndRemotePath(
         owner: String,
         remotePath: String
     ): OCFileEntity?
@@ -46,7 +46,7 @@ abstract class FileDao {
     open fun mergeRemoteAndLocalFile(
         ocFileEntity: OCFileEntity
     ): Long {
-        val localFile: OCFileEntity? = getFileFromOwnerAndRemoteId(
+        val localFile: OCFileEntity? = getFileByOwnerAndRemotePath(
             owner = ocFileEntity.owner,
             remotePath = ocFileEntity.remotePath
         )
