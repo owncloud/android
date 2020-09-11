@@ -27,4 +27,5 @@ interface FileRepository {
 
     fun createFolder(remotePath: String, parentFolder: OCFile)
     fun refreshFolder(remotePath: String)
+    fun getFileById(fileId: Long): OCFile?
 }
