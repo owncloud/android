@@ -64,4 +64,8 @@ class OCFileRepository(
             )
         }
     }
+
+    override fun getFileById(fileId: Long): OCFile? =
+        localFileDataSource.getFileById(fileId)
+
 }

@@ -38,4 +38,8 @@ class OCLocalFileDataSource(
             fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(it)!!.apply { parentId = folderId })
         }
     }
+
+    override fun getFileById(fileId: Long): OCFile? {
+        return ocFileMapper.toModel(fileDao.getFileById(fileId))
+    }
 }
