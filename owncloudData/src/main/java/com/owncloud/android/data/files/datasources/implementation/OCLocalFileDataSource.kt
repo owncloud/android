@@ -21,6 +21,7 @@ package com.owncloud.android.data.files.datasources.implementation
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
 import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
 
 class OCLocalFileDataSource(
@@ -40,7 +41,7 @@ class OCLocalFileDataSource(
         }
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
-        fileDao.getFolderImages(folderId = folderId).map {
+        fileDao.getFolderByMimeType(folderId = folderId, mimeType = MIME_PREFIX_IMAGE).map {
             ocFileMapper.toModel(it)!!
         }
 
