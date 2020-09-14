@@ -29,23 +29,24 @@ import org.junit.Test
 
 class CreateFolderAsyncUseCaseTest {
 
-    private val fileRepository: FileRepository = spyk()
-    private val useCase = CreateFolderAsyncUseCase(fileRepository)
+    private val repository: FileRepository = spyk()
+    private val useCase = CreateFolderAsyncUseCase(repository)
     private val useCaseParams = CreateFolderAsyncUseCase.Params("new folder", OC_FILE)
 
     @Test
-    fun createFolderSuccess() {
+    fun `create folder - ok`() {
+        every { repository.createFolder(any(), any()) } returns Unit
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertFalse(useCaseResult.isError)
         Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { fileRepository.createFolder(any(), useCaseParams.parentFile) }
+        verify(exactly = 1) { repository.createFolder(any(), useCaseParams.parentFile) }
     }
 
     @Test
-    fun createFolderWithForbiddenChars() {
+    fun `create folder - ko - forbidden chars`() {
         // Folder name is blank
         var useCaseResult = useCase.execute(useCaseParams.copy(folderName = "   "))
 
@@ -60,17 +61,14 @@ class CreateFolderAsyncUseCaseTest {
     }
 
     @Test
-    fun createFolderWithUnauthorizedException() {
-        every { fileRepository.createFolder(any(), any()) } throws UnauthorizedException()
+    fun `create folder - ko - other exception`() {
+        every { repository.createFolder(any(), any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        Assert.assertFalse(useCaseResult.isSuccess)
         Assert.assertTrue(useCaseResult.isError)
-
-        Assert.assertNull(useCaseResult.getDataOrNull())
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { fileRepository.createFolder(any(), useCaseParams.parentFile) }
+        verify(exactly = 1) { repository.createFolder(any(), useCaseParams.parentFile) }
     }
 }
