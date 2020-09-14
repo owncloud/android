@@ -106,7 +106,10 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBN
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta._ID
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.files.MIME_DIR
+import com.owncloud.android.domain.files.model.MIME_DIR
+import com.owncloud.android.domain.files.model.MIME_PREFIX_AUDIO
+import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
+import com.owncloud.android.domain.files.model.MIME_PREFIX_VIDEO
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.utils.FileStorageUtils
 import timber.log.Timber
@@ -1122,19 +1125,19 @@ class FileDataStorageManager {
         val mimeTypeString = FileStorageUtils.getMimeTypeFromName(path)
         try {
             when {
-                mimeTypeString.startsWith(pathImage) -> // Images
+                mimeTypeString.startsWith(MIME_PREFIX_IMAGE) -> // Images
                     performDelete(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         "${MediaStore.Images.Media.DATA}=?",
                         arrayOf(path)
                     )
-                mimeTypeString.startsWith(pathAudio) -> // Audio
+                mimeTypeString.startsWith(MIME_PREFIX_AUDIO) -> // Audio
                     performDelete(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                         "${MediaStore.Audio.Media.DATA}=?",
                         arrayOf(path)
                     )
-                mimeTypeString.startsWith(pathVideo) -> // Video
+                mimeTypeString.startsWith(MIME_PREFIX_VIDEO) -> // Video
                     performDelete(
                         MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                         "${MediaStore.Video.Media.DATA}=?",
@@ -1567,8 +1570,5 @@ class FileDataStorageManager {
 
     companion object {
         const val ROOT_PARENT_ID = 0
-        private const val pathAudio = "audio/"
-        private const val pathVideo = "video/"
-        private const val pathImage = "image/"
     }
 }

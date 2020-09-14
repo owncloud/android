@@ -20,7 +20,7 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.domain.files.MIME_DIR
+import com.owncloud.android.domain.files.model.MIME_DIR
 
 object AppTestUtil {
     /**

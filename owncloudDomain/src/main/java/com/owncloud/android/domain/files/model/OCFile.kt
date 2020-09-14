@@ -21,7 +21,9 @@
 package com.owncloud.android.domain.files.model
 
 import android.os.Parcelable
+import android.webkit.MimeTypeMap
 import kotlinx.android.parcel.Parcelize
+import java.util.Locale
 
 //TODO: Add new attributes on demand. Let's try to perform a clean up :)
 @Parcelize
@@ -45,7 +47,44 @@ data class OCFile(
      *
      * @return true if it is a folder
      */
-    fun isFolder() = mimeType == MIME_DIR || mimeType == MIME_DIR_UNIX
+    val isFolder
+        get() = mimeType == MIME_DIR || mimeType == MIME_DIR_UNIX
+
+    /**
+     * @return 'True' if the file contains audio
+     */
+    val isAudio: Boolean
+        get() = isOfType(MIME_PREFIX_AUDIO)
+
+    /**
+     * @return 'True' if the file contains video
+     */
+    val isVideo: Boolean
+        get() = isOfType(MIME_PREFIX_VIDEO)
+
+    /**
+     * @return 'True' if the file contains an image
+     */
+    val isImage: Boolean
+        get() = isOfType(MIME_PREFIX_IMAGE)
+
+    /**
+     * @return 'True' if the file is simple text (e.g. not application-dependent, like .doc or .docx)
+     */
+    val isText: Boolean
+        get() = isOfType(MIME_PREFIX_TEXT)
+
+    /**
+     * @param   type        Type to match in the file MIME type; it's MUST include the trailing "/"
+     * @return              'True' if the file MIME type matches the received parameter in the type part.
+     */
+    private fun isOfType(type: String): Boolean =
+        mimeType.startsWith(type) || getMimeTypeFromName()?.startsWith(type) ?: false
+
+    private fun getMimeTypeFromName(): String? {
+        val extension = remotePath.substringAfterLast('.').toLowerCase(Locale.ROOT)
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+    }
 
     companion object {
         const val PATH_SEPARATOR = '/'

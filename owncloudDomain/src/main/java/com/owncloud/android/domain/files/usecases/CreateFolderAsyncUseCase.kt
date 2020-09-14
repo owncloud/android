@@ -36,7 +36,7 @@ class CreateFolderAsyncUseCase(
             "Invalid name"
         }
 
-        require(params.parentFile.isFolder()) {
+        require(params.parentFile.isFolder) {
             "Is not a folder"
         }
 

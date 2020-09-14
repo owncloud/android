@@ -32,11 +32,16 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import com.owncloud.android.R;
-import com.owncloud.android.domain.files.MimeTypeConstantsKt;
+import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import timber.log.Timber;
 
 import java.io.File;
+
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_AUDIO;
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_IMAGE;
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_TEXT;
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_VIDEO;
 
 public class OCFile implements Parcelable, Comparable<OCFile> {
 
@@ -626,28 +631,28 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * @return 'True' if the file contains audio
      */
     public boolean isAudio() {
-        return isOfType("audio/");
+        return isOfType(MIME_PREFIX_AUDIO);
     }
 
     /**
      * @return 'True' if the file contains video
      */
     public boolean isVideo() {
-        return isOfType("video/");
+        return isOfType(MIME_PREFIX_VIDEO);
     }
 
     /**
      * @return 'True' if the file contains an image
      */
     public boolean isImage() {
-        return isOfType("image/");
+        return isOfType(MIME_PREFIX_IMAGE);
     }
 
     /**
      * @return 'True' if the file is simple text (e.g. not application-dependent, like .doc or .docx)
      */
     public boolean isText() {
-        return isOfType("text/");
+        return isOfType(MIME_PREFIX_TEXT);
     }
 
     /**
