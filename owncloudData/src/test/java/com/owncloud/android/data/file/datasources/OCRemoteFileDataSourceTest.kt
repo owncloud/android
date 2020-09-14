@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.file.datasource
+package com.owncloud.android.data.file.datasources
 
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
 import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
