@@ -27,7 +27,7 @@ import android.net.Uri;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
-import com.owncloud.android.domain.files.MimeTypeConstantsKt;
+import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
