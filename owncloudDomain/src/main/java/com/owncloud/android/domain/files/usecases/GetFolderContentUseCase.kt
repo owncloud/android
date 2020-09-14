@@ -16,14 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.domain.files.usecases
 
-package com.owncloud.android.data.files.datasources
-
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
-interface LocalFileDataSource {
-    fun getFileById(fileId: Long): OCFile?
-    fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
-    fun getFolderContent(folderId: Long): List<OCFile>
-    fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
+class GetFolderContentUseCase(
+    private val repository: FileRepository
+) : BaseUseCaseWithResult<List<OCFile>, GetFolderContentUseCase.Params>() {
+
+    override fun run(params: Params) = repository.getFolderContent(params.folderId)
+
+    data class Params(val folderId: Long)
+
 }
