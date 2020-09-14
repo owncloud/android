@@ -65,6 +65,9 @@ class OCFileRepository(
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
         localFileDataSource.getFileByRemotePath(remotePath, owner)
 
+    override fun getFolderContent(folderId: Long): List<OCFile> =
+        localFileDataSource.getFolderContent(folderId)
+
     override fun refreshFolder(remotePath: String) {
         remoteFileDataSource.refreshFolder(remotePath).also {
             localFileDataSource.saveFilesInFolder(
