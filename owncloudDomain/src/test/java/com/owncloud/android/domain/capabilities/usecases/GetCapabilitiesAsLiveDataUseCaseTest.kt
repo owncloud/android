@@ -1,4 +1,3 @@
-
 /**
  * ownCloud Android client application
  *
@@ -27,32 +26,29 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.testutil.OC_CAPABILITY
 import io.mockk.every
 import io.mockk.spyk
+import io.mockk.verify
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class GetCapabilitiesAsLiveDataUseCaseTest {
+
     @Rule
     @JvmField
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val capabilityRepository: CapabilityRepository = spyk()
-    private val useCase = GetCapabilitiesAsLiveDataUseCase((capabilityRepository))
+    private val repository: CapabilityRepository = spyk()
+    private val useCase = GetCapabilitiesAsLiveDataUseCase((repository))
     private val useCaseParams = GetCapabilitiesAsLiveDataUseCase.Params("")
-    private lateinit var capabilitiesEmitted: MutableList<OCCapability>
-
-    @Before
-    fun init() {
-        capabilitiesEmitted = mutableListOf()
-    }
 
     @Test
-    fun getCapabilitiesAsLiveDataOk() {
+    fun `get capabilities as livedata - ok`() {
         val capabilitiesLiveData = MutableLiveData<OCCapability>()
-        every { capabilityRepository.getCapabilitiesAsLiveData(any()) } returns capabilitiesLiveData
+        every { repository.getCapabilitiesAsLiveData(any()) } returns capabilitiesLiveData
 
         val capabilitiesToEmit = listOf(OC_CAPABILITY)
+
+        val capabilitiesEmitted = mutableListOf<OCCapability>()
 
         useCase.execute(useCaseParams).observeForever {
             capabilitiesEmitted.add(it!!)
@@ -61,11 +57,14 @@ class GetCapabilitiesAsLiveDataUseCaseTest {
         capabilitiesToEmit.forEach { capabilitiesLiveData.postValue(it) }
 
         Assert.assertEquals(capabilitiesToEmit, capabilitiesEmitted)
+
+        verify(exactly = 1) { repository.getCapabilitiesAsLiveData(any()) }
     }
 
     @Test(expected = Exception::class)
-    fun getCapabilitiesAsLiveDataException() {
-        every { capabilityRepository.getCapabilitiesAsLiveData(any()) } throws Exception()
+    fun `get capabilities as livedata - ko`() {
+        every { repository.getCapabilitiesAsLiveData(any()) } throws Exception()
+
         useCase.execute(useCaseParams)
     }
 }
