@@ -34,28 +34,36 @@ class GetFileByIdUseCaseTest {
     private val useCaseParams = GetFileByIdUseCase.Params(OC_FILE.id!!)
 
     @Test
-    fun getFileByIdSuccess() {
+    fun `get file by id - ok`() {
         every { repository.getFileById(useCaseParams.fileId) } returns OC_FILE
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertFalse(useCaseResult.isError)
         Assert.assertEquals(OC_FILE, useCaseResult.getDataOrNull())
 
         verify(exactly = 1) { repository.getFileById(useCaseParams.fileId) }
     }
 
     @Test
-    fun getFileByIdException() {
+    fun `get file by id - ok - null`() {
+        every { repository.getFileById(useCaseParams.fileId) } returns null
+
+        val useCaseResult = useCase.execute(useCaseParams)
+
+        Assert.assertTrue(useCaseResult.isSuccess)
+        Assert.assertEquals(null, useCaseResult.getDataOrNull())
+
+        verify(exactly = 1) { repository.getFileById(useCaseParams.fileId) }
+    }
+
+    @Test
+    fun `get file by id - ko`() {
         every { repository.getFileById(useCaseParams.fileId) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        Assert.assertFalse(useCaseResult.isSuccess)
         Assert.assertTrue(useCaseResult.isError)
-
-        Assert.assertNull(useCaseResult.getDataOrNull())
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
         verify(exactly = 1) { repository.getFileById(useCaseParams.fileId) }
