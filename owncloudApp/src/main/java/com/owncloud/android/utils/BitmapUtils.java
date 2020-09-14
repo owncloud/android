@@ -40,6 +40,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_IMAGE;
+
 /**
  * Utility class with methods for decoding Bitmaps.
  */
@@ -236,7 +238,7 @@ public class BitmapUtils {
         final String fileExtension = MimeTypeMap.getFileExtensionFromUrl(selectedUri.toString().toLowerCase());
         final String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
 
-        return (mimeType != null && mimeType.startsWith("image/"));
+        return (mimeType != null && mimeType.startsWith(MIME_PREFIX_IMAGE));
     }
 
     /**

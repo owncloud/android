@@ -24,7 +24,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.owncloud.android.data.ProviderMeta
-import com.owncloud.android.domain.files.model.OCFile
 
 @Dao
 abstract class FileDao {
@@ -45,10 +44,10 @@ abstract class FileDao {
         folderId: Long
     ): List<OCFileEntity>
 
-    @Query(SELECT_FOLDER_IMAGES)
-    abstract fun getFolderImages(
+    @Query(SELECT_FOLDER_BY_MIMETYPE)
+    abstract fun getFolderByMimeType(
         folderId: Long,
-        filter: String = "image"
+        mimeType: String
     ): List<OCFileEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -97,10 +96,10 @@ abstract class FileDao {
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE parentId = :folderId"
 
-        private const val SELECT_FOLDER_IMAGES =
+        private const val SELECT_FOLDER_BY_MIMETYPE =
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE parentId = :folderId " +
-                    "AND mimeType LIKE :filter || '%' "
+                    "AND mimeType LIKE :mimeType || '%' "
     }
 }
