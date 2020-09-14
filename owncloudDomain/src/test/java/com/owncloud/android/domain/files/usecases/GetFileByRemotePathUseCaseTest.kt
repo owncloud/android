@@ -34,28 +34,38 @@ class GetFileByRemotePathUseCaseTest {
     private val useCaseParams = GetFileByRemotePathUseCase.Params("owner", "remotePath")
 
     @Test
-    fun getFileByRemotePathSuccess() {
+    fun `get file by remote path - ok`() {
         every { repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner) } returns OC_FILE
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertFalse(useCaseResult.isError)
         Assert.assertEquals(OC_FILE, useCaseResult.getDataOrNull())
 
         verify(exactly = 1) { repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner) }
     }
 
     @Test
-    fun getFileByRemotePathException() {
-        every { repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner) } throws UnauthorizedException()
+    fun `get file by remote path - ok - null`() {
+        every { repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner) } returns null
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        Assert.assertFalse(useCaseResult.isSuccess)
-        Assert.assertTrue(useCaseResult.isError)
+        Assert.assertTrue(useCaseResult.isSuccess)
+        Assert.assertEquals(null, useCaseResult.getDataOrNull())
 
-        Assert.assertNull(useCaseResult.getDataOrNull())
+        verify(exactly = 1) { repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner) }
+    }
+
+    @Test
+    fun `get file by remote path - ko`() {
+        every {
+            repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner)
+        } throws UnauthorizedException()
+
+        val useCaseResult = useCase.execute(useCaseParams)
+
+        Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
         verify(exactly = 1) { repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner) }
