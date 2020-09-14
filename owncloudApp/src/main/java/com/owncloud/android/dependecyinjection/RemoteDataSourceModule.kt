@@ -76,9 +76,15 @@ val remoteDataSourceModule = module {
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get()) }
-    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), get(), get(), androidContext().resources.getDimension(
-                R.dimen.file_avatar_size
-            ).toInt()) }
+    factory<RemoteUserDataSource> {
+        OCRemoteUserDataSource(
+            get(),
+            get(),
+            get(),
+            get(),
+            androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt()
+        )
+    }
 
     factory { RemoteCapabilityMapper() }
     factory { RemoteFileMapper() }

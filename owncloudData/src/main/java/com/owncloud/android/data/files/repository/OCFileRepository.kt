@@ -26,8 +26,8 @@ import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
 
 class OCFileRepository(
-    private val remoteFileDataSource: RemoteFileDataSource,
-    private val localFileDataSource: LocalFileDataSource
+    private val localFileDataSource: LocalFileDataSource,
+    private val remoteFileDataSource: RemoteFileDataSource
 ) : FileRepository {
     override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
         remoteFileDataSource.checkPathExistence(path, userLogged)
@@ -56,6 +56,12 @@ class OCFileRepository(
         }
     }
 
+    override fun getFileById(fileId: Long): OCFile? =
+        localFileDataSource.getFileById(fileId)
+
+    override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
+        localFileDataSource.getFileByRemotePath(remotePath, owner)
+
     override fun refreshFolder(remotePath: String) {
         remoteFileDataSource.refreshFolder(remotePath).also {
             localFileDataSource.saveFilesInFolder(
@@ -64,4 +70,5 @@ class OCFileRepository(
             )
         }
     }
+
 }

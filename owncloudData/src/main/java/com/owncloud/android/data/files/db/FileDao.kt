@@ -28,30 +28,13 @@ import com.owncloud.android.data.ProviderMeta
 @Dao
 abstract class FileDao {
 
-    companion object {
-        private const val SELECT_FILE_WITH_ID =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE id = :id"
-
-        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :owner " +
-                    "AND remotePath = :remotePath"
-
-        private const val DELETE_FILE_WITH_ID =
-            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE id = :id"
-    }
-
     @Query(SELECT_FILE_WITH_ID)
-    abstract fun getFileWithId(
+    abstract fun getFileById(
         id: Long
     ): OCFileEntity?
 
     @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH)
-    abstract fun getFileFromOwnerAndRemoteId(
+    abstract fun getFileByOwnerAndRemotePath(
         owner: String,
         remotePath: String
     ): OCFileEntity?
@@ -63,7 +46,7 @@ abstract class FileDao {
     open fun mergeRemoteAndLocalFile(
         ocFileEntity: OCFileEntity
     ): Long {
-        val localFile: OCFileEntity? = getFileFromOwnerAndRemoteId(
+        val localFile: OCFileEntity? = getFileByOwnerAndRemotePath(
             owner = ocFileEntity.owner,
             remotePath = ocFileEntity.remotePath
         )
@@ -80,4 +63,21 @@ abstract class FileDao {
 
     @Query(DELETE_FILE_WITH_ID)
     abstract fun deleteFileWithId(id: Long)
+
+    companion object {
+        private const val SELECT_FILE_WITH_ID =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE id = :id"
+
+        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE owner = :owner " +
+                    "AND remotePath = :remotePath"
+
+        private const val DELETE_FILE_WITH_ID =
+            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE id = :id"
+    }
 }

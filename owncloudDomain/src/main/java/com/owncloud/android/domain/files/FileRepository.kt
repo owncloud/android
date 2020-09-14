@@ -24,5 +24,7 @@ import com.owncloud.android.domain.files.model.OCFile
 interface FileRepository {
     fun checkPathExistence(path: String, userLogged: Boolean): Boolean
     fun createFolder(remotePath: String, parentFolder: OCFile)
+    fun getFileById(fileId: Long): OCFile?
+    fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun refreshFolder(remotePath: String)
 }
