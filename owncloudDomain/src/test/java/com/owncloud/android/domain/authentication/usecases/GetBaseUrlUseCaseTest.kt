@@ -27,55 +27,49 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GetBaseUrlUseCaseTest {
-    private val authRepository: AuthenticationRepository = spyk()
-    private val getBaseUrlUseCase = GetBaseUrlUseCase(authRepository)
-    private val getBaseUrlUseCaseParams = GetBaseUrlUseCase.Params(
+
+    private val repository: AuthenticationRepository = spyk()
+    private val useCase = GetBaseUrlUseCase(repository)
+    private val useCaseParams = GetBaseUrlUseCase.Params(
         accountName = OC_ACCOUNT_NAME
     )
 
     @Test
-    fun invalidParams() {
-        val invalidGetBaseUrlUseCaseParams = getBaseUrlUseCaseParams.copy(accountName = "")
-        val getBaseUrlUseCaseResult = getBaseUrlUseCase.execute(invalidGetBaseUrlUseCaseParams)
+    fun `get base url - ko - invalid params`() {
+        val invalidGetBaseUrlUseCaseParams = useCaseParams.copy(accountName = "")
+        val getBaseUrlUseCaseResult = useCase.execute(invalidGetBaseUrlUseCaseParams)
 
         assertTrue(getBaseUrlUseCaseResult.isError)
         assertTrue(getBaseUrlUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 0) { authRepository.getBaseUrl(any()) }
+        verify(exactly = 0) { repository.getBaseUrl(any()) }
     }
 
     @Test
-    fun getBaseUrlSuccess() {
-        every { authRepository.getBaseUrl(any()) } returns OC_BASE_URL
-        val getBaseUrlUseCaseResult = getBaseUrlUseCase.execute(getBaseUrlUseCaseParams)
+    fun `get base url - ok`() {
+        every { repository.getBaseUrl(any()) } returns OC_BASE_URL
+
+        val getBaseUrlUseCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(getBaseUrlUseCaseResult.isSuccess)
-        assertFalse(getBaseUrlUseCaseResult.isError)
-
-        assertNull(getBaseUrlUseCaseResult.getThrowableOrNull())
         assertEquals(OC_BASE_URL, getBaseUrlUseCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { authRepository.getBaseUrl(any()) }
+        verify(exactly = 1) { repository.getBaseUrl(any()) }
     }
 
     @Test
-    fun getBaseUrlAccountNotFoundException() {
-        every { authRepository.getBaseUrl(any()) } throws AccountNotFoundException()
+    fun `get base url - ko - another exception`() {
+        every { repository.getBaseUrl(any()) } throws AccountNotFoundException()
 
-        val getBaseUrlUseCaseResult = getBaseUrlUseCase.execute(getBaseUrlUseCaseParams)
+        val getBaseUrlUseCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(getBaseUrlUseCaseResult.isSuccess)
         assertTrue(getBaseUrlUseCaseResult.isError)
-
-        assertNull(getBaseUrlUseCaseResult.getDataOrNull())
         assertTrue(getBaseUrlUseCaseResult.getThrowableOrNull() is AccountNotFoundException)
 
-        verify(exactly = 1) { authRepository.getBaseUrl(any()) }
+        verify(exactly = 1) { repository.getBaseUrl(any()) }
     }
 }
