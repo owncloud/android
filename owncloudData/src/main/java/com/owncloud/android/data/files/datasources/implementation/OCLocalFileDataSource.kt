@@ -34,6 +34,11 @@ class OCLocalFileDataSource(
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
         ocFileMapper.toModel(fileDao.getFileByOwnerAndRemotePath(owner, remotePath))
 
+    override fun getFolderContent(folderId: Long): List<OCFile> =
+        fileDao.getFolderContent(folderId = folderId).map {
+            ocFileMapper.toModel(it)!!
+        }
+
     override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
         // Insert first folder container
         // TODO: If it is root, add 0 as parent Id

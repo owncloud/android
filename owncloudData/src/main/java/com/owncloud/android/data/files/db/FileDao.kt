@@ -24,6 +24,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.domain.files.model.OCFile
 
 @Dao
 abstract class FileDao {
@@ -38,6 +39,11 @@ abstract class FileDao {
         owner: String,
         remotePath: String
     ): OCFileEntity?
+
+    @Query(SELECT_FOLDER_CONTENT)
+    abstract fun getFolderContent(
+        folderId: Long
+    ): List<OCFileEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocFileEntity: OCFileEntity): Long
@@ -79,5 +85,10 @@ abstract class FileDao {
         private const val DELETE_FILE_WITH_ID =
             "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE id = :id"
+
+        private const val SELECT_FOLDER_CONTENT =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE parentId = :folderId"
     }
 }
