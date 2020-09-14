@@ -27,22 +27,22 @@ class FileNameValidatorTest {
     private val validator = FileNameValidator()
 
     @Test
-    fun validateNameOk(){
+    fun `validate name - ok`() {
         Assert.assertTrue(validator.validate("Photos"))
     }
 
     @Test
-    fun validateNameWithBackSlash(){
+    fun `validate name - ko - back slash`() {
         Assert.assertFalse(validator.validate("/Photos"))
     }
 
     @Test
-    fun validateNameWithForwardSlash(){
+    fun `validate name - ko - forward slash`() {
         Assert.assertFalse(validator.validate("\\Photos"))
     }
 
     @Test
-    fun validateNameWithBothSlashes(){
+    fun `validate name - ko - both slashes()`() {
         Assert.assertFalse(validator.validate("\\Photos/"))
     }
 

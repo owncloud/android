@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.owncloud.android.domain.shares.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
@@ -33,56 +32,51 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CreatePrivateShareAsyncUseCaseTest {
-    private val shareRepository: ShareRepository = spyk()
-    private val useCase = CreatePrivateShareAsyncUseCase((shareRepository))
+
+    private val repository: ShareRepository = spyk()
+    private val useCase = CreatePrivateShareAsyncUseCase(repository)
     private val useCaseParams = CreatePrivateShareAsyncUseCase.Params("", ShareType.USER, "", 1, "")
 
     @Test
-    fun createPrivateShareOk() {
+    fun `create private share - ok`() {
+        every {
+            repository.insertPrivateShare(any(), any(), any(), any(), any())
+        } returns Unit
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.insertPrivateShare("", ShareType.USER, "", 1, "") }
+        verify(exactly = 1) { repository.insertPrivateShare("", ShareType.USER, "", 1, "") }
     }
 
     @Test
-    fun createPrivateShareWithUnauthorizedException() {
-        every { shareRepository.insertPrivateShare(any(), any(), any(), any(), any()) } throws UnauthorizedException()
+    fun `create private share - ko - unauthorized exception`() {
+        every { repository.insertPrivateShare(any(), any(), any(), any(), any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.insertPrivateShare("", ShareType.USER, "", 1, "") }
+        verify(exactly = 1) { repository.insertPrivateShare("", ShareType.USER, "", 1, "") }
     }
 
     @Test
-    fun createPrivateShareWithNotValidShareTypeException() {
+    fun `create private share - ko - illegal argument exception`() {
         val useCaseParamsNotValid1 = useCaseParams.copy(shareType = null)
         val useCaseResult1 = useCase.execute(useCaseParamsNotValid1)
 
-        assertFalse(useCaseResult1.isSuccess)
         assertTrue(useCaseResult1.isError)
-
-        assertNull(useCaseResult1.getDataOrNull())
         assertTrue(useCaseResult1.getThrowableOrNull() is IllegalArgumentException)
 
         val useCaseParamsNotValid2 = useCaseParams.copy(shareType = ShareType.CONTACT)
         val useCaseResult2 = useCase.execute(useCaseParamsNotValid2)
 
-        assertFalse(useCaseResult2.isSuccess)
         assertTrue(useCaseResult2.isError)
-
-        assertNull(useCaseResult2.getDataOrNull())
         assertTrue(useCaseResult2.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 0) { shareRepository.insertPrivateShare(any(), any(), any(), any(), any()) }
+        verify(exactly = 0) { repository.insertPrivateShare(any(), any(), any(), any(), any()) }
     }
 }
