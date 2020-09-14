@@ -26,37 +26,32 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RefreshSharesFromServerAsyncUseCaseTest {
+
     private val shareRepository: ShareRepository = spyk()
     private val useCase = RefreshSharesFromServerAsyncUseCase((shareRepository))
     private val useCaseParams = RefreshSharesFromServerAsyncUseCase.Params("", "")
 
     @Test
-    fun refreshSharesFromNetworkOk() {
+    fun `refresh shares from server - ok`() {
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
         verify(exactly = 1) { shareRepository.refreshSharesFromNetwork("", "") }
     }
 
     @Test
-    fun refreshSharesFromNetworkWithUnauthorizedException() {
+    fun `refresh shares from server - ko`() {
         every { shareRepository.refreshSharesFromNetwork(any(), any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
         verify(exactly = 1) { shareRepository.refreshSharesFromNetwork("", "") }
