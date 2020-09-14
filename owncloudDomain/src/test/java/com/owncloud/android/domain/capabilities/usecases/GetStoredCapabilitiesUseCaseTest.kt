@@ -29,29 +29,37 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class GetStoredCapabilitiesUseCaseTest {
-    private val capabilityRepository: CapabilityRepository = spyk()
-    private val useCase = GetStoredCapabilitiesUseCase((capabilityRepository))
+
+    private val repository: CapabilityRepository = spyk()
+    private val useCase = GetStoredCapabilitiesUseCase((repository))
     private val useCaseParams = GetStoredCapabilitiesUseCase.Params("user@server")
 
     @Test
-    fun getStoredCapabilities() {
-        every { capabilityRepository.getStoredCapabilities(any()) } returns OC_CAPABILITY
+    fun `get stored capabilities - ok`() {
+        every { repository.getStoredCapabilities(any()) } returns OC_CAPABILITY
 
         val capability = useCase.execute(useCaseParams)
 
         assertEquals(OC_CAPABILITY, capability)
 
-        verify(exactly = 1) { capabilityRepository.getStoredCapabilities(any()) }
+        verify(exactly = 1) { repository.getStoredCapabilities(any()) }
     }
 
     @Test
-    fun getStoredCapabilitiesNull() {
-        every { capabilityRepository.getStoredCapabilities(any()) } returns null
+    fun `get stored capabilities - ok - null`() {
+        every { repository.getStoredCapabilities(any()) } returns null
 
         val capability = useCase.execute(useCaseParams)
 
         assertNull(capability)
 
-        verify(exactly = 1) { capabilityRepository.getStoredCapabilities(any()) }
+        verify(exactly = 1) { repository.getStoredCapabilities(any()) }
+    }
+
+    @Test(expected = Exception::class)
+    fun `get stored capabilities - ko`() {
+        every { repository.getStoredCapabilities(any()) } throws Exception()
+
+        useCase.execute(useCaseParams)
     }
 }
