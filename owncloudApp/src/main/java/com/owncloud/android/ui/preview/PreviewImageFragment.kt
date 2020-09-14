@@ -49,7 +49,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.domain.files.MIME_SVG
+import com.owncloud.android.domain.files.model.MIME_SVG
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
