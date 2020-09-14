@@ -100,11 +100,11 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBN
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta._ID
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.files.MIME_DIR
 import com.owncloud.android.extensions.getIntFromColumnOrThrow
 import com.owncloud.android.extensions.getLongFromColumnOrThrow
 import com.owncloud.android.extensions.getStringFromColumnOrEmpty
 import com.owncloud.android.extensions.getStringFromColumnOrThrow
+import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.utils.FileStorageUtils
 import timber.log.Timber
@@ -1439,8 +1439,5 @@ class FileDataStorageManager {
 
     companion object {
         const val ROOT_PARENT_ID = 0
-        private const val pathAudio = "audio/"
-        private const val pathVideo = "video/"
-        private const val pathImage = "image/"
     }
 }
