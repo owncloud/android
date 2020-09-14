@@ -28,6 +28,9 @@ import android.webkit.MimeTypeMap;
 import timber.log.Timber;
 
 import static com.owncloud.android.extensions.CursorExtKt.getStringFromColumnOrThrow;
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_AUDIO;
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_IMAGE;
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_VIDEO;
 
 /**
  * A helper class for some Uri operations.
@@ -83,13 +86,13 @@ public class UriUtils {
         String mimeType = context.getContentResolver().getType(uri);
         if (mimeType != null) {
             String displayNameColumn;
-            if (mimeType.toLowerCase().startsWith("image/")) {
+            if (mimeType.toLowerCase().startsWith(MIME_PREFIX_IMAGE)) {
                 displayNameColumn = MediaStore.Images.ImageColumns.DISPLAY_NAME;
 
-            } else if (mimeType.toLowerCase().startsWith("video/")) {
+            } else if (mimeType.toLowerCase().startsWith(MIME_PREFIX_VIDEO)) {
                 displayNameColumn = MediaStore.Video.VideoColumns.DISPLAY_NAME;
 
-            } else if (mimeType.toLowerCase().startsWith("audio/")) {
+            } else if (mimeType.toLowerCase().startsWith(MIME_PREFIX_AUDIO)) {
                 displayNameColumn = MediaStore.Audio.AudioColumns.DISPLAY_NAME;
 
             } else {

@@ -61,9 +61,9 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
-import com.owncloud.android.domain.files.LIST_MIME_DIR
 import com.owncloud.android.extensions.getLongFromColumnOrThrow
 import com.owncloud.android.extensions.getStringFromColumnOrThrow
+import com.owncloud.android.domain.files.model.LIST_MIME_DIR
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.android.ext.android.inject
@@ -92,7 +92,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         } finally {
             db.endTransaction()
         }
-        context?.contentResolver?.notifyChange(
+        context?.contentResolver?.notifyChangge(
             uri,
             null
         )
