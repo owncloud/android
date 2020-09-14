@@ -39,6 +39,11 @@ class OCLocalFileDataSource(
             ocFileMapper.toModel(it)!!
         }
 
+    override fun getFolderImages(folderId: Long): List<OCFile> =
+        fileDao.getFolderImages(folderId = folderId).map {
+            ocFileMapper.toModel(it)!!
+        }
+
     override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
         // Insert first folder container
         // TODO: If it is root, add 0 as parent Id

@@ -27,5 +27,6 @@ interface FileRepository {
     fun getFileById(fileId: Long): OCFile?
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getFolderContent(folderId: Long): List<OCFile>
+    fun getFolderImages(folderId: Long): List<OCFile>
     fun refreshFolder(remotePath: String)
 }

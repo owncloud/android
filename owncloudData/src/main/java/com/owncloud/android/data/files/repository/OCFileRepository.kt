@@ -65,6 +65,9 @@ class OCFileRepository(
     override fun getFolderContent(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderContent(folderId)
 
+    override fun getFolderImages(folderId: Long): List<OCFile> =
+        localFileDataSource.getFolderImages(folderId)
+
     override fun refreshFolder(remotePath: String) {
         remoteFileDataSource.refreshFolder(remotePath).also {
             localFileDataSource.saveFilesInFolder(
