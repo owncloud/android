@@ -27,32 +27,33 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUs
 import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.spyk
-import org.junit.Assert
-import org.junit.Before
+import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
 class GetSharesAsLiveDataUseCaseTest {
+
     @Rule
     @JvmField
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val shareRepository: ShareRepository = spyk()
-    private val useCase = GetSharesAsLiveDataUseCase((shareRepository))
+    private val repository: ShareRepository = spyk()
+    private val useCase = GetSharesAsLiveDataUseCase(repository)
     private val useCaseParams = GetSharesAsLiveDataUseCase.Params("", "")
-    private lateinit var sharesEmitted: MutableList<OCShare>
-
-    @Before
-    fun init() {
-        sharesEmitted = mutableListOf()
-    }
 
     @Test
-    fun getSharesAsLiveDataOk() {
+    fun `get shares as livedata - ok`() {
         val sharesLiveData = MutableLiveData<List<OCShare>>()
-        every { shareRepository.getSharesAsLiveData(any(), any()) } returns sharesLiveData
+        every { repository.getSharesAsLiveData(any(), any()) } returns sharesLiveData
 
-        val sharesToEmit = listOf(OC_SHARE, OC_SHARE.copy(id = 2), OC_SHARE.copy(id = 3))
+        val sharesToEmit = listOf(
+            OC_SHARE,
+            OC_SHARE.copy(id = 2),
+            OC_SHARE.copy(id = 3)
+        )
+
+        val sharesEmitted = mutableListOf<OCShare>()
 
         useCase.execute(useCaseParams).observeForever {
             it?.forEach { ocShare -> sharesEmitted.add(ocShare) }
@@ -60,12 +61,14 @@ class GetSharesAsLiveDataUseCaseTest {
 
         sharesLiveData.postValue(sharesToEmit)
 
-        Assert.assertEquals(sharesToEmit, sharesEmitted)
+        assertEquals(sharesToEmit, sharesEmitted)
+
+        verify(exactly = 1) { repository.getSharesAsLiveData(any(), any()) }
     }
 
     @Test(expected = Exception::class)
-    fun getSharesAsLiveDataException() {
-        every { shareRepository.getSharesAsLiveData(any(), any()) } throws Exception()
+    fun `get shares as livedata - ko`() {
+        every { repository.getSharesAsLiveData(any(), any()) } throws Exception()
 
         useCase.execute(useCaseParams)
     }
