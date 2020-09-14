@@ -24,7 +24,8 @@ import com.owncloud.android.testutil.OC_FILE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GetFolderContentUseCaseTest {
@@ -34,29 +35,25 @@ class GetFolderContentUseCaseTest {
     private val useCaseParams = GetFolderContentUseCase.Params(OC_FILE.parentId!!)
 
     @Test
-    fun `test get folder content - ok`() {
+    fun `get folder content - ok`() {
         every { repository.getFolderContent(useCaseParams.folderId) } returns listOf(OC_FILE)
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertFalse(useCaseResult.isError)
-        Assert.assertEquals(listOf(OC_FILE), useCaseResult.getDataOrNull())
+        assertTrue(useCaseResult.isSuccess)
+        assertEquals(listOf(OC_FILE), useCaseResult.getDataOrNull())
 
         verify(exactly = 1) { repository.getFolderContent(useCaseParams.folderId) }
     }
 
     @Test
-    fun `test get folder content - ko`() {
+    fun `get folder content - ko`() {
         every { repository.getFolderContent(useCaseParams.folderId) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        Assert.assertFalse(useCaseResult.isSuccess)
-        Assert.assertTrue(useCaseResult.isError)
-
-        Assert.assertNull(useCaseResult.getDataOrNull())
-        Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
+        assertTrue(useCaseResult.isError)
+        assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
         verify(exactly = 1) { repository.getFolderContent(useCaseParams.folderId) }
     }
