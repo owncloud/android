@@ -23,37 +23,37 @@ import com.owncloud.android.domain.files.FileRepository
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RefreshFolderFromServerAsyncUseCaseTest {
-    private val fileRepository: FileRepository = spyk()
-    private val useCase = RefreshFolderFromServerAsyncUseCase(fileRepository)
+
+    private val repository: FileRepository = spyk()
+    private val useCase = RefreshFolderFromServerAsyncUseCase(repository)
     private val useCaseParams = RefreshFolderFromServerAsyncUseCase.Params("/Photos")
 
     @Test
-    fun refreshFolderFromServerOk() {
+    fun `refresh folder from server - ok`() {
+        every { repository.refreshFolder(any()) } returns Unit
+
         val useCaseResult = useCase.execute(useCaseParams)
 
-        Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertFalse(useCaseResult.isError)
-        Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
+        assertTrue(useCaseResult.isSuccess)
+        assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { fileRepository.refreshFolder(useCaseParams.remotePath) }
+        verify(exactly = 1) { repository.refreshFolder(useCaseParams.remotePath) }
     }
 
     @Test
-    fun refreshCapabilitiesFromServerWithUnauthorizedException() {
-        every { fileRepository.refreshFolder(any()) } throws UnauthorizedException()
+    fun `refresh folder from server - ko`() {
+        every { repository.refreshFolder(any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        Assert.assertFalse(useCaseResult.isSuccess)
-        Assert.assertTrue(useCaseResult.isError)
+        assertTrue(useCaseResult.isError)
+        assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        Assert.assertNull(useCaseResult.getDataOrNull())
-        Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
-
-        verify(exactly = 1) { fileRepository.refreshFolder(useCaseParams.remotePath) }
+        verify(exactly = 1) { repository.refreshFolder(useCaseParams.remotePath) }
     }
 }
