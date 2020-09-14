@@ -45,6 +45,12 @@ abstract class FileDao {
         folderId: Long
     ): List<OCFileEntity>
 
+    @Query(SELECT_FOLDER_IMAGES)
+    abstract fun getFolderImages(
+        folderId: Long,
+        filter: String = "image"
+    ): List<OCFileEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocFileEntity: OCFileEntity): Long
 
@@ -90,5 +96,11 @@ abstract class FileDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE parentId = :folderId"
+
+        private const val SELECT_FOLDER_IMAGES =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE parentId = :folderId " +
+                    "AND mimeType LIKE :filter || '%' "
     }
 }
