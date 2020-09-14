@@ -26,40 +26,36 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RefreshUserQuotaFromServerAsyncUseCaseTest {
-    private val userRepository: UserRepository = spyk()
-    private val useCase = RefreshUserQuotaFromServerAsyncUseCase((userRepository))
+
+    private val repository: UserRepository = spyk()
+    private val useCase = RefreshUserQuotaFromServerAsyncUseCase(repository)
     private val useCaseParams = RefreshUserQuotaFromServerAsyncUseCase.Params(accountName = OC_ACCOUNT_NAME)
 
     @Test
-    fun getUserInfoSuccess() {
-        every { userRepository.getUserQuota(OC_ACCOUNT_NAME) } returns OC_USER_QUOTA
+    fun `refresh user quota - ok`() {
+        every { repository.getUserQuota(OC_ACCOUNT_NAME) } returns OC_USER_QUOTA
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
         assertEquals(OC_USER_QUOTA, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { userRepository.getUserQuota(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { repository.getUserQuota(OC_ACCOUNT_NAME) }
     }
 
     @Test
-    fun getUserInfoWithUnauthorizedException() {
-        every { userRepository.getUserQuota(OC_ACCOUNT_NAME) } throws UnauthorizedException()
+    fun `refresh user quota - ko`() {
+        every { repository.getUserQuota(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { userRepository.getUserQuota(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { repository.getUserQuota(OC_ACCOUNT_NAME) }
     }
 }
