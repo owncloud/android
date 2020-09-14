@@ -28,32 +28,28 @@ import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
-import org.junit.Assert
-import org.junit.Before
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
 class GetShareAsLiveDataUseCaseTest {
+
     @Rule
     @JvmField
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val shareRepository: ShareRepository = spyk()
-    private val useCase = GetShareAsLiveDataUseCase((shareRepository))
+    private val repository: ShareRepository = spyk()
+    private val useCase = GetShareAsLiveDataUseCase(repository)
     private val useCaseParams = GetShareAsLiveDataUseCase.Params(OC_SHARE.remoteId)
-    private lateinit var shareEmitted: MutableList<OCShare>
-
-    @Before
-    fun init() {
-        shareEmitted = mutableListOf()
-    }
 
     @Test
-    fun getShareAsLiveDataOk() {
+    fun `get share as livedata - ok`() {
         val shareLiveData = MutableLiveData<OCShare>()
-        every { shareRepository.getShareAsLiveData(any()) } returns shareLiveData
+        every { repository.getShareAsLiveData(any()) } returns shareLiveData
 
         val shareToEmit = listOf(OC_SHARE)
+
+        val shareEmitted = mutableListOf<OCShare>()
 
         useCase.execute(useCaseParams).observeForever {
             shareEmitted.add(it)
@@ -61,14 +57,14 @@ class GetShareAsLiveDataUseCaseTest {
 
         shareToEmit.forEach { shareLiveData.postValue(it) }
 
-        Assert.assertEquals(shareToEmit, shareEmitted)
+        assertEquals(shareToEmit, shareEmitted)
 
-        verify { shareRepository.getShareAsLiveData(OC_SHARE.remoteId) }
+        verify(exactly = 1) { repository.getShareAsLiveData(OC_SHARE.remoteId) }
     }
 
     @Test(expected = Exception::class)
-    fun getShareAsLiveDataException() {
-        every { shareRepository.getShareAsLiveData(any()) } throws Exception()
+    fun `get share as livedata - ko`() {
+        every { repository.getShareAsLiveData(any()) } throws Exception()
 
         useCase.execute(useCaseParams)
     }
