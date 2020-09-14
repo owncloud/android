@@ -179,4 +179,28 @@ class OCFileRepositoryTest {
             localFileDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
         }
     }
+
+    @Test
+    fun getFolderContentSuccess() {
+        every { localFileDataSource.getFolderContent(OC_FILE.parentId!!) } returns listOf(OC_FILE)
+
+        val folderContent = ocFileRepository.getFolderContent(OC_FILE.parentId!!)
+
+        assertEquals(listOf(OC_FILE), folderContent)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFolderContent(OC_FILE.parentId!!)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun getFolderContentException() {
+        every { localFileDataSource.getFolderContent(OC_FILE.parentId!!) } throws Exception()
+
+        ocFileRepository.getFolderContent(OC_FILE.parentId!!)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFolderContent(OC_FILE.parentId!!)
+        }
+    }
 }
