@@ -43,6 +43,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_IMAGE;
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_VIDEO;
+
 public class CameraUploadsSyncJobService extends JobService {
 
     @Override
@@ -148,8 +151,8 @@ public class CameraUploadsSyncJobService extends JobService {
             String fileName = localFile.getName();
 
             String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
-            boolean isImage = mimeType.startsWith("image/");
-            boolean isVideo = mimeType.startsWith("video/");
+            boolean isImage = mimeType.startsWith(MIME_PREFIX_IMAGE);
+            boolean isVideo = mimeType.startsWith(MIME_PREFIX_VIDEO);
 
             if (!isImage && !isVideo) {
                 Timber.d("Ignoring %s", fileName);
