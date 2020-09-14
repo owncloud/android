@@ -53,7 +53,8 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
         val baseUriStr = client.baseUri.toString()
         if (baseUriStr.startsWith(HTTP_PREFIX) || baseUriStr.startsWith(
                 HTTPS_PREFIX
-            )) {
+            )
+        ) {
             tryConnection(client)
         } else {
             client.baseUri = Uri.parse(HTTPS_PREFIX + baseUriStr)
@@ -67,11 +68,18 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
         return latestResult
     }
 
+    private fun updateLocationWithRelativePath(oldLocation: String, redirectedLocation: String): String {
+        if(!redirectedLocation.startsWith("/"))
+            return redirectedLocation
+        val oldLocation = URL(oldLocation)
+        return URL(oldLocation.protocol, oldLocation.host, oldLocation.port, redirectedLocation).toString()
+    }
+
     private fun tryConnection(client: OwnCloudClient): Boolean {
         var successfulConnection = false
-        val baseUrlSt = client.baseUri.toString()
+        val baseUrlStr = client.baseUri.toString()
         try {
-            var getMethod = GetMethod(URL(baseUrlSt + OwnCloudClient.STATUS_PATH)).apply {
+            var getMethod = GetMethod(URL(baseUrlStr + OwnCloudClient.STATUS_PATH)).apply {
                 setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
                 setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             }
@@ -89,11 +97,11 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
                 return successfulConnection
             }
 
-            var redirectedLocation = latestResult.redirectedLocation
+            var redirectedLocation = updateLocationWithRelativePath(baseUrlStr, latestResult.redirectedLocation)
             while (!redirectedLocation.isNullOrEmpty() && !latestResult.isSuccess) {
                 isRedirectToNonSecureConnection =
                     isRedirectToNonSecureConnection ||
-                            (baseUrlSt.startsWith(HTTPS_PREFIX) && redirectedLocation.startsWith(
+                            (baseUrlStr.startsWith(HTTPS_PREFIX) && redirectedLocation.startsWith(
                                 HTTP_PREFIX
                             ))
 
@@ -104,7 +112,7 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
 
                 status = client.executeHttpMethod(getMethod)
                 latestResult = RemoteOperationResult(getMethod)
-                redirectedLocation = latestResult.redirectedLocation
+                redirectedLocation = updateLocationWithRelativePath(redirectedLocation, latestResult.redirectedLocation)
             }
 
             if (isSuccess(status)) {
@@ -119,7 +127,7 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
                     latestResult = if (isRedirectToNonSecureConnection) {
                         RemoteOperationResult(ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
                     } else {
-                        if (baseUrlSt.startsWith(HTTPS_PREFIX)) RemoteOperationResult(ResultCode.OK_SSL)
+                        if (baseUrlStr.startsWith(HTTPS_PREFIX)) RemoteOperationResult(ResultCode.OK_SSL)
                         else RemoteOperationResult(ResultCode.OK_NO_SSL)
                     }
                     latestResult.data = ocVersion
@@ -134,12 +142,12 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
             latestResult = RemoteOperationResult(e)
         }
         when {
-            latestResult.isSuccess -> Timber.i("Connection check at $baseUrlSt successful: ${latestResult.logMessage}")
+            latestResult.isSuccess -> Timber.i("Connection check at $baseUrlStr successful: ${latestResult.logMessage}")
 
             latestResult.isException ->
-                Timber.e(latestResult.exception, "Connection check at $baseUrlSt: ${latestResult.logMessage}")
+                Timber.e(latestResult.exception, "Connection check at $baseUrlStr: ${latestResult.logMessage}")
 
-            else -> Timber.e("Connection check at $baseUrlSt failed: ${latestResult.logMessage}")
+            else -> Timber.e("Connection check at $baseUrlStr failed: ${latestResult.logMessage}")
         }
         return successfulConnection
     }
