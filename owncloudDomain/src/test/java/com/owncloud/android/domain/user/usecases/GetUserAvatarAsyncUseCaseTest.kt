@@ -26,40 +26,36 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GetUserAvatarAsyncUseCaseTest {
-    private val userRepository: UserRepository = spyk()
-    private val useCase = GetUserAvatarAsyncUseCase(userRepository)
+
+    private val repository: UserRepository = spyk()
+    private val useCase = GetUserAvatarAsyncUseCase(repository)
     private val useCaseParams = GetUserAvatarAsyncUseCase.Params(OC_ACCOUNT_NAME)
 
     @Test
-    fun getUserAvatarSuccess() {
-        every { userRepository.getUserAvatar(OC_ACCOUNT_NAME) } returns OC_USER_AVATAR
+    fun `get user avatar - ok`() {
+        every { repository.getUserAvatar(OC_ACCOUNT_NAME) } returns OC_USER_AVATAR
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
         assertEquals(OC_USER_AVATAR, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { userRepository.getUserAvatar(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { repository.getUserAvatar(OC_ACCOUNT_NAME) }
     }
 
     @Test
-    fun getUserAvatarWithUnauthorizedException() {
-        every { userRepository.getUserAvatar(OC_ACCOUNT_NAME) } throws UnauthorizedException()
+    fun `get user avatar - ko`() {
+        every { repository.getUserAvatar(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { userRepository.getUserAvatar(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { repository.getUserAvatar(OC_ACCOUNT_NAME) }
     }
 }

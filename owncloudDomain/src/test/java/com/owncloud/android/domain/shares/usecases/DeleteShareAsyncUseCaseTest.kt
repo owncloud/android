@@ -27,39 +27,36 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class DeleteShareAsyncUseCaseTest {
-    private val shareRepository: ShareRepository = spyk()
-    private val useCase = DeleteShareAsyncUseCase((shareRepository))
+
+    private val repository: ShareRepository = spyk()
+    private val useCase = DeleteShareAsyncUseCase(repository)
     private val useCaseParams = DeleteShareAsyncUseCase.Params(OC_SHARE.remoteId)
 
     @Test
-    fun deleteShareOk() {
+    fun `delete share - ok`() {
+        every { repository.deleteShare(any()) } returns Unit
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.deleteShare(OC_SHARE.remoteId) }
+        verify(exactly = 1) { repository.deleteShare(OC_SHARE.remoteId) }
     }
 
     @Test
-    fun deleteShareWithUnauthorizedException() {
-        every { shareRepository.deleteShare(any()) } throws UnauthorizedException()
+    fun `delete share - ko`() {
+        every { repository.deleteShare(any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.deleteShare(OC_SHARE.remoteId) }
+        verify(exactly = 1) { repository.deleteShare(OC_SHARE.remoteId) }
     }
 }

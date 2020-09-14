@@ -32,34 +32,32 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GetUserInfoAsyncUseCaseTest {
-    private val userRepository: UserRepository = spyk()
-    private val useCase = GetUserInfoAsyncUseCase(userRepository)
+
+    private val repository: UserRepository = spyk()
+    private val useCase = GetUserInfoAsyncUseCase(repository)
     private val useCaseParams = GetUserInfoAsyncUseCase.Params(OC_ACCOUNT_NAME)
 
     @Test
-    fun getUserInfoSuccess() {
-        every { userRepository.getUserInfo(OC_ACCOUNT_NAME) } returns OC_USER_INFO
+    fun `get user info - ok`() {
+        every { repository.getUserInfo(OC_ACCOUNT_NAME) } returns OC_USER_INFO
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
         assertEquals(OC_USER_INFO, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { userRepository.getUserInfo(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { repository.getUserInfo(OC_ACCOUNT_NAME) }
     }
 
     @Test
-    fun getUserInfoWithUnauthorizedException() {
-        every { userRepository.getUserInfo(OC_ACCOUNT_NAME) } throws UnauthorizedException()
+    fun `get user info - ko`() {
+        every { repository.getUserInfo(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { userRepository.getUserInfo(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { repository.getUserInfo(OC_ACCOUNT_NAME) }
     }
 }
