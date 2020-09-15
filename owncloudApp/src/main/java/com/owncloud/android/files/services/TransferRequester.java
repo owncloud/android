@@ -85,8 +85,9 @@ public class TransferRequester {
 
         if ((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO) &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Since in Android O the apps in background are not allowed to start background
-            // services and camera uploads feature may try to do it, this is the way to proceed
+            // Since in Android O the apps running in background are not allowed to start background services. The
+            // camera uploads feature may try to do this. A way to solve this is to run the camera upload feature in
+            // the foreground.
             Timber.d("Start to upload some files from foreground/background, startForeground() will be called soon");
             context.startForegroundService(intent);
         } else {
@@ -125,8 +126,9 @@ public class TransferRequester {
         intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
         intent.putExtra(FileUploader.KEY_FORCE_OVERWRITE, forceOverwrite);
 
-        // Since in Android O and above the apps in background are not allowed to start background
-        // services and available offline feature may try to do it, this is the way to proceed
+        // Since in Android O the apps running in background are not allowed to start background services. The
+        // available offline feature may try to do this. A way to solve this is to run the available offline feature in
+        // the foreground.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && requestedFromAvOfflineJobService) {
             intent.putExtra(FileUploader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
             Timber.d("Start to upload some already uploaded files from foreground/background, startForeground() will be called soon");
@@ -216,6 +218,8 @@ public class TransferRequester {
                 // services and camera uploads feature may try to do it, this is the way to proceed
                 if (requestedFromWifiBackEvent) {
                     intent.putExtra(FileUploader.KEY_REQUESTED_FROM_WIFI_BACK_EVENT, true);
+                } else {
+                    intent.putExtra(FileUploader.KEY_CREATED_BY, upload.getCreatedBy());
                 }
                 Timber.d("Retry some uploads from foreground/background, startForeground() will be called soon");
                 context.startForegroundService(intent);
