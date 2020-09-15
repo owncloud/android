@@ -71,6 +71,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import static com.owncloud.android.utils.NotificationConstantsKt.DOWNLOAD_NOTIFICATION_CHANNEL_ID;
+
 public class FileDownloader extends Service
         implements OnDatatransferProgressListener, OnAccountsUpdateListener {
 
@@ -115,7 +117,7 @@ public class FileDownloader extends Service
         super.onCreate();
         Timber.d("Creating service");
 
-        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
+        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID);
 
         HandlerThread thread = new HandlerThread("FileDownloaderThread",
                 Process.THREAD_PRIORITY_BACKGROUND);

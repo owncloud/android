@@ -30,33 +30,19 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Process
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.ui.activity.ConflictsResolveActivity
 import java.util.Random
 
 object NotificationUtils {
-    /**
-     * Factory method for [androidx.core.app.NotificationCompat.Builder] instances.
-     *
-     *
-     * Not strictly needed from the moment when the minimum API level supported by the app
-     * was raised to 14 (Android 4.0).
-     *
-     *
-     * Formerly, returned a customized implementation of [androidx.core.app.NotificationCompat.Builder]
-     * for Android API levels >= 8 and < 14.
-     *
-     *
-     * Kept in place for the extra abstraction level; notifications in the app need a review, and they
-     * change a lot in different Android versions.
-     *
-     * @param context Context that will use the builder to create notifications
-     * @return An instance of the regular [NotificationCompat.Builder].
-     */
+
     @JvmStatic
-    fun newNotificationBuilder(context: Context): NotificationCompat.Builder {
-        return NotificationCompat.Builder(context).setColor(context.resources.getColor(R.color.primary))
+    fun newNotificationBuilder(context: Context, channelId: String): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, channelId).apply {
+            color = ContextCompat.getColor(context, R.color.primary)
+        }
     }
 
     @JvmStatic
@@ -86,9 +72,8 @@ object NotificationUtils {
     @JvmStatic
     fun notifyConflict(fileInConflict: OCFile, account: Account?, context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationBuilder = newNotificationBuilder(context)
+        val notificationBuilder = newNotificationBuilder(context, FILE_SYNC_CONFLICT_CHANNEL_ID)
         notificationBuilder
-            .setChannelId(FILE_SYNC_CONFLICT_CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_icon)
             .setTicker(context.getString(R.string.conflict_title))
             .setContentTitle(context.getString(R.string.conflict_title))
