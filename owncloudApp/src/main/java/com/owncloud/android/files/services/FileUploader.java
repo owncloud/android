@@ -273,8 +273,6 @@ public class FileUploader extends Service
         if ((isCameraUploadFile || isAvailableOfflineFile || isRequestedFromWifiBackEvent) &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Timber.d("Starting FileUploader service in foreground");
-            mNotificationBuilder
-                    .setSmallIcon(R.drawable.notification_icon);
 
             if (isCameraUploadFile) {
                 mNotificationBuilder.setContentTitle(getString(R.string.uploader_upload_camera_upload_files));
@@ -945,13 +943,11 @@ public class FileUploader extends Service
         mLastPercent = 0;
         mNotificationBuilder
                 .setOngoing(true)
-                .setSmallIcon(R.drawable.notification_icon)
                 .setTicker(getString(R.string.uploader_upload_in_progress_ticker))
                 .setContentTitle(getString(R.string.uploader_upload_in_progress_ticker))
                 .setProgress(100, 0, false)
                 .setContentText(
                         String.format(getString(R.string.uploader_upload_in_progress_content), 0, upload.getFileName()))
-                .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis());
 
         /// includes a pending intent in the notification showing the details
@@ -981,7 +977,6 @@ public class FileUploader extends Service
             String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
             String text = String.format(getString(R.string.uploader_upload_in_progress_content), percent, fileName);
             mNotificationBuilder.setContentText(text);
-            mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
             getNotificationManager().notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
         }
         mLastPercent = percent;
@@ -1064,7 +1059,6 @@ public class FileUploader extends Service
             }
 
             mNotificationBuilder.setContentText(content);
-            mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
 
             getNotificationManager().notify(tickerId, mNotificationBuilder.build());
 

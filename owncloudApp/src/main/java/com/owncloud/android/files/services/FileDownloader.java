@@ -529,7 +529,6 @@ public class FileDownloader extends Service
         /// create status notification with a progress bar
         mLastPercent = 0;
         mNotificationBuilder
-                .setSmallIcon(R.drawable.notification_icon)
                 .setTicker(getString(R.string.downloader_download_in_progress_ticker))
                 .setContentTitle(getString(R.string.downloader_download_in_progress_ticker))
                 .setOngoing(true)
@@ -537,7 +536,6 @@ public class FileDownloader extends Service
                 .setContentText(
                         String.format(getString(R.string.downloader_download_in_progress_content), 0,
                                 new File(download.getSavePath()).getName()))
-                .setChannelId(NotificationConstantsKt.DOWNLOAD_NOTIFICATION_CHANNEL_ID)
                 .setWhen(System.currentTimeMillis());
 
         /// includes a pending intent in the notification showing the details view of the file
@@ -630,8 +628,6 @@ public class FileDownloader extends Service
                     ErrorMessageAdapter.Companion.getResultMessage(downloadResult, download,
                             getResources())
             );
-
-            mNotificationBuilder.setChannelId(NotificationConstantsKt.DOWNLOAD_NOTIFICATION_CHANNEL_ID);
 
             getNotificationManager().notify(tickerId, mNotificationBuilder.build());
 

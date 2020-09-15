@@ -42,6 +42,7 @@ object NotificationUtils {
     fun newNotificationBuilder(context: Context, channelId: String): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, channelId).apply {
             color = ContextCompat.getColor(context, R.color.primary)
+            setSmallIcon(R.drawable.notification_icon)
         }
     }
 
@@ -74,7 +75,6 @@ object NotificationUtils {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationBuilder = newNotificationBuilder(context, FILE_SYNC_CONFLICT_CHANNEL_ID)
         notificationBuilder
-            .setSmallIcon(R.drawable.notification_icon)
             .setTicker(context.getString(R.string.conflict_title))
             .setContentTitle(context.getString(R.string.conflict_title))
             .setContentText(
