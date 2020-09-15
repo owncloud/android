@@ -58,8 +58,8 @@ import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
-import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.FileStorageUtils
+import com.owncloud.android.utils.NotificationUtils
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -156,11 +156,13 @@ class DocumentsStorageProvider : DocumentsProvider() {
                         ).apply {
                             val result = execute(currentStorageManager, context)
                             if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                                NotificationUtils.notifyConflict(
-                                    ocFile,
-                                    getAccountFromFileId(ocFile.fileId),
-                                    context
-                                )
+                                context?.let {
+                                    NotificationUtils.notifyConflict(
+                                        ocFile,
+                                        getAccountFromFileId(ocFile.fileId),
+                                        it
+                                    )
+                                }
                             }
                         }
                     }.start()
