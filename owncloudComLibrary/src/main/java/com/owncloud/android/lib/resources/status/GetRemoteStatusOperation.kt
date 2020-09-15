@@ -68,7 +68,7 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
         return latestResult
     }
 
-    private fun updateLocationWithRelativePath(oldLocation: String, redirectedLocation: String): String {
+    fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
         if(!redirectedLocation.startsWith("/"))
             return redirectedLocation
         val oldLocation = URL(oldLocation)
@@ -97,7 +97,7 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
                 return successfulConnection
             }
 
-            var redirectedLocation = updateLocationWithRelativePath(baseUrlStr, latestResult.redirectedLocation)
+            var redirectedLocation = updateLocationWithRedirectPath(baseUrlStr, latestResult.redirectedLocation)
             while (!redirectedLocation.isNullOrEmpty() && !latestResult.isSuccess) {
                 isRedirectToNonSecureConnection =
                     isRedirectToNonSecureConnection ||
@@ -112,7 +112,7 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
 
                 status = client.executeHttpMethod(getMethod)
                 latestResult = RemoteOperationResult(getMethod)
-                redirectedLocation = updateLocationWithRelativePath(redirectedLocation, latestResult.redirectedLocation)
+                redirectedLocation = updateLocationWithRedirectPath(redirectedLocation, latestResult.redirectedLocation)
             }
 
             if (isSuccess(status)) {
