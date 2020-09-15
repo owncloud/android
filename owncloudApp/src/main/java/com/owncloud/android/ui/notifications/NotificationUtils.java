@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  * <p>
- * Copyright (C) 2016 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -19,7 +19,6 @@
 package com.owncloud.android.ui.notifications;
 
 import android.accounts.Account;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -36,10 +35,9 @@ import com.owncloud.android.ui.activity.ConflictsResolveActivity;
 import java.util.Random;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.owncloud.android.utils.NotificationConstantsKt.FILE_SYNC_CONFLICT_CHANNEL_ID;
 
 public class NotificationUtils {
-
-    private static final String FILE_SYNC_CONFLICT_CHANNEL_ID = "FILE_SYNC_CONFLICT_CHANNEL_ID";
 
     /**
      * Factory method for {@link androidx.core.app.NotificationCompat.Builder} instances.
@@ -91,20 +89,6 @@ public class NotificationUtils {
         NotificationManager notificationManager = (NotificationManager) context.
                 getSystemService(NOTIFICATION_SERVICE);
         NotificationCompat.Builder notificationBuilder = newNotificationBuilder(context);
-
-        // Configure notification channel
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel;
-            CharSequence name = context.
-                    getString(R.string.file_sync_notification_channel_name);
-            String description = context.
-                    getString(R.string.file_sync_notification_channel_description);
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            notificationChannel = new NotificationChannel(FILE_SYNC_CONFLICT_CHANNEL_ID,
-                    name, importance);
-            notificationChannel.setDescription(description);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
 
         notificationBuilder
                 .setChannelId(FILE_SYNC_CONFLICT_CHANNEL_ID)
