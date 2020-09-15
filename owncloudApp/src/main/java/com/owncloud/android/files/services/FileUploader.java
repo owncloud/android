@@ -70,7 +70,7 @@ import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
-import com.owncloud.android.ui.notifications.NotificationUtils;
+import com.owncloud.android.utils.NotificationUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.NotificationConstantsKt;
 import com.owncloud.android.utils.SecurityUtils;

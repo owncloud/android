@@ -58,7 +58,7 @@ import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
-import com.owncloud.android.ui.notifications.NotificationUtils
+import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.FileStorageUtils
 import timber.log.Timber
 import java.io.File

@@ -39,7 +39,7 @@ import timber.log.Timber;
 import java.io.File;
 import java.util.List;
 
-import static com.owncloud.android.ui.notifications.NotificationUtils.notifyConflict;
+import static com.owncloud.android.utils.NotificationUtils.notifyConflict;
 
 /**
  * Job to watch for local changes in available offline files (formerly known as kept-in-sync files) and try to
