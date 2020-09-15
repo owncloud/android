@@ -69,87 +69,104 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
     }
 
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
-        if(!redirectedLocation.startsWith("/"))
+        if (!redirectedLocation.startsWith("/"))
             return redirectedLocation
         val oldLocation = URL(oldLocation)
         return URL(oldLocation.protocol, oldLocation.host, oldLocation.port, redirectedLocation).toString()
     }
 
-    private fun tryConnection(client: OwnCloudClient): Boolean {
-        var successfulConnection = false
-        val baseUrlStr = client.baseUri.toString()
-        try {
-            var getMethod = GetMethod(URL(baseUrlStr + OwnCloudClient.STATUS_PATH)).apply {
-                setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-                setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-            }
-            client.setFollowRedirects(false)
-            var isRedirectToNonSecureConnection = false
-            var status: Int
-            try {
-                status = client.executeHttpMethod(getMethod)
-                latestResult =
-                    if (isSuccess(status)) RemoteOperationResult(ResultCode.OK)
-                    else RemoteOperationResult(getMethod)
+    private fun checkIfConnectionIsRedirectedToNoneSecure(
+        isConnectionSecure: Boolean,
+        baseUrl: String,
+        redirectedUrl: String
+    ): Boolean {
+        return isConnectionSecure ||
+                (baseUrl.startsWith(HTTPS_PREFIX) && redirectedUrl.startsWith(HTTP_PREFIX))
+    }
 
-            } catch (sslE: SSLException) {
-                latestResult = RemoteOperationResult(sslE)
-                return successfulConnection
-            }
+    private fun getGetMethod(url: String): GetMethod {
+        return GetMethod(URL(url + OwnCloudClient.STATUS_PATH)).apply {
+            setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+            setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+        }
+    }
 
-            var redirectedLocation = updateLocationWithRedirectPath(baseUrlStr, latestResult.redirectedLocation)
-            while (!redirectedLocation.isNullOrEmpty() && !latestResult.isSuccess) {
-                isRedirectToNonSecureConnection =
-                    isRedirectToNonSecureConnection ||
-                            (baseUrlStr.startsWith(HTTPS_PREFIX) && redirectedLocation.startsWith(
-                                HTTP_PREFIX
-                            ))
+    data class RequestResult(
+        val getMethod: GetMethod,
+        val status: Int,
+        val result: RemoteOperationResult<OwnCloudVersion>,
+        val redirectedToUnsecureLocation: Boolean
+    )
 
-                getMethod = GetMethod(URL(redirectedLocation)).apply {
-                    setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-                    setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-                }
+    fun requestAndFollowRedirects(baseLocation: String): RequestResult {
+        var currentLocation = baseLocation
+        var redirectedToUnsecureLocation = false
+        var status: Int
 
-                status = client.executeHttpMethod(getMethod)
-                latestResult = RemoteOperationResult(getMethod)
-                redirectedLocation = updateLocationWithRedirectPath(redirectedLocation, latestResult.redirectedLocation)
-            }
+        while (true) {
+            val getMethod = getGetMethod(currentLocation)
 
-            if (isSuccess(status)) {
-                val respJSON = JSONObject(getMethod.getResponseBodyAsString())
-                if (!respJSON.getBoolean(NODE_INSTALLED)) {
-                    latestResult = RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
-                } else {
-                    val version = respJSON.getString(NODE_VERSION)
-                    val ocVersion = OwnCloudVersion(version)
-                    // the version object will be returned even if the version is invalid, no error code;
-                    // every app will decide how to act if (ocVersion.isVersionValid() == false)
-                    latestResult = if (isRedirectToNonSecureConnection) {
-                        RemoteOperationResult(ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
-                    } else {
-                        if (baseUrlStr.startsWith(HTTPS_PREFIX)) RemoteOperationResult(ResultCode.OK_SSL)
-                        else RemoteOperationResult(ResultCode.OK_NO_SSL)
-                    }
-                    latestResult.data = ocVersion
-                    successfulConnection = true
-                }
+            status = client.executeHttpMethod(getMethod)
+            val result =
+                if (isSuccess(status)) RemoteOperationResult<OwnCloudVersion>(ResultCode.OK)
+                else RemoteOperationResult(getMethod)
+
+            if (result.redirectedLocation.isNullOrEmpty() || result.isSuccess) {
+                return RequestResult(getMethod, status, result, redirectedToUnsecureLocation)
             } else {
-                latestResult = RemoteOperationResult(getMethod)
+                val nextLocation = updateLocationWithRedirectPath(currentLocation, result.redirectedLocation)
+                redirectedToUnsecureLocation =
+                    checkIfConnectionIsRedirectedToNoneSecure(
+                        redirectedToUnsecureLocation,
+                        currentLocation,
+                        nextLocation
+                    )
+                currentLocation = nextLocation
             }
+        }
+    }
+
+    private fun handleRequestResult(requestResult: RequestResult, baseUrl: String): RemoteOperationResult<OwnCloudVersion> {
+        if (!isSuccess(requestResult.status))
+            return RemoteOperationResult(requestResult.getMethod)
+
+        val respJSON = JSONObject(requestResult.getMethod.getResponseBodyAsString())
+        if (!respJSON.getBoolean(NODE_INSTALLED))
+            return RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
+
+        val version = respJSON.getString(NODE_VERSION)
+        val ocVersion = OwnCloudVersion(version)
+        // the version object will be returned even if the version is invalid, no error code;
+        // every app will decide how to act if (ocVersion.isVersionValid() == false)
+        val result =
+            if (requestResult.redirectedToUnsecureLocation) {
+                RemoteOperationResult<OwnCloudVersion>(ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
+            } else {
+                if (baseUrl.startsWith(HTTPS_PREFIX)) RemoteOperationResult(ResultCode.OK_SSL)
+                else RemoteOperationResult(ResultCode.OK_NO_SSL)
+            }
+        result.data = ocVersion
+        return result
+    }
+
+    private fun tryConnection(client: OwnCloudClient): Boolean {
+        val baseUrl = client.baseUri.toString()
+        try {
+            client.setFollowRedirects(false)
+
+            val requestResult = requestAndFollowRedirects(baseUrl)
+            val operationResult = handleRequestResult(requestResult, baseUrl)
+            return operationResult.code == ResultCode.OK_SSL || operationResult.code == ResultCode.OK_NO_SSL
         } catch (e: JSONException) {
             latestResult = RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
+            return false
         } catch (e: Exception) {
             latestResult = RemoteOperationResult(e)
+            return false
+        } catch (sslE: SSLException) {
+            latestResult = RemoteOperationResult(sslE)
+            return false
         }
-        when {
-            latestResult.isSuccess -> Timber.i("Connection check at $baseUrlStr successful: ${latestResult.logMessage}")
-
-            latestResult.isException ->
-                Timber.e(latestResult.exception, "Connection check at $baseUrlStr: ${latestResult.logMessage}")
-
-            else -> Timber.e("Connection check at $baseUrlStr failed: ${latestResult.logMessage}")
-        }
-        return successfulConnection
     }
 
     private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
