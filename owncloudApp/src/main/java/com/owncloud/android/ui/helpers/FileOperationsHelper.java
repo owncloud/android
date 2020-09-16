@@ -195,7 +195,13 @@ public class FileOperationsHelper {
             String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                mFileActivity.startActivity(Intent.createChooser(sendIntent, ""));
+                Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
+                        sendIntent,
+                        mFileActivity.getApplicationContext(),
+                        packagesToExclude
+                );
+
+                mFileActivity.startActivity(shareSheetIntent);
             } else {
                 DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude);
                 chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
@@ -448,7 +454,13 @@ public class FileOperationsHelper {
         String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            mFileActivity.startActivity(Intent.createChooser(intentToShareLink, ""));
+            Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
+                    intentToShareLink,
+                    mFileActivity.getApplicationContext(),
+                    packagesToExclude
+            );
+
+            mFileActivity.startActivity(shareSheetIntent);
         } else {
             DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
             chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
