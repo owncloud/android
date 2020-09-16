@@ -35,7 +35,6 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.net.URL
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLException
 
 /**
  * Checks if the server is valid
@@ -46,26 +45,18 @@ import javax.net.ssl.SSLException
  * @author Abel García de Prada
  */
 class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
-    private lateinit var latestResult: RemoteOperationResult<OwnCloudVersion>
-
     override fun run(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {
+        if (client.baseUri.scheme.isNullOrEmpty())
+            client.baseUri = Uri.parse(HTTPS_SCHEME + "://" + client.baseUri.toString())
 
-        val baseUriStr = client.baseUri.toString()
-        if (baseUriStr.startsWith(HTTP_PREFIX) || baseUriStr.startsWith(
-                HTTPS_PREFIX
-            )
-        ) {
-            tryConnection(client)
-        } else {
-            client.baseUri = Uri.parse(HTTPS_PREFIX + baseUriStr)
-            val httpsSuccess = tryConnection(client)
-            if (!httpsSuccess && !latestResult.isSslRecoverableException) {
-                Timber.d("Establishing secure connection failed, trying non secure connection")
-                client.baseUri = Uri.parse(HTTP_PREFIX + baseUriStr)
-                tryConnection(client)
-            }
+        var result = tryToConnect(client)
+        if (result.code != ResultCode.OK_SSL && !result.isSslRecoverableException) {
+            Timber.d("Establishing secure connection failed, trying non secure connection")
+            client.baseUri = client.baseUri.buildUpon().scheme(HTTP_SCHEME).build()
+            result = tryToConnect(client)
         }
-        return latestResult
+
+        return result
     }
 
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
@@ -81,7 +72,7 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
         redirectedUrl: String
     ): Boolean {
         return isConnectionSecure ||
-                (baseUrl.startsWith(HTTPS_PREFIX) && redirectedUrl.startsWith(HTTP_PREFIX))
+                (baseUrl.startsWith(HTTPS_SCHEME) && redirectedUrl.startsWith(HTTP_SCHEME))
     }
 
     private fun getGetMethod(url: String): GetMethod {
@@ -126,7 +117,10 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
         }
     }
 
-    private fun handleRequestResult(requestResult: RequestResult, baseUrl: String): RemoteOperationResult<OwnCloudVersion> {
+    private fun handleRequestResult(
+        requestResult: RequestResult,
+        baseUrl: String
+    ): RemoteOperationResult<OwnCloudVersion> {
         if (!isSuccess(requestResult.status))
             return RemoteOperationResult(requestResult.getMethod)
 
@@ -142,30 +136,23 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
             if (requestResult.redirectedToUnsecureLocation) {
                 RemoteOperationResult<OwnCloudVersion>(ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
             } else {
-                if (baseUrl.startsWith(HTTPS_PREFIX)) RemoteOperationResult(ResultCode.OK_SSL)
+                if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(ResultCode.OK_SSL)
                 else RemoteOperationResult(ResultCode.OK_NO_SSL)
             }
         result.data = ocVersion
         return result
     }
 
-    private fun tryConnection(client: OwnCloudClient): Boolean {
+    private fun tryToConnect(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {
         val baseUrl = client.baseUri.toString()
-        try {
-            client.setFollowRedirects(false)
-
+        client.setFollowRedirects(false)
+        return try {
             val requestResult = requestAndFollowRedirects(baseUrl)
-            val operationResult = handleRequestResult(requestResult, baseUrl)
-            return operationResult.code == ResultCode.OK_SSL || operationResult.code == ResultCode.OK_NO_SSL
+            handleRequestResult(requestResult, baseUrl)
         } catch (e: JSONException) {
-            latestResult = RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
-            return false
+            RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
         } catch (e: Exception) {
-            latestResult = RemoteOperationResult(e)
-            return false
-        } catch (sslE: SSLException) {
-            latestResult = RemoteOperationResult(sslE)
-            return false
+            RemoteOperationResult(e)
         }
     }
 
@@ -179,7 +166,7 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
         private const val TRY_CONNECTION_TIMEOUT: Long = 5000
         private const val NODE_INSTALLED = "installed"
         private const val NODE_VERSION = "version"
-        private const val HTTPS_PREFIX = "https://"
-        private const val HTTP_PREFIX = "http://"
+        private const val HTTPS_SCHEME = "https"
+        private const val HTTP_SCHEME = "http"
     }
 }
