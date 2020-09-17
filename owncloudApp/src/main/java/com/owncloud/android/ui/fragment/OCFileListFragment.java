@@ -48,9 +48,9 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -65,6 +65,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.presentation.ui.files.SortOptionsView;
+import com.owncloud.android.presentation.ui.files.ViewType;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FileListOption;
@@ -82,6 +83,7 @@ import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
@@ -129,6 +131,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private OCFileListFragment.MultiChoiceModeListener mMultiChoiceModeListener;
 
     private SearchView mSearchView;
+
+    private SortOptionsView mSortOptionsView;
 
     /**
      * Public factory method to create new {@link OCFileListFragment} instances.
@@ -207,13 +211,19 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (allowContextualActions) {
             setChoiceModeAsMultipleModal(savedInstanceState);
         }
-        SortOptionsView sortOptionsView = v.findViewById(R.id.options_layout);
-        if (sortOptionsView != null){
-            sortOptionsView.setOnSortOptionsListener(this);
-        }
 
         Timber.i("onCreateView() end");
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mSortOptionsView = view.findViewById(R.id.options_layout);
+        if (mSortOptionsView != null) {
+            mSortOptionsView.setOnSortOptionsListener(this);
+        }
     }
 
     @Override
@@ -453,8 +463,13 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     @Override
-    public void onViewTypeListener() {
-
+    public void onViewTypeListener(@NotNull ViewType viewType) {
+        mSortOptionsView.setViewTypeSelected(viewType);
+        if (viewType == ViewType.VIEW_TYPE_LIST) {
+            setListAsPreferred();
+        } else {
+            setGridAsPreferred();
+        }
     }
 
     /**
@@ -1070,8 +1085,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
             OwnCloudVersion version = AccountUtils.getServerVersion(((FileActivity) mContainerActivity).getAccount());
             if (version != null && isGridViewPreferred(mFile)) {
                 switchToGridView();
+                mSortOptionsView.setViewTypeSelected(ViewType.VIEW_TYPE_GRID);
             } else {
                 switchToListView();
+                mSortOptionsView.setViewTypeSelected(ViewType.VIEW_TYPE_LIST);
             }
 
             // set footer text

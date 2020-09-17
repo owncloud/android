@@ -14,7 +14,6 @@
         android:padding="@dimen/global_padding"
         android:textColor="@color/primary"
         android:textSize="16sp"
-        android:text="BARTOOOOLO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/view_type_selector"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
