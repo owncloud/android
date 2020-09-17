@@ -48,6 +48,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -63,6 +64,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.ui.files.SortOptionsView;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FileListOption;
@@ -92,7 +94,7 @@ import java.util.List;
  * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
 public class OCFileListFragment extends ExtendedListFragment implements
-        SearchView.OnQueryTextListener, View.OnFocusChangeListener {
+        SearchView.OnQueryTextListener, View.OnFocusChangeListener, SortOptionsView.SortOptionsListener {
 
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
@@ -205,6 +207,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (allowContextualActions) {
             setChoiceModeAsMultipleModal(savedInstanceState);
         }
+        SortOptionsView sortOptionsView = v.findViewById(R.id.options_layout);
+        if (sortOptionsView != null){
+            sortOptionsView.setOnSortOptionsListener(this);
+        }
+
         Timber.i("onCreateView() end");
         return v;
     }
@@ -433,6 +440,21 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     public boolean isSingleItemChecked() {
         return mFileListAdapter.getCheckedItems(getListView()).size() == 1;
+    }
+
+    @Override
+    public void onSortTypeListener() {
+
+    }
+
+    @Override
+    public void onSortTypeOrderListener() {
+
+    }
+
+    @Override
+    public void onViewTypeListener() {
+
     }
 
     /**

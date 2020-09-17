@@ -17,6 +17,10 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
+    <!-- GLOBAL -->
+    <dimen name="global_margin">16dp</dimen>
+    <dimen name="global_padding">8dp</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">@dimen/standard_padding</dimen>
     <dimen name="activity_vertical_margin">@dimen/standard_padding</dimen>
