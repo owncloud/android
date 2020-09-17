@@ -48,8 +48,8 @@ internal class StatusRequester {
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
         if (!redirectedLocation.startsWith("/"))
             return redirectedLocation
-        val oldLocation = URL(oldLocation)
-        return URL(oldLocation.protocol, oldLocation.host, oldLocation.port, redirectedLocation).toString()
+        val oldLocationURL = URL(oldLocation)
+        return URL(oldLocationURL.protocol, oldLocationURL.host, oldLocationURL.port, redirectedLocation).toString()
     }
 
     private fun getGetMethod(url: String): GetMethod {

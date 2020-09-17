@@ -33,7 +33,7 @@ class StatusRequestorTest {
 
     @Test
     fun `update location with an absolute path`() {
-        val newLocation = requestor.updateLocationWithRedirectPath(TEST_DOMAIN, "$TEST_DOMAIN/subdir")
+        val newLocation = requestor.updateLocationWithRedirectPath(TEST_DOMAIN, "$TEST_DOMAIN$SUB_PATH")
         assertEquals("$TEST_DOMAIN$SUB_PATH", newLocation)
     }
 
@@ -46,9 +46,7 @@ class StatusRequestorTest {
 
     @Test
     fun `update location with a relative path`() {
-        val newLocation = requestor.updateLocationWithRedirectPath(
-            TEST_DOMAIN, SUB_PATH
-        )
+        val newLocation = requestor.updateLocationWithRedirectPath(TEST_DOMAIN, SUB_PATH)
         assertEquals("$TEST_DOMAIN$SUB_PATH", newLocation)
     }
 
