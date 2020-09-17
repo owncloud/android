@@ -1,26 +1,40 @@
+/* ownCloud Android Library is available under MIT license
+*   Copyright (C) 2020 ownCloud GmbH.
+*
+*   Permission is hereby granted, free of charge, to any person obtaining a copy
+*   of this software and associated documentation files (the "Software"), to deal
+*   in the Software without restriction, including without limitation the rights
+*   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+*   copies of the Software, and to permit persons to whom the Software is
+*   furnished to do so, subject to the following conditions:
+*
+*   The above copyright notice and this permission notice shall be included in
+*   all copies or substantial portions of the Software.
+*
+*   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+*   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+*   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+*   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+*   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+*   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+*   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+*   THE SOFTWARE.
+*
+*/
+
 package com.owncloud.android.lib.resources.status
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_SCHEME
+import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
 import org.json.JSONObject
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
-internal class StatusRequestor {
-
-    companion object {
-        /**
-         * Maximum time to wait for a response from the server when the connection is being tested,
-         * in MILLISECONDs.
-         */
-        private const val TRY_CONNECTION_TIMEOUT: Long = 5000
-        private const val NODE_INSTALLED = "installed"
-        private const val HTTPS_SCHEME = "https"
-        private const val HTTP_SCHEME = "http"
-        private const val NODE_VERSION = "version"
-    }
+internal class StatusRequester {
 
     private fun checkIfConnectionIsRedirectedToNoneSecure(
         isConnectionSecure: Boolean,
@@ -28,9 +42,7 @@ internal class StatusRequestor {
         redirectedUrl: String
     ): Boolean {
         return isConnectionSecure ||
-                (baseUrl.startsWith(HTTPS_SCHEME) && redirectedUrl.startsWith(
-                    HTTP_SCHEME
-                ))
+                (baseUrl.startsWith(HTTPS_SCHEME) && redirectedUrl.startsWith(HTTP_SCHEME))
     }
 
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
@@ -64,7 +76,7 @@ internal class StatusRequestor {
 
             status = client.executeHttpMethod(getMethod)
             val result =
-                if (isSuccess(status)) RemoteOperationResult<OwnCloudVersion>(RemoteOperationResult.ResultCode.OK)
+                if (status.isSuccess()) RemoteOperationResult<OwnCloudVersion>(RemoteOperationResult.ResultCode.OK)
                 else RemoteOperationResult(getMethod)
 
             if (result.redirectedLocation.isNullOrEmpty() || result.isSuccess) {
@@ -82,13 +94,13 @@ internal class StatusRequestor {
         }
     }
 
-    private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
+    private fun Int.isSuccess() = this == HttpConstants.HTTP_OK
 
     fun handleRequestResult(
         requestResult: RequestResult,
         baseUrl: String
     ): RemoteOperationResult<OwnCloudVersion> {
-        if (!isSuccess(requestResult.status))
+        if (!requestResult.status.isSuccess())
             return RemoteOperationResult(requestResult.getMethod)
 
         val respJSON = JSONObject(requestResult.getMethod.getResponseBodyAsString() ?: "")
@@ -109,5 +121,15 @@ internal class StatusRequestor {
             }
         result.data = ocVersion
         return result
+    }
+
+    companion object {
+        /**
+         * Maximum time to wait for a response from the server when the connection is being tested,
+         * in MILLISECONDs.
+         */
+        private const val TRY_CONNECTION_TIMEOUT: Long = 5000
+        private const val NODE_INSTALLED = "installed"
+        private const val NODE_VERSION = "version"
     }
 }

@@ -28,9 +28,10 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_SCHEME
+import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
 import org.json.JSONException
 import timber.log.Timber
-
 
 /**
  * Checks if the server is valid
@@ -41,14 +42,10 @@ import timber.log.Timber
  * @author Abel García de Prada
  */
 class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
-    companion object {
-        const val HTTPS_SCHEME = "https"
-        const val HTTP_SCHEME = "http"
-    }
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {
         if (client.baseUri.scheme.isNullOrEmpty())
-            client.baseUri = Uri.parse(HTTPS_SCHEME + "://" + client.baseUri.toString())
+            client.baseUri = Uri.parse("$HTTPS_SCHEME://${client.baseUri}")
 
         var result = tryToConnect(client)
         if (result.code != ResultCode.OK_SSL && !result.isSslRecoverableException) {
@@ -64,9 +61,9 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
         val baseUrl = client.baseUri.toString()
         client.setFollowRedirects(false)
         return try {
-            val requestor = StatusRequestor()
-            val requestResult = requestor.requestAndFollowRedirects(baseUrl, client)
-            requestor.handleRequestResult(requestResult, baseUrl)
+            val requester = StatusRequester()
+            val requestResult = requester.requestAndFollowRedirects(baseUrl, client)
+            requester.handleRequestResult(requestResult, baseUrl)
         } catch (e: JSONException) {
             RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
         } catch (e: Exception) {
