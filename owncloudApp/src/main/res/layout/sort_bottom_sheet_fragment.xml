@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/global_padding"
+        android:padding="@dimen/standard_half_padding"
         android:text="@string/actionbar_sort"
         android:textColor="@color/textColor"
         android:textSize="@dimen/two_line_primary_text_size"
@@ -21,7 +21,7 @@
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginBottom="@dimen/global_margin"
+        android:layout_marginBottom="@dimen/standard_margin"
         android:background="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,44 +29,26 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/sort_by_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:drawablePadding="@dimen/global_padding"
-        android:padding="@dimen/global_padding"
+        style="@style/Theme.ownCloud.SortBottomSheetFragment.Item"
         android:text="@string/actionbar_sort_by_name"
-        android:textColor="@color/textColor"
-        tools:drawableStart="@drawable/ic_baseline_arrow_upward"
-        android:textSize="@dimen/two_line_primary_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        tools:drawableStart="@drawable/ic_baseline_arrow_upward" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/sort_by_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:drawablePadding="@dimen/global_padding"
-        android:padding="@dimen/global_padding"
+        style="@style/Theme.ownCloud.SortBottomSheetFragment.Item"
         android:text="@string/actionbar_sort_by_date"
-        android:textColor="@color/textColor"
-        android:textSize="@dimen/two_line_primary_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sort_by_name" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/sort_by_size"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="@dimen/global_margin"
-        android:drawablePadding="@dimen/global_padding"
-        android:padding="@dimen/global_padding"
+        style="@style/Theme.ownCloud.SortBottomSheetFragment.Item"
+        android:layout_marginBottom="@dimen/standard_margin"
         android:text="@string/actionbar_sort_by_size"
-        android:textColor="@color/textColor"
-        android:textSize="@dimen/two_line_primary_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
