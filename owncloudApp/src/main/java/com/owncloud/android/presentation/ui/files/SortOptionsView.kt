@@ -41,18 +41,41 @@ class SortOptionsView @JvmOverloads constructor(
             field = viewType
         }
 
+    // Enable sort by name by default.
+    var sortTypeSelected: SortType = SortType.SORT_TYPE_BY_NAME
+        set(sortType) {
+            if (field == sortType) {
+                sortOrderSelected = sortOrderSelected.getAlternativeViewType()
+            }
+            sort_type_selector.text = context.getText(sortType.toStringRes())
+            field = sortType
+        }
+
+    // Enable sort ascending by default.
+    var sortOrderSelected: SortOrder = SortOrder.SORT_ORDER_ASCENDING
+        set(sortOrder) {
+            sort_type_selector.setCompoundDrawablesWithIntrinsicBounds(0, 0, sortOrder.toDrawableRes(), 0)
+            field = sortOrder
+        }
+
     init {
         View.inflate(context, R.layout.sort_options_layout, this)
 
-        sort_type_selector.setOnClickListener { onSortOptionsListener?.onSortTypeListener() }
-        sort_type_mode.setOnClickListener { onSortOptionsListener?.onSortTypeOrderListener() }
-        view_type_selector.setOnClickListener { onSortOptionsListener?.onViewTypeListener(viewTypeSelected.getAlternativeViewType()) }
+        sort_type_selector.setOnClickListener {
+            onSortOptionsListener?.onSortTypeListener(
+                sortTypeSelected,
+                sortOrderSelected
+            )
+        }
+        view_type_selector.setOnClickListener {
+            onSortOptionsListener?.onViewTypeListener(
+                viewTypeSelected.getAlternativeViewType()
+            )
+        }
     }
 
     interface SortOptionsListener {
-
-        fun onSortTypeListener()
-        fun onSortTypeOrderListener()
+        fun onSortTypeListener(sortType: SortType, sortOrder: SortOrder)
         fun onViewTypeListener(viewType: ViewType)
     }
 

@@ -64,7 +64,10 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
 import com.owncloud.android.presentation.ui.files.SortOptionsView;
+import com.owncloud.android.presentation.ui.files.SortOrder;
+import com.owncloud.android.presentation.ui.files.SortType;
 import com.owncloud.android.presentation.ui.files.ViewType;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
@@ -96,7 +99,8 @@ import java.util.List;
  * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
 public class OCFileListFragment extends ExtendedListFragment implements
-        SearchView.OnQueryTextListener, View.OnFocusChangeListener, SortOptionsView.SortOptionsListener {
+        SearchView.OnQueryTextListener, View.OnFocusChangeListener, SortOptionsView.SortOptionsListener,
+        SortBottomSheetFragment.SortDialogListener {
 
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
@@ -453,16 +457,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     @Override
-    public void onSortTypeListener() {
-
-    }
-
-    @Override
-    public void onSortTypeOrderListener() {
-
-    }
-
-    @Override
     public void onViewTypeListener(@NotNull ViewType viewType) {
         mSortOptionsView.setViewTypeSelected(viewType);
         if (viewType == ViewType.VIEW_TYPE_LIST) {
@@ -470,6 +464,28 @@ public class OCFileListFragment extends ExtendedListFragment implements
         } else {
             setGridAsPreferred();
         }
+    }
+
+    @Override
+    public void onSortSelected(@NotNull SortType sortType) {
+        mSortOptionsView.setSortTypeSelected(sortType);
+
+        boolean isAscending = mSortOptionsView.getSortOrderSelected().equals(SortOrder.SORT_ORDER_ASCENDING);
+        if (sortType == SortType.SORT_TYPE_BY_NAME) {
+            sortByName(isAscending);
+        } else if (sortType == SortType.SORT_TYPE_BY_DATE) {
+            sortByDate(isAscending);
+        } else if (sortType == SortType.SORT_TYPE_BY_SIZE) {
+            sortBySize(isAscending);
+        }
+
+    }
+
+    @Override
+    public void onSortTypeListener(@NotNull SortType sortType, @NotNull SortOrder sortOrder) {
+        SortBottomSheetFragment sortBottomSheetFragment = new SortBottomSheetFragment(sortType, sortOrder);
+        sortBottomSheetFragment.setSortDialogListener(this);
+        sortBottomSheetFragment.show(getChildFragmentManager(), SortBottomSheetFragment.TAG);
     }
 
     /**
