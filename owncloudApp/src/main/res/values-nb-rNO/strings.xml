@@ -475,8 +475,6 @@
   <string name="action_clear_failed_uploads">Fjern feilede</string>
   <string name="action_clear_successful_uploads">Fjern vellykkede</string>
   <string name="action_clear_finished_uploads">Slett alle ferdige</string>
-  <string name="action_switch_grid_view">Rutenett-visning</string>
-  <string name="action_switch_list_view">Listevisning</string>
   <string name="manage_space_title">Håndter plass</string>
   <string name="manage_space_description">Innstillinger, database og server-sertifikater fra %1$s sine data vil bli slettet permanent. \n\nNedlastede filer beholdes urørt.\n\nDenne prosessen kan ta litt tid.</string>
   <string name="manage_space_clear_data">Nullstill data</string>

@@ -397,8 +397,6 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="action_clear_failed_uploads">Eemaldamine ebaõnnestus</string>
   <string name="action_clear_successful_uploads">Eemaldatud</string>
   <string name="action_clear_finished_uploads">Eemalda kõik lõpetatud</string>
-  <string name="action_switch_grid_view">Võrgustikuvaade</string>
-  <string name="action_switch_list_view">kirjavaade</string>
   <string name="manage_space_title">Ruumi haldamine</string>
   <string name="manage_space_clear_data">Tühjenda andmed</string>
   <string name="manage_space_error">Mõningate failide kustutamine ebaõnnestus.</string>

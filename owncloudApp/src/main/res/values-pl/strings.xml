@@ -470,8 +470,6 @@
   <string name="action_clear_failed_uploads">Wystąpił błąd podczas czyszczenia</string>
   <string name="action_clear_successful_uploads">Czyszczenie zakończone pomyślnie</string>
   <string name="action_clear_finished_uploads">Wyczyszczono wszystkie</string>
-  <string name="action_switch_grid_view">Widok siatki</string>
-  <string name="action_switch_list_view">Widok listy</string>
   <string name="manage_space_title">Zarządzaj przestrzenią</string>
   <string name="manage_space_description">Ustawienia, baza danych i certyfikaty serwera %1$s zostaną trwale skasowane.\n\nPobrane pliki pozostaną na swoich miejscach.\n\nTen proces zajmie trochę czasu.</string>
   <string name="manage_space_clear_data">Wyczyść dane</string>

@@ -469,7 +469,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         menu.findItem(R.id.action_sync_account).isVisible = !isDrawerOpen()
-        menu.findItem(R.id.action_switch_view).isVisible = !isDrawerOpen()
 
         return super.onPrepareOptionsMenu(menu)
     }
@@ -533,24 +532,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     FileStorageUtils.SORT_DATE -> sortByDate(sortAscending)
                     FileStorageUtils.SORT_SIZE -> sortBySize(sortAscending)
                 }
-            }
-            R.id.action_switch_view -> {
-                if (isGridView) {
-                    item.title = getString(R.string.action_switch_grid_view)
-                    item.icon = ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.ic_view_module
-                    )
-                    listOfFilesFragment?.setListAsPreferred()
-                } else {
-                    item.title = applicationContext.getString(R.string.action_switch_list_view)
-                    item.icon = ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.ic_view_list
-                    )
-                    listOfFilesFragment?.setGridAsPreferred()
-                }
-                return true
             }
             R.id.action_sort_by_date -> {
                 item.isChecked = true

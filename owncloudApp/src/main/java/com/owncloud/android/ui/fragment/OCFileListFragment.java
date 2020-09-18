@@ -700,7 +700,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
             item.setVisible(mFileListOption.isAllFiles());
             item.setEnabled(mFileListOption.isAllFiles());
         }
-        changeGridIcon(menu);   // this is enough if the option stays out of the action bar
     }
 
     /**
@@ -1206,17 +1205,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
             return false;
         } else {
             return !setting.contains(String.valueOf(parentDir.getFileId()));
-        }
-    }
-
-    private void changeGridIcon(Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.action_switch_view);
-        if (isGridViewPreferred(mFile)) {
-            menuItem.setTitle(getString(R.string.action_switch_list_view));
-            menuItem.setIcon(R.drawable.ic_view_list);
-        } else {
-            menuItem.setTitle(getString(R.string.action_switch_grid_view));
-            menuItem.setIcon(R.drawable.ic_view_module);
         }
     }
 

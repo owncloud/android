@@ -435,8 +435,6 @@
   <string name="action_clear_failed_uploads">Limpiar fallido</string>
   <string name="action_clear_successful_uploads">Limpiar exitoso</string>
   <string name="action_clear_finished_uploads">Limpiar todo lo terminado</string>
-  <string name="action_switch_grid_view">Vista de rejilla</string>
-  <string name="action_switch_list_view">Ver lista</string>
   <string name="manage_space_title">Gestionar espacio</string>
   <string name="manage_space_description">Las opciones, certificados y Bases de Datos de %1$s\'s serán borrados permanentemente. \n\nLos archibos bajados no serán tocados. .\n\nEste proceso tardará algún tiempo.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>

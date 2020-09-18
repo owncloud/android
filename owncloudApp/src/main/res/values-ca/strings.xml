@@ -474,8 +474,6 @@
   <string name="action_clear_failed_uploads">Neteja fallida</string>
   <string name="action_clear_successful_uploads">Neteja exitosa</string>
   <string name="action_clear_finished_uploads">Netejat correctament</string>
-  <string name="action_switch_grid_view">Vista de graella</string>
-  <string name="action_switch_list_view">Vista de Llista</string>
   <string name="manage_space_title">Gestió d\'espai</string>
   <string name="manage_space_description">La configuració, base de dades i certificats del servidor %1$s s\'esborraran de forma permanent.\n\nEls arxius descarregats quedaran intactes.\n\nAquest procés tardarà una mica.</string>
   <string name="manage_space_clear_data">Neteja dades</string>

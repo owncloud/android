@@ -471,8 +471,6 @@
   <string name="action_clear_failed_uploads">Sikertelenek törlése</string>
   <string name="action_clear_successful_uploads">Sikeresek törlése</string>
   <string name="action_clear_finished_uploads">Befejezettek törlése</string>
-  <string name="action_switch_grid_view">Rács nézet</string>
-  <string name="action_switch_list_view">Lista nézet</string>
   <string name="manage_space_title">Helykezelés</string>
   <string name="manage_space_description">Beállítások, adatbázis és kiszolgáló tanúsítványok %1$s az adatok véglegesen törlődnek. \ n \ n A letöltött fájlok érintetlenül maradnak. \ n \ n Ez a folyamat eltarthat egy ideig.</string>
   <string name="manage_space_clear_data">Adatok törlése</string>

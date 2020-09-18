@@ -486,8 +486,6 @@
   <string name="action_clear_failed_uploads">Cancella non riusciti</string>
   <string name="action_clear_successful_uploads">Cancella corretti</string>
   <string name="action_clear_finished_uploads">Cancella tutti i completati</string>
-  <string name="action_switch_grid_view">Vista Griglia</string>
-  <string name="action_switch_list_view">Vista Elenco</string>
   <string name="manage_space_title">Gestisci lo spazio</string>
   <string name="manage_space_description">Impostazioni, database e certificati server dai dati di %1$s saranno eliminati definitivamente. \n\n\I file scaricati rimarranno intatti.\n\nQuesto processo può richiedere del tempo.</string>
   <string name="manage_space_clear_data">Cancella i dati</string>
