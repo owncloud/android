@@ -28,7 +28,9 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_SCHEME
+import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
 import org.json.JSONException
 import timber.log.Timber
@@ -44,8 +46,7 @@ import timber.log.Timber
 class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {
-        if (client.baseUri.scheme.isNullOrEmpty())
-            client.baseUri = Uri.parse("$HTTPS_SCHEME://${client.baseUri}")
+        client.baseUri = buildFullHttpsUrl(client.baseUri)
 
         var result = tryToConnect(client)
         if (result.code != ResultCode.OK_SSL && !result.isSslRecoverableException) {
@@ -68,6 +69,18 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
             RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
         } catch (e: Exception) {
             RemoteOperationResult(e)
+        }
+    }
+
+    companion object {
+        fun usesHttpOrHttps(uri: Uri) =
+            uri.toString().startsWith(HTTPS_PREFIX) || uri.toString().startsWith(HTTP_PREFIX)
+
+        fun buildFullHttpsUrl(baseUri: Uri): Uri {
+            if (usesHttpOrHttps(baseUri)) {
+                return baseUri
+            }
+            return Uri.parse("$HTTPS_PREFIX$baseUri")
         }
     }
 }
