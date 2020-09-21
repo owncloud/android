@@ -53,7 +53,7 @@ internal class StatusRequester {
     }
 
     private fun getGetMethod(url: String): GetMethod {
-        return GetMethod(URL(url + OwnCloudClient.STATUS_PATH)).apply {
+        return GetMethod(URL(url)).apply {
             setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
         }
@@ -67,7 +67,7 @@ internal class StatusRequester {
     )
 
     fun requestAndFollowRedirects(baseLocation: String, client: OwnCloudClient): RequestResult {
-        var currentLocation = baseLocation
+        var currentLocation = baseLocation + OwnCloudClient.STATUS_PATH
         var redirectedToUnsecureLocation = false
         var status: Int
 
