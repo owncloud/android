@@ -27,6 +27,7 @@
   <string name="drawer_close"> 關閉</string>
   <string name="drawer_open">開啟</string>
   <string name="drawer_loading_quota">裝貨配額</string>
+  <string name="drawer_unavailable_free_storage">%1$s 正在使用</string>
   <string name="drawer_feedback">反饋</string>
   <string name="drawer_help">說明</string>
   <string name="prefs_category_general">一般</string>
@@ -35,6 +36,8 @@
   <string name="prefs_accounts">帳號</string>
   <string name="prefs_manage_accounts">管理帳號</string>
   <string name="prefs_passcode">密碼鎖</string>
+  <string name="prefs_biometric">生物識別鎖</string>
+  <string name="prefs_biometric_summary">啟用密碼或模式鎖定以啟用此選項。</string>
   <string name="prefs_camera_picture_upload">圖片上傳</string>
   <string name="prefs_camera_picture_upload_summary">自動地上傳相機照片</string>
   <string name="prefs_camera_video_upload">影片上傳</string>
