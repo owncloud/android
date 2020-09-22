@@ -1,0 +1,32 @@
+= Android Frequently Asked Questions (FAQ)
+:hardbreaks:
+:oauth2-app-url: https://marketplace.owncloud.com/apps/oauth2
+:android-legacy-central-url: https://central.owncloud.org/t/local-copy-could-not-be-renamed-try-a-different-name/16715/2
+:android-app-tx-url: https://www.transifex.com/owncloud-org/owncloud/android/
+:android-app-beta-url: https://owncloud.com/beta-testing/#android
+:toc: right
+
+Here you can find some of the most frequently asked questions about the ownCloud Android app.
+
+== Usage
+
+=== Compatibility with ownCloud server older than version 10.0
+
+ownCloud Android app 2.9 and later only supports ownCloud server > 10.0. Check {android-legacy-central-url}[this post in the community forum] how to install older versions.
+
+=== Login with TOTP and other 2FA
+
+ownCloud server must have {oauth2-app-url}[the OAuth2 app] installed, configured, and enabled to use Two-Factor Authentication.
+Please contact your ownCloud administrator for more details.
+
+== Feature Requests
+
+=== Missing translations or translation bugs
+
+You can help translate in your language or fix a bug.
+
+We use Transifex for translations. Please {android-app-tx-url}[register here] for an account and join the global community.
+
+=== Testing new features
+
+Use {android-app-beta-url}[this link] to join the beta program on Android.
