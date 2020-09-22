@@ -8,7 +8,7 @@ class CookieJarImpl(
     private val sCookieStore: HashMap<String, List<Cookie>>
 ) : CookieJar {
 
-    private fun containsCookieWithName(cookies: List<Cookie>, name: String): Boolean {
+    fun containsCookieWithName(cookies: List<Cookie>, name: String): Boolean {
         for (cookie: Cookie in cookies) {
             if (cookie.name == name) {
                 return true;
@@ -17,7 +17,7 @@ class CookieJarImpl(
         return false;
     }
 
-    private fun getUpdatedCookies(oldCookies: List<Cookie>, newCookies: List<Cookie>): List<Cookie> {
+    fun getUpdatedCookies(oldCookies: List<Cookie>, newCookies: List<Cookie>): List<Cookie> {
         val updatedList = ArrayList<Cookie>(newCookies);
         for (oldCookie: Cookie in oldCookies) {
             if (!containsCookieWithName(updatedList, oldCookie.name)) {
@@ -27,11 +27,11 @@ class CookieJarImpl(
         return updatedList;
     }
 
-    override fun saveFromResponse(url: HttpUrl, newCookies: List<Cookie>) {
+    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         // Avoid duplicated cookies but update
         val currentCookies: List<Cookie> = sCookieStore[url.host] ?: ArrayList()
-        val updatedCookies: List<Cookie> = getUpdatedCookies(currentCookies, newCookies);
-        sCookieStore.put(url.host, updatedCookies);
+        val updatedCookies: List<Cookie> = getUpdatedCookies(currentCookies, cookies);
+        sCookieStore[url.host] = updatedCookies;
     }
 
     override fun loadForRequest(url: HttpUrl) =
