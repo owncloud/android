@@ -483,7 +483,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onSortTypeListener(@NotNull SortType sortType, @NotNull SortOrder sortOrder) {
-        SortBottomSheetFragment sortBottomSheetFragment = new SortBottomSheetFragment(sortType, sortOrder);
+        SortBottomSheetFragment sortBottomSheetFragment = SortBottomSheetFragment.Companion.newInstance(sortType, sortOrder);
         sortBottomSheetFragment.setSortDialogListener(this);
         sortBottomSheetFragment.show(getChildFragmentManager(), SortBottomSheetFragment.TAG);
     }

@@ -18,11 +18,14 @@
  */
 package com.owncloud.android.presentation.ui.files
 
+import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.owncloud.android.R
+import kotlinx.android.parcel.Parcelize
 
-enum class SortType {
+@Parcelize
+enum class SortType : Parcelable {
     SORT_TYPE_BY_NAME, SORT_TYPE_BY_DATE, SORT_TYPE_BY_SIZE;
 
     @StringRes
@@ -34,7 +37,8 @@ enum class SortType {
         }
 }
 
-enum class SortOrder {
+@Parcelize
+enum class SortOrder : Parcelable {
     SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING;
 
     fun getAlternativeViewType(): SortOrder =
