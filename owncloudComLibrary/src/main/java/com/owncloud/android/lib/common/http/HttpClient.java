@@ -136,7 +136,7 @@ public class HttpClient {
         return sLogInterceptor;
     }
 
-    public List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
+    public static List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
         return sCookieStore.get(httpUrl.host());
     }
 
