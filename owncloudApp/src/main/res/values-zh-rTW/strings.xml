@@ -28,6 +28,7 @@
   <string name="drawer_open">開啟</string>
   <string name="drawer_loading_quota">裝貨配額</string>
   <string name="drawer_unavailable_free_storage">%1$s 正在使用</string>
+  <string name="drawer_unavailable_used_storage">沒有可用的儲存空間使用方式資訊。</string>
   <string name="drawer_feedback">反饋</string>
   <string name="drawer_help">說明</string>
   <string name="prefs_category_general">一般</string>
@@ -38,6 +39,7 @@
   <string name="prefs_passcode">密碼鎖</string>
   <string name="prefs_biometric">生物識別鎖</string>
   <string name="prefs_biometric_summary">啟用密碼或模式鎖定以啟用此選項。</string>
+  <string name="confirmation_touches_with_other_windows_title">您確定要啟用這個功能？</string>
   <string name="prefs_camera_picture_upload">圖片上傳</string>
   <string name="prefs_camera_picture_upload_summary">自動地上傳相機照片</string>
   <string name="prefs_camera_video_upload">影片上傳</string>
@@ -48,6 +50,7 @@
   <string name="prefs_log_summary_history">顯示之前的記錄檔</string>
   <string name="prefs_log_delete_history_button">刪除記錄</string>
   <string name="prefs_help">說明</string>
+  <string name="prefs_sync_calendar_contacts_summary">安裝 DAVx⁵</string>
   <string name="prefs_recommend">推薦給朋友</string>
   <string name="prefs_feedback">反饋</string>
   <string name="prefs_imprint">法律聲明</string>
@@ -441,6 +444,7 @@
   <string name="streaming_certificate_error">串流不能被初始化，因為您的伺服器的憑證不被信任。檔案下載會自動開始。</string>
   <string name="streaming_unrecognized_input">不支援這種影片格式</string>
   <string name="share_no_link_in_this_share">沒有連結的分享</string>
+  <string name="share_warning_about_forwarding_public_links">任何有連結的人都能存取目錄/檔案</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">密碼 *</string>
   <string name="share_via_link_expiration_date_enforced_label">過期 *</string>
