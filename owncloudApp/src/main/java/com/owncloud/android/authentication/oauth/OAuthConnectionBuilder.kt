@@ -2,9 +2,11 @@ package com.owncloud.android.authentication.oauth
 
 import android.content.Context
 import android.net.Uri
+import com.owncloud.android.lib.common.http.HttpClient
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager
 import com.owncloud.android.lib.common.network.NetworkUtils
 import net.openid.appauth.connectivity.ConnectionBuilder
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import timber.log.Timber
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -67,11 +69,25 @@ class OAuthConnectionBuilder(val context: Context) : ConnectionBuilder {
             conn = URL(uri.toString()).openConnection() as HttpURLConnection
         }
 
+        conn.setRequestProperty("Cookie", getCookiesAsString(uri))
+
         return conn.apply {
             connectTimeout = CONNECTION_TIMEOUT_MS
             readTimeout = READ_TIMEOUT_MS
             instanceFollowRedirects = false
         }
+    }
+
+    private fun getCookiesAsString(uri: Uri): String {
+        var cookiesString = ""
+        val cookies = HttpClient.getCookiesFromUrl(uri.toString().toHttpUrlOrNull())
+
+        cookies.forEach {
+            cookiesString =
+                cookiesString.plus(it.toString().substringBefore("httponly").substringBefore("path=/") + " ")
+        }
+
+        return cookiesString
     }
 
     companion object {
