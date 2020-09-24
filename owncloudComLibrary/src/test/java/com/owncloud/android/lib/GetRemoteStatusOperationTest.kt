@@ -14,26 +14,26 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
+@Config(sdk = [Build.VERSION_CODES.O], manifest = Config.NONE)
 class GetRemoteStatusOperationTest {
 
     @Test
-    fun use_http_or_https_ok_http() {
+    fun `uses http or https - ok - http`() {
         assertTrue(GetRemoteStatusOperation.usesHttpOrHttps(Uri.parse(HTTP_SOME_OWNCLOUD)))
     }
 
     @Test
-    fun uses_http_or_https_ok_https() {
+    fun `uses http or https - ok - https`() {
         assertTrue(GetRemoteStatusOperation.usesHttpOrHttps(Uri.parse(HTTPS_SOME_OWNCLOUD)))
     }
 
     @Test
-    fun use_http_or_https_ok_no_http_or_https() {
+    fun `uses http or https - ok - no http or https`() {
         assertFalse(GetRemoteStatusOperation.usesHttpOrHttps(Uri.parse(SOME_OWNCLOUD)))
     }
 
     @Test
-    fun build_full_https_url_ok_http() {
+    fun `build full https url - ok - http`() {
         assertEquals(
             Uri.parse(HTTP_SOME_OWNCLOUD),
             GetRemoteStatusOperation.buildFullHttpsUrl(Uri.parse(HTTP_SOME_OWNCLOUD))
@@ -41,7 +41,7 @@ class GetRemoteStatusOperationTest {
     }
 
     @Test
-    fun build_full_https_url_ok_https() {
+    fun `build full https url - ok - https`() {
         assertEquals(
             Uri.parse(HTTPS_SOME_OWNCLOUD),
             GetRemoteStatusOperation.buildFullHttpsUrl(Uri.parse(HTTPS_SOME_OWNCLOUD))
@@ -49,7 +49,7 @@ class GetRemoteStatusOperationTest {
     }
 
     @Test
-    fun build_full_https_url_ok_no_prefix() {
+    fun `build full https url - ok - no prefix`() {
         assertEquals(
             Uri.parse(HTTPS_SOME_OWNCLOUD),
             GetRemoteStatusOperation.buildFullHttpsUrl(Uri.parse(SOME_OWNCLOUD))
@@ -57,7 +57,7 @@ class GetRemoteStatusOperationTest {
     }
 
     @Test
-    fun build_full_https_url_ok_no_https_with_subdir() {
+    fun `build full https url - ok - no https with subdir`() {
         assertEquals(
             Uri.parse(HTTPS_SOME_OWNCLOUD_WITH_SUBDIR), GetRemoteStatusOperation.buildFullHttpsUrl(
                 Uri.parse(
@@ -68,7 +68,7 @@ class GetRemoteStatusOperationTest {
     }
 
     @Test
-    fun build_full_https_url_ok_no_prefix_with_subdir() {
+    fun `build full https url - ok - no prefix with subdir`() {
         assertEquals(
             Uri.parse(HTTPS_SOME_OWNCLOUD_WITH_SUBDIR), GetRemoteStatusOperation.buildFullHttpsUrl(
                 Uri.parse(
@@ -79,17 +79,17 @@ class GetRemoteStatusOperationTest {
     }
 
     @Test
-    fun build_full_https_url_ok_ip() {
+    fun `build full https url - ok - ip`() {
         assertEquals(Uri.parse(HTTPS_SOME_IP), GetRemoteStatusOperation.buildFullHttpsUrl(Uri.parse(SOME_IP)))
     }
 
     @Test
-    fun build_full_https_url_http_ip() {
+    fun `build full https url - ok - http ip`() {
         assertEquals(Uri.parse(HTTP_SOME_IP), GetRemoteStatusOperation.buildFullHttpsUrl(Uri.parse(HTTP_SOME_IP)))
     }
 
     @Test
-    fun build_full_https_url_ok_ip_with_port() {
+    fun `build full https url - ok - ip with port`() {
         assertEquals(
             Uri.parse(HTTPS_SOME_IP_WITH_PORT),
             GetRemoteStatusOperation.buildFullHttpsUrl(Uri.parse(SOME_IP_WITH_PORT))
@@ -97,7 +97,7 @@ class GetRemoteStatusOperationTest {
     }
 
     @Test
-    fun build_full_https_url_ok_ip_with_http_and_port() {
+    fun `build full https url - ok - ip with http and port`() {
         assertEquals(
             Uri.parse(HTTP_SOME_IP_WITH_PORT),
             GetRemoteStatusOperation.buildFullHttpsUrl(Uri.parse(HTTP_SOME_IP_WITH_PORT))
