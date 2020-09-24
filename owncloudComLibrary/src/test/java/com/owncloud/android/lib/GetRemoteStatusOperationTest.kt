@@ -1,6 +1,7 @@
 package com.owncloud.android.lib
 
 import android.net.Uri
+import android.os.Build
 import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_PREFIX
@@ -8,7 +9,12 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class GetRemoteStatusOperationTest {
 
     @Test
