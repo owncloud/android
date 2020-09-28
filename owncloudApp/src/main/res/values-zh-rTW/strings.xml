@@ -39,6 +39,7 @@
   <string name="prefs_passcode">密碼鎖</string>
   <string name="prefs_biometric">生物識別鎖</string>
   <string name="prefs_biometric_summary">啟用密碼或模式鎖定以啟用此選項。</string>
+  <string name="prefs_touches_with_other_visible_windows">與其他可見窗口接觸</string>
   <string name="confirmation_touches_with_other_windows_title">您確定要啟用這個功能？</string>
   <string name="prefs_camera_picture_upload">圖片上傳</string>
   <string name="prefs_camera_picture_upload_summary">自動地上傳相機照片</string>
@@ -50,12 +51,23 @@
   <string name="prefs_log_summary_history">顯示之前的記錄檔</string>
   <string name="prefs_log_delete_history_button">刪除記錄</string>
   <string name="prefs_help">說明</string>
+  <string name="prefs_sync_calendar_contacts">同步您的聯繫人，日曆和任務</string>
   <string name="prefs_sync_calendar_contacts_summary">安裝 DAVx⁵</string>
   <string name="prefs_recommend">推薦給朋友</string>
   <string name="prefs_feedback">反饋</string>
   <string name="prefs_imprint">法律聲明</string>
   <string name="prefs_remember_last_share_location">記住分享位置</string>
   <string name="prefs_remember_last_upload_location_summary">記住上次分享上傳位置</string>
+  <string name="prefs_pattern">圖案鎖</string>
+  <string name="pattern_enter_pattern">請輸入你的圖案</string>
+  <string name="pattern_configure_pattern">確認你的圖案</string>
+  <string name="pattern_remove_pattern">移除你的模式</string>
+  <string name="pattern_incorrect_pattern">圖案不正確</string>
+  <string name="pattern_reenter_pattern">請重新輸入您的圖案</string>
+  <string name="pattern_not_same_pattern">模式不一樣</string>
+  <string name="pattern_stored">模式存儲</string>
+  <string name="pattern_removed">圖案已刪除</string>
+  <string name="pass_code_locked">密碼與鎖定</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">檔案</string>
   <string name="bottom_nav_uploads">上傳</string>
@@ -64,6 +76,7 @@
   <string name="recommend_subject">在您的手機中試用%1$s!</string>
   <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
   <string name="error_reason">因為</string>
+  <string name="auth_failure_snackbar">驗證失敗了</string>
   <string name="auth_failure_snackbar_action">更改帳號</string>
   <string name="auth_oauth_failure_snackbar_action">登入</string>
   <string name="auth_check_server">檢查伺服器</string>
@@ -194,6 +207,7 @@
   <string name="pass_code_wrong">不正確的密碼</string>
   <string name="pass_code_removed">密碼鎖已被移除</string>
   <string name="pass_code_stored">密碼鎖已設定</string>
+  <string name="biometric_prompt_subtitle">登入使用您的生物特徵憑證</string>
   <string name="media_notif_ticker">%1$s 音樂播放器</string>
   <string name="media_state_playing">%1$s (播放中)</string>
   <string name="media_state_loading">%1$s (載入中)</string>
@@ -252,6 +266,7 @@
   <string name="confirmation_remove_local">只有本地</string>
   <string name="confirmation_remove_account_alert">你是否真的要移除這個帳號 %1$s?</string>
   <string name="confirmation_remove_public_share_title">移除連結</string>
+  <string name="confirmation_remove_private_share_title">移除私人的分享</string>
   <string name="remove_success_msg">成功地移除</string>
   <string name="remove_fail_msg">刪除失敗</string>
   <string name="rename_dialog_title">輸入新名稱</string>
@@ -267,6 +282,7 @@
   <string name="wait_checking_credentials">檢查儲存的密碼</string>
   <string name="filedisplay_unexpected_bad_get_content">未知的問題; 請選擇其他程式開啟檔案</string>
   <string name="filedisplay_no_file_selected">沒有挑選檔案</string>
+  <string name="activity_chooser_title">發送連結到</string>
   <string name="wait_for_tmp_copy_from_private_storage">由私有的儲存空間複製檔案中</string>
   <string name="oauth_check_onoff">以 oAuth2 方式登入</string>
   <string name="ssl_validator_header">這個服務主機的身份憑證無法被驗證</string>
