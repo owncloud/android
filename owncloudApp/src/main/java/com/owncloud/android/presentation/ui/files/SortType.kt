@@ -22,6 +22,7 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.owncloud.android.R
+import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -35,6 +36,16 @@ enum class SortType : Parcelable {
             SORT_TYPE_BY_DATE -> R.string.actionbar_sort_by_date
             SORT_TYPE_BY_SIZE -> R.string.actionbar_sort_by_size
         }
+
+    companion object {
+        fun fromPreference(value: Int): SortType =
+            when (value) {
+                FileStorageUtils.SORT_NAME -> SORT_TYPE_BY_NAME
+                FileStorageUtils.SORT_SIZE -> SORT_TYPE_BY_SIZE
+                FileStorageUtils.SORT_DATE -> SORT_TYPE_BY_DATE
+                else -> throw IllegalArgumentException("Sort type not supported")
+            }
+    }
 }
 
 @Parcelize
@@ -53,4 +64,13 @@ enum class SortOrder : Parcelable {
             SORT_ORDER_ASCENDING -> R.drawable.ic_baseline_arrow_upward
             SORT_ORDER_DESCENDING -> R.drawable.ic_baseline_arrow_downward
         }
+
+    companion object {
+        fun fromPreference(isAscending: Boolean) =
+            if (isAscending) {
+                SORT_ORDER_ASCENDING
+            } else {
+                SORT_ORDER_DESCENDING
+            }
+    }
 }

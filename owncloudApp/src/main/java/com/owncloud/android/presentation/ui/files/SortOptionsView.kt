@@ -24,6 +24,10 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
+import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.presentation.ui.files.SortOrder.Companion.fromPreference
+import com.owncloud.android.presentation.ui.files.SortType.Companion.fromPreference
+import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.android.synthetic.main.sort_options_layout.view.*
 
 class SortOptionsView @JvmOverloads constructor(
@@ -60,6 +64,13 @@ class SortOptionsView @JvmOverloads constructor(
 
     init {
         View.inflate(context, R.layout.sort_options_layout, this)
+
+        // Select sort type and order according to preference.
+        val isAscending = PreferenceManager.getSortAscending(getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+        sortOrderSelected = fromPreference(isAscending)
+
+        val sortBy = PreferenceManager.getSortOrder(getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+        sortTypeSelected = fromPreference(sortBy)
 
         sort_type_selector.setOnClickListener {
             onSortOptionsListener?.onSortTypeListener(
