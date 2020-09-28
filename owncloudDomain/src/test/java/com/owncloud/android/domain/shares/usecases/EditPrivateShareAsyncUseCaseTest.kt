@@ -1,4 +1,3 @@
-
 /**
  * ownCloud Android client application
  *
@@ -17,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.owncloud.android.domain.shares.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
@@ -27,39 +25,36 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class EditPrivateShareAsyncUseCaseTest {
-    private val shareRepository: ShareRepository = spyk()
-    private val useCase = EditPrivateShareAsyncUseCase((shareRepository))
+
+    private val repository: ShareRepository = spyk()
+    private val useCase = EditPrivateShareAsyncUseCase((repository))
     private val useCaseParams = EditPrivateShareAsyncUseCase.Params(1, 1, "")
 
     @Test
-    fun editPrivateShareOk() {
+    fun `edit private share - ok`() {
+        every { repository.updatePrivateShare(any(), any(), any()) } returns Unit
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.updatePrivateShare(1, 1, "") }
+        verify(exactly = 1) { repository.updatePrivateShare(1, 1, "") }
     }
 
     @Test
-    fun editPrivateShareWithUnauthorizedException() {
-        every { shareRepository.updatePrivateShare(any(), any(), any()) } throws UnauthorizedException()
+    fun `edit private share - ko`() {
+        every { repository.updatePrivateShare(any(), any(), any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.updatePrivateShare(1, 1, "") }
+        verify(exactly = 1) { repository.updatePrivateShare(1, 1, "") }
     }
 }

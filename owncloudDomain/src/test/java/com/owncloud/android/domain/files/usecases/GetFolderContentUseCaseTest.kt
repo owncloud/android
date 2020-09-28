@@ -16,12 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package com.owncloud.android.domain.shares.usecases
+package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
-import com.owncloud.android.domain.sharing.shares.ShareRepository
-import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.testutil.OC_FILE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -29,31 +28,33 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class RefreshSharesFromServerAsyncUseCaseTest {
+class GetFolderContentUseCaseTest {
 
-    private val shareRepository: ShareRepository = spyk()
-    private val useCase = RefreshSharesFromServerAsyncUseCase((shareRepository))
-    private val useCaseParams = RefreshSharesFromServerAsyncUseCase.Params("", "")
+    private val repository: FileRepository = spyk()
+    private val useCase = GetFolderContentUseCase(repository)
+    private val useCaseParams = GetFolderContentUseCase.Params(OC_FILE.parentId!!)
 
     @Test
-    fun `refresh shares from server - ok`() {
+    fun `get folder content - ok`() {
+        every { repository.getFolderContent(useCaseParams.folderId) } returns listOf(OC_FILE)
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertEquals(Unit, useCaseResult.getDataOrNull())
+        assertEquals(listOf(OC_FILE), useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.refreshSharesFromNetwork("", "") }
+        verify(exactly = 1) { repository.getFolderContent(useCaseParams.folderId) }
     }
 
     @Test
-    fun `refresh shares from server - ko`() {
-        every { shareRepository.refreshSharesFromNetwork(any(), any()) } throws UnauthorizedException()
+    fun `get folder content - ko`() {
+        every { repository.getFolderContent(useCaseParams.folderId) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.refreshSharesFromNetwork("", "") }
+        verify(exactly = 1) { repository.getFolderContent(useCaseParams.folderId) }
     }
 }

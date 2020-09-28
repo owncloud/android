@@ -21,46 +21,41 @@ package com.owncloud.android.domain.user.usecases
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
-import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.testutil.OC_USER_QUOTA
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GetStoredQuotaUseCaseTest {
-    private val userRepository: UserRepository = spyk()
-    private val useCase = GetStoredQuotaUseCase(userRepository)
+
+    private val repository: UserRepository = spyk()
+    private val useCase = GetStoredQuotaUseCase(repository)
     private val useCaseParams = GetStoredQuotaUseCase.Params(OC_ACCOUNT_NAME)
 
     @Test
-    fun getStoredQuotaSuccess() {
-        every { userRepository.getStoredUserQuota(OC_ACCOUNT_NAME) } returns OC_USER_QUOTA
+    fun `get stored quota - ok`() {
+        every { repository.getStoredUserQuota(OC_ACCOUNT_NAME) } returns OC_USER_QUOTA
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
         assertEquals(OC_USER_QUOTA, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { userRepository.getStoredUserQuota(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { repository.getStoredUserQuota(OC_ACCOUNT_NAME) }
     }
 
     @Test
-    fun getStoredQuotaWithUnauthorizedException() {
-        every { userRepository.getStoredUserQuota(OC_ACCOUNT_NAME) }  throws UnauthorizedException()
+    fun `get stored quota - ko`() {
+        every { repository.getStoredUserQuota(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { userRepository.getStoredUserQuota(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { repository.getStoredUserQuota(OC_ACCOUNT_NAME) }
     }
 }

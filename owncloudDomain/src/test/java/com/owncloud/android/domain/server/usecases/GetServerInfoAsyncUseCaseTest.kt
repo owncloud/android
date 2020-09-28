@@ -25,57 +25,49 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GetServerInfoAsyncUseCaseTest {
-    private val serverInfoRepository: ServerInfoRepository = spyk()
-    private val useCase = GetServerInfoAsyncUseCase((serverInfoRepository))
+
+    private val repository: ServerInfoRepository = spyk()
+    private val useCase = GetServerInfoAsyncUseCase((repository))
     private val useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = "http://demo.owncloud.com")
     private val useCaseParamsWithSlash = useCaseParams.copy(serverPath = useCaseParams.serverPath.plus(TRAILING_SLASH))
 
     @Test
-    fun getServerInfoSuccess() {
-        every { serverInfoRepository.getServerInfo(useCaseParams.serverPath) } returns OC_SERVER_INFO
+    fun `get server info - ok`() {
+        every { repository.getServerInfo(useCaseParams.serverPath) } returns OC_SERVER_INFO
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
-
-        assertNull(useCaseResult.getThrowableOrNull())
         assertEquals(OC_SERVER_INFO, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { serverInfoRepository.getServerInfo(useCaseParams.serverPath) }
+        verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath) }
     }
 
     @Test
-    fun getServerInfoSuccessSlashTrim() {
-        every { serverInfoRepository.getServerInfo(useCaseParams.serverPath) } returns OC_SERVER_INFO
+    fun `get server info - ok - slash trimmed`() {
+        every { repository.getServerInfo(useCaseParams.serverPath) } returns OC_SERVER_INFO
+
         val useCaseResult = useCase.execute(useCaseParamsWithSlash)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
-
-        assertNull(useCaseResult.getThrowableOrNull())
         assertEquals(OC_SERVER_INFO, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { serverInfoRepository.getServerInfo(useCaseParams.serverPath) }
+        verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath) }
     }
 
     @Test
-    fun getServerInfoWithException() {
-        every { serverInfoRepository.getServerInfo(useCaseParams.serverPath)  } throws Exception()
+    fun `get server info - ko`() {
+        every { repository.getServerInfo(useCaseParams.serverPath) } throws Exception()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is Exception)
 
-        verify(exactly = 1) { serverInfoRepository.getServerInfo(useCaseParams.serverPath)}
+        verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath) }
     }
 }

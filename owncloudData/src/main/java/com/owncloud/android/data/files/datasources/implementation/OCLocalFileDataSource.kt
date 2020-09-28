@@ -21,6 +21,7 @@ package com.owncloud.android.data.files.datasources.implementation
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
 import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
 
 class OCLocalFileDataSource(
@@ -33,6 +34,16 @@ class OCLocalFileDataSource(
 
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
         ocFileMapper.toModel(fileDao.getFileByOwnerAndRemotePath(owner, remotePath))
+
+    override fun getFolderContent(folderId: Long): List<OCFile> =
+        fileDao.getFolderContent(folderId = folderId).map {
+            ocFileMapper.toModel(it)!!
+        }
+
+    override fun getFolderImages(folderId: Long): List<OCFile> =
+        fileDao.getFolderByMimeType(folderId = folderId, mimeType = MIME_PREFIX_IMAGE).map {
+            ocFileMapper.toModel(it)!!
+        }
 
     override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
         // Insert first folder container
