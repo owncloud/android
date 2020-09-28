@@ -1159,15 +1159,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
         return output;
     }
 
-    public void sortByName(boolean descending) {
+    private void sortByName(boolean descending) {
         mFileListAdapter.setSortOrder(FileStorageUtils.SORT_NAME, descending);
     }
 
-    public void sortByDate(boolean descending) {
+    private void sortByDate(boolean descending) {
         mFileListAdapter.setSortOrder(FileStorageUtils.SORT_DATE, descending);
     }
 
-    public void sortBySize(boolean descending) {
+    private void sortBySize(boolean descending) {
         mFileListAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, descending);
     }
 

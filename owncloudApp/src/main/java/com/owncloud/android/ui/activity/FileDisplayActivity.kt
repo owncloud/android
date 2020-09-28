@@ -49,7 +49,6 @@ import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
@@ -484,17 +483,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         inflater.inflate(R.menu.main_menu, menu)
-        inflater.inflate(R.menu.sort_menu, menu.findItem(R.id.action_sort).subMenu)
         menu.findItem(R.id.action_create_dir).isVisible = false
 
-        descendingMenuItem = menu.findItem(R.id.action_sort_descending)
         selectAllMenuItem = menu.findItem(R.id.action_select_all)
         if (secondFragment == null) {
             selectAllMenuItem?.isVisible = true
         }
         mainMenu = menu
-
-        recoverSortMenuFormPreferences(menu)
 
         return true
     }
@@ -523,50 +518,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     openDrawer()
                 }
             }
-            R.id.action_sort_descending -> {
-                item.isChecked = !item.isChecked
-                val sortAscending = !item.isChecked
-                PreferenceManager.setSortAscending(sortAscending, this, FileStorageUtils.FILE_DISPLAY_SORT)
-                when (getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT)) {
-                    FileStorageUtils.SORT_NAME -> sortByName(sortAscending)
-                    FileStorageUtils.SORT_DATE -> sortByDate(sortAscending)
-                    FileStorageUtils.SORT_SIZE -> sortBySize(sortAscending)
-                }
-            }
-            R.id.action_sort_by_date -> {
-                item.isChecked = true
-                sortByDate(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT))
-                return true
-            }
-            R.id.action_sort_by_name -> {
-                item.isChecked = true
-                sortByName(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT))
-                return true
-            }
-            R.id.action_sort_by_size -> {
-                item.isChecked = true
-                sortBySize(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT))
-                return true
-            }
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun recoverSortMenuFormPreferences(menu: Menu?) {
-        // setup sort menu
-        if (menu != null) {
-            descendingMenuItem?.isChecked = !PreferenceManager.getSortAscending(
-                this,
-                FileStorageUtils.FILE_DISPLAY_SORT
-            )
-
-            when (getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT)) {
-                FileStorageUtils.SORT_NAME -> menu.findItem(R.id.action_sort_by_name).isChecked = true
-                FileStorageUtils.SORT_DATE -> menu.findItem(R.id.action_sort_by_date).isChecked = true
-                FileStorageUtils.SORT_SIZE -> menu.findItem(R.id.action_sort_by_size).isChecked = true
-            }
-        }
     }
 
     private fun startSynchronization() {
@@ -801,8 +755,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         downloadIntentFilter.addAction(FileDownloader.getDownloadFinishMessage())
         downloadBroadcastReceiver = DownloadBroadcastReceiver()
         localBroadcastManager!!.registerReceiver(downloadBroadcastReceiver!!, downloadIntentFilter)
-
-        recoverSortMenuFormPreferences(mainMenu)
 
         Timber.v("onResume() end")
     }
@@ -1742,18 +1694,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 startSyncFolderOperation(folder, ignoreETag)
             }
         }
-    }
-
-    private fun sortByDate(ascending: Boolean) {
-        listOfFilesFragment?.sortByDate(ascending)
-    }
-
-    private fun sortBySize(ascending: Boolean) {
-        listOfFilesFragment?.sortBySize(ascending)
-    }
-
-    private fun sortByName(ascending: Boolean) {
-        listOfFilesFragment?.sortByName(ascending)
     }
 
     private fun navigateTo(newFileListOption: FileListOption) {

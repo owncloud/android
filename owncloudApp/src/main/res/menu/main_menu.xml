@@ -45,13 +45,6 @@
         android:title="@string/actionbar_sync"
         android:contentDescription="@string/actionbar_sync" />
 
-    <item
-        android:id="@+id/action_sort"
-        android:orderInCategory="2"
-        android:title="@string/actionbar_sort">
-        <menu></menu>
-    </item>
-
     <!-- <item android:id="@+id/search"
     android:title="@string/actionbar_search"
     android:icon="@drawable/ic_action_search"></item> -->

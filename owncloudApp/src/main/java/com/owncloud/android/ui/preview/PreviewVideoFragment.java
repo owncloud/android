@@ -348,13 +348,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         // additional restrictions for this fragment
 
-        MenuItem item = menu.findItem(R.id.action_sort);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        item = menu.findItem(R.id.action_sync_account);
+        MenuItem item = menu.findItem(R.id.action_sync_account);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
