@@ -2,7 +2,9 @@ package com.owncloud.android.authentication.oauth
 
 import android.content.Context
 import android.net.Uri
+import com.owncloud.android.MainApp
 import com.owncloud.android.lib.common.http.HttpClient
+import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager
 import com.owncloud.android.lib.common.network.NetworkUtils
 import net.openid.appauth.connectivity.ConnectionBuilder
@@ -69,12 +71,13 @@ class OAuthConnectionBuilder(val context: Context) : ConnectionBuilder {
             conn = URL(uri.toString()).openConnection() as HttpURLConnection
         }
 
-        conn.setRequestProperty("Cookie", getCookiesAsString(uri))
-
         return conn.apply {
             connectTimeout = CONNECTION_TIMEOUT_MS
             readTimeout = READ_TIMEOUT_MS
             instanceFollowRedirects = false
+            setRequestProperty(HttpConstants.COOKIE_HEADER, getCookiesAsString(uri))
+            setRequestProperty(HttpConstants.USER_AGENT_HEADER, MainApp.userAgent)
+
         }
     }
 
