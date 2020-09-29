@@ -18,8 +18,6 @@ android {
             }
         }
 
-        multiDexEnabled true
-
         manifestPlaceholders = [appAuthRedirectScheme: '']
     }
 
