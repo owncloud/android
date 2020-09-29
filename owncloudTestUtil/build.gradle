@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+
 android {
     compileSdkVersion sdkCompileVersion
 
@@ -20,6 +21,7 @@ android {
 dependencies {
     implementation project(':owncloudDomain')
     implementation project(':owncloud-android-library:owncloudComLibrary')
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleLiveData"
 }

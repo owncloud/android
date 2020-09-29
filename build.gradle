@@ -8,25 +8,24 @@ buildscript {
         // Android jetpack
         archLifecycleVersion = "2.1.0"
         roomVersion = "2.2.5"
-        appCompat = "1.1.0"
+        appCompat = "1.2.0"
         sqliteVersion = "2.1.0"
         lifecycleLiveData = "2.2.0"
         biometricVersion="1.0.1"
 
         // Kotlin
-        kotlinVersion = "1.3.72"
-        coroutinesVersion = "1.3.2"
+        kotlinVersion = "1.4.10"
+        coroutinesVersion = "1.3.5"
 
         // Koin
-        koinVersion = "2.0.1"
-        mockkVersion = "1.9.3"
+        koinVersion = "2.1.5"
+        mockkVersion = '1.10.2'
 
         // Testing
-        junitVersion = "4.12"
-        extJunitVersion = "1.1.1"
-        androidTestVersion = "1.2.0"
-        mockitoVersion = "2.24.0"
-        espressoTestVersion = "3.2.0"
+        junitVersion = "4.13"
+        extJunitVersion = '1.1.2'
+        androidTestVersion = '1.3.0'
+        espressoTestVersion = '3.3.0'
         fragmentTestVersion = "1.1.0"
         uiAutomatorTestVersion = "2.2.0"
         annotationTestVersion = "1.1.0"
@@ -35,9 +34,9 @@ buildscript {
         ktxVersion = "1.1.0"
 
         // KTX extensions
-        ktxCoreVersion = "1.3.0"
+        ktxCoreVersion = "1.3.1"
         ktxViewModelVersion = "2.2.0"
-        ktxFragmentVersion = "1.2.4"
+        ktxFragmentVersion = "1.2.5"
         ktxLiveData = "2.1.0"
     }
 
@@ -49,7 +48,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
     }
 }
 
@@ -64,12 +62,5 @@ allprojects {
         maven {
             url "https://jitpack.io"
         }
-    }
-}
-
-tasks.withType(Test) {
-    /// increased logging for tests
-    testLogging {
-        events "passed", "skipped", "failed"
     }
 }
