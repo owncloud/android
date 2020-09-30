@@ -20,7 +20,7 @@ package com.owncloud.android.testutil
 
 import com.owncloud.android.domain.files.model.OCFile
 
-val OC_FILE = OCFile(
+val OC_FOLDER = OCFile(
     id = 122,
     parentId = 123,
     remotePath = "/Photos",
@@ -33,4 +33,19 @@ val OC_FILE = OCFile(
     etag = "5efb0c13c688f",
     mimeType = "DIR",
     length = 123123123
+)
+
+val OC_FILE = OCFile(
+    id = 124,
+    parentId = 122,
+    remotePath = "/Photos/image.jpt",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2how",
+    privateLink = "http://server.url/f/4",
+    creationTimestamp = 0,
+    modifiedTimestamp = 1593510589000,
+    etag = "5efb0c13c688f",
+    mimeType = "image/jpeg",
+    length = 3000000
 )
