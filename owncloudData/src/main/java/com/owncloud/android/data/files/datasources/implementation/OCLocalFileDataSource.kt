@@ -57,4 +57,8 @@ class OCLocalFileDataSource(
         }
     }
 
+    override fun saveFile(file: OCFile) {
+        fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(file)!!)
+    }
+
 }
