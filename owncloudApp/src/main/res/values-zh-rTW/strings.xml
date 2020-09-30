@@ -2,8 +2,7 @@
 <resources>
   <string name="about_android">%1$s用於安卓系統</string>
   <string name="about_version">版本%1$s</string>
-  <string name="actionbar_search">搜尋這個資料夾
-</string>
+  <string name="actionbar_search">搜尋這個目錄</string>
   <string name="actionbar_sync">更新檔案列表</string>
   <string name="actionbar_upload">上傳檔案</string>
   <string name="actionbar_upload_from_apps">其他應用程序的內容</string>
@@ -27,6 +26,7 @@
   <string name="drawer_close"> 關閉</string>
   <string name="drawer_open">開啟</string>
   <string name="drawer_loading_quota">裝貨配額</string>
+  <string name="drawer_quota">%1$s的%2$s用過的(%3$s%%)</string>
   <string name="drawer_unavailable_free_storage">%1$s 正在使用</string>
   <string name="drawer_unavailable_used_storage">沒有可用的儲存空間使用方式資訊。</string>
   <string name="drawer_feedback">反饋</string>
@@ -40,7 +40,9 @@
   <string name="prefs_biometric">生物識別鎖</string>
   <string name="prefs_biometric_summary">啟用密碼或模式鎖定以啟用此選項。</string>
   <string name="prefs_touches_with_other_visible_windows">與其他可見窗口接觸</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">當視圖被另一個可見窗口遮擋時，允許觸摸。 啟用它以使用濾光應用程序。</string>
   <string name="confirmation_touches_with_other_windows_title">您確定要啟用這個功能？</string>
+  <string name="confirmation_touches_with_other_windows_message">使用此功能由您自己負責，惡意應用程式可能試圖欺騙您執行某些未覺察到的使用其他視圖的操作。</string>
   <string name="prefs_camera_picture_upload">圖片上傳</string>
   <string name="prefs_camera_picture_upload_summary">自動地上傳相機照片</string>
   <string name="prefs_camera_video_upload">影片上傳</string>
@@ -67,7 +69,13 @@
   <string name="pattern_not_same_pattern">模式不一樣</string>
   <string name="pattern_stored">模式存儲</string>
   <string name="pattern_removed">圖案已刪除</string>
+  <string name="pattern_already_set">模式和密碼鎖不能同時已啟用，請先停用模式</string>
+  <string name="passcode_already_set">模式和密碼鎖不能同時已啟用，請先停用密碼</string>
+  <string name="pattern_no_longer_required">模式將不再被詢問</string>
+  <string name="pattern_configure_your_pattern_explanation">每次啟動應用軟體時都會請求該模式</string>
   <string name="pass_code_locked">密碼與鎖定</string>
+  <string name="pattern_locked">鎖定與圖案</string>
+  <string name="illegal_argument_exception_message">傳遞給的Intent中需要有效的ACTION</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">檔案</string>
   <string name="bottom_nav_uploads">上傳</string>
@@ -77,7 +85,9 @@
   <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
   <string name="error_reason">因為</string>
   <string name="auth_failure_snackbar">驗證失敗了</string>
+  <string name="server_not_supported">您的伺服器版本低於10，因此不受支持，請升級伺服器到較新版本</string>
   <string name="auth_failure_snackbar_action">更改帳號</string>
+  <string name="auth_oauth_failure">訪問令牌已過期或變為無效的。 再次登錄以重新獲得訪問權限</string>
   <string name="auth_oauth_failure_snackbar_action">登入</string>
   <string name="auth_check_server">檢查伺服器</string>
   <string name="auth_host_url">伺服器位址 https://...</string>
@@ -101,9 +111,13 @@
   <string name="uploader_error_message_source_file_not_copied">在複製檔案到暫存資料夾時發生錯誤. 請再試一次.</string>
   <string name="file_list_seconds_ago">幾秒前</string>
   <string name="file_list_empty">這裡還沒有東西，上傳一些吧！</string>
+  <string name="file_list_empty_available_offline">沒有可用的脫機文件。</string>
+  <string name="file_list_empty_shared_by_links">連結未已分享的任何文件。</string>
   <string name="file_list_loading">載入中…</string>
+  <string name="file_list_no_app_for_file_type">找不到檔案類型的軟體</string>
   <string name="local_file_list_empty">沒有檔案在這個目錄。</string>
   <string name="local_file_list_empty_just_folders">這個資料夾中沒有任何資料夾.</string>
+  <string name="local_file_list_search_with_no_matches">沒有與此搜尋匹配的</string>
   <string name="upload_list_empty">無上傳</string>
   <string name="file_list_folder">資料夾</string>
   <string name="file_list_folders">資料夾</string>
@@ -147,13 +161,21 @@
   <string name="uploader_upload_failed_ticker">上傳失敗</string>
   <string name="uploader_upload_failed_content_single">上傳 %1$s 未完成</string>
   <string name="uploader_upload_failed_credentials_error">上傳失敗，請重新登入。</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">伺服器憑證不是可信的</string>
+  <string name="uploader_upload_text_dialog_title">插入新檔案的名稱</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">檔名不能為空</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">檔名不能超過%d個字元</string>
   <string name="uploader_upload_text_filename_hint">檔案名稱</string>
+  <string name="uploader_upload_camera_upload_files">上傳相機上傳文件</string>
+  <string name="uploader_upload_available_offline_files">上載可用的脫機文件</string>
+  <string name="uploader_upload_requested_from_wifi_files">從wifi文件上傳請求</string>
+  <string name="ssl_certificate_not_trusted">伺服器憑證不是可信的</string>
   <string name="uploads_view_title">上傳</string>
   <string name="uploads_view_group_current_uploads">目前</string>
   <string name="uploads_view_group_failed_uploads">失敗 (輕觸可重試)</string>
   <string name="uploads_view_group_finished_uploads">已上傳</string>
+  <string name="uploads_view_group_file_count">%d檔案</string>
+  <string name="uploads_view_group_file_count_single">%d檔案</string>
   <string name="uploads_view_upload_status_succeeded">完成</string>
   <string name="uploads_view_upload_status_cancelled">已取消</string>
   <string name="uploads_view_upload_status_paused">已暫停</string>
@@ -164,6 +186,7 @@
   <string name="uploads_view_upload_status_failed_file_error">檔案錯誤</string>
   <string name="uploads_view_upload_status_failed_localfile_error">找不到本地的檔案</string>
   <string name="uploads_view_upload_status_failed_permission_error">權限錯誤</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">由於防火牆規則而被禁止</string>
   <string name="uploads_view_upload_status_conflict">衝突</string>
   <string name="uploads_view_upload_status_service_interrupted">程式已被中止</string>
   <string name="uploads_view_upload_status_unknown_fail">未知的錯誤</string>
@@ -207,6 +230,9 @@
   <string name="pass_code_wrong">不正確的密碼</string>
   <string name="pass_code_removed">密碼鎖已被移除</string>
   <string name="pass_code_stored">密碼鎖已設定</string>
+  <string name="biometric_not_hardware_detected">此裝置不支持生物特徵驗證</string>
+  <string name="biometric_not_enrolled">註冊至少一個生物特徵以使用此功能</string>
+  <string name="biometric_prompt_title">生物識別登入</string>
   <string name="biometric_prompt_subtitle">登入使用您的生物特徵憑證</string>
   <string name="media_notif_ticker">%1$s 音樂播放器</string>
   <string name="media_state_playing">%1$s (播放中)</string>
@@ -285,6 +311,7 @@
   <string name="activity_chooser_title">發送連結到</string>
   <string name="wait_for_tmp_copy_from_private_storage">由私有的儲存空間複製檔案中</string>
   <string name="oauth_check_onoff">以 oAuth2 方式登入</string>
+  <string name="oauth_login_connection">正在連接到OAuth2伺服器…</string>
   <string name="ssl_validator_header">這個服務主機的身份憑證無法被驗證</string>
   <string name="ssl_validator_reason_cert_not_trusted">- 這個伺服器使用未被信任的憑證</string>
   <string name="ssl_validator_reason_cert_expired">- 這個伺服器的憑證已過期</string>
@@ -473,10 +500,29 @@
   <string name="media_service_notification_channel_description">查看音樂播放器</string>
   <string name="file_sync_notification_channel_name">檔案同步</string>
   <string name="file_sync_notification_channel_description">檢視檔案同步結果</string>
+  <string name="button_later_name">後來</string>
+  <string name="button_rate_now_name">現在就評價吧</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已選取</item>
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">略過</string>
+  <string name="welcome_feature_1_title">管理所有同步的文件</string>
+  <string name="welcome_feature_1_text">您可以復制移動刪除</string>
+  <string name="welcome_feature_2_title">分享檔案跟目錄</string>
+  <string name="welcome_feature_2_text">您可以分享私下或公開</string>
+  <string name="welcome_feature_3_title">多帳號</string>
+  <string name="welcome_feature_3_text">連接到所有您自己的Cloud服務器</string>
   <string name="welcome_feature_4_title">相機上傳</string>
+  <string name="welcome_feature_4_text">您的圖片/視頻自動地上傳</string>
+  <string name="welcome_feature_5_title">視頻流</string>
+  <string name="welcome_feature_5_text">播放視頻而不下載它們</string>
+  <string name="welcome_feature_6_title">新的底部導航欄</string>
+  <string name="welcome_feature_6_text">更輕鬆，更快速地訪問可用的脫機文件和鏈接</string>
+  <string name="welcome_feature_7_title">支持OpenID 連接</string>
+  <string name="welcome_feature_7_text">使用OpenID 連接與更安全更多的方式連接到您自己的Cloud服務器</string>
+  <string name="no_borwser_installed_alert">未安裝瀏覽器。 請安裝瀏覽器以允許安全登錄。</string>
+  <string name="common_not_found">找不到</string>
+  <string name="supports_oauth2_error">無法知道是否支持OAuth2</string>
+  <string name="get_base_url_error">無法知道伺服器基本超連結</string>
 </resources>
