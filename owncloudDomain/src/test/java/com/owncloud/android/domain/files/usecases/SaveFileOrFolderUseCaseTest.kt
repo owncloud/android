@@ -69,6 +69,5 @@ class SaveFileOrFolderUseCaseTest {
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
         verify(exactly = 1) { fileRepository.saveFile(useCaseParamsFile.fileToUpload) }
-
     }
 }
