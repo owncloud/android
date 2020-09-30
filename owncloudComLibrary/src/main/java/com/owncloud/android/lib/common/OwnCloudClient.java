@@ -103,7 +103,6 @@ public class OwnCloudClient extends HttpClient {
             Timber.d("Executing in request with id %s", requestId);
             method.setRequestHeader(HttpConstants.OC_X_REQUEST_ID, requestId);
             method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
-            method.setRequestHeader(HttpConstants.PARAM_SINGLE_COOKIE_HEADER, "true");
             method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
             if (mCredentials.getHeaderAuth() != null) {
                 method.setRequestHeader(HttpConstants.AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
@@ -135,7 +134,6 @@ public class OwnCloudClient extends HttpClient {
             Timber.d("Executing in request with id %s", requestId);
             method.setRequestHeader(OC_X_REQUEST_ID, requestId);
             method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
-            method.setRequestHeader(HttpConstants.PARAM_SINGLE_COOKIE_HEADER, "true");
             method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
             if (mCredentials.getHeaderAuth() != null) {
                 method.setRequestHeader(HttpConstants.AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
