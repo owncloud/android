@@ -23,7 +23,7 @@ import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDa
 import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
-import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -94,10 +94,10 @@ class OCRemoteFileDataSourceTest {
             createRemoteOperationResultMock(data = Unit, isSuccess = true)
 
         every {
-            ocFileService.createFolder(remotePath = OC_FILE.remotePath, createFullPath = false, isChunkFolder = false)
+            ocFileService.createFolder(remotePath = OC_FOLDER.remotePath, createFullPath = false, isChunkFolder = false)
         } returns createFolderRemoteResult
 
-        val createFolderResult = ocRemoteFileDataSource.createFolder(OC_FILE.remotePath, false, false)
+        val createFolderResult = ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false)
 
         assertNotNull(createFolderResult)
         assertEquals(createFolderRemoteResult.data, createFolderResult)
@@ -108,9 +108,9 @@ class OCRemoteFileDataSourceTest {
     @Test(expected = Exception::class)
     fun createFolderException() {
         every {
-            ocFileService.createFolder(OC_FILE.remotePath, false, false)
+            ocFileService.createFolder(OC_FOLDER.remotePath, false, false)
         } throws Exception()
 
-        ocRemoteFileDataSource.createFolder(OC_FILE.remotePath, false, false)
+        ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false)
     }
 }
