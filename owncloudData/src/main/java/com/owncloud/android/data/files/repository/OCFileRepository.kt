@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Christian Schabesberger
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -77,4 +78,7 @@ class OCFileRepository(
         }
     }
 
+    override fun saveFile(file: OCFile) {
+        localFileDataSource.saveFile(file)
+    }
 }

@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Christian Schabesberger
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,5 +28,4 @@ class RefreshFolderFromServerAsyncUseCase(
     override fun run(params: Params) = fileRepository.refreshFolder(params.remotePath)
 
     data class Params(val remotePath: String)
-
 }

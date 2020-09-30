@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Christian Schabesberger
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,7 +21,7 @@ package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
-import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -28,10 +29,9 @@ import org.junit.Assert
 import org.junit.Test
 
 class CreateFolderAsyncUseCaseTest {
-
     private val repository: FileRepository = spyk()
     private val useCase = CreateFolderAsyncUseCase(repository)
-    private val useCaseParams = CreateFolderAsyncUseCase.Params("new folder", OC_FILE)
+    private val useCaseParams = CreateFolderAsyncUseCase.Params("new folder", OC_FOLDER)
 
     @Test
     fun `create folder - ok`() {
@@ -54,7 +54,7 @@ class CreateFolderAsyncUseCaseTest {
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
         // Parent folder is not a folder :S
-        useCaseResult = useCase.execute(useCaseParams.copy(parentFile = OC_FILE.copy(mimeType = "text/plain")))
+        useCaseResult = useCase.execute(useCaseParams.copy(parentFile = OC_FOLDER.copy(mimeType = "text/plain")))
 
         Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
