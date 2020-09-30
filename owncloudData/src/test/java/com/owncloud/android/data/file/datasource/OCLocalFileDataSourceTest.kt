@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Christian Schabesberger
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,6 +26,7 @@ import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -57,5 +59,11 @@ class OCLocalFileDataSourceTest {
         every { dao.getFileById(any()) } throws Exception()
 
         localDataSource.getFileById(dummy.id!!)
+    }
+
+    @Test
+    fun `saveFile - ok - OC_FILE`() {
+        localDataSource.saveFile(dummy)
+        verify(exactly = 1) {dao.mergeRemoteAndLocalFile(dummy_entity!!)}
     }
 }
