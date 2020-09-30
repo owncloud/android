@@ -24,7 +24,6 @@ package com.owncloud.android.syncadapter;
 
 import android.accounts.Account;
 import android.accounts.AccountsException;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
@@ -49,6 +48,7 @@ import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.activity.ErrorsWhileCopyingHandlerActivity;
+import com.owncloud.android.utils.NotificationUtils;
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -56,6 +56,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.owncloud.android.utils.NotificationConstantsKt.FILE_SYNC_NOTIFICATION_CHANNEL_ID;
 
 /**
  * Implementation of {@link AbstractThreadedSyncAdapter} responsible for synchronizing
@@ -85,8 +87,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     public static final String EXTRA_RESULT = FileSyncAdapter.class.getName() + ".EXTRA_RESULT";
 
     private static final int MAX_REPEAT_COUNTER = 1;
-
-    private static final String FILE_SYNC_NOTIFICATION_CHANNEL_ID = "FILE_SYNC_NOTIFICATION_CHANNEL";
 
     /**
      * Time stamp for the current synchronization process, used to distinguish fresh data
@@ -528,9 +528,9 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * @return a notification builder with some commonly used settings.
      */
     private NotificationCompat.Builder createNotificationBuilder() {
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext());
-        notificationBuilder.setSmallIcon(R.drawable.notification_icon).setAutoCancel(true);
-        notificationBuilder.setColor(getContext().getResources().getColor(R.color.primary));
+        NotificationCompat.Builder notificationBuilder = NotificationUtils.newNotificationBuilder(getContext(),
+                FILE_SYNC_NOTIFICATION_CHANNEL_ID);
+        notificationBuilder.setAutoCancel(true);
         return notificationBuilder;
     }
 
@@ -544,25 +544,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
 
         NotificationManager mNotificationManager = ((NotificationManager) getContext().
                 getSystemService(Context.NOTIFICATION_SERVICE));
-
-        // Configure notification channel
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mNotificationChannel;
-            // The user-visible name of the channel.
-            CharSequence name = getContext().getString(R.string.file_sync_notification_channel_name);
-            // The user-visible description of the channel.
-            String description = getContext().getString(R.string.
-                    file_sync_notification_channel_description);
-            // Set importance low: show the notification everywhere but with no sound
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            mNotificationChannel = new NotificationChannel(FILE_SYNC_NOTIFICATION_CHANNEL_ID,
-                    name, importance);
-            // Configure the notification channel.
-            mNotificationChannel.setDescription(description);
-            mNotificationManager.createNotificationChannel(mNotificationChannel);
-        }
-
-        builder.setChannelId(FILE_SYNC_NOTIFICATION_CHANNEL_ID);
 
         mNotificationManager.notify(id, builder.build());
     }
