@@ -23,7 +23,7 @@ import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
-import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.mockk
@@ -38,11 +38,11 @@ class OCFileRepositoryTest {
     private val localFileDataSource = mockk<LocalFileDataSource>(relaxed = true)
     private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource)
 
-    private val folderToFetch = OC_FILE
+    private val folderToFetch = OC_FOLDER
     private val listOfFilesRetrieved = listOf(
         folderToFetch,
-        OC_FILE.copy(remoteId = "one"),
-        OC_FILE.copy(remoteId = "two")
+        OC_FOLDER.copy(remoteId = "one"),
+        OC_FOLDER.copy(remoteId = "two")
     )
 
     @Test
@@ -74,138 +74,139 @@ class OCFileRepositoryTest {
 
     @Test
     fun `create folder - ok`() {
-        every { remoteFileDataSource.createFolder(OC_FILE.remotePath, false, false) } returns Unit
+        every { remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false) } returns Unit
 
-        ocFileRepository.createFolder(OC_FILE.remotePath, OC_FILE)
+
+        ocFileRepository.createFolder(OC_FOLDER.remotePath, OC_FOLDER)
 
         verify(exactly = 1) {
             remoteFileDataSource.createFolder(any(), false, false)
-            localFileDataSource.saveFilesInFolder(any(), OC_FILE)
+            localFileDataSource.saveFilesInFolder(any(), OC_FOLDER)
         }
     }
 
     @Test(expected = NoConnectionWithServerException::class)
     fun `create folder - ko - no connection exception`() {
         every {
-            remoteFileDataSource.createFolder(OC_FILE.remotePath, false, false)
+            remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false)
         } throws NoConnectionWithServerException()
 
-        ocFileRepository.createFolder(OC_FILE.remotePath, OC_FILE)
+        ocFileRepository.createFolder(OC_FOLDER.remotePath, OC_FOLDER)
 
         verify(exactly = 1) {
             remoteFileDataSource.createFolder(any(), false, false)
         }
         verify(exactly = 0) {
-            localFileDataSource.saveFilesInFolder(any(), OC_FILE)
+            localFileDataSource.saveFilesInFolder(any(), OC_FOLDER)
         }
     }
 
     @Test
     fun `get file by id - ok`() {
-        every { localFileDataSource.getFileById(OC_FILE.id!!) } returns OC_FILE
+        every { localFileDataSource.getFileById(OC_FOLDER.id!!) } returns OC_FOLDER
 
-        val ocFile = ocFileRepository.getFileById(OC_FILE.id!!)
+        val ocFile = ocFileRepository.getFileById(OC_FOLDER.id!!)
 
-        assertEquals(OC_FILE, ocFile)
+        assertEquals(OC_FOLDER, ocFile)
 
         verify(exactly = 1) {
-            localFileDataSource.getFileById(OC_FILE.id!!)
+            localFileDataSource.getFileById(OC_FOLDER.id!!)
         }
     }
 
     @Test
     fun `get file by id - ok - null`() {
-        every { localFileDataSource.getFileById(OC_FILE.id!!) } returns null
+        every { localFileDataSource.getFileById(OC_FOLDER.id!!) } returns null
 
-        val ocFile = ocFileRepository.getFileById(OC_FILE.id!!)
+        val ocFile = ocFileRepository.getFileById(OC_FOLDER.id!!)
 
         assertNull(ocFile)
 
         verify(exactly = 1) {
-            localFileDataSource.getFileById(OC_FILE.id!!)
+            localFileDataSource.getFileById(OC_FOLDER.id!!)
         }
     }
 
     @Test(expected = Exception::class)
     fun `get file by id - ko`() {
-        every { localFileDataSource.getFileById(OC_FILE.id!!) } throws Exception()
+        every { localFileDataSource.getFileById(OC_FOLDER.id!!) } throws Exception()
 
-        ocFileRepository.getFileById(OC_FILE.id!!)
+        ocFileRepository.getFileById(OC_FOLDER.id!!)
 
         verify(exactly = 1) {
-            localFileDataSource.getFileById(OC_FILE.id!!)
+            localFileDataSource.getFileById(OC_FOLDER.id!!)
         }
     }
 
     @Test
     fun `get file by remote path - ok`() {
-        every { localFileDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner) } returns OC_FILE
+        every { localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner) } returns OC_FOLDER
 
-        ocFileRepository.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+        ocFileRepository.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
 
         verify(exactly = 1) {
-            localFileDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
         }
     }
 
     @Test(expected = Exception::class)
     fun `get file by remote path - ko`() {
         every {
-            localFileDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
         } throws Exception()
 
-        ocFileRepository.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+        ocFileRepository.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
 
         verify(exactly = 1) {
-            localFileDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
         }
     }
 
     @Test
     fun `get folder content - ok`() {
-        every { localFileDataSource.getFolderContent(OC_FILE.parentId!!) } returns listOf(OC_FILE)
+        every { localFileDataSource.getFolderContent(OC_FOLDER.parentId!!) } returns listOf(OC_FOLDER)
 
-        val folderContent = ocFileRepository.getFolderContent(OC_FILE.parentId!!)
+        val folderContent = ocFileRepository.getFolderContent(OC_FOLDER.parentId!!)
 
-        assertEquals(listOf(OC_FILE), folderContent)
+        assertEquals(listOf(OC_FOLDER), folderContent)
 
         verify(exactly = 1) {
-            localFileDataSource.getFolderContent(OC_FILE.parentId!!)
+            localFileDataSource.getFolderContent(OC_FOLDER.parentId!!)
         }
     }
 
     @Test(expected = Exception::class)
     fun `get folder content - ko`() {
-        every { localFileDataSource.getFolderContent(OC_FILE.parentId!!) } throws Exception()
+        every { localFileDataSource.getFolderContent(OC_FOLDER.parentId!!) } throws Exception()
 
-        ocFileRepository.getFolderContent(OC_FILE.parentId!!)
+        ocFileRepository.getFolderContent(OC_FOLDER.parentId!!)
 
         verify(exactly = 1) {
-            localFileDataSource.getFolderContent(OC_FILE.parentId!!)
+            localFileDataSource.getFolderContent(OC_FOLDER.parentId!!)
         }
     }
 
     @Test
     fun `get folder images - ok`() {
-        every { localFileDataSource.getFolderImages(OC_FILE.parentId!!) } returns listOf(OC_FILE)
+        every { localFileDataSource.getFolderImages(OC_FOLDER.parentId!!) } returns listOf(OC_FOLDER)
 
-        val folderContent = ocFileRepository.getFolderImages(OC_FILE.parentId!!)
+        val folderContent = ocFileRepository.getFolderImages(OC_FOLDER.parentId!!)
 
-        assertEquals(listOf(OC_FILE), folderContent)
+        assertEquals(listOf(OC_FOLDER), folderContent)
 
         verify(exactly = 1) {
-            localFileDataSource.getFolderImages(OC_FILE.parentId!!)
+            localFileDataSource.getFolderImages(OC_FOLDER.parentId!!)
         }
     }
 
     @Test(expected = Exception::class)
     fun `get folder images - ko`() {
-        every { localFileDataSource.getFolderImages(OC_FILE.parentId!!) } throws Exception()
+        every { localFileDataSource.getFolderImages(OC_FOLDER.parentId!!) } throws Exception()
 
-        ocFileRepository.getFolderImages(OC_FILE.parentId!!)
+        ocFileRepository.getFolderImages(OC_FOLDER.parentId!!)
 
         verify(exactly = 1) {
-            localFileDataSource.getFolderImages(OC_FILE.parentId!!)
+            localFileDataSource.getFolderImages(OC_FOLDER.parentId!!)
         }
     }
 
@@ -235,7 +236,7 @@ class OCFileRepositoryTest {
         ocFileRepository.refreshFolder(folderToFetch.remotePath)
 
         verify(exactly = 1) {
-            remoteFileDataSource.refreshFolder(OC_FILE.remotePath)
+            remoteFileDataSource.refreshFolder(OC_FOLDER.remotePath)
         }
         verify(exactly = 0) {
             localFileDataSource.saveFilesInFolder(any(), any())
