@@ -57,6 +57,7 @@ public class HttpClient {
     private static OkHttpClient sOkHttpClient;
     private static Context sContext;
     private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
+    private static LogInterceptor sLogInterceptor;
 
     public static OkHttpClient getOkHttpClient() {
         if (sOkHttpClient == null) {
@@ -111,6 +112,7 @@ public class HttpClient {
 
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
+                        .addInterceptor(getLogInterceptor())
                         .readTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                         .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                         .connectTimeout(HttpConstants.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -135,6 +137,13 @@ public class HttpClient {
 
     public static void setContext(Context context) {
         sContext = context;
+    }
+
+    public static LogInterceptor getLogInterceptor() {
+        if (sLogInterceptor == null) {
+            sLogInterceptor = new LogInterceptor();
+        }
+        return sLogInterceptor;
     }
 
     public List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
