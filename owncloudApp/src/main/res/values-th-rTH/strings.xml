@@ -36,9 +36,9 @@
   <string name="prefs_category_security">ความปลอดภัย</string>
   <string name="prefs_accounts">บัญชี</string>
   <string name="prefs_manage_accounts">บริหารจัดการบัญชี</string>
-  <string name="prefs_passcode">ล็อครหัสยืนยัน</string>
+  <string name="prefs_passcode">ล็อครหัสปลดล็อค</string>
   <string name="prefs_biometric">ล็อคด้วยไบโอเมตริกซ์</string>
-  <string name="prefs_biometric_summary">เปิดใช้งานรหัสผ่านหรือรูปแบบล็อคเพื่อเปิดใช้งานตัวเลือกนี้</string>
+  <string name="prefs_biometric_summary">เปิดใช้งานรหัสปลดล็อคหรือรูปแบบล็อคเพื่อเปิดใช้งานตัวเลือกนี้</string>
   <string name="prefs_touches_with_other_visible_windows">แตะกับหน้าต่างอื่นที่มองเห็น</string>
   <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอปกรองแสง</string>
   <string name="confirmation_touches_with_other_windows_title">คุณแน่ใจหรือว่าต้องการเปิดใช้งานคุณลักษณะนี้?</string>
@@ -73,7 +73,7 @@
   <string name="passcode_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดใช้งานรหัสผ่านก่อน</string>
   <string name="pattern_no_longer_required">จะไม่ถามเรื่องรูปแบบอีกต่อไป</string>
   <string name="pattern_configure_your_pattern_explanation">ร้องขอรูปแบบทุกครั้งที่มีการเริ่มต้นแอป</string>
-  <string name="pass_code_locked">ล็อคด้วยรหัสผ่าน</string>
+  <string name="pass_code_locked">ล็อคด้วยรหัสปลดล็อค</string>
   <string name="pattern_locked">ล็อคด้วยรูปแบบ</string>
   <string name="illegal_argument_exception_message">ต้องใช้การกระทำที่ถูกต้องเพื่อ</string>
   <!--Bottom navigation bar-->
@@ -221,15 +221,15 @@
   <string name="foreign_files_local_text">ในเครื่อง: %1$s</string>
   <string name="foreign_files_remote_text">รีโมท: %1$s</string>
   <string name="upload_query_move_foreign_files">มีพื้นที่เหลือไม่เพียงพอสำหรับคัดลอกไฟล์ที่คุณเลือกไปไว้ในโฟลเดอร์ %1$s คุณต้องการย้ายไฟล์ดังกล่าวแทน?</string>
-  <string name="pass_code_enter_pass_code">กรุณากรอกรหัสผ่านของคุณ</string>
-  <string name="pass_code_configure_your_pass_code">กรอกรหัสยืนยันของคุณ</string>
-  <string name="pass_code_configure_your_pass_code_explanation">จะมีการร้องขอรหัสยืนยันทุกครั้งเมื่อเริ่มต้นใช้แอปฯ</string>
-  <string name="pass_code_reenter_your_pass_code">กรุณากรอกรหัสผ่านของคุณใหม่อีกครั้ง</string>
-  <string name="pass_code_remove_your_pass_code">ลบรหัสยืนยันของคุณ</string>
-  <string name="pass_code_mismatch">รหัสยืนยันของคุณไม่ตรงกัน</string>
-  <string name="pass_code_wrong">รหัสยืนยันไม่ถูกต้อง</string>
-  <string name="pass_code_removed">ลบรหัสยืนยัน</string>
-  <string name="pass_code_stored">รหัสยืนยันที่เก็บไว้</string>
+  <string name="pass_code_enter_pass_code">กรุณากรอกรหัสปลดล็อคของคุณ</string>
+  <string name="pass_code_configure_your_pass_code">กรอกรหัสปลดล็อคของคุณ</string>
+  <string name="pass_code_configure_your_pass_code_explanation">จะมีการร้องขอรหัสปลดล็อคทุกครั้งเมื่อเริ่มต้นใช้แอปฯ</string>
+  <string name="pass_code_reenter_your_pass_code">กรุณากรอกรหัสปลดล็อคของคุณใหม่อีกครั้ง</string>
+  <string name="pass_code_remove_your_pass_code">ลบรหัสปลดล็อคของคุณ</string>
+  <string name="pass_code_mismatch">รหัสปลดล็อคของคุณไม่ตรงกัน</string>
+  <string name="pass_code_wrong">รหัสปลดล็อคไม่ถูกต้อง</string>
+  <string name="pass_code_removed">ลบรหัสปลดล็อค</string>
+  <string name="pass_code_stored">รหัสปลดล็อคที่เก็บไว้</string>
   <string name="biometric_not_hardware_detected">อุปกรณ์นี้ไม่รองรับการใช้งานไบโอเมตริกซ์</string>
   <string name="biometric_not_enrolled">จำเป็นต้องเพิ่มอย่างน้อยหนึ่งไบโอเมตริกซ์เพื่อใช้เปิดการใช้งานฟีดเจอร์นี้</string>
   <string name="biometric_prompt_title">เข้าสู่ระบบด้วยไบโอเมตริกซ์</string>

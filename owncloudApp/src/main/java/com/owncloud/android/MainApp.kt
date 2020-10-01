@@ -22,6 +22,7 @@
 package com.owncloud.android
 
 import android.app.Activity
+import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -42,6 +43,7 @@ import com.owncloud.android.dependecyinjection.remoteDataSourceModule
 import com.owncloud.android.dependecyinjection.repositoryModule
 import com.owncloud.android.dependecyinjection.useCaseModule
 import com.owncloud.android.dependecyinjection.viewModelModule
+import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.utils.LoggingHelper
@@ -49,6 +51,11 @@ import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
+import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
+import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
+import com.owncloud.android.utils.FILE_SYNC_NOTIFICATION_CHANNEL_ID
+import com.owncloud.android.utils.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID
+import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -71,6 +78,8 @@ class MainApp : MultiDexApplication() {
         startLogIfDeveloper()
 
         OwnCloudClient.setContext(appContext)
+
+        createNotificationChannels()
 
         SingleSessionManager.setUserAgent(userAgent)
 
@@ -168,6 +177,47 @@ class MainApp : MultiDexApplication() {
             )
             Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
         }
+    }
+
+    private fun createNotificationChannels() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return
+        }
+
+        createNotificationChannel(
+            id = DOWNLOAD_NOTIFICATION_CHANNEL_ID,
+            name = getString(R.string.download_notification_channel_name),
+            description = getString(R.string.download_notification_channel_description),
+            importance = IMPORTANCE_LOW
+        )
+
+        createNotificationChannel(
+            id = UPLOAD_NOTIFICATION_CHANNEL_ID,
+            name = getString(R.string.upload_notification_channel_name),
+            description = getString(R.string.upload_notification_channel_description),
+            importance = IMPORTANCE_LOW
+        )
+
+        createNotificationChannel(
+            id = MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID,
+            name = getString(R.string.media_service_notification_channel_name),
+            description = getString(R.string.media_service_notification_channel_description),
+            importance = IMPORTANCE_LOW
+        )
+
+        createNotificationChannel(
+            id = FILE_SYNC_CONFLICT_CHANNEL_ID,
+            name = getString(R.string.file_sync_notification_channel_name),
+            description = getString(R.string.file_sync_notification_channel_description),
+            importance = IMPORTANCE_LOW
+        )
+
+        createNotificationChannel(
+            id = FILE_SYNC_NOTIFICATION_CHANNEL_ID,
+            name = getString(R.string.file_sync_notification_channel_name),
+            description = getString(R.string.file_sync_notification_channel_description),
+            importance = IMPORTANCE_LOW
+        )
     }
 
     companion object {

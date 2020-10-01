@@ -23,7 +23,6 @@ package com.owncloud.android.media;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -52,6 +51,8 @@ import timber.log.Timber;
 import java.io.File;
 import java.io.IOException;
 
+import static com.owncloud.android.utils.NotificationConstantsKt.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID;
+
 /**
  * Service that handles media playback, both audio and video. 
  *
@@ -63,9 +64,6 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
     private static final String MY_PACKAGE = MediaService.class.getPackage() != null ?
             MediaService.class.getPackage().getName() : "com.owncloud.android.media";
-
-    private static final String MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID =
-            "MEDIA_SERVICE_NOTIFICATION_CHANNEL";
 
     /// Intent actions that we are prepared to handle
     public static final String ACTION_PLAY_FILE = MY_PACKAGE + ".action.PLAY_FILE";
@@ -237,22 +235,6 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
                 createWifiLock(WifiManager.WIFI_MODE_FULL, MEDIA_WIFI_LOCK_TAG);
 
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        // Configure notification channel
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mNotificationChannel;
-            // The user-visible name of the channel.
-            CharSequence name = getString(R.string.media_service_notification_channel_name);
-            // The user-visible description of the channel.
-            String description = getString(R.string.media_service_notification_channel_description);
-            // Set importance low: show the notification everywhere but with no sound
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            mNotificationChannel = new NotificationChannel(MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID,
-                    name, importance);
-            // Configure the notification channel.
-            mNotificationChannel.setDescription(description);
-            mNotificationManager.createNotificationChannel(mNotificationChannel);
-        }
 
         mNotificationBuilder = new NotificationCompat.Builder(this);
         mNotificationBuilder.setColor(this.getResources().getColor(R.color.primary));
