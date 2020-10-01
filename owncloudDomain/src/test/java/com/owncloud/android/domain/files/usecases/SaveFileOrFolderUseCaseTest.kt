@@ -33,9 +33,7 @@ class SaveFileOrFolderUseCaseTest {
     private val fileRepository: FileRepository = spyk()
     private val useCase = SaveFileOrFolderUseCase(fileRepository)
     private val file = OC_FILE
-    private val folder = OC_FOLDER
     private val useCaseParamsFile = SaveFileOrFolderUseCase.Params(file)
-    private val useCaseParamsFolder = SaveFileOrFolderUseCase.Params(folder)
 
     private fun testOkWithParams(params: SaveFileOrFolderUseCase.Params) {
         val useCaseResult = useCase.execute(params)
@@ -43,17 +41,12 @@ class SaveFileOrFolderUseCaseTest {
         Assert.assertFalse(useCaseResult.isError)
         Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) {fileRepository.saveFile(params.fileToUpload)}
+        verify(exactly = 1) {fileRepository.saveFile(params.fileToSave)}
     }
 
     @Test
     fun `execute - ok - OC_FILE`() {
         testOkWithParams(useCaseParamsFile)
-    }
-
-    @Test
-    fun `execute - ok - OC_FOLDER`() {
-        testOkWithParams(useCaseParamsFolder)
     }
 
     @Test
@@ -63,11 +56,8 @@ class SaveFileOrFolderUseCaseTest {
         val useCaseResult = useCase.execute(useCaseParamsFile)
 
         Assert.assertFalse(useCaseResult.isSuccess)
-        Assert.assertTrue(useCaseResult.isError)
-
-        Assert.assertNull(useCaseResult.getDataOrNull())
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { fileRepository.saveFile(useCaseParamsFile.fileToUpload) }
+        verify(exactly = 1) { fileRepository.saveFile(useCaseParamsFile.fileToSave) }
     }
 }
