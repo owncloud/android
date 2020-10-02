@@ -3,7 +3,7 @@ name: Android CI
 on: [push]
 
 jobs:
-  Build and test native:
+  Build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
         with:
           name: debug/release build
           path: /home/schabi/Projects/owncloud-android/owncloudApp/build/outputs/apk
-  Test with Espresso:
+  Espresso_test:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
