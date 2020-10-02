@@ -32,8 +32,7 @@ import org.junit.Test
 class SaveFileOrFolderUseCaseTest {
     private val fileRepository: FileRepository = spyk()
     private val useCase = SaveFileOrFolderUseCase(fileRepository)
-    private val file = OC_FILE
-    private val useCaseParamsFile = SaveFileOrFolderUseCase.Params(file)
+    private val useCaseParamsFile = SaveFileOrFolderUseCase.Params(OC_FILE)
 
     private fun testOkWithParams(params: SaveFileOrFolderUseCase.Params) {
         val useCaseResult = useCase.execute(params)
@@ -45,12 +44,17 @@ class SaveFileOrFolderUseCaseTest {
     }
 
     @Test
-    fun `execute - ok - OC_FILE`() {
-        testOkWithParams(useCaseParamsFile)
+    fun `save file or folder - ok`() {
+        val useCaseResult = useCase.execute(useCaseParamsFile)
+        Assert.assertTrue(useCaseResult.isSuccess)
+        Assert.assertFalse(useCaseResult.isError)
+        Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
+
+        verify(exactly = 1) {fileRepository.saveFile(useCaseParamsFile.fileToSave)}
     }
 
     @Test
-    fun `execute - ko - OC_FILE`() {
+    fun `save file or folder - ko`() {
         every { fileRepository.saveFile(any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParamsFile)
