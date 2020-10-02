@@ -37,3 +37,5 @@ Note: If you want to use the ownCloud production version you have to leave the b
 1. Go to ownCloud tab in F-Droid.
 2. Open versions section.
 3. Download the latest version that contains beta in the name.
+
+<3
