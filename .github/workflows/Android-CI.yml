@@ -3,6 +3,12 @@ name: Android CI
 on: [push]
 
 jobs:
+  Wrapper_validation:
+    name: "Gradlew wrapper validation"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1
   Build:
     runs-on: ubuntu-latest
     steps:
@@ -20,12 +26,12 @@ jobs:
         if: ${{ always() }}
         with:
           name: reports
-          path: ${{ github.workspace }}/owncloudApp/build/reports
+          path: ${{ github.workspace }}/owncloudApp/build
       - name: Upload debug/release build
         uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
-          name: debug/release build
+          name: builds
           path: ${{ github.workspace }}/owncloudApp/build/outputs/apk
   Espresso_test:
     runs-on: macos-latest
@@ -44,10 +50,7 @@ jobs:
           disable-animations: true
           arch: x86_64
           profile: Nexus 6
-          script: |
-            adb logcat -c
-            adb logcat *:E &
-            ./gradlew connectedAndroidTest
+          script: ./gradlew connectedAndroidTest
       - uses: actions/upload-artifact@v2
         if: ${{ failure() }}
         with:
