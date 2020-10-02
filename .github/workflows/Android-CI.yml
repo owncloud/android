@@ -20,15 +20,15 @@ jobs:
         if: ${{ always() }}
         with:
           name: reports
-          path: owncloudApp/build/reports
+          path: ${{ github.workspace }}/owncloudApp/build/reports
       - name: Upload debug/release build
         uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           name: debug/release build
-          path: /home/schabi/Projects/owncloud-android/owncloudApp/build/outputs/apk
+          path: ${{ github.workspace }}/owncloudApp/build/outputs/apk
   Espresso_test:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
         with:
@@ -38,7 +38,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Android Emulator test
-        uses: ReactiveCircus/android-emulator-runner@v2.8.0
+        uses: ReactiveCircus/android-emulator-runner@v2.11.0
         with:
           api-level: 28
           disable-animations: true
@@ -47,7 +47,7 @@ jobs:
           script: |
             adb logcat -c
             adb logcat *:E &
-            ./gradlew cAT
+            ./gradlew connectedAndroidTest
       - uses: actions/upload-artifact@v2
         if: ${{ failure() }}
         with:
