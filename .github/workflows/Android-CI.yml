@@ -1,5 +1,7 @@
 name: Android CI
 
+on: [push]
+
 jobs:
   Build and test native:
     runs-on: ubuntu-latest
