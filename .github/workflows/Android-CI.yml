@@ -1,9 +1,5 @@
 name: Android CI
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-
 jobs:
   Build and test native:
     runs-on: ubuntu-latest
