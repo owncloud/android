@@ -26,6 +26,7 @@ package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
 
+import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
@@ -112,7 +113,6 @@ public class HttpClient {
 
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
-                        .addInterceptor(getLogInterceptor())
                         .readTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                         .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                         .connectTimeout(HttpConstants.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -122,6 +122,12 @@ public class HttpClient {
                         .cookieJar(cookieJar);
                 // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
                 //.hostnameVerifier(new BrowserCompatHostnameVerifier());
+
+                // Http logs enabled only in debug version. TODO: Add an option to enable and disable it.
+                if (BuildConfig.DEBUG) {
+                    clientBuilder.addInterceptor(getLogInterceptor());
+                }
+
                 sOkHttpClient = clientBuilder.build();
 
             } catch (Exception e) {
