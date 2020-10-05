@@ -22,18 +22,25 @@
  */
 package com.owncloud.android.lib.common.http
 
+import timber.log.Timber
+import java.util.Locale
+
 object LogBuilder {
-    fun toLogString(
+    fun logHttp(
         networkPetition: NetworkPetition,
         networkNode: NetworkNode,
         description: String
-    ): String = "[Network, $networkPetition] [$networkNode] $description"
+    ) = Timber.d("[Network, $networkPetition] [$networkNode] $description")
 }
 
 enum class NetworkPetition {
-    REQUEST, RESPONSE
+    REQUEST, RESPONSE;
+
+    override fun toString(): String = super.toString().toLowerCase(Locale.ROOT)
 }
 
 enum class NetworkNode {
-    INFO, HEADER, BODY
+    INFO, HEADER, BODY;
+
+    override fun toString(): String = super.toString().toLowerCase(Locale.ROOT)
 }
