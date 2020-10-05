@@ -34,15 +34,6 @@ class SaveFileOrFolderUseCaseTest {
     private val useCase = SaveFileOrFolderUseCase(fileRepository)
     private val useCaseParamsFile = SaveFileOrFolderUseCase.Params(OC_FILE)
 
-    private fun testOkWithParams(params: SaveFileOrFolderUseCase.Params) {
-        val useCaseResult = useCase.execute(params)
-        Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertFalse(useCaseResult.isError)
-        Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
-
-        verify(exactly = 1) {fileRepository.saveFile(params.fileToSave)}
-    }
-
     @Test
     fun `save file or folder - ok`() {
         val useCaseResult = useCase.execute(useCaseParamsFile)
