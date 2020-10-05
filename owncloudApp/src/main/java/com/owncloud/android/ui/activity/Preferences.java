@@ -34,6 +34,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -49,13 +50,17 @@ import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.BiometricManager;
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
+import com.owncloud.android.providers.LogsProvider;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
+
+import static org.koin.java.KoinJavaComponent.*;
 
 import java.io.File;
 
@@ -87,6 +92,7 @@ public class Preferences extends PreferenceActivity {
     private static final String PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH = "camera_uploads_source_path";
     private static final String PREFERENCE_CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
     private static final String PREFERENCE_SECURITY_CATEGORY = "security_category";
+    private static final String PREFERENCE_LOGS_CATEGORY = "logs_category";
     private static final String PREFERENCE_MORE_CATEGORY = "more";
     private static final String PREFERENCE_HELP = "help";
     private static final String PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts";
@@ -96,6 +102,9 @@ public class Preferences extends PreferenceActivity {
     private static final String PREFERENCE_LOGGER = "logger";
     private static final String PREFERENCE_IMPRINT = "imprint";
     private static final String PREFERENCE_ABOUT_APP = "about_app";
+    private static final String PREFERENCE_LOG_HTTP = "set_httpLogs";
+
+    private static final String PREFERENCE_SCREEN = "preference_screen";
 
     public static final String PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows";
 
@@ -108,6 +117,7 @@ public class Preferences extends PreferenceActivity {
     private Preference mPrefCameraVideoUploadsWiFi;
     private Preference mPrefCameraUploadsSourcePath;
     private Preference mPrefCameraUploadsBehaviour;
+    private CheckBoxPreference mPrefLogHttpOption;
 
     private String mUploadPath;
     private String mUploadVideoPath;
@@ -128,6 +138,7 @@ public class Preferences extends PreferenceActivity {
     private AppCompatDelegate mDelegate;
 
     private SharedPreferences mAppPrefs;
+    private LogsProvider mLogsProvider;
     private Preference mLogger;
 
     @SuppressWarnings("deprecation")
@@ -137,6 +148,7 @@ public class Preferences extends PreferenceActivity {
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         mAppPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mLogsProvider = get(LogsProvider.class);
         addPreferencesFromResource(R.xml.preferences);
 
         ActionBar actionBar = getSupportActionBar();
@@ -363,6 +375,31 @@ public class Preferences extends PreferenceActivity {
         }
 
         /**
+         * Logs
+         */
+        PreferenceCategory pCategoryLogs = (PreferenceCategory) findPreference(PREFERENCE_LOGS_CATEGORY);
+        mPrefLogHttpOption = (CheckBoxPreference) findPreference(PREFERENCE_LOG_HTTP);
+
+        if (mPrefLogHttpOption != null) {
+            mPrefLogHttpOption.setOnPreferenceChangeListener(
+                    (preference, newValue) -> {
+                        mLogsProvider.shouldLogHttpRequests((Boolean) newValue);
+                        return true;
+                    }
+            );
+        }
+
+        // show item(s) only when you are developer
+        mLogger = findPreference(PREFERENCE_LOGGER);
+        mLogger.setOnPreferenceClickListener(preference -> {
+            Intent loggerIntent = new Intent(getApplicationContext(), LogHistoryActivity.class);
+            startActivity(loggerIntent);
+
+            return true;
+        });
+        showDeveloperItems(pCategoryLogs);
+
+        /**
          * More
          */
         PreferenceCategory pCategoryMore = (PreferenceCategory) findPreference(PREFERENCE_MORE_CATEGORY);
@@ -470,16 +507,6 @@ public class Preferences extends PreferenceActivity {
             }
         }
 
-        // show item(s) only when you are developer
-        mLogger = findPreference(PREFERENCE_LOGGER);
-        mLogger.setOnPreferenceClickListener(preference -> {
-            Intent loggerIntent = new Intent(getApplicationContext(), LogHistoryActivity.class);
-            startActivity(loggerIntent);
-
-            return true;
-        });
-        showDeveloperItems(pCategoryMore);
-
         boolean imprintEnabled = getResources().getBoolean(R.bool.imprint_enabled);
         Preference pImprint = findPreference(PREFERENCE_IMPRINT);
         if (pImprint != null) {
@@ -531,10 +558,11 @@ public class Preferences extends PreferenceActivity {
 
     private void showDeveloperItems(PreferenceCategory preferenceCategory) {
         Preference pLogger = findPreference(PREFERENCE_LOGGER);
+        PreferenceScreen preferenceScreen = (PreferenceScreen) findPreference(PREFERENCE_SCREEN);
         if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) >= MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER && pLogger == null) {
-            preferenceCategory.addPreference(mLogger);
+            preferenceScreen.addPreference(preferenceCategory);
         } else if (!MainApp.Companion.isDeveloper() && pLogger != null) {
-            preferenceCategory.removePreference(mLogger);
+            preferenceScreen.removePreference(preferenceCategory);
         }
     }
 

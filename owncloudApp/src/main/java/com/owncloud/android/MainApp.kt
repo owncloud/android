@@ -34,6 +34,7 @@ import android.view.WindowManager
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
@@ -46,6 +47,7 @@ import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.utils.LoggingHelper
+import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
@@ -55,6 +57,7 @@ import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -155,6 +158,8 @@ class MainApp : Application() {
         })
 
         initDependencyInjection()
+
+        initPreferenceOptions()
     }
 
     fun startLogIfDeveloper() {
@@ -171,6 +176,11 @@ class MainApp : Application() {
             )
             Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
         }
+    }
+
+    private fun initPreferenceOptions() {
+        val logsProvider: LogsProvider by inject()
+        logsProvider.initHttpLogs()
     }
 
     private fun createNotificationChannels() {

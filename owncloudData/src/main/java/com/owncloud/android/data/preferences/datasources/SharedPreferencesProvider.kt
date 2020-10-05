@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author David González Verdugo
  * @author Abel García de Prada
  * Copyright (C) 2020 ownCloud GmbH.
  *
@@ -18,20 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.dependecyinjection
+package com.owncloud.android.data.preferences.datasources
 
-import com.owncloud.android.presentation.manager.AvatarManager
-import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.providers.LogsProvider
-import com.owncloud.android.providers.OCContextProvider
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
+interface SharedPreferencesProvider {
 
-val commonModule = module {
+    fun putString(key: String, value: String)
+    fun getString(key: String, defaultValue: String): String?
 
-    single { AvatarManager() }
-    single { CoroutinesDispatcherProvider() }
-    single { LogsProvider() }
-    factory<ContextProvider> { OCContextProvider(androidContext()) }
+    fun putBoolean(key: String, value: Boolean)
+    fun getBoolean(key: String, defaultValue: Boolean): Boolean
 }

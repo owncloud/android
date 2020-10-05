@@ -16,7 +16,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preference_screen">
 
     <PreferenceCategory
         android:key="camera_uploads_category"
@@ -73,6 +74,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="logs_category"
+        android:title="@string/actionbar_logger">
+        <android.preference.CheckBoxPreference
+            android:key="set_httpLogs"
+            android:title="@string/prefs_http_logs" />
+        <Preference
+            android:key="logger"
+            android:summary="@string/prefs_logs_summary"
+            android:title="@string/actionbar_logger" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="more"
         android:title="@string/prefs_category_more">
         <Preference
@@ -80,17 +93,14 @@
             android:title="@string/prefs_help" />
         <Preference
             android:key="syncCalendarContacts"
-            android:title="@string/prefs_sync_calendar_contacts"
-            android:summary="@string/prefs_sync_calendar_contacts_summary" />
+            android:summary="@string/prefs_sync_calendar_contacts_summary"
+            android:title="@string/prefs_sync_calendar_contacts" />
         <Preference
             android:key="recommend"
             android:title="@string/prefs_recommend" />
         <Preference
             android:key="feedback"
             android:title="@string/drawer_feedback" />
-        <Preference
-            android:key="logger"
-            android:title="@string/actionbar_logger" />
         <Preference
             android:key="privacyPolicy"
             android:title="@string/prefs_privacy_policy" />
