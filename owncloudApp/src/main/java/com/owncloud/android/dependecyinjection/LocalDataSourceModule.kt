@@ -52,7 +52,7 @@ val localDataSourceModule = module {
 
     single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
 
-    factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), accountType) }
+    factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get(), get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get(), get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get(), get()) }

@@ -24,7 +24,6 @@ package com.owncloud.android.ui.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
@@ -33,7 +32,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -137,7 +135,7 @@ public class Preferences extends PreferenceActivity {
     private Preference mAboutApp;
     private AppCompatDelegate mDelegate;
 
-    private SharedPreferences mAppPrefs;
+    private SharedPreferencesProvider mPreferencesProvider;
     private LogsProvider mLogsProvider;
     private Preference mLogger;
 
@@ -147,7 +145,7 @@ public class Preferences extends PreferenceActivity {
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
-        mAppPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mPreferencesProvider = get(SharedPreferencesProvider.class);
         mLogsProvider = get(LogsProvider.class);
         addPreferencesFromResource(R.xml.preferences);
 
@@ -289,7 +287,7 @@ public class Preferences extends PreferenceActivity {
             mPasscode.setOnPreferenceChangeListener((preference, newValue) -> {
                 Intent i = new Intent(getApplicationContext(), PassCodeActivity.class);
                 Boolean incoming = (Boolean) newValue;
-                patternSet = mAppPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
+                patternSet = mPreferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
                 if (patternSet) {
                     showSnackMessage(R.string.pattern_already_set);
                 } else {
@@ -308,7 +306,7 @@ public class Preferences extends PreferenceActivity {
             mPattern.setOnPreferenceChangeListener((preference, newValue) -> {
                 Intent intent = new Intent(getApplicationContext(), PatternLockActivity.class);
                 Boolean state = (Boolean) newValue;
-                passcodeSet = mAppPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+                passcodeSet = mPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
                 if (passcodeSet) {
                     showSnackMessage(R.string.passcode_already_set);
                 } else {
@@ -356,14 +354,13 @@ public class Preferences extends PreferenceActivity {
         if (mPrefTouchesWithOtherVisibleWindows != null) {
             mPrefTouchesWithOtherVisibleWindows.setOnPreferenceChangeListener(
                     (preference, newValue) -> {
-                        SharedPreferences.Editor editor = mAppPrefs.edit();
                         if ((Boolean) newValue) {
                             new AlertDialog.Builder(this)
                                     .setTitle(getString(R.string.confirmation_touches_with_other_windows_title))
                                     .setMessage(getString(R.string.confirmation_touches_with_other_windows_message))
                                     .setNegativeButton(getString(R.string.common_no), null)
                                     .setPositiveButton(getString(R.string.common_yes), (dialog, which) -> {
-                                        editor.putBoolean(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, true).apply();
+                                        mPreferencesProvider.putBoolean(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, true);
                                         mPrefTouchesWithOtherVisibleWindows.setChecked(true);
                                     })
                                     .show();
@@ -536,10 +533,10 @@ public class Preferences extends PreferenceActivity {
             ));
             mAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
             mAboutApp.setOnPreferenceClickListener(preference -> {
-                int clickCount = mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0);
-                if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) > MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
+                int clickCount = mPreferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0);
+                if (mPreferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0) > MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
                     return true;
-                } else if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) ==
+                } else if (mPreferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0) ==
                         MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
                     showDeveloperItems(pCategoryMore);
                 } else if (clickCount > 0) {
@@ -548,7 +545,7 @@ public class Preferences extends PreferenceActivity {
                                     MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER - clickCount),
                             Toast.LENGTH_SHORT).show();
                 }
-                mAppPrefs.edit().putInt(MainApp.CLICK_DEV_MENU, clickCount + 1).apply();
+                mPreferencesProvider.putInt(MainApp.CLICK_DEV_MENU, clickCount + 1);
                 ((MainApp) getApplication()).startLogIfDeveloper(); // read value to global variable
 
                 return true;
@@ -559,7 +556,7 @@ public class Preferences extends PreferenceActivity {
     private void showDeveloperItems(PreferenceCategory preferenceCategory) {
         Preference pLogger = findPreference(PREFERENCE_LOGGER);
         PreferenceScreen preferenceScreen = (PreferenceScreen) findPreference(PREFERENCE_SCREEN);
-        if (mAppPrefs.getInt(MainApp.CLICK_DEV_MENU, 0) >= MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER && pLogger == null) {
+        if (mPreferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0) >= MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER && pLogger == null) {
             preferenceScreen.addPreference(preferenceCategory);
         } else if (!MainApp.Companion.isDeveloper() && pLogger != null) {
             preferenceScreen.removePreference(preferenceCategory);
@@ -666,11 +663,12 @@ public class Preferences extends PreferenceActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        boolean passCodeState = mAppPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+        boolean passCodeState = mPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
         mPasscode.setChecked(passCodeState);
-        boolean patternState = mAppPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
+        boolean patternState = mPreferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
         mPattern.setChecked(patternState);
-        boolean biometricState = mAppPrefs.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false);
+        boolean biometricState = mPreferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC,
+                false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mBiometricManager != null &&
                 !mBiometricManager.hasEnrolledBiometric()) {
@@ -751,13 +749,12 @@ public class Preferences extends PreferenceActivity {
 
             String passcode = data.getStringExtra(PassCodeActivity.KEY_PASSCODE);
             if (passcode != null && passcode.length() == 4) {
-                SharedPreferences.Editor editor = mAppPrefs.edit();
 
                 for (int i = 1; i <= 4; ++i) {
-                    editor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, passcode.substring(i - 1, i));
+                    mPreferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE_D + i,
+                            passcode.substring(i - 1, i));
                 }
-                editor.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true);
-                editor.apply();
+                mPreferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true);
 
                 showSnackMessage(R.string.pass_code_stored);
 
@@ -768,7 +765,7 @@ public class Preferences extends PreferenceActivity {
         } else if (requestCode == ACTION_CONFIRM_PASSCODE && resultCode == RESULT_OK) { // Disable passcode
 
             if (data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)) {
-                mAppPrefs.edit().putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false).apply();
+                mPreferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
                 showSnackMessage(R.string.pass_code_removed);
 
                 // Do not allow to use biometric lock since Passcode lock has been disabled
@@ -777,10 +774,8 @@ public class Preferences extends PreferenceActivity {
         } else if (requestCode == ACTION_REQUEST_PATTERN && resultCode == RESULT_OK) { // Enable pattern
             String patternValue = data.getStringExtra(PatternLockActivity.KEY_PATTERN);
             if (patternValue != null) {
-                SharedPreferences.Editor editor = mAppPrefs.edit();
-                editor.putString(PatternLockActivity.KEY_PATTERN, patternValue);
-                editor.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true);
-                editor.apply();
+                mPreferencesProvider.putString(PatternLockActivity.KEY_PATTERN, patternValue);
+                mPreferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true);
                 showSnackMessage(R.string.pattern_stored);
 
                 // Allow to use biometric lock since Pattern lock has been enabled
@@ -788,7 +783,7 @@ public class Preferences extends PreferenceActivity {
             }
         } else if (requestCode == ACTION_CONFIRM_PATTERN && resultCode == RESULT_OK) { // Disable pattern
             if (data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)) {
-                mAppPrefs.edit().putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false).apply();
+                mPreferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
                 showSnackMessage(R.string.pattern_removed);
 
                 // Do not allow to use biometric lock since Pattern lock has been disabled
@@ -889,7 +884,8 @@ public class Preferences extends PreferenceActivity {
      * Load picture upload path set on preferences
      */
     private void loadCameraUploadsPicturePath() {
-        mUploadPath = mAppPrefs.getString(PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH, PREF__CAMERA_UPLOADS_DEFAULT_PATH);
+        mUploadPath = mPreferencesProvider.getString(PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH,
+                PREF__CAMERA_UPLOADS_DEFAULT_PATH);
         mPrefCameraPictureUploadsPath.setSummary(
                 DisplayUtils.getPathWithoutLastSlash(mUploadPath)
         );
@@ -899,14 +895,15 @@ public class Preferences extends PreferenceActivity {
      * Save the "Picture upload path" on preferences
      */
     private void saveCameraUploadsPicturePathOnPreferences() {
-        mAppPrefs.edit().putString(PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH, mUploadPath).apply();
+        mPreferencesProvider.putString(PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH, mUploadPath);
     }
 
     /**
      * Load video upload path set on preferences
      */
     private void loadCameraUploadsVideoPath() {
-        mUploadVideoPath = mAppPrefs.getString(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH, PREF__CAMERA_UPLOADS_DEFAULT_PATH);
+        mUploadVideoPath = mPreferencesProvider.getString(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH,
+                PREF__CAMERA_UPLOADS_DEFAULT_PATH);
         mPrefCameraVideoUploadsPath.setSummary(DisplayUtils.getPathWithoutLastSlash(mUploadVideoPath));
     }
 
@@ -914,14 +911,14 @@ public class Preferences extends PreferenceActivity {
      * Save the "Video upload path" on preferences
      */
     private void saveCameraUploadsVideoPathOnPreferences() {
-        mAppPrefs.edit().putString(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH, mUploadVideoPath).apply();
+        mPreferencesProvider.putString(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH, mUploadVideoPath);
     }
 
     /**
      * Load source path set on preferences
      */
     private void loadCameraUploadsSourcePath() {
-        mSourcePath = mAppPrefs.getString(
+        mSourcePath = mPreferencesProvider.getString(
                 PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH,
                 CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
         );
@@ -945,7 +942,7 @@ public class Preferences extends PreferenceActivity {
      * Save the "Camera folder" path on preferences
      */
     private void saveCameraUploadsSourcePathOnPreferences() {
-        mAppPrefs.edit().putString(PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH, mSourcePath).apply();
+        mPreferencesProvider.putString(PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH, mSourcePath);
     }
 
     private void enableBiometric() {

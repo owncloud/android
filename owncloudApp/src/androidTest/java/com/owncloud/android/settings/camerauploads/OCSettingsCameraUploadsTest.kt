@@ -19,11 +19,14 @@
 
 package com.owncloud.android.settings.camerauploads
 
+import android.content.Context
 import android.os.Environment
 import android.preference.CheckBoxPreference
 import android.preference.PreferenceCategory
 import android.preference.PreferenceManager
 import android.preference.PreferenceScreen
+import androidx.lifecycle.MutableLiveData
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -37,14 +40,24 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.Preferences
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.unmockkAll
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 class OCSettingsCameraUploadsTest {
     @Rule
@@ -59,9 +72,25 @@ class OCSettingsCameraUploadsTest {
     private lateinit var mPrefCameraPictureUploads: CheckBoxPreference
     private lateinit var mPrefCameraVideoUploads: CheckBoxPreference
 
+    private lateinit var sharedPreferencesProvider: SharedPreferencesProvider
+    private lateinit var logsProvider: LogsProvider
+
     @Before
     fun setUp() {
+        sharedPreferencesProvider = mockk(relaxed = true)
+        logsProvider = mockk(relaxed = true)
 
+        stopKoin()
+
+        startKoin {
+            context
+            modules(
+                module(override = true) {
+                    factory { sharedPreferencesProvider }
+                    factory { logsProvider }
+                }
+            )
+        }
         mPrefCameraPictureUploads = activityRule.activity.findPreference(cameraPictureUploads) as CheckBoxPreference
         mPrefCameraVideoUploads = activityRule.activity.findPreference(cameraVideoUploads) as CheckBoxPreference
 
@@ -78,6 +107,8 @@ class OCSettingsCameraUploadsTest {
     @After
     fun tearDown() {
         //Clean preferences
+        clearAllMocks()
+        unmockkAll()
         PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit()
     }
 

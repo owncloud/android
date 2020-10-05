@@ -21,8 +21,8 @@ package com.owncloud.android.data
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
-import android.preference.PreferenceManager
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
@@ -31,6 +31,7 @@ import com.owncloud.android.lib.resources.users.services.implementation.OCUserSe
 
 class ClientManager(
     private val accountManager: AccountManager,
+    private val preferencesProvider: SharedPreferencesProvider,
     val context: Context
 ) {
     private fun getClientForAccount(
@@ -48,8 +49,7 @@ class ClientManager(
     private fun getCurrentAccount(): Account? {
         val ocAccounts = accountManager.accounts
 
-        val appPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val accountName = appPreferences.getString(SELECTED_ACCOUNT, null)
+        val accountName = preferencesProvider.getString(SELECTED_ACCOUNT, null)
 
         // account validation: the saved account MUST be in the list of ownCloud Accounts known by the AccountManager
         accountName?.let { selectedAccountName ->

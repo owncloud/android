@@ -32,15 +32,12 @@ class SharedPreferencesProviderImpl(
     private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val editor = sharedPreferences.edit()
 
-    override fun putString(key: String, value: String) {
-        editor.putString(key, value).apply()
-    }
+    override fun putString(key: String, value: String) = editor.putString(key, value).apply()
+    override fun getString(key: String, defaultValue: String?) = sharedPreferences.getString(key, defaultValue)
 
-    override fun getString(key: String, defaultValue: String) = sharedPreferences.getString(key, defaultValue)
+    override fun putInt(key: String, value: Int) = editor.putInt(key, value).apply()
+    override fun getInt(key: String, defaultValue: Int) = sharedPreferences.getInt(key, defaultValue)
 
-    override fun putBoolean(key: String, value: Boolean) {
-        editor.putBoolean(key, value).apply()
-    }
-
+    override fun putBoolean(key: String, value: Boolean) = editor.putBoolean(key, value).apply()
     override fun getBoolean(key: String, defaultValue: Boolean) = sharedPreferences.getBoolean(key, defaultValue)
 }
