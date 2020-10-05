@@ -24,6 +24,8 @@
 package com.owncloud.android.lib.common.http
 
 import com.owncloud.android.lib.common.http.LogBuilder.toLogString
+import com.owncloud.android.lib.common.http.NetworkNode.*
+import com.owncloud.android.lib.common.http.NetworkPetition.*
 import okhttp3.Interceptor
 import okhttp3.Response
 import timber.log.Timber
@@ -31,27 +33,39 @@ import timber.log.Timber
 class LogInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        // Log request
-        chain.request().let {
-            Timber.d(toLogString(NetworkPetition.REQUEST, NetworkNode.INFO, "Type: ${it.method} URL: ${it.url}"))
-            it.headers.forEach { header ->
-                Timber.d(toLogString(NetworkPetition.REQUEST, NetworkNode.HEADER, header.toString()))
-            }
-            Timber.d(toLogString(NetworkPetition.REQUEST, NetworkNode.BODY, it.body.toString()))
-        }
 
         val response = chain.proceed(chain.request())
 
-        // Log response
-        response.let {
-            Timber.d(toLogString(NetworkPetition.RESPONSE, NetworkNode.INFO, "RequestId: ${it.request.header(HttpConstants.OC_X_REQUEST_ID)}"))
-            Timber.d(toLogString(NetworkPetition.RESPONSE, NetworkNode.INFO, "Code: ${it.code}  Message: ${it.message} IsSuccessful: ${it.isSuccessful}"))
-            it.headers.forEach { header ->
-                Timber.d(toLogString(NetworkPetition.RESPONSE, NetworkNode.HEADER, header.toString()))
-            }
-            Timber.d(toLogString(NetworkPetition.RESPONSE, NetworkNode.BODY, it.body.toString()))
-        }
+        return response.also {
+            if (httpLogsEnabled) {
+                // Log request
+                Timber.d(
+                    toLogString(REQUEST, INFO, "Type: ${it.request.method} URL: ${it.request.url}")
+                )
+                it.headers.forEach { header ->
+                    Timber.d(toLogString(REQUEST, HEADER, header.toString()))
+                }
+                Timber.d(toLogString(REQUEST, BODY, it.body.toString()))
 
-        return response
+                // Log response
+                Timber.d(toLogString(RESPONSE, INFO, "RequestId: ${it.request.header(HttpConstants.OC_X_REQUEST_ID)}"))
+                Timber.d(
+                    toLogString(
+                        RESPONSE,
+                        INFO,
+                        "Code: ${it.code}  Message: ${it.message} IsSuccessful: ${it.isSuccessful}"
+                    )
+                )
+                it.headers.forEach { header ->
+                    Timber.d(toLogString(RESPONSE, HEADER, header.toString()))
+                }
+                Timber.d(toLogString(RESPONSE, BODY, it.body.toString()))
+
+            }
+        }
+    }
+
+    companion object {
+        var httpLogsEnabled: Boolean = false
     }
 }
