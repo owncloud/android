@@ -78,9 +78,12 @@ class OCSettingsSecurityTest {
         val preferenceScreen = activityRule.activity.preferenceScreen as PreferenceScreen
         val cameraUploadsCategory =
             activityRule.activity.findPreference("camera_uploads_category") as PreferenceCategory
+        val logsCategory =
+            activityRule.activity.findPreference("logs_category") as PreferenceCategory
         val moreCategory =
             activityRule.activity.findPreference("more") as PreferenceCategory
         preferenceScreen.removePreference(cameraUploadsCategory)
+        preferenceScreen.removePreference(logsCategory)
         preferenceScreen.removePreference(moreCategory)
 
         mPrefPasscode = activityRule.activity.findPreference("set_pincode") as CheckBoxPreference

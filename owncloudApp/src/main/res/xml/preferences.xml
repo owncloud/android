@@ -75,7 +75,7 @@
 
     <PreferenceCategory
         android:key="logs_category"
-        android:title="@string/actionbar_logger">
+        android:title="@string/log_open_logs_view">
         <android.preference.CheckBoxPreference
             android:key="set_httpLogs"
             android:title="@string/prefs_http_logs" />

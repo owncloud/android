@@ -49,6 +49,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.BiometricManager;
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
@@ -57,8 +58,6 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
-
-import static org.koin.java.KoinJavaComponent.*;
 
 import java.io.File;
 
@@ -145,8 +144,8 @@ public class Preferences extends PreferenceActivity {
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
-        mPreferencesProvider = get(SharedPreferencesProvider.class);
-        mLogsProvider = get(LogsProvider.class);
+        mPreferencesProvider = new SharedPreferencesProviderImpl(getApplicationContext());
+        mLogsProvider = new LogsProvider();
         addPreferencesFromResource(R.xml.preferences);
 
         ActionBar actionBar = getSupportActionBar();
