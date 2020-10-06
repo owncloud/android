@@ -198,7 +198,7 @@ public class FileOperationsHelper {
                 Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
                         sendIntent,
                         mFileActivity.getApplicationContext(),
-                        R.string.share_with_title,
+                        R.string.activity_chooser_send_file_title,
                         packagesToExclude
                 );
 
@@ -458,7 +458,7 @@ public class FileOperationsHelper {
             Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
                     intentToShareLink,
                     mFileActivity.getApplicationContext(),
-                    R.string.share_with_title,
+                    R.string.activity_chooser_title,
                     packagesToExclude
             );
 
