@@ -28,12 +28,14 @@
 
 package com.owncloud.android.lib.resources.shares
 
+import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
+import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 import java.net.URL
@@ -80,78 +82,94 @@ class GetRemoteShareesOperation
     (private val searchString: String, private val page: Int, private val perPage: Int) :
     RemoteOperation<ArrayList<JSONObject>>() {
 
+    private fun buildRequestUri(baseUri: Uri) =
+        baseUri.buildUpon()
+            .appendEncodedPath(OCS_ROUTE)
+            .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
+            .appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE)
+            .appendQueryParameter(PARAM_SEARCH, searchString)
+            .appendQueryParameter(PARAM_PAGE, page.toString())
+            .appendQueryParameter(PARAM_PER_PAGE, perPage.toString())
+            .build()
+
+    private fun parseResponse(response: String): Array<JSONArray> {
+        val respJSON = JSONObject(response)
+        val respOCS = respJSON.getJSONObject(NODE_OCS)
+        val respData = respOCS.getJSONObject(NODE_DATA)
+        val respExact = respData.getJSONObject(NODE_EXACT)
+        val respExactUsers = respExact.getJSONArray(NODE_USERS)
+        val respExactGroups = respExact.getJSONArray(NODE_GROUPS)
+        val respExactRemotes = respExact.getJSONArray(NODE_REMOTES)
+        val respPartialUsers = respData.getJSONArray(NODE_USERS)
+        val respPartialGroups = respData.getJSONArray(NODE_GROUPS)
+        val respPartialRemotes = respData.getJSONArray(NODE_REMOTES)
+        return arrayOf(
+            respExactUsers,
+            respExactGroups,
+            respExactRemotes,
+            respPartialUsers,
+            respPartialGroups,
+            respPartialRemotes
+        )
+    }
+
+    private fun onResultUnsuccessful(
+        method: GetMethod,
+        response: String?,
+        status: Int
+    ): RemoteOperationResult<ArrayList<JSONObject>> {
+        Timber.e("Failed response while getting users/groups from the server ")
+        if (response != null) {
+            Timber.e("*** status code: $status; response message: $response")
+        } else {
+            Timber.e("*** status code: $status")
+        }
+        return RemoteOperationResult(method)
+    }
+
+    private fun flattenResultData(jsonResults: Array<JSONArray>):ArrayList<JSONObject> {
+        val data = ArrayList<JSONObject>() // For result data
+        for (i in 0..jsonResults.size) {
+            for (j in 0 until jsonResults[i].length()) {
+                val jsonResult = jsonResults[i].getJSONObject(j)
+                data.add(jsonResult)
+                Timber.d("*** Added item: ${jsonResult.getString(PROPERTY_LABEL)}")
+            }
+        }
+        return data
+    }
+
+    private fun onRequestSuccessful(response: String?): RemoteOperationResult<ArrayList<JSONObject>> {
+        Timber.d("Successful response: $response")
+
+        // Parse the response
+        val jsonResults = parseResponse(response!!)
+
+        Timber.d("*** Get Users or groups completed ")
+        val result = RemoteOperationResult<ArrayList<JSONObject>>(OK)
+        result.data = flattenResultData(jsonResults)
+        return result
+    }
+
     override fun run(client: OwnCloudClient): RemoteOperationResult<ArrayList<JSONObject>> {
-        var result: RemoteOperationResult<ArrayList<JSONObject>>
+        val requestUri = buildRequestUri(client.baseUri)
 
-        try {
-            val requestUri = client.baseUri
-            val uriBuilder = requestUri.buildUpon()
-                .appendEncodedPath(OCS_ROUTE)
-                .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
-                .appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE)
-                .appendQueryParameter(PARAM_SEARCH, searchString)
-                .appendQueryParameter(PARAM_PAGE, page.toString())
-                .appendQueryParameter(PARAM_PER_PAGE, perPage.toString())
+        val getMethod = GetMethod(URL(requestUri.toString()))
+        getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
 
-            val getMethod = GetMethod(URL(uriBuilder.build().toString()))
-
-            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-
+        return try {
             val status = client.executeHttpMethod(getMethod)
             val response = getMethod.getResponseBodyAsString()
 
-            if (isSuccess(status)) {
-                Timber.d("Successful response: $response")
-
-                // Parse the response
-                val respJSON = JSONObject(response)
-                val respOCS = respJSON.getJSONObject(NODE_OCS)
-                val respData = respOCS.getJSONObject(NODE_DATA)
-                val respExact = respData.getJSONObject(NODE_EXACT)
-                val respExactUsers = respExact.getJSONArray(NODE_USERS)
-                val respExactGroups = respExact.getJSONArray(NODE_GROUPS)
-                val respExactRemotes = respExact.getJSONArray(NODE_REMOTES)
-                val respPartialUsers = respData.getJSONArray(NODE_USERS)
-                val respPartialGroups = respData.getJSONArray(NODE_GROUPS)
-                val respPartialRemotes = respData.getJSONArray(NODE_REMOTES)
-                val jsonResults = arrayOf(
-                    respExactUsers,
-                    respExactGroups,
-                    respExactRemotes,
-                    respPartialUsers,
-                    respPartialGroups,
-                    respPartialRemotes
-                )
-
-                val data = ArrayList<JSONObject>() // For result data
-                for (i in 0..5) {
-                    for (j in 0 until jsonResults[i].length()) {
-                        val jsonResult = jsonResults[i].getJSONObject(j)
-                        data.add(jsonResult)
-                        Timber.d("*** Added item: ${jsonResult.getString(PROPERTY_LABEL)}")
-                    }
-                }
-
-                result = RemoteOperationResult(OK)
-                result.data = data
-
-                Timber.d("*** Get Users or groups completed ")
-
+            if (!isSuccess(status)) {
+                onResultUnsuccessful(getMethod, response, status)
             } else {
-                result = RemoteOperationResult(getMethod)
-                Timber.e("Failed response while getting users/groups from the server ")
-                if (response != null) {
-                    Timber.e("*** status code: $status; response message: $response")
-                } else {
-                    Timber.e("*** status code: $status")
-                }
+                onRequestSuccessful(response)
             }
         } catch (e: Exception) {
-            result = RemoteOperationResult(e)
             Timber.e(e, "Exception while getting users/groups")
+            RemoteOperationResult(e)
         }
-
-        return result
     }
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK
