@@ -105,7 +105,8 @@ public class FileStorageUtils {
     public static OCFile createOCFileFromRemoteFile(RemoteFile remote) {
         OCFile file = new OCFile(remote.getRemotePath());
         file.setCreationTimestamp(remote.getCreationTimestamp());
-        if (remote.getMimeType().equalsIgnoreCase("DIR")) {
+        if (remote.getMimeType() != null &&
+                remote.getMimeType().equalsIgnoreCase("DIR")) {
             file.setFileLength(remote.getSize());
         } else {
             file.setFileLength(remote.getLength());
