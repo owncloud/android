@@ -28,6 +28,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.webkit.MimeTypeMap;
 
 import androidx.fragment.app.DialogFragment;
@@ -192,9 +193,20 @@ public class FileOperationsHelper {
 
             // Show dialog, without the own app
             String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-            DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude);
-            chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
+                        sendIntent,
+                        mFileActivity.getApplicationContext(),
+                        R.string.activity_chooser_send_file_title,
+                        packagesToExclude
+                );
+
+                mFileActivity.startActivity(shareSheetIntent);
+            } else {
+                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude);
+                chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+            }
         } else {
             Timber.e("Trying to send a NULL OCFile");
         }
@@ -441,7 +453,19 @@ public class FileOperationsHelper {
         }
 
         String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-        DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
-        chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
+                    intentToShareLink,
+                    mFileActivity.getApplicationContext(),
+                    R.string.activity_chooser_title,
+                    packagesToExclude
+            );
+
+            mFileActivity.startActivity(shareSheetIntent);
+        } else {
+            DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
+            chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+        }
     }
 }
