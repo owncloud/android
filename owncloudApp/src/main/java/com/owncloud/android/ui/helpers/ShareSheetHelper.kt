@@ -27,6 +27,7 @@ import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import java.util.ArrayList
 
 class ShareSheetHelper {
@@ -35,6 +36,7 @@ class ShareSheetHelper {
     fun getShareSheetIntent(
         intent: Intent,
         context: Context,
+        @StringRes title: Int,
         packagesToExclude: Array<String>
     ): Intent {
 
@@ -56,6 +58,7 @@ class ShareSheetHelper {
         // Return a new ShareSheet intent
         return Intent.createChooser(intent, "").apply {
             putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, excludeLists.toArray(arrayOf<Parcelable>()))
+            putExtra(Intent.EXTRA_TITLE, context.getString(title))
         }
     }
 }
