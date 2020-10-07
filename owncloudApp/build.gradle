@@ -84,6 +84,8 @@ dependencies {
     implementation "androidx.core:core-ktx:$ktxCoreVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktxViewModelVersion"
     implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
 }
 
 tasks.withType(Test) {
