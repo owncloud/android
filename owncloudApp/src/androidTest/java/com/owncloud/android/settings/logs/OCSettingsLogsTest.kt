@@ -74,7 +74,7 @@ class OCSettingsLogsTest {
 
     @Test
     fun loggerView() {
-        onView(withText(R.string.log_open_logs_view)).check(matches(isDisplayed()))
+        onView(withText(R.string.actionbar_logger)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -86,7 +86,7 @@ class OCSettingsLogsTest {
 
     @Test
     fun loggerOpen() {
-        onView(withText(R.string.actionbar_logger)).perform(click())
+        onView(withText(R.string.log_open_logs_view)).perform(click())
         intended(hasComponent(LogHistoryActivity::class.java.name))
     }
 }

@@ -610,5 +610,5 @@
     <string name="supports_oauth2_error">It was not possible to know if OAuth2 is supported</string>
     <string name="get_base_url_error">It was not possible to know the server base url</string>
     <string name="prefs_http_logs">Log HTTP requests and responses</string>
-    <string name="prefs_logs_summary">Logs may impact performance and include sensitive information. Sharing logs with others is sole user responsabilty</string>
+    <string name="prefs_logs_summary">Logs may include sensitive information. Sharing logs with others is sole user responsibility</string>
 </resources>
