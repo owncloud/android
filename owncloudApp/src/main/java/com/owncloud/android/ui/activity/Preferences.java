@@ -145,7 +145,7 @@ public class Preferences extends PreferenceActivity {
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         mPreferencesProvider = new SharedPreferencesProviderImpl(getApplicationContext());
-        mLogsProvider = new LogsProvider();
+        mLogsProvider = new LogsProvider(getApplicationContext());
         addPreferencesFromResource(R.xml.preferences);
 
         ActionBar actionBar = getSupportActionBar();

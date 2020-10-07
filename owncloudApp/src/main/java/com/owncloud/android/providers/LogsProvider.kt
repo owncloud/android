@@ -19,13 +19,14 @@
 
 package com.owncloud.android.providers
 
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import android.content.Context
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.lib.common.http.LogInterceptor
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
-class LogsProvider : KoinComponent {
-    private val sharedPreferencesProvider: SharedPreferencesProvider by inject()
+class LogsProvider(
+    context: Context
+) {
+    private val sharedPreferencesProvider = SharedPreferencesProviderImpl(context)
 
     fun initHttpLogs() {
         val httpLogsEnabled: Boolean = sharedPreferencesProvider.getBoolean(PREFERENCE_LOG_HTTP, false)
