@@ -54,6 +54,10 @@ import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
+import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
@@ -991,6 +995,39 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     upgraded = true
                 } finally {
                     db.endTransaction()
+                }
+            }
+
+
+            if (oldVersion < 33 && newVersion >= 33) {
+                Timber.i("SQL : Entering in #33 to migrate ocfiles from SQLite to Room")
+                val cursor = db.query(
+                    ProviderTableMeta.FILE_TABLE_NAME,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+
+                if (cursor.moveToFirst()) {
+                    val files = mutableListOf<OCFileEntity>()
+
+                    do {
+                        files.add(OCFileEntity.fromCursor(cursor))
+                    } while (cursor.moveToNext())
+
+                    // Insert share list to the new shares table in new database
+                    val ocFileDao: FileDao by inject()
+                    executors.diskIO().execute {
+                        for (file in files){
+                            ocFileDao.mergeRemoteAndLocalFile(file)
+                        }
+                    }
+
+                    // Drop old files table from old database
+                    //db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.FILE_TABLE_NAME + ";")
                 }
             }
 
