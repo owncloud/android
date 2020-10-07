@@ -23,6 +23,7 @@ package com.owncloud.android.domain.files.model
 import android.os.Parcelable
 import android.webkit.MimeTypeMap
 import kotlinx.android.parcel.Parcelize
+import java.io.File
 import java.util.Locale
 
 //TODO: Add new attributes on demand. Let's try to perform a clean up :)
@@ -39,8 +40,27 @@ data class OCFile(
     val etag: String? = null,
     val permissions: String? = null,
     val remoteId: String? = null,
-    val privateLink: String? = null
+    val privateLink: String? = null,
+    val storagePath: String? = null,
+    var name: String? = null,
+    val treeEtag: String? = null,
+
+    // May not needed
+    val lastSyncDate: Int? = null,
+    val keepInSync: Int? = null,
+    val lastSyncDateForData: Int? = null,
+    val fileShareViaLink: Int? = null,
+    val updateThumbnail: Int? = null, //MAYBE BOOLEAN
+    val publicLink: String? = null,
+    val modifiedAtLastSyncForData: Int? = null,
+    val etagInConflict: String? = null,
+    val fileIsDownloading: Int? = null, //MAYBE BOOLEAN
+    val sharedWithSharee: Int? = null
 ) : Parcelable {
+
+    init {
+        name = File(remotePath).name.let { if (it.isBlank()) ROOT_PATH else it }
+    }
 
     /**
      * Use this to find out if this file is a folder.
@@ -88,6 +108,6 @@ data class OCFile(
 
     companion object {
         const val PATH_SEPARATOR = '/'
-        const val ROOT_PATH = PATH_SEPARATOR
+        const val ROOT_PATH: String = "/"
     }
 }

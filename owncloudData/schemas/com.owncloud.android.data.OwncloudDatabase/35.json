@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 35,
-    "identityHash": "613a0513f7471c904a95e1738036818f",
+    "identityHash": "c1204fc634557d60ce64611329671116",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -261,7 +261,7 @@
       },
       {
         "tableName": "files",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`parentId` INTEGER, `owner` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `remoteId` TEXT, `length` INTEGER NOT NULL, `creationTimestamp` INTEGER, `modifiedTimestamp` INTEGER NOT NULL, `mimeType` TEXT NOT NULL, `etag` TEXT, `permissions` TEXT, `privateLink` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`parentId` INTEGER, `owner` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `remoteId` TEXT, `length` INTEGER NOT NULL, `creationTimestamp` INTEGER, `modifiedTimestamp` INTEGER NOT NULL, `mimeType` TEXT NOT NULL, `etag` TEXT, `permissions` TEXT, `privateLink` TEXT, `storagePath` TEXT, `name` TEXT, `treeEtag` TEXT, `lastSyncDate` INTEGER, `keepInSync` INTEGER, `lastSyncDateForData` INTEGER, `fileShareViaLink` INTEGER, `updateThumbnail` INTEGER, `publicLink` TEXT, `modifiedAtLastSyncForData` INTEGER, `etagInConflict` TEXT, `fileIsDownloading` INTEGER, `sharedWithSharee` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "parentId",
@@ -327,6 +327,84 @@
             "fieldPath": "privateLink",
             "columnName": "privateLink",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "storagePath",
+            "columnName": "storagePath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "treeEtag",
+            "columnName": "treeEtag",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastSyncDate",
+            "columnName": "lastSyncDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "keepInSync",
+            "columnName": "keepInSync",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastSyncDateForData",
+            "columnName": "lastSyncDateForData",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fileShareViaLink",
+            "columnName": "fileShareViaLink",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updateThumbnail",
+            "columnName": "updateThumbnail",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "publicLink",
+            "columnName": "publicLink",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modifiedAtLastSyncForData",
+            "columnName": "modifiedAtLastSyncForData",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "etagInConflict",
+            "columnName": "etagInConflict",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fileIsDownloading",
+            "columnName": "fileIsDownloading",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sharedWithSharee",
+            "columnName": "sharedWithSharee",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -485,7 +563,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '613a0513f7471c904a95e1738036818f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c1204fc634557d60ce64611329671116')"
     ]
   }
 }

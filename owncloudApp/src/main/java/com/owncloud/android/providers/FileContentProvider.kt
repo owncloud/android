@@ -54,6 +54,8 @@ import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
 import com.owncloud.android.data.migrations.CameraUploadsMigrationToRoom
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
@@ -1038,6 +1040,37 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
 
+            if (oldVersion < 35 && newVersion >= 35) {
+                Timber.i("SQL : Entering in #33 to migrate ocfiles from SQLite to Room")
+                val cursor = db.query(
+                    ProviderTableMeta.FILE_TABLE_NAME,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+
+                if (cursor.moveToFirst()) {
+                    val files = mutableListOf<OCFileEntity>()
+
+                    do {
+                        files.add(OCFileEntity.fromCursor(cursor))
+                    } while (cursor.moveToNext())
+
+                    // Insert share list to the new shares table in new database
+                    val ocFileDao: FileDao by inject()
+                    executors.diskIO().execute {
+                        for (file in files) {
+                            ocFileDao.mergeRemoteAndLocalFile(file)
+                        }
+                    }
+
+                    // Drop old files table from old database
+                    //db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.FILE_TABLE_NAME + ";")
+                }
+            }
             if (!upgraded) {
                 Timber.i("SQL : OUT of the ADD in onUpgrade; oldVersion == $oldVersion, newVersion == $newVersion")
             }
