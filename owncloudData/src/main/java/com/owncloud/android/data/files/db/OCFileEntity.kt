@@ -18,12 +18,38 @@
  */
 package com.owncloud.android.data.files.db
 
+import android.database.Cursor
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_CONTENT_LENGTH
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_CONTENT_TYPE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_CREATION
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_ETAG
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_ETAG_IN_CONFLICT
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_IS_DOWNLOADING
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_KEEP_IN_SYNC
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_MODIFIED
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PARENT
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PATH
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PERMISSIONS
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PRIVATE_LINK
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PUBLIC_LINK
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_REMOTE_ID
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_SHARED_VIA_LINK
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_SHARED_WITH_SHAREE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_STORAGE_PATH
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_TREE_ETAG
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBNAIL
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta._ID
 
 @Entity(
-    tableName = ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME
+    tableName = FILES_TABLE_NAME
 )
 data class OCFileEntity(
     var parentId: Long? = null,
@@ -36,7 +62,22 @@ data class OCFileEntity(
     val mimeType: String,
     val etag: String?,
     val permissions: String?,
-    val privateLink: String?
+    val privateLink: String? = null,
+    val storagePath: String? = null,
+    var name: String? = null,
+    val treeEtag: String? = null,
+
+    // May not needed
+    val lastSyncDate: Int? = null,
+    val keepInSync: Int? = null,
+    val lastSyncDateForData: Int? = null,
+    val fileShareViaLink: Int? = null,
+    val updateThumbnail: Int? = null, //MAYBE BOOLEAN
+    val publicLink: String? = null,
+    val modifiedAtLastSyncForData: Int? = null,
+    val etagInConflict: String? = null,
+    val fileIsDownloading: Int? = null, //MAYBE BOOLEAN
+    val sharedWithSharee: Int? = null
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -44,5 +85,37 @@ data class OCFileEntity(
     companion object {
         const val PATH_SEPARATOR = "/"
         const val ROOT_PATH = PATH_SEPARATOR
+
+        fun fromCursor(cursor: Cursor): OCFileEntity {
+            return OCFileEntity(
+                parentId = cursor.getLong(cursor.getColumnIndex(FILE_PARENT)),
+                remotePath = cursor.getString(cursor.getColumnIndex(FILE_PATH)),
+                owner = cursor.getString(cursor.getColumnIndex(FILE_ACCOUNT_OWNER)),
+                permissions = cursor.getString(cursor.getColumnIndex(FILE_PERMISSIONS)),
+                remoteId = cursor.getString(cursor.getColumnIndex(FILE_REMOTE_ID)),
+                privateLink = cursor.getString(cursor.getColumnIndex(FILE_PRIVATE_LINK)),
+                creationTimestamp = cursor.getLong(cursor.getColumnIndex(FILE_CREATION)),
+                modifiedTimestamp = cursor.getLong(cursor.getColumnIndex(FILE_MODIFIED)),
+                etag = cursor.getString(cursor.getColumnIndex(FILE_ETAG)),
+                mimeType = cursor.getString(cursor.getColumnIndex(FILE_CONTENT_TYPE)),
+                length = cursor.getLong(cursor.getColumnIndex(FILE_CONTENT_LENGTH)),
+                storagePath = cursor.getString(cursor.getColumnIndex(FILE_STORAGE_PATH)),
+                name = cursor.getString(cursor.getColumnIndex(FILE_NAME)),
+                treeEtag = cursor.getString(cursor.getColumnIndex(FILE_TREE_ETAG)),
+                lastSyncDate = cursor.getInt(cursor.getColumnIndex(FILE_LAST_SYNC_DATE)),
+                lastSyncDateForData = cursor.getInt(cursor.getColumnIndex(FILE_LAST_SYNC_DATE_FOR_DATA)),
+                keepInSync = cursor.getInt(cursor.getColumnIndex(FILE_KEEP_IN_SYNC)),
+                fileShareViaLink = cursor.getInt(cursor.getColumnIndex(FILE_SHARED_VIA_LINK)),
+                updateThumbnail = cursor.getInt(cursor.getColumnIndex(FILE_UPDATE_THUMBNAIL)),
+                publicLink = cursor.getString(cursor.getColumnIndex(FILE_PUBLIC_LINK)),
+                modifiedAtLastSyncForData = cursor.getInt(cursor.getColumnIndex(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA)),
+                etagInConflict = cursor.getString(cursor.getColumnIndex(FILE_ETAG_IN_CONFLICT)),
+                fileIsDownloading = cursor.getInt(cursor.getColumnIndex(FILE_IS_DOWNLOADING)),
+                sharedWithSharee = cursor.getInt(cursor.getColumnIndex(FILE_SHARED_WITH_SHAREE))
+
+            ).apply {
+                id = cursor.getLong(cursor.getColumnIndex(_ID))
+            }
+        }
     }
 }
