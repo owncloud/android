@@ -1064,7 +1064,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         if (waitedPreview) {
                             if (success) {
                                 // update the file from database, to get the local storage path
-                                fileWaitingToPreview = storageManager.getFileById(fileWaitingToPreview!!.fileId)
+                                fileWaitingToPreview = storageManager.getFileById(fileWaitingToPreview!!.id!!)
                                 when {
                                     PreviewAudioFragment.canBePreviewed(fileWaitingToPreview) -> {
                                         fragmentReplaced = true
@@ -1162,7 +1162,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 if (fileWaitingToPreview != null) {
                     if (storageManager != null) {
                         // update the file
-                        fileWaitingToPreview = storageManager.getFileById(fileWaitingToPreview!!.fileId)
+                        fileWaitingToPreview = storageManager.getFileById(fileWaitingToPreview!!.id!!)
                         if (!fileWaitingToPreview!!.isDown) {
                             // If the file to preview isn't downloaded yet, check if it is being
                             // downloaded in this moment or not
@@ -1351,13 +1351,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (result.isSuccess) {
             val details = secondFragment
             if (details != null && renamedFile == details.file) {
-                renamedFile = storageManager.getFileById(renamedFile!!.fileId)
+                renamedFile = storageManager.getFileById(renamedFile!!.id!!)
                 file = renamedFile
                 details.onFileMetadataChanged(renamedFile)
                 updateToolbar(renamedFile)
             }
 
-            if (storageManager.getFileById(renamedFile!!.parentId) == currentDir) {
+            if (storageManager.getFileById(renamedFile!!.parentId!!) == currentDir) {
                 refreshListOfFilesFragment(true)
             }
 
@@ -1398,7 +1398,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
-        val waitedForPreview = fileWaitingToPreview?.let { it == operation.localFile && it.isDown } ?: false
+        val waitedForPreview = fileWaitingToPreview?.let { it == operation.localFile && it.isDown() } ?: false
         if (!operation.transferWasRequested() and waitedForPreview) {
             fileOperationsHelper.openFile(fileWaitingToPreview)
             fileWaitingToPreview = null
