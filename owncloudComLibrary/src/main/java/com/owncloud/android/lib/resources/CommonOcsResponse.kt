@@ -23,6 +23,7 @@
  */
 package com.owncloud.android.lib.resources
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 // Response retrieved by OCS Rest API, used to obtain capabilities, shares and user info among others.
@@ -41,6 +42,11 @@ data class OCSResponse<T>(
 @JsonClass(generateAdapter = true)
 data class MetaData(
     val status: String,
-    val statuscode: Int,
-    val message: String?
+    @Json(name = "statuscode")
+    val statusCode: Int,
+    val message: String?,
+    @Json(name = "itemsperpage")
+    val itemsPerPage: String?,
+    @Json(name = "totalitems")
+    val totalItems: String?
 )

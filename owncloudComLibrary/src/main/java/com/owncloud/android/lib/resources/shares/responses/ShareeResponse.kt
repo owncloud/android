@@ -32,14 +32,6 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class ShareeOcsResponse(
-    @Json(name = "data")
-    val data: ShareeResponseData?,
-    @Json(name = "meta")
-    val meta: ShareeMeta?
-)
-
-@JsonClass(generateAdapter = true)
-data class ShareeResponseData(
     @Json(name = "exact")
     val exact: ExactSharees?,
     @Json(name = "groups")
@@ -74,18 +66,4 @@ data class ShareeValue(
     val shareType: Int?,
     @Json(name = "shareWith")
     val shareWith: String?
-)
-
-@JsonClass(generateAdapter = true)
-data class ShareeMeta(
-    @Json(name = "itemsperpage")
-    val itemsPerPage: Int?,
-    @Json(name = "message")
-    val message: String?,
-    @Json(name = "status")
-    val status: String?,
-    @Json(name = "statuscode")
-    val statusCode: Int?,
-    @Json(name = "totalitems")
-    val totalItems: Int?
 )
