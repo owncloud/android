@@ -34,7 +34,7 @@ class OCFileMapper : Mapper<OCFile, OCFileEntity> {
                 remoteId = it.remoteId,
                 privateLink = it.privateLink,
                 creationTimestamp = it.creationTimestamp,
-                modifiedTimestamp = it.modifiedTimestamp,
+                modificationTimestamp = it.modifiedTimestamp,
                 etag = it.etag,
                 mimeType = it.mimeType,
                 length = it.length
@@ -51,7 +51,7 @@ class OCFileMapper : Mapper<OCFile, OCFileEntity> {
                 remoteId = it.remoteId,
                 privateLink = it.privateLink,
                 creationTimestamp = it.creationTimestamp,
-                modifiedTimestamp = it.modifiedTimestamp,
+                modifiedTimestamp = it.modificationTimestamp,
                 etag = it.etag,
                 mimeType = it.mimeType,
                 length = it.length

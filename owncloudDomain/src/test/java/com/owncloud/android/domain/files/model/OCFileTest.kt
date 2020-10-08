@@ -50,7 +50,7 @@ class OCFileTest {
             remoteId = "00000003oci9p7er2hay",
             privateLink = "http://server.url/f/3",
             creationTimestamp = 0,
-            modifiedTimestamp = 1593510589000,
+            modificationTimestamp = 1593510589000,
             etag = "5efb0c13c688f",
             mimeType = "DIR",
             length = 123123123
@@ -87,7 +87,7 @@ class OCFileTest {
             remoteId = "00000003oci9p7er2hay",
             privateLink = "http://server.url/f/3",
             creationTimestamp = 0,
-            modifiedTimestamp = 1593510589000,
+            modificationTimestamp = 1593510589000,
             etag = "5efb0c13c688f",
             mimeType = "DIR",
             length = 123123123
