@@ -35,9 +35,15 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
+import com.owncloud.android.lib.resources.CommonOcsResponse
+import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
+import java.lang.reflect.Type
 import java.net.URL
 import java.util.ArrayList
 
@@ -80,7 +86,7 @@ class GetRemoteShareesOperation
  * @param perPage      maximum number of results in a single page
  */
     (private val searchString: String, private val page: Int, private val perPage: Int) :
-    RemoteOperation<ArrayList<JSONObject>>() {
+    RemoteOperation<ShareeOcsResponse>() {
 
     private fun buildRequestUri(baseUri: Uri) =
         baseUri.buildUpon()
@@ -92,32 +98,18 @@ class GetRemoteShareesOperation
             .appendQueryParameter(PARAM_PER_PAGE, perPage.toString())
             .build()
 
-    private fun parseResponse(response: String): Array<JSONArray> {
-        val respJSON = JSONObject(response)
-        val respOCS = respJSON.getJSONObject(NODE_OCS)
-        val respData = respOCS.getJSONObject(NODE_DATA)
-        val respExact = respData.getJSONObject(NODE_EXACT)
-        val respExactUsers = respExact.getJSONArray(NODE_USERS)
-        val respExactGroups = respExact.getJSONArray(NODE_GROUPS)
-        val respExactRemotes = respExact.getJSONArray(NODE_REMOTES)
-        val respPartialUsers = respData.getJSONArray(NODE_USERS)
-        val respPartialGroups = respData.getJSONArray(NODE_GROUPS)
-        val respPartialRemotes = respData.getJSONArray(NODE_REMOTES)
-        return arrayOf(
-            respExactUsers,
-            respExactGroups,
-            respExactRemotes,
-            respPartialUsers,
-            respPartialGroups,
-            respPartialRemotes
-        )
+    private fun parseResponse(response: String): ShareeOcsResponse? {
+        val moshi = Moshi.Builder().build()
+        val type: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareeOcsResponse::class.java)
+        val adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>> = moshi.adapter(type)
+        return adapter.fromJson(response)!!.ocs.data
     }
 
     private fun onResultUnsuccessful(
         method: GetMethod,
         response: String?,
         status: Int
-    ): RemoteOperationResult<ArrayList<JSONObject>> {
+    ): RemoteOperationResult<ShareeOcsResponse> {
         Timber.e("Failed response while getting users/groups from the server ")
         if (response != null) {
             Timber.e("*** status code: $status; response message: $response")
@@ -139,19 +131,15 @@ class GetRemoteShareesOperation
         return data
     }
 
-    private fun onRequestSuccessful(response: String?): RemoteOperationResult<ArrayList<JSONObject>> {
+    private fun onRequestSuccessful(response: String?): RemoteOperationResult<ShareeOcsResponse> {
+        val result = RemoteOperationResult<ShareeOcsResponse>(OK)
         Timber.d("Successful response: $response")
-
-        // Parse the response
-        val jsonResults = parseResponse(response!!)
-
+        result.data = parseResponse(response!!)
         Timber.d("*** Get Users or groups completed ")
-        val result = RemoteOperationResult<ArrayList<JSONObject>>(OK)
-        result.data = flattenResultData(jsonResults)
         return result
     }
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<ArrayList<JSONObject>> {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareeOcsResponse> {
         val requestUri = buildRequestUri(client.baseUri)
 
         val getMethod = GetMethod(URL(requestUri.toString()))
@@ -191,12 +179,6 @@ class GetRemoteShareesOperation
         private const val VALUE_ITEM_TYPE = "file"         //  to get the server search for users / groups
 
         // JSON Node names
-        private const val NODE_OCS = "ocs"
-        private const val NODE_DATA = "data"
-        private const val NODE_EXACT = "exact"
-        private const val NODE_USERS = "users"
-        private const val NODE_GROUPS = "groups"
-        private const val NODE_REMOTES = "remotes"
         const val NODE_VALUE = "value"
         const val PROPERTY_LABEL = "label"
         const val PROPERTY_SHARE_TYPE = "shareType"
