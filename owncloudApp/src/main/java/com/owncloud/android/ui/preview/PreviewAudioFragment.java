@@ -43,7 +43,7 @@ import android.widget.ProgressBar;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.media.MediaControlView;
 import com.owncloud.android.media.MediaService;
