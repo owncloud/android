@@ -24,7 +24,7 @@ package com.owncloud.android.ui.fragment;
 import android.content.Context;
 
 import androidx.fragment.app.Fragment;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.ui.activity.ComponentsGetter;
