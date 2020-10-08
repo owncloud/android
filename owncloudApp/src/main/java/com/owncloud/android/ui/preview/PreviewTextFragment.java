@@ -37,7 +37,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -466,7 +466,7 @@ public class PreviewTextFragment extends FileFragment {
         unsupportedTypes.add("text/vnd.wap.wml");
         unsupportedTypes.add("text/vnd.wap.wmlscript");
         return (file != null && file.isDown() && file.isText() &&
-                !unsupportedTypes.contains(file.getMimetype()) &&
+                !unsupportedTypes.contains(file.getMimeType()) &&
                 !unsupportedTypes.contains(file.getMimeTypeFromName())
         );
     }
