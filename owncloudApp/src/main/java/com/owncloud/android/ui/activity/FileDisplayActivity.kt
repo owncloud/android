@@ -60,7 +60,9 @@ import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.db.PreferenceManager.getSortOrder
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
@@ -286,12 +288,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             // get parent from path
             val parentPath: String
             if (file != null) {
-                if (file.isDown && file.lastSyncDateForProperties == 0L) {
+                if (file.isDown() && file.lastSyncDateForProperties == 0L) {
                     // upload in progress - right now, files are not inserted in the local
                     // cache until the upload is successful get parent from path
                     parentPath = file.remotePath.substring(
                         0,
-                        file.remotePath.lastIndexOf(file.fileName)
+                        file.remotePath.lastIndexOf(file.name!!)
                     )
                     if (storageManager.getFileByPath(parentPath) == null) {
                         file = null // not able to know the directory where the file is uploading
@@ -607,7 +609,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             FileUploader.LOCAL_BEHAVIOUR_COPY
 
         val currentDir = currentDir
-        val remotePath = if (currentDir != null) currentDir.remotePath else OCFile.ROOT_PATH
+        val remotePath = currentDir?.remotePath ?: OCFile.ROOT_PATH
 
         val uploader = UriUploader(
             this,
