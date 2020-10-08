@@ -46,7 +46,7 @@ import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -242,7 +242,7 @@ public class PreviewImageFragment extends FileFragment {
 
         if (mContainerActivity.getStorageManager() != null && getFile() != null) {
             // Update the file
-            setFile(mContainerActivity.getStorageManager().getFileById(getFile().getFileId()));
+            setFile(mContainerActivity.getStorageManager().getFileById(getFile().getId()));
 
             FileMenuFilter mf = new FileMenuFilter(
                     getFile(),
@@ -408,7 +408,7 @@ public class PreviewImageFragment extends FileFragment {
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                                                    DataSource dataSource, boolean isFirstResource) {
-                        Timber.d("Loading image %s", getFile().getFileName());
+                        Timber.d("Loading image %s", getFile().getName());
                         return false;
                     }
                 })

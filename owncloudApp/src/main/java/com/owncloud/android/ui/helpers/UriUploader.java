@@ -30,7 +30,7 @@ import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
-import com.owncloud.android.utils.UriUtils;
+import com.owncloud.android.utils.UriUtilsKt;
 import timber.log.Timber;
 
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class UriUploader {
             for (Parcelable sourceStream : mUrisToUpload) {
                 Uri sourceUri = (Uri) sourceStream;
                 if (sourceUri != null) {
-                    String displayName = UriUtils.getDisplayNameForUri(sourceUri, mActivity);
+                    String displayName = UriUtilsKt.getDisplayNameForUri(sourceUri, mActivity);
                     String remotePath = mUploadPath + displayName;
 
                     if (ContentResolver.SCHEME_CONTENT.equals(sourceUri.getScheme())) {
