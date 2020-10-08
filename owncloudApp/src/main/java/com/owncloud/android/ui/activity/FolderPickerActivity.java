@@ -43,7 +43,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -280,7 +280,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 return file;
             } else if (getStorageManager() != null) {
                 String parentPath = file.getRemotePath().substring(0,
-                        file.getRemotePath().lastIndexOf(file.getFileName()));
+                        file.getRemotePath().lastIndexOf(file.getName()));
                 return getStorageManager().getFileByPath(parentPath);
             }
         }
@@ -328,7 +328,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         actionBar.setTitle(
                 atRoot
                         ? getString(R.string.default_display_name_for_root_folder)
-                        : currentDir.getFileName()
+                        : currentDir.getName()
         );
     }
 
@@ -394,6 +394,37 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         }
     }
 
+    /**
+     * Shows the information of the {@link OCFile} received as a
+     * parameter in the second fragment.
+     *
+     * @param file {@link OCFile} whose details will be shown
+     */
+    @Override
+    public void showDetails(OCFile file) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+        refreshList(true);
+    }
+
+    @Override
+    public void onRefresh(boolean enforced) {
+        refreshList(enforced);
+    }
+
+    private void refreshList(boolean ignoreETag) {
+        OCFileListFragment listOfFiles = getListOfFilesFragment();
+        if (listOfFiles != null) {
+            OCFile folder = listOfFiles.getCurrentFile();
+            if (folder != null) {
+                startSyncFolderOperation(folder, ignoreETag);
+            }
+        }
+    }
+
     private class SyncBroadcastReceiver extends BroadcastReceiver {
 
         /**
@@ -426,7 +457,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                         showSnackMessage(
                                 String.format(
                                         getString(R.string.sync_current_folder_was_removed),
-                                        getCurrentFolder().getFileName()
+                                        getCurrentFolder().getName()
                                 )
                         );
                         browseToRoot();
@@ -475,37 +506,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 }
 
                 setBackgroundText();
-            }
-        }
-    }
-
-    /**
-     * Shows the information of the {@link OCFile} received as a
-     * parameter in the second fragment.
-     *
-     * @param file {@link OCFile} whose details will be shown
-     */
-    @Override
-    public void showDetails(OCFile file) {
-
-    }
-
-    @Override
-    public void onRefresh() {
-        refreshList(true);
-    }
-
-    @Override
-    public void onRefresh(boolean enforced) {
-        refreshList(enforced);
-    }
-
-    private void refreshList(boolean ignoreETag) {
-        OCFileListFragment listOfFiles = getListOfFilesFragment();
-        if (listOfFiles != null) {
-            OCFile folder = listOfFiles.getCurrentFile();
-            if (folder != null) {
-                startSyncFolderOperation(folder, ignoreETag);
             }
         }
     }
