@@ -23,7 +23,7 @@ package com.owncloud.android.operations;
 import android.accounts.Account;
 import android.webkit.MimeTypeMap;
 
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
@@ -97,8 +97,8 @@ public class DownloadFileOperation extends RemoteOperation {
     }
 
     public String getMimeType() {
-        String mimeType = mFile.getMimetype();
-        if (mimeType == null || mimeType.length() <= 0) {
+        String mimeType = mFile.getMimeType();
+        if (mimeType.length() <= 0) {
             try {
                 mimeType = MimeTypeMap.getSingleton()
                         .getMimeTypeFromExtension(
@@ -115,7 +115,7 @@ public class DownloadFileOperation extends RemoteOperation {
     }
 
     public long getSize() {
-        return mFile.getFileLength();
+        return mFile.getLength();
     }
 
     public long getModificationTimestamp() {

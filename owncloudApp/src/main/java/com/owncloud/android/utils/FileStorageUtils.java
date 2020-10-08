@@ -28,8 +28,9 @@ import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.webkit.MimeTypeMap;
 
+import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper;
 import com.owncloud.android.data.storage.LocalStorageProvider;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
@@ -106,20 +107,8 @@ public class FileStorageUtils {
      * @return New OCFile instance representing the remote resource described by remote.
      */
     public static OCFile createOCFileFromRemoteFile(RemoteFile remote) {
-        OCFile file = new OCFile(remote.getRemotePath());
-        file.setCreationTimestamp(remote.getCreationTimestamp());
-        if (remote.isFolder()) {
-            file.setFileLength(remote.getSize());
-        } else {
-            file.setFileLength(remote.getLength());
-        }
-        file.setMimetype(remote.getMimeType());
-        file.setModificationTimestamp(remote.getModifiedTimestamp());
-        file.setEtag(remote.getEtag());
-        file.setPermissions(remote.getPermissions());
-        file.setRemoteId(remote.getRemoteId());
-        file.setPrivateLink(remote.getPrivateLink());
-        return file;
+        RemoteFileMapper remoteFileMapper = new RemoteFileMapper();
+        return remoteFileMapper.toModel(remote);
     }
 
     /**
