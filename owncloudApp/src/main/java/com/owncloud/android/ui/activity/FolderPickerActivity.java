@@ -43,7 +43,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -291,7 +291,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 return file;
             } else if (getStorageManager() != null) {
                 String parentPath = file.getRemotePath().substring(0,
-                        file.getRemotePath().lastIndexOf(file.getFileName()));
+                        file.getRemotePath().lastIndexOf(file.getName()));
                 return getStorageManager().getFileByPath(parentPath);
             }
         }
@@ -339,7 +339,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         actionBar.setTitle(
                 atRoot
                         ? getString(R.string.default_display_name_for_root_folder)
-                        : currentDir.getFileName()
+                        : currentDir.getName()
         );
     }
 
@@ -437,7 +437,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                         showSnackMessage(
                                 String.format(
                                         getString(R.string.sync_current_folder_was_removed),
-                                        getCurrentFolder().getFileName()
+                                        getCurrentFolder().getName()
                                 )
                         );
                         browseToRoot();

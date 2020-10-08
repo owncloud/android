@@ -19,18 +19,18 @@
 
 package com.owncloud.android.extensions
 
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import java.util.ArrayList
 import java.util.Locale
 import java.util.Vector
 
 fun Vector<OCFile>.filterByQuery(query: String): List<OCFile> {
-    val lowerCaseQuery = query.lowercase(Locale.getDefault())
+    val lowerCaseQuery = query.lowercase(Locale.ROOT)
 
     val filteredList: MutableList<OCFile> = ArrayList()
 
     for (fileToAdd in this) {
-        val nameOfTheFileToAdd: String = fileToAdd.fileName.lowercase(Locale.getDefault())
+        val nameOfTheFileToAdd: String = fileToAdd.name?.lowercase(Locale.ROOT).orEmpty()
         if (nameOfTheFileToAdd.contains(lowerCaseQuery)) {
             filteredList.add(fileToAdd)
         }
