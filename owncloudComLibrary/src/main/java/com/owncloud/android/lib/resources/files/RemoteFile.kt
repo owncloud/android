@@ -79,11 +79,23 @@ data class RemoteFile(
     var sharedWithSharee: Boolean = false,
 ) : Parcelable {
 
+    // TODO: Quotas not used. Use or remove them.
     init {
         require(!(remotePath.isEmpty() || !remotePath.startsWith(File.separator))) { "Trying to create a OCFile with a non valid remote path: $remotePath" }
     }
 
+    /**
+     * Use this to find out if this file is a folder.
+     *
+     * @return true if it is a folder
+     */
+    val isFolder
+        get() = mimeType == MIME_DIR || mimeType == MIME_DIR_UNIX
+
     companion object {
+
+        const val MIME_DIR = "DIR"
+        const val MIME_DIR_UNIX = "httpd/unix-directory"
 
         fun getRemoteFileFromDav(davResource: Response, userId: String, userName: String): RemoteFile {
             val remotePath = getRemotePathFromUrl(davResource.href, userId)
