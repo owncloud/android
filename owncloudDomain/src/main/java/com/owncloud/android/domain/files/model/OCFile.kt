@@ -50,6 +50,7 @@ data class OCFile(
     val lastSyncDate: Int? = null,
     val keepInSync: Int? = null,
     val lastSyncDateForData: Int? = null,
+    val lastSyncDateForProperties: Long? = null,
     val fileShareViaLink: Int? = null,
     val updateThumbnail: Int? = null, //MAYBE BOOLEAN
     val publicLink: String? = null,
@@ -96,13 +97,52 @@ data class OCFile(
         get() = isOfType(MIME_PREFIX_TEXT)
 
     /**
+     * get remote path of parent file
+     * @return remote path
+     */
+    fun getParentRemotePath(): String {
+        val parentPath: String = File(remotePath).parent ?: throw IllegalArgumentException("Parent path is null")
+        return if (parentPath.endsWith("/")) parentPath else "$parentPath/"
+    }
+
+    /**
+     * Use this to check if this file is available locally
+     *
+     * @return true if it is
+     */
+    fun isDown(): Boolean {
+        if (storagePath != null && storagePath.isNotEmpty()) {
+            val file = File(storagePath)
+            return file.exists()
+        }
+        return false
+    }
+
+    /**
+     * Can be used to check, whether or not this file exists in the database
+     * already
+     *
+     * @return true, if the file exists in the database
+     */
+    fun fileExists(): Boolean {
+        return id != -1L
+    }
+
+    /**
+     * @return 'True' if the file is hidden
+     */
+    fun isHidden(): Boolean {
+        return name?.startsWith(".") ?: false
+    }
+
+    /**
      * @param   type        Type to match in the file MIME type; it's MUST include the trailing "/"
      * @return              'True' if the file MIME type matches the received parameter in the type part.
      */
     private fun isOfType(type: String): Boolean =
         mimeType.startsWith(type) || getMimeTypeFromName()?.startsWith(type) ?: false
 
-    private fun getMimeTypeFromName(): String? {
+    fun getMimeTypeFromName(): String? {
         val extension = remotePath.substringAfterLast('.').toLowerCase(Locale.ROOT)
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
     }
