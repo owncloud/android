@@ -37,8 +37,6 @@ import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.Vector;
 
 import static org.koin.java.KoinJavaComponent.inject;
 
