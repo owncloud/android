@@ -35,7 +35,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
 import com.owncloud.android.lib.resources.status.responses.CapabilityResponse
-import com.owncloud.android.lib.resources.status.responses.CommonOcsResponse
+import com.owncloud.android.lib.resources.CommonOcsResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types

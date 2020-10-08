@@ -21,7 +21,7 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
-package com.owncloud.android.lib.resources.status.responses
+package com.owncloud.android.lib.resources
 
 import com.squareup.moshi.JsonClass
 
