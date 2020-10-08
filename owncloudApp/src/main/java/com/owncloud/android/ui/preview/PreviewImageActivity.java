@@ -42,7 +42,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
@@ -124,7 +124,7 @@ public class PreviewImageActivity extends FileActivity implements
     private void initViewPager() {
         // get parent from path
         String parentPath = getFile().getRemotePath().substring(0,
-                getFile().getRemotePath().lastIndexOf(getFile().getFileName()));
+                getFile().getRemotePath().lastIndexOf(getFile().getName()));
         OCFile parentFolder = getStorageManager().getFileByPath(parentPath);
         if (parentFolder == null) {
             // should not be necessary
@@ -432,14 +432,14 @@ public class PreviewImageActivity extends FileActivity implements
             }
 
             // Update file according to DB file, if it is possible
-            if (file.getFileId() > FileDataStorageManager.ROOT_PARENT_ID) {
-                file = getStorageManager().getFileById(file.getFileId());
+            if (file.getId() > FileDataStorageManager.ROOT_PARENT_ID) {
+                file = getStorageManager().getFileById(file.getId());
             }
 
             if (file != null) {
                 /// Refresh the activity according to the Account and OCFile set
                 setFile(file);  // reset after getting it fresh from storageManager
-                updateActionBarTitle(getFile().getFileName());
+                updateActionBarTitle(getFile().getName());
                 initViewPager();
 
             } else {
