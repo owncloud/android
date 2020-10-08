@@ -27,6 +27,7 @@ import java.io.File
 import java.util.Locale
 
 //TODO: Add new attributes on demand. Let's try to perform a clean up :)
+//TODO: Make name not nullable.
 @Parcelize
 data class OCFile(
     val id: Long? = null,
