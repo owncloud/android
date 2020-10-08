@@ -29,7 +29,8 @@ import android.os.Environment;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import timber.log.Timber;
 
@@ -103,20 +104,8 @@ public class FileStorageUtils {
      * @return New OCFile instance representing the remote resource described by remote.
      */
     public static OCFile createOCFileFromRemoteFile(RemoteFile remote) {
-        OCFile file = new OCFile(remote.getRemotePath());
-        file.setCreationTimestamp(remote.getCreationTimestamp());
-        if (remote.isFolder()) {
-            file.setFileLength(remote.getSize());
-        } else {
-            file.setFileLength(remote.getLength());
-        }
-        file.setMimetype(remote.getMimeType());
-        file.setModificationTimestamp(remote.getModifiedTimestamp());
-        file.setEtag(remote.getEtag());
-        file.setPermissions(remote.getPermissions());
-        file.setRemoteId(remote.getRemoteId());
-        file.setPrivateLink(remote.getPrivateLink());
-        return file;
+        RemoteFileMapper remoteFileMapper = new RemoteFileMapper();
+        return remoteFileMapper.toModel(remote);
     }
 
     /**
@@ -172,8 +161,8 @@ public class FileStorageUtils {
         }
 
         Collections.sort(files, (ocFile1, ocFile2) -> {
-            Long obj1 = ocFile1.getFileLength();
-            return val * obj1.compareTo(ocFile2.getFileLength());
+            Long obj1 = ocFile1.getLength();
+            return val * obj1.compareTo(ocFile2.getLength());
         });
 
     }
@@ -193,13 +182,13 @@ public class FileStorageUtils {
 
         Collections.sort(files, (ocFile1, ocFile2) -> {
             if (ocFile1.isFolder() && ocFile2.isFolder()) {
-                return val * ocFile1.getFileName().toLowerCase().compareTo(ocFile2.getFileName().toLowerCase());
+                return val * ocFile1.getName().toLowerCase().compareTo(ocFile2.getName().toLowerCase());
             } else if (ocFile1.isFolder()) {
                 return -1;
             } else if (ocFile2.isFolder()) {
                 return 1;
             }
-            return val * ocFile1.getFileName().toLowerCase().compareTo(ocFile2.getFileName().toLowerCase());
+            return val * ocFile1.getName().toLowerCase().compareTo(ocFile2.getName().toLowerCase());
         });
 
     }
