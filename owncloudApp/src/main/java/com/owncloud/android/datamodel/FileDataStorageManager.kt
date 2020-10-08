@@ -44,12 +44,8 @@ import androidx.core.content.FileProvider
 import androidx.core.util.Pair
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.fromValue
-import com.owncloud.android.datamodel.OCFile.ROOT_PATH
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
@@ -106,12 +102,23 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBN
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta._ID
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_AUDIO
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.MIME_PREFIX_VIDEO
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
+import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
+import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.lib.resources.status.RemoteCapability
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.utils.FileStorageUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -120,10 +127,9 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.ArrayList
-import java.util.HashSet
 import java.util.Vector
 
-class FileDataStorageManager {
+class FileDataStorageManager : KoinComponent {
 
     private var contentResolver: ContentResolver? = null
     private var contentProviderClient: ContentProviderClient? = null
@@ -154,41 +160,42 @@ class FileDataStorageManager {
      * @return List with all the files set by the user as available offline.
      */
     fun getAvailableOfflineFilesFromEveryAccount(): List<Pair<OCFile, String>> {
-        val result = ArrayList<Pair<OCFile, String>>()
-        var cursorOnKeptInSync: Cursor? = null
-        try {
-            cursorOnKeptInSync = performQuery(
-                uri = CONTENT_URI,
-                projection = null,
-                selection = "$FILE_KEEP_IN_SYNC = ? OR $FILE_KEEP_IN_SYNC = ?",
-                selectionArgs = arrayOf(AVAILABLE_OFFLINE.value.toString(), AVAILABLE_OFFLINE_PARENT.value.toString()),
-                sortOrder = null,
-                performWithContentProviderClient = false
-            )
-
-            if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
-                var file: OCFile?
-                var accountName: String
-                do {
-                    file = createFileInstance(cursorOnKeptInSync)
-                    accountName =
-                        cursorOnKeptInSync.getString(cursorOnKeptInSync.getColumnIndex(FILE_ACCOUNT_OWNER))
-                    if (!file!!.isFolder && AccountUtils.exists(accountName, mContext)) {
-                        result.add(Pair(file, accountName))
-                    }
-                } while (cursorOnKeptInSync.moveToNext())
-            } else {
-                Timber.d("No available offline files found")
-            }
-
-        } catch (e: Exception) {
-            Timber.e(e, "Exception retrieving all the available offline files")
-
-        } finally {
-            cursorOnKeptInSync?.close()
-        }
-
-        return result
+        return listOf()
+//        val result = ArrayList<Pair<OCFile, String>>()
+//        var cursorOnKeptInSync: Cursor? = null
+//        try {
+//            cursorOnKeptInSync = performQuery(
+//                uri = CONTENT_URI,
+//                projection = null,
+//                selection = "$FILE_KEEP_IN_SYNC = ? OR $FILE_KEEP_IN_SYNC = ?",
+//                selectionArgs = arrayOf(AVAILABLE_OFFLINE.value.toString(), AVAILABLE_OFFLINE_PARENT.value.toString()),
+//                sortOrder = null,
+//                performWithContentProviderClient = false
+//            )
+//
+//            if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
+//                var file: OCFile?
+//                var accountName: String
+//                do {
+//                    file = createFileInstance(cursorOnKeptInSync)
+//                    accountName =
+//                        cursorOnKeptInSync.getString(cursorOnKeptInSync.getColumnIndex(FILE_ACCOUNT_OWNER))
+//                    if (!file!!.isFolder && AccountUtils.exists(accountName, mContext)) {
+//                        result.add(Pair(file, accountName))
+//                    }
+//                } while (cursorOnKeptInSync.moveToNext())
+//            } else {
+//                Timber.d("No available offline files found")
+//            }
+//
+//        } catch (e: Exception) {
+//            Timber.e(e, "Exception retrieving all the available offline files")
+//
+//        } finally {
+//            cursorOnKeptInSync?.close()
+//        }
+//
+//        return result
     }
 
     /**
@@ -199,212 +206,209 @@ class FileDataStorageManager {
      */
     val availableOfflineFilesFromCurrentAccount: Vector<OCFile>
         get() {
-            val result = Vector<OCFile>()
-
-            var cursorOnKeptInSync: Cursor? = null
-            try {
-                cursorOnKeptInSync = performQuery(
-                    uri = CONTENT_URI,
-                    projection = null,
-                    selection = "($FILE_KEEP_IN_SYNC = ? AND NOT $FILE_KEEP_IN_SYNC = ? ) AND $FILE_ACCOUNT_OWNER = ? ",
-                    selectionArgs = arrayOf(
-                        AVAILABLE_OFFLINE.value.toString(),
-                        AVAILABLE_OFFLINE_PARENT.value.toString(),
-                        account.name
-                    ),
-                    sortOrder = null,
-                    performWithContentProviderClient = false
-                )
-
-                if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
-                    var file: OCFile?
-                    do {
-                        file = createFileInstance(cursorOnKeptInSync)
-                        result.add(file)
-                    } while (cursorOnKeptInSync.moveToNext())
-                } else {
-                    Timber.d("No available offline files found")
-                }
-
-            } catch (e: Exception) {
-                Timber.e(e, "Exception retrieving all the available offline files")
-
-            } finally {
-                cursorOnKeptInSync?.close()
-            }
-
-            return result.apply { sort() }
+            return Vector()
+//            val result = Vector<OCFile>()
+//
+//            var cursorOnKeptInSync: Cursor? = null
+//            try {
+//                cursorOnKeptInSync = performQuery(
+//                    uri = CONTENT_URI,
+//                    projection = null,
+//                    selection = "($FILE_KEEP_IN_SYNC = ? AND NOT $FILE_KEEP_IN_SYNC = ? ) AND $FILE_ACCOUNT_OWNER = ? ",
+//                    selectionArgs = arrayOf(
+//                        AVAILABLE_OFFLINE.value.toString(),
+//                        AVAILABLE_OFFLINE_PARENT.value.toString(),
+//                        account.name
+//                    ),
+//                    sortOrder = null,
+//                    performWithContentProviderClient = false
+//                )
+//
+//                if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
+//                    var file: OCFile?
+//                    do {
+//                        file = createFileInstance(cursorOnKeptInSync)
+//                        result.add(file)
+//                    } while (cursorOnKeptInSync.moveToNext())
+//                } else {
+//                    Timber.d("No available offline files found")
+//                }
+//
+//            } catch (e: Exception) {
+//                Timber.e(e, "Exception retrieving all the available offline files")
+//
+//            } finally {
+//                cursorOnKeptInSync?.close()
+//            }
+//
+//            return result.apply { sort() }
         }
 
     val sharedByLinkFilesFromCurrentAccount: Vector<OCFile>
         get() {
-            val allSharedFiles = Vector<OCFile>()
-            var cursorOnShared: Cursor? = null
-            try {
-                cursorOnShared = contentResolver?.query(
-                    CONTENT_URI,
-                    null,
-                    "$FILE_SHARED_VIA_LINK = ? AND $FILE_ACCOUNT_OWNER = ? ",
-                    arrayOf(1.toString(), account.name),
-                    null
-                )
-                if (cursorOnShared != null && cursorOnShared.moveToFirst()) {
-                    var file: OCFile?
-                    do {
-                        file = createFileInstance(cursorOnShared)
-                        allSharedFiles.add(file)
-                    } while (cursorOnShared.moveToNext())
-                }
-            } catch (exception: Exception) {
-                Timber.e(exception, "Exception retrieving all the shared by link files")
-            } finally {
-                cursorOnShared?.close()
-            }
-
-            return allSharedFiles.apply { sort() }
+            return Vector()
+//            val allSharedFiles = Vector<OCFile>()
+//            val result = Vector<OCFile>()
+//            var cursorOnShared: Cursor? = null
+//            try {
+//                cursorOnShared = contentResolver?.query(
+//                    CONTENT_URI,
+//                    null,
+//                    "$FILE_SHARED_VIA_LINK = ? AND $FILE_ACCOUNT_OWNER = ? ",
+//                    arrayOf(1.toString(), account.name),
+//                    null
+//                )
+//                if (cursorOnShared != null && cursorOnShared.moveToFirst()) {
+//                    var file: OCFile?
+//                    do {
+//                        file = createFileInstance(cursorOnShared)
+//                        allSharedFiles.add(file)
+//                    } while (cursorOnShared.moveToNext())
+//                }
+//            } catch (exception: Exception) {
+//                Timber.e(exception, "Exception retrieving all the shared by link files")
+//            } finally {
+//                cursorOnShared?.close()
+//            }
+//
+//            if (allSharedFiles.isNotEmpty()) {
+//                val allSharedDirs = Vector<Long>()
+//                for (file in allSharedFiles) {
+//                    if (file.isFolder) {
+//                        allSharedDirs.add(file.fileId)
+//                    }
+//                }
+//                for (file in allSharedFiles) {
+//                    if (file.isFolder || (!file.isFolder && !allSharedDirs.contains(file.parentId))) {
+//                        result.add(file)
+//                    }
+//                }
+//            }
+//            result.sort()
+//            return result
         }
 
-    fun getFileByPath(path: String): OCFile? {
-        val c = getFileCursorForValue(FILE_PATH, path)
-        var file: OCFile? = null
-        if (c != null) {
-            if (c.moveToFirst()) {
-                file = createFileInstance(c)
-            }
-            c.close()
-        }
-        return if (file == null && ROOT_PATH == path) {
-            createRootDir() // root should always exist
-        } else file
+    fun getFileByPath(path: String): OCFile? = runBlocking {
+        val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(account.name, path))
+        }.getDataOrNull()
+        // TODO: Check if this is needed
+        //        return if (file == null && ROOT_PATH == path) {
+        //            createRootDir() // root should always exist
+        //        } else file
+        result
     }
 
-    fun getFileById(id: Long): OCFile? {
-        val c = getFileCursorForValue(_ID, id.toString()) ?: return null
-        val file: OCFile? = if (c.moveToFirst()) {
-            createFileInstance(c)
-        } else null
-        c.close()
-        return file
+    fun getFileById(id: Long): OCFile? = runBlocking {
+        val getFileByIdUseCase: GetFileByIdUseCase by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getFileByIdUseCase.execute(GetFileByIdUseCase.Params(id))
+        }.getDataOrNull()
+        result
     }
 
-    /**
-     * This will return a OCFile by its given FileId here refered as the remoteId.
-     * Its the fileId ownCloud Core uses to identify a file even if its name has changed.
-     *
-     *
-     * An Explanation about how to use ETags an those FileIds can be found here:
-     * [](https://github.com/owncloud/client/wiki/Etags-and-file-ids)
-     *
-     * @param remoteID
-     * @return
-     */
-    fun getFileByRemoteId(remoteID: String): OCFile? {
-        val c = getFileCursorForValue(FILE_REMOTE_ID, remoteID) ?: return null
-        val file: OCFile? = if (c.moveToFirst()) {
-            createFileInstance(c)
-        } else null
-        c.close()
-        return file
-    }
+    fun fileExists(id: Long): Boolean = getFileById(id) != null
 
-    fun getFileByLocalPath(path: String): OCFile? {
-        val c = getFileCursorForValue(FILE_STORAGE_PATH, path) ?: return null
-        val file: OCFile? = if (c.moveToFirst()) {
-            createFileInstance(c)
-        } else null
-        c.close()
-        return file
-    }
+    fun fileExists(path: String): Boolean = getFileByPath(path) != null
 
-    fun fileExists(id: Long): Boolean = fileExists(_ID, id.toString())
-
-    fun fileExists(path: String): Boolean = fileExists(FILE_PATH, path)
-
-    fun getFolderContent(f: OCFile?): Vector<OCFile> {
-        return if (f != null && f.isFolder && f.fileId != -1L) {
-            getFolderContent(f.fileId)
+    fun getFolderContent(f: OCFile?): List<OCFile> {
+        return if (f != null && f.isFolder && f.id != -1L) {
+            // TODO: Remove !!
+            getFolderContent(f.id!!)
         } else {
-            Vector()
+            listOf()
         }
     }
 
-    fun getFolderImages(folder: OCFile?): Vector<OCFile> =
-        folder?.let {
-            // TODO better implementation, filtering in the access to database instead of here
-            val folderImages = Vector<OCFile>()
-            for (file in getFolderContent(it)) {
-                if (file.isImage) folderImages.add(file)
-            }
-            folderImages
-        } ?: Vector()
+    fun getFolderImages(folder: OCFile?): List<OCFile> = runBlocking {
+        val getFolderImagesUseCase: GetFolderImagesUseCase by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            // TODO: Remove !!
+            getFolderImagesUseCase.execute(GetFolderImagesUseCase.Params(folderId = folder!!.id!!))
+        }.getDataOrNull()
+        result ?: listOf()
+    }
 
     fun saveFile(file: OCFile): Boolean {
-        var overriden = false
-        val cv = ContentValues().apply {
-            put(FILE_MODIFIED, file.modificationTimestamp)
-            put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, file.modificationTimestampAtLastSyncForData)
-            put(FILE_CREATION, file.creationTimestamp)
-            put(FILE_CONTENT_LENGTH, file.fileLength)
-            put(FILE_CONTENT_TYPE, file.mimetype)
-            put(FILE_NAME, file.fileName)
-            put(FILE_PARENT, file.parentId)
-            put(FILE_PATH, file.remotePath)
-            if (!file.isFolder) put(FILE_STORAGE_PATH, file.storagePath)
-            put(FILE_ACCOUNT_OWNER, account.name)
-            put(FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
-            put(FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
-            put(FILE_ETAG, file.etag)
-            put(FILE_TREE_ETAG, file.treeEtag)
-            put(FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
-            put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
-            put(FILE_PERMISSIONS, file.permissions)
-            put(FILE_REMOTE_ID, file.remoteId)
-            put(FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
-            put(FILE_IS_DOWNLOADING, file.isDownloading)
-            put(FILE_ETAG_IN_CONFLICT, file.etagInConflict)
-            put(FILE_PRIVATE_LINK, file.privateLink)
+        runBlocking {
+            val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
+
+            val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+                // TODO: We may need to return if it was updated or not.
+                saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(file))
+            }.getDataOrNull()
         }
-
-        val sameRemotePath = fileExists(file.remotePath)
-        if (sameRemotePath || fileExists(file.fileId)) {  // for renamed files; no more delete and create
-
-            val oldFile: OCFile?
-            if (sameRemotePath) {
-                oldFile = getFileByPath(file.remotePath)
-                file.fileId = oldFile!!.fileId
-            } else {
-                oldFile = getFileById(file.fileId)
-            }
-
-            overriden = true
-            try {
-                performUpdate(
-                    uri = CONTENT_URI,
-                    contentValues = cv,
-                    where = "$_ID=?",
-                    selectionArgs = arrayOf(file.fileId.toString())
-                ).let { Timber.d("Rows updated: $it") }
-            } catch (e: Exception) {
-                Timber.e(e, "Fail to insert insert file to database ${e.message}")
-            }
-
-        } else {
-            // new file
-            setInitialAvailableOfflineStatus(file, cv)
-
-            val resultUri: Uri? =
-                try {
-                    performInsert(CONTENT_URI_FILE, cv)
-                } catch (e: RemoteException) {
-                    Timber.e(e, "Fail to insert insert file to database ${e.message}")
-                    null
-                }
-            resultUri?.let {
-                file.fileId = it.pathSegments[1].toLong()
-            }
-        }
-
-        return overriden
+        return true
+//        var overriden = false
+//        val cv = ContentValues().apply {
+//            put(FILE_MODIFIED, file.modificationTimestamp)
+//            put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, file.modificationTimestampAtLastSyncForData)
+//            put(FILE_CREATION, file.creationTimestamp)
+//            put(FILE_CONTENT_LENGTH, file.fileLength)
+//            put(FILE_CONTENT_TYPE, file.mimetype)
+//            put(FILE_NAME, file.fileName)
+//            put(FILE_PARENT, file.parentId)
+//            put(FILE_PATH, file.remotePath)
+//            if (!file.isFolder) put(FILE_STORAGE_PATH, file.storagePath)
+//            put(FILE_ACCOUNT_OWNER, account.name)
+//            put(FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
+//            put(FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
+//            put(FILE_ETAG, file.etag)
+//            put(FILE_TREE_ETAG, file.treeEtag)
+//            put(FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
+//            put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
+//            put(FILE_PERMISSIONS, file.permissions)
+//            put(FILE_REMOTE_ID, file.remoteId)
+//            put(FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
+//            put(FILE_IS_DOWNLOADING, file.isDownloading)
+//            put(FILE_ETAG_IN_CONFLICT, file.etagInConflict)
+//            put(FILE_PRIVATE_LINK, file.privateLink)
+//        }
+//
+//        val sameRemotePath = fileExists(file.remotePath)
+//        if (sameRemotePath || fileExists(file.id!!)) {  // for renamed files; no more delete and create
+//
+//            val oldFile: OCFile?
+//            if (sameRemotePath) {
+//                oldFile = getFileByPath(file.remotePath)
+//                file.fileId = oldFile!!.fileId
+//            } else {
+//                oldFile = getFileById(file.fileId)
+//            }
+//
+//            overriden = true
+//            try {
+//                performUpdate(
+//                    uri = CONTENT_URI,
+//                    contentValues = cv,
+//                    where = "$_ID=?",
+//                    selectionArgs = arrayOf(file.fileId.toString())
+//                ).let { Timber.d("Rows updated: $it") }
+//            } catch (e: Exception) {
+//                Timber.e(e, "Fail to insert insert file to database ${e.message}")
+//            }
+//
+//        } else {
+//            // new file
+//            setInitialAvailableOfflineStatus(file, cv)
+//
+//            val resultUri: Uri? =
+//                try {
+//                    performInsert(CONTENT_URI_FILE, cv)
+//                } catch (e: RemoteException) {
+//                    Timber.e(e, "Fail to insert insert file to database ${e.message}")
+//                    null
+//                }
+//            resultUri?.let {
+//                file.fileId = it.pathSegments[1].toLong()
+//            }
+//        }
+//
+//        return overriden
     }
 
     /**
@@ -422,148 +426,148 @@ class FileDataStorageManager {
         folder: OCFile, updatedFiles: Collection<OCFile>, filesToRemove: Collection<OCFile>
     ) {
         Timber.d("Saving folder ${folder.remotePath} with ${updatedFiles.size} children and ${filesToRemove.size} files to remove")
-
-        val operations = ArrayList<ContentProviderOperation>(updatedFiles.size)
-
-        // prepare operations to insert or update files to save in the given folder
-        for (file in updatedFiles) {
-            val cv = ContentValues().apply {
-                put(FILE_MODIFIED, file.modificationTimestamp)
-                put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, file.modificationTimestampAtLastSyncForData)
-                put(FILE_CREATION, file.creationTimestamp)
-                put(FILE_CONTENT_LENGTH, file.fileLength)
-                put(FILE_CONTENT_TYPE, file.mimetype)
-                put(FILE_NAME, file.fileName)
-                put(FILE_PARENT, folder.fileId)
-                put(FILE_PATH, file.remotePath)
-                if (!file.isFolder) put(FILE_STORAGE_PATH, file.storagePath)
-                put(FILE_ACCOUNT_OWNER, account.name)
-                put(FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
-                put(FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
-                put(FILE_ETAG, file.etag)
-                put(FILE_TREE_ETAG, file.treeEtag)
-                put(FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
-                put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
-                put(FILE_PERMISSIONS, file.permissions)
-                put(FILE_REMOTE_ID, file.remoteId)
-                put(FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
-                put(FILE_IS_DOWNLOADING, file.isDownloading)
-                put(FILE_ETAG_IN_CONFLICT, file.etagInConflict)
-                put(FILE_PRIVATE_LINK, file.privateLink)
-            }
-
-            val existsByPath = fileExists(file.remotePath)
-            if (existsByPath || fileExists(file.fileId)) {
-                // updating an existing file
-                operations.add(
-                    ContentProviderOperation.newUpdate(CONTENT_URI).withValues(cv).withSelection(
-                        "$_ID=?",
-                        arrayOf(file.fileId.toString())
-                    )
-                        .build()
-                )
-            } else {
-                // adding a new file
-                setInitialAvailableOfflineStatus(file, cv)
-                operations.add(ContentProviderOperation.newInsert(CONTENT_URI).withValues(cv).build())
-            }
-        }
-
-        // prepare operations to remove files in the given folder
-        val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
-        var whereArgs: Array<String>?
-        for (file in filesToRemove) {
-            if (file.parentId == folder.fileId) {
-                whereArgs = arrayOf(account.name, file.remotePath)
-                if (file.isFolder) {
-                    operations.add(
-                        ContentProviderOperation.newDelete(
-                            ContentUris.withAppendedId(CONTENT_URI_DIR, file.fileId)
-                        ).withSelection(where, whereArgs).build()
-                    )
-
-                    val localFolder = File(FileStorageUtils.getDefaultSavePathFor(account.name, file))
-                    if (localFolder.exists()) {
-                        removeLocalFolder(localFolder)
-                    }
-                } else {
-                    operations.add(
-                        ContentProviderOperation.newDelete(
-                            ContentUris.withAppendedId(CONTENT_URI_FILE, file.fileId)
-                        ).withSelection(where, whereArgs).build()
-                    )
-
-                    if (file.isDown) {
-                        val path = file.storagePath
-                        File(path).delete()
-                        triggerMediaScan(path) // notify MediaScanner about removed file
-                    }
-                }
-            }
-        }
-
-        // update metadata of folder
-        val cv = ContentValues().apply {
-            put(FILE_MODIFIED, folder.modificationTimestamp)
-            put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, folder.modificationTimestampAtLastSyncForData)
-            put(FILE_CREATION, folder.creationTimestamp)
-            put(FILE_CONTENT_LENGTH, folder.fileLength)
-            put(FILE_CONTENT_TYPE, folder.mimetype)
-            put(FILE_NAME, folder.fileName)
-            put(FILE_PARENT, folder.parentId)
-            put(FILE_PATH, folder.remotePath)
-            put(FILE_ACCOUNT_OWNER, account.name)
-            put(FILE_LAST_SYNC_DATE, folder.lastSyncDateForProperties)
-            put(FILE_LAST_SYNC_DATE_FOR_DATA, folder.lastSyncDateForData)
-            put(FILE_ETAG, folder.etag)
-            put(FILE_TREE_ETAG, folder.treeEtag)
-            put(FILE_SHARED_VIA_LINK, if (folder.isSharedViaLink) 1 else 0)
-            put(FILE_SHARED_WITH_SHAREE, if (folder.isSharedWithSharee) 1 else 0)
-            put(FILE_PERMISSIONS, folder.permissions)
-            put(FILE_REMOTE_ID, folder.remoteId)
-            put(FILE_PRIVATE_LINK, folder.privateLink)
-        }
-
-        operations.add(
-            ContentProviderOperation.newUpdate(CONTENT_URI).withValues(cv).withSelection(
-                "$_ID=?", arrayOf(folder.fileId.toString())
-            )
-                .build()
-        )
-
-        // apply operations in batch
-        var results: Array<ContentProviderResult>? = null
-        Timber.d("Sending ${operations.size} operations to FileContentProvider")
-        try {
-            results =
-                if (contentResolver != null) {
-                    contentResolver!!.applyBatch(MainApp.authority, operations)
-                } else {
-                    contentProviderClient!!.applyBatch(operations)
-                }
-
-        } catch (e: OperationApplicationException) {
-            Timber.e(e, "Exception in batch of operations ${e.message}")
-
-        } catch (e: RemoteException) {
-            Timber.e(e, "Exception in batch of operations ${e.message}")
-        }
-
-        // update new id in file objects for insertions
-        if (results != null) {
-            val filesIt = updatedFiles.iterator()
-            var file: OCFile?
-            for (i in results.indices) {
-                file = if (filesIt.hasNext()) {
-                    filesIt.next()
-                } else {
-                    null
-                }
-                results[i].uri?.let { newId ->
-                    file?.fileId = newId.pathSegments[1].toLong()
-                }
-            }
-        }
+//
+//        val operations = ArrayList<ContentProviderOperation>(updatedFiles.size)
+//
+//        // prepare operations to insert or update files to save in the given folder
+//        for (file in updatedFiles) {
+//            val cv = ContentValues().apply {
+//                put(FILE_MODIFIED, file.modificationTimestamp)
+//                put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, file.modificationTimestampAtLastSyncForData)
+//                put(FILE_CREATION, file.creationTimestamp)
+//                put(FILE_CONTENT_LENGTH, file.fileLength)
+//                put(FILE_CONTENT_TYPE, file.mimetype)
+//                put(FILE_NAME, file.fileName)
+//                put(FILE_PARENT, folder.fileId)
+//                put(FILE_PATH, file.remotePath)
+//                if (!file.isFolder) put(FILE_STORAGE_PATH, file.storagePath)
+//                put(FILE_ACCOUNT_OWNER, account.name)
+//                put(FILE_LAST_SYNC_DATE, file.lastSyncDateForProperties)
+//                put(FILE_LAST_SYNC_DATE_FOR_DATA, file.lastSyncDateForData)
+//                put(FILE_ETAG, file.etag)
+//                put(FILE_TREE_ETAG, file.treeEtag)
+//                put(FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
+//                put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
+//                put(FILE_PERMISSIONS, file.permissions)
+//                put(FILE_REMOTE_ID, file.remoteId)
+//                put(FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
+//                put(FILE_IS_DOWNLOADING, file.isDownloading)
+//                put(FILE_ETAG_IN_CONFLICT, file.etagInConflict)
+//                put(FILE_PRIVATE_LINK, file.privateLink)
+//            }
+//
+//            val existsByPath = fileExists(file.remotePath)
+//            if (existsByPath || fileExists(file.fileId)) {
+//                // updating an existing file
+//                operations.add(
+//                    ContentProviderOperation.newUpdate(CONTENT_URI).withValues(cv).withSelection(
+//                        "$_ID=?",
+//                        arrayOf(file.fileId.toString())
+//                    )
+//                        .build()
+//                )
+//            } else {
+//                // adding a new file
+//                setInitialAvailableOfflineStatus(file, cv)
+//                operations.add(ContentProviderOperation.newInsert(CONTENT_URI).withValues(cv).build())
+//            }
+//        }
+//
+//        // prepare operations to remove files in the given folder
+//        val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
+//        var whereArgs: Array<String>?
+//        for (file in filesToRemove) {
+//            if (file.parentId == folder.fileId) {
+//                whereArgs = arrayOf(account.name, file.remotePath)
+//                if (file.isFolder) {
+//                    operations.add(
+//                        ContentProviderOperation.newDelete(
+//                            ContentUris.withAppendedId(CONTENT_URI_DIR, file.fileId)
+//                        ).withSelection(where, whereArgs).build()
+//                    )
+//
+//                    val localFolder = File(FileStorageUtils.getDefaultSavePathFor(account.name, file))
+//                    if (localFolder.exists()) {
+//                        removeLocalFolder(localFolder)
+//                    }
+//                } else {
+//                    operations.add(
+//                        ContentProviderOperation.newDelete(
+//                            ContentUris.withAppendedId(CONTENT_URI_FILE, file.fileId)
+//                        ).withSelection(where, whereArgs).build()
+//                    )
+//
+//                    if (file.isDown) {
+//                        val path = file.storagePath
+//                        File(path).delete()
+//                        triggerMediaScan(path) // notify MediaScanner about removed file
+//                    }
+//                }
+//            }
+//        }
+//
+//        // update metadata of folder
+//        val cv = ContentValues().apply {
+//            put(FILE_MODIFIED, folder.modificationTimestamp)
+//            put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, folder.modificationTimestampAtLastSyncForData)
+//            put(FILE_CREATION, folder.creationTimestamp)
+//            put(FILE_CONTENT_LENGTH, folder.fileLength)
+//            put(FILE_CONTENT_TYPE, folder.mimetype)
+//            put(FILE_NAME, folder.fileName)
+//            put(FILE_PARENT, folder.parentId)
+//            put(FILE_PATH, folder.remotePath)
+//            put(FILE_ACCOUNT_OWNER, account.name)
+//            put(FILE_LAST_SYNC_DATE, folder.lastSyncDateForProperties)
+//            put(FILE_LAST_SYNC_DATE_FOR_DATA, folder.lastSyncDateForData)
+//            put(FILE_ETAG, folder.etag)
+//            put(FILE_TREE_ETAG, folder.treeEtag)
+//            put(FILE_SHARED_VIA_LINK, if (folder.isSharedViaLink) 1 else 0)
+//            put(FILE_SHARED_WITH_SHAREE, if (folder.isSharedWithSharee) 1 else 0)
+//            put(FILE_PERMISSIONS, folder.permissions)
+//            put(FILE_REMOTE_ID, folder.remoteId)
+//            put(FILE_PRIVATE_LINK, folder.privateLink)
+//        }
+//
+//        operations.add(
+//            ContentProviderOperation.newUpdate(CONTENT_URI).withValues(cv).withSelection(
+//                "$_ID=?", arrayOf(folder.fileId.toString())
+//            )
+//                .build()
+//        )
+//
+//        // apply operations in batch
+//        var results: Array<ContentProviderResult>? = null
+//        Timber.d("Sending ${operations.size} operations to FileContentProvider")
+//        try {
+//            results =
+//                if (contentResolver != null) {
+//                    contentResolver!!.applyBatch(MainApp.authority, operations)
+//                } else {
+//                    contentProviderClient!!.applyBatch(operations)
+//                }
+//
+//        } catch (e: OperationApplicationException) {
+//            Timber.e(e, "Exception in batch of operations ${e.message}")
+//
+//        } catch (e: RemoteException) {
+//            Timber.e(e, "Exception in batch of operations ${e.message}")
+//        }
+//
+//        // update new id in file objects for insertions
+//        if (results != null) {
+//            val filesIt = updatedFiles.iterator()
+//            var file: OCFile?
+//            for (i in results.indices) {
+//                file = if (filesIt.hasNext()) {
+//                    filesIt.next()
+//                } else {
+//                    null
+//                }
+//                results[i].uri?.let { newId ->
+//                    file?.fileId = newId.pathSegments[1].toLong()
+//                }
+//            }
+//        }
     }
 
     /**
@@ -596,165 +600,171 @@ class FileDataStorageManager {
      * @return 'true' if value was updated, 'false' otherwise.
      */
     fun saveLocalAvailableOfflineStatus(file: OCFile): Boolean {
-        if (!fileExists(file.fileId)) {
-            return false
-        }
-
-        val newStatus = file.availableOfflineStatus
-        require(AVAILABLE_OFFLINE_PARENT != newStatus) {
-            "Forbidden value, AVAILABLE_OFFLINE_PARENT is calculated, cannot be set"
-        }
-
-        val cv = ContentValues()
-        cv.put(FILE_KEEP_IN_SYNC, file.availableOfflineStatus.value)
-
-        var updatedCount: Int
-        try {
-            updatedCount = performUpdate(
-                uri = CONTENT_URI,
-                contentValues = cv,
-                where = "$_ID=?",
-                selectionArgs = arrayOf(file.fileId.toString())
-            )
-
-            // Update descendants
-            if (file.isFolder && updatedCount > 0) {
-                val descendantsCv = ContentValues()
-                if (newStatus == AVAILABLE_OFFLINE) {
-                    // all descendant files MUST be av-off due to inheritance, not due to previous value
-                    descendantsCv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
-                } else {
-                    // all descendant files MUST be not-available offline
-                    descendantsCv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
-                }
-                val selectDescendants = selectionForAllDescendantsOf(file)
-                updatedCount += performUpdate(
-                    uri = CONTENT_URI,
-                    contentValues = descendantsCv,
-                    where = selectDescendants.first,
-                    selectionArgs = selectDescendants.second
-                )
-            }
-
-        } catch (e: RemoteException) {
-            Timber.e(e, "Fail updating available offline status")
-            return false
-        }
-
-        return updatedCount > 0
+        return false
+//        if (!fileExists(file.fileId)) {
+//            return false
+//        }
+//
+//        val newStatus = file.availableOfflineStatus
+//        require(AVAILABLE_OFFLINE_PARENT != newStatus) {
+//            "Forbidden value, AVAILABLE_OFFLINE_PARENT is calculated, cannot be set"
+//        }
+//
+//        val cv = ContentValues()
+//        cv.put(FILE_KEEP_IN_SYNC, file.availableOfflineStatus.value)
+//
+//        var updatedCount: Int
+//        try {
+//            updatedCount = performUpdate(
+//                uri = CONTENT_URI,
+//                contentValues = cv,
+//                where = "$_ID=?",
+//                selectionArgs = arrayOf(file.fileId.toString())
+//            )
+//
+//            // Update descendants
+//            if (file.isFolder && updatedCount > 0) {
+//                val descendantsCv = ContentValues()
+//                if (newStatus == AVAILABLE_OFFLINE) {
+//                    // all descendant files MUST be av-off due to inheritance, not due to previous value
+//                    descendantsCv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
+//                } else {
+//                    // all descendant files MUST be not-available offline
+//                    descendantsCv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
+//                }
+//                val selectDescendants = selectionForAllDescendantsOf(file)
+//                updatedCount += performUpdate(
+//                    uri = CONTENT_URI,
+//                    contentValues = descendantsCv,
+//                    where = selectDescendants.first,
+//                    selectionArgs = selectDescendants.second
+//                )
+//            }
+//
+//        } catch (e: RemoteException) {
+//            Timber.e(e, "Fail updating available offline status")
+//            return false
+//        }
+//
+//        return updatedCount > 0
     }
 
     fun removeFile(file: OCFile?, removeDBData: Boolean, removeLocalCopy: Boolean): Boolean {
-        var success = true
-        if (file != null) {
-            if (file.isFolder) {
-                success = removeFolder(file, removeDBData, removeLocalCopy)
-
-            } else {
-                if (removeDBData) {
-                    val fileUri = ContentUris.withAppendedId(CONTENT_URI_FILE, file.fileId)
-                    val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
-                    val whereArgs = arrayOf(account.name, file.remotePath)
-                    val deleted =
-                        try {
-                            performDelete(fileUri, where, whereArgs)
-                        } catch (e: RemoteException) {
-                            Timber.e(e)
-                            0
-                        }
-                    success = success and (deleted > 0)
-                }
-                val localPath = file.storagePath
-                if (removeLocalCopy && file.isDown && localPath != null && success) {
-                    success = File(localPath).delete()
-                    if (success) {
-                        deleteFileInMediaScan(localPath)
-                        if (!removeDBData) {
-                            // maybe unnecessary, but should be checked TODO remove if unnecessary
-                            file.storagePath = null
-                            saveFile(file)
-                            saveConflict(file, null)
-                        }
-                    }
-                }
-            }
-        } else {
-            success = false
-        }
-        return success
+        return false
+//        var success = true
+//        if (file != null) {
+//            if (file.isFolder) {
+//                success = removeFolder(file, removeDBData, removeLocalCopy)
+//
+//            } else {
+//                if (removeDBData) {
+//                    val fileUri = ContentUris.withAppendedId(CONTENT_URI_FILE, file.fileId)
+//                    val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
+//                    val whereArgs = arrayOf(account.name, file.remotePath)
+//                    val deleted =
+//                        try {
+//                            performDelete(fileUri, where, whereArgs)
+//                        } catch (e: RemoteException) {
+//                            Timber.e(e)
+//                            0
+//                        }
+//                    success = success and (deleted > 0)
+//                }
+//                val localPath = file.storagePath
+//                if (removeLocalCopy && file.isDown && localPath != null && success) {
+//                    success = File(localPath).delete()
+//                    if (success) {
+//                        deleteFileInMediaScan(localPath)
+//                        if (!removeDBData) {
+//                            // maybe unnecessary, but should be checked TODO remove if unnecessary
+//                            file.storagePath = null
+//                            saveFile(file)
+//                            saveConflict(file, null)
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+//            success = false
+//        }
+//        return success
     }
 
     fun removeFolder(folder: OCFile?, removeDBData: Boolean, removeLocalContent: Boolean): Boolean {
-        var success = true
-        if (folder != null && folder.isFolder) {
-            if (removeDBData && folder.fileId != -1L) {
-                success = removeFolderInDb(folder)
-            }
-            if (removeLocalContent && success) {
-                success = removeLocalFolder(folder)
-            }
-        }
-        return success
+        return false
+//        var success = true
+//        if (folder != null && folder.isFolder) {
+//            if (removeDBData && folder.fileId != -1L) {
+//                success = removeFolderInDb(folder)
+//            }
+//            if (removeLocalContent && success) {
+//                success = removeLocalFolder(folder)
+//            }
+//        }
+//        return success
     }
 
     private fun removeFolderInDb(folder: OCFile): Boolean {
-        val folderUri =
-            Uri.withAppendedPath(CONTENT_URI_DIR, "" + folder.fileId) // URI for recursive deletion
-        val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
-        val whereArgs = arrayOf(account.name, folder.remotePath)
-        return try {
-            performDelete(url = folderUri, where = where, selectionArgs = whereArgs) > 0
-        } catch (e: RemoteException) {
-            Timber.e(e)
-            false
-        }
+        return false
+//        val folderUri =
+//            Uri.withAppendedPath(CONTENT_URI_DIR, "" + folder.fileId) // URI for recursive deletion
+//        val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
+//        val whereArgs = arrayOf(account.name, folder.remotePath)
+//        return try {
+//            performDelete(url = folderUri, where = where, selectionArgs = whereArgs) > 0
+//        } catch (e: RemoteException) {
+//            Timber.e(e)
+//            false
+//        }
     }
 
     private fun removeLocalFolder(folder: OCFile): Boolean {
-        var success = true
-        val localFolderPath = FileStorageUtils.getDefaultSavePathFor(account.name, folder)
-        val localFolder = File(localFolderPath)
-        if (localFolder.exists()) {
-            // stage 1: remove the local files already registered in the files database
-            val files = getFolderContent(folder.fileId)
-            for (file in files) {
-                if (file.isFolder) {
-                    success = success and removeLocalFolder(file)
-                } else {
-                    if (file.isDown) {
-                        val localFile = File(file.storagePath)
-                        success = success and localFile.delete()
-                        if (success) {
-                            // notify MediaScanner about removed file
-                            deleteFileInMediaScan(file.storagePath)
-                            file.storagePath = null
-                            saveFile(file)
-                        }
-                    }
-                }
-            }
-
-            // stage 2: remove the folder itself and any local file inside out of sync;
-            //          for instance, after clearing the app cache or reinstalling
-            success = success and removeLocalFolder(localFolder)
-        }
-        return success
+        return false
+//        var success = true
+//        val localFolderPath = FileStorageUtils.getDefaultSavePathFor(account.name, folder)
+//        val localFolder = File(localFolderPath)
+//        if (localFolder.exists()) {
+//            // stage 1: remove the local files already registered in the files database
+//            val files = getFolderContent(folder.fileId)
+//            for (file in files) {
+//                if (file.isFolder) {
+//                    success = success and removeLocalFolder(file)
+//                } else {
+//                    if (file.isDown) {
+//                        val localFile = File(file.storagePath)
+//                        success = success and localFile.delete()
+//                        if (success) {
+//                            // notify MediaScanner about removed file
+//                            deleteFileInMediaScan(file.storagePath)
+//                            file.storagePath = null
+//                            saveFile(file)
+//                        }
+//                    }
+//                }
+//            }
+//
+//            // stage 2: remove the folder itself and any local file inside out of sync;
+//            //          for instance, after clearing the app cache or reinstalling
+//            success = success and removeLocalFolder(localFolder)
+//        }
+//        return success
     }
 
     private fun removeLocalFolder(localFolder: File): Boolean {
-        var success = true
-        val localFiles = localFolder.listFiles()
-        if (localFiles != null) {
-            for (localFile in localFiles) {
-                success = if (localFile.isDirectory) {
-                    success and removeLocalFolder(localFile)
-                } else {
-                    success and localFile.delete()
-                }
-            }
-        }
-        success = success and localFolder.delete()
-        return success
+        return false
+//        var success = true
+//        val localFiles = localFolder.listFiles()
+//        if (localFiles != null) {
+//            for (localFile in localFiles) {
+//                success = if (localFile.isDirectory) {
+//                    success and removeLocalFolder(localFile)
+//                } else {
+//                    success and localFile.delete()
+//                }
+//            }
+//        }
+//        success = success and localFolder.delete()
+//        return success
     }
 
     /**
@@ -765,150 +775,150 @@ class FileDataStorageManager {
      */
     fun moveLocalFile(file: OCFile?, targetPath: String, targetParentPath: String) {
 
-        if (file != null && file.fileExists() && ROOT_PATH != file.fileName) {
-
-            val targetParent = getFileByPath(targetParentPath)
-                ?: throw IllegalStateException(
-                    "Parent folder of the target path does not exist!!"
-                )
-
-            /// 1. get all the descendants of the moved element in a single QUERY
-            val c: Cursor? =
-                try {
-                    performQuery(
-                        uri = CONTENT_URI,
-                        projection = null,
-                        selection = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? ",
-                        selectionArgs = arrayOf(account.name, "${file.remotePath}%"),
-                        sortOrder = "$FILE_PATH ASC "
-                    )
-                } catch (e: RemoteException) {
-                    Timber.e(e)
-                    null
-                }
-
-            val originalPathsToTriggerMediaScan = ArrayList<String>()
-            val newPathsToTriggerMediaScan = ArrayList<String>()
-            val defaultSavePath = FileStorageUtils.getSavePath(account.name)
-
-            /// 2. prepare a batch of update operations to change all the descendants
-            if (c != null) {
-                val operations = ArrayList<ContentProviderOperation>(c.count)
-                if (c.moveToFirst()) {
-                    val lengthOfOldPath = file.remotePath.length
-                    val lengthOfOldStoragePath = defaultSavePath.length + lengthOfOldPath
-                    do {
-                        val cv = ContentValues() // keep construction in the loop
-                        val child = createFileInstance(c)
-                        cv.put(FILE_PATH, targetPath + child!!.remotePath.substring(lengthOfOldPath))
-                        if (child.storagePath != null && child.storagePath.startsWith(defaultSavePath)) {
-                            // update link to downloaded content - but local move is not done here!
-                            val targetLocalPath = defaultSavePath + targetPath +
-                                    child.storagePath.substring(lengthOfOldStoragePath)
-
-                            cv.put(FILE_STORAGE_PATH, targetLocalPath)
-
-                            originalPathsToTriggerMediaScan.add(child.storagePath)
-                            newPathsToTriggerMediaScan.add(targetLocalPath)
-
-                        }
-                        if (targetParent.availableOfflineStatus != NOT_AVAILABLE_OFFLINE) {
-                            // moving to an available offline subfolder
-                            cv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
-                        } else {
-                            // moving to a not available offline subfolder - with care
-                            if (file.availableOfflineStatus == AVAILABLE_OFFLINE_PARENT) {
-                                cv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
-                            }
-                        }
-
-                        if (child.remotePath == file.remotePath) {
-                            cv.put(FILE_PARENT, targetParent.fileId)
-                        }
-                        operations.add(
-                            ContentProviderOperation.newUpdate(CONTENT_URI).withValues(cv).withSelection(
-                                "$_ID=?",
-                                arrayOf(child.fileId.toString())
-                            )
-                                .build()
-                        )
-
-                    } while (c.moveToNext())
-                }
-                c.close()
-
-                /// 3. apply updates in batch
-                try {
-                    if (contentResolver != null) {
-                        contentResolver!!.applyBatch(MainApp.authority, operations)
-
-                    } else {
-                        contentProviderClient!!.applyBatch(operations)
-                    }
-
-                } catch (e: Exception) {
-                    Timber.e(e, "Fail to update ${file.fileId} and descendants in database")
-                }
-
-            }
-
-            /// 4. move in local file system
-            val originalLocalPath = FileStorageUtils.getDefaultSavePathFor(account.name, file)
-            val targetLocalPath = defaultSavePath + targetPath
-            val localFile = File(originalLocalPath)
-            var renamed = false
-            if (localFile.exists()) {
-                val targetFile = File(targetLocalPath)
-                val targetFolder = targetFile.parentFile
-                if (targetFolder != null && !targetFolder.exists()) {
-                    targetFolder.mkdirs()
-                }
-                renamed = localFile.renameTo(targetFile)
-            }
-
-            if (renamed) {
-                var it = originalPathsToTriggerMediaScan.iterator()
-                while (it.hasNext()) {
-                    // Notify MediaScanner about removed file
-                    deleteFileInMediaScan(it.next())
-                }
-                it = newPathsToTriggerMediaScan.iterator()
-                while (it.hasNext()) {
-                    // Notify MediaScanner about new file/folder
-                    triggerMediaScan(it.next())
-                }
-            }
-        }
+//        if (file != null && file.fileExists() && ROOT_PATH != file.fileName) {
+//
+//            val targetParent = getFileByPath(targetParentPath)
+//                ?: throw IllegalStateException(
+//                    "Parent folder of the target path does not exist!!"
+//                )
+//
+//            /// 1. get all the descendants of the moved element in a single QUERY
+//            val c: Cursor? =
+//                try {
+//                    performQuery(
+//                        uri = CONTENT_URI,
+//                        projection = null,
+//                        selection = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? ",
+//                        selectionArgs = arrayOf(account.name, "${file.remotePath}%"),
+//                        sortOrder = "$FILE_PATH ASC "
+//                    )
+//                } catch (e: RemoteException) {
+//                    Timber.e(e)
+//                    null
+//                }
+//
+//            val originalPathsToTriggerMediaScan = ArrayList<String>()
+//            val newPathsToTriggerMediaScan = ArrayList<String>()
+//            val defaultSavePath = FileStorageUtils.getSavePath(account.name)
+//
+//            /// 2. prepare a batch of update operations to change all the descendants
+//            if (c != null) {
+//                val operations = ArrayList<ContentProviderOperation>(c.count)
+//                if (c.moveToFirst()) {
+//                    val lengthOfOldPath = file.remotePath.length
+//                    val lengthOfOldStoragePath = defaultSavePath.length + lengthOfOldPath
+//                    do {
+//                        val cv = ContentValues() // keep construction in the loop
+//                        val child = createFileInstance(c)
+//                        cv.put(FILE_PATH, targetPath + child!!.remotePath.substring(lengthOfOldPath))
+//                        if (child.storagePath != null && child.storagePath.startsWith(defaultSavePath)) {
+//                            // update link to downloaded content - but local move is not done here!
+//                            val targetLocalPath = defaultSavePath + targetPath +
+//                                    child.storagePath.substring(lengthOfOldStoragePath)
+//
+//                            cv.put(FILE_STORAGE_PATH, targetLocalPath)
+//
+//                            originalPathsToTriggerMediaScan.add(child.storagePath)
+//                            newPathsToTriggerMediaScan.add(targetLocalPath)
+//
+//                        }
+//                        if (targetParent.availableOfflineStatus != NOT_AVAILABLE_OFFLINE) {
+//                            // moving to an available offline subfolder
+//                            cv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
+//                        } else {
+//                            // moving to a not available offline subfolder - with care
+//                            if (file.availableOfflineStatus == AVAILABLE_OFFLINE_PARENT) {
+//                                cv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
+//                            }
+//                        }
+//
+//                        if (child.remotePath == file.remotePath) {
+//                            cv.put(FILE_PARENT, targetParent.fileId)
+//                        }
+//                        operations.add(
+//                            ContentProviderOperation.newUpdate(CONTENT_URI).withValues(cv).withSelection(
+//                                "$_ID=?",
+//                                arrayOf(child.fileId.toString())
+//                            )
+//                                .build()
+//                        )
+//
+//                    } while (c.moveToNext())
+//                }
+//                c.close()
+//
+//                /// 3. apply updates in batch
+//                try {
+//                    if (contentResolver != null) {
+//                        contentResolver!!.applyBatch(MainApp.authority, operations)
+//
+//                    } else {
+//                        contentProviderClient!!.applyBatch(operations)
+//                    }
+//
+//                } catch (e: Exception) {
+//                    Timber.e(e, "Fail to update ${file.fileId} and descendants in database")
+//                }
+//
+//            }
+//
+//            /// 4. move in local file system
+//            val originalLocalPath = FileStorageUtils.getDefaultSavePathFor(account.name, file)
+//            val targetLocalPath = defaultSavePath + targetPath
+//            val localFile = File(originalLocalPath)
+//            var renamed = false
+//            if (localFile.exists()) {
+//                val targetFile = File(targetLocalPath)
+//                val targetFolder = targetFile.parentFile
+//                if (targetFolder != null && !targetFolder.exists()) {
+//                    targetFolder.mkdirs()
+//                }
+//                renamed = localFile.renameTo(targetFile)
+//            }
+//
+//            if (renamed) {
+//                var it = originalPathsToTriggerMediaScan.iterator()
+//                while (it.hasNext()) {
+//                    // Notify MediaScanner about removed file
+//                    deleteFileInMediaScan(it.next())
+//                }
+//                it = newPathsToTriggerMediaScan.iterator()
+//                while (it.hasNext()) {
+//                    // Notify MediaScanner about new file/folder
+//                    triggerMediaScan(it.next())
+//                }
+//            }
+//        }
     }
 
     fun copyLocalFile(originalFile: OCFile?, targetPath: String, targetFileRemoteId: String) {
-        if (originalFile != null && originalFile.fileExists() && ROOT_PATH != originalFile.fileName) {
-            // 1. Copy in database
-            val ocTargetFile = OCFile(targetPath)
-            val parentId = getFileByPath(FileStorageUtils.getParentPath(targetPath))!!.fileId
-            ocTargetFile.parentId = parentId
-            ocTargetFile.remoteId = targetFileRemoteId
-            ocTargetFile.fileLength = originalFile.fileLength
-            ocTargetFile.mimetype = originalFile.mimetype
-            ocTargetFile.modificationTimestamp = System.currentTimeMillis()
-            saveFile(ocTargetFile)
-
-            // 2. Copy in local file system
-            var copied = false
-            val localPath = FileStorageUtils.getDefaultSavePathFor(account.name, originalFile)
-            val localFile = File(localPath)
-            val defaultSavePath = FileStorageUtils.getSavePath(account.name)
-            if (localFile.exists()) {
-                val targetFile = File(defaultSavePath + targetPath)
-                val targetFolder = targetFile.parentFile
-                if (targetFolder != null && !targetFolder.exists()) {
-                    targetFolder.mkdirs()
-                }
-                copied = copyFile(localFile, targetFile)
-            }
-
-            Timber.d("Local file COPIED : $copied")
-        }
+//        if (originalFile != null && originalFile.fileExists() && ROOT_PATH != originalFile.fileName) {
+//            // 1. Copy in database
+//            val ocTargetFile = OCFile(targetPath)
+//            val parentId = getFileByPath(FileStorageUtils.getParentPath(targetPath))!!.fileId
+//            ocTargetFile.parentId = parentId
+//            ocTargetFile.remoteId = targetFileRemoteId
+//            ocTargetFile.fileLength = originalFile.fileLength
+//            ocTargetFile.mimetype = originalFile.mimetype
+//            ocTargetFile.modificationTimestamp = System.currentTimeMillis()
+//            saveFile(ocTargetFile)
+//
+//            // 2. Copy in local file system
+//            var copied = false
+//            val localPath = FileStorageUtils.getDefaultSavePathFor(account.name, originalFile)
+//            val localFile = File(localPath)
+//            val defaultSavePath = FileStorageUtils.getSavePath(account.name)
+//            if (localFile.exists()) {
+//                val targetFile = File(defaultSavePath + targetPath)
+//                val targetFolder = targetFile.parentFile
+//                if (targetFolder != null && !targetFolder.exists()) {
+//                    targetFolder.mkdirs()
+//                }
+//                copied = copyFile(localFile, targetFile)
+//            }
+//
+//            Timber.d("Local file COPIED : $copied")
+//        }
     }
 
     private fun copyFile(src: File, target: File): Boolean {
@@ -950,38 +960,13 @@ class FileDataStorageManager {
         return ret
     }
 
-    fun getFolderContent(parentId: Long): Vector<OCFile> {
-        val ret = Vector<OCFile>()
+    fun getFolderContent(parentId: Long): List<OCFile> = runBlocking {
+        val getFolderContentUseCase: GetFolderContentUseCase by inject()
 
-        val reqUri = Uri.withAppendedPath(CONTENT_URI_DIR, parentId.toString())
-
-        val selection = "$FILE_PARENT=?"
-        val selectionArgs: Array<String> = arrayOf(parentId.toString())
-
-        val c: Cursor? = try {
-            performQuery(
-                uri = reqUri,
-                projection = null,
-                selection = selection,
-                selectionArgs = selectionArgs,
-                sortOrder = null
-            )
-        } catch (e: RemoteException) {
-            Timber.e(e)
-            return ret
-        }
-
-        c?.let {
-            if (it.moveToFirst()) {
-                do {
-                    val child = createFileInstance(it)
-                    ret.add(child)
-                } while (it.moveToNext())
-            }
-            c.close()
-        }
-
-        return ret.apply { sort() }
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getFolderContentUseCase.execute(GetFolderContentUseCase.Params(parentId))
+        }.getDataOrNull()
+        result ?: listOf()
     }
 
     /**
@@ -990,7 +975,7 @@ class FileDataStorageManager {
      * @param file [OCFile] which ancestors will be searched.
      * @return true/false
      */
-    private fun isAnyAncestorAvailableOfflineFolder(file: OCFile) = getAvailableOfflineAncestorOf(file) != null
+    private fun isAnyAncestorAvailableOfflineFolder(file: OCFile) = false //getAvailableOfflineAncestorOf(file) != null
 
     /**
      * Returns ancestor folder with available offline status AVAILABLE_OFFLINE.
@@ -1000,45 +985,25 @@ class FileDataStorageManager {
      * does not exist.
      */
     private fun getAvailableOfflineAncestorOf(file: OCFile): OCFile? {
-        var avOffAncestor: OCFile? = null
-        val parent = getFileById(file.parentId)
-        if (parent != null && parent.isFolder) {  // file is null for the parent of the root folder
-            if (parent.availableOfflineStatus == AVAILABLE_OFFLINE) {
-                avOffAncestor = parent
-            } else if (parent.fileName != ROOT_PATH) {
-                avOffAncestor = getAvailableOfflineAncestorOf(parent)
-            }
-        }
-        return avOffAncestor
+        return null
+//        var avOffAncestor: OCFile? = null
+//        val parent = getFileById(file.parentId)
+//        if (parent != null && parent.isFolder) {  // file is null for the parent of the root folder
+//            if (parent.availableOfflineStatus == AVAILABLE_OFFLINE) {
+//                avOffAncestor = parent
+//            } else if (parent.fileName != ROOT_PATH) {
+//                avOffAncestor = getAvailableOfflineAncestorOf(parent)
+//            }
+//        }
+//        return avOffAncestor
     }
-
-    private fun createRootDir(): OCFile =
-        OCFile(ROOT_PATH).apply {
-            mimetype = MIME_DIR
-            parentId = ROOT_PARENT_ID.toLong()
-            saveFile(this)
-        }
-
-    private fun fileExists(cmp_key: String, value: String): Boolean {
-        val c: Cursor? =
-            try {
-                performQuery(
-                    uri = CONTENT_URI,
-                    projection = null,
-                    selection = "$cmp_key=? AND $FILE_ACCOUNT_OWNER=?",
-                    selectionArgs = arrayOf(value, account.name),
-                    sortOrder = null
-                )
-            } catch (e: RemoteException) {
-                Timber.e(e, "Couldn't determine file existence, assuming non existence: ${e.message}")
-                return false
-            }
-        return c?.let {
-            val toReturn = it.moveToFirst()
-            it.close()
-            toReturn
-        } ?: false
-    }
+// TODO: Move to Data layer if needed
+//    private fun createRootDir(): OCFile =
+//        OCFile(ROOT_PATH).apply {
+//            mimetype = MIME_DIR
+//            parentId = ROOT_PARENT_ID.toLong()
+//            saveFile(this)
+//        }
 
     private fun getFileCursorForValue(key: String, value: String): Cursor? =
         try {
@@ -1054,43 +1019,43 @@ class FileDataStorageManager {
             null
         }
 
-    private fun createFileInstance(c: Cursor?): OCFile? = c?.let {
-        OCFile(it.getString(it.getColumnIndex(FILE_PATH))).apply {
-            fileId = it.getLong(it.getColumnIndex(_ID))
-            parentId = it.getLong(it.getColumnIndex(FILE_PARENT))
-            mimetype = it.getString(it.getColumnIndex(FILE_CONTENT_TYPE))
-            if (!isFolder) {
-                storagePath = it.getString(it.getColumnIndex(FILE_STORAGE_PATH))
-                if (storagePath == null) {
-                    // try to find existing file and bind it with current account;
-                    // with the current update of SynchronizeFolderOperation, this won't be
-                    // necessary anymore after a full synchronization of the account
-                    val f = File(FileStorageUtils.getDefaultSavePathFor(account.name, this))
-                    if (f.exists()) {
-                        storagePath = f.absolutePath
-                        lastSyncDateForData = f.lastModified()
-                    }
-                }
-            }
-            fileLength = it.getLong(it.getColumnIndex(FILE_CONTENT_LENGTH))
-            creationTimestamp = it.getLong(it.getColumnIndex(FILE_CREATION))
-            modificationTimestamp = it.getLong(it.getColumnIndex(FILE_MODIFIED))
-            modificationTimestampAtLastSyncForData = it.getLong(it.getColumnIndex(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA))
-            lastSyncDateForProperties = it.getLong(it.getColumnIndex(FILE_LAST_SYNC_DATE))
-            lastSyncDateForData = it.getLong(it.getColumnIndex(FILE_LAST_SYNC_DATE_FOR_DATA))
-            availableOfflineStatus = fromValue(it.getInt(it.getColumnIndex(FILE_KEEP_IN_SYNC)))
-            etag = it.getString(it.getColumnIndex(FILE_ETAG))
-            treeEtag = it.getString(it.getColumnIndex(FILE_TREE_ETAG))
-            isSharedViaLink = it.getInt(it.getColumnIndex(FILE_SHARED_VIA_LINK)) == 1
-            isSharedWithSharee = it.getInt(it.getColumnIndex(FILE_SHARED_WITH_SHAREE)) == 1
-            permissions = it.getString(it.getColumnIndex(FILE_PERMISSIONS))
-            remoteId = it.getString(it.getColumnIndex(FILE_REMOTE_ID))
-            setNeedsUpdateThumbnail(it.getInt(it.getColumnIndex(FILE_UPDATE_THUMBNAIL)) == 1)
-            isDownloading = it.getInt(it.getColumnIndex(FILE_IS_DOWNLOADING)) == 1
-            etagInConflict = it.getString(it.getColumnIndex(FILE_ETAG_IN_CONFLICT))
-            privateLink = it.getString(it.getColumnIndex(FILE_PRIVATE_LINK))
-        }
-    }
+    private fun createFileInstance(c: Cursor?): OCFile? = null//c?.let {
+//        OCFile(it.getString(it.getColumnIndex(FILE_PATH))).apply {
+//            fileId = it.getLong(it.getColumnIndex(_ID))
+//            parentId = it.getLong(it.getColumnIndex(FILE_PARENT))
+//            mimetype = it.getString(it.getColumnIndex(FILE_CONTENT_TYPE))
+//            if (!isFolder) {
+//                storagePath = it.getString(it.getColumnIndex(FILE_STORAGE_PATH))
+//                if (storagePath == null) {
+//                    // try to find existing file and bind it with current account;
+//                    // with the current update of SynchronizeFolderOperation, this won't be
+//                    // necessary anymore after a full synchronization of the account
+//                    val f = File(FileStorageUtils.getDefaultSavePathFor(account.name, this))
+//                    if (f.exists()) {
+//                        storagePath = f.absolutePath
+//                        lastSyncDateForData = f.lastModified()
+//                    }
+//                }
+//            }
+//            fileLength = it.getLong(it.getColumnIndex(FILE_CONTENT_LENGTH))
+//            creationTimestamp = it.getLong(it.getColumnIndex(FILE_CREATION))
+//            modificationTimestamp = it.getLong(it.getColumnIndex(FILE_MODIFIED))
+//            modificationTimestampAtLastSyncForData = it.getLong(it.getColumnIndex(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA))
+//            lastSyncDateForProperties = it.getLong(it.getColumnIndex(FILE_LAST_SYNC_DATE))
+//            lastSyncDateForData = it.getLong(it.getColumnIndex(FILE_LAST_SYNC_DATE_FOR_DATA))
+//            availableOfflineStatus = fromValue(it.getInt(it.getColumnIndex(FILE_KEEP_IN_SYNC)))
+//            etag = it.getString(it.getColumnIndex(FILE_ETAG))
+//            treeEtag = it.getString(it.getColumnIndex(FILE_TREE_ETAG))
+//            isSharedViaLink = it.getInt(it.getColumnIndex(FILE_SHARED_VIA_LINK)) == 1
+//            isSharedWithSharee = it.getInt(it.getColumnIndex(FILE_SHARED_WITH_SHAREE)) == 1
+//            permissions = it.getString(it.getColumnIndex(FILE_PERMISSIONS))
+//            remoteId = it.getString(it.getColumnIndex(FILE_REMOTE_ID))
+//            setNeedsUpdateThumbnail(it.getInt(it.getColumnIndex(FILE_UPDATE_THUMBNAIL)) == 1)
+//            isDownloading = it.getInt(it.getColumnIndex(FILE_IS_DOWNLOADING)) == 1
+//            etagInConflict = it.getString(it.getColumnIndex(FILE_ETAG_IN_CONFLICT))
+//            privateLink = it.getString(it.getColumnIndex(FILE_PRIVATE_LINK))
+//        }
+//    }
 
     @Suppress("DEPRECATION")
     fun triggerMediaScan(path: String?) {
@@ -1150,115 +1115,115 @@ class FileDataStorageManager {
     }
 
     fun saveConflict(file: OCFile, eTagInConflictFromParameter: String?) {
-        var eTagInConflict = eTagInConflictFromParameter
-        if (!file.isDown) {
-            eTagInConflict = null
-        }
-        val cv = ContentValues()
-        cv.put(FILE_ETAG_IN_CONFLICT, eTagInConflict)
-        val updated =
-            try {
-                performUpdate(
-                    uri = CONTENT_URI_FILE,
-                    contentValues = cv,
-                    where = "$_ID=?",
-                    selectionArgs = arrayOf(file.fileId.toString())
-                )
-            } catch (e: RemoteException) {
-                Timber.e(e, "Failed saving conflict in database ${e.message}")
-                0
-            }
-
-        Timber.d("Number of files updated with CONFLICT: $updated")
-
-        if (updated > 0) {
-            if (eTagInConflict != null) {
-                /// set conflict in all ancestor folders
-
-                var parentId = file.parentId
-                val ancestorIds = HashSet<String>()
-                while (parentId != ROOT_PARENT_ID.toLong()) {
-                    ancestorIds.add(parentId.toString())
-                    parentId = getFileById(parentId)!!.parentId
-                }
-
-                if (ancestorIds.size > 0) {
-                    val whereBuffer = StringBuffer()
-                    whereBuffer.append(_ID).append(" IN (")
-                    for (i in 0 until ancestorIds.size - 1) {
-                        whereBuffer.append("?,")
-                    }
-                    whereBuffer.append("?")
-                    whereBuffer.append(")")
-
-                    try {
-                        performUpdate(
-                            uri = CONTENT_URI_FILE,
-                            contentValues = cv,
-                            where = whereBuffer.toString(),
-                            selectionArgs = ancestorIds.toTypedArray()
-                        )
-                    } catch (e: RemoteException) {
-                        Timber.e(e, "Failed saving conflict in database ${e.message}")
-                    }
-                } // else file is ROOT folder, no parent to set in conflict
-
-            } else {
-                /// update conflict in ancestor folders
-                // (not directly unset; maybe there are more conflicts below them)
-                var parentPath = file.remotePath
-                if (parentPath.endsWith(File.separator)) {
-                    parentPath = parentPath.substring(0, parentPath.length - 1)
-                }
-                parentPath = parentPath.substring(0, parentPath.lastIndexOf(File.separator) + 1)
-
-                Timber.d("checking parents to remove conflict; STARTING with $parentPath")
-                while (parentPath.isNotEmpty()) {
-
-                    val whereForDescendantsInConflict = FILE_ETAG_IN_CONFLICT + " IS NOT NULL AND " +
-                            FILE_CONTENT_TYPE + " != 'DIR' AND " +
-                            FILE_ACCOUNT_OWNER + " = ? AND " +
-                            FILE_PATH + " LIKE ?"
-                    val descendantsInConflict: Cursor? =
-                        try {
-                            performQuery(
-                                uri = CONTENT_URI_FILE,
-                                projection = arrayOf(_ID),
-                                selection = whereForDescendantsInConflict,
-                                selectionArgs = arrayOf(account.name, "$parentPath%"),
-                                sortOrder = null
-                            )
-                        } catch (e: RemoteException) {
-                            Timber.e(e, "Failed querying for descendants in conflict ${e.message}")
-                            null
-                        }
-
-                    if (descendantsInConflict == null || descendantsInConflict.count == 0) {
-                        Timber.d("NO MORE conflicts in $parentPath")
-
-                        try {
-                            performUpdate(
-                                uri = CONTENT_URI_FILE,
-                                contentValues = cv,
-                                where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
-                                selectionArgs = arrayOf(account.name, parentPath)
-                            )
-                        } catch (e: RemoteException) {
-                            Timber.e(e, "Failed saving conflict in database ${e.message}")
-                        }
-
-                    } else {
-                        Timber.d("STILL ${descendantsInConflict.count} in $parentPath")
-                    }
-
-                    descendantsInConflict?.close()
-
-                    parentPath = parentPath.substring(0, parentPath.length - 1)  // trim last /
-                    parentPath = parentPath.substring(0, parentPath.lastIndexOf(File.separator) + 1)
-                    Timber.d("checking parents to remove conflict; NEXT $parentPath")
-                }
-            }
-        }
+//        var eTagInConflict = eTagInConflictFromParameter
+//        if (!file.isDown) {
+//            eTagInConflict = null
+//        }
+//        val cv = ContentValues()
+//        cv.put(FILE_ETAG_IN_CONFLICT, eTagInConflict)
+//        val updated =
+//            try {
+//                performUpdate(
+//                    uri = CONTENT_URI_FILE,
+//                    contentValues = cv,
+//                    where = "$_ID=?",
+//                    selectionArgs = arrayOf(file.fileId.toString())
+//                )
+//            } catch (e: RemoteException) {
+//                Timber.e(e, "Failed saving conflict in database ${e.message}")
+//                0
+//            }
+//
+//        Timber.d("Number of files updated with CONFLICT: $updated")
+//
+//        if (updated > 0) {
+//            if (eTagInConflict != null) {
+//                /// set conflict in all ancestor folders
+//
+//                var parentId = file.parentId
+//                val ancestorIds = HashSet<String>()
+//                while (parentId != ROOT_PARENT_ID.toLong()) {
+//                    ancestorIds.add(parentId.toString())
+//                    parentId = getFileById(parentId)!!.parentId
+//                }
+//
+//                if (ancestorIds.size > 0) {
+//                    val whereBuffer = StringBuffer()
+//                    whereBuffer.append(_ID).append(" IN (")
+//                    for (i in 0 until ancestorIds.size - 1) {
+//                        whereBuffer.append("?,")
+//                    }
+//                    whereBuffer.append("?")
+//                    whereBuffer.append(")")
+//
+//                    try {
+//                        performUpdate(
+//                            uri = CONTENT_URI_FILE,
+//                            contentValues = cv,
+//                            where = whereBuffer.toString(),
+//                            selectionArgs = ancestorIds.toTypedArray()
+//                        )
+//                    } catch (e: RemoteException) {
+//                        Timber.e(e, "Failed saving conflict in database ${e.message}")
+//                    }
+//                } // else file is ROOT folder, no parent to set in conflict
+//
+//            } else {
+//                /// update conflict in ancestor folders
+//                // (not directly unset; maybe there are more conflicts below them)
+//                var parentPath = file.remotePath
+//                if (parentPath.endsWith(File.separator)) {
+//                    parentPath = parentPath.substring(0, parentPath.length - 1)
+//                }
+//                parentPath = parentPath.substring(0, parentPath.lastIndexOf(File.separator) + 1)
+//
+//                Timber.d("checking parents to remove conflict; STARTING with $parentPath")
+//                while (parentPath.isNotEmpty()) {
+//
+//                    val whereForDescendantsInConflict = FILE_ETAG_IN_CONFLICT + " IS NOT NULL AND " +
+//                            FILE_CONTENT_TYPE + " != 'DIR' AND " +
+//                            FILE_ACCOUNT_OWNER + " = ? AND " +
+//                            FILE_PATH + " LIKE ?"
+//                    val descendantsInConflict: Cursor? =
+//                        try {
+//                            performQuery(
+//                                uri = CONTENT_URI_FILE,
+//                                projection = arrayOf(_ID),
+//                                selection = whereForDescendantsInConflict,
+//                                selectionArgs = arrayOf(account.name, "$parentPath%"),
+//                                sortOrder = null
+//                            )
+//                        } catch (e: RemoteException) {
+//                            Timber.e(e, "Failed querying for descendants in conflict ${e.message}")
+//                            null
+//                        }
+//
+//                    if (descendantsInConflict == null || descendantsInConflict.count == 0) {
+//                        Timber.d("NO MORE conflicts in $parentPath")
+//
+//                        try {
+//                            performUpdate(
+//                                uri = CONTENT_URI_FILE,
+//                                contentValues = cv,
+//                                where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?",
+//                                selectionArgs = arrayOf(account.name, parentPath)
+//                            )
+//                        } catch (e: RemoteException) {
+//                            Timber.e(e, "Failed saving conflict in database ${e.message}")
+//                        }
+//
+//                    } else {
+//                        Timber.d("STILL ${descendantsInConflict.count} in $parentPath")
+//                    }
+//
+//                    descendantsInConflict?.close()
+//
+//                    parentPath = parentPath.substring(0, parentPath.length - 1)  // trim last /
+//                    parentPath = parentPath.substring(0, parentPath.lastIndexOf(File.separator) + 1)
+//                    Timber.d("checking parents to remove conflict; NEXT $parentPath")
+//                }
+//            }
+//        }
     }
 
     fun saveCapabilities(capability: RemoteCapability): RemoteCapability {
