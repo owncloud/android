@@ -48,7 +48,7 @@ class OCFileRepository(
                     OCFile(
                         remotePath = remotePath,
                         owner = parentFolder.owner,
-                        modifiedTimestamp = System.currentTimeMillis(),
+                        modificationTimestamp = System.currentTimeMillis(),
                         length = 0,
                         mimeType = MIME_DIR
                     )
