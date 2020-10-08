@@ -40,7 +40,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
@@ -74,14 +74,11 @@ public class FileActivity extends DrawerActivity
     public static final String EXTRA_FROM_NOTIFICATION =
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
     public static final String EXTRA_FILE_LIST_OPTION = "EXTRA_FILE_LIST_OPTION";
-
-    private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
-    private static final String KEY_ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
-
     // go to a high number, since the low numbers are usded by android
     public static final int REQUEST_CODE__UPDATE_CREDENTIALS = 0;
     public static final int REQUEST_CODE__LAST_SHARED = REQUEST_CODE__UPDATE_CREDENTIALS;
-
+    private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
+    private static final String KEY_ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
     protected static final long DELAY_TO_REQUEST_OPERATIONS_LATER = 200;
 
     /* Dialog tags */
@@ -118,7 +115,7 @@ public class FileActivity extends DrawerActivity
     /**
      * Loads the ownCloud {@link Account} and main {@link OCFile} to be handled by the instance of
      * the {@link FileActivity}.
-     *
+     * <p>
      * Grants that a valid ownCloud {@link Account} is associated to the instance, or that the user
      * is requested to create a new one.
      */
@@ -344,7 +341,7 @@ public class FileActivity extends DrawerActivity
     /**
      * Invalidates the credentials stored for the current OC account and requests new credentials to the user,
      * navigating to {@link LoginActivity}
-     *
+     * <p>
      * Equivalent to call requestCredentialsUpdate(null);
      */
     protected void requestCredentialsUpdate() {
@@ -423,32 +420,6 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-    /**
-     * Implements callback methods for service binding. Passed as a parameter to {
-     */
-    private class OperationsServiceConnection implements ServiceConnection {
-
-        @Override
-        public void onServiceConnected(ComponentName component, IBinder service) {
-            if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
-                Timber.d("Operations service connected");
-                mOperationsServiceBinder = (OperationsServiceBinder) service;
-                if (mResumed) {
-                    doOnResumeAndBound();
-                }
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName component) {
-            if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
-                Timber.d("Operations service disconnected");
-                mOperationsServiceBinder = null;
-                // TODO whatever could be waiting for the service is unbound
-            }
-        }
-    }
-
     @Override
     public FileDownloaderBinder getFileDownloaderBinder() {
         return mDownloaderBinder;
@@ -501,12 +472,12 @@ public class FileActivity extends DrawerActivity
         return null;
     }
 
-    /* OnSslUntrustedCertListener methods */
-
     @Override
     public void onSavedCertificate() {
         // Nothing to do in this context
     }
+
+    /* OnSslUntrustedCertListener methods */
 
     @Override
     public void onFailedSavingCertificate() {
@@ -519,5 +490,31 @@ public class FileActivity extends DrawerActivity
     @Override
     public void onCancelCertificate() {
         // nothing to do
+    }
+
+    /**
+     * Implements callback methods for service binding. Passed as a parameter to {
+     */
+    private class OperationsServiceConnection implements ServiceConnection {
+
+        @Override
+        public void onServiceConnected(ComponentName component, IBinder service) {
+            if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
+                Timber.d("Operations service connected");
+                mOperationsServiceBinder = (OperationsServiceBinder) service;
+                if (mResumed) {
+                    doOnResumeAndBound();
+                }
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName component) {
+            if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
+                Timber.d("Operations service disconnected");
+                mOperationsServiceBinder = null;
+                // TODO whatever could be waiting for the service is unbound
+            }
+        }
     }
 }
