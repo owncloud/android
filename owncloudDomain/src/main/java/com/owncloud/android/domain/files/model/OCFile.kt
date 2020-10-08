@@ -34,7 +34,7 @@ data class OCFile(
     val owner: String,
     val length: Long,
     val creationTimestamp: Long? = null,
-    val modifiedTimestamp: Long,
+    val modificationTimestamp: Long,
     val remotePath: String,
     val mimeType: String,
     val etag: String? = null,

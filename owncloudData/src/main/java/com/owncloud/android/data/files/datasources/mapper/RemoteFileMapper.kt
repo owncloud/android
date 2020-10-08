@@ -31,7 +31,7 @@ class RemoteFileMapper : RemoteMapper<OCFile, RemoteFile> {
                 remotePath = it.remotePath,
                 length = if (it.isFolder) it.size else it.length,
                 creationTimestamp = it.creationTimestamp,
-                modifiedTimestamp = it.modifiedTimestamp,
+                modificationTimestamp = it.modifiedTimestamp,
                 mimeType = it.mimeType,
                 etag = it.etag,
                 permissions = it.permissions,
