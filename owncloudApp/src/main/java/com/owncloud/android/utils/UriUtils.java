@@ -123,7 +123,7 @@ public class UriUtils {
         // DocumentProvider
         if (DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
-            if (UriUtils.isExternalStorageDocument(uri)) {
+            if (UriUtilsKt.isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -133,16 +133,16 @@ public class UriUtils {
                 }
             }
             // DownloadsProvider
-            else if (UriUtils.isDownloadsDocument(uri)) {
+            else if (UriUtilsKt.isDownloadsDocument(uri)) {
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
                         Long.valueOf(id));
 
-                return UriUtils.getDataColumn(context, contentUri, null, null);
+                return UriUtilsKt.getDataColumn(context, contentUri, null, null);
             }
             // MediaProvider
-            else if (UriUtils.isMediaDocument(uri)) {
+            else if (UriUtilsKt.isMediaDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -159,10 +159,10 @@ public class UriUtils {
                 final String selection = "_id=?";
                 final String[] selectionArgs = new String[]{split[1]};
 
-                return UriUtils.getDataColumn(context, contentUri, selection, selectionArgs);
+                return UriUtilsKt.getDataColumn(context, contentUri, selection, selectionArgs);
             }
             // Documents providers returned as content://...
-            else if (UriUtils.isContentDocument(uri)) {
+            else if (UriUtilsKt.isContentDocument(uri)) {
                 return uri.toString();
             }
         }
@@ -170,11 +170,11 @@ public class UriUtils {
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
             // Return the remote address
-            if (UriUtils.isGooglePhotosUri(uri)) {
+            if (UriUtilsKt.isGooglePhotosUri(uri)) {
                 return uri.getLastPathSegment();
             }
 
-            return UriUtils.getDataColumn(context, uri, null, null);
+            return UriUtilsKt.getDataColumn(context, uri, null, null);
         }
         // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {

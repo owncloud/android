@@ -60,7 +60,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView;
@@ -81,7 +81,6 @@ import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.ui.helpers.SparseBooleanArrayParcelable;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
-import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -1198,8 +1197,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
             SharedPreferences setting =
                     requireActivity().getSharedPreferences(GRID_IS_PREFERED_PREFERENCE, Context.MODE_PRIVATE);
 
-            if (setting.contains(String.valueOf(fileToTest.getFileId()))) {
-                return setting.getBoolean(String.valueOf(fileToTest.getFileId()), false);
+            if (setting.contains(String.valueOf(fileToTest.getId()))) {
+                return setting.getBoolean(String.valueOf(fileToTest.getId()), false);
             } else {
                 do {
                     if (fileToTest.getParentId() != FileDataStorageManager.ROOT_PARENT_ID) {
@@ -1219,7 +1218,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     }
                     fileToTest = parentDir;
                 } while (endWhile(parentDir, setting));
-                return setting.getBoolean(String.valueOf(fileToTest.getFileId()), false);
+                return setting.getBoolean(String.valueOf(fileToTest.getId()), false);
             }
         } else {
             return false;
@@ -1230,7 +1229,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (parentDir.getRemotePath().compareToIgnoreCase(OCFile.ROOT_PATH) == 0) {
             return false;
         } else {
-            return !setting.contains(String.valueOf(parentDir.getFileId()));
+            return !setting.contains(String.valueOf(parentDir.getId()));
         }
     }
 
@@ -1250,7 +1249,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         );
 
         SharedPreferences.Editor editor = setting.edit();
-        editor.putBoolean(String.valueOf(mFile.getFileId()), setGrid);
+        editor.putBoolean(String.valueOf(mFile.getId()), setGrid);
         editor.apply();
     }
 
