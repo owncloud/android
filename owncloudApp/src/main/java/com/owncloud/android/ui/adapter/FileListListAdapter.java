@@ -50,10 +50,9 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.db.PreferenceManager;
-import com.owncloud.android.extensions.VectorExtKt;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment;
@@ -66,6 +65,7 @@ import com.owncloud.android.utils.PreferenceUtils;
 import com.owncloud.android.utils.SortFilesUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -142,7 +142,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         if (mFiles == null || mFiles.size() <= position) {
             return 0;
         }
-        return mFiles.get(position).getFileId();
+        return mFiles.get(position).getId();
     }
 
     @Override
@@ -200,9 +200,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             final ImageView localStateView = view.findViewById(R.id.localFileIndicator);
             final ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
-            fileIcon.setTag(file.getFileId());
+            fileIcon.setTag(file.getId());
             TextView fileName;
-            String name = file.getFileName();
+            String name = file.getName();
 
             final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
             if (linearLayout != null) {
@@ -224,7 +224,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
                     TextView fileSizeTV = view.findViewById(R.id.file_list_size);
                     TextView lastModTV = view.findViewById(R.id.file_list_last_mod);
-                    fileSizeTV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength(), mContext));
+                    fileSizeTV.setText(DisplayUtils.bytesToHumanReadable(file.getLength(), mContext));
                     lastModTV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
 
                     if (mOnlyAvailableOffline || mSharedByLinkFiles) {
@@ -236,7 +236,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 case GRID_ITEM:
                     // filename
                     fileName = view.findViewById(R.id.Filename);
-                    name = file.getFileName();
+                    name = file.getName();
                     fileName.setText(name);
 
                 case GRID_IMAGE:
@@ -288,7 +288,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                 file.isSharedViaLink()));
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
-                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimetype(), file.getFileName()));
+                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimeType(), file.getName()));
                 if (file.getRemoteId() != null) {
                     // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.getRemoteId());
@@ -314,7 +314,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         }
                     }
 
-                    if (file.getMimetype().equalsIgnoreCase("image/png")) {
+                    if (file.getMimeType().equalsIgnoreCase("image/png")) {
                         fileIcon.setBackgroundColor(mContext.getResources()
                                 .getColor(R.color.background_color));
                     }
@@ -435,8 +435,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
      * @param files Collection of files to filter
      * @return Folders in the input
      */
-    private Vector<OCFile> getFolders(Vector<OCFile> files) {
-        Vector<OCFile> ret = new Vector<>();
+    private List<OCFile> getFolders(List<OCFile> files) {
+        List<OCFile> ret = new Vector<>();
         OCFile current;
         for (int i = 0; i < files.size(); i++) {
             current = files.get(i);
@@ -477,13 +477,36 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     public void filterBySearch(String query) {
         clearFilterBySearch();
-        VectorExtKt.filterByQuery(mFiles, query);
+
+        List<OCFile> filteredList = new ArrayList<>();
+
+        // Gather files matching the query
+        for (OCFile fileToAdd : mFiles) {
+            final String nameOfTheFileToAdd = fileToAdd.getName().toLowerCase();
+            if (nameOfTheFileToAdd.contains(query)) {
+                filteredList.add(fileToAdd);
+            }
+        }
+
+        // Remove not matching files from the filelist
+        for (int i = mFiles.size() - 1; i >= 0; i--) {
+            if (!filteredList.contains(mFiles.get(i))) {
+                mFiles.remove(i);
+            }
+        }
+
+        // Add matching files to the filelist
+        for (int i = 0; i < filteredList.size(); i++) {
+            if (!mFiles.contains(filteredList.get(i))) {
+                mFiles.add(i, filteredList.get(i));
+            }
+        }
 
         notifyDataSetChanged();
     }
 
     public void clearFilterBySearch() {
-        mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
+        mFiles = new ArrayList<OCFile>(mImmutableFilesList);
         notifyDataSetChanged();
     }
 
