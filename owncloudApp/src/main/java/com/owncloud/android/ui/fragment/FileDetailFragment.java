@@ -42,8 +42,8 @@ import android.widget.TextView;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
@@ -362,9 +362,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             OCFile file = getFile();
 
             // set file details
-            setFilename(file.getFileName());
+            setFilename(file.getName());
             setFiletype(file);
-            setFilesize(file.getFileLength());
+            setFilesize(file.getLength());
 
             setTimeModified(file.getModificationTimestamp());
 
@@ -417,7 +417,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      * @param file : An {@link OCFile}
      */
     private void setFiletype(OCFile file) {
-        String mimetype = file.getMimetype();
+        String mimetype = file.getMimeType();
         TextView tv = getView().findViewById(R.id.fdType);
         if (tv != null) {
             // mimetype      MIME type to set
@@ -429,7 +429,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
         if (iv != null) {
             Bitmap thumbnail;
-            iv.setTag(file.getFileId());
+            iv.setTag(file.getId());
 
             if (file.isImage()) {
                 String tagId = String.valueOf(file.getRemoteId());
@@ -459,7 +459,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 }
             } else {
                 // Name of the file, to deduce the icon to use in case the MIME type is not precise enough
-                String filename = file.getFileName();
+                String filename = file.getName();
                 iv.setImageResource(MimetypeIconUtil.getFileTypeIconId(mimetype, filename));
             }
         }

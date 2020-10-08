@@ -44,7 +44,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -325,7 +325,7 @@ public class FileDownloader extends Service
             if (account == null || file == null || listener == null) {
                 return;
             }
-            mBoundListeners.put(file.getFileId(), new WeakReference<>(listener));
+            mBoundListeners.put(file.getId(), new WeakReference<>(listener));
         }
 
         /**
@@ -341,7 +341,7 @@ public class FileDownloader extends Service
             if (account == null || file == null || listener == null) {
                 return;
             }
-            Long fileId = file.getFileId();
+            Long fileId = file.getId();
             if (mBoundListeners.get(fileId) == listener) {
                 mBoundListeners.remove(fileId);
             }
@@ -351,7 +351,7 @@ public class FileDownloader extends Service
         public void onTransferProgress(long progressRate, long totalTransferredSoFar,
                                        long totalToTransfer, String fileName) {
             WeakReference<OnDatatransferProgressListener> boundListenerRef =
-                    mBoundListeners.get(mCurrentDownload.getFile().getFileId());
+                    mBoundListeners.get(mCurrentDownload.getFile().getId());
             if (boundListenerRef != null && boundListenerRef.get() != null) {
                 boundListenerRef.get().onTransferProgress(
                         progressRate,
