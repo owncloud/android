@@ -45,7 +45,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel

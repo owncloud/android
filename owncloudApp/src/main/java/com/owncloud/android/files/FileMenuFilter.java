@@ -30,8 +30,8 @@ import android.view.MenuItem;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
@@ -355,30 +355,31 @@ public class FileMenuFilter {
         return false;
     }
 
+// TODO: NEW_ARCH
     private boolean anyFavorite() {
-        for (OCFile file : mFiles) {
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
-                return true;
-            }
-        }
+//        for (OCFile file : mFiles) {
+//            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
+//                return true;
+//            }
+//        }
         return false;
     }
-
+//
     private boolean anyUnfavorite() {
-        for (OCFile file : mFiles) {
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
-                return true;
-            }
-        }
+//        for (OCFile file : mFiles) {
+//            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
+//                return true;
+//            }
+//        }
         return false;
-    }
-
+   }
+//
     private boolean anyFileSharedWithMe() {
-        for (OCFile file : mFiles) {
-            if (file.isSharedWithMe()) {
-                return true;
-            }
-        }
+//        for (OCFile file : mFiles) {
+//            if (file.isSharedWithMe()) {
+//                return true;
+//            }
+//        }
         return false;
     }
 }

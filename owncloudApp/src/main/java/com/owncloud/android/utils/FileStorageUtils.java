@@ -36,7 +36,7 @@ import timber.log.Timber;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Static methods to help in access to local file system.
@@ -111,7 +111,7 @@ public class FileStorageUtils {
     /**
      * Sorts all filenames, regarding last user decision
      */
-    public static Vector<OCFile> sortFolder(Vector<OCFile> files, int sortOrder, boolean isAscending) {
+    public static List<OCFile> sortFolder(List<OCFile> files, int sortOrder, boolean isAscending) {
         switch (sortOrder) {
             case SORT_NAME:
                 FileStorageUtils.sortByName(files, isAscending);
@@ -130,7 +130,7 @@ public class FileStorageUtils {
     /**
      * Sorts list by Date
      */
-    private static void sortByDate(Vector<OCFile> files, boolean isAscending) {
+    private static void sortByDate(List<OCFile> files, boolean isAscending) {
         final int val;
         if (isAscending) {
             val = 1;
@@ -152,7 +152,7 @@ public class FileStorageUtils {
     /**
      * Sorts list by Size
      */
-    private static void sortBySize(Vector<OCFile> files, boolean isAscending) {
+    private static void sortBySize(List<OCFile> files, boolean isAscending) {
         final int val;
         if (isAscending) {
             val = 1;
@@ -172,7 +172,7 @@ public class FileStorageUtils {
      *
      * @param files files to sort
      */
-    private static void sortByName(Vector<OCFile> files, boolean isAscending) {
+    private static void sortByName(List<OCFile> files, boolean isAscending) {
         final int val;
         if (isAscending) {
             val = 1;

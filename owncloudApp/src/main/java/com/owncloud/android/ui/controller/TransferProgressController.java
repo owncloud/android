@@ -23,7 +23,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.annotation.UiThread;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;

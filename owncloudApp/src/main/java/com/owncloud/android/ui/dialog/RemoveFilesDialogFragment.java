@@ -29,7 +29,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 
@@ -90,7 +90,7 @@ public class RemoveFilesDialogFragment extends ConfirmationDialogFragment
 
         args.putInt(ARG_MESSAGE_RESOURCE_ID, messageStringId);
         if (files.size() == 1) {
-            args.putStringArray(ARG_MESSAGE_ARGUMENTS, new String[]{files.get(0).getFileName()});
+            args.putStringArray(ARG_MESSAGE_ARGUMENTS, new String[]{files.get(0).getName()});
         }
         args.putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes);
         args.putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no);

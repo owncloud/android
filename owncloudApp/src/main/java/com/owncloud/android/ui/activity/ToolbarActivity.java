@@ -27,7 +27,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 
 /**
  * Base class providing toolbar registration functionality, see {@link #setupToolbar()}.
@@ -61,7 +61,7 @@ public abstract class ToolbarActivity extends BaseActivity {
                         (chosenFile.isFolder() && chosenFile.getParentId() == FileDataStorageManager.ROOT_PARENT_ID)
         );
         if (!inRoot) {
-            title = chosenFile.getFileName();
+            title = chosenFile.getName();
         }
 
         updateActionBarTitleAndHomeButtonByString(title);

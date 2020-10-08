@@ -46,9 +46,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
@@ -69,8 +69,8 @@ import java.util.Vector;
 public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     private Context mContext;
-    private Vector<OCFile> mImmutableFilesList = null; // List containing the database files, doesn't change with search
-    private Vector<OCFile> mFiles = null; // List that can be changed when using search
+    private List<OCFile> mImmutableFilesList = null; // List containing the database files, doesn't change with search
+    private List<OCFile> mFiles = null; // List that can be changed when using search
     private boolean mJustFolders;
     private boolean mOnlyAvailableOffline;
     private boolean mSharedByLinkFiles;
@@ -79,8 +79,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
     private ComponentsGetter mTransferServiceGetter;
-
-    private enum ViewType {LIST_ITEM, GRID_IMAGE, GRID_ITEM}
 
     public FileListListAdapter(
             boolean justFolders,
@@ -138,7 +136,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         if (mFiles == null || mFiles.size() <= position) {
             return 0;
         }
-        return mFiles.get(position).getFileId();
+        return mFiles.get(position).getId();
     }
 
     @Override
@@ -196,9 +194,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             final ImageView localStateView = view.findViewById(R.id.localFileIndicator);
             final ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
-            fileIcon.setTag(file.getFileId());
+            fileIcon.setTag(file.getId());
             TextView fileName;
-            String name = file.getFileName();
+            String name = file.getName();
 
             final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
             if (linearLayout != null) {
@@ -220,7 +218,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
                     TextView fileSizeTV = view.findViewById(R.id.file_list_size);
                     TextView lastModTV = view.findViewById(R.id.file_list_last_mod);
-                    fileSizeTV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength(), mContext));
+                    fileSizeTV.setText(DisplayUtils.bytesToHumanReadable(file.getLength(), mContext));
                     lastModTV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
 
                     if (mOnlyAvailableOffline || mSharedByLinkFiles) {
@@ -232,7 +230,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 case GRID_ITEM:
                     // filename
                     fileName = view.findViewById(R.id.Filename);
-                    name = file.getFileName();
+                    name = file.getName();
                     fileName.setText(name);
 
                 case GRID_IMAGE:
@@ -309,14 +307,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         }
                     }
 
-                    if (file.getMimetype().equalsIgnoreCase("image/png")) {
+                    if (file.getMimeType().equalsIgnoreCase("image/png")) {
                         fileIcon.setBackgroundColor(mContext.getResources()
                                 .getColor(R.color.background_color));
                     }
 
                 } else {
-                    fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimetype(),
-                            file.getFileName()));
+                    fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimeType(),
+                            file.getName()));
                 }
 
             }
@@ -425,8 +423,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
      * @param files Collection of files to filter
      * @return Folders in the input
      */
-    private Vector<OCFile> getFolders(Vector<OCFile> files) {
-        Vector<OCFile> ret = new Vector<>();
+    private List<OCFile> getFolders(List<OCFile> files) {
+        List<OCFile> ret = new Vector<>();
         OCFile current;
         for (int i = 0; i < files.size(); i++) {
             current = files.get(i);
@@ -474,7 +472,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         // Gather files matching the query
         for (OCFile fileToAdd : mFiles) {
-            final String nameOfTheFileToAdd = fileToAdd.getFileName().toLowerCase();
+            final String nameOfTheFileToAdd = fileToAdd.getName().toLowerCase();
             if (nameOfTheFileToAdd.contains(query)) {
                 filteredList.add(fileToAdd);
             }
@@ -498,7 +496,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     }
 
     public void clearFilterBySearch() {
-        mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
+        mFiles = new ArrayList<>(mImmutableFilesList);
         notifyDataSetChanged();
     }
+
+    private enum ViewType {LIST_ITEM, GRID_IMAGE, GRID_ITEM}
 }
