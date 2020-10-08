@@ -46,7 +46,7 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.databinding.TopProgressBarBinding
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
@@ -143,7 +143,7 @@ class PreviewImageFragment : FileFragment() {
         account = requireArguments().getParcelable(PreviewAudioFragment.EXTRA_ACCOUNT)
         checkNotNull(account) { "Instanced with a NULL ownCloud Account" }
         checkNotNull(file) { "Instanced with a NULL OCFile" }
-        check(file.isDown) { "There is no local file to preview" }
+        check(file.isDown()) { "There is no local file to preview" }
 
         binding.message.isVisible = false
         binding.progressWheel.isVisible = true
@@ -188,7 +188,7 @@ class PreviewImageFragment : FileFragment() {
         super.onPrepareOptionsMenu(menu)
         file?.let {
             // Update the file
-            file = mContainerActivity.storageManager.getFileById(it.fileId)
+            file = mContainerActivity.storageManager.getFileById(it.id)
             val fileMenuFilter = FileMenuFilter(
                 it,
                 mContainerActivity.storageManager.account,
@@ -328,7 +328,7 @@ class PreviewImageFragment : FileFragment() {
                     resource: Drawable?, model: Any, target: Target<Drawable?>,
                     dataSource: DataSource, isFirstResource: Boolean
                 ): Boolean {
-                    Timber.d("Loading image %s", file.fileName)
+                    Timber.d("Loading image %s", file.name)
                     return false
                 }
             })

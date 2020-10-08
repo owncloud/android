@@ -45,7 +45,7 @@ import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.RemoteFileUtils;
-import com.owncloud.android.utils.UriUtils;
+import com.owncloud.android.utils.UriUtilsKt;
 import timber.log.Timber;
 
 import java.io.File;
@@ -631,7 +631,7 @@ public class UploadFileOperation extends SyncOperation {
             try {
                 if (!mOriginalStoragePath.equals(targetFile.getAbsolutePath())) {
                     // In case document provider schema as 'content://'
-                    if (mOriginalStoragePath.startsWith(UriUtils.URI_CONTENT_SCHEME)) {
+                    if (mOriginalStoragePath.startsWith(UriUtilsKt.URI_CONTENT_SCHEME)) {
                         Uri uri = Uri.parse(mOriginalStoragePath);
                         in = mContext.getContentResolver().openInputStream(uri);
                     } else {
