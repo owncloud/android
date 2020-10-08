@@ -88,7 +88,8 @@ public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
             if (status == HttpConstants.HTTP_MULTI_STATUS
                     || status == HttpConstants.HTTP_OK) {
 
-                final RemoteFile file = new RemoteFile(propfind.getRoot(), AccountUtils.getUserId(mAccount, mContext));
+                final RemoteFile file = RemoteFile.Companion.getRemoteFileFromDav(propfind.getRoot(),
+                        AccountUtils.getUserId(mAccount, mContext), mAccount.name);
 
                 result = new RemoteOperationResult<>(OK);
                 result.setData(file);
