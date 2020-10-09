@@ -22,7 +22,7 @@ import android.accounts.Account;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
 
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 
@@ -38,9 +38,9 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
         String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
 
         // The caller activity (Preferences) is not a FileActivity, so it has no OCFile, only a path.
-        OCFile folder = new OCFile(cameraUploadPath);
+        //OCFile folder = new OCFile(cameraUploadPath);
 
-        setFile(folder);
+        //setFile(folder);
     }
 
     /**
