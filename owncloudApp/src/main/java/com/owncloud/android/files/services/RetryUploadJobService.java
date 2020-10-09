@@ -23,9 +23,9 @@ package com.owncloud.android.files.services;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.utils.Extras;
 import timber.log.Timber;
 
@@ -43,7 +43,7 @@ public class RetryUploadJobService extends JobService {
         Timber.d("Retrying upload of %1s in %2s", fileRemotePath, accountName);
 
         // Get upload to be retried
-        OCUpload ocUpload = uploadsStorageManager.getLastUploadFor(new OCFile(fileRemotePath), accountName);
+        OCUpload ocUpload = null; // uploadsStorageManager.getLastUploadFor(new OCFile(fileRemotePath), accountName);
 
         if (ocUpload != null) {
             // Retry the upload

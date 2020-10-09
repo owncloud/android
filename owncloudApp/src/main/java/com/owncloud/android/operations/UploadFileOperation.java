@@ -58,6 +58,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.owncloud.android.utils.UriUtils.URI_CONTENT_SCHEME;
+
 /**
  * Operation performing the update in the ownCloud server
  * of a file that was modified locally.
@@ -71,28 +73,29 @@ public class UploadFileOperation extends SyncOperation {
     public static OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType,
                                                  Context context) {
 
-        // MIME type
-        if (mimeType == null || mimeType.length() <= 0) {
-            mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(localPath);
-        }
-
-        OCFile newFile = new OCFile(remotePath);
-
-        newFile.setStoragePath(localPath);
-        newFile.setLastSyncDateForProperties(0);
-        newFile.setLastSyncDateForData(0);
-
-        // size
-        if (localPath != null && localPath.length() > 0) {
-            File localFile = new File(localPath);
-            newFile.setFileLength(localFile.length());
-            newFile.setLastSyncDateForData(localFile.lastModified());
-        } // don't worry about not assigning size, the problems with localPath
-        // are checked when the UploadFileOperation instance is created
-
-        newFile.setMimetype(mimeType);
-
-        return newFile;
+//        // MIME type
+//        if (mimeType == null || mimeType.length() <= 0) {
+//            mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(localPath);
+//        }
+//
+//        OCFile newFile = new OCFile(remotePath);
+//
+//        newFile.setStoragePath(localPath);
+//        newFile.setLastSyncDateForProperties(0);
+//        newFile.setLastSyncDateForData(0);
+//
+//        // size
+//        if (localPath != null && localPath.length() > 0) {
+//            File localFile = new File(localPath);
+//            newFile.setLength(localFile.length());
+////            newFile.setLastSyncDateForData(localFile.lastModified());
+//        } // don't worry about not assigning size, the problems with localPath
+//        // are checked when the UploadFileOperation instance is created
+//
+//        newFile.setMimeType(mimeType);
+//
+//        return newFile;
+        return null;
     }
 
     private Account mAccount;
@@ -175,7 +178,7 @@ public class UploadFileOperation extends SyncOperation {
     }
 
     public String getFileName() {
-        return (mFile != null) ? mFile.getFileName() : null;
+        return (mFile != null) ? mFile.getName() : null;
     }
 
     public OCFile getFile() {
@@ -528,11 +531,11 @@ public class UploadFileOperation extends SyncOperation {
             parent = createLocalFolder(parentPath);
         }
         if (parent != null) {
-            OCFile createdFolder = new OCFile(remotePath);
-            createdFolder.setMimetype(MimeTypeConstantsKt.MIME_DIR);
-            createdFolder.setParentId(parent.getId());
-            getStorageManager().saveFile(createdFolder);
-            return createdFolder;
+//            OCFile createdFolder = new OCFile(remotePath);
+//            createdFolder.setMimetype(MimeTypeConstantsKt.MIME_DIR);
+//            createdFolder.setParentId(parent.getId());
+//            getStorageManager().saveFile(createdFolder);
+//            return createdFolder;
         }
         return null;
     }
@@ -545,22 +548,22 @@ public class UploadFileOperation extends SyncOperation {
      */
     private void createNewOCFile(String newRemotePath) {
         // a new OCFile instance must be created for a new remote path
-        OCFile newFile = new OCFile(newRemotePath);
-        newFile.setCreationTimestamp(mFile.getCreationTimestamp());
-        newFile.setFileLength(mFile.getFileLength());
-        newFile.setMimetype(mFile.getMimetype());
-        newFile.setModificationTimestamp(mFile.getModificationTimestamp());
-        newFile.setModificationTimestampAtLastSyncForData(
-                mFile.getModificationTimestampAtLastSyncForData()
-        );
-        newFile.setEtag(mFile.getEtag());
-        newFile.setAvailableOfflineStatus(mFile.getAvailableOfflineStatus());
-        newFile.setLastSyncDateForProperties(mFile.getLastSyncDateForProperties());
-        newFile.setLastSyncDateForData(mFile.getLastSyncDateForData());
-        newFile.setStoragePath(mFile.getStoragePath());
-        newFile.setParentId(mFile.getParentId());
-        mOldFile = mFile;
-        mFile = newFile;
+//        OCFile newFile = new OCFile(newRemotePath);
+//        newFile.setCreationTimestamp(mFile.getCreationTimestamp());
+//        newFile.setFileLength(mFile.getFileLength());
+//        newFile.setMimetype(mFile.getMimetype());
+//        newFile.setModificationTimestamp(mFile.getModificationTimestamp());
+//        newFile.setModificationTimestampAtLastSyncForData(
+//                mFile.getModificationTimestampAtLastSyncForData()
+//        );
+//        newFile.setEtag(mFile.getEtag());
+//        newFile.setAvailableOfflineStatus(mFile.getAvailableOfflineStatus());
+//        newFile.setLastSyncDateForProperties(mFile.getLastSyncDateForProperties());
+//        newFile.setLastSyncDateForData(mFile.getLastSyncDateForData());
+//        newFile.setStoragePath(mFile.getStoragePath());
+//        newFile.setParentId(mFile.getParentId());
+//        mOldFile = mFile;
+//        mFile = newFile;
     }
 
     /**
@@ -630,7 +633,7 @@ public class UploadFileOperation extends SyncOperation {
             try {
                 if (!mOriginalStoragePath.equals(targetFile.getAbsolutePath())) {
                     // In case document provider schema as 'content://'
-                    if (mOriginalStoragePath.startsWith(UriUtilsKt.URI_CONTENT_SCHEME)) {
+                    if (mOriginalStoragePath.startsWith(URI_CONTENT_SCHEME)) {
                         Uri uri = Uri.parse(mOriginalStoragePath);
                         in = mContext.getContentResolver().openInputStream(uri);
                     } else {
@@ -733,10 +736,10 @@ public class UploadFileOperation extends SyncOperation {
     private void saveUploadedFile(OwnCloudClient client) {
         OCFile file = mFile;
         if (file.fileExists()) {
-            file = getStorageManager().getFileById(file.getFileId());
+            file = getStorageManager().getFileById(file.getId());
         }
         long syncDate = System.currentTimeMillis();
-        file.setLastSyncDateForData(syncDate);
+        //file.setLastSyncDateForData(syncDate);
 
         // new PROPFIND to keep data consistent with server
         // in theory, should return the same we already have
@@ -762,7 +765,7 @@ public class UploadFileOperation extends SyncOperation {
             // coincidence; nothing else is needed, the storagePath is right
             // in the instance returned by mCurrentUpload.getFile()
         }
-        file.setNeedsUpdateThumbnail(true);
+//        file.setNeedsUpdateThumbnail(true);
         getStorageManager().saveFile(file);
         getStorageManager().saveConflict(file, null);
 
@@ -770,13 +773,13 @@ public class UploadFileOperation extends SyncOperation {
     }
 
     private void updateOCFile(OCFile file, RemoteFile remoteFile) {
-        file.setCreationTimestamp(remoteFile.getCreationTimestamp());
-        file.setFileLength(remoteFile.getLength());
-        file.setMimetype(remoteFile.getMimeType());
-        file.setModificationTimestamp(remoteFile.getModifiedTimestamp());
-        file.setModificationTimestampAtLastSyncForData(remoteFile.getModifiedTimestamp());
-        file.setEtag(remoteFile.getEtag());
-        file.setRemoteId(remoteFile.getRemoteId());
+//        file.setCreationTimestamp(remoteFile.getCreationTimestamp());
+//        file.setFileLength(remoteFile.getLength());
+//        file.setMimetype(remoteFile.getMimeType());
+//        file.setModificationTimestamp(remoteFile.getModifiedTimestamp());
+//        file.setModificationTimestampAtLastSyncForData(remoteFile.getModifiedTimestamp());
+//        file.setEtag(remoteFile.getEtag());
+//        file.setRemoteId(remoteFile.getRemoteId());
     }
 
     public interface OnRenameListener {

@@ -28,9 +28,9 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -276,7 +276,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     private void removeLocalFolder() {
         FileDataStorageManager storageManager = getStorageManager();
-        if (storageManager.fileExists(mLocalFolder.getFileId())) {
+        if (storageManager.fileExists(mLocalFolder.getId())) {
             String currentSavePath = FileStorageUtils.getSavePath(mAccount.name);
             storageManager.removeFolder(
                     mLocalFolder,
@@ -306,7 +306,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         OCFile updatedFolder = FileStorageUtils.createOCFileFromRemoteFile(
                 remoteFolderAndFiles.get(0)
         );  // NOTE: updates ETag with remote value; that's INTENDED
-        updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
+        //updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
 
         Timber.d("Remote folder " + mLocalFolder.getRemotePath() + " changed - starting update of local data ");
 
@@ -347,28 +347,28 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
             /// add to updatedFile data about LOCAL STATE (not existing in server)
             updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
-            if (localFile != null) {
-                updatedLocalFile.copyLocalPropertiesFrom(localFile);
-                updatedLocalFile.setFileName(remoteFile.getFileName());
-                // remote eTag will not be set unless file CONTENTS are synchronized
-                updatedLocalFile.setEtag(localFile.getEtag());
-                if (!updatedLocalFile.isFolder() &&
-                        remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
-                    updatedLocalFile.setNeedsUpdateThumbnail(true);
-                }
-            } else {
-                updatedLocalFile.setParentId(mLocalFolder.getFileId());
-                // remote eTag will not be set unless file CONTENTS are synchronized
-                updatedLocalFile.setEtag("");
-                // new files need to check av-off status of parent folder!
-                if (updatedFolder.isAvailableOffline()) {
-                    updatedLocalFile.setAvailableOfflineStatus(
-                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
-                    );
-                }
-                // new files need to update thumbnails
-                updatedLocalFile.setNeedsUpdateThumbnail(true);
-            }
+//            if (localFile != null) {
+//                updatedLocalFile.copyLocalPropertiesFrom(localFile);
+//                updatedLocalFile.setFileName(remoteFile.getFileName());
+//                // remote eTag will not be set unless file CONTENTS are synchronized
+//                updatedLocalFile.setEtag(localFile.getEtag());
+//                if (!updatedLocalFile.isFolder() &&
+//                        remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
+//                    updatedLocalFile.setNeedsUpdateThumbnail(true);
+//                }
+//            } else {
+//                updatedLocalFile.setParentId(mLocalFolder.getFileId());
+//                // remote eTag will not be set unless file CONTENTS are synchronized
+//                updatedLocalFile.setEtag("");
+//                // new files need to check av-off status of parent folder!
+//                if (updatedFolder.isAvailableOffline()) {
+//                    updatedLocalFile.setAvailableOfflineStatus(
+//                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+//                    );
+//                }
+//                // new files need to update thumbnails
+//                updatedLocalFile.setNeedsUpdateThumbnail(true);
+//            }
 
             /// check and fix, if needed, local storage path
             searchForLocalFileInDefaultPath(updatedLocalFile);
@@ -523,7 +523,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             File f = new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, file));
             if (f.exists()) {
                 file.setStoragePath(f.getAbsolutePath());
-                file.setLastSyncDateForData(f.lastModified());
+//                file.setLastSyncDateForData(f.lastModified());
             }
         }
     }
