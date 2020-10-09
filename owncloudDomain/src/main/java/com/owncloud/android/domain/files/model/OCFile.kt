@@ -33,7 +33,7 @@ data class OCFile(
     val id: Long? = null,
     val parentId: Long? = null,
     val owner: String,
-    val length: Long,
+    var length: Long,
     val creationTimestamp: Long? = null,
     val modificationTimestamp: Long,
     val remotePath: String,
@@ -42,7 +42,7 @@ data class OCFile(
     val permissions: String? = null,
     val remoteId: String? = null,
     val privateLink: String? = null,
-    val storagePath: String? = null,
+    var storagePath: String? = null,
     var name: String? = null,
     val treeEtag: String? = null,
 
@@ -57,7 +57,8 @@ data class OCFile(
     val modifiedAtLastSyncForData: Int? = null,
     val etagInConflict: String? = null,
     val fileIsDownloading: Int? = null, //MAYBE BOOLEAN
-    val sharedWithSharee: Int? = null
+    var sharedWithSharee: Boolean = false,
+    var sharedByLink: Boolean = false
 ) : Parcelable {
 
     init {
@@ -111,7 +112,7 @@ data class OCFile(
      * @return true if it is
      */
     fun isDown(): Boolean {
-        if (storagePath != null && storagePath.isNotEmpty()) {
+        if (!storagePath.isNullOrEmpty()) {
             val file = File(storagePath)
             return file.exists()
         }
@@ -134,6 +135,9 @@ data class OCFile(
     fun isHidden(): Boolean {
         return name?.startsWith(".") ?: false
     }
+
+    val isSharedWithMe
+        get() = permissions != null && permissions.contains(PERMISSION_SHARED_WITH_ME)
 
     /**
      * @param   type        Type to match in the file MIME type; it's MUST include the trailing "/"

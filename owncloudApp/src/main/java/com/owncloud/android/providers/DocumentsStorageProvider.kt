@@ -40,7 +40,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.TransferRequester
@@ -98,7 +98,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
             ocFile = getFileByIdOrException(docId)
 
-            if (!ocFile.isDown) {
+            if (!ocFile.isDown()) {
                 val intent = Intent(context, FileDownloader::class.java).apply {
                     putExtra(FileDownloader.KEY_ACCOUNT, getAccountFromFileId(docId))
                     putExtra(FileDownloader.KEY_FILE, ocFile)
@@ -112,7 +112,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     }
                     ocFile = getFileByIdOrException(docId)
 
-                } while (!ocFile.isDown)
+                } while (!ocFile.isDown())
             }
         } else {
             ocFile = fileToUpload
@@ -131,7 +131,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 Timber.d("A file with id $documentId has been closed! Time to synchronize it with server.")
                 // If only needs to upload that file
                 if (uploadOnly) {
-                    ocFile.fileLength = fileToOpen.length()
+                    ocFile.length = fileToOpen.length()
                     TransferRequester().run {
                         uploadNewFile(
                             context,
@@ -139,7 +139,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             ocFile.storagePath,
                             ocFile.remotePath,
                             FileUploader.LOCAL_BEHAVIOUR_COPY,
-                            ocFile.mimetype,
+                            ocFile.mimeType,
                             false,
                             UploadFileOperation.CREATED_BY_USER
                         )
@@ -149,7 +149,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                         SynchronizeFileOperation(
                             ocFile,
                             null,
-                            getAccountFromFileId(ocFile.fileId),
+                            getAccountFromFileId(ocFile.id!!),
                             false,
                             context,
                             false
@@ -159,7 +159,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                                 context?.let {
                                     NotificationUtils.notifyConflict(
                                         ocFile,
-                                        getAccountFromFileId(ocFile.fileId),
+                                        getAccountFromFileId(ocFile.id!!),
                                         it
                                     )
                                 }
@@ -355,14 +355,14 @@ class DocumentsStorageProvider : DocumentsProvider() {
         ).apply {
             execute(currentStorageManager, context).also { result ->
                 syncRequired = false
-                checkOperationResult(result, targetParentFile.fileId.toString())
+                checkOperationResult(result, targetParentFile.id.toString())
                 //Returns the document id of the document copied at the target destination
-                var newPath = targetParentFile.remotePath + sourceFile.fileName
+                var newPath = targetParentFile.remotePath + sourceFile.name
                 if (sourceFile.isFolder) {
                     newPath += File.separator
                 }
                 val newFile = getFileByPathOrException(newPath)
-                return newFile.fileId.toString()
+                return newFile.id.toString()
             }
         }
     }
@@ -386,12 +386,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
         ).apply {
             execute(currentStorageManager, context).also { result ->
                 syncRequired = false
-                checkOperationResult(result, targetParentFile.fileId.toString())
+                checkOperationResult(result, targetParentFile.id.toString())
                 //Returns the document id of the document moved to the target destination
-                var newPath = targetParentFile.remotePath + sourceFile.fileName
+                var newPath = targetParentFile.remotePath + sourceFile.name
                 if (sourceFile.isFolder) newPath += File.separator
                 val newFile = getFileByPathOrException(newPath)
-                return newFile.fileId.toString()
+                return newFile.id.toString()
             }
         }
     }
@@ -417,9 +417,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         CreateFolderOperation(newPath, false).apply {
             execute(currentStorageManager, context).also { result ->
-                checkOperationResult(result, parentDocument.fileId.toString())
+                checkOperationResult(result, parentDocument.id.toString())
                 val newFolder = getFileByPathOrException(newPath)
-                return newFolder.fileId.toString()
+                return newFolder.id.toString()
             }
         }
     }
@@ -428,14 +428,14 @@ class DocumentsStorageProvider : DocumentsProvider() {
         // We just need to return a Document ID, so we'll return an empty one. File does not exist in our db yet.
         // File will be created at [openDocument] method.
         val tempDir =
-            File(FileStorageUtils.getTemporalPath(getAccountFromFileId(parentDocument.fileId)?.name))
+            File(FileStorageUtils.getTemporalPath(getAccountFromFileId(parentDocument.id!!)?.name))
         val newFile = File(tempDir, displayName)
 
-        fileToUpload = OCFile(parentDocument.remotePath + displayName).apply {
-            mimetype = mimeType
-            parentId = parentDocument.fileId
-            storagePath = newFile.path
-        }
+//        fileToUpload = OCFile(parentDocument.remotePath + displayName).apply {
+//            mimeType = mimeType
+//            parentId = parentDocument.id
+//            storagePath = newFile.path
+//        }
 
         return NONEXISTENT_DOCUMENT_ID
     }
@@ -467,7 +467,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         for (account in AccountUtils.getAccounts(context)) {
             val storageManager = FileDataStorageManager(MainApp.appContext, account, MainApp.appContext.contentResolver)
             val rootDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            rootIdToStorageManager[rootDir!!.fileId] = storageManager
+            rootIdToStorageManager[rootDir!!.id!!] = storageManager
         }
     }
 
@@ -506,7 +506,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val folderContent = currentStorageManager?.getFolderContent(root) ?: return result
         folderContent.forEach {
-            if (it.fileName.contains(query)) {
+            if (it.name!!.contains(query)) {
                 result.add(it)
                 if (it.isFolder) result.addAll(findFiles(it, query))
             }
