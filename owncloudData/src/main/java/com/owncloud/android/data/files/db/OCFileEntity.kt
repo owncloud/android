@@ -72,7 +72,7 @@ data class OCFileEntity(
     val keepInSync: Int? = null,
     val lastSyncDateForData: Int? = null,
     val fileShareViaLink: Int? = null,
-    val updateThumbnail: Int? = null, //MAYBE BOOLEAN
+    val needsToUpdateThumbnail: Boolean? = null,
     val publicLink: String? = null,
     val modifiedAtLastSyncForData: Int? = null,
     val etagInConflict: String? = null,
@@ -106,7 +106,7 @@ data class OCFileEntity(
                 lastSyncDateForData = cursor.getInt(cursor.getColumnIndex(FILE_LAST_SYNC_DATE_FOR_DATA)),
                 keepInSync = cursor.getInt(cursor.getColumnIndex(FILE_KEEP_IN_SYNC)),
                 fileShareViaLink = cursor.getInt(cursor.getColumnIndex(FILE_SHARED_VIA_LINK)),
-                updateThumbnail = cursor.getInt(cursor.getColumnIndex(FILE_UPDATE_THUMBNAIL)),
+                needsToUpdateThumbnail = cursor.getInt(cursor.getColumnIndex(FILE_UPDATE_THUMBNAIL)) == 1,
                 publicLink = cursor.getString(cursor.getColumnIndex(FILE_PUBLIC_LINK)),
                 modifiedAtLastSyncForData = cursor.getInt(cursor.getColumnIndex(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA)),
                 etagInConflict = cursor.getString(cursor.getColumnIndex(FILE_ETAG_IN_CONFLICT)),
