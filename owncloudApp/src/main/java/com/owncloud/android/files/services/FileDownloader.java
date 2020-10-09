@@ -56,6 +56,7 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
+import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.NotificationUtils;
 import timber.log.Timber;
@@ -496,20 +497,20 @@ public class FileDownloader extends Service
      * TODO move to DownloadFileOperation
      */
     private void saveDownloadedFile() {
-        OCFile file = mStorageManager.getFileById(mCurrentDownload.getFile().getFileId());
-        long syncDate = System.currentTimeMillis();
-        file.setLastSyncDateForProperties(syncDate);
-        file.setLastSyncDateForData(syncDate);
-        file.setNeedsUpdateThumbnail(true);
-        file.setModificationTimestamp(mCurrentDownload.getModificationTimestamp());
-        file.setModificationTimestampAtLastSyncForData(mCurrentDownload.getModificationTimestamp());
-        file.setEtag(mCurrentDownload.getEtag());
-        file.setMimetype(mCurrentDownload.getMimeType());
-        file.setStoragePath(mCurrentDownload.getSavePath());
-        file.setFileLength((new File(mCurrentDownload.getSavePath()).length()));
-        file.setRemoteId(mCurrentDownload.getFile().getRemoteId());
-        mStorageManager.saveFile(file);
-        mStorageManager.saveConflict(file, null);
+//        OCFile file = mStorageManager.getFileById(mCurrentDownload.getFile().getFileId());
+//        long syncDate = System.currentTimeMillis();
+//        file.setLastSyncDateForProperties(syncDate);
+//        file.setLastSyncDateForData(syncDate);
+//        file.setNeedsUpdateThumbnail(true);
+//        file.setModificationTimestamp(mCurrentDownload.getModificationTimestamp());
+//        file.setModificationTimestampAtLastSyncForData(mCurrentDownload.getModificationTimestamp());
+//        file.setEtag(mCurrentDownload.getEtag());
+//        file.setMimetype(mCurrentDownload.getMimeType());
+//        file.setStoragePath(mCurrentDownload.getSavePath());
+//        file.setFileLength((new File(mCurrentDownload.getSavePath()).length()));
+//        file.setRemoteId(mCurrentDownload.getFile().getRemoteId());
+//        mStorageManager.saveFile(file);
+//        mStorageManager.saveConflict(file, null);
     }
 
     /**
