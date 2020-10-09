@@ -31,11 +31,11 @@ import android.os.Build;
 import android.os.PersistableBundle;
 
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PowerUtils;
@@ -350,7 +350,7 @@ public class TransferRequester {
         UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(context.getContentResolver());
 
         // Get last upload to be retried
-        OCUpload ocUpload = uploadsStorageManager.getLastUploadFor(new OCFile(remotePath), accountName);
+        OCUpload ocUpload =  null; //uploadsStorageManager.getLastUploadFor(new OCFile(remotePath), accountName);
 
         PreferenceManager.CameraUploadsConfiguration mConfig = PreferenceManager.getCameraUploadsConfiguration(context);
 

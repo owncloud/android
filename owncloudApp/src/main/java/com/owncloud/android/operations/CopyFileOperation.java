@@ -21,7 +21,7 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -78,7 +78,7 @@ public class CopyFileOperation extends SyncOperation {
         }
 
         /// 2. remote copy
-        String targetRemotePath = mTargetParentPath + mFile.getFileName();
+        String targetRemotePath = mTargetParentPath + mFile.getName();
         // Check if target remote path already exists on server or add suffix (2), (3) ... otherwise
         String finalRemotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, targetRemotePath);
 
