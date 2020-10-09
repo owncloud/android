@@ -20,7 +20,7 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -74,7 +74,7 @@ public class MoveFileOperation extends SyncOperation {
         }
 
         /// 2. remote move
-        String targetRemotePath = mTargetParentPath + mFile.getFileName();
+        String targetRemotePath = mTargetParentPath + mFile.getName();
         // Check if target remote path already exists on server or add suffix (2), (3) ... otherwise
         String finalRemotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, targetRemotePath);
         if (mFile.isFolder()) {
@@ -92,8 +92,8 @@ public class MoveFileOperation extends SyncOperation {
             getStorageManager().moveLocalFile(mFile, finalRemotePath, mTargetParentPath);
 
             // adjust available offline status after move resume observation of file after rename
-            OCFile updatedFile = getStorageManager().getFileById(mFile.getFileId());
-            OCFile.AvailableOfflineStatus updatedAvOffStatus = updatedFile.getAvailableOfflineStatus();
+            OCFile updatedFile = getStorageManager().getFileById(mFile.getId());
+//            OCFile.AvailableOfflineStatus updatedAvOffStatus = updatedFile.getAvailableOfflineStatus();
         }
         // TODO handle ResultCode.PARTIAL_MOVE_DONE in client Activity, for the moment
 

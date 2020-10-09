@@ -64,9 +64,9 @@ public class RemoveFilesDialogFragment extends ConfirmationDialogFragment
             if (file.isDown()) {
                 containsDown = true;
             }
-            if (file.getAvailableOfflineStatus() != OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
-                containsAvailableOffline = true;
-            }
+//            if (file.getAvailableOfflineStatus() != OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
+//                containsAvailableOffline = true;
+//            }
         }
 
         if (files.size() == 1) {
