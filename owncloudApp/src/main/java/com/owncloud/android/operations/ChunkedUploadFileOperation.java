@@ -22,8 +22,8 @@ package com.owncloud.android.operations;
 import android.accounts.Account;
 import android.content.Context;
 
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
@@ -60,7 +60,7 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
 
             // Step 2, start to upload chunks
             mUploadOperation = new ChunkedUploadRemoteFileOperation(mTransferId, mFile.getStoragePath(),
-                    mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
+                    mFile.getRemotePath(), mFile.getMimeType(), mFile.getEtagInConflict(), timeStamp);
 
             Iterator<OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
             while (listener.hasNext()) {
