@@ -63,8 +63,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -91,6 +91,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -315,7 +316,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // click on folder in the list
         Timber.d("on item click");
-        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile);
+        List<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile);
         tmpfiles = sortFileList(tmpfiles);
 
         if (tmpfiles.size() <= 0) {
@@ -329,7 +330,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (files.get(position).isFolder()) {
             OCFile folderToEnter = files.get(position);
             startSyncFolderOperation(folderToEnter);
-            mParents.push(folderToEnter.getFileName());
+            mParents.push(folderToEnter.getName());
             populateDirectoryList();
         }
     }
@@ -408,7 +409,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         mFile = getStorageManager().getFileByPath(full_path);
         if (mFile != null) {
-            Vector<OCFile> files = getStorageManager().getFolderContent(mFile);
+            List<OCFile> files = getStorageManager().getFolderContent(mFile);
             files = sortFileList(files);
 
             mAdapter = new ReceiveExternalFilesAdapter(
@@ -444,7 +445,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         synchFolderOp.execute(getStorageManager(), this, null, null);
     }
 
-    private Vector<OCFile> sortFileList(Vector<OCFile> files) {
+    private List<OCFile> sortFileList(List<OCFile> files) {
         // Read sorting order, default to sort by name ascending
         FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT);
         FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(this,
@@ -745,7 +746,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                         showSnackMessage(
                                 String.format(
                                         getString(R.string.sync_current_folder_was_removed),
-                                        getCurrentFolder().getFileName()
+                                        getCurrentFolder().getName()
                                 )
                         );
                         browseToRoot();
