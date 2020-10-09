@@ -131,7 +131,7 @@ public class OCUpload implements Parcelable {
      * @param  ocFile           {@link OCFile} instance to update in the remote server.
      * @param  account          ownCloud {@link Account} where ocFile is contained.
      */
-    public OCUpload(OCFile ocFile, Account account) {
+    public OCUpload(com.owncloud.android.domain.files.model.OCFile ocFile, Account account) {
         this(ocFile.getStoragePath(), ocFile.getRemotePath(), account.name);
     }
 
@@ -211,7 +211,7 @@ public class OCUpload implements Parcelable {
     }
 
     /**
-     * @param remotePath
+     * @param remotePath Remote path
      */
     public void setRemotePath(String remotePath) {
         mRemotePath = remotePath;
@@ -285,7 +285,7 @@ public class OCUpload implements Parcelable {
     }
 
     /**
-     * Returns owncloud account as {@link Account} object.  
+     * Returns owncloud account as {@link Account} object.
      */
     public Account getAccount(Context context) {
         return AccountUtils.getOwnCloudAccountByName(context, getAccountName());
