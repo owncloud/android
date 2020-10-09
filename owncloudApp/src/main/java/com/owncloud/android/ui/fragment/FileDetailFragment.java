@@ -435,7 +435,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 String tagId = String.valueOf(file.getRemoteId());
                 thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(tagId);
 
-                if (thumbnail != null && !file.needsUpdateThumbnail()) {
+                if (thumbnail != null && !file.getNeedsToUpdateThumbnail()) {
                     iv.setImageBitmap(thumbnail);
                 } else {
                     // generate new Thumbnail
