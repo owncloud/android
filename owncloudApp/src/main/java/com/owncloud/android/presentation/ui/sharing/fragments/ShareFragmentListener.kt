@@ -24,7 +24,7 @@
 
 package com.owncloud.android.presentation.ui.sharing.fragments
 
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 
 /**

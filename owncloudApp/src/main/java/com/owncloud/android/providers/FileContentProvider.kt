@@ -54,12 +54,9 @@ import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
-import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.domain.files.model.LIST_MIME_DIR
@@ -71,6 +68,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
 import java.util.HashMap
+import com.owncloud.android.datamodel.OCFile as OCFileLegacy
 
 /**
  * The ContentProvider for the ownCloud App.
@@ -507,7 +505,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return results
     }
 
-    private inner class DataBaseHelper internal constructor(context: Context?) :
+    private inner class DataBaseHelper(context: Context?) :
         SQLiteOpenHelper(
             context,
             ProviderMeta.DB_NAME,
@@ -1021,7 +1019,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     // Insert share list to the new shares table in new database
                     val ocFileDao: FileDao by inject()
                     executors.diskIO().execute {
-                        for (file in files){
+                        for (file in files) {
                             ocFileDao.mergeRemoteAndLocalFile(file)
                         }
                     }
@@ -1286,7 +1284,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     val oldPath = it.getString(
                         it.getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH)
                     )
-                    val file = OCFile(
+                    val file = OCFileLegacy(
                         it.getString(it.getColumnIndex(ProviderTableMeta.FILE_PATH))
                     )
                     val newPath = FileStorageUtils.getDefaultSavePathFor(newAccountName, file)
