@@ -60,7 +60,6 @@ import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataS
 import com.owncloud.android.data.migrations.CameraUploadsMigrationToRoom
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.extensions.getLongFromColumnOrThrow
@@ -74,6 +73,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
 import java.util.HashMap
+import com.owncloud.android.datamodel.OCFile as OCFileLegacy
 
 /**
  * The ContentProvider for the ownCloud App.
@@ -508,7 +508,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return results
     }
 
-    private inner class DataBaseHelper internal constructor(context: Context?) :
+    private inner class DataBaseHelper(context: Context?) :
         SQLiteOpenHelper(
             context,
             ProviderMeta.DB_NAME,
@@ -1324,7 +1324,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 do {
                     // Update database
                     val oldPath = it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_STORAGE_PATH)
-                    val file = OCFile(it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_PATH))
+                    val file = OCFileLegacy(it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_PATH))
                     val newPath = FileStorageUtils.getDefaultSavePathFor(newAccountName, file)
 
                     val cv = ContentValues()
