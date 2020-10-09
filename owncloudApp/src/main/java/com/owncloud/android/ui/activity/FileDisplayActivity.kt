@@ -372,7 +372,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         if (secondFragment == null) { // If second fragment has not been chosen yet, choose it
             if (file != null && !file.isFolder) {
-                if ((PreviewAudioFragment.canBePreviewed(file) || PreviewVideoFragment.canBePreviewed(file)) && file.lastSyncDateForProperties > 0  // temporal fix
+                if ((PreviewAudioFragment.canBePreviewed(file) || PreviewVideoFragment.canBePreviewed(file)) && file.lastSyncDateForProperties ?: 0 > 0  // temporal fix
                 ) {
                     val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
                     val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
@@ -1019,7 +1019,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
             if (waitingToSend != null) {
                 waitingToSend = storageManager.getFileByPath(waitingToSend!!.remotePath)
-                if (waitingToSend!!.isDown) {
+                if (waitingToSend!!.isDown()) {
                     sendDownloadedFile()
                 }
             }
@@ -1163,7 +1163,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     if (storageManager != null) {
                         // update the file
                         fileWaitingToPreview = storageManager.getFileById(fileWaitingToPreview!!.id!!)
-                        if (!fileWaitingToPreview!!.isDown) {
+                        if (!fileWaitingToPreview!!.isDown()) {
                             // If the file to preview isn't downloaded yet, check if it is being
                             // downloaded in this moment or not
                             requestForDownload()
@@ -1270,10 +1270,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 } else if (second is PreviewVideoFragment) {
                     second.releasePlayer()
                 }
-                file = storageManager.getFileById(removedFile.parentId)
+                file = storageManager.getFileById(removedFile.parentId!!)
                 cleanSecondFragment()
             }
-            if (storageManager.getFileById(removedFile.parentId) == currentDir) {
+            if (storageManager.getFileById(removedFile.parentId!!) == currentDir) {
                 refreshListOfFilesFragment(true)
             }
             invalidateOptionsMenu()

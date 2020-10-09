@@ -32,7 +32,7 @@ import android.os.Process
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.ui.activity.ConflictsResolveActivity
 import java.util.Random
 
@@ -98,8 +98,8 @@ object NotificationUtils {
         var notificationId = 0
 
         // We need a notification id for each file in conflict, let's use the file id but in a safe way
-        if (fileInConflict.fileId.toInt() >= Int.MIN_VALUE && fileInConflict.fileId.toInt() <= Int.MAX_VALUE) {
-            notificationId = fileInConflict.fileId.toInt()
+        if (fileInConflict.id!!.toInt() >= Int.MIN_VALUE && fileInConflict.id!!.toInt() <= Int.MAX_VALUE) {
+            notificationId = fileInConflict.id!!.toInt()
         }
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
