@@ -31,28 +31,28 @@ import java.util.Locale
 @Parcelize
 data class OCFile(
     val id: Long? = null,
-    val parentId: Long? = null,
+    var parentId: Long? = null,
     val owner: String,
     var length: Long,
     val creationTimestamp: Long? = null,
     val modificationTimestamp: Long,
     val remotePath: String,
-    val mimeType: String,
+    var mimeType: String,
     val etag: String? = null,
     val permissions: String? = null,
     val remoteId: String? = null,
     val privateLink: String? = null,
     var storagePath: String? = null,
     var name: String? = null,
-    val treeEtag: String? = null,
+    var treeEtag: String? = null,
 
     // May not needed
     val lastSyncDate: Int? = null,
     val keepInSync: Int? = null,
-    val lastSyncDateForData: Int? = null,
-    val lastSyncDateForProperties: Long? = null,
+    var lastSyncDateForData: Int? = null,
+    var lastSyncDateForProperties: Long? = null,
     val fileShareViaLink: Int? = null,
-    val updateThumbnail: Int? = null, //MAYBE BOOLEAN
+    var needsToUpdateThumbnail: Int? = null, //MAYBE BOOLEAN
     val publicLink: String? = null,
     val modifiedAtLastSyncForData: Int? = null,
     val etagInConflict: String? = null,

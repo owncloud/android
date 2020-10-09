@@ -47,6 +47,7 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
 import com.owncloud.android.utils.BitmapUtils;
 import timber.log.Timber;
+import com.owncloud.android.domain.files.model.OCFile;
 
 import java.io.File;
 import java.io.InputStream;
@@ -205,7 +206,7 @@ public class ThumbnailsCacheManager {
                 if (this == bitmapWorkerTask) {
                     String tagId = "";
                     if (mFile instanceof OCFile) {
-                        tagId = String.valueOf(((OCFile) mFile).getFileId());
+                        tagId = String.valueOf(((OCFile) mFile).getId());
                     } else if (mFile instanceof File) {
                         tagId = String.valueOf(mFile.hashCode());
                     }
@@ -258,7 +259,7 @@ public class ThumbnailsCacheManager {
             Bitmap thumbnail = getBitmapFromDiskCache(imageKey);
 
             // Not found in disk cache
-            if (thumbnail == null || file.needsUpdateThumbnail()) {
+            if (thumbnail == null || file.getNeedsToUpdateThumbnail()) {
 
                 int px = getThumbnailDimension();
 
@@ -269,13 +270,13 @@ public class ThumbnailsCacheManager {
 
                     if (bitmap != null) {
                         // Handle PNG
-                        if (file.getMimetype().equalsIgnoreCase("image/png")) {
+                        if (file.getMimeType().equalsIgnoreCase("image/png")) {
                             bitmap = handlePNG(bitmap, px);
                         }
 
                         thumbnail = addThumbnailToCache(imageKey, bitmap, file.getStoragePath(), px);
 
-                        file.setNeedsUpdateThumbnail(false);
+                        file.setNeedsToUpdateThumbnail(false);
                         mStorageManager.saveFile(file);
                     }
 
@@ -297,7 +298,7 @@ public class ThumbnailsCacheManager {
                                 thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
                                 // Handle PNG
-                                if (file.getMimetype().equalsIgnoreCase("image/png")) {
+                                if (file.getMimeType().equalsIgnoreCase("image/png")) {
                                     thumbnail = handlePNG(thumbnail, px);
                                 }
 
