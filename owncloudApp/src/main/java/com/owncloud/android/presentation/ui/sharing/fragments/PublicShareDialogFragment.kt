@@ -39,9 +39,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SharePublicDialogBinding
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.parseError
