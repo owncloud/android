@@ -498,21 +498,21 @@ public class FileDownloader extends Service
      * TODO move to DownloadFileOperation
      */
     private void saveDownloadedFile() {
-        OCFile file = mStorageManager.getFileById(mCurrentDownload.getFile().getFileId());
-        long syncDate = System.currentTimeMillis();
-        file.setLastSyncDateForProperties(syncDate);
-        file.setLastSyncDateForData(syncDate);
-        file.setNeedsUpdateThumbnail(true);
-        file.setModificationTimestamp(mCurrentDownload.getModificationTimestamp());
-        file.setModificationTimestampAtLastSyncForData(mCurrentDownload.getModificationTimestamp());
-        file.setEtag(mCurrentDownload.getEtag());
-        file.setMimetype(mCurrentDownload.getMimeType());
-        file.setStoragePath(mCurrentDownload.getSavePath());
-        file.setFileLength((new File(mCurrentDownload.getSavePath()).length()));
-        file.setRemoteId(mCurrentDownload.getFile().getRemoteId());
-        mStorageManager.saveFile(file);
-        mStorageManager.triggerMediaScan(file.getStoragePath());
-        mStorageManager.saveConflict(file, null);
+//        OCFile file = mStorageManager.getFileById(mCurrentDownload.getFile().getFileId());
+//        long syncDate = System.currentTimeMillis();
+//        file.setLastSyncDateForProperties(syncDate);
+//        file.setLastSyncDateForData(syncDate);
+//        file.setNeedsUpdateThumbnail(true);
+//        file.setModificationTimestamp(mCurrentDownload.getModificationTimestamp());
+//        file.setModificationTimestampAtLastSyncForData(mCurrentDownload.getModificationTimestamp());
+//        file.setEtag(mCurrentDownload.getEtag());
+//        file.setMimetype(mCurrentDownload.getMimeType());
+//        file.setStoragePath(mCurrentDownload.getSavePath());
+//        file.setFileLength((new File(mCurrentDownload.getSavePath()).length()));
+//        file.setRemoteId(mCurrentDownload.getFile().getRemoteId());
+//        mStorageManager.saveFile(file);
+//        mStorageManager.triggerMediaScan(file.getStoragePath());
+//        mStorageManager.saveConflict(file, null);
     }
 
     /**
