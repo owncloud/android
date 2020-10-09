@@ -21,7 +21,7 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -89,7 +89,7 @@ public class RenameFileOperation extends SyncOperation {
                 return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
             }
 
-            RenameRemoteFileOperation operation = new RenameRemoteFileOperation(mFile.getFileName(),
+            RenameRemoteFileOperation operation = new RenameRemoteFileOperation(mFile.getName(),
                     mFile.getRemotePath(),
                     mNewName, mFile.isFolder());
             result = operation.execute(client);
@@ -113,11 +113,11 @@ public class RenameFileOperation extends SyncOperation {
 
     private void saveLocalDirectory(String parent) {
         getStorageManager().moveLocalFile(mFile, mNewRemotePath, parent);
-        mFile.setFileName(mNewName);
+        mFile.setName(mNewName);
     }
 
     private void saveLocalFile() {
-        mFile.setFileName(mNewName);
+        mFile.setName(mNewName);
 
         if (mFile.isDown()) {
             // rename the local copy of the file
