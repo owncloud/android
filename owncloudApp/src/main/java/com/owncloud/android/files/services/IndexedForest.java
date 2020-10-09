@@ -22,7 +22,7 @@ package com.owncloud.android.files.services;
 
 import android.util.Pair;
 
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import timber.log.Timber;
 
 import java.io.File;
