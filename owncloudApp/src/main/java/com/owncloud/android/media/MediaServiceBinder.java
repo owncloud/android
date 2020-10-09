@@ -25,7 +25,7 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.widget.MediaController;
 
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.media.MediaService.State;
 import timber.log.Timber;
 
