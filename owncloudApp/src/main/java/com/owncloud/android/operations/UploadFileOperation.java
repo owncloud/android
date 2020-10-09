@@ -24,10 +24,9 @@ import android.accounts.Account;
 import android.content.Context;
 import android.net.Uri;
 
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
-import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
@@ -204,7 +203,7 @@ public class UploadFileOperation extends SyncOperation {
     }
 
     public String getMimeType() {
-        return mFile.getMimetype();
+        return mFile.getMimeType();
     }
 
     public int getLocalBehaviour() {
@@ -305,7 +304,7 @@ public class UploadFileOperation extends SyncOperation {
 
             /// set parent local id in uploading file
             OCFile parent = getStorageManager().getFileByPath(remoteParentPath);
-            mFile.setParentId(parent.getFileId());
+            mFile.setParentId(parent.getId());
 
             /// automatic rename of file to upload in case of name collision in server
             Timber.d("Checking name collision in server");
@@ -408,7 +407,7 @@ public class UploadFileOperation extends SyncOperation {
 
         try {
             mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(), mFile.getRemotePath(),
-                    mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
+                    mFile.getMimeType(), mFile.getEtagInConflict(), timeStamp);
 
             for (OnDatatransferProgressListener dataTransferListener : mDataTransferListeners) {
                 mUploadOperation.addDatatransferProgressListener(dataTransferListener);
@@ -531,7 +530,7 @@ public class UploadFileOperation extends SyncOperation {
         if (parent != null) {
             OCFile createdFolder = new OCFile(remotePath);
             createdFolder.setMimetype(MimeTypeConstantsKt.MIME_DIR);
-            createdFolder.setParentId(parent.getFileId());
+            createdFolder.setParentId(parent.getId());
             getStorageManager().saveFile(createdFolder);
             return createdFolder;
         }

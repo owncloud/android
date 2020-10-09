@@ -39,7 +39,7 @@ import android.util.Pair;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
