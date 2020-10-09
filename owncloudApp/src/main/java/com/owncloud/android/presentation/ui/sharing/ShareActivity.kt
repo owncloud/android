@@ -30,7 +30,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.transaction
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event.EventObserver

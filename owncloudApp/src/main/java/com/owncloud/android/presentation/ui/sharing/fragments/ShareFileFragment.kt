@@ -35,10 +35,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -123,7 +123,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         get() {
             val defaultName = getString(
                 R.string.share_via_link_default_name_template,
-                file?.fileName
+                file?.name
             )
             val defaultNameNumberedRegex = QUOTE_START + defaultName + QUOTE_END + DEFAULT_NAME_REGEX_SUFFIX
             val usedNumbers = ArrayList<Int>()
@@ -217,8 +217,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         // Image
         view.shareFileIcon?.setImageResource(
             MimetypeIconUtil.getFileTypeIconId(
-                file?.mimetype,
-                file?.fileName
+                file?.mimeType,
+                file?.name
             )
         )
         if (file!!.isImage) {
@@ -229,13 +229,13 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             }
         }
         // Name
-        view.shareFileName?.text = file?.fileName
+        view.shareFileName?.text = file?.name
 
         // Size
         if (file!!.isFolder) {
             view.shareFileSize?.visibility = View.GONE
         } else {
-            view.shareFileSize?.text = DisplayUtils.bytesToHumanReadable(file!!.fileLength, activity)
+            view.shareFileSize?.text = DisplayUtils.bytesToHumanReadable(file!!.length, activity)
         }
 
         // Private link button
