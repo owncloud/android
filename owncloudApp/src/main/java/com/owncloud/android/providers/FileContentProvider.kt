@@ -1300,47 +1300,47 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         oldAccountName: String
     ) {
 
-        val whereClause = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL"
-
-        val c = db.query(
-            ProviderTableMeta.FILE_TABLE_NAME, null,
-            whereClause,
-            arrayOf(newAccountName), null, null, null
-        )
-
-        c.use {
-            if (it.moveToFirst()) {
-                // create storage path
-                val oldAccountPath = FileStorageUtils.getSavePath(oldAccountName)
-                val newAccountPath = FileStorageUtils.getSavePath(newAccountName)
-
-                // move files
-                val oldAccountFolder = File(oldAccountPath)
-                val newAccountFolder = File(newAccountPath)
-                oldAccountFolder.renameTo(newAccountFolder)
-
-                // update database
-                do {
-                    // Update database
-                    val oldPath = it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_STORAGE_PATH)
-                    val file = OCFileLegacy(it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_PATH))
-                    val newPath = FileStorageUtils.getDefaultSavePathFor(newAccountName, file)
-
-                    val cv = ContentValues()
-                    cv.put(ProviderTableMeta.FILE_STORAGE_PATH, newPath)
-                    db.update(
-                        ProviderTableMeta.FILE_TABLE_NAME,
-                        cv,
-                        ProviderTableMeta.FILE_STORAGE_PATH + "=?",
-                        arrayOf(oldPath)
-                    )
-
-                    Timber.v("SQL : Updated path of downloaded file: old file name == $oldPath, new file name == $newPath")
-
-                } while (it.moveToNext())
-            }
-        }
+//        val whereClause = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
+//                ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL"
+//
+//        val c = db.query(
+//            ProviderTableMeta.FILE_TABLE_NAME, null,
+//            whereClause,
+//            arrayOf(newAccountName), null, null, null
+//        )
+//
+//        c.use {
+//            if (it.moveToFirst()) {
+//                // create storage path
+//                val oldAccountPath = FileStorageUtils.getSavePath(oldAccountName)
+//                val newAccountPath = FileStorageUtils.getSavePath(newAccountName)
+//
+//                // move files
+//                val oldAccountFolder = File(oldAccountPath)
+//                val newAccountFolder = File(newAccountPath)
+//                oldAccountFolder.renameTo(newAccountFolder)
+//
+//                // update database
+//                do {
+//                    // Update database
+//                    val oldPath = it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_STORAGE_PATH)
+//                    val file = OCFileLegacy(it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_PATH))
+//                    val newPath = FileStorageUtils.getDefaultSavePathFor(newAccountName, file)
+//
+//                    val cv = ContentValues()
+//                    cv.put(ProviderTableMeta.FILE_STORAGE_PATH, newPath)
+//                    db.update(
+//                        ProviderTableMeta.FILE_TABLE_NAME,
+//                        cv,
+//                        ProviderTableMeta.FILE_STORAGE_PATH + "=?",
+//                        arrayOf(oldPath)
+//                    )
+//
+//                    Timber.v("SQL : Updated path of downloaded file: old file name == $oldPath, new file name == $newPath")
+//
+//                } while (it.moveToNext())
+//            }
+//        }
     }
 
     @Throws(FileNotFoundException::class)
