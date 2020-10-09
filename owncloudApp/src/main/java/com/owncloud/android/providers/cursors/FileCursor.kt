@@ -25,7 +25,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.utils.MimetypeIconUtil
 
 class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_DOCUMENT_PROJECTION) {
@@ -38,9 +38,9 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
     }
 
     fun addFile(file: OCFile) {
-        val iconRes = MimetypeIconUtil.getFileTypeIconId(file.mimetype, file.fileName)
-        val mimeType = if (file.isFolder) Document.MIME_TYPE_DIR else file.mimetype
-        val imagePath = if (file.isImage && file.isDown) file.storagePath else null
+        val iconRes = MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.name)
+        val mimeType = if (file.isFolder) Document.MIME_TYPE_DIR else file.mimeType
+        val imagePath = if (file.isImage && file.isDown()) file.storagePath else null
         var flags = if (imagePath != null) Document.FLAG_SUPPORTS_THUMBNAIL else 0
 
         flags = flags or Document.FLAG_SUPPORTS_DELETE or Document.FLAG_SUPPORTS_WRITE
@@ -57,10 +57,10 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
         }
 
         newRow()
-            .add(Document.COLUMN_DOCUMENT_ID, file.fileId.toString())
-            .add(Document.COLUMN_DISPLAY_NAME, file.fileName)
+            .add(Document.COLUMN_DOCUMENT_ID, file.id.toString())
+            .add(Document.COLUMN_DISPLAY_NAME, file.name)
             .add(Document.COLUMN_LAST_MODIFIED, file.modificationTimestamp)
-            .add(Document.COLUMN_SIZE, file.fileLength)
+            .add(Document.COLUMN_SIZE, file.length)
             .add(Document.COLUMN_FLAGS, flags)
             .add(Document.COLUMN_ICON, iconRes)
             .add(Document.COLUMN_MIME_TYPE, mimeType)
