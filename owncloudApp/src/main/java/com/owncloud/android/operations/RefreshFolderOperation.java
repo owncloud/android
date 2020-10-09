@@ -46,14 +46,14 @@ import java.util.Vector;
 /**
  * Operation performing a REFRESH on a folder, conceived to be triggered by an action started
  * FROM THE USER INTERFACE.
- *
+ * <p>
  * Fetches the LIST and properties of the files contained in the given folder (including the
  * properties of the folder itself), and updates the local database with them.
- *
+ * <p>
  * Synchronizes the CONTENTS of any file or folder set locally as AVAILABLE OFFLINE.
- *
+ * <p>
  * If the folder is ROOT, it also retrieves the VERSION of the server, and the USER PROFILE info.
- *
+ * <p>
  * Does NOT travel subfolders to refresh their contents also, UNLESS they are
  * set as AVAILABLE OFFLINE FOLDERS.
  */
