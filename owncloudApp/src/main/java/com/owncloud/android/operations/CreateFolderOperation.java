@@ -21,8 +21,7 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
@@ -101,13 +100,13 @@ public class CreateFolderOperation extends SyncOperation {
                 }
             }
         } else { // Create directory on DB
-            newDir = new OCFile(mRemotePath);
-            newDir.setMimetype(MimeTypeConstantsKt.MIME_DIR);
-            long parentId = getStorageManager().
-                    getFileByPath(FileStorageUtils.getParentPath(mRemotePath)).getFileId();
-            newDir.setParentId(parentId);
-            newDir.setModificationTimestamp(System.currentTimeMillis());
-            getStorageManager().saveFile(newDir);
+//            newDir = new OCFile(mRemotePath);
+//            newDir.setMimetype(MimeTypeConstantsKt.MIME_DIR);
+//            long parentId = getStorageManager().
+//                    getFileByPath(FileStorageUtils.getParentPath(mRemotePath)).getFileId();
+//            newDir.setParentId(parentId);
+//            newDir.setModificationTimestamp(System.currentTimeMillis());
+//            getStorageManager().saveFile(newDir);
 
             Timber.d("Create directory " + mRemotePath + " in Database");
         }
