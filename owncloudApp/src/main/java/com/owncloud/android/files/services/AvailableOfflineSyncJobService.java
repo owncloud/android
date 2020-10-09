@@ -68,56 +68,56 @@ public class AvailableOfflineSyncJobService extends JobService {
 
         @Override
         protected JobParameters doInBackground(JobParameters... jobParams) {
-
-            Account account =
-                    AccountUtils.getCurrentOwnCloudAccount(mAvailableOfflineJobService.getApplicationContext());
-
-            if (mAvailableOfflineJobService.getContentResolver() == null) {
-                Timber.w("Content resolver is null, do not sync av. offline files.");
-                return jobParams[0];
-            }
-
-            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
-                    mAvailableOfflineJobService, account, mAvailableOfflineJobService.getContentResolver()
-            );
-
-            List<Pair<OCFile, String>> availableOfflineFilesFromEveryAccount = fileDataStorageManager.
-                    getAvailableOfflineFilesFromEveryAccount();
-
-            // Cancel periodic job if there's no available offline files to watch for local changes
-            if (availableOfflineFilesFromEveryAccount.isEmpty()) {
-                cancelPeriodicJob(jobParams[0].getJobId());
-                return jobParams[0];
-            } else {
-                syncAvailableOfflineFiles(availableOfflineFilesFromEveryAccount);
-            }
+//
+//            Account account =
+//                    AccountUtils.getCurrentOwnCloudAccount(mAvailableOfflineJobService.getApplicationContext());
+//
+//            if (mAvailableOfflineJobService.getContentResolver() == null) {
+//                Timber.w("Content resolver is null, do not sync av. offline files.");
+//                return jobParams[0];
+//            }
+//
+//            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
+//                    mAvailableOfflineJobService, account, mAvailableOfflineJobService.getContentResolver()
+//            );
+//
+//            List<Pair<OCFile, String>> availableOfflineFilesFromEveryAccount = fileDataStorageManager.
+//                    getAvailableOfflineFilesFromEveryAccount();
+//
+//            // Cancel periodic job if there's no available offline files to watch for local changes
+//            if (availableOfflineFilesFromEveryAccount.isEmpty()) {
+//                cancelPeriodicJob(jobParams[0].getJobId());
+//                return jobParams[0];
+//            } else {
+//                syncAvailableOfflineFiles(availableOfflineFilesFromEveryAccount);
+//            }
 
             return jobParams[0];
         }
 
         private void syncAvailableOfflineFiles(List<Pair<OCFile, String>> availableOfflineFilesForAccount) {
-            for (Pair<OCFile, String> fileForAccount : availableOfflineFilesForAccount) {
-
-                String localPath = fileForAccount.first.getStoragePath();
-
-                if (localPath == null) {
-                    localPath = FileStorageUtils.getDefaultSavePathFor(
-                            fileForAccount.second, // Account name
-                            fileForAccount.first   // OCFile
-                    );
-                }
-
-                File localFile = new File(localPath);
-
-                if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() &&
-                        MainApp.Companion.isDeveloper()) {
-                    Timber.i("File " + fileForAccount.first.getRemotePath() + " already synchronized " +
-                            "in account " + fileForAccount.second + ", ignoring");
-                    continue;
-                }
-
-                startSyncOperation(fileForAccount.first, fileForAccount.second);
-            }
+//            for (Pair<OCFile, String> fileForAccount : availableOfflineFilesForAccount) {
+//
+//                String localPath = fileForAccount.first.getStoragePath();
+//
+//                if (localPath == null) {
+//                    localPath = FileStorageUtils.getDefaultSavePathFor(
+//                            fileForAccount.second, // Account name
+//                            fileForAccount.first   // OCFile
+//                    );
+//                }
+//
+//                File localFile = new File(localPath);
+//
+//                if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() &&
+//                        MainApp.Companion.isDeveloper()) {
+//                    Timber.i("File " + fileForAccount.first.getRemotePath() + " already synchronized " +
+//                            "in account " + fileForAccount.second + ", ignoring");
+//                    continue;
+//                }
+//
+//                startSyncOperation(fileForAccount.first, fileForAccount.second);
+//            }
         }
 
         /**
@@ -128,32 +128,32 @@ public class AvailableOfflineSyncJobService extends JobService {
          * @param accountName          account to synchronize the available offline file with
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
-            if (MainApp.Companion.isDeveloper()) {
-                Timber.i("Requested synchronization for file %1s in account %2s",
-                        availableOfflineFile.getRemotePath(), accountName);
-            }
-
-            Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
-            if (account == null) {
-                Timber.w("Account '" + accountName + "' not found in account manager. Aborting Sync operation...");
-                return;
-            }
-
-            FileDataStorageManager storageManager =
-                    new FileDataStorageManager(
-                            mAvailableOfflineJobService, account, mAvailableOfflineJobService.getContentResolver()
-                    );
-
-            SynchronizeFileOperation synchronizeFileOperation =
-                    new SynchronizeFileOperation(availableOfflineFile, null, account, false,
-                            mAvailableOfflineJobService, true);
-
-            RemoteOperationResult result = synchronizeFileOperation.
-                    execute(storageManager, mAvailableOfflineJobService);
-
-            if (result.getCode() == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                notifyConflict(availableOfflineFile, account, mAvailableOfflineJobService);
-            }
+//            if (MainApp.Companion.isDeveloper()) {
+//                Timber.i("Requested synchronization for file %1s in account %2s",
+//                        availableOfflineFile.getRemotePath(), accountName);
+//            }
+//
+//            Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
+//            if (account == null) {
+//                Timber.w("Account '" + accountName + "' not found in account manager. Aborting Sync operation...");
+//                return;
+//            }
+//
+//            FileDataStorageManager storageManager =
+//                    new FileDataStorageManager(
+//                            mAvailableOfflineJobService, account, mAvailableOfflineJobService.getContentResolver()
+//                    );
+//
+//            SynchronizeFileOperation synchronizeFileOperation =
+//                    new SynchronizeFileOperation(availableOfflineFile, null, account, false,
+//                            mAvailableOfflineJobService, true);
+//
+//            RemoteOperationResult result = synchronizeFileOperation.
+//                    execute(storageManager, mAvailableOfflineJobService);
+//
+//            if (result.getCode() == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
+//                notifyConflict(availableOfflineFile, account, mAvailableOfflineJobService);
+//            }
         }
 
         /**
