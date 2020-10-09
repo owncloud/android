@@ -237,11 +237,11 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 case GRID_IMAGE:
                     // sharedIcon
                     ImageView sharedIconV = view.findViewById(R.id.sharedIcon);
-                    if (file.isSharedViaLink()) {
+                    if (file.getSharedByLink()) {
                         sharedIconV.setImageResource(R.drawable.ic_shared_by_link);
                         sharedIconV.setVisibility(View.VISIBLE);
                         sharedIconV.bringToFront();
-                    } else if (file.isSharedWithSharee() || file.isSharedWithMe()) {
+                    } else if (file.getSharedWithSharee() || file.isSharedWithMe()) {
                         sharedIconV.setImageResource(R.drawable.shared_via_users);
                         sharedIconV.setVisibility(View.VISIBLE);
                         sharedIconV.bringToFront();
@@ -279,8 +279,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 // Folder
                 fileIcon.setImageResource(
                         MimetypeIconUtil.getFolderTypeIconId(
-                                file.isSharedWithMe() || file.isSharedWithSharee(),
-                                file.isSharedViaLink()));
+                                file.isSharedWithMe() || file.getSharedWithSharee(),
+                                file.getSharedByLink()));
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimeType(), file.getName()));
@@ -357,10 +357,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 localStateView.setImageResource(R.drawable.downloaded_pin);
             }
 
-            if (file.isAvailableOffline()) {
-                localStateView.setVisibility(View.VISIBLE);
-                localStateView.setImageResource(R.drawable.offline_available_pin);
-            }
+//            if (file.isAvailableOffline()) {
+//                localStateView.setVisibility(View.VISIBLE);
+//                localStateView.setImageResource(R.drawable.offline_available_pin);
+//            }
         }
     }
 
@@ -396,7 +396,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         boolean isRootFolder = folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH));
 
         if (mStorageManager != null) {
-            if (mOnlyAvailableOffline && (isRootFolder || !folder.isAvailableOffline())) {
+            if (mOnlyAvailableOffline && (isRootFolder)){ // || !folder.isAvailableOffline())) {
                 mImmutableFilesList = updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
             } else if (mSharedByLinkFiles && isRootFolder) {
                 mImmutableFilesList = updatedStorageManager.getSharedByLinkFilesFromCurrentAccount();
