@@ -49,12 +49,12 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -379,7 +379,7 @@ public class FileUploader extends Service
                 for (OCFile ocFile : files) {
 
                     OCUpload ocUpload = new OCUpload(ocFile, account);
-                    ocUpload.setFileSize(ocFile.getFileLength());
+                    ocUpload.setFileSize(ocFile.getLength());
                     ocUpload.setForceOverwrite(forceOverwrite);
                     ocUpload.setCreateRemoteFolder(isCreateRemoteFolder);
                     ocUpload.setCreatedBy(createdBy);
