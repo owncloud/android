@@ -45,9 +45,9 @@ public class UriUtils {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
@@ -105,7 +105,6 @@ public class UriUtils {
     }
 
     /**
-     *
      * @param uri The Uri to check.
      * @return Whether the Uri is from a content provider as kind "content://..."
      */
@@ -116,14 +115,14 @@ public class UriUtils {
     /**
      * Translates a content:// URI referred to a local file file to a path on the local filesystem
      *
-     * @param uri       The URI to resolve
+     * @param uri The URI to resolve
      * @return The path in the file system to the content or null if it could not be found (not a file)
      */
     public static String getLocalPath(Uri uri, Context context) {
         // DocumentProvider
         if (DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
-            if (UriUtilsKt.isExternalStorageDocument(uri)) {
+            if (UriUtils.isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -133,16 +132,16 @@ public class UriUtils {
                 }
             }
             // DownloadsProvider
-            else if (UriUtilsKt.isDownloadsDocument(uri)) {
+            else if (UriUtils.isDownloadsDocument(uri)) {
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
                         Long.valueOf(id));
 
-                return UriUtilsKt.getDataColumn(context, contentUri, null, null);
+                return UriUtils.getDataColumn(context, contentUri, null, null);
             }
             // MediaProvider
-            else if (UriUtilsKt.isMediaDocument(uri)) {
+            else if (UriUtils.isMediaDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -159,10 +158,10 @@ public class UriUtils {
                 final String selection = "_id=?";
                 final String[] selectionArgs = new String[]{split[1]};
 
-                return UriUtilsKt.getDataColumn(context, contentUri, selection, selectionArgs);
+                return UriUtils.getDataColumn(context, contentUri, selection, selectionArgs);
             }
             // Documents providers returned as content://...
-            else if (UriUtilsKt.isContentDocument(uri)) {
+            else if (UriUtils.isContentDocument(uri)) {
                 return uri.toString();
             }
         }
@@ -170,11 +169,11 @@ public class UriUtils {
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
             // Return the remote address
-            if (UriUtilsKt.isGooglePhotosUri(uri)) {
+            if (UriUtils.isGooglePhotosUri(uri)) {
                 return uri.getLastPathSegment();
             }
 
-            return UriUtilsKt.getDataColumn(context, uri, null, null);
+            return UriUtils.getDataColumn(context, uri, null, null);
         }
         // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {

@@ -488,9 +488,9 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                             // or involving other parts
                             if (previewVideoError.isParentFolderSyncNeeded()) {
                                 // Start to sync the parent file folder
-                                OCFile folder = new OCFile(getFile().getParentRemotePath());
-                                ((FileDisplayActivity) getActivity()).
-                                        startSyncFolderOperation(folder, false);
+//                                OCFile folder = new OCFile(getFile().getParentRemotePath());
+//                                ((FileDisplayActivity) getActivity()).
+//                                        startSyncFolderOperation(folder, false);
                             }
                         })
                 .setCancelable(false)

@@ -760,11 +760,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
 
-            if (mFileListOption.isAvailableOffline() && !parentDir.isAvailableOffline()) {
-                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
-            }
+//            if (mFileListOption.isAvailableOffline() && !parentDir.isAvailableOffline()) {
+//                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
+//            }
 
-            if (mFileListOption.isSharedByLink() && !parentDir.isSharedViaLink()) {
+            if (mFileListOption.isSharedByLink() && !parentDir.getSharedByLink()) {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
@@ -856,14 +856,14 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 } else if (PreviewVideoFragment.canBePreviewed(file) &&
                         !fileIsDownloading(file)) {
 
-                    // Available offline exception, don't initialize streaming
-                    if (!file.isDown() && file.isAvailableOffline()) {
-                        // sync file content, then open with external apps
-                        ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
-                    } else {
-                        // media preview
-                        ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
-                    }
+//                    // Available offline exception, don't initialize streaming
+//                    if (!file.isDown() && file.isAvailableOffline()) {
+//                        // sync file content, then open with external apps
+//                        ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
+//                    } else {
+//                        // media preview
+//                        ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
+//                    }
 
                     // If the file is already downloaded sync it, just to update it if there is a
                     // new available file version

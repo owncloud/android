@@ -333,7 +333,7 @@ public class PreviewImageActivity extends FileActivity implements
             mHasSavedPosition = true;
 
             OCFile currentFile = mPreviewImagePagerAdapter.getFileAt(position);
-            updateActionBarTitle(currentFile.getFileName());
+            updateActionBarTitle(currentFile.getName());
             if (!mPreviewImagePagerAdapter.pendingErrorAt(position)) {
                 getFileOperationsHelper().syncFile(currentFile);
             }

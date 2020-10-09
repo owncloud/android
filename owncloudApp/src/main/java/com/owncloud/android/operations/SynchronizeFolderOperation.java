@@ -413,7 +413,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      */
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
 
-        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableOffline());
+        boolean shouldSyncContents = (mSyncContentOfRegularFiles); // || localFile.isAvailableOffline());
         boolean serverUnchanged;
 
         if (localFile.isFolder()) {

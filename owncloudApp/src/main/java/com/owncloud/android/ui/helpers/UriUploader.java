@@ -30,7 +30,7 @@ import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
-import com.owncloud.android.utils.UriUtilsKt;
+import com.owncloud.android.utils.UriUtils;
 import timber.log.Timber;
 
 import java.util.ArrayList;
@@ -38,10 +38,10 @@ import java.util.List;
 
 /**
  * This class examines URIs pointing to files to upload and then requests {@link FileUploader} to upload them.
- *
+ * <p>
  * URIs with scheme file:// do not require any previous processing, their path is sent to {@link FileUploader}
  * to find the source file.
- *
+ * <p>
  * URIs with scheme content:// are handling assuming that file is in private storage owned by a different app,
  * and that persistency permission is not granted. Due to this, contents of the file are temporary copied by
  * the OC app, and then passed {@link FileUploader}.
@@ -98,7 +98,7 @@ public class UriUploader {
             for (Parcelable sourceStream : mUrisToUpload) {
                 Uri sourceUri = (Uri) sourceStream;
                 if (sourceUri != null) {
-                    String displayName = UriUtilsKt.getDisplayNameForUri(sourceUri, mActivity);
+                    String displayName = UriUtils.getDisplayNameForUri(sourceUri, mActivity);
                     String remotePath = mUploadPath + displayName;
 
                     if (ContentResolver.SCHEME_CONTENT.equals(sourceUri.getScheme())) {
@@ -139,14 +139,14 @@ public class UriUploader {
 
     /**
      * Requests the upload of a file in the local file system to {@link FileUploader} service.
-     *
+     * <p>
      * The original file will be left in its original location, and will not be duplicated.
      * As a side effect, the user will see the file as not uploaded when accesses to the OC app.
      * This is considered as acceptable, since when a file is shared from another app to OC,
      * the usual workflow will go back to the original app.
      *
-     * @param localPath     Absolute path in the local file system to the file to upload.
-     * @param remotePath    Absolute path in the current OC account to set to the uploaded file.
+     * @param localPath  Absolute path in the local file system to the file to upload.
+     * @param remotePath Absolute path in the current OC account to set to the uploaded file.
      */
     private void requestUpload(String localPath, String remotePath) {
         TransferRequester requester = new TransferRequester();
@@ -163,9 +163,8 @@ public class UriUploader {
     }
 
     /**
-     *
-     * @param sourceUris        Array of content:// URIs to the files to upload
-     * @param remotePaths       Array of absolute paths to set to the uploaded files
+     * @param sourceUris  Array of content:// URIs to the files to upload
+     * @param remotePaths Array of absolute paths to set to the uploaded files
      */
     private void copyThenUpload(Uri[] sourceUris, String[] remotePaths) {
         if (mShowWaitingDialog) {

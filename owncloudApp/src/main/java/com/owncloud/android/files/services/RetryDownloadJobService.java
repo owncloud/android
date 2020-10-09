@@ -28,7 +28,7 @@ import android.content.Intent;
 import androidx.core.content.ContextCompat;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.utils.Extras;
 import timber.log.Timber;
 
