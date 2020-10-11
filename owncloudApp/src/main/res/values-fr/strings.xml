@@ -362,7 +362,10 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="error__upload__local_file_not_copied">%1$s n\'a pas pu être copié dans le dossier local %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
   <string name="get_shares_error">Il était impossible de récupérer les fichiers depuis le server</string>
+  <string name="get_sharees_error">Une erreur est survenue lors de la récupération des groupes et utilisateurs depuis le serveur</string>
   <string name="share_link_no_support_share_api">Désolé, le partage n\'est pas disponible sur votre serveur. Veuillez contacter votre administrateur.</string>
+  <string name="share_link_file_error">Une erreur est survenue lors de la tentative de partage de ce fichier ou dossier</string>
+  <string name="update_link_file_error">Une erreur est survenue lors de la mise à jour du partage</string>
   <string name="share_link_password_title">Saisissez un mot de passe</string>
   <string name="share_link_empty_password">Vous devez saisir un mot de passe</string>
   <string name="activity_chooser_send_file_title">Envoyer</string>
@@ -520,6 +523,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_service_notification_channel_description">Voir le lecteur de musique</string>
   <string name="file_sync_notification_channel_name">synchronisation de fichier</string>
   <string name="file_sync_notification_channel_description">Voir le résultat de la synchronisation de fichier</string>
+  <string name="clicks_to_be_developer">Vous êtes à %1$d clicks d\'activer les menus développeur</string>
   <string name="rate_dialog_title">Notez l’application %1$s</string>
   <string name="rate_dialog_description">Si vous appréciez l’utilisation de cette application, pouvez-vous prendre un instant pour la noter ? Votre retour d’expérience est très important pour nous.</string>
   <string name="button_no_thanks_name">NON MERCI</string>
