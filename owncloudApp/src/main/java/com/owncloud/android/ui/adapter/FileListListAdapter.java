@@ -29,7 +29,10 @@ package com.owncloud.android.ui.adapter;
 import android.accounts.Account;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -283,11 +286,17 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                 file.isSharedWithMe() || file.isSharedWithSharee(),
                                 file.isSharedViaLink()));
             } else {
-                if (file.isImage() && file.getRemoteId() != null) {
+                if ((file.isImage() || file.isVideo()) && file.getRemoteId() != null) {
                     // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.getRemoteId());
                     if (thumbnail != null && !file.needsUpdateThumbnail()) {
-                        fileIcon.setImageBitmap(thumbnail);
+
+                        if (file.isVideo()) {
+                            Bitmap withOverlay = ThumbnailsCacheManager.addVideoOverlay(thumbnail);
+                            fileIcon.setImageBitmap(withOverlay);
+                        } else {
+                            fileIcon.setImageBitmap(thumbnail);
+                        }
                     } else {
                         // generate new Thumbnail
                         if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
@@ -296,14 +305,15 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                             fileIcon, mStorageManager, mAccount
                                     );
                             if (thumbnail == null) {
-                                thumbnail = ThumbnailsCacheManager.mDefaultImg;
+                                int id = MimetypeIconUtil.getFileTypeIconId(file.getMimetype(), file.getFileName());
+                                thumbnail = BitmapFactory.decodeResource(mContext.getResources(), id);
                             }
                             final ThumbnailsCacheManager.AsyncThumbnailDrawable asyncDrawable =
-                                    new ThumbnailsCacheManager.AsyncThumbnailDrawable(
-                                            mContext.getResources(),
-                                            thumbnail,
-                                            task
-                                    );
+                                new ThumbnailsCacheManager.AsyncThumbnailDrawable(
+                                    mContext.getResources(),
+                                    thumbnail,
+                                    task
+                                );
                             fileIcon.setImageDrawable(asyncDrawable);
                             task.execute(file);
                         }
