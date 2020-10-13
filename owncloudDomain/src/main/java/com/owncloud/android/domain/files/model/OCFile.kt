@@ -47,17 +47,15 @@ data class OCFile(
     var treeEtag: String? = null,
 
     // May not needed
-    val lastSyncDate: Int? = null,
     val keepInSync: Int? = null,
-    var lastSyncDateForData: Int? = null,
+    val lastSyncDateForData: Int? = null,
     var lastSyncDateForProperties: Long? = null,
-    val fileShareViaLink: Int? = null,
-    var needsToUpdateThumbnail: Boolean? = null, //MAYBE BOOLEAN
+    var needsToUpdateThumbnail: Boolean? = null,
     val publicLink: String? = null,
     val modifiedAtLastSyncForData: Int? = null,
     val etagInConflict: String? = null,
-    val fileIsDownloading: Int? = null, //MAYBE BOOLEAN
-    var sharedWithSharee: Boolean = false,
+    val fileIsDownloading: Boolean? = null,
+    var sharedWithSharee: Boolean? = false,
     var sharedByLink: Boolean = false
 ) : Parcelable {
 
