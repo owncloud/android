@@ -19,12 +19,12 @@
 
 package com.owncloud.android.domain.sharing.sharees
 
-import org.json.JSONObject
+import com.owncloud.android.domain.sharing.sharees.model.OCSharee
 
 interface ShareeRepository {
     fun getSharees(
         searchString: String,
         page: Int,
         perPage: Int
-    ): ArrayList<JSONObject>
+    ): List<OCSharee>
 }

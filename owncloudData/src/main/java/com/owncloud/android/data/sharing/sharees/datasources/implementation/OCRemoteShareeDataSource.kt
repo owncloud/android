@@ -21,21 +21,24 @@ package com.owncloud.android.data.sharing.sharees.datasources.implementation
 
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
+import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteUserShareeMapper
+import com.owncloud.android.domain.sharing.sharees.model.OCSharee
+import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
 import com.owncloud.android.lib.resources.shares.services.ShareeService
 import org.json.JSONObject
 import java.util.ArrayList
 
 class OCRemoteShareeDataSource(
-    private val shareeService: ShareeService
+    private val shareeService: ShareeService,
+    private val shareeMapper: RemoteUserShareeMapper
 ) : RemoteShareeDataSource {
 
     override fun getSharees(
         searchString: String,
         page: Int,
         perPage: Int
-    ): ArrayList<JSONObject> {
+    ): List<OCSharee> =
         executeRemoteOperation { shareeService.getSharees(searchString, page, perPage) }.let {
-            return it
+            shareeMapper.toModel(it)!!
         }
-    }
 }
