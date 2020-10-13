@@ -20,40 +20,38 @@
 package com.owncloud.android.data.shares.datasources
 
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
+import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteUserShareeMapper
+import com.owncloud.android.domain.sharing.sharees.model.OCSharee
+import com.owncloud.android.domain.sharing.sharees.model.ShareeType
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
-import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
+import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.lib.resources.shares.responses.ExactSharees
+import com.owncloud.android.lib.resources.shares.responses.ShareeItem
+import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
+import com.owncloud.android.lib.resources.shares.responses.ShareeValue
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
-import org.json.JSONObject
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 
 // Needs to be instrumented since JSONObject is tied to the Android platform
 class OCRemoteShareesDataSourceTest {
     private lateinit var ocRemoteShareesDataSource: OCRemoteShareeDataSource
     private val ocShareeService: OCShareeService = mockk()
+    private lateinit var sharees: List<OCSharee>;
 
     @Before
     fun init() {
         ocRemoteShareesDataSource =
-            OCRemoteShareeDataSource(ocShareeService)
-    }
-
-    @Ignore("We need first to address https://github.com/owncloud/android/issues/2704 to properly test this")
-    @Test
-    fun readRemoteSharees() {
-        val remoteSharees: ArrayList<JSONObject> = arrayListOf(
-            createSharee("User 1", "0", "user1", "user1@mail.com"),
-            createSharee("User 2", "0", "user2", "user2@mail.com"),
-            createSharee("User 3", "0", "user3", "user3@mail.com")
-        )
+            OCRemoteShareeDataSource(ocShareeService, RemoteUserShareeMapper())
 
         val getRemoteShareesOperationResult = createRemoteOperationResultMock(
-            remoteSharees,
+            REMOTE_SHAREES,
             true
         )
 
@@ -62,54 +60,83 @@ class OCRemoteShareesDataSourceTest {
         } returns getRemoteShareesOperationResult
 
         // Get sharees from remote datasource
-        val sharees = ocRemoteShareesDataSource.getSharees(
+        sharees = ocRemoteShareesDataSource.getSharees(
             "user",
             1,
             30
         )
-
-        assertNotNull(sharees)
-        assertEquals(3, sharees.size)
-
-        val sharee1 = sharees.first()
-        assertEquals(sharee1.getString(GetRemoteShareesOperation.PROPERTY_LABEL), "User 1")
-        val value = sharee1.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
-        assertEquals(value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE), "0")
-        assertEquals(value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user1")
-        assertEquals(value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user1@mail.com")
-
-        val sharee2 = sharees[1]
-        assertEquals(sharee2.getString(GetRemoteShareesOperation.PROPERTY_LABEL), "User 2")
-        val value2 = sharee2.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
-        assertEquals(value2.getString(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE), "0")
-        assertEquals(value2.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user2")
-        assertEquals(value2.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user2@mail.com")
-
-        val sharee3 = sharees[2]
-        assertEquals(sharee3.getString(GetRemoteShareesOperation.PROPERTY_LABEL), "User 3")
-        val value3 = sharee3.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
-        assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE), "0")
-        assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH), "user3")
-        assertEquals(value3.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO), "user3@mail.com")
     }
 
-    private fun createSharee(
-        label: String,
-        shareType: String,
-        shareWith: String,
-        shareWithAdditionalInfo: String
-    ): JSONObject {
-        val jsonObject = JSONObject()
+    @Test
+    fun `OCSharees List - ok - contains sharees entered as remote sharees`(){
+        assertNotNull(sharees)
+        assertEquals(5, sharees.size)
+    }
 
-        jsonObject.put(GetRemoteShareesOperation.PROPERTY_LABEL, label)
+    @Test
+    fun `OCSharees List - ok - contains exact user match`() {
+        val sharee = sharees[0]
+        assertEquals(sharee.label, "User");
+        assertEquals(sharee.shareType, ShareType.USER)
+        assertEquals(sharee.shareWith, "user")
+        assertEquals(sharee.additionalInfo, "user1@exact.com")
+        assertTrue(sharee.isExactMatch)
+    }
 
-        val value = JSONObject()
-        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE, shareType)
-        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH, shareWith)
-        value.put(GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO, shareWithAdditionalInfo)
+    @Test
+    fun `OCSharees List - ok - contains one user not exactly matched`() {
+        val sharee = sharees[1]
+        assertEquals(sharee.label, "User 1");
+        assertEquals(sharee.shareType, ShareType.USER)
+        assertEquals(sharee.shareWith, "user2")
+        assertEquals(sharee.additionalInfo, "user1@mail.com")
+        assertFalse(sharee.isExactMatch)
+    }
 
-        jsonObject.put(GetRemoteShareesOperation.NODE_VALUE, value)
+    @Test
+    fun `OCShares List - ok - contains one user without additional info`() {
+        val sharee = sharees[2]
+        assertEquals(sharee.label, "User 2");
+        assertEquals(sharee.shareType, ShareType.USER)
+        assertEquals(sharee.shareWith, "user")
+        assertEquals(sharee.additionalInfo, "")
+        assertFalse(sharee.isExactMatch)
+    }
 
-        return jsonObject
+    @Test
+    fun `OCShares List - ok - contains one remote user`() {
+        val sharee = sharees[3]
+        assertEquals(sharee.label, "Remoteuser 1");
+        assertEquals(sharee.shareType, ShareeType.REMOTE)
+        assertEquals(sharee.shareWith, "remoteuser1")
+        assertEquals(sharee.additionalInfo, "user1@remote.com")
+        assertFalse(sharee.isExactMatch)
+    }
+
+    @Test
+    fun `OCShares List - ok - contains one group`() {
+        val sharee = sharees[4]
+        assertEquals(sharee.label, "Group 1");
+        assertEquals(sharee.shareType, ShareeType.GROUP)
+        assertEquals(sharee.shareWith, "group1")
+        assertEquals(sharee.additionalInfo, "group@group.com")
+        assertFalse(sharee.isExactMatch)
+    }
+
+    companion object {
+        val REMOTE_SHAREES = ShareeOcsResponse(
+            ExactSharees(arrayListOf(), arrayListOf(), arrayListOf(
+                ShareeItem("User", ShareeValue(0, "user", "user@exact.com"))
+            )),
+            arrayListOf(
+                ShareeItem("Group 1", ShareeValue(1, "group1", "group@group.com"))),
+            arrayListOf(
+                ShareeItem("Remoteuser 1", ShareeValue(6, "remoteuser1", "user1@remote.com"))
+            ),
+            arrayListOf(
+                ShareeItem("User 1", ShareeValue(0, "user1", "user1@mail.com")),
+                ShareeItem("User 2", ShareeValue(0, "user2", null))
+            )
+        )
     }
 }

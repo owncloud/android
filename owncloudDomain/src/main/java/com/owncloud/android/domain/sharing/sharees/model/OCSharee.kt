@@ -15,5 +15,6 @@ data class OCSharee(
     val label: String,
     val shareType: ShareeType,
     val shareWith: String,
+    val additionalInfo: String,
     val isExactMatch: Boolean
 )

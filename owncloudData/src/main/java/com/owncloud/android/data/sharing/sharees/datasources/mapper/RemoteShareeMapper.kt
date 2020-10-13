@@ -12,6 +12,7 @@ class RemoteUserShareeMapper : RemoteMapper<List<OCSharee>, ShareeOcsResponse> {
             label = item.label!!,
             shareType = ShareeType.getByValue(item.value?.shareType!!)!!,
             shareWith = item.value?.shareWith!!,
+            additionalInfo = item.value?.additionalInfo ?: "",
             isExactMatch = isExactMatch
         )
 
