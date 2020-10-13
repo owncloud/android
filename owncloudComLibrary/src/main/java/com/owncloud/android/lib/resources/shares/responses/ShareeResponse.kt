@@ -40,7 +40,23 @@ data class ShareeOcsResponse(
     val remotes: List<ShareeItem>?,
     @Json(name = "users")
     val users: List<ShareeItem>?
-)
+) {
+    fun getFlatRepresentation()
+            = ArrayList<ShareeItem>().apply {
+        if(exact != null) {
+            addAll(exact.getFlatRepresentation())
+        }
+        if(users != null) {
+            addAll(users)
+        }
+        if(remotes != null) {
+            addAll(remotes)
+        }
+        if(groups != null) {
+            addAll(groups)
+        }
+    }
+}
 
 @JsonClass(generateAdapter = true)
 data class ExactSharees(
@@ -50,7 +66,20 @@ data class ExactSharees(
     val remotes: List<ShareeItem>?,
     @Json(name = "users")
     val users: List<ShareeItem>?
-)
+) {
+    fun getFlatRepresentation()
+    = ArrayList<ShareeItem>().apply {
+        if(users != null) {
+            addAll(users)
+        }
+        if(remotes != null) {
+            addAll(remotes)
+        }
+        if(groups != null) {
+            addAll(groups)
+        }
+    }
+}
 
 @JsonClass(generateAdapter = true)
 data class ShareeItem(
