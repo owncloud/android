@@ -488,6 +488,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                             // or involving other parts
                             if (previewVideoError.isParentFolderSyncNeeded()) {
                                 // Start to sync the parent file folder
+                                // FIXME: 13/10/2020 : New_arch: Migration
+
 //                                OCFile folder = new OCFile(getFile().getParentRemotePath());
 //                                ((FileDisplayActivity) getActivity()).
 //                                        startSyncFolderOperation(folder, false);
