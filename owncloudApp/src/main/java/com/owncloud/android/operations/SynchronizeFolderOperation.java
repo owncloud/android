@@ -294,6 +294,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         OCFile updatedFolder = FileStorageUtils.createOCFileFromRemoteFile(
                 remoteFolderAndFiles.get(0)
         );  // NOTE: updates ETag with remote value; that's INTENDED
+        // FIXME: 13/10/2020 : New_arch: Migration
         //updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
 
         Timber.d("Remote folder " + mLocalFolder.getRemotePath() + " changed - starting update of local data ");
@@ -335,6 +336,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
             /// add to updatedFile data about LOCAL STATE (not existing in server)
             updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
+            // FIXME: 13/10/2020 : New_arch: Migration
 //            if (localFile != null) {
 //                updatedLocalFile.copyLocalPropertiesFrom(localFile);
 //                updatedLocalFile.setFileName(remoteFile.getFileName());
@@ -400,7 +402,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * last synchronization.
      */
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
-
+        // FIXME: 13/10/2020 : New_arch: Av.Offline
         boolean shouldSyncContents = (mSyncContentOfRegularFiles); // || localFile.isAvailableOffline());
         boolean serverUnchanged;
 
@@ -512,7 +514,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             File f = new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, file));
             if (f.exists()) {
                 file.setStoragePath(f.getAbsolutePath());
-//                file.setLastSyncDateForData(f.lastModified());
+                file.setLastSyncDateForData((int) f.lastModified());
             }
         }
     }
