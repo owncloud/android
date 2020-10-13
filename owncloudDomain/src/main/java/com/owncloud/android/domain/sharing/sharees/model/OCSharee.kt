@@ -1,19 +1,10 @@
 package com.owncloud.android.domain.sharing.sharees.model
 
-enum class ShareeType(val rawType:Int) {
-    USER(0),
-    GROUP(1),
-    REMOTE(6);
-
-    companion object {
-        private val values = values();
-        fun getByValue(value: Int) = values.firstOrNull { it.rawType == value }
-    }
-}
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 
 data class OCSharee(
     val label: String,
-    val shareType: ShareeType,
+    val shareType: ShareType,
     val shareWith: String,
     val additionalInfo: String,
     val isExactMatch: Boolean

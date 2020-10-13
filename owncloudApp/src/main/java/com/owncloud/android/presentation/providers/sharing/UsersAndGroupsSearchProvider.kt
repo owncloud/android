@@ -40,6 +40,7 @@ import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
+import com.owncloud.android.domain.sharing.sharees.model.OCSharee
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
@@ -160,7 +161,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
         if (!names.isNullOrEmpty()) {
             response = MatrixCursor(COLUMNS)
             val namesIt = names.iterator()
-            var item: JSONObject
+            var item: OCSharee
             var displayName: String? = null
             var icon = 0
             var dataUri: Uri? = null
@@ -181,15 +182,12 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             try {
                 while (namesIt.hasNext()) {
                     item = namesIt.next()
-                    var userName = item.getString(GetRemoteShareesOperation.PROPERTY_LABEL)
-                    val value = item.getJSONObject(GetRemoteShareesOperation.NODE_VALUE)
-                    val type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE)
-                    val shareWith = value.getString(GetRemoteShareesOperation.PROPERTY_SHARE_WITH)
+                    var userName = item.label
+                    val type = item.shareType
+                    val shareWith = item.shareWith
 
                     try {
-                        val shareWithAdditionalInfo = value.getString(
-                            GetRemoteShareesOperation.PROPERTY_SHARE_WITH_ADDITIONAL_INFO
-                        )
+                        val shareWithAdditionalInfo = item.additionalInfo
 
                         userName = if (shareWithAdditionalInfo.isEmpty())
                             userName
@@ -201,12 +199,12 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                     }
 
                     when (type) {
-                        ShareType.GROUP.value -> {
+                        ShareType.GROUP -> {
                             displayName = context?.getString(R.string.share_group_clarification, userName)
                             icon = R.drawable.ic_group
                             dataUri = Uri.withAppendedPath(groupBaseUri, shareWith)
                         }
-                        ShareType.FEDERATED.value -> {
+                        ShareType.FEDERATED -> {
                             if (federatedShareAllowed) {
                                 icon = R.drawable.ic_user
                                 displayName = if (userName == shareWith) {
@@ -222,7 +220,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                                 dataUri = Uri.withAppendedPath(remoteBaseUri, shareWith)
                             }
                         }
-                        ShareType.USER.value -> {
+                        ShareType.USER -> {
                             displayName = userName
                             icon = R.drawable.ic_user
                             dataUri = Uri.withAppendedPath(userBaseUri, shareWith)
