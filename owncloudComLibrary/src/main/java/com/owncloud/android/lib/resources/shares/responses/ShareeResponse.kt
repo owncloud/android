@@ -91,5 +91,7 @@ data class ShareeValue(
     @Json(name = "shareType")
     val shareType: Int?,
     @Json(name = "shareWith")
-    val shareWith: String?
+    val shareWith: String?,
+    @Json(name ="shareWithAdditionalInfo")
+    val additionalInfo: String?
 )

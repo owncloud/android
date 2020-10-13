@@ -68,6 +68,16 @@ class ShareeResponseTest {
         assertEquals(1, response?.ocs?.data?.exact?.users?.size)
     }
 
+    @Test
+    fun `check structure - ok - user1 contains additional data`() {
+        assertEquals("user1@user1.com", response?.ocs?.data?.users?.get(0)?.value?.additionalInfo)
+    }
+
+    @Test
+    fun `check structure - ok - user2 does not contain additional data`() {
+        assertEquals(null, response!!.ocs.data.users!![1].value!!.additionalInfo)
+    }
+
     companion object {
         val EXAMPLE_RESPONSE = """
 {
@@ -108,7 +118,8 @@ class ShareeResponseTest {
                     "label": "user1",
                     "value": {
                         "shareType": 0,
-                        "shareWith": "user1"
+                        "shareWith": "user1",
+                        "shareWithAdditionalInfo": "user1@user1.com"
                     }
                 },
                 {
