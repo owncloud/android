@@ -100,6 +100,7 @@ public class CreateFolderOperation extends SyncOperation {
                 }
             }
         } else { // Create directory on DB
+            // FIXME: 13/10/2020 : New_arch: Migration
 //            newDir = new OCFile(mRemotePath);
 //            newDir.setMimetype(MimeTypeConstantsKt.MIME_DIR);
 //            long parentId = getStorageManager().
