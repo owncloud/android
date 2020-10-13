@@ -430,7 +430,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val tempDir =
             File(FileStorageUtils.getTemporalPath(getAccountFromFileId(parentDocument.id!!)?.name))
         val newFile = File(tempDir, displayName)
-
+        // FIXME: 13/10/2020 : New_arch: Migration
 //        fileToUpload = OCFile(parentDocument.remotePath + displayName).apply {
 //            mimeType = mimeType
 //            parentId = parentDocument.id

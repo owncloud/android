@@ -72,7 +72,7 @@ public class UploadFileOperation extends SyncOperation {
 
     public static OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType,
                                                  Context context) {
-
+        // FIXME: 13/10/2020 : New_arch: Upload
 //        // MIME type
 //        if (mimeType == null || mimeType.length() <= 0) {
 //            mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(localPath);
@@ -531,6 +531,7 @@ public class UploadFileOperation extends SyncOperation {
             parent = createLocalFolder(parentPath);
         }
         if (parent != null) {
+            // FIXME: 13/10/2020 : New_arch: Migration
 //            OCFile createdFolder = new OCFile(remotePath);
 //            createdFolder.setMimetype(MimeTypeConstantsKt.MIME_DIR);
 //            createdFolder.setParentId(parent.getId());
@@ -547,6 +548,7 @@ public class UploadFileOperation extends SyncOperation {
      * @param newRemotePath new remote path
      */
     private void createNewOCFile(String newRemotePath) {
+        // FIXME: 13/10/2020 : New_arch: Migration
         // a new OCFile instance must be created for a new remote path
 //        OCFile newFile = new OCFile(newRemotePath);
 //        newFile.setCreationTimestamp(mFile.getCreationTimestamp());
@@ -739,7 +741,7 @@ public class UploadFileOperation extends SyncOperation {
             file = getStorageManager().getFileById(file.getId());
         }
         long syncDate = System.currentTimeMillis();
-        //file.setLastSyncDateForData(syncDate);
+        file.setLastSyncDateForData((int) syncDate);
 
         // new PROPFIND to keep data consistent with server
         // in theory, should return the same we already have
@@ -765,7 +767,7 @@ public class UploadFileOperation extends SyncOperation {
             // coincidence; nothing else is needed, the storagePath is right
             // in the instance returned by mCurrentUpload.getFile()
         }
-//        file.setNeedsUpdateThumbnail(true);
+        file.setNeedsToUpdateThumbnail(true);
         getStorageManager().saveFile(file);
         getStorageManager().saveConflict(file, null);
 
@@ -773,6 +775,7 @@ public class UploadFileOperation extends SyncOperation {
     }
 
     private void updateOCFile(OCFile file, RemoteFile remoteFile) {
+        // FIXME: 13/10/2020 : New_arch: Migration
 //        file.setCreationTimestamp(remoteFile.getCreationTimestamp());
 //        file.setFileLength(remoteFile.getLength());
 //        file.setMimetype(remoteFile.getMimeType());
