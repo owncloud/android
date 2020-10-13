@@ -355,7 +355,7 @@ public class FileMenuFilter {
         return false;
     }
 
-// TODO: NEW_ARCH
+    // FIXME: 13/10/2020 : New_arch: Av.Offline
     private boolean anyFavorite() {
 //        for (OCFile file : mFiles) {
 //            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
@@ -364,7 +364,8 @@ public class FileMenuFilter {
 //        }
         return false;
     }
-//
+
+    // FIXME: 13/10/2020 : New_arch: Av.Offline
     private boolean anyUnfavorite() {
 //        for (OCFile file : mFiles) {
 //            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
@@ -373,7 +374,7 @@ public class FileMenuFilter {
 //        }
         return false;
    }
-//
+    // FIXME: 13/10/2020 : New_arch: Shared by Link
     private boolean anyFileSharedWithMe() {
 //        for (OCFile file : mFiles) {
 //            if (file.isSharedWithMe()) {

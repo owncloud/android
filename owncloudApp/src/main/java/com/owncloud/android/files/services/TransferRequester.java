@@ -350,6 +350,7 @@ public class TransferRequester {
         UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(context.getContentResolver());
 
         // Get last upload to be retried
+        // FIXME: 13/10/2020 : New_arch: Upload
         OCUpload ocUpload =  null; //uploadsStorageManager.getLastUploadFor(new OCFile(remotePath), accountName);
 
         PreferenceManager.CameraUploadsConfiguration mConfig = PreferenceManager.getCameraUploadsConfiguration(context);

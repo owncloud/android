@@ -48,7 +48,7 @@ data class OCFile(
 
     // May not needed
     val keepInSync: Int? = null,
-    val lastSyncDateForData: Int? = null,
+    var lastSyncDateForData: Int? = null,
     var lastSyncDateForProperties: Long? = null,
     var needsToUpdateThumbnail: Boolean? = null,
     val publicLink: String? = null,

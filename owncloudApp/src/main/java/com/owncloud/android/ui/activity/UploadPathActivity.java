@@ -38,6 +38,8 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
         String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
 
         // The caller activity (Preferences) is not a FileActivity, so it has no OCFile, only a path.
+        // FIXME: 13/10/2020 : New_arch: Upload
+
         //OCFile folder = new OCFile(cameraUploadPath);
 
         //setFile(folder);

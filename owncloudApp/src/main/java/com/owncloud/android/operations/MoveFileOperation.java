@@ -93,6 +93,7 @@ public class MoveFileOperation extends SyncOperation {
 
             // adjust available offline status after move resume observation of file after rename
             OCFile updatedFile = getStorageManager().getFileById(mFile.getId());
+            // FIXME: 13/10/2020 : New_arch: Av.Offline and Move
 //            OCFile.AvailableOfflineStatus updatedAvOffStatus = updatedFile.getAvailableOfflineStatus();
         }
         // TODO handle ResultCode.PARTIAL_MOVE_DONE in client Activity, for the moment
