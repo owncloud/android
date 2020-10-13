@@ -41,11 +41,8 @@ data class ShareeOcsResponse(
     @Json(name = "users")
     val users: List<ShareeItem>?
 ) {
-    fun getFlatRepresentation()
+    fun getFlatRepresentationWithoutExact()
             = ArrayList<ShareeItem>().apply {
-        if(exact != null) {
-            addAll(exact.getFlatRepresentation())
-        }
         if(users != null) {
             addAll(users)
         }
