@@ -58,7 +58,7 @@ data class OCFileEntity(
     val remoteId: String?,
     val length: Long,
     val creationTimestamp: Long?,
-    val modifiedTimestamp: Long,
+    val modificationTimestamp: Long,
     val mimeType: String,
     val etag: String?,
     val permissions: String?,
@@ -68,16 +68,17 @@ data class OCFileEntity(
     val treeEtag: String? = null,
 
     // May not needed
-    val lastSyncDate: Int? = null,
     val keepInSync: Int? = null,
     val lastSyncDateForData: Int? = null,
     val fileShareViaLink: Int? = null,
-    val needsToUpdateThumbnail: Boolean? = null,
+    var lastSyncDateForProperties: Long? = null,
+    var needsToUpdateThumbnail: Boolean? = null,
     val publicLink: String? = null,
     val modifiedAtLastSyncForData: Int? = null,
     val etagInConflict: String? = null,
-    val fileIsDownloading: Int? = null, //MAYBE BOOLEAN
-    val sharedWithSharee: Int? = null
+    val fileIsDownloading: Boolean? = null,
+    val sharedWithSharee: Boolean? = false,
+    var sharedByLink: Boolean = false
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -95,14 +96,14 @@ data class OCFileEntity(
                 remoteId = cursor.getString(cursor.getColumnIndex(FILE_REMOTE_ID)),
                 privateLink = cursor.getString(cursor.getColumnIndex(FILE_PRIVATE_LINK)),
                 creationTimestamp = cursor.getLong(cursor.getColumnIndex(FILE_CREATION)),
-                modifiedTimestamp = cursor.getLong(cursor.getColumnIndex(FILE_MODIFIED)),
+                modificationTimestamp = cursor.getLong(cursor.getColumnIndex(FILE_MODIFIED)),
                 etag = cursor.getString(cursor.getColumnIndex(FILE_ETAG)),
                 mimeType = cursor.getString(cursor.getColumnIndex(FILE_CONTENT_TYPE)),
                 length = cursor.getLong(cursor.getColumnIndex(FILE_CONTENT_LENGTH)),
                 storagePath = cursor.getString(cursor.getColumnIndex(FILE_STORAGE_PATH)),
                 name = cursor.getString(cursor.getColumnIndex(FILE_NAME)),
                 treeEtag = cursor.getString(cursor.getColumnIndex(FILE_TREE_ETAG)),
-                lastSyncDate = cursor.getInt(cursor.getColumnIndex(FILE_LAST_SYNC_DATE)),
+                lastSyncDateForProperties = cursor.getInt(cursor.getColumnIndex(FILE_LAST_SYNC_DATE)).toLong(),
                 lastSyncDateForData = cursor.getInt(cursor.getColumnIndex(FILE_LAST_SYNC_DATE_FOR_DATA)),
                 keepInSync = cursor.getInt(cursor.getColumnIndex(FILE_KEEP_IN_SYNC)),
                 fileShareViaLink = cursor.getInt(cursor.getColumnIndex(FILE_SHARED_VIA_LINK)),
@@ -110,9 +111,8 @@ data class OCFileEntity(
                 publicLink = cursor.getString(cursor.getColumnIndex(FILE_PUBLIC_LINK)),
                 modifiedAtLastSyncForData = cursor.getInt(cursor.getColumnIndex(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA)),
                 etagInConflict = cursor.getString(cursor.getColumnIndex(FILE_ETAG_IN_CONFLICT)),
-                fileIsDownloading = cursor.getInt(cursor.getColumnIndex(FILE_IS_DOWNLOADING)),
-                sharedWithSharee = cursor.getInt(cursor.getColumnIndex(FILE_SHARED_WITH_SHAREE))
-
+                fileIsDownloading = cursor.getInt(cursor.getColumnIndex(FILE_IS_DOWNLOADING)) == 1,
+                sharedWithSharee = cursor.getInt(cursor.getColumnIndex(FILE_SHARED_WITH_SHAREE)) == 1
             ).apply {
                 id = cursor.getLong(cursor.getColumnIndex(_ID))
             }
