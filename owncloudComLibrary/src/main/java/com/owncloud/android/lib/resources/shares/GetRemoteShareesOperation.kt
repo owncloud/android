@@ -1,5 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *
+ *   @author Christian Schabesberger
  *   @author masensio
  *   @author David A. Velasco
  *   @author David González Verdugo
@@ -73,6 +74,7 @@ import java.util.ArrayList
  * Status codes:
  * 100 - successful
  *
+ * @author Christian Schabesberger
  * @author masensio
  * @author David A. Velasco
  * @author David González Verdugo
