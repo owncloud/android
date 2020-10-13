@@ -63,6 +63,7 @@ public class RemoveFilesDialogFragment extends ConfirmationDialogFragment
             if (file.isDown()) {
                 containsDown = true;
             }
+            // FIXME: 13/10/2020 : New_arch: Av.Offline
 //            if (file.getAvailableOfflineStatus() != OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
 //                containsAvailableOffline = true;
 //            }

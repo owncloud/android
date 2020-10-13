@@ -357,6 +357,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 localStateView.setImageResource(R.drawable.downloaded_pin);
             }
 
+            // FIXME: 13/10/2020 : New_arch: Av.Offline
 //            if (file.isAvailableOffline()) {
 //                localStateView.setVisibility(View.VISIBLE);
 //                localStateView.setImageResource(R.drawable.offline_available_pin);
@@ -396,6 +397,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         boolean isRootFolder = folder.equals(updatedStorageManager.getFileByPath(OCFile.ROOT_PATH));
 
         if (mStorageManager != null) {
+            // FIXME: 13/10/2020 : New_arch: Av.Offline
             if (mOnlyAvailableOffline && (isRootFolder)){ // || !folder.isAvailableOffline())) {
                 mImmutableFilesList = updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
             } else if (mSharedByLinkFiles && isRootFolder) {

@@ -498,6 +498,7 @@ public class FileDownloader extends Service
      * TODO move to DownloadFileOperation
      */
     private void saveDownloadedFile() {
+        // FIXME: 13/10/2020 : New_arch: Migration
 //        OCFile file = mStorageManager.getFileById(mCurrentDownload.getFile().getFileId());
 //        long syncDate = System.currentTimeMillis();
 //        file.setLastSyncDateForProperties(syncDate);
