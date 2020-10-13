@@ -75,17 +75,17 @@ class OAuthConnectionBuilder(val context: Context) : ConnectionBuilder {
             connectTimeout = CONNECTION_TIMEOUT_MS
             readTimeout = READ_TIMEOUT_MS
             instanceFollowRedirects = false
-            setRequestProperty(HttpConstants.COOKIE_HEADER, getCookiesAsString(uri))
+            getCookiesAsString(uri)?.let { setRequestProperty(HttpConstants.COOKIE_HEADER, it) }
             setRequestProperty(HttpConstants.USER_AGENT_HEADER, MainApp.userAgent)
 
         }
     }
 
-    private fun getCookiesAsString(uri: Uri): String {
-        var cookiesString = ""
+    private fun getCookiesAsString(uri: Uri): String? {
+        var cookiesString: String? = null
         val cookies = HttpClient.getCookiesFromUrl(uri.toString().toHttpUrlOrNull())
 
-        cookies.forEach {
+        cookies?.forEach {
             cookiesString =
                 cookiesString.plus(it.toString().substringBefore("httponly").substringBefore("path=/") + " ")
         }
