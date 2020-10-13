@@ -20,7 +20,7 @@ dependencies {
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
     implementation "androidx.appcompat:appcompat:$appCompat"
     implementation 'com.getbase:floatingactionbutton:1.10.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation "androidx.browser:browser:1.2.0"
     implementation 'commons-io:commons-io:2.7'
     implementation "androidx.sqlite:sqlite:$sqliteVersion"
