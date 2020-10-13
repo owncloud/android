@@ -68,7 +68,7 @@ public class AvailableOfflineSyncJobService extends JobService {
 
         @Override
         protected JobParameters doInBackground(JobParameters... jobParams) {
-
+// FIXME: 13/10/2020 : New_arch: Av.Offline
 //            Account account;
 //
 //            if (mAvailableOfflineJobService != null) {
@@ -107,6 +107,7 @@ public class AvailableOfflineSyncJobService extends JobService {
         }
 
         private void syncAvailableOfflineFiles(List<Pair<OCFile, String>> availableOfflineFilesForAccount) {
+            // FIXME: 13/10/2020 : New_arch: Av.Offline
 //            for (Pair<OCFile, String> fileForAccount : availableOfflineFilesForAccount) {
 //
 //                String localPath = fileForAccount.first.getStoragePath();
@@ -139,8 +140,9 @@ public class AvailableOfflineSyncJobService extends JobService {
          * @param accountName          account to synchronize the available offline file with
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
-//            Timber.i("Requested synchronization for file %1s in account %2s",
-//                    availableOfflineFile.getRemotePath(), accountName);
+            // FIXME: 13/10/2020 : New_arch: Av.Offline
+            Timber.i("Requested synchronization for file %1s in account %2s",
+                    availableOfflineFile.getRemotePath(), accountName);
 //
 //            Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
 //            if (account == null) {

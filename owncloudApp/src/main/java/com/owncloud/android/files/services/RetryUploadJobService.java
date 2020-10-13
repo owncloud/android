@@ -43,6 +43,7 @@ public class RetryUploadJobService extends JobService {
         Timber.d("Retrying upload of %1s in %2s", fileRemotePath, accountName);
 
         // Get upload to be retried
+        // FIXME: 13/10/2020 : New_arch: Upload
         OCUpload ocUpload = null; // uploadsStorageManager.getLastUploadFor(new OCFile(fileRemotePath), accountName);
 
         if (ocUpload != null) {
