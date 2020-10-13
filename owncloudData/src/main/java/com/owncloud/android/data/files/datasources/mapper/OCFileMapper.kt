@@ -34,10 +34,23 @@ class OCFileMapper : Mapper<OCFile, OCFileEntity> {
                 remoteId = it.remoteId,
                 privateLink = it.privateLink,
                 creationTimestamp = it.creationTimestamp,
-                modificationTimestamp = it.modifiedTimestamp,
+                modificationTimestamp = it.modificationTimestamp,
                 etag = it.etag,
                 mimeType = it.mimeType,
-                length = it.length
+                length = it.length,
+                sharedByLink = it.sharedByLink,
+                sharedWithSharee = it.sharedWithSharee,
+                storagePath = it.storagePath,
+                keepInSync = it.keepInSync,
+                needsToUpdateThumbnail = it.needsToUpdateThumbnail,
+                fileIsDownloading = it.fileIsDownloading,
+                lastSyncDateForData = it.lastSyncDateForData,
+                lastSyncDateForProperties = it.lastSyncDateForProperties,
+                modifiedAtLastSyncForData = it.modifiedAtLastSyncForData,
+                publicLink = it.publicLink,
+                etagInConflict = it.etagInConflict,
+                treeEtag = it.treeEtag,
+                name = it.name
             )
         }
 
@@ -51,10 +64,23 @@ class OCFileMapper : Mapper<OCFile, OCFileEntity> {
                 remoteId = it.remoteId,
                 privateLink = it.privateLink,
                 creationTimestamp = it.creationTimestamp,
-                modifiedTimestamp = it.modificationTimestamp,
+                modificationTimestamp = it.modificationTimestamp,
                 etag = it.etag,
                 mimeType = it.mimeType,
-                length = it.length
-            )
+                length = it.length,
+                sharedByLink = it.sharedByLink,
+                sharedWithSharee = it.sharedWithSharee,
+                storagePath = it.storagePath,
+                keepInSync = it.keepInSync,
+                needsToUpdateThumbnail = it.needsToUpdateThumbnail,
+                fileIsDownloading = it.fileIsDownloading,
+                lastSyncDateForData = it.lastSyncDateForData,
+                lastSyncDateForProperties = it.lastSyncDateForProperties,
+                modifiedAtLastSyncForData = it.modifiedAtLastSyncForData,
+                publicLink = it.publicLink,
+                etagInConflict = it.etagInConflict,
+                treeEtag = it.treeEtag,
+                name = it.name
+            ).apply { it.id?.let { modelId -> this.id = modelId } }
         }
 }
