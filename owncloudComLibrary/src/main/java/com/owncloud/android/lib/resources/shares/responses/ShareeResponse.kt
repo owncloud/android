@@ -35,63 +35,49 @@ data class ShareeOcsResponse(
     @Json(name = "exact")
     val exact: ExactSharees?,
     @Json(name = "groups")
-    val groups: List<ShareeItem>?,
+    val groups: List<ShareeItem>,
     @Json(name = "remotes")
-    val remotes: List<ShareeItem>?,
+    val remotes: List<ShareeItem>,
     @Json(name = "users")
-    val users: List<ShareeItem>?
+    val users: List<ShareeItem>
 ) {
-    fun getFlatRepresentationWithoutExact()
-            = ArrayList<ShareeItem>().apply {
-        if(users != null) {
-            addAll(users)
-        }
-        if(remotes != null) {
-            addAll(remotes)
-        }
-        if(groups != null) {
-            addAll(groups)
-        }
+    fun getFlatRepresentationWithoutExact() = ArrayList<ShareeItem>().apply {
+        addAll(users)
+        addAll(remotes)
+        addAll(groups)
     }
 }
 
 @JsonClass(generateAdapter = true)
 data class ExactSharees(
     @Json(name = "groups")
-    val groups: List<ShareeItem>?,
+    val groups: List<ShareeItem>,
     @Json(name = "remotes")
-    val remotes: List<ShareeItem>?,
+    val remotes: List<ShareeItem>,
     @Json(name = "users")
-    val users: List<ShareeItem>?
+    val users: List<ShareeItem>
 ) {
-    fun getFlatRepresentation()
-    = ArrayList<ShareeItem>().apply {
-        if(users != null) {
-            addAll(users)
-        }
-        if(remotes != null) {
-            addAll(remotes)
-        }
-        if(groups != null) {
-            addAll(groups)
-        }
+    fun getFlatRepresentation() = ArrayList<ShareeItem>().apply {
+        addAll(users)
+        addAll(remotes)
+        addAll(groups)
     }
 }
 
 @JsonClass(generateAdapter = true)
 data class ShareeItem(
     @Json(name = "label")
-    val label: String?,
+    val label: String,
     @Json(name = "value")
-    val value: ShareeValue?
+    val value: ShareeValue
 )
 
 @JsonClass(generateAdapter = true)
 data class ShareeValue(
     @Json(name = "shareType")
-    val shareType: Int?,
+    val shareType: Int,
     @Json(name = "shareWith")
-    val shareWith: String?,
-    @Json(name ="shareWithAdditionalInfo")
+    val shareWith: String,
+    @Json(name = "shareWithAdditionalInfo")
     val additionalInfo: String?
 )
