@@ -251,6 +251,8 @@ public class FileOperationsHelper {
     }
 
     public void toggleAvailableOffline(OCFile file, boolean isAvailableOffline) {
+        // FIXME: 13/10/2020 : New_arch: Av.Offline
+
         //        if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT == file.getAvailableOfflineStatus()) {
         //            /// files descending of an av-offline folder can't be toggled
         //            mFileActivity.showSnackMessage(

@@ -136,6 +136,7 @@ class FileDataStorageManager : KoinComponent {
      */
     fun getAvailableOfflineFilesFromEveryAccount(): List<Pair<OCFile, String>> {
         return listOf()
+        // FIXME: 13/10/2020 : New_arch: Av.Offline
 //        val result = ArrayList<Pair<OCFile, String>>()
 //        var cursorOnKeptInSync: Cursor? = null
 //        try {
@@ -182,6 +183,7 @@ class FileDataStorageManager : KoinComponent {
     val availableOfflineFilesFromCurrentAccount: Vector<OCFile>
         get() {
             return Vector()
+            // FIXME: 13/10/2020 : New_arch: Av.Offline
 //            val result = Vector<OCFile>()
 //
 //            var cursorOnKeptInSync: Cursor? = null
@@ -222,6 +224,7 @@ class FileDataStorageManager : KoinComponent {
     val sharedByLinkFilesFromCurrentAccount: Vector<OCFile>
         get() {
             return Vector()
+            // FIXME: 13/10/2020 : New_arch: Shared By Link
 //            val allSharedFiles = Vector<OCFile>()
 //            val result = Vector<OCFile>()
 //            var cursorOnShared: Cursor? = null
@@ -576,6 +579,7 @@ class FileDataStorageManager : KoinComponent {
      */
     fun saveLocalAvailableOfflineStatus(file: OCFile): Boolean {
         return false
+        // FIXME: 13/10/2020 : New_arch: Av.Offline
 //        if (!fileExists(file.fileId)) {
 //            return false
 //        }
@@ -626,6 +630,7 @@ class FileDataStorageManager : KoinComponent {
 
     fun removeFile(file: OCFile?, removeDBData: Boolean, removeLocalCopy: Boolean): Boolean {
         return false
+        // FIXME: 13/10/2020 : New_arch: Remove file
 //        var success = true
 //        if (file != null) {
 //            if (file.isFolder) {
@@ -667,6 +672,7 @@ class FileDataStorageManager : KoinComponent {
 
     fun removeFolder(folder: OCFile?, removeDBData: Boolean, removeLocalContent: Boolean): Boolean {
         return false
+        // FIXME: 13/10/2020 : New_arch: Remove file
 //        var success = true
 //        if (folder != null && folder.isFolder) {
 //            if (removeDBData && folder.fileId != -1L) {
@@ -681,6 +687,7 @@ class FileDataStorageManager : KoinComponent {
 
     private fun removeFolderInDb(folder: OCFile): Boolean {
         return false
+        // FIXME: 13/10/2020 : New_arch: Remove file
 //        val folderUri =
 //            Uri.withAppendedPath(CONTENT_URI_DIR, "" + folder.fileId) // URI for recursive deletion
 //        val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
@@ -695,6 +702,7 @@ class FileDataStorageManager : KoinComponent {
 
     private fun removeLocalFolder(folder: OCFile): Boolean {
         return false
+        // FIXME: 13/10/2020 : New_arch: Remove file
 //        var success = true
 //        val localFolderPath = FileStorageUtils.getDefaultSavePathFor(account.name, folder)
 //        val localFolder = File(localFolderPath)
@@ -727,6 +735,7 @@ class FileDataStorageManager : KoinComponent {
 
     private fun removeLocalFolder(localFolder: File): Boolean {
         return false
+        // FIXME: 13/10/2020 : New_arch: Remove file
 //        var success = true
 //        val localFiles = localFolder.listFiles()
 //        if (localFiles != null) {
@@ -749,6 +758,7 @@ class FileDataStorageManager : KoinComponent {
      * TODO throw exceptions up !
      */
     fun moveLocalFile(file: OCFile?, targetPath: String, targetParentPath: String) {
+        // FIXME: 13/10/2020 : New_arch: Move file
 
 //        if (file != null && file.fileExists() && ROOT_PATH != file.fileName) {
 //
@@ -867,6 +877,8 @@ class FileDataStorageManager : KoinComponent {
     }
 
     fun copyLocalFile(originalFile: OCFile?, targetPath: String, targetFileRemoteId: String) {
+        // FIXME: 13/10/2020 : New_arch: Copy file
+
 //        if (originalFile != null && originalFile.fileExists() && ROOT_PATH != originalFile.fileName) {
 //            // 1. Copy in database
 //            val ocTargetFile = OCFile(targetPath)
@@ -950,6 +962,7 @@ class FileDataStorageManager : KoinComponent {
      * @param file [OCFile] which ancestors will be searched.
      * @return true/false
      */
+    // FIXME: 13/10/2020 : New_arch: Av.Offline
     private fun isAnyAncestorAvailableOfflineFolder(file: OCFile) = false //getAvailableOfflineAncestorOf(file) != null
 
     /**
@@ -959,6 +972,7 @@ class FileDataStorageManager : KoinComponent {
      * @return Ancestor folder with available offline status AVAILABLE_OFFLINE, or null if
      * does not exist.
      */
+    // FIXME: 13/10/2020 : New_arch: Av.Offline
     private fun getAvailableOfflineAncestorOf(file: OCFile): OCFile? {
         return null
 //        var avOffAncestor: OCFile? = null
@@ -972,6 +986,7 @@ class FileDataStorageManager : KoinComponent {
 //        }
 //        return avOffAncestor
     }
+    // FIXME: 13/10/2020 : New_arch: Migration
 // TODO: Move to Data layer if needed
 //    private fun createRootDir(): OCFile =
 //        OCFile(ROOT_PATH).apply {
@@ -980,20 +995,7 @@ class FileDataStorageManager : KoinComponent {
 //            saveFile(this)
 //        }
 
-    private fun getFileCursorForValue(key: String, value: String): Cursor? =
-        try {
-            performQuery(
-                uri = CONTENT_URI,
-                projection = null,
-                selection = "$key=? AND $FILE_ACCOUNT_OWNER=?",
-                selectionArgs = arrayOf(value, account.name),
-                sortOrder = null
-            )
-        } catch (e: RemoteException) {
-            Timber.e(e, "Could not get file details: ${e.message}")
-            null
-        }
-
+    // FIXME: 13/10/2020 : New_arch: Migration
     private fun createFileInstance(c: Cursor?): OCFile? = null//c?.let {
 //        OCFile(it.getStringFromColumnOrThrow(FILE_PATH)).apply {
 //            fileId = it.getLongFromColumnOrThrow(_ID)
@@ -1089,6 +1091,7 @@ class FileDataStorageManager : KoinComponent {
         }
     }
 
+    // FIXME: 13/10/2020 : New_arch: Conflicts
     fun saveConflict(file: OCFile, eTagInConflictFromParameter: String?) {
 //        var eTagInConflict = eTagInConflictFromParameter
 //        if (!file.isDown) {
@@ -1351,6 +1354,7 @@ class FileDataStorageManager : KoinComponent {
         )
     }
 
+    // FIXME: 13/10/2020 : New_arch: Av.Offline
     private fun selectionForAllDescendantsOf(file: OCFile): Pair<String, Array<String>> {
         val selection = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? "
         val selectionArgs = arrayOf(account.name, "${file.remotePath}_%") // one or more characters after remote path

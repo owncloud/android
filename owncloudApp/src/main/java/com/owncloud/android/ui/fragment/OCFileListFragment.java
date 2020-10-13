@@ -760,6 +760,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
 
+            // FIXME: 13/10/2020 : New_arch: Av.Offline
 //            if (mFileListOption.isAvailableOffline() && !parentDir.isAvailableOffline()) {
 //                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
 //            }
@@ -855,7 +856,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
                 } else if (PreviewVideoFragment.canBePreviewed(file) &&
                         !fileIsDownloading(file)) {
-
+                    // FIXME: 13/10/2020 : New_arch: Av.Offline
 //                    // Available offline exception, don't initialize streaming
 //                    if (!file.isDown() && file.isAvailableOffline()) {
 //                        // sync file content, then open with external apps
