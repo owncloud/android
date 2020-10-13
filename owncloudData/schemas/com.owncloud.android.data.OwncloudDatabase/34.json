@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 34,
-    "identityHash": "aecffd1742bcc814c1f640170140275f",
+    "identityHash": "945e3cddd103ba5a5b602e47581b0f73",
     "entities": [
       {
         "tableName": "capabilities",
@@ -199,7 +199,7 @@
       },
       {
         "tableName": "files",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `parentId` INTEGER, `owner` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `remoteId` TEXT, `length` INTEGER NOT NULL, `creationTimestamp` INTEGER, `modifiedTimestamp` INTEGER NOT NULL, `mimeType` TEXT NOT NULL, `etag` TEXT, `permissions` TEXT, `privateLink` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `parentId` INTEGER, `owner` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `remoteId` TEXT, `length` INTEGER NOT NULL, `creationTimestamp` INTEGER, `modificationTimestamp` INTEGER NOT NULL, `mimeType` TEXT NOT NULL, `etag` TEXT, `permissions` TEXT, `privateLink` TEXT, `storagePath` TEXT, `name` TEXT, `treeEtag` TEXT, `keepInSync` INTEGER, `lastSyncDateForData` INTEGER, `fileShareViaLink` INTEGER, `lastSyncDateForProperties` INTEGER, `needsToUpdateThumbnail` INTEGER, `publicLink` TEXT, `modifiedAtLastSyncForData` INTEGER, `etagInConflict` TEXT, `fileIsDownloading` INTEGER, `sharedWithSharee` INTEGER, `sharedByLink` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -244,8 +244,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "modifiedTimestamp",
-            "columnName": "modifiedTimestamp",
+            "fieldPath": "modificationTimestamp",
+            "columnName": "modificationTimestamp",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -272,6 +272,90 @@
             "columnName": "privateLink",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "storagePath",
+            "columnName": "storagePath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "treeEtag",
+            "columnName": "treeEtag",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "keepInSync",
+            "columnName": "keepInSync",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastSyncDateForData",
+            "columnName": "lastSyncDateForData",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fileShareViaLink",
+            "columnName": "fileShareViaLink",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastSyncDateForProperties",
+            "columnName": "lastSyncDateForProperties",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "needsToUpdateThumbnail",
+            "columnName": "needsToUpdateThumbnail",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "publicLink",
+            "columnName": "publicLink",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modifiedAtLastSyncForData",
+            "columnName": "modifiedAtLastSyncForData",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "etagInConflict",
+            "columnName": "etagInConflict",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fileIsDownloading",
+            "columnName": "fileIsDownloading",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sharedWithSharee",
+            "columnName": "sharedWithSharee",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sharedByLink",
+            "columnName": "sharedByLink",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -423,7 +507,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aecffd1742bcc814c1f640170140275f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '945e3cddd103ba5a5b602e47581b0f73')"
     ]
   }
 }
