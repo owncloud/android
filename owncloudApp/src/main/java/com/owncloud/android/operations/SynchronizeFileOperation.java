@@ -170,6 +170,7 @@ public class SynchronizeFileOperation extends SyncOperation {
                 } else if (mLocalFile.getEtag() == null || mLocalFile.getEtag().length() == 0) {
                     // file uploaded (null) or downloaded ("")
                     // before upgrade to version 1.8.0; this is legacy condition
+                    // FIXME: 13/10/2020 : New_arch: Migration
                     serverChanged = false; //mServerFile.getModificationTimestamp() !=
 //                            mLocalFile.getModificationTimestampAtLastSyncForData();
                 } else {
@@ -177,6 +178,7 @@ public class SynchronizeFileOperation extends SyncOperation {
                 }
 
                 /// decide if file changed in local device
+                // FIXME: 13/10/2020 : New_arch: Migration
                 boolean localChanged = false; //(
 //                        mLocalFile.getLocalModificationTimestamp() >
 //                                mLocalFile.getLastSyncDateForData()
@@ -192,12 +194,14 @@ public class SynchronizeFileOperation extends SyncOperation {
                         // prevent accidental override of unnoticed change in server;
                         // dirty trick, more refactoring is needed, but not today;
                         // works due to {@link UploadFileOperation#L364,L367}
+                        // FIXME: 13/10/2020 : New_arch: Migration
 //                        mLocalFile.setEtagInConflict(mLocalFile.getEtag());
                     }
                     requestForUpload(mLocalFile);
                     result = new RemoteOperationResult<>(ResultCode.OK);
 
                 } else if (serverChanged) {
+                    // FIXME: 13/10/2020 : New_arch: Migration
 //                    mLocalFile.setRemoteId(mServerFile.getRemoteId());
                     requestForDownload(mLocalFile);
                     // mLocalFile, not mServerFile; we want to keep the value of

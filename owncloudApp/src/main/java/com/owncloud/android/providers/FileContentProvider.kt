@@ -1258,6 +1258,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         db: SQLiteDatabase, newAccountName: String,
         oldAccountName: String
     ) {
+        // FIXME: 13/10/2020 : New_arch: Download
 
 //        val whereClause = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
 //                ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL"
