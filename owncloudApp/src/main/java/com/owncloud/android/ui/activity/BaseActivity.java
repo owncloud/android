@@ -39,7 +39,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import timber.log.Timber;

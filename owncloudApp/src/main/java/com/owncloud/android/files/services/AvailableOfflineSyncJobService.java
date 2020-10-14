@@ -19,7 +19,6 @@
 
 package com.owncloud.android.files.services;
 
-import android.accounts.Account;
 import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
 import android.app.job.JobService;
@@ -27,19 +26,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.core.util.Pair;
-import com.owncloud.android.MainApp;
-import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.operations.SynchronizeFileOperation;
-import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.domain.files.model.OCFile;
 import timber.log.Timber;
 
-import java.io.File;
 import java.util.List;
-
-import static com.owncloud.android.utils.NotificationUtils.notifyConflict;
 
 /**
  * Job to watch for local changes in available offline files (formerly known as kept-in-sync files) and try to
