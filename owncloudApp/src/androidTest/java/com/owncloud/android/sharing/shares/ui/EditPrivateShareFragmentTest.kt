@@ -39,9 +39,9 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.OC_SHARE
-import com.owncloud.android.utils.AppTestUtil.OC_FILE
-import com.owncloud.android.utils.AppTestUtil.OC_FOLDER
 import com.owncloud.android.utils.Permissions
 import io.mockk.every
 import io.mockk.mockk

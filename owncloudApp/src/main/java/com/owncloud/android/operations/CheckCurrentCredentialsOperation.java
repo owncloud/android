@@ -23,7 +23,7 @@ package com.owncloud.android.operations;
 
 import android.accounts.Account;
 
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;

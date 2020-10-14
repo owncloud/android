@@ -26,14 +26,10 @@ package com.owncloud.android.datamodel
 
 import android.accounts.Account
 import android.content.ContentProviderClient
-import android.content.ContentProviderOperation
-import android.content.ContentProviderResult
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.OperationApplicationException
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
@@ -72,34 +68,10 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSI
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_STRING
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_CAPABILITIES
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_DIR
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_FILE
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_CONTENT_LENGTH
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_CONTENT_TYPE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_CREATION
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ETAG
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ETAG_IN_CONFLICT
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_IS_DOWNLOADING
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_KEEP_IN_SYNC
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_MODIFIED
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_NAME
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PARENT
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PATH
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PERMISSIONS
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PRIVATE_LINK
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_REMOTE_ID
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_SHARED_VIA_LINK
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_SHARED_WITH_SHAREE
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_STORAGE_PATH
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_TREE_ETAG
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBNAIL
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta._ID
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.MIME_PREFIX_AUDIO
@@ -126,7 +98,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.ArrayList
 import java.util.Vector
 
 class FileDataStorageManager : KoinComponent {
