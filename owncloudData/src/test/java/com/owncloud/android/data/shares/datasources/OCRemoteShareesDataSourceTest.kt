@@ -22,9 +22,8 @@ package com.owncloud.android.data.shares.datasources
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteShareeMapper
 import com.owncloud.android.domain.sharing.sharees.model.OCSharee
-import com.owncloud.android.domain.sharing.sharees.model.ShareeType
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
-import com.owncloud.android.lib.resources.shares.ShareType
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.responses.ExactSharees
 import com.owncloud.android.lib.resources.shares.responses.ShareeItem
 import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
@@ -79,47 +78,47 @@ class OCRemoteShareesDataSourceTest {
         assertEquals(sharee.label, "User");
         assertEquals(sharee.shareType, ShareType.USER)
         assertEquals(sharee.shareWith, "user")
-        assertEquals(sharee.additionalInfo, "user1@exact.com")
+        assertEquals(sharee.additionalInfo, "user@exact.com")
         assertTrue(sharee.isExactMatch)
     }
 
     @Test
     fun `OCSharees List - ok - contains one user not exactly matched`() {
         val sharee = sharees[1]
-        assertEquals(sharee.label, "User 1");
-        assertEquals(sharee.shareType, ShareType.USER)
-        assertEquals(sharee.shareWith, "user2")
-        assertEquals(sharee.additionalInfo, "user1@mail.com")
+        assertEquals("User 1", sharee.label)
+        assertEquals(ShareType.USER, sharee.shareType)
+        assertEquals("user1", sharee.shareWith)
+        assertEquals("user1@mail.com", sharee.additionalInfo)
         assertFalse(sharee.isExactMatch)
     }
 
     @Test
     fun `OCShares List - ok - contains one user without additional info`() {
         val sharee = sharees[2]
-        assertEquals(sharee.label, "User 2");
-        assertEquals(sharee.shareType, ShareType.USER)
-        assertEquals(sharee.shareWith, "user")
-        assertEquals(sharee.additionalInfo, "")
+        assertEquals("User 2", sharee.label)
+        assertEquals( ShareType.USER, sharee.shareType)
+        assertEquals("user2", sharee.shareWith)
+        assertEquals( "", sharee.additionalInfo)
         assertFalse(sharee.isExactMatch)
     }
 
     @Test
     fun `OCShares List - ok - contains one remote user`() {
         val sharee = sharees[3]
-        assertEquals(sharee.label, "Remoteuser 1");
-        assertEquals(sharee.shareType, ShareeType.REMOTE)
-        assertEquals(sharee.shareWith, "remoteuser1")
-        assertEquals(sharee.additionalInfo, "user1@remote.com")
+        assertEquals("Remoteuser 1", sharee.label)
+        assertEquals(ShareType.FEDERATED, sharee.shareType)
+        assertEquals("remoteuser1", sharee.shareWith)
+        assertEquals("user1@remote.com", sharee.additionalInfo)
         assertFalse(sharee.isExactMatch)
     }
 
     @Test
     fun `OCShares List - ok - contains one group`() {
         val sharee = sharees[4]
-        assertEquals(sharee.label, "Group 1");
-        assertEquals(sharee.shareType, ShareeType.GROUP)
-        assertEquals(sharee.shareWith, "group1")
-        assertEquals(sharee.additionalInfo, "group@group.com")
+        assertEquals("Group 1", sharee.label)
+        assertEquals(ShareType.GROUP, sharee.shareType)
+        assertEquals("group1", sharee.shareWith)
+        assertEquals("group@group.com", sharee.additionalInfo)
         assertFalse(sharee.isExactMatch)
     }
 

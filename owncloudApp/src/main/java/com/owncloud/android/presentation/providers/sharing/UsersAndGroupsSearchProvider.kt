@@ -43,9 +43,7 @@ import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.model.OCSharee
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.parseError
-import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import org.json.JSONException
-import org.json.JSONObject
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.util.HashMap
