@@ -27,7 +27,7 @@ import android.database.MatrixCursor
 import android.provider.DocumentsContract.Root
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 
 class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_ROOT_PROJECTION) {
 

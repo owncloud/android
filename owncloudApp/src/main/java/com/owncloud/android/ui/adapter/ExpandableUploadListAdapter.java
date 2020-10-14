@@ -41,12 +41,12 @@ import androidx.appcompat.widget.AppCompatButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -406,9 +406,13 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
             /* Cancellation needs do be checked and done before changing the drawable in fileIcon, or
              * {@link ThumbnailsCacheManager#cancelPotentialWork} will NEVER cancel any task.
              */
-            OCFile fakeFileToCheatThumbnailsCacheManagerInterface = new OCFile(upload.getRemotePath());
+            // FIXME: 14/10/2020 : New_arch: Migration
+            OCFile fakeFileToCheatThumbnailsCacheManagerInterface = null; //new OCFile(upload.getRemotePath());
+            if (fakeFileToCheatThumbnailsCacheManagerInterface == null) {
+                return view;
+            }
             fakeFileToCheatThumbnailsCacheManagerInterface.setStoragePath(upload.getLocalPath());
-            fakeFileToCheatThumbnailsCacheManagerInterface.setMimetype(upload.getMimeType());
+            fakeFileToCheatThumbnailsCacheManagerInterface.setMimeType(upload.getMimeType());
 
             boolean allowedToCreateNewThumbnail = (ThumbnailsCacheManager.cancelPotentialThumbnailWork(
                     fakeFileToCheatThumbnailsCacheManagerInterface,
@@ -423,7 +427,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
                         String.valueOf(fakeFileToCheatThumbnailsCacheManagerInterface.getRemoteId())
                 );
-                if (thumbnail != null && !fakeFileToCheatThumbnailsCacheManagerInterface.needsUpdateThumbnail()) {
+                if (thumbnail != null && !fakeFileToCheatThumbnailsCacheManagerInterface.getNeedsToUpdateThumbnail()) {
                     fileIcon.setImageBitmap(thumbnail);
                 } else {
                     // generate new Thumbnail

@@ -30,6 +30,7 @@ import android.os.Parcelable;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.MimetypeIconUtil;
@@ -131,7 +132,7 @@ public class OCUpload implements Parcelable {
      * @param  ocFile           {@link OCFile} instance to update in the remote server.
      * @param  account          ownCloud {@link Account} where ocFile is contained.
      */
-    public OCUpload(com.owncloud.android.domain.files.model.OCFile ocFile, Account account) {
+    public OCUpload(OCFile ocFile, Account account) {
         this(ocFile.getStoragePath(), ocFile.getRemotePath(), account.name);
     }
 

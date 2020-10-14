@@ -47,8 +47,8 @@ import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityVie
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_CAPABILITY
-import com.owncloud.android.utils.AppTestUtil.OC_FILE
-import com.owncloud.android.utils.AppTestUtil.OC_FOLDER
+import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.utils.DateUtils
 import io.mockk.every
 import io.mockk.mockk
