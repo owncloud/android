@@ -32,7 +32,6 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
 
 import java.io.File;
 import java.math.BigDecimal;
