@@ -36,27 +36,32 @@ class OCRemoteFileDataSource(
     override fun checkPathExistence(
         path: String,
         checkUserCredentials: Boolean
-    ): Boolean =
+    ): Boolean = executeRemoteOperation {
         fileService.checkPathExistence(
             path = path,
             isUserLogged = checkUserCredentials
-        ).data
+        )
+    }
 
     override fun createFolder(
         remotePath: String,
         createFullPath: Boolean,
         isChunksFolder: Boolean
-    ): Unit =
+    ): Unit = executeRemoteOperation {
         fileService.createFolder(
             remotePath = remotePath,
             createFullPath = createFullPath,
             isChunkFolder = isChunksFolder
-        ).data
+        )
+    }
 
     override fun refreshFolder(remotePath: String): List<OCFile> =
         // Assert not null, service should return an empty list if no files there.
-        fileService.refreshFolder(
-            remotePath = remotePath
-        ).data.map { remoteFileMapper.toModel(it)!! }
-
+        executeRemoteOperation {
+            fileService.refreshFolder(
+                remotePath = remotePath
+            )
+        }.let { listOfRemote ->
+            listOfRemote.map { remoteFile -> remoteFileMapper.toModel(remoteFile)!! }
+        }
 }
