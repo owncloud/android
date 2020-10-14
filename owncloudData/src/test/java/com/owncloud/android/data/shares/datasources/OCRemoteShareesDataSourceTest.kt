@@ -20,7 +20,7 @@
 package com.owncloud.android.data.shares.datasources
 
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
-import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteUserShareeMapper
+import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteShareeMapper
 import com.owncloud.android.domain.sharing.sharees.model.OCSharee
 import com.owncloud.android.domain.sharing.sharees.model.ShareeType
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
@@ -48,7 +48,7 @@ class OCRemoteShareesDataSourceTest {
     @Before
     fun init() {
         ocRemoteShareesDataSource =
-            OCRemoteShareeDataSource(ocShareeService, RemoteUserShareeMapper())
+            OCRemoteShareeDataSource(ocShareeService, RemoteShareeMapper())
 
         val getRemoteShareesOperationResult = createRemoteOperationResultMock(
             REMOTE_SHAREES,

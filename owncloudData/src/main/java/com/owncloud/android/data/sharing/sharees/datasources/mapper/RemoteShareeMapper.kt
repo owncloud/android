@@ -6,7 +6,7 @@ import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.responses.ShareeItem
 import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
 
-class RemoteUserShareeMapper : RemoteMapper<List<OCSharee>, ShareeOcsResponse> {
+class RemoteShareeMapper : RemoteMapper<List<OCSharee>, ShareeOcsResponse> {
     private fun mapShareeItemToOCShare(item: ShareeItem, isExactMatch: Boolean) =
         OCSharee(
             label = item.label,
