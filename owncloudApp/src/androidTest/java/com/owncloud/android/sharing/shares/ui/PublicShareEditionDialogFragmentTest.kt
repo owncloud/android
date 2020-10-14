@@ -42,8 +42,8 @@ import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogF
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SHARE
-import com.owncloud.android.utils.AppTestUtil.OC_FILE
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
