@@ -42,8 +42,8 @@ import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityVie
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_CAPABILITY
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SHARE
-import com.owncloud.android.utils.AppTestUtil.OC_FILE
 import com.owncloud.android.utils.matchers.assertVisibility
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText
@@ -90,7 +90,7 @@ class ShareFileFragmentTest {
     @Test
     fun showHeader() {
         loadShareFileFragment()
-        R.id.shareFileName.withText("img.png")
+        onView(withId(R.id.shareFileName)).check(matches(withText(OC_FILE.name)))
     }
 
     @Test
