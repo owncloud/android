@@ -43,6 +43,10 @@ import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_P
 import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_TEXT;
 import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_VIDEO;
 
+@Deprecated
+/**
+ * Use com.owncloud.android.domain.files.model.OCFile instead
+ */
 public class OCFile implements Parcelable, Comparable<OCFile> {
 
     public static final Parcelable.Creator<OCFile> CREATOR = new Parcelable.Creator<OCFile>() {
