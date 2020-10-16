@@ -20,12 +20,16 @@
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.domain.exceptions.validation.FileNameException
+import com.owncloud.android.domain.exceptions.validation.FileNameException.FileNameExceptionType.FILE_NAME_EMPTY
+import com.owncloud.android.domain.exceptions.validation.FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CreateFolderAsyncUseCaseTest {
@@ -39,25 +43,32 @@ class CreateFolderAsyncUseCaseTest {
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
+        assertTrue(useCaseResult.isSuccess)
+        assertEquals(Unit, useCaseResult.getDataOrNull())
 
         verify(exactly = 1) { repository.createFolder(any(), useCaseParams.parentFile) }
     }
 
     @Test
+    fun `create folder - ko - empty name`() {
+        val useCaseResult = useCase.execute(useCaseParams.copy(folderName = "   "))
+
+        assertTrue(useCaseResult.isError)
+        assertEquals(
+            FileNameException(type = FILE_NAME_EMPTY),
+            useCaseResult.getThrowableOrNull()
+        )
+    }
+
+    @Test
     fun `create folder - ko - forbidden chars`() {
-        // Folder name is blank
-        var useCaseResult = useCase.execute(useCaseParams.copy(folderName = "   "))
+        val useCaseResult = useCase.execute(useCaseParams.copy(folderName = "/Photos"))
 
-        Assert.assertTrue(useCaseResult.isError)
-        Assert.assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
-
-        // Parent folder is not a folder :S
-        useCaseResult = useCase.execute(useCaseParams.copy(parentFile = OC_FOLDER.copy(mimeType = "text/plain")))
-
-        Assert.assertTrue(useCaseResult.isError)
-        Assert.assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
+        assertTrue(useCaseResult.isError)
+        assertEquals(
+            FileNameException(type = FILE_NAME_FORBIDDEN_CHARACTERS),
+            useCaseResult.getThrowableOrNull()
+        )
     }
 
     @Test
@@ -66,8 +77,8 @@ class CreateFolderAsyncUseCaseTest {
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        Assert.assertTrue(useCaseResult.isError)
-        Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
+        assertTrue(useCaseResult.isError)
+        assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
         verify(exactly = 1) { repository.createFolder(any(), useCaseParams.parentFile) }
     }
