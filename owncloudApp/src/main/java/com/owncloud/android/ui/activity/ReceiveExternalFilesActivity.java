@@ -71,6 +71,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
+import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.interfaces.ISecurityEnforced;
 import com.owncloud.android.interfaces.LockType;
@@ -84,6 +85,7 @@ import com.owncloud.android.presentation.ui.files.SortOptionsView;
 import com.owncloud.android.presentation.ui.files.SortOrder;
 import com.owncloud.android.presentation.ui.files.SortType;
 import com.owncloud.android.presentation.ui.files.ViewType;
+import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
@@ -96,6 +98,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.SortFilesUtils;
+import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
@@ -768,14 +771,16 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         filesViewModel.createFolder(parentFolder, newFolderName);
         filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
-
-            if (uiResultEvent.peekContent().isSuccess()) {
+            UIResult<Unit> uiResult = uiResultEvent.peekContent();
+            if (uiResult.isSuccess()) {
                 updateDirectoryList();
             } else {
-                // TODO: Show error message
-                //  showSnackMessage(
-                //        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
-                //  );
+                Throwable throwable = uiResult.getThrowableOrNull();
+                CharSequence errorMessage = ThrowableExtKt.parseError(throwable,
+                        getResources().getString(R.string.create_dir_fail_msg),
+                        getResources(), false);
+
+                showSnackMessage(errorMessage.toString());
             }
         });
     }
