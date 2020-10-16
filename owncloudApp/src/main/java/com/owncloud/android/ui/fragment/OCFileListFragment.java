@@ -61,6 +61,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView;
@@ -69,6 +70,7 @@ import com.owncloud.android.presentation.ui.files.SortOptionsView;
 import com.owncloud.android.presentation.ui.files.SortOrder;
 import com.owncloud.android.presentation.ui.files.SortType;
 import com.owncloud.android.presentation.ui.files.ViewType;
+import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -87,6 +89,7 @@ import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
@@ -513,16 +516,16 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
         filesViewModel.createFolder(parentFolder, newFolderName);
         filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
-
-            if (uiResultEvent.peekContent().isSuccess()) {
+            UIResult<Unit> uiResult = uiResultEvent.peekContent();
+            if (uiResult.isSuccess()) {
                 listDirectory(true);
             } else {
-                // TODO: Show error message
-                //                showMessageInSnackbar(
-                //                                R.id.ListLayout,
-                //                                ErrorMessageAdapter.getResultMessage(result, operation, resources)
-                //                        )
+                Throwable throwable = uiResult.getThrowableOrNull();
+                CharSequence errorMessage = ThrowableExtKt.parseError(throwable, getResources().getString(R.string.create_dir_fail_msg),
+                        getResources(), false);
+                showSnackMessage(errorMessage.toString());
             }
+
         });
     }
 
@@ -1284,6 +1287,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * @param messageResource Message to show.
      */
     private void showSnackMessage(int messageResource) {
+        Snackbar snackbar = Snackbar.make(
+                requireActivity().findViewById(R.id.coordinator_layout),
+                messageResource,
+                Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
+    }
+
+    private void showSnackMessage(String messageResource) {
         Snackbar snackbar = Snackbar.make(
                 requireActivity().findViewById(R.id.coordinator_layout),
                 messageResource,
