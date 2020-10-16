@@ -43,16 +43,19 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.utils.PreferenceUtils;
+import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
@@ -397,15 +400,14 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         filesViewModel.createFolder(parentFolder, newFolderName);
         filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
-
-            if (uiResultEvent.peekContent().isSuccess()) {
+            UIResult<Unit> uiResult = uiResultEvent.peekContent();
+            if (uiResult.isSuccess()) {
                 refreshListOfFilesFragment();
             } else {
-                // TODO: Show error message
-                //                showSnackMessage(
-                //                        ErrorMessageAdapter.Companion.getResultMessage(result, operation,
-                //                        getResources())
-                //                );
+                Throwable throwable = uiResult.getThrowableOrNull();
+                CharSequence errorMessage = ThrowableExtKt.parseError(throwable, getResources().getString(R.string.create_dir_fail_msg),
+                        getResources(), false);
+                showSnackMessage(errorMessage.toString());
             }
         });
     }
