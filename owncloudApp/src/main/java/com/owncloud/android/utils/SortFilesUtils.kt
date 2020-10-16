@@ -18,7 +18,7 @@
  */
 package com.owncloud.android.utils
 
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.ui.files.SortType
 import java.util.Vector
 
@@ -37,16 +37,16 @@ class SortFilesUtils {
 
     private fun sortByName(listOfFiles: Vector<OCFile>, ascending: Boolean): Vector<OCFile> {
         val newListOfFiles =
-            if (ascending) listOfFiles.sortedBy { it.fileName.lowercase() }
-            else listOfFiles.sortedByDescending { it.fileName.lowercase() }
+            if (ascending) listOfFiles.sortedBy { it.name?.lowercase() }
+            else listOfFiles.sortedByDescending { it.name?.lowercase() }
 
         // Show first the folders when sorting by name
         return newListOfFiles.sortedByDescending { it.isFolder }.toVector()
     }
 
     private fun sortBySize(listOfFiles: Vector<OCFile>, ascending: Boolean): Vector<OCFile> {
-        return if (ascending) listOfFiles.sortedBy { it.fileLength }.toVector()
-        else listOfFiles.sortedByDescending { it.fileLength }.toVector()
+        return if (ascending) listOfFiles.sortedBy { it.length }.toVector()
+        else listOfFiles.sortedByDescending { it.length }.toVector()
     }
 
     private fun sortByDate(listOfFiles: Vector<OCFile>, ascending: Boolean): Vector<OCFile> {
