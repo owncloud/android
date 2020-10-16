@@ -71,8 +71,6 @@ public class OperationsService extends Service {
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
     public static final String EXTRA_NEWNAME = "NEWNAME";
     public static final String EXTRA_REMOVE_ONLY_LOCAL = "REMOVE_LOCAL_COPY";
-    public static final String EXTRA_CREATE_FULL_PATH = "CREATE_FULL_PATH";
-    public static final String EXTRA_RESULT = "RESULT";
     public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
@@ -83,15 +81,11 @@ public class OperationsService extends Service {
 
     public static final String ACTION_RENAME = "RENAME";
     public static final String ACTION_REMOVE = "REMOVE";
-    public static final String ACTION_CREATE_FOLDER = "CREATE_FOLDER";
     public static final String ACTION_SYNC_FILE = "SYNC_FILE";
     public static final String ACTION_SYNC_FOLDER = "SYNC_FOLDER";
     public static final String ACTION_MOVE_FILE = "MOVE_FILE";
     public static final String ACTION_COPY_FILE = "COPY_FILE";
     public static final String ACTION_CHECK_CURRENT_CREDENTIALS = "CHECK_CURRENT_CREDENTIALS";
-
-    public static final String ACTION_OPERATION_ADDED = OperationsService.class.getName() + ".OPERATION_ADDED";
-    public static final String ACTION_OPERATION_FINISHED = OperationsService.class.getName() + ".OPERATION_FINISHED";
 
     private ConcurrentMap<Integer, Pair<RemoteOperation, RemoteOperationResult>>
             mUndispatchedFinishedOperations = new ConcurrentHashMap<>();
@@ -476,14 +470,6 @@ public class OperationsService extends Service {
                             boolean onlyLocalCopy = operationIntent.getBooleanExtra(EXTRA_REMOVE_ONLY_LOCAL, false);
                             operation = new RemoveFileOperation(remotePath, onlyLocalCopy,
                                     operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE, false));
-
-                            break;
-                        }
-                        case ACTION_CREATE_FOLDER: {
-                            // Create Folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            boolean createFullPath = operationIntent.getBooleanExtra(EXTRA_CREATE_FULL_PATH, true);
-                            operation = new CreateFolderOperation(remotePath, createFullPath);
 
                             break;
                         }
