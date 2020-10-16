@@ -170,8 +170,11 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         FileStorageUtils.mSortOrderFileDisp = order;
         FileStorageUtils.mSortAscendingFileDisp = isAscending;
         if (mFiles != null && mFiles.size() > 0) {
-            new SortFilesUtils().sortFiles((Vector<OCFile>) mFiles,
-                    FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
+            new SortFilesUtils().sortFiles(
+                    (Vector<OCFile>) mFiles,
+                    FileStorageUtils.mSortOrderFileDisp,
+                    FileStorageUtils.mSortAscendingFileDisp
+            );
         }
         notifyDataSetChanged();
     }
