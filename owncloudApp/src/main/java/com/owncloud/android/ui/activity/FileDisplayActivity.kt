@@ -59,8 +59,6 @@ import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.db.PreferenceManager.getSortOrder
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.services.FileDownloader
@@ -74,7 +72,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.CopyFileOperation
-import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.MoveFileOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
@@ -1140,7 +1137,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             setupRootToolbar(title, isSearchEnabled = true)
             listOfFilesFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else {
-            updateStandardToolbar(chosenFile.fileName, true, true)
+            updateStandardToolbar(chosenFile.name!!, true, true)
         }
     }
 
@@ -1233,7 +1230,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             is RemoveFileOperation -> onRemoveFileOperationFinish(operation, result)
             is RenameFileOperation -> onRenameFileOperationFinish(operation, result)
             is SynchronizeFileOperation -> onSynchronizeFileOperationFinish(operation, result)
-            is CreateFolderOperation -> onCreateFolderOperationFinish(operation, result)
             is MoveFileOperation -> onMoveFileOperationFinish(operation, result)
             is CopyFileOperation -> onCopyFileOperationFinish(operation, result)
         }
@@ -1403,32 +1399,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             fileWaitingToPreview = null
         }
 
-    }
-
-    /**
-     * Updates the view associated to the activity after the finish of an operation trying create a
-     * new folder
-     *
-     * @param operation Creation operation performed.
-     * @param result    Result of the creation.
-     */
-    private fun onCreateFolderOperationFinish(
-        operation: CreateFolderOperation,
-        result: RemoteOperationResult<*>
-    ) {
-        if (result.isSuccess) {
-            refreshListOfFilesFragment(true)
-        } else {
-            try {
-                showMessageInSnackbar(
-                    R.id.list_layout,
-                    ErrorMessageAdapter.getResultMessage(result, operation, resources)
-                )
-            } catch (e: NotFoundException) {
-                Timber.e(e, "Error while trying to show fail message")
-            }
-
-        }
     }
 
     private fun requestForDownload() {
