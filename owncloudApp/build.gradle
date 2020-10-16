@@ -79,6 +79,7 @@ dependencies {
     // Koin dependency injector
     implementation "org.koin:koin-core:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
+    implementation "org.koin:koin-java:$koinVersion"
 
     // KTX extensions, see https://developer.android.com/kotlin/ktx.html
     implementation "androidx.core:core-ktx:$ktxCoreVersion"

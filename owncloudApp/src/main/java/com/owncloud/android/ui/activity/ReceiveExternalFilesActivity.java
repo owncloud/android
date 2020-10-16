@@ -36,7 +36,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -67,23 +66,22 @@ import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
@@ -95,12 +93,14 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
+import static org.koin.java.KoinJavaComponent.get;
+
 /**
  * This can be used to upload things to an ownCloud instance.
  */
 public class ReceiveExternalFilesActivity extends FileActivity
-        implements OnItemClickListener, android.view.View.OnClickListener,
-        CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener {
+        implements OnItemClickListener, View.OnClickListener,
+        CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener, CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
 
@@ -535,39 +535,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         }
     }
 
-    @Override
-    public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
-        super.onRemoteOperationFinish(operation, result);
-
-        if (operation instanceof CreateFolderOperation) {
-            onCreateFolderOperationFinish((CreateFolderOperation) operation, result);
-        }
-
-    }
-
-    /**
-     * Updates the view associated to the activity after the finish of an operation
-     * trying create a new folder
-     *
-     * @param operation Creation operation performed.
-     * @param result    Result of the creation.
-     */
-    private void onCreateFolderOperationFinish(CreateFolderOperation operation,
-                                               RemoteOperationResult result) {
-        if (result.isSuccess()) {
-            populateDirectoryList();
-        } else {
-            try {
-                showSnackMessage(
-                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
-                );
-
-            } catch (NotFoundException e) {
-                Timber.e(e, "Error while trying to show fail message ");
-            }
-        }
-    }
-
     /**
      * Loads the target folder initialize shown to the user.
      * <p/>
@@ -611,7 +578,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         boolean retval = true;
         switch (item.getItemId()) {
             case R.id.action_create_dir:
-                CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+                CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile, this);
                 dialog.show(
                         getSupportFragmentManager(),
                         CreateFolderDialogFragment.CREATE_FOLDER_FRAGMENT);
@@ -710,6 +677,24 @@ public class ReceiveExternalFilesActivity extends FileActivity
         OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
         mFile = root;
         startSyncFolderOperation(root);
+    }
+
+    @Override
+    public void onFolderNameSet(@NotNull String newFolderName, @NotNull OCFile parentFolder) {
+        FilesViewModel filesViewModel = get(FilesViewModel.class);
+
+        filesViewModel.createFolder(parentFolder, newFolderName);
+        filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
+
+            if (uiResultEvent.peekContent().isSuccess()) {
+                populateDirectoryList();
+            } else {
+                // TODO: Show error message
+                //                showSnackMessage(
+                //                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
+                //                );
+            }
+        });
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {

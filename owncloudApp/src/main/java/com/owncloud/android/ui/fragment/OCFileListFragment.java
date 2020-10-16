@@ -63,6 +63,8 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FileListOption;
@@ -70,7 +72,6 @@ import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.ui.helpers.SparseBooleanArrayParcelable;
@@ -80,11 +81,14 @@ import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.koin.java.KoinJavaComponent.get;
 
 /**
  * A Fragment that lists all files and folders in a given path.
@@ -92,7 +96,7 @@ import java.util.List;
  * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
 public class OCFileListFragment extends ExtendedListFragment implements
-        SearchView.OnQueryTextListener, View.OnFocusChangeListener {
+        SearchView.OnQueryTextListener, View.OnFocusChangeListener, CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
@@ -373,7 +377,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      */
     private void registerFabMkDirListeners() {
         getFabMkdir().setOnClickListener(v -> {
-            CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+            CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile, this);
             dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
             getFabMain().collapse();
             recordMiniFabClick();
@@ -433,6 +437,25 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     public boolean isSingleItemChecked() {
         return mFileListAdapter.getCheckedItems(getListView()).size() == 1;
+    }
+
+    @Override
+    public void onFolderNameSet(@NotNull String newFolderName, @NotNull OCFile parentFolder) {
+        FilesViewModel filesViewModel = get(FilesViewModel.class);
+
+        filesViewModel.createFolder(parentFolder, newFolderName);
+        filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
+
+            if (uiResultEvent.peekContent().isSuccess()) {
+                listDirectory(true);
+            } else {
+                // TODO: Show error message
+                //                showMessageInSnackbar(
+                //                                R.id.ListLayout,
+                //                                ErrorMessageAdapter.getResultMessage(result, operation, resources)
+                //                        )
+            }
+        });
     }
 
     /**
