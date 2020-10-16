@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-allopen'
 
 dependencies {
     api 'com.squareup.okhttp3:okhttp:4.6.0'
@@ -15,11 +14,6 @@ dependencies {
         exclude module: "kotlin-reflect"
     }
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
-}
-
-allOpen {
-    // allows mocking for classes w/o directly opening them for release builds
-    annotation 'com.owncloud.android.lib.testing.OpenClass'
 }
 
 android {
