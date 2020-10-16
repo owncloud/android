@@ -254,16 +254,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 AuthenticationMethod.BASIC_HTTP_AUTH -> {
                     authTokenType = BASIC_TOKEN_TYPE
                     showOrHideBasicAuthFields(shouldBeVisible = true)
-                    account_username.run {
-                        doAfterTextChanged { updateLoginButtonVisibility() }
-                    }
-                    account_password.run {
-                        doAfterTextChanged {
-                            updateLoginButtonVisibility()
-                            account_password_container.isPasswordVisibilityToggleEnabled =
-                                !account_password.text.isNullOrEmpty()
-                        }
-                    }
+                    account_username.doAfterTextChanged { updateLoginButtonVisibility() }
+                    account_password.doAfterTextChanged { updateLoginButtonVisibility() }
                 }
 
                 AuthenticationMethod.BEARER_TOKEN -> {

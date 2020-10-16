@@ -68,12 +68,6 @@ The third party software included and used by this project is:
     Included in the ownCloud client APK.
     See https://github.com/chrisbanes/PhotoView
 
- * Gson, version 2.8.5
-    Copyright 2008 Google Inc.
-    Licensed under Apache License, Version 2.0.
-    Included in the ownCloud client APK.
-    See https://github.com/google/gson
-
  * OkHttp, version 4.6.0
    Licensed under Apache License, Version 2.0.
    Included in the ownCloud client APK.

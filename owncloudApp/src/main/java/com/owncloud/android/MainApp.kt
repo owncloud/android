@@ -23,6 +23,7 @@ package com.owncloud.android
 
 import android.app.Activity
 import android.app.NotificationManager.IMPORTANCE_LOW
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -30,8 +31,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.WindowManager
-import androidx.multidex.MultiDex
-import androidx.multidex.MultiDexApplication
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
@@ -69,7 +68,7 @@ import java.io.File
  * Contains methods to build the "static" strings. These strings were before constants in different
  * classes
  */
-class MainApp : MultiDexApplication() {
+class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
@@ -156,11 +155,6 @@ class MainApp : MultiDexApplication() {
         })
 
         initDependencyInjection()
-    }
-
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
     }
 
     fun startLogIfDeveloper() {
