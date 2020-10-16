@@ -32,6 +32,7 @@ import android.accounts.AccountManager
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.view.View.GONE
@@ -67,6 +68,14 @@ import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.account_setup.*
+import kotlinx.android.synthetic.main.account_setup.account_password
+import kotlinx.android.synthetic.main.account_setup.account_password_container
+import kotlinx.android.synthetic.main.account_setup.account_username
+import kotlinx.android.synthetic.main.account_setup.hostUrlInput
+import kotlinx.android.synthetic.main.account_setup.loginButton
+import kotlinx.android.synthetic.main.account_setup.login_background_image
+import kotlinx.android.synthetic.main.account_setup.server_status_text
+import kotlinx.android.synthetic.main.account_setup.view.*
 import net.openid.appauth.AppAuthConfiguration
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationException
@@ -125,6 +134,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         // UI initialization
         setContentView(R.layout.account_setup)
+
+        initBackgroundImage()
 
         if (loginAction != ACTION_CREATE) {
             account_username.isEnabled = false
@@ -208,6 +219,29 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         authStateManager = AuthStateManager.getInstance(this)
     }
+
+    private fun initBackgroundImage() {
+        //TODO: Change this behaviour for customer branding
+        val backgroundView = login_layout.login_background_image
+        backgroundView.viewTreeObserver.addOnGlobalLayoutListener {
+            backgroundView.imageMatrix = Matrix().apply {
+                val dWidth = backgroundView.drawable.intrinsicWidth.toFloat()
+                val dHeight = backgroundView.drawable.intrinsicHeight.toFloat()
+
+                val vWidth = backgroundView.measuredWidth.toFloat()
+                val vHeight = backgroundView.measuredHeight.toFloat()
+
+                val scaleFactor = if (vHeight > vWidth) {
+                    vHeight / dHeight
+                } else {
+                    vWidth / dWidth
+                }
+                setScale(scaleFactor, scaleFactor, 0f, 0f)
+                postTranslate((-dWidth*scaleFactor)+vWidth, (-dHeight*scaleFactor)+vHeight)
+            }
+        }
+    }
+
 
     private fun checkOcServer() {
         val uri = hostUrlInput.text.toString().trim()
