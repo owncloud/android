@@ -327,18 +327,6 @@ public class FileOperationsHelper {
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
-    public void createFolder(String remotePath, boolean createFullPath) {
-        // Create Folder
-        Intent service = new Intent(mFileActivity, OperationsService.class);
-        service.setAction(OperationsService.ACTION_CREATE_FOLDER);
-        service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        service.putExtra(OperationsService.EXTRA_REMOTE_PATH, remotePath);
-        service.putExtra(OperationsService.EXTRA_CREATE_FULL_PATH, createFullPath);
-        mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-
-        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-    }
-
     /**
      * Cancel the transference in downloads (files/folders) and file uploads
      *

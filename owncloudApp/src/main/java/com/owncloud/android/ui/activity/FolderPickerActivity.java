@@ -27,7 +27,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
@@ -44,24 +43,25 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
-import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.utils.PreferenceUtils;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.util.ArrayList;
 
+import static org.koin.java.KoinJavaComponent.get;
+
 public class FolderPickerActivity extends FileActivity implements FileFragment.ContainerActivity,
-        OnClickListener, OnEnforceableRefreshListener {
+        OnClickListener, OnEnforceableRefreshListener, CreateFolderDialogFragment.CreateFolderListener {
 
     public static final String EXTRA_FOLDER = FolderPickerActivity.class.getCanonicalName()
             + ".EXTRA_FOLDER";
@@ -360,41 +360,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         }
     }
 
-    @Override
-    public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
-        super.onRemoteOperationFinish(operation, result);
-
-        if (operation instanceof CreateFolderOperation) {
-            onCreateFolderOperationFinish((CreateFolderOperation) operation, result);
-
-        }
-    }
-
-    /**
-     * Updates the view associated to the activity after the finish of an operation trying
-     * to create a new folder.
-     *
-     * @param operation Creation operation performed.
-     * @param result    Result of the creation.
-     */
-    private void onCreateFolderOperationFinish(
-            CreateFolderOperation operation, RemoteOperationResult result
-    ) {
-
-        if (result.isSuccess()) {
-            refreshListOfFilesFragment();
-        } else {
-            try {
-                showSnackMessage(
-                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
-                );
-
-            } catch (NotFoundException e) {
-                Timber.e(e, "Error while trying to show fail message ");
-            }
-        }
-    }
-
     /**
      * Shows the information of the {@link OCFile} received as a
      * parameter in the second fragment.
@@ -424,6 +389,25 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 startSyncFolderOperation(folder, ignoreETag);
             }
         }
+    }
+
+    @Override
+    public void onFolderNameSet(@NotNull String newFolderName, @NotNull OCFile parentFolder) {
+        FilesViewModel filesViewModel = get(FilesViewModel.class);
+
+        filesViewModel.createFolder(parentFolder, newFolderName);
+        filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
+
+            if (uiResultEvent.peekContent().isSuccess()) {
+                refreshListOfFilesFragment();
+            } else {
+                // TODO: Show error message
+                //                showSnackMessage(
+                //                        ErrorMessageAdapter.Companion.getResultMessage(result, operation,
+                //                        getResources())
+                //                );
+            }
+        });
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {

@@ -69,6 +69,8 @@ import com.owncloud.android.presentation.ui.files.SortOptionsView;
 import com.owncloud.android.presentation.ui.files.SortOrder;
 import com.owncloud.android.presentation.ui.files.SortType;
 import com.owncloud.android.presentation.ui.files.ViewType;
+import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FileListOption;
@@ -76,11 +78,11 @@ import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.ui.helpers.SparseBooleanArrayParcelable;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
+import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -92,6 +94,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.koin.java.KoinJavaComponent.get;
+
 /**
  * A Fragment that lists all files and folders in a given path.
  * <p>
@@ -99,7 +103,7 @@ import java.util.List;
  */
 public class OCFileListFragment extends ExtendedListFragment implements
         SearchView.OnQueryTextListener, View.OnFocusChangeListener, SortOptionsView.SortOptionsListener,
-        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener {
+        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener, CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
@@ -398,7 +402,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      */
     private void registerFabMkDirListeners() {
         getFabMkdir().setOnClickListener(v -> {
-            CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+            CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile, this);
             dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
             getFabMain().collapse();
             recordMiniFabClick();
@@ -498,8 +502,28 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onCreateFolderListener() {
-        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile, this::onFolderNameSet);
         dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
+
+    }
+
+    @Override
+    public void onFolderNameSet(@NotNull String newFolderName, @NotNull OCFile parentFolder) {
+        FilesViewModel filesViewModel = get(FilesViewModel.class);
+
+        filesViewModel.createFolder(parentFolder, newFolderName);
+        filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
+
+            if (uiResultEvent.peekContent().isSuccess()) {
+                listDirectory(true);
+            } else {
+                // TODO: Show error message
+                //                showMessageInSnackbar(
+                //                                R.id.ListLayout,
+                //                                ErrorMessageAdapter.getResultMessage(result, operation, resources)
+                //                        )
+            }
+        });
     }
 
     /**
