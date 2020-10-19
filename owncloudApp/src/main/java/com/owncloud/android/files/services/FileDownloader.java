@@ -498,22 +498,21 @@ public class FileDownloader extends Service
      * TODO move to DownloadFileOperation
      */
     private void saveDownloadedFile() {
-        // FIXME: 13/10/2020 : New_arch: Migration
-//        OCFile file = mStorageManager.getFileById(mCurrentDownload.getFile().getFileId());
-//        long syncDate = System.currentTimeMillis();
-//        file.setLastSyncDateForProperties(syncDate);
-//        file.setLastSyncDateForData(syncDate);
-//        file.setNeedsUpdateThumbnail(true);
-//        file.setModificationTimestamp(mCurrentDownload.getModificationTimestamp());
-//        file.setModificationTimestampAtLastSyncForData(mCurrentDownload.getModificationTimestamp());
-//        file.setEtag(mCurrentDownload.getEtag());
-//        file.setMimetype(mCurrentDownload.getMimeType());
-//        file.setStoragePath(mCurrentDownload.getSavePath());
-//        file.setFileLength((new File(mCurrentDownload.getSavePath()).length()));
-//        file.setRemoteId(mCurrentDownload.getFile().getRemoteId());
-//        mStorageManager.saveFile(file);
-//        mStorageManager.triggerMediaScan(file.getStoragePath());
-//        mStorageManager.saveConflict(file, null);
+        OCFile file = mStorageManager.getFileById(mCurrentDownload.getFile().getId());
+        long syncDate = System.currentTimeMillis();
+        file.setLastSyncDateForProperties(syncDate);
+        file.setLastSyncDateForData((int) syncDate);
+        file.setNeedsToUpdateThumbnail(true);
+        file.setModificationTimestamp(mCurrentDownload.getModificationTimestamp());
+        file.setModifiedAtLastSyncForData((int)mCurrentDownload.getModificationTimestamp());
+        file.setEtag(mCurrentDownload.getEtag());
+        file.setMimeType(mCurrentDownload.getMimeType());
+        file.setStoragePath(mCurrentDownload.getSavePath());
+        file.setLength((new File(mCurrentDownload.getSavePath()).length()));
+        file.setRemoteId(mCurrentDownload.getFile().getRemoteId());
+        mStorageManager.saveFile(file);
+        mStorageManager.triggerMediaScan(file.getStoragePath());
+        mStorageManager.saveConflict(file, null);
     }
 
     /**
