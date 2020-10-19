@@ -268,10 +268,6 @@ class FileDataStorageManager : KoinComponent {
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(account.name, path))
         }.getDataOrNull()
-        // TODO: Check if this is needed
-        //        return if (file == null && ROOT_PATH == path) {
-        //            createRootDir() // root should always exist
-        //        } else file
         result
     }
 
@@ -982,14 +978,6 @@ class FileDataStorageManager : KoinComponent {
 //        }
 //        return avOffAncestor
     }
-    // FIXME: 13/10/2020 : New_arch: Migration
-// TODO: Move to Data layer if needed
-//    private fun createRootDir(): OCFile =
-//        OCFile(ROOT_PATH).apply {
-//            mimetype = MIME_DIR
-//            parentId = ROOT_PARENT_ID.toLong()
-//            saveFile(this)
-//        }
 
     // FIXME: 13/10/2020 : New_arch: Migration
     private fun createFileInstance(c: Cursor?): OCFile? = null//c?.let {

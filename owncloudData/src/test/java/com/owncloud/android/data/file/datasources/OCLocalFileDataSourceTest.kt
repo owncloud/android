@@ -23,12 +23,16 @@ import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDat
 import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.testutil.OC_FILE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
@@ -95,6 +99,29 @@ class OCLocalFileDataSourceTest {
         assertNull(result)
 
         verify { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath) }
+    }
+
+    @Test
+    fun `get file by remote path - ok - null - create root folder`() {
+        every { dao.getFileByOwnerAndRemotePath(any(), any()) } returns null
+        every { dao.mergeRemoteAndLocalFile(any()) } returns 1234
+        every { dao.getFileById(1234) } returns dummyFileEntity.copy(
+            parentId = ROOT_PARENT_ID,
+            mimeType = MIME_DIR,
+            remotePath = ROOT_PATH
+        )
+
+        val result = localDataSource.getFileByRemotePath(ROOT_PATH, OC_FILE.owner)
+
+        assertNotNull(result)
+        assertEquals(ROOT_PARENT_ID, result!!.parentId)
+        assertEquals(OC_FILE.owner, result.owner)
+        assertEquals(MIME_DIR, result.mimeType)
+        assertEquals(ROOT_PATH, result.remotePath)
+
+        verify { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, ROOT_PATH) }
+        verify { dao.mergeRemoteAndLocalFile(any()) }
+        verify { dao.getFileById(1234) }
     }
 
     @Test(expected = Exception::class)
