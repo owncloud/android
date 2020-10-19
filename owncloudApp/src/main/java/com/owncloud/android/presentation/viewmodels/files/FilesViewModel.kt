@@ -23,6 +23,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
@@ -33,6 +34,7 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
  */
 class FilesViewModel(
     private val createFolderAsyncUseCase: CreateFolderAsyncUseCase,
+    private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -49,6 +51,17 @@ class FilesViewModel(
         useCaseParams = CreateFolderAsyncUseCase.Params(
             parentFile = parentFile,
             folderName = folderName
+        )
+    )
+
+    fun refreshFolder(
+        remotePath: String
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutineDispatcherProvider.io,
+        liveData = _createFolder,
+        useCase = refreshFolderFromServerAsyncUseCase,
+        useCaseParams = RefreshFolderFromServerAsyncUseCase.Params(
+            remotePath = remotePath
         )
     )
 }
