@@ -57,6 +57,10 @@ import java.util.List;
  * Does NOT travel subfolders to refresh their contents also, UNLESS they are
  * set as AVAILABLE OFFLINE FOLDERS.
  */
+@Deprecated
+// Call RefreshFolderFromServerAsyncUseCase instead. Keep it for the moment.
+// It calls SynchronizeFolderOperation that handles conflicts.
+// At the moment, in new arch we don't handle them.
 public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
 
     public static final String EVENT_SINGLE_FOLDER_CONTENTS_SYNCED =
