@@ -56,5 +56,5 @@ val viewModelModule = module {
     viewModel { SettingsMoreViewModel(get()) }
     viewModel { SettingsPictureUploadsViewModel(get(), get()) }
     viewModel { SettingsVideoUploadsViewModel(get(), get()) }
-    viewModel { FilesViewModel(get(), get()) }
+    viewModel { FilesViewModel(get(), get(), get()) }
 }

@@ -157,7 +157,7 @@ public class UploadFileOperation extends SyncOperation {
         if (localPath != null && localPath.length() > 0) {
             File localFile = new File(localPath);
             newFile.setLength(localFile.length());
-            //            newFile.setLastSyncDateForData(localFile.lastModified());
+            newFile.setLastSyncDateForData((int)localFile.lastModified());
         } // don't worry about not assigning size, the problems with localPath
         // are checked when the UploadFileOperation instance is created
 
