@@ -44,7 +44,7 @@ data class OCFile(
     val privateLink: String? = null,
     var storagePath: String? = null,
     var name: String? = null,
-    var treeEtag: String? = null,
+    var treeEtag: String? = "",
 
     // May not needed
     val keepInSync: Int? = null,
@@ -152,5 +152,6 @@ data class OCFile(
     companion object {
         const val PATH_SEPARATOR = '/'
         const val ROOT_PATH: String = "/"
+        const val ROOT_PARENT_ID: Long = 0
     }
 }

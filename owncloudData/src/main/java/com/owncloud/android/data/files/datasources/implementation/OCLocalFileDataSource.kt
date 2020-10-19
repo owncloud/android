@@ -21,8 +21,11 @@ package com.owncloud.android.data.files.datasources.implementation
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
 import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
@@ -32,8 +35,24 @@ class OCLocalFileDataSource(
     override fun getFileById(fileId: Long): OCFile? =
         ocFileMapper.toModel(fileDao.getFileById(fileId))
 
-    override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
-        ocFileMapper.toModel(fileDao.getFileByOwnerAndRemotePath(owner, remotePath))
+    override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? {
+        ocFileMapper.toModel(fileDao.getFileByOwnerAndRemotePath(owner, remotePath))?.let { return it }
+
+        // If root folder do not exists, create and return it.
+        if (remotePath == ROOT_PATH) {
+            val rootFolder = OCFile(
+                parentId = ROOT_PARENT_ID,
+                owner = owner,
+                remotePath = ROOT_PATH,
+                length = 0,
+                mimeType = MIME_DIR,
+                modificationTimestamp = 0
+            )
+            fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(rootFolder)!!).also { return getFileById(it) }
+        }
+
+        return null
+    }
 
     override fun getFolderContent(folderId: Long): List<OCFile> =
         fileDao.getFolderContent(folderId = folderId).map {
