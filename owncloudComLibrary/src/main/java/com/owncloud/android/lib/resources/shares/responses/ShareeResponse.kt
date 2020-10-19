@@ -32,13 +32,9 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class ShareeOcsResponse(
-    @Json(name = "exact")
     val exact: ExactSharees?,
-    @Json(name = "groups")
     val groups: List<ShareeItem>,
-    @Json(name = "remotes")
     val remotes: List<ShareeItem>,
-    @Json(name = "users")
     val users: List<ShareeItem>
 ) {
     fun getFlatRepresentationWithoutExact() = ArrayList<ShareeItem>().apply {
@@ -50,11 +46,8 @@ data class ShareeOcsResponse(
 
 @JsonClass(generateAdapter = true)
 data class ExactSharees(
-    @Json(name = "groups")
     val groups: List<ShareeItem>,
-    @Json(name = "remotes")
     val remotes: List<ShareeItem>,
-    @Json(name = "users")
     val users: List<ShareeItem>
 ) {
     fun getFlatRepresentation() = ArrayList<ShareeItem>().apply {
@@ -66,17 +59,13 @@ data class ExactSharees(
 
 @JsonClass(generateAdapter = true)
 data class ShareeItem(
-    @Json(name = "label")
     val label: String,
-    @Json(name = "value")
     val value: ShareeValue
 )
 
 @JsonClass(generateAdapter = true)
 data class ShareeValue(
-    @Json(name = "shareType")
     val shareType: Int,
-    @Json(name = "shareWith")
     val shareWith: String,
     @Json(name = "shareWithAdditionalInfo")
     val additionalInfo: String?

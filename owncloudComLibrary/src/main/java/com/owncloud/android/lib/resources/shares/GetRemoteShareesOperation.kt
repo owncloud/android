@@ -121,18 +121,6 @@ class GetRemoteShareesOperation
         return RemoteOperationResult(method)
     }
 
-    private fun flattenResultData(jsonResults: Array<JSONArray>):ArrayList<JSONObject> {
-        val data = ArrayList<JSONObject>() // For result data
-        for (i in 0..jsonResults.size) {
-            for (j in 0 until jsonResults[i].length()) {
-                val jsonResult = jsonResults[i].getJSONObject(j)
-                data.add(jsonResult)
-                Timber.d("*** Added item: ${jsonResult.getString(PROPERTY_LABEL)}")
-            }
-        }
-        return data
-    }
-
     private fun onRequestSuccessful(response: String?): RemoteOperationResult<ShareeOcsResponse> {
         val result = RemoteOperationResult<ShareeOcsResponse>(OK)
         Timber.d("Successful response: $response")
