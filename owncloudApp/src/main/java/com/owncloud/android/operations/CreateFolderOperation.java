@@ -35,6 +35,8 @@ import java.io.File;
  * Access to remote operation performing the creation of a new folder in the ownCloud server.
  * Save the new folder in Database
  */
+@Deprecated
+// Call usecase instead of this operation. Remove as soon as possible-
 public class CreateFolderOperation extends SyncOperation {
 
     protected String mRemotePath;
