@@ -30,17 +30,17 @@ import java.util.Locale
 //TODO: Make name not nullable.
 @Parcelize
 data class OCFile(
-    val id: Long? = null,
+    var id: Long? = null,
     var parentId: Long? = null,
     val owner: String,
     var length: Long,
-    val creationTimestamp: Long? = null,
-    val modificationTimestamp: Long,
+    var creationTimestamp: Long? = null,
+    var modificationTimestamp: Long,
     val remotePath: String,
     var mimeType: String,
-    val etag: String? = null,
+    var etag: String? = null,
     val permissions: String? = null,
-    val remoteId: String? = null,
+    var remoteId: String? = null,
     val privateLink: String? = null,
     var storagePath: String? = null,
     var name: String? = null,
@@ -52,8 +52,8 @@ data class OCFile(
     var lastSyncDateForProperties: Long? = null,
     var needsToUpdateThumbnail: Boolean? = null,
     val publicLink: String? = null,
-    val modifiedAtLastSyncForData: Int? = null,
-    val etagInConflict: String? = null,
+    var modifiedAtLastSyncForData: Int? = null,
+    var etagInConflict: String? = null,
     val fileIsDownloading: Boolean? = null,
     var sharedWithSharee: Boolean? = false,
     var sharedByLink: Boolean = false
@@ -62,6 +62,16 @@ data class OCFile(
     init {
         name = File(remotePath).name.let { if (it.isBlank()) ROOT_PATH else it }
     }
+
+    @Deprecated("Do not use this constructor. Remove it as soon as possible")
+    constructor(remotePath: String, mimeType: String, parentId: Long?, owner: String) : this(
+        remotePath = remotePath,
+        mimeType = mimeType,
+        parentId = parentId,
+        owner = owner,
+        modificationTimestamp = 0,
+        length = 0
+    )
 
     /**
      * Use this to find out if this file is a folder.
@@ -136,6 +146,26 @@ data class OCFile(
 
     val isSharedWithMe
         get() = permissions != null && permissions.contains(PERMISSION_SHARED_WITH_ME)
+
+    fun getLocalModificationTimestamp(): Long {
+        storagePath?.takeIf { it.isNotBlank() }?.let { storagePath -> return File(storagePath).lastModified() }
+        return 0
+    }
+
+    fun copyLocalPropertiesFrom(sourceFile: OCFile) {
+        parentId = sourceFile.parentId
+        id = sourceFile.id
+        lastSyncDateForData = sourceFile.lastSyncDateForData
+        modifiedAtLastSyncForData = sourceFile.modifiedAtLastSyncForData
+        storagePath = sourceFile.storagePath
+        treeEtag = sourceFile.treeEtag
+        etagInConflict = sourceFile.etagInConflict
+        // FIXME: 19/10/2020 : New_arch: Av.Offline
+//        setAvailableOfflineStatus(sourceFile.getAvailableOfflineStatus())
+        // FIXME: 19/10/2020 : New_arch: Shared by link
+//        setSharedViaLink(sourceFile.isSharedViaLink())
+//        setSharedWithSharee(sourceFile.isSharedWithSharee())
+    }
 
     /**
      * @param   type        Type to match in the file MIME type; it's MUST include the trailing "/"
