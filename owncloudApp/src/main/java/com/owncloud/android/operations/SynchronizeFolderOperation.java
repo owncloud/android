@@ -38,6 +38,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.utils.FileStorageUtils;
 import timber.log.Timber;
@@ -50,6 +51,8 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.koin.java.KoinJavaComponent.get;
+
 /**
  * Operation performing the synchronization of the list of files contained
  * in a folder identified with its remote path.
@@ -60,6 +63,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Does NOT enter in the child folders to synchronize their contents also, BUT requests for a new operation instance
  * doing so.
  */
+@Deprecated
+// Call RefreshFolderFromServerAsyncUseCase instead. Keep it for the moment.
+// It handles conflicts.
+// At the moment, in new arch we don't handle them.
 public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
 
     /**
@@ -199,6 +206,9 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     @Override
     protected RemoteOperationResult<ArrayList<RemoteFile>> run(OwnCloudClient client) {
         final RemoteOperationResult<ArrayList<RemoteFile>> fetchFolderResult;
+
+        FilesViewModel filesViewModel = get(FilesViewModel.class);
+        filesViewModel.refreshFolder(mRemotePath);
 
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
