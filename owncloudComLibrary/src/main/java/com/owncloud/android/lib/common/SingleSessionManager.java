@@ -111,6 +111,12 @@ public class SingleSessionManager {
                     account.getBaseUri(),
                     context.getApplicationContext(),
                     true);    // TODO remove dependency on OwnCloudClientFactory
+
+            //the next two lines are a hack because okHttpclient is used as a singleton instead of being an
+            //injected instance that can be deleted when required
+            client.clearCookies();
+            client.clearCredentials();
+
             client.setAccount(account);
             HttpClient.setContext(context);
 
