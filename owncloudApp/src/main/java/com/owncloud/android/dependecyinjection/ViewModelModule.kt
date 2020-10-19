@@ -65,5 +65,5 @@ val viewModelModule = module {
     viewModel { PassCodeViewModel(get(), get()) }
     viewModel { LogListViewModel(get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get()) }
-    viewModel { FilesViewModel(get(), get()) }
+    viewModel { FilesViewModel(get(), get(), get()) }
 }
