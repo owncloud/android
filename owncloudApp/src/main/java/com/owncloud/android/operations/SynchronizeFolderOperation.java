@@ -306,8 +306,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         OCFile updatedFolder = FileStorageUtils.createOCFileFromRemoteFile(
                 remoteFolderAndFiles.get(0)
         );  // NOTE: updates ETag with remote value; that's INTENDED
-        // FIXME: 13/10/2020 : New_arch: Migration
-        //updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
+        updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
 
         Timber.d("Remote folder " + mLocalFolder.getRemotePath() + " changed - starting update of local data ");
 
@@ -348,29 +347,30 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
             /// add to updatedFile data about LOCAL STATE (not existing in server)
             updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
-            // FIXME: 13/10/2020 : New_arch: Migration
-//            if (localFile != null) {
-//                updatedLocalFile.copyLocalPropertiesFrom(localFile);
-//                updatedLocalFile.setFileName(remoteFile.getFileName());
-//                // remote eTag will not be set unless file CONTENTS are synchronized
-//                updatedLocalFile.setEtag(localFile.getEtag());
-//                if (!updatedLocalFile.isFolder() &&
-//                        remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
-//                    updatedLocalFile.setNeedsUpdateThumbnail(true);
-//                }
-//            } else {
-//                updatedLocalFile.setParentId(mLocalFolder.getFileId());
-//                // remote eTag will not be set unless file CONTENTS are synchronized
-//                updatedLocalFile.setEtag("");
-//                // new files need to check av-off status of parent folder!
+
+            if (localFile != null) {
+                updatedLocalFile.copyLocalPropertiesFrom(localFile);
+                updatedLocalFile.setName(remoteFile.getName());
+                // remote eTag will not be set unless file CONTENTS are synchronized
+                updatedLocalFile.setEtag(localFile.getEtag());
+                if (!updatedLocalFile.isFolder() &&
+                        remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
+                    updatedLocalFile.setNeedsToUpdateThumbnail(true);
+                }
+            } else {
+                updatedLocalFile.setParentId(mLocalFolder.getId());
+                // remote eTag will not be set unless file CONTENTS are synchronized
+                updatedLocalFile.setEtag("");
+                // new files need to check av-off status of parent folder!
+                // FIXME: 19/10/2020 : New_arch: Av.Offline
 //                if (updatedFolder.isAvailableOffline()) {
 //                    updatedLocalFile.setAvailableOfflineStatus(
 //                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 //                    );
 //                }
-//                // new files need to update thumbnails
-//                updatedLocalFile.setNeedsUpdateThumbnail(true);
-//            }
+                // new files need to update thumbnails
+                updatedLocalFile.setNeedsToUpdateThumbnail(true);
+            }
 
             /// check and fix, if needed, local storage path
             searchForLocalFileInDefaultPath(updatedLocalFile);
