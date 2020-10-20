@@ -71,6 +71,7 @@ import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEF
  */
 public class Preferences extends PreferenceActivity {
 
+    public static final String PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows";
     private static final int ACTION_SELECT_UPLOAD_PATH = 1;
     private static final int ACTION_SELECT_UPLOAD_VIDEO_PATH = 2;
     private static final int ACTION_SELECT_SOURCE_PATH = 3;
@@ -78,7 +79,6 @@ public class Preferences extends PreferenceActivity {
     private static final int ACTION_CONFIRM_PASSCODE = 6;
     private static final int ACTION_REQUEST_PATTERN = 7;
     private static final int ACTION_CONFIRM_PATTERN = 8;
-
     private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS = "camera_picture_uploads";
     private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH = "camera_picture_uploads_path";
     private static final String PREFERENCE_CAMERA_UPLOADS_CATEGORY = "camera_uploads_category";
@@ -100,11 +100,7 @@ public class Preferences extends PreferenceActivity {
     private static final String PREFERENCE_IMPRINT = "imprint";
     private static final String PREFERENCE_ABOUT_APP = "about_app";
     private static final String PREFERENCE_LOG_HTTP = "set_httpLogs";
-
     private static final String PREFERENCE_SCREEN = "preference_screen";
-
-    public static final String PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows";
-
     private PreferenceCategory mPrefCameraUploadsCategory;
     private CheckBoxPreference mPrefCameraPictureUploads;
     private Preference mPrefCameraPictureUploadsPath;
@@ -537,7 +533,7 @@ public class Preferences extends PreferenceActivity {
                     return true;
                 } else if (mPreferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0) ==
                         MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
-                    showDeveloperItems(pCategoryMore);
+                    showDeveloperItems(pCategoryLogs);
                 } else if (clickCount > 0) {
                     Toast.makeText(this,
                             getString(R.string.clicks_to_be_developer,
