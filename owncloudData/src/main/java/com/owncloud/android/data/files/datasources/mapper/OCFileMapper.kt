@@ -47,7 +47,6 @@ class OCFileMapper : Mapper<OCFile, OCFileEntity> {
                 lastSyncDateForData = it.lastSyncDateForData,
                 lastSyncDateForProperties = it.lastSyncDateForProperties,
                 modifiedAtLastSyncForData = it.modifiedAtLastSyncForData,
-                publicLink = it.publicLink,
                 etagInConflict = it.etagInConflict,
                 treeEtag = it.treeEtag,
                 name = it.name
@@ -77,7 +76,6 @@ class OCFileMapper : Mapper<OCFile, OCFileEntity> {
                 lastSyncDateForData = it.lastSyncDateForData,
                 lastSyncDateForProperties = it.lastSyncDateForProperties,
                 modifiedAtLastSyncForData = it.modifiedAtLastSyncForData,
-                publicLink = it.publicLink,
                 etagInConflict = it.etagInConflict,
                 treeEtag = it.treeEtag,
                 name = it.name
