@@ -25,8 +25,11 @@ package com.owncloud.android.utils;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Matrix;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
@@ -251,5 +254,27 @@ public class DisplayUtils {
         } else {
             return (int) resources.getDimension(R.dimen.nav_drawer_header_height);
         }
+    }
+
+    public static void scaleImageInViewFromBottomRight(ImageView imageView) {
+        imageView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Matrix imageMatrix = new Matrix();
+
+            final float dWidth = imageView.getDrawable().getIntrinsicWidth();
+            final float dHeight = imageView.getDrawable().getIntrinsicHeight();
+
+            final float vWidth = imageView.getMeasuredWidth();
+            final float vHeight = imageView.getMeasuredHeight();
+
+            final float scaleFactor;
+            if (vHeight > vWidth) {
+                scaleFactor = vHeight / dHeight;
+            } else {
+                scaleFactor = vWidth / dWidth;
+            }
+            imageMatrix.setScale(scaleFactor, scaleFactor, 0f, 0f);
+            imageMatrix.postTranslate((-dWidth * scaleFactor) + vWidth, (-dHeight * scaleFactor) + vHeight);
+            imageView.setImageMatrix(imageMatrix);
+        });
     }
 }

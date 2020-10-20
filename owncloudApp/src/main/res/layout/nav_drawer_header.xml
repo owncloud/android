@@ -27,7 +27,7 @@
         android:id="@+id/drawer_header_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="matrix" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"

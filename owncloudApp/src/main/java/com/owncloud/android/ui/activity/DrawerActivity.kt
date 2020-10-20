@@ -96,6 +96,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         // Set background header image and logo, if any
         if (resources.getBoolean(R.bool.use_drawer_background_header)) {
             nav_view.getHeaderView(0).drawer_header_background?.setImageResource(R.drawable.drawer_header_background)
+            DisplayUtils.scaleImageInViewFromBottomRight(nav_view.getHeaderView(0).drawer_header_background)
         }
         if (resources.getBoolean(R.bool.use_drawer_logo)) {
             drawer_logo?.setImageResource(R.drawable.drawer_logo)

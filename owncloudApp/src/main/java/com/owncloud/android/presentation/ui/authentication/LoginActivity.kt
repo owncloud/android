@@ -65,6 +65,7 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
+import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.account_setup.*
@@ -220,27 +221,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         authStateManager = AuthStateManager.getInstance(this)
     }
 
-    private fun initBackgroundImage() {
+    private fun initBackgroundImage() =
         //TODO: Change this behaviour for customer branding
-        val backgroundView = login_layout.login_background_image
-        backgroundView.viewTreeObserver.addOnGlobalLayoutListener {
-            backgroundView.imageMatrix = Matrix().apply {
-                val dWidth = backgroundView.drawable.intrinsicWidth.toFloat()
-                val dHeight = backgroundView.drawable.intrinsicHeight.toFloat()
-
-                val vWidth = backgroundView.measuredWidth.toFloat()
-                val vHeight = backgroundView.measuredHeight.toFloat()
-
-                val scaleFactor = if (vHeight > vWidth) {
-                    vHeight / dHeight
-                } else {
-                    vWidth / dWidth
-                }
-                setScale(scaleFactor, scaleFactor, 0f, 0f)
-                postTranslate((-dWidth*scaleFactor)+vWidth, (-dHeight*scaleFactor)+vHeight)
-            }
-        }
-    }
+        DisplayUtils.scaleImageInViewFromBottomRight(login_layout.login_background_image)
 
 
     private fun checkOcServer() {
