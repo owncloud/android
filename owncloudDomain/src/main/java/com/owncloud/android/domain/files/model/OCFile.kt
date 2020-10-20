@@ -50,7 +50,7 @@ data class OCFile(
     val keepInSync: Int? = null,
     var lastSyncDateForData: Int? = null,
     var lastSyncDateForProperties: Long? = null,
-    var needsToUpdateThumbnail: Boolean? = null,
+    var needsToUpdateThumbnail: Boolean = false,
     val publicLink: String? = null,
     var modifiedAtLastSyncForData: Int? = null,
     var etagInConflict: String? = null,
