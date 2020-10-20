@@ -72,7 +72,7 @@ data class OCFileEntity(
     val lastSyncDateForData: Int? = null,
     val fileShareViaLink: Int? = null,
     var lastSyncDateForProperties: Long? = null,
-    var needsToUpdateThumbnail: Boolean? = null,
+    var needsToUpdateThumbnail: Boolean = false,
     val publicLink: String? = null,
     val modifiedAtLastSyncForData: Int? = null,
     val etagInConflict: String? = null,
@@ -84,9 +84,6 @@ data class OCFileEntity(
     var id: Long = 0
 
     companion object {
-        const val PATH_SEPARATOR = "/"
-        const val ROOT_PATH = PATH_SEPARATOR
-
         fun fromCursor(cursor: Cursor): OCFileEntity {
             return OCFileEntity(
                 parentId = cursor.getLong(cursor.getColumnIndex(FILE_PARENT)),

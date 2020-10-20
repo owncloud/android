@@ -406,13 +406,9 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
             /* Cancellation needs do be checked and done before changing the drawable in fileIcon, or
              * {@link ThumbnailsCacheManager#cancelPotentialWork} will NEVER cancel any task.
              */
-            // FIXME: 14/10/2020 : New_arch: Migration
-            OCFile fakeFileToCheatThumbnailsCacheManagerInterface = null; //new OCFile(upload.getRemotePath());
-            if (fakeFileToCheatThumbnailsCacheManagerInterface == null) {
-                return view;
-            }
+            OCFile fakeFileToCheatThumbnailsCacheManagerInterface =
+                    new OCFile(upload.getRemotePath(), upload.getMimeType(),OCFile.ROOT_PARENT_ID, upload.getAccountName());
             fakeFileToCheatThumbnailsCacheManagerInterface.setStoragePath(upload.getLocalPath());
-            fakeFileToCheatThumbnailsCacheManagerInterface.setMimeType(upload.getMimeType());
 
             boolean allowedToCreateNewThumbnail = (ThumbnailsCacheManager.cancelPotentialThumbnailWork(
                     fakeFileToCheatThumbnailsCacheManagerInterface,
