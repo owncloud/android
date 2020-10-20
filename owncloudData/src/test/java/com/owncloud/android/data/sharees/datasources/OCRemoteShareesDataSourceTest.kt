@@ -66,7 +66,7 @@ class OCRemoteShareesDataSourceTest {
     }
 
     @Test
-    fun `OCSharees List - ok - contains sharees entered as remote sharees`(){
+    fun `OCSharees List - ok - contains sharees entered as remote sharees`() {
         assertNotNull(sharees)
         assertEquals(5, sharees.size)
     }
@@ -95,9 +95,9 @@ class OCRemoteShareesDataSourceTest {
     fun `OCShares List - ok - contains one user without additional info`() {
         val sharee = sharees[2]
         assertEquals("User 2", sharee.label)
-        assertEquals( ShareType.USER, sharee.shareType)
+        assertEquals(ShareType.USER, sharee.shareType)
         assertEquals("user2", sharee.shareWith)
-        assertEquals( "", sharee.additionalInfo)
+        assertEquals("", sharee.additionalInfo)
         assertFalse(sharee.isExactMatch)
     }
 
@@ -121,13 +121,37 @@ class OCRemoteShareesDataSourceTest {
         assertFalse(sharee.isExactMatch)
     }
 
+    @Test
+    fun `OCShares List - ok - handle empty response`() {
+        val getRemoteShareesOperationResult = createRemoteOperationResultMock(
+            EMTPY_REMOTE_SHAREES,
+            true
+        )
+
+        every {
+            ocShareeService.getSharees("user", 1, 30)
+        } returns getRemoteShareesOperationResult
+
+        // Get sharees from remote datasource
+        val emptySharees = ocRemoteShareesDataSource.getSharees(
+            "user",
+            1,
+            30
+        )
+
+        assertTrue(emptySharees.isEmpty())
+    }
+
     companion object {
         val REMOTE_SHAREES = ShareeOcsResponse(
-            ExactSharees(arrayListOf(), arrayListOf(), arrayListOf(
-                ShareeItem("User", ShareeValue(0, "user", "user@exact.com"))
-            )),
+            ExactSharees(
+                arrayListOf(), arrayListOf(), arrayListOf(
+                    ShareeItem("User", ShareeValue(0, "user", "user@exact.com"))
+                )
+            ),
             arrayListOf(
-                ShareeItem("Group 1", ShareeValue(1, "group1", "group@group.com"))),
+                ShareeItem("Group 1", ShareeValue(1, "group1", "group@group.com"))
+            ),
             arrayListOf(
                 ShareeItem("Remoteuser 1", ShareeValue(6, "remoteuser1", "user1@remote.com"))
             ),
@@ -136,5 +160,11 @@ class OCRemoteShareesDataSourceTest {
                 ShareeItem("User 2", ShareeValue(0, "user2", null))
             )
         )
+
+        val EMTPY_REMOTE_SHAREES = ShareeOcsResponse(
+            ExactSharees(arrayListOf(), arrayListOf(), arrayListOf()),
+            arrayListOf(), arrayListOf(), arrayListOf()
+        )
+
     }
 }
