@@ -24,8 +24,11 @@
 package com.owncloud.android.lib.common.http
 
 import com.owncloud.android.lib.common.http.LogBuilder.logHttp
-import com.owncloud.android.lib.common.http.NetworkNode.*
-import com.owncloud.android.lib.common.http.NetworkPetition.*
+import com.owncloud.android.lib.common.http.NetworkNode.BODY
+import com.owncloud.android.lib.common.http.NetworkNode.HEADER
+import com.owncloud.android.lib.common.http.NetworkNode.INFO
+import com.owncloud.android.lib.common.http.NetworkPetition.REQUEST
+import com.owncloud.android.lib.common.http.NetworkPetition.RESPONSE
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -39,8 +42,8 @@ class LogInterceptor : Interceptor {
             if (httpLogsEnabled) {
                 // Log request
                 logHttp(REQUEST, INFO, "Type: ${it.request.method} URL: ${it.request.url}")
-                it.headers.forEach { header -> logHttp(REQUEST, HEADER, header.toString()) }
-                logHttp(REQUEST, BODY, it.body.toString())
+                it.request.headers.forEach { header -> logHttp(REQUEST, HEADER, header.toString()) }
+                logHttp(REQUEST, BODY, it.request.body.toString())
 
                 // Log response
                 logHttp(RESPONSE, INFO, "Code: ${it.code}  Message: ${it.message} IsSuccessful: ${it.isSuccessful}")
