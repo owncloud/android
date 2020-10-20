@@ -25,8 +25,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation
 import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
 import com.owncloud.android.lib.resources.shares.services.ShareeService
-import org.json.JSONObject
-import java.util.ArrayList
 
 class OCShareeService(override val client: OwnCloudClient) :
     ShareeService {

@@ -24,7 +24,6 @@
 
 package com.owncloud.android.lib.resources.shares
 
-import com.owncloud.android.lib.resources.files.FileUtils
 import java.io.File
 
 /**

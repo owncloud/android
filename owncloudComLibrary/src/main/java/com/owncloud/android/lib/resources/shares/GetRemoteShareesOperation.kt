@@ -41,12 +41,9 @@ import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import org.json.JSONArray
-import org.json.JSONObject
 import timber.log.Timber
 import java.lang.reflect.Type
 import java.net.URL
-import java.util.ArrayList
 
 /**
  * Created by masensio on 08/10/2015.

@@ -29,140 +29,94 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 import java.lang.reflect.Type
 
 class ShareeResponseTest {
 
-    var response: CommonOcsResponse<ShareeOcsResponse>? = null
+    lateinit var response: CommonOcsResponse<ShareeOcsResponse>
+
+    private fun loadResponses(fileName: String, adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>>) =
+        adapter.fromJson(File(fileName).readText())
 
     @Before
     fun prepare() {
         val moshi = Moshi.Builder().build()
         val type: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareeOcsResponse::class.java)
         val adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>> = moshi.adapter(type)
-        response = adapter.fromJson(EXAMPLE_RESPONSE)
+        response = loadResponses(EXAMPLE_RESPONSE_JSON, adapter)!!
     }
 
     @Test
     fun `check structure - ok - contains meta`() {
-        assertEquals("OK", response?.ocs?.meta?.message!!)
-        assertEquals(200, response?.ocs?.meta?.statusCode!!)
-        assertEquals("ok", response?.ocs?.meta?.status!!)
-        assertTrue(response?.ocs?.meta?.itemsPerPage?.isEmpty()!!)
-        assertTrue(response?.ocs?.meta?.totalItems?.isEmpty()!!)
+        assertEquals("OK", response.ocs.meta.message!!)
+        assertEquals(200, response.ocs.meta.statusCode!!)
+        assertEquals("ok", response.ocs.meta.status!!)
+        assertTrue(response.ocs.meta.itemsPerPage?.isEmpty()!!)
+        assertTrue(response.ocs.meta.totalItems?.isEmpty()!!)
     }
 
     @Test
     fun `check structure - ok - contains exact`() {
-        assertNotEquals(null, response?.ocs?.data?.exact)
+        assertNotEquals(null, response.ocs.data.exact)
     }
 
     @Test
     fun `check structure - ok - contains groups`() {
-        assertNotEquals(null, response?.ocs?.data?.groups)
+        assertNotEquals(null, response.ocs.data.groups)
     }
 
     @Test
     fun `check structure - ok - contains remotes`() {
-        assertNotEquals(null, response?.ocs?.data?.remotes)
+        assertNotEquals(null, response.ocs.data.remotes)
     }
 
     @Test
     fun `check structure - ok - contains users`() {
-        assertNotEquals(null, response?.ocs?.data?.users)
+        assertNotEquals(null, response.ocs.data.users)
     }
 
     @Test
     fun `check structure - ok - groups contains two items`() {
-        assertEquals(2, response?.ocs?.data?.groups?.size)
+        assertEquals(2, response.ocs.data.groups.size)
     }
 
     @Test
     fun `check structure - ok - users contains two items`() {
-        assertEquals(2, response?.ocs?.data?.users?.size)
+        assertEquals(2, response.ocs.data.users.size)
     }
 
     @Test
     fun `check structure - ok - exact_users contains one item`() {
-        assertEquals(1, response?.ocs?.data?.exact?.users?.size)
+        assertEquals(1, response.ocs.data.exact?.users?.size)
     }
 
     @Test
     fun `check structure - ok - user1 contains additional data`() {
-        assertEquals("user1@user1.com", response?.ocs?.data?.users?.get(0)?.value?.additionalInfo)
+        assertEquals("user1@user1.com", response.ocs.data.users.get(0).value.additionalInfo)
     }
 
     @Test
     fun `check structure - ok - user2 does not contain additional data`() {
-        assertEquals(null, response!!.ocs.data.users!![1].value!!.additionalInfo)
+        assertEquals(null, response.ocs.data.users[1].value.additionalInfo)
+    }
+
+    @Test
+    fun `check empty response - ok - parsing ok`() {
+        val moshi = Moshi.Builder().build()
+        val type: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareeOcsResponse::class.java)
+        val adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>> = moshi.adapter(type)
+        loadResponses(EMPTY_RESPONSE_JSON, adapter)!!
     }
 
     companion object {
-        val EXAMPLE_RESPONSE = """
-{
-    "ocs": {
-        "data": {
-            "exact": {
-                "groups": [],
-                "remotes": [],
-                "users": [
-                    {
-                        "label": "admin",
-                        "value": {
-                            "shareType": 0,
-                            "shareWith": "admin"
-                        }
-                    }
-                ]
-            },
-            "groups": [
-                {
-                    "label": "group1",
-                    "value": {
-                        "shareType": 1,
-                        "shareWith": "group1"
-                    }
-                },
-                {
-                    "label": "group2",
-                    "value": {
-                        "shareType": 1,
-                        "shareWith": "group2"
-                    }
-                }
-            ],
-            "remotes": [],
-            "users": [
-                {
-                    "label": "user1",
-                    "value": {
-                        "shareType": 0,
-                        "shareWith": "user1",
-                        "shareWithAdditionalInfo": "user1@user1.com"
-                    }
-                },
-                {
-                    "label": "user2",
-                    "value": {
-                        "shareType": 0,
-                        "shareWith": "user2"
-                    }
-                }
-            ]
-        },
-        "meta": {
-            "itemsperpage": "",
-            "message": "OK",
-            "status": "ok",
-            "statuscode": 200,
-            "totalitems": ""
-        }
-    }
-}
-        """
+        val RESOURCES_PATH =
+            "/home/schabi/Projects/owncloud-android/owncloud-android-library/owncloudComLibrary/src/test/resources/com.owncloud.android.lib.resources.sharees.responses"
+        val EXAMPLE_RESPONSE_JSON = "$RESOURCES_PATH/example_sharee_response.json"
+        val EMPTY_RESPONSE_JSON = "$RESOURCES_PATH/empty_sharee_response.json"
     }
 }
