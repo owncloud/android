@@ -1101,7 +1101,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             setupRootToolbar(title, isSearchEnabled = true)
             listOfFilesFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else {
-            updateStandardToolbar(title = chosenFile.name!!, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
+            updateStandardToolbar(title = chosenFile.name.orEmpty(), displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         }
     }
 
