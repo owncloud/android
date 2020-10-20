@@ -49,6 +49,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -468,10 +469,14 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                             // or involving other parts
                             if (previewVideoError.isParentFolderSyncNeeded()) {
                                 // Start to sync the parent file folder
-                                // FIXME: 13/10/2020 : New_arch: Migration
-
-//                                OCFile folder = new OCFile(getFile().getParentRemotePath());
-//                                ((FileDisplayActivity) requireActivity()).startSyncFolderOperation(folder, false);
+                                // TODO: Check if startSyncFolderOperation requires a folder or whether it would be enough with the remote path.
+                                OCFile folder = new OCFile(
+                                        getFile().getParentRemotePath(),
+                                        MimeTypeConstantsKt.MIME_DIR,
+                                        OCFile.ROOT_PARENT_ID,
+                                        mAccount.name
+                                );
+                                ((FileDisplayActivity) requireActivity()).startSyncFolderOperation(folder, false);
                             }
                         })
                 .setCancelable(false)

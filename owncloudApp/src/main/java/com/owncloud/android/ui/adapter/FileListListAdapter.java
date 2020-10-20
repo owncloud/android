@@ -290,7 +290,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     if (thumbnail != null) {
                         fileIcon.setImageBitmap(thumbnail);
                     }
-                    if (file.needsUpdateThumbnail()) {
+                    if (file.getNeedsToUpdateThumbnail()) {
                         // generate new Thumbnail
                         if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
                             final ThumbnailsCacheManager.ThumbnailGenerationTask task =
