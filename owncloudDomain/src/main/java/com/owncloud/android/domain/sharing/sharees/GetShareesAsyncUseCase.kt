@@ -21,7 +21,6 @@ package com.owncloud.android.domain.sharing.sharees
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.sharing.sharees.model.OCSharee
-import org.json.JSONObject
 
 class GetShareesAsyncUseCase(
     private val shareeRepository: ShareeRepository

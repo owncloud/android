@@ -71,7 +71,6 @@ enum class ShareType constructor(val value: Int) {
     FEDERATED(6);
 
     companion object {
-        private val values = values();
-        fun fromValue(value: Int) = values.firstOrNull { it.value == value }
+        fun fromValue(value: Int) = values().firstOrNull { it.value == value }
     }
 }

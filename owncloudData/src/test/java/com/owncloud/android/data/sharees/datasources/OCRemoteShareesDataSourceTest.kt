@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.shares.datasources
+package com.owncloud.android.data.sharees.datasources
 
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteShareeMapper
@@ -38,11 +38,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-// Needs to be instrumented since JSONObject is tied to the Android platform
 class OCRemoteShareesDataSourceTest {
     private lateinit var ocRemoteShareesDataSource: OCRemoteShareeDataSource
     private val ocShareeService: OCShareeService = mockk()
-    private lateinit var sharees: List<OCSharee>;
+    private lateinit var sharees: List<OCSharee>
 
     @Before
     fun init() {
@@ -75,7 +74,7 @@ class OCRemoteShareesDataSourceTest {
     @Test
     fun `OCSharees List - ok - contains exact user match`() {
         val sharee = sharees[0]
-        assertEquals(sharee.label, "User");
+        assertEquals(sharee.label, "User")
         assertEquals(sharee.shareType, ShareType.USER)
         assertEquals(sharee.shareWith, "user")
         assertEquals(sharee.additionalInfo, "user@exact.com")
