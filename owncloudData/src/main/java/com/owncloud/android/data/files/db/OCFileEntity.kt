@@ -39,7 +39,6 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PARENT
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PATH
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PERMISSIONS
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PRIVATE_LINK
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PUBLIC_LINK
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_REMOTE_ID
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_SHARED_VIA_LINK
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_SHARED_WITH_SHAREE
@@ -73,7 +72,6 @@ data class OCFileEntity(
     val fileShareViaLink: Int? = null,
     var lastSyncDateForProperties: Long? = null,
     var needsToUpdateThumbnail: Boolean = false,
-    val publicLink: String? = null,
     val modifiedAtLastSyncForData: Int? = null,
     val etagInConflict: String? = null,
     val fileIsDownloading: Boolean? = null,
@@ -105,7 +103,6 @@ data class OCFileEntity(
                 keepInSync = cursor.getInt(cursor.getColumnIndex(FILE_KEEP_IN_SYNC)),
                 fileShareViaLink = cursor.getInt(cursor.getColumnIndex(FILE_SHARED_VIA_LINK)),
                 needsToUpdateThumbnail = cursor.getInt(cursor.getColumnIndex(FILE_UPDATE_THUMBNAIL)) == 1,
-                publicLink = cursor.getString(cursor.getColumnIndex(FILE_PUBLIC_LINK)),
                 modifiedAtLastSyncForData = cursor.getInt(cursor.getColumnIndex(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA)),
                 etagInConflict = cursor.getString(cursor.getColumnIndex(FILE_ETAG_IN_CONFLICT)),
                 fileIsDownloading = cursor.getInt(cursor.getColumnIndex(FILE_IS_DOWNLOADING)) == 1,
