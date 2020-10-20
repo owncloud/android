@@ -34,27 +34,26 @@ data class OCFile(
     var parentId: Long? = null,
     val owner: String,
     var length: Long,
-    var creationTimestamp: Long? = null,
+    var creationTimestamp: Long? = 0,
     var modificationTimestamp: Long,
     val remotePath: String,
     var mimeType: String,
-    var etag: String? = null,
+    var etag: String? = "",
     val permissions: String? = null,
     var remoteId: String? = null,
-    val privateLink: String? = null,
+    val privateLink: String? = "",
     var storagePath: String? = null,
     var name: String? = null,
     var treeEtag: String? = "",
 
     // May not needed
     val keepInSync: Int? = null,
-    var lastSyncDateForData: Int? = null,
-    var lastSyncDateForProperties: Long? = null,
+    var lastSyncDateForData: Int? = 0,
+    var lastSyncDateForProperties: Long? = 0,
     var needsToUpdateThumbnail: Boolean = false,
-    val publicLink: String? = null,
-    var modifiedAtLastSyncForData: Int? = null,
+    var modifiedAtLastSyncForData: Int? = 0,
     var etagInConflict: String? = null,
-    val fileIsDownloading: Boolean? = null,
+    val fileIsDownloading: Boolean? = false,
     var sharedWithSharee: Boolean? = false,
     var sharedByLink: Boolean = false
 ) : Parcelable {
@@ -120,10 +119,7 @@ data class OCFile(
      * @return true if it is
      */
     fun isDown(): Boolean {
-        if (!storagePath.isNullOrEmpty()) {
-            val file = File(storagePath)
-            return file.exists()
-        }
+        storagePath?.takeIf { it.isNotBlank() }?.let { storagePath -> return File(storagePath).exists() }
         return false
     }
 

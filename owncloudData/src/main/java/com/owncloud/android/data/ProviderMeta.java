@@ -116,8 +116,5 @@ public class ProviderMeta {
         public static final String FILE_IS_DOWNLOADING = "is_downloading";
         public static final String FILE_ETAG_IN_CONFLICT = "etag_in_conflict";
         public static final String FILE_PRIVATE_LINK = "private_link";
-
-        // @deprecated
-        public static final String FILE_PUBLIC_LINK = "public_link";
     }
 }
