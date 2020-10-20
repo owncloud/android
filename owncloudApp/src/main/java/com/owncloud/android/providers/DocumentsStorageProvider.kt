@@ -40,14 +40,16 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.files.FileUtils
 import com.owncloud.android.operations.CopyFileOperation
-import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.MoveFileOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RemoveFileOperation
@@ -60,6 +62,7 @@ import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NotificationUtils
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -407,20 +410,30 @@ class DocumentsStorageProvider : DocumentsProvider() {
         notifyChangeInFolder(folderToNotify)
     }
 
-    private fun createFolder(parentDocument: OCFile, displayName: String): String {
-        val newPath = parentDocument.remotePath + displayName + File.separator
-
-        if (!FileUtils.isValidName(displayName)) {
-            throw UnsupportedOperationException("Folder $displayName contains at least one invalid character")
-        }
-        Timber.d("Trying to create folder with path $newPath")
-
-        CreateFolderOperation(newPath, false).apply {
-            execute(currentStorageManager, context).also { result ->
-                checkOperationResult(result, parentDocument.id.toString())
-                val newFolder = getFileByPathOrException(newPath)
-                return newFolder.id.toString()
+    private fun checkUseCaseResult(result: UseCaseResult<Any>, folderToNotify: String) {
+        if (!result.isSuccess) {
+            if (result.getThrowableOrNull() is FileNameException) {
+                throw UnsupportedOperationException("Operation contains at least one invalid character")
             }
+            if (result.getThrowableOrNull() !is NoConnectionWithServerException) {
+                notifyChangeInFolder(folderToNotify)
+            }
+            throw FileNotFoundException("Remote Operation failed")
+        }
+        syncRequired = false
+        notifyChangeInFolder(folderToNotify)
+    }
+
+    private fun createFolder(parentDocument: OCFile, displayName: String): String {
+        Timber.d("Trying to create a new folder with name $displayName and parent ${parentDocument.remotePath}")
+
+        val createFolderAsyncUseCase: CreateFolderAsyncUseCase by inject()
+
+        createFolderAsyncUseCase.execute(CreateFolderAsyncUseCase.Params(displayName, parentDocument)).run {
+            checkUseCaseResult(this, parentDocument.id.toString())
+            val newPath = parentDocument.remotePath + displayName + File.separator
+            val newFolder = getFileByPathOrException(newPath)
+            return newFolder.id.toString()
         }
     }
 
