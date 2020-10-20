@@ -193,7 +193,7 @@ class PreviewImageFragment : FileFragment() {
         super.onPrepareOptionsMenu(menu)
         file?.let {
             // Update the file
-            file = mContainerActivity.storageManager.getFileById(it.id!!)
+            file = mContainerActivity.storageManager.getFileById(it.id ?: -1)
             val fileMenuFilter = FileMenuFilter(
                 it,
                 mContainerActivity.storageManager.account,
