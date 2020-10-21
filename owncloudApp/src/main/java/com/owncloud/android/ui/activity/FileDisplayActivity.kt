@@ -289,7 +289,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     // cache until the upload is successful get parent from path
                     parentPath = file.remotePath.substring(
                         0,
-                        file.remotePath.lastIndexOf(file.name!!)
+                        file.remotePath.lastIndexOf(file.fileName)
                     )
                     if (storageManager.getFileByPath(parentPath) == null) {
                         file = null // not able to know the directory where the file is uploading
@@ -1137,7 +1137,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             setupRootToolbar(title, isSearchEnabled = true)
             listOfFilesFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else {
-            updateStandardToolbar(chosenFile.name.orEmpty(), true, true)
+            updateStandardToolbar(chosenFile.fileName, true, true)
         }
     }
 
