@@ -18,82 +18,182 @@
  */
 package com.owncloud.android.domain.files.model
 
-import com.owncloud.android.testutil.OC_ACCOUNT_NAME
-import org.junit.Assert
+import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FOLDER
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class OCFileTest {
 
     @Test
-    fun testEqualsOk() {
+    fun `test equals - ok`() {
         val item1 = OCFile(
-            122,
-            123,
-            OC_ACCOUNT_NAME,
-            123123123,
-            0,
-            1593510589000,
-            "/Photos",
-            "DIR",
-            "5efb0c13c688f",
-            "RDNVCK",
-            "00000003oci9p7er2hay",
-            "http://server.url/f/3"
+            OC_FILE.id,
+            OC_FILE.parentId,
+            OC_FILE.owner,
+            OC_FILE.length,
+            OC_FILE.creationTimestamp,
+            OC_FILE.modificationTimestamp,
+            OC_FILE.remotePath,
+            OC_FILE.mimeType,
+            OC_FILE.etag,
+            OC_FILE.permissions,
+            OC_FILE.remoteId,
+            OC_FILE.privateLink,
+            OC_FILE.storagePath,
+            OC_FILE.name,
+            OC_FILE.treeEtag,
+            OC_FILE.keepInSync,
+            OC_FILE.lastSyncDateForData,
+            OC_FILE.lastSyncDateForProperties,
+            OC_FILE.needsToUpdateThumbnail,
+            OC_FILE.modifiedAtLastSyncForData,
+            OC_FILE.etagInConflict,
+            OC_FILE.fileIsDownloading,
+            OC_FILE.sharedWithSharee,
+            OC_FILE.sharedByLink
         )
 
         val item2 = OCFile(
-            id = 122,
-            parentId = 123,
-            remotePath = "/Photos",
-            owner = OC_ACCOUNT_NAME,
-            permissions = "RDNVCK",
-            remoteId = "00000003oci9p7er2hay",
-            privateLink = "http://server.url/f/3",
-            creationTimestamp = 0,
-            modificationTimestamp = 1593510589000,
-            etag = "5efb0c13c688f",
-            mimeType = "DIR",
-            length = 123123123
+            id = OC_FILE.id,
+            parentId = OC_FILE.parentId,
+            owner = OC_FILE.owner,
+            length = OC_FILE.length,
+            creationTimestamp = OC_FILE.creationTimestamp,
+            modificationTimestamp = OC_FILE.modificationTimestamp,
+            remotePath = OC_FILE.remotePath,
+            mimeType = OC_FILE.mimeType,
+            etag = OC_FILE.etag,
+            permissions = OC_FILE.permissions,
+            remoteId = OC_FILE.remoteId,
+            privateLink = OC_FILE.privateLink,
+            storagePath = OC_FILE.storagePath,
+            name = OC_FILE.name,
+            treeEtag = OC_FILE.treeEtag,
+            keepInSync = OC_FILE.keepInSync,
+            lastSyncDateForData = OC_FILE.lastSyncDateForData,
+            lastSyncDateForProperties = OC_FILE.lastSyncDateForProperties,
+            needsToUpdateThumbnail = OC_FILE.needsToUpdateThumbnail,
+            modifiedAtLastSyncForData = OC_FILE.modifiedAtLastSyncForData,
+            etagInConflict = OC_FILE.etagInConflict,
+            fileIsDownloading = OC_FILE.fileIsDownloading,
+            sharedWithSharee = OC_FILE.sharedWithSharee,
+            sharedByLink = OC_FILE.sharedByLink
         )
 
-
-        Assert.assertTrue(item1 == item2)
-        Assert.assertFalse(item1 === item2)
+        assertTrue(item1 == item2)
+        assertFalse(item1 === item2)
     }
 
     @Test
-    fun testEqualsKo() {
+    fun `test equals - ko`() {
         val item1 = OCFile(
-            123,
-            122,
-            OC_ACCOUNT_NAME,
-            123123123,
-            0,
-            1593510589000,
-            "/Photos",
-            "DIR",
-            "5efb0c13c688f",
-            "RDNVCK",
-            "00000003oci9p7er2hay",
-            "http://server.url/f/3"
+            OC_FILE.id,
+            OC_FILE.parentId,
+            OC_FILE.owner,
+            OC_FILE.length,
+            OC_FILE.creationTimestamp,
+            OC_FILE.modificationTimestamp,
+            OC_FILE.remotePath,
+            OC_FILE.mimeType,
+            OC_FILE.etag,
+            OC_FILE.permissions,
+            OC_FILE.remoteId,
+            OC_FILE.privateLink,
+            OC_FILE.storagePath,
+            OC_FILE.name,
+            OC_FILE.treeEtag,
+            OC_FILE.keepInSync,
+            OC_FILE.lastSyncDateForData,
+            OC_FILE.lastSyncDateForProperties,
+            OC_FILE.needsToUpdateThumbnail,
+            OC_FILE.modifiedAtLastSyncForData,
+            OC_FILE.etagInConflict,
+            OC_FILE.fileIsDownloading,
+            OC_FILE.sharedWithSharee,
+            OC_FILE.sharedByLink
         )
 
         val item2 = OCFile(
-            id = 122,
-            parentId = 123,
-            remotePath = "/Photos",
-            owner = OC_ACCOUNT_NAME,
-            permissions = "RDNVCK",
-            remoteId = "00000003oci9p7er2hay",
-            privateLink = "http://server.url/f/3",
-            creationTimestamp = 0,
-            modificationTimestamp = 1593510589000,
-            etag = "5efb0c13c688f",
-            mimeType = "DIR",
-            length = 123123123
+            id = 123,
+            parentId = OC_FILE.parentId,
+            owner = OC_FILE.owner,
+            length = OC_FILE.length,
+            creationTimestamp = OC_FILE.creationTimestamp,
+            modificationTimestamp = OC_FILE.modificationTimestamp,
+            remotePath = OC_FILE.remotePath,
+            mimeType = OC_FILE.mimeType,
+            etag = OC_FILE.etag,
+            permissions = OC_FILE.permissions,
+            remoteId = OC_FILE.remoteId,
+            privateLink = OC_FILE.privateLink,
+            storagePath = OC_FILE.storagePath,
+            name = OC_FILE.name,
+            treeEtag = OC_FILE.treeEtag,
+            keepInSync = OC_FILE.keepInSync,
+            lastSyncDateForData = OC_FILE.lastSyncDateForData,
+            lastSyncDateForProperties = OC_FILE.lastSyncDateForProperties,
+            needsToUpdateThumbnail = OC_FILE.needsToUpdateThumbnail,
+            modifiedAtLastSyncForData = OC_FILE.modifiedAtLastSyncForData,
+            etagInConflict = OC_FILE.etagInConflict,
+            fileIsDownloading = OC_FILE.fileIsDownloading,
+            sharedWithSharee = OC_FILE.sharedWithSharee,
+            sharedByLink = OC_FILE.sharedByLink
         )
 
-        Assert.assertFalse(item1 == item2)
-        Assert.assertFalse(item1 === item2)
+        assertFalse(item1 == item2)
+        assertFalse(item1 === item2)
+    }
+
+    @Test
+    fun `test filename - ok`() {
+        val ocFile = OCFile(
+            owner = OC_FILE.owner,
+            length = OC_FILE.length,
+            modificationTimestamp = OC_FILE.modificationTimestamp,
+            remotePath = "/Photos/",
+            mimeType = OC_FILE.mimeType
+        )
+        assertNotNull(ocFile.name)
+        assertEquals("Photos", ocFile.name)
+    }
+
+    @Test
+    fun `test file is folder - unix dir`() {
+        val ocFile = OC_FOLDER.copy(mimeType = MIME_DIR_UNIX)
+        assertTrue(ocFile.isFolder)
+    }
+
+    @Test
+    fun `test file is folder - dir`() {
+        val ocFile = OC_FOLDER.copy(mimeType = MIME_DIR)
+        assertTrue(ocFile.isFolder)
+    }
+
+    @Test
+    fun `test file is audio - ok`() {
+        val ocFile = OC_FILE.copy(mimeType = "${MIME_PREFIX_AUDIO}ogg")
+        assertTrue(ocFile.isAudio)
+    }
+
+    @Test
+    fun `test file is video - ok`() {
+        val ocFile = OC_FILE.copy(mimeType = "${MIME_PREFIX_VIDEO}mp4")
+        assertTrue(ocFile.isVideo)
+    }
+
+    @Test
+    fun `test is image - ok`() {
+        val ocFile = OC_FILE.copy(mimeType = "${MIME_PREFIX_IMAGE}jpeg")
+        assertTrue(ocFile.isImage)
+    }
+
+    @Test
+    fun `test is hidden - ok`() {
+        val ocFile = OC_FILE.copy(remotePath = ".secretFile")
+        assertTrue(ocFile.isHidden())
     }
 }
