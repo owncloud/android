@@ -284,7 +284,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 return file;
             } else if (getStorageManager() != null) {
                 String parentPath = file.getRemotePath().substring(0,
-                        file.getRemotePath().lastIndexOf(file.getName()));
+                        file.getRemotePath().lastIndexOf(file.getFileName()));
                 return getStorageManager().getFileByPath(parentPath);
             }
         }
@@ -332,7 +332,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         actionBar.setTitle(
                 atRoot
                         ? getString(R.string.default_display_name_for_root_folder)
-                        : currentDir.getName()
+                        : currentDir.getFileName()
         );
     }
 
@@ -444,7 +444,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                         showSnackMessage(
                                 String.format(
                                         getString(R.string.sync_current_folder_was_removed),
-                                        getCurrentFolder().getName()
+                                        getCurrentFolder().getFileName()
                                 )
                         );
                         browseToRoot();
