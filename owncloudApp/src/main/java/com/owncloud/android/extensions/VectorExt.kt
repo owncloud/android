@@ -30,7 +30,7 @@ fun Vector<OCFile>.filterByQuery(query: String): List<OCFile> {
     val filteredList: MutableList<OCFile> = ArrayList()
 
     for (fileToAdd in this) {
-        val nameOfTheFileToAdd: String = fileToAdd.name?.lowercase(Locale.ROOT).orEmpty()
+        val nameOfTheFileToAdd: String = fileToAdd.fileName.lowercase(Locale.ROOT)
         if (nameOfTheFileToAdd.contains(lowerCaseQuery)) {
             filteredList.add(fileToAdd)
         }
