@@ -360,7 +360,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 syncRequired = false
                 checkOperationResult(result, targetParentFile.id.toString())
                 //Returns the document id of the document copied at the target destination
-                var newPath = targetParentFile.remotePath + sourceFile.name
+                var newPath = targetParentFile.remotePath + sourceFile.fileName
                 if (sourceFile.isFolder) {
                     newPath += File.separator
                 }
@@ -391,7 +391,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 syncRequired = false
                 checkOperationResult(result, targetParentFile.id.toString())
                 //Returns the document id of the document moved to the target destination
-                var newPath = targetParentFile.remotePath + sourceFile.name
+                var newPath = targetParentFile.remotePath + sourceFile.fileName
                 if (sourceFile.isFolder) newPath += File.separator
                 val newFile = getFileByPathOrException(newPath)
                 return newFile.id.toString()
@@ -521,7 +521,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val folderContent = currentStorageManager?.getFolderContent(root) ?: return result
         folderContent.forEach {
-            if (it.name!!.contains(query)) {
+            if (it.fileName.contains(query)) {
                 result.add(it)
                 if (it.isFolder) result.addAll(findFiles(it, query))
             }

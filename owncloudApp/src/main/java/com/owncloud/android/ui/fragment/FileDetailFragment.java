@@ -475,7 +475,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             OCFile file = getFile();
 
             // set file details
-            setFilename(file.getName());
+            setFilename(file.getFileName());
             setFiletype(file);
             setFilesize(file.getLength());
             setTimeModified(file.getModificationTimestamp());
@@ -570,7 +570,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 }
             } else {
                 // Name of the file, to deduce the icon to use in case the MIME type is not precise enough
-                String filename = file.getName();
+                String filename = file.getFileName();
                 iv.setImageResource(MimetypeIconUtil.getFileTypeIconId(mimetype, filename));
             }
         }

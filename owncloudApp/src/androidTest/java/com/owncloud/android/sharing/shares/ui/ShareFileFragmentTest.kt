@@ -90,7 +90,7 @@ class ShareFileFragmentTest {
     @Test
     fun showHeader() {
         loadShareFileFragment()
-        onView(withId(R.id.shareFileName)).check(matches(withText(OC_FILE.name)))
+        onView(withId(R.id.shareFileName)).check(matches(withText(OC_FILE.fileName)))
     }
 
     @Test

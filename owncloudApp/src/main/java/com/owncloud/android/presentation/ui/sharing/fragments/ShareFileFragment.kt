@@ -122,7 +122,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         get() {
             val defaultName = getString(
                 R.string.share_via_link_default_name_template,
-                file?.name
+                file?.fileName
             )
             val defaultNameNumberedRegex = QUOTE_START + defaultName + QUOTE_END + DEFAULT_NAME_REGEX_SUFFIX
             val usedNumbers = ArrayList<Int>()
@@ -232,7 +232,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         binding.shareFileIcon.setImageResource(
             MimetypeIconUtil.getFileTypeIconId(
                 file?.mimeType,
-                file?.name
+                file?.fileName
             )
         )
         if (file!!.isImage) {
@@ -243,7 +243,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             }
         }
         // Name
-        binding.shareFileName.text = file?.name
+        binding.shareFileName.text = file?.fileName
 
         // Size
         if (file!!.isFolder) {
