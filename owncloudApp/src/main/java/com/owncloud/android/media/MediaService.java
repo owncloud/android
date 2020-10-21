@@ -314,7 +314,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         } else if (mState == State.PAUSED) {
             // continue playback
             mState = State.PLAYING;
-            setUpAsForeground(String.format(getString(R.string.media_state_playing), mFile.getName()));
+            setUpAsForeground(String.format(getString(R.string.media_state_playing), mFile.getFileName()));
             configAndStartMediaPlayer();
         }
     }
@@ -480,7 +480,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             mPlayer.setDataSource(url);
 
             mState = State.PREPARING;
-            setUpAsForeground(String.format(getString(R.string.media_state_loading), mFile.getName()));
+            setUpAsForeground(String.format(getString(R.string.media_state_loading), mFile.getFileName()));
 
             // starts preparing the media player in background
             mPlayer.prepareAsync();
@@ -494,25 +494,25 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
         } catch (SecurityException e) {
             Timber.e(e, "SecurityException playing " + mAccount.name + mFile.getRemotePath());
-            Toast.makeText(this, String.format(getString(R.string.media_err_security_ex), mFile.getName()),
+            Toast.makeText(this, String.format(getString(R.string.media_err_security_ex), mFile.getFileName()),
                     Toast.LENGTH_LONG).show();
             processStopRequest(true);
 
         } catch (IOException e) {
             Timber.e(e, "IOException playing " + mAccount.name + mFile.getRemotePath());
-            Toast.makeText(this, String.format(getString(R.string.media_err_io_ex), mFile.getName()),
+            Toast.makeText(this, String.format(getString(R.string.media_err_io_ex), mFile.getFileName()),
                     Toast.LENGTH_LONG).show();
             processStopRequest(true);
 
         } catch (IllegalStateException e) {
             Timber.e(e, "IllegalStateException " + mAccount.name + mFile.getRemotePath());
-            Toast.makeText(this, String.format(getString(R.string.media_err_unexpected), mFile.getName()),
+            Toast.makeText(this, String.format(getString(R.string.media_err_unexpected), mFile.getFileName()),
                     Toast.LENGTH_LONG).show();
             processStopRequest(true);
 
         } catch (IllegalArgumentException e) {
             Timber.e(e, "IllegalArgumentException " + mAccount.name + mFile.getRemotePath());
-            Toast.makeText(this, String.format(getString(R.string.media_err_unexpected), mFile.getName()),
+            Toast.makeText(this, String.format(getString(R.string.media_err_unexpected), mFile.getFileName()),
                     Toast.LENGTH_LONG).show();
             processStopRequest(true);
         }
@@ -532,7 +532,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
     /** Called when media player is done playing current song. */
     public void onCompletion(MediaPlayer player) {
-        Toast.makeText(this, String.format(getString(R.string.media_event_done), mFile.getName()),
+        Toast.makeText(this, String.format(getString(R.string.media_event_done), mFile.getFileName()),
                 Toast.LENGTH_LONG).show();
         if (mMediaController != null) {
             // somebody is still bound to the service
@@ -553,7 +553,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
      */
     public void onPrepared(MediaPlayer player) {
         mState = State.PLAYING;
-        updateNotification(String.format(getString(R.string.media_state_playing), mFile.getName()));
+        updateNotification(String.format(getString(R.string.media_state_playing), mFile.getFileName()));
         if (mMediaController != null) {
             mMediaController.setEnabled(true);
         }
@@ -753,7 +753,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
         @Override
         public void onEvent(int event, String path) {
-            if (path != null && path.equals(mFile.getName())) {
+            if (path != null && path.equals(mFile.getFileName())) {
                 Timber.d("Media file deleted or moved out of sight, stopping playback");
                 processStopRequest(true);
             }
