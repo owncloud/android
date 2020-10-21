@@ -48,8 +48,7 @@ class OCFileMapper : Mapper<OCFile, OCFileEntity> {
                 lastSyncDateForProperties = it.lastSyncDateForProperties,
                 modifiedAtLastSyncForData = it.modifiedAtLastSyncForData,
                 etagInConflict = it.etagInConflict,
-                treeEtag = it.treeEtag,
-                name = it.name
+                treeEtag = it.treeEtag
             )
         }
 
@@ -78,7 +77,7 @@ class OCFileMapper : Mapper<OCFile, OCFileEntity> {
                 modifiedAtLastSyncForData = it.modifiedAtLastSyncForData,
                 etagInConflict = it.etagInConflict,
                 treeEtag = it.treeEtag,
-                name = it.name
+                name = it.fileName
             ).apply { it.id?.let { modelId -> this.id = modelId } }
         }
 }

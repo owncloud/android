@@ -37,8 +37,8 @@ class SortFilesUtils {
 
     private fun sortByName(listOfFiles: Vector<OCFile>, ascending: Boolean): Vector<OCFile> {
         val newListOfFiles =
-            if (ascending) listOfFiles.sortedBy { it.name?.lowercase() }
-            else listOfFiles.sortedByDescending { it.name?.lowercase() }
+            if (ascending) listOfFiles.sortedBy { it.fileName.lowercase() }
+            else listOfFiles.sortedByDescending { it.fileName.lowercase() }
 
         // Show first the folders when sorting by name
         return newListOfFiles.sortedByDescending { it.isFolder }.toVector()
