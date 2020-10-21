@@ -139,7 +139,7 @@ class LogInterceptor : Interceptor {
 
             if (!buffer.isProbablyUtf8()) {
                 logHttp(
-                    REQUEST,
+                    RESPONSE,
                     BODY,
                     requestId,
                     "<-- Body end for request -- Binary -- Omitted: ${responseBody.contentLength()} bytes"
@@ -147,12 +147,12 @@ class LogInterceptor : Interceptor {
             }
 
             if (responseBody.contentLength() < LIMIT_BODY_LOG) {
-                logHttp(REQUEST, BODY, requestId, buffer.clone().readString(charset))
+                logHttp(RESPONSE, BODY, requestId, buffer.clone().readString(charset))
             } else {
-                logHttp(REQUEST, BODY, requestId, buffer.clone().readString(LIMIT_BODY_LOG, charset))
+                logHttp(RESPONSE, BODY, requestId, buffer.clone().readString(LIMIT_BODY_LOG, charset))
             }
             logHttp(
-                REQUEST,
+                RESPONSE,
                 BODY,
                 requestId,
                 "<-- Body end for request -- Omitted: ${max(0, responseBody.contentLength() - LIMIT_BODY_LOG)} bytes"
