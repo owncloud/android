@@ -111,7 +111,7 @@ public class HttpClient {
                 };
 
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
-                        .addInterceptor(getLogInterceptor())
+                        .addNetworkInterceptor(getLogInterceptor())
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
                         .readTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                         .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
