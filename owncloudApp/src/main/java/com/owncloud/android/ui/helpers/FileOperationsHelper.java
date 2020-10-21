@@ -419,7 +419,7 @@ public class FileOperationsHelper {
                     mFileActivity.getString(
                             R.string.subject_user_shared_with_you,
                             username,
-                            mFileActivity.getFile().getName()
+                            mFileActivity.getFile().getFileName()
                     )
             );
         } else {
@@ -427,7 +427,7 @@ public class FileOperationsHelper {
                     Intent.EXTRA_SUBJECT,
                     mFileActivity.getString(
                             R.string.subject_shared_with_you,
-                            mFileActivity.getFile().getName()
+                            mFileActivity.getFile().getFileName()
                     )
             );
         }

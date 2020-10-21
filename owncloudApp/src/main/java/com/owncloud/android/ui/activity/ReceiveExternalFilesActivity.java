@@ -371,7 +371,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (files.get(position).isFolder()) {
             OCFile folderToEnter = files.get(position);
             startSyncFolderOperation(folderToEnter);
-            mParents.push(folderToEnter.getName());
+            mParents.push(folderToEnter.getFileName());
             updateDirectoryList();
         }
     }
@@ -800,7 +800,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                         showSnackMessage(
                                 String.format(
                                         getString(R.string.sync_current_folder_was_removed),
-                                        getCurrentFolder().getName()
+                                        getCurrentFolder().getFileName()
                                 )
                         );
                         browseToRoot();
