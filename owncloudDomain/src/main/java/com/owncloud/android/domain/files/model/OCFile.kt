@@ -27,7 +27,6 @@ import java.io.File
 import java.util.Locale
 
 //TODO: Add new attributes on demand. Let's try to perform a clean up :)
-//TODO: Make name not nullable.
 @Parcelize
 data class OCFile(
     var id: Long? = null,
@@ -43,7 +42,6 @@ data class OCFile(
     var remoteId: String? = null,
     val privateLink: String? = "",
     var storagePath: String? = null,
-    var name: String? = null,
     var treeEtag: String? = "",
 
     // May not needed
@@ -58,9 +56,8 @@ data class OCFile(
     var sharedByLink: Boolean = false
 ) : Parcelable {
 
-    init {
-        name = File(remotePath).name.let { if (it.isBlank()) ROOT_PATH else it }
-    }
+    val fileName: String
+        get() = File(remotePath).name.let { if (it.isBlank()) ROOT_PATH else it }
 
     @Deprecated("Do not use this constructor. Remove it as soon as possible")
     constructor(remotePath: String, mimeType: String, parentId: Long?, owner: String) : this(
@@ -137,7 +134,7 @@ data class OCFile(
      * @return 'True' if the file is hidden
      */
     fun isHidden(): Boolean {
-        return name?.startsWith(".") ?: false
+        return fileName.startsWith(".")
     }
 
     val isSharedWithMe

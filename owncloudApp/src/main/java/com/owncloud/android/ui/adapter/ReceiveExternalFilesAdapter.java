@@ -116,7 +116,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         OCFile file = mFiles.get(position);
 
         TextView filename = vi.findViewById(R.id.filename);
-        filename.setText(file.getName());
+        filename.setText(file.getFileName());
 
         ImageView fileIcon = vi.findViewById(R.id.thumbnail);
         fileIcon.setTag(file.getId());
@@ -158,7 +158,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
             }
         } else {
             fileIcon.setImageResource(
-                    MimetypeIconUtil.getFileTypeIconId(file.getMimeType(), file.getName())
+                    MimetypeIconUtil.getFileTypeIconId(file.getMimeType(), file.getFileName())
             );
         }
         return vi;
