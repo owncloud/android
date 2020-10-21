@@ -74,7 +74,7 @@ public class MoveFileOperation extends SyncOperation {
         }
 
         /// 2. remote move
-        String targetRemotePath = mTargetParentPath + mFile.getName();
+        String targetRemotePath = mTargetParentPath + mFile.getFileName();
         // Check if target remote path already exists on server or add suffix (2), (3) ... otherwise
         String finalRemotePath = RemoteFileUtils.Companion.getAvailableRemotePath(client, targetRemotePath);
         if (mFile.isFolder()) {

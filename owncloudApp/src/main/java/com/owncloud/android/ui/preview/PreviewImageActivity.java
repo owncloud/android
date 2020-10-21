@@ -122,7 +122,7 @@ public class PreviewImageActivity extends FileActivity implements
     private void initViewPager() {
         // get parent from path
         String parentPath = getFile().getRemotePath().substring(0,
-                getFile().getRemotePath().lastIndexOf(getFile().getName()));
+                getFile().getRemotePath().lastIndexOf(getFile().getFileName()));
         OCFile parentFolder = getStorageManager().getFileByPath(parentPath);
         if (parentFolder == null) {
             // should not be necessary
@@ -331,7 +331,7 @@ public class PreviewImageActivity extends FileActivity implements
             mHasSavedPosition = true;
 
             OCFile currentFile = mPreviewImagePagerAdapter.getFileAt(position);
-            getSupportActionBar().setTitle(currentFile.getName());
+            getSupportActionBar().setTitle(currentFile.getFileName());
             setDrawerIndicatorEnabled(false);
             if (!mPreviewImagePagerAdapter.pendingErrorAt(position)) {
                 getFileOperationsHelper().syncFile(currentFile);
@@ -438,7 +438,7 @@ public class PreviewImageActivity extends FileActivity implements
             if (file != null) {
                 /// Refresh the activity according to the Account and OCFile set
                 setFile(file);  // reset after getting it fresh from storageManager
-                getSupportActionBar().setTitle(getFile().getName());
+                getSupportActionBar().setTitle(getFile().getFileName());
                 initViewPager();
 
             } else {

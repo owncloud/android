@@ -408,7 +408,7 @@ public class PreviewImageFragment extends FileFragment {
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                                                    DataSource dataSource, boolean isFirstResource) {
-                        Timber.d("Loading image %s", getFile().getName());
+                        Timber.d("Loading image %s", getFile().getFileName());
                         return false;
                     }
                 })

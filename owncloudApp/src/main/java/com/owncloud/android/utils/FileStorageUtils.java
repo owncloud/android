@@ -182,13 +182,13 @@ public class FileStorageUtils {
 
         Collections.sort(files, (ocFile1, ocFile2) -> {
             if (ocFile1.isFolder() && ocFile2.isFolder()) {
-                return val * ocFile1.getName().toLowerCase().compareTo(ocFile2.getName().toLowerCase());
+                return val * ocFile1.getFileName().toLowerCase().compareTo(ocFile2.getFileName().toLowerCase());
             } else if (ocFile1.isFolder()) {
                 return -1;
             } else if (ocFile2.isFolder()) {
                 return 1;
             }
-            return val * ocFile1.getName().toLowerCase().compareTo(ocFile2.getName().toLowerCase());
+            return val * ocFile1.getFileName().toLowerCase().compareTo(ocFile2.getFileName().toLowerCase());
         });
 
     }

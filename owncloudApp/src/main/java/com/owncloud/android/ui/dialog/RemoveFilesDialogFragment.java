@@ -91,7 +91,7 @@ public class RemoveFilesDialogFragment extends ConfirmationDialogFragment
 
         args.putInt(ARG_MESSAGE_RESOURCE_ID, messageStringId);
         if (files.size() == 1) {
-            args.putStringArray(ARG_MESSAGE_ARGUMENTS, new String[]{files.get(0).getName()});
+            args.putStringArray(ARG_MESSAGE_ARGUMENTS, new String[]{files.get(0).getFileName()});
         }
         args.putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes);
         args.putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no);

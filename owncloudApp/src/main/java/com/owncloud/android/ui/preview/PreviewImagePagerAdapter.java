@@ -135,7 +135,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mImageFiles.get(position).getName();
+        return mImageFiles.get(position).getFileName();
     }
 
     private void updateFile(int position, OCFile file) {

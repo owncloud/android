@@ -359,7 +359,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
             if (localFile != null) {
                 updatedLocalFile.copyLocalPropertiesFrom(localFile);
-                updatedLocalFile.setName(remoteFile.getName());
+//                updatedLocalFile.setFileName(remoteFile.getFileName());
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag(localFile.getEtag());
                 if (!updatedLocalFile.isFolder() &&

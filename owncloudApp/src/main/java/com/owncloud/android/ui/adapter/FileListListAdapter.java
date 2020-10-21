@@ -196,7 +196,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
             fileIcon.setTag(file.getId());
             TextView fileName;
-            String name = file.getName();
+            String name = file.getFileName();
 
             final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
             if (linearLayout != null) {
@@ -230,7 +230,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 case GRID_ITEM:
                     // filename
                     fileName = view.findViewById(R.id.Filename);
-                    name = file.getName();
+                    name = file.getFileName();
                     fileName.setText(name);
 
                 case GRID_IMAGE:
@@ -314,7 +314,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
                 } else {
                     fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimeType(),
-                            file.getName()));
+                            file.getFileName()));
                 }
 
             }
@@ -474,7 +474,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         // Gather files matching the query
         for (OCFile fileToAdd : mFiles) {
-            final String nameOfTheFileToAdd = fileToAdd.getName().toLowerCase();
+            final String nameOfTheFileToAdd = fileToAdd.getFileName().toLowerCase();
             if (nameOfTheFileToAdd.contains(query)) {
                 filteredList.add(fileToAdd);
             }

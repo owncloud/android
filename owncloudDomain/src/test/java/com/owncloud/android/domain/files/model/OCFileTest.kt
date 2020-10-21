@@ -44,7 +44,6 @@ class OCFileTest {
             OC_FILE.remoteId,
             OC_FILE.privateLink,
             OC_FILE.storagePath,
-            OC_FILE.name,
             OC_FILE.treeEtag,
             OC_FILE.keepInSync,
             OC_FILE.lastSyncDateForData,
@@ -71,7 +70,6 @@ class OCFileTest {
             remoteId = OC_FILE.remoteId,
             privateLink = OC_FILE.privateLink,
             storagePath = OC_FILE.storagePath,
-            name = OC_FILE.name,
             treeEtag = OC_FILE.treeEtag,
             keepInSync = OC_FILE.keepInSync,
             lastSyncDateForData = OC_FILE.lastSyncDateForData,
@@ -104,7 +102,6 @@ class OCFileTest {
             OC_FILE.remoteId,
             OC_FILE.privateLink,
             OC_FILE.storagePath,
-            OC_FILE.name,
             OC_FILE.treeEtag,
             OC_FILE.keepInSync,
             OC_FILE.lastSyncDateForData,
@@ -131,7 +128,6 @@ class OCFileTest {
             remoteId = OC_FILE.remoteId,
             privateLink = OC_FILE.privateLink,
             storagePath = OC_FILE.storagePath,
-            name = OC_FILE.name,
             treeEtag = OC_FILE.treeEtag,
             keepInSync = OC_FILE.keepInSync,
             lastSyncDateForData = OC_FILE.lastSyncDateForData,
@@ -157,8 +153,8 @@ class OCFileTest {
             remotePath = "/Photos/",
             mimeType = OC_FILE.mimeType
         )
-        assertNotNull(ocFile.name)
-        assertEquals("Photos", ocFile.name)
+        assertNotNull(ocFile.fileName)
+        assertEquals("Photos", ocFile.fileName)
     }
 
     @Test

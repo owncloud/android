@@ -89,7 +89,7 @@ public class RenameFileOperation extends SyncOperation {
                 return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
             }
 
-            RenameRemoteFileOperation operation = new RenameRemoteFileOperation(mFile.getName(),
+            RenameRemoteFileOperation operation = new RenameRemoteFileOperation(mFile.getFileName(),
                     mFile.getRemotePath(),
                     mNewName, mFile.isFolder());
             result = operation.execute(client);
@@ -113,11 +113,11 @@ public class RenameFileOperation extends SyncOperation {
 
     private void saveLocalDirectory(String parent) {
         getStorageManager().moveLocalFile(mFile, mNewRemotePath, parent);
-        mFile.setName(mNewName);
+//        mFile.setFileName(mNewName);
     }
 
     private void saveLocalFile() {
-        mFile.setName(mNewName);
+//        mFile.setFileName(mNewName);
 
         if (mFile.isDown()) {
             // rename the local copy of the file

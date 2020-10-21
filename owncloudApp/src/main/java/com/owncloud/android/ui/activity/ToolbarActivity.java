@@ -61,7 +61,7 @@ public abstract class ToolbarActivity extends BaseActivity {
                         (chosenFile.isFolder() && chosenFile.getParentId() == FileDataStorageManager.ROOT_PARENT_ID)
         );
         if (!inRoot) {
-            title = chosenFile.getName();
+            title = chosenFile.getFileName();
         }
 
         updateActionBarTitleAndHomeButtonByString(title);
