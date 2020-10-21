@@ -334,7 +334,7 @@ class PreviewImageFragment : FileFragment() {
                     resource: Drawable?, model: Any, target: Target<Drawable?>,
                     dataSource: DataSource, isFirstResource: Boolean
                 ): Boolean {
-                    Timber.d("Loading image %s", file.name)
+                    Timber.d("Loading image %s", file.fileName)
 
                     view?.findViewById<ProgressBar>(R.id.progressWheel)?.isVisible = false
                     return false
