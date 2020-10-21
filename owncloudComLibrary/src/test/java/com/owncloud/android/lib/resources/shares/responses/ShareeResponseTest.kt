@@ -52,6 +52,12 @@ class ShareeResponseTest {
     }
 
     @Test
+    fun `check structure - ok - example response files exist`() {
+        val file = File(EXAMPLE_RESPONSE_JSON)
+        assertTrue(file.exists())
+    }
+
+    @Test
     fun `check structure - ok - contains meta`() {
         assertEquals("OK", response.ocs.meta.message!!)
         assertEquals(200, response.ocs.meta.statusCode!!)
@@ -115,7 +121,7 @@ class ShareeResponseTest {
 
     companion object {
         val RESOURCES_PATH =
-            "/home/schabi/Projects/owncloud-android/owncloud-android-library/owncloudComLibrary/src/test/resources/com.owncloud.android.lib.resources.sharees.responses"
+            "src/test/responses/com.owncloud.android.lib.resources.sharees.responses"
         val EXAMPLE_RESPONSE_JSON = "$RESOURCES_PATH/example_sharee_response.json"
         val EMPTY_RESPONSE_JSON = "$RESOURCES_PATH/empty_sharee_response.json"
     }

@@ -164,12 +164,5 @@ class GetRemoteShareesOperation
         // Arguments - constant values
         private const val VALUE_FORMAT = "json"
         private const val VALUE_ITEM_TYPE = "file"         //  to get the server search for users / groups
-
-        // JSON Node names
-        const val NODE_VALUE = "value"
-        const val PROPERTY_LABEL = "label"
-        const val PROPERTY_SHARE_TYPE = "shareType"
-        const val PROPERTY_SHARE_WITH = "shareWith"
-        const val PROPERTY_SHARE_WITH_ADDITIONAL_INFO = "shareWithAdditionalInfo"
     }
 }
