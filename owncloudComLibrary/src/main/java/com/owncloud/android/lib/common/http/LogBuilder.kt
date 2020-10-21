@@ -29,8 +29,9 @@ object LogBuilder {
     fun logHttp(
         networkPetition: NetworkPetition,
         networkNode: NetworkNode,
+        requestId: String? = "",
         description: String
-    ) = Timber.d("[Network, $networkPetition] [$networkNode] $description")
+    ) = Timber.d("[Network, $networkPetition] [$networkNode] [$requestId] $description")
 }
 
 enum class NetworkPetition {
