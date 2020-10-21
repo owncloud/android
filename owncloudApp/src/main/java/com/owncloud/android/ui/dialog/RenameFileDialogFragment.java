@@ -86,7 +86,7 @@ public class RenameFileDialogFragment
         );
 
         // Setup layout 
-        String currentName = mTargetFile.getName();
+        String currentName = mTargetFile.getFileName();
         EditText inputText = v.findViewById(R.id.user_input);
         inputText.setText(currentName);
         int selectionStart = 0;

@@ -197,7 +197,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
             fileIcon.setTag(file.getId());
             TextView fileName;
-            String name = file.getName();
+            String name = file.getFileName();
 
             final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
             if (linearLayout != null) {
@@ -231,7 +231,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 case GRID_ITEM:
                     // filename
                     fileName = view.findViewById(R.id.Filename);
-                    name = file.getName();
+                    name = file.getFileName();
                     fileName.setText(name);
 
                 case GRID_IMAGE:
@@ -283,7 +283,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                 file.getSharedByLink()));
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
-                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimeType(), file.getName()));
+                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimeType(), file.getFileName()));
                 if (file.getRemoteId() != null) {
                     // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.getRemoteId());
@@ -315,7 +315,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         fileIcon.setBackgroundColor(mContext.getResources()
                                 .getColor(R.color.background_color));
                     }
-
                 }
 
             }
@@ -473,7 +472,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         // Gather files matching the query
         for (OCFile fileToAdd : mFiles) {
-            final String nameOfTheFileToAdd = fileToAdd.getName().toLowerCase();
+            final String nameOfTheFileToAdd = fileToAdd.getFileName().toLowerCase();
             if (nameOfTheFileToAdd.contains(query)) {
                 filteredList.add(fileToAdd);
             }
