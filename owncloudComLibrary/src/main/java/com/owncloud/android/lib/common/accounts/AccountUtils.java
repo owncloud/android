@@ -36,15 +36,10 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import okhttp3.Cookie;
 import timber.log.Timber;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccountUtils {
     /**
@@ -200,64 +195,6 @@ public class AccountUtils {
         }
 
         return username + "@" + url;
-    }
-
-    public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {
-        // Account Manager
-        AccountManager ac = AccountManager.get(context.getApplicationContext());
-
-        if (client != null) {
-            String cookiesString = client.getCookiesString();
-            if (!"".equals(cookiesString)) {
-                ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString);
-                Timber.d("Saving Cookies: %s", cookiesString);
-            }
-        }
-    }
-
-    /**
-     * Restore the client cookies persisted in an account stored in the system AccountManager.
-     *
-     * @param account Stored account.
-     * @param client  Client to restore cookies in.
-     * @param context Android context used to access the system AccountManager.
-     */
-    public static void restoreCookies(Account account, OwnCloudClient client, Context context) {
-        if (account == null) {
-            Timber.d("Cannot restore cookie for null account");
-
-        } else {
-            Timber.d("Restoring cookies for %s", account.name);
-
-            // Account Manager
-            AccountManager am = AccountManager.get(context.getApplicationContext());
-
-            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getUserFilesWebDavUri();
-
-            String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
-            if (cookiesString != null) {
-                String[] rawCookies = cookiesString.split(";");
-                List<Cookie> cookieList = new ArrayList<>(rawCookies.length);
-                for (String rawCookie : rawCookies) {
-                    rawCookie = rawCookie.replace(" ", "");
-                    final int equalPos = rawCookie.indexOf('=');
-                    if (equalPos == -1) {
-                        continue;
-                    }
-                    cookieList.add(new Cookie.Builder()
-                            .name(rawCookie.substring(0, equalPos))
-                            .value(rawCookie.substring(equalPos + 1))
-                            .domain(serverUri.getHost())
-                            .path(
-                                    serverUri.getPath().equals("")
-                                            ? File.separator
-                                            : serverUri.getPath()
-                            )
-                            .build());
-                }
-                client.setCookiesForCurrentAccount(cookieList);
-            }
-        }
     }
 
     public static class AccountNotFoundException extends AccountsException {

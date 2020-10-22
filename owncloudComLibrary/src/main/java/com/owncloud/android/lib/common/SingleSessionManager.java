@@ -24,8 +24,6 @@
 
 package com.owncloud.android.lib.common;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
@@ -37,7 +35,6 @@ import com.owncloud.android.lib.common.http.HttpClient;
 import timber.log.Timber;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -136,7 +133,6 @@ public class SingleSessionManager {
                 Timber.v("reusing client for session %s", sessionName);
             }
 
-            keepCookiesUpdated(context, account, client);
             keepUriUpdated(account, client);
         }
         Timber.d("getClientFor finishing ");
@@ -165,32 +161,6 @@ public class SingleSessionManager {
         mClientsWithUnknownUsername.clear();
 
         Timber.d("removeClientFor finishing ");
-    }
-
-    public void saveAllClients(Context context, String accountType) {
-        Timber.d("Saving sessions... ");
-
-        Iterator<String> accountNames = mClientsWithKnownUsername.keySet().iterator();
-        String accountName;
-        Account account;
-        while (accountNames.hasNext()) {
-            accountName = accountNames.next();
-            account = new Account(accountName, accountType);
-            AccountUtils.saveClient(mClientsWithKnownUsername.get(accountName), account, context);
-        }
-
-        Timber.d("All sessions saved");
-    }
-
-    private void keepCookiesUpdated(Context context, OwnCloudAccount account, OwnCloudClient reusedClient) {
-        AccountManager am = AccountManager.get(context.getApplicationContext());
-        if (am != null && account.getSavedAccount() != null) {
-            String recentCookies = am.getUserData(account.getSavedAccount(), AccountUtils.Constants.KEY_COOKIES);
-            String previousCookies = reusedClient.getCookiesString();
-            if (recentCookies != null && !previousCookies.equals("") && !recentCookies.equals(previousCookies)) {
-                AccountUtils.restoreCookies(account.getSavedAccount(), reusedClient, context);
-            }
-        }
     }
 
     public void refreshCredentialsForAccount(String accountName, OwnCloudCredentials credentials) {
