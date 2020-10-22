@@ -203,13 +203,6 @@ public class AccountUtils {
                                 accountMgr.getUserData(account, Constants.KEY_OC_VERSION)
                         );
 
-                        // copy cookies
-                        accountMgr.setUserData(
-                                newAccount,
-                                Constants.KEY_COOKIES,
-                                accountMgr.getUserData(account, Constants.KEY_COOKIES)
-                        );
-
                         String isOauthStr = accountMgr.getUserData(account, Constants.KEY_SUPPORTS_OAUTH2);
                         boolean isOAuth = OAUTH_SUPPORTED_TRUE.equals(isOauthStr);
                         if (isOAuth) {
