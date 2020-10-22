@@ -28,7 +28,6 @@ import com.owncloud.android.lib.resources.CommonOcsResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -62,56 +61,15 @@ class ShareeResponseTest {
     }
 
     @Test
-    fun `check structure - ok - contains exact`() {
-        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
-        assertNotNull(response.ocs.data.exact)
-    }
-
-    @Test
-    fun `check structure - ok - contains groups`() {
-        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
-        assertNotNull(response.ocs.data.groups)
-    }
-
-    @Test
-    fun `check structure - ok - contains remotes`() {
-        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
-        assertNotNull(response.ocs.data.remotes)
-    }
-
-    @Test
-    fun `check structure - ok - contains users`() {
-        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
-        assertNotNull(response.ocs.data.users)
-    }
-
-    @Test
-    fun `check structure - ok - groups contains two items`() {
+    fun `example response - ok - correct sturcture`() {
         val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
         assertEquals(2, response.ocs.data.groups.size)
-    }
-
-    @Test
-    fun `check structure - ok - users contains two items`() {
-        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
+        assertEquals(0, response.ocs.data.remotes.size)
         assertEquals(2, response.ocs.data.users.size)
-    }
-
-    @Test
-    fun `check structure - ok - exact_users contains one item`() {
-        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
+        assertEquals(0, response.ocs.data.exact?.groups?.size)
+        assertEquals(0, response.ocs.data.exact?.remotes?.size)
         assertEquals(1, response.ocs.data.exact?.users?.size)
-    }
-
-    @Test
-    fun `check structure - ok - user1 contains additional data`() {
-        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
         assertEquals("user1@user1.com", response.ocs.data.users.get(0).value.additionalInfo)
-    }
-
-    @Test
-    fun `check structure - ok - user2 does not contain additional data`() {
-        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
         assertNull(response.ocs.data.users[1].value.additionalInfo)
     }
 
