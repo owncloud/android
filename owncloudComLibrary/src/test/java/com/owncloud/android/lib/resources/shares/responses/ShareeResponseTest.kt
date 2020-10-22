@@ -28,8 +28,9 @@ import com.owncloud.android.lib.resources.CommonOcsResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -38,85 +39,91 @@ import java.lang.reflect.Type
 
 class ShareeResponseTest {
 
-    lateinit var response: CommonOcsResponse<ShareeOcsResponse>
+    lateinit var adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>>
 
-    private fun loadResponses(fileName: String, adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>>) =
+    private fun loadResponses(fileName: String) =
         adapter.fromJson(File(fileName).readText())
 
     @Before
     fun prepare() {
         val moshi = Moshi.Builder().build()
         val type: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareeOcsResponse::class.java)
-        val adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>> = moshi.adapter(type)
-        response = loadResponses(EXAMPLE_RESPONSE_JSON, adapter)!!
-    }
-
-    @Test
-    fun `check structure - ok - example response files exist`() {
-        val file = File(EXAMPLE_RESPONSE_JSON)
-        assertTrue(file.exists())
+        adapter = moshi.adapter(type)
     }
 
     @Test
     fun `check structure - ok - contains meta`() {
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
         assertEquals("OK", response.ocs.meta.message!!)
-        assertEquals(200, response.ocs.meta.statusCode!!)
-        assertEquals("ok", response.ocs.meta.status!!)
+        assertEquals(200, response.ocs.meta.statusCode)
+        assertEquals("ok", response.ocs.meta.status)
         assertTrue(response.ocs.meta.itemsPerPage?.isEmpty()!!)
         assertTrue(response.ocs.meta.totalItems?.isEmpty()!!)
     }
 
     @Test
     fun `check structure - ok - contains exact`() {
-        assertNotEquals(null, response.ocs.data.exact)
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
+        assertNotNull(response.ocs.data.exact)
     }
 
     @Test
     fun `check structure - ok - contains groups`() {
-        assertNotEquals(null, response.ocs.data.groups)
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
+        assertNotNull(response.ocs.data.groups)
     }
 
     @Test
     fun `check structure - ok - contains remotes`() {
-        assertNotEquals(null, response.ocs.data.remotes)
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
+        assertNotNull(response.ocs.data.remotes)
     }
 
     @Test
     fun `check structure - ok - contains users`() {
-        assertNotEquals(null, response.ocs.data.users)
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
+        assertNotNull(response.ocs.data.users)
     }
 
     @Test
     fun `check structure - ok - groups contains two items`() {
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
         assertEquals(2, response.ocs.data.groups.size)
     }
 
     @Test
     fun `check structure - ok - users contains two items`() {
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
         assertEquals(2, response.ocs.data.users.size)
     }
 
     @Test
     fun `check structure - ok - exact_users contains one item`() {
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
         assertEquals(1, response.ocs.data.exact?.users?.size)
     }
 
     @Test
     fun `check structure - ok - user1 contains additional data`() {
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
         assertEquals("user1@user1.com", response.ocs.data.users.get(0).value.additionalInfo)
     }
 
     @Test
     fun `check structure - ok - user2 does not contain additional data`() {
-        assertEquals(null, response.ocs.data.users[1].value.additionalInfo)
+        val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
+        assertNull(response.ocs.data.users[1].value.additionalInfo)
     }
 
     @Test
     fun `check empty response - ok - parsing ok`() {
-        val moshi = Moshi.Builder().build()
-        val type: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareeOcsResponse::class.java)
-        val adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>> = moshi.adapter(type)
-        loadResponses(EMPTY_RESPONSE_JSON, adapter)!!
+        val response = loadResponses(EMPTY_RESPONSE_JSON)!!
+        assertTrue(response.ocs.data.exact?.groups?.isEmpty()!!)
+        assertTrue(response.ocs.data.exact?.remotes?.isEmpty()!!)
+        assertTrue(response.ocs.data.exact?.users?.isEmpty()!!)
+        assertTrue(response.ocs.data.groups.isEmpty())
+        assertTrue(response.ocs.data.remotes.isEmpty())
+        assertTrue(response.ocs.data.users.isEmpty())
     }
 
     companion object {
