@@ -46,6 +46,7 @@ import com.owncloud.android.lib.common.http.methods.webdav.properties.OCShareTyp
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.ShareType.Companion.fromValue
 import kotlinx.parcelize.Parcelize
+import com.owncloud.android.lib.common.utils.isOneOf
 import okhttp3.HttpUrl
 import timber.log.Timber
 import java.io.File
@@ -81,7 +82,9 @@ data class RemoteFile(
 
     // TODO: Quotas not used. Use or remove them.
     init {
-        require(!(remotePath.isEmpty() || !remotePath.startsWith(File.separator))) { "Trying to create a OCFile with a non valid remote path: $remotePath" }
+        require(
+            !(remotePath.isEmpty() || !remotePath.startsWith(File.separator))
+        ) { "Trying to create a OCFile with a non valid remote path: $remotePath" }
     }
 
     /**
@@ -90,7 +93,7 @@ data class RemoteFile(
      * @return true if it is a folder
      */
     val isFolder
-        get() = mimeType == MIME_DIR || mimeType == MIME_DIR_UNIX
+        get() = mimeType.isOneOf(MIME_DIR, MIME_DIR_UNIX)
 
     companion object {
 
@@ -170,7 +173,7 @@ data class RemoteFile(
         private fun getRemotePathFromUrl(url: HttpUrl, userId: String): String {
             val davFilesPath = OwnCloudClient.WEBDAV_FILES_PATH_4_0 + userId
             val absoluteDavPath = Uri.decode(url.encodedPath)
-            val pathToOc = absoluteDavPath.split(davFilesPath)[0]
+            val pathToOc = absoluteDavPath.split(davFilesPath).first()
             return absoluteDavPath.replace(pathToOc + davFilesPath, "")
         }
 
