@@ -54,6 +54,11 @@ public class FileRequestBody extends RequestBody implements ProgressiveDataTrans
     }
 
     @Override
+    public boolean isOneShot() {
+        return true;
+    }
+
+    @Override
     public MediaType contentType() {
         return mContentType;
     }
