@@ -188,8 +188,45 @@ class OCFileTest {
     }
 
     @Test
+    fun `test file is available locally - ok - null`() {
+        val ocFile = OC_FILE.copy(storagePath = null)
+        assertFalse(ocFile.isAvailableLocally)
+    }
+
+    @Test
+    fun `test file exists - ok - null`() {
+        val ocFile = OC_FILE.copy(id = null)
+        assertFalse(ocFile.fileExists)
+    }
+
+    @Test
+    fun `test file exists - ok - (-1)`() {
+        val ocFile = OC_FILE.copy(id = -1)
+        assertFalse(ocFile.fileExists)
+    }
+
+    @Test
+    fun `test file exists - ok`() {
+        val ocFile = OC_FILE.copy(id = 1123)
+        assertTrue(ocFile.fileExists)
+    }
+
+    @Test
     fun `test is hidden - ok`() {
         val ocFile = OC_FILE.copy(remotePath = ".secretFile")
-        assertTrue(ocFile.isHidden())
+        assertTrue(ocFile.isHidden)
     }
+
+    @Test
+    fun `test shared with me - ok`() {
+        val ocFile = OC_FILE.copy(permissions = "RDNSCK")
+        assertTrue(ocFile.isSharedWithMe)
+    }
+
+    @Test
+    fun `test shared with me - ok - false`() {
+        val ocFile = OC_FILE.copy(permissions = "RDCK")
+        assertFalse(ocFile.isSharedWithMe)
+    }
+
 }

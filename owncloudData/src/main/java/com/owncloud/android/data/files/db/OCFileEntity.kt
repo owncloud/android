@@ -66,7 +66,7 @@ data class OCFileEntity(
     var name: String? = null,
     val treeEtag: String? = null,
 
-    // May not needed
+    //TODO: May not needed
     val keepInSync: Int? = null,
     val lastSyncDateForData: Int? = null,
     val fileShareViaLink: Int? = null,
