@@ -119,7 +119,7 @@ public class RenameFileOperation extends SyncOperation {
     private void saveLocalFile() {
 //        mFile.setFileName(mNewName);
 
-        if (mFile.isDown()) {
+        if (mFile.isAvailableLocally()) {
             // rename the local copy of the file
             String oldPath = mFile.getStoragePath();
             File f = new File(oldPath);
