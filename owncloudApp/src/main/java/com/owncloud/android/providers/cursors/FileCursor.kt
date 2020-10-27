@@ -40,7 +40,7 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
     fun addFile(file: OCFile) {
         val iconRes = MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
         val mimeType = if (file.isFolder) Document.MIME_TYPE_DIR else file.mimeType
-        val imagePath = if (file.isImage && file.isDown()) file.storagePath else null
+        val imagePath = if (file.isImage && file.isAvailableLocally) file.storagePath else null
         var flags = if (imagePath != null) Document.FLAG_SUPPORTS_THUMBNAIL else 0
 
         flags = flags or Document.FLAG_SUPPORTS_DELETE or Document.FLAG_SUPPORTS_WRITE

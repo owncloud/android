@@ -29,7 +29,11 @@ class RemoteFileMapper : RemoteMapper<OCFile, RemoteFile> {
                 owner = it.owner,
                 remoteId = it.remoteId,
                 remotePath = it.remotePath,
-                length = if (it.isFolder) it.size else it.length,
+                length = if (it.isFolder) {
+                    it.size
+                } else {
+                    it.length
+                },
                 creationTimestamp = it.creationTimestamp,
                 modificationTimestamp = it.modifiedTimestamp,
                 mimeType = it.mimeType,
