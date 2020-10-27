@@ -131,7 +131,7 @@ class LogInterceptor : Interceptor {
 
             logHttp(RESPONSE, BODY, requestId, "Length: ${responseBody.contentLength()} byte body")
             logHttp(RESPONSE, BODY, requestId, "Type: ${responseBody.contentType()}")
-            logHttp(RESPONSE, BODY, requestId, "--> Body start for request")
+            logHttp(RESPONSE, BODY, requestId, "--> Body start for response")
 
             val source = responseBody.source()
             source.request(LIMIT_BODY_LOG)
@@ -142,7 +142,7 @@ class LogInterceptor : Interceptor {
                     RESPONSE,
                     BODY,
                     requestId,
-                    "<-- Body end for request -- Binary -- Omitted: ${responseBody.contentLength()} bytes"
+                    "<-- Body end for response -- Binary -- Omitted: ${responseBody.contentLength()} bytes"
                 )
             }
 
@@ -155,7 +155,7 @@ class LogInterceptor : Interceptor {
                 RESPONSE,
                 BODY,
                 requestId,
-                "<-- Body end for request -- Omitted: ${max(0, responseBody.contentLength() - LIMIT_BODY_LOG)} bytes"
+                "<-- Body end for response -- Omitted: ${max(0, responseBody.contentLength() - LIMIT_BODY_LOG)} bytes"
             )
         } ?: logHttp(RESPONSE, BODY, requestId, "Empty body")
     }
