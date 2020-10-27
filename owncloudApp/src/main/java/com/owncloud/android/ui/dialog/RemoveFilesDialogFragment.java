@@ -60,7 +60,7 @@ public class RemoveFilesDialogFragment extends ConfirmationDialogFragment
             if (file.isFolder()) {
                 containsFolder = true;
             }
-            if (file.isDown()) {
+            if (file.isAvailableLocally()) {
                 containsDown = true;
             }
             // FIXME: 13/10/2020 : New_arch: Av.Offline
