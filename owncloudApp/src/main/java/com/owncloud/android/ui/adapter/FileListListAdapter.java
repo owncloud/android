@@ -351,7 +351,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             localStateView.setImageResource(R.drawable.error_pin);
             localStateView.setVisibility(View.VISIBLE);
         } else {
-            if (file.isDown()) {
+            if (file.isAvailableLocally()) {
                 localStateView.setVisibility(View.VISIBLE);
                 localStateView.setImageResource(R.drawable.downloaded_pin);
             }

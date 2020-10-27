@@ -42,7 +42,6 @@ class OCLocalFileDataSourceTest {
     private lateinit var dao: FileDao
 
     private val mapper = OCFileMapper()
-    private val dummyFileEntity: OCFileEntity = mapper.toEntity(OC_FILE)!!
 
     @Before
     fun init() {
@@ -52,7 +51,7 @@ class OCLocalFileDataSourceTest {
 
     @Test
     fun `get file by id - ok`() {
-        every { dao.getFileById(any()) } returns dummyFileEntity
+        every { dao.getFileById(any()) } returns DUMMY_FILE_ENTITY
 
         val result = localDataSource.getFileById(OC_FILE.id!!)
 
@@ -65,23 +64,23 @@ class OCLocalFileDataSourceTest {
     fun `get file by id - ok - null`() {
         every { dao.getFileById(any()) } returns null
 
-        val result = localDataSource.getFileById(dummyFileEntity.id)
+        val result = localDataSource.getFileById(DUMMY_FILE_ENTITY.id)
 
         assertNull(result)
 
-        verify { dao.getFileById(dummyFileEntity.id) }
+        verify { dao.getFileById(DUMMY_FILE_ENTITY.id) }
     }
 
     @Test(expected = Exception::class)
     fun `get file by id - ko`() {
         every { dao.getFileById(any()) } throws Exception()
 
-        localDataSource.getFileById(dummyFileEntity.id)
+        localDataSource.getFileById(DUMMY_FILE_ENTITY.id)
     }
 
     @Test
     fun `get file by remote path - ok`() {
-        every { dao.getFileByOwnerAndRemotePath(any(), any()) } returns dummyFileEntity
+        every { dao.getFileByOwnerAndRemotePath(any(), any()) } returns DUMMY_FILE_ENTITY
 
         val result = localDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
 
@@ -105,7 +104,7 @@ class OCLocalFileDataSourceTest {
     fun `get file by remote path - ok - null - create root folder`() {
         every { dao.getFileByOwnerAndRemotePath(any(), any()) } returns null
         every { dao.mergeRemoteAndLocalFile(any()) } returns 1234
-        every { dao.getFileById(1234) } returns dummyFileEntity.copy(
+        every { dao.getFileById(1234) } returns DUMMY_FILE_ENTITY.copy(
             parentId = ROOT_PARENT_ID,
             mimeType = MIME_DIR,
             remotePath = ROOT_PATH
@@ -135,42 +134,42 @@ class OCLocalFileDataSourceTest {
 
     @Test
     fun `get folder content - ok`() {
-        every { dao.getFolderContent(any()) } returns listOf(dummyFileEntity)
+        every { dao.getFolderContent(any()) } returns listOf(DUMMY_FILE_ENTITY)
 
-        val result = localDataSource.getFolderContent(dummyFileEntity.id)
+        val result = localDataSource.getFolderContent(DUMMY_FILE_ENTITY.id)
 
         assertEquals(listOf(OC_FILE), result)
 
-        verify { dao.getFolderContent(dummyFileEntity.id) }
+        verify { dao.getFolderContent(DUMMY_FILE_ENTITY.id) }
     }
 
     @Test(expected = Exception::class)
     fun `get folder content - ko`() {
         every { dao.getFolderContent(any()) } throws Exception()
 
-        localDataSource.getFolderContent(dummyFileEntity.id)
+        localDataSource.getFolderContent(DUMMY_FILE_ENTITY.id)
 
-        verify { dao.getFolderContent(dummyFileEntity.id) }
+        verify { dao.getFolderContent(DUMMY_FILE_ENTITY.id) }
     }
 
     @Test
     fun `get folder images - ok`() {
-        every { dao.getFolderByMimeType(any(), any()) } returns listOf(dummyFileEntity)
+        every { dao.getFolderByMimeType(any(), any()) } returns listOf(DUMMY_FILE_ENTITY)
 
-        val result = localDataSource.getFolderImages(dummyFileEntity.id)
+        val result = localDataSource.getFolderImages(DUMMY_FILE_ENTITY.id)
 
         assertEquals(listOf(OC_FILE), result)
 
-        verify { dao.getFolderByMimeType(dummyFileEntity.id, MIME_PREFIX_IMAGE) }
+        verify { dao.getFolderByMimeType(DUMMY_FILE_ENTITY.id, MIME_PREFIX_IMAGE) }
     }
 
     @Test(expected = Exception::class)
     fun `get folder images - ko`() {
         every { dao.getFolderByMimeType(any(), any()) } throws Exception()
 
-        localDataSource.getFolderImages(dummyFileEntity.id)
+        localDataSource.getFolderImages(DUMMY_FILE_ENTITY.id)
 
-        verify { dao.getFolderByMimeType(dummyFileEntity.id, MIME_PREFIX_IMAGE) }
+        verify { dao.getFolderByMimeType(DUMMY_FILE_ENTITY.id, MIME_PREFIX_IMAGE) }
     }
 
     @Test
@@ -181,7 +180,7 @@ class OCLocalFileDataSourceTest {
 
         assertEquals(Unit, result)
 
-        verify(exactly = 1) { dao.mergeRemoteAndLocalFile(dummyFileEntity) }
+        verify(exactly = 1) { dao.mergeRemoteAndLocalFile(DUMMY_FILE_ENTITY) }
     }
 
     @Test(expected = Exception::class)
@@ -190,6 +189,10 @@ class OCLocalFileDataSourceTest {
 
         localDataSource.saveFile(OC_FILE)
 
-        verify { dao.mergeRemoteAndLocalFile(dummyFileEntity) }
+        verify { dao.mergeRemoteAndLocalFile(DUMMY_FILE_ENTITY) }
+    }
+
+    companion object {
+        private val DUMMY_FILE_ENTITY: OCFileEntity = OCFileMapper().toEntity(OC_FILE)!!
     }
 }

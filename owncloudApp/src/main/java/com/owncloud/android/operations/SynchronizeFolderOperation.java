@@ -291,7 +291,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             storageManager.removeFolder(
                     mLocalFolder,
                     true,
-                    (mLocalFolder.isDown() &&
+                    (mLocalFolder.isAvailableLocally() &&
                             mLocalFolder.getStoragePath().startsWith(currentSavePath)
                     )
             );

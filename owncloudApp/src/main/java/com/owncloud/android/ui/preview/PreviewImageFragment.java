@@ -194,7 +194,7 @@ public class PreviewImageFragment extends FileFragment {
         if (getFile() == null) {
             throw new IllegalStateException("Instanced with a NULL OCFile");
         }
-        if (!getFile().isDown()) {
+        if (!getFile().isAvailableLocally()) {
             throw new IllegalStateException("There is no local file to preview");
         }
     }

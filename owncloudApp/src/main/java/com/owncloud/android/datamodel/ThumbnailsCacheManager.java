@@ -263,7 +263,7 @@ public class ThumbnailsCacheManager {
 
                 int px = getThumbnailDimension();
 
-                if (file.isDown()) {
+                if (file.isAvailableLocally()) {
                     Bitmap temp = BitmapUtils.decodeSampledBitmapFromFile(
                             file.getStoragePath(), px, px);
                     Bitmap bitmap = ThumbnailUtils.extractThumbnail(temp, px, px);

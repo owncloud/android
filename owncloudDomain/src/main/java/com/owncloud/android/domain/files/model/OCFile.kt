@@ -22,6 +22,7 @@ package com.owncloud.android.domain.files.model
 
 import android.os.Parcelable
 import android.webkit.MimeTypeMap
+import com.owncloud.android.domain.ext.isOneOf
 import kotlinx.android.parcel.Parcelize
 import java.io.File
 import java.util.Locale
@@ -44,7 +45,7 @@ data class OCFile(
     var storagePath: String? = null,
     var treeEtag: String? = "",
 
-    // May not needed
+    //TODO: May not needed
     val keepInSync: Int? = null,
     var lastSyncDateForData: Int? = 0,
     var lastSyncDateForProperties: Long? = 0,
@@ -75,7 +76,7 @@ data class OCFile(
      * @return true if it is a folder
      */
     val isFolder
-        get() = mimeType == MIME_DIR || mimeType == MIME_DIR_UNIX
+        get() = mimeType.isOneOf(MIME_DIR, MIME_DIR_UNIX)
 
     /**
      * @return 'True' if the file contains audio
@@ -107,7 +108,7 @@ data class OCFile(
      */
     fun getParentRemotePath(): String {
         val parentPath: String = File(remotePath).parent ?: throw IllegalArgumentException("Parent path is null")
-        return if (parentPath.endsWith("/")) parentPath else "$parentPath/"
+        return if (parentPath.endsWith("$PATH_SEPARATOR")) parentPath else "$parentPath$PATH_SEPARATOR"
     }
 
     /**
@@ -115,10 +116,13 @@ data class OCFile(
      *
      * @return true if it is
      */
-    fun isDown(): Boolean {
-        storagePath?.takeIf { it.isNotBlank() }?.let { storagePath -> return File(storagePath).exists() }
-        return false
-    }
+    val isAvailableLocally: Boolean
+        get() =
+            storagePath?.takeIf {
+                it.isNotBlank()
+            }?.let { storagePath ->
+                File(storagePath).exists()
+            } ?: false
 
     /**
      * Can be used to check, whether or not this file exists in the database
@@ -126,24 +130,25 @@ data class OCFile(
      *
      * @return true, if the file exists in the database
      */
-    fun fileExists(): Boolean {
-        return id != -1L
-    }
+    val fileExists: Boolean
+        get() = id != null && id != -1L
 
     /**
      * @return 'True' if the file is hidden
      */
-    fun isHidden(): Boolean {
-        return fileName.startsWith(".")
-    }
+    val isHidden: Boolean
+        get() = fileName.startsWith(".")
 
     val isSharedWithMe
         get() = permissions != null && permissions.contains(PERMISSION_SHARED_WITH_ME)
 
-    fun getLocalModificationTimestamp(): Long {
-        storagePath?.takeIf { it.isNotBlank() }?.let { storagePath -> return File(storagePath).lastModified() }
-        return 0
-    }
+    val localModificationTimestamp: Long
+        get() =
+            storagePath?.takeIf {
+                it.isNotBlank()
+            }?.let { storagePath ->
+                File(storagePath).lastModified()
+            } ?: 0
 
     fun copyLocalPropertiesFrom(sourceFile: OCFile) {
         parentId = sourceFile.parentId
