@@ -191,7 +191,7 @@ public class PreviewAudioFragment extends FileFragment {
         if (mAccount == null) {
             throw new IllegalStateException("Instanced with a NULL ownCloud Account");
         }
-        if (!file.isDown()) {
+        if (!file.isAvailableLocally()) {
             throw new IllegalStateException("There is no local file to preview");
         }
         if (!file.isAudio()) {
@@ -247,7 +247,7 @@ public class PreviewAudioFragment extends FileFragment {
         Timber.v("onStart");
 
         OCFile file = getFile();
-        if (file != null && file.isDown()) {
+        if (file != null && file.isAvailableLocally()) {
             bindMediaService();
         }
 
@@ -516,7 +516,7 @@ public class PreviewAudioFragment extends FileFragment {
      * @return 'True' if the file can be handled by the fragment.
      */
     public static boolean canBePreviewed(OCFile file) {
-        return (file != null && file.isDown() && file.isAudio());
+        return (file != null && file.isAvailableLocally() && file.isAudio());
     }
 
     public void stopPreview() {

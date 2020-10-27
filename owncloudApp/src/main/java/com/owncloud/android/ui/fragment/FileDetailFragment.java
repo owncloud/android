@@ -302,7 +302,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             }
             case R.id.action_send_file: {
                 // Obtain the file
-                if (!getFile().isDown()) {  // Download the file                    
+                if (!getFile().isAvailableLocally()) {  // Download the file
                     Timber.d("%s : File must be downloaded", getFile().getRemotePath());
                     ((FileDisplayActivity) mContainerActivity).startDownloadForSending(getFile());
                 } else {
@@ -377,7 +377,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             ) {
                 setButtonsForTransferring();
 
-            } else if (file.isDown()) {
+            } else if (file.isAvailableLocally()) {
 
                 setButtonsForDown();
 

@@ -276,7 +276,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
     @Override
     public void updateViewForSyncOff() {
-        if (getFile().isDown()) {
+        if (getFile().isAvailableLocally()) {
             setButtonsForDown(getView());
         } else {
             setButtonsForRemote(getView());
