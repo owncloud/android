@@ -100,7 +100,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
             ocFile = getFileByIdOrException(docId)
 
-            if (!ocFile.isDown()) {
+            if (!ocFile.isAvailableLocally) {
                 val intent = Intent(context, FileDownloader::class.java).apply {
                     putExtra(FileDownloader.KEY_ACCOUNT, getAccountFromFileId(docId))
                     putExtra(FileDownloader.KEY_FILE, ocFile)
@@ -114,7 +114,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     }
                     ocFile = getFileByIdOrException(docId)
 
-                } while (!ocFile.isDown())
+                } while (!ocFile.isAvailableLocally)
             }
         } else {
             ocFile = fileToUpload
