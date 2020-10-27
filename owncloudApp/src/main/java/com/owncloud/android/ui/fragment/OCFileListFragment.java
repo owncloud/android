@@ -885,7 +885,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                         !fileIsDownloading(file)) {
                     // FIXME: 13/10/2020 : New_arch: Av.Offline
 //                    // Available offline exception, don't initialize streaming
-//                    if (!file.isDown() && file.isAvailableOffline()) {
+//                    if (!file.isAvailableLocally() && file.isAvailableOffline()) {
 //                        // sync file content, then open with external apps
 //                        ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
 //                    } else {
@@ -895,7 +895,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
                     // If the file is already downloaded sync it, just to update it if there is a
                     // new available file version
-                    if (file.isDown()) {
+                    if (file.isAvailableLocally()) {
                         mContainerActivity.getFileOperationsHelper().syncFile(file);
                     }
                 } else {
@@ -968,7 +968,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 }
                 case R.id.action_send_file: {
                     // Obtain the file
-                    if (!singleFile.isDown()) {  // Download the file
+                    if (!singleFile.isAvailableLocally()) {  // Download the file
                         Timber.d("%s : File must be downloaded", singleFile.getRemotePath());
                         ((FileDisplayActivity) mContainerActivity).startDownloadForSending(singleFile);
 
