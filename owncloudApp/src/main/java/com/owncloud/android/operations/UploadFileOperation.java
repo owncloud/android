@@ -695,7 +695,7 @@ public class UploadFileOperation extends SyncOperation {
      */
     private void saveUploadedFile(OwnCloudClient client) {
         OCFile file = mFile;
-        if (file.fileExists()) {
+        if (file.getFileExists()) {
             file = getStorageManager().getFileById(file.getId());
         }
         long syncDate = System.currentTimeMillis();
