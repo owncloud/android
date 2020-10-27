@@ -357,7 +357,7 @@ public class FileMenuFilter {
 
     private boolean anyFileDown() {
         for (OCFile file : mFiles) {
-            if (file.isDown()) {
+            if (file.isAvailableLocally()) {
                 return true;
             }
         }

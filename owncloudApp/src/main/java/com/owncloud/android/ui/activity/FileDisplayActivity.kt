@@ -242,7 +242,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             // get parent from path
             val parentPath: String
             if (file != null) {
-                if (file.isDown() && file.lastSyncDateForProperties == 0L) {
+                if (file.isAvailableLocally && file.lastSyncDateForProperties == 0L) {
                     // upload in progress - right now, files are not inserted in the local
                     // cache until the upload is successful get parent from path
                     parentPath = file.remotePath.substring(
@@ -913,7 +913,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             val secondFragment = secondFragment
 
             if (secondFragment != null) {
-                if (!success && !file.fileExists()) {
+                if (!success && !file.fileExists) {
                     cleanSecondFragment()
                 } else {
                     val file = file
@@ -973,14 +973,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             waitingToSend = waitingToSend?.let { file ->
                 storageManager.getFileByPath(file.remotePath)
             }
-            if (waitingToSend?.isDown() == true) {
+            if (waitingToSend?.isAvailableLocally == true) {
                 sendDownloadedFile()
             }
 
             waitingToOpen = waitingToOpen?.let { file ->
                 storageManager.getFileByPath(file.remotePath)
             }
-            if (waitingToOpen?.isDown() == true) {
+            if (waitingToOpen?.isAvailableLocally == true) {
                 openDownloadedFile()
             }
         }
@@ -1123,7 +1123,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     if (storageManager != null) {
                         // update the file
                         fileWaitingToPreview = storageManager.getFileById(fileWaitingToPreview!!.id!!)
-                        if (!fileWaitingToPreview!!.isDown()) {
+                        if (!fileWaitingToPreview!!.isAvailableLocally) {
                             // If the file to preview isn't downloaded yet, check if it is being
                             // downloaded in this moment or not
                             requestForDownload()
@@ -1357,7 +1357,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
-        val waitedForPreview = fileWaitingToPreview?.let { it == operation.localFile && it.isDown() } ?: false
+        val waitedForPreview = fileWaitingToPreview?.let { it == operation.localFile && it.isAvailableLocally } ?: false
         if (!operation.transferWasRequested() and waitedForPreview) {
             fileOperationsHelper.openFile(fileWaitingToPreview)
             fileWaitingToPreview = null
@@ -1585,7 +1585,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         val secondFragment = secondFragment
         if (secondFragment != null && file == secondFragment.file) {
-            if (!file.fileExists()) {
+            if (!file.fileExists) {
                 cleanSecondFragment()
             } else {
                 secondFragment.onSyncEvent(FileDownloader.getDownloadFinishMessage(), false, null)
