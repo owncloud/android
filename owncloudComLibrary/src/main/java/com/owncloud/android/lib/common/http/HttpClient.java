@@ -57,6 +57,7 @@ public class HttpClient {
     private static OkHttpClient sOkHttpClient;
     private static Context sContext;
     private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
+    private static LogInterceptor sLogInterceptor;
 
     public static OkHttpClient getOkHttpClient() {
         if (sOkHttpClient == null) {
@@ -110,6 +111,7 @@ public class HttpClient {
                 };
 
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
+                        .addNetworkInterceptor(getLogInterceptor())
                         .protocols(Arrays.asList(Protocol.HTTP_1_1))
                         .readTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                         .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -120,6 +122,7 @@ public class HttpClient {
                         .cookieJar(cookieJar);
                 // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
                 //.hostnameVerifier(new BrowserCompatHostnameVerifier());
+
                 sOkHttpClient = clientBuilder.build();
 
             } catch (Exception e) {
@@ -135,6 +138,13 @@ public class HttpClient {
 
     public static void setContext(Context context) {
         sContext = context;
+    }
+
+    public static LogInterceptor getLogInterceptor() {
+        if (sLogInterceptor == null) {
+            sLogInterceptor = new LogInterceptor();
+        }
+        return sLogInterceptor;
     }
 
     public List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
