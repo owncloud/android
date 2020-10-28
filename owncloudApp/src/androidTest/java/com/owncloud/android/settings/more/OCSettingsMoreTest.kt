@@ -66,8 +66,11 @@ class OCSettingsMoreTest {
             activityRule.activity.findPreference("camera_uploads_category") as PreferenceCategory
         val securityCategory =
             activityRule.activity.findPreference("security_category") as PreferenceCategory
+        val logsCategory =
+            activityRule.activity.findPreference("logs_category") as PreferenceCategory
         preferenceScreen.removePreference(cameraUploadsCategory)
         preferenceScreen.removePreference(securityCategory)
+        preferenceScreen.removePreference(logsCategory)
     }
 
     @After
@@ -156,17 +159,6 @@ class OCSettingsMoreTest {
                 hasFlag(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         )
-    }
-
-    @Test
-    fun loggerView() {
-        onView(withText(R.string.actionbar_logger)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun loggerOpen() {
-        onView(withText(R.string.actionbar_logger)).perform(click())
-        intended(hasComponent(LogHistoryActivity::class.java.name))
     }
 
     @Test

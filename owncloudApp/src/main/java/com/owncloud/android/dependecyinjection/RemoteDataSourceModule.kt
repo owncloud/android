@@ -61,7 +61,7 @@ val remoteDataSourceModule = module {
     single { OwnCloudAccount(get(), androidContext()) }
     single { SingleSessionManager.getDefaultSingleton().getClientFor(get(), androidContext()) }
 
-    single { ClientManager(get(), get()) }
+    single { ClientManager(get(), get(), get()) }
 
     single<CapabilityService> { OCCapabilityService(get()) }
     single<FileService> { OCFileService(get()) }

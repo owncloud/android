@@ -46,6 +46,7 @@ import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.utils.LoggingHelper
+import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
@@ -170,6 +171,8 @@ class MainApp : Application() {
                 File(Environment.getExternalStorageDirectory().absolutePath + File.separator + dataFolder), dataFolder
             )
             Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
+
+            LogsProvider(applicationContext).initHttpLogs()
         }
     }
 
