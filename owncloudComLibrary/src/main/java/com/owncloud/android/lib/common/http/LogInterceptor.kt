@@ -99,7 +99,7 @@ class LogInterceptor : Interceptor {
             logHttp(REQUEST, BODY, requestId, "Type: ${requestBody.contentType()}")
             logHttp(REQUEST, BODY, requestId, "--> Body start for request")
 
-            if (buffer.isProbablyUtf8()) {
+            if (contentType.isLoggable()) {
                 if (requestBody.contentLength() < LIMIT_BODY_LOG) {
                     logHttp(REQUEST, BODY, requestId, buffer.readString(charset))
                 } else {
@@ -137,7 +137,25 @@ class LogInterceptor : Interceptor {
             source.request(LIMIT_BODY_LOG)
             val buffer = source.buffer
 
-            if (!buffer.isProbablyUtf8()) {
+            if (contentType.isLoggable()) {
+
+                if (responseBody.contentLength() < LIMIT_BODY_LOG) {
+                    logHttp(RESPONSE, BODY, requestId, buffer.clone().readString(charset))
+                } else {
+                    logHttp(RESPONSE, BODY, requestId, buffer.clone().readString(LIMIT_BODY_LOG, charset))
+                }
+                logHttp(
+                    RESPONSE,
+                    BODY,
+                    requestId,
+                    "<-- Body end for response -- Omitted: ${
+                        max(
+                            0,
+                            responseBody.contentLength() - LIMIT_BODY_LOG
+                        )
+                    } bytes"
+                )
+            } else {
                 logHttp(
                     RESPONSE,
                     BODY,
@@ -145,18 +163,6 @@ class LogInterceptor : Interceptor {
                     "<-- Body end for response -- Binary -- Omitted: ${responseBody.contentLength()} bytes"
                 )
             }
-
-            if (responseBody.contentLength() < LIMIT_BODY_LOG) {
-                logHttp(RESPONSE, BODY, requestId, buffer.clone().readString(charset))
-            } else {
-                logHttp(RESPONSE, BODY, requestId, buffer.clone().readString(LIMIT_BODY_LOG, charset))
-            }
-            logHttp(
-                RESPONSE,
-                BODY,
-                requestId,
-                "<-- Body end for response -- Omitted: ${max(0, responseBody.contentLength() - LIMIT_BODY_LOG)} bytes"
-            )
         } ?: logHttp(RESPONSE, BODY, requestId, "Empty body")
     }
 

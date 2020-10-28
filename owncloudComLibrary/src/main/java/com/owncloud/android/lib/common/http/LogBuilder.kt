@@ -22,6 +22,10 @@
  */
 package com.owncloud.android.lib.common.http
 
+import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_JSON
+import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_WWW_FORM
+import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_XML
+import okhttp3.MediaType
 import timber.log.Timber
 import java.util.Locale
 
@@ -45,3 +49,17 @@ enum class NetworkNode {
 
     override fun toString(): String = super.toString().toLowerCase(Locale.ROOT)
 }
+
+/**
+ * Check whether a media type is loggable.
+ *
+ * @return true if its type is text, xml, json, or x-www-form-urlencoded.
+ */
+fun MediaType?.isLoggable(): Boolean =
+    this?.let { mediaType ->
+        val mediaTypeString = mediaType.toString()
+        (mediaType.type == "text" ||
+                mediaTypeString.contains(CONTENT_TYPE_XML) ||
+                mediaTypeString.contains(CONTENT_TYPE_JSON) ||
+                mediaTypeString.contains(CONTENT_TYPE_WWW_FORM))
+    } ?: false
