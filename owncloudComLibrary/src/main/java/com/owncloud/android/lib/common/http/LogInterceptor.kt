@@ -23,6 +23,7 @@
  */
 package com.owncloud.android.lib.common.http
 
+import com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER
 import com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID
 import com.owncloud.android.lib.common.http.LogBuilder.logHttp
 import com.owncloud.android.lib.common.http.NetworkNode.BODY
@@ -72,7 +73,12 @@ class LogInterceptor : Interceptor {
 
     private fun logHeaders(requestId: String?, headers: Headers, networkPetition: NetworkPetition) {
         headers.forEach { header ->
-            logHttp(networkPetition, HEADER, requestId, "${header.first}: ${header.second}")
+            val headerValue: String = if (header.first.equals(AUTHORIZATION_HEADER, true)) {
+                "[redacted]"
+            } else {
+                header.second
+            }
+            logHttp(networkPetition, HEADER, requestId, "${header.first}: $headerValue")
         }
     }
 
