@@ -300,11 +300,6 @@ public class AccountUtils {
         public static final String OAUTH_SUPPORTED_TRUE = "TRUE";
 
         /**
-         * OC account cookies
-         */
-        public static final String KEY_COOKIES = "oc_account_cookies";
-
-        /**
          * OC account version
          */
         public static final String KEY_OC_ACCOUNT_VERSION = "oc_account_version";
