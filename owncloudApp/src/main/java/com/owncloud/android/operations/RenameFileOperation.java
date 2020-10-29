@@ -113,10 +113,12 @@ public class RenameFileOperation extends SyncOperation {
 
     private void saveLocalDirectory(String parent) {
         getStorageManager().moveLocalFile(mFile, mNewRemotePath, parent);
+        // FIXME: 29/10/2020 : New_arch: Rename
 //        mFile.setFileName(mNewName);
     }
 
     private void saveLocalFile() {
+        // FIXME: 29/10/2020 : New_arch: Rename
 //        mFile.setFileName(mNewName);
 
         if (mFile.isAvailableLocally()) {

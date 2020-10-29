@@ -265,7 +265,8 @@ class FileDataStorageManager : KoinComponent {
 //            return result
         }
 
-    fun getFileByPath(path: String): OCFile? = runBlocking {
+    // TODO: New_arch: Remove this and call usecase inside FilesViewModel
+    fun getFileByPath(path: String): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
@@ -274,7 +275,8 @@ class FileDataStorageManager : KoinComponent {
         result
     }
 
-    fun getFileById(id: Long): OCFile? = runBlocking {
+    // TODO: New_arch: Remove this and call usecase inside FilesViewModel
+    fun getFileById(id: Long): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFileByIdUseCase: GetFileByIdUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
@@ -296,7 +298,8 @@ class FileDataStorageManager : KoinComponent {
         }
     }
 
-    fun getFolderImages(folder: OCFile?): List<OCFile> = runBlocking {
+    // TODO: New_arch: Remove this and call usecase inside FilesViewModel
+    fun getFolderImages(folder: OCFile?): List<OCFile> = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFolderImagesUseCase: GetFolderImagesUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
@@ -306,8 +309,9 @@ class FileDataStorageManager : KoinComponent {
         result ?: listOf()
     }
 
+    // TODO: New_arch: Remove this and call usecase inside FilesViewModel
     fun saveFile(file: OCFile): Boolean {
-        runBlocking {
+        runBlocking(CoroutinesDispatcherProvider().io){
             val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
 
             val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
@@ -317,6 +321,7 @@ class FileDataStorageManager : KoinComponent {
         }
 
         return true
+        // FIXME: 29/10/2020 : New_arch: Conflicts
 //        var overriden = false
 //        val cv = ContentValues().apply {
 //            put(FILE_MODIFIED, file.modificationTimestamp)
@@ -400,7 +405,7 @@ class FileDataStorageManager : KoinComponent {
         folder: OCFile, updatedFiles: Collection<OCFile>, filesToRemove: Collection<OCFile>
     ) {
         Timber.d("Saving folder ${folder.remotePath} with ${updatedFiles.size} children and ${filesToRemove.size} files to remove")
-//
+        // FIXME: 29/10/2020 : New_arch: Conflicts
 //        val operations = ArrayList<ContentProviderOperation>(updatedFiles.size)
 //
 //        // prepare operations to insert or update files to save in the given folder
@@ -969,7 +974,8 @@ class FileDataStorageManager : KoinComponent {
         return ret
     }
 
-    fun getFolderContent(parentId: Long): List<OCFile> = runBlocking {
+    // TODO: New_arch: Remove this and call usecase inside FilesViewModel
+    fun getFolderContent(parentId: Long): List<OCFile> = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFolderContentUseCase: GetFolderContentUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
