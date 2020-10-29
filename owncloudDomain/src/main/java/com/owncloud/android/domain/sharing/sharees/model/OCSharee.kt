@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author David González Verdugo
+ * @author Christian Schabesberger
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.sharing.sharees
+package com.owncloud.android.domain.sharing.sharees.model
 
-import com.owncloud.android.domain.sharing.sharees.model.OCSharee
+import com.owncloud.android.domain.sharing.shares.model.ShareType
 
-interface ShareeRepository {
-    fun getSharees(
-        searchString: String,
-        page: Int,
-        perPage: Int
-    ): List<OCSharee>
-}
+data class OCSharee(
+    val label: String,
+    val shareType: ShareType,
+    val shareWith: String,
+    val additionalInfo: String,
+    val isExactMatch: Boolean
+)

@@ -33,6 +33,7 @@ import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
 import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerInfoDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
+import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteShareeMapper
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
@@ -74,13 +75,14 @@ val remoteDataSourceModule = module {
     factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
-    factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get()) }
+    factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
     factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), get(), get(), androidContext().resources.getDimension(
                 R.dimen.file_avatar_size
             ).toInt()) }
 
     factory { RemoteCapabilityMapper() }
     factory { RemoteShareMapper() }
+    factory { RemoteShareeMapper() }
     factory { RemoteUserAvatarMapper() }
     factory { RemoteUserInfoMapper() }
     factory { RemoteUserQuotaMapper() }
