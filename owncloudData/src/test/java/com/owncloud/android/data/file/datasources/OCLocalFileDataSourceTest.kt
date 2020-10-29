@@ -118,9 +118,11 @@ class OCLocalFileDataSourceTest {
         assertEquals(MIME_DIR, result.mimeType)
         assertEquals(ROOT_PATH, result.remotePath)
 
-        verify { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, ROOT_PATH) }
-        verify { dao.mergeRemoteAndLocalFile(any()) }
-        verify { dao.getFileById(1234) }
+        verify {
+            dao.getFileByOwnerAndRemotePath(OC_FILE.owner, ROOT_PATH)
+            dao.mergeRemoteAndLocalFile(any())
+            dao.getFileById(1234)
+        }
     }
 
     @Test(expected = Exception::class)
