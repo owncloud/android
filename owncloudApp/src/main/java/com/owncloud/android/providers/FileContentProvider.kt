@@ -1017,7 +1017,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         files.add(OCFileEntity.fromCursor(cursor))
                     } while (cursor.moveToNext())
 
-                    // Insert share list to the new shares table in new database
+                    // Insert file list to the new files table in new database
                     val ocFileDao: FileDao by inject()
                     executors.diskIO().execute {
                         for (file in files) {
@@ -1025,6 +1025,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         }
                     }
 
+                    // TODO: Remove old database once it is not needed anymore.
+                    // FIXME: 29/10/2020 : New_arch: Av.Offline
                     // Drop old files table from old database
                     //db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.FILE_TABLE_NAME + ";")
                 }
