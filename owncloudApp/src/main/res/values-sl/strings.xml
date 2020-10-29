@@ -36,6 +36,8 @@
   <string name="prefs_accounts">Računi</string>
   <string name="prefs_manage_accounts">Upravljanje z računi</string>
   <string name="prefs_passcode">Zakleni dostop s kodo PIN</string>
+  <string name="prefs_biometric_summary">Nastavite geslo ali odklepanje z vzorcem za možnost nastavitve te opcije</string>
+  <string name="confirmation_touches_with_other_windows_title">Ali ste prepričani, da želite vklopiti to funkcijo?</string>
   <string name="prefs_camera_picture_upload">Hipno pošiljanje slik</string>
   <string name="prefs_camera_picture_upload_summary">Hipno pošiljanje slik, zajetih s kamero, na strežnik</string>
   <string name="prefs_camera_video_upload">Hipno pošiljanje posnetkov</string>
@@ -46,17 +48,34 @@
   <string name="prefs_log_summary_history">Pokaže shranjene dnevnike</string>
   <string name="prefs_log_delete_history_button">Izbriši zgodovino</string>
   <string name="prefs_help">Pomoč</string>
+  <string name="prefs_sync_calendar_contacts">Sinhronizirajte svoje stike, koledarje in naloge.</string>
   <string name="prefs_recommend">Priporoči prijateljem</string>
   <string name="prefs_feedback">Pošlji sporočilo razvijalcem programa</string>
   <string name="prefs_imprint">Natis</string>
   <string name="prefs_remember_last_share_location">Zapomni si mesto souporabe</string>
   <string name="prefs_remember_last_upload_location_summary">Zapomni si zadnje mesto za pošiljanje v oblak</string>
+  <string name="prefs_pattern">Odklepanje z vzorcem</string>
+  <string name="pattern_enter_pattern">Prosimo vnesite svoj vzorec</string>
+  <string name="pattern_configure_pattern">Vnesite svoj vzorec</string>
+  <string name="pattern_remove_pattern">Odstranite svoj vzorec</string>
+  <string name="pattern_incorrect_pattern">Napačen vzorec</string>
+  <string name="pattern_reenter_pattern">Prosimo ponovno vnesite svoj vzorec</string>
+  <string name="pattern_not_same_pattern">Vzorca se ne ujemata</string>
+  <string name="pattern_stored">Vzorec shranjen</string>
+  <string name="pattern_removed">Vzorec odstranjen</string>
+  <string name="pattern_no_longer_required">Ne boste več vprašani po vzorcu</string>
+  <string name="pattern_configure_your_pattern_explanation">Vzorec bo zahtevan vedno, ko se zažene aplikacija</string>
+  <string name="pass_code_locked">Zaklenjeno z geslom</string>
+  <string name="pattern_locked">Zaklenjeno z vzorcem</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Datoteke</string>
   <string name="bottom_nav_uploads">Prenosi na strežnik</string>
   <string name="bottom_nav_links">Povezave</string>
   <string name="recommend_subject">Poskusite z uporabo %1$s na pametnem telefonu!</string>
   <string name="recommend_text">Želim ti predstaviti %1$s na pametnem telefonu!\nPrejmeš ga lahko na: %2$s</string>
+  <string name="error_reason">zaradi</string>
+  <string name="auth_failure_snackbar">Overitev ni uspela</string>
+  <string name="auth_failure_snackbar_action">Spremeni račun</string>
   <string name="auth_oauth_failure_snackbar_action">Prijava</string>
   <string name="auth_check_server">Preveri strežnik</string>
   <string name="auth_host_url">Naslov strežnika https://…</string>
@@ -80,10 +99,13 @@
   <string name="uploader_error_message_source_file_not_copied">Prišlo je do napake med kopiranjem datoteke v začasno mapo. Poskusite znova poslati kasneje.</string>
   <string name="file_list_seconds_ago">pred nekaj sekundami</string>
   <string name="file_list_empty">Tukaj še ni ničesar. Najprej je treba datoteke poslati v oblak!</string>
+  <string name="file_list_empty_available_offline">Ni na voljo nobenih datotek na voljo brez povezave</string>
+  <string name="file_list_empty_shared_by_links">Nobene datoteke niso bile deljene s povezavo</string>
   <string name="file_list_loading">Poteka nalaganje ...</string>
   <string name="file_list_no_app_for_file_type">Ni nameščenega programa za to vrsto datoteke</string>
   <string name="local_file_list_empty">V tej mapi ni datotek.</string>
   <string name="local_file_list_empty_just_folders">V tej mapi ni drugih map.</string>
+  <string name="local_file_list_search_with_no_matches">Ni rezultatov iskanja</string>
   <string name="upload_list_empty">Ni posodobitev</string>
   <string name="file_list_folder">mapa</string>
   <string name="file_list_folders">mape</string>
@@ -111,13 +133,16 @@
   <string name="common_error">Napaka</string>
   <string name="common_loading">Poteka nalaganje ...</string>
   <string name="common_unknown">neznano</string>
+  <string name="common_error_unknown">neznana napaka</string>
   <string name="common_pending">V čakanju ...</string>
   <string name="common_important">Pomembno</string>
   <string name="about_title">O oblaku %1$s</string>
   <string name="change_password">Spremeni geslo</string>
   <string name="delete_account">Odstrani račun</string>
   <string name="create_account">Ustvari račun</string>
+  <string name="upload_chooser_title">Naloženo iz</string>
   <string name="uploader_info_dirname">Ime mape</string>
+  <string name="uploader_upload_in_progress_ticker">Nalaganje</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Pošiljanje %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Pošiljanje je uspešno končano</string>
   <string name="uploader_upload_succeeded_content_single">%1$s: poslano v oblak</string>
@@ -134,6 +159,8 @@
   <string name="uploads_view_group_current_uploads">Trenutno</string>
   <string name="uploads_view_group_failed_uploads">Spodletelo (kliknite za ponovni poskus)</string>
   <string name="uploads_view_group_finished_uploads">Poslano</string>
+  <string name="uploads_view_group_file_count">%d datotek</string>
+  <string name="uploads_view_group_file_count_single">%d datoteka</string>
   <string name="uploads_view_upload_status_succeeded">Končano</string>
   <string name="uploads_view_upload_status_cancelled">Preklicano</string>
   <string name="uploads_view_upload_status_paused">V premoru</string>
@@ -151,6 +178,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Čakanje na povezavo WiFi ...</string>
   <string name="uploads_view_later_waiting_to_upload">Čakanje na pošiljanje</string>
   <string name="uploads_view_unsupported_media_type">Nepodprta vrsta predstavne vsebine</string>
+  <string name="downloader_download_in_progress_ticker">Prenašanje...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Prejemanje %2$s</string>
   <string name="downloader_download_succeeded_ticker">Prejemanje je uspešno končano</string>
   <string name="downloader_download_succeeded_content">%1$s: prejeto iz oblaka</string>
@@ -208,6 +236,7 @@
   <string name="media_forward_description">Gumb za hitro predvajanje naprej</string>
   <string name="upload_from_camera_title">Slika s kamere</string>
   <string name="auth_getting_authorization">Pridobivanje overitve ...</string>
+  <string name="auth_trying_to_login">Poskušanje prijave...</string>
   <string name="auth_no_net_conn_title">Ni omrežne povezave</string>
   <string name="auth_nossl_plain_ok_title">Varna povezava ni na voljo.</string>
   <string name="auth_connection_established">Povezava je vzpostavljena</string>
@@ -260,6 +289,7 @@
   <string name="wait_checking_credentials">Poteka preverjanje shranjenih poveril</string>
   <string name="filedisplay_unexpected_bad_get_content">Prišlo je do nepričakovane napake. Poskusite datoteko izbrati z drugim programom.</string>
   <string name="filedisplay_no_file_selected">Ni izbranih datotek</string>
+  <string name="activity_chooser_title">Pošlji povezavo...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopiranje datoteke iz zasebne shrambe</string>
   <string name="oauth_check_onoff">Prijava  z oAuth2</string>
   <string name="oauth_login_connection">Vzpostavljanje povezave s strežnikom OAuth2 ...</string>
@@ -312,6 +342,7 @@
   <string name="prefs_camera_picture_upload_path_title">Mapa v oblaku za odlaganje slik</string>
   <string name="share_link_no_support_share_api">Souporaba je na strežniku onemogočena. Možnost lahko spreminjajo le
 		uporabniki s skrbniškimi dovoljenji.</string>
+  <string name="share_link_file_error">Ni bilo možno deliti datoteke ali mape</string>
   <string name="share_link_password_title">Vpis gesla</string>
   <string name="share_link_empty_password">Vpisati je treba geslo.</string>
   <string name="activity_chooser_send_file_title">Pošlji</string>
@@ -462,6 +493,9 @@
   <string name="media_service_notification_channel_description">Pokaži predvajalnik glasbe</string>
   <string name="file_sync_notification_channel_name">Usklajevanje datotek</string>
   <string name="file_sync_notification_channel_description">Pokaži rezultat usklajevanja datotek</string>
+  <string name="button_no_thanks_name">Ne, hvala.</string>
+  <string name="button_later_name">Kasneje</string>
+  <string name="button_rate_now_name">Oceni zdaj</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d izbrana</item>
     <item quantity="two">%d izbrani</item>
@@ -470,5 +504,8 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Preskoči</string>
+  <string name="welcome_feature_1_text">Lahko kopirate, premikate, izbrišete</string>
+  <string name="welcome_feature_2_title">Deli datoteke in mape</string>
   <string name="welcome_feature_4_title">Pošiljanje posnetkov s kamero</string>
+  <string name="common_not_found">Ni bilo najdeno</string>
 </resources>
