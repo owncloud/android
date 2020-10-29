@@ -211,9 +211,6 @@ public class OCUpload implements Parcelable {
         return mRemotePath;
     }
 
-    /**
-     * @param remotePath Remote path
-     */
     public void setRemotePath(String remotePath) {
         mRemotePath = remotePath;
     }

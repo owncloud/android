@@ -44,9 +44,10 @@ object UriUtilsKt {
         if (file.storagePath == null || file.length == 0.toLong()) {
             return null
         }
-        val builder = Uri.Builder()
-        builder.scheme(ContentResolver.SCHEME_FILE)
-        builder.path(file.storagePath)
-        return builder.build()
+
+        return Uri.Builder().apply {
+            scheme(ContentResolver.SCHEME_FILE)
+            path(file.storagePath)
+        }.build()
     }
 }

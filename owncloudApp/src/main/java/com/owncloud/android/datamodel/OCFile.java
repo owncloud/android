@@ -45,7 +45,7 @@ import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_P
 
 @Deprecated
 /**
- * Use com.owncloud.android.domain.files.model.OCFile instead
+ * Use [com.owncloud.android.domain.files.model.OCFile] instead
  */
 public class OCFile implements Parcelable, Comparable<OCFile> {
 

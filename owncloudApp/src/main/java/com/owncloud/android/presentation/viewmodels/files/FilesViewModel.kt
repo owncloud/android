@@ -29,9 +29,6 @@ import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 
-/**
- * View Model to keep a reference to the files repository.
- */
 class FilesViewModel(
     private val createFolderAsyncUseCase: CreateFolderAsyncUseCase,
     private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
