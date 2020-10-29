@@ -29,8 +29,8 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.lib.resources.response.CommonOcsResponse
-import com.owncloud.android.lib.resources.response.UserInfoResponse
+import com.owncloud.android.lib.resources.CommonOcsResponse
+import com.owncloud.android.lib.resources.users.responses.UserInfoResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types

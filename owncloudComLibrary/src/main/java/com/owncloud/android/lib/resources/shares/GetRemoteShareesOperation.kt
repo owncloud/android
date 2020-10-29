@@ -1,5 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *
+ *   @author Christian Schabesberger
  *   @author masensio
  *   @author David A. Velasco
  *   @author David González Verdugo
@@ -28,16 +29,21 @@
 
 package com.owncloud.android.lib.resources.shares
 
+import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK
-import org.json.JSONObject
+import com.owncloud.android.lib.resources.CommonOcsResponse
+import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import timber.log.Timber
+import java.lang.reflect.Type
 import java.net.URL
-import java.util.ArrayList
 
 /**
  * Created by masensio on 08/10/2015.
@@ -65,6 +71,7 @@ import java.util.ArrayList
  * Status codes:
  * 100 - successful
  *
+ * @author Christian Schabesberger
  * @author masensio
  * @author David A. Velasco
  * @author David González Verdugo
@@ -78,80 +85,66 @@ class GetRemoteShareesOperation
  * @param perPage      maximum number of results in a single page
  */
     (private val searchString: String, private val page: Int, private val perPage: Int) :
-    RemoteOperation<ArrayList<JSONObject>>() {
+    RemoteOperation<ShareeOcsResponse>() {
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<ArrayList<JSONObject>> {
-        var result: RemoteOperationResult<ArrayList<JSONObject>>
+    private fun buildRequestUri(baseUri: Uri) =
+        baseUri.buildUpon()
+            .appendEncodedPath(OCS_ROUTE)
+            .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
+            .appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE)
+            .appendQueryParameter(PARAM_SEARCH, searchString)
+            .appendQueryParameter(PARAM_PAGE, page.toString())
+            .appendQueryParameter(PARAM_PER_PAGE, perPage.toString())
+            .build()
 
-        try {
-            val requestUri = client.baseUri
-            val uriBuilder = requestUri.buildUpon()
-                .appendEncodedPath(OCS_ROUTE)
-                .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
-                .appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE)
-                .appendQueryParameter(PARAM_SEARCH, searchString)
-                .appendQueryParameter(PARAM_PAGE, page.toString())
-                .appendQueryParameter(PARAM_PER_PAGE, perPage.toString())
+    private fun parseResponse(response: String): ShareeOcsResponse? {
+        val moshi = Moshi.Builder().build()
+        val type: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareeOcsResponse::class.java)
+        val adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>> = moshi.adapter(type)
+        return adapter.fromJson(response)!!.ocs.data
+    }
 
-            val getMethod = GetMethod(URL(uriBuilder.build().toString()))
+    private fun onResultUnsuccessful(
+        method: GetMethod,
+        response: String?,
+        status: Int
+    ): RemoteOperationResult<ShareeOcsResponse> {
+        Timber.e("Failed response while getting users/groups from the server ")
+        if (response != null) {
+            Timber.e("*** status code: $status; response message: $response")
+        } else {
+            Timber.e("*** status code: $status")
+        }
+        return RemoteOperationResult(method)
+    }
 
-            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
+    private fun onRequestSuccessful(response: String?): RemoteOperationResult<ShareeOcsResponse> {
+        val result = RemoteOperationResult<ShareeOcsResponse>(OK)
+        Timber.d("Successful response: $response")
+        result.data = parseResponse(response!!)
+        Timber.d("*** Get Users or groups completed ")
+        return result
+    }
 
+    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareeOcsResponse> {
+        val requestUri = buildRequestUri(client.baseUri)
+
+        val getMethod = GetMethod(URL(requestUri.toString()))
+        getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
+
+        return try {
             val status = client.executeHttpMethod(getMethod)
             val response = getMethod.getResponseBodyAsString()
 
-            if (isSuccess(status)) {
-                Timber.d("Successful response: $response")
-
-                // Parse the response
-                val respJSON = JSONObject(response)
-                val respOCS = respJSON.getJSONObject(NODE_OCS)
-                val respData = respOCS.getJSONObject(NODE_DATA)
-                val respExact = respData.getJSONObject(NODE_EXACT)
-                val respExactUsers = respExact.getJSONArray(NODE_USERS)
-                val respExactGroups = respExact.getJSONArray(NODE_GROUPS)
-                val respExactRemotes = respExact.getJSONArray(NODE_REMOTES)
-                val respPartialUsers = respData.getJSONArray(NODE_USERS)
-                val respPartialGroups = respData.getJSONArray(NODE_GROUPS)
-                val respPartialRemotes = respData.getJSONArray(NODE_REMOTES)
-                val jsonResults = arrayOf(
-                    respExactUsers,
-                    respExactGroups,
-                    respExactRemotes,
-                    respPartialUsers,
-                    respPartialGroups,
-                    respPartialRemotes
-                )
-
-                val data = ArrayList<JSONObject>() // For result data
-                for (i in 0..5) {
-                    for (j in 0 until jsonResults[i].length()) {
-                        val jsonResult = jsonResults[i].getJSONObject(j)
-                        data.add(jsonResult)
-                        Timber.d("*** Added item: ${jsonResult.getString(PROPERTY_LABEL)}")
-                    }
-                }
-
-                result = RemoteOperationResult(OK)
-                result.data = data
-
-                Timber.d("*** Get Users or groups completed ")
-
+            if (!isSuccess(status)) {
+                onResultUnsuccessful(getMethod, response, status)
             } else {
-                result = RemoteOperationResult(getMethod)
-                Timber.e("Failed response while getting users/groups from the server ")
-                if (response != null) {
-                    Timber.e("*** status code: $status; response message: $response")
-                } else {
-                    Timber.e("*** status code: $status")
-                }
+                onRequestSuccessful(response)
             }
         } catch (e: Exception) {
-            result = RemoteOperationResult(e)
             Timber.e(e, "Exception while getting users/groups")
+            RemoteOperationResult(e)
         }
-
-        return result
     }
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK
@@ -171,18 +164,5 @@ class GetRemoteShareesOperation
         // Arguments - constant values
         private const val VALUE_FORMAT = "json"
         private const val VALUE_ITEM_TYPE = "file"         //  to get the server search for users / groups
-
-        // JSON Node names
-        private const val NODE_OCS = "ocs"
-        private const val NODE_DATA = "data"
-        private const val NODE_EXACT = "exact"
-        private const val NODE_USERS = "users"
-        private const val NODE_GROUPS = "groups"
-        private const val NODE_REMOTES = "remotes"
-        const val NODE_VALUE = "value"
-        const val PROPERTY_LABEL = "label"
-        const val PROPERTY_SHARE_TYPE = "shareType"
-        const val PROPERTY_SHARE_WITH = "shareWith"
-        const val PROPERTY_SHARE_WITH_ADDITIONAL_INFO = "shareWithAdditionalInfo"
     }
 }

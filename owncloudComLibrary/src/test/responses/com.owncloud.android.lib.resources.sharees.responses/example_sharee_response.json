@@ -1,0 +1,60 @@
+{
+  "ocs": {
+    "data": {
+      "exact": {
+        "groups": [],
+        "remotes": [],
+        "users": [
+          {
+            "label": "admin",
+            "value": {
+              "shareType": 0,
+              "shareWith": "admin"
+            }
+          }
+        ]
+      },
+      "groups": [
+        {
+          "label": "group1",
+          "value": {
+            "shareType": 1,
+            "shareWith": "group1"
+          }
+        },
+        {
+          "label": "group2",
+          "value": {
+            "shareType": 1,
+            "shareWith": "group2"
+          }
+        }
+      ],
+      "remotes": [],
+      "users": [
+        {
+          "label": "user1",
+          "value": {
+            "shareType": 0,
+            "shareWith": "user1",
+            "shareWithAdditionalInfo": "user1@user1.com"
+          }
+        },
+        {
+          "label": "user2",
+          "value": {
+            "shareType": 0,
+            "shareWith": "user2"
+          }
+        }
+      ]
+    },
+    "meta": {
+      "itemsperpage": "",
+      "message": "OK",
+      "status": "ok",
+      "statuscode": 200,
+      "totalitems": ""
+    }
+  }
+}

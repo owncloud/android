@@ -22,7 +22,7 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.resources.response
+package com.owncloud.android.lib.resources.status.responses
 
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType

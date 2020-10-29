@@ -14,6 +14,8 @@ dependencies {
         exclude module: "kotlin-reflect"
     }
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+
+    testImplementation 'junit:junit:4.13'
 }
 
 android {

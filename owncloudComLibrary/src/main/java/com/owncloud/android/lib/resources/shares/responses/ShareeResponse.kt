@@ -21,26 +21,52 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
-package com.owncloud.android.lib.resources.response
+package com.owncloud.android.lib.resources.shares.responses
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-// Response retrieved by OCS Rest API, used to obtain capabilities, shares and user info among others.
-// More info: https://doc.owncloud.com/server/developer_manual/core/apis/ocs-capabilities.html
+/**
+ * This was modeled according to the documentation:
+ * https://doc.owncloud.com/server/developer_manual/core/apis/ocs-recipient-api.html#get-shares-recipients
+ */
 @JsonClass(generateAdapter = true)
-data class CommonOcsResponse<T>(
-    val ocs: OCSResponse<T>
+data class ShareeOcsResponse(
+    val exact: ExactSharees?,
+    val groups: List<ShareeItem>,
+    val remotes: List<ShareeItem>,
+    val users: List<ShareeItem>
+) {
+    fun getFlatRepresentationWithoutExact() = ArrayList<ShareeItem>().apply {
+        addAll(users)
+        addAll(remotes)
+        addAll(groups)
+    }
+}
+
+@JsonClass(generateAdapter = true)
+data class ExactSharees(
+    val groups: List<ShareeItem>,
+    val remotes: List<ShareeItem>,
+    val users: List<ShareeItem>
+) {
+    fun getFlatRepresentation() = ArrayList<ShareeItem>().apply {
+        addAll(users)
+        addAll(remotes)
+        addAll(groups)
+    }
+}
+
+@JsonClass(generateAdapter = true)
+data class ShareeItem(
+    val label: String,
+    val value: ShareeValue
 )
 
 @JsonClass(generateAdapter = true)
-data class OCSResponse<T>(
-    val meta: MetaData,
-    val data: T
-)
-
-@JsonClass(generateAdapter = true)
-data class MetaData(
-    val status: String,
-    val statuscode: Int,
-    val message: String?
+data class ShareeValue(
+    val shareType: Int,
+    val shareWith: String,
+    @Json(name = "shareWithAdditionalInfo")
+    val additionalInfo: String?
 )

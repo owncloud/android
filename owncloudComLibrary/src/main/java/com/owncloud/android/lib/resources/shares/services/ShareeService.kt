@@ -1,6 +1,7 @@
 /**
  * ownCloud Android client application
  *
+ * @author Christian Schabesberger
  * @author David González Verdugo
  *
  * Copyright (C) 2020 ownCloud GmbH.
@@ -22,13 +23,12 @@ package com.owncloud.android.lib.resources.shares.services
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.Service
-import org.json.JSONObject
-import java.util.ArrayList
+import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
 
 interface ShareeService : Service {
     fun getSharees(
         searchString: String,
         page: Int,
         perPage: Int
-    ): RemoteOperationResult<ArrayList<JSONObject>>
+    ): RemoteOperationResult<ShareeOcsResponse>
 }

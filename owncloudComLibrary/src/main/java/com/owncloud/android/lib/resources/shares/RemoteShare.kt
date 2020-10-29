@@ -24,7 +24,6 @@
 
 package com.owncloud.android.lib.resources.shares
 
-import com.owncloud.android.lib.resources.files.FileUtils
 import java.io.File
 
 /**
@@ -106,17 +105,6 @@ enum class ShareType constructor(val value: Int) {
     FEDERATED(6);
 
     companion object {
-        fun fromValue(value: Int): ShareType? {
-            return when (value) {
-                -1 -> UNKNOWN
-                0 -> USER
-                1 -> GROUP
-                3 -> PUBLIC_LINK
-                4 -> EMAIL
-                5 -> CONTACT
-                6 -> FEDERATED
-                else -> null
-            }
-        }
+        fun fromValue(value: Int) = values().firstOrNull { it.value == value }
     }
 }
