@@ -18,7 +18,7 @@ Here you have a description about how to get relevant information to be handled 
 
 You will find the Logs in the Settings view of the Android app. If the Logs option is not visible, tap five times on the build number (bottom of the Settings view), and Logs section will be visible.
 
-Additionally, you can enable Log HTTP requests and responses. This will include information about every http request performed. It will help us to determine where is the problem.
+Additionally, you can enable Log HTTP requests and responses. This will include information about every http request performed. It will help us to locate the issue.
 Logs may contain sensitive information. Sharing logs with others is sole user responsibility.
 
 When you have reproduced the issue you want to address, the "Send History" button will automatically add the logs to a new mail message. Please follow the next steps to send us your logs:
