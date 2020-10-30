@@ -400,6 +400,7 @@
   <string name="drawer_manage_accounts">Gerenciar contas</string>
   <string name="auth_redirect_non_secure_connection_title">A conexão segura está redirecionada através de uma rota insegura.</string>
   <string name="actionbar_logger">Logs</string>
+  <string name="log_open_logs_view">Abrir visualização de registros</string>
   <string name="log_send_history_button">Enviar histórico</string>
   <string name="log_send_no_mail_app">Nenhum aplicativo para envio de logs foi encontrado. Por favor instale um aplicativo de e-mail</string>
   <string name="log_send_mail_subject">%1$s logs do Android app</string>
@@ -559,4 +560,6 @@
   <string name="common_not_found">não foi encontrado</string>
   <string name="supports_oauth2_error">Não foi possível  saber se OAuth2 é suportada</string>
   <string name="get_base_url_error">Não foi possível saber a url base do servidor</string>
+  <string name="prefs_http_logs">Registrar solicitações e respostas HTTP</string>
+  <string name="prefs_logs_summary">Os registros podem incluir informações confidenciais. Compartilhar registros com outros é de inteira responsabilidade do usuário</string>
 </resources>

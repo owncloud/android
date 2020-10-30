@@ -398,6 +398,7 @@
   <string name="drawer_manage_accounts">Administroni llogari</string>
   <string name="auth_redirect_non_secure_connection_title">Lidhja e sigurt është ridrejtuar përmes një rruge të pasigurt.</string>
   <string name="actionbar_logger">Regjistra</string>
+  <string name="log_open_logs_view">Hap pamjen regjistra</string>
   <string name="log_send_history_button">Historik dërgimesh</string>
   <string name="log_send_no_mail_app">S\’u gjet aplikacion për dërgim regjistrimesh. Ju lutemi, instaloni një aplikacion email-esh.</string>
   <string name="log_send_mail_subject">Regjistra aplikacioni %1$s për Android</string>
@@ -557,4 +558,6 @@
   <string name="common_not_found">s’u gjet</string>
   <string name="supports_oauth2_error">S’qe e mundur të dihej nëse mbulohet OAuth2</string>
   <string name="get_base_url_error">S’qe e mundur të dihej URL-ja bazë e shërbyesit</string>
+  <string name="prefs_http_logs">Regjistro kërkesa dhe përgjigje HTTP</string>
+  <string name="prefs_logs_summary">Regjistrat mund të përmbajnë të dhëna rezervat. Për ndarjen e regjistrave me të tjerët, përdoruesi mban vetë përgjegjësi</string>
 </resources>
