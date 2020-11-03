@@ -324,7 +324,7 @@ class OCShareViewModelTest {
         coEvery { editPublicShareAsyncUseCase.execute(any()) } returns useCaseResult
 
         ocShareViewModel.updatePublicShare(
-            remoteId = 1,
+            remoteId = OC_SHARE.remoteId,
             name = "Photos 2 link",
             password = "1234",
             expirationDateInMillis = -1,
