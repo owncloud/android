@@ -23,8 +23,6 @@ import com.owncloud.android.domain.mappers.RemoteMapper
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import org.jetbrains.annotations.TestOnly
-import com.owncloud.android.lib.resources.shares.ShareType as RemoteShareType
 
 class RemoteShareMapper : RemoteMapper<OCShare, RemoteShare> {
     override fun toModel(remote: RemoteShare?): OCShare? =
@@ -49,27 +47,6 @@ class RemoteShareMapper : RemoteMapper<OCShare, RemoteShare> {
             )
         }
 
-    @TestOnly
-    override fun toRemote(model: OCShare?): RemoteShare? =
-        model?.let {
-            RemoteShare(
-                id = model.remoteId,
-                shareWith = model.shareWith!!,
-                path = model.path,
-                token = model.token!!,
-                sharedWithDisplayName = model.sharedWithDisplayName!!,
-                sharedWithAdditionalInfo = model.sharedWithAdditionalInfo!!,
-                name = model.name!!,
-                shareLink = model.shareLink!!,
-                fileSource = model.fileSource,
-                itemSource = model.itemSource,
-                shareType = RemoteShareType.fromValue(model.shareType.value),
-                permissions = model.permissions,
-                sharedDate = model.sharedDate,
-                expirationDate = model.expirationDate,
-                isFolder = model.isFolder,
-                userId = model.userId,
-                isValid = model.remoteId > -1
-            )
-        }
+    // Not needed
+    override fun toRemote(model: OCShare?): RemoteShare? = null
 }

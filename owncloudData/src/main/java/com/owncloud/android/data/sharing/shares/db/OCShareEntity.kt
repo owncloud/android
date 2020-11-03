@@ -58,7 +58,7 @@ data class OCShareEntity(
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_USER_ID)
     val userId: Long,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)
-    val remoteId: Long,
+    val remoteId: String,
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)
     var accountOwner: String = "",
     @ColumnInfo(name = ProviderTableMeta.OCSHARES_NAME)
@@ -105,7 +105,7 @@ data class OCShareEntity(
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
                 cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1,
                 cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)),
+                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)).toString(),
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)),
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)),
                 cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_URL))
@@ -127,7 +127,7 @@ data class OCShareEntity(
                 values.getAsString(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO),
                 values.getAsBoolean(ProviderTableMeta.OCSHARES_IS_DIRECTORY),
                 values.getAsLong(ProviderTableMeta.OCSHARES_USER_ID),
-                values.getAsLong(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED),
+                values.getAsLong(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED).toString(),
                 values.getAsString(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER),
                 values.getAsString(ProviderTableMeta.OCSHARES_NAME),
                 values.getAsString(ProviderTableMeta.OCSHARES_URL)

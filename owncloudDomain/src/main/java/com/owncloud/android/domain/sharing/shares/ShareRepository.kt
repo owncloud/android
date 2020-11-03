@@ -38,7 +38,7 @@ interface ShareRepository {
     )
 
     fun updatePrivateShare(
-        remoteId: Long,
+        remoteId: String,
         permissions: Int,
         accountName: String
     )
@@ -58,7 +58,7 @@ interface ShareRepository {
     )
 
     fun updatePublicShare(
-        remoteId: Long,
+        remoteId: String,
         name: String,
         password: String?,
         expirationDateInMillis: Long,
@@ -73,11 +73,9 @@ interface ShareRepository {
 
     fun getSharesAsLiveData(filePath: String, accountName: String): LiveData<List<OCShare>>
 
-    fun getShareAsLiveData(remoteId: Long): LiveData<OCShare>
+    fun getShareAsLiveData(remoteId: String): LiveData<OCShare>
 
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
-    fun deleteShare(
-        remoteId: Long
-    )
+    fun deleteShare(remoteId: String)
 }

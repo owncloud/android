@@ -85,7 +85,7 @@ class OCShareViewModel(
     val shareDeletionStatus: LiveData<Event<UIResult<Unit>>> = _shareDeletionStatus
 
     fun deleteShare(
-        remoteId: Long
+        remoteId: String
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutineDispatcherProvider.io,
         showLoading = true,
@@ -130,7 +130,7 @@ class OCShareViewModel(
 
     // Used to get a specific private share after updating it
     fun refreshPrivateShare(
-        remoteId: Long
+        remoteId: String
     ) {
         val privateShareLiveData = getShareAsLiveDataUseCase.execute(
             GetShareAsLiveDataUseCase.Params(remoteId)
@@ -145,7 +145,7 @@ class OCShareViewModel(
     val privateShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _privateShareEditionStatus
 
     fun updatePrivateShare(
-        remoteId: Long,
+        remoteId: String,
         permissions: Int,
         accountName: String
     ) = runUseCaseWithResult(
@@ -197,7 +197,7 @@ class OCShareViewModel(
     val publicShareEditionStatus: LiveData<Event<UIResult<Unit>>> = _publicShareEditionStatus
 
     fun updatePublicShare(
-        remoteId: Long,
+        remoteId: String,
         name: String,
         password: String?,
         expirationDateInMillis: Long,

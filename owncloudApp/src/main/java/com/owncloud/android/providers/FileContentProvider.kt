@@ -161,7 +161,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             ROOT_DIRECTORY ->
                 count = db.delete(ProviderTableMeta.FILE_TABLE_NAME, where, whereArgs)
             SHARES -> count =
-                OwncloudDatabase.getDatabase(MainApp.appContext).shareDao().deleteShare(uri.pathSegments[1].toLong())
+                OwncloudDatabase.getDatabase(MainApp.appContext).shareDao().deleteShare(uri.pathSegments[1])
             CAPABILITIES -> count = db.delete(ProviderTableMeta.CAPABILITIES_TABLE_NAME, where, whereArgs)
             UPLOADS -> count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs)
             CAMERA_UPLOADS_SYNC -> count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs)

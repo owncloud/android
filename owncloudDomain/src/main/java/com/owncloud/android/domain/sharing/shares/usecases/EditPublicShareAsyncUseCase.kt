@@ -39,7 +39,7 @@ class EditPublicShareAsyncUseCase(
     }
 
     data class Params(
-        val remoteId: Long,
+        val remoteId: String,
         val name: String,
         val password: String?,
         val expirationDateInMillis: Long,

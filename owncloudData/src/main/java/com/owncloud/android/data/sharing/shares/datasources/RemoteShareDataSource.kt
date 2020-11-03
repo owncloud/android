@@ -44,7 +44,7 @@ interface RemoteShareDataSource {
     ): OCShare
 
     fun updateShare(
-        remoteId: Long,
+        remoteId: String,
         name: String = "",
         password: String? = "",
         expirationDateInMillis: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
@@ -54,6 +54,6 @@ interface RemoteShareDataSource {
     ): OCShare
 
     fun deleteShare(
-        remoteId: Long
+        remoteId: String
     )
 }

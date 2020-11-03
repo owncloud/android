@@ -38,7 +38,7 @@ data class OCShare(
     val sharedWithAdditionalInfo: String?,
     val isFolder: Boolean,
     val userId: Long,
-    val remoteId: Long,
+    val remoteId: String,
     var accountOwner: String = "",
     val name: String?,
     val shareLink: String?

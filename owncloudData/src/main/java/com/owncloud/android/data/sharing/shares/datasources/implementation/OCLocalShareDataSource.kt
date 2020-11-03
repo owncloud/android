@@ -46,7 +46,7 @@ class OCLocalShareDataSource(
             ocShareEntities.map { ocShareEntity -> ocShareMapper.toModel(ocShareEntity)!! }
         }
 
-    override fun getShareAsLiveData(remoteId: Long): LiveData<OCShare> =
+    override fun getShareAsLiveData(remoteId: String): LiveData<OCShare> =
         Transformations.map(ocShareDao.getShareAsLiveData(remoteId)) { ocShareEntity ->
             ocShareMapper.toModel(ocShareEntity)!!
         }
@@ -68,7 +68,7 @@ class OCLocalShareDataSource(
             ocShares.map { ocShare -> ocShareMapper.toEntity(ocShare)!! }
         )
 
-    override fun deleteShare(remoteId: Long): Int = ocShareDao.deleteShare(remoteId)
+    override fun deleteShare(remoteId: String): Int = ocShareDao.deleteShare(remoteId)
 
     override fun deleteSharesForFile(filePath: String, accountName: String) =
         ocShareDao.deleteSharesForFile(filePath, accountName)

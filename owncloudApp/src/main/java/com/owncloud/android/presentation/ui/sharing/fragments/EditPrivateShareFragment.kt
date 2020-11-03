@@ -420,7 +420,7 @@ class EditPrivateShareFragment : DialogFragment() {
         ocShareViewModel.updatePrivateShare(share?.remoteId!!, permissions, account?.name!!)
     }
 
-    private fun refreshPrivateShare(remoteId: Long) {
+    private fun refreshPrivateShare(remoteId: String) {
         ocShareViewModel.refreshPrivateShare(remoteId)
     }
 

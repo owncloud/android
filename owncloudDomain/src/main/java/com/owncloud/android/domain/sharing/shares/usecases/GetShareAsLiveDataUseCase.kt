@@ -33,6 +33,6 @@ class GetShareAsLiveDataUseCase(
         )
 
     data class Params(
-        val remoteId: Long
+        val remoteId: String
     )
 }
