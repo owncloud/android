@@ -4,8 +4,6 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 
 val OC_SHARE = OCShare(
-    fileSource = "7",
-    itemSource = "7",
     shareType = ShareType.USER, // Private share by default
     shareWith = "",
     path = "/Photos/image.jpg",
@@ -16,7 +14,6 @@ val OC_SHARE = OCShare(
     sharedWithDisplayName = "",
     sharedWithAdditionalInfo = "",
     isFolder = false,
-    userId = -1,
     remoteId = "1",
     name = "",
     shareLink = ""

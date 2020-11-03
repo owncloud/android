@@ -1094,8 +1094,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         db.execSQL(
             "CREATE TABLE " + ProviderTableMeta.OCSHARES_TABLE_NAME + "("
                     + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + ProviderTableMeta.OCSHARES_FILE_SOURCE + " INTEGER, "
-                    + ProviderTableMeta.OCSHARES_ITEM_SOURCE + " INTEGER, "
+                    + "file_source" + " INTEGER, "
+                    + "item_source" + " INTEGER, "
                     + ProviderTableMeta.OCSHARES_SHARE_TYPE + " INTEGER, "
                     + ProviderTableMeta.OCSHARES_SHARE_WITH + " TEXT, "
                     + ProviderTableMeta.OCSHARES_PATH + " TEXT, "
@@ -1105,7 +1105,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     + ProviderTableMeta.OCSHARES_TOKEN + " TEXT, "
                     + ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME + " TEXT, "
                     + ProviderTableMeta.OCSHARES_IS_DIRECTORY + " INTEGER, "  // boolean
-                    + ProviderTableMeta.OCSHARES_USER_ID + " INTEGER, "
+                    + "user_id" + " INTEGER, "
                     + ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " INTEGER,"
                     + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " TEXT, "
                     + ProviderTableMeta.OCSHARES_URL + " TEXT, "
@@ -1417,8 +1417,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
         init {
             shareProjectionMap[ProviderTableMeta.ID] = ProviderTableMeta.ID
-            shareProjectionMap[ProviderTableMeta.OCSHARES_FILE_SOURCE] = ProviderTableMeta.OCSHARES_FILE_SOURCE
-            shareProjectionMap[ProviderTableMeta.OCSHARES_ITEM_SOURCE] = ProviderTableMeta.OCSHARES_ITEM_SOURCE
             shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_TYPE] = ProviderTableMeta.OCSHARES_SHARE_TYPE
             shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH] = ProviderTableMeta.OCSHARES_SHARE_WITH
             shareProjectionMap[ProviderTableMeta.OCSHARES_PATH] = ProviderTableMeta.OCSHARES_PATH
@@ -1431,7 +1429,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO] =
                 ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO
             shareProjectionMap[ProviderTableMeta.OCSHARES_IS_DIRECTORY] = ProviderTableMeta.OCSHARES_IS_DIRECTORY
-            shareProjectionMap[ProviderTableMeta.OCSHARES_USER_ID] = ProviderTableMeta.OCSHARES_USER_ID
             shareProjectionMap[ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED] =
                 ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED
             shareProjectionMap[ProviderTableMeta.OCSHARES_ACCOUNT_OWNER] = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER

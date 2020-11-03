@@ -103,8 +103,6 @@ public class ProviderMeta {
         public static final String FILE_PUBLIC_LINK = "public_link";
 
         // Columns of ocshares table
-        public static final String OCSHARES_FILE_SOURCE = "file_source";
-        public static final String OCSHARES_ITEM_SOURCE = "item_source";
         public static final String OCSHARES_SHARE_TYPE = "share_type";
         public static final String OCSHARES_SHARE_WITH = "shate_with";
         public static final String OCSHARES_PATH = "path";
@@ -115,13 +113,12 @@ public class ProviderMeta {
         public static final String OCSHARES_SHARE_WITH_DISPLAY_NAME = "shared_with_display_name";
         public static final String OCSHARES_SHARE_WITH_ADDITIONAL_INFO = "share_with_additional_info";
         public static final String OCSHARES_IS_DIRECTORY = "is_directory";
-        public static final String OCSHARES_USER_ID = "user_id";
         public static final String OCSHARES_ID_REMOTE_SHARED = "id_remote_shared";
         public static final String OCSHARES_ACCOUNT_OWNER = "owner_share";
         public static final String OCSHARES_NAME = "name";
         public static final String OCSHARES_URL = "url";
 
-        public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_FILE_SOURCE
+        public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_ID_REMOTE_SHARED
                 + " collate nocase asc";
 
         // Columns of capabilities table

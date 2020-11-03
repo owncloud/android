@@ -29,8 +29,6 @@ class OCShareEntityTest {
     @Test
     fun testEqualsNamedParams() {
         val item1 = OCShareEntity(
-            fileSource = "7",
-            itemSource = "7",
             shareType = 0,
             shareWith = "",
             path = "/Photos/image2.jpg",
@@ -41,7 +39,6 @@ class OCShareEntityTest {
             sharedWithDisplayName = "",
             sharedWithAdditionalInfo = "",
             isFolder = false,
-            userId = -1,
             remoteId = "remoteId",
             accountOwner = "admin@server",
             name = "",
@@ -49,8 +46,6 @@ class OCShareEntityTest {
         )
 
         val item2 = OCShareEntity(
-            "7",
-            "7",
             0,
             "",
             "/Photos/image2.jpg",
@@ -61,7 +56,6 @@ class OCShareEntityTest {
             "",
             "",
             false,
-            -1,
             "remoteId",
             "admin@server",
             "",
@@ -77,8 +71,6 @@ class OCShareEntityTest {
     @Test
     fun testEqualsNamedParamsNullValues() {
         val item1 = OCShareEntity(
-            fileSource = "7",
-            itemSource = "7",
             shareType = 0,
             shareWith = null,
             path = "/Photos/image2.jpg",
@@ -89,7 +81,6 @@ class OCShareEntityTest {
             sharedWithDisplayName = null,
             sharedWithAdditionalInfo = null,
             isFolder = false,
-            userId = -1,
             remoteId = "remoteId",
             accountOwner = "admin@server",
             name = null,
@@ -97,8 +88,6 @@ class OCShareEntityTest {
         )
 
         val item2 = OCShareEntity(
-            "7",
-            "7",
             0,
             null,
             "/Photos/image2.jpg",
@@ -109,7 +98,6 @@ class OCShareEntityTest {
             null,
             null,
             false,
-            -1,
             "remoteId",
             "admin@server",
             null,
@@ -124,8 +112,6 @@ class OCShareEntityTest {
     @Test
     fun testNotEqualsNamedParams() {
         val item1 = OCShareEntity(
-            fileSource = "7",
-            itemSource = "7",
             shareType = 0,
             shareWith = "",
             path = "/Photos/image2.jpg",
@@ -136,7 +122,6 @@ class OCShareEntityTest {
             sharedWithDisplayName = "",
             sharedWithAdditionalInfo = "",
             isFolder = false,
-            userId = -1,
             remoteId = "remoteId",
             accountOwner = "admin@server",
             name = "",
@@ -144,8 +129,6 @@ class OCShareEntityTest {
         )
 
         val item2 = OCShareEntity(
-            "7",
-            "7",
             0,
             "",
             "/Photos/image2.jpg",
@@ -156,7 +139,6 @@ class OCShareEntityTest {
             "",
             "",
             false,
-            -1,
             "remoteId",
             "AnyServer",
             "",
