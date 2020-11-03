@@ -42,7 +42,7 @@ class OCShareEntityTest {
             sharedWithAdditionalInfo = "",
             isFolder = false,
             userId = -1,
-            remoteId = 1,
+            remoteId = "remoteId",
             accountOwner = "admin@server",
             name = "",
             shareLink = ""
@@ -62,7 +62,7 @@ class OCShareEntityTest {
             "",
             false,
             -1,
-            1,
+            "remoteId",
             "admin@server",
             "",
             ""
@@ -90,7 +90,7 @@ class OCShareEntityTest {
             sharedWithAdditionalInfo = null,
             isFolder = false,
             userId = -1,
-            remoteId = 1,
+            remoteId = "remoteId",
             accountOwner = "admin@server",
             name = null,
             shareLink = null
@@ -110,7 +110,7 @@ class OCShareEntityTest {
             null,
             false,
             -1,
-            1,
+            "remoteId",
             "admin@server",
             null,
             null
@@ -137,7 +137,7 @@ class OCShareEntityTest {
             sharedWithAdditionalInfo = "",
             isFolder = false,
             userId = -1,
-            remoteId = 1,
+            remoteId = "remoteId",
             accountOwner = "admin@server",
             name = "",
             shareLink = ""
@@ -157,7 +157,7 @@ class OCShareEntityTest {
             "",
             false,
             -1,
-            1,
+            "remoteId",
             "AnyServer",
             "",
             ""

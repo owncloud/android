@@ -30,6 +30,7 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
+import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -64,7 +65,12 @@ class OCShareRepositoryTest {
         ocShareRepository.refreshSharesFromNetwork(filePath, accountName)
 
         verify(exactly = 1) {
-            remoteShareDataSource.getShares(filePath, true, false, accountName)
+            remoteShareDataSource.getShares(
+                remoteFilePath = filePath,
+                reshares = true,
+                subfiles = false,
+                accountName = accountName
+            )
         }
 
         verify(exactly = 1) {
@@ -79,7 +85,12 @@ class OCShareRepositoryTest {
         ocShareRepository.refreshSharesFromNetwork(filePath, accountName)
 
         verify(exactly = 1) {
-            remoteShareDataSource.getShares(filePath, true, false, accountName)
+            remoteShareDataSource.getShares(
+                remoteFilePath = filePath,
+                reshares = true,
+                subfiles = false,
+                accountName = accountName
+            )
         }
 
         verify(exactly = 1) {
@@ -94,7 +105,12 @@ class OCShareRepositoryTest {
         ocShareRepository.refreshSharesFromNetwork(filePath, accountName)
 
         verify(exactly = 1) {
-            remoteShareDataSource.getShares(filePath, true, false, accountName)
+            remoteShareDataSource.getShares(
+                remoteFilePath = filePath,
+                reshares = true,
+                subfiles = false,
+                accountName = accountName
+            )
         }
 
         verify(exactly = 1) {
@@ -151,7 +167,7 @@ class OCShareRepositoryTest {
         } returns shareLiveData
 
         val sharesEmitted = mutableListOf<OCShare>()
-        ocShareRepository.getShareAsLiveData(1).observeForever {
+        ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId).observeForever {
             sharesEmitted.add(it!!)
         }
 
@@ -173,7 +189,7 @@ class OCShareRepositoryTest {
         } throws Exception()
 
         val sharesEmitted = mutableListOf<OCShare>()
-        ocShareRepository.getShareAsLiveData(1)
+        ocShareRepository.getShareAsLiveData(OC_SHARE.remoteId)
 
         val sharesToEmit = listOf(shares.first())
 
@@ -287,7 +303,7 @@ class OCShareRepositoryTest {
         } returns shares.first()
 
         ocShareRepository.updatePublicShare(
-            1,
+            OC_SHARE.remoteId,
             "Docs link",
             "password",
             2000,
@@ -298,7 +314,7 @@ class OCShareRepositoryTest {
 
         verify(exactly = 1) {
             remoteShareDataSource.updateShare(
-                1,
+                OC_SHARE.remoteId,
                 "Docs link",
                 "password",
                 2000,
@@ -326,7 +342,7 @@ class OCShareRepositoryTest {
         } throws FileNotFoundException()
 
         ocShareRepository.updatePublicShare(
-            1,
+            OC_SHARE.remoteId,
             "Docs link",
             "password",
             2000,
@@ -337,7 +353,7 @@ class OCShareRepositoryTest {
 
         verify(exactly = 1) {
             remoteShareDataSource.updateShare(
-                1,
+                OC_SHARE.remoteId,
                 "Docs link",
                 "password",
                 2000,
@@ -443,14 +459,14 @@ class OCShareRepositoryTest {
         } returns shares[2]
 
         ocShareRepository.updatePrivateShare(
-            1,
+            OC_SHARE.remoteId,
             -1,
             accountName
         )
 
         verify(exactly = 1) {
             remoteShareDataSource.updateShare(
-                1,
+                OC_SHARE.remoteId,
                 permissions = -1,
                 accountName = accountName
             )
@@ -474,14 +490,14 @@ class OCShareRepositoryTest {
         } throws FileNotFoundException()
 
         ocShareRepository.updatePrivateShare(
-            1,
+            OC_SHARE.remoteId,
             -1,
             accountName
         )
 
         verify(exactly = 1) {
             remoteShareDataSource.updateShare(
-                1,
+                OC_SHARE.remoteId,
                 permissions = -1,
                 accountName = accountName
             )
@@ -492,7 +508,7 @@ class OCShareRepositoryTest {
 
     @Test
     fun removeShare() {
-        val shareId = 1L
+        val shareId = "fjCZxtidwFrzoCl"
         ocShareRepository.deleteShare(shareId)
 
         verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId) }
@@ -501,7 +517,7 @@ class OCShareRepositoryTest {
 
     @Test(expected = FileNotFoundException::class)
     fun removeShareFileNotFoundException() {
-        val shareId = 1L
+        val shareId = "fjCZxtidwFrzoCl"
 
         every {
             remoteShareDataSource.deleteShare(shareId)

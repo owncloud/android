@@ -47,6 +47,25 @@ class RemoteShareMapper : RemoteMapper<OCShare, RemoteShare> {
             )
         }
 
-    // Not needed
-    override fun toRemote(model: OCShare?): RemoteShare? = null
+    override fun toRemote(model: OCShare?): RemoteShare? =
+        model?.let {
+            RemoteShare(
+                id = model.remoteId,
+                shareWith = model.shareWith!!,
+                path = model.path,
+                token = model.token!!,
+                sharedWithDisplayName = model.sharedWithDisplayName!!,
+                sharedWithAdditionalInfo = model.sharedWithAdditionalInfo!!,
+                name = model.name!!,
+                shareLink = model.shareLink!!,
+                fileSource = model.fileSource,
+                itemSource = model.itemSource,
+                shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(model.shareType.value),
+                permissions = model.permissions,
+                sharedDate = model.sharedDate,
+                expirationDate = model.expirationDate,
+                isFolder = model.isFolder,
+                userId = model.userId
+            )
+        }
 }

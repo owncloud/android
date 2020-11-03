@@ -46,7 +46,7 @@ class OCShareTest {
             "",
             false,
             -1,
-            1,
+            "1",
             "admin@server",
             "",
             ""
@@ -66,7 +66,7 @@ class OCShareTest {
         assertEquals("", item.sharedWithAdditionalInfo)
         assertEquals(false, item.isFolder)
         assertEquals(-1, item.userId)
-        assertEquals(1, item.remoteId)
+        assertEquals("1", item.remoteId)
         assertEquals("admin@server", item.accountOwner)
         assertEquals("", item.name)
         assertEquals("", item.shareLink)
@@ -89,7 +89,7 @@ class OCShareTest {
             sharedWithAdditionalInfo = "",
             isFolder = false,
             userId = -1,
-            remoteId = 1,
+            remoteId = "1",
             accountOwner = "admin@server",
             name = "",
             shareLink = ""
@@ -110,7 +110,7 @@ class OCShareTest {
             "",
             false,
             -1,
-            1,
+            "1",
             "admin@server",
             "",
             ""
@@ -136,7 +136,7 @@ class OCShareTest {
             sharedWithAdditionalInfo = "",
             isFolder = false,
             userId = -1,
-            remoteId = 1,
+            remoteId = "1",
             name = "",
             shareLink = ""
         )
@@ -156,7 +156,7 @@ class OCShareTest {
             "",
             false,
             -1,
-            1,
+            "1",
             "",
             "",
             ""
@@ -183,7 +183,7 @@ class OCShareTest {
             sharedWithAdditionalInfo = "",
             isFolder = false,
             userId = -1,
-            remoteId = 1,
+            remoteId = "1",
             accountOwner = "admin@server",
             name = "",
             shareLink = ""
@@ -204,7 +204,7 @@ class OCShareTest {
             "",
             false,
             -1,
-            1,
+            "1",
             "admin@server",
             "",
             ""
@@ -230,7 +230,7 @@ class OCShareTest {
             sharedWithAdditionalInfo = "",
             isFolder = false,
             userId = -1,
-            remoteId = 1,
+            remoteId = "1",
             accountOwner = "admin@server",
             name = "",
             shareLink = ""

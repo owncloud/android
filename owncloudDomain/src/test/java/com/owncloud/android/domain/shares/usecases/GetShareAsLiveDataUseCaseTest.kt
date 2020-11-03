@@ -27,6 +27,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUse
 import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.spyk
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -39,7 +40,7 @@ class GetShareAsLiveDataUseCaseTest {
 
     private val shareRepository: ShareRepository = spyk()
     private val useCase = GetShareAsLiveDataUseCase((shareRepository))
-    private val useCaseParams = GetShareAsLiveDataUseCase.Params(1)
+    private val useCaseParams = GetShareAsLiveDataUseCase.Params(OC_SHARE.remoteId)
     private lateinit var shareEmitted: MutableList<OCShare>
 
     @Before
@@ -58,9 +59,11 @@ class GetShareAsLiveDataUseCaseTest {
             shareEmitted.add(it)
         }
 
-        shareToEmit.forEach{ shareLiveData.postValue(it)}
+        shareToEmit.forEach { shareLiveData.postValue(it) }
 
         Assert.assertEquals(shareToEmit, shareEmitted)
+
+        verify { shareRepository.getShareAsLiveData(OC_SHARE.remoteId) }
     }
 
     @Test(expected = Exception::class)

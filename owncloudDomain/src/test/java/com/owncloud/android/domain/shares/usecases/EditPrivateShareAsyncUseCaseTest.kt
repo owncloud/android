@@ -1,4 +1,3 @@
-
 /**
  * ownCloud Android client application
  *
@@ -23,6 +22,7 @@ package com.owncloud.android.domain.shares.usecases
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.sharing.shares.usecases.EditPrivateShareAsyncUseCase
+import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -34,8 +34,9 @@ import org.junit.Test
 
 class EditPrivateShareAsyncUseCaseTest {
     private val shareRepository: ShareRepository = spyk()
-    private val useCase = EditPrivateShareAsyncUseCase((shareRepository))
-    private val useCaseParams = EditPrivateShareAsyncUseCase.Params(1, 1, "")
+    private val useCase = EditPrivateShareAsyncUseCase(shareRepository)
+    private val useCaseParams =
+        EditPrivateShareAsyncUseCase.Params(OC_SHARE.remoteId, OC_SHARE.permissions, OC_SHARE.accountOwner)
 
     @Test
     fun editPrivateShareOk() {
@@ -45,7 +46,13 @@ class EditPrivateShareAsyncUseCaseTest {
         assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.updatePrivateShare(1, 1, "") }
+        verify(exactly = 1) {
+            shareRepository.updatePrivateShare(
+                OC_SHARE.remoteId,
+                OC_SHARE.permissions,
+                OC_SHARE.accountOwner
+            )
+        }
     }
 
     @Test
@@ -60,6 +67,12 @@ class EditPrivateShareAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.updatePrivateShare(1, 1, "") }
+        verify(exactly = 1) {
+            shareRepository.updatePrivateShare(
+                OC_SHARE.remoteId,
+                OC_SHARE.permissions,
+                OC_SHARE.accountOwner
+            )
+        }
     }
 }

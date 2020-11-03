@@ -17,7 +17,7 @@ val OC_SHARE = OCShare(
     sharedWithAdditionalInfo = "",
     isFolder = false,
     userId = -1,
-    remoteId = 1,
+    remoteId = "1",
     name = "",
     shareLink = ""
 )
