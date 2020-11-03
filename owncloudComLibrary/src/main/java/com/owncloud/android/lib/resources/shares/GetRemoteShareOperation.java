@@ -46,9 +46,9 @@ import java.net.URL;
 
 public class GetRemoteShareOperation extends RemoteOperation<ShareParserResult> {
 
-    private long mRemoteId;
+    private String mRemoteId;
 
-    public GetRemoteShareOperation(long remoteId) {
+    public GetRemoteShareOperation(String remoteId) {
         mRemoteId = remoteId;
     }
 
@@ -60,7 +60,7 @@ public class GetRemoteShareOperation extends RemoteOperation<ShareParserResult> 
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
-            uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
+            uriBuilder.appendEncodedPath(mRemoteId);
 
             GetMethod getMethod = new GetMethod(new URL(uriBuilder.build().toString()));
             getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);

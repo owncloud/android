@@ -179,7 +179,7 @@ class ShareXMLParser {
                 name.equals(NODE_ID, ignoreCase = true) -> {// Parse Create XML Response
                     share = RemoteShare()
                     val value = readNode(parser, NODE_ID)
-                    share.id = Integer.parseInt(value).toLong()
+                    share.id = value
                 }
                 name.equals(NODE_URL, ignoreCase = true) -> {
                     // NOTE: this field is received in all the public shares from OC 9.0.0
@@ -236,7 +236,7 @@ class ShareXMLParser {
                 }
 
                 name.equals(NODE_ID, ignoreCase = true) -> {
-                    remoteShare.id = Integer.parseInt(readNode(parser, NODE_ID)).toLong()
+                    remoteShare.id = readNode(parser, NODE_ID)
                 }
 
                 name.equals(NODE_ITEM_TYPE, ignoreCase = true) -> {
@@ -320,9 +320,7 @@ class ShareXMLParser {
             }
         }
 
-        if (remoteShare.isValid) {
-            shares.add(remoteShare)
-        }
+        shares.add(remoteShare)
     }
 
     private fun fixPathForFolder(share: RemoteShare) {
