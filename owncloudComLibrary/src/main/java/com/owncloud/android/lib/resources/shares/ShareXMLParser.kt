@@ -244,10 +244,6 @@ class ShareXMLParser {
                     fixPathForFolder(remoteShare)
                 }
 
-                name.equals(NODE_ITEM_SOURCE, ignoreCase = true) -> {
-                    remoteShare.itemSource = readNode(parser, NODE_ITEM_SOURCE)
-                }
-
                 name.equals(NODE_PARENT, ignoreCase = true) -> {
                     readNode(parser, NODE_PARENT)
                 }
@@ -259,10 +255,6 @@ class ShareXMLParser {
 
                 name.equals(NODE_SHARE_WITH, ignoreCase = true) -> {
                     remoteShare.shareWith = readNode(parser, NODE_SHARE_WITH)
-                }
-
-                name.equals(NODE_FILE_SOURCE, ignoreCase = true) -> {
-                    remoteShare.fileSource = readNode(parser, NODE_FILE_SOURCE)
                 }
 
                 name.equals(NODE_PATH, ignoreCase = true) -> {
@@ -401,11 +393,9 @@ class ShareXMLParser {
         private const val NODE_ELEMENT = "element"
         private const val NODE_ID = "id"
         private const val NODE_ITEM_TYPE = "item_type"
-        private const val NODE_ITEM_SOURCE = "item_source"
         private const val NODE_PARENT = "parent"
         private const val NODE_SHARE_TYPE = "share_type"
         private const val NODE_SHARE_WITH = "share_with"
-        private const val NODE_FILE_SOURCE = "file_source"
         private const val NODE_PATH = "path"
         private const val NODE_PERMISSIONS = "permissions"
         private const val NODE_STIME = "stime"
