@@ -127,7 +127,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private var leftFragmentContainer: View? = null
     private var rightFragmentContainer: View? = null
-    private var descendingMenuItem: MenuItem? = null
     private var selectAllMenuItem: MenuItem? = null
     private var mainMenu: Menu? = null
 
@@ -151,9 +150,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private val isFabOpen: Boolean
         get() = listOfFilesFragment?.fabMain?.isExpanded ?: false
-
-    private val isGridView: Boolean
-        get() = listOfFilesFragment?.isGridEnabled ?: false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.v("onCreate() start")
@@ -263,6 +259,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         requestCode: Int,
         permissions: Array<String>, grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             PermissionUtil.PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
                 // If request is cancelled, result arrays are empty.
