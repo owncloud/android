@@ -63,26 +63,6 @@ data class OCShareEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
     companion object {
-
-        fun fromCursor(cursor: Cursor): OCShareEntity {
-            return OCShareEntity(
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_TYPE)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PATH)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_PERMISSIONS)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARED_DATE)),
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_TOKEN)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO)),
-                cursor.getInt(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1,
-                cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)).toString(),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)),
-                cursor.getString(cursor.getColumnIndex(ProviderTableMeta.OCSHARES_URL))
-            )
-        }
-
         fun fromContentValues(values: ContentValues): OCShareEntity {
             return OCShareEntity(
                 values.getAsInteger(ProviderTableMeta.OCSHARES_SHARE_TYPE),

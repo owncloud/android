@@ -965,32 +965,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
             if (oldVersion < 26 && newVersion >= 26) {
                 Timber.i("SQL : Entering in #26 to migrate shares from SQLite to Room")
-                val cursor = db.query(
-                    ProviderTableMeta.OCSHARES_TABLE_NAME,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                )
 
-                if (cursor.moveToFirst()) {
-                    val shares = mutableListOf<OCShareEntity>()
-
-                    do {
-                        shares.add(OCShareEntity.fromCursor(cursor))
-                    } while (cursor.moveToNext())
-
-                    // Insert share list to the new shares table in new database
-                    // TODO New arch
-//                    executors.diskIO().execute {
-//                        OCLocalShareDataSource(context).insert(shares)
-//                    }
-
-                    // Drop old shares table from old database
-                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.OCSHARES_TABLE_NAME + ";")
-                }
+                // Drop old shares table from old database
+                db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.OCSHARES_TABLE_NAME + ";")
             }
 
             if (oldVersion < 27 && newVersion >= 27) {
