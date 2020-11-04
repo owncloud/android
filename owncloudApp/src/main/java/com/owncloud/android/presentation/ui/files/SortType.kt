@@ -32,9 +32,9 @@ enum class SortType : Parcelable {
     @StringRes
     fun toStringRes(): Int =
         when (this) {
-            SORT_TYPE_BY_NAME -> R.string.actionbar_sort_by_name
-            SORT_TYPE_BY_DATE -> R.string.actionbar_sort_by_date
-            SORT_TYPE_BY_SIZE -> R.string.actionbar_sort_by_size
+            SORT_TYPE_BY_NAME -> R.string.global_name
+            SORT_TYPE_BY_DATE -> R.string.global_date
+            SORT_TYPE_BY_SIZE -> R.string.global_size
         }
 
     companion object {

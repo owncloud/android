@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/standard_padding">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/standard_half_padding"
-        android:text="@string/actionbar_sort"
-        android:textColor="@color/textColor"
+        android:layout_marginStart="@dimen/standard_half_margin"
+        android:text="@string/actionbar_sort_title"
+        android:textColor="@color/bottom_sheet_fragment_item_color"
         android:textSize="@dimen/two_line_primary_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,37 +22,40 @@
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginBottom="@dimen/standard_margin"
-        android:background="@color/primary"
+        android:layout_marginTop="@dimen/standard_half_margin"
+        android:background="@color/bottom_sheet_fragment_item_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
         android:id="@+id/sort_by_name"
-        style="@style/Theme.ownCloud.SortBottomSheetFragment.Item"
-        android:text="@string/actionbar_sort_by_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemIcon="@drawable/ic_sort_by_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        tools:drawableStart="@drawable/ic_baseline_arrow_upward" />
+        app:title="@string/global_name" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
         android:id="@+id/sort_by_date"
-        style="@style/Theme.ownCloud.SortBottomSheetFragment.Item"
-        android:text="@string/actionbar_sort_by_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemIcon="@drawable/ic_sort_by_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sort_by_name" />
+        app:layout_constraintTop_toBottomOf="@id/sort_by_name"
+        app:title="@string/global_date" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
         android:id="@+id/sort_by_size"
-        style="@style/Theme.ownCloud.SortBottomSheetFragment.Item"
-        android:layout_marginBottom="@dimen/standard_margin"
-        android:text="@string/actionbar_sort_by_size"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemIcon="@drawable/ic_sort_by_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sort_by_date" />
+        app:layout_constraintTop_toBottomOf="@id/sort_by_date"
+        app:title="@string/global_size" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

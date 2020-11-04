@@ -51,14 +51,14 @@ class SortOptionsView @JvmOverloads constructor(
             if (field == sortType) {
                 sortOrderSelected = sortOrderSelected.getAlternativeViewType()
             }
-            sort_type_selector.text = context.getText(sortType.toStringRes())
+            sort_type_title.text = context.getText(sortType.toStringRes())
             field = sortType
         }
 
     // Enable sort ascending by default.
     var sortOrderSelected: SortOrder = SortOrder.SORT_ORDER_ASCENDING
         set(sortOrder) {
-            sort_type_selector.setCompoundDrawablesWithIntrinsicBounds(0, 0, sortOrder.toDrawableRes(), 0)
+            sort_type_icon.setImageDrawable(ContextCompat.getDrawable(context, sortOrder.toDrawableRes()))
             field = sortOrder
         }
 

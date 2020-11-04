@@ -276,12 +276,6 @@
     <style name="Theme.ownCloud.SortBottomSheetFragment" />
 
     <style name="Theme.ownCloud.SortBottomSheetFragment.Item">
-        <item name="android:drawablePadding">@dimen/standard_padding</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/standard_half_margin</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:padding">@dimen/standard_half_padding</item>
-        <item name="drawableTint">@color/primary</item>
         <item name="android:textAppearance">@style/TextAppearance.OwnCloud.SortBottomSheetFragment.Item</item>
     </style>
 </resources>

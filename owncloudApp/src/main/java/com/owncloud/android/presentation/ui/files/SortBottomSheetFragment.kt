@@ -22,9 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.textview.MaterialTextView
 import com.owncloud.android.R
 import kotlinx.android.synthetic.main.sort_bottom_sheet_fragment.*
 
@@ -50,21 +48,14 @@ class SortBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         when (sortType) {
-            SortType.SORT_TYPE_BY_NAME -> sort_by_name.setSelectedType()
-            SortType.SORT_TYPE_BY_SIZE -> sort_by_size.setSelectedType()
-            SortType.SORT_TYPE_BY_DATE -> sort_by_date.setSelectedType()
+            SortType.SORT_TYPE_BY_NAME -> sort_by_name.setSelected(sortOrder.toDrawableRes())
+            SortType.SORT_TYPE_BY_SIZE -> sort_by_size.setSelected(sortOrder.toDrawableRes())
+            SortType.SORT_TYPE_BY_DATE -> sort_by_date.setSelected(sortOrder.toDrawableRes())
         }
 
         sort_by_name.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_NAME) }
         sort_by_size.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_SIZE) }
         sort_by_date.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_DATE) }
-    }
-
-    private fun MaterialTextView.setSelectedType() {
-        this.apply {
-            setTextColor(ContextCompat.getColor(requireContext(), R.color.primary))
-            setCompoundDrawablesWithIntrinsicBounds(sortOrder.toDrawableRes(), 0, 0, 0)
-        }
     }
 
     private fun onSortClick(sortType: SortType) {
