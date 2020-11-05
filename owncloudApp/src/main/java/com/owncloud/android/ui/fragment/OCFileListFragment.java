@@ -45,7 +45,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -64,6 +63,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView;
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
 import com.owncloud.android.presentation.ui.files.SortOptionsView;
 import com.owncloud.android.presentation.ui.files.SortOrder;
@@ -350,11 +350,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment, null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
                 dialog.setContentView(uploadBottomSheet);
-                final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
-                LinearLayout uploadFromCameraLinearLayout =
-                        uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                final BottomSheetFragmentItemView uploadFromFilesItemView = uploadBottomSheet.findViewById(R.id.upload_from_files_item_view);
+                BottomSheetFragmentItemView uploadFromCameraItemView =
+                        uploadBottomSheet.findViewById(R.id.upload_from_camera_item_view);
                 TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
-                uploadFilesLinearLayout.setOnTouchListener((v13, event) -> {
+                uploadFromFilesItemView.setOnTouchListener((v13, event) -> {
                     Intent action = new Intent(Intent.ACTION_GET_CONTENT);
                     action = action.setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE);
                     action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -365,7 +365,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     dialog.hide();
                     return false;
                 });
-                uploadFromCameraLinearLayout.setOnTouchListener((v12, event) -> {
+                uploadFromCameraItemView.setOnTouchListener((v12, event) -> {
                     ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
                     dialog.hide();
                     return false;
