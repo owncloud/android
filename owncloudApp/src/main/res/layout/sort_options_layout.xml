@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/standard_half_margin"
-    android:layout_marginEnd="@dimen/standard_half_margin"
-    android:layout_marginBottom="@dimen/standard_margin">
+    android:background="@color/primary"
+    android:paddingStart="@dimen/standard_half_padding"
+    android:paddingEnd="@dimen/standard_half_padding"
+    android:paddingBottom="@dimen/standard_quarter_padding">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/sort_type_selector"
@@ -22,7 +23,7 @@
             android:id="@+id/sort_type_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary"
+            android:textColor="@color/white"
             android:textSize="@dimen/two_line_primary_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/sort_type_icon"
@@ -34,7 +35,7 @@
             android:id="@+id/sort_type_icon"
             android:layout_width="@dimen/bottom_sheet_fragment_item_icon_size"
             android:layout_height="@dimen/bottom_sheet_fragment_item_icon_size"
-            android:tint="@color/primary"
+            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/sort_type_title"
             app:layout_constraintStart_toEndOf="@+id/sort_type_title"
             app:layout_constraintTop_toTopOf="@+id/sort_type_title"
@@ -47,7 +48,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/standard_half_padding"
         android:src="@drawable/ic_baseline_view_list"
-        android:tint="@color/primary"
+        android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/sort_type_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/sort_type_selector"

@@ -37,9 +37,29 @@
             fab:layout_constraintStart_toStartOf="parent"
             fab:layout_constraintTop_toTopOf="parent" />
 
+        <ProgressBar
+            android:id="@+id/syncProgressBar"
+            style="@style/Widget.ownCloud.TopProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_margin="0dp"
+            android:indeterminate="false"
+            android:indeterminateOnly="false"
+            android:visibility="visible"
+            fab:layout_constraintTop_toBottomOf="@id/options_layout" />
+
+        <View
+            android:id="@+id/shadow_view"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_margin="0dp"
+            android:background="@drawable/shadow_gradient"
+            fab:layout_constraintTop_toBottomOf="@id/options_layout" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="4dp"
             fab:layout_constraintBottom_toBottomOf="parent"
             fab:layout_constraintTop_toBottomOf="@+id/options_layout">
 
@@ -137,7 +157,4 @@
             fab:fab_title="" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-    <!-- last to draw, will be top in Z axis -->
-    <include layout="@layout/top_progress_bar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
