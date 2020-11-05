@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Nastavenia</string>
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Odoslať</string>
-  <string name="actionbar_sort">Zoradiť</string>
   <string name="actionbar_descending">Zostupne</string>
   <string name="actionbar_sort_title">Zoradiť podľa</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Staršie-Novšie</string>
-  <string name="actionbar_sort_by_size">Vačšie-Menšie</string>
   <string name="drawer_item_all_files">Všetky súbory</string>
   <string name="drawer_item_only_available_offline">Dostupné offline</string>
   <string name="drawer_item_shared_by_link_files">Zdieľané pomocou odkazu</string>

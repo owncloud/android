@@ -12,12 +12,8 @@
   <string name="actionbar_settings">الإعدادات</string>
   <string name="actionbar_see_details">التفاصيل</string>
   <string name="actionbar_send_file">إرسال</string>
-  <string name="actionbar_sort">فرز</string>
   <string name="actionbar_descending">تنازلي</string>
   <string name="actionbar_sort_title">فرز حسب</string>
-  <string name="actionbar_sort_by_name">أ-ي</string>
-  <string name="actionbar_sort_by_date">من الأقدم إلى الأحدث</string>
-  <string name="actionbar_sort_by_size">من الأصغر إلى الأكبر</string>
   <string name="drawer_item_all_files">كل الملفات</string>
   <string name="drawer_item_only_available_offline">متوفر دون اتصال بالإنترنت</string>
   <string name="drawer_item_shared_by_link_files">مشاركة بواسطة الرابط</string>

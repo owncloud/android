@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Setări</string>
   <string name="actionbar_see_details">Detalii</string>
   <string name="actionbar_send_file">Expediază</string>
-  <string name="actionbar_sort">Sortare</string>
   <string name="actionbar_descending">Descrescător</string>
   <string name="actionbar_sort_title">Sortare după</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Cele mai vechi - Cele mai noi</string>
-  <string name="actionbar_sort_by_size">Cele mai mici - Cele mai mari</string>
   <string name="drawer_item_all_files">Toate fișierele</string>
   <string name="drawer_item_only_available_offline">Disponibil offline</string>
   <string name="drawer_item_shared_by_link_files">Partajat prin link</string>

@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Paramètres</string>
   <string name="actionbar_see_details">Détails</string>
   <string name="actionbar_send_file">Envoyer</string>
-  <string name="actionbar_sort">Trier</string>
   <string name="actionbar_descending">Décroissant</string>
   <string name="actionbar_sort_title">Trier</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Du plus ancien au plus récent</string>
-  <string name="actionbar_sort_by_size">Du plus petit au plus grand</string>
   <string name="drawer_item_all_files">Tous les fichiers</string>
   <string name="drawer_item_only_available_offline">Disponible hors-ligne</string>
   <string name="drawer_item_shared_by_link_files">Partagés par lien</string>

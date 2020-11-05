@@ -10,8 +10,7 @@
   <string name="actionbar_settings">Iestatījumi</string>
   <string name="actionbar_see_details">Detaļas</string>
   <string name="actionbar_send_file">Sūtīt</string>
-  <string name="actionbar_sort">Kārtot</string>
-  <string name="actionbar_sort_title">Kārtot pēc</string>
+    <string name="actionbar_sort_title">Kārtot pēc</string>
   <string name="drawer_item_all_files">Visas datnes</string>
   <string name="drawer_item_settings">Iestatījumi</string>
   <string name="drawer_close">Aizvērt</string>

@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Instellingen</string>
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Versturen</string>
-  <string name="actionbar_sort">Sorteren</string>
   <string name="actionbar_descending">Aflopend</string>
   <string name="actionbar_sort_title">Sorteer op</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Oudste - Nieuwste</string>
-  <string name="actionbar_sort_by_size">Kleinste - Grootste</string>
   <string name="drawer_item_all_files">Alle bestanden</string>
   <string name="drawer_item_only_available_offline">Beschikbaar off-line</string>
   <string name="drawer_item_shared_by_link_files">Gedeeld via een link</string>

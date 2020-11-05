@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Nastavení</string>
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Odeslat</string>
-  <string name="actionbar_sort">Seřadit</string>
   <string name="actionbar_descending">Klesající</string>
   <string name="actionbar_sort_title">Seřadit podle</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Nejstarší - Nejnovější</string>
-  <string name="actionbar_sort_by_size">Nejmenší - Největší</string>
   <string name="drawer_item_all_files">Všechny soubory</string>
   <string name="drawer_item_only_available_offline">Dostupné offline</string>
   <string name="drawer_item_shared_by_link_files">Sdíleno pomocí odkazu</string>

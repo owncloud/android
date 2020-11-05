@@ -9,10 +9,8 @@
   <string name="actionbar_settings">Կարգավորումներ</string>
   <string name="actionbar_see_details">Մանրամասներ</string>
   <string name="actionbar_send_file">Ուղարկել</string>
-  <string name="actionbar_sort">Դասակարգել</string>
-  <string name="actionbar_sort_title">Դասակարգել ըստ</string>
-  <string name="actionbar_sort_by_name">Ա-Ֆ</string>
-  <string name="drawer_item_all_files">Բոլոր ֆայլերը</string>
+    <string name="actionbar_sort_title">Դասակարգել ըստ</string>
+    <string name="drawer_item_all_files">Բոլոր ֆայլերը</string>
   <string name="drawer_item_settings">Կարգավորումներ</string>
   <string name="drawer_item_uploads_list">Բեռնումներ</string>
   <string name="drawer_close">Փակել</string>

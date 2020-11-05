@@ -10,12 +10,8 @@
   <string name="actionbar_settings">Definições</string>
   <string name="actionbar_see_details">Detalhes</string>
   <string name="actionbar_send_file">Enviar</string>
-  <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Antigo - Novo</string>
-  <string name="actionbar_sort_by_size">Pequeno - Grande</string>
   <string name="drawer_item_all_files">Todos os ficheiros</string>
   <string name="drawer_item_only_available_offline">Disponível off-line</string>
   <string name="drawer_item_shared_by_link_files">Partilhado por hiperligação</string>

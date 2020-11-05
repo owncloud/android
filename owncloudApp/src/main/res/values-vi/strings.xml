@@ -11,11 +11,9 @@
   <string name="actionbar_settings">Cài đặt</string>
   <string name="actionbar_see_details">Chi tiết</string>
   <string name="actionbar_send_file">Gởi</string>
-  <string name="actionbar_sort">Sắp xếp</string>
-  <string name="actionbar_descending">Giảm dần</string>
+    <string name="actionbar_descending">Giảm dần</string>
   <string name="actionbar_sort_title">Sắp xếp theo</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="drawer_item_all_files">Tất cả tệp tin</string>
+    <string name="drawer_item_all_files">Tất cả tệp tin</string>
   <string name="drawer_item_settings">Thiết lập</string>
   <string name="drawer_item_uploads_list">Tải lên</string>
   <string name="drawer_close">Đóng</string>

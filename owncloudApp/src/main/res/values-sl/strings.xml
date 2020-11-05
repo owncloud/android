@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Nastavitve</string>
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Pošlji</string>
-  <string name="actionbar_sort">Razvrsti</string>
   <string name="actionbar_descending">Padajoče</string>
   <string name="actionbar_sort_title">Razvrsti ...</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Starejše - Novejše</string>
-  <string name="actionbar_sort_by_size">Manjše - Večje</string>
   <string name="drawer_item_all_files">Vse datoteke</string>
   <string name="drawer_item_only_available_offline">Na voljo za rabo brez povezave</string>
   <string name="drawer_item_shared_by_link_files">V souporabi prek povezave</string>

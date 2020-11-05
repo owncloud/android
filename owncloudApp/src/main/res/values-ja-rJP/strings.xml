@@ -11,12 +11,8 @@
   <string name="actionbar_settings">設定</string>
   <string name="actionbar_see_details">詳細</string>
   <string name="actionbar_send_file">送信</string>
-  <string name="actionbar_sort">ソート</string>
   <string name="actionbar_descending">降順</string>
   <string name="actionbar_sort_title">ソート: </string>
-  <string name="actionbar_sort_by_name">名前順</string>
-  <string name="actionbar_sort_by_date">最古 - 最新</string>
-  <string name="actionbar_sort_by_size">最小 - 最大</string>
   <string name="drawer_item_all_files">すべてのファイル</string>
   <string name="drawer_item_only_available_offline">オフラインが利用可能です</string>
   <string name="drawer_item_shared_by_link_files">URLリンクで共有中</string>

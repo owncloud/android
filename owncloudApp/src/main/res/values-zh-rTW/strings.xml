@@ -12,12 +12,8 @@
   <string name="actionbar_settings">設定</string>
   <string name="actionbar_see_details">詳細資料</string>
   <string name="actionbar_send_file">寄出</string>
-  <string name="actionbar_sort">排序</string>
   <string name="actionbar_descending">降序</string>
   <string name="actionbar_sort_title">排序依照</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">最舊-最新</string>
-  <string name="actionbar_sort_by_size">最小-最大</string>
   <string name="drawer_item_all_files">所有檔案</string>
   <string name="drawer_item_only_available_offline">離線可使用</string>
   <string name="drawer_item_shared_by_link_files">由連結分享</string>

@@ -12,12 +12,8 @@
   <string name="actionbar_settings">הגדרות</string>
   <string name="actionbar_see_details">פרטים</string>
   <string name="actionbar_send_file">שליחה</string>
-  <string name="actionbar_sort">מיון</string>
   <string name="actionbar_descending">יורד</string>
   <string name="actionbar_sort_title">מיון על בסיס</string>
-  <string name="actionbar_sort_by_name">א-ת</string>
-  <string name="actionbar_sort_by_date">ישן - חדש</string>
-  <string name="actionbar_sort_by_size">קטן - גדול</string>
   <string name="drawer_item_all_files">כל הקבצים</string>
   <string name="drawer_item_only_available_offline">זמין במצב לא מקוון</string>
   <string name="drawer_item_shared_by_link_files">משותף עם קישור</string>

@@ -8,8 +8,7 @@
   <string name="actionbar_settings">Podešavanja</string>
   <string name="actionbar_see_details">Detaljnije</string>
   <string name="actionbar_send_file">Pošalji</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="drawer_item_all_files">Svi fajlovi</string>
+    <string name="drawer_item_all_files">Svi fajlovi</string>
   <string name="drawer_item_settings">Podešavanja</string>
   <string name="drawer_close">Zatvori</string>
   <string name="drawer_open">Otvori</string>

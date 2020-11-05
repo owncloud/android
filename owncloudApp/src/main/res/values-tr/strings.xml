@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Ayarlar</string>
   <string name="actionbar_see_details">Ayrıntılar</string>
   <string name="actionbar_send_file">Gönder</string>
-  <string name="actionbar_sort">Sırala</string>
   <string name="actionbar_descending">Azalan</string>
   <string name="actionbar_sort_title">Şuna göre sırala</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Eskiden yeniye</string>
-  <string name="actionbar_sort_by_size">Küçükten büyüğe</string>
   <string name="drawer_item_all_files">Tüm dosyalar</string>
   <string name="drawer_item_only_available_offline">Çevrimdışı kullanılabilir</string>
   <string name="drawer_item_shared_by_link_files">Bağlantı ile paylaşılmış</string>

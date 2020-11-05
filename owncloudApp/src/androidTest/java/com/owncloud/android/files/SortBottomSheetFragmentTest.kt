@@ -48,19 +48,19 @@ class SortBottomSheetFragmentTest {
     fun test_initial_view() {
         R.id.title.run {
             isDisplayed(true)
-            withText(R.string.actionbar_sort)
+            withText(R.string.actionbar_sort_title)
         }
         R.id.sort_by_name.run {
             isDisplayed(true)
-            withText(R.string.actionbar_sort_by_name)
+            withText(R.string.global_name)
         }
         R.id.sort_by_size.run {
             isDisplayed(true)
-            withText(R.string.actionbar_sort_by_size)
+            withText(R.string.global_size)
         }
         R.id.sort_by_date.run {
             isDisplayed(true)
-            withText(R.string.actionbar_sort_by_date)
+            withText(R.string.global_date)
         }
     }
 }

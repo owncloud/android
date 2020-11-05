@@ -6,8 +6,7 @@
   <string name="actionbar_open_with">Buka dengan</string>
   <string name="actionbar_settings">Set</string>
   <string name="actionbar_send_file">Hantar</string>
-  <string name="actionbar_sort">Susun</string>
-  <string name="actionbar_descending">Menurun</string>
+    <string name="actionbar_descending">Menurun</string>
   <string name="actionbar_sort_title">Susun mengikut</string>
   <string name="drawer_open">Buka</string>
   <string name="drawer_help">Bantuan</string>

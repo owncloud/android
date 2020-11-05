@@ -11,11 +11,9 @@
   <string name="actionbar_settings">Ezarpenak</string>
   <string name="actionbar_see_details">Xehetasunak</string>
   <string name="actionbar_send_file">Bidali</string>
-  <string name="actionbar_sort">Ordenatu</string>
-  <string name="actionbar_descending">Beherantz</string>
+    <string name="actionbar_descending">Beherantz</string>
   <string name="actionbar_sort_title">Ordenatu honen arabera</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="drawer_item_all_files">Fitxategi guztiak</string>
+    <string name="drawer_item_all_files">Fitxategi guztiak</string>
   <string name="drawer_item_settings">Ezarpenak</string>
   <string name="drawer_item_uploads_list">Kargatutakoak</string>
   <string name="drawer_close">Itxi</string>

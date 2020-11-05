@@ -10,11 +10,8 @@
   <string name="actionbar_settings">설정</string>
   <string name="actionbar_see_details">자세한 정보</string>
   <string name="actionbar_send_file">보내기</string>
-  <string name="actionbar_sort">정렬</string>
   <string name="actionbar_descending">내림차순</string>
   <string name="actionbar_sort_title">정렬 순서</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">오래된순 - 최신순</string>
   <string name="drawer_item_all_files">모든 파일</string>
   <string name="drawer_item_only_available_offline">오프라인 사용 가능</string>
   <string name="drawer_item_shared_by_link_files">링크로 공유됨</string>

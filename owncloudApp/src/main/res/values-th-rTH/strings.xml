@@ -12,12 +12,8 @@
   <string name="actionbar_settings">ตั้งค่า</string>
   <string name="actionbar_see_details">รายละเอียด</string>
   <string name="actionbar_send_file">ส่ง</string>
-  <string name="actionbar_sort">จัดเรียง</string>
   <string name="actionbar_descending">กำลังมากไปน้อย</string>
   <string name="actionbar_sort_title">เรียงตาม</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">จากเก่า-ใหม่</string>
-  <string name="actionbar_sort_by_size">เล็กที่สุด - ใหญ่ที่สุด</string>
   <string name="drawer_item_all_files">ไฟล์ทั้งหมด</string>
   <string name="drawer_item_only_available_offline">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="drawer_item_shared_by_link_files">แชร์โดยลิงก์</string>

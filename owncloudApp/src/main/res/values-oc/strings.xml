@@ -11,10 +11,8 @@
   <string name="actionbar_settings">Paramètres</string>
   <string name="actionbar_see_details">Detalhs</string>
   <string name="actionbar_send_file">Mandar</string>
-  <string name="actionbar_sort">Triar</string>
-  <string name="actionbar_sort_title">Triar</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="drawer_item_all_files">Totes los fichièrs</string>
+    <string name="actionbar_sort_title">Triar</string>
+    <string name="drawer_item_all_files">Totes los fichièrs</string>
   <string name="drawer_item_settings">Paramètres</string>
   <string name="drawer_item_uploads_list">Cargaments</string>
   <string name="drawer_close">Tampar</string>
