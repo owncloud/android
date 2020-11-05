@@ -22,6 +22,7 @@ package com.owncloud.android.files
 import android.os.Bundle
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragment
+import androidx.fragment.app.testing.launchFragmentInContainer
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
 import com.owncloud.android.presentation.ui.files.SortOrder
@@ -43,7 +44,7 @@ class SortBottomSheetFragmentTest {
             putParcelable(SortBottomSheetFragment.ARG_SORT_TYPE, SortType.SORT_TYPE_BY_NAME)
             putParcelable(SortBottomSheetFragment.ARG_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING)
         }
-        fragmentScenario = launchFragment<SortBottomSheetFragment>(fragmentArgs)
+        fragmentScenario = launchFragmentInContainer<SortBottomSheetFragment>(fragmentArgs)
     }
 
     @Test
