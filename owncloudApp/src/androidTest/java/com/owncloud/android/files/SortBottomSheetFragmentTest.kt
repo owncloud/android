@@ -26,8 +26,10 @@ import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
 import com.owncloud.android.presentation.ui.files.SortOrder
 import com.owncloud.android.presentation.ui.files.SortType
-import com.owncloud.android.utils.isDisplayed
-import com.owncloud.android.utils.withText
+import com.owncloud.android.utils.matchers.bsfItemWithIcon
+import com.owncloud.android.utils.matchers.bsfItemWithTitle
+import com.owncloud.android.utils.matchers.isDisplayed
+import com.owncloud.android.utils.matchers.withText
 import org.junit.Before
 import org.junit.Test
 
@@ -52,15 +54,18 @@ class SortBottomSheetFragmentTest {
         }
         R.id.sort_by_name.run {
             isDisplayed(true)
-            withText(R.string.global_name)
+            bsfItemWithTitle(R.string.global_name, R.color.primary)
+            bsfItemWithIcon(R.drawable.ic_sort_by_name, R.color.primary)
         }
         R.id.sort_by_size.run {
             isDisplayed(true)
-            withText(R.string.global_size)
+            bsfItemWithTitle(R.string.global_size, R.color.bottom_sheet_fragment_item_color)
+            bsfItemWithIcon(R.drawable.ic_sort_by_size, R.color.bottom_sheet_fragment_item_color)
         }
         R.id.sort_by_date.run {
             isDisplayed(true)
-            withText(R.string.global_date)
+            bsfItemWithTitle(R.string.global_date, R.color.bottom_sheet_fragment_item_color)
+            bsfItemWithIcon(R.drawable.ic_sort_by_date, R.color.bottom_sheet_fragment_item_color)
         }
     }
 }
