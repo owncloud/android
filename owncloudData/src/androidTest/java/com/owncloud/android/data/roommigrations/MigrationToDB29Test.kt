@@ -34,7 +34,7 @@ import org.junit.Test
  * Test the migration from database to version 29.
  */
 @SmallTest
-class MigrationToDB29 : MigrationTest() {
+class MigrationToDB29Test : MigrationTest() {
 
     @Test
     fun migrationFrom27To29_containsCorrectData() {
@@ -73,7 +73,7 @@ class MigrationToDB29 : MigrationTest() {
         database.run {
             insert(
                 CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE,
-                MigrationToDB28.cvWithDefaultValues
+                MigrationToDB28Test.cvWithDefaultValues
             )
             execSQL(
                 "INSERT INTO `$OCSHARES_TABLE_NAME`" +

@@ -32,7 +32,7 @@ import org.junit.Test
  * Test the migration from database to version 33.
  */
 @SmallTest
-class MigrationToDB33 : MigrationTest() {
+class MigrationToDB33Test : MigrationTest() {
 
     @Test
     fun migrationFrom32to33_containsCorrectData() {
