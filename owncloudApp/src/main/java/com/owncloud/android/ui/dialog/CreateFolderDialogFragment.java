@@ -87,10 +87,11 @@ public class CreateFolderDialogFragment extends DialogFragment implements Dialog
         );
 
         CoordinatorLayout coordinatorLayout = requireActivity().findViewById(R.id.coordinator_layout);
-
-        coordinatorLayout.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
-        );
+        if (coordinatorLayout != null) {
+            coordinatorLayout.setFilterTouchesWhenObscured(
+                    PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
+            );
+        }
 
         // Setup layout 
         EditText inputText = v.findViewById(R.id.user_input);
