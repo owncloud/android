@@ -480,7 +480,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         inflater.inflate(R.menu.main_menu, menu)
-        menu.findItem(R.id.action_create_dir).isVisible = false
 
         selectAllMenuItem = menu.findItem(R.id.action_select_all)
         if (secondFragment == null) {

@@ -106,7 +106,7 @@ import java.util.Vector;
 public class ReceiveExternalFilesActivity extends FileActivity
         implements OnItemClickListener, android.view.View.OnClickListener,
         CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener, SortOptionsView.SortOptionsListener,
-        SortBottomSheetFragment.SortDialogListener {
+        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
 
@@ -399,6 +399,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mSortOptionsView = findViewById(R.id.options_layout);
         if (mSortOptionsView != null) {
             mSortOptionsView.setOnSortOptionsListener(this);
+            mSortOptionsView.setOnCreateFolderListener(this);
+            mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
         }
 
         ListView mListView = findViewById(android.R.id.list);
@@ -619,12 +621,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retval = true;
         switch (item.getItemId()) {
-            case R.id.action_create_dir:
-                CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
-                dialog.show(
-                        getSupportFragmentManager(),
-                        CreateFolderDialogFragment.CREATE_FOLDER_FRAGMENT);
-                break;
             case android.R.id.home:
                 if ((mParents.size() > 1)) {
                     onBackPressed();
@@ -695,6 +691,12 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else if (sortType == SortType.SORT_TYPE_BY_SIZE) {
             sortBySize(isAscending);
         }
+    }
+
+    @Override
+    public void onCreateFolderListener() {
+        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+        dialog.show(getSupportFragmentManager(), CreateFolderDialogFragment.CREATE_FOLDER_FRAGMENT);
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {

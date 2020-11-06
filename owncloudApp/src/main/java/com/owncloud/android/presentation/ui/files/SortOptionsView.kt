@@ -38,6 +38,7 @@ class SortOptionsView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyle) {
 
     var onSortOptionsListener: SortOptionsListener? = null
+    var onCreateFolderListener: CreateFolderListener? = null
 
     // Enable list view by default.
     var viewTypeSelected: ViewType = ViewType.VIEW_TYPE_LIST
@@ -90,9 +91,35 @@ class SortOptionsView @JvmOverloads constructor(
         sort_options_layout.isVisible = visible
     }
 
+    fun selectAdditionalView(additionalView: AdditionalView){
+        when(additionalView){
+            AdditionalView.CREATE_FOLDER -> {
+                view_type_selector.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_create_dir))
+                view_type_selector.setOnClickListener {
+                    onCreateFolderListener?.onCreateFolderListener()
+                }
+            }
+            AdditionalView.VIEW_TYPE -> {
+                viewTypeSelected = viewTypeSelected
+                view_type_selector.setOnClickListener {
+                    onSortOptionsListener?.onViewTypeListener(
+                        viewTypeSelected.getAlternativeViewType()
+                    )
+                }
+            }
+        }
+    }
+
     interface SortOptionsListener {
         fun onSortTypeListener(sortType: SortType, sortOrder: SortOrder)
         fun onViewTypeListener(viewType: ViewType)
     }
 
+    interface CreateFolderListener {
+        fun onCreateFolderListener()
+    }
+
+    enum class AdditionalView {
+        CREATE_FOLDER, VIEW_TYPE
+    }
 }
