@@ -594,6 +594,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
             setFabEnabled(false);
             ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(false);
 
+            // Hide sort options view in multi-selection mode
+            mSortOptionsView.shouldBeVisible(false);
+
             return true;
         }
 
@@ -644,6 +647,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 setFabEnabled(true);
             }
             ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(true);
+
+            // Show sort options view when multi-selection mode finish
+            mSortOptionsView.shouldBeVisible(true);
         }
 
         void storeStateIn(Bundle outState) {

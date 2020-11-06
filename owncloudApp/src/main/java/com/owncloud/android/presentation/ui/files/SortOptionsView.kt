@@ -23,6 +23,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.presentation.ui.files.SortOrder.Companion.fromPreference
@@ -83,6 +84,10 @@ class SortOptionsView @JvmOverloads constructor(
                 viewTypeSelected.getAlternativeViewType()
             )
         }
+    }
+
+    fun shouldBeVisible(visible: Boolean) {
+        sort_options_layout.isVisible = visible
     }
 
     interface SortOptionsListener {
