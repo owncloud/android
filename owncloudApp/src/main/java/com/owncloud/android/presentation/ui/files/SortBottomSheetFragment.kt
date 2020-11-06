@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.owncloud.android.R
 import kotlinx.android.synthetic.main.sort_bottom_sheet_fragment.*
@@ -46,6 +47,10 @@ class SortBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Show bottom sheet expanded even in landscape, since there are just 3 options at the moment.
+        val behavior = BottomSheetBehavior.from(requireView().parent as View)
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         when (sortType) {
             SortType.SORT_TYPE_BY_NAME -> sort_by_name.setSelected(sortOrder.toDrawableRes())
