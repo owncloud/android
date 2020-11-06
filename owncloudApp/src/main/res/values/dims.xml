@@ -60,4 +60,5 @@
 
     <!-- Bottom Sheet Fragment Item -->
     <dimen name="bottom_sheet_fragment_item_icon_size">24dp</dimen>
+    <dimen name="bottom_sheet_fragment_arrow_icon_size">18dp</dimen>
 </resources>

@@ -35,7 +35,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/sort_type_icon"
             android:layout_width="@dimen/bottom_sheet_fragment_item_icon_size"
-            android:layout_height="@dimen/bottom_sheet_fragment_item_icon_size"
+            android:layout_height="@dimen/bottom_sheet_fragment_arrow_icon_size"
             android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/sort_type_title"
             app:layout_constraintStart_toEndOf="@+id/sort_type_title"

@@ -32,8 +32,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/item_additional_icon"
-        android:layout_width="@dimen/bottom_sheet_fragment_item_icon_size"
-        android:layout_height="@dimen/bottom_sheet_fragment_item_icon_size"
+        android:layout_width="@dimen/bottom_sheet_fragment_arrow_icon_size"
+        android:layout_height="@dimen/bottom_sheet_fragment_arrow_icon_size"
         android:layout_marginStart="@dimen/standard_quarter_margin"
         android:tint="@color/bottom_sheet_fragment_item_color"
         app:layout_constraintBottom_toBottomOf="@+id/item_title"
