@@ -559,5 +559,4 @@
   <string name="supports_oauth2_error">S’qe e mundur të dihej nëse mbulohet OAuth2</string>
   <string name="get_base_url_error">S’qe e mundur të dihej URL-ja bazë e shërbyesit</string>
   <string name="prefs_http_logs">Regjistro kërkesa dhe përgjigje HTTP</string>
-  <string name="prefs_logs_summary">Regjistrat mund të përmbajnë të dhëna rezervat. Për ndarjen e regjistrave me të tjerët, përdoruesi mban vetë përgjegjësi</string>
 </resources>

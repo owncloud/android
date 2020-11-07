@@ -562,5 +562,4 @@ Descárgueo de aquí: %2$s</string>
   <string name="supports_oauth2_error">Non foi posible saber se OAuth2 é compatíbel</string>
   <string name="get_base_url_error">Non foi posíbel saber cal é o URL base do servidor</string>
   <string name="prefs_http_logs">Rexistro de solicitudes e respostas HTTP</string>
-  <string name="prefs_logs_summary">Os rexistros poden incluír información confidencial. Compartir rexistros con outras persoas é responsabilidade exclusiva do usuario</string>
 </resources>
