@@ -19,14 +19,14 @@
 
 package com.owncloud.android.data.files.datasources.implementation
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.lib.resources.files.services.FileService
 
 class OCRemoteFileDataSource(
-    private val fileService: FileService,
+    private val clientManager: ClientManager,
     private val remoteFileMapper: RemoteFileMapper
 ) : RemoteFileDataSource {
 
@@ -34,7 +34,7 @@ class OCRemoteFileDataSource(
         path: String,
         checkUserCredentials: Boolean
     ): Boolean = executeRemoteOperation {
-        fileService.checkPathExistence(
+        clientManager.getFileService().checkPathExistence(
             path = path,
             isUserLogged = checkUserCredentials
         )
@@ -45,7 +45,7 @@ class OCRemoteFileDataSource(
         createFullPath: Boolean,
         isChunksFolder: Boolean
     ): Unit = executeRemoteOperation {
-        fileService.createFolder(
+        clientManager.getFileService().createFolder(
             remotePath = remotePath,
             createFullPath = createFullPath,
             isChunkFolder = isChunksFolder
@@ -55,7 +55,7 @@ class OCRemoteFileDataSource(
     override fun refreshFolder(remotePath: String): List<OCFile> =
         // Assert not null, service should return an empty list if no files there.
         executeRemoteOperation {
-            fileService.refreshFolder(
+            clientManager.getFileService().refreshFolder(
                 remotePath = remotePath
             )
         }.let { listOfRemote ->
