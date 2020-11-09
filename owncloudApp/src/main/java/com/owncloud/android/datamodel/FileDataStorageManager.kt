@@ -235,7 +235,6 @@ class FileDataStorageManager {
     val sharedByLinkFilesFromCurrentAccount: Vector<OCFile>
         get() {
             val allSharedFiles = Vector<OCFile>()
-            val result = Vector<OCFile>()
             var cursorOnShared: Cursor? = null
             try {
                 cursorOnShared = contentResolver?.query(
@@ -258,21 +257,7 @@ class FileDataStorageManager {
                 cursorOnShared?.close()
             }
 
-            if (allSharedFiles.isNotEmpty()) {
-                val allSharedDirs = Vector<Long>()
-                for (file in allSharedFiles) {
-                    if (file.isFolder) {
-                        allSharedDirs.add(file.fileId)
-                    }
-                }
-                for (file in allSharedFiles) {
-                    if (file.isFolder || (!file.isFolder && !allSharedDirs.contains(file.parentId))) {
-                        result.add(file)
-                    }
-                }
-            }
-            result.sort()
-            return result
+            return allSharedFiles.apply { sort() }
         }
 
     fun getFileByPath(path: String): OCFile? {
