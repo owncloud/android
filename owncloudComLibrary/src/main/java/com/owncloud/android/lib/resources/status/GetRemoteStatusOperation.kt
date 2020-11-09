@@ -49,7 +49,9 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
         client.baseUri = buildFullHttpsUrl(client.baseUri)
 
         var result = tryToConnect(client)
-        if (result.code != ResultCode.OK_SSL && !result.isSslRecoverableException) {
+        if (!(result.code == ResultCode.OK || result.code == ResultCode.OK_SSL)
+            && !result.isSslRecoverableException
+        ) {
             Timber.d("Establishing secure connection failed, trying non secure connection")
             client.baseUri = client.baseUri.buildUpon().scheme(HTTP_SCHEME).build()
             result = tryToConnect(client)
