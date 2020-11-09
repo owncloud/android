@@ -23,9 +23,12 @@ import android.accounts.AccountManager
 import android.content.Context
 import android.preference.PreferenceManager
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
+import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.resources.files.services.FileService
+import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
 import com.owncloud.android.lib.resources.users.services.UserService
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 
@@ -63,5 +66,10 @@ class ClientManager(
     fun getUserService(accountName: String? = ""): UserService {
         val ownCloudClient = getClientForAccount(accountName)
         return OCUserService(client = ownCloudClient)
+    }
+
+    fun getFileService(accountName: String? = ""): FileService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCFileService(client = ownCloudClient)
     }
 }
