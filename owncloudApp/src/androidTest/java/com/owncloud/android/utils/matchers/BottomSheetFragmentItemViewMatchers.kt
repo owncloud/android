@@ -28,6 +28,7 @@ import androidx.annotation.StringRes
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.BoundedMatcher
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
@@ -36,12 +37,12 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 
 fun Int.bsfItemWithTitle(@StringRes title: Int, @ColorRes tintColor: Int?) {
-    Espresso.onView(ViewMatchers.withId(this))
+    Espresso.onView(ViewMatchers.withId(this)).inRoot(RootMatchers.isDialog())
         .check(ViewAssertions.matches(withTitle(title, tintColor)))
 }
 
 fun Int.bsfItemWithIcon(@DrawableRes drawable: Int, @ColorRes tintColor: Int?) {
-    Espresso.onView(ViewMatchers.withId(this))
+    Espresso.onView(ViewMatchers.withId(this)).inRoot(RootMatchers.isDialog())
         .check(ViewAssertions.matches(withIcon(drawable, tintColor)))
 }
 

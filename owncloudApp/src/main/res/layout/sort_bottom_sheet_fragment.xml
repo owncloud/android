@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_half_margin"
         android:text="@string/actionbar_sort_title"
-        android:textColor="@color/bottom_sheet_fragment_item_color"
+        android:textColor="@color/bottom_sheet_fragment_title_color"
         android:textSize="@dimen/two_line_primary_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
