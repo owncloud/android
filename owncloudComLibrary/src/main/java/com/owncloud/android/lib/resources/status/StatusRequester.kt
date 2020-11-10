@@ -28,6 +28,7 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_SCHEME
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
 import org.json.JSONObject
@@ -36,14 +37,20 @@ import java.util.concurrent.TimeUnit
 
 internal class StatusRequester {
 
-    private fun checkIfConnectionIsRedirectedToNoneSecure(
-        isConnectionSecure: Boolean,
+    /**
+     * This function is ment to detect if a redirect from a secure to an unsecure connection
+     * was made. If only connections from unsecure connections to unsecure connections were made
+     * this function should not return true, because if the whole redirect chain was unsecure
+     * we assume it was a debug setup.
+     */
+    fun isRedirectedToNonSecureConnection(
+        redirectedToUnsecureLocationBefore: Boolean,
         baseUrl: String,
         redirectedUrl: String
-    ): Boolean {
-        return isConnectionSecure ||
-                (baseUrl.startsWith(HTTPS_SCHEME) && redirectedUrl.startsWith(HTTP_SCHEME))
-    }
+    ) = redirectedToUnsecureLocationBefore
+            || (baseUrl.startsWith(HTTPS_SCHEME)
+            && (!redirectedUrl.startsWith(HTTPS_SCHEME))
+            && redirectedUrl.startsWith(HTTP_SCHEME))
 
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
         if (!redirectedLocation.startsWith("/"))
@@ -84,7 +91,7 @@ internal class StatusRequester {
             } else {
                 val nextLocation = updateLocationWithRedirectPath(currentLocation, result.redirectedLocation)
                 redirectedToUnsecureLocation =
-                    checkIfConnectionIsRedirectedToNoneSecure(
+                    isRedirectedToNonSecureConnection(
                         redirectedToUnsecureLocation,
                         currentLocation,
                         nextLocation
