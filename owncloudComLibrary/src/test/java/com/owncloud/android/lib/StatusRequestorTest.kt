@@ -83,6 +83,12 @@ class StatusRequestorTest {
             true, SECURE_DOMAIN, SECURE_DOMAIN))
     }
 
+    @Test
+    fun `check redirect to unsecure connection - ok - from http to http`() {
+        assertFalse(requester.isRedirectedToNonSecureConnection(
+            false, UNSECURE_DOMAIN, UNSECURE_DOMAIN))
+    }
+
     companion object {
         const val TEST_DOMAIN = "https://cloud.somewhere.com"
         const val SUB_PATH = "/subdir"
