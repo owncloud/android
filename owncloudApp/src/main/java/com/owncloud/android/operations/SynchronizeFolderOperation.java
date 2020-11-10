@@ -69,6 +69,12 @@ import static org.koin.java.KoinJavaComponent.get;
 // At the moment, in new arch we don't handle them.
 public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
 
+    private final AtomicBoolean mCancellationRequested;
+    /**
+     * 'True' means that the contents of all the files in the folder will be synchronized;
+     * otherwise, only contents of available offline files will be synchronized.
+     */
+    private final boolean mSyncContentOfRegularFiles;
     /**
      * Time stamp for the synchronization process in progress
      */
@@ -108,8 +114,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     private List<Intent> mFoldersToSyncContents;
 
-    private final AtomicBoolean mCancellationRequested;
-
     /**
      * Files and folders contained in the synchronized folder after a successful operation
      */
@@ -125,12 +129,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * 'True' means that this operation is part of a full account synchronization
      */
     private boolean mSyncFullAccount;
-
-    /**
-     * 'True' means that the contents of all the files in the folder will be synchronized;
-     * otherwise, only contents of available offline files will be synchronized.
-     */
-    private final boolean mSyncContentOfRegularFiles;
 
     /**
      * Creates a new instance of {@link SynchronizeFolderOperation}.
@@ -257,7 +255,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         if (mCancellationRequested.get()) {
             throw new OperationCancelledException();
         }
-        OCFileService ocFileService  = new OCFileService(client);
+        OCFileService ocFileService = new OCFileService(client);
         return ocFileService.refreshFolder(mRemotePath);
     }
 
@@ -524,7 +522,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             File f = new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, file));
             if (f.exists()) {
                 file.setStoragePath(f.getAbsolutePath());
-                file.setLastSyncDateForData((int) f.lastModified());
+                file.setLastSyncDateForData(f.lastModified());
             }
         }
     }
