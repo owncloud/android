@@ -150,14 +150,14 @@ public class UploadFileOperation extends SyncOperation {
         OCFile newFile = new OCFile(remotePath, mimeType, (long) 0, "");
 
         newFile.setStoragePath(localPath);
-        newFile.setLastSyncDateForProperties((long) 0);
-        newFile.setLastSyncDateForData(0);
+        newFile.setLastSyncDateForProperties(0L);
+        newFile.setLastSyncDateForData(0L);
 
         // size
         if (localPath != null && localPath.length() > 0) {
             File localFile = new File(localPath);
             newFile.setLength(localFile.length());
-            newFile.setLastSyncDateForData((int)localFile.lastModified());
+            newFile.setLastSyncDateForData(localFile.lastModified());
         } // don't worry about not assigning size, the problems with localPath
         // are checked when the UploadFileOperation instance is created
 
@@ -727,7 +727,7 @@ public class UploadFileOperation extends SyncOperation {
             file = getStorageManager().getFileById(file.getId());
         }
         long syncDate = System.currentTimeMillis();
-        file.setLastSyncDateForData((int) syncDate);
+        file.setLastSyncDateForData(syncDate);
 
         // new PROPFIND to keep data consistent with server
         // in theory, should return the same we already have
@@ -765,7 +765,7 @@ public class UploadFileOperation extends SyncOperation {
         file.setLength(remoteFile.getLength());
         file.setMimeType(remoteFile.getMimeType());
         file.setModificationTimestamp(remoteFile.getModifiedTimestamp());
-        file.setModifiedAtLastSyncForData((int) remoteFile.getModifiedTimestamp());
+        file.setModifiedAtLastSyncForData(remoteFile.getModifiedTimestamp());
         file.setEtag(remoteFile.getEtag());
         file.setRemoteId(remoteFile.getRemoteId());
     }

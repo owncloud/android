@@ -69,74 +69,60 @@ import static org.koin.java.KoinJavaComponent.get;
 // At the moment, in new arch we don't handle them.
 public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
 
-    /**
-     * Time stamp for the synchronization process in progress
-     */
-    private long mCurrentSyncTime;
-
-    /**
-     * Remote path of the folder to synchronize
-     */
-    private String mRemotePath;
-
-    /**
-     * Account where the file to synchronize belongs
-     */
-    private Account mAccount;
-
-    /**
-     * Android context; necessary to send requests to the download service
-     */
-    private Context mContext;
-
-    /**
-     * Locally cached information about folder to synchronize
-     */
-    private OCFile mLocalFolder;
-
-    /**
-     * Counter of conflicts found between local and remote files
-     */
-    private int mConflictsFound;
-
-    /**
-     * Counter of failed operations in synchronization of kept-in-sync files
-     */
-    private int mFailsInFileSyncsFound;
-
-    /**
-     * Map of remote and local paths to files that where locally stored in a location
-     * out of the ownCloud folder and couldn't be copied automatically into it
-     **/
-    private Map<String, String> mForgottenLocalFiles;
-
-    private List<SynchronizeFileOperation> mFilesToSyncContents;
-
-    private List<Intent> mFoldersToSyncContents;
-
     private final AtomicBoolean mCancellationRequested;
-
-    /**
-     * Files and folders contained in the synchronized folder after a successful operation
-     */
-    private List<Pair<OCFile, Boolean>> mFoldersToVisit;
-
-    /**
-     * When 'true', will assume that folder did not change in the server and
-     * will focus only in push any local change to the server (carefully).
-     */
-    private boolean mPushOnly;
-
-    /**
-     * 'True' means that this operation is part of a full account synchronization
-     */
-    private boolean mSyncFullAccount;
-
     /**
      * 'True' means that the contents of all the files in the folder will be synchronized;
      * otherwise, only contents of available offline files will be synchronized.
      */
     private final boolean mSyncContentOfRegularFiles;
+    /**
+     * Time stamp for the synchronization process in progress
+     */
+    private long mCurrentSyncTime;
+    /**
+     * Remote path of the folder to synchronize
+     */
+    private String mRemotePath;
+    /**
+     * Account where the file to synchronize belongs
+     */
+    private Account mAccount;
+    /**
+     * Android context; necessary to send requests to the download service
+     */
+    private Context mContext;
+    /**
+     * Locally cached information about folder to synchronize
+     */
+    private OCFile mLocalFolder;
+    /**
+     * Counter of conflicts found between local and remote files
+     */
+    private int mConflictsFound;
+    /**
+     * Counter of failed operations in synchronization of kept-in-sync files
+     */
+    private int mFailsInFileSyncsFound;
+    /**
+     * Map of remote and local paths to files that where locally stored in a location
+     * out of the ownCloud folder and couldn't be copied automatically into it
+     **/
+    private Map<String, String> mForgottenLocalFiles;
+    private List<SynchronizeFileOperation> mFilesToSyncContents;
+    private List<Intent> mFoldersToSyncContents;
+    /**
+     * Files and folders contained in the synchronized folder after a successful operation
+     */
+    private List<Pair<OCFile, Boolean>> mFoldersToVisit;
+    /**
+     * When 'true', will assume that folder did not change in the server and
+     * will focus only in push any local change to the server (carefully).
+     */
+    private boolean mPushOnly;
+    /**
+     * 'True' means that this operation is part of a full account synchronization
+     */
+    private boolean mSyncFullAccount;
 
     /**
      * Creates a new instance of {@link SynchronizeFolderOperation}.
@@ -269,7 +255,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         if (mCancellationRequested.get()) {
             throw new OperationCancelledException();
         }
-        OCFileService ocFileService  = new OCFileService(client);
+        OCFileService ocFileService = new OCFileService(client);
         return ocFileService.refreshFolder(mRemotePath);
     }
 
@@ -535,7 +521,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             File f = new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, file));
             if (f.exists()) {
                 file.setStoragePath(f.getAbsolutePath());
-                file.setLastSyncDateForData((int) f.lastModified());
+                file.setLastSyncDateForData(f.lastModified());
             }
         }
     }
