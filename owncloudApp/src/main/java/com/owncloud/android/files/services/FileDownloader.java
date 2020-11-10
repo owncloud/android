@@ -502,10 +502,10 @@ public class FileDownloader extends Service
         OCFile file = mStorageManager.getFileById(mCurrentDownload.getFile().getId());
         long syncDate = System.currentTimeMillis();
         file.setLastSyncDateForProperties(syncDate);
-        file.setLastSyncDateForData((int) syncDate);
+        file.setLastSyncDateForData(syncDate);
         file.setNeedsToUpdateThumbnail(true);
         file.setModificationTimestamp(mCurrentDownload.getModificationTimestamp());
-        file.setModifiedAtLastSyncForData((int)mCurrentDownload.getModificationTimestamp());
+        file.setModifiedAtLastSyncForData(mCurrentDownload.getModificationTimestamp());
         file.setEtag(mCurrentDownload.getEtag());
         file.setMimeType(mCurrentDownload.getMimeType());
         file.setStoragePath(mCurrentDownload.getSavePath());
