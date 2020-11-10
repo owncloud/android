@@ -47,10 +47,10 @@ data class OCFile(
 
     //TODO: May not needed
     val keepInSync: Int? = null,
-    var lastSyncDateForData: Int? = 0,
+    var lastSyncDateForData: Long? = 0,
     var lastSyncDateForProperties: Long? = 0,
     var needsToUpdateThumbnail: Boolean = false,
-    var modifiedAtLastSyncForData: Int? = 0,
+    var modifiedAtLastSyncForData: Long? = 0,
     var etagInConflict: String? = null,
     val fileIsDownloading: Boolean? = false,
     var sharedWithSharee: Boolean? = false,
