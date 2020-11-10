@@ -49,8 +49,7 @@ internal class StatusRequester {
         redirectedUrl: String
     ) = redirectedToUnsecureLocationBefore
             || (baseUrl.startsWith(HTTPS_SCHEME)
-            && (!redirectedUrl.startsWith(HTTPS_SCHEME))
-            && redirectedUrl.startsWith(HTTP_SCHEME))
+            && !redirectedUrl.startsWith(HTTPS_SCHEME))
 
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
         if (!redirectedLocation.startsWith("/"))
