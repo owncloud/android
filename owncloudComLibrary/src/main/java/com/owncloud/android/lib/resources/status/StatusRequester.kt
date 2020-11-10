@@ -68,7 +68,6 @@ internal class StatusRequester {
     data class RequestResult(
         val getMethod: GetMethod,
         val status: Int,
-        val result: RemoteOperationResult<OwnCloudVersion>,
         val redirectedToUnsecureLocation: Boolean
     )
 
@@ -86,7 +85,7 @@ internal class StatusRequester {
                 else RemoteOperationResult(getMethod)
 
             if (result.redirectedLocation.isNullOrEmpty() || result.isSuccess) {
-                return RequestResult(getMethod, status, result, redirectedToUnsecureLocation)
+                return RequestResult(getMethod, status, redirectedToUnsecureLocation)
             } else {
                 val nextLocation = updateLocationWithRedirectPath(currentLocation, result.redirectedLocation)
                 redirectedToUnsecureLocation =
