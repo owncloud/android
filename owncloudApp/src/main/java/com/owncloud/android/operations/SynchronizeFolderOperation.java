@@ -110,8 +110,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     private List<Intent> mFoldersToSyncContents;
 
-    private final AtomicBoolean mCancellationRequested;
-
     /**
      * Files and folders contained in the synchronized folder after a successful operation
      */
@@ -259,7 +257,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         if (mCancellationRequested.get()) {
             throw new OperationCancelledException();
         }
-        OCFileService ocFileService  = new OCFileService(client);
+        OCFileService ocFileService = new OCFileService(client);
         return ocFileService.refreshFolder(mRemotePath);
     }
 
@@ -523,7 +521,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             File f = new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, file));
             if (f.exists()) {
                 file.setStoragePath(f.getAbsolutePath());
-                file.setLastSyncDateForData((int) f.lastModified());
+                file.setLastSyncDateForData(f.lastModified());
             }
         }
     }
