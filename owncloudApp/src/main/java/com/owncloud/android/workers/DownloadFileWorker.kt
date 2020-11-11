@@ -24,6 +24,8 @@ import androidx.work.WorkerParameters
 import com.owncloud.android.R
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -44,7 +46,8 @@ class DownloadFileWorker(
 ), KoinComponent, OnDatatransferProgressListener {
 
     private val client: OwnCloudClient by inject()
-    private val localFileDataSource: LocalFileDataSource by inject()
+    private val getFileByIdUseCase: GetFileByIdUseCase by inject()
+    private val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
 
     lateinit var accountName: String
     lateinit var downloadRemoteFileOperation: DownloadRemoteFileOperation
@@ -57,7 +60,7 @@ class DownloadFileWorker(
         val fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1)
 
         // If file is null, return failure. TODO: Try to improve this with a specific message.
-        val ocFile: OCFile? = localFileDataSource.getFileById(fileId)
+        val ocFile: OCFile? = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId)).getDataOrNull()
 
         if (ocFile == null || ocFile.isFolder) {
             Timber.d("PARAM: $fileId OCFILE : ${ocFile?.remotePath} is folder ${ocFile?.isFolder}")
@@ -130,7 +133,7 @@ class DownloadFileWorker(
             storagePath = savePathForFile
             length = (File(savePathForFile).length())
         }
-        localFileDataSource.saveFile(ocFile)
+        saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(ocFile))
 
         //mStorageManager.triggerMediaScan(file.getStoragePath())
         //mStorageManager.saveConflict(file, null)
@@ -177,5 +180,4 @@ class DownloadFileWorker(
         const val KEY_PARAM_ACCOUNT = "KEY_PARAM_ACCOUNT"
         const val KEY_PARAM_FILE_ID = "KEY_PARAM_FILE_ID"
     }
-
 }
