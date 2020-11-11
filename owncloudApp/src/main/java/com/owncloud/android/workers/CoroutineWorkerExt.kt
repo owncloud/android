@@ -24,13 +24,15 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import com.owncloud.android.R
+import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_ID_DEFAULT
 
 fun CoroutineWorker.showNotificationWithProgress(
     progress: Int,
     maxValue: Int,
     contentTitle: String,
     contentText: String,
-    notificationChannelId: String
+    notificationChannelId: String,
+    fileId: Long?
 ) {
 
     val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -49,5 +51,7 @@ fun CoroutineWorker.showNotificationWithProgress(
     } else {
         notificationBuilder.setProgress(maxValue, progress, false)
     }
-    notificationManager.notify(123, notificationBuilder.build())
+
+    val notificationId = fileId?.toInt() ?: DOWNLOAD_NOTIFICATION_ID_DEFAULT
+    notificationManager.notify(notificationId, notificationBuilder.build())
 }
