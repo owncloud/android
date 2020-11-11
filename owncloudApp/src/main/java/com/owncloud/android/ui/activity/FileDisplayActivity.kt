@@ -1473,7 +1473,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private fun requestForDownload(file: OCFile?) {
         val account = account
         if (!mDownloaderBinder.isDownloading(account, fileWaitingToPreview)) {
-            val downloadFileWorker: DownloadFileWorker by inject()
             val inputData = workDataOf(
                 DownloadFileWorker.KEY_PARAM_ACCOUNT to account.name,
                 DownloadFileWorker.KEY_PARAM_FILE_ID to file?.id
