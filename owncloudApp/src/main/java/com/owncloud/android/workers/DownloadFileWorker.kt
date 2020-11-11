@@ -75,6 +75,7 @@ class DownloadFileWorker(
 
         return try {
             val result = downloadFile()
+            Timber.d("Result" + result.httpCode + " " + result.data + " " + result.code)
             if (result.isSuccess) {
                 saveDownloadedFile()
                 Result.success()
@@ -167,7 +168,8 @@ class DownloadFileWorker(
             progress = totalTransferredSoFar.toInt(),
             notificationChannelId = DOWNLOAD_NOTIFICATION_CHANNEL_ID,
             contentText = contentText,
-            contentTitle = contentTitle
+            contentTitle = contentTitle,
+            fileId = ocFile.id
         )
     }
 
