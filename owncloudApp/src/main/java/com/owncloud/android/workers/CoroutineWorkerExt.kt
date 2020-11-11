@@ -42,14 +42,15 @@ fun CoroutineWorker.showNotificationWithProgress(
         notificationChannelId
     ).setContentTitle(contentTitle)
         .setSmallIcon(R.drawable.notification_icon)
-        .setOngoing(true)
         .setWhen(System.currentTimeMillis())
         .setContentText(contentText)
+        .setProgress(maxValue, progress, false)
 
     if (progress == maxValue) {
         notificationBuilder.setTimeoutAfter(1_000)
+            .setOngoing(false)
     } else {
-        notificationBuilder.setProgress(maxValue, progress, false)
+        notificationBuilder.setOngoing(true)
     }
 
     val notificationId = fileId?.toInt() ?: DOWNLOAD_NOTIFICATION_ID_DEFAULT
