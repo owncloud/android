@@ -110,6 +110,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     private List<Intent> mFoldersToSyncContents;
 
+    private final AtomicBoolean mCancellationRequested;
+
     /**
      * Files and folders contained in the synchronized folder after a successful operation
      */
@@ -414,7 +416,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
 
         // FIXME: 13/10/2020 : New_arch: Av.Offline
-        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isDown()); //|| localFile.isAvailableOffline());
+        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableLocally()); //|| localFile.isAvailableOffline());
         boolean serverUnchanged;
 
         if (localFile.isFolder()) {
