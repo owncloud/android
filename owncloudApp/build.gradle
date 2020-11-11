@@ -44,6 +44,9 @@ dependencies {
     kapt "org.xerial:sqlite-jdbc:3.34.0" // fix kapt for Apple Silicon https://stackoverflow.com/a/68285501/1079990
     implementation "androidx.room:room-runtime:$roomVersion"
 
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:$workManagerVersion"
+
     // Koin dependency injector
     implementation "io.insert-koin:koin-core:$koinVersion"
     implementation "io.insert-koin:koin-androidx-viewmodel:$koinVersion"
