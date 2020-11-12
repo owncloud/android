@@ -249,6 +249,12 @@ public class ThumbnailsCacheManager {
             return Math.round(r.getDimension(R.dimen.file_icon_size_grid));
         }
 
+        private String getPreviewUrl(OCFile ocFile, Account account) {
+            return mClient.getBaseUri() +
+                    "/remote.php/dav/files/" + account.name.split("@")[0] + Uri.encode(ocFile.getRemotePath(), "/")
+                    + "?" + "x=" + getThumbnailDimension() + "&y=" + getThumbnailDimension() + "&c=" + ocFile.getEtag() + "&preview=1";
+        }
+
         private Bitmap doOCFileInBackground() {
             OCFile file = (OCFile) mFile;
 
@@ -285,9 +291,7 @@ public class ThumbnailsCacheManager {
                     if (mClient != null && serverOCVersion != null) {
                         GetMethod get;
                         try {
-                            String uri = mClient.getBaseUri() + "" +
-                                    "/index.php/apps/files/api/v1/thumbnail/" +
-                                    px + "/" + px + Uri.encode(file.getRemotePath(), "/");
+                            String uri = getPreviewUrl(file, mAccount);
                             Timber.d("URI: %s", uri);
                             get = new GetMethod(new URL(uri));
                             int status = mClient.executeHttpMethod(get);
