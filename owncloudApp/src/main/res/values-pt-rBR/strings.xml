@@ -561,4 +561,5 @@
   <string name="supports_oauth2_error">Não foi possível  saber se OAuth2 é suportada</string>
   <string name="get_base_url_error">Não foi possível saber a url base do servidor</string>
   <string name="prefs_http_logs">Registrar solicitações e respostas HTTP</string>
+  <string name="prefs_logs_summary">Os logs podem conter informações confidenciais. O compartilhamento de registros com outras pessoas é de responsabilidade exclusiva do usuário</string>
 </resources>
