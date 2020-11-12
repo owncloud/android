@@ -80,8 +80,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private Account mAccount;
     private ComponentsGetter mTransferServiceGetter;
 
-    private enum ViewType {LIST_ITEM, GRID_IMAGE, GRID_ITEM}
-
     public FileListListAdapter(
             boolean justFolders,
             boolean onlyAvailableOffline,
@@ -283,7 +281,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                 file.isSharedWithMe() || file.isSharedWithSharee(),
                                 file.isSharedViaLink()));
             } else {
-                if (file.isImage() && file.getRemoteId() != null) {
+                // Set file icon depending on its mimetype. Ask for thumbnail later.
+                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimetype(), file.getFileName()));
+                if (file.getRemoteId() != null) {
                     // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.getRemoteId());
                     if (thumbnail != null && !file.needsUpdateThumbnail()) {
@@ -295,16 +295,16 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                     new ThumbnailsCacheManager.ThumbnailGenerationTask(
                                             fileIcon, mStorageManager, mAccount
                                     );
-                            if (thumbnail == null) {
-                                thumbnail = ThumbnailsCacheManager.mDefaultImg;
-                            }
                             final ThumbnailsCacheManager.AsyncThumbnailDrawable asyncDrawable =
                                     new ThumbnailsCacheManager.AsyncThumbnailDrawable(
                                             mContext.getResources(),
                                             thumbnail,
                                             task
                                     );
-                            fileIcon.setImageDrawable(asyncDrawable);
+                            // If drawable is not visible, do not update it.
+                            if (asyncDrawable.getMinimumHeight() > 0 && asyncDrawable.getMinimumWidth() > 0) {
+                                fileIcon.setImageDrawable(asyncDrawable);
+                            }
                             task.execute(file);
                         }
                     }
@@ -314,9 +314,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                 .getColor(R.color.background_color));
                     }
 
-                } else {
-                    fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimetype(),
-                            file.getFileName()));
                 }
 
             }
@@ -501,4 +498,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
         notifyDataSetChanged();
     }
+
+    private enum ViewType {LIST_ITEM, GRID_IMAGE, GRID_ITEM}
 }
