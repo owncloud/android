@@ -21,12 +21,12 @@
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/bottom_sheet_fragment_divider_height"
         android:layout_marginTop="@dimen/standard_half_margin"
         android:background="@color/bottom_sheet_fragment_item_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
         android:id="@+id/sort_by_name"
@@ -35,7 +35,7 @@
         app:itemIcon="@drawable/ic_sort_by_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintTop_toBottomOf="@id/divider"
         app:title="@string/global_name" />
 
     <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView

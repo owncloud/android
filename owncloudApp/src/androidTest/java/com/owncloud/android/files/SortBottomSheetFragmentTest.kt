@@ -65,15 +65,15 @@ class SortBottomSheetFragmentTest {
             .check(matches(ViewMatchers.withText(R.string.actionbar_sort_title)))
             .check(matches(ViewMatchers.hasTextColor(R.color.bottom_sheet_fragment_title_color)))
 
-        R.id.sort_by_name.run {
+        with(R.id.sort_by_name) {
             bsfItemWithTitle(R.string.global_name, R.color.primary)
             bsfItemWithIcon(R.drawable.ic_sort_by_name, R.color.primary)
         }
-        R.id.sort_by_size.run {
+        with(R.id.sort_by_size) {
             bsfItemWithTitle(R.string.global_size, R.color.bottom_sheet_fragment_item_color)
             bsfItemWithIcon(R.drawable.ic_sort_by_size, R.color.bottom_sheet_fragment_item_color)
         }
-        R.id.sort_by_date.run {
+        with(R.id.sort_by_date) {
             bsfItemWithTitle(R.string.global_date, R.color.bottom_sheet_fragment_item_color)
             bsfItemWithIcon(R.drawable.ic_sort_by_date, R.color.bottom_sheet_fragment_item_color)
         }

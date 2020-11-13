@@ -24,7 +24,7 @@ import com.owncloud.android.R
 enum class ViewType {
     VIEW_TYPE_GRID, VIEW_TYPE_LIST;
 
-    fun getAlternativeViewType(): ViewType =
+    fun getOppositeViewType(): ViewType =
         when (this) {
             VIEW_TYPE_LIST -> VIEW_TYPE_GRID
             VIEW_TYPE_GRID -> VIEW_TYPE_LIST

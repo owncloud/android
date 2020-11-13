@@ -595,7 +595,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(false);
 
             // Hide sort options view in multi-selection mode
-            mSortOptionsView.shouldBeVisible(false);
+            mSortOptionsView.setVisibility(View.GONE);
 
             return true;
         }
@@ -649,7 +649,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(true);
 
             // Show sort options view when multi-selection mode finish
-            mSortOptionsView.shouldBeVisible(true);
+            mSortOptionsView.setVisibility(View.VISIBLE);
         }
 
         void storeStateIn(Bundle outState) {

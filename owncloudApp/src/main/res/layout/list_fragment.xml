@@ -41,7 +41,7 @@
             android:id="@+id/syncProgressBar"
             style="@style/Widget.ownCloud.TopProgressBar"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="@dimen/file_list_progress_bar_height"
             android:layout_margin="0dp"
             android:indeterminate="false"
             android:indeterminateOnly="false"
@@ -51,7 +51,7 @@
         <View
             android:id="@+id/shadow_view"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="@dimen/file_list_progress_bar_height"
             android:layout_margin="0dp"
             android:background="@drawable/shadow_gradient"
             fab:layout_constraintTop_toBottomOf="@id/options_layout" />
@@ -59,9 +59,9 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/file_list_progress_bar_height"
             fab:layout_constraintBottom_toBottomOf="parent"
-            fab:layout_constraintTop_toBottomOf="@+id/options_layout">
+            fab:layout_constraintTop_toBottomOf="@id/options_layout">
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_containing_list"

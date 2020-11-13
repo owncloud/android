@@ -54,14 +54,14 @@ import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASIC_PASSWORD
 import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_SERVER_INFO
-import com.owncloud.android.utils.matchers.assertVisibility
 import com.owncloud.android.utils.click
+import com.owncloud.android.utils.matchers.assertVisibility
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.isEnabled
 import com.owncloud.android.utils.matchers.isFocusable
+import com.owncloud.android.utils.matchers.withText
 import com.owncloud.android.utils.replaceText
 import com.owncloud.android.utils.typeText
-import com.owncloud.android.utils.matchers.withText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -215,9 +215,9 @@ class LoginActivityTest {
         launchTest()
         serverInfoLiveData.postValue(Event(UIResult.Loading()))
 
-        R.id.server_status_text.let {
-            it.isDisplayed(true)
-            it.withText(R.string.auth_testing_connection)
+        with(R.id.server_status_text) {
+            isDisplayed(true)
+            withText(R.string.auth_testing_connection)
         }
     }
 
@@ -236,10 +236,10 @@ class LoginActivityTest {
         launchTest()
         serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(isSecureConnection = true))))
 
-        R.id.server_status_text.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.withText(R.string.auth_secure_connection)
+        with(R.id.server_status_text) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
+            withText(R.string.auth_secure_connection)
         }
     }
 
@@ -248,10 +248,10 @@ class LoginActivityTest {
         launchTest()
         serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(isSecureConnection = false))))
 
-        R.id.server_status_text.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.withText(R.string.auth_connection_established)
+        with(R.id.server_status_text) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
+            withText(R.string.auth_connection_established)
         }
     }
 
@@ -296,14 +296,14 @@ class LoginActivityTest {
 
         R.id.hostUrlInput.typeText("anything")
 
-        R.id.account_username.let {
-            it.withText("")
-            it.assertVisibility(Visibility.GONE)
+        with(R.id.account_username) {
+            withText("")
+            assertVisibility(Visibility.GONE)
         }
 
-        R.id.account_password.let {
-            it.withText("")
-            it.assertVisibility(Visibility.GONE)
+        with(R.id.account_password) {
+            withText("")
+            assertVisibility(Visibility.GONE)
         }
 
         R.id.loginButton.assertVisibility(Visibility.GONE)
@@ -330,10 +330,10 @@ class LoginActivityTest {
 
         R.id.embeddedCheckServerButton.click()
 
-        R.id.server_status_text.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.withText(R.string.auth_can_not_auth_against_server)
+        with(R.id.server_status_text) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
+            withText(R.string.auth_can_not_auth_against_server)
         }
 
         verify(exactly = 0) { ocAuthenticationViewModel.getServerInfo(any()) }
@@ -345,10 +345,10 @@ class LoginActivityTest {
 
         serverInfoLiveData.postValue(Event(UIResult.Error(OwncloudVersionNotSupportedException())))
 
-        R.id.server_status_text.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.withText(R.string.server_not_supported)
+        with(R.id.server_status_text) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
+            withText(R.string.server_not_supported)
         }
     }
 
@@ -358,10 +358,10 @@ class LoginActivityTest {
 
         serverInfoLiveData.postValue(Event(UIResult.Error(NoNetworkConnectionException())))
 
-        R.id.server_status_text.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.withText(R.string.error_no_network_connection)
+        with(R.id.server_status_text) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
+            withText(R.string.error_no_network_connection)
         }
     }
 
@@ -371,10 +371,10 @@ class LoginActivityTest {
 
         serverInfoLiveData.postValue(Event(UIResult.Error(ServerNotReachableException())))
 
-        R.id.server_status_text.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.withText(R.string.network_host_not_available)
+        with(R.id.server_status_text) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
+            withText(R.string.network_host_not_available)
         }
     }
 
@@ -388,9 +388,9 @@ class LoginActivityTest {
 
         R.id.account_password.typeText(OC_BASIC_PASSWORD)
 
-        R.id.loginButton.let {
-            it.isDisplayed(true)
-            it.click()
+        with(R.id.loginButton) {
+            isDisplayed(true)
+            click()
         }
 
         verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }
@@ -406,9 +406,9 @@ class LoginActivityTest {
 
         R.id.account_password.typeText(OC_BASIC_PASSWORD)
 
-        R.id.loginButton.let {
-            it.isDisplayed(true)
-            it.click()
+        with(R.id.loginButton) {
+            isDisplayed(true)
+            click()
         }
 
         verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }
@@ -440,10 +440,10 @@ class LoginActivityTest {
 
         loginResultLiveData.postValue(Event(UIResult.Loading()))
 
-        R.id.auth_status_text.let {
-            it.withText(R.string.auth_trying_to_login)
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
+        with(R.id.auth_status_text) {
+            withText(R.string.auth_trying_to_login)
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
         }
     }
 
@@ -536,10 +536,10 @@ class LoginActivityTest {
 
         supportsOauth2LiveData.postValue(Event(UIResult.Success(true)))
 
-        R.id.instructions_message.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.withText(context.getString(R.string.auth_expired_oauth_token_toast))
+        with(R.id.instructions_message) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
+            withText(context.getString(R.string.auth_expired_oauth_token_toast))
         }
     }
 
@@ -570,10 +570,10 @@ class LoginActivityTest {
 
         supportsOauth2LiveData.postValue(Event(UIResult.Success(false)))
 
-        R.id.instructions_message.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.withText(context.getString(R.string.auth_expired_basic_auth_toast))
+        with(R.id.instructions_message) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
+            withText(context.getString(R.string.auth_expired_basic_auth_toast))
         }
     }
 
@@ -587,12 +587,12 @@ class LoginActivityTest {
 
         baseUrlLiveData.postValue(Event(UIResult.Success(OC_SERVER_INFO.baseUrl)))
 
-        R.id.hostUrlInput.let {
-            it.withText(OC_SERVER_INFO.baseUrl)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.isDisplayed(true)
-            it.isEnabled(false)
-            it.isFocusable(false)
+        with(R.id.hostUrlInput) {
+            withText(OC_SERVER_INFO.baseUrl)
+            assertVisibility(Visibility.VISIBLE)
+            isDisplayed(true)
+            isEnabled(false)
+            isFocusable(false)
         }
 
         verify(exactly = 0) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
@@ -609,12 +609,12 @@ class LoginActivityTest {
 
         baseUrlLiveData.postValue(Event(UIResult.Success(OC_SERVER_INFO.baseUrl)))
 
-        R.id.hostUrlInput.let {
-            it.withText(OC_SERVER_INFO.baseUrl)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.isDisplayed(true)
-            it.isEnabled(false)
-            it.isFocusable(false)
+        with(R.id.hostUrlInput) {
+            withText(OC_SERVER_INFO.baseUrl)
+            assertVisibility(Visibility.VISIBLE)
+            isDisplayed(true)
+            isEnabled(false)
+            isFocusable(false)
         }
 
         verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
@@ -627,16 +627,16 @@ class LoginActivityTest {
         val visibilityMatcherFields = if (fieldsShouldBeVisible) Visibility.VISIBLE else Visibility.GONE
         val visibilityMatcherLoginButton = if (loginButtonShouldBeVisible) Visibility.VISIBLE else Visibility.GONE
 
-        R.id.account_username.let {
-            it.isDisplayed(fieldsShouldBeVisible)
-            it.assertVisibility(visibilityMatcherFields)
-            it.withText("")
+        with(R.id.account_username) {
+            isDisplayed(fieldsShouldBeVisible)
+            assertVisibility(visibilityMatcherFields)
+            withText("")
         }
 
-        R.id.account_password.let {
-            it.isDisplayed(fieldsShouldBeVisible)
-            it.assertVisibility(visibilityMatcherFields)
-            it.withText("")
+        with(R.id.account_password) {
+            isDisplayed(fieldsShouldBeVisible)
+            assertVisibility(visibilityMatcherFields)
+            withText("")
         }
 
         R.id.loginButton.assertVisibility(visibilityMatcherLoginButton)
@@ -648,17 +648,17 @@ class LoginActivityTest {
         R.id.account_password.assertVisibility(Visibility.GONE)
         R.id.auth_status_text.assertVisibility(Visibility.GONE)
 
-        R.id.loginButton.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
+        with(R.id.loginButton) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
         }
     }
 
     private fun assertNoneFieldsVisibility() {
-        R.id.server_status_text.let {
-            it.isDisplayed(true)
-            it.assertVisibility(Visibility.VISIBLE)
-            it.withText(R.string.auth_unsupported_auth_method)
+        with(R.id.server_status_text) {
+            isDisplayed(true)
+            assertVisibility(Visibility.VISIBLE)
+            withText(R.string.auth_unsupported_auth_method)
         }
 
         R.id.account_username.assertVisibility(Visibility.GONE)

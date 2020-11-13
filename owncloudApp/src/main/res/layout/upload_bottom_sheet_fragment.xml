@@ -21,12 +21,12 @@
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/bottom_sheet_fragment_divider_height"
         android:layout_marginTop="@dimen/standard_half_margin"
         android:background="@color/bottom_sheet_fragment_item_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_to_text_view" />
+        app:layout_constraintTop_toBottomOf="@id/upload_to_text_view" />
 
     <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
         android:id="@+id/upload_from_files_item_view"
@@ -35,7 +35,7 @@
         app:itemIcon="@drawable/bottom_sheets_files"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintTop_toBottomOf="@id/divider"
         app:title="@string/upload_files_title" />
 
     <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
@@ -45,7 +45,7 @@
         app:itemIcon="@drawable/bottom_sheets_camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_from_files_item_view"
+        app:layout_constraintTop_toBottomOf="@id/upload_from_files_item_view"
         app:title="@string/upload_from_camera_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
