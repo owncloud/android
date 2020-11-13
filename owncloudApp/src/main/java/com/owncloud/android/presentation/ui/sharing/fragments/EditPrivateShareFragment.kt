@@ -129,6 +129,11 @@ class EditPrivateShareFragment : DialogFragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        closeButton.setOnClickListener { dismiss() }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 

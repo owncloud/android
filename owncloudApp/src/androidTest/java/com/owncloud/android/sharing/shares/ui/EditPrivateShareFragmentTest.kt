@@ -46,6 +46,7 @@ import com.owncloud.android.utils.Permissions
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.CoreMatchers.not
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.koin.android.ext.koin.androidContext
@@ -59,6 +60,8 @@ class EditPrivateShareFragmentTest {
     private val defaultSharedWithDisplayName = "user"
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
     private val privateShareAsLiveData = MutableLiveData<Event<UIResult<OCShare>>>()
+
+    private lateinit var activityScenario: ActivityScenario<TestShareFileActivity>
 
     @Before
     fun setUp() {
@@ -89,6 +92,13 @@ class EditPrivateShareFragmentTest {
                     )
                 )
             )
+    }
+
+    @Test
+    fun closeDialog(){
+        loadEditPrivateShareFragment()
+        onView(withId(R.id.closeButton)).perform(click())
+        activityScenario.onActivity { Assert.assertNull(it.getTestFragment()) }
     }
 
     @Test
@@ -246,7 +256,7 @@ class EditPrivateShareFragmentTest {
             OC_ACCOUNT
         )
 
-        ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
+        activityScenario = ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
             it.startFragment(editPrivateShareFragment)
         }
 
