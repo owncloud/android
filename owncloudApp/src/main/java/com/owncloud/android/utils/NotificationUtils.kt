@@ -58,12 +58,14 @@ object NotificationUtils {
     ) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val notificationBuilder = newNotificationBuilder(context, notificationChannelId)
-            .setContentTitle(contentTitle)
-            .setSmallIcon(R.drawable.notification_icon)
-            .setWhen(System.currentTimeMillis())
-            .setContentText(contentText)
-            .setOngoing(onGoing)
+        val notificationBuilder = newNotificationBuilder(context, notificationChannelId).apply {
+            setContentTitle(contentTitle)
+            color = ContextCompat.getColor(context, R.color.primary)
+            setSmallIcon(R.drawable.notification_icon)
+            setWhen(System.currentTimeMillis())
+            setContentText(contentText)
+            setOngoing(onGoing)
+        }
 
         intent?.let {
             notificationBuilder.setContentIntent(it)
