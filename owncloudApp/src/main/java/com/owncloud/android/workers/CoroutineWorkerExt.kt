@@ -25,6 +25,7 @@ import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import com.owncloud.android.R
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_ID_DEFAULT
+import com.owncloud.android.utils.NOTIFICATION_TIMEOUT_STANDARD
 
 fun CoroutineWorker.showNotificationWithProgress(
     progress: Int,
@@ -47,10 +48,12 @@ fun CoroutineWorker.showNotificationWithProgress(
         .setProgress(maxValue, progress, false)
 
     if (progress == maxValue) {
-        notificationBuilder.setTimeoutAfter(1_000)
+        notificationBuilder
+            .setTimeoutAfter(NOTIFICATION_TIMEOUT_STANDARD)
             .setOngoing(false)
     } else {
-        notificationBuilder.setOngoing(true)
+        notificationBuilder
+            .setOngoing(true)
     }
 
     val notificationId = fileId?.toInt() ?: DOWNLOAD_NOTIFICATION_ID_DEFAULT
