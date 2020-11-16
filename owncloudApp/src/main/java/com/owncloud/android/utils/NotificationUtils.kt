@@ -46,6 +46,36 @@ object NotificationUtils {
         }
     }
 
+    fun createBasicNotification(
+        context: Context,
+        contentTitle: String,
+        contentText: String,
+        notificationChannelId: String,
+        notificationId: Int,
+        intent: PendingIntent?,
+        onGoing: Boolean = false,
+        timeOut: Long?
+    ) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val notificationBuilder = newNotificationBuilder(context, notificationChannelId)
+            .setContentTitle(contentTitle)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setWhen(System.currentTimeMillis())
+            .setContentText(contentText)
+            .setOngoing(onGoing)
+
+        intent?.let {
+            notificationBuilder.setContentIntent(it)
+        }
+
+        timeOut?.let {
+            notificationBuilder.setTimeoutAfter(it)
+        }
+
+        notificationManager.notify(notificationId, notificationBuilder.build())
+    }
+
     @JvmStatic
     fun cancelWithDelay(
         notificationManager: NotificationManager,

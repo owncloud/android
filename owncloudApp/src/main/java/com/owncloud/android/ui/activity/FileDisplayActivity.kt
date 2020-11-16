@@ -48,11 +48,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isVisible
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
@@ -82,6 +82,7 @@ import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
+import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
@@ -96,7 +97,6 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
-import com.owncloud.android.workers.DownloadFileWorker
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PermissionUtil
@@ -105,7 +105,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
@@ -1472,19 +1471,25 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun requestForDownload(file: OCFile?) {
-        val account = account
-        if (!mDownloaderBinder.isDownloading(account, fileWaitingToPreview)) {
-            val inputData = workDataOf(
-                DownloadFileWorker.KEY_PARAM_ACCOUNT to account.name,
-                DownloadFileWorker.KEY_PARAM_FILE_ID to file?.id
-            )
-            val downloadFileWork = OneTimeWorkRequestBuilder<DownloadFileWorker>().setInputData(inputData).build()
-            WorkManager.getInstance(applicationContext).enqueue(downloadFileWork)
-//            val i = Intent(this, FileDownloader::class.java)
-//            i.putExtra(FileDownloader.KEY_ACCOUNT, account)
-//            i.putExtra(FileDownloader.KEY_FILE, file)
-//            startService(i)
-        }
+        if (file == null) return
+        val transferManager = TransferManager(applicationContext)
+        val id = transferManager.downloadFile(account, file) ?: return
+
+        WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(id).observe(this, {
+            when (it.state) {
+                WorkInfo.State.ENQUEUED -> Toast.makeText(this, "Waiting to download", Toast.LENGTH_SHORT).show()
+                WorkInfo.State.RUNNING -> Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show()
+                WorkInfo.State.SUCCEEDED -> {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        waitingToSend = storageManager.getFileByPath(file.remotePath)
+                        sendDownloadedFile()
+                    }
+                }
+                WorkInfo.State.FAILED -> Toast.makeText(this, "Download failed", Toast.LENGTH_SHORT).show()
+                WorkInfo.State.BLOCKED -> Toast.makeText(this, "Download blocked", Toast.LENGTH_SHORT).show()
+                WorkInfo.State.CANCELLED -> Toast.makeText(this, "Download cancelled", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun sendDownloadedFile() {

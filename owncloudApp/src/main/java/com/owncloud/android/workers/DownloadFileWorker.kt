@@ -18,20 +18,28 @@
  */
 package com.owncloud.android.workers
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.owncloud.android.R
-import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
+import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
+import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
+import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
+import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FileStorageUtils
+import com.owncloud.android.utils.NOTIFICATION_TIMEOUT_STANDARD
+import com.owncloud.android.utils.NotificationUtils.createBasicNotification
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
@@ -78,7 +86,7 @@ class DownloadFileWorker(
 
         return try {
             val result = downloadFile()
-            Timber.d("Result" + result.httpCode + " " + result.data + " " + result.code)
+            notifyDownloadResult(result)
             if (result.isSuccess) {
                 saveDownloadedFile()
                 Result.success()
@@ -90,7 +98,6 @@ class DownloadFileWorker(
             Timber.e(throwable)
             Result.failure()
         }
-
     }
 
     private fun downloadFile(): RemoteOperationResult<Any> {
@@ -150,6 +157,68 @@ class DownloadFileWorker(
             // re-downloads should be done over the original file
             ocFile.storagePath.takeUnless { it.isNullOrBlank() }
                 ?: FileStorageUtils.getDefaultSavePathFor(accountName, ocFile)
+
+    private fun notifyDownloadResult(
+        downloadResult: RemoteOperationResult<*>
+    ) {
+        if (!downloadResult.isCancelled) {
+            var tickerId =
+                if (downloadResult.isSuccess) R.string.downloader_download_succeeded_ticker else R.string.downloader_download_failed_ticker
+            val needsToUpdateCredentials = ResultCode.UNAUTHORIZED == downloadResult.code
+            tickerId = if (needsToUpdateCredentials) R.string.downloader_download_failed_credentials_error else tickerId
+
+            val pendingIntent: PendingIntent?
+            if (needsToUpdateCredentials) {
+                // let the user update credentials with one click
+                val updateCredentialsIntent =
+                    Intent(appContext, LoginActivity::class.java).apply {
+                        putExtra(EXTRA_ACCOUNT, accountName)
+                        putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                        addFlags(Intent.FLAG_FROM_BACKGROUND)
+                    }
+                pendingIntent = PendingIntent.getActivity(
+                    appContext,
+                    System.currentTimeMillis().toInt(),
+                    updateCredentialsIntent,
+                    PendingIntent.FLAG_ONE_SHOT
+                )
+
+            } else {
+                // TODO put something smart in showDetailsIntent
+                val showDetailsIntent = Intent()
+                pendingIntent =
+                    PendingIntent.getActivity(
+                        appContext,
+                        System.currentTimeMillis().toInt(),
+                        showDetailsIntent,
+                        0
+                    )
+            }
+            val contextText = "Downloaded" //getResultMessage(downloadResult, download, appContext.resources)
+
+            var timeOut: Long? = null
+            var onGoing = true
+
+            // Remove success notification after timeout
+            if (downloadResult.isSuccess) {
+                timeOut = NOTIFICATION_TIMEOUT_STANDARD
+                onGoing = false
+            }
+
+            createBasicNotification(
+                context = appContext,
+                contentTitle = appContext.getString(tickerId),
+                notificationChannelId = DOWNLOAD_NOTIFICATION_CHANNEL_ID,
+                notificationId = ocFile.id!!.toInt(),
+                intent = pendingIntent,
+                contentText = contextText,
+                onGoing = onGoing,
+                timeOut = timeOut
+            )
+        }
+    }
 
     override fun onTransferProgress(
         progressRate: Long,
