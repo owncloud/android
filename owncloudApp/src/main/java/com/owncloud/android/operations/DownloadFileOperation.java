@@ -53,6 +53,9 @@ public class DownloadFileOperation extends RemoteOperation {
 
     private DownloadRemoteFileOperation mDownloadOperation;
 
+    /** Dummy constructor. Migrating to new architecture..." */
+    public DownloadFileOperation(){}
+
     public DownloadFileOperation(Account account, OCFile file) {
         if (account == null) {
             throw new IllegalArgumentException("Illegal null account in DownloadFileOperation " +
