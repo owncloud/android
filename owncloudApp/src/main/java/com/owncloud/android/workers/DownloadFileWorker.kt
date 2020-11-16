@@ -32,10 +32,12 @@ import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
+import com.owncloud.android.operations.DownloadFileOperation
 import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter.Companion.getResultMessage
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NOTIFICATION_TIMEOUT_STANDARD
@@ -196,7 +198,7 @@ class DownloadFileWorker(
                         0
                     )
             }
-            val contextText = "Downloaded" //getResultMessage(downloadResult, download, appContext.resources)
+            val contextText = getResultMessage(downloadResult, DownloadFileOperation(), appContext.resources)
 
             var timeOut: Long? = null
             var onGoing = true
