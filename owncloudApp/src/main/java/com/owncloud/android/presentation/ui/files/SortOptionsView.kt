@@ -42,7 +42,7 @@ class SortOptionsView @JvmOverloads constructor(
     // Enable list view by default.
     var viewTypeSelected: ViewType = ViewType.VIEW_TYPE_LIST
         set(viewType) {
-            view_type_selector.setImageDrawable(ContextCompat.getDrawable(context, viewType.toDrawableRes()))
+            view_type_selector.setImageDrawable(ContextCompat.getDrawable(context, viewType.getOppositeViewType().toDrawableRes()))
             field = viewType
         }
 
