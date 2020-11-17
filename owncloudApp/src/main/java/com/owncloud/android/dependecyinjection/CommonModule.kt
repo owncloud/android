@@ -25,8 +25,7 @@ import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
-import com.owncloud.android.providers.OCContextProvider
-import org.koin.android.ext.koin.androidApplication
+import com.owncloud.android.providers.impl.OCContextProvider
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
