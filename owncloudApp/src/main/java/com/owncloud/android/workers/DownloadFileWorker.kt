@@ -24,21 +24,21 @@ import android.content.Intent
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import at.bitfire.dav4jvm.exception.UnauthorizedException
 import com.owncloud.android.R
+import com.owncloud.android.data.executeRemoteOperation
+import com.owncloud.android.domain.exceptions.CancelledException
+import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
-import com.owncloud.android.operations.DownloadFileOperation
 import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter.Companion.getResultMessage
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NOTIFICATION_TIMEOUT_STANDARD
@@ -91,48 +91,49 @@ class DownloadFileWorker(
         }
 
         return try {
-            val result = downloadFile()
-            notifyDownloadResult(result)
-            if (result.isSuccess) {
-                saveDownloadedFile()
-                Result.success()
-            } else {
-                throw result.exception
-            }
+            downloadFile()
+            saveDownloadedFile()
+            notifyDownloadResult(null)
+            Result.success()
         } catch (throwable: Throwable) {
             // clean up and log
             Timber.e(throwable)
+            notifyDownloadResult(throwable)
             Result.failure()
         }
     }
 
-    private fun downloadFile(): RemoteOperationResult<Any> {
+    /**
+     * Download a file and throw an exception if something goes wrong
+     */
+    private fun downloadFile(): Boolean {
         /// download will be performed to a temporal file, then moved to the final location
         val tmpFile = File(temporalPath)
 
-        var result = downloadRemoteFileOperation.execute(client)
-
-        if (result.isSuccess) {
-            if (FileStorageUtils.getUsableSpace() < tmpFile.length()) {
-                Timber.w("Not enough space to copy %s", tmpFile.absolutePath)
-            }
-
-            val newFile = File(savePathForFile)
-            Timber.d("Save path: %s", newFile.absolutePath)
-            val parent: File? = newFile.parentFile
-            val created = parent?.mkdirs()
-            parent?.let {
-                Timber.d("Creation of parent folder ${it.absolutePath} succeeded: $created")
-                Timber.d("Parent folder ${it.absolutePath} is directory: ${it.isDirectory} exists: ${it.exists()}")
-            }
-            val moved = tmpFile.renameTo(newFile)
-            Timber.d("New file ${newFile.absolutePath} is directory: ${newFile.isDirectory} and exists: ${newFile.exists()}")
-            if (!moved) {
-                result = RemoteOperationResult(RemoteOperationResult.ResultCode.LOCAL_STORAGE_NOT_MOVED)
-            }
-
+        // It will throw an exception if something goes wrong.
+        executeRemoteOperation {
+            downloadRemoteFileOperation.execute(client)
         }
-        return result
+
+        if (FileStorageUtils.getUsableSpace() < tmpFile.length()) {
+            Timber.w("Not enough space to copy %s", tmpFile.absolutePath)
+        }
+
+        val newFile = File(savePathForFile)
+        Timber.d("Save path: %s", newFile.absolutePath)
+        val parent: File? = newFile.parentFile
+        val created = parent?.mkdirs()
+        parent?.let {
+            Timber.d("Creation of parent folder ${it.absolutePath} succeeded: $created")
+            Timber.d("Parent folder ${it.absolutePath} is directory: ${it.isDirectory} exists: ${it.exists()}")
+        }
+        val moved = tmpFile.renameTo(newFile)
+        Timber.d("New file ${newFile.absolutePath} is directory: ${newFile.isDirectory} and exists: ${newFile.exists()}")
+        if (!moved) {
+            throw LocalStorageNotMovedException()
+        }
+
+        return true
     }
 
     /**
@@ -165,12 +166,17 @@ class DownloadFileWorker(
                 ?: FileStorageUtils.getDefaultSavePathFor(accountName, ocFile)
 
     private fun notifyDownloadResult(
-        downloadResult: RemoteOperationResult<*>
+        throwable: Throwable?
     ) {
-        if (!downloadResult.isCancelled) {
-            var tickerId =
-                if (downloadResult.isSuccess) R.string.downloader_download_succeeded_ticker else R.string.downloader_download_failed_ticker
-            val needsToUpdateCredentials = ResultCode.UNAUTHORIZED == downloadResult.code
+        if (throwable !is CancelledException) {
+
+            var tickerId = if (throwable == null) {
+                R.string.downloader_download_succeeded_ticker
+            } else {
+                R.string.downloader_download_failed_ticker
+            }
+
+            val needsToUpdateCredentials = throwable is UnauthorizedException
             tickerId = if (needsToUpdateCredentials) R.string.downloader_download_failed_credentials_error else tickerId
 
             val pendingIntent: PendingIntent?
@@ -202,13 +208,13 @@ class DownloadFileWorker(
                         0
                     )
             }
-            val contextText = getResultMessage(downloadResult, DownloadFileOperation(), appContext.resources)
+            val contextText = "X"//getResultMessage(downloadResult, DownloadFileOperation(), appContext.resources)
 
             var timeOut: Long? = null
             var onGoing = true
 
             // Remove success notification after timeout
-            if (downloadResult.isSuccess) {
+            if (throwable == null) {
                 timeOut = NOTIFICATION_TIMEOUT_STANDARD
                 onGoing = false
             }
