@@ -50,8 +50,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
-
-import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0;
+import java.util.Locale;
 
 /**
  * Manager for concurrent access to thumbnails cache.
@@ -68,6 +67,8 @@ public class ThumbnailsCacheManager {
     private static final CompressFormat mCompressFormat = CompressFormat.JPEG;
     private static final int mCompressQuality = 70;
     private static OwnCloudClient mClient = null;
+
+    private static final String PREVIEW_URI = "%s/remote.php/dav/files/%s%s?x=%d&y=%d&c=%s&preview=1";
 
     public static Bitmap mDefaultImg =
             BitmapFactory.decodeResource(
@@ -250,9 +251,14 @@ public class ThumbnailsCacheManager {
         }
 
         private String getPreviewUrl(OCFile ocFile, Account account) {
-            return mClient.getBaseUri() +
-                    WEBDAV_FILES_PATH_4_0 + account.name.split("@")[0] + Uri.encode(ocFile.getRemotePath(), "/")
-                    + "?" + "x=" + getThumbnailDimension() + "&y=" + getThumbnailDimension() + "&c=" + ocFile.getEtag() + "&preview=1";
+            return String.format(Locale.ROOT,
+                    PREVIEW_URI,
+                    mClient.getBaseUri(),
+                    account.name.split("@")[0],
+                    Uri.encode(ocFile.getRemotePath(), "/"),
+                    getThumbnailDimension(),
+                    getThumbnailDimension(),
+                    ocFile.getEtag());
         }
 
         private Bitmap doOCFileInBackground() {
