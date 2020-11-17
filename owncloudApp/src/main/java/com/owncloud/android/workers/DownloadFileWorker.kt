@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
@@ -42,6 +43,9 @@ import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NOTIFICATION_TIMEOUT_STANDARD
 import com.owncloud.android.utils.NotificationUtils.createBasicNotification
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
@@ -237,6 +241,12 @@ class DownloadFileWorker(
             File(this.savePathForFile).name
         )
 
+        // Set current progress. Observers will listen.
+        CoroutineScope(Dispatchers.IO).launch {
+            val progress = workDataOf(KEY_PROGRESS to percent)
+            setProgress(progress)
+        }
+
         showNotificationWithProgress(
             maxValue = totalToTransfer.toInt(),
             progress = totalTransferredSoFar.toInt(),
@@ -250,5 +260,6 @@ class DownloadFileWorker(
     companion object {
         const val KEY_PARAM_ACCOUNT = "KEY_PARAM_ACCOUNT"
         const val KEY_PARAM_FILE_ID = "KEY_PARAM_FILE_ID"
+        const val KEY_PROGRESS = "KEY_PROGRESS"
     }
 }
