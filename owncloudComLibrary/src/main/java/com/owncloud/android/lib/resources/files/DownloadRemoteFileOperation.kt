@@ -48,7 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class DownloadRemoteFileOperation(
     private val remotePath: String,
     localFolderPath: String
-) : RemoteOperation<Any>() {
+) : RemoteOperation<Unit>() {
 
     private val mCancellationRequested = AtomicBoolean(false)
     private val mDataTransferListeners: MutableSet<OnDatatransferProgressListener> = HashSet()
@@ -58,8 +58,8 @@ class DownloadRemoteFileOperation(
     var etag: String = ""
         private set
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<Any> {
-        var result: RemoteOperationResult<Any>
+    override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
+        var result: RemoteOperationResult<Unit>
 
         // download will be performed to a temporal file, then moved to the final location
         val tmpFile = File(tmpPath)
@@ -77,8 +77,8 @@ class DownloadRemoteFileOperation(
     }
 
     @Throws(Exception::class)
-    private fun downloadFile(client: OwnCloudClient, targetFile: File): RemoteOperationResult<Any> {
-        val result: RemoteOperationResult<Any>
+    private fun downloadFile(client: OwnCloudClient, targetFile: File): RemoteOperationResult<Unit> {
+        val result: RemoteOperationResult<Unit>
         var it: Iterator<OnDatatransferProgressListener>
         var fos: FileOutputStream? = null
         var bis: BufferedInputStream? = null

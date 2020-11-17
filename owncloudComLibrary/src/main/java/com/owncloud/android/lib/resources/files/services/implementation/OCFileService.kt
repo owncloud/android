@@ -61,7 +61,7 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
     override fun downloadFile(
         remotePath: String,
         localTempPath: String
-    ): RemoteOperationResult<Any> =
+    ): RemoteOperationResult<Unit> =
         DownloadRemoteFileOperation(
             remotePath = remotePath,
             localFolderPath = localTempPath
