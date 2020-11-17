@@ -51,6 +51,8 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 
+import static com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0;
+
 /**
  * Manager for concurrent access to thumbnails cache.
  */
@@ -249,7 +251,7 @@ public class ThumbnailsCacheManager {
 
         private String getPreviewUrl(OCFile ocFile, Account account) {
             return mClient.getBaseUri() +
-                    "/remote.php/dav/files/" + account.name.split("@")[0] + Uri.encode(ocFile.getRemotePath(), "/")
+                    WEBDAV_FILES_PATH_4_0 + account.name.split("@")[0] + Uri.encode(ocFile.getRemotePath(), "/")
                     + "?" + "x=" + getThumbnailDimension() + "&y=" + getThumbnailDimension() + "&c=" + ocFile.getEtag() + "&preview=1";
         }
 
