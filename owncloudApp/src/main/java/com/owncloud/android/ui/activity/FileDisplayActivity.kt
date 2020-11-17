@@ -1433,7 +1433,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(id).observe(this, {
             when (it.state) {
                 WorkInfo.State.ENQUEUED -> Toast.makeText(this, "Waiting to download", Toast.LENGTH_SHORT).show()
-                WorkInfo.State.RUNNING -> Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show()
+                WorkInfo.State.RUNNING -> {
+                    Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show()
+                    Timber.d("Download of ${it.tags} in progress: ${it.progress}")
+                }
                 WorkInfo.State.SUCCEEDED -> {
                     CoroutineScope(Dispatchers.IO).launch {
                         waitingToSend = storageManager.getFileByPath(file.remotePath)
