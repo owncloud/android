@@ -50,7 +50,8 @@ class SortOptionsView @JvmOverloads constructor(
     var sortTypeSelected: SortType = SortType.SORT_TYPE_BY_NAME
         set(sortType) {
             if (field == sortType) {
-                sortOrderSelected = sortOrderSelected.getAlternativeViewType()
+                // TODO: Should be changed directly, not here.
+                sortOrderSelected = sortOrderSelected.getOppositeSortOrder()
             }
             sort_type_title.text = context.getText(sortType.toStringRes())
             field = sortType
@@ -67,11 +68,11 @@ class SortOptionsView @JvmOverloads constructor(
         View.inflate(context, R.layout.sort_options_layout, this)
 
         // Select sort type and order according to preference.
-        val isAscending = PreferenceManager.getSortAscending(getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
-        sortOrderSelected = fromPreference(isAscending)
-
         val sortBy = PreferenceManager.getSortOrder(getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
         sortTypeSelected = fromPreference(sortBy)
+
+        val isAscending = PreferenceManager.getSortAscending(getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+        sortOrderSelected = fromPreference(isAscending)
 
         sort_type_selector.setOnClickListener {
             onSortOptionsListener?.onSortTypeListener(

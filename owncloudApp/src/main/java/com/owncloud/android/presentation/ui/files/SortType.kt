@@ -52,7 +52,7 @@ enum class SortType : Parcelable {
 enum class SortOrder : Parcelable {
     SORT_ORDER_ASCENDING, SORT_ORDER_DESCENDING;
 
-    fun getAlternativeViewType(): SortOrder =
+    fun getOppositeSortOrder(): SortOrder =
         when (this) {
             SORT_ORDER_ASCENDING -> SORT_ORDER_DESCENDING
             SORT_ORDER_DESCENDING -> SORT_ORDER_ASCENDING
