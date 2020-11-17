@@ -126,6 +126,8 @@ public class LocalFileListFragment extends ExtendedListFragment {
             coordinatorLayout.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
             );
+            // Hide options layout in the local file list fragment.
+            coordinatorLayout.findViewById(R.id.options_layout).setVisibility(View.GONE);
         }
         Timber.i("onActivityCreated() stop");
     }
