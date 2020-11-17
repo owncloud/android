@@ -20,20 +20,20 @@ package com.owncloud.android.presentation.manager
 
 import android.accounts.Account
 import android.content.Context
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
-import androidx.work.workDataOf
 import com.google.common.util.concurrent.ListenableFuture
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.workers.DownloadFileWorker
+import com.owncloud.android.providers.impl.TransferProviderImpl
 import timber.log.Timber
 import java.util.UUID
 
 class TransferManager(
     private val context: Context
 ) {
+
+    private val transferProvider = TransferProviderImpl(context)
 
     /**
      * Enqueue a new download and return its uuid.
@@ -44,15 +44,23 @@ class TransferManager(
     fun downloadFile(account: Account, file: OCFile): UUID? {
         if (file.id == null) return null
 
+        if (isDownloadAlreadyEnqueued(account, file)) {
+            return null
+        }
+
+        return transferProvider.downloadFile(account, file)
+    }
+
+    private fun isDownloadAlreadyEnqueued(account: Account, file: OCFile): Boolean {
         val downloadWorkersForFile = getWorkInfoFromTags(
             TRANSFER_TAG_DOWNLOAD,
-            file.id.toString()
+            file.id.toString(),
+            account.name
         ).get()
 
         // Check if this download is in progress.
         var isEnqueued = false
         downloadWorkersForFile.forEach {
-            Timber.d(it.toString())
             if (!it.state.isFinished) {
                 isEnqueued = true
             }
@@ -60,24 +68,9 @@ class TransferManager(
 
         if (isEnqueued) {
             Timber.i("Download of ${file.fileName} has not finished yet. Do not enqueue it again.")
-            return null
         }
 
-        val inputData = workDataOf(
-            DownloadFileWorker.KEY_PARAM_ACCOUNT to account.name,
-            DownloadFileWorker.KEY_PARAM_FILE_ID to file.id
-        )
-
-        val downloadFileWork = OneTimeWorkRequestBuilder<DownloadFileWorker>()
-            .setInputData(inputData)
-            .addTag(file.id.toString())
-            .addTag(TRANSFER_TAG_DOWNLOAD)
-            .build()
-
-        getWorkManager().enqueue(downloadFileWork)
-        Timber.i("Download of ${file.fileName} has been enqueued.")
-
-        return downloadFileWork.id
+        return isEnqueued
     }
 
     private fun getWorkInfoFromTags(vararg tags: String): ListenableFuture<MutableList<WorkInfo>> {
