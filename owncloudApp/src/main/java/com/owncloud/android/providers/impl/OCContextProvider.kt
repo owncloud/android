@@ -19,9 +19,10 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.providers
+package com.owncloud.android.providers.impl
 
 import android.content.Context
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.utils.ConnectivityUtils
 
 class OCContextProvider(private val context: Context) : ContextProvider {
