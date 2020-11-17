@@ -29,6 +29,7 @@ import com.owncloud.android.R
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
+import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
@@ -39,6 +40,8 @@ import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
+import com.owncloud.android.ui.errorhandling.TypeOfOperation.TransferDownload
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NOTIFICATION_TIMEOUT_STANDARD
@@ -94,12 +97,10 @@ class DownloadFileWorker(
             downloadFile()
             saveDownloadedFile()
             notifyDownloadResult(null)
-            Result.success()
         } catch (throwable: Throwable) {
             // clean up and log
             Timber.e(throwable)
             notifyDownloadResult(throwable)
-            Result.failure()
         }
     }
 
@@ -165,9 +166,12 @@ class DownloadFileWorker(
             ocFile.storagePath.takeUnless { it.isNullOrBlank() }
                 ?: FileStorageUtils.getDefaultSavePathFor(accountName, ocFile)
 
+    /**
+     * Notify download result and then return Worker Result.
+     */
     private fun notifyDownloadResult(
         throwable: Throwable?
-    ) {
+    ): Result {
         if (throwable !is CancelledException) {
 
             var tickerId = if (throwable == null) {
@@ -208,15 +212,18 @@ class DownloadFileWorker(
                         0
                     )
             }
-            val contextText = "X"//getResultMessage(downloadResult, DownloadFileOperation(), appContext.resources)
+
+            val contextText = ErrorMessageAdapter.getMessageFromOperation(
+                typeOfOperation = TransferDownload(savePathForFile),
+                throwable = throwable,
+                resources = appContext.resources
+            )
 
             var timeOut: Long? = null
-            var onGoing = true
 
             // Remove success notification after timeout
             if (throwable == null) {
                 timeOut = NOTIFICATION_TIMEOUT_STANDARD
-                onGoing = false
             }
 
             createBasicNotification(
@@ -226,9 +233,18 @@ class DownloadFileWorker(
                 notificationId = ocFile.id!!.toInt(),
                 intent = pendingIntent,
                 contentText = contextText,
-                onGoing = onGoing,
                 timeOut = timeOut
             )
+        }
+
+        return if (throwable == null) {
+            Result.success()
+        } else {
+            if (throwable is NoConnectionWithServerException) {
+                Result.retry()
+            } else {
+                Result.failure()
+            }
         }
     }
 
