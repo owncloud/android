@@ -1,8 +1,8 @@
 /**
  * ownCloud Android client application
  *
- * @author David González Verdugo
  * @author Abel García de Prada
+ *
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,21 +15,24 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.dependecyinjection
+package com.owncloud.android.providers.impl
 
-import com.owncloud.android.presentation.manager.AvatarManager
+import android.content.Context
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.providers.impl.OCContextProvider
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
+import com.owncloud.android.utils.ConnectivityUtils
 
-val commonModule = module {
+class OCContextProvider(private val context: Context) : ContextProvider {
 
-    single { AvatarManager() }
-    single { CoroutinesDispatcherProvider() }
-    factory<ContextProvider> { OCContextProvider(androidContext()) }
+    override fun getBoolean(id: Int): Boolean = context.resources.getBoolean(id)
+
+    override fun getString(id: Int): String = context.resources.getString(id)
+
+    override fun getContext(): Context = context
+
+    override fun isConnected(): Boolean {
+        return ConnectivityUtils.isAppConnected(context)
+    }
 }
