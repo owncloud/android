@@ -25,6 +25,7 @@ package com.owncloud.android.ui.errorhandling
 
 import android.content.res.Resources
 import com.owncloud.android.R
+import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
@@ -37,6 +38,7 @@ import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
 import com.owncloud.android.operations.UploadFileOperation
+import com.owncloud.android.ui.errorhandling.TypeOfOperation.TransferDownload
 import java.io.File
 import java.net.SocketTimeoutException
 
@@ -75,6 +77,33 @@ class ErrorMessageAdapter {
     }
 
     companion object {
+
+        fun getMessageFromOperation(
+            typeOfOperation: TypeOfOperation,
+            throwable: Throwable?,
+            resources: Resources
+        ): String {
+            val f = Formatter(resources)
+
+            if (throwable == null) {
+                return when (typeOfOperation) {
+                    is TransferDownload -> {
+                        f.format(
+                            R.string.downloader_download_succeeded_content,
+                            File(typeOfOperation.downloadPath).name
+                        )
+                    }
+                }
+            } else {
+                val genericMessage = when (typeOfOperation) {
+                    is TransferDownload -> f.format(
+                        R.string.downloader_download_failed_content,
+                        File(typeOfOperation.downloadPath).name
+                    )
+                }
+                return throwable.parseError(genericMessage, resources, true).toString()
+            }
+        }
 
         /**
          * Return an internationalized user message corresponding to an operation result
