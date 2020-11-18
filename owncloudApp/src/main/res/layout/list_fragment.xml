@@ -18,80 +18,117 @@
 -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:filterTouchesWhenObscured="true">
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="top">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_containing_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:footerDividersEnabled="false"
-            android:visibility="visible">
+        <com.owncloud.android.presentation.ui.files.SortOptionsView
+            android:id="@+id/options_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            fab:layout_constraintEnd_toEndOf="parent"
+            fab:layout_constraintStart_toStartOf="parent"
+            fab:layout_constraintTop_toTopOf="parent" />
 
-            <com.owncloud.android.ui.ExtendedListView
-                android:id="@+id/list_root"
+        <ProgressBar
+            android:id="@+id/syncProgressBar"
+            style="@style/Widget.ownCloud.TopProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/file_list_progress_bar_height"
+            android:layout_margin="0dp"
+            android:indeterminate="false"
+            android:indeterminateOnly="false"
+            android:visibility="visible"
+            fab:layout_constraintTop_toBottomOf="@id/options_layout" />
+
+        <View
+            android:id="@+id/shadow_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/file_list_progress_bar_height"
+            android:layout_margin="0dp"
+            android:background="@drawable/shadow_gradient"
+            fab:layout_constraintTop_toBottomOf="@id/options_layout" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/file_list_progress_bar_height"
+            fab:layout_constraintBottom_toBottomOf="parent"
+            fab:layout_constraintTop_toBottomOf="@id/options_layout">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_containing_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@color/list_divider_background"
-                android:dividerHeight="1px"
-                android:visibility="visible" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:footerDividersEnabled="false"
+                android:visibility="visible">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_containing_grid"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:footerDividersEnabled="false"
-            android:visibility="gone">
-
-            <third_parties.in.srain.cube.GridViewWithHeaderAndFooter
-                android:id="@+id/grid_root"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:columnWidth="100dp"
-                android:gravity="center"
-                android:horizontalSpacing="2dp"
-                android:stretchMode="columnWidth"
-                android:verticalSpacing="2dp"
-                android:visibility="visible" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_containing_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/empty_list_view"
+                <com.owncloud.android.ui.ExtendedListView
+                    android:id="@+id/list_root"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="@string/empty"
+                    android:layout_height="match_parent"
+                    android:divider="@color/list_divider_background"
+                    android:dividerHeight="1px"
+                    android:visibility="visible"
+                    tools:listitem="@layout/item_file_list" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_containing_grid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:footerDividersEnabled="false"
+                android:visibility="gone">
+
+                <third_parties.in.srain.cube.GridViewWithHeaderAndFooter
+                    android:id="@+id/grid_root"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:columnWidth="100dp"
+                    android:gravity="center"
+                    android:horizontalSpacing="2dp"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="2dp"
                     android:visibility="visible" />
-            </ScrollView>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </FrameLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_containing_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/empty_list_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="@string/empty"
+                        android:visibility="visible" />
+                </ScrollView>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/fab_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/standard_margin"
         android:layout_marginEnd="@dimen/standard_margin"
+        android:layout_marginBottom="@dimen/standard_margin"
         android:visibility="gone"
         fab:fab_addButtonColorNormal="@color/primary_button_background_color"
         fab:fab_addButtonColorPressed="@color/owncloud_blue"
@@ -120,7 +157,4 @@
             fab:fab_title="" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-    <!-- last to draw, will be top in Z axis -->
-    <include layout="@layout/top_progress_bar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

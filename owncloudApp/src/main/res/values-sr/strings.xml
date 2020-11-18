@@ -11,8 +11,7 @@
   <string name="actionbar_settings">Поставке</string>
   <string name="actionbar_see_details">Детаљи</string>
   <string name="actionbar_send_file">Пошаљи</string>
-  <string name="actionbar_sort">Разврставање</string>
-  <string name="actionbar_sort_title">Разврставање</string>
+    <string name="actionbar_sort_title">Разврставање</string>
   <string name="drawer_item_all_files">Сви фајлови</string>
   <string name="drawer_item_settings">Поставке</string>
   <string name="drawer_item_uploads_list">Отпремања</string>
@@ -346,8 +345,6 @@
   <string name="edit_share_unshare">Заустави дељење</string>
   <string name="edit_share_done">завршено</string>
   <string name="action_clear_finished_uploads">Очисти све завршене</string>
-  <string name="action_switch_grid_view">Приказ мреже</string>
-  <string name="action_switch_list_view">Приказ листе</string>
   <string name="manage_space_title">Управљање простором</string>
   <string name="manage_space_clear_data">Очисти податке</string>
   <string name="manage_space_error">Неки фајлови нису могли бити обрисани.</string>

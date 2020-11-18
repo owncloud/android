@@ -18,10 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.utils
+package com.owncloud.android.utils.matchers
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.CoreMatchers
@@ -55,6 +56,11 @@ fun Int.withText(text: String) {
 fun Int.withText(resourceId: Int) {
     onView(withId(this))
         .check(matches(ViewMatchers.withText(resourceId)))
+}
+
+fun Int.withTextColor(resourceId: Int) {
+    onView(withId(this))
+        .check(matches(ViewMatchers.hasTextColor(resourceId)))
 }
 
 fun Int.assertVisibility(visibility: ViewMatchers.Visibility) {

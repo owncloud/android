@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Nastavitve</string>
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Pošlji</string>
-  <string name="actionbar_sort">Razvrsti</string>
   <string name="actionbar_descending">Padajoče</string>
   <string name="actionbar_sort_title">Razvrsti ...</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Starejše - Novejše</string>
-  <string name="actionbar_sort_by_size">Manjše - Večje</string>
   <string name="drawer_item_all_files">Vse datoteke</string>
   <string name="drawer_item_only_available_offline">Na voljo za rabo brez povezave</string>
   <string name="drawer_item_shared_by_link_files">V souporabi prek povezave</string>
@@ -451,8 +447,6 @@
   <string name="action_clear_failed_uploads">Počiščenje je spodletelo</string>
   <string name="action_clear_successful_uploads">Počiščenje je uspešno končano</string>
   <string name="action_clear_finished_uploads">Počiščenje vseh predmetov je končano</string>
-  <string name="action_switch_grid_view">Mrežni pogled</string>
-  <string name="action_switch_list_view">Seznamski pogled</string>
   <string name="manage_space_title">Upravljanje s prostorom</string>
   <string name="manage_space_description">Naastavitve, podatkovna zbirka in potrdila strežnika podatkov %1$s bodo trajno izbrisani. \n\nŽe prejete datoteke bodo ostane nedotaknjene.\n\nTo opravilo je lahko dolgotrajno.</string>
   <string name="manage_space_clear_data">Počisti podatke</string>

@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Instellingen</string>
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Versturen</string>
-  <string name="actionbar_sort">Sorteren</string>
   <string name="actionbar_descending">Aflopend</string>
   <string name="actionbar_sort_title">Sorteer op</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Oudste - Nieuwste</string>
-  <string name="actionbar_sort_by_size">Kleinste - Grootste</string>
   <string name="drawer_item_all_files">Alle bestanden</string>
   <string name="drawer_item_only_available_offline">Beschikbaar off-line</string>
   <string name="drawer_item_shared_by_link_files">Gedeeld via een link</string>
@@ -489,8 +485,6 @@ Neem contact op met uw beheerder</string>
   <string name="action_clear_failed_uploads">Leegmaken mislukt</string>
   <string name="action_clear_successful_uploads">Leegmaken gelukt</string>
   <string name="action_clear_finished_uploads">Alles leegmaken beëindigd</string>
-  <string name="action_switch_grid_view">Raster indeling</string>
-  <string name="action_switch_list_view">Lijst indeling</string>
   <string name="manage_space_title">Beheer ruimte</string>
   <string name="manage_space_description">Instellingen, database en servercertificaten van %1$s\'s data zullen permanent worden verwijderd. \n\nGedownloade bestanden blijven onaangeroerd.\n\nDit proces kan even duren.</string>
   <string name="manage_space_clear_data">Verwijder data</string>

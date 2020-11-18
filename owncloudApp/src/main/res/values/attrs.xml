@@ -11,4 +11,9 @@
 
     </declare-styleable>
 
+    <declare-styleable name="BottomSheetFragmentItemView">
+        <attr name="itemIcon" format="reference" />
+        <attr name="title" format="string" />
+    </declare-styleable>
+
 </resources>

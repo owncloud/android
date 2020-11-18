@@ -12,12 +12,8 @@
   <string name="actionbar_settings">设置</string>
   <string name="actionbar_see_details">详细信息</string>
   <string name="actionbar_send_file">发送</string>
-  <string name="actionbar_sort">排序</string>
   <string name="actionbar_descending">逆序</string>
   <string name="actionbar_sort_title">排序方式</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">日期</string>
-  <string name="actionbar_sort_by_size">最小 - 最大</string>
   <string name="drawer_item_all_files">全部文件</string>
   <string name="drawer_item_only_available_offline">离线可用</string>
   <string name="drawer_item_shared_by_link_files">分享链接的文件</string>
@@ -463,8 +459,6 @@
   <string name="action_clear_failed_uploads">清除失败</string>
   <string name="action_clear_successful_uploads">清除成功</string>
   <string name="action_clear_finished_uploads">清除所有完成任务</string>
-  <string name="action_switch_grid_view">网格视图</string>
-  <string name="action_switch_list_view">列表视图</string>
   <string name="manage_space_title">管理空间</string>
   <string name="manage_space_description"> %1$s 的设置，数据库以及服务器证书将会被永久删除。
 \n\n 已下载的文件将会被保留。\n\n完成此操作需要一些时间。</string>

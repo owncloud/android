@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Axustes</string>
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
-  <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Os máis antigos primeiro</string>
-  <string name="actionbar_sort_by_size">Os máis pequenos primeiro</string>
   <string name="drawer_item_all_files">Todos os ficheiros</string>
   <string name="drawer_item_only_available_offline">Dispoñíbel sen conexión</string>
   <string name="drawer_item_shared_by_link_files">Compartido por ligazón</string>
@@ -488,8 +484,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="action_clear_failed_uploads">Limpar os envíos fallados</string>
   <string name="action_clear_successful_uploads">Limpar os envíos satisfactorios</string>
   <string name="action_clear_finished_uploads">Limpar os envíos rematados</string>
-  <string name="action_switch_grid_view">Ver como grella</string>
-  <string name="action_switch_list_view">Ver como lista</string>
   <string name="manage_space_title">Administrar o espazo</string>
   <string name="manage_space_description">Van ser eliminados de xeito permanente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
   <string name="manage_space_clear_data">Limpar os datos</string>

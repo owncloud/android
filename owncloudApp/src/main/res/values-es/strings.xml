@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Configuración</string>
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
-  <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Más antiguo - Más nuevo</string>
-  <string name="actionbar_sort_by_size">Más pequeño - Más grande</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
   <string name="drawer_item_only_available_offline">Disponible offline</string>
   <string name="drawer_item_shared_by_link_files">Compartido por enlace</string>
@@ -485,8 +481,6 @@
   <string name="action_clear_failed_uploads">Limpiar fallido</string>
   <string name="action_clear_successful_uploads">Limpiar exitoso</string>
   <string name="action_clear_finished_uploads">Limpiar todo lo terminado</string>
-  <string name="action_switch_grid_view">Vista de rejilla</string>
-  <string name="action_switch_list_view">Ver lista</string>
   <string name="manage_space_title">Gestionar espacio</string>
   <string name="manage_space_description">Los ajustes, bases de datos y certificados de servidor de %1$s serán borrados permanentemente. \n\nLos archivos descargados se mantendrán intactos. .\n\nEste proceso puede tardar algún tiempo.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>

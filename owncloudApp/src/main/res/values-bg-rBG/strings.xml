@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Настройки</string>
   <string name="actionbar_see_details">Детайли</string>
   <string name="actionbar_send_file">Изпращане</string>
-  <string name="actionbar_sort">Сортиране</string>
   <string name="actionbar_descending">Низходящ</string>
   <string name="actionbar_sort_title">Сортирай по</string>
-  <string name="actionbar_sort_by_name">А - Я</string>
-  <string name="actionbar_sort_by_date">Стари - Нови</string>
-  <string name="actionbar_sort_by_size">Малки - Големи</string>
   <string name="drawer_item_all_files">Всички файлове</string>
   <string name="drawer_item_only_available_offline">Достъпно офлайн</string>
   <string name="drawer_item_shared_by_link_files">Споделяне с връзка</string>
@@ -484,8 +480,6 @@
   <string name="action_clear_failed_uploads">Неуспешно изчистване</string>
   <string name="action_clear_successful_uploads">Успешно изчистване</string>
   <string name="action_clear_finished_uploads">Изчистването на всичко приключи</string>
-  <string name="action_switch_grid_view">Изглед решетка</string>
-  <string name="action_switch_list_view">Изглед списък</string>
   <string name="manage_space_title">Управление на пространството</string>
   <string name="manage_space_description">Настройки, като сертификатите на сървъра и базата данни от данните на %1$s ще бъдат безвъзвратно изтрити.
 \n\nИзтеглените файлове ще бъдат запазени непроменени.

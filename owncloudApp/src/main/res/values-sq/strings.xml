@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Rregullime</string>
   <string name="actionbar_see_details">Hollësi</string>
   <string name="actionbar_send_file">Dërgoje</string>
-  <string name="actionbar_sort">Renditi</string>
   <string name="actionbar_descending">Në rend zbritës</string>
   <string name="actionbar_sort_title">Renditi sipas</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Më e vjetra - Më e reja</string>
-  <string name="actionbar_sort_by_size">Më e vogla - Më e madhja</string>
   <string name="drawer_item_all_files">Krejt kartelat</string>
   <string name="drawer_item_only_available_offline">I passhëm jo në linjë</string>
   <string name="drawer_item_shared_by_link_files">Të ndara me lidhje</string>
@@ -485,8 +481,6 @@
   <string name="action_clear_failed_uploads">Pastrimi dështoi</string>
   <string name="action_clear_successful_uploads">Pastrim i suksesshëm</string>
   <string name="action_clear_finished_uploads">Pastro krejt të përfunduarit</string>
-  <string name="action_switch_grid_view">Pamje galeri</string>
-  <string name="action_switch_list_view">Pamje listë</string>
   <string name="manage_space_title">Administroni hapësirë</string>
   <string name="manage_space_description">Rregullimet, baza e të dhënave dhe dëshmitë e shërbyesit prej të dhënave nga %1$s do të fshihen përgjithmonë. \n\nKartelat e shkarkuara do të ruhen të paprekura.\n\nKy proces mund të hajë ca kohë.</string>
   <string name="manage_space_clear_data">Pastroji të dhënat</string>

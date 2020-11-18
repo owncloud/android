@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Innstillinger</string>
   <string name="actionbar_see_details">Detaljer</string>
   <string name="actionbar_send_file">Send</string>
-  <string name="actionbar_sort">Sorter</string>
   <string name="actionbar_descending">Synkende</string>
   <string name="actionbar_sort_title">Sorter etter</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Eldste - nyeste</string>
-  <string name="actionbar_sort_by_size">Minste - største</string>
   <string name="drawer_item_all_files">Alle filer</string>
   <string name="drawer_item_only_available_offline">Tilgjengelig frakoblet</string>
   <string name="drawer_item_shared_by_link_files">Delt med lenke</string>
@@ -475,8 +471,6 @@
   <string name="action_clear_failed_uploads">Fjern feilede</string>
   <string name="action_clear_successful_uploads">Fjern vellykkede</string>
   <string name="action_clear_finished_uploads">Slett alle ferdige</string>
-  <string name="action_switch_grid_view">Rutenett-visning</string>
-  <string name="action_switch_list_view">Listevisning</string>
   <string name="manage_space_title">Håndter plass</string>
   <string name="manage_space_description">Innstillinger, database og server-sertifikater fra %1$s sine data vil bli slettet permanent. \n\nNedlastede filer beholdes urørt.\n\nDenne prosessen kan ta litt tid.</string>
   <string name="manage_space_clear_data">Nullstill data</string>

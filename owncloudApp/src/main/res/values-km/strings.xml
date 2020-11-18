@@ -10,8 +10,7 @@
   <string name="actionbar_settings">ការកំណត់</string>
   <string name="actionbar_see_details">ព័ត៌មាន​លម្អិត</string>
   <string name="actionbar_send_file">ផ្ញើ</string>
-  <string name="actionbar_sort">តម្រៀប</string>
-  <string name="actionbar_sort_title">តម្រៀបដោយ</string>
+    <string name="actionbar_sort_title">តម្រៀបដោយ</string>
   <string name="drawer_open">បើក</string>
   <string name="drawer_feedback">មតិត្រឡប់</string>
   <string name="drawer_help">ជំនួយ</string>

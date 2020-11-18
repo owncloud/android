@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Configuración</string>
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Mandar</string>
-  <string name="actionbar_sort">Orden</string>
   <string name="actionbar_descending">Orden Descendiente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Desde el más antiguo al más nuevo</string>
-  <string name="actionbar_sort_by_size">Desde el más pequeño al más grande</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
   <string name="drawer_item_only_available_offline">Disponible sin conexión</string>
   <string name="drawer_item_shared_by_link_files">Compartido por enlace</string>
@@ -488,8 +484,6 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="action_clear_failed_uploads">Fallo al limpiar</string>
   <string name="action_clear_successful_uploads">Limpieza completadas</string>
   <string name="action_clear_finished_uploads">Limpieza total terminada</string>
-  <string name="action_switch_grid_view">Vista de grilla</string>
-  <string name="action_switch_list_view">Vista de lista</string>
   <string name="manage_space_title">Administrar espacio</string>
   <string name="manage_space_description">Los ajustes, certificados de base de datos y servidor de %1$s serán elminados permanentemente. \n\nLos Archivos descargados no serán tocados.\n\nEste proceso puede tardar en completarse.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>

@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Einstellungen</string>
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Senden</string>
-  <string name="actionbar_sort">Sortieren</string>
   <string name="actionbar_descending">Absteigend</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Älteste - Neueste</string>
-  <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
   <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_shared_by_link_files">Geteilt über einen Link</string>
@@ -486,8 +482,6 @@
   <string name="action_clear_failed_uploads">Entferne Fehlversuche</string>
   <string name="action_clear_successful_uploads">Entferne erfolgreiche Uploads</string>
   <string name="action_clear_finished_uploads">Alles aufräumen</string>
-  <string name="action_switch_grid_view">Zur Rasteransicht wechseln</string>
-  <string name="action_switch_list_view">Zur Listenansicht wechseln</string>
   <string name="manage_space_title">Speicher verwalten</string>
   <string name="manage_space_description">Einstellungen, Datenbank und Server-Zertifikate von %1$s\'s Daten werden dauerhaft gelöscht.\n\nHerunter geladene Dateien bleiben unangetastet.\n\nDieser Vorgang kann eine Zeit dauern.</string>
   <string name="manage_space_clear_data">Lösche Daten</string>

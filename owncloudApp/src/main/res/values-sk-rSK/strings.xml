@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Nastavenia</string>
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Odoslať</string>
-  <string name="actionbar_sort">Zoradiť</string>
   <string name="actionbar_descending">Zostupne</string>
   <string name="actionbar_sort_title">Zoradiť podľa</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Staršie-Novšie</string>
-  <string name="actionbar_sort_by_size">Vačšie-Menšie</string>
   <string name="drawer_item_all_files">Všetky súbory</string>
   <string name="drawer_item_only_available_offline">Dostupné offline</string>
   <string name="drawer_item_shared_by_link_files">Zdieľané pomocou odkazu</string>
@@ -418,8 +414,6 @@
   <string name="action_clear_failed_uploads">Čistenie zlyhalo</string>
   <string name="action_clear_successful_uploads">Čistenie ukončené</string>
   <string name="action_clear_finished_uploads">Všetky čistenia boli ukončené</string>
-  <string name="action_switch_grid_view">Základný pohľad</string>
-  <string name="action_switch_list_view">Zobrazenie</string>
   <string name="manage_space_title">Spravovať prestor</string>
   <string name="manage_space_description">Nastavenia, certifikaty databazy a servera z %1$s budú trvalo odstránené. \n\nStiahnuté súbory budú ponechané.\n\nTento proces môžete spustiť iba raz.</string>
   <string name="manage_space_clear_data">Vyčistenie dát.</string>

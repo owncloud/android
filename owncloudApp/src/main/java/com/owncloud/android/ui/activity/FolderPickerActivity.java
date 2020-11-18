@@ -144,7 +144,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void createFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(true, FileListOption.ALL_FILES, false, true,
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(true, FileListOption.ALL_FILES, true, true,
                 false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, listOfFiles, TAG_LIST_OF_FOLDERS);
@@ -260,7 +260,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        menu.findItem(R.id.action_switch_view).setVisible(false);
         menu.findItem(R.id.action_sync_account).setVisible(false);
         return true;
     }
@@ -269,15 +268,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retval = true;
         switch (item.getItemId()) {
-            case R.id.action_create_dir: {
-                CreateFolderDialogFragment dialog =
-                        CreateFolderDialogFragment.newInstance(getCurrentFolder());
-                dialog.show(
-                        getSupportFragmentManager(),
-                        CreateFolderDialogFragment.CREATE_FOLDER_FRAGMENT
-                );
-                break;
-            }
             case android.R.id.home: {
                 OCFile currentDir = getCurrentFolder();
                 if (currentDir != null && currentDir.getParentId() != 0) {

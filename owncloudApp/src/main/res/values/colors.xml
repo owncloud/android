@@ -64,4 +64,7 @@
     <color name="warning">#f4511e</color>
     <color name="success">#009688</color>
 
+    <!-- Bottom Sheet Fragment -->
+    <color name="bottom_sheet_fragment_item_color">#6E758C</color>
+    <color name="bottom_sheet_fragment_title_color">#6E758C</color>
 </resources>

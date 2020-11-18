@@ -10,8 +10,7 @@
   <string name="actionbar_settings">Quraşdırmalar</string>
   <string name="actionbar_see_details">Detallar</string>
   <string name="actionbar_send_file">Göndər</string>
-  <string name="actionbar_sort">Çeşidləmək</string>
-  <string name="actionbar_sort_title">Təyinata görə çeşidləmək </string>
+    <string name="actionbar_sort_title">Təyinata görə çeşidləmək </string>
   <string name="drawer_open">Aç</string>
   <string name="drawer_feedback">Geriyə cavab</string>
   <string name="drawer_help">Kömək</string>

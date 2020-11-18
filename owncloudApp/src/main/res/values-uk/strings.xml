@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Налаштування</string>
   <string name="actionbar_see_details">Подробиці</string>
   <string name="actionbar_send_file">Надіслати</string>
-  <string name="actionbar_sort">Сортувати</string>
   <string name="actionbar_descending">За зменшенням</string>
   <string name="actionbar_sort_title">Сортувати за</string>
-  <string name="actionbar_sort_by_name">А-Я</string>
-  <string name="actionbar_sort_by_date">Старіші - Новіші</string>
-  <string name="actionbar_sort_by_size">Найменші - Найбільші</string>
   <string name="drawer_item_all_files">Усі файли</string>
   <string name="drawer_item_only_available_offline">Доступний в автономному режимі</string>
   <string name="drawer_item_shared_by_link_files">Доступне за посиланням</string>
@@ -437,8 +433,6 @@
   <string name="action_clear_failed_uploads">Очищення не повелося</string>
   <string name="action_clear_successful_uploads">Очищення вдалося</string>
   <string name="action_clear_finished_uploads">Очистити все закінчене</string>
-  <string name="action_switch_grid_view">Вигляд таблицею</string>
-  <string name="action_switch_list_view">Перегляд списком</string>
   <string name="manage_space_title">Керування вільним місцем</string>
   <string name="manage_space_description">Налаштування, бази даних і сертифікати сервера з даних %1$s\'s будуть вилучені повністю. \n\nЗвантажені файли будуть збережені незайманими.\n\nЦей процес може тривати якийсь час.</string>
   <string name="manage_space_clear_data">Очистити дані</string>

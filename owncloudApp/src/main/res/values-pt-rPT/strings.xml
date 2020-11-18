@@ -10,12 +10,8 @@
   <string name="actionbar_settings">Definições</string>
   <string name="actionbar_see_details">Detalhes</string>
   <string name="actionbar_send_file">Enviar</string>
-  <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Antigo - Novo</string>
-  <string name="actionbar_sort_by_size">Pequeno - Grande</string>
   <string name="drawer_item_all_files">Todos os ficheiros</string>
   <string name="drawer_item_only_available_offline">Disponível off-line</string>
   <string name="drawer_item_shared_by_link_files">Partilhado por hiperligação</string>
@@ -412,8 +408,6 @@
   <string name="action_clear_failed_uploads">Limpar os que falharam</string>
   <string name="action_clear_successful_uploads">Limpar efetuada com Sucesso</string>
   <string name="action_clear_finished_uploads">Limpar todos os concluídos</string>
-  <string name="action_switch_grid_view">Vista em grelha</string>
-  <string name="action_switch_list_view">Vista em lista</string>
   <string name="manage_space_title">Gerir espaço</string>
   <string name="manage_space_description">As configurações, base de dados e certificados de servidor dos dados de %1$s serão eliminados para sempre. \n\nOs ficheiros transferidos serão mantidos.\n\nEste processo pode demorar algum tempo.</string>
   <string name="manage_space_clear_data">Limpar dados</string>

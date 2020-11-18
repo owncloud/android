@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Настройки</string>
   <string name="actionbar_see_details">Подробно</string>
   <string name="actionbar_send_file">Отправить</string>
-  <string name="actionbar_sort">Упорядочить</string>
   <string name="actionbar_descending">Убывающий </string>
   <string name="actionbar_sort_title">Упорядочить по</string>
-  <string name="actionbar_sort_by_name">А-Я</string>
-  <string name="actionbar_sort_by_date">От старых к новым</string>
-  <string name="actionbar_sort_by_size">От маленьких к большим</string>
   <string name="drawer_item_all_files">Все файлы</string>
   <string name="drawer_item_only_available_offline">Доступно автономно</string>
   <string name="drawer_item_shared_by_link_files">Доступные по ссылке</string>
@@ -486,8 +482,6 @@
   <string name="action_clear_failed_uploads">Очистить неудавшиеся</string>
   <string name="action_clear_successful_uploads">Очистить удавшиеся</string>
   <string name="action_clear_finished_uploads">Очистить завершённые</string>
-  <string name="action_switch_grid_view">Сетка</string>
-  <string name="action_switch_list_view">Список</string>
   <string name="manage_space_title">Управление свободным местом</string>
   <string name="manage_space_description">Установки, сертификаты базы данных и сервера из данных %1$s будут удалены навсегда. \n\nЗагруженные файлы будут сохранены нетронутыми. \n\nЭтот процесс может занять некоторое время.</string>
   <string name="manage_space_clear_data">Очистить данные</string>

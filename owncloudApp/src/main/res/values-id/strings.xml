@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Pengaturan</string>
   <string name="actionbar_see_details">Rincian</string>
   <string name="actionbar_send_file">Kirim</string>
-  <string name="actionbar_sort">Urutkan</string>
   <string name="actionbar_descending">Turun</string>
   <string name="actionbar_sort_title">Urutan</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Terlama - Terbaru</string>
-  <string name="actionbar_sort_by_size">Terkecil - Terbesar</string>
   <string name="drawer_item_all_files">Semua berkas</string>
   <string name="drawer_item_only_available_offline">Tersedia offline</string>
   <string name="drawer_item_shared_by_link_files">Dibagikan dengan tautan</string>
@@ -476,8 +472,6 @@
   <string name="action_clear_failed_uploads">Pembersihan gagal</string>
   <string name="action_clear_successful_uploads">Berhasil membersihkan</string>
   <string name="action_clear_finished_uploads">Bersihkan semua yang selesai</string>
-  <string name="action_switch_grid_view">Tampian Grid</string>
-  <string name="action_switch_list_view">Tampilan daftar</string>
   <string name="manage_space_title">Kelola ruang </string>
   <string name="manage_space_description">Pengaturan, basisdata dan sertifikat server dari %1$s data akan dihapus permanen.
 \n\nBerkas terunduh tidak akan terhapus.\n\nProses dapat memakan waktu.</string>

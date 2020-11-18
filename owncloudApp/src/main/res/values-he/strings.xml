@@ -12,12 +12,8 @@
   <string name="actionbar_settings">הגדרות</string>
   <string name="actionbar_see_details">פרטים</string>
   <string name="actionbar_send_file">שליחה</string>
-  <string name="actionbar_sort">מיון</string>
   <string name="actionbar_descending">יורד</string>
   <string name="actionbar_sort_title">מיון על בסיס</string>
-  <string name="actionbar_sort_by_name">א-ת</string>
-  <string name="actionbar_sort_by_date">ישן - חדש</string>
-  <string name="actionbar_sort_by_size">קטן - גדול</string>
   <string name="drawer_item_all_files">כל הקבצים</string>
   <string name="drawer_item_only_available_offline">זמין במצב לא מקוון</string>
   <string name="drawer_item_shared_by_link_files">משותף עם קישור</string>
@@ -487,8 +483,6 @@
   <string name="action_clear_failed_uploads">ניקוי נכשל</string>
   <string name="action_clear_successful_uploads">ניקוי הצליח</string>
   <string name="action_clear_finished_uploads">ניקוי כל הפריטים שהסתיימו</string>
-  <string name="action_switch_grid_view">תצוגת טבלה</string>
-  <string name="action_switch_list_view">תצוגת רשימה</string>
   <string name="manage_space_title">ניהול מקום</string>
   <string name="manage_space_description">הגדרות, של אישורי מסד נתונים ושרת מתוך מידע %1$s\'s ימחק לצמיתות. \n\nקבצים שהורדו ישמרו ללא פגע.\n\nתהליך זה יכול להמשך זמן מה.</string>
   <string name="manage_space_clear_data">ניקוי מידע</string>

@@ -12,12 +12,8 @@
   <string name="actionbar_settings">Ρυθμίσεις</string>
   <string name="actionbar_see_details">Λεπτομέρειες</string>
   <string name="actionbar_send_file">Αποστολή</string>
-  <string name="actionbar_sort">Ταξινόμηση</string>
   <string name="actionbar_descending">Φθίνουσα</string>
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
-  <string name="actionbar_sort_by_name">A-Ω</string>
-  <string name="actionbar_sort_by_date">Παλαιότερο - Νεότερο</string>
-  <string name="actionbar_sort_by_size">Μικρότερο - Μεγαλύτερο</string>
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
   <string name="drawer_item_only_available_offline">Διαθέσιμο εκτός σύνδεσης</string>
   <string name="drawer_item_shared_by_link_files">Διαμοιρασμένα μέσω συνδέσμου</string>
@@ -478,8 +474,6 @@
   <string name="action_clear_failed_uploads">Αποτυχία εκκαθάρισης</string>
   <string name="action_clear_successful_uploads"> Επιτυχής εκκαθάριση</string>
   <string name="action_clear_finished_uploads">Εκκαθάριση όλων των ολοκληρωμένων</string>
-  <string name="action_switch_grid_view">Προβολή πλέγματος</string>
-  <string name="action_switch_list_view">Προβολή λίστας</string>
   <string name="manage_space_title">Διαχείριση χώρου</string>
   <string name="manage_space_description">Οι ρυθμίσεις, οι βάσεις δεδομένων και οι τα πιστοποιητικά των διακομιστών από τα δεδομένα του %1$s θα διαγραφούν μόνιμα. \n\nΤα ληφθέντα αρχεία θα παραμείνουν άθικτα. \n\nΗ διαδικασία αυτή μπορεί να διαρκέσει αρκετό χρόνο.</string>
   <string name="manage_space_clear_data">Εκκαθάριση δεδομένων</string>
