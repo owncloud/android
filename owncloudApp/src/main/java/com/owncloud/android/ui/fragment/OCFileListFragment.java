@@ -100,7 +100,7 @@ import java.util.List;
  */
 public class OCFileListFragment extends ExtendedListFragment implements
         SearchView.OnQueryTextListener, View.OnFocusChangeListener, SortOptionsView.SortOptionsListener,
-        SortBottomSheetFragment.SortDialogListener {
+        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener {
 
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
@@ -130,6 +130,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private int mStatusBarColor;
 
     private boolean mHideFab = true;
+
     private boolean miniFabClicked = false;
     private ActionMode mActiveActionMode;
     private OCFileListFragment.MultiChoiceModeListener mMultiChoiceModeListener;
@@ -227,6 +228,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
         mSortOptionsView = view.findViewById(R.id.options_layout);
         if (mSortOptionsView != null) {
             mSortOptionsView.setOnSortOptionsListener(this);
+            if(isPickingAFolder()){
+                mSortOptionsView.setOnCreateFolderListener(this);
+                mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
+            }
         }
     }
 
@@ -295,7 +300,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         );
         setListAdapter(mFileListAdapter);
 
-        mHideFab = !fileListOption.isAllFiles();
+        mHideFab = !fileListOption.isAllFiles() || folderPicker;
         if (mHideFab) {
             setFabEnabled(false);
         } else {
@@ -486,6 +491,12 @@ public class OCFileListFragment extends ExtendedListFragment implements
         SortBottomSheetFragment sortBottomSheetFragment = SortBottomSheetFragment.Companion.newInstance(sortType, sortOrder);
         sortBottomSheetFragment.setSortDialogListener(this);
         sortBottomSheetFragment.show(getChildFragmentManager(), SortBottomSheetFragment.TAG);
+    }
+
+    @Override
+    public void onCreateFolderListener() {
+        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+        dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
     }
 
     /**
