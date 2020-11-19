@@ -76,11 +76,11 @@ val remoteDataSourceModule = module {
     single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
 
-    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext(), get()) }
+    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get(), get()) }
     factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
     factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
     factory<RemoteOAuthDataSource> { RemoteOAuthDataSourceImpl(get(), get()) }
-    factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
+    factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
     factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), get(), get(), androidContext().resources.getDimension(
