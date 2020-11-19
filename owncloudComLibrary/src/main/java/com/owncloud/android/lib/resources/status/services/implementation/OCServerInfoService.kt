@@ -43,10 +43,4 @@ class OCServerInfoService : ServerInfoService {
         client: OwnCloudClient
     ): RemoteOperationResult<OwnCloudVersion> =
         GetRemoteStatusOperation().execute(client)
-
-    private fun createClientFromPath(path: String): OwnCloudClient {
-        val client = OwnCloudClient(Uri.parse(path)).apply { credentials = getAnonymousCredentials() }
-        OwnCloudClientFactory.retriveCookisFromMiddleware(client)
-        return client
-    }
 }
