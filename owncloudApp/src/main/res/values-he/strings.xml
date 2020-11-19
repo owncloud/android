@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">שם</string>
+  <string name="global_date">תאריך</string>
+  <string name="global_size">גודל</string>
   <string name="about_android">%1$s אנדרויד</string>
   <string name="about_version">גרסה%1$s</string>
   <string name="actionbar_search">חפש בתוך התיקיה</string>

@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">الاسم</string>
+  <string name="global_date">التاريخ</string>
+  <string name="global_size">الحجم</string>
   <string name="about_android">%1$s للأندرويد</string>
   <string name="about_version">إصدار %1$s</string>
   <string name="actionbar_search">بحث في هذا المجلد</string>

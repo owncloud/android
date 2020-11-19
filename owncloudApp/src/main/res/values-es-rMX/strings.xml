@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nombre</string>
+  <string name="global_date">Fecha</string>
+  <string name="global_size">Tamaño</string>
   <string name="about_android">%1$s para Android</string>
   <string name="about_version">Versión %1$s</string>
   <string name="actionbar_search">Buscar en esta carpeta</string>

@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Όνομα</string>
+  <string name="global_date">Ημερομηνία</string>
+  <string name="global_size">Μέγεθος</string>
   <string name="about_android">%1$s για Android</string>
   <string name="about_version">Έκδοση %1$s</string>
   <string name="actionbar_search">Αναζήτηση σε αυτό το φάκελο</string>

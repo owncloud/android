@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nome</string>
+  <string name="global_date">Data</string>
+  <string name="global_size">Tamanho</string>
   <string name="actionbar_search">Procurar esta pasta</string>
   <string name="actionbar_sync">Atualizar conta</string>
   <string name="actionbar_upload">Enviar</string>

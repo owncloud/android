@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nama</string>
+  <string name="global_date">Tanggal</string>
+  <string name="global_size">Ukuran</string>
   <string name="about_android">%1$suntuk Android</string>
   <string name="about_version">Versi %1$s</string>
   <string name="actionbar_search">Cari folder ini</string>

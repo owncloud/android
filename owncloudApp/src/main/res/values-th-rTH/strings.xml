@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">ชื่อ</string>
+  <string name="global_date">วันที่</string>
+  <string name="global_size">ขนาด</string>
   <string name="about_android">%1$sสำหรับแอนดรอยด์ </string>
   <string name="about_version">เวอร์ชัน %1$s</string>
   <string name="actionbar_search">ค้นหาโฟลเดอร์นี้</string>

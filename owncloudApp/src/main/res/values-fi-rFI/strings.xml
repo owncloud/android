@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nimi</string>
+  <string name="global_date">Päivämäärä</string>
+  <string name="global_size">Koko</string>
   <string name="actionbar_sync">Päivitä tili</string>
   <string name="actionbar_upload">Lähetä tiedosto</string>
   <string name="actionbar_upload_from_apps">Sisältö toisista sovelluksista</string>

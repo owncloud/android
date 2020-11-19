@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Heiti</string>
+  <string name="global_date">Dagsetning</string>
+  <string name="global_size">Stærð</string>
   <string name="about_android">%1$s fyrir Android</string>
   <string name="about_version">Útgáfa %1$s</string>
   <string name="actionbar_search">Leita í þessari möppu</string>

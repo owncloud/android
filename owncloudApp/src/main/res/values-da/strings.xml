@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Navn</string>
+  <string name="global_date">Dato</string>
+  <string name="global_size">Størrelse</string>
   <string name="about_android">%1$s til Android</string>
   <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Søg i mappen</string>
@@ -12,9 +16,9 @@
   <string name="actionbar_settings">Indstillinger</string>
   <string name="actionbar_see_details">Detaljer</string>
   <string name="actionbar_send_file">Send</string>
-    <string name="actionbar_descending">Oppefra</string>
+  <string name="actionbar_descending">Oppefra</string>
   <string name="actionbar_sort_title">Sortér efter</string>
-    <string name="drawer_item_all_files">Alle filer</string>
+  <string name="drawer_item_all_files">Alle filer</string>
   <string name="drawer_item_only_available_offline">Tilgængelig offline</string>
   <string name="drawer_item_shared_by_link_files">Delt via link</string>
   <string name="drawer_item_settings">Indstillinger</string>

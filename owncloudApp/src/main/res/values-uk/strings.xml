@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Ім’я</string>
+  <string name="global_date">Дата</string>
+  <string name="global_size">Розмір</string>
   <string name="about_android">%1$s для Android</string>
   <string name="about_version">Версія %1$s</string>
   <string name="actionbar_search">Пошук в цій теці</string>

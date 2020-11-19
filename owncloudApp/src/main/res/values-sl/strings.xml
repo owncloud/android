@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Ime</string>
+  <string name="global_date">Datum</string>
+  <string name="global_size">Velikost</string>
   <string name="about_android">%1$s za Android</string>
   <string name="about_version">Verzija %1$s</string>
   <string name="actionbar_search">Preiščite to mapo</string>

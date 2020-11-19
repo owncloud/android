@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">이름</string>
+  <string name="global_date">날짜</string>
+  <string name="global_size">크기</string>
   <string name="actionbar_search">이 폴더에서 검색</string>
   <string name="actionbar_sync">계정 새로 고침</string>
   <string name="actionbar_upload">업로드</string>

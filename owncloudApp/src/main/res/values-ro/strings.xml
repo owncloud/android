@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nume</string>
+  <string name="global_date">Data</string>
+  <string name="global_size">Mărime</string>
   <string name="about_android">%1$s pentru Android</string>
   <string name="about_version">Versiunea %1$s</string>
   <string name="actionbar_search">Caută în acest dosar</string>

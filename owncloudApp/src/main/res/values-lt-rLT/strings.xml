@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Pavadinimas</string>
+  <string name="global_date">Data</string>
+  <string name="global_size">Dydis</string>
   <string name="actionbar_search">Ieškoti kataloge</string>
   <string name="actionbar_sync">Atnaujinti paskyrą</string>
   <string name="actionbar_upload">Įkelti</string>

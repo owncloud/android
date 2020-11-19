@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">名前</string>
+  <string name="global_date">日付</string>
+  <string name="global_size">サイズ</string>
   <string name="about_version">バージョン %1$s</string>
   <string name="actionbar_search">このフォルダーを探す</string>
   <string name="actionbar_sync">アカウントを同期</string>

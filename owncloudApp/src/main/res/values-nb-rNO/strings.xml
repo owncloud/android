@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Navn</string>
+  <string name="global_date">Dato</string>
+  <string name="global_size">Størrelse</string>
   <string name="about_android">%1$s for Android</string>
   <string name="about_version">Versjon %1$s</string>
   <string name="actionbar_search">Søk i denne mappen</string>

@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Názov</string>
+  <string name="global_date">Dátum</string>
+  <string name="global_size">Veľkosť</string>
   <string name="about_android">%1$s pre Android</string>
   <string name="about_version">Verzia %1$s</string>
   <string name="actionbar_search">Hľadať tento adresár</string>
