@@ -22,29 +22,12 @@ package com.owncloud.android.data.server.repository
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.server.model.ServerInfo
-import com.owncloud.android.lib.common.network.WebdavUtils.normalizeProtocolPrefix
 
 class OCServerInfoRepository(
     private val remoteServerInfoDataSource: RemoteServerInfoDataSource
 ) : ServerInfoRepository {
 
     override fun getServerInfo(path: String): ServerInfo {
-        // First step: check the status of the server (including its version)
-        val pairRemoteStatus = remoteServerInfoDataSource.getRemoteStatus(path)
-
-        // Second step: get authentication method required by the server
-        val authenticationMethod = remoteServerInfoDataSource.getAuthenticationMethod(
-            normalizeProtocolPrefix(
-                path,
-                pairRemoteStatus.second
-            )
-        )
-
-        return ServerInfo(
-            ownCloudVersion = pairRemoteStatus.first.version,
-            baseUrl = normalizeProtocolPrefix(path, pairRemoteStatus.second),
-            authenticationMethod = authenticationMethod,
-            isSecureConnection = pairRemoteStatus.second
-        )
+        return remoteServerInfoDataSource.getServerInfo(path)
     }
 }

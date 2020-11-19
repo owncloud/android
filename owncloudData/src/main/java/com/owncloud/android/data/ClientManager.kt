@@ -21,11 +21,13 @@ package com.owncloud.android.data
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
+import android.net.Uri
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.getAnonymousCredentials
 import com.owncloud.android.lib.resources.users.services.UserService
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 
@@ -34,6 +36,31 @@ class ClientManager(
     private val preferencesProvider: SharedPreferencesProvider,
     val context: Context
 ) {
+    // This client will maintain cookies across the whole login process.
+    private var ownCloudClient: OwnCloudClient? = null
+
+    /**
+     * Returns a client for the login process.
+     * Helpful to keep the cookies from the status request to the final login and user info retrieval.
+     * For regular uses, use [getClientForAccount]
+     */
+    fun getClientForUnExistingAccount(
+        path: String,
+        requiresNewClient: Boolean
+    ): OwnCloudClient {
+        val safeClient = ownCloudClient
+
+        return if (requiresNewClient || safeClient == null) {
+            return OwnCloudClient(Uri.parse(path)).apply {
+                credentials = getAnonymousCredentials()
+            }.also {
+                ownCloudClient = it
+            }
+        } else {
+            safeClient
+        }
+    }
+
     private fun getClientForAccount(
         accountName: String?
     ): OwnCloudClient {
