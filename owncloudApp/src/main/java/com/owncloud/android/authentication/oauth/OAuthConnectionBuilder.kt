@@ -5,6 +5,8 @@ import android.net.Uri
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager
 import com.owncloud.android.lib.common.network.NetworkUtils
 import net.openid.appauth.connectivity.ConnectionBuilder
+import net.openid.appauth.connectivity.DefaultHttpConnectionImpl
+import net.openid.appauth.connectivity.HttpConnection
 import timber.log.Timber
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -28,8 +30,9 @@ class OAuthConnectionBuilder(val context: Context) : ConnectionBuilder {
      */
 
     @Throws(IOException::class)
-    override fun openConnection(uri: Uri): HttpURLConnection {
+    override fun openConnection(uri: Uri): HttpConnection {
         val conn: HttpURLConnection
+        val conWrapper: HttpConnection
 
         if (Objects.equals(uri.scheme, HTTPS_SCHEME)) {
             conn = URL(uri.toString()).openConnection() as HttpsURLConnection
@@ -67,11 +70,14 @@ class OAuthConnectionBuilder(val context: Context) : ConnectionBuilder {
             conn = URL(uri.toString()).openConnection() as HttpURLConnection
         }
 
-        return conn.apply {
+
+
+        conn.apply {
             connectTimeout = CONNECTION_TIMEOUT_MS
             readTimeout = READ_TIMEOUT_MS
             instanceFollowRedirects = false
         }
+        return DefaultHttpConnectionImpl(conn)
     }
 
     companion object {
