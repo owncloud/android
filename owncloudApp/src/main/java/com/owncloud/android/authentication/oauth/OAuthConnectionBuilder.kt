@@ -70,8 +70,6 @@ class OAuthConnectionBuilder(val context: Context) : ConnectionBuilder {
             conn = URL(uri.toString()).openConnection() as HttpURLConnection
         }
 
-
-
         conn.apply {
             connectTimeout = CONNECTION_TIMEOUT_MS
             readTimeout = READ_TIMEOUT_MS

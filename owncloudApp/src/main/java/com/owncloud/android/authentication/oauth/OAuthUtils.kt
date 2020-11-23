@@ -22,9 +22,12 @@ package com.owncloud.android.authentication.oauth
 import android.content.Context
 import android.net.Uri
 import com.owncloud.android.R
+import com.owncloud.android.lib.common.http.HttpClient
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
 import net.openid.appauth.ClientSecretBasic
+import net.openid.appauth.connectivity.ok.OkConnectionBuilder
+import net.openid.appauth.connectivity.ok.OkHttpConnectionImpl
 import timber.log.Timber
 import java.io.File
 
@@ -58,7 +61,7 @@ class OAuthUtils {
             AuthorizationServiceConfiguration.fetchFromUrl(
                 serviceDiscoveryLocation,
                 onGetAuthorizationServiceConfiguration,
-                OAuthConnectionBuilder(context)
+                OkConnectionBuilder(HttpClient.getOkHttpClient())
             )
         }
 
