@@ -31,6 +31,9 @@ dependencies {
         exclude group: "com.android.support"
     }
 
+    // AppAuth
+    api 'net.openid:appauth:0.7.1'
+
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
@@ -96,8 +99,6 @@ android {
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
-
-        manifestPlaceholders = [appAuthRedirectScheme: 'oc']
     }
 
     compileOptions {
