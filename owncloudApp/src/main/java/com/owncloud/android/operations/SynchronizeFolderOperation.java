@@ -354,7 +354,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag(localFile.getEtag());
                 if (!updatedLocalFile.isFolder() &&
-                        remoteFile.isImage() &&
                         remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
                     updatedLocalFile.setNeedsUpdateThumbnail(true);
                 }

@@ -37,13 +37,11 @@ import android.widget.ImageView;
 import androidx.core.content.ContextCompat;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
 import com.owncloud.android.utils.BitmapUtils;
 import timber.log.Timber;
@@ -52,6 +50,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
+import java.util.Locale;
 
 /**
  * Manager for concurrent access to thumbnails cache.
@@ -68,6 +67,8 @@ public class ThumbnailsCacheManager {
     private static final CompressFormat mCompressFormat = CompressFormat.JPEG;
     private static final int mCompressQuality = 70;
     private static OwnCloudClient mClient = null;
+
+    private static final String PREVIEW_URI = "%s/remote.php/dav/files/%s%s?x=%d&y=%d&c=%s&preview=1";
 
     public static Bitmap mDefaultImg =
             BitmapFactory.decodeResource(
@@ -249,6 +250,17 @@ public class ThumbnailsCacheManager {
             return Math.round(r.getDimension(R.dimen.file_icon_size_grid));
         }
 
+        private String getPreviewUrl(OCFile ocFile, Account account) {
+            return String.format(Locale.ROOT,
+                    PREVIEW_URI,
+                    mClient.getBaseUri(),
+                    account.name.split("@")[0],
+                    Uri.encode(ocFile.getRemotePath(), "/"),
+                    getThumbnailDimension(),
+                    getThumbnailDimension(),
+                    ocFile.getEtag());
+        }
+
         private Bitmap doOCFileInBackground() {
             OCFile file = (OCFile) mFile;
 
@@ -281,13 +293,10 @@ public class ThumbnailsCacheManager {
 
                 } else {
                     // Download thumbnail from server
-                    OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
-                    if (mClient != null && serverOCVersion != null) {
+                    if (mClient != null) {
                         GetMethod get;
                         try {
-                            String uri = mClient.getBaseUri() + "" +
-                                    "/index.php/apps/files/api/v1/thumbnail/" +
-                                    px + "/" + px + Uri.encode(file.getRemotePath(), "/");
+                            String uri = getPreviewUrl(file, mAccount);
                             Timber.d("URI: %s", uri);
                             get = new GetMethod(new URL(uri));
                             int status = mClient.executeHttpMethod(get);
