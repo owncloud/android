@@ -463,12 +463,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         fileListFragment?.listDirectory(reloadData)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.action_sync_account).isVisible = !isDrawerOpen()
-
-        return super.onPrepareOptionsMenu(menu)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
 
@@ -496,9 +490,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             R.id.action_select_all -> {
                 listOfFilesFragment?.selectAll()
             }
-            R.id.action_sync_account -> {
-                startSynchronization()
-            }
             android.R.id.home -> {
                 val second = secondFragment
                 val currentDir = currentDir
@@ -517,23 +508,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun startSynchronization() {
-        Timber.d("Got to start sync")
-        Timber.d("Requesting sync for ${account.name} at ${MainApp.authority} with new API")
-        val builder = SyncRequest.Builder()
-        builder.setSyncAdapter(account, MainApp.authority)
-        builder.setExpedited(true)
-        builder.setManual(true)
-        builder.syncOnce()
-
-        // Fix bug in Android Lollipop when you click on refresh the whole account
-        val extras = Bundle()
-        builder.setExtras(extras)
-
-        val request = builder.build()
-        ContentResolver.requestSync(request)
     }
 
     /**

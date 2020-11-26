@@ -72,6 +72,7 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
             viewHolder.checkViewItem.setImageDrawable(mTintedCheck);
             viewHolder.nameViewItem = convertView.findViewById(R.id.name);
             viewHolder.accountViewItem = convertView.findViewById(R.id.account);
+            viewHolder.refreshAccountButtonItem = convertView.findViewById(R.id.refreshAccountButton);
             viewHolder.passwordButtonItem = convertView.findViewById(R.id.passwordButton);
             viewHolder.removeButtonItem = convertView.findViewById(R.id.removeButton);
 
@@ -122,21 +123,18 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                     viewHolder.checkViewItem.setVisibility(View.INVISIBLE);
                 }
 
+                /// bind listener to refresh account
+                viewHolder.refreshAccountButtonItem.setOnClickListener(v ->
+                        mListener.refreshAccount(mValues.get(position).getAccount()));
+
                 /// bind listener to change password
-                viewHolder.passwordButtonItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mListener.changePasswordOfAccount(mValues.get(position).getAccount());
-                    }
-                });
+                viewHolder.passwordButtonItem.setOnClickListener(v ->
+                        mListener.changePasswordOfAccount(mValues.get(position).getAccount()));
 
                 /// bind listener to remove account
-                viewHolder.removeButtonItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mListener.removeAccount(mValues.get(position).getAccount());
-                    }
-                });
+                viewHolder.removeButtonItem.setOnClickListener(v ->
+                        mListener.removeAccount(mValues.get(position).getAccount()));
+
             } // create add account action item
             else if (AccountListItem.TYPE_ACTION_ADD == accountListItem.getType()) {
                 LayoutInflater inflater = mContext.getLayoutInflater();
@@ -145,12 +143,7 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                 ((ImageView) actionView.findViewById(R.id.icon)).setImageResource(R.drawable.ic_account_plus);
 
                 // bind action listener
-                actionView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mListener.createAccount();
-                    }
-                });
+                actionView.setOnClickListener(v -> mListener.createAccount());
 
                 return actionView;
             }
@@ -167,6 +160,8 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
 
         void changePasswordOfAccount(Account account);
 
+        void refreshAccount(Account account);
+
         void createAccount();
     }
 
@@ -180,6 +175,7 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
         TextView nameViewItem;
         TextView accountViewItem;
 
+        ImageView refreshAccountButtonItem;
         ImageView passwordButtonItem;
         ImageView removeButtonItem;
     }

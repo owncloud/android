@@ -26,9 +26,11 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.OperationCanceledException;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SyncRequest;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -238,6 +240,24 @@ public class ManageAccountsActivity extends FileActivity
         updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACTION,
                 AuthenticatorConstants.ACTION_UPDATE_TOKEN);
         startActivity(updateAccountCredentials);
+    }
+
+    @Override
+    public void refreshAccount(Account account) {
+        Timber.d("Got to start sync");
+        Timber.d("Requesting sync for " + account.name + " at " + MainApp.Companion.getAuthority() + " with new API");
+        SyncRequest.Builder builder = new SyncRequest.Builder();
+        builder.setSyncAdapter(account, MainApp.Companion.getAuthority());
+        builder.setExpedited(true);
+        builder.setManual(true);
+        builder.syncOnce();
+
+        // Fix bug in Android Lollipop when you click on refresh the whole account
+        Bundle extras = new Bundle();
+        builder.setExtras(extras);
+
+        SyncRequest request = builder.build();
+        ContentResolver.requestSync(request);
     }
 
     @Override

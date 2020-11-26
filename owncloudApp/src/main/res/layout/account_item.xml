@@ -16,11 +16,10 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/icon"
@@ -53,7 +52,7 @@
         android:layout_marginEnd="@dimen/standard_half_margin"
         android:layout_marginTop="4dp"
         android:layout_toEndOf="@id/icon"
-        android:layout_toStartOf="@+id/passwordButton"
+        android:layout_toStartOf="@+id/refreshAccountButton"
         android:layout_alignParentTop="true"
         android:gravity="bottom"
         android:text="@string/placeholder_filename"
@@ -71,7 +70,7 @@
         android:layout_marginEnd="@dimen/standard_half_margin"
         android:layout_marginBottom="4dp"
         android:layout_toEndOf="@id/icon"
-        android:layout_toStartOf="@id/passwordButton"
+        android:layout_toStartOf="@id/refreshAccountButton"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/name"
         android:gravity="top"
@@ -80,6 +79,21 @@
         android:textSize="14sp"
         android:maxLines="2"
         android:ellipsize="end" />
+
+    <ImageView
+        android:id="@+id/refreshAccountButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_toStartOf="@id/passwordButton"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/actionbar_sync"
+        android:paddingLeft="@dimen/standard_half_padding"
+        android:paddingTop="@dimen/standard_padding"
+        android:paddingBottom="@dimen/standard_padding"
+        android:paddingRight="@dimen/standard_half_padding"
+        app:tint="@color/grey"
+        android:src="@drawable/ic_action_refresh" />
 
     <ImageView
         android:id="@+id/passwordButton"
