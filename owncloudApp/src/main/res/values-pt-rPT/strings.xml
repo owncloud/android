@@ -4,6 +4,7 @@
   <string name="global_name">Nome</string>
   <string name="global_date">Data</string>
   <string name="global_size">Tamanho</string>
+  <string name="about_version">Versão %1$s</string>
   <string name="actionbar_search">Procurar esta pasta</string>
   <string name="actionbar_sync">Atualizar conta</string>
   <string name="actionbar_upload">Enviar</string>
