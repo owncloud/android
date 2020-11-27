@@ -423,8 +423,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
         Timber.d("A browser should be opened now to authenticate this user.")
         val clientId = getString(R.string.oauth2_client_id)
-        val redirectString = getString(R.string.oauth2_redirect_uri_scheme) + "://" + getString(R.string.oauth2_redirect_uri_path)
-        val redirectUri = Uri.parse(redirectString)
+        val redirectUri = Uri.Builder()
+            .scheme(getString(R.string.oauth2_redirect_uri_scheme))
+            .authority(getString(R.string.oauth2_redirect_uri_path))
+            .build()
         val scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
         val builder = AuthorizationRequest.Builder(
             authorizationServiceConfiguration,
