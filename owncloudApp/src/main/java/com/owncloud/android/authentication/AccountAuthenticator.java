@@ -41,6 +41,7 @@ import com.owncloud.android.authentication.oauth.OAuthUtils;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder;
+import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import net.openid.appauth.AppAuthConfiguration;
@@ -49,6 +50,7 @@ import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.GrantTypeValues;
 import net.openid.appauth.TokenRequest;
+import net.openid.appauth.connectivity.ok.OkConnectionBuilder;
 import timber.log.Timber;
 
 import java.io.File;
@@ -357,7 +359,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 OAuthUtils.Companion.createClientSecretBasic(mContext.getString(R.string.oauth2_client_secret));
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
-        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(mContext));
+        //appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(mContext));
+        appAuthConfigurationBuilder.setConnectionBuilder(new OkConnectionBuilder(HttpClient.getOkHttpClient()));
         AuthorizationService authService = new AuthorizationService(mContext, appAuthConfigurationBuilder.build());
 
         // Let's perform the token request

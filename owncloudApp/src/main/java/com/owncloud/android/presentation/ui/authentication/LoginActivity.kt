@@ -59,6 +59,7 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.http.HttpClient
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
@@ -78,6 +79,8 @@ import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
 import net.openid.appauth.ResponseTypeValues
 import net.openid.appauth.TokenResponse
+import net.openid.appauth.connectivity.ok.OkConnectionBuilder
+import net.openid.appauth.connectivity.ok.OkHttpConnectionImpl
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -441,7 +444,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0)
 
         val appAuthConfigurationBuilder = AppAuthConfiguration.Builder()
-        appAuthConfigurationBuilder.setConnectionBuilder(OAuthConnectionBuilder(this))
+        //appAuthConfigurationBuilder.setConnectionBuilder(OAuthConnectionBuilder(this))
+        appAuthConfigurationBuilder.setConnectionBuilder(OkConnectionBuilder(HttpClient.getOkHttpClient()));
         authService = AuthorizationService(this, appAuthConfigurationBuilder.build())
         Timber.d("Sends an authorization request to the authorization service using a custom tab or browser instance.")
         authService?.performAuthorizationRequest(request, pendingIntent)
