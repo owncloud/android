@@ -40,7 +40,6 @@ import com.owncloud.android.authentication.oauth.AuthStateManager;
 import com.owncloud.android.authentication.oauth.OAuthUtils;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder;
 import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
@@ -359,7 +358,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 OAuthUtils.Companion.createClientSecretBasic(mContext.getString(R.string.oauth2_client_secret));
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
-        //appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(mContext));
         appAuthConfigurationBuilder.setConnectionBuilder(new OkConnectionBuilder(HttpClient.getOkHttpClient()));
         AuthorizationService authService = new AuthorizationService(mContext, appAuthConfigurationBuilder.build());
 
