@@ -34,7 +34,7 @@ abstract class OCShareDao {
                 ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " = :remoteId"
     )
     abstract fun getShareAsLiveData(
-        remoteId: Long
+        remoteId: String
     ): LiveData<OCShareEntity>
 
     @Query(
@@ -71,7 +71,7 @@ abstract class OCShareDao {
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " = :remoteId"
     )
-    abstract fun deleteShare(remoteId: Long): Int
+    abstract fun deleteShare(remoteId: String): Int
 
     @Query(
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +

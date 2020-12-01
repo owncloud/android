@@ -25,8 +25,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class OCShare(
     val id: Int? = null,
-    val fileSource: String,
-    val itemSource: String,
     val shareType: ShareType,
     val shareWith: String?,
     val path: String,
@@ -37,8 +35,7 @@ data class OCShare(
     val sharedWithDisplayName: String?,
     val sharedWithAdditionalInfo: String?,
     val isFolder: Boolean,
-    val userId: Long,
-    val remoteId: Long,
+    val remoteId: String,
     var accountOwner: String = "",
     val name: String?,
     val shareLink: String?

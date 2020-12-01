@@ -23,15 +23,12 @@ import com.owncloud.android.domain.mappers.RemoteMapper
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import org.jetbrains.annotations.TestOnly
 import com.owncloud.android.lib.resources.shares.ShareType as RemoteShareType
 
 class RemoteShareMapper : RemoteMapper<OCShare, RemoteShare> {
     override fun toModel(remote: RemoteShare?): OCShare? =
         remote?.let {
             OCShare(
-                fileSource = remote.fileSource,
-                itemSource = remote.itemSource,
                 shareType = ShareType.fromValue(remote.shareType!!.value)!!,
                 shareWith = remote.shareWith,
                 path = remote.path,
@@ -42,14 +39,12 @@ class RemoteShareMapper : RemoteMapper<OCShare, RemoteShare> {
                 sharedWithDisplayName = remote.sharedWithDisplayName,
                 sharedWithAdditionalInfo = remote.sharedWithAdditionalInfo,
                 isFolder = remote.isFolder,
-                userId = remote.userId,
                 remoteId = remote.id,
                 name = remote.name,
                 shareLink = remote.shareLink
             )
         }
 
-    @TestOnly
     override fun toRemote(model: OCShare?): RemoteShare? =
         model?.let {
             RemoteShare(
@@ -61,15 +56,11 @@ class RemoteShareMapper : RemoteMapper<OCShare, RemoteShare> {
                 sharedWithAdditionalInfo = model.sharedWithAdditionalInfo!!,
                 name = model.name!!,
                 shareLink = model.shareLink!!,
-                fileSource = model.fileSource,
-                itemSource = model.itemSource,
                 shareType = RemoteShareType.fromValue(model.shareType.value),
                 permissions = model.permissions,
                 sharedDate = model.sharedDate,
                 expirationDate = model.expirationDate,
                 isFolder = model.isFolder,
-                userId = model.userId,
-                isValid = model.remoteId > -1
             )
         }
 }

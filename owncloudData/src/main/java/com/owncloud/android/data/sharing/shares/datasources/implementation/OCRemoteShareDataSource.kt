@@ -78,7 +78,7 @@ class OCRemoteShareDataSource(
     }
 
     override fun updateShare(
-        remoteId: Long,
+        remoteId: String,
         name: String,
         password: String?,
         expirationDateInMillis: Long,
@@ -102,7 +102,7 @@ class OCRemoteShareDataSource(
         }
     }
 
-    override fun deleteShare(remoteId: Long) {
+    override fun deleteShare(remoteId: String) {
         executeRemoteOperation {
             shareService.deleteShare(remoteId)
         }

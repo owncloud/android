@@ -22,6 +22,7 @@ package com.owncloud.android.domain.shares.usecases
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.sharing.shares.usecases.DeleteShareAsyncUseCase
+import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -34,7 +35,7 @@ import org.junit.Test
 class DeleteShareAsyncUseCaseTest {
     private val shareRepository: ShareRepository = spyk()
     private val useCase = DeleteShareAsyncUseCase((shareRepository))
-    private val useCaseParams = DeleteShareAsyncUseCase.Params(1)
+    private val useCaseParams = DeleteShareAsyncUseCase.Params(OC_SHARE.remoteId)
 
     @Test
     fun deleteShareOk() {
@@ -44,7 +45,7 @@ class DeleteShareAsyncUseCaseTest {
         assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.deleteShare(1) }
+        verify(exactly = 1) { shareRepository.deleteShare(OC_SHARE.remoteId) }
     }
 
     @Test
@@ -59,6 +60,6 @@ class DeleteShareAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.deleteShare(1) }
+        verify(exactly = 1) { shareRepository.deleteShare(OC_SHARE.remoteId) }
     }
 }

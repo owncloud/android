@@ -26,7 +26,6 @@ import androidx.test.filters.SmallTest
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.OCSHARES_TABLE_NAME
-import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.testutil.OC_SHARE
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -35,8 +34,7 @@ import org.junit.Test
  * Test the migration from database to version 29.
  */
 @SmallTest
-class MigrationToDB29 : MigrationTest() {
-    private val shareMapper: OCShareMapper = OCShareMapper()
+class MigrationToDB29Test : MigrationTest() {
 
     @Test
     fun migrationFrom27To29_containsCorrectData() {
@@ -75,17 +73,49 @@ class MigrationToDB29 : MigrationTest() {
         database.run {
             insert(
                 CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE,
-                MigrationToDB28.cvWithDefaultValues
+                MigrationToDB28Test.cvWithDefaultValues
             )
-            insert(
-                OCSHARES_TABLE_NAME,
-                SQLiteDatabase.CONFLICT_NONE,
-                shareMapper.toEntity(OC_SHARE)!!.toContentValues()
-            )
-            insert(
-                OCSHARES_TABLE_NAME,
-                SQLiteDatabase.CONFLICT_NONE,
-                shareMapper.toEntity(OC_SHARE.copy(id = 499))!!.toContentValues()
+            execSQL(
+                "INSERT INTO `$OCSHARES_TABLE_NAME`" +
+                        "(" +
+                        "share_type, " +
+                        "shate_with, " +
+                        "path, " +
+                        "permissions, " +
+                        "shared_date, " +
+                        "expiration_date, " +
+                        "token, " +
+                        "shared_with_display_name, " +
+                        "share_with_additional_info, " +
+                        "is_directory, " +
+                        "id_remote_shared, " +
+                        "owner_share, " +
+                        "name, " +
+                        "url, " +
+                        "user_id, " +
+                        "item_source, " +
+                        "file_source)" +
+                        " VALUES " +
+                        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                arrayOf(
+                    OC_SHARE.shareType,
+                    OC_SHARE.shareWith,
+                    OC_SHARE.path,
+                    OC_SHARE.permissions,
+                    OC_SHARE.sharedDate,
+                    OC_SHARE.expirationDate,
+                    OC_SHARE.token,
+                    OC_SHARE.sharedWithDisplayName,
+                    OC_SHARE.sharedWithAdditionalInfo,
+                    OC_SHARE.isFolder,
+                    OC_SHARE.remoteId,
+                    OC_SHARE.accountOwner,
+                    OC_SHARE.name,
+                    OC_SHARE.shareLink,
+                    1,
+                    1,
+                    1
+                )
             )
             close()
         }

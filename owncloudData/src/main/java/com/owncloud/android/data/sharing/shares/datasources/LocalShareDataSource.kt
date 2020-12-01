@@ -31,7 +31,7 @@ interface LocalShareDataSource {
     ): LiveData<List<OCShare>>
 
     fun getShareAsLiveData(
-        remoteId: Long
+        remoteId: String
     ): LiveData<OCShare>
 
     fun insert(ocShare: OCShare): Long
@@ -42,7 +42,7 @@ interface LocalShareDataSource {
 
     fun replaceShares(ocShares: List<OCShare>): List<Long>
 
-    fun deleteShare(remoteId: Long): Int
+    fun deleteShare(remoteId: String): Int
 
     fun deleteSharesForFile(filePath: String, accountName: String)
 }

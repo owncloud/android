@@ -89,7 +89,7 @@ class EditPrivateShareFragment : DialogFragment() {
             file = arguments?.getParcelable(ARG_FILE)
             account = arguments?.getParcelable(ARG_ACCOUNT)
             share = savedInstanceState?.getParcelable(ARG_SHARE) ?: arguments?.getParcelable(ARG_SHARE)
-            Timber.d("Share has id %1\$d remoteId %2\$d", share?.id, share?.remoteId)
+            Timber.d("Share has id ${share?.id} remoteId ${share?.remoteId}")
         }
 
         setStyle(STYLE_NO_TITLE, 0)
@@ -420,7 +420,7 @@ class EditPrivateShareFragment : DialogFragment() {
         ocShareViewModel.updatePrivateShare(share?.remoteId!!, permissions, account?.name!!)
     }
 
-    private fun refreshPrivateShare(remoteId: Long) {
+    private fun refreshPrivateShare(remoteId: String) {
         ocShareViewModel.refreshPrivateShare(remoteId)
     }
 

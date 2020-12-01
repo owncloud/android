@@ -30,6 +30,7 @@ import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
+import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.every
 import io.mockk.mockkClass
@@ -121,9 +122,9 @@ class OCLocalShareDataSourceTest {
         val privateShareAsLiveData: MutableLiveData<OCShareEntity> = MutableLiveData()
         privateShareAsLiveData.value = privateShares.first()
 
-        every { ocSharesDao.getShareAsLiveData(1) } returns privateShareAsLiveData
+        every { ocSharesDao.getShareAsLiveData(OC_SHARE.remoteId) } returns privateShareAsLiveData
 
-        val share = ocLocalSharesDataSource.getShareAsLiveData(1).getLastEmittedValue()!!
+        val share = ocLocalSharesDataSource.getShareAsLiveData(OC_SHARE.remoteId).getLastEmittedValue()!!
 
         assertEquals("/Docs/doc1.doc", share.path)
         assertEquals(false, share.isFolder)
@@ -282,9 +283,9 @@ class OCLocalShareDataSourceTest {
 
     @Test
     fun deleteShare() {
-        every { ocSharesDao.deleteShare(5) } returns 1
+        every { ocSharesDao.deleteShare(OC_SHARE.remoteId) } returns 1
 
-        val deletedRows = ocLocalSharesDataSource.deleteShare(5)
+        val deletedRows = ocLocalSharesDataSource.deleteShare(OC_SHARE.remoteId)
 
         assertEquals(1, deletedRows)
     }

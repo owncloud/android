@@ -29,8 +29,6 @@ class OCShareMapper : Mapper<OCShare, OCShareEntity> {
         entity?.let {
             OCShare(
                 id = entity.id,
-                fileSource = entity.fileSource,
-                itemSource = entity.fileSource,
                 shareType = ShareType.fromValue(entity.shareType)!!,
                 shareWith = entity.shareWith,
                 path = entity.path,
@@ -41,7 +39,6 @@ class OCShareMapper : Mapper<OCShare, OCShareEntity> {
                 sharedWithDisplayName = entity.sharedWithDisplayName,
                 sharedWithAdditionalInfo = entity.sharedWithAdditionalInfo,
                 isFolder = entity.isFolder,
-                userId = entity.userId,
                 remoteId = entity.remoteId,
                 accountOwner = entity.accountOwner,
                 name = entity.name,
@@ -52,8 +49,6 @@ class OCShareMapper : Mapper<OCShare, OCShareEntity> {
     override fun toEntity(model: OCShare?): OCShareEntity? =
         model?.let {
             OCShareEntity(
-                fileSource = model.fileSource,
-                itemSource = model.fileSource,
                 shareType = model.shareType.value,
                 shareWith = model.shareWith,
                 path = model.path,
@@ -64,7 +59,6 @@ class OCShareMapper : Mapper<OCShare, OCShareEntity> {
                 sharedWithDisplayName = model.sharedWithDisplayName,
                 sharedWithAdditionalInfo = model.sharedWithAdditionalInfo,
                 isFolder = model.isFolder,
-                userId = model.userId,
                 remoteId = model.remoteId,
                 accountOwner = model.accountOwner,
                 name = model.name,

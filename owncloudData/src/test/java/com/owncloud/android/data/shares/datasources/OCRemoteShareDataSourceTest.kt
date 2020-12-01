@@ -106,7 +106,7 @@ class OCRemoteShareDataSourceTest {
                             shareWith = "user",
                             sharedWithDisplayName = "User",
                             permissions = 17,
-                            remoteId = 3
+                            remoteId = "3"
                         )
                     )!!
                 )
@@ -120,7 +120,7 @@ class OCRemoteShareDataSourceTest {
 
         // Update share on remote datasource
         val privateShareUpdated = ocRemoteShareDataSource.updateShare(
-            remoteId = 3,
+            remoteId = "3",
             permissions = 17,
             accountName = "user@server"
         )
@@ -189,7 +189,7 @@ class OCRemoteShareDataSourceTest {
                             shareType = ShareType.PUBLIC_LINK,
                             path = "Videos/video1.mp4",
                             expirationDate = 2000,
-                            remoteId = 3,
+                            remoteId = "3",
                             name = "video1 link updated",
                             shareLink = "http://server:port/s/1275farv"
                         )
@@ -205,7 +205,7 @@ class OCRemoteShareDataSourceTest {
 
         // Update share on remote datasource
         val publicShareUpdated = ocRemoteShareDataSource.updateShare(
-            remoteId = 3,
+            remoteId = "3",
             permissions = 17,
             accountName = "user@server"
         )
@@ -363,7 +363,7 @@ class OCRemoteShareDataSourceTest {
         } returns updateRemoteShareOperationResult
 
         ocRemoteShareDataSource.updateShare(
-            3,
+            "3",
             permissions = 17,
             accountName = "user@server"
         )
@@ -380,7 +380,7 @@ class OCRemoteShareDataSourceTest {
             ocShareService.deleteShare(any())
         } returns removeRemoteShareOperationResult
 
-        ocRemoteShareDataSource.deleteShare(1)
+        ocRemoteShareDataSource.deleteShare("3")
 
         // We check there's no exception here
     }
@@ -407,6 +407,6 @@ class OCRemoteShareDataSourceTest {
             ocShareService.deleteShare(any())
         } returns removeRemoteShareOperationResult
 
-        ocRemoteShareDataSource.deleteShare(1)
+        ocRemoteShareDataSource.deleteShare("1")
     }
 }
