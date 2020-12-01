@@ -179,7 +179,7 @@ class ShareXMLParser {
                 name.equals(NODE_ID, ignoreCase = true) -> {// Parse Create XML Response
                     share = RemoteShare()
                     val value = readNode(parser, NODE_ID)
-                    share.id = Integer.parseInt(value).toLong()
+                    share.id = value
                 }
                 name.equals(NODE_URL, ignoreCase = true) -> {
                     // NOTE: this field is received in all the public shares from OC 9.0.0
@@ -236,16 +236,12 @@ class ShareXMLParser {
                 }
 
                 name.equals(NODE_ID, ignoreCase = true) -> {
-                    remoteShare.id = Integer.parseInt(readNode(parser, NODE_ID)).toLong()
+                    remoteShare.id = readNode(parser, NODE_ID)
                 }
 
                 name.equals(NODE_ITEM_TYPE, ignoreCase = true) -> {
                     remoteShare.isFolder = readNode(parser, NODE_ITEM_TYPE).equals(TYPE_FOLDER, ignoreCase = true)
                     fixPathForFolder(remoteShare)
-                }
-
-                name.equals(NODE_ITEM_SOURCE, ignoreCase = true) -> {
-                    remoteShare.itemSource = readNode(parser, NODE_ITEM_SOURCE)
                 }
 
                 name.equals(NODE_PARENT, ignoreCase = true) -> {
@@ -259,10 +255,6 @@ class ShareXMLParser {
 
                 name.equals(NODE_SHARE_WITH, ignoreCase = true) -> {
                     remoteShare.shareWith = readNode(parser, NODE_SHARE_WITH)
-                }
-
-                name.equals(NODE_FILE_SOURCE, ignoreCase = true) -> {
-                    remoteShare.fileSource = readNode(parser, NODE_FILE_SOURCE)
                 }
 
                 name.equals(NODE_PATH, ignoreCase = true) -> {
@@ -320,9 +312,7 @@ class ShareXMLParser {
             }
         }
 
-        if (remoteShare.isValid) {
-            shares.add(remoteShare)
-        }
+        shares.add(remoteShare)
     }
 
     private fun fixPathForFolder(share: RemoteShare) {
@@ -403,11 +393,9 @@ class ShareXMLParser {
         private const val NODE_ELEMENT = "element"
         private const val NODE_ID = "id"
         private const val NODE_ITEM_TYPE = "item_type"
-        private const val NODE_ITEM_SOURCE = "item_source"
         private const val NODE_PARENT = "parent"
         private const val NODE_SHARE_TYPE = "share_type"
         private const val NODE_SHARE_WITH = "share_with"
-        private const val NODE_FILE_SOURCE = "file_source"
         private const val NODE_PATH = "path"
         private const val NODE_PERMISSIONS = "permissions"
         private const val NODE_STIME = "stime"

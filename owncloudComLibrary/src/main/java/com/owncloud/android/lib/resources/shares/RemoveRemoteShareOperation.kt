@@ -48,7 +48,7 @@ import java.net.URL
  *
  * @param remoteShareId Share ID
  */
-class RemoveRemoteShareOperation(private val remoteShareId: Long) : RemoteOperation<ShareParserResult>() {
+class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOperation<ShareParserResult>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
         var result: RemoteOperationResult<ShareParserResult>
@@ -57,7 +57,7 @@ class RemoveRemoteShareOperation(private val remoteShareId: Long) : RemoteOperat
             val requestUri = client.baseUri
             val uriBuilder = requestUri.buildUpon()
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH)
-            uriBuilder.appendEncodedPath(remoteShareId.toString())
+            uriBuilder.appendEncodedPath(remoteShareId)
 
             val deleteMethod = DeleteMethod(
                 URL(uriBuilder.build().toString())

@@ -34,7 +34,7 @@ import java.io.File
  * @author David González Verdugo
  */
 data class RemoteShare(
-    var id: Long = 0,
+    var id: String = "0",
     var shareWith: String = "",
     var path: String = "",
     var token: String = "",
@@ -42,15 +42,11 @@ data class RemoteShare(
     var sharedWithAdditionalInfo: String = "",
     var name: String = "",
     var shareLink: String = "",
-    var fileSource: String = "0",
-    var itemSource: String = "0",
     var shareType: ShareType? = ShareType.UNKNOWN,
     var permissions: Int = DEFAULT_PERMISSION,
     var sharedDate: Long = INIT_SHARED_DATE,
     var expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
-    var isFolder: Boolean = path.endsWith(File.separator),
-    var userId: Long = 0,
-    val isValid: Boolean = id > -1
+    var isFolder: Boolean = path.endsWith(File.separator)
 ) {
 
     companion object {

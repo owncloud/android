@@ -55,7 +55,7 @@ class UpdateRemoteShareOperation
     /**
      * @param remoteId Identifier of the share to update.
      */
-    private val remoteId: Long
+    private val remoteId: String
 
 ) : RemoteOperation<ShareParserResult>() {
     /**

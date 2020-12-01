@@ -66,7 +66,7 @@ class OCShareService(override val client: OwnCloudClient) :
         }.execute(client)
 
     override fun updateShare(
-        remoteId: Long,
+        remoteId: String,
         name: String,
         password: String?,
         expirationDate: Long,
@@ -84,7 +84,7 @@ class OCShareService(override val client: OwnCloudClient) :
             this.retrieveShareDetails = true
         }.execute(client)
 
-    override fun deleteShare(remoteId: Long): RemoteOperationResult<ShareParserResult> =
+    override fun deleteShare(remoteId: String): RemoteOperationResult<ShareParserResult> =
         RemoveRemoteShareOperation(
             remoteId
         ).execute(client)

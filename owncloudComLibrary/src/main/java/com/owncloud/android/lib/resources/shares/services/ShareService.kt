@@ -44,7 +44,7 @@ interface ShareService : Service {
     ): RemoteOperationResult<ShareParserResult>
 
     fun updateShare(
-        remoteId: Long,
+        remoteId: String,
         name: String,
         password: String?,
         expirationDate: Long,
@@ -52,5 +52,5 @@ interface ShareService : Service {
         publicUpload: Boolean
     ): RemoteOperationResult<ShareParserResult>
 
-    fun deleteShare(remoteId: Long): RemoteOperationResult<ShareParserResult>
+    fun deleteShare(remoteId: String): RemoteOperationResult<ShareParserResult>
 }
