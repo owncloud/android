@@ -63,9 +63,9 @@ val MIGRATION_32_33 = object : Migration(32, 33) {
             database.execSQL("ALTER TABLE ${OCSHARES_TABLE_NAME}2 RENAME TO $OCSHARES_TABLE_NAME")
 
         } catch (e: SQLiteException) {
-            Timber.e(e, "SQLiteException in migrate from database version 1 to version 2")
+            Timber.e(e, "SQLiteException in migrate from database version 32 to version 33")
         } catch (e: Exception) {
-            Timber.e(e, "Failed to migrate database version 1 to version 2")
+            Timber.e(e, "Failed to migrate database version 32 to version 33")
         }
     }
 
