@@ -6,8 +6,8 @@
   <string name="global_size">Размер</string>
   <string name="about_android">%1$s для Андроида</string>
   <string name="about_version">Версия %1$s</string>
-  <string name="actionbar_search">Поиск в этой папке</string>
-  <string name="actionbar_sync">Обновить учетную запись</string>
+  <string name="actionbar_search">Поиск в текущей папке</string>
+  <string name="actionbar_sync">Синхронизировать</string>
   <string name="actionbar_upload">Загрузить</string>
   <string name="actionbar_upload_from_apps">Содержимое из других приложений</string>
   <string name="actionbar_upload_files">Файлы</string>
@@ -39,13 +39,13 @@
   <string name="prefs_passcode">Блокировка кодом</string>
   <string name="prefs_biometric">Биометрическая блокировка</string>
   <string name="prefs_biometric_summary">Чтобы использовать эту настройку, включите блокировку по коду или графическому ключу</string>
-  <string name="prefs_touches_with_other_visible_windows">Разрешить соприкосновения с другими видимыми окнами</string>
-  <string name="prefs_touches_with_other_visible_windows_summary">Разрешить соприкосновения, когда просмотр перекрывается другим видимым окном. Разрешите, чтобы использовать лёгкие фильтрующие приложения.</string>
+  <string name="prefs_touches_with_other_visible_windows">Разрешить работу под прозрачными окнами других приложений</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Разрешает взаимодействие, когда есть перекрытие другим видимым или прозрачным окном. Это нужно, если вы используете приложения для фильтрации света от экрана. Перекрывающее приложение сможет получать информацию о взаимодействии.</string>
   <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>
-  <string name="confirmation_touches_with_other_windows_message">Используйте на свой страх и риск: вредоносное приложение может попытаться вас обмануть, заставить незаметно выполнить некоторые действия, используя посторонние отображения.</string>
-  <string name="prefs_camera_picture_upload">Загрузки изображений</string>
+  <string name="confirmation_touches_with_other_windows_message">Используйте на свой страх и риск: вредоносное приложение может попытаться вас обмануть, заставить незаметно выполнить некоторые действия, используя поддельные элементы интерфейса</string>
+  <string name="prefs_camera_picture_upload">Загрузка изображений</string>
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
-  <string name="prefs_camera_video_upload">Загрузки видео</string>
+  <string name="prefs_camera_video_upload">Загрузка видео</string>
   <string name="prefs_camera_video_upload_summary">Автоматически загружать видео, записанные камерой</string>
   <string name="prefs_log_title">Включить журналирование</string>
   <string name="prefs_log_summary">Используется для регистрации ошибок</string>
@@ -61,7 +61,7 @@
   <string name="prefs_remember_last_share_location">Запомнить расположение общего ресурса</string>
   <string name="prefs_remember_last_upload_location_summary">Запомнить расположение загрузки последней публикации</string>
   <string name="prefs_pattern">Графический ключ</string>
-  <string name="pattern_enter_pattern">Введите графический ключ, пожалуйста</string>
+  <string name="pattern_enter_pattern">Пожалуйста, введите графический ключ</string>
   <string name="pattern_configure_pattern">Введите графический ключ</string>
   <string name="pattern_remove_pattern">Удалить графический ключ</string>
   <string name="pattern_incorrect_pattern">Неверный графический ключ</string>
@@ -69,8 +69,8 @@
   <string name="pattern_not_same_pattern">Ключи не совпадают</string>
   <string name="pattern_stored">Ключ сохранён</string>
   <string name="pattern_removed">Ключ удалён</string>
-  <string name="pattern_already_set">Графический ключ и код не могут быть включены одновременно, пожалуйста, отключите сперва графический ключ</string>
-  <string name="passcode_already_set">Графический ключ и код не могут быть включены одновременно, пожалуйста, отключите сперва код</string>
+  <string name="pattern_already_set">Сначала отключите графический ключ. Графический ключ и код не могут быть включены одновременно.</string>
+  <string name="passcode_already_set">Сначала отключите код. Графический ключ и код не могут быть включены одновременно.</string>
   <string name="pattern_no_longer_required">Графический ключ не будет больше запрашиваться</string>
   <string name="pattern_configure_your_pattern_explanation">Графический ключ будет запрашиваться каждый раз при запуске приложения</string>
   <string name="pass_code_locked">Заблокировано кодом</string>
@@ -86,9 +86,9 @@
 	</string>
   <string name="error_reason">поскольку</string>
   <string name="auth_failure_snackbar">Аутентификация не удалась</string>
-  <string name="server_not_supported">Версия вашего сервера старше чем 10, и поэтому не поддерживается. Пожалуйста, обновите ваш сервер до свежей версии.</string>
+  <string name="server_not_supported">Версия вашего сервера ниже 10й, и поэтому не поддерживается. Пожалуйста, обновите ваш сервер до последней версии.</string>
   <string name="auth_failure_snackbar_action">Измените учётную запись</string>
-  <string name="auth_oauth_failure">Токен доступа устарел или стал недопустимым. Перевойдите, чтобы восстановить доступ</string>
+  <string name="auth_oauth_failure">Токен доступа устарел или стал недопустимым. Введите имя и пароль повторно, чтобы восстановить доступ</string>
   <string name="auth_oauth_failure_snackbar_action">Войти</string>
   <string name="auth_check_server">Проверить сервер</string>
   <string name="auth_host_url">Адрес сервера https://...</string>
@@ -105,7 +105,7 @@
   <string name="uploader_wrn_no_account_quit_btn_text">Выход</string>
   <string name="uploader_error_title_no_file_to_upload">Не выбран файл для загрузки</string>
   <string name="uploader_error_message_received_piece_of_text">%1$s не может загрузить часть текста как файл.</string>
-  <string name="uploader_error_message_no_file_to_upload">Принятые данные не включают в себя никакой исправный файл.</string>
+  <string name="uploader_error_message_no_file_to_upload">Принятые данные не включают в себя никаких файлов.</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Файл не может быть загружен</string>
   <string name="uploader_error_message_read_permission_not_granted">%1$s не позволено читать принятый файл</string>
   <string name="uploader_error_message_source_file_not_found">Файл для загрузки не был найден в положенном месте. Пожалуйста проверьте, существует ли файл.</string>
@@ -115,7 +115,7 @@
   <string name="file_list_empty_available_offline">Нет доступных автономных файлов.</string>
   <string name="file_list_empty_shared_by_links">Отсутствуют файлы общего доступа по ссылке</string>
   <string name="file_list_loading">Загрузка...</string>
-  <string name="file_list_no_app_for_file_type">Не найдено приложение для типа файла</string>
+  <string name="file_list_no_app_for_file_type">Не найдено приложение для этого типа файла</string>
   <string name="local_file_list_empty">В этом каталоге нет файлов.</string>
   <string name="local_file_list_empty_just_folders">В этом каталоге нет каталогов.</string>
   <string name="local_file_list_search_with_no_matches">Нет соответствий для этого поиска</string>
@@ -167,7 +167,7 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Имя файла не должно быть пустым</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Имя файла должно быть не длиннее %d символов</string>
   <string name="uploader_upload_text_filename_hint">Имя файла</string>
-  <string name="uploader_upload_camera_upload_files">Загрузка файлов загрузки из камеры</string>
+  <string name="uploader_upload_camera_upload_files">Загрузка файлов, загруженных из камеры</string>
   <string name="uploader_upload_available_offline_files">Загрузка файлов, доступных автономно</string>
   <string name="uploader_upload_requested_from_wifi_files">Загрузка файлов, запрошенных через WiFi</string>
   <string name="ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
@@ -222,10 +222,10 @@
   <string name="foreign_files_local_text">Локальные: %1$s</string>
   <string name="foreign_files_remote_text">Удаленные: %1$s</string>
   <string name="upload_query_move_foreign_files">Недостаточно места для копирования выбранных файлов в папку %1$s. Вы хотите их переместить?</string>
-  <string name="pass_code_enter_pass_code">Пожалуйста укажите ваш код</string>
+  <string name="pass_code_enter_pass_code">Пожалуйста, укажите ваш код</string>
   <string name="pass_code_configure_your_pass_code">Укажите ваш код</string>
   <string name="pass_code_configure_your_pass_code_explanation">Код будет запрашиваться каждый раз при запуске приложения</string>
-  <string name="pass_code_reenter_your_pass_code">Пожалуйста укажите ваш код еще раз</string>
+  <string name="pass_code_reenter_your_pass_code">Пожалуйста, укажите ваш код еще раз</string>
   <string name="pass_code_remove_your_pass_code">Убрать код</string>
   <string name="pass_code_mismatch">Коды не совпадают</string>
   <string name="pass_code_wrong">Некоррентный код</string>
@@ -312,7 +312,7 @@
   <string name="filedisplay_unexpected_bad_get_content">Неизвестная ошибка; выберите этот файл из другого приложения</string>
   <string name="filedisplay_no_file_selected">Файлы не выбраны</string>
   <string name="activity_chooser_title">Отправка ссылки пользователю</string>
-  <string name="wait_for_tmp_copy_from_private_storage">Копирование файла из частной хранилища</string>
+  <string name="wait_for_tmp_copy_from_private_storage">Копирование файла из частного хранилища</string>
   <string name="oauth_check_onoff">Войти через oAuth2</string>
   <string name="oauth_login_connection">Подключение к oAuth2 серверу...</string>
   <string name="ssl_validator_header">Не удалось проверить подлинность сервера</string>
@@ -353,8 +353,8 @@
   <string name="confirmation_disable_camera_uploads_title">Подтвердите</string>
   <string name="confirmation_disable_pictures_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие изображения не будут загружены</string>
   <string name="confirmation_disable_videos_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие видеозаписи не будут загружены</string>
-  <string name="proper_pics_folder_warning_camera_upload">Пожалуйста, удостоверьтесь, что выбранный вами каталог — тот самый, в который ваша камера сохраняет снятые изображения. Иначе данная возможность не сможет обнаружить ваши снимки. Учитывайте, что загрузка изображений происходит как минимум через 15 минут после момента съёмки.</string>
-  <string name="proper_videos_folder_warning_camera_upload">Пожалуйста, удостоверьтесь,что выбранный вами каталог, тот самый, где камера сохраняет снятые видеоролики. Иначе данная возможность не сможет обнаружить ваши видео. Учитывайте, что ролики буду закачиваться не раньше чем через 15 минут после их записи.</string>
+  <string name="proper_pics_folder_warning_camera_upload">Пожалуйста, удостоверьтесь, что выбранный вами каталог — тот самый, в который ваша камера сохраняет снятые изображения. Иначе приложение не сможет обнаружить ваши снимки. Учитывайте, что загрузка изображений происходит как минимум через 15 минут после момента съёмки.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Пожалуйста, удостоверьтесь,что выбранный вами каталог, тот самый, где камера сохраняет снятые видеоролики. Иначе приложение не сможет обнаружить ваши видео. Учитывайте, что ролики буду закачиваться не раньше чем через 15 минут после их записи.</string>
   <string name="conflict_title">Конфликт файлов</string>
   <string name="conflict_description">Конфликт в файле %1$s, нажмите чтобы разрешить его</string>
   <string name="conflict_message">Какие файлы Вы хотите сохранить? При выборе обеих версий, к названию локального файла будет добавлена цифра</string>
@@ -378,7 +378,7 @@
   <string name="activity_chooser_send_file_title">Отправить</string>
   <string name="copy_link">Копировать ссылку</string>
   <string name="clipboard_text_copied">Скопировано в буфер обмена</string>
-  <string name="clipboard_no_text_to_copy">Нет принятого текста для копирования в буфер обмена</string>
+  <string name="clipboard_no_text_to_copy">Не получен текст для копирования в буфер обмена</string>
   <string name="clipboard_uxexpected_error">Неожиданная ошибка во время копирования в буфер обмена</string>
   <string name="clipboard_label">Текст скопирован из %1$s</string>
   <string name="error_cant_bind_to_operations_service">Критическая ошибка: невозможно выполнить действия</string>
@@ -401,12 +401,13 @@
   <string name="drawer_manage_accounts">Управление аккаунтами</string>
   <string name="auth_redirect_non_secure_connection_title">Безопасное соединение перенаправлено через небезопасный маршрут.</string>
   <string name="actionbar_logger">Журналы</string>
+  <string name="log_open_logs_view">Открыть лог-файл приложения</string>
   <string name="log_send_history_button">История отправок</string>
   <string name="log_send_no_mail_app">Программа для отправки журналов не найдена. Пожалуйста установите почтовую программу.</string>
   <string name="log_send_mail_subject">Журналы %1$s для Android</string>
   <string name="log_progress_dialog_text">Загрузка данных…</string>
   <string name="actionbar_select_all">Выделить все</string>
-  <string name="actionbar_select_inverse">Выбрать наоборот</string>
+  <string name="actionbar_select_inverse">Инвертировать выделение</string>
   <string name="actionbar_move">Переместить</string>
   <string name="file_list_empty_moving">Здесь ничего нет. Вы можете создать каталог!</string>
   <string name="folder_picker_choose_button_text">Выбрать</string>
@@ -487,7 +488,7 @@
   <string name="action_clear_successful_uploads">Очистить удавшиеся</string>
   <string name="action_clear_finished_uploads">Очистить завершённые</string>
   <string name="manage_space_title">Управление свободным местом</string>
-  <string name="manage_space_description">Установки, сертификаты базы данных и сервера из данных %1$s будут удалены навсегда. \n\nЗагруженные файлы будут сохранены нетронутыми. \n\nЭтот процесс может занять некоторое время.</string>
+  <string name="manage_space_description">Настройки, сертификаты базы данных и сервера из данных %1$s будут удалены навсегда. \n\nЗагруженные файлы будут сохранены нетронутыми. \n\nЭтот процесс может занять некоторое время.</string>
   <string name="manage_space_clear_data">Очистить данные</string>
   <string name="manage_space_error">Некоторые файлы не могут быть удалены.</string>
   <string name="permission_storage_access">Для загрузки и скачивания файлов требуются дополнительные права.</string>
@@ -541,7 +542,7 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Пропустить</string>
-  <string name="welcome_feature_1_title">Управляйте всеми вашими засинхронизированными файлами</string>
+  <string name="welcome_feature_1_title">Управляйте всеми вашими синхронизированными файлами</string>
   <string name="welcome_feature_1_text">Вы можете копировать, перемещать, удалять</string>
   <string name="welcome_feature_2_title">Делитесь файлами и папками</string>
   <string name="welcome_feature_2_text">Вы можете делиться лично или со всеми</string>
@@ -559,4 +560,6 @@
   <string name="common_not_found">не найдено</string>
   <string name="supports_oauth2_error">Невозможно было узнать, поддерживается ли OAuth2</string>
   <string name="get_base_url_error">Узнать базу сервера, было невозможно</string>
+  <string name="prefs_http_logs">Записывать в лог-файл HTTP запросы и ответы</string>
+  <string name="prefs_logs_summary">В логах может содержаться чувствительная информация. Отправка логов третьим лицам находится под вашей ответственностью</string>
 </resources>
