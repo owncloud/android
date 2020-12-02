@@ -40,8 +40,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.owncloud.android.R;
@@ -253,7 +255,7 @@ public class PreviewImageFragment extends FileFragment {
             mf.filter(menu, false, false, false, false);
         }
 
-        // additional restriction for this fragment 
+        // additional restriction for this fragment
         // TODO allow renaming in PreviewImageFragment
         MenuItem item = menu.findItem(R.id.action_rename_file);
         if (item != null) {
@@ -261,7 +263,7 @@ public class PreviewImageFragment extends FileFragment {
             item.setEnabled(false);
         }
 
-        // additional restriction for this fragment 
+        // additional restriction for this fragment
         // TODO allow refresh file in PreviewImageFragment
         item = menu.findItem(R.id.action_sync_file);
         if (item != null) {
@@ -393,9 +395,11 @@ public class PreviewImageFragment extends FileFragment {
     }
 
     private void loadAndShowImage() {
-
-        Glide.with(getContext())
+        RequestOptions requestOptions =
+                RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).apply(RequestOptions.skipMemoryCacheOf(true));
+        Glide.with(requireContext())
                 .load(new File(getFile().getStoragePath()))
+                .apply(requestOptions)
                 .listener(new RequestListener<Drawable>() {
 
                     @Override
