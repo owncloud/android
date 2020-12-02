@@ -373,7 +373,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             RetrieveConfigurationCallback { serviceConfiguration, exception ->
                 if (exception != null) {
                     Timber.e(exception, "OIDC failed. Try with normal OAuth")
-                    Timber.e(exception, "OIDC failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}")
+                    Timber.e(
+                        exception,
+                        "OIDC failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}"
+                    )
                     startNormalOauthorization()
                 } else if (serviceConfiguration != null) {
                     oidcSupported = true
@@ -398,7 +401,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             RetrieveConfigurationCallback { serviceConfiguration, exception ->
                 if (exception != null) {
                     Timber.e(exception, "OAuth failed.")
-                    Timber.e(exception, "OAuth failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}")
+                    Timber.e(
+                        exception,
+                        "OAuth failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}"
+                    )
 
                     updateOAuthStatusIconAndText(exception)
                 } else if (serviceConfiguration != null) {
@@ -417,7 +423,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
         Timber.d("A browser should be opened now to authenticate this user.")
         val clientId = getString(R.string.oauth2_client_id)
-        val redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri))
+        val redirectUri = Uri.Builder()
+            .scheme(getString(R.string.oauth2_redirect_uri_scheme))
+            .authority(getString(R.string.oauth2_redirect_uri_path))
+            .build()
         val scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
         val builder = AuthorizationRequest.Builder(
             authorizationServiceConfiguration,
