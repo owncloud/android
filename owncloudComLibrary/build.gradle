@@ -7,7 +7,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     api 'com.gitlab.ownclouders:dav4android:oc_support_2.1.5'
     api 'com.github.AppDevNext.Logcat:LogcatCore:2.1.1'
-    api 'net.openid:appauth:0.7.1'
 
     // Moshi
     implementation ("com.squareup.moshi:moshi-kotlin:$moshiVersion") {
@@ -27,10 +26,6 @@ android {
 
         versionCode = 10000800
         versionName = "1.0.8"
-
-        // This is pretty ugly but manifest placeholders don't seem to work very well when using different modules
-        // See https://github.com/openid/AppAuth-Android/issues/325
-        manifestPlaceholders = [appAuthRedirectScheme: '']
     }
 
     lintOptions {
