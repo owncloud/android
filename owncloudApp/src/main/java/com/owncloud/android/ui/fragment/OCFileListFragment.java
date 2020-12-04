@@ -228,7 +228,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         mSortOptionsView = view.findViewById(R.id.options_layout);
         if (mSortOptionsView != null) {
             mSortOptionsView.setOnSortOptionsListener(this);
-            if(isPickingAFolder()){
+            if (isPickingAFolder()) {
                 mSortOptionsView.setOnCreateFolderListener(this);
                 mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
             }
@@ -453,7 +453,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (hasFocus) {
             setMessageForEmptyList(getString(R.string.local_file_list_search_with_no_matches));
         } else { // Set default message for empty list of files
-            ((FileDisplayActivity) requireActivity()).setBackgroundText();
+            if (requireActivity() instanceof FileDisplayActivity) {
+                ((FileDisplayActivity) requireActivity()).setBackgroundText();
+            } else if (requireActivity() instanceof FolderPickerActivity) {
+                ((FolderPickerActivity) requireActivity()).setBackgroundText();
+            }
         }
     }
 
