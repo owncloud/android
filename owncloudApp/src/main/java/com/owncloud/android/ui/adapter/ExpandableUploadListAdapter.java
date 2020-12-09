@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -51,6 +52,8 @@ import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.fragment.OptionsInUploadListClickListener;
+import com.owncloud.android.ui.fragment.UploadListFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -77,6 +80,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
     private UploadsStorageManager mUploadsStorageManager;
 
     private ProgressListener mProgressListener;
+    private OptionsInUploadListClickListener mOptionsInUploadListClickListener;
 
     interface Refresh {
         void refresh();
@@ -140,9 +144,10 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
 
     private UploadGroup[] mUploadGroups;
 
-    public ExpandableUploadListAdapter(FileActivity parentActivity) {
+    public ExpandableUploadListAdapter(FileActivity parentActivity, OptionsInUploadListClickListener listener) {
         Timber.d("ExpandableUploadListAdapter");
         mParentActivity = parentActivity;
+        mOptionsInUploadListClickListener = listener;
         mUploadsStorageManager = new UploadsStorageManager(mParentActivity.getContentResolver());
         mUploadGroups = new UploadGroup[3];
         mUploadGroups[0] = new UploadGroup(mParentActivity.getString(R.string.uploads_view_group_current_uploads)) {
@@ -715,6 +720,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
         }
         TextView tvGroupName = convertView.findViewById(R.id.uploadListGroupName);
         TextView tvFileCount = convertView.findViewById(R.id.textViewFileCount);
+        AppCompatButton clear = convertView.findViewById(R.id.uploadListGroupButtonClear);
+        AppCompatButton retry = convertView.findViewById(R.id.uploadListGroupButtonRetry);
 
         int stringResFileCount = group.getGroupCount() == 1 ? R.string.uploads_view_group_file_count_single :
                 R.string.uploads_view_group_file_count;
@@ -722,6 +729,19 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
 
         tvGroupName.setText(group.getGroupName());
         tvFileCount.setText(fileCountText);
+        if (group.name.equals(mParentActivity.getString(R.string.uploads_view_group_failed_uploads))) {
+            clear.setVisibility(View.VISIBLE);
+            clear.setText(mParentActivity.getString(R.string.action_clear_failed_uploads));
+            clear.setOnClickListener(v -> mOptionsInUploadListClickListener.onClick(UploadListFragment.OptionsInUploadList.CLEAR_FAILED));
+            retry.setVisibility(View.VISIBLE);
+            retry.setText(mParentActivity.getString(R.string.action_retry_uploads));
+            retry.setOnClickListener(v -> mOptionsInUploadListClickListener.onClick(UploadListFragment.OptionsInUploadList.RETRY_FAILED));
+        } else if (group.name.equals(mParentActivity.getString(R.string.uploads_view_group_finished_uploads))) {
+            clear.setVisibility(View.VISIBLE);
+            clear.setText(mParentActivity.getString(R.string.action_clear_successful_uploads));
+            clear.setOnClickListener(v -> mOptionsInUploadListClickListener.onClick(UploadListFragment.OptionsInUploadList.CLEAR_SUCCESSFUL));
+            retry.setVisibility(View.GONE);
+        }
         return convertView;
     }
 

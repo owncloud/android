@@ -481,7 +481,7 @@
   <string name="share_privilege_can_edit_delete">borrar</string>
   <string name="edit_share_unshare">Dejar de compatir</string>
   <string name="edit_share_done">hecho</string>
-  <string name="action_retry_uploads">Reintento fallido</string>
+  <string name="action_retry_uploads">Reintentar fallido</string>
   <string name="action_clear_failed_uploads">Limpiar fallido</string>
   <string name="action_clear_successful_uploads">Limpiar exitoso</string>
   <string name="action_clear_finished_uploads">Limpiar todo lo terminado</string>

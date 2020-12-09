@@ -446,23 +446,6 @@ public class UploadsStorageManager extends Observable {
         return result;
     }
 
-    public long clearAllFinishedButNotDelayedForWifiUploads() {
-        String[] whereArgs = new String[2];
-        whereArgs[0] = String.valueOf(UploadStatus.UPLOAD_SUCCEEDED.value);
-        whereArgs[1] = String.valueOf(UploadStatus.UPLOAD_FAILED.value);
-        long result = getDB().delete(
-                ProviderTableMeta.CONTENT_URI_UPLOADS,
-                ProviderTableMeta.UPLOADS_STATUS + "=? OR " + ProviderTableMeta.UPLOADS_STATUS + "=? AND " +
-                        ProviderTableMeta.UPLOADS_LAST_RESULT + "<>" + UploadResult.DELAYED_FOR_WIFI.getValue(),
-                whereArgs
-        );
-        Timber.d("delete all finished uploads");
-        if (result > 0) {
-            notifyObserversNow();
-        }
-        return result;
-    }
-
     /**
      * Updates the persistent upload database with upload result.
      */
