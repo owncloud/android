@@ -25,8 +25,8 @@
     <color name="color_accent">@color/owncloud_blue_accent</color>
 
     <!-- Colors -->
-    <color name="owncloud_blue">#1D2D44</color>
-    <color name="owncloud_blue_accent">#35537A</color>
+    <color name="owncloud_blue">#1b223d</color>
+    <color name="owncloud_blue_accent">#4E85C8</color>
     <color name="owncloud_blue_bright">#00ddff</color>
 
     <color name="list_item_lastmod_and_filesize_text">@color/secondaryTextColor</color>
