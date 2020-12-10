@@ -92,7 +92,7 @@
         android:paddingTop="@dimen/standard_padding"
         android:paddingBottom="@dimen/standard_padding"
         android:paddingRight="@dimen/standard_half_padding"
-        app:tint="@color/grey"
+        app:tint="@color/black"
         android:src="@drawable/ic_action_refresh" />
 
     <ImageView
@@ -106,7 +106,8 @@
         android:paddingTop="@dimen/standard_padding"
         android:paddingBottom="@dimen/standard_padding"
         android:paddingRight="@dimen/standard_half_padding"
-        android:src="@drawable/ic_key" />
+        android:src="@drawable/ic_key"
+        app:tint="@color/black" />
 
     <ImageView
         android:id="@+id/removeButton"
@@ -119,6 +120,7 @@
         android:paddingTop="@dimen/standard_padding"
         android:paddingBottom="@dimen/standard_padding"
         android:paddingEnd="@dimen/standard_padding"
+        app:tint="@color/black"
         android:src="@drawable/ic_action_delete_grey" />
 
 </RelativeLayout>
