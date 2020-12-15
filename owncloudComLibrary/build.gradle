@@ -14,7 +14,7 @@ dependencies {
     }
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
 }
 
 android {
