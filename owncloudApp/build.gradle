@@ -32,7 +32,7 @@ dependencies {
     }
 
     // AppAuth
-    api 'net.openid:appauth:0.7.1'
+    api 'com.github.theScrabi:AppAuth-Android:97517ca671a413a6'
 
     //Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
