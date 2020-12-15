@@ -155,7 +155,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
      * Show a text message on screen view for notifying user if content is
      * loading or folder is empty
      */
-    private void setBackgroundText() {
+    public void setBackgroundText() {
         OCFileListFragment listFragment = getListOfFilesFragment();
         if (listFragment != null) {
             int message = R.string.file_list_loading;
