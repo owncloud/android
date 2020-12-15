@@ -44,28 +44,35 @@ import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdapter {
 
+    private List<OCFile> mImmutableFilesList = new ArrayList<>();
     private List<OCFile> mFiles;
     private Context mContext;
     private Account mAccount;
     private FileDataStorageManager mStorageManager;
     private LayoutInflater mInflater;
+    private OnSearchQueryUpdateListener mOnSearchQueryUpdateListener;
 
     public ReceiveExternalFilesAdapter(Context context,
                                        List<OCFile> files,
                                        FileDataStorageManager storageManager,
                                        Account account
     ) {
+        mImmutableFilesList.addAll(files);
         mFiles = files;
         mAccount = account;
         mStorageManager = storageManager;
         mContext = context;
         mInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (mContext instanceof OnSearchQueryUpdateListener) {
+            mOnSearchQueryUpdateListener = (OnSearchQueryUpdateListener) mContext;
+        }
     }
 
     @Override
@@ -167,4 +174,57 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         notifyDataSetChanged();
     }
 
+    public void filterBySearch(String query) {
+        query = query.toLowerCase();
+
+        clearFilterBySearch();
+
+        List<OCFile> filteredList = new ArrayList<>();
+
+        // Gather files matching the query
+        for (OCFile fileToAdd : mFiles) {
+            final String nameOfTheFileToAdd = fileToAdd.getFileName().toLowerCase();
+            if (nameOfTheFileToAdd.contains(query)) {
+                filteredList.add(fileToAdd);
+            }
+        }
+
+        // Remove not matching files from the filelist
+        for (int i = mFiles.size() - 1; i >= 0; i--) {
+            if (!filteredList.contains(mFiles.get(i))) {
+                mFiles.remove(i);
+            }
+        }
+
+        // Add matching files to the filelist
+        for (int i = 0; i < filteredList.size(); i++) {
+            if (!mFiles.contains(filteredList.get(i))) {
+                mFiles.add(i, filteredList.get(i));
+            }
+        }
+
+        if (mFiles.size() == 0) {
+            mOnSearchQueryUpdateListener.updateEmptyListMessage(
+                    mContext.getString(R.string.local_file_list_search_with_no_matches));
+        }
+        else {
+            mOnSearchQueryUpdateListener.updateEmptyListMessage(mContext.getString(R.string.empty));
+        }
+
+        notifyDataSetChanged();
+    }
+
+    public void clearFilterBySearch() {
+        mFiles.clear();
+        mFiles.addAll(mImmutableFilesList);
+        notifyDataSetChanged();
+    }
+
+    public List<OCFile> getFiles() {
+        return mFiles;
+    }
+
+    public interface OnSearchQueryUpdateListener {
+        void updateEmptyListMessage(String updateTxt);
+    }
 }
