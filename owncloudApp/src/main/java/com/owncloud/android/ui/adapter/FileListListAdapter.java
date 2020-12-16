@@ -50,7 +50,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.db.PreferenceManager;
-import com.owncloud.android.extensions.AdapterExtKt;
+import com.owncloud.android.extensions.VectorExtKt;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
@@ -465,7 +465,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     public void filterBySearch(String query) {
         clearFilterBySearch();
-        AdapterExtKt.filterByQuery(mFiles, query);
+        VectorExtKt.filterByQuery(mFiles, query);
 
         notifyDataSetChanged();
     }
