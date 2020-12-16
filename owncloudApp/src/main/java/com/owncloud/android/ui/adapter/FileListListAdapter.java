@@ -9,6 +9,7 @@
  * @author David González Verdugo
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author John Kalimeris
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
@@ -49,6 +50,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.extensions.AdapterExtKt;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
@@ -59,7 +61,6 @@ import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 /**
@@ -463,33 +464,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     }
 
     public void filterBySearch(String query) {
-        query = query.toLowerCase();
-
         clearFilterBySearch();
-
-        List<OCFile> filteredList = new ArrayList<>();
-
-        // Gather files matching the query
-        for (OCFile fileToAdd : mFiles) {
-            final String nameOfTheFileToAdd = fileToAdd.getFileName().toLowerCase();
-            if (nameOfTheFileToAdd.contains(query)) {
-                filteredList.add(fileToAdd);
-            }
-        }
-
-        // Remove not matching files from the filelist
-        for (int i = mFiles.size() - 1; i >= 0; i--) {
-            if (!filteredList.contains(mFiles.get(i))) {
-                mFiles.remove(i);
-            }
-        }
-
-        // Add matching files to the filelist
-        for (int i = 0; i < filteredList.size(); i++) {
-            if (!mFiles.contains(filteredList.get(i))) {
-                mFiles.add(i, filteredList.get(i));
-            }
-        }
+        AdapterExtKt.filterByQuery(mFiles, query);
 
         notifyDataSetChanged();
     }

@@ -8,6 +8,7 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author John Kalimeris
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
@@ -725,9 +726,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus && mAdapter.getFiles().size() == 0) {
+        if (hasFocus && mAdapter.getFiles().isEmpty()) {
             updateEmptyListMessage(getString(R.string.local_file_list_search_with_no_matches));
-        } else if (!hasFocus && mAdapter.getFiles().size() == 0) {
+        } else if (!hasFocus && mAdapter.getFiles().isEmpty()) {
             updateEmptyListMessage(getString(R.string.file_list_empty));
         }
         else {

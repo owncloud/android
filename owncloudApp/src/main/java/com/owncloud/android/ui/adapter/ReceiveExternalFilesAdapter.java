@@ -5,6 +5,7 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author David González Verdugo
+ * @author John Kalimeris
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -39,19 +40,18 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncThumbnailDrawable;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.extensions.AdapterExtKt;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdapter {
 
-    private List<OCFile> mImmutableFilesList = new ArrayList<>();
-    private List<OCFile> mFiles;
+    private Vector<OCFile> mImmutableFilesList;
+    private Vector<OCFile> mFiles;
     private Context mContext;
     private Account mAccount;
     private FileDataStorageManager mStorageManager;
@@ -59,12 +59,12 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
     private OnSearchQueryUpdateListener mOnSearchQueryUpdateListener;
 
     public ReceiveExternalFilesAdapter(Context context,
-                                       List<OCFile> files,
+                                       Vector<OCFile> files,
                                        FileDataStorageManager storageManager,
                                        Account account
     ) {
-        mImmutableFilesList.addAll(files);
         mFiles = files;
+        mImmutableFilesList = (Vector<OCFile>) mFiles.clone();
         mAccount = account;
         mStorageManager = storageManager;
         mContext = context;
@@ -175,35 +175,10 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
     }
 
     public void filterBySearch(String query) {
-        query = query.toLowerCase();
-
         clearFilterBySearch();
+        AdapterExtKt.filterByQuery(mFiles, query);
 
-        List<OCFile> filteredList = new ArrayList<>();
-
-        // Gather files matching the query
-        for (OCFile fileToAdd : mFiles) {
-            final String nameOfTheFileToAdd = fileToAdd.getFileName().toLowerCase();
-            if (nameOfTheFileToAdd.contains(query)) {
-                filteredList.add(fileToAdd);
-            }
-        }
-
-        // Remove not matching files from the filelist
-        for (int i = mFiles.size() - 1; i >= 0; i--) {
-            if (!filteredList.contains(mFiles.get(i))) {
-                mFiles.remove(i);
-            }
-        }
-
-        // Add matching files to the filelist
-        for (int i = 0; i < filteredList.size(); i++) {
-            if (!mFiles.contains(filteredList.get(i))) {
-                mFiles.add(i, filteredList.get(i));
-            }
-        }
-
-        if (mFiles.size() == 0) {
+        if (mFiles.isEmpty()) {
             mOnSearchQueryUpdateListener.updateEmptyListMessage(
                     mContext.getString(R.string.local_file_list_search_with_no_matches));
         }
@@ -215,12 +190,11 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
     }
 
     public void clearFilterBySearch() {
-        mFiles.clear();
-        mFiles.addAll(mImmutableFilesList);
+        mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
         notifyDataSetChanged();
     }
 
-    public List<OCFile> getFiles() {
+    public Vector<OCFile> getFiles() {
         return mFiles;
     }
 
