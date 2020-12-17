@@ -5,6 +5,7 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author David González Verdugo
+ * @author John Kalimeris
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -39,33 +40,39 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncThumbnailDrawable;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.extensions.VectorExtKt;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
 
-import java.util.List;
 import java.util.Vector;
 
 public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdapter {
 
-    private List<OCFile> mFiles;
+    private Vector<OCFile> mImmutableFilesList;
+    private Vector<OCFile> mFiles;
     private Context mContext;
     private Account mAccount;
     private FileDataStorageManager mStorageManager;
     private LayoutInflater mInflater;
+    private OnSearchQueryUpdateListener mOnSearchQueryUpdateListener;
 
     public ReceiveExternalFilesAdapter(Context context,
-                                       List<OCFile> files,
+                                       Vector<OCFile> files,
                                        FileDataStorageManager storageManager,
                                        Account account
     ) {
         mFiles = files;
+        mImmutableFilesList = (Vector<OCFile>) mFiles.clone();
         mAccount = account;
         mStorageManager = storageManager;
         mContext = context;
         mInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (mContext instanceof OnSearchQueryUpdateListener) {
+            mOnSearchQueryUpdateListener = (OnSearchQueryUpdateListener) mContext;
+        }
     }
 
     @Override
@@ -167,4 +174,31 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         notifyDataSetChanged();
     }
 
+    public void filterBySearch(String query) {
+        clearFilterBySearch();
+        VectorExtKt.filterByQuery(mFiles, query);
+
+        if (mFiles.isEmpty()) {
+            mOnSearchQueryUpdateListener.updateEmptyListMessage(
+                    mContext.getString(R.string.local_file_list_search_with_no_matches));
+        }
+        else {
+            mOnSearchQueryUpdateListener.updateEmptyListMessage(mContext.getString(R.string.empty));
+        }
+
+        notifyDataSetChanged();
+    }
+
+    public void clearFilterBySearch() {
+        mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
+        notifyDataSetChanged();
+    }
+
+    public Vector<OCFile> getFiles() {
+        return mFiles;
+    }
+
+    public interface OnSearchQueryUpdateListener {
+        void updateEmptyListMessage(String updateTxt);
+    }
 }

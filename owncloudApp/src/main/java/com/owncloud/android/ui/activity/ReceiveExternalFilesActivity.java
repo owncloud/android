@@ -8,6 +8,7 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author John Kalimeris
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
@@ -53,10 +54,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.textfield.TextInputEditText;
@@ -106,7 +109,8 @@ import java.util.Vector;
 public class ReceiveExternalFilesActivity extends FileActivity
         implements OnItemClickListener, android.view.View.OnClickListener,
         CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener, SortOptionsView.SortOptionsListener,
-        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener {
+        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener, SearchView.OnQueryTextListener,
+        View.OnFocusChangeListener, ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
 
@@ -116,6 +120,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private String mUploadPath;
     private OCFile mFile;
     private SortOptionsView mSortOptionsView;
+    private SearchView mSearchView;
+    private TextView mEmptyListMessage;
 
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
@@ -404,6 +410,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         }
 
         ListView mListView = findViewById(android.R.id.list);
+        mEmptyListMessage = findViewById(R.id.empty_list_view);
 
         String current_dir = mParents.peek();
         if (current_dir.equals("")) {
@@ -613,6 +620,13 @@ public class ReceiveExternalFilesActivity extends FileActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.action_sync_account).setVisible(false);
+
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
+        mSearchView.setOnQueryTextFocusChangeListener(this);
+        mSearchView.setOnQueryTextListener(this);
+
         mMainMenu = menu;
         return true;
     }
@@ -697,6 +711,34 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public void onCreateFolderListener() {
         CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
         dialog.show(getSupportFragmentManager(), CreateFolderDialogFragment.CREATE_FOLDER_FRAGMENT);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        mAdapter.filterBySearch(query);
+        return true;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus && mAdapter.getFiles().isEmpty()) {
+            updateEmptyListMessage(getString(R.string.local_file_list_search_with_no_matches));
+        } else if (!hasFocus && mAdapter.getFiles().isEmpty()) {
+            updateEmptyListMessage(getString(R.string.file_list_empty));
+        }
+        else {
+            updateEmptyListMessage(getString(R.string.empty));
+        }
+    }
+
+    @Override
+    public void updateEmptyListMessage(String updateTxt) {
+        mEmptyListMessage.setText(updateTxt);
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {
