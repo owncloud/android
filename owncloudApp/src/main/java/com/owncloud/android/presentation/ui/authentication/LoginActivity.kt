@@ -61,6 +61,7 @@ import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.viewmodels.OAuthViewModel
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
@@ -85,6 +86,7 @@ import timber.log.Timber
 class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
 
     private val authenticationViewModel by viewModel<OCAuthenticationViewModel>()
+    private val oauthViewModel by viewModel<OAuthViewModel>()
     private val contextProvider by inject<ContextProvider>()
 
     private var loginAction: Byte = ACTION_CREATE
@@ -369,27 +371,22 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             text = resources.getString(R.string.oauth_login_connection)
         }
 
-        val retrieveConfigurationCallback =
-            RetrieveConfigurationCallback { serviceConfiguration, exception ->
-                if (exception != null) {
-                    Timber.e(exception, "OIDC failed. Try with normal OAuth")
-                    Timber.e(
-                        exception,
-                        "OIDC failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}"
-                    )
+        oauthViewModel.getOIDCServerConfiguration(serverBaseUrl)
+        oauthViewModel.oidcDiscovery.observe(this, {
+            when (it.peekContent()) {
+                is UIResult.Loading -> TODO()
+                is UIResult.Success -> {
+                    Timber.d("Service discovery: ${it.peekContent().getStoredData()}")
+//                    oidcSupported = true
+//                    performGetAuthorizationCodeRequest(serviceConfiguration)
+//                    authorizationServiceConfiguration = serviceConfiguration
+                }
+                is UIResult.Error -> {
+                    Timber.e(it.peekContent().getThrowableOrNull(), "OIDC failed. Try with normal OAuth")
                     startNormalOauthorization()
-                } else if (serviceConfiguration != null) {
-                    oidcSupported = true
-                    performGetAuthorizationCodeRequest(serviceConfiguration)
-                    authorizationServiceConfiguration = serviceConfiguration
                 }
             }
-
-        OAuthUtils.buildOIDCAuthorizationServiceConfig(
-            this,
-            serverBaseUrl,
-            retrieveConfigurationCallback
-        )
+        })
     }
 
     /**
