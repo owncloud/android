@@ -21,21 +21,13 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
-package com.owncloud.android.lib.resources.oauth.services
+package com.owncloud.android.lib.resources.oauth.params
 
-import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.oauth.params.TokenRequestParams
-import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
-import com.owncloud.android.lib.resources.oauth.responses.TokenResponse
-
-interface OIDCService {
-
-    fun getOIDCServerDiscovery(ownCloudClient: OwnCloudClient): RemoteOperationResult<OIDCDiscoveryResponse>
-
-    fun performTokenRequest(
-        ownCloudClient: OwnCloudClient,
-        tokenRequest: TokenRequestParams
-    ): RemoteOperationResult<TokenResponse>
-
-}
+class TokenRequestParams(
+    val tokenEndpoint: String,
+    val authorizationCode: String,
+    val grantType: String,
+    val redirectUri: String,
+    val codeVerifier: String,
+    val clientAuth: String
+)

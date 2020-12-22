@@ -51,6 +51,12 @@ public class HttpConstants {
     public static final String ACCEPT_ENCODING_IDENTITY = "identity";
     public static final String OC_FILE_REMOTE_ID = "OC-FileId";
 
+    // OAuth
+    public static final String HEADER_AUTHORIZATION_CODE = "code";
+    public static final String HEADER_GRANT_TYPE = "grant_type";
+    public static final String HEADER_REDIRECT_URI = "redirect_uri";
+    public static final String HEADER_CODE_VERIFIER = "code_verifier";
+
     /***********************************************************************************************************
      ************************************************ CONTENT TYPES ********************************************
      ***********************************************************************************************************/
