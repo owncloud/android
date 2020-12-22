@@ -30,6 +30,8 @@ import java.io.File;
 
 public class FileUtils {
     public static final String FINAL_CHUNKS_FILE = ".file";
+    public static final String MIME_DIR = "DIR";
+    public static final String MIME_DIR_UNIX = "httpd/unix-directory";
 
     static String getParentPath(String remotePath) {
         String parentPath = new File(remotePath).getParent();
