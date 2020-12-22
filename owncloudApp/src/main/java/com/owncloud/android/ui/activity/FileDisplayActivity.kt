@@ -693,6 +693,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 val currentDir = currentDir
                 if (currentDir == null || currentDir.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
                     finish()
+                    return
                 }
                 listOfFiles?.onBrowseUp()
             }
