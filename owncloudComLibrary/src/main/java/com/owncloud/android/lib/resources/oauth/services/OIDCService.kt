@@ -23,11 +23,12 @@
  */
 package com.owncloud.android.lib.resources.oauth.services
 
+import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 
 interface OIDCService {
 
-    fun getOIDCServerDiscovery(baseUrl: String): RemoteOperationResult<OIDCDiscoveryResponse>
+    fun getOIDCServerDiscovery(ownCloudClient: OwnCloudClient): RemoteOperationResult<OIDCDiscoveryResponse>
 
 }

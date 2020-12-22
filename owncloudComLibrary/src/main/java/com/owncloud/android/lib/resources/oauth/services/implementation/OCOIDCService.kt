@@ -23,9 +23,7 @@
  */
 package com.owncloud.android.lib.resources.oauth.services.implementation
 
-import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.oauth.GetOIDCDiscoveryRemoteOperation
 import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
@@ -33,12 +31,9 @@ import com.owncloud.android.lib.resources.oauth.services.OIDCService
 
 class OCOIDCService() : OIDCService {
 
-    override fun getOIDCServerDiscovery(baseUrl: String): RemoteOperationResult<OIDCDiscoveryResponse> =
-        GetOIDCDiscoveryRemoteOperation().execute(createClientFromPath(baseUrl))
-
-    private fun createClientFromPath(path: String): OwnCloudClient =
-        OwnCloudClient(Uri.parse(path)).apply {
-            credentials = OwnCloudCredentialsFactory.getAnonymousCredentials()
-        }
+    override fun getOIDCServerDiscovery(
+        ownCloudClient: OwnCloudClient
+    ): RemoteOperationResult<OIDCDiscoveryResponse> =
+        GetOIDCDiscoveryRemoteOperation().execute(ownCloudClient)
 
 }
