@@ -25,20 +25,20 @@ import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 
 class RemoteOIDCDiscoveryMapper : RemoteMapper<OIDCServerConfiguration, OIDCDiscoveryResponse> {
 
-    override fun toModel(oidcDiscoveryResponse: OIDCDiscoveryResponse?): OIDCServerConfiguration? {
-        oidcDiscoveryResponse ?: return null
+    override fun toModel(remote: OIDCDiscoveryResponse?): OIDCServerConfiguration? {
+        remote ?: return null
 
         return OIDCServerConfiguration(
-            authorization_endpoint = oidcDiscoveryResponse.authorization_endpoint,
-            check_session_iframe = oidcDiscoveryResponse.check_session_iframe,
-            end_session_endpoint = oidcDiscoveryResponse.end_session_endpoint,
-            issuer = oidcDiscoveryResponse.issuer,
-            registration_endpoint = oidcDiscoveryResponse.registration_endpoint,
-            response_types_supported = oidcDiscoveryResponse.response_types_supported,
-            scopes_supported = oidcDiscoveryResponse.scopes_supported,
-            token_endpoint = oidcDiscoveryResponse.token_endpoint,
-            token_endpoint_auth_methods_supported = oidcDiscoveryResponse.token_endpoint_auth_methods_supported,
-            userinfo_endpoint = oidcDiscoveryResponse.userinfo_endpoint
+            authorization_endpoint = remote.authorization_endpoint,
+            check_session_iframe = remote.check_session_iframe,
+            end_session_endpoint = remote.end_session_endpoint,
+            issuer = remote.issuer,
+            registration_endpoint = remote.registration_endpoint,
+            response_types_supported = remote.response_types_supported,
+            scopes_supported = remote.scopes_supported,
+            token_endpoint = remote.token_endpoint,
+            token_endpoint_auth_methods_supported = remote.token_endpoint_auth_methods_supported,
+            userinfo_endpoint = remote.userinfo_endpoint
         )
     }
 

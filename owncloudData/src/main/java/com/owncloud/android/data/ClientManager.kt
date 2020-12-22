@@ -27,6 +27,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.getAnonymousCredentials
 import com.owncloud.android.lib.resources.users.services.UserService
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
@@ -46,13 +47,14 @@ class ClientManager(
      */
     fun getClientForUnExistingAccount(
         path: String,
-        requiresNewClient: Boolean
+        requiresNewClient: Boolean,
+        ownCloudCredentials: OwnCloudCredentials? = getAnonymousCredentials()
     ): OwnCloudClient {
         val safeClient = ownCloudClient
 
         return if (requiresNewClient || safeClient == null) {
             return OwnCloudClient(Uri.parse(path)).apply {
-                credentials = getAnonymousCredentials()
+                credentials = ownCloudCredentials
             }.also {
                 ownCloudClient = it
             }

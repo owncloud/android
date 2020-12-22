@@ -19,7 +19,7 @@
 
 package com.owncloud.android.dependecyinjection
 
-import com.owncloud.android.presentation.viewmodels.OAuthViewModel
+import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
@@ -40,5 +40,5 @@ val viewModelModule = module {
     }
 
     viewModel { OCAuthenticationViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { OAuthViewModel(get(), get()) }
+    viewModel { OAuthViewModel(get(), get(), get()) }
 }

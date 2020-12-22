@@ -23,22 +23,41 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.mapper.RemoteOIDCDiscoveryMapper
+import com.owncloud.android.data.oauth.mapper.RemoteTokenRequestMapper
+import com.owncloud.android.data.oauth.mapper.RemoteTokenResponseMapper
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
+import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
+import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 
 class RemoteOAuthDataSourceImpl(
     private val clientManager: ClientManager,
     private val oidcService: OIDCService,
-    private val remoteOIDCDiscoveryMapper: RemoteOIDCDiscoveryMapper
+    private val remoteOIDCDiscoveryMapper: RemoteOIDCDiscoveryMapper,
+    private val remoteTokenRequestMapper: RemoteTokenRequestMapper,
+    private val remoteTokenResponseMapper: RemoteTokenResponseMapper
 ) : RemoteOAuthDataSource {
 
     override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration {
         val ownCloudClient = clientManager.getClientForUnExistingAccount(baseUrl, false)
 
-        val result = executeRemoteOperation {
+        val serverConfiguration = executeRemoteOperation {
             oidcService.getOIDCServerDiscovery(ownCloudClient)
         }
 
-        return remoteOIDCDiscoveryMapper.toModel(result)!!
+        return remoteOIDCDiscoveryMapper.toModel(serverConfiguration)!!
+    }
+
+    override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse {
+        val ownCloudClient = clientManager.getClientForUnExistingAccount(tokenRequest.baseUrl, false)
+
+        val tokenResponse = executeRemoteOperation {
+            oidcService.performTokenRequest(
+                ownCloudClient = ownCloudClient,
+                tokenRequest = remoteTokenRequestMapper.toRemote(tokenRequest)!!
+            )
+        }
+
+        return remoteTokenResponseMapper.toModel(tokenResponse)!!
     }
 }

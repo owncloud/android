@@ -16,13 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.oauth.datasource
+package com.owncloud.android.domain.authentication.oauth
 
-import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
+import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 
-interface RemoteOAuthDataSource {
-    fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration
-    fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse
+class RequestTokenUseCase(
+    private val oAuthRepository: OAuthRepository
+) : BaseUseCaseWithResult<TokenResponse, RequestTokenUseCase.Params>() {
+
+    override fun run(params: Params): TokenResponse {
+        return oAuthRepository.performTokenRequest(params.tokenRequest)
+    }
+
+    data class Params(
+        val tokenRequest: TokenRequest
+    )
 }

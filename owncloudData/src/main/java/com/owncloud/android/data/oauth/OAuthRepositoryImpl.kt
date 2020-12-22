@@ -21,10 +21,15 @@ package com.owncloud.android.data.oauth
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
+import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
+import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 
 class OAuthRepositoryImpl(
     private val oidcRemoteOAuthDataSource: RemoteOAuthDataSource
 ) : OAuthRepository {
     override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration =
         oidcRemoteOAuthDataSource.performOIDCDiscovery(baseUrl)
+
+    override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse =
+        oidcRemoteOAuthDataSource.performTokenRequest(tokenRequest)
 }

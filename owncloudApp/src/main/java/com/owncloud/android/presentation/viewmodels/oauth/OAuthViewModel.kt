@@ -17,13 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.viewmodels
+package com.owncloud.android.presentation.viewmodels.oauth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
+import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
+import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
+import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
@@ -31,6 +34,7 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
 
 class OAuthViewModel(
     private val getOIDCDiscoveryUseCase: OIDCDiscoveryUseCase,
+    private val requestTokenUseCase: RequestTokenUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -45,5 +49,18 @@ class OAuthViewModel(
         liveData = _oidcDiscovery,
         useCase = getOIDCDiscoveryUseCase,
         useCaseParams = OIDCDiscoveryUseCase.Params(baseUrl = serverUrl)
+    )
+
+    private val _requestToken = MediatorLiveData<Event<UIResult<TokenResponse>>>()
+    val requestToken: LiveData<Event<UIResult<TokenResponse>>> = _requestToken
+
+    fun requestToken(
+        tokenRequest: TokenRequest
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        showLoading = false,
+        liveData = _requestToken,
+        useCase = requestTokenUseCase,
+        useCaseParams = RequestTokenUseCase.Params(tokenRequest = tokenRequest)
     )
 }
