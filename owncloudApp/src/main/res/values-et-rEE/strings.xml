@@ -394,9 +394,6 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="edit_share_unshare">Lõpeta jagamine</string>
   <string name="edit_share_done">valmis</string>
   <string name="action_retry_uploads">Uuesti proovimine ebaõnnestus</string>
-  <string name="action_clear_failed_uploads">Eemaldamine ebaõnnestus</string>
-  <string name="action_clear_successful_uploads">Eemaldatud</string>
-  <string name="action_clear_finished_uploads">Eemalda kõik lõpetatud</string>
   <string name="manage_space_title">Ruumi haldamine</string>
   <string name="manage_space_clear_data">Tühjenda andmed</string>
   <string name="manage_space_error">Mõningate failide kustutamine ebaõnnestus.</string>

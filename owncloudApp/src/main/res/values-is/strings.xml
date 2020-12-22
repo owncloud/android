@@ -441,9 +441,6 @@
   <string name="edit_share_unshare">Hætta deilingu</string>
   <string name="edit_share_done">lokið</string>
   <string name="action_retry_uploads">Mistókst við að reyna aftur</string>
-  <string name="action_clear_failed_uploads">Hreinsun mistókst</string>
-  <string name="action_clear_successful_uploads">Hreinsun tókst</string>
-  <string name="action_clear_finished_uploads">Hreinsa allt sem er lokið</string>
   <string name="manage_space_title">Sýsla með geymslurými</string>
   <string name="manage_space_description">Stillingar, gagnagrunnur og skilríki þjóna úr gögnum %1$s verður eytt endanlega. \n\nSóttar skrár verða skildar eftir ósnertar.\n\nÞetta ferli getur tekið drjúgan tíma.</string>
   <string name="manage_space_clear_data">Hreinsa gögn</string>

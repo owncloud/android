@@ -43,7 +43,7 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/uploadListGroupName"
-        tools:text="@string/action_clear_failed_uploads"
+        tools:text="@string/action_upload_clear"
         tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -54,6 +54,6 @@
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@id/uploadListGroupButtonClear"
         app:layout_constraintTop_toBottomOf="@id/uploadListGroupName"
-        tools:text="@string/action_retry_uploads"
+        tools:text="@string/action_upload_retry"
         tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -483,9 +483,6 @@
   <string name="edit_share_unshare">Paylaşımı durdur</string>
   <string name="edit_share_done">bitti</string>
   <string name="action_retry_uploads">Tekrar deneme başarısız</string>
-  <string name="action_clear_failed_uploads">Temizleme başarısız</string>
-  <string name="action_clear_successful_uploads">Temizleme başarılı</string>
-  <string name="action_clear_finished_uploads">Tüm tamamlananları temizle</string>
   <string name="manage_space_title">Alanı ayarla</string>
   <string name="manage_space_description">%1$s sunucusundan ayarlar, veritabanı ve sunucu sertifikaları kalıcı olarak silinecektir. \n\nİndirilen dosyalara dokunulmayacaktır.\n\nBu işlem biraz zaman alabilir.</string>
   <string name="manage_space_clear_data">Verileri temizle</string>

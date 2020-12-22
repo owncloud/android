@@ -407,9 +407,6 @@
   <string name="edit_share_unshare">Sluta dela</string>
   <string name="edit_share_done">färdig</string>
   <string name="action_retry_uploads">Försök ladda upp igen</string>
-  <string name="action_clear_failed_uploads">Rensa misslyckade</string>
-  <string name="action_clear_successful_uploads">Rensa lyckade</string>
-  <string name="action_clear_finished_uploads">Rensa alla färdigställda</string>
   <string name="manage_space_title">Hantera utrymme</string>
   <string name="manage_space_description">Inställningar, databas och servercertifikat från %1$s\'s data kommer att raderas permanent. \n\nNedladdade filer kommer inte påverkas.\n\nDetta kan ta ett tag.</string>
   <string name="manage_space_clear_data">Rensa data</string>

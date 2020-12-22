@@ -484,9 +484,6 @@
   <string name="edit_share_unshare">Parar compartilhamento</string>
   <string name="edit_share_done">finalizado</string>
   <string name="action_retry_uploads">Falha, tentar novamente</string>
-  <string name="action_clear_failed_uploads">Limpar falha</string>
-  <string name="action_clear_successful_uploads">Limpado com sucesso</string>
-  <string name="action_clear_finished_uploads">Limpar tudo finalizado</string>
   <string name="manage_space_title">Gerenciar o espaço</string>
   <string name="manage_space_description">Definições, certificados de banco de dados e servidor de dados %1$s serão excluído permanentemente. \n\nArquivos baixados serão mantidos inalterados. \n\nEste processo pode demorar algum tempo.</string>
   <string name="manage_space_clear_data">Limpar dados</string>

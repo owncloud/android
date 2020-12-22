@@ -448,9 +448,6 @@
   <string name="edit_share_unshare">Prekini souporabo</string>
   <string name="edit_share_done">končano</string>
   <string name="action_retry_uploads">Ponovitev je spodletela</string>
-  <string name="action_clear_failed_uploads">Počiščenje je spodletelo</string>
-  <string name="action_clear_successful_uploads">Počiščenje je uspešno končano</string>
-  <string name="action_clear_finished_uploads">Počiščenje vseh predmetov je končano</string>
   <string name="manage_space_title">Upravljanje s prostorom</string>
   <string name="manage_space_description">Naastavitve, podatkovna zbirka in potrdila strežnika podatkov %1$s bodo trajno izbrisani. \n\nŽe prejete datoteke bodo ostane nedotaknjene.\n\nTo opravilo je lahko dolgotrajno.</string>
   <string name="manage_space_clear_data">Počisti podatke</string>

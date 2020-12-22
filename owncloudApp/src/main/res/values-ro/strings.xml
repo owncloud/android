@@ -447,9 +447,6 @@ Te rog ia legătura cu administratorul</string>
   <string name="edit_share_unshare">Oprește partajarea</string>
   <string name="edit_share_done">terminat</string>
   <string name="action_retry_uploads">Reîncercarea a eșuat</string>
-  <string name="action_clear_failed_uploads">Curățarea a eșuat</string>
-  <string name="action_clear_successful_uploads">Curățare cu succes</string>
-  <string name="action_clear_finished_uploads">Curățare totala terminată</string>
   <string name="manage_space_title">Gestionează spațiul</string>
   <string name="manage_space_description">Configurările, baza de date și certificatele serverului de la informațiile %1$s vor fi șterse definitiv.\n\nFișierele descărcate vor fi păstrate neatinse.\n\nAcest process poate dura o vreme.</string>
   <string name="manage_space_clear_data">Curăță informațiile</string>

@@ -482,9 +482,6 @@
   <string name="edit_share_unshare">ยกเลิกการแชร์</string>
   <string name="edit_share_done">สำเร็จ</string>
   <string name="action_retry_uploads">ลองใหม่แล้วล้มเหลว</string>
-  <string name="action_clear_failed_uploads">ล้างข้อผิดพลาด</string>
-  <string name="action_clear_successful_uploads">ล้างสำเร็จ</string>
-  <string name="action_clear_finished_uploads">ล้างทั้งหมดเสร็จแล้ว</string>
   <string name="manage_space_title">จัดการพื้นที่จัดการพื้นที่</string>
   <string name="manage_space_description">การตั้งค่าใบรับรองเซิร์ฟเวอร์และฐานข้อมูลจาก %1$s จะถูกลบอย่างถาวร \n\nไฟล์ที่ดาวน์โหลดจะถูกเก็บไว้อย่างดี กระบวนการนี้ต้องใช้เวลาสักครู่</string>
   <string name="manage_space_clear_data">ล้างข้อมูล</string>

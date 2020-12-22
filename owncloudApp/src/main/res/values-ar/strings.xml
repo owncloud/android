@@ -481,9 +481,6 @@
   <string name="edit_share_unshare">إيقاف المشاركة</string>
   <string name="edit_share_done">تم</string>
   <string name="action_retry_uploads">فشلت إعادة المحاولة</string>
-  <string name="action_clear_failed_uploads">فشل المسح</string>
-  <string name="action_clear_successful_uploads">نجح المسح</string>
-  <string name="action_clear_finished_uploads">تم الانتهاء من مسح الكل</string>
   <string name="manage_space_title">إدارة المساحة</string>
   <string name="manage_space_description">سيتم حذف الإعدادات وقواعد البيانات وشهادات الخادم من بيانات %1$s\'s نهائيًا. \n\nسيتم الاحتفاظ بالملفات التي تم تنزيلها دون تغيير.\n\nيمكن أن تستغرق هذه العملية بعض الوقت.</string>
   <string name="manage_space_clear_data">مسح البيانات</string>

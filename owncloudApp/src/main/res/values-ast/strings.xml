@@ -372,9 +372,6 @@
   <string name="edit_share_unshare">Dexar de compartir</string>
   <string name="edit_share_done">fechu</string>
   <string name="action_retry_uploads">Reintentar falló</string>
-  <string name="action_clear_failed_uploads">Llimpiar falló</string>
-  <string name="action_clear_successful_uploads">Llimpieza con ésitu</string>
-  <string name="action_clear_finished_uploads">Esborrar tolos finalizaos</string>
   <string name="manage_space_title">Alministrar espaciu</string>
   <string name="manage_space_description">Axustes, bases de datos y sirvidor de certificaos de los datos %1$s esborraránse dafechu. \n\nLos archivos descargados caltendrase intactos.\n\nEsti procesu puede tardar dalgún tiempu.</string>
   <string name="manage_space_clear_data">Llimpiar datos</string>

@@ -484,9 +484,6 @@
   <string name="edit_share_unshare">Остановить общий доступ</string>
   <string name="edit_share_done">завершено</string>
   <string name="action_retry_uploads">Повторить неудавшиеся</string>
-  <string name="action_clear_failed_uploads">Очистить неудавшиеся</string>
-  <string name="action_clear_successful_uploads">Очистить удавшиеся</string>
-  <string name="action_clear_finished_uploads">Очистить завершённые</string>
   <string name="manage_space_title">Управление свободным местом</string>
   <string name="manage_space_description">Настройки, сертификаты базы данных и сервера из данных %1$s будут удалены навсегда. \n\nЗагруженные файлы будут сохранены нетронутыми. \n\nЭтот процесс может занять некоторое время.</string>
   <string name="manage_space_clear_data">Очистить данные</string>

@@ -484,9 +484,6 @@
   <string name="edit_share_unshare">הפסקת שיתוף</string>
   <string name="edit_share_done">הסתיים</string>
   <string name="action_retry_uploads">ניסיון שנית נכשל</string>
-  <string name="action_clear_failed_uploads">ניקוי נכשל</string>
-  <string name="action_clear_successful_uploads">ניקוי הצליח</string>
-  <string name="action_clear_finished_uploads">ניקוי כל הפריטים שהסתיימו</string>
   <string name="manage_space_title">ניהול מקום</string>
   <string name="manage_space_description">הגדרות, של אישורי מסד נתונים ושרת מתוך מידע %1$s\'s ימחק לצמיתות. \n\nקבצים שהורדו ישמרו ללא פגע.\n\nתהליך זה יכול להמשך זמן מה.</string>
   <string name="manage_space_clear_data">ניקוי מידע</string>

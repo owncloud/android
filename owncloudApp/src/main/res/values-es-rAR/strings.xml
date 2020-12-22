@@ -485,9 +485,6 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="edit_share_unshare">Detener compartir</string>
   <string name="edit_share_done">hecho</string>
   <string name="action_retry_uploads">Fallo al reintentar</string>
-  <string name="action_clear_failed_uploads">Fallo al limpiar</string>
-  <string name="action_clear_successful_uploads">Limpieza completadas</string>
-  <string name="action_clear_finished_uploads">Limpieza total terminada</string>
   <string name="manage_space_title">Administrar espacio</string>
   <string name="manage_space_description">Los ajustes, certificados de base de datos y servidor de %1$s serán elminados permanentemente. \n\nLos Archivos descargados no serán tocados.\n\nEste proceso puede tardar en completarse.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>

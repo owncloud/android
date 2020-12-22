@@ -257,6 +257,5 @@
   <string name="share_privilege_can_edit_change">endra</string>
   <string name="share_privilege_can_edit_delete">slett</string>
   <string name="action_retry_uploads">Prøv feila på nytt</string>
-  <string name="action_clear_failed_uploads">Fjern feila</string>
-  <string name="share_warning_about_forwarding_public_links">Alle med lenke har tilgang til fil eller mappe</string>
+    <string name="share_warning_about_forwarding_public_links">Alle med lenke har tilgang til fil eller mappe</string>
 </resources>

@@ -441,9 +441,6 @@
   <string name="edit_share_unshare">Stop deling</string>
   <string name="edit_share_done">færdig</string>
   <string name="action_retry_uploads">Forsøg igen med fejlede</string>
-  <string name="action_clear_failed_uploads">Ryd fejlede</string>
-  <string name="action_clear_successful_uploads">Ryd gennemførte</string>
-  <string name="action_clear_finished_uploads">Ryd alle gennemførte</string>
   <string name="manage_space_title">Administrer plads</string>
   <string name="manage_space_description">Indstillinger, database og server certifikater fra %1$s\'s data vil blive slettet permanent.\n\nHentede filer vil blive beholdt urørte.\n\nDenne proces kan tage nogen tid.</string>
   <string name="manage_space_clear_data">Ryd data</string>

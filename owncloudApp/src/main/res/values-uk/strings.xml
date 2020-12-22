@@ -434,9 +434,6 @@
   <string name="edit_share_unshare">Не ділитися</string>
   <string name="edit_share_done">зроблено</string>
   <string name="action_retry_uploads">Нова спроба не повелася</string>
-  <string name="action_clear_failed_uploads">Очищення не повелося</string>
-  <string name="action_clear_successful_uploads">Очищення вдалося</string>
-  <string name="action_clear_finished_uploads">Очистити все закінчене</string>
   <string name="manage_space_title">Керування вільним місцем</string>
   <string name="manage_space_description">Налаштування, бази даних і сертифікати сервера з даних %1$s\'s будуть вилучені повністю. \n\nЗвантажені файли будуть збережені незайманими.\n\nЦей процес може тривати якийсь час.</string>
   <string name="manage_space_clear_data">Очистити дані</string>

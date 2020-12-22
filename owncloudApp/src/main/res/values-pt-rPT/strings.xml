@@ -410,9 +410,6 @@
   <string name="edit_share_unshare">Parar partilha</string>
   <string name="edit_share_done">feito</string>
   <string name="action_retry_uploads">A tentativa falhou</string>
-  <string name="action_clear_failed_uploads">Limpar os que falharam</string>
-  <string name="action_clear_successful_uploads">Limpar efetuada com Sucesso</string>
-  <string name="action_clear_finished_uploads">Limpar todos os concluídos</string>
   <string name="manage_space_title">Gerir espaço</string>
   <string name="manage_space_description">As configurações, base de dados e certificados de servidor dos dados de %1$s serão eliminados para sempre. \n\nOs ficheiros transferidos serão mantidos.\n\nEste processo pode demorar algum tempo.</string>
   <string name="manage_space_clear_data">Limpar dados</string>

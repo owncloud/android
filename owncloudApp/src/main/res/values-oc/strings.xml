@@ -357,9 +357,6 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="edit_share_unshare">Acabar lo partiment</string>
   <string name="edit_share_done">Acabat</string>
   <string name="action_retry_uploads">Novèl ensag fracassat</string>
-  <string name="action_clear_failed_uploads">Voidar los fracassats</string>
-  <string name="action_clear_successful_uploads">Voidar los capitats</string>
-  <string name="action_clear_finished_uploads">Voidar totes los acabats</string>
   <string name="manage_space_title">Gestion de l\'espaci</string>
   <string name="manage_space_clear_data">Escafar las donadas</string>
   <plurals name="items_selected_count">

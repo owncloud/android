@@ -461,9 +461,6 @@
   <string name="edit_share_unshare">停止共享</string>
   <string name="edit_share_done">完成</string>
   <string name="action_retry_uploads">重试失败</string>
-  <string name="action_clear_failed_uploads">清除失败</string>
-  <string name="action_clear_successful_uploads">清除成功</string>
-  <string name="action_clear_finished_uploads">清除所有完成任务</string>
   <string name="manage_space_title">管理空间</string>
   <string name="manage_space_description"> %1$s 的设置，数据库以及服务器证书将会被永久删除。
 \n\n 已下载的文件将会被保留。\n\n完成此操作需要一些时间。</string>

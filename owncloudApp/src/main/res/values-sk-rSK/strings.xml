@@ -415,9 +415,6 @@
   <string name="edit_share_unshare">Ukončenie zdieľania</string>
   <string name="edit_share_done">Hotovo</string>
   <string name="action_retry_uploads">Opakovaná chyba</string>
-  <string name="action_clear_failed_uploads">Čistenie zlyhalo</string>
-  <string name="action_clear_successful_uploads">Čistenie ukončené</string>
-  <string name="action_clear_finished_uploads">Všetky čistenia boli ukončené</string>
   <string name="manage_space_title">Spravovať prestor</string>
   <string name="manage_space_description">Nastavenia, certifikaty databazy a servera z %1$s budú trvalo odstránené. \n\nStiahnuté súbory budú ponechané.\n\nTento proces môžete spustiť iba raz.</string>
   <string name="manage_space_clear_data">Vyčistenie dát.</string>

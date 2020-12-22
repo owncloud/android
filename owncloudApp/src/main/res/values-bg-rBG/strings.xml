@@ -481,9 +481,6 @@
   <string name="edit_share_unshare">Спри споделянето</string>
   <string name="edit_share_done">готово</string>
   <string name="action_retry_uploads">Неуспешен опит</string>
-  <string name="action_clear_failed_uploads">Неуспешно изчистване</string>
-  <string name="action_clear_successful_uploads">Успешно изчистване</string>
-  <string name="action_clear_finished_uploads">Изчистването на всичко приключи</string>
   <string name="manage_space_title">Управление на пространството</string>
   <string name="manage_space_description">Настройки, като сертификатите на сървъра и базата данни от данните на %1$s ще бъдат безвъзвратно изтрити.
 \n\nИзтеглените файлове ще бъдат запазени непроменени.

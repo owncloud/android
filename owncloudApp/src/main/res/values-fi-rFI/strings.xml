@@ -420,9 +420,6 @@
   <string name="edit_share_unshare">Lopeta jakaminen</string>
   <string name="edit_share_done">valmis</string>
   <string name="action_retry_uploads">Uudelleenyritys epäonnistui</string>
-  <string name="action_clear_failed_uploads">Tyhjennä epäonnistuneet</string>
-  <string name="action_clear_successful_uploads">Tyhjennä onnistuneet</string>
-  <string name="action_clear_finished_uploads">Tyhjennä kaikki valmistuneet</string>
   <string name="manage_space_title">Hallitse tilaa</string>
   <string name="manage_space_clear_data">Tyhjennä tiedot</string>
   <string name="manage_space_error">Joitain tiedostoja ei voitu poistaa.</string>

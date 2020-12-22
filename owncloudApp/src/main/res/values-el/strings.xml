@@ -475,9 +475,6 @@
   <string name="edit_share_unshare">Διακοπή διαμοιρασμού</string>
   <string name="edit_share_done">ολοκληρώθηκε</string>
   <string name="action_retry_uploads">Επανάληψη όσων απέτυχαν</string>
-  <string name="action_clear_failed_uploads">Αποτυχία εκκαθάρισης</string>
-  <string name="action_clear_successful_uploads"> Επιτυχής εκκαθάριση</string>
-  <string name="action_clear_finished_uploads">Εκκαθάριση όλων των ολοκληρωμένων</string>
   <string name="manage_space_title">Διαχείριση χώρου</string>
   <string name="manage_space_description">Οι ρυθμίσεις, οι βάσεις δεδομένων και οι τα πιστοποιητικά των διακομιστών από τα δεδομένα του %1$s θα διαγραφούν μόνιμα. \n\nΤα ληφθέντα αρχεία θα παραμείνουν άθικτα. \n\nΗ διαδικασία αυτή μπορεί να διαρκέσει αρκετό χρόνο.</string>
   <string name="manage_space_clear_data">Εκκαθάριση δεδομένων</string>

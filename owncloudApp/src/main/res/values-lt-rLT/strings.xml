@@ -436,9 +436,6 @@
   <string name="edit_share_unshare">Stabdyti dalinimasi</string>
   <string name="edit_share_done">atlikta</string>
   <string name="action_retry_uploads">Pakartojimas nepavyko</string>
-  <string name="action_clear_failed_uploads">Išvalymas nepavyko</string>
-  <string name="action_clear_successful_uploads">išvalyta sėkmingai</string>
-  <string name="action_clear_finished_uploads">Išvalymas baigtas</string>
   <string name="manage_space_title">Valdyti vietą</string>
   <string name="manage_space_description">Nustatymai, duombazės ir serverio sertifikatai  iš%1$sbus ištrinti. \n\nParsiūsti failai bus nepaliesti.\n\nŠis procesas gali užtrukti.</string>
   <string name="manage_space_clear_data">Išvalyti duomenis</string>

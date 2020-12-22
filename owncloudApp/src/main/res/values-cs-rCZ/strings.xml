@@ -479,9 +479,6 @@ správce systému.</string>
   <string name="edit_share_unshare">Ukončit sdílení</string>
   <string name="edit_share_done">dokončeno</string>
   <string name="action_retry_uploads">Opakovat neúspěšné</string>
-  <string name="action_clear_failed_uploads">Vyčištit neúspěšné</string>
-  <string name="action_clear_successful_uploads">Vyčištit úspěšné</string>
-  <string name="action_clear_finished_uploads">Vyčistit všechny ukončené</string>
   <string name="manage_space_title">Spravovat úložný prostor</string>
   <string name="manage_space_description">Nastavení, databáze a certifikáty serverů z %1$s data budou permanentně smazány. \n\nStažené soubory nebudou rozbaleny.\n\nTento proces může chvíli trvat.</string>
   <string name="manage_space_clear_data">Vyčistit data</string>

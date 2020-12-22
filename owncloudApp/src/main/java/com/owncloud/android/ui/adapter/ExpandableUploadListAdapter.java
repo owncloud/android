@@ -731,14 +731,14 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
         tvFileCount.setText(fileCountText);
         if (group.name.equals(mParentActivity.getString(R.string.uploads_view_group_failed_uploads))) {
             clear.setVisibility(View.VISIBLE);
-            clear.setText(mParentActivity.getString(R.string.action_clear_failed_uploads));
+            clear.setText(mParentActivity.getString(R.string.action_upload_clear));
             clear.setOnClickListener(v -> mOptionsInUploadListClickListener.onClick(UploadListFragment.OptionsInUploadList.CLEAR_FAILED));
             retry.setVisibility(View.VISIBLE);
-            retry.setText(mParentActivity.getString(R.string.action_retry_uploads));
+            retry.setText(mParentActivity.getString(R.string.action_upload_retry));
             retry.setOnClickListener(v -> mOptionsInUploadListClickListener.onClick(UploadListFragment.OptionsInUploadList.RETRY_FAILED));
         } else if (group.name.equals(mParentActivity.getString(R.string.uploads_view_group_finished_uploads))) {
             clear.setVisibility(View.VISIBLE);
-            clear.setText(mParentActivity.getString(R.string.action_clear_successful_uploads));
+            clear.setText(mParentActivity.getString(R.string.action_upload_clear));
             clear.setOnClickListener(v -> mOptionsInUploadListClickListener.onClick(UploadListFragment.OptionsInUploadList.CLEAR_SUCCESSFUL));
             retry.setVisibility(View.GONE);
         }

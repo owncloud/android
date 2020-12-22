@@ -485,9 +485,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="edit_share_unshare">Deter a compartición</string>
   <string name="edit_share_done">feito</string>
   <string name="action_retry_uploads">Tentar de novo os envíos fallados</string>
-  <string name="action_clear_failed_uploads">Limpar os envíos fallados</string>
-  <string name="action_clear_successful_uploads">Limpar os envíos satisfactorios</string>
-  <string name="action_clear_finished_uploads">Limpar os envíos rematados</string>
   <string name="manage_space_title">Administrar o espazo</string>
   <string name="manage_space_description">Van ser eliminados de xeito permanente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
   <string name="manage_space_clear_data">Limpar os datos</string>
