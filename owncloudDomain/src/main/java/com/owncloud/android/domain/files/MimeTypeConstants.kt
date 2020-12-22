@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,29 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.utils
+package com.owncloud.android.domain.files
 
-import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.domain.files.MIME_DIR
-
-object AppTestUtil {
-    /**
-     * Files
-     * Move to owncloudTestUtil module when OCFile is migrated to owncloudDomain
-     */
-    val OC_FILE = OCFile(
-        "/Images/img.png"
-    ).apply {
-        fileId = 1
-        fileName =  "img.png"
-        mimetype = ".png"
-        privateLink = "privateLink"
-    }
-
-    val OC_FOLDER = OCFile(
-        "/Images/img.png"
-    ).apply {
-        fileName =  "/Documents/"
-        mimetype = MIME_DIR
-    }
-}
+const val MIME_DIR = "DIR"
+const val MIME_DIR_UNIX = "httpd/unix-directory"
+val LIST_MIME_DIR = listOf(MIME_DIR, MIME_DIR_UNIX)

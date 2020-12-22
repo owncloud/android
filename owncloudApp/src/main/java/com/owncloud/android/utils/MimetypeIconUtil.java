@@ -21,6 +21,7 @@ package com.owncloud.android.utils;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.R;
+import com.owncloud.android.domain.files.MimeTypeConstantsKt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -268,7 +269,7 @@ public class MimetypeIconUtil {
         MIMETYPE_TO_ICON_MAPPING.put("application/yaml", R.drawable.file_code);
         MIMETYPE_TO_ICON_MAPPING.put("application/zip", R.drawable.file_zip);
         MIMETYPE_TO_ICON_MAPPING.put("database", R.drawable.file);
-        MIMETYPE_TO_ICON_MAPPING.put("httpd/unix-directory", R.drawable.ic_menu_archive);
+        MIMETYPE_TO_ICON_MAPPING.put(MimeTypeConstantsKt.MIME_DIR_UNIX, R.drawable.ic_menu_archive);
         MIMETYPE_TO_ICON_MAPPING.put("image/svg+xml", R.drawable.file_image);
         MIMETYPE_TO_ICON_MAPPING.put("image/vector", R.drawable.file_image);
         MIMETYPE_TO_ICON_MAPPING.put("text/calendar", R.drawable.file_calendar);
@@ -282,7 +283,7 @@ public class MimetypeIconUtil {
         MIMETYPE_TO_ICON_MAPPING.put("text/x-python", R.drawable.file_code);
         MIMETYPE_TO_ICON_MAPPING.put("text/x-shellscript", R.drawable.file_code);
         MIMETYPE_TO_ICON_MAPPING.put("web", R.drawable.file_code);
-        MIMETYPE_TO_ICON_MAPPING.put("DIR", R.drawable.ic_menu_archive);
+        MIMETYPE_TO_ICON_MAPPING.put(MimeTypeConstantsKt.MIME_DIR, R.drawable.ic_menu_archive);
     }
 
     /**

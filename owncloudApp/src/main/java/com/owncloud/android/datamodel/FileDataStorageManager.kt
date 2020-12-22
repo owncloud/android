@@ -106,6 +106,7 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBN
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta._ID
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.files.MIME_DIR
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.utils.FileStorageUtils
 import timber.log.Timber
@@ -1010,7 +1011,7 @@ class FileDataStorageManager {
 
     private fun createRootDir(): OCFile =
         OCFile(ROOT_PATH).apply {
-            mimetype = mimeTypeDir
+            mimetype = MIME_DIR
             parentId = ROOT_PARENT_ID.toLong()
             saveFile(this)
         }
@@ -1569,6 +1570,5 @@ class FileDataStorageManager {
         private const val pathAudio = "audio/"
         private const val pathVideo = "video/"
         private const val pathImage = "image/"
-        private const val mimeTypeDir = "DIR"
     }
 }

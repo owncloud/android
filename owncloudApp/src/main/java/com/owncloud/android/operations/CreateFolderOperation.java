@@ -22,6 +22,7 @@
 package com.owncloud.android.operations;
 
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.MimeTypeConstantsKt;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
@@ -100,7 +101,7 @@ public class CreateFolderOperation extends SyncOperation {
             }
         } else { // Create directory on DB
             newDir = new OCFile(mRemotePath);
-            newDir.setMimetype("DIR");
+            newDir.setMimetype(MimeTypeConstantsKt.MIME_DIR);
             long parentId = getStorageManager().
                     getFileByPath(FileStorageUtils.getParentPath(mRemotePath)).getFileId();
             newDir.setParentId(parentId);
