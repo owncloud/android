@@ -41,7 +41,7 @@ class OAuthViewModel(
         serverUrl: String
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
-        showLoading = true,
+        showLoading = false,
         liveData = _oidcDiscovery,
         useCase = getOIDCDiscoveryUseCase,
         useCaseParams = OIDCDiscoveryUseCase.Params(baseUrl = serverUrl)

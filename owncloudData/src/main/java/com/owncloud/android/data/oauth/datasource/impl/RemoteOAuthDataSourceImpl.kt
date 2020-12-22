@@ -19,6 +19,7 @@
 
 package com.owncloud.android.data.oauth.datasource.impl
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.mapper.RemoteOIDCDiscoveryMapper
@@ -26,13 +27,16 @@ import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfigur
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 
 class RemoteOAuthDataSourceImpl(
+    private val clientManager: ClientManager,
     private val oidcService: OIDCService,
     private val remoteOIDCDiscoveryMapper: RemoteOIDCDiscoveryMapper
 ) : RemoteOAuthDataSource {
 
     override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration {
+        val ownCloudClient = clientManager.getClientForUnExistingAccount(baseUrl, false)
+
         val result = executeRemoteOperation {
-            oidcService.getOIDCServerDiscovery(baseUrl)
+            oidcService.getOIDCServerDiscovery(ownCloudClient)
         }
 
         return remoteOIDCDiscoveryMapper.toModel(result)!!

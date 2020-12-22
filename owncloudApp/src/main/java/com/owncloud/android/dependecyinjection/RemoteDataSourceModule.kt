@@ -79,7 +79,7 @@ val remoteDataSourceModule = module {
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get(), get()) }
     factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
     factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
-    factory<RemoteOAuthDataSource> { RemoteOAuthDataSourceImpl(get(), get()) }
+    factory<RemoteOAuthDataSource> { RemoteOAuthDataSourceImpl(get(), get(), get()) }
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
