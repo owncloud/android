@@ -23,12 +23,51 @@
  */
 package com.owncloud.android.lib.resources.oauth.params
 
-class TokenRequestParams(
+import com.owncloud.android.lib.common.http.HttpConstants
+import okhttp3.FormBody
+import okhttp3.RequestBody
+
+sealed class TokenRequestParams(
     val tokenEndpoint: String,
-    val authorizationCode: String,
-    val grantType: String,
-    val redirectUri: String,
-    val refreshToken: String? = null,
-    val codeVerifier: String,
-    val clientAuth: String
-)
+    val clientAuth: String,
+    val grantType: String
+) {
+    abstract fun toRequestBody(): RequestBody
+
+    class Authorization(
+        tokenEndpoint: String,
+        clientAuth: String,
+        grantType: String,
+        val authorizationCode: String,
+        val redirectUri: String,
+        val codeVerifier: String
+    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType) {
+
+        override fun toRequestBody(): RequestBody {
+            return FormBody.Builder()
+                .add(HttpConstants.HEADER_AUTHORIZATION_CODE, authorizationCode)
+                .add(HttpConstants.HEADER_GRANT_TYPE, grantType)
+                .add(HttpConstants.HEADER_REDIRECT_URI, redirectUri)
+                .add(HttpConstants.HEADER_CODE_VERIFIER, codeVerifier)
+                .build()
+        }
+    }
+
+    class RefreshToken(
+        tokenEndpoint: String,
+        clientAuth: String,
+        grantType: String,
+        val refreshToken: String? = null
+    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType) {
+
+        override fun toRequestBody(): RequestBody {
+            return FormBody.Builder().apply {
+                add(HttpConstants.HEADER_GRANT_TYPE, grantType)
+                if (!refreshToken.isNullOrBlank()) {
+                    add(HttpConstants.HEADER_REFRESH_TOKEN, refreshToken)
+                }
+            }.build()
+
+        }
+    }
+}

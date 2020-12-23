@@ -59,13 +59,7 @@ class TokenRequestRemoteOperation(
         var result: RemoteOperationResult<TokenResponse>
 
         try {
-            val requestBody = FormBody.Builder()
-                .add(HEADER_AUTHORIZATION_CODE, tokenRequestParams.authorizationCode)
-                .add(HEADER_GRANT_TYPE, tokenRequestParams.grantType)
-                .add(HEADER_REDIRECT_URI, tokenRequestParams.redirectUri)
-                .add(HEADER_CODE_VERIFIER, tokenRequestParams.codeVerifier)
-                .add(HEADER_REFRESH_TOKEN, tokenRequestParams.refreshToken.orEmpty())
-                .build()
+            val requestBody = tokenRequestParams.toRequestBody()
 
             val postMethod = PostMethod(URL(tokenRequestParams.tokenEndpoint), requestBody)
 
