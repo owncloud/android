@@ -31,14 +31,23 @@ class RemoteTokenRequestMapper : RemoteMapper<TokenRequest, TokenRequestParams> 
     override fun toRemote(model: TokenRequest?): TokenRequestParams? {
         model ?: return null
 
-        return TokenRequestParams(
-            tokenEndpoint = model.tokenEndpoint,
-            authorizationCode = model.authorizationCode,
-            grantType = model.grantType,
-            redirectUri = model.redirectUri,
-            codeVerifier = model.codeVerifier,
-            refreshToken = model.refreshToken,
-            clientAuth = model.clientSecretBasic
-        )
+        return when (model) {
+            is TokenRequest.Authorization ->
+                TokenRequestParams.Authorization(
+                    tokenEndpoint = model.tokenEndpoint,
+                    authorizationCode = model.authorizationCode,
+                    grantType = model.grantType,
+                    redirectUri = model.redirectUri,
+                    codeVerifier = model.codeVerifier,
+                    clientAuth = model.clientAuth
+                )
+            is TokenRequest.RefreshToken ->
+                TokenRequestParams.RefreshToken(
+                    tokenEndpoint = model.tokenEndpoint,
+                    grantType = model.grantType,
+                    clientAuth = model.clientAuth,
+                    refreshToken = model.refreshToken
+                )
+        }
     }
 }

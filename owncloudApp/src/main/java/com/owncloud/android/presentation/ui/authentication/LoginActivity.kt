@@ -475,21 +475,20 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      */
     private fun exchangeAuthorizationCodeForTokens(authorizationResponse: AuthorizationResponse) {
         server_status_text.text = getString(R.string.auth_getting_authorization)
-        val clientAuth = OAuthUtils.createClientSecretBasic(getString(R.string.oauth2_client_secret))
+        val clientAuth =
+            OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
 
         // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
         val tokenEndPoint = oauthViewModel.oidcDiscovery.value?.peekContent()?.getStoredData()?.token_endpoint
             ?: "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
 
-        val requestToken = TokenRequest(
+        val requestToken = TokenRequest.Authorization(
             baseUrl = serverBaseUrl,
             tokenEndpoint = tokenEndPoint,
             authorizationCode = authorizationResponse.authorizationCode ?: "",
-            grantType = TokenRequest.GrantType.AUTHORIZATION_CODE.string,
             redirectUri = authorizationResponse.request.redirectUri.toString(),
             codeVerifier = authorizationResponse.request.codeVerifier ?: "",
-            // TODO: DO IT MORE ELEGANT!
-            clientSecretBasic = clientAuth.getRequestHeaders(getString(R.string.oauth2_client_id))["Authorization"]!!
+            clientAuth = clientAuth
         )
 
         oauthViewModel.requestToken(requestToken)

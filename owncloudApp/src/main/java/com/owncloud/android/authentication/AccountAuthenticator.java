@@ -339,15 +339,13 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             tokenEndpoint = baseUrl + File.separator + mContext.getString(R.string.oauth2_url_endpoint_access);
         }
 
-        TokenRequest oauthTokenRequest = new TokenRequest(
+        String clientAuth = OAuthUtils.Companion.getClientAuth(mContext.getString(R.string.oauth2_client_secret),
+                mContext.getString(R.string.oauth2_client_id));
+
+        TokenRequest oauthTokenRequest = new TokenRequest.RefreshToken(
                 baseUrl,
                 tokenEndpoint,
-                "",
-                TokenRequest.GrantType.REFRESH_TOKEN.getString(),
-                "",
-                "",
-                // TODO: DO IT MORE ELEGANT!
-                OAuthUtils.Companion.createClientSecretBasic(mContext.getString(R.string.oauth2_client_secret)).getRequestHeaders(mContext.getString(R.string.oauth2_client_id)).get("Authorization"),
+                clientAuth,
                 refreshToken
         );
 

@@ -21,46 +21,16 @@ package com.owncloud.android.authentication.oauth
 
 import android.content.Context
 import android.net.Uri
+import android.util.Base64
 import com.owncloud.android.R
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
-import net.openid.appauth.ClientSecretBasic
 import timber.log.Timber
 import java.io.File
+import java.net.URLEncoder
 
 class OAuthUtils {
     companion object {
-        fun buildOIDCAuthorizationServiceConfig(
-            context: Context,
-            serverBaseUrl: String,
-            onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback
-        ) {
-            Timber.d("OIDC, getting the auth and token endpoints from the discovery document (well-known)")
-
-            val urlPathAfterProtocolIndex = serverBaseUrl.indexOf(
-                File.separator, serverBaseUrl.indexOf(File.separator) + 2
-            )
-
-            // OIDC Service Discovery Location is placed in urls like https://whatever and not https://whatever/others,
-            // so remove those subpaths
-            val urlToGetServiceDiscoveryLocation = if (urlPathAfterProtocolIndex != -1) {
-                serverBaseUrl.substring(0, urlPathAfterProtocolIndex)
-            } else {
-                serverBaseUrl
-            }
-
-            val serviceDiscoveryLocation =
-                Uri.parse(urlToGetServiceDiscoveryLocation).buildUpon()
-                    .appendPath(AuthorizationServiceConfiguration.WELL_KNOWN_PATH)
-                    .appendPath(AuthorizationServiceConfiguration.OPENID_CONFIGURATION_RESOURCE)
-                    .build()
-
-            AuthorizationServiceConfiguration.fetchFromUrl(
-                serviceDiscoveryLocation,
-                onGetAuthorizationServiceConfiguration,
-                OAuthConnectionBuilder(context)
-            )
-        }
 
         fun buildOAuthorizationServiceConfig(
             context: Context,
@@ -83,6 +53,16 @@ class OAuthUtils {
             )
         }
 
-        fun createClientSecretBasic(clientSecret: String) = ClientSecretBasic(clientSecret)
+        fun getClientAuth(
+            clientSecret: String,
+            clientId: String
+        ): String {
+            // From the OAuth2 RFC, client ID and secret should be encoded prior to concatenation and
+            // conversion to Base64: https://tools.ietf.org/html/rfc6749#section-2.3.1
+            val encodedClientId = URLEncoder.encode(clientId, "utf-8")
+            val encodedClientSecret = URLEncoder.encode(clientSecret, "utf-8")
+            val credentials = "$encodedClientId:$encodedClientSecret"
+            return "Basic " + Base64.encodeToString(credentials.toByteArray(), Base64.NO_WRAP)
+        }
     }
 }
