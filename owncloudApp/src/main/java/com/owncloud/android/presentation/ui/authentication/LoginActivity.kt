@@ -83,6 +83,7 @@ import net.openid.appauth.ResponseTypeValues
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.io.File
 
 class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
 
@@ -476,11 +477,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         server_status_text.text = getString(R.string.auth_getting_authorization)
         val clientAuth = OAuthUtils.createClientSecretBasic(getString(R.string.oauth2_client_secret))
 
+        // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
+        val tokenEndPoint = oauthViewModel.oidcDiscovery.value?.peekContent()?.getStoredData()?.token_endpoint
+            ?: "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
+
         val requestToken = TokenRequest(
             baseUrl = serverBaseUrl,
-            tokenEndpoint = oauthViewModel.oidcDiscovery.value?.peekContent()
-                ?.getStoredData()?.token_endpoint?.substringAfter(serverBaseUrl)?.trimStart('/').takeIf { it != null }
-                ?: contextProvider.getString(R.string.oauth2_url_endpoint_access),
+            tokenEndpoint = tokenEndPoint,
             authorizationCode = authorizationResponse.authorizationCode ?: "",
             grantType = TokenRequest.GrantType.AUTHORIZATION_CODE.string,
             redirectUri = authorizationResponse.request.redirectUri.toString(),

@@ -50,6 +50,8 @@ import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
+import java.io.File;
+
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_OAUTH2_REFRESH_TOKEN;
 import static com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants.KEY_AUTH_TOKEN_TYPE;
 import static org.koin.java.KoinJavaComponent.inject;
@@ -323,38 +325,31 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         UseCaseResult<OIDCServerConfiguration> oidcServerConfigurationUseCaseResult =
                 oidcDiscoveryUseCase.getValue().execute(oidcDiscoveryUseCaseParams);
 
-        TokenRequest oauthTokenRequest;
+        String tokenEndpoint;
         if (oidcServerConfigurationUseCaseResult.isSuccess()) {
             Timber.d("OIDC Discovery success. Server discovery info: [ %s ]",
                     oidcServerConfigurationUseCaseResult.getDataOrNull());
 
-            oauthTokenRequest = new TokenRequest(
-                    baseUrl,
-                    oidcServerConfigurationUseCaseResult.getDataOrNull().getToken_endpoint().split(baseUrl + '/')[1],
-                    "",
-                    TokenRequest.GrantType.REFRESH_TOKEN.getString(),
-                    "",
-                    "",
-                    // TODO: DO IT MORE ELEGANT!
-                    OAuthUtils.Companion.createClientSecretBasic(mContext.getString(R.string.oauth2_client_secret)).getRequestHeaders(mContext.getString(R.string.oauth2_client_id)).get("Authorization"),
-                    refreshToken
-            );
+            // Use token endpoint retrieved from oidc discovery
+            tokenEndpoint = oidcServerConfigurationUseCaseResult.getDataOrNull().getToken_endpoint();
 
         } else {
             Timber.d("OIDC Discovery failed. Server discovery info: [ %s ]",
                     oidcServerConfigurationUseCaseResult.getThrowableOrNull().toString());
-
-            oauthTokenRequest = new TokenRequest(
-                    baseUrl,
-                    mContext.getString(R.string.oauth2_url_endpoint_access),
-                    "",
-                    TokenRequest.GrantType.REFRESH_TOKEN.getString(),
-                    "",
-                    "",
-                    OAuthUtils.Companion.createClientSecretBasic(mContext.getString(R.string.oauth2_client_secret)).getRequestHeaders(mContext.getString(R.string.oauth2_client_id)).get("Authorization"),
-                    refreshToken
-            );
+            tokenEndpoint = baseUrl + File.separator + mContext.getString(R.string.oauth2_url_endpoint_access);
         }
+
+        TokenRequest oauthTokenRequest = new TokenRequest(
+                baseUrl,
+                tokenEndpoint,
+                "",
+                TokenRequest.GrantType.REFRESH_TOKEN.getString(),
+                "",
+                "",
+                // TODO: DO IT MORE ELEGANT!
+                OAuthUtils.Companion.createClientSecretBasic(mContext.getString(R.string.oauth2_client_secret)).getRequestHeaders(mContext.getString(R.string.oauth2_client_id)).get("Authorization"),
+                refreshToken
+        );
 
         // Token exchange
         @NotNull Lazy<RequestTokenUseCase> requestTokenUseCase = inject(RequestTokenUseCase.class);
