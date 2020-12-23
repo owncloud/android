@@ -32,6 +32,7 @@ import com.owncloud.android.lib.common.http.HttpConstants.HEADER_AUTHORIZATION_C
 import com.owncloud.android.lib.common.http.HttpConstants.HEADER_CODE_VERIFIER
 import com.owncloud.android.lib.common.http.HttpConstants.HEADER_GRANT_TYPE
 import com.owncloud.android.lib.common.http.HttpConstants.HEADER_REDIRECT_URI
+import com.owncloud.android.lib.common.http.HttpConstants.HEADER_REFRESH_TOKEN
 import com.owncloud.android.lib.common.http.HttpConstants.HTTP_OK
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
@@ -46,7 +47,7 @@ import timber.log.Timber
 import java.net.URL
 
 /**
- * Get OIDC Discovery
+ * Perform token request
  *
  * @author Abel García de Prada
  */
@@ -67,6 +68,7 @@ class TokenRequestRemoteOperation(
                 .add(HEADER_GRANT_TYPE, tokenRequestParams.grantType)
                 .add(HEADER_REDIRECT_URI, tokenRequestParams.redirectUri)
                 .add(HEADER_CODE_VERIFIER, tokenRequestParams.codeVerifier)
+                .add(HEADER_REFRESH_TOKEN, tokenRequestParams.refreshToken.orEmpty())
                 .build()
 
             val postMethod = PostMethod(URL(uriBuilder.toString()), requestBody)

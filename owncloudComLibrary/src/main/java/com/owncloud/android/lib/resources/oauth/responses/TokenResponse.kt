@@ -34,7 +34,7 @@ data class TokenResponse(
     @Json(name = "expires_in")
     val expiresIn: Int,
     @Json(name = "refresh_token")
-    val refreshToken: String,
+    val refreshToken: String?,
     @Json(name = "token_type")
     val tokenType: String,
     @Json(name = "user_id")

@@ -28,6 +28,7 @@ class TokenRequestParams(
     val authorizationCode: String,
     val grantType: String,
     val redirectUri: String,
+    val refreshToken: String? = null,
     val codeVerifier: String,
     val clientAuth: String
 )
