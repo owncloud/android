@@ -37,6 +37,7 @@ class RemoteTokenRequestMapper : RemoteMapper<TokenRequest, TokenRequestParams> 
             grantType = model.grantType,
             redirectUri = model.redirectUri,
             codeVerifier = model.codeVerifier,
+            refreshToken = model.refreshToken,
             clientAuth = model.clientSecretBasic
         )
     }

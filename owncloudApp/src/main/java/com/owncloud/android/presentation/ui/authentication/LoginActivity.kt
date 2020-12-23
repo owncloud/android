@@ -506,7 +506,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         tokenResponse.additionalParameters?.get(KEY_USER_ID) ?: "",
                         OAUTH_TOKEN_TYPE,
                         tokenResponse.accessToken,
-                        tokenResponse.refreshToken,
+                        tokenResponse.refreshToken.orEmpty(),
                         if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
                         if (loginAction != ACTION_CREATE) userAccount?.name else null
                     )

@@ -25,9 +25,11 @@ class TokenRequest(
     val grantType: String,
     val redirectUri: String,
     val codeVerifier: String,
-    val clientSecretBasic: String
+    val clientSecretBasic: String,
+    val refreshToken: String? = null
 ) {
     enum class GrantType(val string: String) {
-        AUTHORIZATION_CODE("authorization_code")
+        AUTHORIZATION_CODE("authorization_code"),
+        REFRESH_TOKEN("refresh_token")
     }
 }
