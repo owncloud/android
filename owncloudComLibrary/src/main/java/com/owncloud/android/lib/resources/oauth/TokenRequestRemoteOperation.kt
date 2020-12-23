@@ -59,10 +59,6 @@ class TokenRequestRemoteOperation(
         var result: RemoteOperationResult<TokenResponse>
 
         try {
-            val uriBuilder = client.baseUri.buildUpon().apply {
-                appendEncodedPath(tokenRequestParams.tokenEndpoint)
-            }.build()
-
             val requestBody = FormBody.Builder()
                 .add(HEADER_AUTHORIZATION_CODE, tokenRequestParams.authorizationCode)
                 .add(HEADER_GRANT_TYPE, tokenRequestParams.grantType)
@@ -71,7 +67,7 @@ class TokenRequestRemoteOperation(
                 .add(HEADER_REFRESH_TOKEN, tokenRequestParams.refreshToken.orEmpty())
                 .build()
 
-            val postMethod = PostMethod(URL(uriBuilder.toString()), requestBody)
+            val postMethod = PostMethod(URL(tokenRequestParams.tokenEndpoint), requestBody)
 
             postMethod.addRequestHeader(AUTHORIZATION_HEADER, tokenRequestParams.clientAuth)
 
