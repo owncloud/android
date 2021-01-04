@@ -140,7 +140,6 @@ public class SingleSessionManager {
             client.clearCredentials();
 
             client.setAccount(account);
-            HttpClient.setContext(context);
 
             account.loadCredentials(context);
             client.setCredentials(account.getCredentials());

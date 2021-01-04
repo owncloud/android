@@ -23,6 +23,7 @@
  */
 package com.owncloud.android.lib.common.http.methods.nonwebdav
 
+import com.owncloud.android.lib.common.http.HttpClient
 import java.io.IOException
 import java.net.URL
 
@@ -31,7 +32,7 @@ import java.net.URL
  *
  * @author David González Verdugo
  */
-class DeleteMethod(url: URL) : HttpMethod(url) {
+class DeleteMethod(httpClient: HttpClient, url: URL) : HttpMethod(httpClient, url) {
     @Throws(IOException::class)
     override fun onExecute(): Int {
         request = request.newBuilder()

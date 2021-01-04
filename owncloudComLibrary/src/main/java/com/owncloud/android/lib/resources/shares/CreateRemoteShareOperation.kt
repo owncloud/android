@@ -138,7 +138,6 @@ class CreateRemoteShareOperation(
     }
 
     private fun createFormBody(): FormBody {
-
         val formBodyBuilder = FormBody.Builder()
             .add(PARAM_PATH, remoteFilePath)
             .add(PARAM_SHARE_TYPE, shareType.value.toString())
@@ -172,7 +171,7 @@ class CreateRemoteShareOperation(
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
         val requestUri = buildRequestUri(client.baseUri)
 
-        val postMethod = PostMethod(URL(requestUri.toString()), createFormBody()).apply {
+        val postMethod = PostMethod(client, URL(requestUri.toString()), createFormBody()).apply {
             setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8)
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }

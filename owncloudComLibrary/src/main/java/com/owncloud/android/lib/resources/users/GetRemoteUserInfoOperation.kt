@@ -51,7 +51,7 @@ class GetRemoteUserInfoOperation : RemoteOperation<RemoteUserInfo>() {
         var result: RemoteOperationResult<RemoteUserInfo>
         //Get the user
         try {
-            val getMethod = GetMethod(URL(client.baseUri.toString() + OCS_ROUTE))
+            val getMethod = GetMethod(client, URL(client.baseUri.toString() + OCS_ROUTE))
             val status = client.executeHttpMethod(getMethod)
             val response = getMethod.getResponseBodyAsString() ?: ""
             if (status == HttpConstants.HTTP_OK) {

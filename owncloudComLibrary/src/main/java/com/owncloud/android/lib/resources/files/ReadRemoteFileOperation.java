@@ -76,7 +76,8 @@ public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
         /// take the duty of check the server for the current state of the file there
         try {
             // remote request
-            propfind = new PropfindMethod(new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
+            propfind = new PropfindMethod(client,
+                    new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     DEPTH_0,
                     DavUtils.getAllPropset());
 

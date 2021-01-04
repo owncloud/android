@@ -50,6 +50,7 @@ class GetRemoteUserQuotaOperation : RemoteOperation<RemoteQuota>() {
     override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteQuota> =
         try {
             val propfindMethod = PropfindMethod(
+                client,
                 URL(client.userFilesWebDavUri.toString()),
                 DavConstants.DEPTH_0,
                 DavUtils.quotaPropSet

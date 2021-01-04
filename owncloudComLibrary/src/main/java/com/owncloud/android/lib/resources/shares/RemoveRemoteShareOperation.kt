@@ -104,9 +104,10 @@ class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOper
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
 
+
         val requestUri = buildRequestUri(client.baseUri)
 
-        val deleteMethod = DeleteMethod(URL(requestUri.toString())).apply {
+        val deleteMethod = DeleteMethod(client, URL(requestUri.toString())).apply {
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }
 

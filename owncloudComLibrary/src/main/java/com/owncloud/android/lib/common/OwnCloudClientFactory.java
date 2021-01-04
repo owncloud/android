@@ -21,29 +21,34 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.common.http.methods.nonwebdav
 
-import com.owncloud.android.lib.common.http.HttpClient
-import okhttp3.OkHttpClient
-import okhttp3.RequestBody
-import java.io.IOException
-import java.net.URL
+package com.owncloud.android.lib.common;
 
-/**
- * OkHttp put calls wrapper
- *
- * @author David González Verdugo
- */
-class PutMethod(
-    httpClient: HttpClient,
-    url: URL,
-    private val putRequestBody: RequestBody
-) : HttpMethod(httpClient, url) {
-    @Throws(IOException::class)
-    override fun onExecute(): Int {
-        request = request.newBuilder()
-            .put(putRequestBody)
-            .build()
-        return super.onExecute()
+import android.net.Uri;
+
+import com.owncloud.android.lib.common.http.HttpClient;
+import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation;
+
+public class OwnCloudClientFactory {
+
+    /**
+     * Creates a OwnCloudClient to access a URL and sets the desired parameters for ownCloud
+     * client connections.
+     *
+     * @param uri     URL to the ownCloud server; BASE ENTRY POINT, not WebDavPATH
+     * @return A OwnCloudClient object ready to be used
+     */
+    public static OwnCloudClient createOwnCloudClient(Uri uri, boolean followRedirects) {
+        OwnCloudClient client = new OwnCloudClient(uri);
+
+        client.setFollowRedirects(followRedirects);
+        HttpClient.setContext(context);
+        retrieveCookiesFromMiddleware(client);
+        return client;
+    }
+
+    private static void retrieveCookiesFromMiddleware(OwnCloudClient client) {
+        final GetRemoteStatusOperation statusOperation = new GetRemoteStatusOperation();
+        statusOperation.run(client);
     }
 }

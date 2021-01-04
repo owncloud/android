@@ -119,7 +119,7 @@ class GetRemoteSharesForFileOperation(
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
         val requestUri = buildRequestUri(client.baseUri)
 
-        val getMethod = GetMethod(URL(requestUri.toString())).apply {
+        val getMethod = GetMethod(client, URL(requestUri.toString())).apply {
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }
 

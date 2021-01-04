@@ -55,30 +55,38 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class HttpClient {
-    private static OkHttpClient sOkHttpClient;
     private static Context sContext;
-    private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
-    private static LogInterceptor sLogInterceptor;
-    private static Interceptor sDebugInterceptor;
+    private HashMap<String, List<Cookie>> mCookieStore = new HashMap<>();
+    private LogInterceptor mLogInterceptor;
 
-    public static OkHttpClient getOkHttpClient() {
-        if (sOkHttpClient == null) {
+    private OkHttpClient mOkHttpClient = null;
+
+    protected HttpClient() {
+        mLogInterceptor = new LogInterceptor();
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        if(sContext == null) {
+            Timber.e("Context not initialized call HttpClient.setContext(applicationContext) in the MainApp.onCrate()");
+            throw new RuntimeException("Context not initialized call HttpClient.setContext(applicationContext) in the MainApp.onCrate()");
+        }
+        if(mOkHttpClient == null) {
             try {
                 final X509TrustManager trustManager = new AdvancedX509TrustManager(
                         NetworkUtils.getKnownServersStore(sContext));
                 final SSLSocketFactory sslSocketFactory = getNewSslSocketFactory(trustManager);
                 // Automatic cookie handling, NOT PERSISTENT
-                final CookieJar cookieJar = new CookieJarImpl(sCookieStore);
+                final CookieJar cookieJar = new CookieJarImpl(mCookieStore);
 
                 // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
                 //.hostnameVerifier(new BrowserCompatHostnameVerifier());
-                sOkHttpClient = buildNewOkHttpClient(sslSocketFactory, trustManager, cookieJar);
+                mOkHttpClient = buildNewOkHttpClient(sslSocketFactory, trustManager, cookieJar);
 
             } catch (Exception e) {
                 Timber.e(e, "Could not setup SSL system.");
             }
         }
-        return sOkHttpClient;
+        return mOkHttpClient;
     }
 
     private static SSLContext getSslContext() throws NoSuchAlgorithmException {
@@ -109,7 +117,7 @@ public class HttpClient {
         return sslContext.getSocketFactory();
     }
 
-    private static OkHttpClient buildNewOkHttpClient(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager,
+    private OkHttpClient buildNewOkHttpClient(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager,
                                                      CookieJar cookieJar) {
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(getLogInterceptor())
@@ -125,15 +133,16 @@ public class HttpClient {
                 .build();
     }
 
-    public static LogInterceptor getLogInterceptor() {
-        if (sLogInterceptor == null) {
-            sLogInterceptor = new LogInterceptor();
-        }
-        return sLogInterceptor;
-    }
-
     public Context getContext() {
         return sContext;
+    }
+
+    public LogInterceptor getLogInterceptor() {
+        return mLogInterceptor;
+    }
+
+    public List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
+        return mCookieStore.get(httpUrl.host());
     }
 
     public static void setContext(Context context) {
@@ -141,6 +150,6 @@ public class HttpClient {
     }
 
     public void clearCookies() {
-        sCookieStore.clear();
+        mCookieStore.clear();
     }
 }

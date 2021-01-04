@@ -100,7 +100,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             // so this uri has to be customizable
             Uri srcWebDavUri = moveChunkedFile ? client.getUploadsWebDavUri() : client.getUserFilesWebDavUri();
 
-            final MoveMethod move = new MoveMethod(
+            final MoveMethod move = new MoveMethod(client,
                     new URL(srcWebDavUri + WebdavUtils.encodePath(mSrcRemotePath)),
                     client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);

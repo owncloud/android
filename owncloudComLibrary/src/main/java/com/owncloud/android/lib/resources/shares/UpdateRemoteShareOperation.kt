@@ -200,7 +200,7 @@ class UpdateRemoteShareOperation
 
         val formBodyBuilder = createFormBodyBuilder()
 
-        val putMethod = PutMethod(URL(requestUri.toString()), formBodyBuilder.build()).apply {
+        val putMethod = PutMethod(client, URL(requestUri.toString()), formBodyBuilder.build()).apply {
             setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8)
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }

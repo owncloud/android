@@ -1,4 +1,6 @@
 /* ownCloud Android Library is available under MIT license
+ *   @author David A. Velasco
+ *   @author David González Verdugo
  *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,76 +24,71 @@
  *
  */
 
-package com.owncloud.android.lib.resources.files;
+package com.owncloud.android.lib.resources.shares;
 
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.methods.nonwebdav.DeleteMethod;
-import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import timber.log.Timber;
 
 import java.net.URL;
 
-import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
-
 /**
- * Remote operation performing the removal of a remote file or folder in the ownCloud server.
+ * Get the data about a Share resource, known its remote ID.
  *
  * @author David A. Velasco
- * @author masensio
  * @author David González Verdugo
  */
-public class RemoveRemoteFileOperation extends RemoteOperation {
-    private String mRemotePath;
 
-    protected boolean removeChunksFolder = false;
+public class GetRemoteShareOperation extends RemoteOperation<ShareParserResult> {
 
-    /**
-     * Constructor
-     *
-     * @param remotePath RemotePath of the remote file or folder to remove from the server
-     */
-    public RemoveRemoteFileOperation(String remotePath) {
-        mRemotePath = remotePath;
+    private String mRemoteId;
+
+    public GetRemoteShareOperation(String remoteId) {
+        mRemoteId = remoteId;
     }
 
-    /**
-     * Performs the rename operation.
-     *
-     * @param client Client object to communicate with the remote ownCloud server.
-     */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
+        RemoteOperationResult<ShareParserResult> result;
 
         try {
-            Uri srcWebDavUri = removeChunksFolder ? client.getUploadsWebDavUri() : client.getUserFilesWebDavUri();
+            Uri requestUri = client.getBaseUri();
+            Uri.Builder uriBuilder = requestUri.buildUpon();
+            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
+            uriBuilder.appendEncodedPath(mRemoteId);
 
-            DeleteMethod deleteMethod = new DeleteMethod(
-                    client,
-                    new URL(srcWebDavUri + WebdavUtils.encodePath(mRemotePath)));
+            GetMethod getMethod = new GetMethod(client, new URL(uriBuilder.build().toString()));
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-            int status = client.executeHttpMethod(deleteMethod);
+            int status = client.executeHttpMethod(getMethod);
 
-            result = isSuccess(status) ?
-                    new RemoteOperationResult<>(OK) :
-                    new RemoteOperationResult<>(deleteMethod);
+            if (isSuccess(status)) {
+                // Parse xml response and obtain the list of shares
+                ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
+                        new ShareXMLParser()
+                );
+                parser.setOneOrMoreSharesRequired(true);
+                parser.setOwnCloudVersion(client.getOwnCloudVersion());
+                parser.setServerBaseUri(client.getBaseUri());
+                result = parser.parse(getMethod.getResponseBodyAsString());
 
-            Timber.i("Remove " + mRemotePath + ": " + result.getLogMessage());
+            } else {
+                result = new RemoteOperationResult<>(getMethod);
+            }
 
         } catch (Exception e) {
             result = new RemoteOperationResult<>(e);
-            Timber.e(e, "Remove " + mRemotePath + ": " + result.getLogMessage());
+            Timber.e(e, "Exception while getting remote shares");
         }
-
         return result;
     }
 
     private boolean isSuccess(int status) {
-        return status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_NO_CONTENT;
+        return (status == HttpConstants.HTTP_OK);
     }
 }

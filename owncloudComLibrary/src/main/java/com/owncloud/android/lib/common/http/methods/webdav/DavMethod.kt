@@ -27,6 +27,7 @@ import at.bitfire.dav4jvm.Dav4jvm.log
 import at.bitfire.dav4jvm.DavOCResource
 import at.bitfire.dav4jvm.exception.HttpException
 import at.bitfire.dav4jvm.exception.RedirectException
+import com.owncloud.android.lib.common.http.HttpClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod
 import okhttp3.HttpUrl
@@ -43,7 +44,7 @@ import java.util.concurrent.TimeUnit
  *
  * @author David González Verdugo
  */
-abstract class DavMethod protected constructor(url: URL) : HttpBaseMethod(url) {
+abstract class DavMethod protected constructor(httpClient: HttpClient,url: URL) : HttpBaseMethod(httpClient, url) {
     protected var davResource: DavOCResource
 
     override lateinit var response: Response

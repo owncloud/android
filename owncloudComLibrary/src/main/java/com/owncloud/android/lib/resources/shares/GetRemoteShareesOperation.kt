@@ -131,7 +131,7 @@ class GetRemoteShareesOperation
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareeOcsResponse> {
         val requestUri = buildRequestUri(client.baseUri)
 
-        val getMethod = GetMethod(URL(requestUri.toString()))
+        val getMethod = GetMethod(client, URL(requestUri.toString()))
         getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
 
         return try {

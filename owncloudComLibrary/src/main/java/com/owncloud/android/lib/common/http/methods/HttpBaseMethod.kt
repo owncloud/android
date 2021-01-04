@@ -37,7 +37,7 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
-abstract class HttpBaseMethod constructor(url: URL) {
+abstract class HttpBaseMethod constructor(clientWrapper: HttpClient, url: URL) {
     var okHttpClient: OkHttpClient
     var httpUrl: HttpUrl = url.toHttpUrlOrNull() ?: throw MalformedURLException()
     var request: Request
@@ -47,7 +47,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     var call: Call? = null
 
     init {
-        okHttpClient = HttpClient.getOkHttpClient()
+        okHttpClient = clientWrapper.okHttpClient
         request = Request.Builder()
             .url(httpUrl)
             .build()

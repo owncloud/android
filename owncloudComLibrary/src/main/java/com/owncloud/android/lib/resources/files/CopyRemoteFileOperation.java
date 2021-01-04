@@ -92,7 +92,8 @@ public class CopyRemoteFileOperation extends RemoteOperation<String> {
         RemoteOperationResult result;
         try {
             CopyMethod copyMethod =
-                    new CopyMethod(new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
+                    new CopyMethod(client,
+                            new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
                     client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
                     mOverwrite);
 

@@ -92,7 +92,8 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 result = new RemoteOperationResult<>(new OperationCancelledException());
                 break;
             } else {
-                mPutMethod = new PutMethod(new URL(uriPrefix + File.separator + chunkIndex), mFileRequestBody);
+                mPutMethod = new PutMethod(client,
+                        new URL(uriPrefix + File.separator + chunkIndex), mFileRequestBody);
 
                 if (chunkIndex == chunkCount - 1) {
                     // Added a high timeout to the last chunk due to when the last chunk
