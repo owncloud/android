@@ -42,11 +42,11 @@ class OCRemoteServerInfoDataSource(
         val owncloudClient = clientManager.getClientForUnExistingAccount(path, false)
 
         var checkPathExistenceResult =
-            serverInfoService.checkPathExistence(path, isUserLogged = false, client = owncloudClient)
+            serverInfoService.checkPathExistence(path, isUserLogged = false, owncloudClient)
         var redirectionLocation = checkPathExistenceResult.redirectedLocation
         while (!redirectionLocation.isNullOrEmpty()) {
             checkPathExistenceResult =
-                serverInfoService.checkPathExistence(redirectionLocation, isUserLogged = false, client = owncloudClient)
+                serverInfoService.checkPathExistence(redirectionLocation, isUserLogged = false, owncloudClient)
             redirectionLocation = checkPathExistenceResult.redirectedLocation
         }
 

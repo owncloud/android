@@ -43,7 +43,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.robolectric.RuntimeEnvironment
 
 class OCRemoteServerInfoDataSourceTest {
     private lateinit var ocRemoteServerInfoDatasource: OCRemoteServerInfoDataSource
@@ -62,14 +61,12 @@ class OCRemoteServerInfoDataSourceTest {
     private val authHeadersBasic = listOf(basicAuthHeader)
     private val authHeaderBearer = listOf(basicAuthHeader, bearerHeader)
     private val redirectedLocation = "http://demo.owncloud.demo.com"
-    private val context = RuntimeEnvironment.application.getApplicationContext();
 
     @Before
     fun init() {
         ocRemoteServerInfoDatasource = OCRemoteServerInfoDataSource(ocServerInfoService, clientManager)
 
         every { clientManager.getClientForUnExistingAccount(any(), any()) } returns ocClientMocked
-
     }
 
     @Test
