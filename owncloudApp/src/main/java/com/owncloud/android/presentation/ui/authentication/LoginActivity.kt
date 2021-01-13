@@ -413,9 +413,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
             exchangeAuthorizationCodeForTokens(authorizationCode)
         } else {
-            Timber.e("OAuth request to get authorization code failed")
-            // TODO: Add error handling
-            // updateOAuthStatusIconAndText(exception)
+            val authorizationError = intent.data?.getQueryParameter("error")
+            val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
+
+            Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]. Error description: [$authorizationErrorDescription]")
+            val authorizationException =
+                if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
+            updateOAuthStatusIconAndText(authorizationException)
         }
     }
 
