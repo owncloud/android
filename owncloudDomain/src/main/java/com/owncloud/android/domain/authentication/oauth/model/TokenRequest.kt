@@ -24,14 +24,13 @@ sealed class TokenRequest(
     val clientAuth: String,
     val grantType: String
 ) {
-    class Authorization(
+    class AccessToken(
         baseUrl: String,
         tokenEndpoint: String,
         clientAuth: String,
         val authorizationCode: String,
-        val redirectUri: String,
-        val codeVerifier: String
-    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.AUTHORIZATION_CODE.string)
+        val redirectUri: String
+    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.ACCESS_TOKEN.string)
 
     class RefreshToken(
         baseUrl: String,
@@ -41,7 +40,10 @@ sealed class TokenRequest(
     ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.REFRESH_TOKEN.string)
 
     enum class GrantType(val string: String) {
-        AUTHORIZATION_CODE("authorization_code"),
+        /** Request access token. [More info](https://tools.ietf.org/html/rfc6749#section-4.1.3) */
+        ACCESS_TOKEN("authorization_code"),
+
+        /** Refresh access token. [More info](https://tools.ietf.org/html/rfc6749#section-6) */
         REFRESH_TOKEN("refresh_token")
     }
 }

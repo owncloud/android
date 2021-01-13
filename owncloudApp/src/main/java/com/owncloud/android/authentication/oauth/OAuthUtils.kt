@@ -23,6 +23,10 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import com.owncloud.android.R
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_CLIENT_ID
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
 import timber.log.Timber
@@ -64,5 +68,25 @@ class OAuthUtils {
             val credentials = "$encodedClientId:$encodedClientSecret"
             return "Basic " + Base64.encodeToString(credentials.toByteArray(), Base64.NO_WRAP)
         }
+
+        fun buildAuthorizationRequest(
+            authorizationEndpoint: Uri,
+            redirectUri: String,
+            clientId: String,
+            responseType: String,
+            scope: String
+        ): Uri =
+            authorizationEndpoint.buildUpon()
+                .appendQueryParameter(QUERY_PARAMETER_REDIRECT_URI, redirectUri)
+                .appendQueryParameter(QUERY_PARAMETER_CLIENT_ID, clientId)
+                .appendQueryParameter(QUERY_PARAMETER_RESPONSE_TYPE, responseType)
+                .appendQueryParameter(QUERY_PARAMETER_SCOPE, scope)
+                .build()
+
+        fun buildRedirectUri(context: Context): Uri =
+            Uri.Builder()
+                .scheme(context.getString(R.string.oauth2_redirect_uri_scheme))
+                .authority(context.getString(R.string.oauth2_redirect_uri_path))
+                .build()
     }
 }

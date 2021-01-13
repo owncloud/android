@@ -30,7 +30,6 @@ import android.accounts.Account
 import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.app.Activity
-import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -39,6 +38,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -47,10 +47,10 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.authentication.oauth.AuthStateManager
-import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
+import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
@@ -71,15 +71,11 @@ import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.account_setup.*
-import net.openid.appauth.AppAuthConfiguration
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
-import net.openid.appauth.ResponseTypeValues
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -427,29 +423,23 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
         Timber.d("A browser should be opened now to authenticate this user.")
-        val clientId = getString(R.string.oauth2_client_id)
-        val redirectUri = Uri.Builder()
-            .scheme(getString(R.string.oauth2_redirect_uri_scheme))
-            .authority(getString(R.string.oauth2_redirect_uri_path))
-            .build()
-        val scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
-        val builder = AuthorizationRequest.Builder(
-            authorizationServiceConfiguration,
-            clientId,
-            ResponseTypeValues.CODE,
-            redirectUri
-        ).setScope(scope)
 
-        val request = builder.build()
-        Timber.d("Request information: ${request.jsonSerializeString()}")
-        val completedIntent = Intent(this, LoginActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0)
+        val authorizationEndpoint = authorizationServiceConfiguration.authorizationEndpoint
+        val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
+        val customTabsIntent: CustomTabsIntent = customTabsBuilder.build()
 
-        val appAuthConfigurationBuilder = AppAuthConfiguration.Builder()
-        appAuthConfigurationBuilder.setConnectionBuilder(OAuthConnectionBuilder(this))
-        authService = AuthorizationService(this, appAuthConfigurationBuilder.build())
-        Timber.d("Sends an authorization request to the authorization service using a custom tab or browser instance.")
-        authService?.performAuthorizationRequest(request, pendingIntent)
+        val authorizationEndpointUri = OAuthUtils.buildAuthorizationRequest(
+            authorizationEndpoint = authorizationEndpoint,
+            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
+            clientId = getString(R.string.oauth2_client_id),
+            responseType = ResponseType.CODE.string,
+            scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
+        )
+
+        customTabsIntent.launchUrl(
+            this,
+            authorizationEndpointUri
+        )
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -460,20 +450,22 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun handleGetAuthorizationCodeResponse(intent: Intent) {
-        val authorizationResponse = AuthorizationResponse.fromIntent(intent)
         val authorizationException = AuthorizationException.fromIntent(intent)
-        if (authorizationResponse?.authorizationCode != null) {
-            exchangeAuthorizationCodeForTokens(authorizationResponse)
+        val authorizationCode = intent.data?.getQueryParameter("code")
+
+        if (authorizationCode != null) {
+            Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
+            exchangeAuthorizationCodeForTokens(authorizationCode)
         } else if (authorizationException != null) {
-            updateOAuthStatusIconAndText(authorizationException)
             Timber.e(authorizationException, "OAuth request to get authorization code failed")
+            updateOAuthStatusIconAndText(authorizationException)
         }
     }
 
     /**
      * OAuth step 2: Exchange the received authorization code for access and refresh tokens
      */
-    private fun exchangeAuthorizationCodeForTokens(authorizationResponse: AuthorizationResponse) {
+    private fun exchangeAuthorizationCodeForTokens(authorizationCode: String) {
         server_status_text.text = getString(R.string.auth_getting_authorization)
         val clientAuth =
             OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
@@ -482,12 +474,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val tokenEndPoint = oauthViewModel.oidcDiscovery.value?.peekContent()?.getStoredData()?.token_endpoint
             ?: "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
 
-        val requestToken = TokenRequest.Authorization(
+        val requestToken = TokenRequest.AccessToken(
             baseUrl = serverBaseUrl,
             tokenEndpoint = tokenEndPoint,
-            authorizationCode = authorizationResponse.authorizationCode ?: "",
-            redirectUri = authorizationResponse.request.redirectUri.toString(),
-            codeVerifier = authorizationResponse.request.codeVerifier ?: "",
+            authorizationCode = authorizationCode,
+            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
             clientAuth = clientAuth
         )
 

@@ -32,13 +32,12 @@ class RemoteTokenRequestMapper : RemoteMapper<TokenRequest, TokenRequestParams> 
         model ?: return null
 
         return when (model) {
-            is TokenRequest.Authorization ->
+            is TokenRequest.AccessToken ->
                 TokenRequestParams.Authorization(
                     tokenEndpoint = model.tokenEndpoint,
                     authorizationCode = model.authorizationCode,
                     grantType = model.grantType,
                     redirectUri = model.redirectUri,
-                    codeVerifier = model.codeVerifier,
                     clientAuth = model.clientAuth
                 )
             is TokenRequest.RefreshToken ->
