@@ -46,7 +46,6 @@ import androidx.lifecycle.Observer
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
-import com.owncloud.android.authentication.oauth.AuthStateManager
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
@@ -71,11 +70,6 @@ import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.account_setup.*
-import net.openid.appauth.AuthState
-import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationService
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -92,10 +86,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var userAccount: Account? = null
     private lateinit var serverBaseUrl: String
 
-    private var authService: AuthorizationService? = null
-    private lateinit var authStateManager: AuthStateManager
     private var oidcSupported = false
-    private var authorizationServiceConfiguration: AuthorizationServiceConfiguration? = null
 
     // For handling AbstractAccountAuthenticator responses
     private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
@@ -205,8 +196,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 )
             }
         })
-
-        authStateManager = AuthStateManager.getInstance(this)
     }
 
     private fun checkOcServer() {
@@ -320,13 +309,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         notifyDocumentProviderRoots(applicationContext)
 
-        authorizationServiceConfiguration?.let { authServiceConfig ->
-            accountName?.let {
-                val authState = AuthState(authServiceConfig)
-                authStateManager.replace(it, authState)
-            }
-        }
-
         finish()
     }
 
@@ -377,13 +359,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     Timber.d("Service discovery: ${it.peekContent().getStoredData()}")
                     oidcSupported = true
                     val oidcServerConfiguration = it.peekContent().getStoredData() ?: return@observe
-                    val newServerConfiguration = AuthorizationServiceConfiguration(
-                        oidcServerConfiguration.authorization_endpoint.toUri(),
-                        oidcServerConfiguration.token_endpoint.toUri(),
-                        oidcServerConfiguration.registration_endpoint.toUri()
-                    )
-                    performGetAuthorizationCodeRequest(newServerConfiguration)
-                    authorizationServiceConfiguration = newServerConfiguration
+                    performGetAuthorizationCodeRequest(oidcServerConfiguration.authorization_endpoint.toUri())
                 }
                 is UIResult.Error -> {
                     Timber.e(it.peekContent().getThrowableOrNull(), "OIDC failed. Try with normal OAuth")
@@ -398,33 +374,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      * If OIDC is not available, falling back to normal OAuth
      */
     private fun startNormalOauthorization() {
-        val retrieveConfigurationCallback =
-            RetrieveConfigurationCallback { serviceConfiguration, exception ->
-                if (exception != null) {
-                    Timber.e(exception, "OAuth failed.")
-                    Timber.e(
-                        exception,
-                        "OAuth failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}"
-                    )
-
-                    updateOAuthStatusIconAndText(exception)
-                } else if (serviceConfiguration != null) {
-                    performGetAuthorizationCodeRequest(serviceConfiguration)
-                    authorizationServiceConfiguration = serviceConfiguration
-                }
-            }
-
-        OAuthUtils.buildOAuthorizationServiceConfig(
-            this,
-            serverBaseUrl,
-            retrieveConfigurationCallback
-        )
+        val oauth2authorizationEndpoint =
+            Uri.parse("$serverBaseUrl${File.separator}${getString(R.string.oauth2_url_endpoint_auth)}")
+        performGetAuthorizationCodeRequest(oauth2authorizationEndpoint)
     }
 
-    private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
+    private fun performGetAuthorizationCodeRequest(authorizationEndpoint: Uri) {
         Timber.d("A browser should be opened now to authenticate this user.")
 
-        val authorizationEndpoint = authorizationServiceConfiguration.authorizationEndpoint
         val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
         val customTabsIntent: CustomTabsIntent = customTabsBuilder.build()
 
@@ -450,15 +407,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun handleGetAuthorizationCodeResponse(intent: Intent) {
-        val authorizationException = AuthorizationException.fromIntent(intent)
         val authorizationCode = intent.data?.getQueryParameter("code")
 
         if (authorizationCode != null) {
             Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
             exchangeAuthorizationCodeForTokens(authorizationCode)
-        } else if (authorizationException != null) {
-            Timber.e(authorizationException, "OAuth request to get authorization code failed")
-            updateOAuthStatusIconAndText(authorizationException)
+        } else {
+            Timber.e("OAuth request to get authorization code failed")
+            // TODO: Add error handling
+            // updateOAuthStatusIconAndText(exception)
         }
     }
 
@@ -663,11 +620,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(KEY_AUTH_TOKEN_TYPE, authTokenType)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        authService?.dispose()
     }
 
     override fun finish() {

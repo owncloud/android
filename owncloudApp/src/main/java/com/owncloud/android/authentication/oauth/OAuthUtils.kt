@@ -27,35 +27,10 @@ import com.owncloud.android.data.authentication.QUERY_PARAMETER_CLIENT_ID
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
-import timber.log.Timber
-import java.io.File
 import java.net.URLEncoder
 
 class OAuthUtils {
     companion object {
-
-        fun buildOAuthorizationServiceConfig(
-            context: Context,
-            serverBaseUrl: String = "",
-            onGetAuthorizationServiceConfiguration: RetrieveConfigurationCallback
-        ) {
-            Timber.d("Trying normal OAuth instead")
-
-            val authorizationServiceConfiguration = AuthorizationServiceConfiguration(
-                Uri.parse( // auth endpoint
-                    "$serverBaseUrl${File.separator}${context.getString(R.string.oauth2_url_endpoint_auth)}"
-                ),
-                Uri.parse( // token endpoint
-                    "$serverBaseUrl${File.separator}${context.getString(R.string.oauth2_url_endpoint_access)}"
-                )
-            )
-
-            onGetAuthorizationServiceConfiguration.onFetchConfigurationCompleted(
-                authorizationServiceConfiguration, null
-            )
-        }
 
         fun getClientAuth(
             clientSecret: String,

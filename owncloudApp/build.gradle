@@ -31,9 +31,6 @@ dependencies {
         exclude group: "com.android.support"
     }
 
-    // AppAuth
-    api 'net.openid:appauth:0.7.1'
-
     // CustomTabs required for OAuth2 and OIDC.
     implementation "androidx.browser:browser:1.3.0"
 
