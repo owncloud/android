@@ -39,8 +39,7 @@ sealed class TokenRequestParams(
         clientAuth: String,
         grantType: String,
         val authorizationCode: String,
-        val redirectUri: String,
-        val codeVerifier: String
+        val redirectUri: String
     ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType) {
 
         override fun toRequestBody(): RequestBody {
@@ -48,7 +47,6 @@ sealed class TokenRequestParams(
                 .add(HttpConstants.HEADER_AUTHORIZATION_CODE, authorizationCode)
                 .add(HttpConstants.HEADER_GRANT_TYPE, grantType)
                 .add(HttpConstants.HEADER_REDIRECT_URI, redirectUri)
-                .add(HttpConstants.HEADER_CODE_VERIFIER, codeVerifier)
                 .build()
         }
     }

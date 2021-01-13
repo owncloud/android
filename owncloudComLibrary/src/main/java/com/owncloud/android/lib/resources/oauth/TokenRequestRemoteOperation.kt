@@ -28,11 +28,6 @@ package com.owncloud.android.lib.resources.oauth
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER
-import com.owncloud.android.lib.common.http.HttpConstants.HEADER_AUTHORIZATION_CODE
-import com.owncloud.android.lib.common.http.HttpConstants.HEADER_CODE_VERIFIER
-import com.owncloud.android.lib.common.http.HttpConstants.HEADER_GRANT_TYPE
-import com.owncloud.android.lib.common.http.HttpConstants.HEADER_REDIRECT_URI
-import com.owncloud.android.lib.common.http.HttpConstants.HEADER_REFRESH_TOKEN
 import com.owncloud.android.lib.common.http.HttpConstants.HTTP_OK
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
@@ -41,8 +36,6 @@ import com.owncloud.android.lib.resources.oauth.params.TokenRequestParams
 import com.owncloud.android.lib.resources.oauth.responses.TokenResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import okhttp3.FormBody
-import okio.ByteString.Companion.encodeUtf8
 import timber.log.Timber
 import java.net.URL
 
