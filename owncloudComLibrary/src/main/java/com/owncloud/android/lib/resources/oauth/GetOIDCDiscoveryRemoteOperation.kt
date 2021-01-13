@@ -45,8 +45,6 @@ import java.net.URL
 class GetOIDCDiscoveryRemoteOperation : RemoteOperation<OIDCDiscoveryResponse>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<OIDCDiscoveryResponse> {
-        var result: RemoteOperationResult<OIDCDiscoveryResponse>
-
         try {
             val uriBuilder = client.baseUri.buildUpon().apply {
                 appendPath(WELL_KNOWN_PATH)    // avoid starting "/" in this method
@@ -68,22 +66,23 @@ class GetOIDCDiscoveryRemoteOperation : RemoteOperation<OIDCDiscoveryResponse>()
                 val moshi: Moshi = Moshi.Builder().build()
                 val jsonAdapter: JsonAdapter<OIDCDiscoveryResponse> = moshi.adapter(OIDCDiscoveryResponse::class.java)
                 val oidcDiscoveryResponse: OIDCDiscoveryResponse? = jsonAdapter.fromJson(responseBody)
+                Timber.d("Get OIDC Discovery completed and parsed to [$oidcDiscoveryResponse]")
 
-                result = RemoteOperationResult(RemoteOperationResult.ResultCode.OK)
-                result.data = oidcDiscoveryResponse
+                return RemoteOperationResult<OIDCDiscoveryResponse>(RemoteOperationResult.ResultCode.OK).apply {
+                    data = oidcDiscoveryResponse
+                }
 
-                Timber.d("Get OIDC Discovery completed and parsed to $oidcDiscoveryResponse")
             } else {
-                result = RemoteOperationResult(getMethod)
                 Timber.e("Failed response while getting OIDC server discovery from the server status code: $status; response message: $responseBody")
+
+                return RemoteOperationResult<OIDCDiscoveryResponse>(getMethod)
             }
 
         } catch (e: Exception) {
-            result = RemoteOperationResult(e)
             Timber.e(e, "Exception while getting OIDC server discovery")
-        }
 
-        return result
+            return RemoteOperationResult<OIDCDiscoveryResponse>(e)
+        }
     }
 
     companion object {

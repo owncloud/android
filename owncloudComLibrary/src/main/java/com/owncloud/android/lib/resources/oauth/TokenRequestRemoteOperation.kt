@@ -49,8 +49,6 @@ class TokenRequestRemoteOperation(
 ) : RemoteOperation<TokenResponse>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<TokenResponse> {
-        var result: RemoteOperationResult<TokenResponse>
-
         try {
             val requestBody = tokenRequestParams.toRequestBody()
 
@@ -69,21 +67,21 @@ class TokenRequestRemoteOperation(
                 val moshi: Moshi = Moshi.Builder().build()
                 val jsonAdapter: JsonAdapter<TokenResponse> = moshi.adapter(TokenResponse::class.java)
                 val tokenResponse: TokenResponse? = jsonAdapter.fromJson(responseBody)
-
-                result = RemoteOperationResult(RemoteOperationResult.ResultCode.OK)
-                result.data = tokenResponse
-
                 Timber.d("Get tokens completed and parsed to $tokenResponse")
+
+                return RemoteOperationResult<TokenResponse>(RemoteOperationResult.ResultCode.OK).apply {
+                    data = tokenResponse
+                }
+
             } else {
-                result = RemoteOperationResult(postMethod)
                 Timber.e("Failed response while getting tokens from the server status code: $status; response message: $responseBody")
+                return RemoteOperationResult<TokenResponse>(postMethod)
             }
 
         } catch (e: Exception) {
-            result = RemoteOperationResult(e)
             Timber.e(e, "Exception while getting tokens")
-        }
+            return RemoteOperationResult<TokenResponse>(e)
 
-        return result
+        }
     }
 }
