@@ -47,9 +47,11 @@ import com.owncloud.android.ui.activity.PrivacyPolicyActivity
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+@Ignore
 class OCSettingsMoreTest {
 
     @Rule
@@ -110,6 +112,7 @@ class OCSettingsMoreTest {
         onView(withText(R.string.prefs_recommend)).check(matches(isDisplayed()))
     }
 
+    @Ignore
     @Test
     fun recommendOpenSender() {
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
@@ -143,6 +146,7 @@ class OCSettingsMoreTest {
         onView(withText(R.string.drawer_feedback)).check(matches(isDisplayed()))
     }
 
+    @Ignore
     @Test
     fun feedbackOpenSender() {
         val intentResult = ActivityResult(Activity.RESULT_OK, Intent())
@@ -166,6 +170,7 @@ class OCSettingsMoreTest {
         onView(withText(R.string.prefs_privacy_policy)).check(matches(isDisplayed()))
     }
 
+    @Ignore
     @Test
     fun privacyPolicyOpenWeb() {
         onView(withText(R.string.prefs_privacy_policy)).perform(click())

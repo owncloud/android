@@ -38,9 +38,11 @@ import com.owncloud.android.ui.activity.Preferences
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+@Ignore
 class OCSettingsLogsTest {
 
     @Rule
@@ -72,6 +74,7 @@ class OCSettingsLogsTest {
         Intents.release()
     }
 
+    @Ignore
     @Test
     fun loggerView() {
         onView(withText(R.string.actionbar_logger)).check(matches(isDisplayed()))
@@ -84,6 +87,7 @@ class OCSettingsLogsTest {
         Assert.assertTrue(prefHttpLogs.isChecked)
     }
 
+    @Ignore
     @Test
     fun loggerOpen() {
         onView(withText(R.string.log_open_logs_view)).perform(click())
