@@ -29,7 +29,17 @@ import android.os.Parcelable;
 
 import at.bitfire.dav4jvm.Property;
 import at.bitfire.dav4jvm.Response;
-import at.bitfire.dav4jvm.property.*;
+import at.bitfire.dav4jvm.property.CreationDate;
+import at.bitfire.dav4jvm.property.GetContentLength;
+import at.bitfire.dav4jvm.property.GetContentType;
+import at.bitfire.dav4jvm.property.GetETag;
+import at.bitfire.dav4jvm.property.GetLastModified;
+import at.bitfire.dav4jvm.property.OCId;
+import at.bitfire.dav4jvm.property.OCPermissions;
+import at.bitfire.dav4jvm.property.OCPrivatelink;
+import at.bitfire.dav4jvm.property.OCSize;
+import at.bitfire.dav4jvm.property.QuotaAvailableBytes;
+import at.bitfire.dav4jvm.property.QuotaUsedBytes;
 
 import java.io.File;
 import java.io.Serializable;
@@ -83,7 +93,8 @@ public class RemoteFile implements Parcelable, Serializable {
     /**
      * Create new {@link RemoteFile} with given path.
      * <p>
-     * The path received must be URL-decoded. Path separator must be File.separator, and it must be the first character in 'path'.
+     * The path received must be URL-decoded. Path separator must be File.separator, and it must be the first
+     * character in 'path'.
      *
      * @param path The remote path of the file.
      */
@@ -95,7 +106,7 @@ public class RemoteFile implements Parcelable, Serializable {
         mRemotePath = path;
         mCreationTimestamp = 0;
         mLength = 0;
-        mMimeType = "DIR";
+        mMimeType = FileUtils.MIME_DIR;
         mQuotaUsedBytes = BigDecimal.ZERO;
         mQuotaAvailableBytes = BigDecimal.ZERO;
         mPrivateLink = null;
@@ -154,6 +165,14 @@ public class RemoteFile implements Parcelable, Serializable {
         readFromParcel(source);
     }
 
+    /**
+     * Use this to find out if this file is a folder.
+     *
+     * @return true if it is a folder
+     */
+    public boolean isFolder() {
+        return mMimeType != null && (mMimeType.equals(FileUtils.MIME_DIR) || mMimeType.equals(FileUtils.MIME_DIR_UNIX));
+    }
 
     /**
      * Getters and Setters
