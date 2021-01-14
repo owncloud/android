@@ -58,6 +58,9 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
+import com.owncloud.android.domain.files.LIST_MIME_DIR
+import com.owncloud.android.domain.files.MIME_DIR
+import com.owncloud.android.domain.files.MIME_DIR_UNIX
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.android.ext.android.inject
@@ -128,9 +131,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     var isDir: Boolean
                     while (!children.isAfterLast) {
                         childId = children.getLong(children.getColumnIndex(ProviderTableMeta._ID))
-                        isDir = "DIR" == children.getString(
+                        isDir = children.getString(
                             children.getColumnIndex(ProviderTableMeta.FILE_CONTENT_TYPE)
-                        )
+                        ) in LIST_MIME_DIR
                         count += if (isDir) {
                             delete(
                                 db,

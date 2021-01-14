@@ -27,6 +27,7 @@ import android.net.Uri;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.domain.files.MimeTypeConstantsKt;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
@@ -529,7 +530,7 @@ public class UploadFileOperation extends SyncOperation {
         }
         if (parent != null) {
             OCFile createdFolder = new OCFile(remotePath);
-            createdFolder.setMimetype("DIR");
+            createdFolder.setMimetype(MimeTypeConstantsKt.MIME_DIR);
             createdFolder.setParentId(parent.getFileId());
             getStorageManager().saveFile(createdFolder);
             return createdFolder;
