@@ -274,24 +274,6 @@ public class ThumbnailsCacheManager {
 
                 int px = getThumbnailDimension();
 
-                if (file.isDown()) {
-                    Bitmap temp = BitmapUtils.decodeSampledBitmapFromFile(
-                            file.getStoragePath(), px, px);
-                    Bitmap bitmap = ThumbnailUtils.extractThumbnail(temp, px, px);
-
-                    if (bitmap != null) {
-                        // Handle PNG
-                        if (file.getMimetype().equalsIgnoreCase("image/png")) {
-                            bitmap = handlePNG(bitmap, px);
-                        }
-
-                        thumbnail = addThumbnailToCache(imageKey, bitmap, file.getStoragePath(), px);
-
-                        file.setNeedsUpdateThumbnail(false);
-                        mStorageManager.saveFile(file);
-                    }
-
-                } else {
                     // Download thumbnail from server
                     if (mClient != null) {
                         GetMethod get;
@@ -322,7 +304,6 @@ public class ThumbnailsCacheManager {
                         }
                     }
                 }
-            }
 
             return thumbnail;
 
