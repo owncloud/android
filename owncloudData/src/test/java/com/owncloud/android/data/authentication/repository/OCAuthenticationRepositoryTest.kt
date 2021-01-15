@@ -19,7 +19,6 @@
  */
 package com.owncloud.android.data.authentication.repository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
@@ -37,13 +36,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Rule
 import org.junit.Test
 
 class OCAuthenticationRepositoryTest {
-    @Rule
-    @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     private val localAuthenticationDataSource = mockk<LocalAuthenticationDataSource>(relaxed = true)
     private val remoteAuthenticationDataSource = mockk<RemoteAuthenticationDataSource>(relaxed = true)

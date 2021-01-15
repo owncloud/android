@@ -19,21 +19,16 @@
 
 package com.owncloud.android.data.file.repository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Rule
 import org.junit.Test
 
 class OCFileRepositoryTest {
-    @Rule
-    @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     private val remoteFileDataSource = mockk<RemoteFileDataSource>(relaxed = true)
     private val ocFileRepository: OCFileRepository = OCFileRepository(remoteFileDataSource)
