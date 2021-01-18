@@ -541,8 +541,6 @@
   <string name="welcome_feature_4_text">Οι φωτογραφίες  / τα βίντεο σας μεταφορτώθηκαν αυτόματα</string>
   <string name="welcome_feature_5_title">Ροή βίντεο</string>
   <string name="welcome_feature_5_text">Αναπαράγετε τα βίντεό σας χωρίς να κάνετε λήψη</string>
-  <string name="welcome_feature_7_title">Υποστήριξη για το OpenID Connect</string>
-  <string name="welcome_feature_7_text">Συνδεθείτε στους διακομιστές ownCloud σας με πιο ασφαλή τρόπο με το OpenID Connect</string>
   <string name="no_borwser_installed_alert">Δεν είναι εγκατεστημένος περιηγητής. Παρακαλούμε εγκαταστήστε ένα περιηγητή έτσι ώστε να επιτρέπεται η ασφαλής σύνδεση.</string>
   <string name="common_not_found">δεν βρέθηκε</string>
 </resources>

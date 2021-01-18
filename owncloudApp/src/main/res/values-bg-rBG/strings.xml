@@ -549,10 +549,6 @@
   <string name="welcome_feature_4_text">Вашите снимки/видеоклипове се качват автоматично</string>
   <string name="welcome_feature_5_title">Видео поток</string>
   <string name="welcome_feature_5_text">Възпроизвеждайте видеоклиповете си без да ги изтегляте</string>
-  <string name="welcome_feature_6_title">Нова долна навигационна лента</string>
-  <string name="welcome_feature_6_text">Бърз и лесен достъп до вашите налични офлайн файлове и връзки</string>
-  <string name="welcome_feature_7_title">Поддръжа за OpenID Connect</string>
-  <string name="welcome_feature_7_text">Свържете вашите ownCloud сървъри по по-сигурен начин с OpenID Connect</string>
   <string name="no_borwser_installed_alert">Не е инсталиран браузър. Моля, инсталирайте браузър за да имате достъп до сигурно влизане.</string>
   <string name="common_not_found">не беше намерен</string>
   <string name="supports_oauth2_error">Не беше възможно да се разбере дали OAuth2 се поддържа</string>

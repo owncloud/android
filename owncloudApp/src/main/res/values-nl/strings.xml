@@ -552,10 +552,6 @@ Neem contact op met uw beheerder</string>
   <string name="welcome_feature_4_text">Uw afbeeldingen/video\'s automatisch uploaden</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
-  <string name="welcome_feature_6_title">Nieuwe navigatiebalk onderaan</string>
-  <string name="welcome_feature_6_text">Gemakkelijkere en snellere toegang tot uw beschikbare offline bestanden en koppelingen</string>
-  <string name="welcome_feature_7_title">Ondersteuning voor OpenID Connect</string>
-  <string name="welcome_feature_7_text">Maak op een veiligere manier verbinding met uw ownCloud-servers met OpenID Connect</string>
   <string name="no_borwser_installed_alert">Geen browser geinstalleerd. Installeer een browser om een veilige login mogelijk te maken.</string>
   <string name="common_not_found">Niet gevonden</string>
   <string name="supports_oauth2_error">Het was niet mogelijk om te weten of OAuth2 wordt ondersteund</string>
