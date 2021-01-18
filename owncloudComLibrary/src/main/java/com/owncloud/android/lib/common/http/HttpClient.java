@@ -74,47 +74,46 @@ public class HttpClient {
             try {
                 final X509TrustManager trustManager = new AdvancedX509TrustManager(
                         NetworkUtils.getKnownServersStore(sContext));
-                final SSLSocketFactory sslSocketFactory = getNewSslSocketFactory(trustManager);
+
+
+                final SSLContext sslContext = buildSSLContext();
+                sslContext.init(null, new TrustManager[]{trustManager}, null);
+                final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
                 // Automatic cookie handling, NOT PERSISTENT
                 final CookieJar cookieJar = new CookieJarImpl(mCookieStore);
-
-                // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
-                //.hostnameVerifier(new BrowserCompatHostnameVerifier());
                 mOkHttpClient = buildNewOkHttpClient(sslSocketFactory, trustManager, cookieJar);
 
+            } catch(NoSuchAlgorithmException nsae){
+                Timber.e(nsae, "Could not setup SSL system.");
+                throw new RuntimeException("Could not setup okHttp client.", nsae);
             } catch (Exception e) {
-                Timber.e(e, "Could not setup SSL system.");
+                Timber.e(e, "Could not setup okHttp client.");
+                throw new RuntimeException("Could not setup okHttp client.", e);
             }
         }
         return mOkHttpClient;
     }
 
-    private static SSLContext getSslContext() throws NoSuchAlgorithmException {
+    private SSLContext buildSSLContext() throws NoSuchAlgorithmException {
         try {
-            return SSLContext.getInstance(TlsVersion.TLS_1_3.javaName());
+            return SSLContext.getInstance("TLSv1.3");
         } catch (NoSuchAlgorithmException tlsv13Exception) {
             try {
                 Timber.w("TLSv1.3 is not supported in this device; falling through TLSv1.2");
-                return SSLContext.getInstance(TlsVersion.TLS_1_2.javaName());
+                return SSLContext.getInstance("TLSv1.2");
             } catch (NoSuchAlgorithmException tlsv12Exception) {
                 try {
                     Timber.w("TLSv1.2 is not supported in this device; falling through TLSv1.1");
-                    return SSLContext.getInstance(TlsVersion.TLS_1_1.javaName());
+                    return SSLContext.getInstance("TLSv1.1");
                 } catch (NoSuchAlgorithmException tlsv11Exception) {
                     Timber.w("TLSv1.1 is not supported in this device; falling through TLSv1.0");
-                    return SSLContext.getInstance(TlsVersion.TLS_1_0.javaName());
+                    return SSLContext.getInstance("TLSv1");
                     // should be available in any device; see reference of supported protocols in
                     // http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
                 }
             }
         }
-    }
-
-    private static SSLSocketFactory getNewSslSocketFactory(X509TrustManager trustManager)
-            throws NoSuchAlgorithmException, KeyManagementException {
-        final SSLContext sslContext = getSslContext();
-        sslContext.init(null, new TrustManager[]{trustManager}, null);
-        return sslContext.getSocketFactory();
     }
 
     private OkHttpClient buildNewOkHttpClient(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager,
