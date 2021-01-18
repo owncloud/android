@@ -43,6 +43,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.robolectric.RuntimeEnvironment
 
 class OCRemoteServerInfoDataSourceTest {
     private lateinit var ocRemoteServerInfoDatasource: OCRemoteServerInfoDataSource
@@ -65,8 +66,40 @@ class OCRemoteServerInfoDataSourceTest {
     @Before
     fun init() {
         ocRemoteServerInfoDatasource = OCRemoteServerInfoDataSource(ocServerInfoService, clientManager)
-
         every { clientManager.getClientForAnonymousCredentials(any(), any()) } returns ocClientMocked
+    }
+
+    @Test
+    fun getAuthenticationMethodFollowRedirections() {
+        val checkPathExistenceResultFollowRedirectionMocked: RemoteOperationResult<Boolean> =
+            createRemoteOperationResultMock(
+                data = true,
+                isSuccess = true,
+                redirectedLocation = OC_SERVER_INFO.baseUrl
+            )
+        val checkPathExistenceResultMocked: RemoteOperationResult<Boolean> =
+            createRemoteOperationResultMock(
+                data = true,
+                isSuccess = true,
+                resultCode = OK_SSL,
+                authenticationHeader = authHeadersBasic,
+                httpCode = HTTP_UNAUTHORIZED
+            )
+
+        every {
+            ocServerInfoService.checkPathExistence(redirectedLocation, false, ocClientMocked)
+        } returns checkPathExistenceResultFollowRedirectionMocked
+
+        every {
+            ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked)
+        } returns checkPathExistenceResultMocked
+
+        val authenticationMethod = ocRemoteServerInfoDatasource.getAuthenticationMethod(redirectedLocation)
+
+        assertNotNull(authenticationMethod)
+        assertEquals(AuthenticationMethod.BASIC_HTTP_AUTH, authenticationMethod)
+
+        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
     }
 
     @Test
