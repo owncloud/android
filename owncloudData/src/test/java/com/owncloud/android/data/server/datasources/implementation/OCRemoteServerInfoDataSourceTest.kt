@@ -43,6 +43,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.robolectric.RuntimeEnvironment
 
 class OCRemoteServerInfoDataSourceTest {
     private lateinit var ocRemoteServerInfoDatasource: OCRemoteServerInfoDataSource
@@ -61,12 +62,47 @@ class OCRemoteServerInfoDataSourceTest {
     private val authHeadersBasic = listOf(basicAuthHeader)
     private val authHeaderBearer = listOf(basicAuthHeader, bearerHeader)
     private val redirectedLocation = "http://demo.owncloud.demo.com"
+    private val context = RuntimeEnvironment.application.getApplicationContext();
 
     @Before
     fun init() {
         ocRemoteServerInfoDatasource = OCRemoteServerInfoDataSource(ocServerInfoService, clientManager)
 
         every { clientManager.getClientForUnExistingAccount(any(), any()) } returns ocClientMocked
+
+    }
+
+    @Test
+    fun getAuthenticationMethodFollowRedirections() {
+        val checkPathExistenceResultFollowRedirectionMocked: RemoteOperationResult<Boolean> =
+            createRemoteOperationResultMock(
+                data = true,
+                isSuccess = true,
+                redirectedLocation = OC_SERVER_INFO.baseUrl
+            )
+        val checkPathExistenceResultMocked: RemoteOperationResult<Boolean> =
+            createRemoteOperationResultMock(
+                data = true,
+                isSuccess = true,
+                resultCode = OK_SSL,
+                authenticationHeader = authHeadersBasic,
+                httpCode = HTTP_UNAUTHORIZED
+            )
+
+        every {
+            ocServerInfoService.checkPathExistence(redirectedLocation, false)
+        } returns checkPathExistenceResultFollowRedirectionMocked
+
+        every {
+            ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
+        } returns checkPathExistenceResultMocked
+
+        val authenticationMethod = ocRemoteServerInfoDatasource.getAuthenticationMethod(redirectedLocation)
+
+        assertNotNull(authenticationMethod)
+        assertEquals(AuthenticationMethod.BASIC_HTTP_AUTH, authenticationMethod)
+
+        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     @Test
@@ -79,7 +115,7 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(expectedValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     @Test
@@ -92,7 +128,7 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(expectedValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     @Test
@@ -105,7 +141,7 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(expectedValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     @Test(expected = SpecificServiceUnavailableException::class)
@@ -120,7 +156,7 @@ class OCRemoteServerInfoDataSourceTest {
     @Test(expected = Exception::class)
     fun getAuthenticationMethodException() {
         every {
-            ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked)
+            ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
         } throws Exception()
 
         ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl)
@@ -136,7 +172,7 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(currentValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
+        verify { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
     }
 
     @Test
@@ -149,7 +185,7 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(currentValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
+        verify { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
     }
 
     @Test(expected = OwncloudVersionNotSupportedException::class)
@@ -176,7 +212,7 @@ class OCRemoteServerInfoDataSourceTest {
     @Test(expected = Exception::class)
     fun getRemoteStatusException() {
         every {
-            ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked)
+            ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl)
         } throws Exception()
 
         ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
@@ -193,8 +229,8 @@ class OCRemoteServerInfoDataSourceTest {
         val currentValue = ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
         assertEquals(expectedValue, currentValue)
 
-        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
-        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     @Test
@@ -208,8 +244,8 @@ class OCRemoteServerInfoDataSourceTest {
         val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl)
         assertEquals(expectedValue, currentValue)
 
-        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
-        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     @Test
@@ -223,8 +259,8 @@ class OCRemoteServerInfoDataSourceTest {
         val currentValue = ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
         assertEquals(expectedValue, currentValue)
 
-        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
-        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     @Test
@@ -238,8 +274,8 @@ class OCRemoteServerInfoDataSourceTest {
         val currentValue = ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
         assertEquals(expectedValue, currentValue)
 
-        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
-        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     @Test(expected = NoConnectionWithServerException::class)
@@ -248,8 +284,8 @@ class OCRemoteServerInfoDataSourceTest {
 
         ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
 
-        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
-        verify(exactly = 0) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 0) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
     }
 
     private fun prepareAuthorizationMethodToBeRetrieved(
@@ -272,7 +308,7 @@ class OCRemoteServerInfoDataSourceTest {
             )
 
         every {
-            ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked)
+            ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
         } returns checkPathExistenceResultMocked
     }
 
@@ -294,7 +330,7 @@ class OCRemoteServerInfoDataSourceTest {
             )
 
         every {
-            ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked)
+            ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl)
         } returns remoteStatusResultMocked
     }
 }

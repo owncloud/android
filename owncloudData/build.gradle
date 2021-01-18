@@ -41,6 +41,12 @@ android {
         // Room Database Tests
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -65,6 +71,7 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
     testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
 
     // Dependencies for instrumented tests
     androidTestImplementation project(':owncloudTestUtil')
