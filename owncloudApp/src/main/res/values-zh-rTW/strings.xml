@@ -549,10 +549,6 @@
   <string name="welcome_feature_4_text">您的圖片/視頻自動地上傳</string>
   <string name="welcome_feature_5_title">視頻流</string>
   <string name="welcome_feature_5_text">播放視頻而不下載它們</string>
-  <string name="welcome_feature_6_title">新的底部導航欄</string>
-  <string name="welcome_feature_6_text">更輕鬆，更快速地訪問可用的脫機文件和鏈接</string>
-  <string name="welcome_feature_7_title">支持OpenID 連接</string>
-  <string name="welcome_feature_7_text">使用OpenID 連接與更安全更多的方式連接到您自己的Cloud服務器</string>
   <string name="no_borwser_installed_alert">未安裝瀏覽器。 請安裝瀏覽器以允許安全登錄。</string>
   <string name="common_not_found">找不到</string>
   <string name="supports_oauth2_error">無法知道是否支持OAuth2</string>

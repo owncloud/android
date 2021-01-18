@@ -491,6 +491,5 @@
   <string name="welcome_feature_4_title">Cargas de la cámara</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-  <string name="welcome_feature_7_title">Soporte para OpenID Connect</string>
-  <string name="common_not_found">no se encontró</string>
+    <string name="common_not_found">no se encontró</string>
 </resources>
