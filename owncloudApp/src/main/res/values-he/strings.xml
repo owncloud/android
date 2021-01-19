@@ -90,7 +90,7 @@
   <string name="auth_oauth_failure">פג תוקף חתימת הייצוג או שהפך להיות לא חוקי. יש להתחבר שנית לקבלת גישה חוזרת.</string>
   <string name="auth_oauth_failure_snackbar_action">התחברות</string>
   <string name="auth_check_server">בדיקת שרת</string>
-  <string name="auth_host_url">כתובת שרת https://…</string>
+  <string name="auth_host_url">כתובת שרת https://‎…</string>
   <string name="auth_username">שם משתמש</string>
   <string name="auth_password">ססמה</string>
   <string name="auth_register">חדש ב- %1$s?</string>
@@ -99,7 +99,7 @@
   <string name="uploader_btn_upload_text">העלאה</string>
   <string name="uploader_top_message">יש לבחור בתיקיית העלאה</string>
   <string name="uploader_wrn_no_account_title">לא נמצא חשבון</string>
-  <string name="uploader_wrn_no_account_text">לא מוגדרים חשבונות %1$s במכשיר שלך. יש להגדיר חשבות תחילה.</string>
+  <string name="uploader_wrn_no_account_text">לא מוגדרים חשבונות %1$s במכשיר שלך. יש להגדיר חשבון תחילה.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">הגדרות</string>
   <string name="uploader_wrn_no_account_quit_btn_text">יציאה</string>
   <string name="uploader_error_title_no_file_to_upload">אין קובץ להעלאה</string>
