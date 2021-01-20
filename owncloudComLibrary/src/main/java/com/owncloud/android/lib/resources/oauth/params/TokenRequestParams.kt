@@ -44,9 +44,9 @@ sealed class TokenRequestParams(
 
         override fun toRequestBody(): RequestBody {
             return FormBody.Builder()
-                .add(HttpConstants.HEADER_AUTHORIZATION_CODE, authorizationCode)
-                .add(HttpConstants.HEADER_GRANT_TYPE, grantType)
-                .add(HttpConstants.HEADER_REDIRECT_URI, redirectUri)
+                .add(HttpConstants.OAUTH_HEADER_AUTHORIZATION_CODE, authorizationCode)
+                .add(HttpConstants.OAUTH_HEADER_GRANT_TYPE, grantType)
+                .add(HttpConstants.OAUTH_HEADER_REDIRECT_URI, redirectUri)
                 .build()
         }
     }
@@ -60,9 +60,9 @@ sealed class TokenRequestParams(
 
         override fun toRequestBody(): RequestBody {
             return FormBody.Builder().apply {
-                add(HttpConstants.HEADER_GRANT_TYPE, grantType)
+                add(HttpConstants.OAUTH_HEADER_GRANT_TYPE, grantType)
                 if (!refreshToken.isNullOrBlank()) {
-                    add(HttpConstants.HEADER_REFRESH_TOKEN, refreshToken)
+                    add(HttpConstants.OAUTH_HEADER_REFRESH_TOKEN, refreshToken)
                 }
             }.build()
 

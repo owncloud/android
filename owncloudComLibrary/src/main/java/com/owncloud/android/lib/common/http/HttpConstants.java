@@ -52,10 +52,10 @@ public class HttpConstants {
     public static final String OC_FILE_REMOTE_ID = "OC-FileId";
 
     // OAuth
-    public static final String HEADER_AUTHORIZATION_CODE = "code";
-    public static final String HEADER_GRANT_TYPE = "grant_type";
-    public static final String HEADER_REDIRECT_URI = "redirect_uri";
-    public static final String HEADER_REFRESH_TOKEN = "refresh_token";
+    public static final String OAUTH_HEADER_AUTHORIZATION_CODE = "code";
+    public static final String OAUTH_HEADER_GRANT_TYPE = "grant_type";
+    public static final String OAUTH_HEADER_REDIRECT_URI = "redirect_uri";
+    public static final String OAUTH_HEADER_REFRESH_TOKEN = "refresh_token";
 
     /***********************************************************************************************************
      ************************************************ CONTENT TYPES ********************************************
