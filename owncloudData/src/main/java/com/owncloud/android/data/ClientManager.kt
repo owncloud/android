@@ -53,7 +53,7 @@ class ClientManager(
         val safeClient = ownCloudClient
 
         return if (requiresNewClient || safeClient == null) {
-            return OwnCloudClient(Uri.parse(path)).apply {
+            OwnCloudClient(Uri.parse(path)).apply {
                 credentials = ownCloudCredentials
             }.also {
                 ownCloudClient = it

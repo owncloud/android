@@ -363,14 +363,15 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         }
     }
 
-    private void handleSuccessfulRefreshToken(TokenResponse tokenResponse,
-                                              AccountAuthenticatorResponse accountAuthenticatorResponse,
-                                              Account account,
-                                              String authTokenType,
-                                              AccountManager accountManager,
-                                              String oldRefreshToken
+    private void handleSuccessfulRefreshToken(
+            TokenResponse tokenResponse,
+            AccountAuthenticatorResponse accountAuthenticatorResponse,
+            Account account,
+            String authTokenType,
+            AccountManager accountManager,
+            String oldRefreshToken
     ) {
-        if (tokenResponse != null && tokenResponse.getAccessToken() != null) {
+        if (tokenResponse != null) {
             String newAccessToken = tokenResponse.getAccessToken();
             accountManager.setAuthToken(account, authTokenType, newAccessToken);
 
@@ -394,11 +395,12 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         }
     }
 
-    private void handleFailedRefreshToken(Throwable exception,
-                                          AccountAuthenticatorResponse accountAuthenticatorResponse,
-                                          Account account,
-                                          String authTokenType,
-                                          Bundle options
+    private void handleFailedRefreshToken(
+            Throwable exception,
+            AccountAuthenticatorResponse accountAuthenticatorResponse,
+            Account account,
+            String authTokenType,
+            Bundle options
     ) {
         Timber.e(exception, "OAuth request to refresh access token failed. Preparing to access Login Activity");
         Bundle result = prepareBundleToAccessLoginActivity(accountAuthenticatorResponse, account, authTokenType, options);

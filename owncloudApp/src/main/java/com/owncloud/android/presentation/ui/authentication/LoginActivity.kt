@@ -358,8 +358,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 is UIResult.Success -> {
                     Timber.d("Service discovery: ${it.peekContent().getStoredData()}")
                     oidcSupported = true
-                    val oidcServerConfiguration = it.peekContent().getStoredData() ?: return@observe
-                    performGetAuthorizationCodeRequest(oidcServerConfiguration.authorization_endpoint.toUri())
+                    it.peekContent().getStoredData()?.let { oidcServerConfiguration ->
+                        performGetAuthorizationCodeRequest(oidcServerConfiguration.authorization_endpoint.toUri())
+                    }
                 }
                 is UIResult.Error -> {
                     Timber.e(it.peekContent().getThrowableOrNull(), "OIDC failed. Try with normal OAuth")
