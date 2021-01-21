@@ -2,7 +2,6 @@
 - Native Android ShareSheet
 - Option to log HTTP requests and responses
 - Move sort menu from toolbar to files view
-- Improvements in thumbnails
 - Update background images
 - Search when sharing with ownCloud
 - Bug fixes, including:
