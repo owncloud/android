@@ -5,13 +5,15 @@
 
 version: 2
 updates:
-  - package-ecosystem: "gradle" # See documentation for possible values
+  - package-ecosystem: "gradle"
     directory: "/" # Location of package manifests
+    target-branch: "special"
     schedule:
       interval: "daily"
     labels:
       - "Dependencies"
   - package-ecosystem: "github-actions"
     directory: "/" # Location of package manifests
+    target-branch: "special"
     schedule:
       interval: "weekly"
