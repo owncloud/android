@@ -49,6 +49,7 @@ class OCRemoteServerInfoDataSource(
             serverInfoService.checkPathExistence(path, isUserLogged = false, client = owncloudClient)
         var redirectionLocation = checkPathExistenceResult.redirectedLocation
         while (!redirectionLocation.isNullOrEmpty()) {
+            owncloudClient.setFollowRedirects(true)
             checkPathExistenceResult =
                 serverInfoService.checkPathExistence(redirectionLocation, isUserLogged = false, client = owncloudClient)
             redirectionLocation = checkPathExistenceResult.redirectedLocation
