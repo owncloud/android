@@ -400,6 +400,7 @@
   <string name="drawer_manage_accounts">Manage accounts</string>
   <string name="auth_redirect_non_secure_connection_title">Secure connection is redirected through an unsecured route.</string>
   <string name="actionbar_logger">Logs</string>
+  <string name="log_open_logs_view">Open logs view</string>
   <string name="log_send_history_button">Send history</string>
   <string name="log_send_no_mail_app">No app for sending logs found. Please install a mail app.</string>
   <string name="log_send_mail_subject">%1$s Android app logs</string>
@@ -549,8 +550,14 @@
   <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Play your videos without downloading them</string>
+  <string name="welcome_feature_6_title">New bottom navigation bar</string>
+  <string name="welcome_feature_6_text">Easier and faster access to your available offline files and links</string>
+  <string name="welcome_feature_7_title">Support for OpenID Connect</string>
+  <string name="welcome_feature_7_text">Connect to your ownCloud servers in a more secure way with OpenID Connect</string>
   <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
   <string name="common_not_found">it was not found</string>
   <string name="supports_oauth2_error">It was not possible to know if OAuth2 is supported</string>
   <string name="get_base_url_error">It was not possible to know the server base URL</string>
+  <string name="prefs_http_logs">Log HTTP requests and responses</string>
+  <string name="prefs_logs_summary">Logs may contain sensitive information. Sharing logs with others is sole user responsibility</string>
 </resources>
