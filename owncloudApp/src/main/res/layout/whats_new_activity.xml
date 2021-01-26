@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="100"
-    android:background="@color/owncloud_blue_accent">
+    android:background="@color/primary">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/contentPanel"

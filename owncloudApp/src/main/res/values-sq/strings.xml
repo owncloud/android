@@ -548,10 +548,6 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
-  <string name="welcome_feature_6_title">Shtyllë e re poshtë për lëvizje</string>
-  <string name="welcome_feature_6_text">Hyrje më e kollajtë dhe më e shpejtë te kartela dhe lidhje tuajat jo në linjë</string>
-  <string name="welcome_feature_7_title">Mbulim për OpenID Connect</string>
-  <string name="welcome_feature_7_text">Lidhuni te shërbyesit tuaj ownCloud në një rrugë më të sigurt, përmes OpenID Connect</string>
   <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
   <string name="common_not_found">s\’u gjet</string>
   <string name="supports_oauth2_error">S\’qe e mundur të dihej nëse mbulohet OAuth2</string>

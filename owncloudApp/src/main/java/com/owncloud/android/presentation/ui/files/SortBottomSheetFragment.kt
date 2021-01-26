@@ -48,10 +48,6 @@ class SortBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Show bottom sheet expanded even in landscape, since there are just 3 options at the moment.
-        val behavior = BottomSheetBehavior.from(requireView().parent as View)
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
-
         when (sortType) {
             SortType.SORT_TYPE_BY_NAME -> sort_by_name.setSelected(sortOrder.toDrawableRes())
             SortType.SORT_TYPE_BY_SIZE -> sort_by_size.setSelected(sortOrder.toDrawableRes())
@@ -61,6 +57,14 @@ class SortBottomSheetFragment : BottomSheetDialogFragment() {
         sort_by_name.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_NAME) }
         sort_by_size.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_SIZE) }
         sort_by_date.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_DATE) }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // Show bottom sheet expanded even in landscape, since there are just 3 options at the moment.
+        val behavior = BottomSheetBehavior.from(requireView().parent as View)
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun onSortClick(sortType: SortType) {

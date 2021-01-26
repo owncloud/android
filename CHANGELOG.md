@@ -1,3 +1,15 @@
+## 2.16.0 (January 2021)
+- Native Android ShareSheet
+- Option to log HTTP requests and responses
+- Move sort menu from toolbar to files view
+- Update background images
+- Search when sharing with ownCloud
+- Bug fixes, including:
+  + Fix a crash while accessing a WebDAV folder
+  + Fix some crashes when rotating the device
+  + Fix a glitch where image was not refreshed properly
+  + Fix some issues when using OCIS
+
 ## 2.15.3 (October 2020)
 - Bug fixes, including:
   + Fix a crash related to downloads notifications

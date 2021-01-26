@@ -550,10 +550,6 @@
   <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-  <string name="welcome_feature_6_title">New bottom navigation bar</string>
-  <string name="welcome_feature_6_text">Easier and faster access to your available offline files and links</string>
-  <string name="welcome_feature_7_title">Support for OpenID Connect</string>
-  <string name="welcome_feature_7_text">Connect to your ownCloud servers in a more secure way with OpenID Connect</string>
   <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
   <string name="common_not_found">it was not found</string>
   <string name="supports_oauth2_error">It was not possible to know if OAuth2 is supported</string>
