@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">이름</string>
+  <string name="global_date">날짜</string>
+  <string name="global_size">크기</string>
   <string name="actionbar_search">이 폴더에서 검색</string>
   <string name="actionbar_sync">계정 새로 고침</string>
   <string name="actionbar_upload">업로드</string>
@@ -10,11 +14,8 @@
   <string name="actionbar_settings">설정</string>
   <string name="actionbar_see_details">자세한 정보</string>
   <string name="actionbar_send_file">보내기</string>
-  <string name="actionbar_sort">정렬</string>
   <string name="actionbar_descending">내림차순</string>
   <string name="actionbar_sort_title">정렬 순서</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">오래된순 - 최신순</string>
   <string name="drawer_item_all_files">모든 파일</string>
   <string name="drawer_item_only_available_offline">오프라인 사용 가능</string>
   <string name="drawer_item_shared_by_link_files">링크로 공유됨</string>
@@ -426,8 +427,6 @@
   <string name="action_clear_failed_uploads">실패한 항목 지우기</string>
   <string name="action_clear_successful_uploads">성공한 항목 지우기</string>
   <string name="action_clear_finished_uploads">완료된 항목 지우기</string>
-  <string name="action_switch_grid_view">바둑판식 보기</string>
-  <string name="action_switch_list_view">목록 보기</string>
   <string name="manage_space_title">저장 공간 관리</string>
   <string name="manage_space_description">%1$s의 데이터에서 설정, 데이터베이스, 서버 인증서를 삭제합니다.\n\n다운로드한 파일은 변경되지 않습니다.\n\n이 작업은 시간이 걸릴 수 있습니다.</string>
   <string name="manage_space_clear_data">데이터 지우기</string>

@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Naam</string>
+  <string name="global_date">Datum</string>
+  <string name="global_size">Grootte</string>
   <string name="about_android">%1$s voor Android</string>
   <string name="about_version">Versie %1$s</string>
   <string name="actionbar_search">Zoek in deze map</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Instellingen</string>
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Versturen</string>
-  <string name="actionbar_sort">Sorteren</string>
   <string name="actionbar_descending">Aflopend</string>
   <string name="actionbar_sort_title">Sorteer op</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Oudste - Nieuwste</string>
-  <string name="actionbar_sort_by_size">Kleinste - Grootste</string>
   <string name="drawer_item_all_files">Alle bestanden</string>
   <string name="drawer_item_only_available_offline">Beschikbaar off-line</string>
   <string name="drawer_item_shared_by_link_files">Gedeeld via een link</string>
@@ -39,8 +39,10 @@
   <string name="prefs_passcode">Pincode slot</string>
   <string name="prefs_biometric">Biometrisch slot</string>
   <string name="prefs_biometric_summary">Zet de toegangscode of de patroonvergrendeling aan om deze optie te activeren </string>
+  <string name="prefs_touches_with_other_visible_windows">Aanraken bij andere zichtbare vensters</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Sta acties toe als het scherm wordt beinvloed door een andere app. Zet dit aan als je licht-filter apps gebruikt.</string>
   <string name="confirmation_touches_with_other_windows_title">Weet je zeker dat je deze functionaliteit wilt aanzetten?</string>
+  <string name="confirmation_touches_with_other_windows_message">Gebruik deze functie op eigen verantwoordelijkheid. Een kwaadaardig programma zou kunnen proberen u te misleiden om, onbewust, bepaalde acties uit te voeren met behulp van andere weergaven.</string>
   <string name="prefs_camera_picture_upload">Afbeeldingen uploaden</string>
   <string name="prefs_camera_picture_upload_summary">Automatisch afbeeldingen uploaden die met de camera genomen zijn</string>
   <string name="prefs_camera_video_upload">Video’s uploaden</string>
@@ -73,15 +75,18 @@
   <string name="pattern_configure_your_pattern_explanation">Telkens wanneer de app is gestart zal er om een patroon worden gevraagd</string>
   <string name="pass_code_locked">Vergrendeld met wachtwoord</string>
   <string name="pattern_locked">Vergrendeld met patroon</string>
+  <string name="illegal_argument_exception_message">Een geldige ACTIE is nodig in de Intentie die wordt doorgegeven aan</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Bestanden</string>
   <string name="bottom_nav_uploads">Uploads</string>
+  <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Links</string>
   <string name="recommend_subject">Probeer %1$s op uw smartphone!</string>
   <string name="recommend_text">Uitnodiging om %1$s op uw smartphone uit te proberen!
 Download hier: %2$s</string>
   <string name="error_reason">omdat</string>
   <string name="auth_failure_snackbar">Authenticatie is mislukt</string>
+  <string name="server_not_supported">Uw serverversie is lager dan 10 en wordt dus niet ondersteund. Upgrade uw server naar een nieuwere versie</string>
   <string name="auth_failure_snackbar_action">Verander account</string>
   <string name="auth_oauth_failure">Het toegangstoken is verlopen of niet meer geldig. Log opnieuw in om weer toegang te krijgen.</string>
   <string name="auth_oauth_failure_snackbar_action">Inloggen</string>
@@ -164,6 +169,7 @@ Download hier: %2$s</string>
   <string name="uploader_upload_text_filename_hint">Bestandsnaam</string>
   <string name="uploader_upload_camera_upload_files">Camera bestanden worden geupload</string>
   <string name="uploader_upload_available_offline_files">Uploaden van beschikbare offline bestanden</string>
+  <string name="uploader_upload_requested_from_wifi_files">Uploaden aangevraagd van wifi-bestanden</string>
   <string name="ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
@@ -227,6 +233,10 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_wrong">Onjuiste pincode</string>
   <string name="pass_code_removed">Pincode verwijderd</string>
   <string name="pass_code_stored">Pincode opgeslagen</string>
+  <string name="biometric_not_hardware_detected">Dit apparaat ondersteunt geen biometrische authenticatie</string>
+  <string name="biometric_not_enrolled">Registreer ten minste één biometrie om deze functie te gebruiken</string>
+  <string name="biometric_prompt_title">Biometrisch aanmelden</string>
+  <string name="biometric_prompt_subtitle">Aanmelden met uw biometrische gegevens</string>
   <string name="media_notif_ticker">%1$s muziekspeler</string>
   <string name="media_state_playing">%1$s (speelt)</string>
   <string name="media_state_loading">%1$s (laden)</string>
@@ -285,6 +295,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="confirmation_remove_local">Alleen lokaal</string>
   <string name="confirmation_remove_account_alert">Wilt u werkelijk account %1$s verwijderen?</string>
   <string name="confirmation_remove_public_share_title">Verwijderen link</string>
+  <string name="confirmation_remove_private_share_title">Verwijder privé gedeelde bestanden</string>
+  <string name="confirmation_remove_share_message">Wilt u werkelijk het delen van %1$sverwijderen?</string>
   <string name="remove_success_msg">Succesvol verwijderd</string>
   <string name="remove_fail_msg">Verwijdering kon niet voltooid worden</string>
   <string name="rename_dialog_title">Voer een nieuwe naam in</string>
@@ -355,8 +367,14 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="preview_image_error_unknown_format">Deze afbeelding kan niet worden getoond</string>
   <string name="error__upload__local_file_not_copied">%1$s kon niet worden gekopieerd naar de %2$s lokale map</string>
   <string name="prefs_camera_picture_upload_path_title">Afbeelding upload bestemming</string>
+  <string name="get_shares_error">Het was niet mogelijk om de gedeelde bestanden van de server op te halen</string>
+  <string name="get_sharees_error">Het was niet mogelijk om gebruikers en groepen van de server op te halen</string>
+  <string name="get_capabilities_error">Het was niet mogelijk om de mogelijkheden van de server op te halen</string>
   <string name="share_link_no_support_share_api">Sorry, delen is niet mogelijk op uw server. Neem contact op met uw
 		beheerder.</string>
+  <string name="share_link_file_error">Het was niet mogelijk om dit bestand of deze map te delen</string>
+  <string name="unshare_link_file_error">Het was niet mogelijk om het delen van dit bestand of deze map ongedaan te maken</string>
+  <string name="update_link_file_error">Het was niet mogelijk om dit bestand of deze map bij te werken</string>
   <string name="share_link_password_title">Vul het wachtwoord in</string>
   <string name="share_link_empty_password">U moet een wachtwoord opgeven</string>
   <string name="activity_chooser_send_file_title">Versturen</string>
@@ -426,6 +444,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="prefs_camera_upload_source_path_title">Cameramap (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vereist</string>
   <string name="prefs_camera_upload_source_path_title_optional">optioneel</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Origineel bestand zal zijn</string>
+  <string name="prefs_camera_upload_behaviour_title">Origineel bestand zal zijn</string>
   <string name="upload_copy_files">Kopiëren bestand</string>
   <string name="upload_move_files">Verplaatsen bestand</string>
   <string name="pref_behaviour_entries_keep_file">bewaard in originele map</string>
@@ -469,8 +489,6 @@ Neem contact op met uw beheerder</string>
   <string name="action_clear_failed_uploads">Leegmaken mislukt</string>
   <string name="action_clear_successful_uploads">Leegmaken gelukt</string>
   <string name="action_clear_finished_uploads">Alles leegmaken beëindigd</string>
-  <string name="action_switch_grid_view">Raster indeling</string>
-  <string name="action_switch_list_view">Lijst indeling</string>
   <string name="manage_space_title">Beheer ruimte</string>
   <string name="manage_space_description">Instellingen, database en servercertificaten van %1$s\'s data zullen permanent worden verwijderd. \n\nGedownloade bestanden blijven onaangeroerd.\n\nDit proces kan even duren.</string>
   <string name="manage_space_clear_data">Verwijder data</string>
@@ -535,4 +553,7 @@ Neem contact op met uw beheerder</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
   <string name="no_borwser_installed_alert">Geen browser geinstalleerd. Installeer een browser om een veilige login mogelijk te maken.</string>
+  <string name="common_not_found">Niet gevonden</string>
+  <string name="supports_oauth2_error">Het was niet mogelijk om te weten of OAuth2 wordt ondersteund</string>
+  <string name="get_base_url_error">Het was niet mogelijk om de basis-URL van de server te kennen</string>
 </resources>

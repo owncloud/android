@@ -31,14 +31,16 @@ import com.owncloud.android.testing.SingleFragmentActivity
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     fun startFragment(fragment: Fragment) {
         supportFragmentManager.transaction(allowStateLoss = true) {
-            add(R.id.container, fragment, "TEST FRAGMENT")
+            add(R.id.container, fragment, TEST_FRAGMENT_TAG)
         }
     }
+
+    fun getTestFragment(): Fragment? = supportFragmentManager.findFragmentByTag(TEST_FRAGMENT_TAG)
 
     override fun copyOrSendPrivateLink(file: OCFile) {
     }
 
-    override fun deleteShare(remoteId: Long) {
+    override fun deleteShare(remoteId: String) {
     }
 
     override fun showLoading() {
@@ -63,5 +65,9 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     }
 
     override fun showEditPrivateShare(share: OCShare) {
+    }
+
+    companion object {
+        private const val TEST_FRAGMENT_TAG = "TEST FRAGMENT"
     }
 }

@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">الاسم</string>
+  <string name="global_date">التاريخ</string>
+  <string name="global_size">الحجم</string>
   <string name="about_android">%1$s للأندرويد</string>
   <string name="about_version">إصدار %1$s</string>
   <string name="actionbar_search">بحث في هذا المجلد</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">الإعدادات</string>
   <string name="actionbar_see_details">التفاصيل</string>
   <string name="actionbar_send_file">إرسال</string>
-  <string name="actionbar_sort">فرز</string>
   <string name="actionbar_descending">تنازلي</string>
   <string name="actionbar_sort_title">فرز حسب</string>
-  <string name="actionbar_sort_by_name">أ-ي</string>
-  <string name="actionbar_sort_by_date">من الأقدم إلى الأحدث</string>
-  <string name="actionbar_sort_by_size">من الأصغر إلى الأكبر</string>
   <string name="drawer_item_all_files">كل الملفات</string>
   <string name="drawer_item_only_available_offline">متوفر دون اتصال بالإنترنت</string>
   <string name="drawer_item_shared_by_link_files">مشاركة بواسطة الرابط</string>
@@ -398,6 +398,7 @@
   <string name="drawer_manage_accounts">إدارة الحسابات</string>
   <string name="auth_redirect_non_secure_connection_title">يُعاد توجيه الاتصال الآمن خلال مسار غير آمن.</string>
   <string name="actionbar_logger">السجلات</string>
+  <string name="log_open_logs_view">افتح عرض السجلات</string>
   <string name="log_send_history_button">إرسال المحفوظات</string>
   <string name="log_send_no_mail_app">لم يتم العثور على تطبيق لإرسال السجلات. يُرجى تثبيت تطبيق بريد.</string>
   <string name="log_send_mail_subject">%1$s سجلات تطبيقات الأندرويد</string>
@@ -483,8 +484,6 @@
   <string name="action_clear_failed_uploads">فشل المسح</string>
   <string name="action_clear_successful_uploads">نجح المسح</string>
   <string name="action_clear_finished_uploads">تم الانتهاء من مسح الكل</string>
-  <string name="action_switch_grid_view">عرض الشبكة</string>
-  <string name="action_switch_list_view">عرض القائمة</string>
   <string name="manage_space_title">إدارة المساحة</string>
   <string name="manage_space_description">سيتم حذف الإعدادات وقواعد البيانات وشهادات الخادم من بيانات %1$s\'s نهائيًا. \n\nسيتم الاحتفاظ بالملفات التي تم تنزيلها دون تغيير.\n\nيمكن أن تستغرق هذه العملية بعض الوقت.</string>
   <string name="manage_space_clear_data">مسح البيانات</string>
@@ -552,12 +551,10 @@
   <string name="welcome_feature_4_text">تم تحميل صورك/مقاطع الفيديو تلقائيًا</string>
   <string name="welcome_feature_5_title">بث الفيديو</string>
   <string name="welcome_feature_5_text">شغِّل مقاطع الفيديو دون تنزيلها</string>
-  <string name="welcome_feature_6_title">شريط تنقل سفلي جديد</string>
-  <string name="welcome_feature_6_text">وصول أسهل وأسرع إلى الملفات والروابط المتاحة دون اتصال</string>
-  <string name="welcome_feature_7_title">دعم لـ OpenID Connect</string>
-  <string name="welcome_feature_7_text">اتصل بخوادم  ownCloud الخاصة بك بطريقة أكثر أمانًا باستخدام OpenID Connect</string>
   <string name="no_borwser_installed_alert">لم يتم تثبيت متصفح. يُرجى تثبيت متصفح للسماح بعملية تسجيل دخول آمنة.</string>
   <string name="common_not_found">لم يتم العثور عليه</string>
   <string name="supports_oauth2_error">لا يمكن معرفة ما إذا كان OAuth2 مدعومًا أم لا</string>
   <string name="get_base_url_error">لا يمكن معرفة عنوان URL قاعدة الخادم</string>
+  <string name="prefs_http_logs"> تسجيل طلبات واستجابات بروتوكول HTTP </string>
+  <string name="prefs_logs_summary">قد تحتوي السجلات على معلومات حساسة. تعتبر مشاركة السجلات مع الآخرين مسؤولية المستخدم وحده</string>
 </resources>

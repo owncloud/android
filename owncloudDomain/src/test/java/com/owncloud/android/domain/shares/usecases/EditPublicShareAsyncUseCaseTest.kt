@@ -22,6 +22,7 @@ package com.owncloud.android.domain.shares.usecases
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncUseCase
+import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -33,8 +34,16 @@ import org.junit.Test
 
 class EditPublicShareAsyncUseCaseTest {
     private val shareRepository: ShareRepository = spyk()
-    private val useCase = EditPublicShareAsyncUseCase((shareRepository))
-    private val useCaseParams = EditPublicShareAsyncUseCase.Params(1, "", "", 1, 1, false, "")
+    private val useCase = EditPublicShareAsyncUseCase(shareRepository)
+    private val useCaseParams = EditPublicShareAsyncUseCase.Params(
+        OC_SHARE.remoteId,
+        "",
+        "",
+        OC_SHARE.expirationDate,
+        OC_SHARE.permissions,
+        false,
+        OC_SHARE.accountOwner
+    )
 
     @Test
     fun editPublicShareOk() {
@@ -44,7 +53,15 @@ class EditPublicShareAsyncUseCaseTest {
         assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.updatePublicShare(1, "", "", 1, 1, false, "") }
+        verify(exactly = 1) { shareRepository.updatePublicShare(
+            OC_SHARE.remoteId,
+            "",
+            "",
+            OC_SHARE.expirationDate,
+            OC_SHARE.permissions,
+            false,
+            OC_SHARE.accountOwner
+        ) }
     }
 
     @Test
@@ -69,6 +86,14 @@ class EditPublicShareAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.updatePublicShare(1, "", "", 1, 1, false, "") }
+        verify(exactly = 1) { shareRepository.updatePublicShare(
+            OC_SHARE.remoteId,
+            "",
+            "",
+            OC_SHARE.expirationDate,
+            OC_SHARE.permissions,
+            false,
+            OC_SHARE.accountOwner
+        ) }
     }
 }

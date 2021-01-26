@@ -2,12 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-allopen'
-
-allOpen {
-    // allows mocking for classes w/o directly opening them for release builds
-    annotation 'com.owncloud.android.testing.OpenClass'
-}
 
 android {
     compileSdkVersion sdkCompileVersion
@@ -15,11 +9,6 @@ android {
     defaultConfig {
         minSdkVersion sdkMinVersion
         targetSdkVersion sdkTargetVersion
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -35,14 +24,12 @@ android {
     }
 
     sourceSets {
-        androidTest.java.srcDirs += "src/test-common/java"
         test.java.srcDirs += "src/test-common/java"
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation project(':owncloudTestUtil')
 
     implementation "androidx.appcompat:appcompat:$appCompat"
 
@@ -50,28 +37,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
     // Dependencies for unit tests
+    testImplementation project(':owncloudTestUtil')
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
     testImplementation "io.mockk:mockk:$mockkVersion"
-
-    // Dependencies for instrumented tests
-    androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    androidTestImplementation "androidx.test:runner:$androidTestVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoTestVersion"
-    androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
-        exclude module: 'objenesis'
-    }
-}
-
-allOpen {
-    // allows mocking for classes w/o directly opening them for release builds
-    annotation 'com.owncloud.android.testing.OpenClass'
-}
-
-configurations.all {
-    resolutionStrategy.eachDependency { details ->
-        if (details.requested.group == 'androidx.arch.core' && !details.requested.name.contains('core-runtime')) {
-            details.useVersion "2.0.0"
-        }
-    }
 }

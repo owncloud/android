@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,6 +28,8 @@ import com.owncloud.android.data.authentication.datasources.implementation.OCLoc
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
@@ -47,7 +50,9 @@ val localDataSourceModule = module {
     factory { OCShareMapper() }
     factory { UserQuotaMapper() }
 
-    factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), accountType) }
+    single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
+
+    factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get(), get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get(), get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get(), get()) }

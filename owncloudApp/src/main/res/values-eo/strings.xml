@@ -11,8 +11,7 @@
   <string name="actionbar_settings">Agordo</string>
   <string name="actionbar_see_details">Detaloj</string>
   <string name="actionbar_send_file">Sendi</string>
-  <string name="actionbar_sort">Ordigi</string>
-  <string name="actionbar_descending">Malsuprenirece</string>
+    <string name="actionbar_descending">Malsuprenirece</string>
   <string name="actionbar_sort_title">Ordigi laŭ</string>
   <string name="drawer_item_all_files">Ĉiuj dosieroj</string>
   <string name="drawer_item_settings">Agordo</string>
@@ -266,8 +265,6 @@
   <string name="share_privilege_can_edit_delete">forigi</string>
   <string name="edit_share_unshare">Ĉesi kunhavigi</string>
   <string name="edit_share_done">farita</string>
-  <string name="action_switch_grid_view">Krada vido</string>
-  <string name="action_switch_list_view">Lista vido</string>
   <string name="manage_space_title">Administri spacon</string>
   <string name="manage_space_clear_data">Forviŝi datumojn</string>
   <string name="manage_space_error">Kelkaj dosieroj ne povis foriĝi.</string>

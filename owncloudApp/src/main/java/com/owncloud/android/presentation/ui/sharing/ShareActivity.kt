@@ -270,7 +270,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    override fun deleteShare(remoteId: Long) {
+    override fun deleteShare(remoteId: String) {
         ocShareViewModel.deleteShare(remoteId)
     }
 

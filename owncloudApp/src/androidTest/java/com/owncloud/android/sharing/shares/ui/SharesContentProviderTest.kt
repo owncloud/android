@@ -250,8 +250,6 @@ class SharesContentProviderTest {
         remoteId: Int? = 1
     ): ContentValues {
         val values = ContentValues()
-        values.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, 7)
-        values.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, 7)
         values.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, 3)
         values.put(ProviderTableMeta.OCSHARES_SHARE_WITH, shareWith)
         values.put(ProviderTableMeta.OCSHARES_PATH, "/Photos/")
@@ -261,7 +259,6 @@ class SharesContentProviderTest {
         values.put(ProviderTableMeta.OCSHARES_TOKEN, "pwdasd12dasdWZ")
         values.put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME, shareWithDisplayName)
         values.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, 1)
-        values.put(ProviderTableMeta.OCSHARES_USER_ID, -1)
         values.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteId)
         values.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, "admin@server")
         values.put(ProviderTableMeta.OCSHARES_NAME, "")
@@ -373,8 +370,6 @@ class SharesContentProviderTest {
         remoteId: Int? = 1
     ): ContentValues {
         val values = ContentValues()
-        values.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, 7)
-        values.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, 7)
         values.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, 3)
         values.put(ProviderTableMeta.OCSHARES_SHARE_WITH, "")
         values.put(ProviderTableMeta.OCSHARES_PATH, "/Photos/")
@@ -384,7 +379,6 @@ class SharesContentProviderTest {
         values.put(ProviderTableMeta.OCSHARES_TOKEN, "pwdasd12dasdWZ")
         values.put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME, "")
         values.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, 1)
-        values.put(ProviderTableMeta.OCSHARES_USER_ID, -1)
         values.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, remoteId)
         values.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, "admin@server")
         values.put(ProviderTableMeta.OCSHARES_NAME, name)

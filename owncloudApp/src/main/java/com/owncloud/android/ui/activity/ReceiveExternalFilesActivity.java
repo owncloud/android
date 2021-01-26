@@ -8,6 +8,7 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author John Kalimeris
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
@@ -53,10 +54,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.textfield.TextInputEditText;
@@ -73,6 +76,11 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
+import com.owncloud.android.presentation.ui.files.SortOptionsView;
+import com.owncloud.android.presentation.ui.files.SortOrder;
+import com.owncloud.android.presentation.ui.files.SortType;
+import com.owncloud.android.presentation.ui.files.ViewType;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
@@ -84,6 +92,7 @@ import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
@@ -99,7 +108,9 @@ import java.util.Vector;
  */
 public class ReceiveExternalFilesActivity extends FileActivity
         implements OnItemClickListener, android.view.View.OnClickListener,
-        CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener {
+        CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener, SortOptionsView.SortOptionsListener,
+        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener, SearchView.OnQueryTextListener,
+        View.OnFocusChangeListener, ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
 
@@ -108,6 +119,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private ArrayList<Uri> mStreamsToUpload;
     private String mUploadPath;
     private OCFile mFile;
+    private SortOptionsView mSortOptionsView;
+    private SearchView mSearchView;
+    private TextView mEmptyListMessage;
 
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
@@ -388,7 +402,15 @@ public class ReceiveExternalFilesActivity extends FileActivity
         setupToolbar();
         ActionBar actionBar = getSupportActionBar();
 
+        mSortOptionsView = findViewById(R.id.options_layout);
+        if (mSortOptionsView != null) {
+            mSortOptionsView.setOnSortOptionsListener(this);
+            mSortOptionsView.setOnCreateFolderListener(this);
+            mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
+        }
+
         ListView mListView = findViewById(android.R.id.list);
+        mEmptyListMessage = findViewById(R.id.empty_list_view);
 
         String current_dir = mParents.peek();
         if (current_dir.equals("")) {
@@ -597,11 +619,15 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        inflater.inflate(R.menu.sort_menu, menu.findItem(R.id.action_sort).getSubMenu());
-        menu.findItem(R.id.action_switch_view).setVisible(false);
         menu.findItem(R.id.action_sync_account).setVisible(false);
+
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
+        mSearchView.setOnQueryTextFocusChangeListener(this);
+        mSearchView.setOnQueryTextListener(this);
+
         mMainMenu = menu;
-        recoverSortMenuState(menu);
         return true;
     }
 
@@ -609,44 +635,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retval = true;
         switch (item.getItemId()) {
-            case R.id.action_create_dir:
-                CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
-                dialog.show(
-                        getSupportFragmentManager(),
-                        CreateFolderDialogFragment.CREATE_FOLDER_FRAGMENT);
-                break;
             case android.R.id.home:
                 if ((mParents.size() > 1)) {
                     onBackPressed();
                 }
-                break;
-            case R.id.action_sort_descending:
-                item.setChecked(!item.isChecked());
-                boolean isAscending = !item.isChecked();
-                PreferenceManager.setSortAscending(isAscending, this, FileStorageUtils.FILE_DISPLAY_SORT);
-                switch (PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT)) {
-                    case FileStorageUtils.SORT_NAME:
-                        sortByName(isAscending);
-                        break;
-                    case FileStorageUtils.SORT_SIZE:
-                        sortBySize(isAscending);
-                        break;
-                    case FileStorageUtils.SORT_DATE:
-                        sortByDate(isAscending);
-                        break;
-                }
-                break;
-            case R.id.action_sort_by_name:
-                item.setChecked(true);
-                sortByName(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
-                break;
-            case R.id.action_sort_by_size:
-                item.setChecked(true);
-                sortBySize(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
-                break;
-            case R.id.action_sort_by_date:
-                item.setChecked(true);
-                sortByDate(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
                 break;
             default:
                 retval = super.onOptionsItemSelected(item);
@@ -656,7 +648,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     protected void onResume() {
-        recoverSortMenuState(mMainMenu);
         super.onResume();
     }
 
@@ -670,27 +661,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private void sortByDate(boolean isAscending) {
         mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, isAscending);
-    }
-
-    private void recoverSortMenuState(Menu menu) {
-        if (menu != null) {
-            menu.findItem(R.id.action_sort_descending).setChecked(
-                    !PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
-            switch (PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT)) {
-                case FileStorageUtils.SORT_NAME:
-                    menu.findItem(R.id.action_sort_by_name).setChecked(true);
-                    sortByName(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
-                    break;
-                case FileStorageUtils.SORT_SIZE:
-                    menu.findItem(R.id.action_sort_by_size).setChecked(true);
-                    sortBySize(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
-                    break;
-                case FileStorageUtils.SORT_DATE:
-                    menu.findItem(R.id.action_sort_by_date).setChecked(true);
-                    sortByDate(PreferenceManager.getSortAscending(this, FileStorageUtils.FILE_DISPLAY_SORT));
-                    break;
-            }
-        }
     }
 
     private OCFile getCurrentFolder() {
@@ -709,6 +679,66 @@ public class ReceiveExternalFilesActivity extends FileActivity
         OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
         mFile = root;
         startSyncFolderOperation(root);
+    }
+
+    @Override
+    public void onSortTypeListener(@NotNull SortType sortType, @NotNull SortOrder sortOrder) {
+        SortBottomSheetFragment sortBottomSheetFragment = SortBottomSheetFragment.Companion.newInstance(sortType, sortOrder);
+        sortBottomSheetFragment.setSortDialogListener(this);
+        sortBottomSheetFragment.show(getSupportFragmentManager(), SortBottomSheetFragment.TAG);
+    }
+
+    @Override
+    public void onViewTypeListener(@NotNull ViewType viewType) {
+
+    }
+
+    @Override
+    public void onSortSelected(@NotNull SortType sortType) {
+        mSortOptionsView.setSortTypeSelected(sortType);
+
+        boolean isAscending = mSortOptionsView.getSortOrderSelected().equals(SortOrder.SORT_ORDER_ASCENDING);
+        if (sortType == SortType.SORT_TYPE_BY_NAME) {
+            sortByName(isAscending);
+        } else if (sortType == SortType.SORT_TYPE_BY_DATE) {
+            sortByDate(isAscending);
+        } else if (sortType == SortType.SORT_TYPE_BY_SIZE) {
+            sortBySize(isAscending);
+        }
+    }
+
+    @Override
+    public void onCreateFolderListener() {
+        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+        dialog.show(getSupportFragmentManager(), CreateFolderDialogFragment.CREATE_FOLDER_FRAGMENT);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        mAdapter.filterBySearch(query);
+        return true;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus && mAdapter.getFiles().isEmpty()) {
+            updateEmptyListMessage(getString(R.string.local_file_list_search_with_no_matches));
+        } else if (!hasFocus && mAdapter.getFiles().isEmpty()) {
+            updateEmptyListMessage(getString(R.string.file_list_empty));
+        }
+        else {
+            updateEmptyListMessage(getString(R.string.empty));
+        }
+    }
+
+    @Override
+    public void updateEmptyListMessage(String updateTxt) {
+        mEmptyListMessage.setText(updateTxt);
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {

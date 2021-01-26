@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nome</string>
+  <string name="global_date">Data</string>
+  <string name="global_size">Tamaño</string>
   <string name="about_android">%1$s para Android</string>
   <string name="about_version">Versión %1$s</string>
   <string name="actionbar_search">Buscar neste cartafol</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Axustes</string>
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
-  <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Os máis antigos primeiro</string>
-  <string name="actionbar_sort_by_size">Os máis pequenos primeiro</string>
   <string name="drawer_item_all_files">Todos os ficheiros</string>
   <string name="drawer_item_only_available_offline">Dispoñíbel sen conexión</string>
   <string name="drawer_item_shared_by_link_files">Compartido por ligazón</string>
@@ -401,6 +401,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="drawer_manage_accounts">Xestionar as contas</string>
   <string name="auth_redirect_non_secure_connection_title">A conexión segura está a ser redirixida a través dunha ruta non segura.</string>
   <string name="actionbar_logger">Rexistros</string>
+  <string name="log_open_logs_view">Abrir o visor de rexistros</string>
   <string name="log_send_history_button">Enviar o historial</string>
   <string name="log_send_no_mail_app">Non se atopou unha aplicación para enviar os rexistros. Instale unha aplicación de correo!</string>
   <string name="log_send_mail_subject">Rexistros da aplicación %1$s Android</string>
@@ -487,8 +488,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="action_clear_failed_uploads">Limpar os envíos fallados</string>
   <string name="action_clear_successful_uploads">Limpar os envíos satisfactorios</string>
   <string name="action_clear_finished_uploads">Limpar os envíos rematados</string>
-  <string name="action_switch_grid_view">Ver como grella</string>
-  <string name="action_switch_list_view">Ver como lista</string>
   <string name="manage_space_title">Administrar o espazo</string>
   <string name="manage_space_description">Van ser eliminados de xeito permanente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
   <string name="manage_space_clear_data">Limpar os datos</string>
@@ -552,12 +551,10 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_4_text">As súas imaxes ou vídeos enviaranse automaticamente</string>
   <string name="welcome_feature_5_title">Fluxo de vídeo</string>
   <string name="welcome_feature_5_text">Reproduza os seus vídeos sen descargalos</string>
-  <string name="welcome_feature_6_title">Nova barra de navegación inferior</string>
-  <string name="welcome_feature_6_text">Acceso máis sinxelo e rápido aos seus ficheiros e ligazóns dispoñíbeis sen conexión</string>
-  <string name="welcome_feature_7_title">Compatibilidade con OpenID Connect</string>
-  <string name="welcome_feature_7_text">Conéctese aos seus servidores ownCloud dun xeito máis seguro con OpenID Connect</string>
   <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
   <string name="common_not_found">non foi atopado</string>
   <string name="supports_oauth2_error">Non foi posible saber se OAuth2 é compatíbel</string>
   <string name="get_base_url_error">Non foi posíbel saber cal é o URL base do servidor</string>
+  <string name="prefs_http_logs">Rexistro de solicitudes e respostas HTTP</string>
+  <string name="prefs_logs_summary">Os rexistros poden conter información confidencial. Compartir rexistros con outras persoas é responsabilidade exclusiva do usuario</string>
 </resources>

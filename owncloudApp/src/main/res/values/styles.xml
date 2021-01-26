@@ -272,4 +272,10 @@
         <item name="colorControlActivated">@color/login_text_color</item>
     </style>
 
+    <!-- SortBottomSheetFragment -->
+    <style name="Theme.ownCloud.SortBottomSheetFragment" />
+
+    <style name="Theme.ownCloud.SortBottomSheetFragment.Item">
+        <item name="android:textAppearance">@style/TextAppearance.OwnCloud.SortBottomSheetFragment.Item</item>
+    </style>
 </resources>

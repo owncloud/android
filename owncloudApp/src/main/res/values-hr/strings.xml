@@ -11,11 +11,9 @@
   <string name="actionbar_settings">Postavke</string>
   <string name="actionbar_see_details">Detalji</string>
   <string name="actionbar_send_file">Pošaljite</string>
-  <string name="actionbar_sort">Sortiraj</string>
-  <string name="actionbar_descending">Silazno</string>
+    <string name="actionbar_descending">Silazno</string>
   <string name="actionbar_sort_title">Sortiraj po</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="drawer_item_all_files">Sve datoteke</string>
+    <string name="drawer_item_all_files">Sve datoteke</string>
   <string name="drawer_item_settings">Postavke</string>
   <string name="drawer_item_uploads_list">Upload-i</string>
   <string name="drawer_close">Zatvori</string>

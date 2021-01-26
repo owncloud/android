@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Name</string>
+  <string name="global_date">Datum</string>
+  <string name="global_size">Größe</string>
   <string name="about_android">%1$s für Android</string>
   <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Diesen Ordner durchsuchen</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Einstellungen</string>
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Senden</string>
-  <string name="actionbar_sort">Sortieren</string>
   <string name="actionbar_descending">Absteigend</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Älteste - Neueste</string>
-  <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
   <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_shared_by_link_files">Geteilt über einen Link</string>
@@ -400,6 +400,7 @@
   <string name="drawer_manage_accounts">Konten verwalten</string>
   <string name="auth_redirect_non_secure_connection_title">Die gesicherte Verbindung wird durch eine ungesicherte Route geleitet.</string>
   <string name="actionbar_logger">Protokolle</string>
+  <string name="log_open_logs_view">Log-Ansicht öffnen</string>
   <string name="log_send_history_button">versende die Chronik</string>
   <string name="log_send_no_mail_app">Es wurde keine App gefunden die Logs verschicken kann. Bitte installiere eine App die E-Mails verschicken kann.</string>
   <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
@@ -486,8 +487,6 @@
   <string name="action_clear_failed_uploads">Entferne Fehlversuche</string>
   <string name="action_clear_successful_uploads">Entferne erfolgreiche Uploads</string>
   <string name="action_clear_finished_uploads">Alles aufräumen</string>
-  <string name="action_switch_grid_view">Rasteransicht</string>
-  <string name="action_switch_list_view">Listenansicht</string>
   <string name="manage_space_title">verwalte Speicherplatz</string>
   <string name="manage_space_description">Einstellungen, Datenbank und Server-Zertifikate von %1$s\'s Daten werden dauerhaft gelöscht.\n\nHerunter geladene Dateien bleiben unangetastet.\n\nDieser Vorgang kann eine Zeit dauern.</string>
   <string name="manage_space_clear_data">Daten löschen</string>
@@ -551,12 +550,10 @@
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
-  <string name="welcome_feature_6_title">Neue untere Navigationsleiste</string>
-  <string name="welcome_feature_6_text">Leichterer und schnellerer Zugriff auf deine verfügbaren Offline-Dateien und Links</string>
-  <string name="welcome_feature_7_title">Unterstützung für OpenID-Connect</string>
-  <string name="welcome_feature_7_text">Verbinde dich mit OpenID-Connect auf sicherere Weise mit deinem ownCloud-Servern</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installiere zur sicheren Anmeldung einen Browser.</string>
   <string name="common_not_found">nichts gefunden</string>
   <string name="supports_oauth2_error">Es war nicht möglich herauszufinden, ob OAuth2 unterstützt wird.</string>
   <string name="get_base_url_error">Es war nicht möglich, die Server-Basis-URL herauszufinden</string>
+  <string name="prefs_http_logs">HTTP-Anfragen und -Antworten aufzeichnen</string>
+  <string name="prefs_logs_summary">Protokolle können sensible Informationen enthalten. Die gemeinsame Nutzung von Protokollen mit anderen liegt in der alleinigen Verantwortung des Benutzers</string>
 </resources>

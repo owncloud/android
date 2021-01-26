@@ -23,6 +23,7 @@ package com.owncloud.android
 
 import android.app.Activity
 import android.app.NotificationManager.IMPORTANCE_LOW
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -30,8 +31,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.WindowManager
-import androidx.multidex.MultiDex
-import androidx.multidex.MultiDexApplication
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
@@ -47,6 +46,7 @@ import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.utils.LoggingHelper
+import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
@@ -69,7 +69,7 @@ import java.io.File
  * Contains methods to build the "static" strings. These strings were before constants in different
  * classes
  */
-class MainApp : MultiDexApplication() {
+class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
@@ -158,11 +158,6 @@ class MainApp : MultiDexApplication() {
         initDependencyInjection()
     }
 
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
-    }
-
     fun startLogIfDeveloper() {
         isDeveloper =
             BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -176,6 +171,8 @@ class MainApp : MultiDexApplication() {
                 File(Environment.getExternalStorageDirectory().absolutePath + File.separator + dataFolder), dataFolder
             )
             Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
+
+            LogsProvider(applicationContext).initHttpLogs()
         }
     }
 

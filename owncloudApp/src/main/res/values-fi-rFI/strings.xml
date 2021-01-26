@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nimi</string>
+  <string name="global_date">Päivämäärä</string>
+  <string name="global_size">Koko</string>
   <string name="actionbar_sync">Päivitä tili</string>
   <string name="actionbar_upload">Lähetä tiedosto</string>
   <string name="actionbar_upload_from_apps">Sisältö toisista sovelluksista</string>
@@ -9,12 +13,8 @@
   <string name="actionbar_settings">Asetukset</string>
   <string name="actionbar_see_details">Tiedot</string>
   <string name="actionbar_send_file">Lähetä</string>
-  <string name="actionbar_sort">Lajittele</string>
   <string name="actionbar_descending">Laskevasti</string>
   <string name="actionbar_sort_title">Lajittelujärjestys</string>
-  <string name="actionbar_sort_by_name">A-Ö</string>
-  <string name="actionbar_sort_by_date">Vanhin - Uusin</string>
-  <string name="actionbar_sort_by_size">Pienin - Suurin</string>
   <string name="drawer_item_all_files">Kaikki tiedostot</string>
   <string name="drawer_item_shared_by_link_files">Jaettu linkin kautta</string>
   <string name="drawer_item_settings">Asetukset</string>
@@ -423,8 +423,6 @@
   <string name="action_clear_failed_uploads">Tyhjennä epäonnistuneet</string>
   <string name="action_clear_successful_uploads">Tyhjennä onnistuneet</string>
   <string name="action_clear_finished_uploads">Tyhjennä kaikki valmistuneet</string>
-  <string name="action_switch_grid_view">Ruudukkonäkymä</string>
-  <string name="action_switch_list_view">Luettelonäkymä</string>
   <string name="manage_space_title">Hallitse tilaa</string>
   <string name="manage_space_clear_data">Tyhjennä tiedot</string>
   <string name="manage_space_error">Joitain tiedostoja ei voitu poistaa.</string>

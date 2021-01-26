@@ -254,16 +254,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 AuthenticationMethod.BASIC_HTTP_AUTH -> {
                     authTokenType = BASIC_TOKEN_TYPE
                     showOrHideBasicAuthFields(shouldBeVisible = true)
-                    account_username.run {
-                        doAfterTextChanged { updateLoginButtonVisibility() }
-                    }
-                    account_password.run {
-                        doAfterTextChanged {
-                            updateLoginButtonVisibility()
-                            account_password_container.isPasswordVisibilityToggleEnabled =
-                                !account_password.text.isNullOrEmpty()
-                        }
-                    }
+                    account_username.doAfterTextChanged { updateLoginButtonVisibility() }
+                    account_password.doAfterTextChanged { updateLoginButtonVisibility() }
                 }
 
                 AuthenticationMethod.BEARER_TOKEN -> {
@@ -380,7 +372,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val retrieveConfigurationCallback =
             RetrieveConfigurationCallback { serviceConfiguration, exception ->
                 if (exception != null) {
-                    Timber.e(exception, "OIDC failed, try with normal OAuth")
+                    Timber.e(exception, "OIDC failed. Try with normal OAuth")
+                    Timber.e(
+                        exception,
+                        "OIDC failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}"
+                    )
                     startNormalOauthorization()
                 } else if (serviceConfiguration != null) {
                     oidcSupported = true
@@ -404,7 +400,12 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val retrieveConfigurationCallback =
             RetrieveConfigurationCallback { serviceConfiguration, exception ->
                 if (exception != null) {
-                    Timber.e(exception, "Normal OAuth failed")
+                    Timber.e(exception, "OAuth failed.")
+                    Timber.e(
+                        exception,
+                        "OAuth failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}"
+                    )
+
                     updateOAuthStatusIconAndText(exception)
                 } else if (serviceConfiguration != null) {
                     performGetAuthorizationCodeRequest(serviceConfiguration)
@@ -422,7 +423,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
         Timber.d("A browser should be opened now to authenticate this user.")
         val clientId = getString(R.string.oauth2_client_id)
-        val redirectUri = Uri.parse(getString(R.string.oauth2_redirect_uri))
+        val redirectUri = Uri.Builder()
+            .scheme(getString(R.string.oauth2_redirect_uri_scheme))
+            .authority(getString(R.string.oauth2_redirect_uri_path))
+            .build()
         val scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
         val builder = AuthorizationRequest.Builder(
             authorizationServiceConfiguration,
@@ -432,19 +436,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         ).setScope(scope)
 
         val request = builder.build()
+        Timber.d("Request information: ${request.jsonSerializeString()}")
         val completedIntent = Intent(this, LoginActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0)
 
         val appAuthConfigurationBuilder = AppAuthConfiguration.Builder()
-        appAuthConfigurationBuilder.setConnectionBuilder(
-            OAuthConnectionBuilder(
-                this
-            )
-        )
-
+        appAuthConfigurationBuilder.setConnectionBuilder(OAuthConnectionBuilder(this))
         authService = AuthorizationService(this, appAuthConfigurationBuilder.build())
         Timber.d("Sends an authorization request to the authorization service using a custom tab or browser instance.")
-        Timber.d("Authorization service: $authService")
         authService?.performAuthorizationRequest(request, pendingIntent)
     }
 
@@ -482,6 +481,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun handleExchangeAuthorizationCodeForTokensResponse(): TokenResponseCallback =
         TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
+            Timber.d("Authorization response: ${tokenResponse?.jsonSerializeString()} and Authorization Exception: ${authorizationException?.toJsonString()}")
             if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
                 Timber.d("Tokens received, trying to login, creating account and adding it to account manager")
                 authenticationViewModel.loginOAuth(

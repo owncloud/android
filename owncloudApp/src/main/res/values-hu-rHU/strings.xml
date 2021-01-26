@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Név</string>
+  <string name="global_date">Dátum</string>
+  <string name="global_size">Méret</string>
   <string name="about_android">%1$s Android</string>
   <string name="about_version">%1$s verzió</string>
   <string name="actionbar_search">Keresés ebben a mappában</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Beállítások</string>
   <string name="actionbar_see_details">Részletek</string>
   <string name="actionbar_send_file">Küldés</string>
-  <string name="actionbar_sort">Rendezés</string>
   <string name="actionbar_descending">Csökkenő</string>
   <string name="actionbar_sort_title">Rendezés elve</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Legrégebbi - Legújabb</string>
-  <string name="actionbar_sort_by_size">Legkisebb - Legnagyobb</string>
   <string name="drawer_item_all_files">Összes fájl</string>
   <string name="drawer_item_only_available_offline">Offline elérhető</string>
   <string name="drawer_item_shared_by_link_files">Linkkel osztottam meg</string>
@@ -471,8 +471,6 @@
   <string name="action_clear_failed_uploads">Sikertelenek törlése</string>
   <string name="action_clear_successful_uploads">Sikeresek törlése</string>
   <string name="action_clear_finished_uploads">Befejezettek törlése</string>
-  <string name="action_switch_grid_view">Rács nézet</string>
-  <string name="action_switch_list_view">Lista nézet</string>
   <string name="manage_space_title">Helykezelés</string>
   <string name="manage_space_description">Beállítások, adatbázis és kiszolgáló tanúsítványok %1$s az adatok véglegesen törlődnek. \ n \ n A letöltött fájlok érintetlenül maradnak. \ n \ n Ez a folyamat eltarthat egy ideig.</string>
   <string name="manage_space_clear_data">Adatok törlése</string>

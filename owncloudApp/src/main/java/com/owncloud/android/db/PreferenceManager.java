@@ -25,11 +25,9 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
-import android.util.Log;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.ui.activity.BiometricActivity;
 import com.owncloud.android.utils.FileStorageUtils;

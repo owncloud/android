@@ -11,10 +11,8 @@
   <string name="actionbar_settings">Innstillingar</string>
   <string name="actionbar_see_details">Detaljar</string>
   <string name="actionbar_send_file">Send</string>
-  <string name="actionbar_sort">Sorter</string>
-  <string name="actionbar_sort_title">Sorter etter</string>
-  <string name="actionbar_sort_by_name">A-Å</string>
-  <string name="drawer_item_all_files">Alle filer</string>
+    <string name="actionbar_sort_title">Sorter etter</string>
+    <string name="drawer_item_all_files">Alle filer</string>
   <string name="drawer_item_settings">Innstillingar</string>
   <string name="drawer_item_uploads_list">Opplastingar</string>
   <string name="drawer_close">Lukk</string>

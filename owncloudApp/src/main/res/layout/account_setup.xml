@@ -170,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:hintEnabled="false"
-                app:passwordToggleEnabled="false"
+                app:passwordToggleEnabled="true"
                 app:passwordToggleTint="@color/login_text_color">
 
                 <com.google.android.material.textfield.TextInputEditText

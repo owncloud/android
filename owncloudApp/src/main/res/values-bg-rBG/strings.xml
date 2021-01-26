@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Име</string>
+  <string name="global_date">Дата</string>
+  <string name="global_size">Размер</string>
   <string name="about_android">%1$sза Android</string>
   <string name="about_version">Версия %1$s</string>
   <string name="actionbar_search">Търсене в тази папка</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Настройки</string>
   <string name="actionbar_see_details">Детайли</string>
   <string name="actionbar_send_file">Изпращане</string>
-  <string name="actionbar_sort">Сортиране</string>
   <string name="actionbar_descending">Низходящ</string>
   <string name="actionbar_sort_title">Сортирай по</string>
-  <string name="actionbar_sort_by_name">А - Я</string>
-  <string name="actionbar_sort_by_date">Стари - Нови</string>
-  <string name="actionbar_sort_by_size">Малки - Големи</string>
   <string name="drawer_item_all_files">Всички файлове</string>
   <string name="drawer_item_only_available_offline">Достъпно офлайн</string>
   <string name="drawer_item_shared_by_link_files">Споделяне с връзка</string>
@@ -484,8 +484,6 @@
   <string name="action_clear_failed_uploads">Неуспешно изчистване</string>
   <string name="action_clear_successful_uploads">Успешно изчистване</string>
   <string name="action_clear_finished_uploads">Изчистването на всичко приключи</string>
-  <string name="action_switch_grid_view">Изглед решетка</string>
-  <string name="action_switch_list_view">Изглед списък</string>
   <string name="manage_space_title">Управление на пространството</string>
   <string name="manage_space_description">Настройки, като сертификатите на сървъра и базата данни от данните на %1$s ще бъдат безвъзвратно изтрити.
 \n\nИзтеглените файлове ще бъдат запазени непроменени.
@@ -551,10 +549,6 @@
   <string name="welcome_feature_4_text">Вашите снимки/видеоклипове се качват автоматично</string>
   <string name="welcome_feature_5_title">Видео поток</string>
   <string name="welcome_feature_5_text">Възпроизвеждайте видеоклиповете си без да ги изтегляте</string>
-  <string name="welcome_feature_6_title">Нова долна навигационна лента</string>
-  <string name="welcome_feature_6_text">Бърз и лесен достъп до вашите налични офлайн файлове и връзки</string>
-  <string name="welcome_feature_7_title">Поддръжа за OpenID Connect</string>
-  <string name="welcome_feature_7_text">Свържете вашите ownCloud сървъри по по-сигурен начин с OpenID Connect</string>
   <string name="no_borwser_installed_alert">Не е инсталиран браузър. Моля, инсталирайте браузър за да имате достъп до сигурно влизане.</string>
   <string name="common_not_found">не беше намерен</string>
   <string name="supports_oauth2_error">Не беше възможно да се разбере дали OAuth2 се поддържа</string>

@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nome</string>
+  <string name="global_date">Data</string>
+  <string name="global_size">Tamanho</string>
   <string name="about_android">%1$s para Android</string>
   <string name="about_version">Versão %1$s</string>
   <string name="actionbar_search">Procurar no diretório atual</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Configurações</string>
   <string name="actionbar_see_details">Detalhes</string>
   <string name="actionbar_send_file">Enviar</string>
-  <string name="actionbar_sort">Classificar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Classificar por</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Mais antigo - Mais novo</string>
-  <string name="actionbar_sort_by_size">Menor - Maior</string>
   <string name="drawer_item_all_files">Todos os arquivos</string>
   <string name="drawer_item_only_available_offline">Disponível externamente</string>
   <string name="drawer_item_shared_by_link_files">Compartilhado por link</string>
@@ -400,6 +400,7 @@
   <string name="drawer_manage_accounts">Gerenciar contas</string>
   <string name="auth_redirect_non_secure_connection_title">A conexão segura está redirecionada através de uma rota insegura.</string>
   <string name="actionbar_logger">Logs</string>
+  <string name="log_open_logs_view">Abrir visualização de registros</string>
   <string name="log_send_history_button">Enviar histórico</string>
   <string name="log_send_no_mail_app">Nenhum aplicativo para envio de logs foi encontrado. Por favor instale um aplicativo de e-mail</string>
   <string name="log_send_mail_subject">%1$s logs do Android app</string>
@@ -486,8 +487,6 @@
   <string name="action_clear_failed_uploads">Limpar falha</string>
   <string name="action_clear_successful_uploads">Limpado com sucesso</string>
   <string name="action_clear_finished_uploads">Limpar tudo finalizado</string>
-  <string name="action_switch_grid_view">Grade de exibição</string>
-  <string name="action_switch_list_view">Lista de visualização</string>
   <string name="manage_space_title">Gerenciar o espaço</string>
   <string name="manage_space_description">Definições, certificados de banco de dados e servidor de dados %1$s serão excluído permanentemente. \n\nArquivos baixados serão mantidos inalterados. \n\nEste processo pode demorar algum tempo.</string>
   <string name="manage_space_clear_data">Limpar dados</string>
@@ -551,12 +550,10 @@
   <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
   <string name="welcome_feature_5_title">Transmissão de vídeo</string>
   <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
-  <string name="welcome_feature_6_title">Novo botão na barra de navegação</string>
-  <string name="welcome_feature_6_text">Fácil e rápido acesso aos seus arquivos e linques disponibilizados quando não estiver conectado</string>
-  <string name="welcome_feature_7_title">Suporte para o OpenID Connect</string>
-  <string name="welcome_feature_7_text">Faça conexão ao seus servidores ownCloud usando um caminho mais seguro com o OpenID Connect</string>
   <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
   <string name="common_not_found">não foi encontrado</string>
   <string name="supports_oauth2_error">Não foi possível  saber se OAuth2 é suportada</string>
   <string name="get_base_url_error">Não foi possível saber a url base do servidor</string>
+  <string name="prefs_http_logs">Registrar solicitações e respostas HTTP</string>
+  <string name="prefs_logs_summary">Os logs podem conter informações confidenciais. O compartilhamento de registros com outras pessoas é de responsabilidade exclusiva do usuário</string>
 </resources>

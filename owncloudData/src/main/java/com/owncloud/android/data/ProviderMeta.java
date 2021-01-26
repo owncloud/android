@@ -7,16 +7,16 @@
  * @author David González Verdugo
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 32;
+    public static final int DB_VERSION = 33;
 
     private ProviderMeta() {
     }
@@ -42,10 +42,8 @@ public class ProviderMeta {
         public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
 
         // Columns of ocshares table
-        public static final String OCSHARES_FILE_SOURCE = "file_source";
-        public static final String OCSHARES_ITEM_SOURCE = "item_source";
         public static final String OCSHARES_SHARE_TYPE = "share_type";
-        public static final String OCSHARES_SHARE_WITH = "shate_with";
+        public static final String OCSHARES_SHARE_WITH = "share_with";
         public static final String OCSHARES_PATH = "path";
         public static final String OCSHARES_PERMISSIONS = "permissions";
         public static final String OCSHARES_SHARED_DATE = "shared_date";
@@ -54,7 +52,6 @@ public class ProviderMeta {
         public static final String OCSHARES_SHARE_WITH_DISPLAY_NAME = "shared_with_display_name";
         public static final String OCSHARES_SHARE_WITH_ADDITIONAL_INFO = "share_with_additional_info";
         public static final String OCSHARES_IS_DIRECTORY = "is_directory";
-        public static final String OCSHARES_USER_ID = "user_id";
         public static final String OCSHARES_ID_REMOTE_SHARED = "id_remote_shared";
         public static final String OCSHARES_ACCOUNT_OWNER = "owner_share";
         public static final String OCSHARES_NAME = "name";

@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nimi</string>
+  <string name="global_date">Kuupäev</string>
+  <string name="global_size">Suurus</string>
   <string name="about_android">%1$s Androidile</string>
   <string name="about_version">Versioon %1$s</string>
   <string name="actionbar_search">Otsi sellest kaustast</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Seaded</string>
   <string name="actionbar_see_details">Üksikasjad</string>
   <string name="actionbar_send_file">Saada</string>
-  <string name="actionbar_sort">Sorteeri</string>
   <string name="actionbar_descending">Kahanevalt</string>
   <string name="actionbar_sort_title">Sorteeri</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Vanemad - Uuemad</string>
-  <string name="actionbar_sort_by_size">Väiksemad - Suuremad</string>
   <string name="drawer_item_all_files">Kõik failid</string>
   <string name="drawer_item_only_available_offline">Saadaval ilma võrguühenduseta</string>
   <string name="drawer_item_shared_by_link_files">Jagatud lingiga</string>
@@ -397,8 +397,6 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="action_clear_failed_uploads">Eemaldamine ebaõnnestus</string>
   <string name="action_clear_successful_uploads">Eemaldatud</string>
   <string name="action_clear_finished_uploads">Eemalda kõik lõpetatud</string>
-  <string name="action_switch_grid_view">Võrgustikuvaade</string>
-  <string name="action_switch_list_view">kirjavaade</string>
   <string name="manage_space_title">Ruumi haldamine</string>
   <string name="manage_space_clear_data">Tühjenda andmed</string>
   <string name="manage_space_error">Mõningate failide kustutamine ebaõnnestus.</string>

@@ -25,8 +25,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class OCShare(
     val id: Int? = null,
-    val fileSource: String,
-    val itemSource: String,
     val shareType: ShareType,
     val shareWith: String?,
     val path: String,
@@ -37,8 +35,7 @@ data class OCShare(
     val sharedWithDisplayName: String?,
     val sharedWithAdditionalInfo: String?,
     val isFolder: Boolean,
-    val userId: Long,
-    val remoteId: Long,
+    val remoteId: String,
     var accountOwner: String = "",
     val name: String?,
     val shareLink: String?
@@ -71,17 +68,6 @@ enum class ShareType constructor(val value: Int) {
     FEDERATED(6);
 
     companion object {
-        fun fromValue(value: Int): ShareType? {
-            return when (value) {
-                -1 -> UNKNOWN
-                0 -> USER
-                1 -> GROUP
-                3 -> PUBLIC_LINK
-                4 -> EMAIL
-                5 -> CONTACT
-                6 -> FEDERATED
-                else -> null
-            }
-        }
+        fun fromValue(value: Int) = values().firstOrNull { it.value == value }
     }
 }

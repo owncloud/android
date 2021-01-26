@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nume</string>
+  <string name="global_date">Data</string>
+  <string name="global_size">Mărime</string>
   <string name="about_android">%1$s pentru Android</string>
   <string name="about_version">Versiunea %1$s</string>
   <string name="actionbar_search">Caută în acest dosar</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Setări</string>
   <string name="actionbar_see_details">Detalii</string>
   <string name="actionbar_send_file">Expediază</string>
-  <string name="actionbar_sort">Sortare</string>
   <string name="actionbar_descending">Descrescător</string>
   <string name="actionbar_sort_title">Sortare după</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Cele mai vechi - Cele mai noi</string>
-  <string name="actionbar_sort_by_size">Cele mai mici - Cele mai mari</string>
   <string name="drawer_item_all_files">Toate fișierele</string>
   <string name="drawer_item_only_available_offline">Disponibil offline</string>
   <string name="drawer_item_shared_by_link_files">Partajat prin link</string>
@@ -450,8 +450,6 @@ Te rog ia legătura cu administratorul</string>
   <string name="action_clear_failed_uploads">Curățarea a eșuat</string>
   <string name="action_clear_successful_uploads">Curățare cu succes</string>
   <string name="action_clear_finished_uploads">Curățare totala terminată</string>
-  <string name="action_switch_grid_view">Vizualizare în grilă</string>
-  <string name="action_switch_list_view">Vizualizare în listă</string>
   <string name="manage_space_title">Gestionează spațiul</string>
   <string name="manage_space_description">Configurările, baza de date și certificatele serverului de la informațiile %1$s vor fi șterse definitiv.\n\nFișierele descărcate vor fi păstrate neatinse.\n\nAcest process poate dura o vreme.</string>
   <string name="manage_space_clear_data">Curăță informațiile</string>

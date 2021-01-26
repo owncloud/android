@@ -300,7 +300,7 @@ public class FileUploader extends Service
 
         Account account = intent.getParcelableExtra(KEY_ACCOUNT);
         Timber.d("Account to upload the file to: %s", account);
-        if (!AccountUtils.exists(account.name, getApplicationContext())) {
+        if (account == null || !AccountUtils.exists(account.name, getApplicationContext())) {
             return Service.START_NOT_STICKY;
         }
 

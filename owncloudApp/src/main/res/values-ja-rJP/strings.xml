@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">名前</string>
+  <string name="global_date">日付</string>
+  <string name="global_size">サイズ</string>
   <string name="about_version">バージョン %1$s</string>
   <string name="actionbar_search">このフォルダーを探す</string>
   <string name="actionbar_sync">アカウントを同期</string>
@@ -11,12 +15,8 @@
   <string name="actionbar_settings">設定</string>
   <string name="actionbar_see_details">詳細</string>
   <string name="actionbar_send_file">送信</string>
-  <string name="actionbar_sort">ソート</string>
   <string name="actionbar_descending">降順</string>
   <string name="actionbar_sort_title">ソート: </string>
-  <string name="actionbar_sort_by_name">名前順</string>
-  <string name="actionbar_sort_by_date">最古 - 最新</string>
-  <string name="actionbar_sort_by_size">最小 - 最大</string>
   <string name="drawer_item_all_files">すべてのファイル</string>
   <string name="drawer_item_only_available_offline">オフラインが利用可能です</string>
   <string name="drawer_item_shared_by_link_files">URLリンクで共有中</string>
@@ -437,8 +437,6 @@
   <string name="action_clear_failed_uploads">失敗をクリア</string>
   <string name="action_clear_successful_uploads">成功をクリア</string>
   <string name="action_clear_finished_uploads">終了済をクリア</string>
-  <string name="action_switch_grid_view">グリッド表示</string>
-  <string name="action_switch_list_view">リスト表示</string>
   <string name="manage_space_title">管理領域</string>
   <string name="manage_space_description">%1$s のデータから 設定、データベース、サーバー証明書が完全に削除されます。\n\n ダウンロードされたファイルはそのまま残ります。\n\n 実行中はしばらくお待ちください。</string>
   <string name="manage_space_clear_data">データのクリア</string>

@@ -52,7 +52,7 @@ class OCShareRepository(
         )
     }
 
-    override fun updatePrivateShare(remoteId: Long, permissions: Int, accountName: String) {
+    override fun updatePrivateShare(remoteId: String, permissions: Int, accountName: String) {
         return updateShare(
             remoteId = remoteId,
             permissions = permissions,
@@ -86,7 +86,7 @@ class OCShareRepository(
     }
 
     override fun updatePublicShare(
-        remoteId: Long,
+        remoteId: String,
         name: String,
         password: String?,
         expirationDateInMillis: Long,
@@ -105,7 +105,7 @@ class OCShareRepository(
         )
     }
 
-    override fun deleteShare(remoteId: Long) {
+    override fun deleteShare(remoteId: String) {
         remoteShareDataSource.deleteShare(remoteId)
         localShareDataSource.deleteShare(remoteId)
     }
@@ -125,7 +125,7 @@ class OCShareRepository(
         )
     }
 
-    override fun getShareAsLiveData(remoteId: Long): LiveData<OCShare> =
+    override fun getShareAsLiveData(remoteId: String): LiveData<OCShare> =
         localShareDataSource.getShareAsLiveData(remoteId)
 
     override fun refreshSharesFromNetwork(
@@ -173,7 +173,7 @@ class OCShareRepository(
     }
 
     private fun updateShare(
-        remoteId: Long,
+        remoteId: String,
         permissions: Int,
         name: String = "",
         password: String? = "",

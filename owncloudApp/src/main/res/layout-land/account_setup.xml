@@ -31,8 +31,8 @@
         android:scaleType="centerCrop"
         android:src="@drawable/login_background_image"
         android:visibility="invisible"
-        tools:visibility="visible"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -127,7 +127,7 @@
                             android:padding="0dp"
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_arrow_right"
-                            android:tint="@color/login_text_color"/>
+                            android:tint="@color/login_text_color" />
 
                         <ImageButton
                             android:id="@+id/embeddedRefreshButton"
@@ -153,8 +153,8 @@
                         android:drawablePadding="5dp"
                         android:gravity="center_vertical"
                         android:minHeight="32dp"
-                        android:visibility="gone"
                         android:textColor="@color/login_connection_text_color"
+                        android:visibility="gone"
                         app:drawableTint="@color/login_connection_text_color"
                         tools:text="@string/auth_testing_connection"
                         tools:visibility="visible" />
@@ -164,9 +164,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
-                        app:hintEnabled="false"
-                        app:passwordToggleEnabled="true"
-                        app:passwordToggleTint="@color/white">
+                        app:hintEnabled="false">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/account_username"
@@ -187,7 +185,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="gone"
                         app:hintEnabled="false"
-                        app:passwordToggleEnabled="false"
+                        app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/login_text_color">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -238,7 +236,7 @@
                 android:text="@string/setup_btn_login"
                 android:theme="@style/Button.Authenticator"
                 android:visibility="gone"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="match_parent"

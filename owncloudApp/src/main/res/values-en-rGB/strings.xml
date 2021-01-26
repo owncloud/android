@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Name</string>
+  <string name="global_date">Date</string>
+  <string name="global_size">Size</string>
   <string name="about_android">%1$s for Android</string>
   <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Search this folder</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Settings</string>
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Send</string>
-  <string name="actionbar_sort">Sort</string>
   <string name="actionbar_descending">Descending</string>
   <string name="actionbar_sort_title">Sort by</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Oldest - Newest</string>
-  <string name="actionbar_sort_by_size">Smallest - Largest</string>
   <string name="drawer_item_all_files">All files</string>
   <string name="drawer_item_only_available_offline">Available offline</string>
   <string name="drawer_item_shared_by_link_files">Shared by link</string>
@@ -400,6 +400,7 @@
   <string name="drawer_manage_accounts">Manage accounts</string>
   <string name="auth_redirect_non_secure_connection_title">Secure connection is redirected through an unsecured route.</string>
   <string name="actionbar_logger">Logs</string>
+  <string name="log_open_logs_view">Open logs view</string>
   <string name="log_send_history_button">Send history</string>
   <string name="log_send_no_mail_app">No app for sending logs found. Please install a mail app.</string>
   <string name="log_send_mail_subject">%1$s Android app logs</string>
@@ -486,8 +487,6 @@
   <string name="action_clear_failed_uploads">Clear failed</string>
   <string name="action_clear_successful_uploads">Clear successful</string>
   <string name="action_clear_finished_uploads">Clear all finished</string>
-  <string name="action_switch_grid_view">Grid view</string>
-  <string name="action_switch_list_view">List view</string>
   <string name="manage_space_title">Manage space</string>
   <string name="manage_space_description">Settings, database and server certificates from %1$s\'s data will be deleted permanently. \n\nDownloaded files will be kept untouched.\n\nThis process can take some time.</string>
   <string name="manage_space_clear_data">Clear data</string>
@@ -555,4 +554,6 @@
   <string name="common_not_found">it was not found</string>
   <string name="supports_oauth2_error">It was not possible to know if OAuth2 is supported</string>
   <string name="get_base_url_error">It was not possible to know the server base URL</string>
+  <string name="prefs_http_logs">Log HTTP requests and responses</string>
+  <string name="prefs_logs_summary">Logs may contain sensitive information. Sharing logs with others is sole user responsibility</string>
 </resources>

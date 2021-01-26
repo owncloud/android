@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
   @author David A. Velasco
   Copyright (C) 2016 ownCloud GmbH.
@@ -13,14 +12,12 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<ScrollView
-    android:id="@+id/shareScroll"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shareScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="presentation.ui.sharing.fragments.EditPrivateShareFragment"
-    >
+    tools:context="presentation.ui.sharing.fragments.EditPrivateShareFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,8 +32,7 @@
             android:padding="@dimen/standard_padding"
             android:singleLine="true"
             android:text="@string/share_with_edit_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            />
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <!-- for some reason the divider below is determining the width for the fragment;
              so, leave it there, even if it's height is 0dp, we don't really want to see it -->
@@ -44,15 +40,14 @@
             android:id="@+id/shareHeaderDivider"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/owncloud_blue"
-            />
+            android:background="@color/owncloud_blue" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/standard_margin"
             android:layout_marginLeft="@dimen/standard_margin"
             android:layout_marginRight="@dimen/standard_margin"
+            android:layout_marginBottom="@dimen/standard_margin"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.SwitchCompat
@@ -62,35 +57,31 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginTop="@dimen/standard_half_margin"
-                android:paddingEnd="0dp"
                 android:paddingStart="0dp"
+                android:paddingEnd="0dp"
                 android:text="@string/share_privilege_can_edit"
-                android:textColor="@color/color_accent"
-                />
+                android:textColor="@color/color_accent" />
 
             <CheckBox
                 android:id="@+id/canEditCreateCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/share_privilege_can_edit_create"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <CheckBox
                 android:id="@+id/canEditChangeCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/share_privilege_can_edit_change"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <CheckBox
                 android:id="@+id/canEditDeleteCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/share_privilege_can_edit_delete"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/canShareSwitch"
@@ -101,24 +92,34 @@
                 android:layout_marginTop="@dimen/standard_half_margin"
                 android:paddingLeft="0dp"
                 android:text="@string/share_privilege_can_share"
-                android:textColor="@color/color_accent"
-                />
+                android:textColor="@color/color_accent" />
 
             <TextView
                 android:id="@+id/private_share_error_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/standard_half_margin"
                 android:layout_marginTop="@dimen/standard_margin"
-                android:drawablePadding="@dimen/standard_half_padding"
+                android:layout_marginBottom="@dimen/standard_half_margin"
                 android:drawableStart="@drawable/common_error_grey"
+                android:drawablePadding="@dimen/standard_half_padding"
                 android:gravity="center_vertical"
-                android:paddingEnd="0dp"
                 android:paddingStart="0dp"
+                android:paddingEnd="0dp"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="13sp"
                 android:visibility="gone" />
         </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/closeButton"
+            style="@style/Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="sharePublicLinkCloseButton"
+            android:text="@string/drawer_close"
+            android:theme="@style/Button.Primary" />
+
     </LinearLayout>
 
 </ScrollView>

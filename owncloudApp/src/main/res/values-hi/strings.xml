@@ -11,8 +11,7 @@
   <string name="actionbar_settings">सेटिंग्स</string>
   <string name="actionbar_see_details">विवरण </string>
   <string name="actionbar_send_file">भेजें</string>
-  <string name="actionbar_sort">सॉर्ट करें</string>
-  <string name="drawer_item_settings">सेटिंग्स</string>
+    <string name="drawer_item_settings">सेटिंग्स</string>
   <string name="drawer_open">खोलें</string>
   <string name="drawer_help">सहायता </string>
   <string name="prefs_category_general">सामान्य </string>

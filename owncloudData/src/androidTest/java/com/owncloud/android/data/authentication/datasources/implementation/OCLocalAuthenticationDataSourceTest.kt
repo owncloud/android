@@ -21,14 +21,13 @@ package com.owncloud.android.data.authentication.datasources.implementation
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.authentication.KEY_OAUTH2_REFRESH_TOKEN
 import com.owncloud.android.data.authentication.KEY_OAUTH2_SCOPE
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
@@ -55,7 +54,7 @@ import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.OC_USER_INFO
 import io.mockk.every
 import io.mockk.mockkClass
-import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -71,7 +70,7 @@ class OCLocalAuthenticationDataSourceTest {
 
     private lateinit var ocLocalAuthenticationDataSource: OCLocalAuthenticationDataSource
     private val accountManager = mockkClass(AccountManager::class)
-    private val sharedPreferences = mockkClass(SharedPreferences::class, relaxed = true)
+    private val preferencesProvider = spyk<SharedPreferencesProvider>()
 
     @Before
     fun init() {
@@ -80,10 +79,9 @@ class OCLocalAuthenticationDataSourceTest {
         ocLocalAuthenticationDataSource = OCLocalAuthenticationDataSource(
             context,
             accountManager,
+            preferencesProvider,
             OC_ACCOUNT.type
         )
-        mockkStatic(PreferenceManager::class)
-
     }
 
     @Test
@@ -386,12 +384,11 @@ class OCLocalAuthenticationDataSourceTest {
         selectedAccountName: String = OC_ACCOUNT.name
     ) {
         every {
-            sharedPreferences.getString(SELECTED_ACCOUNT, any())
+            preferencesProvider.getString(SELECTED_ACCOUNT, any())
         } returns selectedAccountName
-
         every {
-            PreferenceManager.getDefaultSharedPreferences(any())
-        } returns sharedPreferences
+            preferencesProvider.putString(any(), any())
+        } returns Unit
     }
 
     private fun mockRegularAccountCreationFlow() {

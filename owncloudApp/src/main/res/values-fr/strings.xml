@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nom</string>
+  <string name="global_date">Date</string>
+  <string name="global_size">Taille</string>
   <string name="about_android">%1$s pour Android</string>
   <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Rechercher dans ce dossier</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Paramètres</string>
   <string name="actionbar_see_details">Détails</string>
   <string name="actionbar_send_file">Envoyer</string>
-  <string name="actionbar_sort">Trier</string>
   <string name="actionbar_descending">Décroissant</string>
   <string name="actionbar_sort_title">Trier</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Du plus ancien au plus récent</string>
-  <string name="actionbar_sort_by_size">Du plus petit au plus grand</string>
   <string name="drawer_item_all_files">Tous les fichiers</string>
   <string name="drawer_item_only_available_offline">Disponible hors-ligne</string>
   <string name="drawer_item_shared_by_link_files">Partagés par lien</string>
@@ -362,7 +362,11 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="error__upload__local_file_not_copied">%1$s n\'a pas pu être copié dans le dossier local %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
   <string name="get_shares_error">Il était impossible de récupérer les fichiers depuis le server</string>
+  <string name="get_sharees_error">Une erreur est survenue lors de la récupération des groupes et utilisateurs depuis le serveur</string>
   <string name="share_link_no_support_share_api">Désolé, le partage n\'est pas disponible sur votre serveur. Veuillez contacter votre administrateur.</string>
+  <string name="share_link_file_error">Une erreur est survenue lors de la tentative de partage de ce fichier ou dossier</string>
+  <string name="unshare_link_file_error">Impossible de départager ce fichier ou ce dossier</string>
+  <string name="update_link_file_error">Une erreur est survenue lors de la mise à jour du fichier ou dossier</string>
   <string name="share_link_password_title">Saisissez un mot de passe</string>
   <string name="share_link_empty_password">Vous devez saisir un mot de passe</string>
   <string name="activity_chooser_send_file_title">Envoyer</string>
@@ -477,8 +481,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="action_clear_failed_uploads">Vider les échoués</string>
   <string name="action_clear_successful_uploads">Vider les réussis</string>
   <string name="action_clear_finished_uploads">Vider tous les terminés</string>
-  <string name="action_switch_grid_view">Mosaïque</string>
-  <string name="action_switch_list_view">Liste</string>
   <string name="manage_space_title">Gestion de l\'espace</string>
   <string name="manage_space_description">Les paramètres, la base de données et les certificats du serveur provenant de %1$s seront définitivement effacés. \n\nLes fichiers téléchargés ne seront pas impactés.\n\nCe processus peut prendre du temps.</string>
   <string name="manage_space_clear_data">Effacer les données</string>
@@ -520,6 +522,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_service_notification_channel_description">Voir le lecteur de musique</string>
   <string name="file_sync_notification_channel_name">synchronisation de fichier</string>
   <string name="file_sync_notification_channel_description">Voir le résultat de la synchronisation de fichier</string>
+  <string name="clicks_to_be_developer">Vous êtes à %1$d clicks d\'activer les menus développeur</string>
   <string name="rate_dialog_title">Notez l’application %1$s</string>
   <string name="rate_dialog_description">Si vous appréciez l’utilisation de cette application, pouvez-vous prendre un instant pour la noter ? Votre retour d’expérience est très important pour nous.</string>
   <string name="button_no_thanks_name">NON MERCI</string>
@@ -541,8 +544,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
   <string name="welcome_feature_5_title">Streaming vidéo</string>
   <string name="welcome_feature_5_text">Lire vos vidéos sans les télécharger</string>
-  <string name="welcome_feature_6_text">Accès plus facil et rapide à vos fichiers et liens disponibles</string>
-  <string name="welcome_feature_7_text">Vous connectez à votre serveur ownCloud avec OpenID Connect est une façon plus sécurisé de vous connecter</string>
   <string name="no_borwser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
   <string name="common_not_found">ça n\'a pas été trouvé</string>
   <string name="get_base_url_error">Il est impossible de trouver l\'adresse du serveur</string>

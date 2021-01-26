@@ -32,6 +32,7 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import com.owncloud.android.R;
+import com.owncloud.android.domain.files.MimeTypeConstantsKt;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import timber.log.Timber;
 
@@ -241,7 +242,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * @return true if it is a folder
      */
     public boolean isFolder() {
-        return mMimeType != null && (mMimeType.equals("DIR") || mMimeType.equals("httpd/unix-directory")) ;
+        return mMimeType != null && MimeTypeConstantsKt.getLIST_MIME_DIR().contains(mMimeType);
     }
 
     /**

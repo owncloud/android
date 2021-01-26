@@ -105,7 +105,7 @@ public class FileStorageUtils {
     public static OCFile createOCFileFromRemoteFile(RemoteFile remote) {
         OCFile file = new OCFile(remote.getRemotePath());
         file.setCreationTimestamp(remote.getCreationTimestamp());
-        if (remote.getMimeType().equalsIgnoreCase("DIR")) {
+        if (remote.isFolder()) {
             file.setFileLength(remote.getSize());
         } else {
             file.setFileLength(remote.getLength());
@@ -206,7 +206,6 @@ public class FileStorageUtils {
 
     /**
      * Mimetype String of a file
-     *
      */
     public static String getMimeTypeFromName(String path) {
         String extension = "";

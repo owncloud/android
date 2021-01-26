@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Nombre</string>
+  <string name="global_date">Fecha</string>
+  <string name="global_size">Tamaño</string>
   <string name="about_android">%1$s para Android</string>
   <string name="about_version">Versión %1$s</string>
   <string name="actionbar_search">Buscar esta carpeta</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Configuración</string>
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
-  <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Más antiguo - Más nuevo</string>
-  <string name="actionbar_sort_by_size">Más pequeño - Más grande</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
   <string name="drawer_item_only_available_offline">Disponible offline</string>
   <string name="drawer_item_shared_by_link_files">Compartido por enlace</string>
@@ -485,8 +485,6 @@
   <string name="action_clear_failed_uploads">Limpiar fallido</string>
   <string name="action_clear_successful_uploads">Limpiar exitoso</string>
   <string name="action_clear_finished_uploads">Limpiar todo lo terminado</string>
-  <string name="action_switch_grid_view">Vista de rejilla</string>
-  <string name="action_switch_list_view">Ver lista</string>
   <string name="manage_space_title">Gestionar espacio</string>
   <string name="manage_space_description">Los ajustes, bases de datos y certificados de servidor de %1$s serán borrados permanentemente. \n\nLos archivos descargados se mantendrán intactos. .\n\nEste proceso puede tardar algún tiempo.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>
@@ -550,10 +548,6 @@
   <string name="welcome_feature_4_text">Tus fotografías/vídeos automáticamente se subirán</string>
   <string name="welcome_feature_5_title">Streaming de video</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-  <string name="welcome_feature_6_title">Nueva barra de navegación inferior</string>
-  <string name="welcome_feature_6_text">Accede de manera más fácil y rápida a tus archivos y enlaces disponibles offline</string>
-  <string name="welcome_feature_7_title">Soporte para OpenID Connect</string>
-  <string name="welcome_feature_7_text">Conéctate a tus servidores ownCloud de forma más segura con OpenID Connect</string>
   <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
   <string name="common_not_found">No se encontró</string>
   <string name="supports_oauth2_error">No fue posible determinar si OAuth2 está soportado</string>

@@ -61,7 +61,6 @@ class OCSettingsCameraUploadsTest {
 
     @Before
     fun setUp() {
-
         mPrefCameraPictureUploads = activityRule.activity.findPreference(cameraPictureUploads) as CheckBoxPreference
         mPrefCameraVideoUploads = activityRule.activity.findPreference(cameraVideoUploads) as CheckBoxPreference
 
@@ -69,9 +68,12 @@ class OCSettingsCameraUploadsTest {
         val preferenceScreen = activityRule.activity.preferenceScreen as PreferenceScreen
         val securityCategory =
             activityRule.activity.findPreference("security_category") as PreferenceCategory
+        val logsCategory =
+            activityRule.activity.findPreference("logs_category") as PreferenceCategory
         val moreCategory =
             activityRule.activity.findPreference("more") as PreferenceCategory
         preferenceScreen.removePreference(securityCategory)
+        preferenceScreen.removePreference(logsCategory)
         preferenceScreen.removePreference(moreCategory)
     }
 

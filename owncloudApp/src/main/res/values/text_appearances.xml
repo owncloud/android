@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance" />
+    <style name="TextAppearance.OwnCloud" />
+
+    <style name="TextAppearance.OwnCloud.SortBottomSheetFragment" />
+
+    <style name="TextAppearance.OwnCloud.SortBottomSheetFragment.Item">
+        <item name="android:textColor">@color/bottom_sheet_fragment_item_color</item>
+        <item name="android:textSize">@dimen/two_line_primary_text_size</item>
+    </style>
+</resources>

@@ -11,10 +11,8 @@
   <string name="actionbar_settings">Axustes</string>
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Unviar</string>
-  <string name="actionbar_sort">Ordenar</string>
-  <string name="actionbar_sort_title">Ordenar por</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="drawer_item_all_files">Tolos ficheros</string>
+    <string name="actionbar_sort_title">Ordenar por</string>
+    <string name="drawer_item_all_files">Tolos ficheros</string>
   <string name="drawer_item_settings">Axustes</string>
   <string name="drawer_item_uploads_list">Xubes </string>
   <string name="drawer_close">Zarrar</string>
@@ -377,8 +375,6 @@
   <string name="action_clear_failed_uploads">Llimpiar falló</string>
   <string name="action_clear_successful_uploads">Llimpieza con ésitu</string>
   <string name="action_clear_finished_uploads">Esborrar tolos finalizaos</string>
-  <string name="action_switch_grid_view">Vista de rexella</string>
-  <string name="action_switch_list_view">Vista de llista</string>
   <string name="manage_space_title">Alministrar espaciu</string>
   <string name="manage_space_description">Axustes, bases de datos y sirvidor de certificaos de los datos %1$s esborraránse dafechu. \n\nLos archivos descargados caltendrase intactos.\n\nEsti procesu puede tardar dalgún tiempu.</string>
   <string name="manage_space_clear_data">Llimpiar datos</string>

@@ -20,6 +20,7 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.MIME_DIR
 
 object AppTestUtil {
     /**
@@ -39,6 +40,6 @@ object AppTestUtil {
         "/Images/img.png"
     ).apply {
         fileName =  "/Documents/"
-        mimetype = "DIR"
+        mimetype = MIME_DIR
     }
 }

@@ -11,10 +11,8 @@
   <string name="actionbar_settings">Instellings</string>
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Stuur</string>
-  <string name="actionbar_sort">Sorteer</string>
-  <string name="actionbar_sort_title">Sorteer volgens</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="drawer_item_all_files">Alle lêers</string>
+    <string name="actionbar_sort_title">Sorteer volgens</string>
+    <string name="drawer_item_all_files">Alle lêers</string>
   <string name="drawer_item_settings">Instellings</string>
   <string name="drawer_item_uploads_list">Oplaaie</string>
   <string name="drawer_close">Sluit</string>

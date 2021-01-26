@@ -45,11 +45,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -63,6 +63,12 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView;
+import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
+import com.owncloud.android.presentation.ui.files.SortOptionsView;
+import com.owncloud.android.presentation.ui.files.SortOrder;
+import com.owncloud.android.presentation.ui.files.SortType;
+import com.owncloud.android.presentation.ui.files.ViewType;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FileListOption;
@@ -80,6 +86,7 @@ import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
@@ -92,7 +99,8 @@ import java.util.List;
  * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
 public class OCFileListFragment extends ExtendedListFragment implements
-        SearchView.OnQueryTextListener, View.OnFocusChangeListener {
+        SearchView.OnQueryTextListener, View.OnFocusChangeListener, SortOptionsView.SortOptionsListener,
+        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener {
 
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
@@ -122,11 +130,14 @@ public class OCFileListFragment extends ExtendedListFragment implements
     private int mStatusBarColor;
 
     private boolean mHideFab = true;
+
     private boolean miniFabClicked = false;
     private ActionMode mActiveActionMode;
     private OCFileListFragment.MultiChoiceModeListener mMultiChoiceModeListener;
 
     private SearchView mSearchView;
+
+    private SortOptionsView mSortOptionsView;
 
     /**
      * Public factory method to create new {@link OCFileListFragment} instances.
@@ -205,8 +216,23 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (allowContextualActions) {
             setChoiceModeAsMultipleModal(savedInstanceState);
         }
+
         Timber.i("onCreateView() end");
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mSortOptionsView = view.findViewById(R.id.options_layout);
+        if (mSortOptionsView != null) {
+            mSortOptionsView.setOnSortOptionsListener(this);
+            if (isPickingAFolder()) {
+                mSortOptionsView.setOnCreateFolderListener(this);
+                mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
+            }
+        }
     }
 
     @Override
@@ -274,7 +300,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         );
         setListAdapter(mFileListAdapter);
 
-        mHideFab = !fileListOption.isAllFiles();
+        mHideFab = !fileListOption.isAllFiles() || folderPicker;
         if (mHideFab) {
             setFabEnabled(false);
         } else {
@@ -329,11 +355,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment, null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
                 dialog.setContentView(uploadBottomSheet);
-                final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
-                LinearLayout uploadFromCameraLinearLayout =
-                        uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                final BottomSheetFragmentItemView uploadFromFilesItemView = uploadBottomSheet.findViewById(R.id.upload_from_files_item_view);
+                BottomSheetFragmentItemView uploadFromCameraItemView =
+                        uploadBottomSheet.findViewById(R.id.upload_from_camera_item_view);
                 TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
-                uploadFilesLinearLayout.setOnTouchListener((v13, event) -> {
+                uploadFromFilesItemView.setOnTouchListener((v13, event) -> {
                     Intent action = new Intent(Intent.ACTION_GET_CONTENT);
                     action = action.setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE);
                     action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -344,7 +370,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     dialog.hide();
                     return false;
                 });
-                uploadFromCameraLinearLayout.setOnTouchListener((v12, event) -> {
+                uploadFromCameraItemView.setOnTouchListener((v12, event) -> {
                     ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
                     dialog.hide();
                     return false;
@@ -427,12 +453,54 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (hasFocus) {
             setMessageForEmptyList(getString(R.string.local_file_list_search_with_no_matches));
         } else { // Set default message for empty list of files
-            ((FileDisplayActivity) requireActivity()).setBackgroundText();
+            if (requireActivity() instanceof FileDisplayActivity) {
+                ((FileDisplayActivity) requireActivity()).setBackgroundText();
+            } else if (requireActivity() instanceof FolderPickerActivity) {
+                ((FolderPickerActivity) requireActivity()).setBackgroundText();
+            }
         }
     }
 
     public boolean isSingleItemChecked() {
         return mFileListAdapter.getCheckedItems(getListView()).size() == 1;
+    }
+
+    @Override
+    public void onViewTypeListener(@NotNull ViewType viewType) {
+        mSortOptionsView.setViewTypeSelected(viewType);
+        if (viewType == ViewType.VIEW_TYPE_LIST) {
+            setListAsPreferred();
+        } else {
+            setGridAsPreferred();
+        }
+    }
+
+    @Override
+    public void onSortSelected(@NotNull SortType sortType) {
+        mSortOptionsView.setSortTypeSelected(sortType);
+
+        boolean isAscending = mSortOptionsView.getSortOrderSelected().equals(SortOrder.SORT_ORDER_ASCENDING);
+        if (sortType == SortType.SORT_TYPE_BY_NAME) {
+            sortByName(isAscending);
+        } else if (sortType == SortType.SORT_TYPE_BY_DATE) {
+            sortByDate(isAscending);
+        } else if (sortType == SortType.SORT_TYPE_BY_SIZE) {
+            sortBySize(isAscending);
+        }
+
+    }
+
+    @Override
+    public void onSortTypeListener(@NotNull SortType sortType, @NotNull SortOrder sortOrder) {
+        SortBottomSheetFragment sortBottomSheetFragment = SortBottomSheetFragment.Companion.newInstance(sortType, sortOrder);
+        sortBottomSheetFragment.setSortDialogListener(this);
+        sortBottomSheetFragment.show(getChildFragmentManager(), SortBottomSheetFragment.TAG);
+    }
+
+    @Override
+    public void onCreateFolderListener() {
+        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+        dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
     }
 
     /**
@@ -541,6 +609,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
             setFabEnabled(false);
             ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(false);
 
+            // Hide sort options view in multi-selection mode
+            mSortOptionsView.setVisibility(View.GONE);
+
             return true;
         }
 
@@ -591,6 +662,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 setFabEnabled(true);
             }
             ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(true);
+
+            // Show sort options view when multi-selection mode finish
+            mSortOptionsView.setVisibility(View.VISIBLE);
         }
 
         void storeStateIn(Bundle outState) {
@@ -663,7 +737,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
             item.setVisible(mFileListOption.isAllFiles());
             item.setEnabled(mFileListOption.isAllFiles());
         }
-        changeGridIcon(menu);   // this is enough if the option stays out of the action bar
     }
 
     /**
@@ -1048,8 +1121,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
             OwnCloudVersion version = AccountUtils.getServerVersion(((FileActivity) mContainerActivity).getAccount());
             if (version != null && isGridViewPreferred(mFile)) {
                 switchToGridView();
+                mSortOptionsView.setViewTypeSelected(ViewType.VIEW_TYPE_GRID);
             } else {
                 switchToListView();
+                mSortOptionsView.setViewTypeSelected(ViewType.VIEW_TYPE_LIST);
             }
 
             // set footer text
@@ -1105,15 +1180,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
         return output;
     }
 
-    public void sortByName(boolean descending) {
+    private void sortByName(boolean descending) {
         mFileListAdapter.setSortOrder(FileStorageUtils.SORT_NAME, descending);
     }
 
-    public void sortByDate(boolean descending) {
+    private void sortByDate(boolean descending) {
         mFileListAdapter.setSortOrder(FileStorageUtils.SORT_DATE, descending);
     }
 
-    public void sortBySize(boolean descending) {
+    private void sortBySize(boolean descending) {
         mFileListAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, descending);
     }
 
@@ -1167,17 +1242,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
             return false;
         } else {
             return !setting.contains(String.valueOf(parentDir.getFileId()));
-        }
-    }
-
-    private void changeGridIcon(Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.action_switch_view);
-        if (isGridViewPreferred(mFile)) {
-            menuItem.setTitle(getString(R.string.action_switch_list_view));
-            menuItem.setIcon(R.drawable.ic_view_list);
-        } else {
-            menuItem.setTitle(getString(R.string.action_switch_grid_view));
-            menuItem.setIcon(R.drawable.ic_view_module);
         }
     }
 

@@ -34,7 +34,7 @@ class EditPrivateShareAsyncUseCase(
         )
 
     data class Params(
-        val remoteId: Long,
+        val remoteId: String,
         val permissions: Int,
         val accountName: String
     )

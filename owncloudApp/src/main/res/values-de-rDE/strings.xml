@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">Name</string>
+  <string name="global_date">Datum</string>
+  <string name="global_size">Größe</string>
   <string name="about_android">%1$s Android App</string>
   <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Ordner durchsuchen</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">Einstellungen</string>
   <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Senden</string>
-  <string name="actionbar_sort">Sortieren</string>
   <string name="actionbar_descending">Absteigend</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Älteste - Neueste</string>
-  <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
   <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_shared_by_link_files">Geteilt über einen Link</string>
@@ -400,6 +400,7 @@
   <string name="drawer_manage_accounts">Konten verwalten</string>
   <string name="auth_redirect_non_secure_connection_title">Die gesicherte Verbindung wird auf eine unsichere Route weitergeleitet.</string>
   <string name="actionbar_logger">Protokolle</string>
+  <string name="log_open_logs_view">Log-Ansicht öffnen</string>
   <string name="log_send_history_button">Verlauf senden</string>
   <string name="log_send_no_mail_app">Keine App zum Versenden der Meldungen gefunden. Bitte installieren Sie die Mail-App!</string>
   <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
@@ -486,8 +487,6 @@
   <string name="action_clear_failed_uploads">Entferne Fehlversuche</string>
   <string name="action_clear_successful_uploads">Entferne erfolgreiche Uploads</string>
   <string name="action_clear_finished_uploads">Alles aufräumen</string>
-  <string name="action_switch_grid_view">Zur Rasteransicht wechseln</string>
-  <string name="action_switch_list_view">Zur Listenansicht wechseln</string>
   <string name="manage_space_title">Speicher verwalten</string>
   <string name="manage_space_description">Einstellungen, Datenbank und Server-Zertifikate von %1$s\'s Daten werden dauerhaft gelöscht.\n\nHerunter geladene Dateien bleiben unangetastet.\n\nDieser Vorgang kann eine Zeit dauern.</string>
   <string name="manage_space_clear_data">Lösche Daten</string>
@@ -551,12 +550,10 @@
   <string name="welcome_feature_4_text">Ihre Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Geben Sie Ihre Videos wieder, ohne sie herunterzuladen</string>
-  <string name="welcome_feature_6_title">Neue, untere Navigationsleiste</string>
-  <string name="welcome_feature_6_text">Einfacherer und schnellerer Zugriff auf Ihre verfügbaren Offline-Dateien und Links.</string>
-  <string name="welcome_feature_7_title">Unterstützung von OpenID Connect</string>
-  <string name="welcome_feature_7_text">Verbinden Sie sich mit Ihren ownCloud-Servern in einer sichereren Weise mit OpenID Connect</string>
   <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
   <string name="common_not_found">es wurde nicht gefunden</string>
   <string name="supports_oauth2_error">Es war nicht möglich, herauszufinden ob OAuth2 vom Server unterstützt wird</string>
   <string name="get_base_url_error">Es war nicht möglich die Serveradresse zu ermitteln.</string>
+  <string name="prefs_http_logs">HTTP-Anfragen und Antworten protokollieren</string>
+  <string name="prefs_logs_summary">Protokolle können sensible Informationen enthalten. Die gemeinsame Nutzung von Protokollen liegt in der alleinigen Verantwortung des Benutzers.</string>
 </resources>

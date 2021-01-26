@@ -30,7 +30,5 @@ class DeleteShareAsyncUseCase(
             params.remoteId
         )
 
-    data class Params(
-        val remoteId: Long
-    )
+    data class Params(val remoteId: String)
 }

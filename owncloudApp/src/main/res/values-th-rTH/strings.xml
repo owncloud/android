@@ -1,7 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--GLOBAL-->
+  <string name="global_name">ชื่อ</string>
+  <string name="global_date">วันที่</string>
+  <string name="global_size">ขนาด</string>
   <string name="about_android">%1$sสำหรับแอนดรอยด์ </string>
-  <string name="about_version">รุ่น %1$s</string>
+  <string name="about_version">เวอร์ชัน %1$s</string>
   <string name="actionbar_search">ค้นหาโฟลเดอร์นี้</string>
   <string name="actionbar_sync">ฟื้นฟูบัญชี</string>
   <string name="actionbar_upload">อัปโหลดไฟล์</string>
@@ -12,12 +16,8 @@
   <string name="actionbar_settings">ตั้งค่า</string>
   <string name="actionbar_see_details">รายละเอียด</string>
   <string name="actionbar_send_file">ส่ง</string>
-  <string name="actionbar_sort">จัดเรียง</string>
   <string name="actionbar_descending">กำลังมากไปน้อย</string>
   <string name="actionbar_sort_title">เรียงตาม</string>
-  <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">จากเก่า-ใหม่</string>
-  <string name="actionbar_sort_by_size">เล็กที่สุด - ใหญ่ที่สุด</string>
   <string name="drawer_item_all_files">ไฟล์ทั้งหมด</string>
   <string name="drawer_item_only_available_offline">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="drawer_item_shared_by_link_files">แชร์โดยลิงก์</string>
@@ -26,7 +26,7 @@
   <string name="drawer_close">ปิด</string>
   <string name="drawer_open">เปิด</string>
   <string name="drawer_loading_quota">กำลังโหลดโควต้า</string>
-  <string name="drawer_quota">ใช้ไปแล้ว %1$sจากทั้งหมด %2$s (%3$s %%)</string>
+  <string name="drawer_quota">ใช้ไปแล้ว %1$sจากทั้งหมด %2$s (%3$s%%)</string>
   <string name="drawer_unavailable_free_storage">ใช้ไป%1$s</string>
   <string name="drawer_unavailable_used_storage">ไม่มีข้อมูลการใช้พื้นที่เก็บข้อมูล</string>
   <string name="drawer_feedback">ข้อเสนอแนะ</string>
@@ -57,7 +57,7 @@
   <string name="prefs_sync_calendar_contacts_summary">ติดตั้ง DAVx⁵</string>
   <string name="prefs_recommend">แนะนำให้เพื่อน</string>
   <string name="prefs_feedback">ข้อเสนอแนะ</string>
-  <string name="prefs_imprint">ประทับ</string>
+  <string name="prefs_imprint">นโยบาย</string>
   <string name="prefs_remember_last_share_location">จดจำตำแหน่งที่ใช้ร่วมกัน</string>
   <string name="prefs_remember_last_upload_location_summary">จดจำตำแหน่งล่าสุดที่ใช้ร่วมกัน</string>
   <string name="prefs_pattern">รูปแบบการล็อค</string>
@@ -85,7 +85,7 @@
   <string name="recommend_text">ฉันอยากจะขอเชิญให้คุณใช้ %1$s บนสมาร์ทโฟนของคุณ!\nดาวน์โหลดที่นี่: %2$s</string>
   <string name="error_reason">เพราะว่า</string>
   <string name="auth_failure_snackbar">การรับรองความถูกต้องล้มเหลว</string>
-  <string name="server_not_supported">เซิร์ฟเวอร์ของคุณเวอร์ชันเก่ากว่า 10 โปรดอัปเกรดเซิร์ฟเวอร์ของคุณเป็นรุ่นใหม่</string>
+  <string name="server_not_supported">เซิร์ฟเวอร์ของคุณเวอร์ชันเก่ากว่า 10 โปรดอัปเกรดเซิร์ฟเวอร์ของคุณเป็นเวอร์ชันใหม่</string>
   <string name="auth_failure_snackbar_action">เปลี่ยนบัญชี</string>
   <string name="auth_oauth_failure">โทเค็นการเข้าถึงหมดอายุหรือไม่ถูกต้อง กรุณาลงชื่อเข้าใช้อีกครั้ง</string>
   <string name="auth_oauth_failure_snackbar_action">เข้าสู่ระบบ</string>
@@ -213,7 +213,7 @@
   <string name="sync_fail_in_favourites_content">เนื้อหาของไฟล์ %1$d ไม่สามารถประสานข้อมูลได้ (มี %2$d ปัญหา)</string>
   <string name="sync_foreign_files_forgotten_ticker">มีแฟ้มข้อมูลในเครื่องบางแฟ้มถูกลืม</string>
   <string name="sync_foreign_files_forgotten_content">ไม่สามารถคัดลอกไฟล์ %1$d ไปยังโฟลเดอร์ %2$s</string>
-  <string name="sync_foreign_files_forgotten_explanation">สำหรับรุ่น 1.3.16 ไฟล์ที่อัปโหลดจากเครื่องของคุณจะถูกคัดลอกไปสำรองไว้ที่ในเครื่อง %1$s เพื่อป้องกันข้อมูลสูญหายเมื่อไฟล์เดียวถูกประสานข้อมูลกับบัญชีหลายบัญชี \n\n การเปลี่ยนแปลงนี้ไฟล์ทั้งหมดที่อัปโหลดในรุ่นก่อนหน้า ของ app นี้ถูกคัดลอกลงในโฟลเดอร์ %2$s แต่ก็อาจมีข้อผิดพลาดในการดำเนินการนี้ช่วงระหว่างการประสานบัญชี เช่นเดียวกับการลบ หรือย้ายไฟล์และเชื่อมโยงไปยัง %3$s ส่วนโฟลเดอร์ %1$s จะถูกเชื่อมโยงไปยัง %4$s \n\n รายชื่อด้านล่าง เป็นแฟ้มต้นทาง และแฟ้มปลายทาง ใน %5$s มันจะถูกนำมาเชื่อมโยงกัน</string>
+  <string name="sync_foreign_files_forgotten_explanation">สำหรับเวอร์ชัน 1.3.16 ไฟล์ที่อัปโหลดจากเครื่องของคุณจะถูกคัดลอกไปสำรองไว้ที่ในเครื่อง %1$s เพื่อป้องกันข้อมูลสูญหายเมื่อไฟล์เดียวถูกประสานข้อมูลกับบัญชีหลายบัญชี \n\n การเปลี่ยนแปลงนี้ไฟล์ทั้งหมดที่อัปโหลดในเวอร์ชันก่อนหน้า ของ app นี้ถูกคัดลอกลงในโฟลเดอร์ %2$s แต่ก็อาจมีข้อผิดพลาดในการดำเนินการนี้ช่วงระหว่างการประสานบัญชี เช่นเดียวกับการลบ หรือย้ายไฟล์และเชื่อมโยงไปยัง %3$s ส่วนโฟลเดอร์ %1$s จะถูกเชื่อมโยงไปยัง %4$s \n\n รายชื่อด้านล่าง เป็นแฟ้มต้นทาง และแฟ้มปลายทาง ใน %5$s มันจะถูกนำมาเชื่อมโยงกัน</string>
   <string name="sync_current_folder_was_removed">โฟลเดอร์ %1$s หายไปแล้ว</string>
   <string name="foreign_files_move">ย้ายทั้งหมด</string>
   <string name="foreign_files_success">ทุกแฟ้มข้อมูลถูกย้ายเรียบร้อยแล้ว</string>
@@ -267,7 +267,7 @@
   <string name="auth_incorrect_path_title">ไม่พบค่าตัวอย่างเซิร์ฟเวอร์</string>
   <string name="auth_incorrect_address_title">รูปแบบที่อยู่ของเซิร์ฟเวอร์ไม่ถูกต้อง</string>
   <string name="auth_ssl_general_error_title">การเตรียมใช้งาน SSL ล้มเหลว</string>
-  <string name="auth_bad_oc_version_title">ไม่รู้จักรุ่นของเซิร์ฟเวอร์</string>
+  <string name="auth_bad_oc_version_title">ไม่รู้จักเวอร์ชันของเซิร์ฟเวอร์</string>
   <string name="auth_wrong_connection_title">ไม่สามารถเชื่อมต่อได้</string>
   <string name="auth_secure_connection">เชื่อมต่อแบบปลอดภัยเสร็จสมบูรณ์</string>
   <string name="auth_unauthorized">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</string>
@@ -355,7 +355,7 @@
   <string name="proper_videos_folder_warning_camera_upload">โปรดตรวจสอบให้แน่ใจว่าโฟลเดอร์ที่เลือกเป็นตำแหน่งที่กล้องที่คุณใช้บันทึกวิดีโอ มิฉะนั้นคุณสมบัตินี้จะไม่สามารถตรวจจับวิดีโอของคุณ โปรดทราบว่าระบบจะอัปโหลดวิดีโออย่างน้อย 15 นาทีหลังจากบันทึก</string>
   <string name="conflict_title">ไฟล์ที่มีปัญหา</string>
   <string name="conflict_description">แตะเพื่อแก้ปัญหาไฟล์ %1$s</string>
-  <string name="conflict_message">ต้องการวางทับไฟล์เดิม? ถ้าเลือกเก็บทั้ง 2 รุ่นอีกไฟล์หนึ่งจะถูกเพิ่มตัวเลขเข้าไปในชื่อ</string>
+  <string name="conflict_message">ต้องการวางทับไฟล์เดิม? ถ้าเลือกเก็บทั้ง 2 เวอร์ชันอีกไฟล์หนึ่งจะถูกเพิ่มตัวเลขเข้าไปในชื่อ</string>
   <string name="conflict_keep_both">เก็บไว้ทั้งสองอย่าง</string>
   <string name="conflict_use_local_version">เวอร์ชันปัจจุบัน</string>
   <string name="conflict_use_server_version">เวอร์ชันเซิร์ฟเวอร์</string>
@@ -374,7 +374,7 @@
   <string name="share_link_empty_password">คุณจะต้องกรอกรหัสผ่าน</string>
   <string name="activity_chooser_send_file_title">ส่ง</string>
   <string name="copy_link">คัดลอกลิงก์</string>
-  <string name="clipboard_text_copied">คัดลอกไปยังคลิปบอร์ด</string>
+  <string name="clipboard_text_copied">คัดลอกลิงก์ไปยังคลิปบอร์ด</string>
   <string name="clipboard_no_text_to_copy">ไม่มีข้อความใดที่ถูกคัดลอกไปยังคลิปบอร์ด</string>
   <string name="clipboard_uxexpected_error">เกิดข้อผิดพลาดขณะกำลังคัดลอกไปยังคลิปบอร์ด</string>
   <string name="clipboard_label">คัดลอกข้อความจาก %1$s แล้ว</string>
@@ -398,6 +398,7 @@
   <string name="drawer_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="auth_redirect_non_secure_connection_title">เชื่อมต่อที่ปลอดภัยถูกเปลี่ยนเส้นทางผ่านเราเตอร์ที่ไม่ปลอดภัย</string>
   <string name="actionbar_logger">ไฟล์ log</string>
+  <string name="log_open_logs_view">เปิดมุมมองบันทึก</string>
   <string name="log_send_history_button">ส่งประวัติการใช้งานย้อนหลัง</string>
   <string name="log_send_no_mail_app">ไม่พบแอปสำหรับส่งข้อมูล log กรุณาติดตั้งแอปสำหรับส่งเมล</string>
   <string name="log_send_mail_subject">%1$s ข้อมูล log สำหรับแอปแอนดรอยด์</string>
@@ -449,7 +450,7 @@
   <string name="share_file">แชร์ %1$s</string>
   <string name="share_with_user_section_title">ผู้ใช้และกลุ่ม</string>
   <string name="share_no_users">ยังไม่มีข้อมูลที่แชร์กับผู้ใช้ในตอนนี้</string>
-  <string name="share_incompatible_version">เพื่อแชร์กับผู้ใช้อื่นๆ เซิร์ฟเวอร์ของคุณจะต้องเป็นรุ่น 8.2 ขึ้นไป</string>
+  <string name="share_incompatible_version">เพื่อแชร์กับผู้ใช้อื่นๆ เซิร์ฟเวอร์ของคุณจะต้องเป็นเวอร์ชัน 8.2 ขึ้นไป</string>
   <string name="share_add_user_or_group">เพิ่มชื่อผู้ใช้งาน หรือชื่อกลุ่ม</string>
   <string name="share_via_link_section_title">ลิงก์สาธารณะ</string>
   <string name="share_via_link_create_title">สร้างแชร์ลิงก์</string>
@@ -471,7 +472,7 @@
   <string name="share_group_clarification">%1$s (กลุ่ม)</string>
   <string name="share_remote_clarification">%1$s (รีโมท)</string>
   <string name="share_known_remote_clarification">%1$s (ที่ %2$s )</string>
-  <string name="share_sharee_unavailable">ขออภัย รุ่นเซิร์ฟเวอร์ของคุณไม่อนุญาตให้แชร์กับผู้ใช้ภายในไคลเอนต์
+  <string name="share_sharee_unavailable">ขออภัยเวอร์ชันเซิร์ฟเวอร์ของคุณไม่อนุญาตให้แชร์กับผู้ใช้ภายในไคลเอนต์
 \nกรุณาติดต่อผู้ดูแลระบบ</string>
   <string name="share_privilege_can_share">สามารถแชร์ได้</string>
   <string name="share_privilege_can_edit">สามารถแก้ไข</string>
@@ -484,8 +485,6 @@
   <string name="action_clear_failed_uploads">ล้างข้อผิดพลาด</string>
   <string name="action_clear_successful_uploads">ล้างสำเร็จ</string>
   <string name="action_clear_finished_uploads">ล้างทั้งหมดเสร็จแล้ว</string>
-  <string name="action_switch_grid_view">มุมมองแบบตาราง Grid</string>
-  <string name="action_switch_list_view">มุมมองแบบแสดงรายการ</string>
   <string name="manage_space_title">จัดการพื้นที่จัดการพื้นที่</string>
   <string name="manage_space_description">การตั้งค่าใบรับรองเซิร์ฟเวอร์และฐานข้อมูลจาก %1$s จะถูกลบอย่างถาวร \n\nไฟล์ที่ดาวน์โหลดจะถูกเก็บไว้อย่างดี กระบวนการนี้ต้องใช้เวลาสักครู่</string>
   <string name="manage_space_clear_data">ล้างข้อมูล</string>
@@ -548,12 +547,10 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัปโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
-  <string name="welcome_feature_6_title">แถบนำทางด้านล่างแบบใหม่</string>
-  <string name="welcome_feature_6_text">เข้าถึงไฟล์และลิงก์ออฟไลน์ที่ง่ายและเร็วขึ้น</string>
-  <string name="welcome_feature_7_title">รองรับ OpenID Connect</string>
-  <string name="welcome_feature_7_text">เพื่อความปลอดภัยเชื่อมต่อกับเซิร์ฟเวอร์ ownCloud ด้วย OpenID Connect </string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
   <string name="common_not_found">ไม่พบข้อมูลใดๆ</string>
   <string name="supports_oauth2_error">มันเป็นไปไม่ได้ที่จะรู้ว่ารองรับการใช้งาน OAuth2</string>
   <string name="get_base_url_error">ไม่สามารถทราบ URL ของเซิร์ฟเวอร์</string>
+  <string name="prefs_http_logs">บันทึกคำขอและการตอบกลับ HTTP</string>
+  <string name="prefs_logs_summary">บันทึกอาจมีข้อมูลที่ละเอียดอ่อน การแบ่งปันบันทึกกับผู้อื่นถือเป็นความรับผิดชอบของผู้ใช้แต่เพียงผู้เดียว</string>
 </resources>

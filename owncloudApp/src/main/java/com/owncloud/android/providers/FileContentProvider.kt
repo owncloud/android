@@ -58,6 +58,9 @@ import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
+import com.owncloud.android.domain.files.LIST_MIME_DIR
+import com.owncloud.android.domain.files.MIME_DIR
+import com.owncloud.android.domain.files.MIME_DIR_UNIX
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.android.ext.android.inject
@@ -128,9 +131,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     var isDir: Boolean
                     while (!children.isAfterLast) {
                         childId = children.getLong(children.getColumnIndex(ProviderTableMeta._ID))
-                        isDir = "DIR" == children.getString(
+                        isDir = children.getString(
                             children.getColumnIndex(ProviderTableMeta.FILE_CONTENT_TYPE)
-                        )
+                        ) in LIST_MIME_DIR
                         count += if (isDir) {
                             delete(
                                 db,
@@ -161,7 +164,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             ROOT_DIRECTORY ->
                 count = db.delete(ProviderTableMeta.FILE_TABLE_NAME, where, whereArgs)
             SHARES -> count =
-                OwncloudDatabase.getDatabase(MainApp.appContext).shareDao().deleteShare(uri.pathSegments[1].toLong())
+                OwncloudDatabase.getDatabase(MainApp.appContext).shareDao().deleteShare(uri.pathSegments[1])
             CAPABILITIES -> count = db.delete(ProviderTableMeta.CAPABILITIES_TABLE_NAME, where, whereArgs)
             UPLOADS -> count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs)
             CAMERA_UPLOADS_SYNC -> count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs)
@@ -965,32 +968,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
             if (oldVersion < 26 && newVersion >= 26) {
                 Timber.i("SQL : Entering in #26 to migrate shares from SQLite to Room")
-                val cursor = db.query(
-                    ProviderTableMeta.OCSHARES_TABLE_NAME,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                )
 
-                if (cursor.moveToFirst()) {
-                    val shares = mutableListOf<OCShareEntity>()
-
-                    do {
-                        shares.add(OCShareEntity.fromCursor(cursor))
-                    } while (cursor.moveToNext())
-
-                    // Insert share list to the new shares table in new database
-                    // TODO New arch
-//                    executors.diskIO().execute {
-//                        OCLocalShareDataSource(context).insert(shares)
-//                    }
-
-                    // Drop old shares table from old database
-                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.OCSHARES_TABLE_NAME + ";")
-                }
+                // Drop old shares table from old database
+                db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.OCSHARES_TABLE_NAME + ";")
             }
 
             if (oldVersion < 27 && newVersion >= 27) {
@@ -1094,8 +1074,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         db.execSQL(
             "CREATE TABLE " + ProviderTableMeta.OCSHARES_TABLE_NAME + "("
                     + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + ProviderTableMeta.OCSHARES_FILE_SOURCE + " INTEGER, "
-                    + ProviderTableMeta.OCSHARES_ITEM_SOURCE + " INTEGER, "
+                    + "file_source" + " INTEGER, "
+                    + "item_source" + " INTEGER, "
                     + ProviderTableMeta.OCSHARES_SHARE_TYPE + " INTEGER, "
                     + ProviderTableMeta.OCSHARES_SHARE_WITH + " TEXT, "
                     + ProviderTableMeta.OCSHARES_PATH + " TEXT, "
@@ -1105,7 +1085,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     + ProviderTableMeta.OCSHARES_TOKEN + " TEXT, "
                     + ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME + " TEXT, "
                     + ProviderTableMeta.OCSHARES_IS_DIRECTORY + " INTEGER, "  // boolean
-                    + ProviderTableMeta.OCSHARES_USER_ID + " INTEGER, "
+                    + "user_id" + " INTEGER, "
                     + ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " INTEGER,"
                     + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " TEXT, "
                     + ProviderTableMeta.OCSHARES_URL + " TEXT, "
@@ -1417,8 +1397,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
         init {
             shareProjectionMap[ProviderTableMeta.ID] = ProviderTableMeta.ID
-            shareProjectionMap[ProviderTableMeta.OCSHARES_FILE_SOURCE] = ProviderTableMeta.OCSHARES_FILE_SOURCE
-            shareProjectionMap[ProviderTableMeta.OCSHARES_ITEM_SOURCE] = ProviderTableMeta.OCSHARES_ITEM_SOURCE
             shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_TYPE] = ProviderTableMeta.OCSHARES_SHARE_TYPE
             shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH] = ProviderTableMeta.OCSHARES_SHARE_WITH
             shareProjectionMap[ProviderTableMeta.OCSHARES_PATH] = ProviderTableMeta.OCSHARES_PATH
@@ -1431,7 +1409,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             shareProjectionMap[ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO] =
                 ProviderTableMeta.OCSHARES_SHARE_WITH_ADDITIONAL_INFO
             shareProjectionMap[ProviderTableMeta.OCSHARES_IS_DIRECTORY] = ProviderTableMeta.OCSHARES_IS_DIRECTORY
-            shareProjectionMap[ProviderTableMeta.OCSHARES_USER_ID] = ProviderTableMeta.OCSHARES_USER_ID
             shareProjectionMap[ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED] =
                 ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED
             shareProjectionMap[ProviderTableMeta.OCSHARES_ACCOUNT_OWNER] = ProviderTableMeta.OCSHARES_ACCOUNT_OWNER
