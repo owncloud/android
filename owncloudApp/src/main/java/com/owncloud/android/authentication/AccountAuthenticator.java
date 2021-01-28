@@ -182,8 +182,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             // this account, null will be returned
             accessToken = accountManager.peekAuthToken(account, authTokenType);
             if (accessToken == null && canBeRefreshed(authTokenType)) {
-                refreshToken(accountAuthenticatorResponse, account, authTokenType, accountManager, options);
-                return null;  // We return null because of the callbacks used within refreshToken method
+                accessToken = refreshToken(account, authTokenType, accountManager);
             }
         }
 
@@ -299,19 +298,18 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 getAccountType())));
     }
 
-    private void refreshToken(
-            AccountAuthenticatorResponse accountAuthenticatorResponse,
+    private String refreshToken(
             Account account,
             String authTokenType,
-            AccountManager accountManager,
-            Bundle options) {
+            AccountManager accountManager
+    ) {
 
         // Prepare everything to perform the token request
         String refreshToken = accountManager.getUserData(account, KEY_OAUTH2_REFRESH_TOKEN);
 
         if (refreshToken == null || refreshToken.isEmpty()) {
             Timber.w("No refresh token stored for silent renewal of access token");
-            return;
+            return null;
         }
 
         Timber.d("Ready to exchange for new tokens. Account: [ %s ], Refresh token: [ %s ]", account.name,
@@ -354,58 +352,39 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         RequestTokenUseCase.Params requestTokenParams = new RequestTokenUseCase.Params(oauthTokenRequest);
         UseCaseResult<TokenResponse> tokenResponseResult = requestTokenUseCase.getValue().execute(requestTokenParams);
 
-        if (tokenResponseResult.isSuccess()) {
-            handleSuccessfulRefreshToken(tokenResponseResult.getDataOrNull(), accountAuthenticatorResponse,
+        TokenResponse safeTokenResponse = tokenResponseResult.getDataOrNull();
+        if (safeTokenResponse != null) {
+            return handleSuccessfulRefreshToken(safeTokenResponse,
                     account, authTokenType, accountManager, refreshToken);
         } else {
-            handleFailedRefreshToken(tokenResponseResult.getThrowableOrNull(), accountAuthenticatorResponse,
-                    account, authTokenType, options);
+            Timber.e(tokenResponseResult.getThrowableOrNull(), "OAuth request to refresh access token failed. Preparing to access Login Activity");
+            return null;
         }
     }
 
-    private void handleSuccessfulRefreshToken(
+    private String handleSuccessfulRefreshToken(
             TokenResponse tokenResponse,
-            AccountAuthenticatorResponse accountAuthenticatorResponse,
             Account account,
             String authTokenType,
             AccountManager accountManager,
             String oldRefreshToken
     ) {
-        if (tokenResponse != null) {
             String newAccessToken = tokenResponse.getAccessToken();
             accountManager.setAuthToken(account, authTokenType, newAccessToken);
 
-            final Bundle result = new Bundle();
-            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE, MainApp.Companion.getAccountType());
-            result.putString(AccountManager.KEY_AUTHTOKEN, newAccessToken);
-            accountAuthenticatorResponse.onResult(result);
-
             String refreshTokenToUseFromNowOn;
-
             if (tokenResponse.getRefreshToken() != null) {
                 refreshTokenToUseFromNowOn = tokenResponse.getRefreshToken();
             } else {
                 refreshTokenToUseFromNowOn = oldRefreshToken;
             }
+            accountManager.setUserData(account, KEY_OAUTH2_REFRESH_TOKEN, refreshTokenToUseFromNowOn);
 
             Timber.d("Token refreshed successfully. New access token: [ %s ]. New refresh token: [ %s ]",
                     newAccessToken, refreshTokenToUseFromNowOn);
-            accountManager.setUserData(account, KEY_OAUTH2_REFRESH_TOKEN, refreshTokenToUseFromNowOn);
-        }
-    }
 
-    private void handleFailedRefreshToken(
-            Throwable exception,
-            AccountAuthenticatorResponse accountAuthenticatorResponse,
-            Account account,
-            String authTokenType,
-            Bundle options
-    ) {
-        Timber.e(exception, "OAuth request to refresh access token failed. Preparing to access Login Activity");
-        Bundle result = prepareBundleToAccessLoginActivity(accountAuthenticatorResponse, account, authTokenType, options);
-        accountAuthenticatorResponse.onResult(result);
-    }
+            return newAccessToken;
+        }
 
     /**
      * Return bundle with intent to access LoginActivity and UPDATE the token for the account

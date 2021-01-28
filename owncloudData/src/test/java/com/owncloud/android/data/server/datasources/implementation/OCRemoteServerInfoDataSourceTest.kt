@@ -47,7 +47,7 @@ class OCRemoteServerInfoDataSourceTest {
 
     private val ocServerInfoService: OCServerInfoService = mockk()
     private val clientManager: ClientManager = mockk(relaxed = true)
-    private val ocClientMocked: OwnCloudClient = mockk()
+    private val ocClientMocked: OwnCloudClient = mockk(relaxed = true)
 
     private val ocOwncloudVersion = OwnCloudVersion("10.3.2")
     private val basicAuthHeader = "basic realm=\"owncloud\", charset=\"utf-8\""
