@@ -201,7 +201,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
                     } else if (shareType.equals(ShareType.USER) ||
                             shareType.equals(ShareType.FEDERATED) ||
                             shareType.equals(ShareType.GROUP)) {
-                        file.setSharedWithSharee(true);
+                        file.setSharedWithShare(true);
                     }
                     getStorageManager().saveFile(file);
                 }
@@ -213,7 +213,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         Vector<OCFile> files = getStorageManager().getFolderContent(mLocalFolder);
         for (OCFile file : files) {
             file.setSharedViaLink(false);
-            file.setSharedWithSharee(false);
+            file.setSharedWithShare(false);
             getStorageManager().saveFile(file);
         }
     }

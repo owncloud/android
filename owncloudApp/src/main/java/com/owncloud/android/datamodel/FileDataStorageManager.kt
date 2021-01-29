@@ -353,7 +353,7 @@ class FileDataStorageManager {
             put(FILE_ETAG, file.etag)
             put(FILE_TREE_ETAG, file.treeEtag)
             put(FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
-            put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
+            put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithShare) 1 else 0)
             put(FILE_PERMISSIONS, file.permissions)
             put(FILE_REMOTE_ID, file.remoteId)
             put(FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
@@ -440,7 +440,7 @@ class FileDataStorageManager {
                 put(FILE_ETAG, file.etag)
                 put(FILE_TREE_ETAG, file.treeEtag)
                 put(FILE_SHARED_VIA_LINK, if (file.isSharedViaLink) 1 else 0)
-                put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithSharee) 1 else 0)
+                put(FILE_SHARED_WITH_SHAREE, if (file.isSharedWithShare) 1 else 0)
                 put(FILE_PERMISSIONS, file.permissions)
                 put(FILE_REMOTE_ID, file.remoteId)
                 put(FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail())
@@ -515,7 +515,7 @@ class FileDataStorageManager {
             put(FILE_ETAG, folder.etag)
             put(FILE_TREE_ETAG, folder.treeEtag)
             put(FILE_SHARED_VIA_LINK, if (folder.isSharedViaLink) 1 else 0)
-            put(FILE_SHARED_WITH_SHAREE, if (folder.isSharedWithSharee) 1 else 0)
+            put(FILE_SHARED_WITH_SHAREE, if (folder.isSharedWithShare) 1 else 0)
             put(FILE_PERMISSIONS, folder.permissions)
             put(FILE_REMOTE_ID, folder.remoteId)
             put(FILE_PRIVATE_LINK, folder.privateLink)
@@ -1079,7 +1079,7 @@ class FileDataStorageManager {
             etag = it.getString(it.getColumnIndex(FILE_ETAG))
             treeEtag = it.getString(it.getColumnIndex(FILE_TREE_ETAG))
             isSharedViaLink = it.getInt(it.getColumnIndex(FILE_SHARED_VIA_LINK)) == 1
-            isSharedWithSharee = it.getInt(it.getColumnIndex(FILE_SHARED_WITH_SHAREE)) == 1
+            isSharedWithShare = it.getInt(it.getColumnIndex(FILE_SHARED_WITH_SHAREE)) == 1
             permissions = it.getString(it.getColumnIndex(FILE_PERMISSIONS))
             remoteId = it.getString(it.getColumnIndex(FILE_REMOTE_ID))
             setNeedsUpdateThumbnail(it.getInt(it.getColumnIndex(FILE_UPDATE_THUMBNAIL)) == 1)
