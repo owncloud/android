@@ -26,7 +26,6 @@
 package com.owncloud.android.ui.preview
 
 import android.accounts.Account
-import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -43,6 +42,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.github.chrisbanes.photoview.PhotoView
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.FileMenuFilter
@@ -110,9 +110,10 @@ class PreviewImageFragment : FileFragment() {
             (requireActivity() as PreviewImageActivity).toggleFullScreen()
         }
 
-        progressController = TransferProgressController(mContainerActivity)
-        progressController!!.setProgressBar(syncProgressBar)
-        progressController!!.hideProgressBar()
+        progressController = TransferProgressController(mContainerActivity).apply {
+            setProgressBar(syncProgressBar)
+            hideProgressBar()
+        }
         savedInstanceState?.let {
             if (!ignoreFirstSavedState) {
                 val file: OCFile? = it.getParcelable(EXTRA_FILE)
@@ -123,6 +124,7 @@ class PreviewImageFragment : FileFragment() {
                 ignoreFirstSavedState = false
             }
         }
+
         account = requireArguments().getParcelable(PreviewAudioFragment.EXTRA_ACCOUNT)
         checkNotNull(account) { "Instanced with a NULL ownCloud Account" }
         checkNotNull(file) { "Instanced with a NULL OCFile" }
@@ -132,7 +134,7 @@ class PreviewImageFragment : FileFragment() {
         progressWheel.visibility = View.VISIBLE
     }
 
-    fun getImageView() = photo_view!!
+    fun getImageView(): PhotoView = photo_view
 
     /**
      * {@inheritDoc}
@@ -145,14 +147,14 @@ class PreviewImageFragment : FileFragment() {
     override fun onStart() {
         super.onStart()
         if (file != null) {
-            progressController!!.startListeningProgressFor(file, account)
+            progressController?.startListeningProgressFor(file, account)
             loadAndShowImage()
         }
     }
 
     override fun onStop() {
         Timber.v("onStop starts")
-        progressController!!.stopListeningProgressFor(file, account)
+        progressController?.stopListeningProgressFor(file, account)
         super.onStop()
     }
 
@@ -274,9 +276,7 @@ class PreviewImageFragment : FileFragment() {
     }
 
     override fun onTransferServiceConnected() {
-        if (progressController != null) {
-            progressController!!.startListeningProgressFor(file, account)
-        }
+        progressController?.startListeningProgressFor(file, account)
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile) {
@@ -285,23 +285,18 @@ class PreviewImageFragment : FileFragment() {
     }
 
     override fun onFileMetadataChanged() {
-        val storageManager = mContainerActivity.storageManager
-        if (storageManager != null) {
-            file = storageManager.getFileByPath(file.remotePath)
-        }
+        file = mContainerActivity.storageManager.getFileByPath(file.remotePath)
         requireActivity().invalidateOptionsMenu()
     }
 
-    override fun onFileContentChanged() {
-        loadAndShowImage()
-    }
+    override fun onFileContentChanged() = loadAndShowImage()
 
     override fun updateViewForSyncInProgress() {
-        progressController!!.showProgressBar()
+        progressController?.showProgressBar()
     }
 
     override fun updateViewForSyncOff() {
-        progressController!!.hideProgressBar()
+        progressController?.hideProgressBar()
     }
 
     private fun loadAndShowImage() {
@@ -327,7 +322,7 @@ class PreviewImageFragment : FileFragment() {
                     return false
                 }
             })
-            .into(photo_view!!)
+            .into(photo_view)
         photo_view.visibility = View.VISIBLE
     }
 
@@ -335,8 +330,7 @@ class PreviewImageFragment : FileFragment() {
      * Finishes the preview
      */
     private fun finish() {
-        val container: Activity? = activity
-        container!!.finish()
+        activity?.finish()
     }
 
     companion object {
