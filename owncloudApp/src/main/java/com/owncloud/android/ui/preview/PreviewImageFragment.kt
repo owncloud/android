@@ -307,8 +307,7 @@ class PreviewImageFragment : FileFragment() {
             .apply(requestOptions)
             .listener(object : RequestListener<Drawable?> {
                 override fun onLoadFailed(
-                    e: GlideException?, model: Any, target: Target<Drawable?>,
-                    isFirstResource: Boolean
+                    e: GlideException?, model: Any, target: Target<Drawable?>, isFirstResource: Boolean
                 ): Boolean {
                     Timber.e(e, "Error loading image")
                     return false
@@ -342,19 +341,14 @@ class PreviewImageFragment : FileFragment() {
         /**
          * Public factory method to create a new fragment that previews an image.
          *
-         *
-         * Android strongly recommends keep the empty constructor of fragments as the only public
-         * constructor, and
+         * Android strongly recommends keep the empty constructor of fragments as the only public constructor, and
          * use [.setArguments] to set the needed arguments.
-         *
          *
          * This method hides to client objects the need of doing the construction in two steps.
          *
          * @param file                  An [OCFile] to preview as an image in the fragment
          * @param myAccount             ownCloud account containing file
-         * @param ignoreFirstSavedState Flag to work around an unexpected behaviour of
-         * [FragmentStatePagerAdapter]
-         * ; TODO better solution
+         * @param ignoreFirstSavedState Flag to work around an unexpected behaviour of [androidx.fragment.app.FragmentStatePagerAdapter]
          * @return Fragment ready to be used.
          */
         @JvmStatic
@@ -369,8 +363,7 @@ class PreviewImageFragment : FileFragment() {
         }
 
         /**
-         * Helper method to test if an [OCFile] can be passed to a [PreviewImageFragment]
-         * to be previewed.
+         * Helper method to test if an [OCFile] can be passed to a [PreviewImageFragment] to be previewed.
          *
          * @param file File to test if can be previewed.
          * @return 'True' if the file can be handled by the fragment.
