@@ -97,9 +97,9 @@ class PreviewImageFragment : FileFragment() {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        val view = inflater.inflate(R.layout.preview_image_fragment, container, false)
-        view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-        return view
+        return inflater.inflate(R.layout.preview_image_fragment, container, false).apply {
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -116,7 +116,7 @@ class PreviewImageFragment : FileFragment() {
         }
         savedInstanceState?.let {
             if (!ignoreFirstSavedState) {
-                val file: OCFile? = it.getParcelable(EXTRA_FILE)
+                val file: OCFile? = it.getParcelable(ARG_FILE)
                 file?.let {
                     setFile(it)
                 }
@@ -141,13 +141,13 @@ class PreviewImageFragment : FileFragment() {
      */
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(EXTRA_FILE, file)
+        outState.putParcelable(ARG_FILE, file)
     }
 
     override fun onStart() {
         super.onStart()
-        if (file != null) {
-            progressController?.startListeningProgressFor(file, account)
+        file?.let {
+            progressController?.startListeningProgressFor(it, account)
             loadAndShowImage()
         }
     }
@@ -171,16 +171,16 @@ class PreviewImageFragment : FileFragment() {
      */
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        if (mContainerActivity.storageManager != null && file != null) {
+        file?.let {
             // Update the file
-            file = mContainerActivity.storageManager.getFileById(file.fileId)
-            val mf = FileMenuFilter(
-                file,
+            file = mContainerActivity.storageManager.getFileById(it.fileId)
+            val fileMenuFilter = FileMenuFilter(
+                it,
                 mContainerActivity.storageManager.account,
                 mContainerActivity,
                 activity
             )
-            mf.filter(menu, false, false, false, false)
+            fileMenuFilter.filter(menu, false, false, false, false)
         }
 
         // additional restriction for this fragment
@@ -257,13 +257,10 @@ class PreviewImageFragment : FileFragment() {
     }
 
     override fun onDestroy() {
-        if (bitmap != null) {
-            bitmap.recycle()
-            System.gc()
-            // putting this in onStop() is just the same; the fragment is always destroyed by
-            // {@link FragmentStatePagerAdapter} when the fragment in swiped further than the
-            // valid offscreen distance, and onStop() is never called before than that
-        }
+        bitmap?.recycle()
+        // putting this in onStop() is just the same; the fragment is always destroyed by
+        // {@link FragmentStatePagerAdapter} when the fragment in swiped further than the
+        // valid offscreen distance, and onStop() is never called before than that
         super.onDestroy()
     }
 
@@ -333,7 +330,6 @@ class PreviewImageFragment : FileFragment() {
     }
 
     companion object {
-        const val EXTRA_FILE = "FILE"
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_IGNORE_FIRST = "IGNORE_FIRST"
