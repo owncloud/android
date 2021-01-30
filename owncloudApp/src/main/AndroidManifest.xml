@@ -81,6 +81,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+
         </activity>
         <activity
             android:name=".ui.activity.FileDisplayActivity"
@@ -243,6 +247,7 @@
                 <data android:scheme="@string/deep_link_uri_schemes" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

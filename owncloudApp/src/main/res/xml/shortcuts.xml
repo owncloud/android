@@ -1,0 +1,18 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_scanner_edge_black">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.owncloud.android.ui.activity.SplashActivity"
+            android:targetPackage="com.owncloud.android">
+            <extra
+                android:name="key"
+                android:value="value" />
+        </intent>
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when they launch this shortcut. -->
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <!-- Specify more shortcuts here. -->
+</shortcuts>

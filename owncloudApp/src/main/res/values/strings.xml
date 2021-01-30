@@ -6,6 +6,10 @@
     <string name="global_date">Date</string>
     <string name="global_size">Size</string>
 
+    <string name="scanner_disabled_message1">Scanner disabled</string>
+    <string name="scanner_shortcut_long_label1">Scanner from image</string>
+    <string name="scanner_shortcut_short_label1">Scanner</string>
+
     <string name="actionbar_search">Search this folder</string>
     <string name="actionbar_sync">Refresh account</string>
     <string name="actionbar_upload">Upload</string>
