@@ -10,6 +10,11 @@
     <string name="scanner_shortcut_long_label1">Scanner from image</string>
     <string name="scanner_shortcut_short_label1">Scanner</string>
 
+    <string name="qr_disabled_message">QR disabled</string>
+    <string name="qr_shortcut_long_label">QR scanner and open browser</string>
+    <string name="qr_shortcut_short_label">QR scanner</string>
+    <string name="qr_scan">QR scan</string>
+
     <string name="actionbar_search">Search this folder</string>
     <string name="actionbar_sync">Refresh account</string>
     <string name="actionbar_upload">Upload</string>
@@ -796,4 +801,5 @@
 
     <string name="rotate">Rotate</string>
     <string name="send_as_pdf">Send as PDF</string>
+
 </resources>

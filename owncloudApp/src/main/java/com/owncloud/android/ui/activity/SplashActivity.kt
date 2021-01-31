@@ -21,8 +21,11 @@
 package com.owncloud.android.ui.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.zxing.integration.android.IntentIntegrator
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
@@ -63,7 +66,20 @@ class SplashActivity : AppCompatActivity() {
 
         checkLockDelayEnforced(mdmProvider)
 
-        startActivity(Intent(this, FileDisplayActivity::class.java))
+        val intentLaunch = Intent(this, FileDisplayActivity::class.java)
+        intentLaunch.getStringExtra(OCFileListFragment.SHORTCUT_EXTRA)?.let {
+            if (it == "QR") {
+                IntentIntegrator(this).initiateScan()
+                return
+            } else {
+                intentLaunch.putExtra(
+                    OCFileListFragment.SHORTCUT_EXTRA,
+                    intent.getStringExtra(OCFileListFragment.SHORTCUT_EXTRA)
+                )
+            }
+        }
+
+        startActivity(intentLaunch)
         finish()
     }
 
@@ -75,5 +91,29 @@ class SplashActivity : AppCompatActivity() {
         if (lockTimeout != LockTimeout.DISABLED) {
             OCSharedPreferencesProvider(this@SplashActivity).putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
         }
+    }
+
+    private fun displayToast(toast: String) {
+        Toast.makeText(this, toast, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents == null) {
+                displayToast("Cancelled from fragment")
+            } else {
+                var url = result.contents
+                if (!result.contents.startsWith("http://") && !result.contents.startsWith("https://"))
+                    url = "http://" + result.contents
+
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(browserIntent)
+
+                displayToast(result.contents)
+            }
+        }
+        finish()
     }
 }

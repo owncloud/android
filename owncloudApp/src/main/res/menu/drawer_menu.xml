@@ -65,6 +65,11 @@
             tools:ignore="HardcodedText" />
         <item
             android:orderInCategory="3"
+            android:id="@+id/nav_qr"
+            android:icon="@drawable/ic_qr_code"
+            android:title="@string/qr_scan"/>
+        <item
+            android:orderInCategory="3"
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings"
             android:title="@string/actionbar_settings" />

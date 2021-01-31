@@ -19,5 +19,24 @@
              here. The last intent in the list determines what the user sees when they launch this shortcut. -->
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_qr_code"
+        android:shortcutDisabledMessage="@string/qr_disabled_message"
+        android:shortcutId="qr"
+        android:shortcutLongLabel="@string/qr_shortcut_long_label"
+        android:shortcutShortLabel="@string/qr_shortcut_short_label">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.owncloud.android.ui.activity.SplashActivity"
+            android:targetPackage="com.owncloud.android">
+            <extra
+                android:name="key"
+                android:value="QR" />
+        </intent>
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when they launch this shortcut. -->
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
     <!-- Specify more shortcuts here. -->
 </shortcuts>

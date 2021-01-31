@@ -45,6 +45,7 @@ dependencies {
     implementation libs.androidx.work.runtime.ktx
     implementation(libs.androidx.browser) { because "CustomTabs required for OAuth2 and OIDC" }
     implementation(libs.androidx.enterprise.feedback) { because "MDM feedback" }
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     // Image loading
     implementation libs.coil
