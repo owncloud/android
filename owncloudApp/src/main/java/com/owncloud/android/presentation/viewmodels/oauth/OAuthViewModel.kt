@@ -22,8 +22,12 @@ package com.owncloud.android.presentation.viewmodels.oauth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.MainApp
+import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
+import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
 import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
@@ -35,6 +39,7 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
 class OAuthViewModel(
     private val getOIDCDiscoveryUseCase: OIDCDiscoveryUseCase,
     private val requestTokenUseCase: RequestTokenUseCase,
+    private val registerClientUseCase: RegisterClientUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -50,6 +55,26 @@ class OAuthViewModel(
         useCase = getOIDCDiscoveryUseCase,
         useCaseParams = OIDCDiscoveryUseCase.Params(baseUrl = serverUrl)
     )
+
+    private val _registerClient = MediatorLiveData<Event<UIResult<ClientRegistrationInfo>>>()
+    val registerClient: LiveData<Event<UIResult<ClientRegistrationInfo>>> = _registerClient
+
+    fun registerClient(
+        registrationEndpoint: String
+    ) {
+        val registerUseCaseParams = OAuthUtils.composeClientRegistrationUseCaseParams(
+            registrationEndpoint,
+            MainApp.appContext
+        )
+
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = false,
+            liveData = _registerClient,
+            useCase = registerClientUseCase,
+            useCaseParams = registerUseCaseParams
+        )
+    }
 
     private val _requestToken = MediatorLiveData<Event<UIResult<TokenResponse>>>()
     val requestToken: LiveData<Event<UIResult<TokenResponse>>> = _requestToken

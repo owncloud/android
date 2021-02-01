@@ -38,7 +38,9 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.oauth.OAuthUtils;
 import com.owncloud.android.domain.UseCaseResult;
 import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase;
+import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase;
 import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase;
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo;
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration;
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest;
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse;
@@ -324,6 +326,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 oidcDiscoveryUseCase.getValue().execute(oidcDiscoveryUseCaseParams);
 
         String tokenEndpoint;
+        String clientId = mContext.getString(R.string.oauth2_client_id);
+        String clientSecret =mContext.getString(R.string.oauth2_client_secret);
+
         if (oidcServerConfigurationUseCaseResult.isSuccess()) {
             Timber.d("OIDC Discovery success. Server discovery info: [ %s ]",
                     oidcServerConfigurationUseCaseResult.getDataOrNull());
@@ -331,14 +336,28 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             // Use token endpoint retrieved from oidc discovery
             tokenEndpoint = oidcServerConfigurationUseCaseResult.getDataOrNull().getToken_endpoint();
 
+            // Register client
+            @NotNull Lazy<RegisterClientUseCase> registerClientUseCase = inject(RegisterClientUseCase.class);
+            RegisterClientUseCase.Params registerClientUseCaseParams =
+                    OAuthUtils.Companion.composeClientRegistrationUseCaseParams(
+                    oidcServerConfigurationUseCaseResult.getDataOrNull().getRegistration_endpoint(), mContext);
+            UseCaseResult<ClientRegistrationInfo> clientRegistrationInfoUseCaseResult =
+                    registerClientUseCase.getValue().execute(registerClientUseCaseParams);
+
+            if (clientRegistrationInfoUseCaseResult.isSuccess()) {
+                Timber.d("Client registered successfully: %s", clientRegistrationInfoUseCaseResult.toString());
+                clientId = clientRegistrationInfoUseCaseResult.getDataOrNull().getClientId();
+                clientSecret = clientRegistrationInfoUseCaseResult.getDataOrNull().getClientSecret();
+            }
+
         } else {
             Timber.d("OIDC Discovery failed. Server discovery info: [ %s ]",
                     oidcServerConfigurationUseCaseResult.getThrowableOrNull().toString());
+
             tokenEndpoint = baseUrl + File.separator + mContext.getString(R.string.oauth2_url_endpoint_access);
         }
 
-        String clientAuth = OAuthUtils.Companion.getClientAuth(mContext.getString(R.string.oauth2_client_secret),
-                mContext.getString(R.string.oauth2_client_id));
+        String clientAuth = OAuthUtils.Companion.getClientAuth(clientSecret, clientId);
 
         TokenRequest oauthTokenRequest = new TokenRequest.RefreshToken(
                 baseUrl,
