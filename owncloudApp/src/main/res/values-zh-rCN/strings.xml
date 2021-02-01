@@ -37,6 +37,7 @@
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
+  <string name="prefs_biometric">生物识别锁</string>
   <string name="prefs_biometric_summary">使用密码或图案锁定以启用此选项</string>
   <string name="confirmation_touches_with_other_windows_title">你确定要启用此功能吗？</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
