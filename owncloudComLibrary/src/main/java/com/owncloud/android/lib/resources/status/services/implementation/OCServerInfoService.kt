@@ -19,26 +19,28 @@
 
 package com.owncloud.android.lib.resources.status.services.implementation
 
-import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.getAnonymousCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.status.services.ServerInfoService
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.lib.resources.status.services.ServerInfoService
 
 class OCServerInfoService : ServerInfoService {
-    override fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Boolean> =
+
+    override fun checkPathExistence(
+        path: String,
+        isUserLogged: Boolean,
+        client: OwnCloudClient
+    ): RemoteOperationResult<Boolean> =
         CheckPathExistenceRemoteOperation(
             remotePath = path,
             isUserLogged = true
-        ).execute(createClientFromPath(path))
+        ).execute(client)
 
-    override fun getRemoteStatus(path: String): RemoteOperationResult<OwnCloudVersion> =
-        GetRemoteStatusOperation().execute(createClientFromPath(path))
-
-    private fun createClientFromPath(path: String): OwnCloudClient {
-        return OwnCloudClient(Uri.parse(path)).apply { credentials = getAnonymousCredentials() }
-    }
+    override fun getRemoteStatus(
+        path: String,
+        client: OwnCloudClient
+    ): RemoteOperationResult<OwnCloudVersion> =
+        GetRemoteStatusOperation().execute(client)
 }

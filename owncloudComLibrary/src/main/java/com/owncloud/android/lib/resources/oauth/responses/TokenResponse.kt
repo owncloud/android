@@ -1,4 +1,5 @@
 /* ownCloud Android Library is available under MIT license
+ *
  *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,16 +20,26 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
- *
  */
-package com.owncloud.android.lib.resources.status.services
 
-import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
+package com.owncloud.android.lib.resources.oauth.responses
 
-interface ServerInfoService {
-    fun checkPathExistence(path: String, isUserLogged: Boolean, client: OwnCloudClient): RemoteOperationResult<Boolean>
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-    fun getRemoteStatus(path: String, client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion>
-}
+@JsonClass(generateAdapter = true)
+data class TokenResponse(
+    @Json(name = "access_token")
+    val accessToken: String,
+    @Json(name = "expires_in")
+    val expiresIn: Int,
+    @Json(name = "refresh_token")
+    val refreshToken: String?,
+    @Json(name = "token_type")
+    val tokenType: String,
+    @Json(name = "user_id")
+    val userId: String?,
+    val scope: String?,
+    @Json(name = "additional_parameters")
+    val additionalParameters: Map<String, String>?
+)

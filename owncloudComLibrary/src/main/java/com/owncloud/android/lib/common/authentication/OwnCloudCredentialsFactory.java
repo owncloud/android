@@ -24,10 +24,6 @@
 
 package com.owncloud.android.lib.common.authentication;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpClient;
-import com.owncloud.android.lib.common.http.HttpConstants;
-
 public class OwnCloudCredentialsFactory {
 
     public static final String CREDENTIAL_CHARSET = "UTF-8";

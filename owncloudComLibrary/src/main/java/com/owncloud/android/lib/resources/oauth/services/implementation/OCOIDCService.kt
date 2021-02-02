@@ -1,4 +1,5 @@
 /* ownCloud Android Library is available under MIT license
+ *
  *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,16 +20,29 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
- *
  */
-package com.owncloud.android.lib.resources.status.services
+package com.owncloud.android.lib.resources.oauth.services.implementation
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.lib.resources.oauth.GetOIDCDiscoveryRemoteOperation
+import com.owncloud.android.lib.resources.oauth.TokenRequestRemoteOperation
+import com.owncloud.android.lib.resources.oauth.params.TokenRequestParams
+import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
+import com.owncloud.android.lib.resources.oauth.responses.TokenResponse
+import com.owncloud.android.lib.resources.oauth.services.OIDCService
 
-interface ServerInfoService {
-    fun checkPathExistence(path: String, isUserLogged: Boolean, client: OwnCloudClient): RemoteOperationResult<Boolean>
+class OCOIDCService : OIDCService {
 
-    fun getRemoteStatus(path: String, client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion>
+    override fun getOIDCServerDiscovery(
+        ownCloudClient: OwnCloudClient
+    ): RemoteOperationResult<OIDCDiscoveryResponse> =
+        GetOIDCDiscoveryRemoteOperation().execute(ownCloudClient)
+
+    override fun performTokenRequest(
+        ownCloudClient: OwnCloudClient,
+        tokenRequest: TokenRequestParams
+    ): RemoteOperationResult<TokenResponse> =
+        TokenRequestRemoteOperation(tokenRequest).execute(ownCloudClient)
+
 }

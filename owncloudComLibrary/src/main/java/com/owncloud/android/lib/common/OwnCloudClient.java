@@ -48,15 +48,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER;
 import static com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID;
 
 public class OwnCloudClient extends HttpClient {
 
     public static final String WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
     public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
-    private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     public static final String STATUS_PATH = "/status.php";
-
+    private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     private static final int MAX_REDIRECTIONS_COUNT = 3;
     private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
 
@@ -104,8 +104,8 @@ public class OwnCloudClient extends HttpClient {
             method.setRequestHeader(HttpConstants.OC_X_REQUEST_ID, requestId);
             method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
             method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
-            if (mCredentials.getHeaderAuth() != null) {
-                method.setRequestHeader(HttpConstants.AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
+            if (mCredentials.getHeaderAuth() != null && method.getRequestHeader(AUTHORIZATION_HEADER) == null) {
+                method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
             status = method.execute();
 
@@ -136,7 +136,7 @@ public class OwnCloudClient extends HttpClient {
             method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
             method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
             if (mCredentials.getHeaderAuth() != null) {
-                method.setRequestHeader(HttpConstants.AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
+                method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
             status = method.execute();
 
