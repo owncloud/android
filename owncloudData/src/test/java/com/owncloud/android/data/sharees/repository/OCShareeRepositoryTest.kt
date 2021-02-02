@@ -19,20 +19,15 @@
 
 package com.owncloud.android.data.sharees.repository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Rule
 import org.junit.Test
 
 class OCShareeRepositoryTest {
-    @Rule
-    @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
 
     private val remoteShareeDataSource = mockk<RemoteShareeDataSource>(relaxed = true)
     private val oCShareeRepository: OCShareeRepository = OCShareeRepository((remoteShareeDataSource))

@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -17,17 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.server.repository
+package com.owncloud.android.domain.authentication.oauth.model
 
-import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
-import com.owncloud.android.domain.server.ServerInfoRepository
-import com.owncloud.android.domain.server.model.ServerInfo
-
-class OCServerInfoRepository(
-    private val remoteServerInfoDataSource: RemoteServerInfoDataSource
-) : ServerInfoRepository {
-
-    override fun getServerInfo(path: String): ServerInfo {
-        return remoteServerInfoDataSource.getServerInfo(path)
-    }
+/**
+ * Response type values defined by the
+ * [OAuth 2.0](https://tools.ietf.org/html/rfc6749#section-3.1.1)
+ */
+enum class ResponseType(val string: String) {
+    /**
+     * For requesting an authorization code.
+     */
+    CODE("code")
 }

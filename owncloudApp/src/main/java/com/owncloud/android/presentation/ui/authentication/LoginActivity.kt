@@ -30,7 +30,6 @@ import android.accounts.Account
 import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.app.Activity
-import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -39,20 +38,23 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
-import com.owncloud.android.authentication.oauth.AuthStateManager
-import com.owncloud.android.authentication.oauth.OAuthConnectionBuilder
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
+import com.owncloud.android.domain.authentication.oauth.model.ResponseType
+import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
+import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.extensions.parseError
@@ -62,29 +64,21 @@ import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
+import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.account_setup.*
-import net.openid.appauth.AppAuthConfiguration
-import net.openid.appauth.AuthState
-import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationResponse
-import net.openid.appauth.AuthorizationService
-import net.openid.appauth.AuthorizationService.TokenResponseCallback
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
-import net.openid.appauth.ResponseTypeValues
-import net.openid.appauth.TokenResponse
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.io.File
 
 class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
 
     private val authenticationViewModel by viewModel<OCAuthenticationViewModel>()
+    private val oauthViewModel by viewModel<OAuthViewModel>()
     private val contextProvider by inject<ContextProvider>()
 
     private var loginAction: Byte = ACTION_CREATE
@@ -92,10 +86,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var userAccount: Account? = null
     private lateinit var serverBaseUrl: String
 
-    private var authService: AuthorizationService? = null
-    private lateinit var authStateManager: AuthStateManager
     private var oidcSupported = false
-    private var authorizationServiceConfiguration: AuthorizationServiceConfiguration? = null
 
     // For handling AbstractAccountAuthenticator responses
     private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
@@ -205,8 +196,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 )
             }
         })
-
-        authStateManager = AuthStateManager.getInstance(this)
     }
 
     private fun checkOcServer() {
@@ -320,13 +309,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         notifyDocumentProviderRoots(applicationContext)
 
-        authorizationServiceConfiguration?.let { authServiceConfig ->
-            accountName?.let {
-                val authState = AuthState(authServiceConfig)
-                authStateManager.replace(it, authState)
-            }
-        }
-
         finish()
     }
 
@@ -369,27 +351,23 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             text = resources.getString(R.string.oauth_login_connection)
         }
 
-        val retrieveConfigurationCallback =
-            RetrieveConfigurationCallback { serviceConfiguration, exception ->
-                if (exception != null) {
-                    Timber.e(exception, "OIDC failed. Try with normal OAuth")
-                    Timber.e(
-                        exception,
-                        "OIDC failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}"
-                    )
-                    startNormalOauthorization()
-                } else if (serviceConfiguration != null) {
+        oauthViewModel.getOIDCServerConfiguration(serverBaseUrl)
+        oauthViewModel.oidcDiscovery.observe(this, {
+            when (it.peekContent()) {
+                is UIResult.Loading -> TODO()
+                is UIResult.Success -> {
+                    Timber.d("Service discovery: ${it.peekContent().getStoredData()}")
                     oidcSupported = true
-                    performGetAuthorizationCodeRequest(serviceConfiguration)
-                    authorizationServiceConfiguration = serviceConfiguration
+                    it.peekContent().getStoredData()?.let { oidcServerConfiguration ->
+                        performGetAuthorizationCodeRequest(oidcServerConfiguration.authorization_endpoint.toUri())
+                    }
+                }
+                is UIResult.Error -> {
+                    Timber.e(it.peekContent().getThrowableOrNull(), "OIDC failed. Try with normal OAuth")
+                    startNormalOauthorization()
                 }
             }
-
-        OAuthUtils.buildOIDCAuthorizationServiceConfig(
-            this,
-            serverBaseUrl,
-            retrieveConfigurationCallback
-        )
+        })
     }
 
     /**
@@ -397,54 +375,29 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      * If OIDC is not available, falling back to normal OAuth
      */
     private fun startNormalOauthorization() {
-        val retrieveConfigurationCallback =
-            RetrieveConfigurationCallback { serviceConfiguration, exception ->
-                if (exception != null) {
-                    Timber.e(exception, "OAuth failed.")
-                    Timber.e(
-                        exception,
-                        "OAuth failed. Code: ${exception.code} Error: ${exception.error} Error Description: ${exception.errorDescription} Error Uri: ${exception.errorUri} Type: ${exception.type}"
-                    )
-
-                    updateOAuthStatusIconAndText(exception)
-                } else if (serviceConfiguration != null) {
-                    performGetAuthorizationCodeRequest(serviceConfiguration)
-                    authorizationServiceConfiguration = serviceConfiguration
-                }
-            }
-
-        OAuthUtils.buildOAuthorizationServiceConfig(
-            this,
-            serverBaseUrl,
-            retrieveConfigurationCallback
-        )
+        val oauth2authorizationEndpoint =
+            Uri.parse("$serverBaseUrl${File.separator}${getString(R.string.oauth2_url_endpoint_auth)}")
+        performGetAuthorizationCodeRequest(oauth2authorizationEndpoint)
     }
 
-    private fun performGetAuthorizationCodeRequest(authorizationServiceConfiguration: AuthorizationServiceConfiguration) {
+    private fun performGetAuthorizationCodeRequest(authorizationEndpoint: Uri) {
         Timber.d("A browser should be opened now to authenticate this user.")
-        val clientId = getString(R.string.oauth2_client_id)
-        val redirectUri = Uri.Builder()
-            .scheme(getString(R.string.oauth2_redirect_uri_scheme))
-            .authority(getString(R.string.oauth2_redirect_uri_path))
-            .build()
-        val scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
-        val builder = AuthorizationRequest.Builder(
-            authorizationServiceConfiguration,
-            clientId,
-            ResponseTypeValues.CODE,
-            redirectUri
-        ).setScope(scope)
 
-        val request = builder.build()
-        Timber.d("Request information: ${request.jsonSerializeString()}")
-        val completedIntent = Intent(this, LoginActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, completedIntent, 0)
+        val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
+        val customTabsIntent: CustomTabsIntent = customTabsBuilder.build()
 
-        val appAuthConfigurationBuilder = AppAuthConfiguration.Builder()
-        appAuthConfigurationBuilder.setConnectionBuilder(OAuthConnectionBuilder(this))
-        authService = AuthorizationService(this, appAuthConfigurationBuilder.build())
-        Timber.d("Sends an authorization request to the authorization service using a custom tab or browser instance.")
-        authService?.performAuthorizationRequest(request, pendingIntent)
+        val authorizationEndpointUri = OAuthUtils.buildAuthorizationRequest(
+            authorizationEndpoint = authorizationEndpoint,
+            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
+            clientId = getString(R.string.oauth2_client_id),
+            responseType = ResponseType.CODE.string,
+            scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
+        )
+
+        customTabsIntent.launchUrl(
+            this,
+            authorizationEndpointUri
+        )
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -455,51 +408,74 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun handleGetAuthorizationCodeResponse(intent: Intent) {
-        val authorizationResponse = AuthorizationResponse.fromIntent(intent)
-        val authorizationException = AuthorizationException.fromIntent(intent)
-        if (authorizationResponse?.authorizationCode != null) {
-            exchangeAuthorizationCodeForTokens(authorizationResponse)
-        } else if (authorizationException != null) {
+        val authorizationCode = intent.data?.getQueryParameter("code")
+
+        if (authorizationCode != null) {
+            Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
+            exchangeAuthorizationCodeForTokens(authorizationCode)
+        } else {
+            val authorizationError = intent.data?.getQueryParameter("error")
+            val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
+
+            Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]. Error description: [$authorizationErrorDescription]")
+            val authorizationException =
+                if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
             updateOAuthStatusIconAndText(authorizationException)
-            Timber.e(authorizationException, "OAuth request to get authorization code failed")
         }
     }
 
     /**
      * OAuth step 2: Exchange the received authorization code for access and refresh tokens
      */
-    private fun exchangeAuthorizationCodeForTokens(authorizationResponse: AuthorizationResponse) {
+    private fun exchangeAuthorizationCodeForTokens(authorizationCode: String) {
         server_status_text.text = getString(R.string.auth_getting_authorization)
-        Timber.d("Exchange authorization code for tokens")
-        val clientAuth = OAuthUtils.createClientSecretBasic(getString(R.string.oauth2_client_secret))
-        authService?.performTokenRequest(
-            authorizationResponse.createTokenExchangeRequest(),
-            clientAuth,
-            handleExchangeAuthorizationCodeForTokensResponse()
-        )
-    }
+        val clientAuth =
+            OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
 
-    private fun handleExchangeAuthorizationCodeForTokensResponse(): TokenResponseCallback =
-        TokenResponseCallback { tokenResponse: TokenResponse?, authorizationException: AuthorizationException? ->
-            Timber.d("Authorization response: ${tokenResponse?.jsonSerializeString()} and Authorization Exception: ${authorizationException?.toJsonString()}")
-            if (tokenResponse?.accessToken != null && tokenResponse.refreshToken != null) {
-                Timber.d("Tokens received, trying to login, creating account and adding it to account manager")
-                authenticationViewModel.loginOAuth(
-                    tokenResponse.additionalParameters[KEY_USER_ID] ?: "",
-                    OAUTH_TOKEN_TYPE,
-                    tokenResponse.accessToken as String,
-                    tokenResponse.refreshToken as String,
-                    if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
-                    if (loginAction != ACTION_CREATE) userAccount?.name else null
-                )
-            } else if (authorizationException != null) {
-                updateOAuthStatusIconAndText(authorizationException)
-                Timber.e(
-                    authorizationException,
-                    "OAuth request to exchange authorization code for tokens failed"
-                )
+        // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
+        val tokenEndPoint = oauthViewModel.oidcDiscovery.value?.peekContent()?.getStoredData()?.token_endpoint
+            ?: "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
+
+        val requestToken = TokenRequest.AccessToken(
+            baseUrl = serverBaseUrl,
+            tokenEndpoint = tokenEndPoint,
+            authorizationCode = authorizationCode,
+            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
+            clientAuth = clientAuth
+        )
+
+        oauthViewModel.requestToken(requestToken)
+
+        oauthViewModel.requestToken.observe(this, {
+            when (it.peekContent()) {
+                is UIResult.Loading -> TODO()
+                is UIResult.Success -> {
+                    Timber.d(
+                        "Tokens received ${
+                            it.peekContent().getStoredData()
+                        }, trying to login, creating account and adding it to account manager"
+                    )
+                    val tokenResponse = it.peekContent().getStoredData() ?: return@observe
+
+                    authenticationViewModel.loginOAuth(
+                        tokenResponse.additionalParameters?.get(KEY_USER_ID) ?: "",
+                        OAUTH_TOKEN_TYPE,
+                        tokenResponse.accessToken,
+                        tokenResponse.refreshToken.orEmpty(),
+                        if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
+                        if (loginAction != ACTION_CREATE) userAccount?.name else null
+                    )
+                }
+                is UIResult.Error -> {
+                    updateOAuthStatusIconAndText(it.peekContent().getThrowableOrNull())
+                    Timber.e(
+                        it.peekContent().getThrowableOrNull(),
+                        "OAuth request to exchange authorization code for tokens failed"
+                    )
+                }
             }
-        }
+        })
+    }
 
     private fun updateAuthTokenTypeAndInstructions(uiResult: UIResult<Boolean?>) {
         val supportsOAuth2 = uiResult.getStoredData()
@@ -628,11 +604,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun updateOAuthStatusIconAndText(authorizationException: AuthorizationException) {
+    private fun updateOAuthStatusIconAndText(authorizationException: Throwable?) {
         server_status_text.run {
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             text =
-                if (authorizationException == AuthorizationException.AuthorizationRequestErrors.ACCESS_DENIED) {
+                if (authorizationException is UnauthorizedException) {
                     getString(R.string.auth_oauth_error_access_denied)
                 } else {
                     getString(R.string.auth_oauth_error)
@@ -649,11 +625,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(KEY_AUTH_TOKEN_TYPE, authTokenType)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        authService?.dispose()
     }
 
     override fun finish() {

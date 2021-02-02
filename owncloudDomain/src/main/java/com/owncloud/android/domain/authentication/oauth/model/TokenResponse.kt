@@ -17,17 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.server.repository
+package com.owncloud.android.domain.authentication.oauth.model
 
-import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
-import com.owncloud.android.domain.server.ServerInfoRepository
-import com.owncloud.android.domain.server.model.ServerInfo
-
-class OCServerInfoRepository(
-    private val remoteServerInfoDataSource: RemoteServerInfoDataSource
-) : ServerInfoRepository {
-
-    override fun getServerInfo(path: String): ServerInfo {
-        return remoteServerInfoDataSource.getServerInfo(path)
-    }
-}
+data class TokenResponse(
+    val accessToken: String,
+    val expiresIn: Int,
+    val refreshToken: String?,
+    val tokenType: String,
+    val userId: String?,
+    val scope: String?,
+    val additionalParameters: Map<String, String>?
+)

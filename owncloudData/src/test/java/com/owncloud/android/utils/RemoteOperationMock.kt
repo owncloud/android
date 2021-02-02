@@ -48,7 +48,7 @@ fun <T> createRemoteOperationResultMock(
     }
 
     if (exception != null) {
-        every { remoteOperationResult.exception } returns exception
+        throw exception
     }
 
     if (authenticationHeader.isNotEmpty()) {

@@ -16,18 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.domain.authentication.oauth
 
-package com.owncloud.android.data.server.repository
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 
-import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
-import com.owncloud.android.domain.server.ServerInfoRepository
-import com.owncloud.android.domain.server.model.ServerInfo
+class OIDCDiscoveryUseCase(
+    private val oAuthRepository: OAuthRepository
+) : BaseUseCaseWithResult<OIDCServerConfiguration, OIDCDiscoveryUseCase.Params>() {
 
-class OCServerInfoRepository(
-    private val remoteServerInfoDataSource: RemoteServerInfoDataSource
-) : ServerInfoRepository {
-
-    override fun getServerInfo(path: String): ServerInfo {
-        return remoteServerInfoDataSource.getServerInfo(path)
+    override fun run(params: Params): OIDCServerConfiguration {
+        require(params.baseUrl.isNotEmpty()) { "Invalid URL" }
+        return oAuthRepository.performOIDCDiscovery(params.baseUrl)
     }
+
+    data class Params(
+        val baseUrl: String
+    )
 }

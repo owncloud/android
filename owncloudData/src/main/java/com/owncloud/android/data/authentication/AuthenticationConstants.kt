@@ -36,3 +36,9 @@ const val KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token"
  */
 const val KEY_OAUTH2_SCOPE = "oc_oauth2_scope"
 const val OAUTH2_OIDC_SCOPE = "openid offline_access email profile"
+
+/** Query parameters to retrieve the authorization code. More info: https://tools.ietf.org/html/rfc6749#section-4.1.1 */
+const val QUERY_PARAMETER_REDIRECT_URI = "redirect_uri"
+const val QUERY_PARAMETER_CLIENT_ID = "client_id"
+const val QUERY_PARAMETER_RESPONSE_TYPE = "response_type"
+const val QUERY_PARAMETER_SCOPE = "scope"
