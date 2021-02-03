@@ -507,7 +507,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         tokenResponse.accessToken,
                         tokenResponse.refreshToken.orEmpty(),
                         if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
-                        if (loginAction != ACTION_CREATE) userAccount?.name else null
+                        if (loginAction != ACTION_CREATE) userAccount?.name else null,
+                        clientRegistrationInfo
                     )
                 }
                 is UIResult.Error -> {

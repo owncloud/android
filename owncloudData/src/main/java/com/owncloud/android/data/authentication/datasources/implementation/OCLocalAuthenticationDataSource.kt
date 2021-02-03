@@ -23,11 +23,15 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.net.Uri
+import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE
+import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_ID
+import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_SECRET
 import com.owncloud.android.data.authentication.KEY_OAUTH2_REFRESH_TOKEN
 import com.owncloud.android.data.authentication.KEY_OAUTH2_SCOPE
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
@@ -88,7 +92,8 @@ class OCLocalAuthenticationDataSource(
         userInfo: UserInfo,
         refreshToken: String,
         scope: String?,
-        updateAccountWithUsername: String?
+        updateAccountWithUsername: String?,
+        clientRegistrationInfo: ClientRegistrationInfo?
     ): String =
         addAccount(
             lastPermanentLocation = lastPermanentLocation,
@@ -103,6 +108,18 @@ class OCLocalAuthenticationDataSource(
             updateAccountWithUsername?.let { userName ->
                 SingleSessionManager.getDefaultSingleton().refreshCredentialsForAccount(
                     it.name, OwnCloudBearerCredentials(userName, accessToken)
+                )
+            }
+
+            clientRegistrationInfo?.let { clientRegistrationInfo ->
+                accountManager.setUserData(it, KEY_CLIENT_REGISTRATION_CLIENT_ID, clientRegistrationInfo.clientId)
+                accountManager.setUserData(
+                    it, KEY_CLIENT_REGISTRATION_CLIENT_SECRET, clientRegistrationInfo.clientSecret
+                )
+                accountManager.setUserData(
+                    it,
+                    KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE,
+                    clientRegistrationInfo.clientSecretExpiration.toString()
                 )
             }
 

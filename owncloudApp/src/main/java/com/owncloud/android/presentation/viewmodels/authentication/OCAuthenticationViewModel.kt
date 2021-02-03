@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.viewmodels.authentication
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
@@ -82,7 +83,8 @@ class OCAuthenticationViewModel(
         accessToken: String,
         refreshToken: String,
         scope: String?,
-        updateAccountWithUsername: String?
+        updateAccountWithUsername: String?,
+        clientRegistrationInfo: ClientRegistrationInfo?
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
         liveData = _loginResult,
@@ -95,7 +97,8 @@ class OCAuthenticationViewModel(
             accessToken = accessToken,
             refreshToken = refreshToken,
             scope = scope,
-            updateAccountWithUsername = updateAccountWithUsername
+            updateAccountWithUsername = updateAccountWithUsername,
+            clientRegistrationInfo = clientRegistrationInfo
         )
     )
 

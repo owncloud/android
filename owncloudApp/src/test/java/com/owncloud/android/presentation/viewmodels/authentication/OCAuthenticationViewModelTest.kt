@@ -40,6 +40,7 @@ import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_REFRESH_TOKEN
 import com.owncloud.android.testutil.OC_SCOPE
 import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -160,7 +161,13 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
     fun loginOAuthOk() {
         every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
         ocAuthenticationViewModel.loginOAuth(
-            OC_BASIC_USERNAME, OC_AUTH_TOKEN_TYPE, OC_ACCESS_TOKEN, OC_REFRESH_TOKEN, OC_SCOPE, null
+            username = OC_BASIC_USERNAME,
+            authTokenType = OC_AUTH_TOKEN_TYPE,
+            accessToken = OC_ACCESS_TOKEN,
+            refreshToken = OC_REFRESH_TOKEN,
+            scope = OC_SCOPE,
+            updateAccountWithUsername = null,
+            clientRegistrationInfo = OC_CLIENT_REGISTRATION
         )
 
         assertEmittedValues(
@@ -175,7 +182,13 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
     fun loginOAuthException() {
         every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
         ocAuthenticationViewModel.loginOAuth(
-            OC_BASIC_USERNAME, OC_AUTH_TOKEN_TYPE, OC_ACCESS_TOKEN, OC_REFRESH_TOKEN, OC_SCOPE, null
+            username = OC_BASIC_USERNAME,
+            authTokenType = OC_AUTH_TOKEN_TYPE,
+            accessToken = OC_ACCESS_TOKEN,
+            refreshToken = OC_REFRESH_TOKEN,
+            scope = OC_SCOPE,
+            updateAccountWithUsername = null,
+            clientRegistrationInfo = OC_CLIENT_REGISTRATION
         )
 
         assertEmittedValues(

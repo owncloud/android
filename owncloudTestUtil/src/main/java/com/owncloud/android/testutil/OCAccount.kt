@@ -46,3 +46,7 @@ const val OC_SCOPE = "email"
 
 const val OC_TOKEN_ENDPOINT = "https://owncloud.server/token"
 const val OC_CLIENT_AUTH = "cl13nt4uth"
+
+const val OC_CLIENT_SECRET = "cl13nts3cr3t"
+const val OC_CLIENT_ID = "cl13nt1d"
+const val OC_CLIENT_SECRET_EXPIRATION = 1611251163

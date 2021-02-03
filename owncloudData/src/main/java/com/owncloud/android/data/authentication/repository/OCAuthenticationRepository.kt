@@ -22,6 +22,7 @@ package com.owncloud.android.data.authentication.repository
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.domain.authentication.AuthenticationRepository
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 
@@ -59,7 +60,8 @@ class OCAuthenticationRepository(
         accessToken: String,
         refreshToken: String,
         scope: String?,
-        updateAccountWithUsername: String?
+        updateAccountWithUsername: String?,
+        clientRegistrationInfo: ClientRegistrationInfo?
     ): String {
         val userInfoAndRedirectionPath: Pair<UserInfo, String?> =
             remoteAuthenticationDataSource.loginOAuth(
@@ -77,7 +79,8 @@ class OCAuthenticationRepository(
             userInfo = userInfoAndRedirectionPath.first,
             refreshToken = refreshToken,
             scope = scope,
-            updateAccountWithUsername = updateAccountWithUsername
+            updateAccountWithUsername = updateAccountWithUsername,
+            clientRegistrationInfo = clientRegistrationInfo
         )
     }
 

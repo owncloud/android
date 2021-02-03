@@ -21,6 +21,7 @@ package com.owncloud.android.domain.authentication.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.authentication.AuthenticationRepository
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.server.model.ServerInfo
 
 class LoginOAuthAsyncUseCase(
@@ -40,7 +41,8 @@ class LoginOAuthAsyncUseCase(
             params.accessToken,
             params.refreshToken,
             params.scope,
-            params.updateAccountWithUsername
+            params.updateAccountWithUsername,
+            params.clientRegistrationInfo
         )
 
         return accountName
@@ -53,6 +55,7 @@ class LoginOAuthAsyncUseCase(
         val accessToken: String,
         val refreshToken: String,
         val scope: String?,
-        val updateAccountWithUsername: String?
+        val updateAccountWithUsername: String?,
+        val clientRegistrationInfo: ClientRegistrationInfo?
     )
 }
