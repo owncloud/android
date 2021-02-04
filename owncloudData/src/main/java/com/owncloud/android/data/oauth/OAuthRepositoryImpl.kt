@@ -21,6 +21,7 @@ package com.owncloud.android.data.oauth
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
@@ -34,18 +35,6 @@ class OAuthRepositoryImpl(
     override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse =
         oidcRemoteOAuthDataSource.performTokenRequest(tokenRequest)
 
-    override fun registerClient(
-        registrationEndpoint: String,
-        clientName: String,
-        redirectUris: List<String>,
-        tokenEndpointAuthMethod: String,
-        applicationType: String
-    ): ClientRegistrationInfo =
-        oidcRemoteOAuthDataSource.registerClient(
-            registrationEndpoint = registrationEndpoint,
-            clientName = clientName,
-            redirectUris = redirectUris,
-            tokenEndpointAuthMethod = tokenEndpointAuthMethod,
-            applicationType = applicationType
-        )
+    override fun registerClient(clientRegistrationRequest: ClientRegistrationRequest): ClientRegistrationInfo =
+        oidcRemoteOAuthDataSource.registerClient(clientRegistrationRequest)
 }

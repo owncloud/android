@@ -27,6 +27,7 @@ import com.owncloud.android.data.oauth.mapper.RemoteOIDCDiscoveryMapper
 import com.owncloud.android.data.oauth.mapper.RemoteTokenRequestMapper
 import com.owncloud.android.data.oauth.mapper.RemoteTokenResponseMapper
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
@@ -65,24 +66,19 @@ class RemoteOAuthDataSourceImpl(
         return remoteTokenResponseMapper.toModel(tokenResponse)!!
     }
 
-    override fun registerClient(
-        registrationEndpoint: String,
-        clientName: String,
-        redirectUris: List<String>,
-        tokenEndpointAuthMethod: String,
-        applicationType: String
-    ): ClientRegistrationInfo {
-        val ownCloudClient = clientManager.getClientForUnExistingAccount(registrationEndpoint, false)
+    override fun registerClient(clientRegistrationRequest: ClientRegistrationRequest): ClientRegistrationInfo {
+        val ownCloudClient =
+            clientManager.getClientForUnExistingAccount(clientRegistrationRequest.registrationEndpoint, false)
 
         val remoteClientRegistrationInfo = executeRemoteOperation {
             oidcService.registerClientWithRegistrationEndpoint(
                 ownCloudClient = ownCloudClient,
                 clientRegistrationParams = ClientRegistrationParams(
-                    registrationEndpoint = registrationEndpoint,
-                    clientName = clientName,
-                    redirectUris = redirectUris,
-                    tokenEndpointAuthMethod = tokenEndpointAuthMethod,
-                    applicationType = applicationType
+                    registrationEndpoint = clientRegistrationRequest.registrationEndpoint,
+                    clientName = clientRegistrationRequest.clientName,
+                    redirectUris = clientRegistrationRequest.redirectUris,
+                    tokenEndpointAuthMethod = clientRegistrationRequest.tokenEndpointAuthMethod,
+                    applicationType = clientRegistrationRequest.applicationType
                 )
             )
         }

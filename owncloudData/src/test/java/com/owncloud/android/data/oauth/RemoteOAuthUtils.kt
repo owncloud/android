@@ -18,9 +18,13 @@
  */
 package com.owncloud.android.data.oauth
 
+import com.owncloud.android.lib.resources.oauth.params.ClientRegistrationParams
 import com.owncloud.android.lib.resources.oauth.params.TokenRequestParams
+import com.owncloud.android.lib.resources.oauth.responses.ClientRegistrationResponse
 import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 import com.owncloud.android.lib.resources.oauth.responses.TokenResponse
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION_REQUEST
 import com.owncloud.android.testutil.oauth.OC_OIDC_SERVER_CONFIGURATION
 import com.owncloud.android.testutil.oauth.OC_TOKEN_REQUEST_ACCESS
 import com.owncloud.android.testutil.oauth.OC_TOKEN_REQUEST_REFRESH
@@ -62,4 +66,19 @@ val OC_REMOTE_TOKEN_RESPONSE = TokenResponse(
     userId = OC_TOKEN_RESPONSE.userId,
     scope = OC_TOKEN_RESPONSE.scope,
     additionalParameters = OC_TOKEN_RESPONSE.additionalParameters
+)
+
+val OC_REMOTE_CLIENT_REGISTRATION_PARAMS = ClientRegistrationParams(
+    registrationEndpoint = OC_CLIENT_REGISTRATION_REQUEST.registrationEndpoint,
+    clientName = OC_CLIENT_REGISTRATION_REQUEST.clientName,
+    redirectUris = OC_CLIENT_REGISTRATION_REQUEST.redirectUris,
+    tokenEndpointAuthMethod = OC_CLIENT_REGISTRATION_REQUEST.tokenEndpointAuthMethod,
+    applicationType = OC_CLIENT_REGISTRATION_REQUEST.applicationType
+)
+
+val OC_REMOTE_CLIENT_REGISTRATION_RESPONSE = ClientRegistrationResponse(
+    clientId = OC_CLIENT_REGISTRATION.clientId,
+    clientSecret = OC_CLIENT_REGISTRATION.clientSecret,
+    clientIdIssuedAt = OC_CLIENT_REGISTRATION.clientIdIssuedAt,
+    clientSecretExpiration = OC_CLIENT_REGISTRATION.clientSecretExpiration
 )

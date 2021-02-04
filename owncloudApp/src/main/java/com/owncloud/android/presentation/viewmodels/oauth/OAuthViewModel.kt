@@ -62,8 +62,8 @@ class OAuthViewModel(
     fun registerClient(
         registrationEndpoint: String
     ) {
-        val registerUseCaseParams = OAuthUtils.composeClientRegistrationUseCaseParams(
-            registrationEndpoint,
+        val registrationRequest = OAuthUtils.buildClientRegistrationRequest(
+            registrationEndpoint = registrationEndpoint,
             MainApp.appContext
         )
 
@@ -72,7 +72,7 @@ class OAuthViewModel(
             showLoading = false,
             liveData = _registerClient,
             useCase = registerClientUseCase,
-            useCaseParams = registerUseCaseParams
+            useCaseParams = RegisterClientUseCase.Params(registrationRequest)
         )
     }
 

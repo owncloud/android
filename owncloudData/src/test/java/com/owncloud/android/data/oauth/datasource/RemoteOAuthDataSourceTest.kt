@@ -20,6 +20,8 @@
 package com.owncloud.android.data.oauth.datasource
 
 import com.owncloud.android.data.ClientManager
+import com.owncloud.android.data.oauth.OC_REMOTE_CLIENT_REGISTRATION_PARAMS
+import com.owncloud.android.data.oauth.OC_REMOTE_CLIENT_REGISTRATION_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_OIDC_DISCOVERY_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_REQUEST_PARAMS_ACCESS
 import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_RESPONSE
@@ -30,10 +32,13 @@ import com.owncloud.android.data.oauth.mapper.RemoteTokenRequestMapper
 import com.owncloud.android.data.oauth.mapper.RemoteTokenResponseMapper
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.oauth.responses.ClientRegistrationResponse
 import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 import com.owncloud.android.lib.resources.oauth.responses.TokenResponse
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.testutil.OC_BASE_URL
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION_REQUEST
 import com.owncloud.android.testutil.oauth.OC_OIDC_SERVER_CONFIGURATION
 import com.owncloud.android.testutil.oauth.OC_TOKEN_REQUEST_ACCESS
 import com.owncloud.android.testutil.oauth.OC_TOKEN_RESPONSE
@@ -117,5 +122,29 @@ class RemoteOAuthDataSourceTest {
         } throws Exception()
 
         remoteOAuthDataSource.performTokenRequest(OC_TOKEN_REQUEST_ACCESS)
+    }
+
+    @Test
+    fun `register client - ok`() {
+        val clientRegistrationResponse: RemoteOperationResult<ClientRegistrationResponse> =
+            createRemoteOperationResultMock(data = OC_REMOTE_CLIENT_REGISTRATION_RESPONSE, isSuccess = true)
+
+        every {
+            oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, any())
+        } returns clientRegistrationResponse
+
+        val clientRegistrationInfo = remoteOAuthDataSource.registerClient(OC_CLIENT_REGISTRATION_REQUEST)
+
+        assertNotNull(clientRegistrationInfo)
+        assertEquals(OC_CLIENT_REGISTRATION, clientRegistrationInfo)
+    }
+
+    @Test(expected = Exception::class)
+    fun `register client - ko`() {
+        every {
+            oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, OC_REMOTE_CLIENT_REGISTRATION_PARAMS)
+        } throws Exception()
+
+        remoteOAuthDataSource.registerClient(OC_CLIENT_REGISTRATION_REQUEST)
     }
 }

@@ -16,20 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.domain.authentication.oauth
+package com.owncloud.android.testutil.oauth
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
+import com.owncloud.android.testutil.OC_REDIRECT_URI
 
-class RegisterClientUseCase(
-    private val oAuthRepository: OAuthRepository
-) : BaseUseCaseWithResult<ClientRegistrationInfo, RegisterClientUseCase.Params>() {
-
-    override fun run(params: Params): ClientRegistrationInfo =
-        oAuthRepository.registerClient(clientRegistrationRequest = params.clientRegistrationRequest)
-
-    data class Params(
-        val clientRegistrationRequest: ClientRegistrationRequest
-    )
-}
+val OC_CLIENT_REGISTRATION_REQUEST = ClientRegistrationRequest(
+    registrationEndpoint = OC_OIDC_SERVER_CONFIGURATION.registration_endpoint,
+    clientName = "Android Client v2.17",
+    redirectUris = listOf(OC_REDIRECT_URI),
+    tokenEndpointAuthMethod = "client_secret_basic",
+    applicationType = "native"
+)

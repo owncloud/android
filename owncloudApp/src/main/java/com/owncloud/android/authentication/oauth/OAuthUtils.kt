@@ -28,17 +28,17 @@ import com.owncloud.android.data.authentication.QUERY_PARAMETER_CLIENT_ID
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
-import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import java.net.URLEncoder
 
 class OAuthUtils {
     companion object {
 
-        fun composeClientRegistrationUseCaseParams(
+        fun buildClientRegistrationRequest(
             registrationEndpoint: String,
             context: Context
-        ): RegisterClientUseCase.Params =
-            RegisterClientUseCase.Params(
+        ): ClientRegistrationRequest =
+            ClientRegistrationRequest(
                 registrationEndpoint = registrationEndpoint,
                 clientName = MainApp.userAgent,
                 redirectUris = listOf(buildRedirectUri(context).toString())
