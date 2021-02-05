@@ -5,7 +5,7 @@
     android:id="@+id/sort_options_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/primary"
+    android:background="@color/actionbar_start_color"
     android:paddingStart="@dimen/standard_half_padding"
     android:paddingEnd="@dimen/standard_half_padding"
     android:paddingBottom="@dimen/standard_quarter_padding">
