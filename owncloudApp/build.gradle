@@ -81,7 +81,7 @@ dependencies {
     }
     androidTestImplementation 'com.github.tmurakami:dexopener:2.0.5'
     androidTestImplementation 'androidx.test:runner:1.3.0'
-    debugImplementation "androidx.fragment:fragment-testing:1.3.0-rc01"
+    debugImplementation "androidx.fragment:fragment-testing:1.3.0-rc02"
 
 }
 
