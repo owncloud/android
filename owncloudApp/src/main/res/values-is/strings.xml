@@ -440,8 +440,7 @@
   <string name="share_privilege_can_edit_delete">eytt</string>
   <string name="edit_share_unshare">Hætta deilingu</string>
   <string name="edit_share_done">lokið</string>
-  <string name="action_retry_uploads">Mistókst við að reyna aftur</string>
-  <string name="manage_space_title">Sýsla með geymslurými</string>
+    <string name="manage_space_title">Sýsla með geymslurými</string>
   <string name="manage_space_description">Stillingar, gagnagrunnur og skilríki þjóna úr gögnum %1$s verður eytt endanlega. \n\nSóttar skrár verða skildar eftir ósnertar.\n\nÞetta ferli getur tekið drjúgan tíma.</string>
   <string name="manage_space_clear_data">Hreinsa gögn</string>
   <string name="manage_space_error">Ekki tókst að eyða öllum skrám.</string>

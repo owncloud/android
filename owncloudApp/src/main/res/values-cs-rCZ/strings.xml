@@ -478,8 +478,7 @@ správce systému.</string>
   <string name="share_privilege_can_edit_delete">smazat</string>
   <string name="edit_share_unshare">Ukončit sdílení</string>
   <string name="edit_share_done">dokončeno</string>
-  <string name="action_retry_uploads">Opakovat neúspěšné</string>
-  <string name="manage_space_title">Spravovat úložný prostor</string>
+    <string name="manage_space_title">Spravovat úložný prostor</string>
   <string name="manage_space_description">Nastavení, databáze a certifikáty serverů z %1$s data budou permanentně smazány. \n\nStažené soubory nebudou rozbaleny.\n\nTento proces může chvíli trvat.</string>
   <string name="manage_space_clear_data">Vyčistit data</string>
   <string name="manage_space_error">Některé soubory nebylo možno smazat.</string>

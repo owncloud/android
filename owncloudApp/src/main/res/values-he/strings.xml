@@ -483,8 +483,7 @@
   <string name="share_privilege_can_edit_delete">מחיקה</string>
   <string name="edit_share_unshare">הפסקת שיתוף</string>
   <string name="edit_share_done">הסתיים</string>
-  <string name="action_retry_uploads">ניסיון שנית נכשל</string>
-  <string name="manage_space_title">ניהול מקום</string>
+    <string name="manage_space_title">ניהול מקום</string>
   <string name="manage_space_description">הגדרות, של אישורי מסד נתונים ושרת מתוך מידע %1$s\'s ימחק לצמיתות. \n\nקבצים שהורדו ישמרו ללא פגע.\n\nתהליך זה יכול להמשך זמן מה.</string>
   <string name="manage_space_clear_data">ניקוי מידע</string>
   <string name="manage_space_error">לא ניתן היה למחוק מספר קבצים.</string>

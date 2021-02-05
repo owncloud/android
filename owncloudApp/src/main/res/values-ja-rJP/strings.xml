@@ -433,8 +433,7 @@
   <string name="share_privilege_can_edit_delete">削除</string>
   <string name="edit_share_unshare">共有の停止</string>
   <string name="edit_share_done">完了</string>
-  <string name="action_retry_uploads">失敗を再試行</string>
-  <string name="manage_space_title">管理領域</string>
+    <string name="manage_space_title">管理領域</string>
   <string name="manage_space_description">%1$s のデータから 設定、データベース、サーバー証明書が完全に削除されます。\n\n ダウンロードされたファイルはそのまま残ります。\n\n 実行中はしばらくお待ちください。</string>
   <string name="manage_space_clear_data">データのクリア</string>
   <string name="manage_space_error">いくつかのファイルがクリアできませんでした。</string>

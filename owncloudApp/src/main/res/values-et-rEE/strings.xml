@@ -393,8 +393,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="share_privilege_can_edit_delete">kustuta</string>
   <string name="edit_share_unshare">Lõpeta jagamine</string>
   <string name="edit_share_done">valmis</string>
-  <string name="action_retry_uploads">Uuesti proovimine ebaõnnestus</string>
-  <string name="manage_space_title">Ruumi haldamine</string>
+    <string name="manage_space_title">Ruumi haldamine</string>
   <string name="manage_space_clear_data">Tühjenda andmed</string>
   <string name="manage_space_error">Mõningate failide kustutamine ebaõnnestus.</string>
   <string name="confirmation_remove_files_alert">Kas sa tõesti soovid valitud kirjeid eemaldada?</string>

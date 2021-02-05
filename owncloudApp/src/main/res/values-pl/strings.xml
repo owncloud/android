@@ -476,8 +476,7 @@
   <string name="share_privilege_can_edit_delete">usuń</string>
   <string name="edit_share_unshare">Cofnij udostępnianie</string>
   <string name="edit_share_done">zakończono</string>
-  <string name="action_retry_uploads">Wystąpił błąd podczas ponawiania</string>
-  <string name="manage_space_title">Zarządzaj przestrzenią</string>
+    <string name="manage_space_title">Zarządzaj przestrzenią</string>
   <string name="manage_space_description">Ustawienia, baza danych i certyfikaty serwera %1$s zostaną trwale skasowane.\n\nPobrane pliki pozostaną na swoich miejscach.\n\nTen proces zajmie trochę czasu.</string>
   <string name="manage_space_clear_data">Wyczyść dane</string>
   <string name="manage_space_error">Nie udało się usunąć niektórych plików.</string>

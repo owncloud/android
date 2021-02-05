@@ -446,8 +446,7 @@ Te rog ia legătura cu administratorul</string>
   <string name="share_privilege_can_edit_delete">ștergere</string>
   <string name="edit_share_unshare">Oprește partajarea</string>
   <string name="edit_share_done">terminat</string>
-  <string name="action_retry_uploads">Reîncercarea a eșuat</string>
-  <string name="manage_space_title">Gestionează spațiul</string>
+    <string name="manage_space_title">Gestionează spațiul</string>
   <string name="manage_space_description">Configurările, baza de date și certificatele serverului de la informațiile %1$s vor fi șterse definitiv.\n\nFișierele descărcate vor fi păstrate neatinse.\n\nAcest process poate dura o vreme.</string>
   <string name="manage_space_clear_data">Curăță informațiile</string>
   <string name="manage_space_error">Unele fișiere nu pot fi șterse.</string>

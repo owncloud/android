@@ -481,8 +481,7 @@
   <string name="share_privilege_can_edit_delete">borrar</string>
   <string name="edit_share_unshare">Dejar de compatir</string>
   <string name="edit_share_done">hecho</string>
-  <string name="action_retry_uploads">Reintentar fallido</string>
-  <string name="manage_space_title">Gestionar espacio</string>
+    <string name="manage_space_title">Gestionar espacio</string>
   <string name="manage_space_description">Los ajustes, bases de datos y certificados de servidor de %1$s serán borrados permanentemente. \n\nLos archivos descargados se mantendrán intactos. .\n\nEste proceso puede tardar algún tiempo.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>
   <string name="manage_space_error">No se han podido eliminar algunos archivos</string>

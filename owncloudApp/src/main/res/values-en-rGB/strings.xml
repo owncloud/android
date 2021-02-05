@@ -483,8 +483,7 @@
   <string name="share_privilege_can_edit_delete">delete</string>
   <string name="edit_share_unshare">Stop sharing</string>
   <string name="edit_share_done">done</string>
-  <string name="action_retry_uploads">Retry failed</string>
-  <string name="manage_space_title">Manage space</string>
+    <string name="manage_space_title">Manage space</string>
   <string name="manage_space_description">Settings, database and server certificates from %1$s\'s data will be deleted permanently. \n\nDownloaded files will be kept untouched.\n\nThis process can take some time.</string>
   <string name="manage_space_clear_data">Clear data</string>
   <string name="manage_space_error">Some files could not be deleted.</string>

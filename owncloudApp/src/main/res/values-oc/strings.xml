@@ -356,8 +356,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="share_privilege_can_edit_delete">suprimir</string>
   <string name="edit_share_unshare">Acabar lo partiment</string>
   <string name="edit_share_done">Acabat</string>
-  <string name="action_retry_uploads">Novèl ensag fracassat</string>
-  <string name="manage_space_title">Gestion de l\'espaci</string>
+    <string name="manage_space_title">Gestion de l\'espaci</string>
   <string name="manage_space_clear_data">Escafar las donadas</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionat</item>

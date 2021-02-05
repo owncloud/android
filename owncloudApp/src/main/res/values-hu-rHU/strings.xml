@@ -467,8 +467,7 @@
   <string name="share_privilege_can_edit_delete">törlés</string>
   <string name="edit_share_unshare">Megosztás leállítása</string>
   <string name="edit_share_done">kész</string>
-  <string name="action_retry_uploads">Sikertelenek újrapróbálása</string>
-  <string name="manage_space_title">Helykezelés</string>
+    <string name="manage_space_title">Helykezelés</string>
   <string name="manage_space_description">Beállítások, adatbázis és kiszolgáló tanúsítványok %1$s az adatok véglegesen törlődnek. \ n \ n A letöltött fájlok érintetlenül maradnak. \ n \ n Ez a folyamat eltarthat egy ideig.</string>
   <string name="manage_space_clear_data">Adatok törlése</string>
   <string name="manage_space_error">Egyes fájlokat nem lehet törölni.</string>

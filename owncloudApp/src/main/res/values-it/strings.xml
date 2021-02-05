@@ -482,8 +482,7 @@
   <string name="share_privilege_can_edit_delete">elimina</string>
   <string name="edit_share_unshare">Interrompi la condivisione</string>
   <string name="edit_share_done">completato</string>
-  <string name="action_retry_uploads">Nuovo tentativo non riuscito</string>
-  <string name="manage_space_title">Gestisci lo spazio</string>
+    <string name="manage_space_title">Gestisci lo spazio</string>
   <string name="manage_space_description">Impostazioni, database e certificati server dai dati di %1$s saranno eliminati definitivamente. \n\n\I file scaricati rimarranno intatti.\n\nQuesto processo può richiedere del tempo.</string>
   <string name="manage_space_clear_data">Cancella i dati</string>
   <string name="manage_space_error">Alcuni file non possono essere eliminati.</string>

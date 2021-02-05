@@ -472,8 +472,7 @@
   <string name="share_privilege_can_edit_delete">hapus</string>
   <string name="edit_share_unshare">Hentikan berbagi</string>
   <string name="edit_share_done">Selesai</string>
-  <string name="action_retry_uploads">Percobaan  gagal</string>
-  <string name="manage_space_title">Kelola ruang </string>
+    <string name="manage_space_title">Kelola ruang </string>
   <string name="manage_space_description">Pengaturan, basisdata dan sertifikat server dari %1$s data akan dihapus permanen.
 \n\nBerkas terunduh tidak akan terhapus.\n\nProses dapat memakan waktu.</string>
   <string name="manage_space_clear_data">Membersihkan data</string>

@@ -481,8 +481,7 @@
   <string name="share_privilege_can_edit_delete">ลบ</string>
   <string name="edit_share_unshare">ยกเลิกการแชร์</string>
   <string name="edit_share_done">สำเร็จ</string>
-  <string name="action_retry_uploads">ลองใหม่แล้วล้มเหลว</string>
-  <string name="manage_space_title">จัดการพื้นที่จัดการพื้นที่</string>
+    <string name="manage_space_title">จัดการพื้นที่จัดการพื้นที่</string>
   <string name="manage_space_description">การตั้งค่าใบรับรองเซิร์ฟเวอร์และฐานข้อมูลจาก %1$s จะถูกลบอย่างถาวร \n\nไฟล์ที่ดาวน์โหลดจะถูกเก็บไว้อย่างดี กระบวนการนี้ต้องใช้เวลาสักครู่</string>
   <string name="manage_space_clear_data">ล้างข้อมูล</string>
   <string name="manage_space_error">บางไฟล์ไม่สามารถลบได้</string>

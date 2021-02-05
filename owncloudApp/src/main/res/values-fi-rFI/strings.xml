@@ -419,8 +419,7 @@
   <string name="share_privilege_can_edit_delete">poista</string>
   <string name="edit_share_unshare">Lopeta jakaminen</string>
   <string name="edit_share_done">valmis</string>
-  <string name="action_retry_uploads">Uudelleenyritys epäonnistui</string>
-  <string name="manage_space_title">Hallitse tilaa</string>
+    <string name="manage_space_title">Hallitse tilaa</string>
   <string name="manage_space_clear_data">Tyhjennä tiedot</string>
   <string name="manage_space_error">Joitain tiedostoja ei voitu poistaa.</string>
   <string name="permission_storage_access">Tiedostojen lataaminen ja lähetys vaatii lisäoikeuksia.</string>

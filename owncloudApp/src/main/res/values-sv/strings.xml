@@ -406,8 +406,7 @@
   <string name="share_privilege_can_edit_delete">radera</string>
   <string name="edit_share_unshare">Sluta dela</string>
   <string name="edit_share_done">färdig</string>
-  <string name="action_retry_uploads">Försök ladda upp igen</string>
-  <string name="manage_space_title">Hantera utrymme</string>
+    <string name="manage_space_title">Hantera utrymme</string>
   <string name="manage_space_description">Inställningar, databas och servercertifikat från %1$s\'s data kommer att raderas permanent. \n\nNedladdade filer kommer inte påverkas.\n\nDetta kan ta ett tag.</string>
   <string name="manage_space_clear_data">Rensa data</string>
   <string name="manage_space_error">Vissa filer kunde inte raderas.</string>

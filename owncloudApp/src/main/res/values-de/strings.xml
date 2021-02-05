@@ -483,8 +483,7 @@
   <string name="share_privilege_can_edit_delete">löschen</string>
   <string name="edit_share_unshare">Freigabe löschen</string>
   <string name="edit_share_done">Erledigt</string>
-  <string name="action_retry_uploads">Wiederhole Fehlversuche</string>
-  <string name="manage_space_title">verwalte Speicherplatz</string>
+    <string name="manage_space_title">verwalte Speicherplatz</string>
   <string name="manage_space_description">Einstellungen, Datenbank und Server-Zertifikate von %1$s\'s Daten werden dauerhaft gelöscht.\n\nHerunter geladene Dateien bleiben unangetastet.\n\nDieser Vorgang kann eine Zeit dauern.</string>
   <string name="manage_space_clear_data">Daten löschen</string>
   <string name="manage_space_error">Einige Dateien konnten nicht gelöscht werden.</string>

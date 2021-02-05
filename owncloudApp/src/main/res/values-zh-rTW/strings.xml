@@ -483,8 +483,7 @@
   <string name="share_privilege_can_edit_delete">刪除</string>
   <string name="edit_share_unshare">停止分享</string>
   <string name="edit_share_done">完成</string>
-  <string name="action_retry_uploads">重試失敗</string>
-  <string name="manage_space_title">管理空間</string>
+    <string name="manage_space_title">管理空間</string>
   <string name="manage_space_description">來自 %1$s 的設定, 資料庫與伺服器的憑證將被永久的刪除.\n\n下載的檔案也將無法存取.\n\n這個動作將花費一些時間.</string>
   <string name="manage_space_clear_data">清除資料</string>
   <string name="manage_space_error">某些檔案無法被刪除.</string>

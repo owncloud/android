@@ -481,8 +481,7 @@
   <string name="share_privilege_can_edit_delete">fshi</string>
   <string name="edit_share_unshare">Resht së ndari</string>
   <string name="edit_share_done">u bë</string>
-  <string name="action_retry_uploads">Riprovimi dështoi</string>
-  <string name="manage_space_title">Administroni hapësirë</string>
+    <string name="manage_space_title">Administroni hapësirë</string>
   <string name="manage_space_description">Rregullimet, baza e të dhënave dhe dëshmitë e shërbyesit prej të dhënave nga %1$s do të fshihen përgjithmonë. \n\nKartelat e shkarkuara do të ruhen të paprekura.\n\nKy proces mund të hajë ca kohë.</string>
   <string name="manage_space_clear_data">Spastroji të dhënat</string>
   <string name="manage_space_error">Ca kartela s\’u fshinë dot.</string>
