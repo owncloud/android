@@ -257,6 +257,8 @@ public class ManageAccountsActivity extends FileActivity
 
         SyncRequest request = builder.build();
         ContentResolver.requestSync(request);
+
+        this.showSnackMessage(getString(R.string.synchronizing_account));
     }
 
     @Override
