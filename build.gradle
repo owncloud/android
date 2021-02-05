@@ -19,7 +19,7 @@ buildscript {
 
         // Koin
         koinVersion = "2.1.5"
-        mockkVersion = '1.10.2'
+        mockkVersion = '1.10.5'
 
         // Testing
         junitVersion = "4.13.1"
