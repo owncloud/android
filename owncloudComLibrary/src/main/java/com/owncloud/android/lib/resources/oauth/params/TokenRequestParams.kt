@@ -42,13 +42,12 @@ sealed class TokenRequestParams(
         val redirectUri: String
     ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType) {
 
-        override fun toRequestBody(): RequestBody {
-            return FormBody.Builder()
+        override fun toRequestBody(): RequestBody =
+            FormBody.Builder()
                 .add(HttpConstants.OAUTH_HEADER_AUTHORIZATION_CODE, authorizationCode)
                 .add(HttpConstants.OAUTH_HEADER_GRANT_TYPE, grantType)
                 .add(HttpConstants.OAUTH_HEADER_REDIRECT_URI, redirectUri)
                 .build()
-        }
     }
 
     class RefreshToken(
@@ -58,14 +57,13 @@ sealed class TokenRequestParams(
         val refreshToken: String? = null
     ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType) {
 
-        override fun toRequestBody(): RequestBody {
-            return FormBody.Builder().apply {
+        override fun toRequestBody(): RequestBody =
+            FormBody.Builder().apply {
                 add(HttpConstants.OAUTH_HEADER_GRANT_TYPE, grantType)
                 if (!refreshToken.isNullOrBlank()) {
                     add(HttpConstants.OAUTH_HEADER_REFRESH_TOKEN, refreshToken)
                 }
             }.build()
 
-        }
     }
 }

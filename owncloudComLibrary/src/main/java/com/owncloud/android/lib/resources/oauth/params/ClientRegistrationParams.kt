@@ -40,17 +40,13 @@ data class ClientRegistrationParams(
     val tokenEndpointAuthMethod: String,
     val applicationType: String
 ) {
-    fun toRequestBody(): RequestBody {
-        val jsonObject = JSONObject().apply {
+    fun toRequestBody(): RequestBody =
+        JSONObject().apply {
             put(PARAM_APPLICATION_TYPE, applicationType)
             put(PARAM_CLIENT_NAME, clientName)
             put(PARAM_REDIRECT_URIS, JSONArray(redirectUris))
             put(PARAM_TOKEN_ENDPOINT_AUTH_METHOD, tokenEndpointAuthMethod)
-        }
-
-        val mediaType = CONTENT_TYPE_JSON.toMediaType()
-        return jsonObject.toString().toRequestBody(mediaType)
-    }
+        }.toString().toRequestBody(CONTENT_TYPE_JSON.toMediaType())
 
     companion object {
         private const val PARAM_APPLICATION_TYPE = "application_type"
