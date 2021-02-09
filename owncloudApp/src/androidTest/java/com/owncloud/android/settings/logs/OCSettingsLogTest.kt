@@ -22,6 +22,7 @@ package com.owncloud.android.settings.logs
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -29,6 +30,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.LogHistoryActivity
+import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 
@@ -40,7 +42,11 @@ class OCSettingsLogTest {
 
     @Test
     fun itemsToolbar() {
-        onView(withId(R.id.search_button)).check(matches(isDisplayed()))
+        onView(
+            allOf(withId(R.id.search_button), isDescendantOfA(withId(R.id.standard_toolbar)))
+        ).check(
+            matches(isDisplayed())
+        )
         //Values not i18n
         onView(withText("LOGCAT")).check(matches(isDisplayed()))
         onView(withText("LOGFILE")).check(matches(isDisplayed()))
