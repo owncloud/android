@@ -112,15 +112,11 @@ class OCLocalAuthenticationDataSource(
             }
 
             clientRegistrationInfo?.let { clientRegistrationInfo ->
-                accountManager.setUserData(it, KEY_CLIENT_REGISTRATION_CLIENT_ID, clientRegistrationInfo.clientId)
-                accountManager.setUserData(
-                    it, KEY_CLIENT_REGISTRATION_CLIENT_SECRET, clientRegistrationInfo.clientSecret
-                )
-                accountManager.setUserData(
-                    it,
-                    KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE,
-                    clientRegistrationInfo.clientSecretExpiration.toString()
-                )
+                accountManager.apply {
+                    setUserData(it, KEY_CLIENT_REGISTRATION_CLIENT_ID, clientRegistrationInfo.clientId)
+                    setUserData(it, KEY_CLIENT_REGISTRATION_CLIENT_SECRET, clientRegistrationInfo.clientSecret)
+                    setUserData(it, KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE, clientRegistrationInfo.clientSecretExpiration.toString())
+                }
             }
 
             accountManager.setUserData(it, KEY_SUPPORTS_OAUTH2, OAUTH_SUPPORTED_TRUE)

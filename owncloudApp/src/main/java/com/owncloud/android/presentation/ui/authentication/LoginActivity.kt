@@ -37,7 +37,6 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
@@ -398,7 +397,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 }
                 is UIResult.Error -> {
                     Timber.e(it.peekContent().getThrowableOrNull(), "Client registration failed.")
-                    Toast.makeText(this, it.peekContent().getThrowableOrNull().toString(), Toast.LENGTH_SHORT).show()
+                    performGetAuthorizationCodeRequest(authorizationEndpoint)
                 }
             }
         })

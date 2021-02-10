@@ -83,7 +83,7 @@ class OCAuthenticationViewModel(
         accessToken: String,
         refreshToken: String,
         scope: String?,
-        updateAccountWithUsername: String?,
+        updateAccountWithUsername: String? = null,
         clientRegistrationInfo: ClientRegistrationInfo?
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,

@@ -166,7 +166,6 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
             accessToken = OC_ACCESS_TOKEN,
             refreshToken = OC_REFRESH_TOKEN,
             scope = OC_SCOPE,
-            updateAccountWithUsername = null,
             clientRegistrationInfo = OC_CLIENT_REGISTRATION
         )
 
@@ -187,7 +186,6 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
             accessToken = OC_ACCESS_TOKEN,
             refreshToken = OC_REFRESH_TOKEN,
             scope = OC_SCOPE,
-            updateAccountWithUsername = null,
             clientRegistrationInfo = OC_CLIENT_REGISTRATION
         )
 
