@@ -22,7 +22,7 @@ buildscript {
         mockkVersion = '1.10.6'
 
         // Testing
-        junitVersion = "4.13.1"
+        junitVersion = "4.13.2"
         extJunitVersion = '1.1.2'
         androidTestVersion = '1.3.0'
         espressoTestVersion = '3.3.0'
