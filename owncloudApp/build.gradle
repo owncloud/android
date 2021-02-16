@@ -52,6 +52,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktxViewModelVersion"
     implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
 
+    // Preferences
+    implementation 'androidx.preference:preference:1.1.0-alpha05'
+
     // Tests
     testImplementation project(':owncloudTestUtil')
     testImplementation "junit:junit:$junitVersion"
