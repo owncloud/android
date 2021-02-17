@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.viewpager.widget.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+<com.owncloud.android.ui.preview.ViewPagerWorkAround xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragmentPager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
