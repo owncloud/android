@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.viewpager.widget.ViewPager
+import timber.log.Timber
 
 /**
  * [Workaround](https://github.com/Baseflow/PhotoView/issues/31#issuecomment-19803926)
@@ -18,7 +19,7 @@ class ViewPagerWorkAround : ViewPager {
         try {
             return super.onTouchEvent(ev)
         } catch (ex: IllegalArgumentException) {
-            ex.printStackTrace()
+            Timber.e(ex)
         }
         return false
     }
@@ -27,7 +28,7 @@ class ViewPagerWorkAround : ViewPager {
         try {
             return super.onInterceptTouchEvent(ev)
         } catch (ex: IllegalArgumentException) {
-            ex.printStackTrace()
+            Timber.e(ex)
         }
         return false
     }
