@@ -22,6 +22,7 @@ package com.owncloud.android.presentation.ui.settings.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.preference.CheckBoxPreference
@@ -115,9 +116,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 if (incomingValue) {
                     intent.action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
                     enablePasscodeLauncher.launch(intent)
+                    enableBiometric()
                 } else {
                     intent.action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
                     disablePasscodeLauncher.launch(intent)
+                    disableBiometric(getString(R.string.prefs_biometric_summary))
                 }
             }
             false
@@ -134,42 +137,47 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 if (incomingValue) {
                     intent.action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
                     enablePatternLauncher.launch(intent)
+                    enableBiometric()
                 } else {
                     intent.action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
                     disablePatternLauncher.launch(intent)
+                    disableBiometric(getString(R.string.prefs_biometric_summary))
                 }
             }
             false
         }
 
-        /*
+
         // Biometric lock
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            mPrefSecurityCategory.removePreference(mBiometric)
-        } else if (mBiometric != null) {
-            // Disable biometric lock if Passcode or Pattern locks are disabled
-            if (mPasscode != null && mPattern != null && !mPasscode.isChecked() && !mPattern.isChecked()) {
-                mBiometric.setEnabled(false)
-                mBiometric.setSummary(R.string.prefs_biometric_summary)
+            prefSecurityCategory?.removePreference(prefBiometric)
+        } else {
+            if (prefBiometric != null) {
+                // Disable biometric lock if Passcode or Pattern locks are disabled
+                if (!prefPasscode?.isChecked()!! && !prefPattern?.isChecked()!!) {
+                    prefBiometric?.setEnabled(false)
+                    prefBiometric?.setSummary(R.string.prefs_biometric_summary)
+                }
+                prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+                    val incomingValue = newValue as Boolean
+
+                    // Biometric not supported
+                    if (incomingValue && biometricManager != null && !biometricManager?.isHardwareDetected()!!) {
+                        showMessageInSnackbar(getString(R.string.biometric_not_hardware_detected))
+                        return@setOnPreferenceChangeListener false
+                    }
+
+                    // No biometric enrolled yet
+                    if (incomingValue && biometricManager != null && !biometricManager?.hasEnrolledBiometric()!!) {
+                        showMessageInSnackbar(getString(R.string.biometric_not_enrolled))
+                        return@setOnPreferenceChangeListener false
+                    }
+                    true
+                }
             }
-            mBiometric.setOnPreferenceChangeListener(Preference.OnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-                val incoming = newValue as Boolean
-
-                // Biometric not supported
-                if (incoming && mBiometricManager != null && !mBiometricManager.isHardwareDetected()) {
-                    showSnackMessage(R.string.biometric_not_hardware_detected)
-                    return@setOnPreferenceChangeListener false
-                }
-
-                // No biometric enrolled yet
-                if (incoming && mBiometricManager != null && !mBiometricManager.hasEnrolledBiometric()) {
-                    showSnackMessage(R.string.biometric_not_enrolled)
-                    return@setOnPreferenceChangeListener false
-                }
-                true
-            })
         }
 
+        /*
         if (mPrefTouchesWithOtherVisibleWindows != null) {
             mPrefTouchesWithOtherVisibleWindows.setOnPreferenceChangeListener(
                 Preference.OnPreferenceChangeListener { preference: Preference?, newValue: Any ->
@@ -219,6 +227,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
         prefBiometric?.isChecked = biometricState
     }
     */
+
+    private fun enableBiometric() {
+        prefBiometric?.setEnabled(true)
+        prefBiometric?.setSummary(null)
+    }
+
+    private fun disableBiometric(summary: String) {
+        if (prefBiometric?.isChecked()!!) {
+            prefBiometric?.setChecked(false)
+        }
+        prefBiometric?.setEnabled(false)
+        prefBiometric?.setSummary(summary)
+    }
 
     companion object {
         private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
