@@ -22,33 +22,72 @@ package com.owncloud.android.presentation.ui.settings.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
+
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
     private var prefSecurityCategory: PreferenceCategory? = null
     private var prefPasscode: CheckBoxPreference? = null
     private var prefPattern: CheckBoxPreference? = null
     private var prefBiometric: CheckBoxPreference? = null
     private var biometricManager: BiometricManager? = null
-    private var patternSet = false
-    private var passcodeSet = false
     private var prefTouchesWithOtherVisibleWindows: CheckBoxPreference? = null
 
-    private val preferencesProvider: SharedPreferencesProvider by inject()
+    private val enablePasscodeLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val passcodeEnableOk = settingsViewModel.handleEnablePasscode(result.data)
+                if (passcodeEnableOk) {
+                    prefPasscode?.isChecked = true
+                    showMessageInSnackbar(getString(R.string.pass_code_stored))
+                }
+            }
+        }
+    private val disablePasscodeLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val passcodeDisableOk = settingsViewModel.handleDisablePasscode(result.data)
+                if (passcodeDisableOk) {
+                    prefPasscode?.isChecked = false
+                    showMessageInSnackbar(getString(R.string.pass_code_removed))
+                }
+            }
+        }
+    private val enablePatternLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val patternEnableOk = settingsViewModel.handleEnablePattern(result.data)
+                if (patternEnableOk) {
+                    prefPattern?.isChecked = true
+                    showMessageInSnackbar(getString(R.string.pattern_stored))
+                }
+            }
+        }
+    private val disablePatternLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val patternDisableOk = settingsViewModel.handleDisablePattern(result.data)
+                if (patternDisableOk) {
+                    prefPattern?.isChecked = false
+                    showMessageInSnackbar(getString(R.string.pattern_removed))
+                }
+            }
+        }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
@@ -57,7 +96,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     }
 
-    fun manageSecuritySettings() {
+    private fun manageSecuritySettings() {
 
         prefSecurityCategory = findPreference(PREFERENCE_SECURITY_CATEGORY)
         prefPasscode = findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)
@@ -69,101 +108,41 @@ class SettingsFragment : PreferenceFragmentCompat() {
         prefPasscode?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
             val intent = Intent(activity, PassCodeActivity::class.java)
             val incomingValue = newValue as Boolean
-            patternSet = preferencesProvider.getBoolean(
-                PatternLockActivity.PREFERENCE_SET_PATTERN,
-                false
-            )
+            val patternSet = settingsViewModel.isPatternSet()
             if (patternSet) {
                 showMessageInSnackbar(getString(R.string.pattern_already_set))
             } else {
-                intent.action =
-                    if (incomingValue) PassCodeActivity.ACTION_REQUEST_WITH_RESULT else PassCodeActivity.ACTION_CHECK_WITH_RESULT
-                startActivityForResult(
-                    intent,
-                    if (incomingValue) ACTION_REQUEST_PASSCODE else ACTION_CONFIRM_PASSCODE
-                )
-
-                /*
-                val requestCode = if (incomingValue) ACTION_REQUEST_PASSCODE else ACTION_CONFIRM_PASSCODE
-                var activityLauncher: ActivityResultLauncher<Intent>? = null
-                if (requestCode == ACTION_REQUEST_PASSCODE) {
-                    activityLauncher =
-                        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                            if (result.resultCode == RESULT_OK) { // Enable passcode
-
-                                val passcode: String? = result.data?.getStringExtra(PassCodeActivity.KEY_PASSCODE)
-                                if (passcode != null && passcode.length == 4) {
-                                    for (i in 1..4) {
-                                        (preferencesProvider as SharedPreferencesProviderImpl).putString(
-                                            PassCodeActivity.PREFERENCE_PASSCODE_D + i,
-                                            passcode.substring(i - 1, i)
-                                        )
-                                    }
-                                    preferencesProvider.putBoolean(
-                                        PassCodeActivity.PREFERENCE_SET_PASSCODE,
-                                        true
-                                    )
-                                    showMessageInSnackbar(getString(R.string.pass_code_stored))
-
-                                    // Allow to use biometric lock since Passcode lock has been enabled
-                                    //enableBiometric()
-                                }
-                            }
-                        }
-                } else if (requestCode == ACTION_CONFIRM_PASSCODE) {
-                    activityLauncher =
-                        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                            if (result.resultCode == RESULT_OK) { // Disable passcode
-
-                                val keyCheck: Boolean? =
-                                    result.data?.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)
-                                if (keyCheck != null && keyCheck) {
-                                    preferencesProvider.putBoolean(
-                                        PassCodeActivity.PREFERENCE_SET_PASSCODE,
-                                        false
-                                    )
-                                    showMessageInSnackbar(getString(R.string.pass_code_removed))
-
-                                    // Do not allow to use biometric lock since Passcode lock has been disabled
-                                    //disableBiometric(getString(R.string.prefs_biometric_summary))
-                                }
-                            }
-                        }
+                if (incomingValue) {
+                    intent.action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+                    enablePasscodeLauncher.launch(intent)
+                } else {
+                    intent.action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
+                    disablePasscodeLauncher.launch(intent)
                 }
+            }
+            false
+        }
 
-                activityLauncher?.launch(intent)
-                */
+        // Pattern lock
+        prefPattern?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+            val intent = Intent(activity, PatternLockActivity::class.java)
+            val incomingValue = newValue as Boolean
+            val passcodeSet = settingsViewModel.isPasscodeSet()
+            if (passcodeSet) {
+                showMessageInSnackbar(getString(R.string.passcode_already_set))
+            } else {
+                if (incomingValue) {
+                    intent.action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
+                    enablePatternLauncher.launch(intent)
+                } else {
+                    intent.action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
+                    disablePatternLauncher.launch(intent)
+                }
             }
             false
         }
 
         /*
-
-        // Pattern lock
-        if (mPattern != null) {
-            mPattern.setOnPreferenceChangeListener(Preference.OnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-                val intent = Intent(
-                    getApplicationContext(),
-                    PatternLockActivity::class.java
-                )
-                val state = newValue as Boolean
-                passcodeSet = mPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-                if (passcodeSet) {
-                    showSnackMessage(R.string.passcode_already_set)
-                } else {
-                    intent.action =
-                        if (state) PatternLockActivity.ACTION_REQUEST_WITH_RESULT else PatternLockActivity.ACTION_CHECK_WITH_RESULT
-                    startActivityForResult(
-                        intent,
-                        if (state) Preferences.ACTION_REQUEST_PATTERN else Preferences.ACTION_CONFIRM_PATTERN
-                    )
-                }
-                false
-            })
-        }
-
-        // Biometric lock
-
         // Biometric lock
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             mPrefSecurityCategory.removePreference(mBiometric)
@@ -216,7 +195,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             )
         }
 
-         */
+        */
     }
 
     /*
@@ -241,43 +220,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
     */
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == ACTION_REQUEST_PASSCODE && resultCode == RESULT_OK) { // Enable passcode
-            val passcode = data!!.getStringExtra(PassCodeActivity.KEY_PASSCODE)
-            if (passcode != null && passcode.length == 4) {
-                for (i in 1..4) {
-                    preferencesProvider.putString(
-                        PassCodeActivity.PREFERENCE_PASSCODE_D + i,
-                        passcode.substring(i - 1, i)
-                    )
-                }
-                preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
-                prefPasscode?.isChecked = true
-                showMessageInSnackbar(getString(R.string.pass_code_stored))
-
-                // Allow to use biometric lock since Passcode lock has been enabled
-                //enableBiometric()
-            }
-        } else if (requestCode == ACTION_CONFIRM_PASSCODE && resultCode == RESULT_OK) { // Disable passcode
-            if (data!!.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)) {
-                preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-                prefPasscode?.isChecked = false
-                showMessageInSnackbar(getString(R.string.pass_code_removed))
-
-                // Do not allow to use biometric lock since Passcode lock has been disabled
-                //disableBiometric(getString(R.string.prefs_biometric_summary))
-            }
-        }
-    }
-
-
     companion object {
         private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
         const val PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows"
-        private const val ACTION_REQUEST_PASSCODE = 5
-        private const val ACTION_CONFIRM_PASSCODE = 6
     }
 
 }
