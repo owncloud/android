@@ -1,5 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *
+ *   @author Abel García de Prada
+ *
  *   Copyright (C) 2021 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,28 +22,21 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
+ *
  */
-package com.owncloud.android.lib.resources.oauth.services
+package com.owncloud.android.lib.resources.oauth.responses
 
-import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.oauth.params.ClientRegistrationParams
-import com.owncloud.android.lib.resources.oauth.params.TokenRequestParams
-import com.owncloud.android.lib.resources.oauth.responses.ClientRegistrationResponse
-import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
-import com.owncloud.android.lib.resources.oauth.responses.TokenResponse
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-interface OIDCService {
-
-    fun getOIDCServerDiscovery(ownCloudClient: OwnCloudClient): RemoteOperationResult<OIDCDiscoveryResponse>
-
-    fun performTokenRequest(
-        ownCloudClient: OwnCloudClient,
-        tokenRequest: TokenRequestParams
-    ): RemoteOperationResult<TokenResponse>
-
-    fun registerClientWithRegistrationEndpoint(
-        ownCloudClient: OwnCloudClient,
-        clientRegistrationParams: ClientRegistrationParams
-    ): RemoteOperationResult<ClientRegistrationResponse>
-}
+@JsonClass(generateAdapter = true)
+data class ClientRegistrationResponse(
+    @Json(name = "client_id")
+    val clientId: String,
+    @Json(name = "client_secret")
+    val clientSecret: String?,
+    @Json(name = "client_id_issued_at")
+    val clientIdIssuedAt: Int?,
+    @Json(name = "client_secret_expires_at")
+    val clientSecretExpiration: Int,
+)
