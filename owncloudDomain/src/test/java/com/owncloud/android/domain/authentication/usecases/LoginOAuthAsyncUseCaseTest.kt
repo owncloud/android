@@ -25,6 +25,7 @@ import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_REFRESH_TOKEN
 import com.owncloud.android.testutil.OC_SCOPE
 import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -44,7 +45,8 @@ class LoginOAuthAsyncUseCaseTest {
         accessToken = OC_ACCESS_TOKEN,
         refreshToken = OC_REFRESH_TOKEN,
         scope = OC_SCOPE,
-        updateAccountWithUsername = null
+        updateAccountWithUsername = null,
+        clientRegistrationInfo = OC_CLIENT_REGISTRATION
     )
 
     @Test
@@ -73,12 +75,23 @@ class LoginOAuthAsyncUseCaseTest {
         assertTrue(loginOAuthUseCaseResult.isError)
         assertTrue(loginOAuthUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 0) { authRepository.loginOAuth(any(), any(), any(), any(), any(), any(), any()) }
+        verify(exactly = 0) { authRepository.loginOAuth(any(), any(), any(), any(), any(), any(), any(), any()) }
     }
 
     @Test
     fun loginSuccess() {
-        every { authRepository.loginOAuth(any(), any(), any(), any(), any(), any(), any()) } returns OC_ACCOUNT_NAME
+        every {
+            authRepository.loginOAuth(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } returns OC_ACCOUNT_NAME
         val loginOAuthUseCaseResult = loginOAuthAsyncUseCase.execute(loginOAuthUseCaseParams)
 
         assertTrue(loginOAuthUseCaseResult.isSuccess)
@@ -87,12 +100,12 @@ class LoginOAuthAsyncUseCaseTest {
         assertNull(loginOAuthUseCaseResult.getThrowableOrNull())
         assertEquals(OC_ACCOUNT_NAME, loginOAuthUseCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { authRepository.loginOAuth(any(), any(), any(), any(), any(), any(), any()) }
+        verify(exactly = 1) { authRepository.loginOAuth(any(), any(), any(), any(), any(), any(), any(), any()) }
     }
 
     @Test
     fun getServerInfoWithException() {
-        every { authRepository.loginOAuth(any(), any(), any(), any(), any(), any(), any()) } throws Exception()
+        every { authRepository.loginOAuth(any(), any(), any(), any(), any(), any(), any(), any()) } throws Exception()
 
         val loginOAuthUseCaseResult = loginOAuthAsyncUseCase.execute(loginOAuthUseCaseParams)
 
@@ -102,6 +115,6 @@ class LoginOAuthAsyncUseCaseTest {
         assertNull(loginOAuthUseCaseResult.getDataOrNull())
         assertTrue(loginOAuthUseCaseResult.getThrowableOrNull() is Exception)
 
-        verify(exactly = 1) { authRepository.loginOAuth(any(), any(), any(), any(), any(), any(), any()) }
+        verify(exactly = 1) { authRepository.loginOAuth(any(), any(), any(), any(), any(), any(), any(), any()) }
     }
 }

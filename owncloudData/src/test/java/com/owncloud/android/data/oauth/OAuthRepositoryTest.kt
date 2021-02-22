@@ -21,6 +21,8 @@ package com.owncloud.android.data.oauth
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION_REQUEST
 import com.owncloud.android.testutil.oauth.OC_OIDC_SERVER_CONFIGURATION
 import com.owncloud.android.testutil.oauth.OC_TOKEN_REQUEST_ACCESS
 import com.owncloud.android.testutil.oauth.OC_TOKEN_RESPONSE
@@ -68,5 +70,23 @@ class OAuthRepositoryTest {
         every { remoteOAuthDataSource.performTokenRequest(OC_TOKEN_REQUEST_ACCESS) } throws Exception()
 
         oAuthRepository.performTokenRequest(OC_TOKEN_REQUEST_ACCESS)
+    }
+
+    @Test
+    fun `register client - ok`() {
+        every { remoteOAuthDataSource.registerClient(OC_CLIENT_REGISTRATION_REQUEST) } returns OC_CLIENT_REGISTRATION
+
+        oAuthRepository.registerClient(OC_CLIENT_REGISTRATION_REQUEST)
+
+        verify(exactly = 1) {
+            remoteOAuthDataSource.registerClient(OC_CLIENT_REGISTRATION_REQUEST)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun `register client - ko`() {
+        every { remoteOAuthDataSource.registerClient(OC_CLIENT_REGISTRATION_REQUEST) } throws Exception()
+
+        remoteOAuthDataSource.registerClient(OC_CLIENT_REGISTRATION_REQUEST)
     }
 }

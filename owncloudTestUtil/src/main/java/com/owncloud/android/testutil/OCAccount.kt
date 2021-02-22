@@ -43,6 +43,11 @@ const val OC_AUTH_TOKEN_TYPE = "owncloud.oauth2.access_token"
 const val OC_ACCESS_TOKEN = "Asqweh12p93yehd10eu"
 const val OC_REFRESH_TOKEN = "P3sd19DSsjdp1jwdd1"
 const val OC_SCOPE = "email"
+const val OC_REDIRECT_URI = "oc:android.owncloud.com"
 
 const val OC_TOKEN_ENDPOINT = "https://owncloud.server/token"
 const val OC_CLIENT_AUTH = "cl13nt4uth"
+
+const val OC_CLIENT_SECRET = "cl13nts3cr3t"
+const val OC_CLIENT_ID = "cl13nt1d"
+const val OC_CLIENT_SECRET_EXPIRATION = 1611251163

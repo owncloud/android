@@ -24,10 +24,14 @@ import android.accounts.AccountManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
+import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE
+import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_ID
+import com.owncloud.android.data.authentication.KEY_CLIENT_REGISTRATION_CLIENT_SECRET
 import com.owncloud.android.data.authentication.KEY_OAUTH2_REFRESH_TOKEN
 import com.owncloud.android.data.authentication.KEY_OAUTH2_SCOPE
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
@@ -52,6 +56,7 @@ import com.owncloud.android.testutil.OC_REFRESH_TOKEN
 import com.owncloud.android.testutil.OC_SCOPE
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.spyk
@@ -207,7 +212,8 @@ class OCLocalAuthenticationDataSourceTest {
             OC_USER_INFO,
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            null
+            null,
+            OC_CLIENT_REGISTRATION
         )
 
         val newAccount = Account(OC_ACCOUNT_NAME, "owncloud")
@@ -219,7 +225,7 @@ class OCLocalAuthenticationDataSourceTest {
         verifyAccountInfoIsUpdated(newAccount, OC_SERVER_INFO, OC_USER_INFO, 1)
 
         // OAuth params are updated
-        verifyOAuthParamsAreUpdated(newAccount, OC_ACCESS_TOKEN, OC_OAUTH_SUPPORTED_TRUE, OC_REFRESH_TOKEN, OC_SCOPE, 1)
+        verifyOAuthParamsAreUpdated(newAccount, OC_ACCESS_TOKEN, OC_OAUTH_SUPPORTED_TRUE, OC_REFRESH_TOKEN, OC_SCOPE, OC_CLIENT_REGISTRATION, 1)
 
         assertEquals(newAccount.name, newAccountName)
     }
@@ -239,7 +245,8 @@ class OCLocalAuthenticationDataSourceTest {
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            null
+            null,
+            OC_CLIENT_REGISTRATION
         )
     }
 
@@ -268,7 +275,8 @@ class OCLocalAuthenticationDataSourceTest {
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            OC_ACCOUNT_NAME
+            OC_ACCOUNT_NAME,
+            OC_CLIENT_REGISTRATION
         )
 
         // One for getting account to update
@@ -279,7 +287,7 @@ class OCLocalAuthenticationDataSourceTest {
 
         // The account already exists, so update it
         verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 1)
-        verifyOAuthParamsAreUpdated(OC_ACCOUNT, OC_ACCESS_TOKEN, OC_OAUTH_SUPPORTED_TRUE, OC_REFRESH_TOKEN, OC_SCOPE, 1)
+        verifyOAuthParamsAreUpdated(OC_ACCOUNT, OC_ACCESS_TOKEN, OC_OAUTH_SUPPORTED_TRUE, OC_REFRESH_TOKEN, OC_SCOPE, OC_CLIENT_REGISTRATION, 1)
     }
 
     @Test
@@ -305,7 +313,8 @@ class OCLocalAuthenticationDataSourceTest {
                 OC_USER_INFO,
                 OC_REFRESH_TOKEN,
                 OC_SCOPE,
-                "AccountNotTheSame"
+                "AccountNotTheSame",
+                OC_CLIENT_REGISTRATION
             )
         } catch (exception: Exception) {
             assertTrue(exception is AccountNotTheSameException)
@@ -321,6 +330,7 @@ class OCLocalAuthenticationDataSourceTest {
                 OC_OAUTH_SUPPORTED_TRUE,
                 OC_REFRESH_TOKEN,
                 OC_SCOPE,
+                OC_CLIENT_REGISTRATION,
                 0
             )
         }
@@ -449,6 +459,7 @@ class OCLocalAuthenticationDataSourceTest {
         supportsOAuth2: String,
         refreshToken: String,
         scope: String,
+        clientInfo: ClientRegistrationInfo,
         exactly: Int
     ) {
         verify(exactly = exactly) {
@@ -456,6 +467,9 @@ class OCLocalAuthenticationDataSourceTest {
             accountManager.setUserData(account, KEY_SUPPORTS_OAUTH2, supportsOAuth2)
             accountManager.setUserData(account, KEY_OAUTH2_REFRESH_TOKEN, refreshToken)
             accountManager.setUserData(account, KEY_OAUTH2_SCOPE, scope)
+            accountManager.setUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_SECRET, clientInfo.clientSecret)
+            accountManager.setUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_ID, clientInfo.clientId)
+            accountManager.setUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE, clientInfo.clientSecretExpiration.toString())
         }
     }
 

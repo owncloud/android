@@ -22,15 +22,27 @@ package com.owncloud.android.authentication.oauth
 import android.content.Context
 import android.net.Uri
 import android.util.Base64
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_CLIENT_ID
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import java.net.URLEncoder
 
 class OAuthUtils {
     companion object {
+
+        fun buildClientRegistrationRequest(
+            registrationEndpoint: String,
+            context: Context
+        ): ClientRegistrationRequest =
+            ClientRegistrationRequest(
+                registrationEndpoint = registrationEndpoint,
+                clientName = MainApp.userAgent,
+                redirectUris = listOf(buildRedirectUri(context).toString())
+            )
 
         fun getClientAuth(
             clientSecret: String,

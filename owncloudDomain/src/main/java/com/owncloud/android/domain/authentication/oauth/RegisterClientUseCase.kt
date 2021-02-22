@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -18,15 +18,18 @@
  */
 package com.owncloud.android.domain.authentication.oauth
 
+import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
-import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
-import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
-import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 
-interface OAuthRepository {
-    fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration
-    fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse
+class RegisterClientUseCase(
+    private val oAuthRepository: OAuthRepository
+) : BaseUseCaseWithResult<ClientRegistrationInfo, RegisterClientUseCase.Params>() {
 
-    fun registerClient(clientRegistrationRequest: ClientRegistrationRequest): ClientRegistrationInfo
+    override fun run(params: Params): ClientRegistrationInfo =
+        oAuthRepository.registerClient(clientRegistrationRequest = params.clientRegistrationRequest)
+
+    data class Params(
+        val clientRegistrationRequest: ClientRegistrationRequest
+    )
 }

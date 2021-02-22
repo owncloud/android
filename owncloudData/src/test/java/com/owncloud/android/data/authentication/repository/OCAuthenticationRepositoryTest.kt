@@ -32,6 +32,7 @@ import com.owncloud.android.testutil.OC_REFRESH_TOKEN
 import com.owncloud.android.testutil.OC_SCOPE
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.OC_USER_INFO
+import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -123,7 +124,18 @@ class OCAuthenticationRepositoryTest {
         )
 
         every {
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns OC_ACCOUNT_NAME
 
         val accountName = ocAuthenticationRepository.loginOAuth(
@@ -133,7 +145,8 @@ class OCAuthenticationRepositoryTest {
             OC_ACCESS_TOKEN,
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            null
+            null,
+            OC_CLIENT_REGISTRATION
         )
 
         verify(exactly = 1) {
@@ -147,7 +160,8 @@ class OCAuthenticationRepositoryTest {
                 OC_USER_INFO,
                 OC_REFRESH_TOKEN,
                 OC_SCOPE,
-                null
+                null,
+                OC_CLIENT_REGISTRATION
             )
         }
 
@@ -161,7 +175,18 @@ class OCAuthenticationRepositoryTest {
         } throws NoConnectionWithServerException()
 
         every {
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns OC_ACCOUNT_NAME
 
         ocAuthenticationRepository.loginOAuth(
@@ -171,12 +196,24 @@ class OCAuthenticationRepositoryTest {
             OC_ACCESS_TOKEN,
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            null
+            null,
+            OC_CLIENT_REGISTRATION
         )
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginOAuth(any(), any(), any())
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any()
+            )
         }
     }
 
@@ -188,7 +225,18 @@ class OCAuthenticationRepositoryTest {
         )
 
         every {
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } throws AccountNotNewException()
 
         ocAuthenticationRepository.loginOAuth(
@@ -198,12 +246,24 @@ class OCAuthenticationRepositoryTest {
             OC_ACCESS_TOKEN,
             OC_REFRESH_TOKEN,
             OC_SCOPE,
-            null
+            null,
+            OC_CLIENT_REGISTRATION
         )
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginOAuth(any(), any(), any())
-            localAuthenticationDataSource.addOAuthAccount(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            localAuthenticationDataSource.addOAuthAccount(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any()
+            )
         }
     }
 

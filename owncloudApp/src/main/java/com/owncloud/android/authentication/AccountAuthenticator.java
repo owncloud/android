@@ -52,6 +52,9 @@ import timber.log.Timber;
 
 import java.io.File;
 
+import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE;
+import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_CLIENT_REGISTRATION_CLIENT_ID;
+import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_CLIENT_REGISTRATION_CLIENT_SECRET;
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_OAUTH2_REFRESH_TOKEN;
 import static com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants.KEY_AUTH_TOKEN_TYPE;
 import static org.koin.java.KoinJavaComponent.inject;
@@ -181,7 +184,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             // OAuth, gets an auth token from the AccountManager's cache. If no auth token is cached for
             // this account, null will be returned
             accessToken = accountManager.peekAuthToken(account, authTokenType);
-            if (accessToken == null && canBeRefreshed(authTokenType)) {
+            if (accessToken == null && canBeRefreshed(authTokenType) && clientSecretIsValid(accountManager, account)) {
                 accessToken = refreshToken(account, authTokenType, accountManager);
             }
         }
@@ -196,6 +199,31 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         /// if not stored, return Intent to access the LoginActivity and UPDATE the token for the account
         return prepareBundleToAccessLoginActivity(accountAuthenticatorResponse, account, authTokenType, options);
+    }
+
+    /**
+     * Check if the client has expired or not.
+     * If the client has expired, we can not refresh the token and user needs to re-authenticate.
+     *
+     * @return true if the client is still valid
+     */
+    private boolean clientSecretIsValid(AccountManager accountManager, Account account) {
+        String clientSecretExpiration = accountManager.getUserData(account,
+                KEY_CLIENT_REGISTRATION_CLIENT_EXPIRATION_DATE);
+
+        Timber.d("Client secret expiration [" + clientSecretExpiration + "]");
+        if (clientSecretExpiration == null) {
+            return true;
+        }
+
+        long currentTimeStamp = System.currentTimeMillis() / 1000L;
+        int clientSecretExpirationInt = Integer.parseInt(clientSecretExpiration);
+        boolean clientSecretIsValid = clientSecretExpirationInt == 0 || clientSecretExpirationInt > currentTimeStamp;
+
+        Timber.d("Current time [" + currentTimeStamp + "]");
+        Timber.d("Client is valid [" + clientSecretIsValid + "]");
+
+        return clientSecretIsValid;
     }
 
     @Override
@@ -324,6 +352,19 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 oidcDiscoveryUseCase.getValue().execute(oidcDiscoveryUseCaseParams);
 
         String tokenEndpoint;
+
+        String clientId = accountManager.getUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_ID);
+        String clientSecret = accountManager.getUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_SECRET);
+
+        if (clientId == null) {
+            Timber.d("Client Id not stored. Let's use the hardcoded one");
+            clientId = mContext.getString(R.string.oauth2_client_id);
+        }
+        if (clientSecret == null) {
+            Timber.d("Client Secret not stored. Let's use the hardcoded one");
+            clientSecret = mContext.getString(R.string.oauth2_client_secret);
+        }
+
         if (oidcServerConfigurationUseCaseResult.isSuccess()) {
             Timber.d("OIDC Discovery success. Server discovery info: [ %s ]",
                     oidcServerConfigurationUseCaseResult.getDataOrNull());
@@ -334,11 +375,11 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         } else {
             Timber.d("OIDC Discovery failed. Server discovery info: [ %s ]",
                     oidcServerConfigurationUseCaseResult.getThrowableOrNull().toString());
+
             tokenEndpoint = baseUrl + File.separator + mContext.getString(R.string.oauth2_url_endpoint_access);
         }
 
-        String clientAuth = OAuthUtils.Companion.getClientAuth(mContext.getString(R.string.oauth2_client_secret),
-                mContext.getString(R.string.oauth2_client_id));
+        String clientAuth = OAuthUtils.Companion.getClientAuth(clientSecret, clientId);
 
         TokenRequest oauthTokenRequest = new TokenRequest.RefreshToken(
                 baseUrl,

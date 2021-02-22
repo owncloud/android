@@ -19,6 +19,7 @@
 
 package com.owncloud.android.data.authentication.datasources
 
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.user.model.UserInfo
 
@@ -41,7 +42,8 @@ interface LocalAuthenticationDataSource {
         userInfo: UserInfo,
         refreshToken: String,
         scope: String?,
-        updateAccountWithUsername: String?
+        updateAccountWithUsername: String?,
+        clientRegistrationInfo: ClientRegistrationInfo?
     ): String
 
     fun supportsOAuth2(accountName: String): Boolean

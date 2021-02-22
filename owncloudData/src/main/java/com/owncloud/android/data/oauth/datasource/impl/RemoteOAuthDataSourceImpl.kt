@@ -22,12 +22,16 @@ package com.owncloud.android.data.oauth.datasource.impl
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
+import com.owncloud.android.data.oauth.mapper.RemoteClientRegistrationInfoMapper
 import com.owncloud.android.data.oauth.mapper.RemoteOIDCDiscoveryMapper
 import com.owncloud.android.data.oauth.mapper.RemoteTokenRequestMapper
 import com.owncloud.android.data.oauth.mapper.RemoteTokenResponseMapper
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
+import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
+import com.owncloud.android.lib.resources.oauth.params.ClientRegistrationParams
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 
 class RemoteOAuthDataSourceImpl(
@@ -35,7 +39,8 @@ class RemoteOAuthDataSourceImpl(
     private val oidcService: OIDCService,
     private val remoteOIDCDiscoveryMapper: RemoteOIDCDiscoveryMapper,
     private val remoteTokenRequestMapper: RemoteTokenRequestMapper,
-    private val remoteTokenResponseMapper: RemoteTokenResponseMapper
+    private val remoteTokenResponseMapper: RemoteTokenResponseMapper,
+    private val remoteClientRegistrationInfoMapper: RemoteClientRegistrationInfoMapper
 ) : RemoteOAuthDataSource {
 
     override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration {
@@ -59,5 +64,25 @@ class RemoteOAuthDataSourceImpl(
         }
 
         return remoteTokenResponseMapper.toModel(tokenResponse)!!
+    }
+
+    override fun registerClient(clientRegistrationRequest: ClientRegistrationRequest): ClientRegistrationInfo {
+        val ownCloudClient =
+            clientManager.getClientForUnExistingAccount(clientRegistrationRequest.registrationEndpoint, false)
+
+        val remoteClientRegistrationInfo = executeRemoteOperation {
+            oidcService.registerClientWithRegistrationEndpoint(
+                ownCloudClient = ownCloudClient,
+                clientRegistrationParams = ClientRegistrationParams(
+                    registrationEndpoint = clientRegistrationRequest.registrationEndpoint,
+                    clientName = clientRegistrationRequest.clientName,
+                    redirectUris = clientRegistrationRequest.redirectUris,
+                    tokenEndpointAuthMethod = clientRegistrationRequest.tokenEndpointAuthMethod,
+                    applicationType = clientRegistrationRequest.applicationType
+                )
+            )
+        }
+
+        return remoteClientRegistrationInfoMapper.toModel(remoteClientRegistrationInfo)!!
     }
 }

@@ -21,6 +21,7 @@ package com.owncloud.android.presentation.viewmodels.authentication
 
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
+import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
 import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
@@ -52,6 +53,7 @@ class OAuthViewModelTest : ViewModelTest() {
     private lateinit var oAuthViewModel: OAuthViewModel
 
     private lateinit var getOIDCDiscoveryUseCase: OIDCDiscoveryUseCase
+    private lateinit var registerClientUseCase: RegisterClientUseCase
     private lateinit var requestTokenUseCase: RequestTokenUseCase
     private lateinit var contextProvider: ContextProvider
 
@@ -75,13 +77,15 @@ class OAuthViewModelTest : ViewModelTest() {
 
         getOIDCDiscoveryUseCase = mockk()
         requestTokenUseCase = mockk()
+        registerClientUseCase = mockk()
 
         testCoroutineDispatcher.pauseDispatcher()
 
         oAuthViewModel = OAuthViewModel(
             getOIDCDiscoveryUseCase = getOIDCDiscoveryUseCase,
             requestTokenUseCase = requestTokenUseCase,
-            coroutinesDispatcherProvider = coroutineDispatcherProvider
+            coroutinesDispatcherProvider = coroutineDispatcherProvider,
+            registerClientUseCase = registerClientUseCase
         )
     }
 

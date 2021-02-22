@@ -354,17 +354,50 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         oauthViewModel.getOIDCServerConfiguration(serverBaseUrl)
         oauthViewModel.oidcDiscovery.observe(this, {
             when (it.peekContent()) {
-                is UIResult.Loading -> TODO()
+                is UIResult.Loading -> {
+                }
                 is UIResult.Success -> {
                     Timber.d("Service discovery: ${it.peekContent().getStoredData()}")
                     oidcSupported = true
                     it.peekContent().getStoredData()?.let { oidcServerConfiguration ->
-                        performGetAuthorizationCodeRequest(oidcServerConfiguration.authorization_endpoint.toUri())
+                        registerClient(
+                            oidcServerConfiguration.authorization_endpoint.toUri(),
+                            oidcServerConfiguration.registration_endpoint
+                        )
                     }
                 }
                 is UIResult.Error -> {
                     Timber.e(it.peekContent().getThrowableOrNull(), "OIDC failed. Try with normal OAuth")
                     startNormalOauthorization()
+                }
+            }
+        })
+    }
+
+    /**
+     * Register client if possible.
+     */
+    private fun registerClient(
+        authorizationEndpoint: Uri,
+        registrationEndpoint: String
+    ) {
+        oauthViewModel.registerClient(registrationEndpoint)
+        oauthViewModel.registerClient.observe(this, {
+            when (it.peekContent()) {
+                is UIResult.Loading -> {
+                }
+                is UIResult.Success -> {
+                    Timber.d("Client registered: ${it.peekContent().getStoredData()}")
+                    it.peekContent().getStoredData()?.let { clientRegistrationInfo ->
+                        performGetAuthorizationCodeRequest(
+                            authorizationEndpoint,
+                            clientRegistrationInfo.clientId
+                        )
+                    }
+                }
+                is UIResult.Error -> {
+                    Timber.e(it.peekContent().getThrowableOrNull(), "Client registration failed.")
+                    performGetAuthorizationCodeRequest(authorizationEndpoint)
                 }
             }
         })
@@ -380,7 +413,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         performGetAuthorizationCodeRequest(oauth2authorizationEndpoint)
     }
 
-    private fun performGetAuthorizationCodeRequest(authorizationEndpoint: Uri) {
+    private fun performGetAuthorizationCodeRequest(
+        authorizationEndpoint: Uri,
+        clientId: String = getString(R.string.oauth2_client_id)
+    ) {
         Timber.d("A browser should be opened now to authenticate this user.")
 
         val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
@@ -389,7 +425,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val authorizationEndpointUri = OAuthUtils.buildAuthorizationRequest(
             authorizationEndpoint = authorizationEndpoint,
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
-            clientId = getString(R.string.oauth2_client_id),
+            clientId = clientId,
             responseType = ResponseType.CODE.string,
             scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
         )
@@ -429,8 +465,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      */
     private fun exchangeAuthorizationCodeForTokens(authorizationCode: String) {
         server_status_text.text = getString(R.string.auth_getting_authorization)
-        val clientAuth =
+
+        val clientRegistrationInfo = oauthViewModel.registerClient.value?.peekContent()?.getStoredData()
+
+        val clientAuth = if (clientRegistrationInfo?.clientId != null && clientRegistrationInfo.clientSecret != null) {
+            OAuthUtils.getClientAuth(clientRegistrationInfo.clientSecret as String, clientRegistrationInfo.clientId)
+
+        } else {
             OAuthUtils.getClientAuth(getString(R.string.oauth2_client_secret), getString(R.string.oauth2_client_id))
+        }
 
         // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
         val tokenEndPoint = oauthViewModel.oidcDiscovery.value?.peekContent()?.getStoredData()?.token_endpoint
@@ -463,7 +506,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         tokenResponse.accessToken,
                         tokenResponse.refreshToken.orEmpty(),
                         if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
-                        if (loginAction != ACTION_CREATE) userAccount?.name else null
+                        if (loginAction != ACTION_CREATE) userAccount?.name else null,
+                        clientRegistrationInfo
                     )
                 }
                 is UIResult.Error -> {
