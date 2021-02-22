@@ -61,8 +61,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     // Allow to use biometric lock since Passcode lock has been enabled
                     enableBiometric()
                 }
-            }
-            else {
+            } else {
                 showMessageInSnackbar(getString(R.string.pass_code_error_set))
             }
         }
@@ -76,8 +75,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     // Do not allow to use biometric lock since Passcode lock has been disabled
                     disableBiometric(getString(R.string.prefs_biometric_summary))
                 }
-            }
-            else {
+            } else {
                 showMessageInSnackbar(getString(R.string.pass_code_error_remove))
             }
         }
@@ -91,8 +89,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     // Allow to use biometric lock since Pattern lock has been enabled
                     enableBiometric()
                 }
-            }
-            else {
+            } else {
                 showMessageInSnackbar(getString(R.string.pattern_error_set))
             }
         }
@@ -106,8 +103,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     // Do not allow to use biometric lock since Pattern lock has been disabled
                     disableBiometric(getString(R.string.prefs_biometric_summary))
                 }
-            }
-            else {
+            } else {
                 showMessageInSnackbar(getString(R.string.pattern_error_remove))
             }
         }
@@ -168,7 +164,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
             false
         }
-
 
         // Biometric lock
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
