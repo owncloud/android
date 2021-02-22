@@ -42,7 +42,6 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRem
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
@@ -75,14 +74,14 @@ val remoteDataSourceModule = module {
     single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
 
-    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get(), get()) }
+    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
     factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
     factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
     factory<RemoteOAuthDataSource> { RemoteOAuthDataSourceImpl(get(), get(), get()) }
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
-    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), get(), androidContext().resources.getDimension(
+    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), androidContext().resources.getDimension(
                 R.dimen.file_avatar_size
             ).toInt()) }
 
@@ -90,6 +89,5 @@ val remoteDataSourceModule = module {
     factory { RemoteShareMapper() }
     factory { RemoteShareeMapper() }
     factory { RemoteClientRegistrationInfoMapper() }
-    factory { RemoteUserInfoMapper() }
     factory { RemoteUserQuotaMapper() }
 }

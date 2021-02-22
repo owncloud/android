@@ -22,15 +22,14 @@ package com.owncloud.android.data.user.datasources.implementation
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.lib.resources.users.RemoteAvatarData
+import com.owncloud.android.lib.resources.users.RemoteUserInfo
 
 class OCRemoteUserDataSource(
-    private val remoteUserInfoMapper: RemoteUserInfoMapper,
     private val remoteUserQuotaMapper: RemoteUserQuotaMapper,
     private val clientManager: ClientManager,
     private val avatarDimension: Int
@@ -39,7 +38,7 @@ class OCRemoteUserDataSource(
     override fun getUserInfo(accountName: String): UserInfo =
         executeRemoteOperation {
             clientManager.getUserService(accountName).getUserInfo()
-        }.let { remoteUserInfoMapper.toModel(it)!! }
+        }.toModel()
 
     override fun getUserQuota(accountName: String): UserQuota =
         executeRemoteOperation {
@@ -51,14 +50,21 @@ class OCRemoteUserDataSource(
             clientManager.getUserService(accountName = accountName).getUserAvatar(avatarDimension)
         }.toModel()
 
-    /**************************************************************************************************************
-     ************************************************* Mappers ****************************************************
-     **************************************************************************************************************/
-
-    private fun RemoteAvatarData.toModel(): UserAvatar =
-        UserAvatar(
-            avatarData = this.avatarData,
-            eTag = this.eTag,
-            mimeType = this.mimeType
-        )
 }
+
+/**************************************************************************************************************
+ ************************************************* Mappers ****************************************************
+ **************************************************************************************************************/
+fun RemoteUserInfo.toModel(): UserInfo =
+    UserInfo(
+        id = this.id,
+        displayName = this.displayName,
+        email = this.email
+    )
+
+private fun RemoteAvatarData.toModel(): UserAvatar =
+    UserAvatar(
+        avatarData = this.avatarData,
+        eTag = this.eTag,
+        mimeType = this.mimeType
+    )
