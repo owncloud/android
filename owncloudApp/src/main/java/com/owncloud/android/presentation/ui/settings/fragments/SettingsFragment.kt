@@ -166,21 +166,20 @@ class SettingsFragment : PreferenceFragmentCompat() {
             prefSecurityCategory?.removePreference(prefBiometric)
         } else if (prefBiometric != null) {
             // Disable biometric lock if Passcode or Pattern locks are disabled
-            if (!prefPasscode?.isChecked!! && !prefPattern?.isChecked!!) {
-                prefBiometric?.isEnabled = false
-                prefBiometric?.setSummary(R.string.prefs_biometric_summary)
+            if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
+                disableBiometric(getString(R.string.prefs_biometric_summary))
             }
             prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
                 val incomingValue = newValue as Boolean
 
                 // Biometric not supported
-                if (incomingValue && biometricManager != null && biometricManager?.isHardwareDetected == false) {
+                if (incomingValue && biometricManager?.isHardwareDetected == false) {
                     showMessageInSnackbar(getString(R.string.biometric_not_hardware_detected))
                     return@setOnPreferenceChangeListener false
                 }
 
                 // No biometric enrolled yet
-                if (incomingValue && biometricManager != null && biometricManager?.hasEnrolledBiometric() == false) {
+                if (incomingValue && biometricManager?.hasEnrolledBiometric() == false) {
                     showMessageInSnackbar(getString(R.string.biometric_not_enrolled))
                     return@setOnPreferenceChangeListener false
                 }
