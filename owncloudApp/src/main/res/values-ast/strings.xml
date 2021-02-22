@@ -157,8 +157,6 @@
   <string name="pass_code_remove_your_pass_code">Desanicia la to contraseña</string>
   <string name="pass_code_mismatch">Les contraseñes nun son les mesmes</string>
   <string name="pass_code_wrong">Contraseña incorrecta</string>
-  <string name="pass_code_removed">Contraseña desaniciada</string>
-  <string name="pass_code_stored">Contraseña almacenada</string>
   <string name="media_notif_ticker">%1$s reproductor de música</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>

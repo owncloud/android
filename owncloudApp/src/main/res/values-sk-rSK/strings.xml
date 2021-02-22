@@ -65,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Nesprávny vzor</string>
   <string name="pattern_reenter_pattern">Prosím zadaj znovu svoj vzor</string>
   <string name="pattern_not_same_pattern">Vzory nie sú rovnaké</string>
-  <string name="pattern_stored">Vzor bol uložený.</string>
-  <string name="pattern_removed">Vzor bol odstránený</string>
   <string name="pattern_already_set">Vzor a heslo nemôžu byť, zapnuté na raz, prosím vypni najskôr vzor.</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Súbory</string>
@@ -167,8 +165,6 @@
   <string name="pass_code_remove_your_pass_code">Zmazať svoje heslo</string>
   <string name="pass_code_mismatch">Heslá sa nezhodujú</string>
   <string name="pass_code_wrong">Nesprávne heslo</string>
-  <string name="pass_code_removed">Bezpečnostný kód odstránený</string>
-  <string name="pass_code_stored">Bezpečnostný kód uložený</string>
   <string name="media_notif_ticker">Prehrávač hudby %1$s</string>
   <string name="media_state_playing">%1$s (prehráva)</string>
   <string name="media_state_loading">%1$s (načítava)</string>

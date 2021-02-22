@@ -21,10 +21,12 @@
 package com.owncloud.android.presentation.ui.settings.fragments
 
 import android.app.Activity.RESULT_OK
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -55,8 +57,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 val passcodeEnableOk = settingsViewModel.handleEnablePasscode(result.data)
                 if (passcodeEnableOk) {
                     prefPasscode?.isChecked = true
-                    showMessageInSnackbar(getString(R.string.pass_code_stored))
+
+                    // Allow to use biometric lock since Passcode lock has been enabled
+                    enableBiometric()
                 }
+            }
+            else {
+                showMessageInSnackbar(getString(R.string.pass_code_error_set))
             }
         }
     private val disablePasscodeLauncher =
@@ -65,8 +72,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 val passcodeDisableOk = settingsViewModel.handleDisablePasscode(result.data)
                 if (passcodeDisableOk) {
                     prefPasscode?.isChecked = false
-                    showMessageInSnackbar(getString(R.string.pass_code_removed))
+
+                    // Do not allow to use biometric lock since Passcode lock has been disabled
+                    disableBiometric(getString(R.string.prefs_biometric_summary))
                 }
+            }
+            else {
+                showMessageInSnackbar(getString(R.string.pass_code_error_remove))
             }
         }
     private val enablePatternLauncher =
@@ -75,8 +87,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 val patternEnableOk = settingsViewModel.handleEnablePattern(result.data)
                 if (patternEnableOk) {
                     prefPattern?.isChecked = true
-                    showMessageInSnackbar(getString(R.string.pattern_stored))
+
+                    // Allow to use biometric lock since Pattern lock has been enabled
+                    enableBiometric()
                 }
+            }
+            else {
+                showMessageInSnackbar(getString(R.string.pattern_error_set))
             }
         }
     private val disablePatternLauncher =
@@ -85,8 +102,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 val patternDisableOk = settingsViewModel.handleDisablePattern(result.data)
                 if (patternDisableOk) {
                     prefPattern?.isChecked = false
-                    showMessageInSnackbar(getString(R.string.pattern_removed))
+
+                    // Do not allow to use biometric lock since Pattern lock has been disabled
+                    disableBiometric(getString(R.string.prefs_biometric_summary))
                 }
+            }
+            else {
+                showMessageInSnackbar(getString(R.string.pattern_error_remove))
             }
         }
 
@@ -105,6 +127,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         prefBiometric = findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
         prefTouchesWithOtherVisibleWindows = findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            biometricManager = BiometricManager.getBiometricManager(activity)
+        }
+
         // Passcode lock
         prefPasscode?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
             val intent = Intent(activity, PassCodeActivity::class.java)
@@ -116,11 +142,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 if (incomingValue) {
                     intent.action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
                     enablePasscodeLauncher.launch(intent)
-                    enableBiometric()
                 } else {
                     intent.action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
                     disablePasscodeLauncher.launch(intent)
-                    disableBiometric(getString(R.string.prefs_biometric_summary))
                 }
             }
             false
@@ -137,11 +161,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 if (incomingValue) {
                     intent.action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
                     enablePatternLauncher.launch(intent)
-                    enableBiometric()
                 } else {
                     intent.action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
                     disablePatternLauncher.launch(intent)
-                    disableBiometric(getString(R.string.prefs_biometric_summary))
                 }
             }
             false
@@ -151,59 +173,51 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Biometric lock
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             prefSecurityCategory?.removePreference(prefBiometric)
-        } else {
-            if (prefBiometric != null) {
-                // Disable biometric lock if Passcode or Pattern locks are disabled
-                if (!prefPasscode?.isChecked()!! && !prefPattern?.isChecked()!!) {
-                    prefBiometric?.setEnabled(false)
-                    prefBiometric?.setSummary(R.string.prefs_biometric_summary)
-                }
-                prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-                    val incomingValue = newValue as Boolean
+        } else if (prefBiometric != null) {
+            // Disable biometric lock if Passcode or Pattern locks are disabled
+            if (!prefPasscode?.isChecked()!! && !prefPattern?.isChecked()!!) {
+                prefBiometric?.setEnabled(false)
+                prefBiometric?.setSummary(R.string.prefs_biometric_summary)
+            }
+            prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+                val incomingValue = newValue as Boolean
 
-                    // Biometric not supported
-                    if (incomingValue && biometricManager != null && !biometricManager?.isHardwareDetected()!!) {
-                        showMessageInSnackbar(getString(R.string.biometric_not_hardware_detected))
-                        return@setOnPreferenceChangeListener false
-                    }
-
-                    // No biometric enrolled yet
-                    if (incomingValue && biometricManager != null && !biometricManager?.hasEnrolledBiometric()!!) {
-                        showMessageInSnackbar(getString(R.string.biometric_not_enrolled))
-                        return@setOnPreferenceChangeListener false
-                    }
-                    true
+                // Biometric not supported
+                if (incomingValue && biometricManager != null && !biometricManager?.isHardwareDetected()!!) {
+                    showMessageInSnackbar(getString(R.string.biometric_not_hardware_detected))
+                    return@setOnPreferenceChangeListener false
                 }
+
+                // No biometric enrolled yet
+                if (incomingValue && biometricManager != null && !biometricManager?.hasEnrolledBiometric()!!) {
+                    showMessageInSnackbar(getString(R.string.biometric_not_enrolled))
+                    return@setOnPreferenceChangeListener false
+                }
+                true
             }
         }
 
-        /*
-        if (mPrefTouchesWithOtherVisibleWindows != null) {
-            mPrefTouchesWithOtherVisibleWindows.setOnPreferenceChangeListener(
-                Preference.OnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-                    if (newValue as Boolean) {
-                        AlertDialog.Builder(this)
-                            .setTitle(getString(R.string.confirmation_touches_with_other_windows_title))
-                            .setMessage(getString(R.string.confirmation_touches_with_other_windows_message))
-                            .setNegativeButton(getString(R.string.common_no), null)
-                            .setPositiveButton(
-                                getString(R.string.common_yes)
-                            ) { dialog: DialogInterface?, which: Int ->
-                                mPreferencesProvider.putBoolean(
-                                    Preferences.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
-                                    true
-                                )
-                                mPrefTouchesWithOtherVisibleWindows.setChecked(true)
-                            }
-                            .show()
-                        return@setOnPreferenceChangeListener false
-                    }
-                    true
+        // Touches with other visible windows
+        prefTouchesWithOtherVisibleWindows?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+            if (newValue as Boolean) {
+                activity?.let {
+                    AlertDialog.Builder(it)
+                        .setTitle(getString(R.string.confirmation_touches_with_other_windows_title))
+                        .setMessage(getString(R.string.confirmation_touches_with_other_windows_message))
+                        .setNegativeButton(getString(R.string.common_no), null)
+                        .setPositiveButton(
+                            getString(R.string.common_yes)
+                        ) { dialog: DialogInterface?, which: Int ->
+                            settingsViewModel.setPrefTouchesWithOtherVisibleWindows(true)
+                            prefTouchesWithOtherVisibleWindows?.setChecked(true)
+                        }
+                        .show()
                 }
-            )
+                return@setOnPreferenceChangeListener false
+            }
+            true
         }
 
-        */
     }
 
     /*

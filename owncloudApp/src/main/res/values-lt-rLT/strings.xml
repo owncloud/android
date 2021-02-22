@@ -58,8 +58,6 @@
   <string name="pattern_incorrect_pattern">Neteisingas užraktas</string>
   <string name="pattern_reenter_pattern">Įveskite užraktą dar kartą</string>
   <string name="pattern_not_same_pattern">Nesutampa užraktas</string>
-  <string name="pattern_stored">Užraktas išsaugotas</string>
-  <string name="pattern_removed">Užraktas pašalintas</string>
   <string name="pattern_already_set">Modelio ir frazės užraktai negali būti įjungti vienu metu, prašome išjungti modelio užraktą</string>
   <string name="passcode_already_set">Modelio ir frazės užraktai negali būti įjungti vienu metu, prašome išjungti frazės užraktą</string>
   <string name="pattern_no_longer_required">Daugiau modelio užraktas nebus klausiamas</string>
@@ -202,8 +200,6 @@
   <string name="pass_code_remove_your_pass_code">Užrakto pašalinimas</string>
   <string name="pass_code_mismatch">Nesutampa užraktas</string>
   <string name="pass_code_wrong">Neteisingas užraktas</string>
-  <string name="pass_code_removed">Užraktas pašalintas</string>
-  <string name="pass_code_stored">Užraktas išsaugotas</string>
   <string name="media_notif_ticker">%1$s muzikos grotuvas</string>
   <string name="media_state_playing">%1$s (grojama)</string>
   <string name="media_state_loading">%1$s (įkeliama)</string>

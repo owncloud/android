@@ -65,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Patró incorrecte</string>
   <string name="pattern_reenter_pattern">Repeteix el patró, si us plau</string>
   <string name="pattern_not_same_pattern">Els patrons no son iguals</string>
-  <string name="pattern_stored">Patró desat</string>
-  <string name="pattern_removed">Patró borrat</string>
   <string name="pattern_already_set">El patró i la contrasenya no poden ser activats al mateix moment. Desactiva primer el patró si us plau.</string>
   <string name="passcode_already_set">El patró i la contrasenya no poden ser activats al mateix moment. Desactiva la contrasenya si us plau.</string>
   <string name="pattern_no_longer_required">No demanar mai més el patró</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">Elimina el codi d\'accés</string>
   <string name="pass_code_mismatch">Els codis d\'accés no coincideixen</string>
   <string name="pass_code_wrong">Codi d\'accés incorrecte</string>
-  <string name="pass_code_removed">Codi d\'accés eliminat</string>
-  <string name="pass_code_stored">Codi d\'accés guardat</string>
   <string name="biometric_not_hardware_detected">Aquest dispositiu no admet autentificació biomètrica. </string>
   <string name="biometric_not_enrolled">Registrar al menys una característica biomètrica per poder utilitzar aquesta funció. </string>
   <string name="biometric_prompt_title">Inici de sessió biomètric.</string>

@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">圖案不正確</string>
   <string name="pattern_reenter_pattern">請重新輸入您的圖案</string>
   <string name="pattern_not_same_pattern">模式不一樣</string>
-  <string name="pattern_stored">模式存儲</string>
-  <string name="pattern_removed">圖案已刪除</string>
   <string name="pattern_already_set">模式和密碼鎖不能同時已啟用，請先停用模式</string>
   <string name="passcode_already_set">模式和密碼鎖不能同時已啟用，請先停用密碼</string>
   <string name="pattern_no_longer_required">模式將不再被詢問</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">移除您的密碼鎖密碼</string>
   <string name="pass_code_mismatch">密碼不相符</string>
   <string name="pass_code_wrong">不正確的密碼</string>
-  <string name="pass_code_removed">密碼鎖已被移除</string>
-  <string name="pass_code_stored">密碼鎖已設定</string>
   <string name="biometric_not_hardware_detected">此裝置不支持生物特徵驗證</string>
   <string name="biometric_not_enrolled">註冊至少一個生物特徵以使用此功能</string>
   <string name="biometric_prompt_title">生物識別登入</string>

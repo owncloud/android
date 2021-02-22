@@ -105,8 +105,6 @@
   <string name="pass_code_remove_your_pass_code">Ջնջել քո անցաբառը</string>
   <string name="pass_code_mismatch">Անցաբառերը նույնը չեն</string>
   <string name="pass_code_wrong">Սխալ անցաբառ</string>
-  <string name="pass_code_removed">Անցաբառը ջնջվեց</string>
-  <string name="pass_code_stored">Անցաբառը պահվեց</string>
   <string name="media_notif_ticker">%1$s նվագարկիչ</string>
   <string name="auth_connection_established">Կապը հաստատվեց</string>
   <string name="auth_testing_connection">Փորձարկում եմ կապը</string>

@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_reenter_pattern">Por favor, reingrese el patrón</string>
   <string name="pattern_not_same_pattern">Los patrones no son iguales</string>
-  <string name="pattern_stored">Patrón almacenado</string>
-  <string name="pattern_removed">Patrón borrado</string>
   <string name="pattern_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el patrón</string>
   <string name="passcode_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el código de bloqueo</string>
   <string name="pattern_no_longer_required">El patrón no será requerido nuevamente</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">Borre su contraseña</string>
   <string name="pass_code_mismatch">Los códigos de acceso no son idénticos</string>
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
-  <string name="pass_code_removed">Código de acceso borrado</string>
-  <string name="pass_code_stored">Contraseña almacenada</string>
   <string name="biometric_not_hardware_detected">Este dispositivo no soporta autenticación biométrica</string>
   <string name="biometric_not_enrolled">Registra al menos una característica biométrica para usarla</string>
   <string name="biometric_prompt_title">Inicio de sesión biométrico</string>

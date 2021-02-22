@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Onjuiste vergrendelingspatroon</string>
   <string name="pattern_reenter_pattern">Voer aub opnieuw uw vergrendelingspatroon in</string>
   <string name="pattern_not_same_pattern">De vergrendelingspatronen komen niet overeen</string>
-  <string name="pattern_stored">Vergrendelingspatroon opgeslagen</string>
-  <string name="pattern_removed">Vergrendelingspatroon opgeslagen</string>
   <string name="pattern_already_set">Patroon- en toegangscodes kunnen niet tegelijkertijd actief zijn, deactiveer eerst de patroonbeveiliging</string>
   <string name="passcode_already_set">Patroon- en toegangscodes kunnen niet tegelijkertijd actief zijn, deactiveer eerst de toegangscode</string>
   <string name="pattern_no_longer_required">Het patroon zal niet meer worden gevraagd</string>
@@ -231,8 +229,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_remove_your_pass_code">Verwijderen pincode</string>
   <string name="pass_code_mismatch">De pincodes komen niet overeen</string>
   <string name="pass_code_wrong">Onjuiste pincode</string>
-  <string name="pass_code_removed">Pincode verwijderd</string>
-  <string name="pass_code_stored">Pincode opgeslagen</string>
   <string name="biometric_not_hardware_detected">Dit apparaat ondersteunt geen biometrische authenticatie</string>
   <string name="biometric_not_enrolled">Registreer ten minste één biometrie om deze functie te gebruiken</string>
   <string name="biometric_prompt_title">Biometrisch aanmelden</string>

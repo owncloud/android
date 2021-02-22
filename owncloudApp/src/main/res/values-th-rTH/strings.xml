@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">รูปแบบไม่ถูกต้อง</string>
   <string name="pattern_reenter_pattern">โปรดกรอกรูปแบบของคุณอีกครั้ง</string>
   <string name="pattern_not_same_pattern">รูปแบบไม่เหมือนกัน</string>
-  <string name="pattern_stored">รูปแบบที่เก็บไว้</string>
-  <string name="pattern_removed">ลบรูปแบบแล้ว</string>
   <string name="pattern_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดการใช้รูปแบบก่อน</string>
   <string name="passcode_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดใช้งานรหัสผ่านก่อน</string>
   <string name="pattern_no_longer_required">จะไม่ถามเรื่องรูปแบบอีกต่อไป</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">ลบรหัสปลดล็อคของคุณ</string>
   <string name="pass_code_mismatch">รหัสปลดล็อคของคุณไม่ตรงกัน</string>
   <string name="pass_code_wrong">รหัสปลดล็อคไม่ถูกต้อง</string>
-  <string name="pass_code_removed">ลบรหัสปลดล็อค</string>
-  <string name="pass_code_stored">รหัสปลดล็อคที่เก็บไว้</string>
   <string name="biometric_not_hardware_detected">อุปกรณ์นี้ไม่รองรับการใช้งานไบโอเมตริกซ์</string>
   <string name="biometric_not_enrolled">จำเป็นต้องเพิ่มอย่างน้อยหนึ่งไบโอเมตริกซ์เพื่อใช้เปิดการใช้งานฟีดเจอร์นี้</string>
   <string name="biometric_prompt_title">เข้าสู่ระบบด้วยไบโอเมตริกซ์</string>

@@ -66,8 +66,6 @@
   <string name="pattern_incorrect_pattern">Hibás minta</string>
   <string name="pattern_reenter_pattern">Adja meg újra a mintát</string>
   <string name="pattern_not_same_pattern">A minták nem egyeznek</string>
-  <string name="pattern_stored">Minta tárolva</string>
-  <string name="pattern_removed">Minta eltávolítva</string>
   <string name="pattern_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a mintát</string>
   <string name="passcode_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a jelszót</string>
   <string name="pattern_no_longer_required">A minta többé nem lesz bekérve</string>
@@ -225,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">Jelszó eltávolítása</string>
   <string name="pass_code_mismatch">A jelszavak nem egyeznek</string>
   <string name="pass_code_wrong">Hibás jelszó</string>
-  <string name="pass_code_removed">Jelszó eltávolítva</string>
-  <string name="pass_code_stored">Jelszó eltárolva</string>
   <string name="media_notif_ticker">%1$s zenelejátszó</string>
   <string name="media_state_playing">%1$s (lejátszás)</string>
   <string name="media_state_loading">%1$s (betöltés)</string>

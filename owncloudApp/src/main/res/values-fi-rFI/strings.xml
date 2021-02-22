@@ -55,8 +55,6 @@
   <string name="pattern_incorrect_pattern">Virheellinen kuvio</string>
   <string name="pattern_reenter_pattern">Syötä kuviosi uudelleen</string>
   <string name="pattern_not_same_pattern">Kuviot eivät vastaa toisiaan</string>
-  <string name="pattern_stored">Kuvio tallennettu</string>
-  <string name="pattern_removed">Kuvio poistettu</string>
   <string name="pattern_already_set">Kuvio- ja suojakoodilukitus eivät voi olla samanaikaisesti käytössä. Ole hyvä ja poista kuviolukistus ensin käytöstä.</string>
   <string name="passcode_already_set">Kuvio- ja suojakoodilukitus eivät voi olla samanaikaisesti käytössä. Ole hyvä ja poista suojakoodilukistus ensin käytöstä.</string>
   <string name="pattern_no_longer_required">Kuviota ei enää kysytä</string>
@@ -192,8 +190,6 @@
   <string name="pass_code_remove_your_pass_code">Poista suojakoodi käytöstä</string>
   <string name="pass_code_mismatch">Suojakoodit eivät täsmää</string>
   <string name="pass_code_wrong">Virheellinen suojakoodi</string>
-  <string name="pass_code_removed">Suojakoodi poistettu</string>
-  <string name="pass_code_stored">Suojakoodi tallennettu</string>
   <string name="media_notif_ticker">%1$s-musiikkisoitin</string>
   <string name="media_state_playing">%1$s (toistetaan)</string>
   <string name="media_state_loading">%1$s (ladataan)</string>

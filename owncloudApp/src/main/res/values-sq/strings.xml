@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Rregullsi e pasaktë</string>
   <string name="pattern_reenter_pattern">Ju lutemi, rijepeni rregullsinë tuaj</string>
   <string name="pattern_not_same_pattern">Rregullsitë s\’janë të njëjta</string>
-  <string name="pattern_stored">Rregullsia u Depozitua</string>
-  <string name="pattern_removed">Rregullsia u Hoq</string>
   <string name="pattern_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni rregullsinë</string>
   <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
   <string name="pattern_no_longer_required">S\’do të pyetet më për rregullsinë</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">Hiqeni kodkalimin tuaj</string>
   <string name="pass_code_mismatch">Kodkalimet s\’janë të njëjtë</string>
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
-  <string name="pass_code_removed">Kodkalimi u hoq</string>
-  <string name="pass_code_stored">Kodkalimi u depozitua</string>
   <string name="biometric_not_hardware_detected">Kjo pajisje nuk mbulon mirëfilltësime biometrike</string>
   <string name="biometric_not_enrolled">Që të përdorni këtë veçori, regjistroni të paktën një palë kredenciale biometrike</string>
   <string name="biometric_prompt_title">Hyrje biometrike</string>

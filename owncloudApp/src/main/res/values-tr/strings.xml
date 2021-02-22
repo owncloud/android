@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Geçersiz desen</string>
   <string name="pattern_reenter_pattern">Lütfen deseninizi tekrar girin</string>
   <string name="pattern_not_same_pattern">Desenler aynı değil</string>
-  <string name="pattern_stored">Desen kaydedildi</string>
-  <string name="pattern_removed">Desen kaldırıldı</string>
   <string name="pattern_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, lütfen öncelikle deseni devre dışı bırakınız.</string>
   <string name="passcode_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, lütfen öncelikle parolayı devre dışı bırakınız.</string>
   <string name="pattern_no_longer_required">Desen artık sorulmayacak</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">Parola kodunuzu kaldırın</string>
   <string name="pass_code_mismatch">Parola kodları aynı değil</string>
   <string name="pass_code_wrong">Hatalı parola kodu</string>
-  <string name="pass_code_removed">Parola kodu kaldırıldı</string>
-  <string name="pass_code_stored">Parola kodu depolandı</string>
   <string name="biometric_not_hardware_detected">Bu cihaz biyometrik kimlik doğrulamayı desteklemiyor</string>
   <string name="biometric_not_enrolled">Bu özelliği kullanmak için en az bir biyometrik giriş kaydedilmeli</string>
   <string name="biometric_prompt_title">Biyometrik giriş yap</string>

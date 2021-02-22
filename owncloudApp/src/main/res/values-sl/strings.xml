@@ -61,8 +61,6 @@
   <string name="pattern_incorrect_pattern">Napačen vzorec</string>
   <string name="pattern_reenter_pattern">Prosimo ponovno vnesite svoj vzorec</string>
   <string name="pattern_not_same_pattern">Vzorca se ne ujemata</string>
-  <string name="pattern_stored">Vzorec shranjen</string>
-  <string name="pattern_removed">Vzorec odstranjen</string>
   <string name="pattern_no_longer_required">Ne boste več vprašani po vzorcu</string>
   <string name="pattern_configure_your_pattern_explanation">Vzorec bo zahtevan vedno, ko se zažene aplikacija</string>
   <string name="pass_code_locked">Zaklenjeno z geslom</string>
@@ -213,8 +211,6 @@
   <string name="pass_code_remove_your_pass_code">Odstrani kodo PIN programa</string>
   <string name="pass_code_mismatch">Vpisani kodi PIN nista enaki</string>
   <string name="pass_code_wrong">Napačna koda PIN</string>
-  <string name="pass_code_removed">Koda PIN je odstranjena</string>
-  <string name="pass_code_stored">Koda PIN je shranjena</string>
   <string name="media_notif_ticker">Predvajalnik glasbe %1$s</string>
   <string name="media_state_playing">%1$s (se predvaja)</string>
   <string name="media_state_loading">%1$s (se nalaga)</string>

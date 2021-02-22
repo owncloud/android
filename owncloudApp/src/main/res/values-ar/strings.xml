@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">نمط غير صحيح</string>
   <string name="pattern_reenter_pattern">يُرجى إعادة إدخال نمطك</string>
   <string name="pattern_not_same_pattern">الأنماط غير متطابقة</string>
-  <string name="pattern_stored">تم تخزين النمط</string>
-  <string name="pattern_removed">تم حذف النمط</string>
   <string name="pattern_already_set">لا يمكن تفعيل أقفال الأنماط ورموز المرور في الوقت نفسه، برجاء تعطيل النمط أولاً</string>
   <string name="passcode_already_set">لا يمكن تفعيل أقفال الأنماط ورموز المرور في الوقت نفسه، برجاء تعطيل رمز المرور أولاً</string>
   <string name="pattern_no_longer_required">لن يُطلب النمط بعد الآن</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">أزِل رمز مرورك</string>
   <string name="pass_code_mismatch">رموز المرور غير متطابقة</string>
   <string name="pass_code_wrong">رمز مرور غير صحيح</string>
-  <string name="pass_code_removed">تمت إزالة رمز المرور</string>
-  <string name="pass_code_stored">تم تخزين رمز المرور</string>
   <string name="biometric_not_hardware_detected">لا يدعم هذا الجهاز المصادقة البيولوجية</string>
   <string name="biometric_not_enrolled">سجِّل بيانات اعتماد بيولوجية واحدة على الأقل لاستخدام هذه الميزة</string>
   <string name="biometric_prompt_title">تسجيل دخول بيولوجي</string>

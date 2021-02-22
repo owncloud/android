@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Неправилна схема</string>
   <string name="pattern_reenter_pattern">Моля, въведете отново своята схема</string>
   <string name="pattern_not_same_pattern">Схемите не са еднакви</string>
-  <string name="pattern_stored">Схемата е запазена</string>
-  <string name="pattern_removed">Схемата е изтрита</string>
   <string name="pattern_already_set">Заключването със схема и парола не може да бъде активно едновременно, моля деактивирайте първо схемата</string>
   <string name="passcode_already_set">Заключването със схема и парола не може да бъде активно едновременно, моля деактивирайте първо паролата</string>
   <string name="pattern_no_longer_required">Схемата повече няма да бъде зададена</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">Премахване на паролата</string>
   <string name="pass_code_mismatch">Паролите не съвпадат</string>
   <string name="pass_code_wrong">Грешна парола</string>
-  <string name="pass_code_removed">Паролата е премахната</string>
-  <string name="pass_code_stored">Паролата е запаметена</string>
   <string name="biometric_not_hardware_detected">Това устройство не поддържа биометрична автенификация.</string>
   <string name="biometric_not_enrolled">Регистрирайте поне един брой биометрични данни за да използвате тази  функция</string>
   <string name="biometric_prompt_title">Биометричен вход</string>

@@ -64,8 +64,6 @@
   <string name="pattern_incorrect_pattern">图案不正确</string>
   <string name="pattern_reenter_pattern">请再次输入图案</string>
   <string name="pattern_not_same_pattern">两次图案输入不一致</string>
-  <string name="pattern_stored">图案已保存</string>
-  <string name="pattern_removed">图案已移除</string>
   <string name="pattern_already_set">图案锁和密码锁无法同时启用，请先禁用图案锁</string>
   <string name="passcode_already_set">图案锁和密码锁无法同时启用，请先禁用密码锁</string>
   <string name="pattern_no_longer_required">不再询问输入图案锁</string>
@@ -218,8 +216,6 @@
   <string name="pass_code_remove_your_pass_code">移除您的密码</string>
   <string name="pass_code_mismatch">密码不一致</string>
   <string name="pass_code_wrong">错误的密码</string>
-  <string name="pass_code_removed">移除的密码</string>
-  <string name="pass_code_stored">存储的密码</string>
   <string name="media_notif_ticker">%1$s 音乐播放器</string>
   <string name="media_state_playing">%1$s (播放中)</string>
   <string name="media_state_loading">%1$s (载入中)</string>

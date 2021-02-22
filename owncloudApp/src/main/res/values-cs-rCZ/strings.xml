@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Nesprávné gesto</string>
   <string name="pattern_reenter_pattern">Prosím, zadejte gesto znovu</string>
   <string name="pattern_not_same_pattern">Gesta nejsou shodná</string>
-  <string name="pattern_stored">Gesto uloženo</string>
-  <string name="pattern_removed">Gesto odstraněno</string>
   <string name="pattern_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte gesto</string>
   <string name="passcode_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte bezpečnostní kód</string>
   <string name="pattern_no_longer_required">Gesto již nebude vyžadováno</string>
@@ -227,8 +225,6 @@
   <string name="pass_code_remove_your_pass_code">Odstraňte svůj bezpečnostní kód</string>
   <string name="pass_code_mismatch">Bezpečnostní kód se liší</string>
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
-  <string name="pass_code_removed">Bezpečnostní kód odstraněn</string>
-  <string name="pass_code_stored">Bezpečnostní kód uložen</string>
   <string name="biometric_not_hardware_detected">Toto zařízení nepodoporuje biometrickou autentizaci</string>
   <string name="biometric_not_enrolled">Povolte alespoň jeden biometrický způsob ověření k používání této specialitky</string>
   <string name="biometric_prompt_title">Biometrické přihlášení</string>

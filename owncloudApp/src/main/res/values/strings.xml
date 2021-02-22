@@ -69,8 +69,8 @@
     <string name="pattern_incorrect_pattern">Incorrect pattern</string>
     <string name="pattern_reenter_pattern">Please re-enter your pattern</string>
     <string name="pattern_not_same_pattern">The patterns are not same</string>
-    <string name="pattern_stored">Pattern Stored</string>
-    <string name="pattern_removed">Pattern Removed</string>
+    <string name="pattern_error_set">An error occurred while setting the pattern lock</string>
+    <string name="pattern_error_remove">An error occurred while removing the pattern lock</string>
     <string name="pattern_already_set">Pattern and passcode locks cannot be enabled at the same time, please disable pattern first</string>
     <string name="passcode_already_set">Pattern and passcode locks cannot be enabled at the same time, please disable passcode first</string>
     <string name="pattern_no_longer_required">The pattern will not be asked anymore</string>
@@ -234,8 +234,8 @@
     <string name="pass_code_remove_your_pass_code">Remove your passcode</string>
     <string name="pass_code_mismatch">The passcodes are not the same</string>
     <string name="pass_code_wrong">Incorrect passcode</string>
-    <string name="pass_code_removed">Passcode removed</string>
-    <string name="pass_code_stored">Passcode stored</string>
+    <string name="pass_code_error_set">An error occurred while setting the passcode lock</string>
+    <string name="pass_code_error_remove">An error occurred while removing the passcode lock</string>
 
     <string name="biometric_not_hardware_detected">This device doesn\'t support biometric authentication</string>
     <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
@@ -603,5 +603,6 @@
     <string name="get_base_url_error">It was not possible to know the server base url</string>
     <string name="prefs_http_logs">Log HTTP requests and responses</string>
     <string name="prefs_logs_summary">Logs may contain sensitive information. Sharing logs with others is sole user responsibility</string>
+
     <string name="synchronizing_account">Synchronizing account</string>
 </resources>

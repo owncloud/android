@@ -3,6 +3,7 @@ package com.owncloud.android.presentation.viewmodels.settings
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 
@@ -75,6 +76,10 @@ class SettingsViewModel (
             return true
         }
         return false
+    }
+
+    fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) {
+        preferencesProvider.putBoolean(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
     }
 
 }

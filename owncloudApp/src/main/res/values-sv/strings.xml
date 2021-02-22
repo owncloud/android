@@ -182,8 +182,6 @@
   <string name="pass_code_remove_your_pass_code">Ta bort lösenordet</string>
   <string name="pass_code_mismatch">Lösenorden matchar inte</string>
   <string name="pass_code_wrong">Ogiltigt lösenord</string>
-  <string name="pass_code_removed">Lösenord borttaget</string>
-  <string name="pass_code_stored">Lösenord sparat</string>
   <string name="media_notif_ticker">%1$ musikspelare</string>
   <string name="media_state_playing">%1$s (spelar)</string>
   <string name="media_state_loading">%1$s (buffrar)</string>

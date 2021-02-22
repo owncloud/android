@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Pola yang salah</string>
   <string name="pattern_reenter_pattern">Harap masukkan kembali pola Anda</string>
   <string name="pattern_not_same_pattern">Pola tidak sama</string>
-  <string name="pattern_stored">Pola Disimpan</string>
-  <string name="pattern_removed">Pola Dihapus</string>
   <string name="pattern_already_set">Pola dan kunci kode sandi tidak dapat diaktifkan pada saat yang sama, harap nonaktifkan pola terlebih dahulu</string>
   <string name="passcode_already_set">Pola dan kunci kode sandi tidak dapat diaktifkan secara bersamaan, harap nonaktifkan kode sandi terlebih dahulu</string>
   <string name="pattern_no_longer_required">Pola tidak akan ditanyakan lagi</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">Hapus kode sandi Anda</string>
   <string name="pass_code_mismatch">Kode sandi tidak sama</string>
   <string name="pass_code_wrong">Kode sandi salah</string>
-  <string name="pass_code_removed">Kode sandi dihapus</string>
-  <string name="pass_code_stored">Kode sandi disimpan</string>
   <string name="biometric_not_hardware_detected">Gawai Anda tidak mendukung otentikasi biometrik</string>
   <string name="biometric_not_enrolled">Daftar dengan setidaknya satu biometrik untuk menggunakan fitur ini</string>
   <string name="biometric_prompt_title">Masuk dengan biometrik</string>
