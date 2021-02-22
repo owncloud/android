@@ -21,7 +21,6 @@ package com.owncloud.android.data.user.datasources
 
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserAvatarMapper
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -48,7 +47,6 @@ class OCRemoteUserDataSourceTest {
     private val ocUserService: OCUserService = mockk()
     private val remoteUserInfoMapper = RemoteUserInfoMapper()
     private val remoteUserQuotaMapper = RemoteUserQuotaMapper()
-    private val remoteUserAvatarMapper = RemoteUserAvatarMapper()
 
     private val avatarDimension = 128
 
@@ -76,7 +74,6 @@ class OCRemoteUserDataSourceTest {
         ocRemoteUserDataSource = OCRemoteUserDataSource(
             remoteUserInfoMapper,
             remoteUserQuotaMapper,
-            remoteUserAvatarMapper,
             clientManager,
             avatarDimension
         )

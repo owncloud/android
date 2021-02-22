@@ -22,17 +22,16 @@ package com.owncloud.android.data.user.datasources.implementation
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserAvatarMapper
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
 import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.model.UserQuota
+import com.owncloud.android.lib.resources.users.RemoteAvatarData
 
 class OCRemoteUserDataSource(
     private val remoteUserInfoMapper: RemoteUserInfoMapper,
     private val remoteUserQuotaMapper: RemoteUserQuotaMapper,
-    private val remoteUserAvatarMapper: RemoteUserAvatarMapper,
     private val clientManager: ClientManager,
     private val avatarDimension: Int
 ) : RemoteUserDataSource {
@@ -50,5 +49,16 @@ class OCRemoteUserDataSource(
     override fun getUserAvatar(accountName: String): UserAvatar =
         executeRemoteOperation {
             clientManager.getUserService(accountName = accountName).getUserAvatar(avatarDimension)
-        }.let { remoteUserAvatarMapper.toModel(it)!! }
+        }.toModel()
+
+    /**************************************************************************************************************
+     ************************************************* Mappers ****************************************************
+     **************************************************************************************************************/
+
+    private fun RemoteAvatarData.toModel(): UserAvatar =
+        UserAvatar(
+            avatarData = this.avatarData,
+            eTag = this.eTag,
+            mimeType = this.mimeType
+        )
 }
