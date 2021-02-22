@@ -37,38 +37,38 @@ class OCRemoteUserDataSource(
     override fun getUserInfo(accountName: String): UserInfo =
         executeRemoteOperation {
             clientManager.getUserService(accountName).getUserInfo()
-        }.toModel()
+        }.toDomain()
 
     override fun getUserQuota(accountName: String): UserQuota =
         executeRemoteOperation {
             clientManager.getUserService(accountName).getUserQuota()
-        }.toModel()
+        }.toDomain()
 
     override fun getUserAvatar(accountName: String): UserAvatar =
         executeRemoteOperation {
             clientManager.getUserService(accountName = accountName).getUserAvatar(avatarDimension)
-        }.toModel()
+        }.toDomain()
 
 }
 
 /**************************************************************************************************************
  ************************************************* Mappers ****************************************************
  **************************************************************************************************************/
-fun RemoteUserInfo.toModel(): UserInfo =
+fun RemoteUserInfo.toDomain(): UserInfo =
     UserInfo(
         id = this.id,
         displayName = this.displayName,
         email = this.email
     )
 
-private fun RemoteAvatarData.toModel(): UserAvatar =
+private fun RemoteAvatarData.toDomain(): UserAvatar =
     UserAvatar(
         avatarData = this.avatarData,
         eTag = this.eTag,
         mimeType = this.mimeType
     )
 
-private fun GetRemoteUserQuotaOperation.RemoteQuota.toModel(): UserQuota =
+private fun GetRemoteUserQuotaOperation.RemoteQuota.toDomain(): UserQuota =
     UserQuota(
         available = this.free,
         used = this.used

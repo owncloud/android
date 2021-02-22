@@ -21,7 +21,7 @@ package com.owncloud.android.data.authentication.datasources.implementation
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.user.datasources.implementation.toModel
+import com.owncloud.android.data.user.datasources.implementation.toDomain
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0
@@ -59,7 +59,7 @@ class OCRemoteAuthenticationDataSource(
 
         executeRemoteOperation {
             GetRemoteUserInfoOperation().execute(client)
-        }.let { userInfo = it.toModel() }
+        }.let { userInfo = it.toDomain() }
 
         return Pair(userInfo, userBaseUri)
     }
