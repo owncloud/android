@@ -23,7 +23,6 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.mapper.RemoteClientRegistrationInfoMapper
-import com.owncloud.android.data.oauth.mapper.RemoteOIDCDiscoveryMapper
 import com.owncloud.android.data.oauth.mapper.RemoteTokenRequestMapper
 import com.owncloud.android.data.oauth.mapper.RemoteTokenResponseMapper
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
@@ -32,12 +31,12 @@ import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfigur
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.lib.resources.oauth.params.ClientRegistrationParams
+import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 
 class RemoteOAuthDataSourceImpl(
     private val clientManager: ClientManager,
     private val oidcService: OIDCService,
-    private val remoteOIDCDiscoveryMapper: RemoteOIDCDiscoveryMapper,
     private val remoteTokenRequestMapper: RemoteTokenRequestMapper,
     private val remoteTokenResponseMapper: RemoteTokenResponseMapper,
     private val remoteClientRegistrationInfoMapper: RemoteClientRegistrationInfoMapper
@@ -50,7 +49,7 @@ class RemoteOAuthDataSourceImpl(
             oidcService.getOIDCServerDiscovery(ownCloudClient)
         }
 
-        return remoteOIDCDiscoveryMapper.toModel(serverConfiguration)!!
+        return serverConfiguration.toModel()
     }
 
     override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse {
@@ -85,4 +84,21 @@ class RemoteOAuthDataSourceImpl(
 
         return remoteClientRegistrationInfoMapper.toModel(remoteClientRegistrationInfo)!!
     }
+
+    /**************************************************************************************************************
+     ************************************************* Mappers ****************************************************
+     **************************************************************************************************************/
+    internal fun OIDCDiscoveryResponse.toModel(): OIDCServerConfiguration =
+        OIDCServerConfiguration(
+            authorization_endpoint = this.authorization_endpoint,
+            check_session_iframe = this.check_session_iframe,
+            end_session_endpoint = this.end_session_endpoint,
+            issuer = this.issuer,
+            registration_endpoint = this.registration_endpoint,
+            response_types_supported = this.response_types_supported,
+            scopes_supported = this.scopes_supported,
+            token_endpoint = this.token_endpoint,
+            token_endpoint_auth_methods_supported = this.token_endpoint_auth_methods_supported,
+            userinfo_endpoint = this.userinfo_endpoint
+        )
 }
