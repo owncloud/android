@@ -42,7 +42,6 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRem
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.resources.files.services.FileService
@@ -81,7 +80,7 @@ val remoteDataSourceModule = module {
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
-    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), androidContext().resources.getDimension(
+    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), androidContext().resources.getDimension(
                 R.dimen.file_avatar_size
             ).toInt()) }
 
@@ -89,5 +88,4 @@ val remoteDataSourceModule = module {
     factory { RemoteShareMapper() }
     factory { RemoteShareeMapper() }
     factory { RemoteClientRegistrationInfoMapper() }
-    factory { RemoteUserQuotaMapper() }
 }

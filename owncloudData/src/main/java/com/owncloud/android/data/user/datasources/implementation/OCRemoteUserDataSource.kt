@@ -22,15 +22,14 @@ package com.owncloud.android.data.user.datasources.implementation
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.model.UserQuota
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation
 import com.owncloud.android.lib.resources.users.RemoteAvatarData
 import com.owncloud.android.lib.resources.users.RemoteUserInfo
 
 class OCRemoteUserDataSource(
-    private val remoteUserQuotaMapper: RemoteUserQuotaMapper,
     private val clientManager: ClientManager,
     private val avatarDimension: Int
 ) : RemoteUserDataSource {
@@ -43,7 +42,7 @@ class OCRemoteUserDataSource(
     override fun getUserQuota(accountName: String): UserQuota =
         executeRemoteOperation {
             clientManager.getUserService(accountName).getUserQuota()
-        }.let { remoteUserQuotaMapper.toModel(it)!! }
+        }.toModel()
 
     override fun getUserAvatar(accountName: String): UserAvatar =
         executeRemoteOperation {
@@ -67,4 +66,10 @@ private fun RemoteAvatarData.toModel(): UserAvatar =
         avatarData = this.avatarData,
         eTag = this.eTag,
         mimeType = this.mimeType
+    )
+
+private fun GetRemoteUserQuotaOperation.RemoteQuota.toModel(): UserQuota =
+    UserQuota(
+        available = this.free,
+        used = this.used
     )
