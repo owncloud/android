@@ -59,8 +59,6 @@
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_not_same_pattern">Los patrones introducidos son diferentes</string>
-  <string name="pattern_stored">Patrón almacenado</string>
-  <string name="pattern_removed">Patrón eliminado</string>
   <string name="pass_code_locked">Asegurar con contraseña</string>
   <string name="pattern_locked">Asegurar con patrón</string>
   <!--Bottom navigation bar-->
@@ -210,8 +208,6 @@
   <string name="pass_code_remove_your_pass_code">Borre su contraseña</string>
   <string name="pass_code_mismatch">Los códigos de acceso no son idénticos</string>
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
-  <string name="pass_code_removed">Código de acceso borrado</string>
-  <string name="pass_code_stored">Contraseña almacenada</string>
   <string name="biometric_not_hardware_detected">Este dispositivo no tiene soporte para autenticación biométrica</string>
   <string name="biometric_prompt_subtitle">Iniciar sesión con su credencial biométrica</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>

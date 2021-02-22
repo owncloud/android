@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Εσφαλμένο μοτίβο</string>
   <string name="pattern_reenter_pattern">Παρακαλούμε εισάγετε ξανά το μοτίβο σας</string>
   <string name="pattern_not_same_pattern">Τα μοτίβα δεν είναι ίδια</string>
-  <string name="pattern_stored">Αποθηκεύτηκε το μοτίβο</string>
-  <string name="pattern_removed">Αφαιρέθηκε το μοτίβο</string>
   <string name="pattern_already_set">Δεν είναι δυνατή η ταυτόχρονη ενεργοποίηση των κλειδώματος με μοτίβο και κωδικό, απενεργοποιήστε πρώτα το μοτίβο</string>
   <string name="passcode_already_set">Δεν είναι δυνατή η ταυτόχρονη ενεργοποίηση των κλειδώματος με μοτίβο και κωδικό, απενεργοποιήστε πρώτα τον κωδικό</string>
   <string name="pattern_no_longer_required">Το μοτίβο δεν θα ζητείται πια</string>
@@ -226,8 +224,6 @@
   <string name="pass_code_remove_your_pass_code">Αφαίρεση του κωδικού σας</string>
   <string name="pass_code_mismatch">Οι κωδικοί δεν ταιριάζουν</string>
   <string name="pass_code_wrong">Εσφαλμένος κωδικός</string>
-  <string name="pass_code_removed">Ο κωδικός αφαιρέθηκε</string>
-  <string name="pass_code_stored">Ο κωδικός αποθηκεύτηκε</string>
   <string name="biometric_prompt_title">Βιομετρική είσοδος</string>
   <string name="media_notif_ticker">%1$s αναπαραγωγή μουσικής</string>
   <string name="media_state_playing">%1$s (αναπαραγωγή)</string>

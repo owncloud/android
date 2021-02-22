@@ -159,8 +159,6 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="pass_code_remove_your_pass_code">Suprimir vòstre còdi de seguretat</string>
   <string name="pass_code_mismatch">Los còdis de seguretat son pas identics</string>
   <string name="pass_code_wrong">Còdi de seguretat incorrècte</string>
-  <string name="pass_code_removed">Còdi de seguretat suprimit</string>
-  <string name="pass_code_stored">Còdi de seguretat enregistrat</string>
   <string name="media_notif_ticker">%1$s lector de musica</string>
   <string name="media_state_playing">%1$s (lectura)</string>
   <string name="media_state_loading">%1$s (cargament)</string>
