@@ -21,7 +21,6 @@
 package com.owncloud.android.presentation.ui.settings
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.owncloud.android.R
@@ -29,8 +28,6 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        //delegate.installViewFactory()
-        //delegate.onCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
@@ -39,17 +36,6 @@ class SettingsActivity : AppCompatActivity() {
         }
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        //delegate.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        //delegate.supportActionBar?.setTitle(R.string.actionbar_settings)
-
-        // For adding content description tag to a title field in the action bar
-        val actionBarTitleId = resources.getIdentifier("action_bar_title", "id", "android")
-        val actionBarTitleView = window.decorView.findViewById<View>(actionBarTitleId)
-        if (actionBarTitleView != null) {    // it's null in Android 2.x
-            window.decorView.findViewById<View>(actionBarTitleId).contentDescription =
-                getString(R.string.actionbar_settings)
-        }
 
         supportFragmentManager
             .beginTransaction()
