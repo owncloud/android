@@ -49,8 +49,6 @@
   <string name="pattern_incorrect_pattern">Patroia ez da zuzena</string>
   <string name="pattern_reenter_pattern">Mesedez, berriro sartu zure patroia</string>
   <string name="pattern_not_same_pattern">Patroiak ez dira berdinak</string>
-  <string name="pattern_stored">Patroia gordeta</string>
-  <string name="pattern_removed">Patroia Ezabatuta</string>
   <string name="recommend_subject">Probatu %1$s zure telefono adimentsuan!</string>
   <string name="recommend_text">Nik %1$s zure telefono adimentsuan erabitzera gonbidatu nahi zaitut!\nDeskargatu hemen: %2$s</string>
   <string name="auth_failure_snackbar_action">Aldatu kontua</string>
@@ -186,8 +184,6 @@
   <string name="pass_code_remove_your_pass_code">Ezabatu zure pasahitza</string>
   <string name="pass_code_mismatch">Pasahitzak ez dira berdinak</string>
   <string name="pass_code_wrong">Pasahitza ez da zuzena</string>
-  <string name="pass_code_removed">Pasahitza ezabatuta</string>
-  <string name="pass_code_stored">Pasahitza gordeta</string>
   <string name="biometric_not_hardware_detected">Gailu honek ez du hatz-marka bidezko autentikazioa onartzen.</string>
   <string name="media_notif_ticker">%1$s musika erreproduzigailua</string>
   <string name="media_state_playing">%1$s (jotzen)</string>

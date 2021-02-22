@@ -181,8 +181,6 @@
   <string name="pass_code_remove_your_pass_code">Remova o seu código</string>
   <string name="pass_code_mismatch">Os códigos não coincidem</string>
   <string name="pass_code_wrong">Código incorreto</string>
-  <string name="pass_code_removed">Código removido</string>
-  <string name="pass_code_stored">Código guardado</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
   <string name="media_state_playing">%1$s (a reproduzir)</string>
   <string name="media_state_loading">%1$s (a carregar)</string>

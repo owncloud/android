@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Неверный графический ключ</string>
   <string name="pattern_reenter_pattern">Введите графический ключ снова</string>
   <string name="pattern_not_same_pattern">Ключи не совпадают</string>
-  <string name="pattern_stored">Ключ сохранён</string>
-  <string name="pattern_removed">Ключ удалён</string>
   <string name="pattern_already_set">Сначала отключите графический ключ. Графический ключ и код не могут быть включены одновременно.</string>
   <string name="passcode_already_set">Сначала отключите код. Графический ключ и код не могут быть включены одновременно.</string>
   <string name="pattern_no_longer_required">Графический ключ не будет больше запрашиваться</string>
@@ -229,8 +227,6 @@
   <string name="pass_code_remove_your_pass_code">Убрать код</string>
   <string name="pass_code_mismatch">Коды не совпадают</string>
   <string name="pass_code_wrong">Некоррентный код</string>
-  <string name="pass_code_removed">Код удален</string>
-  <string name="pass_code_stored">Код сохранен</string>
   <string name="biometric_not_hardware_detected">Это устройство не поддерживает биометрическую аутентификацию</string>
   <string name="biometric_not_enrolled">Чтобы пользоваться этой возможностью, зарегистрируйте хотя-бы одну биометрию</string>
   <string name="biometric_prompt_title">Биометрический вход</string>
