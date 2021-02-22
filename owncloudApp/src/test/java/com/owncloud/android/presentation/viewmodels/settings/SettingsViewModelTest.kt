@@ -40,8 +40,6 @@ class SettingsViewModelTest : ViewModelTest() {
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
 
-    private val commonException = Exception()
-
     @Before
     fun setUp() {
         preferencesProvider = mockk()
@@ -93,14 +91,14 @@ class SettingsViewModelTest : ViewModelTest() {
     fun handleEnablePasscodePasscodeIsNull() {
         val data: Intent = mockk()
 
-        every { data?.getStringExtra(any())} returns null
+        every { data.getStringExtra(any())} returns null
 
         val passCodeEnableOk = settingsViewModel.handleEnablePasscode(data)
 
         assertFalse(passCodeEnableOk)
 
         verify(exactly = 1) {
-            data?.getStringExtra(PassCodeActivity.KEY_PASSCODE)
+            data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
         }
     }
 
