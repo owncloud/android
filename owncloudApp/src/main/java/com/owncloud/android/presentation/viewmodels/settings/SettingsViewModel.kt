@@ -40,7 +40,7 @@ class SettingsViewModel(
 
     fun handleEnablePasscode(data: Intent?): Boolean {
         val passcode = data?.getStringExtra(PassCodeActivity.KEY_PASSCODE)
-        if (passcode != null && passcode.length == 4) {
+        if (passcode?.length == 4) {
             for (i in 1..4) {
                 preferencesProvider.putString(
                     PassCodeActivity.PREFERENCE_PASSCODE_D + i,
@@ -70,8 +70,8 @@ class SettingsViewModel(
 
     fun handleEnablePattern(data: Intent?): Boolean {
         val pattern = data?.getStringExtra(PatternLockActivity.KEY_PATTERN)
-        if (pattern != null) {
-            preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, pattern)
+        pattern?.let {
+            preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, it)
             preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
             return true
         }
