@@ -23,7 +23,6 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.mapper.RemoteClientRegistrationInfoMapper
-import com.owncloud.android.data.oauth.mapper.RemoteTokenRequestMapper
 import com.owncloud.android.data.oauth.mapper.RemoteTokenResponseMapper
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
@@ -31,13 +30,13 @@ import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfigur
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.lib.resources.oauth.params.ClientRegistrationParams
+import com.owncloud.android.lib.resources.oauth.params.TokenRequestParams
 import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 
 class RemoteOAuthDataSourceImpl(
     private val clientManager: ClientManager,
     private val oidcService: OIDCService,
-    private val remoteTokenRequestMapper: RemoteTokenRequestMapper,
     private val remoteTokenResponseMapper: RemoteTokenResponseMapper,
     private val remoteClientRegistrationInfoMapper: RemoteClientRegistrationInfoMapper
 ) : RemoteOAuthDataSource {
@@ -58,7 +57,7 @@ class RemoteOAuthDataSourceImpl(
         val tokenResponse = executeRemoteOperation {
             oidcService.performTokenRequest(
                 ownCloudClient = ownCloudClient,
-                tokenRequest = remoteTokenRequestMapper.toRemote(tokenRequest)!!
+                tokenRequest = tokenRequest.toParams()
             )
         }
 
@@ -88,7 +87,7 @@ class RemoteOAuthDataSourceImpl(
     /**************************************************************************************************************
      ************************************************* Mappers ****************************************************
      **************************************************************************************************************/
-    internal fun OIDCDiscoveryResponse.toModel(): OIDCServerConfiguration =
+    private fun OIDCDiscoveryResponse.toModel(): OIDCServerConfiguration =
         OIDCServerConfiguration(
             authorization_endpoint = this.authorization_endpoint,
             check_session_iframe = this.check_session_iframe,
@@ -101,4 +100,24 @@ class RemoteOAuthDataSourceImpl(
             token_endpoint_auth_methods_supported = this.token_endpoint_auth_methods_supported,
             userinfo_endpoint = this.userinfo_endpoint
         )
+
+    private fun TokenRequest.toParams(): TokenRequestParams {
+        return when (this) {
+            is TokenRequest.AccessToken ->
+                TokenRequestParams.Authorization(
+                    tokenEndpoint = this.tokenEndpoint,
+                    authorizationCode = this.authorizationCode,
+                    grantType = this.grantType,
+                    redirectUri = this.redirectUri,
+                    clientAuth = this.clientAuth
+                )
+            is TokenRequest.RefreshToken ->
+                TokenRequestParams.RefreshToken(
+                    tokenEndpoint = this.tokenEndpoint,
+                    grantType = this.grantType,
+                    clientAuth = this.clientAuth,
+                    refreshToken = this.refreshToken
+                )
+        }
+    }
 }
