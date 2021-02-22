@@ -129,13 +129,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // Passcode lock
         prefPasscode?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-            val intent = Intent(activity, PassCodeActivity::class.java)
-            val incomingValue = newValue as Boolean
-            val patternSet = settingsViewModel.isPatternSet()
-            if (patternSet) {
+            if (settingsViewModel.isPatternSet()) {
                 showMessageInSnackbar(getString(R.string.pattern_already_set))
             } else {
-                if (incomingValue) {
+                val intent = Intent(activity, PassCodeActivity::class.java)
+                if (newValue as Boolean) {
                     intent.action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
                     enablePasscodeLauncher.launch(intent)
                 } else {
@@ -148,13 +146,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // Pattern lock
         prefPattern?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-            val intent = Intent(activity, PatternLockActivity::class.java)
-            val incomingValue = newValue as Boolean
-            val passcodeSet = settingsViewModel.isPasscodeSet()
-            if (passcodeSet) {
+            if (settingsViewModel.isPasscodeSet()) {
                 showMessageInSnackbar(getString(R.string.passcode_already_set))
             } else {
-                if (incomingValue) {
+                val intent = Intent(activity, PatternLockActivity::class.java)
+                if (newValue as Boolean) {
                     intent.action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
                     enablePatternLauncher.launch(intent)
                 } else {
@@ -170,21 +166,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
             prefSecurityCategory?.removePreference(prefBiometric)
         } else if (prefBiometric != null) {
             // Disable biometric lock if Passcode or Pattern locks are disabled
-            if (!prefPasscode?.isChecked()!! && !prefPattern?.isChecked()!!) {
-                prefBiometric?.setEnabled(false)
+            if (!prefPasscode?.isChecked!! && !prefPattern?.isChecked!!) {
+                prefBiometric?.isEnabled = false
                 prefBiometric?.setSummary(R.string.prefs_biometric_summary)
             }
             prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
                 val incomingValue = newValue as Boolean
 
                 // Biometric not supported
-                if (incomingValue && biometricManager != null && !biometricManager?.isHardwareDetected()!!) {
+                if (incomingValue && biometricManager != null && biometricManager?.isHardwareDetected == false) {
                     showMessageInSnackbar(getString(R.string.biometric_not_hardware_detected))
                     return@setOnPreferenceChangeListener false
                 }
 
                 // No biometric enrolled yet
-                if (incomingValue && biometricManager != null && !biometricManager?.hasEnrolledBiometric()!!) {
+                if (incomingValue && biometricManager != null && biometricManager?.hasEnrolledBiometric() == false) {
                     showMessageInSnackbar(getString(R.string.biometric_not_enrolled))
                     return@setOnPreferenceChangeListener false
                 }
@@ -204,7 +200,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                             getString(R.string.common_yes)
                         ) { dialog: DialogInterface?, which: Int ->
                             settingsViewModel.setPrefTouchesWithOtherVisibleWindows(true)
-                            prefTouchesWithOtherVisibleWindows?.setChecked(true)
+                            prefTouchesWithOtherVisibleWindows?.isChecked = true
                         }
                         .show()
                 }
@@ -215,39 +211,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     }
 
-    /*
-    override fun onResume() {
-        super.onResume()
-        val passCodeState: Boolean =
-            preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-        prefPasscode?.isChecked = passCodeState
-        val patternState: Boolean =
-            preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
-        prefPattern?.isChecked = patternState
-        var biometricState: Boolean = preferencesProvider.getBoolean(
-            BiometricActivity.PREFERENCE_SET_BIOMETRIC,
-            false
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && biometricManager != null &&
-            !biometricManager!!.hasEnrolledBiometric()
-        ) {
-            biometricState = false
-        }
-        prefBiometric?.isChecked = biometricState
-    }
-    */
-
     private fun enableBiometric() {
-        prefBiometric?.setEnabled(true)
-        prefBiometric?.setSummary(null)
+        prefBiometric?.isEnabled = true
+        prefBiometric?.summary = null
     }
 
     private fun disableBiometric(summary: String) {
-        if (prefBiometric?.isChecked()!!) {
-            prefBiometric?.setChecked(false)
+        if (prefBiometric?.isChecked == true) {
+            prefBiometric?.isChecked = false
         }
-        prefBiometric?.setEnabled(false)
-        prefBiometric?.setSummary(summary)
+        prefBiometric?.isEnabled = false
+        prefBiometric?.summary = summary
     }
 
     companion object {
