@@ -1,3 +1,23 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2021 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
@@ -7,11 +27,11 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 
-class SettingsViewModel (
+class SettingsViewModel(
     private val preferencesProvider: SharedPreferencesProvider
 ) : ViewModel() {
 
-    fun isPatternSet() : Boolean {
+    fun isPatternSet(): Boolean {
         return preferencesProvider.getBoolean(
             PatternLockActivity.PREFERENCE_SET_PATTERN,
             false
@@ -28,9 +48,6 @@ class SettingsViewModel (
                 )
             }
             preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
-
-            // Allow to use biometric lock since Passcode lock has been enabled
-            //enableBiometric()
             return true
         }
         return false
@@ -39,15 +56,12 @@ class SettingsViewModel (
     fun handleDisablePasscode(data: Intent?): Boolean {
         if (data?.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false) == true) {
             preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-
-            // Do not allow to use biometric lock since Passcode lock has been disabled
-            //disableBiometric(getString(R.string.prefs_biometric_summary))
             return true
         }
         return false
     }
 
-    fun isPasscodeSet() : Boolean {
+    fun isPasscodeSet(): Boolean {
         return preferencesProvider.getBoolean(
             PassCodeActivity.PREFERENCE_SET_PASSCODE,
             false
@@ -59,9 +73,6 @@ class SettingsViewModel (
         if (pattern != null) {
             preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, pattern)
             preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
-
-            // Allow to use biometric lock since Pattern lock has been enabled
-            //enableBiometric()
             return true
         }
         return false
@@ -70,9 +81,6 @@ class SettingsViewModel (
     fun handleDisablePattern(data: Intent?): Boolean {
         if (data?.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false) == true) {
             preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
-
-            // Do not allow to use biometric lock since Pattern lock has been disabled
-            //disableBiometric(getString(R.string.prefs_biometric_summary))
             return true
         }
         return false
