@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Forkert mønster</string>
   <string name="pattern_reenter_pattern">Angiv dit mønster igen</string>
   <string name="pattern_not_same_pattern">Mønsteret er ikke identisk</string>
-  <string name="pattern_stored">Mønster er gemt</string>
-  <string name="pattern_removed">Mønster er slettet</string>
   <string name="pattern_already_set">Låse til mønster og passcode kan ikke aktiveres på samme tid, slå venligst mønster fra først.</string>
   <string name="passcode_already_set">Låse til mønster og passcode kan ikke aktiveres på samme tid, slå venligst passcode fra først.</string>
   <!--Bottom navigation bar-->
@@ -218,8 +216,6 @@
   <string name="pass_code_remove_your_pass_code">Fjern din passcode</string>
   <string name="pass_code_mismatch">Passcode\'erne er ikke ens</string>
   <string name="pass_code_wrong">Ukorrekt passcode</string>
-  <string name="pass_code_removed">Passcode blev fjernet</string>
-  <string name="pass_code_stored">Passcode blev gendannet</string>
   <string name="media_notif_ticker">%1$s musikafspiller</string>
   <string name="media_state_playing">%1$s (afspiller)</string>
   <string name="media_state_loading">%1$s (indlæser)</string>

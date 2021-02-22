@@ -54,8 +54,6 @@
   <string name="pattern_incorrect_pattern">잘못된 패턴</string>
   <string name="pattern_reenter_pattern">패턴을 다시 입력해 주세요</string>
   <string name="pattern_not_same_pattern">패턴이 일치하지 않습니다</string>
-  <string name="pattern_stored">패턴 저장됨</string>
-  <string name="pattern_removed">패턴 제거됨</string>
   <string name="pattern_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 패턴을 비활성화하시오</string>
   <string name="passcode_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 비밀번호를 비활성화하시오</string>
   <!--Bottom navigation bar-->
@@ -193,8 +191,6 @@
   <string name="pass_code_remove_your_pass_code">내 암호 삭제</string>
   <string name="pass_code_mismatch">암호가 일치하지 않습니다</string>
   <string name="pass_code_wrong">암호가 잘못됨</string>
-  <string name="pass_code_removed">암호 삭제됨</string>
-  <string name="pass_code_stored">암호 저장됨</string>
   <string name="media_notif_ticker">%1$s 음악 재생기</string>
   <string name="media_state_playing">%1$s (재생 중)</string>
   <string name="media_state_loading">%1$s (불러오는 중)</string>

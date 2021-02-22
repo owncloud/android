@@ -57,8 +57,6 @@
   <string name="pattern_incorrect_pattern">まターンが間違っています</string>
   <string name="pattern_reenter_pattern">再度パターンを入力してください</string>
   <string name="pattern_not_same_pattern">パターンが一致しません</string>
-  <string name="pattern_stored">パターンを保存しました</string>
-  <string name="pattern_removed">パターンを削除しました</string>
   <string name="pattern_already_set">同じタイミングでパターンとパスコードを有効化することはできません。最初に無効化してください。</string>
   <string name="passcode_already_set">同じタイミングでパターンとパスコードを有効化することはできません。最初に無効化してください。</string>
   <!--Bottom navigation bar-->
@@ -199,8 +197,6 @@
   <string name="pass_code_remove_your_pass_code">パスコードを削除</string>
   <string name="pass_code_mismatch">パスコードが一致しません</string>
   <string name="pass_code_wrong">パスコードが正しくありません</string>
-  <string name="pass_code_removed">パスコードを削除しました</string>
-  <string name="pass_code_stored">パスコードを保存しました</string>
   <string name="media_notif_ticker">%1$s ミュージックプレーヤー</string>
   <string name="media_state_playing">%1$s (プレイ中)</string>
   <string name="media_state_loading">%1$s (読込中)</string>

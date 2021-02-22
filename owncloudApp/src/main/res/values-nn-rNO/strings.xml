@@ -166,8 +166,6 @@
   <string name="pass_code_remove_your_pass_code">Fjern kode</string>
   <string name="pass_code_mismatch">Koder er ikkje like</string>
   <string name="pass_code_wrong">Feil kode</string>
-  <string name="pass_code_removed">Kode fjerna</string>
-  <string name="pass_code_stored">Kode lagra</string>
   <string name="media_notif_ticker">%1$s musikk spelar</string>
   <string name="media_state_playing">%1$s (spelar)</string>
   <string name="media_state_loading">%1$s (lastar)</string>

@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_reenter_pattern">Por favor ingresa nuevamente tu patrón</string>
   <string name="pattern_not_same_pattern">Los patrones difieren entre sí</string>
-  <string name="pattern_stored">Patrón almacenado</string>
-  <string name="pattern_removed">Patrón eliminado</string>
   <string name="pattern_already_set">El patrón y la clave de desbloqueo no pueden estar activos al mismo tiempo, por favor desactiva primero el patrón</string>
   <string name="passcode_already_set">El patrón y la clave de desbloqueo no pueden estar activos al mismo tiempo, por favor desactiva primero la clave</string>
   <string name="pattern_no_longer_required">El patrón no se volverá a solicitar</string>
@@ -232,8 +230,6 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="pass_code_remove_your_pass_code">Eliminar tu contraseña</string>
   <string name="pass_code_mismatch">Las contraseñas no son iguales</string>
   <string name="pass_code_wrong">Contraseña incorrecta</string>
-  <string name="pass_code_removed">Contraseña eliminada</string>
-  <string name="pass_code_stored">Contraseña almacenada</string>
   <string name="biometric_not_hardware_detected">Este dispositivo no soporta autenticación biométrica.</string>
   <string name="biometric_not_enrolled">Registra al menos un dato biométrico para usar esta funcionalidad.</string>
   <string name="biometric_prompt_title">Inicio de sesión biométrico</string>

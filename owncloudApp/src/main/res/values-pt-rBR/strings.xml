@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Padrão incorreto</string>
   <string name="pattern_reenter_pattern">Por favor re-digite seu padrão</string>
   <string name="pattern_not_same_pattern">Os padrões não são os mesmos</string>
-  <string name="pattern_stored">Padrão Armazenado</string>
-  <string name="pattern_removed">Padrão Removido</string>
   <string name="pattern_already_set">Os bloqueios de código e senha não podem ser ativados ao mesmo tempo, desative o padrão primeiro</string>
   <string name="passcode_already_set">Os bloqueios de padrão e senha não podem ser ativados ao mesmo tempo, desative primeiro o código de acesso</string>
   <string name="pattern_no_longer_required">O padrão não será mais solicitado</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">Remover o seu código de acesso</string>
   <string name="pass_code_mismatch">Os códigos de acesso não são os mesmos</string>
   <string name="pass_code_wrong">Código de acesso incorreto</string>
-  <string name="pass_code_removed">Código de acesso removido</string>
-  <string name="pass_code_stored">Código de acesso armazenado</string>
   <string name="biometric_not_hardware_detected">Este dispositivo não suporta a autenticação biométrica</string>
   <string name="biometric_not_enrolled">Registre pelo menos uma biométria para usar esse recurso</string>
   <string name="biometric_prompt_title">Conexão biométrica</string>

@@ -65,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Motif incorrect</string>
   <string name="pattern_reenter_pattern">Veullez refaire votre votre schéma</string>
   <string name="pattern_not_same_pattern">Les motifs ne sont pas identiques</string>
-  <string name="pattern_stored">Modèles entreposés</string>
-  <string name="pattern_removed">Modèles supprimés</string>
   <string name="pattern_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le motif</string>
   <string name="passcode_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le code de sécurité</string>
   <string name="pattern_no_longer_required">La saisie du motif ne vous sera plus demandée</string>
@@ -227,8 +225,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="pass_code_remove_your_pass_code">Supprimer votre code de sécurité</string>
   <string name="pass_code_mismatch">Les codes de sécurité ne sont pas identiques</string>
   <string name="pass_code_wrong">Code de sécurité incorrect</string>
-  <string name="pass_code_removed">Code de sécurité supprimé</string>
-  <string name="pass_code_stored">Code de sécurité enregistré</string>
   <string name="biometric_prompt_title">Connexion Biométrique</string>
   <string name="biometric_prompt_subtitle">Connectez-vous en utilisant vos données biométriques</string>
   <string name="media_notif_ticker">%1$s lecteur de musique</string>

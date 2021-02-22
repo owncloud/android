@@ -144,8 +144,6 @@
   <string name="pass_code_remove_your_pass_code">Уклоните код за закључавање</string>
   <string name="pass_code_mismatch">Кодови се не поклапају</string>
   <string name="pass_code_wrong">Неисправан код</string>
-  <string name="pass_code_removed">Код за закључавање уклоњен</string>
-  <string name="pass_code_stored">Код за закључавање је сачуван</string>
   <string name="media_notif_ticker">%1$s музички плејер</string>
   <string name="media_state_playing">%1$s (пуштам)</string>
   <string name="media_state_loading">%1$s (учитавам)</string>

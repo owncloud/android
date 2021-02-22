@@ -59,8 +59,6 @@
   <string name="pattern_incorrect_pattern">Rangt mynstur</string>
   <string name="pattern_reenter_pattern">Settu aftur inn mynstrið þitt</string>
   <string name="pattern_not_same_pattern">Mynstrin eru ekki eins</string>
-  <string name="pattern_stored">Mynstur geymt</string>
-  <string name="pattern_removed">Mynstur fjarlægt</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Skrár</string>
   <string name="bottom_nav_uploads">Innsendingar</string>
@@ -204,8 +202,6 @@
   <string name="pass_code_remove_your_pass_code">Fjarlægja lykilkóðann þinn</string>
   <string name="pass_code_mismatch">Lykilkóðarnir eru ekki eins</string>
   <string name="pass_code_wrong">Rangur lykilkóði</string>
-  <string name="pass_code_removed">Fjarlægði lykilkóða</string>
-  <string name="pass_code_stored">Geymdi lykilkóða</string>
   <string name="media_notif_ticker">%1$s tónlistarspilari</string>
   <string name="media_state_playing">%1$s (afspilun)</string>
   <string name="media_state_loading">%1$s (hleð)</string>
