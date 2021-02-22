@@ -23,7 +23,6 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.mapper.RemoteClientRegistrationInfoMapper
-import com.owncloud.android.data.oauth.mapper.RemoteTokenResponseMapper
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
@@ -33,11 +32,11 @@ import com.owncloud.android.lib.resources.oauth.params.ClientRegistrationParams
 import com.owncloud.android.lib.resources.oauth.params.TokenRequestParams
 import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
+import com.owncloud.android.lib.resources.oauth.responses.TokenResponse as RemoteTokenResponse
 
 class RemoteOAuthDataSourceImpl(
     private val clientManager: ClientManager,
     private val oidcService: OIDCService,
-    private val remoteTokenResponseMapper: RemoteTokenResponseMapper,
     private val remoteClientRegistrationInfoMapper: RemoteClientRegistrationInfoMapper
 ) : RemoteOAuthDataSource {
 
@@ -61,7 +60,7 @@ class RemoteOAuthDataSourceImpl(
             )
         }
 
-        return remoteTokenResponseMapper.toModel(tokenResponse)!!
+        return tokenResponse.toModel()
     }
 
     override fun registerClient(clientRegistrationRequest: ClientRegistrationRequest): ClientRegistrationInfo {
@@ -101,8 +100,8 @@ class RemoteOAuthDataSourceImpl(
             userinfo_endpoint = this.userinfo_endpoint
         )
 
-    private fun TokenRequest.toParams(): TokenRequestParams {
-        return when (this) {
+    private fun TokenRequest.toParams(): TokenRequestParams =
+        when (this) {
             is TokenRequest.AccessToken ->
                 TokenRequestParams.Authorization(
                     tokenEndpoint = this.tokenEndpoint,
@@ -119,5 +118,15 @@ class RemoteOAuthDataSourceImpl(
                     refreshToken = this.refreshToken
                 )
         }
-    }
+
+    private fun RemoteTokenResponse.toModel(): TokenResponse =
+        TokenResponse(
+            accessToken = this.accessToken,
+            expiresIn = this.expiresIn,
+            refreshToken = this.refreshToken,
+            tokenType = this.tokenType,
+            userId = this.userId,
+            scope = this.scope,
+            additionalParameters = this.additionalParameters
+        )
 }
