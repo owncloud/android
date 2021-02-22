@@ -63,8 +63,6 @@
   <string name="uploads_view_upload_status_failed_permission_error">Toestemmingfout</string>
   <string name="uploads_view_upload_status_conflict">Konflik</string>
   <string name="uploads_view_upload_status_unknown_fail">Onbekende fout</string>
-  <string name="pass_code_removed">Wagkode is verwyder</string>
-  <string name="pass_code_stored">Wagkode is bewaar</string>
   <string name="common_rename">Hernoem</string>
   <string name="common_remove">Verwyder</string>
   <string name="confirmation_remove_public_share_title">Verwyder skakel</string>
