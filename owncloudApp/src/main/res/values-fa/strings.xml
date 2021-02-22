@@ -43,8 +43,6 @@
   <string name="pattern_incorrect_pattern">الگوی اشتباه</string>
   <string name="pattern_reenter_pattern">لطفا الگوی خود را مجدد وارد کنید</string>
   <string name="pattern_not_same_pattern">الگو ها یکسان نیست</string>
-  <string name="pattern_stored">الگو ذخیره شد</string>
-  <string name="pattern_removed">الگو حذف شد</string>
   <string name="recommend_subject">‫%1$s را روی گوشی هوشمندتان بیازمایید!</string>
   <string name="recommend_text">می‌خوام ازت دعوت کنم که از %1$s رو گوشیت استفاده کنی!\nاز این‌جا بگیرش: %2$s</string>
   <string name="auth_failure_snackbar">اعتبارسنجی ناموفق</string>
@@ -174,8 +172,6 @@
   <string name="pass_code_remove_your_pass_code">رمز خود را حذف کنید</string>
   <string name="pass_code_mismatch">رمزهای وارد شده یکسان نیستند</string>
   <string name="pass_code_wrong">رمز نادرست</string>
-  <string name="pass_code_removed">رمز حذف شد</string>
-  <string name="pass_code_stored">رمز ذخیره شد</string>
   <string name="media_notif_ticker">%1$s پخش کننده موسیقی</string>
   <string name="media_state_playing">%1$s ( در حال پخش موسیقی )</string>
   <string name="media_state_loading">%1$s (درحال بارگذاری)</string>

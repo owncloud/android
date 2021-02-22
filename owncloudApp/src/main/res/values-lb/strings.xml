@@ -146,8 +146,6 @@
   <string name="pass_code_remove_your_pass_code">D\'Passwuert läschen</string>
   <string name="pass_code_mismatch">D\'Passwierder sinn net d\'selwecht</string>
   <string name="pass_code_wrong">Ongëltegt Passwuert</string>
-  <string name="pass_code_removed">Passwuert geläscht</string>
-  <string name="pass_code_stored">Passwuert gespeichert</string>
   <string name="media_notif_ticker">%1$s Musek-Programm</string>
   <string name="media_state_playing">%1$s (spillt of)</string>
   <string name="media_state_loading">%1$s (lued)</string>

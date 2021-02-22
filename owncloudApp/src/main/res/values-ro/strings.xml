@@ -63,8 +63,6 @@
   <string name="pattern_incorrect_pattern">Model incorect</string>
   <string name="pattern_reenter_pattern">Te rog reintrodu modelul</string>
   <string name="pattern_not_same_pattern">Modelele nu sunt identice</string>
-  <string name="pattern_stored">Modelul a fost salvat</string>
-  <string name="pattern_removed">Modelul a fost șters</string>
   <string name="pass_code_locked">Blocat cu cod</string>
   <string name="pattern_locked">Blocat cu model</string>
   <!--Bottom navigation bar-->
@@ -211,8 +209,6 @@
   <string name="pass_code_remove_your_pass_code">Șterge parola</string>
   <string name="pass_code_mismatch">Parolele nu se potrivesc</string>
   <string name="pass_code_wrong">Parolă incorectă</string>
-  <string name="pass_code_removed">Parolă ștearsă</string>
-  <string name="pass_code_stored">Parolă stocată</string>
   <string name="biometric_prompt_title">Autentificare biometrică</string>
   <string name="biometric_prompt_subtitle">Autentificare folosind datele biometrice</string>
   <string name="media_notif_ticker">%1$s  player de muzică</string>

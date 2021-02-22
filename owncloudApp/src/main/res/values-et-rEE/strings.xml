@@ -56,8 +56,6 @@
   <string name="pattern_incorrect_pattern">Vigane muster</string>
   <string name="pattern_reenter_pattern">Palun sisesta muster uuesti</string>
   <string name="pattern_not_same_pattern">Mustrid pole samad</string>
-  <string name="pattern_stored">Muster on salvestatud</string>
-  <string name="pattern_removed">Muster on eemaldatud</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Failid</string>
   <string name="bottom_nav_uploads">Üleslaadimised</string>
@@ -183,8 +181,6 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="pass_code_remove_your_pass_code">Eemalda oma parool</string>
   <string name="pass_code_mismatch">Paroolid pole samad</string>
   <string name="pass_code_wrong">Vale parool</string>
-  <string name="pass_code_removed">Parool on eemaldatud</string>
-  <string name="pass_code_stored">Parool on salvestatud</string>
   <string name="media_notif_ticker">%1$s muusika mängija</string>
   <string name="media_state_playing">%1$s (mängib)</string>
   <string name="media_state_loading">%1$s (laeb)</string>
