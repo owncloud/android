@@ -535,9 +535,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         // Save the path to shared preferences; even if upload is not possible, user chose the folder
         PreferenceManager.setLastUploadPath(mUploadPath, this);
 
-        if (resultCode == UriUploader.UriUploaderResultCode.OK) {
-            finish();
-        } else {
+        if (resultCode != UriUploader.UriUploaderResultCode.OK) {
 
             int messageResTitle = R.string.uploader_error_title_file_cannot_be_uploaded;
             int messageResId = R.string.common_error_unknown;
