@@ -118,9 +118,7 @@
   <string name="pass_code_remove_your_pass_code">Избришете го вашиот код</string>
   <string name="pass_code_mismatch">Кодовите не се исти</string>
   <string name="pass_code_wrong">Неточен код</string>
-  <string name="pass_code_removed">Кодот е отстранет</string>
-  <string name="pass_code_stored">Кодот е снимен</string>
-  <string name="media_notif_ticker">%1$s пуштач на музика</string>
+    <string name="media_notif_ticker">%1$s пуштач на музика</string>
   <string name="media_state_playing">%1$s (свири)</string>
   <string name="media_state_loading">%1$s (вчитувам)</string>
   <string name="media_event_done">репродуцирањето на %1$s заврши</string>
