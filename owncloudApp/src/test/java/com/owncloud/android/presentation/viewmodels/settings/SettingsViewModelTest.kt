@@ -22,6 +22,7 @@ package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
@@ -89,9 +90,9 @@ class SettingsViewModelTest : ViewModelTest() {
         every { preferencesProvider.putString(any(), any()) } returns Unit
         every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
-        val passCodeEnableOk = settingsViewModel.handleEnablePasscode(data)
+        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(data)
 
-        assertTrue(passCodeEnableOk)
+        assertTrue(passcodeEnableOk)
 
         verify(exactly = 1) {
             data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
@@ -106,9 +107,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
     @Test
     fun `handle enable passcode - ko - data intent is null`() {
-        val passCodeEnableOk = settingsViewModel.handleEnablePasscode(null)
+        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(null)
 
-        assertFalse(passCodeEnableOk)
+        assertFalse(passcodeEnableOk)
     }
 
     @Test
@@ -117,9 +118,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
         every { data.getStringExtra(any())} returns null
 
-        val passCodeEnableOk = settingsViewModel.handleEnablePasscode(data)
+        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(data)
 
-        assertFalse(passCodeEnableOk)
+        assertFalse(passcodeEnableOk)
 
         verify(exactly = 1) {
             data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
@@ -135,9 +136,9 @@ class SettingsViewModelTest : ViewModelTest() {
         every { preferencesProvider.putString(any(), any()) } returns Unit
         every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
-        val passCodeEnableOk = settingsViewModel.handleEnablePasscode(data)
+        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(data)
 
-        assertFalse(passCodeEnableOk)
+        assertFalse(passcodeEnableOk)
 
         verify(exactly = 1) {
             data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
@@ -154,13 +155,52 @@ class SettingsViewModelTest : ViewModelTest() {
         every { preferencesProvider.putString(any(), any()) } returns Unit
         every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
-        val passCodeEnableOk = settingsViewModel.handleEnablePasscode(data)
+        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(data)
 
-        assertFalse(passCodeEnableOk)
+        assertFalse(passcodeEnableOk)
 
         verify(exactly = 1) {
             data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
             passcode.length
+        }
+    }
+
+    @Test
+    fun `handle disable passcode - ok`() {
+        val data: Intent = mockk()
+
+        every { data.getBooleanExtra(any(), any()) } returns true
+        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
+
+        val passcodeDisableOk = settingsViewModel.handleDisablePasscode(data)
+
+        assertTrue(passcodeDisableOk)
+
+        verify(exactly = 1) {
+            data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)
+            preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+        }
+    }
+
+    @Test
+    fun `handle disable passcode - ko - data intent is null`() {
+        val passcodeDisableOk = settingsViewModel.handleDisablePasscode(null)
+
+        assertFalse(passcodeDisableOk)
+    }
+
+    @Test
+    fun `handle disable passcode - ko - key check result is false`() {
+        val data: Intent = mockk()
+
+        every { data.getBooleanExtra(any(), any()) } returns false
+
+        val passcodeDisableOk = settingsViewModel.handleDisablePasscode(data)
+
+        assertFalse(passcodeDisableOk)
+
+        verify(exactly = 1) {
+            data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)
         }
     }
 
@@ -190,5 +230,107 @@ class SettingsViewModelTest : ViewModelTest() {
         }
     }
 
+    @Test
+    fun `handle enable pattern - ok`() {
+        val data: Intent = mockk()
+        val pattern = "pattern"
+
+        every { data.getStringExtra(any()) } returns pattern
+        every { preferencesProvider.putString(any(), any()) } returns Unit
+        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
+
+        val patternEnableOk = settingsViewModel.handleEnablePattern(data)
+
+        assertTrue(patternEnableOk)
+
+        verify(exactly = 1) {
+            data.getStringExtra(PatternLockActivity.KEY_PATTERN)
+            preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, pattern)
+            preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
+        }
+    }
+
+    @Test
+    fun `handle enable pattern - ko - data intent is null`() {
+        val patternEnableOk = settingsViewModel.handleEnablePattern(null)
+
+        assertFalse(patternEnableOk)
+    }
+
+    @Test
+    fun `handle enable pattern - ko - pattern is null`() {
+        val data: Intent = mockk()
+
+        every { data.getStringExtra(any())} returns null
+
+        val patternEnableOk = settingsViewModel.handleEnablePattern(data)
+
+        assertFalse(patternEnableOk)
+
+        verify(exactly = 1) {
+            data.getStringExtra(PatternLockActivity.KEY_PATTERN)
+        }
+    }
+
+    @Test
+    fun `handle disable pattern - ok`() {
+        val data: Intent = mockk()
+
+        every { data.getBooleanExtra(any(), any()) } returns true
+        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
+
+        val patternDisableOk = settingsViewModel.handleDisablePattern(data)
+
+        assertTrue(patternDisableOk)
+
+        verify(exactly = 1) {
+            data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)
+            preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+        }
+    }
+
+    @Test
+    fun `handle disable pattern - ko - data intent is null`() {
+        val patternDisableOk = settingsViewModel.handleDisablePattern(null)
+
+        assertFalse(patternDisableOk)
+    }
+
+    @Test
+    fun `handle disable pattern - ko - key check result is false`() {
+        val data: Intent = mockk()
+
+        every { data.getBooleanExtra(any(), any()) } returns false
+
+        val patternDisableOk = settingsViewModel.handleDisablePattern(data)
+
+        assertFalse(patternDisableOk)
+
+        verify(exactly = 1) {
+            data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)
+        }
+    }
+
+    @Test
+    fun `set pref touches with other visible windows - ok - true`() {
+        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
+
+        settingsViewModel.setPrefTouchesWithOtherVisibleWindows(true)
+
+        verify(exactly = 1) {
+            preferencesProvider.putBoolean(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, true)
+        }
+    }
+
+    @Test
+    fun `set pref touches with other visible windows - ok - false`() {
+        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
+
+        settingsViewModel.setPrefTouchesWithOtherVisibleWindows(false)
+
+        verify(exactly = 1) {
+            preferencesProvider.putBoolean(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false)
+        }
+    }
 
 }
