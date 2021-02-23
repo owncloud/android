@@ -19,8 +19,6 @@
 
 package com.owncloud.android.data.server.datasources.implementation
 
-import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PRIVATE
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
@@ -30,8 +28,7 @@ import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.network.WebdavUtils.normalizeProtocolPrefix
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.lib.resources.status.RemoteServerInfo
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
 
 class OCRemoteServerInfoDataSource(
@@ -40,16 +37,14 @@ class OCRemoteServerInfoDataSource(
 ) : RemoteServerInfoDataSource {
 
     /* Basically, tries to access to the root folder without authorization and analyzes the response.*/
-    @VisibleForTesting(otherwise = PRIVATE)
     fun getAuthenticationMethod(path: String): AuthenticationMethod {
-        val owncloudClient = clientManager.getClientForUnExistingAccount(path, false)
+        val owncloudClient = clientManager.getClientForUnExistingAccount(path, true)
 
         // Step 1: check whether the root folder exists, following redirections
         var checkPathExistenceResult =
             serverInfoService.checkPathExistence(path, isUserLogged = false, client = owncloudClient)
         var redirectionLocation = checkPathExistenceResult.redirectedLocation
         while (!redirectionLocation.isNullOrEmpty()) {
-            owncloudClient.setFollowRedirects(true)
             checkPathExistenceResult =
                 serverInfoService.checkPathExistence(redirectionLocation, isUserLogged = false, client = owncloudClient)
             redirectionLocation = checkPathExistenceResult.redirectedLocation
@@ -81,36 +76,36 @@ class OCRemoteServerInfoDataSource(
         return authenticationMethod
     }
 
-    @VisibleForTesting(otherwise = PRIVATE)
-    fun getRemoteStatus(path: String): Pair<OwnCloudVersion, Boolean> {
+    fun getRemoteStatus(path: String): RemoteServerInfo {
         val ownCloudClient = clientManager.getClientForUnExistingAccount(path, true)
 
         val remoteStatusResult = serverInfoService.getRemoteStatus(path, ownCloudClient)
 
-        val ownCloudVersion = executeRemoteOperation {
+        val remoteServerInfo = executeRemoteOperation {
             remoteStatusResult
         }
 
-        if (!ownCloudVersion.isServerVersionSupported && !ownCloudVersion.isVersionHidden) {
+        if (!remoteServerInfo.ownCloudVersion.isServerVersionSupported && !remoteServerInfo.ownCloudVersion.isVersionHidden) {
             throw OwncloudVersionNotSupportedException()
         }
 
-        return Pair(ownCloudVersion, remoteStatusResult.code == RemoteOperationResult.ResultCode.OK_SSL)
+        return remoteServerInfo
     }
 
     override fun getServerInfo(path: String): ServerInfo {
         // First step: check the status of the server (including its version)
-        val pairVersionAndSecure = getRemoteStatus(path)
-        val normalizedProtocolPrefix = normalizeProtocolPrefix(path, pairVersionAndSecure.second)
+        val remoteServerInfo = getRemoteStatus(path)
+        val normalizedProtocolPrefix =
+            normalizeProtocolPrefix(remoteServerInfo.baseUrl, remoteServerInfo.isSecureConnection)
 
         // Second step: get authentication method required by the server
         val authenticationMethod = getAuthenticationMethod(normalizedProtocolPrefix)
 
         return ServerInfo(
-            ownCloudVersion = pairVersionAndSecure.first.version,
+            ownCloudVersion = remoteServerInfo.ownCloudVersion.version,
             baseUrl = normalizedProtocolPrefix,
             authenticationMethod = authenticationMethod,
-            isSecureConnection = pairVersionAndSecure.second
+            isSecureConnection = remoteServerInfo.isSecureConnection
         )
     }
 }
