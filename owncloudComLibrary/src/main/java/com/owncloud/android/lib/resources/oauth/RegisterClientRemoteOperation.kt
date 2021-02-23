@@ -48,6 +48,7 @@ class RegisterClientRemoteOperation(
             val requestBody = clientRegistrationParams.toRequestBody()
 
             val postMethod = PostMethod(
+                httpClient = client,
                 url = URL(clientRegistrationParams.registrationEndpoint),
                 postRequestBody = requestBody
             )

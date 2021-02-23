@@ -51,7 +51,7 @@ class GetOIDCDiscoveryRemoteOperation : RemoteOperation<OIDCDiscoveryResponse>()
                 appendPath(OPENID_CONFIGURATION_RESOURCE)
             }.build()
 
-            val getMethod = GetMethod(URL(uriBuilder.toString())).apply {
+            val getMethod = GetMethod(client, URL(uriBuilder.toString())).apply {
                 addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
             }
 

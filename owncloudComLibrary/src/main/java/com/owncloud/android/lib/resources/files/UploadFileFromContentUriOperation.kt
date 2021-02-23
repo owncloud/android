@@ -49,7 +49,7 @@ class UploadFileFromContentUriOperation(
 ) : RemoteOperation<Unit>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
-        val putMethod = PutMethod(URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(uploadPath)), requestBody).apply {
+        val putMethod = PutMethod(client, URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(uploadPath)), requestBody).apply {
             setRetryOnConnectionFailure(false)
             addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, requestBody.contentLength().toString())
             addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, lastModified)

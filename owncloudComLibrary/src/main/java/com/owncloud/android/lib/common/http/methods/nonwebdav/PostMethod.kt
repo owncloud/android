@@ -24,7 +24,6 @@
 package com.owncloud.android.lib.common.http.methods.nonwebdav
 
 import com.owncloud.android.lib.common.http.HttpClient
-import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import java.io.IOException
 import java.net.URL

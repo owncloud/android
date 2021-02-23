@@ -19,10 +19,10 @@ class ConnectionValidator(
     val context: Context,
     val clearCookiesOnValidation: Boolean
 ) {
-    fun validate(baseClient: OwnCloudClient, singleSessionManager: SingleSessionManager): Boolean {
+    fun validate(baseClient: OwnCloudClient, singleSessionManager: SingleSessionManager, context: Context): Boolean {
         try {
             var validationRetryCount = 0
-            val client = OwnCloudClient(baseClient.baseUri, null, false, singleSessionManager)
+            val client = OwnCloudClient(baseClient.baseUri, null, false, singleSessionManager, context)
             if (clearCookiesOnValidation) {
                 client.clearCookies()
             } else {

@@ -41,7 +41,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -55,26 +54,26 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class HttpClient {
-    private static Context sContext;
+    private Context mContext;
     private HashMap<String, List<Cookie>> mCookieStore = new HashMap<>();
-    private LogInterceptor mLogInterceptor;
+    private LogInterceptor mLogInterceptor = new LogInterceptor();
 
     private OkHttpClient mOkHttpClient = null;
 
-    protected HttpClient() {
-        mLogInterceptor = new LogInterceptor();
+    protected HttpClient(Context context) {
+        mContext = context;
     }
 
     public OkHttpClient getOkHttpClient() {
-        if(sContext == null) {
+        if (mContext == null) {
             Timber.e("Context not initialized call HttpClient.setContext(applicationContext) in the MainApp.onCrate()");
-            throw new RuntimeException("Context not initialized call HttpClient.setContext(applicationContext) in the MainApp.onCrate()");
+            throw new RuntimeException("Context not initialized call HttpClient.setContext(applicationContext) in the" +
+                    " MainApp.onCrate()");
         }
-        if(mOkHttpClient == null) {
+        if (mOkHttpClient == null) {
             try {
                 final X509TrustManager trustManager = new AdvancedX509TrustManager(
-                        NetworkUtils.getKnownServersStore(sContext));
-
+                        NetworkUtils.getKnownServersStore(mContext));
 
                 final SSLContext sslContext = buildSSLContext();
                 sslContext.init(null, new TrustManager[]{trustManager}, null);
@@ -84,7 +83,7 @@ public class HttpClient {
                 final CookieJar cookieJar = new CookieJarImpl(mCookieStore);
                 mOkHttpClient = buildNewOkHttpClient(sslSocketFactory, trustManager, cookieJar);
 
-            } catch(NoSuchAlgorithmException nsae){
+            } catch (NoSuchAlgorithmException nsae) {
                 Timber.e(nsae, "Could not setup SSL system.");
                 throw new RuntimeException("Could not setup okHttp client.", nsae);
             } catch (Exception e) {
@@ -97,18 +96,18 @@ public class HttpClient {
 
     private SSLContext buildSSLContext() throws NoSuchAlgorithmException {
         try {
-            return SSLContext.getInstance("TLSv1.3");
+            return SSLContext.getInstance(TlsVersion.TLS_1_3.javaName());
         } catch (NoSuchAlgorithmException tlsv13Exception) {
             try {
                 Timber.w("TLSv1.3 is not supported in this device; falling through TLSv1.2");
-                return SSLContext.getInstance("TLSv1.2");
+                return SSLContext.getInstance(TlsVersion.TLS_1_2.javaName());
             } catch (NoSuchAlgorithmException tlsv12Exception) {
                 try {
                     Timber.w("TLSv1.2 is not supported in this device; falling through TLSv1.1");
-                    return SSLContext.getInstance("TLSv1.1");
+                    return SSLContext.getInstance(TlsVersion.TLS_1_1.javaName());
                 } catch (NoSuchAlgorithmException tlsv11Exception) {
                     Timber.w("TLSv1.1 is not supported in this device; falling through TLSv1.0");
-                    return SSLContext.getInstance("TLSv1");
+                    return SSLContext.getInstance(TlsVersion.TLS_1_0.javaName());
                     // should be available in any device; see reference of supported protocols in
                     // http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
                 }
@@ -117,7 +116,7 @@ public class HttpClient {
     }
 
     private OkHttpClient buildNewOkHttpClient(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager,
-                                                     CookieJar cookieJar) {
+                                              CookieJar cookieJar) {
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(getLogInterceptor())
                 .addNetworkInterceptor(DebugInterceptorFactory.INSTANCE.getInterceptor())
@@ -133,7 +132,7 @@ public class HttpClient {
     }
 
     public Context getContext() {
-        return sContext;
+        return mContext;
     }
 
     public LogInterceptor getLogInterceptor() {
@@ -142,10 +141,6 @@ public class HttpClient {
 
     public List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
         return mCookieStore.get(httpUrl.host());
-    }
-
-    public static void setContext(Context context) {
-        sContext = context;
     }
 
     public void clearCookies() {

@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.status
 
 import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.http.HttpClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -63,8 +64,8 @@ internal class StatusRequester {
         return URL(oldLocationURL.protocol, oldLocationURL.host, oldLocationURL.port, redirectedLocation).toString()
     }
 
-    private fun getGetMethod(url: String): GetMethod {
-        return GetMethod(URL(url)).apply {
+    private fun getGetMethod(client: HttpClient, url: String): GetMethod {
+        return GetMethod(client, URL(url)).apply {
             setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
         }
@@ -80,9 +81,14 @@ internal class StatusRequester {
         val currentLocation = baseLocation + OwnCloudClient.STATUS_PATH
         var status: Int
 
+<<<<<<< HEAD
         val getMethod = getGetMethod(currentLocation)
         getMethod.setFollowPermanentRedirects(true)
         status = client.executeHttpMethod(getMethod)
+=======
+        while (true) {
+            val getMethod = getGetMethod(client, currentLocation)
+>>>>>>> 530f8644 (apply required fixes)
 
         return RequestResult(getMethod, status, getMethod.getFinalUrl().toString())
     }

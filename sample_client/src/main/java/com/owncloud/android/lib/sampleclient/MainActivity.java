@@ -95,6 +95,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
         SingleSessionManager.setUserAgent(getUserAgent());
 <<<<<<< HEAD
+<<<<<<< HEAD
         SingleSessionManager.setConnectionValidator(new ConnectionValidator(this, false));
         mClient = new OwnCloudClient(serverUri,
                SingleSessionManager.getConnectionValidator(),
@@ -102,6 +103,9 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
                 SingleSessionManager.getDefaultSingleton());
 =======
         mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, true);
+=======
+        mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
+>>>>>>> 530f8644 (apply required fixes)
 
 >>>>>>> 5e555278 (get okhttp singleton removal changes to compile)
         mClient.setCredentials(

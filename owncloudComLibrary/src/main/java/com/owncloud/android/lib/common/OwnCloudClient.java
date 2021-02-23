@@ -25,6 +25,7 @@
 
 package com.owncloud.android.lib.common;
 
+import android.content.Context;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -76,7 +77,10 @@ public class OwnCloudClient extends HttpClient {
     public OwnCloudClient(Uri baseUri,
                           ConnectionValidator connectionValidator,
                           boolean synchronizeRequests,
-                          SingleSessionManager singleSessionManager) {
+                          SingleSessionManager singleSessionManager,
+                          Context context) {
+        super(context);
+
         if (baseUri == null) {
             throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
         }
