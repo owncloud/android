@@ -29,7 +29,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_PREFIX
-import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_SCHEME
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
 import org.json.JSONException
@@ -43,15 +42,13 @@ import timber.log.Timber
  * @author David González Verdugo
  * @author Abel García de Prada
  */
-class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
+class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
 
-    public override fun run(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {
+    public override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
         client.baseUri = buildFullHttpsUrl(client.baseUri)
 
         var result = tryToConnect(client)
-        if (!(result.code == ResultCode.OK || result.code == ResultCode.OK_SSL)
-            && !result.isSslRecoverableException
-        ) {
+        if (!(result.code == ResultCode.OK || result.code == ResultCode.OK_SSL) && !result.isSslRecoverableException) {
             Timber.d("Establishing secure connection failed, trying non secure connection")
             client.baseUri = client.baseUri.buildUpon().scheme(HTTP_SCHEME).build()
             result = tryToConnect(client)
@@ -60,7 +57,7 @@ class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
         return result
     }
 
-    private fun tryToConnect(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {
+    private fun tryToConnect(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
         val baseUrl = client.baseUri.toString()
         client.setFollowRedirects(false)
         return try {

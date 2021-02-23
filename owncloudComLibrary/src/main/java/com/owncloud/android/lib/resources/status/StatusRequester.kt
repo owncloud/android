@@ -28,9 +28,7 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_SCHEME
-import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
 import org.json.JSONObject
 import java.net.URL
 import java.util.concurrent.TimeUnit
@@ -44,14 +42,21 @@ internal class StatusRequester {
      * we assume it was a debug setup.
      */
     fun isRedirectedToNonSecureConnection(
-        redirectedToUnsecureLocationBefore: Boolean,
+        redirectedToNonSecureLocationBefore: Boolean,
         baseUrl: String,
         redirectedUrl: String
-    ) = redirectedToUnsecureLocationBefore
+    ) = redirectedToNonSecureLocationBefore
             || (baseUrl.startsWith(HTTPS_SCHEME)
             && !redirectedUrl.startsWith(HTTPS_SCHEME))
 
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
+        /** Redirection with different endpoint.
+         * When asking for server.com/status.php and redirected to different.one/, we need to ask different.one/status.php
+         */
+        if (redirectedLocation.endsWith('/')) {
+            return redirectedLocation.trimEnd('/') + OwnCloudClient.STATUS_PATH
+        }
+
         if (!redirectedLocation.startsWith("/"))
             return redirectedLocation
         val oldLocationURL = URL(oldLocation)
@@ -68,7 +73,8 @@ internal class StatusRequester {
     data class RequestResult(
         val getMethod: GetMethod,
         val status: Int,
-        val redirectedToUnsecureLocation: Boolean
+        val redirectedToUnsecureLocation: Boolean,
+        val lastLocation: String
     )
 
     fun requestAndFollowRedirects(baseLocation: String, client: OwnCloudClient): RequestResult {
@@ -85,7 +91,7 @@ internal class StatusRequester {
                 else RemoteOperationResult(getMethod)
 
             if (result.redirectedLocation.isNullOrEmpty() || result.isSuccess) {
-                return RequestResult(getMethod, status, redirectedToUnsecureLocation)
+                return RequestResult(getMethod, status, redirectedToUnsecureLocation, currentLocation)
             } else {
                 val nextLocation = updateLocationWithRedirectPath(currentLocation, result.redirectedLocation)
                 redirectedToUnsecureLocation =
@@ -104,7 +110,7 @@ internal class StatusRequester {
     fun handleRequestResult(
         requestResult: RequestResult,
         baseUrl: String
-    ): RemoteOperationResult<OwnCloudVersion> {
+    ): RemoteOperationResult<RemoteServerInfo> {
         if (!requestResult.status.isSuccess())
             return RemoteOperationResult(requestResult.getMethod)
 
@@ -115,25 +121,35 @@ internal class StatusRequester {
         val ocVersion = OwnCloudVersion(respJSON.getString(NODE_VERSION))
         // the version object will be returned even if the version is invalid, no error code;
         // every app will decide how to act if (ocVersion.isVersionValid() == false)
-        val result =
+        val result: RemoteOperationResult<RemoteServerInfo> =
             if (requestResult.redirectedToUnsecureLocation) {
-                RemoteOperationResult<OwnCloudVersion>(RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
+                RemoteOperationResult(RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
             } else {
-                if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(
-                    RemoteOperationResult.ResultCode.OK_SSL
-                )
+                if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(RemoteOperationResult.ResultCode.OK_SSL)
                 else RemoteOperationResult(RemoteOperationResult.ResultCode.OK_NO_SSL)
             }
-        result.data = ocVersion
+        val finalUrl = URL(requestResult.lastLocation)
+        val finalBaseUrl = URL(
+            finalUrl.protocol,
+            finalUrl.host,
+            finalUrl.port,
+            finalUrl.file.dropLastWhile { it != '/' }.trimEnd('/')
+        )
+
+        result.data = RemoteServerInfo(
+            ownCloudVersion = ocVersion,
+            baseUrl = finalBaseUrl.toString(),
+            isSecureConnection = finalBaseUrl.protocol.startsWith(HTTPS_SCHEME)
+        )
         return result
     }
 
     companion object {
         /**
          * Maximum time to wait for a response from the server when the connection is being tested,
-         * in MILLISECONDs.
+         * in milliseconds.
          */
-        private const val TRY_CONNECTION_TIMEOUT: Long = 5000
+        private const val TRY_CONNECTION_TIMEOUT = 5_000L
         private const val NODE_INSTALLED = "installed"
         private const val NODE_VERSION = "version"
     }
