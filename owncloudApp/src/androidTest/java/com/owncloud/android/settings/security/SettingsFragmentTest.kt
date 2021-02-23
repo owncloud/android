@@ -22,15 +22,17 @@ package com.owncloud.android.settings.security
 
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragment
+import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.PreferenceMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import org.hamcrest.Matchers
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -40,17 +42,16 @@ class SettingsFragmentTest {
 
     @Before
     fun setUp() {
-        fragmentScenario = launchFragment()
+        fragmentScenario = launchFragmentInContainer()
     }
 
     @Test
     fun securityView() {
-        assertTrue(true)
         onView(withText(R.string.prefs_passcode)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_pattern)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_biometric)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_biometric_summary)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_biometric)).check(matches(Matchers.not(ViewMatchers.isEnabled())))
+        onView(withText(R.string.prefs_biometric)).check(matches(Matchers.not(isEnabled())))
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_touches_with_other_visible_windows_summary)).check(matches(isDisplayed()))
     }
