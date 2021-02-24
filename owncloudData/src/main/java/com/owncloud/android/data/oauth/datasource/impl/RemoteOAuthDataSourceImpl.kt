@@ -69,13 +69,7 @@ class RemoteOAuthDataSourceImpl(
         val remoteClientRegistrationInfo = executeRemoteOperation {
             oidcService.registerClientWithRegistrationEndpoint(
                 ownCloudClient = ownCloudClient,
-                clientRegistrationParams = ClientRegistrationParams(
-                    registrationEndpoint = clientRegistrationRequest.registrationEndpoint,
-                    clientName = clientRegistrationRequest.clientName,
-                    redirectUris = clientRegistrationRequest.redirectUris,
-                    tokenEndpointAuthMethod = clientRegistrationRequest.tokenEndpointAuthMethod,
-                    applicationType = clientRegistrationRequest.applicationType
-                )
+                clientRegistrationParams = clientRegistrationRequest.toParams()
             )
         }
 
@@ -127,6 +121,15 @@ class RemoteOAuthDataSourceImpl(
             userId = this.userId,
             scope = this.scope,
             additionalParameters = this.additionalParameters
+        )
+
+    private fun ClientRegistrationRequest.toParams(): ClientRegistrationParams =
+        ClientRegistrationParams(
+            registrationEndpoint = this.registrationEndpoint,
+            clientName = this.clientName,
+            redirectUris = this.redirectUris,
+            tokenEndpointAuthMethod = this.tokenEndpointAuthMethod,
+            applicationType = this.applicationType
         )
 
     private fun ClientRegistrationResponse.toModel(): ClientRegistrationInfo =
