@@ -4,7 +4,8 @@ package com.owncloud.android.ui.preview;
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,6 +22,7 @@ package com.owncloud.android.ui.preview;
 
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource.Factory;
 import com.google.android.exoplayer2.upstream.TransferListener;
@@ -33,7 +35,7 @@ import java.util.Map;
 public final class CustomHttpDataSourceFactory extends BaseFactory {
 
     private final String userAgent;
-    private final TransferListener<? super DataSource> listener;
+    private final TransferListener listener;
     private final int connectTimeoutMillis;
     private final int readTimeoutMillis;
     private final boolean allowCrossProtocolRedirects;
@@ -52,7 +54,7 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
      * Map<String, String>)
      */
     public CustomHttpDataSourceFactory(
-            String userAgent, TransferListener<? super DataSource> listener, Map<String,
+            String userAgent, TransferListener listener, Map<String,
             String> params) {
         this(userAgent, listener, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, false, params);
@@ -70,7 +72,7 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
      *                                    to HTTPS and vice versa) are enabled.
      */
     public CustomHttpDataSourceFactory(String userAgent,
-                                       TransferListener<? super DataSource> listener,
+                                       TransferListener listener,
                                        int connectTimeoutMillis, int readTimeoutMillis,
                                        boolean allowCrossProtocolRedirects,
                                        Map<String, String> params) {
@@ -83,10 +85,14 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
     }
 
     @Override
-    protected DefaultHttpDataSource createDataSourceInternal() {
-        DefaultHttpDataSource defaultHttpDataSource = new DefaultHttpDataSource(userAgent, null,
-                listener, connectTimeoutMillis,
-                readTimeoutMillis, allowCrossProtocolRedirects);
+    protected HttpDataSource createDataSourceInternal(HttpDataSource.RequestProperties defaultRequestProperties) {
+        DefaultHttpDataSource defaultHttpDataSource = new DefaultHttpDataSource.Factory()
+                .setUserAgent(userAgent)
+                .setTransferListener(listener)
+                .setConnectTimeoutMs(connectTimeoutMillis)
+                .setReadTimeoutMs(readTimeoutMillis)
+                .setAllowCrossProtocolRedirects(allowCrossProtocolRedirects)
+                .createDataSource();
 
         // Set headers in http data source
         for (Map.Entry<String, String> entry : headers.entrySet()) {

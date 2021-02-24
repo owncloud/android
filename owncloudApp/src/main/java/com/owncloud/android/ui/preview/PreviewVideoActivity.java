@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,15 +35,12 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.owncloud.android.R;
 import com.owncloud.android.ui.activity.FileActivity;
 import timber.log.Timber;
@@ -60,11 +57,10 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     /** Key to receive the position of the playback where the video should be put at start */
     public static final String EXTRA_START_POSITION = "START_POSITION";
 
-    private final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-
     private Handler mainHandler;
-    private SimpleExoPlayerView simpleExoPlayerView;
+    private PlayerView exoPlayerView;
 
+    private boolean mExoPlayerBooted = false;
     private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
@@ -84,7 +80,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
         setContentView(R.layout.video_preview);
 
-        simpleExoPlayerView = findViewById(R.id.video_player);
+        exoPlayerView = findViewById(R.id.video_player);
 
         // Hide sync bar
         ProgressBar syncProgressBar = findViewById(R.id.syncProgressBar);
@@ -154,15 +150,12 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
         // Create a default TrackSelector
         mainHandler = new Handler();
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+        AdaptiveTrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl());
         player.addListener(this);
-        simpleExoPlayerView.setPlayer(player);
-        player.seekTo(mPlaybackPosition);
-        player.setPlayWhenReady(mAutoplay);
-
+        exoPlayerView.setPlayer(player);
         // Prepare video player asynchronously
         new PrepareVideoPlayerAsyncTask(getApplicationContext(), this, getFile(), getAccount(),
                 mainHandler).execute();
@@ -229,17 +222,13 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        // Do nothing.
-    }
-
-    @Override
-    public void onPositionDiscontinuity() {
-        // Do nothing
-    }
-
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
-        // Do nothing
+        if (playbackState == ExoPlayer.STATE_READY) {
+            if (player != null && !mExoPlayerBooted) {
+                mExoPlayerBooted = true;
+                player.seekTo(mPlaybackPosition);
+                player.setPlayWhenReady(mAutoplay);
+            }
+        }
     }
 
     @Override
