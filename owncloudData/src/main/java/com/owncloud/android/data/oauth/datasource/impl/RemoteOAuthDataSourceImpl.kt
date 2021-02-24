@@ -22,7 +22,6 @@ package com.owncloud.android.data.oauth.datasource.impl
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
-import com.owncloud.android.data.oauth.mapper.RemoteClientRegistrationInfoMapper
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
@@ -30,6 +29,7 @@ import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.lib.resources.oauth.params.ClientRegistrationParams
 import com.owncloud.android.lib.resources.oauth.params.TokenRequestParams
+import com.owncloud.android.lib.resources.oauth.responses.ClientRegistrationResponse
 import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.lib.resources.oauth.responses.TokenResponse as RemoteTokenResponse
@@ -37,7 +37,6 @@ import com.owncloud.android.lib.resources.oauth.responses.TokenResponse as Remot
 class RemoteOAuthDataSourceImpl(
     private val clientManager: ClientManager,
     private val oidcService: OIDCService,
-    private val remoteClientRegistrationInfoMapper: RemoteClientRegistrationInfoMapper
 ) : RemoteOAuthDataSource {
 
     override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration {
@@ -80,7 +79,7 @@ class RemoteOAuthDataSourceImpl(
             )
         }
 
-        return remoteClientRegistrationInfoMapper.toModel(remoteClientRegistrationInfo)!!
+        return remoteClientRegistrationInfo.toModel()
     }
 
     /**************************************************************************************************************
@@ -128,5 +127,13 @@ class RemoteOAuthDataSourceImpl(
             userId = this.userId,
             scope = this.scope,
             additionalParameters = this.additionalParameters
+        )
+
+    private fun ClientRegistrationResponse.toModel(): ClientRegistrationInfo =
+        ClientRegistrationInfo(
+            clientId = this.clientId,
+            clientSecret = this.clientSecret,
+            clientIdIssuedAt = this.clientIdIssuedAt,
+            clientSecretExpiration = this.clientSecretExpiration
         )
 }

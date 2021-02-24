@@ -26,7 +26,6 @@ import com.owncloud.android.data.oauth.OC_REMOTE_OIDC_DISCOVERY_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_REQUEST_PARAMS_ACCESS
 import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_RESPONSE
 import com.owncloud.android.data.oauth.datasource.impl.RemoteOAuthDataSourceImpl
-import com.owncloud.android.data.oauth.mapper.RemoteClientRegistrationInfoMapper
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.oauth.responses.ClientRegistrationResponse
@@ -54,16 +53,14 @@ class RemoteOAuthDataSourceTest {
     private val ocClientMocked: OwnCloudClient = mockk()
 
     private val oidcService: OIDCService = mockk()
-    private val remoteClientInfoMapper = RemoteClientRegistrationInfoMapper()
 
     @Before
     fun init() {
         every { clientManager.getClientForUnExistingAccount(any(), any()) } returns ocClientMocked
 
         remoteOAuthDataSource = RemoteOAuthDataSourceImpl(
-            clientManager,
-            oidcService,
-            remoteClientInfoMapper
+            clientManager = clientManager,
+            oidcService = oidcService,
         )
     }
 
