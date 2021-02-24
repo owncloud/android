@@ -48,7 +48,6 @@ import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import org.hamcrest.Matchers
 import org.junit.After
-import org.junit.Assert
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -75,7 +74,7 @@ class SettingsFragmentTest {
     fun setUp() {
         fragmentScenario = launchFragmentInContainer()
         fragmentScenario.onFragment { fragment ->
-            prefPasscode = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
+            prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
         }
         Intents.init()
     }
@@ -116,8 +115,6 @@ class SettingsFragmentTest {
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
-        //onData(withKey(keyPrefBiometric)).check(matches(isEnabled()))
         assertTrue(prefPasscode.isChecked)
-
     }
 }
