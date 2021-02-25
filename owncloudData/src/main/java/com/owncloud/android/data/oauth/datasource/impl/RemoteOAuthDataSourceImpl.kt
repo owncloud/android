@@ -81,16 +81,16 @@ class RemoteOAuthDataSourceImpl(
      **************************************************************************************************************/
     private fun OIDCDiscoveryResponse.toModel(): OIDCServerConfiguration =
         OIDCServerConfiguration(
-            authorization_endpoint = this.authorization_endpoint,
-            check_session_iframe = this.check_session_iframe,
-            end_session_endpoint = this.end_session_endpoint,
+            authorizationEndpoint = this.authorization_endpoint,
+            checkSessionIframe = this.check_session_iframe,
+            endSessionEndpoint = this.end_session_endpoint,
             issuer = this.issuer,
-            registration_endpoint = this.registration_endpoint,
-            response_types_supported = this.response_types_supported,
-            scopes_supported = this.scopes_supported,
-            token_endpoint = this.token_endpoint,
-            token_endpoint_auth_methods_supported = this.token_endpoint_auth_methods_supported,
-            userinfo_endpoint = this.userinfo_endpoint
+            registrationEndpoint = this.registration_endpoint,
+            responseTypesSupported = this.response_types_supported,
+            scopesSupported = this.scopes_supported,
+            tokenEndpoint = this.token_endpoint,
+            tokenEndpointAuthMethodsSupported = this.token_endpoint_auth_methods_supported,
+            userInfoEndpoint = this.userinfo_endpoint
         )
 
     private fun TokenRequest.toParams(): TokenRequestParams =

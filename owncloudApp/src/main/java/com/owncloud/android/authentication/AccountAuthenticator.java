@@ -370,7 +370,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     oidcServerConfigurationUseCaseResult.getDataOrNull());
 
             // Use token endpoint retrieved from oidc discovery
-            tokenEndpoint = oidcServerConfigurationUseCaseResult.getDataOrNull().getToken_endpoint();
+            tokenEndpoint = oidcServerConfigurationUseCaseResult.getDataOrNull().getTokenEndpoint();
 
         } else {
             Timber.d("OIDC Discovery failed. Server discovery info: [ %s ]",
