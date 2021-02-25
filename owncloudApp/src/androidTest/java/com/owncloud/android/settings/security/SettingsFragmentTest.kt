@@ -20,6 +20,7 @@
 
 package com.owncloud.android.settings.security
 
+import android.content.Context
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.CheckBoxPreference
@@ -37,10 +38,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.utils.mockIntent
+import io.mockk.every
+import io.mockk.mockk
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -48,6 +52,10 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 class SettingsFragmentTest {
 
@@ -59,13 +67,30 @@ class SettingsFragmentTest {
     private lateinit var prefBiometric: CheckBoxPreference
     private lateinit var prefTouchesWithOtherVisibleWindows: CheckBoxPreference
 
-    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var context: Context
 
     private val passCodeValue = "1111"
     private val patternValue = "1234"
 
     @Before
     fun setUp() {
+        context = InstrumentationRegistry.getInstrumentation().targetContext
+        settingsViewModel = mockk(relaxed = true)
+
+        stopKoin()
+
+        startKoin {
+            context
+            modules(
+                module(override = true) {
+                    viewModel {
+                        settingsViewModel
+                    }
+                }
+            )
+        }
+
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
             categorySecurity = fragment.findPreference("security_category")!!
@@ -147,7 +172,9 @@ class SettingsFragmentTest {
     }
 
     @Test
-    fun passcodeLockEnabled() {
+    fun passcodeLockEnabledOk() {
+        every { settingsViewModel.handleEnablePasscode(any())} returns true
+
         mockIntent(
             extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
             action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
@@ -157,7 +184,20 @@ class SettingsFragmentTest {
     }
 
     @Test
-    fun patternLockEnabled() {
+    fun passcodeLockEnabledError() {
+        every { settingsViewModel.handleEnablePasscode(any())} returns false
+
+        mockIntent(
+            extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
+            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+        )
+        onView(withText(R.string.prefs_passcode)).perform(click())
+        assertFalse(prefPasscode.isChecked)
+        onView(withText(R.string.pass_code_error_set)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun patternLockEnabledOk() {
         mockIntent(
             extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
