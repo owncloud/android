@@ -26,7 +26,7 @@ import android.content.Intent
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 
-fun mockIntentExtraString(
+fun mockIntent(
     extras: Pair<String, String>,
     resultCode: Int = Activity.RESULT_OK,
     action: String
@@ -37,7 +37,8 @@ fun mockIntentExtraString(
     intending(hasAction(action)).respondWith(intentResult)
 }
 
-fun mockIntentExtraBoolean(
+@JvmName("mockIntentBoolean")
+fun mockIntent(
     extras: Pair<String, Boolean>,
     resultCode: Int = Activity.RESULT_OK,
     action: String

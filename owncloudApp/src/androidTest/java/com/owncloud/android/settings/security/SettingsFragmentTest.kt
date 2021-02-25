@@ -40,8 +40,7 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
-import com.owncloud.android.utils.mockIntentExtraBoolean
-import com.owncloud.android.utils.mockIntentExtraString
+import com.owncloud.android.utils.mockIntent
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -149,7 +148,7 @@ class SettingsFragmentTest {
 
     @Test
     fun passcodeLockEnabled() {
-        mockIntentExtraString(
+        mockIntent(
             extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
             action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
         )
@@ -159,7 +158,7 @@ class SettingsFragmentTest {
 
     @Test
     fun patternLockEnabled() {
-        mockIntentExtraString(
+        mockIntent(
             extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
@@ -200,7 +199,7 @@ class SettingsFragmentTest {
     @Test
     fun disablePasscode() {
         firstEnablePasscode()
-        mockIntentExtraBoolean(
+        mockIntent(
             extras = Pair(PassCodeActivity.KEY_CHECK_RESULT, true),
             action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
         )
@@ -214,7 +213,7 @@ class SettingsFragmentTest {
     @Test
     fun disablePattern() {
         firstEnablePattern()
-        mockIntentExtraBoolean(
+        mockIntent(
             extras = Pair(PatternLockActivity.KEY_CHECK_RESULT, true),
             action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
         )
@@ -277,7 +276,7 @@ class SettingsFragmentTest {
     }
 
     private fun firstEnablePasscode() {
-        mockIntentExtraString(
+        mockIntent(
             extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
             action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
         )
@@ -285,7 +284,7 @@ class SettingsFragmentTest {
     }
 
     private fun firstEnablePattern() {
-        mockIntentExtraString(
+        mockIntent(
             extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
