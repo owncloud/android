@@ -26,6 +26,7 @@ import android.content.Intent
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.CheckBoxPreference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -46,6 +47,7 @@ import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import org.hamcrest.Matchers.not
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -55,17 +57,13 @@ class SettingsFragmentTest {
 
     private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
 
+    private lateinit var categorySecurity: PreferenceCategory
     private lateinit var prefPasscode: CheckBoxPreference
     private lateinit var prefPattern: CheckBoxPreference
     private lateinit var prefBiometric: CheckBoxPreference
     private lateinit var prefTouchesWithOtherVisibleWindows: CheckBoxPreference
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-    private val keyCheckResult = "KEY_CHECK_RESULT"
-    private val keyPassCode = "KEY_PASSCODE"
-    private val keyPattern = "KEY_PATTERN"
-    private val keyCheckPatternResult = "KEY_CHECK_PATTERN_RESULT"
 
     private val passCodeValue = "1111"
     private val patternValue = "1234"
@@ -74,6 +72,7 @@ class SettingsFragmentTest {
     fun setUp() {
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
+            categorySecurity = fragment.findPreference("security_category")!!
             prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
             prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)!!
@@ -91,13 +90,46 @@ class SettingsFragmentTest {
 
     @Test
     fun securityView() {
+        onView(withText(R.string.prefs_category_security)).check(matches(isDisplayed()))
+        assertEquals("security_category", categorySecurity.key)
+        assertEquals(context.getString(R.string.prefs_category_security), categorySecurity.title)
+        assertEquals(null, categorySecurity.summary)
+        assertTrue(categorySecurity.isVisible)
+
         onView(withText(R.string.prefs_passcode)).check(matches(isDisplayed()))
+        assertEquals("set_pincode", prefPasscode.key)
+        assertEquals(context.getString(R.string.prefs_passcode), prefPasscode.title)
+        assertEquals(null, prefPasscode.summary)
+        assertTrue(prefPasscode.isVisible)
+        assertTrue(prefPasscode.isEnabled)
+        assertFalse(prefPasscode.isChecked)
+
         onView(withText(R.string.prefs_pattern)).check(matches(isDisplayed()))
+        assertEquals("set_pattern", prefPattern.key)
+        assertEquals(context.getString(R.string.prefs_pattern), prefPattern.title)
+        assertEquals(null, prefPattern.summary)
+        assertTrue(prefPattern.isVisible)
+        assertTrue(prefPattern.isEnabled)
+        assertFalse(prefPattern.isChecked)
+
         onView(withText(R.string.prefs_biometric)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_biometric_summary)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
+        assertEquals("set_biometric", prefBiometric.key)
+        assertEquals(context.getString(R.string.prefs_biometric), prefBiometric.title)
+        assertEquals(context.getString(R.string.prefs_biometric_summary), prefBiometric.summary)
+        assertTrue(prefBiometric.isVisible)
+        assertFalse(prefBiometric.isEnabled)
+        assertFalse(prefBiometric.isChecked)
+
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_touches_with_other_visible_windows_summary)).check(matches(isDisplayed()))
+        assertEquals("touches_with_other_visible_windows", prefTouchesWithOtherVisibleWindows.key)
+        assertEquals(context.getString(R.string.prefs_touches_with_other_visible_windows), prefTouchesWithOtherVisibleWindows.title)
+        assertEquals(context.getString(R.string.prefs_touches_with_other_visible_windows_summary), prefTouchesWithOtherVisibleWindows.summary)
+        assertTrue(prefTouchesWithOtherVisibleWindows.isVisible)
+        assertTrue(prefTouchesWithOtherVisibleWindows.isEnabled)
+        assertFalse(prefTouchesWithOtherVisibleWindows.isChecked)
     }
 
     @Test
@@ -115,7 +147,7 @@ class SettingsFragmentTest {
     @Test
     fun passcodeLockEnabled() {
         val result = Intent()
-        result.putExtra(keyPassCode, passCodeValue)
+        result.putExtra(PassCodeActivity.KEY_PASSCODE, passCodeValue)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
@@ -125,7 +157,7 @@ class SettingsFragmentTest {
     @Test
     fun patternLockEnabled() {
         val result = Intent()
-        result.putExtra(keyPattern, patternValue)
+        result.putExtra(PatternLockActivity.KEY_PATTERN, patternValue)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())
@@ -136,12 +168,16 @@ class SettingsFragmentTest {
     fun enablePasscodeEnablesBiometricLock() {
         firstEnablePasscode()
         onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
+        assertTrue(prefBiometric.isEnabled)
+        assertFalse(prefBiometric.isChecked)
     }
 
     @Test
     fun enablePatternEnablesBiometricLock() {
         firstEnablePattern()
         onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
+        assertTrue(prefBiometric.isEnabled)
+        assertFalse(prefBiometric.isChecked)
     }
 
     @Test
@@ -162,24 +198,28 @@ class SettingsFragmentTest {
     fun disablePasscode() {
         firstEnablePasscode()
         val result = Intent()
-        result.putExtra(keyCheckResult, true)
+        result.putExtra(PassCodeActivity.KEY_CHECK_RESULT, true)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_CHECK_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertFalse(prefPasscode.isChecked)
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
+        assertFalse(prefBiometric.isEnabled)
+        assertFalse(prefBiometric.isChecked)
     }
 
     @Test
     fun disablePattern() {
         firstEnablePattern()
         val result = Intent()
-        result.putExtra(keyCheckPatternResult, true)
+        result.putExtra(PatternLockActivity.KEY_CHECK_RESULT, true)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_CHECK_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertFalse(prefPattern.isChecked)
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
+        assertFalse(prefBiometric.isEnabled)
+        assertFalse(prefBiometric.isChecked)
     }
 
     @Test
@@ -207,15 +247,6 @@ class SettingsFragmentTest {
     @Test
     fun touchesDialog() {
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
-        // In OCSettingsSecurityTest the strings for the withText method were retrieved from the activity
-        // instead of using directly the ID from R.strings, so I don't know which is the correct way, but
-        // by the moment it's not important since the first line of this test doesn't work properly :-(
-        /*var dialogTitle = ""
-        var dialogMessage = ""
-        fragmentScenario.onFragment { fragment ->
-            dialogTitle = fragment.getString(R.string.confirmation_touches_with_other_windows_title)
-            dialogMessage = fragment.getString(R.string.confirmation_touches_with_other_windows_message)
-        }*/
         onView(withText(R.string.confirmation_touches_with_other_windows_title)).check(matches(isDisplayed()))
         onView(withText(R.string.confirmation_touches_with_other_windows_message)).check(matches(isDisplayed()))
     }
@@ -244,7 +275,7 @@ class SettingsFragmentTest {
 
     private fun firstEnablePasscode() {
         val result = Intent()
-        result.putExtra(keyPassCode, passCodeValue)
+        result.putExtra(PassCodeActivity.KEY_PASSCODE, passCodeValue)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
@@ -252,7 +283,7 @@ class SettingsFragmentTest {
 
     private fun firstEnablePattern() {
         val result = Intent()
-        result.putExtra(keyPattern, patternValue)
+        result.putExtra(PatternLockActivity.KEY_PATTERN, patternValue)
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
         intending(hasAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())
