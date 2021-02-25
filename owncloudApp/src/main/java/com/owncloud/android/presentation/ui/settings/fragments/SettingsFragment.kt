@@ -53,6 +53,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            // Move this check to the ViewModel
             if (result.resultCode == RESULT_OK) {
                 val passcodeEnableOk = settingsViewModel.handleEnablePasscode(result.data)
                 if (passcodeEnableOk) {
