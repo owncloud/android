@@ -20,9 +20,6 @@
 
 package com.owncloud.android.settings.security
 
-import android.app.Activity
-import android.app.Instrumentation
-import android.content.Intent
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.CheckBoxPreference
@@ -33,8 +30,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.Intents.intending
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
@@ -45,6 +40,8 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.utils.mockIntentExtraBoolean
+import com.owncloud.android.utils.mockIntentExtraString
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -152,20 +149,20 @@ class SettingsFragmentTest {
 
     @Test
     fun passcodeLockEnabled() {
-        val result = Intent()
-        result.putExtra(PassCodeActivity.KEY_PASSCODE, passCodeValue)
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
+        mockIntentExtraString(
+            extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
+            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+        )
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertTrue(prefPasscode.isChecked)
     }
 
     @Test
     fun patternLockEnabled() {
-        val result = Intent()
-        result.putExtra(PatternLockActivity.KEY_PATTERN, patternValue)
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
+        mockIntentExtraString(
+            extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
+            action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
+        )
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertTrue(prefPattern.isChecked)
     }
@@ -203,10 +200,10 @@ class SettingsFragmentTest {
     @Test
     fun disablePasscode() {
         firstEnablePasscode()
-        val result = Intent()
-        result.putExtra(PassCodeActivity.KEY_CHECK_RESULT, true)
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PatternLockActivity.ACTION_CHECK_WITH_RESULT)).respondWith(intentResult)
+        mockIntentExtraBoolean(
+            extras = Pair(PassCodeActivity.KEY_CHECK_RESULT, true),
+            action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
+        )
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertFalse(prefPasscode.isChecked)
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
@@ -217,10 +214,10 @@ class SettingsFragmentTest {
     @Test
     fun disablePattern() {
         firstEnablePattern()
-        val result = Intent()
-        result.putExtra(PatternLockActivity.KEY_CHECK_RESULT, true)
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PatternLockActivity.ACTION_CHECK_WITH_RESULT)).respondWith(intentResult)
+        mockIntentExtraBoolean(
+            extras = Pair(PatternLockActivity.KEY_CHECK_RESULT, true),
+            action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
+        )
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertFalse(prefPattern.isChecked)
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
@@ -280,18 +277,18 @@ class SettingsFragmentTest {
     }
 
     private fun firstEnablePasscode() {
-        val result = Intent()
-        result.putExtra(PassCodeActivity.KEY_PASSCODE, passCodeValue)
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
+        mockIntentExtraString(
+            extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
+            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+        )
         onView(withText(R.string.prefs_passcode)).perform(click())
     }
 
     private fun firstEnablePattern() {
-        val result = Intent()
-        result.putExtra(PatternLockActivity.KEY_PATTERN, patternValue)
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, result)
-        intending(hasAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
+        mockIntentExtraString(
+            extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
+            action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
+        )
         onView(withText(R.string.prefs_pattern)).perform(click())
     }
 }
