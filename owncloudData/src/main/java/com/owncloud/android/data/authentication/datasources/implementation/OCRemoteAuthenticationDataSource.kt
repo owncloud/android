@@ -21,7 +21,7 @@ package com.owncloud.android.data.authentication.datasources.implementation
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
+import com.owncloud.android.data.user.datasources.implementation.toDomain
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0
@@ -31,7 +31,6 @@ import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperatio
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation
 
 class OCRemoteAuthenticationDataSource(
-    private val remoteUserInfoMapper: RemoteUserInfoMapper,
     private val clientManager: ClientManager
 ) : RemoteAuthenticationDataSource {
     override fun loginBasic(serverPath: String, username: String, password: String): Pair<UserInfo, String?> =
@@ -60,7 +59,7 @@ class OCRemoteAuthenticationDataSource(
 
         executeRemoteOperation {
             GetRemoteUserInfoOperation().execute(client)
-        }.let { userInfo = remoteUserInfoMapper.toModel(it)!! }
+        }.let { userInfo = it.toDomain() }
 
         return Pair(userInfo, userBaseUri)
     }
