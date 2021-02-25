@@ -125,8 +125,14 @@ class SettingsFragmentTest {
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_touches_with_other_visible_windows_summary)).check(matches(isDisplayed()))
         assertEquals("touches_with_other_visible_windows", prefTouchesWithOtherVisibleWindows.key)
-        assertEquals(context.getString(R.string.prefs_touches_with_other_visible_windows), prefTouchesWithOtherVisibleWindows.title)
-        assertEquals(context.getString(R.string.prefs_touches_with_other_visible_windows_summary), prefTouchesWithOtherVisibleWindows.summary)
+        assertEquals(
+            context.getString(R.string.prefs_touches_with_other_visible_windows),
+            prefTouchesWithOtherVisibleWindows.title
+        )
+        assertEquals(
+            context.getString(R.string.prefs_touches_with_other_visible_windows_summary),
+            prefTouchesWithOtherVisibleWindows.summary
+        )
         assertTrue(prefTouchesWithOtherVisibleWindows.isVisible)
         assertTrue(prefTouchesWithOtherVisibleWindows.isEnabled)
         assertFalse(prefTouchesWithOtherVisibleWindows.isChecked)
