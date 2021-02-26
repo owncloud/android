@@ -48,7 +48,7 @@ class SettingsViewModel(
     }
 
     fun handleDisablePasscode(data: Intent?): UIResult<Unit> {
-        if (data?.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false) == false) return UIResult.Error()
+        data?.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false).takeIf { it == true } ?: return UIResult.Error()
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
         return UIResult.Success()
     }
@@ -66,7 +66,8 @@ class SettingsViewModel(
     }
 
     fun handleDisablePattern(data: Intent?): UIResult<Unit> {
-        if (data?.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false) == false) return UIResult.Error()
+        data?.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false).takeIf { it == true }
+            ?: return UIResult.Error()
         preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
         return UIResult.Success()
     }
