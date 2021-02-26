@@ -20,7 +20,7 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.content.Intent
+import android.app.Activity
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
@@ -36,7 +36,9 @@ class SettingsViewModel(
     fun isPatternSet() = preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
 
     fun handleEnablePasscode(result: ActivityResult?): UIResult<Unit> {
-        val passcode = result?.data?.getStringExtra(PassCodeActivity.KEY_PASSCODE).takeIf { it?.length == 4 } ?: return UIResult.Error()
+        if (result?.resultCode != Activity.RESULT_OK) return UIResult.Error()
+        val passcode = result.data?.getStringExtra(PassCodeActivity.KEY_PASSCODE).takeIf { it?.length == 4 }
+            ?: return UIResult.Error()
         for (i in 1..4) {
             preferencesProvider.putString(
                 PassCodeActivity.PREFERENCE_PASSCODE_D + i,
@@ -47,18 +49,21 @@ class SettingsViewModel(
         return UIResult.Success()
     }
 
-    fun handleDisablePasscode(data: Intent?): UIResult<Unit> {
-        if (data?.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false) == true) {
-            preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-            return UIResult.Success()
-        }
-        return UIResult.Error()
+    fun handleDisablePasscode(result: ActivityResult?): UIResult<Unit> {
+        if (result?.resultCode != Activity.RESULT_OK || result.data?.getBooleanExtra(
+                PassCodeActivity.KEY_CHECK_RESULT,
+                false
+            ) == false
+        ) return UIResult.Error()
+        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+        return UIResult.Success()
     }
 
     fun isPasscodeSet() = preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
-    fun handleEnablePattern(data: Intent?): UIResult<Unit> {
-        val pattern = data?.getStringExtra(PatternLockActivity.KEY_PATTERN)
+    fun handleEnablePattern(result: ActivityResult?): UIResult<Unit> {
+        if (result?.resultCode != Activity.RESULT_OK) return UIResult.Error()
+        val pattern = result.data?.getStringExtra(PatternLockActivity.KEY_PATTERN)
         pattern?.let {
             preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, it)
             preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
@@ -67,12 +72,14 @@ class SettingsViewModel(
         return UIResult.Error()
     }
 
-    fun handleDisablePattern(data: Intent?): UIResult<Unit> {
-        if (data?.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false) == true) {
-            preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
-            return UIResult.Success()
-        }
-        return UIResult.Error()
+    fun handleDisablePattern(result: ActivityResult?): UIResult<Unit> {
+        if (result?.resultCode != Activity.RESULT_OK || result.data?.getBooleanExtra(
+                PatternLockActivity.KEY_CHECK_RESULT,
+                false
+            ) == false
+        ) return UIResult.Error()
+        preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+        return UIResult.Success()
     }
 
     fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =

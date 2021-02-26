@@ -53,59 +53,50 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            // Move this check to the ViewModel
-            if (result.resultCode == RESULT_OK) {
-                val passcodeEnableOk = settingsViewModel.handleEnablePasscode(result.data)
-                if (passcodeEnableOk) {
-                    prefPasscode?.isChecked = true
+            val passcodeEnableResult = settingsViewModel.handleEnablePasscode(result)
+            if (passcodeEnableResult.isSuccess) {
+                prefPasscode?.isChecked = true
 
-                    // Allow to use biometric lock since Passcode lock has been enabled
-                    enableBiometric()
-                }
+                // Allow to use biometric lock since Passcode lock has been enabled
+                enableBiometric()
             } else {
-                showMessageInSnackbar(getString(R.string.pass_code_error_set))
+            showMessageInSnackbar(getString(R.string.pass_code_error_set))
             }
         }
     private val disablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val passcodeDisableOk = settingsViewModel.handleDisablePasscode(result.data)
-                if (passcodeDisableOk) {
-                    prefPasscode?.isChecked = false
+            val passcodeDisableResult = settingsViewModel.handleDisablePasscode(result)
+            if (passcodeDisableResult.isSuccess) {
+                prefPasscode?.isChecked = false
 
-                    // Do not allow to use biometric lock since Passcode lock has been disabled
-                    disableBiometric(getString(R.string.prefs_biometric_summary))
-                }
+                // Do not allow to use biometric lock since Passcode lock has been disabled
+                disableBiometric(getString(R.string.prefs_biometric_summary))
             } else {
-                showMessageInSnackbar(getString(R.string.pass_code_error_remove))
+            showMessageInSnackbar(getString(R.string.pass_code_error_remove))
             }
         }
     private val enablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val patternEnableOk = settingsViewModel.handleEnablePattern(result.data)
-                if (patternEnableOk) {
-                    prefPattern?.isChecked = true
+            val patternEnableResult = settingsViewModel.handleEnablePattern(result)
+            if (patternEnableResult.isSuccess) {
+                prefPattern?.isChecked = true
 
-                    // Allow to use biometric lock since Pattern lock has been enabled
-                    enableBiometric()
-                }
+                // Allow to use biometric lock since Pattern lock has been enabled
+                enableBiometric()
             } else {
-                showMessageInSnackbar(getString(R.string.pattern_error_set))
+            showMessageInSnackbar(getString(R.string.pattern_error_set))
             }
         }
     private val disablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val patternDisableOk = settingsViewModel.handleDisablePattern(result.data)
-                if (patternDisableOk) {
-                    prefPattern?.isChecked = false
+            val patternDisableResult = settingsViewModel.handleDisablePattern(result)
+            if (patternDisableResult.isSuccess) {
+                prefPattern?.isChecked = false
 
-                    // Do not allow to use biometric lock since Pattern lock has been disabled
-                    disableBiometric(getString(R.string.prefs_biometric_summary))
-                }
+                // Do not allow to use biometric lock since Pattern lock has been disabled
+                disableBiometric(getString(R.string.prefs_biometric_summary))
             } else {
-                showMessageInSnackbar(getString(R.string.pattern_error_remove))
+            showMessageInSnackbar(getString(R.string.pattern_error_remove))
             }
         }
 
