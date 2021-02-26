@@ -361,8 +361,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     oidcSupported = true
                     it.peekContent().getStoredData()?.let { oidcServerConfiguration ->
                         registerClient(
-                            oidcServerConfiguration.authorization_endpoint.toUri(),
-                            oidcServerConfiguration.registration_endpoint
+                            oidcServerConfiguration.authorizationEndpoint.toUri(),
+                            oidcServerConfiguration.registrationEndpoint
                         )
                     }
                 }
@@ -476,7 +476,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
-        val tokenEndPoint = oauthViewModel.oidcDiscovery.value?.peekContent()?.getStoredData()?.token_endpoint
+        val tokenEndPoint = oauthViewModel.oidcDiscovery.value?.peekContent()?.getStoredData()?.tokenEndpoint
             ?: "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
 
         val requestToken = TokenRequest.AccessToken(

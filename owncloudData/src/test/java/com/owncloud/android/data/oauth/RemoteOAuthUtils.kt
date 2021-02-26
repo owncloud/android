@@ -31,16 +31,16 @@ import com.owncloud.android.testutil.oauth.OC_TOKEN_REQUEST_REFRESH
 import com.owncloud.android.testutil.oauth.OC_TOKEN_RESPONSE
 
 val OC_REMOTE_OIDC_DISCOVERY_RESPONSE = OIDCDiscoveryResponse(
-    authorization_endpoint = OC_OIDC_SERVER_CONFIGURATION.authorization_endpoint,
-    check_session_iframe = OC_OIDC_SERVER_CONFIGURATION.check_session_iframe,
-    end_session_endpoint = OC_OIDC_SERVER_CONFIGURATION.end_session_endpoint,
+    authorization_endpoint = OC_OIDC_SERVER_CONFIGURATION.authorizationEndpoint,
+    check_session_iframe = OC_OIDC_SERVER_CONFIGURATION.checkSessionIframe,
+    end_session_endpoint = OC_OIDC_SERVER_CONFIGURATION.endSessionEndpoint,
     issuer = OC_OIDC_SERVER_CONFIGURATION.issuer,
-    registration_endpoint = OC_OIDC_SERVER_CONFIGURATION.registration_endpoint,
-    response_types_supported = OC_OIDC_SERVER_CONFIGURATION.response_types_supported,
-    scopes_supported = OC_OIDC_SERVER_CONFIGURATION.scopes_supported,
-    token_endpoint = OC_OIDC_SERVER_CONFIGURATION.token_endpoint,
-    token_endpoint_auth_methods_supported = OC_OIDC_SERVER_CONFIGURATION.token_endpoint_auth_methods_supported,
-    userinfo_endpoint = OC_OIDC_SERVER_CONFIGURATION.userinfo_endpoint
+    registration_endpoint = OC_OIDC_SERVER_CONFIGURATION.registrationEndpoint,
+    response_types_supported = OC_OIDC_SERVER_CONFIGURATION.responseTypesSupported,
+    scopes_supported = OC_OIDC_SERVER_CONFIGURATION.scopesSupported,
+    token_endpoint = OC_OIDC_SERVER_CONFIGURATION.tokenEndpoint,
+    token_endpoint_auth_methods_supported = OC_OIDC_SERVER_CONFIGURATION.tokenEndpointAuthMethodsSupported,
+    userinfo_endpoint = OC_OIDC_SERVER_CONFIGURATION.userInfoEndpoint
 )
 
 val OC_REMOTE_TOKEN_REQUEST_PARAMS_ACCESS = TokenRequestParams.Authorization(
