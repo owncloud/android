@@ -90,9 +90,9 @@ class SettingsViewModelTest : ViewModelTest() {
         every { preferencesProvider.putString(any(), any()) } returns Unit
         every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
-        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(data)
+        val passcodeEnableResult = settingsViewModel.handleEnablePasscode(data)
 
-        assertTrue(passcodeEnableOk)
+        assertTrue(passcodeEnableResult.isSuccess)
 
         verify(exactly = 1) {
             data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
@@ -107,9 +107,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
     @Test
     fun `handle enable passcode - ko - data intent is null`() {
-        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(null)
+        val passcodeEnableResult = settingsViewModel.handleEnablePasscode(null)
 
-        assertFalse(passcodeEnableOk)
+        assertTrue(passcodeEnableResult.isError)
     }
 
     @Test
@@ -118,9 +118,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
         every { data.getStringExtra(any())} returns null
 
-        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(data)
+        val passcodeEnableResult = settingsViewModel.handleEnablePasscode(data)
 
-        assertFalse(passcodeEnableOk)
+        assertTrue(passcodeEnableResult.isError)
 
         verify(exactly = 1) {
             data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
@@ -136,9 +136,9 @@ class SettingsViewModelTest : ViewModelTest() {
         every { preferencesProvider.putString(any(), any()) } returns Unit
         every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
-        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(data)
+        val passcodeEnableResult = settingsViewModel.handleEnablePasscode(data)
 
-        assertFalse(passcodeEnableOk)
+        assertTrue(passcodeEnableResult.isError)
 
         verify(exactly = 1) {
             data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
@@ -155,9 +155,9 @@ class SettingsViewModelTest : ViewModelTest() {
         every { preferencesProvider.putString(any(), any()) } returns Unit
         every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
-        val passcodeEnableOk = settingsViewModel.handleEnablePasscode(data)
+        val passcodeEnableResult = settingsViewModel.handleEnablePasscode(data)
 
-        assertFalse(passcodeEnableOk)
+        assertTrue(passcodeEnableResult.isError)
 
         verify(exactly = 1) {
             data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
@@ -172,9 +172,9 @@ class SettingsViewModelTest : ViewModelTest() {
         every { data.getBooleanExtra(any(), any()) } returns true
         every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
-        val passcodeDisableOk = settingsViewModel.handleDisablePasscode(data)
+        val passcodeDisableResult = settingsViewModel.handleDisablePasscode(data)
 
-        assertTrue(passcodeDisableOk)
+        assertTrue(passcodeDisableResult.isSuccess)
 
         verify(exactly = 1) {
             data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)
@@ -184,9 +184,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
     @Test
     fun `handle disable passcode - ko - data intent is null`() {
-        val passcodeDisableOk = settingsViewModel.handleDisablePasscode(null)
+        val passcodeDisableResult = settingsViewModel.handleDisablePasscode(null)
 
-        assertFalse(passcodeDisableOk)
+        assertTrue(passcodeDisableResult.isError)
     }
 
     @Test
@@ -195,9 +195,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
         every { data.getBooleanExtra(any(), any()) } returns false
 
-        val passcodeDisableOk = settingsViewModel.handleDisablePasscode(data)
+        val passcodeDisableResult = settingsViewModel.handleDisablePasscode(data)
 
-        assertFalse(passcodeDisableOk)
+        assertTrue(passcodeDisableResult.isError)
 
         verify(exactly = 1) {
             data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)
@@ -239,9 +239,9 @@ class SettingsViewModelTest : ViewModelTest() {
         every { preferencesProvider.putString(any(), any()) } returns Unit
         every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
-        val patternEnableOk = settingsViewModel.handleEnablePattern(data)
+        val patternEnableResult = settingsViewModel.handleEnablePattern(data)
 
-        assertTrue(patternEnableOk)
+        assertTrue(patternEnableResult.isSuccess)
 
         verify(exactly = 1) {
             data.getStringExtra(PatternLockActivity.KEY_PATTERN)
@@ -252,9 +252,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
     @Test
     fun `handle enable pattern - ko - data intent is null`() {
-        val patternEnableOk = settingsViewModel.handleEnablePattern(null)
+        val patternEnableResult = settingsViewModel.handleEnablePattern(null)
 
-        assertFalse(patternEnableOk)
+        assertTrue(patternEnableResult.isError)
     }
 
     @Test
@@ -263,9 +263,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
         every { data.getStringExtra(any())} returns null
 
-        val patternEnableOk = settingsViewModel.handleEnablePattern(data)
+        val patternEnableResult = settingsViewModel.handleEnablePattern(data)
 
-        assertFalse(patternEnableOk)
+        assertTrue(patternEnableResult.isError)
 
         verify(exactly = 1) {
             data.getStringExtra(PatternLockActivity.KEY_PATTERN)
@@ -279,9 +279,9 @@ class SettingsViewModelTest : ViewModelTest() {
         every { data.getBooleanExtra(any(), any()) } returns true
         every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
-        val patternDisableOk = settingsViewModel.handleDisablePattern(data)
+        val patternDisableResult = settingsViewModel.handleDisablePattern(data)
 
-        assertTrue(patternDisableOk)
+        assertTrue(patternDisableResult.isSuccess)
 
         verify(exactly = 1) {
             data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)
@@ -291,9 +291,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
     @Test
     fun `handle disable pattern - ko - data intent is null`() {
-        val patternDisableOk = settingsViewModel.handleDisablePattern(null)
+        val patternDisableResult = settingsViewModel.handleDisablePattern(null)
 
-        assertFalse(patternDisableOk)
+        assertTrue(patternDisableResult.isError)
     }
 
     @Test
@@ -302,9 +302,9 @@ class SettingsViewModelTest : ViewModelTest() {
 
         every { data.getBooleanExtra(any(), any()) } returns false
 
-        val patternDisableOk = settingsViewModel.handleDisablePattern(data)
+        val patternDisableResult = settingsViewModel.handleDisablePattern(data)
 
-        assertFalse(patternDisableOk)
+        assertTrue(patternDisableResult.isError)
 
         verify(exactly = 1) {
             data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)
