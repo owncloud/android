@@ -33,6 +33,7 @@ import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
+import okhttp3.TlsVersion;
 import timber.log.Timber;
 
 import javax.net.ssl.SSLContext;
@@ -41,7 +42,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -80,18 +81,18 @@ public class HttpClient {
 
     private static SSLContext getSslContext() throws NoSuchAlgorithmException {
         try {
-            return SSLContext.getInstance("TLSv1.3");
+            return SSLContext.getInstance(TlsVersion.TLS_1_3.javaName());
         } catch (NoSuchAlgorithmException tlsv13Exception) {
             try {
                 Timber.w("TLSv1.3 is not supported in this device; falling through TLSv1.2");
-                return SSLContext.getInstance("TLSv1.2");
+                return SSLContext.getInstance(TlsVersion.TLS_1_2.javaName());
             } catch (NoSuchAlgorithmException tlsv12Exception) {
                 try {
                     Timber.w("TLSv1.2 is not supported in this device; falling through TLSv1.1");
-                    return SSLContext.getInstance("TLSv1.1");
+                    return SSLContext.getInstance(TlsVersion.TLS_1_1.javaName());
                 } catch (NoSuchAlgorithmException tlsv11Exception) {
                     Timber.w("TLSv1.1 is not supported in this device; falling through TLSv1.0");
-                    return SSLContext.getInstance("TLSv1");
+                    return SSLContext.getInstance(TlsVersion.TLS_1_0.javaName());
                     // should be available in any device; see reference of supported protocols in
                     // http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
                 }
@@ -110,7 +111,7 @@ public class HttpClient {
                                                      CookieJar cookieJar) {
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(getLogInterceptor())
-                .protocols(Arrays.asList(Protocol.HTTP_1_1))
+                .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                 .readTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                 .connectTimeout(HttpConstants.DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -119,14 +120,6 @@ public class HttpClient {
                 .hostnameVerifier((asdf, usdf) -> true)
                 .cookieJar(cookieJar)
                 .build();
-    }
-
-    public Context getContext() {
-        return sContext;
-    }
-
-    public static void setContext(Context context) {
-        sContext = context;
     }
 
     public static LogInterceptor getLogInterceptor() {
@@ -138,6 +131,14 @@ public class HttpClient {
 
     public static List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
         return sCookieStore.get(httpUrl.host());
+    }
+
+    public Context getContext() {
+        return sContext;
+    }
+
+    public static void setContext(Context context) {
+        sContext = context;
     }
 
     public void clearCookies() {

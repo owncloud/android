@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
-*   Copyright (C) 2020 ownCloud GmbH.
+*   Copyright (C) 2021 ownCloud GmbH.
 *
 *   Permission is hereby granted, free of charge, to any person obtaining a copy
 *   of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class StatusRequestorTest {
+class StatusRequesterTest {
     private val requester = StatusRequester()
 
     @Test
@@ -53,40 +53,45 @@ class StatusRequestorTest {
 
     @Test
     fun `update location - ok - replace relative path`() {
-        val newLocation = requester.updateLocationWithRedirectPath(
-            "$TEST_DOMAIN/some/other/subdir", SUB_PATH
-        )
+        val newLocation = requester.updateLocationWithRedirectPath("$TEST_DOMAIN/some/other/subdir", SUB_PATH)
         assertEquals("$TEST_DOMAIN$SUB_PATH", newLocation)
     }
 
     @Test
     fun `check redirect to unsecure connection - ok - redirect to http`() {
-        assertTrue(requester.isRedirectedToNonSecureConnection(
-            false, SECURE_DOMAIN, UNSECURE_DOMAIN))
+        assertTrue(
+            requester.isRedirectedToNonSecureConnection(false, SECURE_DOMAIN, UNSECURE_DOMAIN
+            )
+        )
     }
 
     @Test
     fun `check redirect to unsecure connection - ko - redirect to https from http`() {
-        assertFalse(requester.isRedirectedToNonSecureConnection(
-            false, UNSECURE_DOMAIN, SECURE_DOMAIN))
+        assertFalse(
+            requester.isRedirectedToNonSecureConnection(false, UNSECURE_DOMAIN, SECURE_DOMAIN
+            )
+        )
     }
 
     @Test
     fun `check redirect to unsecure connection - ko - from https to https`() {
-        assertFalse(requester.isRedirectedToNonSecureConnection(
-            false, SECURE_DOMAIN, SECURE_DOMAIN))
+        assertFalse(
+            requester.isRedirectedToNonSecureConnection(false, SECURE_DOMAIN, SECURE_DOMAIN)
+        )
     }
 
     @Test
     fun `check redirect to unsecure connection - ok - from https to https with previous http`() {
-        assertTrue(requester.isRedirectedToNonSecureConnection(
-            true, SECURE_DOMAIN, SECURE_DOMAIN))
+        assertTrue(
+            requester.isRedirectedToNonSecureConnection(true, SECURE_DOMAIN, SECURE_DOMAIN)
+        )
     }
 
     @Test
     fun `check redirect to unsecure connection - ok - from http to http`() {
-        assertFalse(requester.isRedirectedToNonSecureConnection(
-            false, UNSECURE_DOMAIN, UNSECURE_DOMAIN))
+        assertFalse(
+            requester.isRedirectedToNonSecureConnection(false, UNSECURE_DOMAIN, UNSECURE_DOMAIN)
+        )
     }
 
     companion object {

@@ -9,7 +9,7 @@ dependencies {
     api 'com.github.AppDevNext.Logcat:LogcatCore:2.2.2'
 
     // Moshi
-    implementation ("com.squareup.moshi:moshi-kotlin:$moshiVersion") {
+    implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion") {
         exclude module: "kotlin-reflect"
     }
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
