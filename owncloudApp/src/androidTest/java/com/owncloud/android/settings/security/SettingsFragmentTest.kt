@@ -37,6 +37,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
+import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
@@ -46,6 +47,7 @@ import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -68,6 +70,8 @@ class SettingsFragmentTest {
     private lateinit var prefBiometric: CheckBoxPreference
     private lateinit var prefTouchesWithOtherVisibleWindows: CheckBoxPreference
 
+    private lateinit var biometricManager: BiometricManager
+
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var context: Context
 
@@ -78,6 +82,12 @@ class SettingsFragmentTest {
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         settingsViewModel = mockk(relaxed = true)
+        mockkStatic(BiometricManager::class)
+        biometricManager = mockk()
+
+        every { BiometricManager.getBiometricManager(any()) } returns biometricManager
+        every { biometricManager.onActivityStarted(any()) } returns Unit
+        every { biometricManager.onActivityStopped(any()) } returns Unit
 
         stopKoin()
 
@@ -326,6 +336,9 @@ class SettingsFragmentTest {
 
     @Test
     fun enableBiometricLockWithPasscodeEnabled() {
+        every { biometricManager.isHardwareDetected } returns true
+        every { biometricManager.hasEnrolledBiometric() } returns true
+
         firstEnablePasscode()
         onView(withText(R.string.prefs_biometric)).perform(click())
         assertTrue(prefBiometric.isChecked)
@@ -333,13 +346,40 @@ class SettingsFragmentTest {
 
     @Test
     fun enableBiometricLockWithPatternEnabled() {
+        every { biometricManager.isHardwareDetected } returns true
+        every { biometricManager.hasEnrolledBiometric() } returns true
+
         firstEnablePattern()
         onView(withText(R.string.prefs_biometric)).perform(click())
         assertTrue(prefBiometric.isChecked)
     }
 
     @Test
+    fun enableBiometricLockHardwareNotDetected() {
+        every { biometricManager.isHardwareDetected } returns false
+
+        firstEnablePasscode()
+        onView(withText(R.string.prefs_biometric)).perform(click())
+        assertFalse(prefBiometric.isChecked)
+        onView(withText(R.string.biometric_not_hardware_detected)).check(matches(isEnabled()))
+    }
+
+    @Test
+    fun enableBiometricLockNoEnrolledBiometric() {
+        every { biometricManager.isHardwareDetected } returns true
+        every { biometricManager.hasEnrolledBiometric() } returns false
+
+        firstEnablePasscode()
+        onView(withText(R.string.prefs_biometric)).perform(click())
+        assertFalse(prefBiometric.isChecked)
+        onView(withText(R.string.biometric_not_enrolled)).check(matches(isEnabled()))
+    }
+
+    @Test
     fun disableBiometricLock() {
+        every { biometricManager.isHardwareDetected } returns true
+        every { biometricManager.hasEnrolledBiometric() } returns true
+
         firstEnablePasscode()
         onView(withText(R.string.prefs_biometric)).perform(click())
         onView(withText(R.string.prefs_biometric)).perform(click())
