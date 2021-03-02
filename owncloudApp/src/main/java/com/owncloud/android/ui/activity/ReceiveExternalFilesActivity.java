@@ -60,6 +60,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.textfield.TextInputEditText;
@@ -435,9 +437,14 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     /**
-     * This activity uses its own toolbar, so we can not use the ToolbarActivity method to initialize the actionbar.
+     * This activity is special, so we won't use the ToolbarActivity method to initialize the actionbar.
      */
     private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.standard_toolbar);
+        ConstraintLayout rootToolbar = findViewById(R.id.root_toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        rootToolbar.setVisibility(View.GONE);
+
         String current_dir = mParents.peek();
         String actionBarTitle;
         if (current_dir.equals("")) {
@@ -445,14 +452,17 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             actionBarTitle = current_dir;
         }
+        toolbar.setTitle(actionBarTitle);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+
         boolean notRoot = (mParents.size() > 1);
 
-        setupStandardToolbar(
-                actionBarTitle,
-                notRoot,
-                notRoot,
-                false
-        );
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(notRoot);
+            actionBar.setHomeButtonEnabled(notRoot);
+        }
     }
 
     @Override

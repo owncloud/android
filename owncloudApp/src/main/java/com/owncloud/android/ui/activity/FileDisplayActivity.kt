@@ -1125,9 +1125,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private fun updateToolbar(chosenFileFromParam: OCFile?) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
 
-        if (chosenFile.remotePath == OCFile.ROOT_PATH ) {
+        if (chosenFile == null || chosenFile.remotePath == OCFile.ROOT_PATH) {
             val title =
-                when (fileListOption){
+                when (fileListOption) {
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
                     FileListOption.SHARED_BY_LINK -> getString(R.string.drawer_item_shared_by_link_files)
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)

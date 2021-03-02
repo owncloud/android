@@ -482,21 +482,21 @@ public class PreviewImageActivity extends FileActivity implements
         super.navigateToOption(fileListOption);
     }
 
-    private void showActionBar(boolean show){
+    private void showActionBar(boolean show) {
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar == null){
+        if (actionBar == null) {
             return;
         }
-        if (show){
+        if (show) {
             actionBar.show();
         } else {
             actionBar.hide();
         }
     }
 
-    private void updateActionBarTitle(String title){
+    private void updateActionBarTitle(String title) {
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar!=null){
+        if (actionBar != null) {
             actionBar.setTitle(title);
         }
     }
