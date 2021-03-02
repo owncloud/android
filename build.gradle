@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlinVersion = '1.4.31'
-        moshiVersion = "1.9.2"
+        moshiVersion = "1.11.0"
     }
 
     repositories {
