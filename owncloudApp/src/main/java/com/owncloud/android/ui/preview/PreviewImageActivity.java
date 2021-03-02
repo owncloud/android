@@ -334,7 +334,6 @@ public class PreviewImageActivity extends FileActivity implements
 
             OCFile currentFile = mPreviewImagePagerAdapter.getFileAt(position);
             updateActionBarTitle(currentFile.getFileName());
-            setDrawerIndicatorEnabled(false);
             if (!mPreviewImagePagerAdapter.pendingErrorAt(position)) {
                 getFileOperationsHelper().syncFile(currentFile);
             }

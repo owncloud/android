@@ -129,6 +129,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                     if (isAccountChooserActive) {
                         toggleAccountList()
                     }
+                    drawerToggle?.isDrawerIndicatorEnabled = false
                     invalidateOptionsMenu()
                 }
 
@@ -142,8 +143,7 @@ abstract class DrawerActivity : ToolbarActivity() {
 
         // Set the drawer toggle as the DrawerListener
         drawer_layout.addDrawerListener(drawerToggle as ActionBarDrawerToggle)
-        drawerToggle?.isDrawerIndicatorEnabled = true
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        drawerToggle?.isDrawerIndicatorEnabled = false
     }
 
     /**
@@ -292,15 +292,6 @@ abstract class DrawerActivity : ToolbarActivity() {
      */
     open fun setDrawerLockMode(lockMode: Int) {
         drawer_layout?.setDrawerLockMode(lockMode)
-    }
-
-    /**
-     * Enable or disable the drawer indicator.
-     *
-     * @param enable `true` to enable, `false` to disable
-     */
-    open fun setDrawerIndicatorEnabled(enable: Boolean) {
-        drawerToggle?.isDrawerIndicatorEnabled = enable
     }
 
     /**
