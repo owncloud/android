@@ -34,6 +34,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
@@ -45,7 +46,6 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
@@ -434,17 +434,11 @@ abstract class DrawerActivity : ToolbarActivity() {
         })
     }
 
-    /**
-     * Updates title bar and home buttons (state and icon).
-     *
-     *
-     * Assumes that navigation drawer is NOT visible.
-     */
-    override fun updateActionBarTitleAndHomeButton(chosenFile: OCFile?) {
-        super.updateActionBarTitleAndHomeButton(chosenFile)
+    override fun setupRootToolbar(title: String, isSearchEnabled: Boolean) {
+        super.setupRootToolbar(title, isSearchEnabled)
 
-        /// set home button properties
-        drawerToggle?.isDrawerIndicatorEnabled = isRoot(chosenFile)
+        val toolbarLeftIcon = findViewById<ImageView>(R.id.root_toolbar_left_icon)
+        toolbarLeftIcon.setOnClickListener { openDrawer() }
     }
 
     /**

@@ -399,8 +399,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private void populateDirectoryList() {
         setContentView(R.layout.uploader_layout);
-        setupToolbar();
-        ActionBar actionBar = getSupportActionBar();
+        initToolbar();
 
         mSortOptionsView = findViewById(R.id.options_layout);
         if (mSortOptionsView != null) {
@@ -411,18 +410,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         ListView mListView = findViewById(android.R.id.list);
         mEmptyListMessage = findViewById(R.id.empty_list_view);
-
-        String current_dir = mParents.peek();
-        if (current_dir.equals("")) {
-            actionBar.setTitle(getString(R.string.uploader_top_message));
-        } else {
-            actionBar.setTitle(current_dir);
-        }
-
-        boolean notRoot = (mParents.size() > 1);
-
-        actionBar.setDisplayHomeAsUpEnabled(notRoot);
-        actionBar.setHomeButtonEnabled(notRoot);
 
         String full_path = generatePath(mParents);
 
@@ -445,6 +432,27 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
             mListView.setOnItemClickListener(this);
         }
+    }
+
+    /**
+     * This activity uses its own toolbar, so we can not use the ToolbarActivity method to initialize the actionbar.
+     */
+    private void initToolbar() {
+        String current_dir = mParents.peek();
+        String actionBarTitle;
+        if (current_dir.equals("")) {
+            actionBarTitle = getString(R.string.uploader_top_message);
+        } else {
+            actionBarTitle = current_dir;
+        }
+        boolean notRoot = (mParents.size() > 1);
+
+        setupStandardToolbar(
+                actionBarTitle,
+                notRoot,
+                notRoot,
+                false
+        );
     }
 
     @Override

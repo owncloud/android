@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ownCloud Android client application
+  Copyright (C) 2020 ownCloud GmbH.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/owncloud_app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="?android:actionBarSize"
+    android:theme="@style/ownCloud.Appbar">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/root_toolbar_left_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/standard_half_margin"
+            android:padding="@dimen/standard_half_padding"
+            android:src="@drawable/ic_drawer_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/root_toolbar_search_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/standard_half_padding"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/root_toolbar_avatar"
+            app:layout_constraintStart_toEndOf="@id/root_toolbar_left_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryHint="@string/actionbar_search"
+            app:searchHintIcon="@null" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/root_toolbar_title"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginEnd="@dimen/standard_half_margin"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/standard_half_padding"
+            android:textColor="@color/white"
+            android:textSize="@dimen/toolbar_title_text_size"
+            app:drawableEndCompat="@drawable/ic_search"
+            app:drawableTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/root_toolbar_avatar"
+            app:layout_constraintStart_toEndOf="@id/root_toolbar_left_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ownCloud" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/root_toolbar_avatar"
+            android:layout_width="@dimen/toolbar_avatar_size"
+            android:layout_height="@dimen/toolbar_avatar_size"
+            android:layout_marginHorizontal="@dimen/standard_half_margin"
+            android:padding="@dimen/standard_half_padding"
+            android:src="@drawable/ic_account_circle"
+            android:tint="@color/primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/standard_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ownCloud.Appbar"
+        android:visibility="gone"
+        app:popupTheme="?attr/actionBarPopupTheme" />
+</com.google.android.material.appbar.AppBarLayout>

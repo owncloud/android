@@ -101,8 +101,7 @@ public class ManageAccountsActivity extends FileActivity
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getApplicationContext())
         );
 
-        setupToolbar();
-        updateActionBarTitleAndHomeButtonByString(getResources().getString(R.string.prefs_manage_accounts));
+        setupStandardToolbar(getString(R.string.prefs_manage_accounts), true, true, true);
 
         Account[] accountList = AccountManager.get(this).getAccountsByType(MainApp.Companion.getAccountType());
         mOriginalAccounts = toAccountNameSet(accountList);

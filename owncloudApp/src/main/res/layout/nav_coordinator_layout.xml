@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/toolbar_standard" />
+        <include layout="@layout/owncloud_toolbar" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <include

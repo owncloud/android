@@ -1267,4 +1267,9 @@ public class OCFileListFragment extends ExtendedListFragment implements
         );
         snackbar.show();
     }
+
+    public void setSearchListener(SearchView searchView){
+        searchView.setOnQueryTextFocusChangeListener(this);
+        searchView.setOnQueryTextListener(this);
+    }
 }

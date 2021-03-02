@@ -99,8 +99,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         initControls();
 
         // Action bar setup
-        setupToolbar();
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        setupStandardToolbar(null, false, false, true);
 
         // sets message for empty list of folders
         setBackgroundText();
@@ -108,11 +107,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         Timber.d("onCreate() end");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     /**

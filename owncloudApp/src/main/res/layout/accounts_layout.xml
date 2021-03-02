@@ -24,7 +24,7 @@
     android:orientation="vertical">
 
     <include
-        layout="@layout/toolbar_standard" />
+        layout="@layout/owncloud_toolbar" />
 
     <ListView
         android:id="@+id/account_list"

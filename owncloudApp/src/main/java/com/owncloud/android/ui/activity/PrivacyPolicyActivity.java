@@ -46,11 +46,7 @@ public class PrivacyPolicyActivity extends ToolbarActivity {
 
         setContentView(R.layout.activity_privacy_policy);
 
-        setupToolbar();
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        setTitle(getText(R.string.actionbar_privacy_policy));
+        setupStandardToolbar(getString(R.string.actionbar_privacy_policy), true, true, true);
 
         // Display the progress in a progress bar, like the browser app does.
         final ProgressBar mProgressBar = findViewById(R.id.syncProgressBar);

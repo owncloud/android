@@ -89,8 +89,11 @@ public class PreviewImageActivity extends FileActivity implements
 
         // ActionBar
         ActionBar actionBar = getSupportActionBar();
-        updateActionBarTitleAndHomeButton(null);
-        actionBar.hide();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
+        showActionBar(false);
 
         /// FullScreen and Immersive Mode
         mFullScreenAnchorView = getWindow().getDecorView();
@@ -102,12 +105,11 @@ public class PreviewImageActivity extends FileActivity implements
                     @Override
                     public void onSystemUiVisibilityChange(int flags) {
                         boolean visible = (flags & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
-                        ActionBar actionBar = getSupportActionBar();
                         if (visible) {
-                            actionBar.show();
+                            showActionBar(true);
                             setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                         } else {
-                            actionBar.hide();
+                            showActionBar(false);
                             setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                         }
                     }
@@ -168,8 +170,8 @@ public class PreviewImageActivity extends FileActivity implements
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        // Trigger the initial hide() shortly after the activity has been 
-        // created, to briefly hint to the user that UI controls 
+        // Trigger the initial hide() shortly after the activity has been
+        // created, to briefly hint to the user that UI controls
         // are available
         delayedHide(INITIAL_HIDE_DELAY);
 
@@ -179,7 +181,7 @@ public class PreviewImageActivity extends FileActivity implements
         @Override
         public void handleMessage(Message msg) {
             hideSystemUI(mFullScreenAnchorView);
-            getSupportActionBar().hide();
+            showActionBar(false);
         }
     };
 
@@ -331,7 +333,7 @@ public class PreviewImageActivity extends FileActivity implements
             mHasSavedPosition = true;
 
             OCFile currentFile = mPreviewImagePagerAdapter.getFileAt(position);
-            getSupportActionBar().setTitle(currentFile.getFileName());
+            updateActionBarTitle(currentFile.getFileName());
             setDrawerIndicatorEnabled(false);
             if (!mPreviewImagePagerAdapter.pendingErrorAt(position)) {
                 getFileOperationsHelper().syncFile(currentFile);
@@ -438,7 +440,7 @@ public class PreviewImageActivity extends FileActivity implements
             if (file != null) {
                 /// Refresh the activity according to the Account and OCFile set
                 setFile(file);  // reset after getting it fresh from storageManager
-                getSupportActionBar().setTitle(getFile().getFileName());
+                updateActionBarTitle(getFile().getFileName());
                 initViewPager();
 
             } else {
@@ -480,4 +482,24 @@ public class PreviewImageActivity extends FileActivity implements
         backToDisplayActivity();
         super.navigateToOption(fileListOption);
     }
+
+    private void showActionBar(boolean show){
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null){
+            return;
+        }
+        if (show){
+            actionBar.show();
+        } else {
+            actionBar.hide();
+        }
+    }
+
+    private void updateActionBarTitle(String title){
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!=null){
+            actionBar.setTitle(title);
+        }
+    }
+
 }
