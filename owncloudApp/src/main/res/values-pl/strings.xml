@@ -64,8 +64,6 @@
   <string name="pattern_incorrect_pattern">Niepoprawny wzór odblokowania</string>
   <string name="pattern_reenter_pattern">Proszę wpisz ponownie swój wzór odblokowania</string>
   <string name="pattern_not_same_pattern">Wprowadzone wzory odblokowania różnią się</string>
-  <string name="pattern_stored">Wzór odblokowania zapisany</string>
-  <string name="pattern_removed">Wzór odblokowywania usunięty</string>
   <string name="pattern_already_set">Wzór odblokowywania i hasło nie mogą być włączone równocześnie, proszę wyłączyć wzór odblokowywania</string>
   <string name="passcode_already_set">Wzór odblokowywania i hasło nie mogą być włączone jednocześnie, proszę wyłączyć hasło</string>
   <string name="pattern_no_longer_required">Nie będziesz więcej pytany o wzór odblokowywania</string>
@@ -223,8 +221,6 @@
   <string name="pass_code_remove_your_pass_code">Usuń swój kod PIN</string>
   <string name="pass_code_mismatch">Podane hasła nie są takie same</string>
   <string name="pass_code_wrong">Kod PIN nieprawidłowy</string>
-  <string name="pass_code_removed">Kod PIN został usunięty</string>
-  <string name="pass_code_stored">Kod PIN został zapisany</string>
   <string name="biometric_not_hardware_detected">To urządzenie nie wspiera uwierzytelniania biometrycznego</string>
   <string name="biometric_not_enrolled">Zarejestruj co najmniej jedno uwierzytelnienie biometryczne</string>
   <string name="biometric_prompt_title">Zalogowano biometrycznie</string>

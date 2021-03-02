@@ -48,6 +48,7 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.utils.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
@@ -163,7 +164,7 @@ abstract class DrawerActivity : ToolbarActivity() {
             drawer_layout.closeDrawers()
             when (menuItem.itemId) {
                 R.id.nav_settings -> {
-                    val settingsIntent = Intent(applicationContext, Preferences::class.java)
+                    val settingsIntent = Intent(applicationContext, SettingsActivity::class.java)
                     startActivity(settingsIntent)
                 }
                 R.id.drawer_menu_account_add -> createAccount(false)

@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Sequenza non corretta</string>
   <string name="pattern_reenter_pattern">Reinserire la sequenza</string>
   <string name="pattern_not_same_pattern">Le sequenze non sono le stesse</string>
-  <string name="pattern_stored">Sequenza memorizzata</string>
-  <string name="pattern_removed">Sequenza rimossa</string>
   <string name="pattern_already_set">I blocchi con sequenza e password non possono essere abilitati allo stesso tempo, disabilita la sequenza prima</string>
   <string name="passcode_already_set">I blocchi con sequenza e password non possono essere abilitati allo stesso tempo, disabilita la password prima</string>
   <string name="pattern_no_longer_required">La sequenza non sarà più richiesta</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">Rimuovi il tuo codice segreto</string>
   <string name="pass_code_mismatch">I codici segreti non corrispondono</string>
   <string name="pass_code_wrong">Codice segreto non corretto</string>
-  <string name="pass_code_removed">Codice segreto rimosso</string>
-  <string name="pass_code_stored">Codice segreto memorizzato</string>
   <string name="biometric_not_hardware_detected">Questo dispositivo non supporta l\'autenticazione biometrica</string>
   <string name="biometric_not_enrolled">Registrare almeno un impronta per utilizzare questa funzione</string>
   <string name="biometric_prompt_title">Accesso biometrico</string>

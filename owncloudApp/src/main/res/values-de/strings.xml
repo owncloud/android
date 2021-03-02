@@ -67,8 +67,6 @@
   <string name="pattern_incorrect_pattern">Falsches Muster</string>
   <string name="pattern_reenter_pattern">Muster bitte erneut eingeben</string>
   <string name="pattern_not_same_pattern">Die Muster stimmen nicht überein</string>
-  <string name="pattern_stored">Muster gespeichert</string>
-  <string name="pattern_removed">Muster entfernt</string>
   <string name="pattern_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte Muster deaktivieren</string>
   <string name="passcode_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte PIN deaktivieren</string>
   <string name="pattern_no_longer_required">Muster wird nicht mehr verlangt</string>
@@ -228,8 +226,6 @@
   <string name="pass_code_remove_your_pass_code">PIN entfernen</string>
   <string name="pass_code_mismatch">Die PINs stimmen nicht überein</string>
   <string name="pass_code_wrong">PIN nicht korrekt</string>
-  <string name="pass_code_removed">PIN entfernt</string>
-  <string name="pass_code_stored">PIN gespeichert</string>
   <string name="biometric_not_hardware_detected">Dieses Gerät unterstützt keine biometrische Authentifizierung</string>
   <string name="biometric_not_enrolled">Registriere mindestens ein biometrisches Merkmal, um diese Funktion zu nutzen</string>
   <string name="biometric_prompt_title">Biometrisches Einloggen</string>
