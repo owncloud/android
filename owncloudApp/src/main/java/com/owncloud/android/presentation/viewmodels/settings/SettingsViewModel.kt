@@ -56,13 +56,10 @@ class SettingsViewModel(
     fun isPasscodeSet() = preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
     fun handleEnablePattern(data: Intent?): UIResult<Unit> {
-        val pattern = data?.getStringExtra(PatternLockActivity.KEY_PATTERN)
-        pattern?.let {
-            preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, it)
-            preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
-            return UIResult.Success()
-        }
-        return UIResult.Error()
+        val pattern = data?.getStringExtra(PatternLockActivity.KEY_PATTERN) ?: return UIResult.Error()
+        preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, pattern)
+        preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
+        return UIResult.Success()
     }
 
     fun handleDisablePattern(data: Intent?): UIResult<Unit> {
