@@ -132,7 +132,6 @@ class OCSettingsSecurityTest {
         intending(hasAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertTrue(mPrefPasscode.isChecked)
-        //onView(withText(R.string.pass_code_stored)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -143,7 +142,6 @@ class OCSettingsSecurityTest {
         intending(hasAction(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertTrue(mPrefPattern.isChecked)
-        //onView(withText(R.string.pattern_stored)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -181,7 +179,6 @@ class OCSettingsSecurityTest {
         intending(hasAction(PatternLockActivity.ACTION_CHECK_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertFalse(mPrefPasscode.isChecked)
-        //onView(withText(R.string.pass_code_removed)).check(matches(isEnabled()))
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
     }
 
@@ -194,7 +191,6 @@ class OCSettingsSecurityTest {
         intending(hasAction(PatternLockActivity.ACTION_CHECK_WITH_RESULT)).respondWith(intentResult)
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertFalse(mPrefPattern.isChecked)
-        //onView(withText(R.string.pattern_removed)).check(matches(isEnabled()))
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
     }
 

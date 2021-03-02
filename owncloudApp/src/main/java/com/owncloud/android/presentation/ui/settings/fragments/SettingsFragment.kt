@@ -119,10 +119,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         prefBiometric = findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
         prefTouchesWithOtherVisibleWindows = findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            biometricManager = BiometricManager.getBiometricManager(activity)
-        }
-
         // Passcode lock
         prefPasscode?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
             if (settingsViewModel.isPatternSet()) {
@@ -161,6 +157,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             prefSecurityCategory?.removePreference(prefBiometric)
         } else if (prefBiometric != null) {
+            biometricManager = BiometricManager.getBiometricManager(activity)
+
             // Disable biometric lock if Passcode or Pattern locks are disabled
             if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
                 disableBiometric(getString(R.string.prefs_biometric_summary))
@@ -212,9 +210,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun disableBiometric(summary: String) {
-        if (prefBiometric?.isChecked == true) {
-            prefBiometric?.isChecked = false
-        }
+        prefBiometric?.isChecked = false
         prefBiometric?.isEnabled = false
         prefBiometric?.summary = summary
     }

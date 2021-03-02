@@ -751,8 +751,6 @@ public class Preferences extends PreferenceActivity {
                 }
                 mPreferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true);
 
-                //showSnackMessage(R.string.pass_code_stored);
-
                 // Allow to use biometric lock since Passcode lock has been enabled
                 enableBiometric();
             }
@@ -761,7 +759,6 @@ public class Preferences extends PreferenceActivity {
 
             if (data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)) {
                 mPreferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
-                //showSnackMessage(R.string.pass_code_removed);
 
                 // Do not allow to use biometric lock since Passcode lock has been disabled
                 disableBiometric(getString(R.string.prefs_biometric_summary));
@@ -771,7 +768,6 @@ public class Preferences extends PreferenceActivity {
             if (patternValue != null) {
                 mPreferencesProvider.putString(PatternLockActivity.KEY_PATTERN, patternValue);
                 mPreferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true);
-                //showSnackMessage(R.string.pattern_stored);
 
                 // Allow to use biometric lock since Pattern lock has been enabled
                 enableBiometric();
@@ -779,7 +775,6 @@ public class Preferences extends PreferenceActivity {
         } else if (requestCode == ACTION_CONFIRM_PATTERN && resultCode == RESULT_OK) { // Disable pattern
             if (data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)) {
                 mPreferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
-                //showSnackMessage(R.string.pattern_removed);
 
                 // Do not allow to use biometric lock since Pattern lock has been disabled
                 disableBiometric(getString(R.string.prefs_biometric_summary));
