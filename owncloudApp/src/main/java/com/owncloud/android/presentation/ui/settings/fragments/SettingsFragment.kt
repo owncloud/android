@@ -23,14 +23,18 @@ package com.owncloud.android.presentation.ui.settings.fragments
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import com.owncloud.android.BuildConfig
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -38,6 +42,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.ui.activity.PrivacyPolicyActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -50,6 +55,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private var prefBiometric: CheckBoxPreference? = null
     private var biometricManager: BiometricManager? = null
     private var prefTouchesWithOtherVisibleWindows: CheckBoxPreference? = null
+
+    private var prefMoreCategory: PreferenceCategory? = null
+    private var prefHelp: Preference? = null
+    private var prefSync: Preference? = null
+    private var prefRecommend: Preference? = null
+    private var prefFeedback: Preference? = null
+    private var prefPrivacyPolicy: Preference? = null
+    private var prefImprint: Preference? = null
+    private var prefAboutApp: Preference? = null
 
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -108,6 +122,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
         manageSecuritySettings()
+        manageMoreSettings()
 
     }
 
@@ -204,6 +219,117 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     }
 
+    private fun manageMoreSettings() {
+
+        prefMoreCategory = findPreference(PREFERENCE_MORE_CATEGORY)
+        prefHelp = findPreference(PREFERENCE_HELP)
+        prefSync = findPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)
+        prefRecommend = findPreference(PREFERENCE_RECOMMEND)
+        prefFeedback = findPreference(PREFERENCE_FEEDBACK)
+        prefPrivacyPolicy = findPreference(PREFERENCE_PRIVACY_POLICY)
+        prefImprint = findPreference(PREFERENCE_IMPRINT)
+        prefAboutApp = findPreference(PREFERENCE_ABOUT_APP)
+
+        // Help
+        val helpEnabled = resources.getBoolean(R.bool.help_enabled)
+        prefHelp.takeIf { helpEnabled } ?: prefMoreCategory?.removePreference(prefHelp)
+        prefHelp?.setOnPreferenceClickListener {
+            val helpUrl = getString(R.string.url_help)
+            if (helpUrl.isNotEmpty()) {
+                val uriUrl = Uri.parse(helpUrl)
+                val intent = Intent(Intent.ACTION_VIEW, uriUrl)
+                startActivity(intent)
+            }
+            true
+        }
+
+        // Sync contacts, calendars and tasks
+        val syncEnabled = resources.getBoolean(R.bool.sync_calendar_contacts_enabled)
+        prefSync.takeIf { syncEnabled } ?: prefMoreCategory?.removePreference(prefSync)
+        prefSync?.setOnPreferenceClickListener {
+            val syncUrl = getString(R.string.url_sync_calendar_contacts)
+            if (syncUrl.isNotEmpty()) {
+                val uriUrl = Uri.parse(syncUrl)
+                val intent = Intent(Intent.ACTION_VIEW, uriUrl)
+                startActivity(intent)
+            }
+            true
+        }
+
+        // Recommend
+        val recommendEnabled = resources.getBoolean(R.bool.recommend_enabled)
+        prefRecommend.takeIf { recommendEnabled } ?: prefMoreCategory?.removePreference(prefRecommend)
+        prefRecommend?.setOnPreferenceClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse(getString(R.string.mail_recommend))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            val appName = getString(R.string.app_name)
+            val downloadUrl = getString(R.string.url_app_download)
+
+            val recommendSubject = String.format(getString(R.string.recommend_subject), appName)
+            val recommendText = String.format(getString(R.string.recommend_text), appName, downloadUrl)
+
+            intent.putExtra(Intent.EXTRA_SUBJECT, recommendSubject)
+            intent.putExtra(Intent.EXTRA_TEXT, recommendText)
+            startActivity(intent)
+            true
+        }
+
+        // Feedback
+        val feedbackEnabled = resources.getBoolean(R.bool.feedback_enabled)
+        prefFeedback.takeIf { feedbackEnabled } ?: prefMoreCategory?.removePreference(prefFeedback)
+        prefFeedback?.setOnPreferenceClickListener {
+            val feedbackMail = getString(R.string.mail_feedback)
+            val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.putExtra(Intent.EXTRA_SUBJECT, feedback)
+
+            intent.data = Uri.parse(feedbackMail)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            true
+        }
+
+        // Privacy policy
+        val privacyPolicyEnabled = resources.getBoolean(R.bool.privacy_policy_enabled)
+        prefPrivacyPolicy.takeIf { privacyPolicyEnabled } ?: prefMoreCategory?.removePreference(prefPrivacyPolicy)
+        prefPrivacyPolicy?.setOnPreferenceClickListener {
+            val intent = Intent(context, PrivacyPolicyActivity::class.java)
+            startActivity(intent)
+            true
+        }
+
+        // Imprint
+        val imprintEnabled = resources.getBoolean(R.bool.imprint_enabled)
+        if (imprintEnabled) {
+            prefImprint?.setOnPreferenceClickListener {
+                val imprintUrl = getString(R.string.url_imprint)
+                if (imprintUrl.isNotEmpty()) {
+                    val uriUrl = Uri.parse(imprintUrl)
+                    val intent = Intent(Intent.ACTION_VIEW, uriUrl)
+                    startActivity(intent)
+                }
+                true
+            }
+        }
+        else {
+            prefMoreCategory?.removePreference(prefImprint)
+        }
+        // CHANGE THE STRUCTURE OF THE OTHER PREFERENCES TOO!!!
+
+        // About app
+        prefAboutApp?.let {
+            it.title = String.format(getString(R.string.about_android), getString(R.string.app_name))
+            val appVersion = BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.COMMIT_SHA1
+            it.summary = String.format(getString(R.string.about_version), appVersion)
+            it.setOnPreferenceClickListener {
+                // Enable logs with 5 taps, to be done when logs section is approached
+                true
+            }
+        }
+    }
+
     private fun enableBiometric() {
         prefBiometric?.isEnabled = true
         prefBiometric?.summary = null
@@ -217,7 +343,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     companion object {
         private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
+        private const val PREFERENCE_MORE_CATEGORY = "more_category"
+
         const val PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows"
+        private const val PREFERENCE_HELP = "help"
+        private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
+        private const val PREFERENCE_RECOMMEND = "recommend"
+        private const val PREFERENCE_FEEDBACK = "feedback"
+        private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
+        private const val PREFERENCE_IMPRINT = "imprint"
+        private const val PREFERENCE_ABOUT_APP = "about_app"
     }
 
 }

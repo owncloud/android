@@ -74,7 +74,6 @@
             app:title="@string/prefs_imprint" />
         <Preference
             app:iconSpaceReserved="false"
-            app:id="@+id/about_app"
             app:key="about_app"
             app:title="@string/about_title" />
 
