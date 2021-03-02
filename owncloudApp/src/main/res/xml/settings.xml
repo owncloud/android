@@ -42,4 +42,42 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="more_category"
+        app:title="@string/prefs_category_more">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="help"
+            app:title="@string/prefs_help" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="syncCalendarContacts"
+            app:summary="@string/prefs_sync_calendar_contacts_summary"
+            app:title="@string/prefs_sync_calendar_contacts" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="recommend"
+            app:title="@string/prefs_recommend" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="feedback"
+            app:title="@string/drawer_feedback" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="privacyPolicy"
+            app:title="@string/prefs_privacy_policy" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="imprint"
+            app:title="@string/prefs_imprint" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:id="@+id/about_app"
+            app:key="about_app"
+            app:title="@string/about_title" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
