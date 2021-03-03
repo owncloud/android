@@ -235,11 +235,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         if (helpEnabled) {
             prefHelp?.setOnPreferenceClickListener {
                 val helpUrl = getString(R.string.url_help)
-                if (helpUrl.isNotEmpty()) {
-                    val uriUrl = Uri.parse(helpUrl)
-                    val intent = Intent(Intent.ACTION_VIEW, uriUrl)
-                    startActivity(intent)
-                }
+                goToUrl(helpUrl)
                 true
             }
         } else {
@@ -251,11 +247,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         if (syncEnabled) {
             prefSync?.setOnPreferenceClickListener {
                 val syncUrl = getString(R.string.url_sync_calendar_contacts)
-                if (syncUrl.isNotEmpty()) {
-                    val uriUrl = Uri.parse(syncUrl)
-                    val intent = Intent(Intent.ACTION_VIEW, uriUrl)
-                    startActivity(intent)
-                }
+                goToUrl(syncUrl)
                 true
             }
         } else {
@@ -320,11 +312,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         if (imprintEnabled) {
             prefImprint?.setOnPreferenceClickListener {
                 val imprintUrl = getString(R.string.url_imprint)
-                if (imprintUrl.isNotEmpty()) {
-                    val uriUrl = Uri.parse(imprintUrl)
-                    val intent = Intent(Intent.ACTION_VIEW, uriUrl)
-                    startActivity(intent)
-                }
+                goToUrl(imprintUrl)
                 true
             }
         } else {
@@ -352,6 +340,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         prefBiometric?.isChecked = false
         prefBiometric?.isEnabled = false
         prefBiometric?.summary = summary
+    }
+
+    private fun goToUrl(url: String) {
+        if (url.isNotEmpty()) {
+            val uriUrl = Uri.parse(url)
+            val intent = Intent(Intent.ACTION_VIEW, uriUrl)
+            startActivity(intent)
+        }
     }
 
     companion object {
