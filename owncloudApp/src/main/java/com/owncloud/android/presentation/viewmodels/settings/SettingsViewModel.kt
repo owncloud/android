@@ -22,14 +22,17 @@ package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 
 class SettingsViewModel(
-    private val preferencesProvider: SharedPreferencesProvider
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val contextProvider: ContextProvider
 ) : ViewModel() {
 
     fun isPatternSet() = preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
@@ -72,4 +75,15 @@ class SettingsViewModel(
     fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =
         preferencesProvider.putBoolean(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
 
+    fun isHelpEnabled() = contextProvider.getBoolean(R.bool.help_enabled)
+
+    fun isSyncEnabled() = contextProvider.getBoolean(R.bool.sync_calendar_contacts_enabled)
+
+    fun isRecommendEnabled() = contextProvider.getBoolean(R.bool.recommend_enabled)
+
+    fun isFeedbackEnabled() = contextProvider.getBoolean(R.bool.feedback_enabled)
+
+    fun isPrivacyPolicyEnabled() = contextProvider.getBoolean(R.bool.privacy_policy_enabled)
+
+    fun isImprintEnabled() = contextProvider.getBoolean(R.bool.imprint_enabled)
 }
