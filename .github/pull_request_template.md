@@ -20,3 +20,9 @@ _____
 
 _____
 
+## Checklist
+
+- [ ] Added changelog files for the fixed issues in folder changelog/unreleased
+- [ ] For Release PRs:
+	- [ ] Created a folder for the new version like $majorVersion.$minorVersion.$patchVersion_YYYY-MM-DD
+	- [ ] Moved all changelog files from the unreleased folder to the new version folder
