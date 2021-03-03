@@ -64,7 +64,7 @@ class SettingsFragmentSecuritySectionTest {
 
     private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
 
-    private lateinit var categorySecurity: PreferenceCategory
+    private lateinit var prefSecurityCategory: PreferenceCategory
     private lateinit var prefPasscode: CheckBoxPreference
     private lateinit var prefPattern: CheckBoxPreference
     private lateinit var prefBiometric: CheckBoxPreference
@@ -104,7 +104,7 @@ class SettingsFragmentSecuritySectionTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
-            categorySecurity = fragment.findPreference("security_category")!!
+            prefSecurityCategory = fragment.findPreference("security_category")!!
             prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
             prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)!!
@@ -123,10 +123,10 @@ class SettingsFragmentSecuritySectionTest {
     @Test
     fun securityView() {
         onView(withText(R.string.prefs_category_security)).check(matches(isDisplayed()))
-        assertEquals("security_category", categorySecurity.key)
-        assertEquals(context.getString(R.string.prefs_category_security), categorySecurity.title)
-        assertEquals(null, categorySecurity.summary)
-        assertTrue(categorySecurity.isVisible)
+        assertEquals("security_category", prefSecurityCategory.key)
+        assertEquals(context.getString(R.string.prefs_category_security), prefSecurityCategory.title)
+        assertEquals(null, prefSecurityCategory.summary)
+        assertTrue(prefSecurityCategory.isVisible)
 
         onView(withText(R.string.prefs_passcode)).check(matches(isDisplayed()))
         assertEquals("set_pincode", prefPasscode.key)
