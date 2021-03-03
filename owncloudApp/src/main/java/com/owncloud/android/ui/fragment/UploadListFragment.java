@@ -28,6 +28,8 @@ import android.widget.ListView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCUpload;
+import com.owncloud.android.datamodel.UploadsStorageManager;
+import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;
 import timber.log.Timber;
@@ -36,7 +38,7 @@ import timber.log.Timber;
  * A Fragment that lists all files and folders in a given LOCAL path.
  *
  */
-public class UploadListFragment extends ExpandableListFragment {
+public class UploadListFragment extends ExpandableListFragment implements OptionsInUploadListClickListener {
 
     /**
      * Reference to the Activity which this fragment is attached to. For
@@ -68,7 +70,7 @@ public class UploadListFragment extends ExpandableListFragment {
     public void onStart() {
         Timber.v("onStart() start");
         super.onStart();
-        mAdapter = new ExpandableUploadListAdapter((FileActivity) getActivity());
+        mAdapter = new ExpandableUploadListAdapter((FileActivity) getActivity(), this);
         setListAdapter(mAdapter);
     }
 
@@ -102,6 +104,31 @@ public class UploadListFragment extends ExpandableListFragment {
          */
         boolean onUploadItemClick(OCUpload file);
 
+    }
+
+    public enum OptionsInUploadList {
+        CLEAR_FAILED, CLEAR_SUCCESSFUL, RETRY_FAILED;
+    }
+
+    @Override
+    public void onClick(OptionsInUploadList option) {
+        UploadsStorageManager storageManager;
+
+        switch (option) {
+            case RETRY_FAILED:
+                TransferRequester requester = new TransferRequester();
+                requester.retryFailedUploads(requireContext(), null, null, false);
+                break;
+            case CLEAR_FAILED:
+                storageManager = new UploadsStorageManager(requireActivity().getContentResolver());
+                storageManager.clearFailedButNotDelayedForWifiUploads();
+                break;
+            case CLEAR_SUCCESSFUL:
+                storageManager = new UploadsStorageManager(requireActivity().getContentResolver());
+                storageManager.clearSuccessfulUploads();
+                break;
+        }
+        updateUploads();
     }
 
     public void binderReady() {

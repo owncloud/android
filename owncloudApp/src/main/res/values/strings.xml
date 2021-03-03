@@ -525,10 +525,8 @@
     <string name="edit_share_unshare">Stop sharing</string>
     <string name="edit_share_done">done</string>
 
-    <string name="action_retry_uploads">Retry failed</string>
-    <string name="action_clear_failed_uploads">Clear failed</string>
-    <string name="action_clear_successful_uploads">Clear successful</string>
-    <string name="action_clear_finished_uploads">Clear all finished</string>
+    <string name="action_upload_retry">Retry</string>
+    <string name="action_upload_clear">Clear</string>
 
     <string name="manage_space_title">Manage space</string>
     <string name="manage_space_description">Settings, database and server certificates from %1$s\'s data will be deleted permanently. \n\nDownloaded files will be kept untouched.\n\nThis process can take some time.</string>
@@ -606,4 +604,5 @@
     <string name="get_base_url_error">It was not possible to know the server base url</string>
     <string name="prefs_http_logs">Log HTTP requests and responses</string>
     <string name="prefs_logs_summary">Logs may contain sensitive information. Sharing logs with others is sole user responsibility</string>
+    <string name="synchronizing_account">Synchronizing account</string>
 </resources>

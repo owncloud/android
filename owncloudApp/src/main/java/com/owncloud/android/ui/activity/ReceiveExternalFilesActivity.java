@@ -60,6 +60,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.textfield.TextInputEditText;
@@ -399,8 +401,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private void populateDirectoryList() {
         setContentView(R.layout.uploader_layout);
-        setupToolbar();
-        ActionBar actionBar = getSupportActionBar();
+        initToolbar();
 
         mSortOptionsView = findViewById(R.id.options_layout);
         if (mSortOptionsView != null) {
@@ -411,18 +412,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         ListView mListView = findViewById(android.R.id.list);
         mEmptyListMessage = findViewById(R.id.empty_list_view);
-
-        String current_dir = mParents.peek();
-        if (current_dir.equals("")) {
-            actionBar.setTitle(getString(R.string.uploader_top_message));
-        } else {
-            actionBar.setTitle(current_dir);
-        }
-
-        boolean notRoot = (mParents.size() > 1);
-
-        actionBar.setDisplayHomeAsUpEnabled(notRoot);
-        actionBar.setHomeButtonEnabled(notRoot);
 
         String full_path = generatePath(mParents);
 
@@ -444,6 +433,35 @@ public class ReceiveExternalFilesActivity extends FileActivity
             btnNewFolder.setOnClickListener(this);
 
             mListView.setOnItemClickListener(this);
+        }
+    }
+
+    /**
+     * This activity is special, so we won't use the ToolbarActivity method to initialize the actionbar.
+     */
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.standard_toolbar);
+        ConstraintLayout rootToolbar = findViewById(R.id.root_toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        rootToolbar.setVisibility(View.GONE);
+
+        String current_dir = mParents.peek();
+        String actionBarTitle;
+        if (current_dir.equals("")) {
+            actionBarTitle = getString(R.string.uploader_top_message);
+        } else {
+            actionBarTitle = current_dir;
+        }
+        toolbar.setTitle(actionBarTitle);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        boolean notRoot = (mParents.size() > 1);
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(notRoot);
+            actionBar.setHomeButtonEnabled(notRoot);
         }
     }
 
@@ -617,7 +635,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        menu.findItem(R.id.action_sync_account).setVisible(false);
 
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         mSearchView.setMaxWidth(Integer.MAX_VALUE);

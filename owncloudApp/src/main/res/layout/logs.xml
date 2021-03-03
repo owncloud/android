@@ -22,7 +22,7 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <include layout="@layout/toolbar_standard" />
+    <include layout="@layout/owncloud_toolbar" />
 
     <FrameLayout
         android:id="@+id/fragment_container"

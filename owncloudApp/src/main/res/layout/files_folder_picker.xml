@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar_standard" />
+    <include layout="@layout/owncloud_toolbar" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
