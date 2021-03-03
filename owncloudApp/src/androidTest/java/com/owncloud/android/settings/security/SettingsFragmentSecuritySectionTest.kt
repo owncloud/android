@@ -104,7 +104,7 @@ class SettingsFragmentSecuritySectionTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
-            prefSecurityCategory = fragment.findPreference("security_category")!!
+            prefSecurityCategory = fragment.findPreference(PREFERENCE_SECURITY_CATEGORY)!!
             prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
             prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)!!
@@ -439,5 +439,9 @@ class SettingsFragmentSecuritySectionTest {
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
+    }
+
+    companion object {
+        private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
     }
 }
