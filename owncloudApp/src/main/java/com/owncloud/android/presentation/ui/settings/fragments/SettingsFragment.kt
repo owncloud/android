@@ -47,8 +47,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
+    // ViewModel
     private val settingsViewModel by viewModel<SettingsViewModel>()
 
+    // Security section
     private var prefSecurityCategory: PreferenceCategory? = null
     private var prefPasscode: CheckBoxPreference? = null
     private var prefPattern: CheckBoxPreference? = null
@@ -56,6 +58,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private var biometricManager: BiometricManager? = null
     private var prefTouchesWithOtherVisibleWindows: CheckBoxPreference? = null
 
+    // More section
     private var prefMoreCategory: PreferenceCategory? = null
     private var prefHelp: Preference? = null
     private var prefSync: Preference? = null
@@ -65,6 +68,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private var prefImprint: Preference? = null
     private var prefAboutApp: Preference? = null
 
+    // Launchers for security section
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != RESULT_OK) return@registerForActivityResult
@@ -231,8 +235,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         prefAboutApp = findPreference(PREFERENCE_ABOUT_APP)
 
         // Help
-        val helpEnabled = resources.getBoolean(R.bool.help_enabled)
-        if (helpEnabled) {
+        if (settingsViewModel.isHelpEnabled()) {
             prefHelp?.setOnPreferenceClickListener {
                 val helpUrl = getString(R.string.url_help)
                 goToUrl(helpUrl)
@@ -243,8 +246,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         // Sync contacts, calendars and tasks
-        val syncEnabled = resources.getBoolean(R.bool.sync_calendar_contacts_enabled)
-        if (syncEnabled) {
+        if (settingsViewModel.isSyncEnabled()) {
             prefSync?.setOnPreferenceClickListener {
                 val syncUrl = getString(R.string.url_sync_calendar_contacts)
                 goToUrl(syncUrl)
@@ -255,8 +257,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         // Recommend
-        val recommendEnabled = resources.getBoolean(R.bool.recommend_enabled)
-        if (recommendEnabled) {
+        if (settingsViewModel.isRecommendEnabled()) {
             prefRecommend?.setOnPreferenceClickListener {
                 val intent = Intent(Intent.ACTION_SENDTO)
                 intent.data = Uri.parse(getString(R.string.mail_recommend))
@@ -278,8 +279,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         // Feedback
-        val feedbackEnabled = resources.getBoolean(R.bool.feedback_enabled)
-        if (feedbackEnabled) {
+        if (settingsViewModel.isFeedbackEnabled()) {
             prefFeedback?.setOnPreferenceClickListener {
                 val feedbackMail = getString(R.string.mail_feedback)
                 val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
@@ -296,8 +296,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         // Privacy policy
-        val privacyPolicyEnabled = resources.getBoolean(R.bool.privacy_policy_enabled)
-        if (privacyPolicyEnabled) {
+        if (settingsViewModel.isPrivacyPolicyEnabled()) {
             prefPrivacyPolicy?.setOnPreferenceClickListener {
                 val intent = Intent(context, PrivacyPolicyActivity::class.java)
                 startActivity(intent)
@@ -308,8 +307,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         // Imprint
-        val imprintEnabled = resources.getBoolean(R.bool.imprint_enabled)
-        if (imprintEnabled) {
+        if (settingsViewModel.isImprintEnabled()) {
             prefImprint?.setOnPreferenceClickListener {
                 val imprintUrl = getString(R.string.url_imprint)
                 goToUrl(imprintUrl)

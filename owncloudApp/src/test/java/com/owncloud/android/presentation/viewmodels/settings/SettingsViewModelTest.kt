@@ -21,9 +21,11 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import io.mockk.every
@@ -40,13 +42,16 @@ import org.junit.Test
 class SettingsViewModelTest : ViewModelTest() {
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
+    private lateinit var contextProvider: ContextProvider
 
     @Before
     fun setUp() {
         preferencesProvider = mockk()
+        contextProvider = mockk()
 
         settingsViewModel = SettingsViewModel(
-            preferencesProvider
+            preferencesProvider,
+            contextProvider
         )
     }
 
@@ -330,6 +335,162 @@ class SettingsViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             preferencesProvider.putBoolean(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false)
+        }
+    }
+
+    @Test
+    fun `is help enabled - ok - true`() {
+        every { contextProvider.getBoolean(any())} returns true
+
+        val helpEnabled = settingsViewModel.isHelpEnabled()
+
+        assertTrue(helpEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.help_enabled)
+        }
+    }
+
+    @Test
+    fun `is help enabled - ok - false`() {
+        every { contextProvider.getBoolean(any())} returns false
+
+        val helpEnabled = settingsViewModel.isHelpEnabled()
+
+        assertFalse(helpEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.help_enabled)
+        }
+    }
+
+    @Test
+    fun `is sync enabled - ok - true`() {
+        every { contextProvider.getBoolean(any())} returns true
+
+        val syncEnabled = settingsViewModel.isSyncEnabled()
+
+        assertTrue(syncEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.sync_calendar_contacts_enabled)
+        }
+    }
+
+    @Test
+    fun `is sync enabled - ok - false`() {
+        every { contextProvider.getBoolean(any())} returns false
+
+        val syncEnabled = settingsViewModel.isSyncEnabled()
+
+        assertFalse(syncEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.sync_calendar_contacts_enabled)
+        }
+    }
+
+    @Test
+    fun `is recommend enabled - ok - true`() {
+        every { contextProvider.getBoolean(any())} returns true
+
+        val recommendEnabled = settingsViewModel.isRecommendEnabled()
+
+        assertTrue(recommendEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.recommend_enabled)
+        }
+    }
+
+    @Test
+    fun `is recommend enabled - ok - false`() {
+        every { contextProvider.getBoolean(any())} returns false
+
+        val recommendEnabled = settingsViewModel.isRecommendEnabled()
+
+        assertFalse(recommendEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.recommend_enabled)
+        }
+    }
+
+    @Test
+    fun `is feedback enabled - ok - true`() {
+        every { contextProvider.getBoolean(any())} returns true
+
+        val feedbackEnabled = settingsViewModel.isFeedbackEnabled()
+
+        assertTrue(feedbackEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.feedback_enabled)
+        }
+    }
+
+    @Test
+    fun `is feedback enabled - ok - false`() {
+        every { contextProvider.getBoolean(any())} returns false
+
+        val feedbackEnabled = settingsViewModel.isFeedbackEnabled()
+
+        assertFalse(feedbackEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.feedback_enabled)
+        }
+    }
+
+    @Test
+    fun `is privacy policy enabled - ok - true`() {
+        every { contextProvider.getBoolean(any())} returns true
+
+        val privacyPolicyEnabled = settingsViewModel.isPrivacyPolicyEnabled()
+
+        assertTrue(privacyPolicyEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.privacy_policy_enabled)
+        }
+    }
+
+    @Test
+    fun `is privacy policy enabled - ok - false`() {
+        every { contextProvider.getBoolean(any())} returns false
+
+        val privacyPolicyEnabled = settingsViewModel.isPrivacyPolicyEnabled()
+
+        assertFalse(privacyPolicyEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.privacy_policy_enabled)
+        }
+    }
+
+    @Test
+    fun `is imprint enabled - ok - true`() {
+        every { contextProvider.getBoolean(any())} returns true
+
+        val imprintEnabled = settingsViewModel.isImprintEnabled()
+
+        assertTrue(imprintEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.imprint_enabled)
+        }
+    }
+
+    @Test
+    fun `is imprint enabled - ok - false`() {
+        every { contextProvider.getBoolean(any())} returns false
+
+        val imprintEnabled = settingsViewModel.isImprintEnabled()
+
+        assertFalse(imprintEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.imprint_enabled)
         }
     }
 
