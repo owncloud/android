@@ -232,72 +232,87 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // Help
         val helpEnabled = resources.getBoolean(R.bool.help_enabled)
-        prefHelp.takeIf { helpEnabled } ?: prefMoreCategory?.removePreference(prefHelp)
-        prefHelp?.setOnPreferenceClickListener {
-            val helpUrl = getString(R.string.url_help)
-            if (helpUrl.isNotEmpty()) {
-                val uriUrl = Uri.parse(helpUrl)
-                val intent = Intent(Intent.ACTION_VIEW, uriUrl)
-                startActivity(intent)
+        if (helpEnabled) {
+            prefHelp?.setOnPreferenceClickListener {
+                val helpUrl = getString(R.string.url_help)
+                if (helpUrl.isNotEmpty()) {
+                    val uriUrl = Uri.parse(helpUrl)
+                    val intent = Intent(Intent.ACTION_VIEW, uriUrl)
+                    startActivity(intent)
+                }
+                true
             }
-            true
+        } else {
+            prefMoreCategory?.removePreference(prefHelp)
         }
 
         // Sync contacts, calendars and tasks
         val syncEnabled = resources.getBoolean(R.bool.sync_calendar_contacts_enabled)
-        prefSync.takeIf { syncEnabled } ?: prefMoreCategory?.removePreference(prefSync)
-        prefSync?.setOnPreferenceClickListener {
-            val syncUrl = getString(R.string.url_sync_calendar_contacts)
-            if (syncUrl.isNotEmpty()) {
-                val uriUrl = Uri.parse(syncUrl)
-                val intent = Intent(Intent.ACTION_VIEW, uriUrl)
-                startActivity(intent)
+        if (syncEnabled) {
+            prefSync?.setOnPreferenceClickListener {
+                val syncUrl = getString(R.string.url_sync_calendar_contacts)
+                if (syncUrl.isNotEmpty()) {
+                    val uriUrl = Uri.parse(syncUrl)
+                    val intent = Intent(Intent.ACTION_VIEW, uriUrl)
+                    startActivity(intent)
+                }
+                true
             }
-            true
+        } else {
+            prefMoreCategory?.removePreference(prefSync)
         }
 
         // Recommend
         val recommendEnabled = resources.getBoolean(R.bool.recommend_enabled)
-        prefRecommend.takeIf { recommendEnabled } ?: prefMoreCategory?.removePreference(prefRecommend)
-        prefRecommend?.setOnPreferenceClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse(getString(R.string.mail_recommend))
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        if (recommendEnabled) {
+            prefRecommend?.setOnPreferenceClickListener {
+                val intent = Intent(Intent.ACTION_SENDTO)
+                intent.data = Uri.parse(getString(R.string.mail_recommend))
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-            val appName = getString(R.string.app_name)
-            val downloadUrl = getString(R.string.url_app_download)
+                val appName = getString(R.string.app_name)
+                val downloadUrl = getString(R.string.url_app_download)
 
-            val recommendSubject = String.format(getString(R.string.recommend_subject), appName)
-            val recommendText = String.format(getString(R.string.recommend_text), appName, downloadUrl)
+                val recommendSubject = String.format(getString(R.string.recommend_subject), appName)
+                val recommendText = String.format(getString(R.string.recommend_text), appName, downloadUrl)
 
-            intent.putExtra(Intent.EXTRA_SUBJECT, recommendSubject)
-            intent.putExtra(Intent.EXTRA_TEXT, recommendText)
-            startActivity(intent)
-            true
+                intent.putExtra(Intent.EXTRA_SUBJECT, recommendSubject)
+                intent.putExtra(Intent.EXTRA_TEXT, recommendText)
+                startActivity(intent)
+                true
+            }
+        } else {
+            prefMoreCategory?.removePreference(prefRecommend)
         }
 
         // Feedback
         val feedbackEnabled = resources.getBoolean(R.bool.feedback_enabled)
-        prefFeedback.takeIf { feedbackEnabled } ?: prefMoreCategory?.removePreference(prefFeedback)
-        prefFeedback?.setOnPreferenceClickListener {
-            val feedbackMail = getString(R.string.mail_feedback)
-            val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.putExtra(Intent.EXTRA_SUBJECT, feedback)
+        if (feedbackEnabled) {
+            prefFeedback?.setOnPreferenceClickListener {
+                val feedbackMail = getString(R.string.mail_feedback)
+                val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
+                val intent = Intent(Intent.ACTION_SENDTO)
+                intent.putExtra(Intent.EXTRA_SUBJECT, feedback)
 
-            intent.data = Uri.parse(feedbackMail)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            true
+                intent.data = Uri.parse(feedbackMail)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                true
+            }
+        } else {
+            prefMoreCategory?.removePreference(prefFeedback)
         }
 
         // Privacy policy
         val privacyPolicyEnabled = resources.getBoolean(R.bool.privacy_policy_enabled)
-        prefPrivacyPolicy.takeIf { privacyPolicyEnabled } ?: prefMoreCategory?.removePreference(prefPrivacyPolicy)
-        prefPrivacyPolicy?.setOnPreferenceClickListener {
-            val intent = Intent(context, PrivacyPolicyActivity::class.java)
-            startActivity(intent)
-            true
+        if (privacyPolicyEnabled) {
+            prefPrivacyPolicy?.setOnPreferenceClickListener {
+                val intent = Intent(context, PrivacyPolicyActivity::class.java)
+                startActivity(intent)
+                true
+            }
+        } else {
+            prefMoreCategory?.removePreference(prefPrivacyPolicy)
         }
 
         // Imprint
@@ -312,11 +327,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 }
                 true
             }
-        }
-        else {
+        } else {
             prefMoreCategory?.removePreference(prefImprint)
         }
-        // CHANGE THE STRUCTURE OF THE OTHER PREFERENCES TOO!!!
 
         // About app
         prefAboutApp?.let {
