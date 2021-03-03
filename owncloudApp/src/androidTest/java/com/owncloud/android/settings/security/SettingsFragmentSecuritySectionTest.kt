@@ -123,13 +123,13 @@ class SettingsFragmentSecuritySectionTest {
     @Test
     fun securityView() {
         onView(withText(R.string.prefs_category_security)).check(matches(isDisplayed()))
-        assertEquals("security_category", prefSecurityCategory.key)
+        assertEquals(PREFERENCE_SECURITY_CATEGORY, prefSecurityCategory.key)
         assertEquals(context.getString(R.string.prefs_category_security), prefSecurityCategory.title)
         assertEquals(null, prefSecurityCategory.summary)
         assertTrue(prefSecurityCategory.isVisible)
 
         onView(withText(R.string.prefs_passcode)).check(matches(isDisplayed()))
-        assertEquals("set_pincode", prefPasscode.key)
+        assertEquals(PassCodeActivity.PREFERENCE_SET_PASSCODE, prefPasscode.key)
         assertEquals(context.getString(R.string.prefs_passcode), prefPasscode.title)
         assertEquals(null, prefPasscode.summary)
         assertTrue(prefPasscode.isVisible)
@@ -137,7 +137,7 @@ class SettingsFragmentSecuritySectionTest {
         assertFalse(prefPasscode.isChecked)
 
         onView(withText(R.string.prefs_pattern)).check(matches(isDisplayed()))
-        assertEquals("set_pattern", prefPattern.key)
+        assertEquals(PatternLockActivity.PREFERENCE_SET_PATTERN, prefPattern.key)
         assertEquals(context.getString(R.string.prefs_pattern), prefPattern.title)
         assertEquals(null, prefPattern.summary)
         assertTrue(prefPattern.isVisible)
@@ -147,7 +147,7 @@ class SettingsFragmentSecuritySectionTest {
         onView(withText(R.string.prefs_biometric)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_biometric_summary)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
-        assertEquals("set_biometric", prefBiometric.key)
+        assertEquals(BiometricActivity.PREFERENCE_SET_BIOMETRIC, prefBiometric.key)
         assertEquals(context.getString(R.string.prefs_biometric), prefBiometric.title)
         assertEquals(context.getString(R.string.prefs_biometric_summary), prefBiometric.summary)
         assertTrue(prefBiometric.isVisible)
@@ -156,7 +156,7 @@ class SettingsFragmentSecuritySectionTest {
 
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_touches_with_other_visible_windows_summary)).check(matches(isDisplayed()))
-        assertEquals("touches_with_other_visible_windows", prefTouchesWithOtherVisibleWindows.key)
+        assertEquals(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, prefTouchesWithOtherVisibleWindows.key)
         assertEquals(
             context.getString(R.string.prefs_touches_with_other_visible_windows),
             prefTouchesWithOtherVisibleWindows.title
