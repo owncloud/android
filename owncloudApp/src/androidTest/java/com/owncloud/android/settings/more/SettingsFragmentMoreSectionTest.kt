@@ -70,14 +70,15 @@ class SettingsFragmentMoreSectionTest {
 
     private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
 
-    private var prefMoreCategory: PreferenceCategory? = null
+    private lateinit var prefSecurityCategory: PreferenceCategory
+    private lateinit var prefMoreCategory: PreferenceCategory
     private var prefHelp: Preference? = null
     private var prefSync: Preference? = null
     private var prefRecommend: Preference? = null
     private var prefFeedback: Preference? = null
     private var prefPrivacyPolicy: Preference? = null
     private var prefImprint: Preference? = null
-    private var prefAboutApp: Preference? = null
+    private lateinit var prefAboutApp: Preference
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var context: Context
@@ -134,6 +135,7 @@ class SettingsFragmentMoreSectionTest {
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
 
         fragmentScenario.onFragment { fragment ->
+            prefSecurityCategory = fragment.findPreference(PREFERENCE_SECURITY_CATEGORY)!!
             prefMoreCategory = fragment.findPreference(PREFERENCE_MORE_CATEGORY)!!
             if (helpEnabled) prefHelp = fragment.findPreference(PREFERENCE_HELP)!!
             if (syncEnabled) prefSync = fragment.findPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)!!
@@ -143,6 +145,8 @@ class SettingsFragmentMoreSectionTest {
             if (imprintEnabled) prefImprint = fragment.findPreference(PREFERENCE_IMPRINT)!!
             prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
         }
+
+        prefSecurityCategory.isVisible = false
     }
 
     @Test
@@ -150,10 +154,10 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_category_more)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_MORE_CATEGORY, prefMoreCategory?.key)
-        assertEquals(context.getString(R.string.prefs_category_more), prefMoreCategory?.title)
-        assertEquals(null, prefMoreCategory?.summary)
-        assertTrue(prefMoreCategory?.isVisible == true)
+        assertEquals(PREFERENCE_MORE_CATEGORY, prefMoreCategory.key)
+        assertEquals(context.getString(R.string.prefs_category_more), prefMoreCategory.title)
+        assertEquals(null, prefMoreCategory.summary)
+        assertTrue(prefMoreCategory.isVisible)
 
         onView(withText(R.string.prefs_help)).check(matches(isDisplayed()))
         assertEquals(PREFERENCE_HELP, prefHelp?.key)
@@ -214,14 +218,14 @@ class SettingsFragmentMoreSectionTest {
                 )
             )
         ).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_ABOUT_APP, prefAboutApp?.key)
+        assertEquals(PREFERENCE_ABOUT_APP, prefAboutApp.key)
         assertEquals(
             String.format(context.getString(R.string.about_android), context.getString(R.string.app_name)),
-            prefAboutApp?.title
+            prefAboutApp.title
         )
-        assertEquals(String.format(context.getString(R.string.about_version), appVersion), prefAboutApp?.summary)
-        assertTrue(prefAboutApp?.isVisible == true)
-        assertTrue(prefAboutApp?.isEnabled == true)
+        assertEquals(String.format(context.getString(R.string.about_version), appVersion), prefAboutApp.summary)
+        assertTrue(prefAboutApp.isVisible == true)
+        assertTrue(prefAboutApp.isEnabled == true)
     }
 
     @Test
@@ -359,6 +363,7 @@ class SettingsFragmentMoreSectionTest {
     }
 
     companion object {
+        private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
         private const val PREFERENCE_MORE_CATEGORY = "more_category"
         private const val PREFERENCE_HELP = "help"
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
