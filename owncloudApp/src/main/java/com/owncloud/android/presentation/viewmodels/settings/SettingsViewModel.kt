@@ -77,7 +77,11 @@ class SettingsViewModel(
 
     fun isHelpEnabled() = contextProvider.getBoolean(R.bool.help_enabled)
 
+    fun getHelpUrl() = contextProvider.getString(R.string.url_help)
+
     fun isSyncEnabled() = contextProvider.getBoolean(R.bool.sync_calendar_contacts_enabled)
+
+    fun getSyncUrl() = contextProvider.getString(R.string.url_sync_calendar_contacts)
 
     fun isRecommendEnabled() = contextProvider.getBoolean(R.bool.recommend_enabled)
 
@@ -86,4 +90,6 @@ class SettingsViewModel(
     fun isPrivacyPolicyEnabled() = contextProvider.getBoolean(R.bool.privacy_policy_enabled)
 
     fun isImprintEnabled() = contextProvider.getBoolean(R.bool.imprint_enabled)
+
+    fun getImprintUrl() = contextProvider.getString(R.string.url_imprint)
 }

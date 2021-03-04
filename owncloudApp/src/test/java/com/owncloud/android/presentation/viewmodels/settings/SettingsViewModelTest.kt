@@ -33,6 +33,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -365,6 +366,19 @@ class SettingsViewModelTest : ViewModelTest() {
     }
 
     @Test
+    fun `get help url - ok`() {
+        every { contextProvider.getString(any())} returns EXAMPLE_URL
+
+        val helpUrl = settingsViewModel.getHelpUrl()
+
+        assertEquals(EXAMPLE_URL, helpUrl)
+
+        verify(exactly = 1) {
+            contextProvider.getString(R.string.url_help)
+        }
+    }
+
+   @Test
     fun `is sync enabled - ok - true`() {
         every { contextProvider.getBoolean(any())} returns true
 
@@ -374,6 +388,19 @@ class SettingsViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             contextProvider.getBoolean(R.bool.sync_calendar_contacts_enabled)
+        }
+    }
+
+    @Test
+    fun `get sync url - ok`() {
+        every { contextProvider.getString(any())} returns EXAMPLE_URL
+
+        val syncUrl = settingsViewModel.getSyncUrl()
+
+        assertEquals(EXAMPLE_URL, syncUrl)
+
+        verify(exactly = 1) {
+            contextProvider.getString(R.string.url_sync_calendar_contacts)
         }
     }
 
@@ -492,6 +519,23 @@ class SettingsViewModelTest : ViewModelTest() {
         verify(exactly = 1) {
             contextProvider.getBoolean(R.bool.imprint_enabled)
         }
+    }
+
+    @Test
+    fun `get imprint url - ok`() {
+        every { contextProvider.getString(any())} returns EXAMPLE_URL
+
+        val imprintUrl = settingsViewModel.getImprintUrl()
+
+        assertEquals(EXAMPLE_URL, imprintUrl)
+
+        verify(exactly = 1) {
+            contextProvider.getString(R.string.url_imprint)
+        }
+    }
+
+    companion object {
+        private const val EXAMPLE_URL = "URL"
     }
 
 }
