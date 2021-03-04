@@ -64,6 +64,7 @@ class SettingsFragmentSecuritySectionTest {
 
     private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
 
+    private lateinit var prefMoreCategory: PreferenceCategory
     private lateinit var prefSecurityCategory: PreferenceCategory
     private lateinit var prefPasscode: CheckBoxPreference
     private lateinit var prefPattern: CheckBoxPreference
@@ -104,6 +105,7 @@ class SettingsFragmentSecuritySectionTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
+            prefMoreCategory = fragment.findPreference(PREFERENCE_MORE_CATEGORY)!!
             prefSecurityCategory = fragment.findPreference(PREFERENCE_SECURITY_CATEGORY)!!
             prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
             prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
@@ -111,6 +113,9 @@ class SettingsFragmentSecuritySectionTest {
             prefTouchesWithOtherVisibleWindows =
                 fragment.findPreference(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)!!
         }
+
+        prefMoreCategory.isVisible = false
+
         Intents.init()
     }
 
@@ -443,5 +448,6 @@ class SettingsFragmentSecuritySectionTest {
 
     companion object {
         private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
+        private const val PREFERENCE_MORE_CATEGORY = "more_category"
     }
 }
