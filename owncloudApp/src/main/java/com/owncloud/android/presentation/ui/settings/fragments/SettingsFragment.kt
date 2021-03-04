@@ -237,7 +237,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Help
         if (settingsViewModel.isHelpEnabled()) {
             prefHelp?.setOnPreferenceClickListener {
-                val helpUrl = getString(R.string.url_help)
+                val helpUrl = settingsViewModel.getHelpUrl()
                 goToUrl(helpUrl)
                 true
             }
@@ -248,7 +248,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Sync contacts, calendars and tasks
         if (settingsViewModel.isSyncEnabled()) {
             prefSync?.setOnPreferenceClickListener {
-                val syncUrl = getString(R.string.url_sync_calendar_contacts)
+                val syncUrl = settingsViewModel.getSyncUrl()
                 goToUrl(syncUrl)
                 true
             }
@@ -309,7 +309,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Imprint
         if (settingsViewModel.isImprintEnabled()) {
             prefImprint?.setOnPreferenceClickListener {
-                val imprintUrl = getString(R.string.url_imprint)
+                val imprintUrl = settingsViewModel.getImprintUrl()
                 goToUrl(imprintUrl)
                 true
             }
