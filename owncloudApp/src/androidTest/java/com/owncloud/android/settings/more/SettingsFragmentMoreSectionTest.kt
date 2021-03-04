@@ -267,7 +267,9 @@ class SettingsFragmentMoreSectionTest {
     }
 
     @Test
-    fun helpOpensUrl() {
+    fun helpOpensNotEmptyUrl() {
+        every { settingsViewModel.getHelpUrl() } returns context.getString(R.string.url_help)
+
         launchTest()
 
         onView(withText(R.string.prefs_help)).perform(click())
@@ -277,7 +279,9 @@ class SettingsFragmentMoreSectionTest {
     }
 
     @Test
-    fun syncOpensUrl() {
+    fun syncOpensNotEmptyUrl() {
+        every { settingsViewModel.getSyncUrl() } returns context.getString(R.string.url_sync_calendar_contacts)
+
         launchTest()
 
         onView(withText(R.string.prefs_sync_calendar_contacts)).perform(click())
@@ -342,15 +346,17 @@ class SettingsFragmentMoreSectionTest {
         intended(hasComponent(PrivacyPolicyActivity::class.java.name))
     }
 
-    /*@Test
+    @Test
     fun imprintOpensUrl() {
+        every { settingsViewModel.getImprintUrl() } returns "https://owncloud.com/mobile"
+
         launchTest()
 
         onView(withText(R.string.prefs_imprint)).perform(click())
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
         intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
-        intended(hasData(context.getString(R.string.url_imprint)))
-    }*/
+        intended(hasData("https://owncloud.com/mobile"))
+    }
 
     companion object {
         private const val PREFERENCE_MORE_CATEGORY = "more_category"
