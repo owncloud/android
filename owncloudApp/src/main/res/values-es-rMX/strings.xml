@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
+  <string name="prefs_biometric">Candado Biométrico</string>
   <string name="prefs_biometric_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro/a que desea habilitar esta función?</string>
   <string name="prefs_camera_picture_upload">Cargar imagenes</string>
@@ -60,6 +61,8 @@
   <string name="pattern_not_same_pattern">Los patrones introducidos son diferentes</string>
   <string name="pattern_stored">Patrón almacenado</string>
   <string name="pattern_removed">Patrón eliminado</string>
+  <string name="pass_code_locked">Asegurar con contraseña</string>
+  <string name="pattern_locked">Asegurar con patrón</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
   <string name="bottom_nav_uploads">Cargas</string>
@@ -70,6 +73,7 @@
   <string name="error_reason">porque</string>
   <string name="auth_failure_snackbar">Fallo en autenticación</string>
   <string name="server_not_supported">La versión de tu servidor es inferior a la 10 así que ya no está soportado, actualiza tu servidor a una versión más nueva.</string>
+  <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
   <string name="auth_oauth_failure">The token de acceso ha expirado o ya no es válido. Inicie sesión de nuevo para obtener acceso</string>
   <string name="auth_oauth_failure_snackbar_action">Iniciar sesión</string>
   <string name="auth_check_server">Verificar servidor</string>
@@ -126,13 +130,16 @@
   <string name="common_error">Error</string>
   <string name="common_loading">Cargando...</string>
   <string name="common_unknown">desconocido</string>
+  <string name="common_error_unknown">Error desconocido</string>
   <string name="common_pending">Pendiente</string>
   <string name="common_important">Importante</string>
   <string name="about_title">Acerca de</string>
   <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>
   <string name="create_account">Crear cuenta</string>
+  <string name="upload_chooser_title">Subir desde</string>
   <string name="uploader_info_dirname">Nombre de la carpeta</string>
+  <string name="uploader_upload_in_progress_ticker">Subiendo...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Subiendo %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Subido con éxito</string>
   <string name="uploader_upload_succeeded_content_single">%1$s subido</string>
@@ -150,6 +157,7 @@
   <string name="uploads_view_group_failed_uploads">Fallido (presiona para reintentarlo)</string>
   <string name="uploads_view_group_finished_uploads">Subidos</string>
   <string name="uploads_view_group_file_count">%d archivos</string>
+  <string name="uploads_view_group_file_count_single">%d archivo</string>
   <string name="uploads_view_upload_status_succeeded">Completada</string>
   <string name="uploads_view_upload_status_cancelled">Cancelado</string>
   <string name="uploads_view_upload_status_paused">Pausado</string>
@@ -167,6 +175,7 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Esperando a la conexión wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Esperando para subir</string>
   <string name="uploads_view_unsupported_media_type">Tipo de medio no soportado</string>
+  <string name="downloader_download_in_progress_ticker">Descargando</string>
   <string name="downloader_download_in_progress_content">%1$d%% Descargado de %2$s</string>
   <string name="downloader_download_succeeded_ticker">Descarga completa</string>
   <string name="downloader_download_succeeded_content">%1$s descargado</string>
@@ -185,7 +194,7 @@
   <string name="sync_fail_in_favourites_ticker">Fallos en la sincronización de contenidos</string>
   <string name="sync_fail_in_favourites_content">Los contenidos de %1$d archivos no pudieron sincronizarse (%2$d conflictos)</string>
   <string name="sync_foreign_files_forgotten_ticker">Algunos archivos locales se han perdido</string>
-  <string name="sync_foreign_files_forgotten_content">%1$d archivos en la carpeta %2$s no pudieron ser copiados a</string>
+  <string name="sync_foreign_files_forgotten_content">%1$d archivos en la carpeta %2$s no pudieron ser copiados</string>
   <string name="sync_foreign_files_forgotten_explanation">A partir de la versión 1.3.16, los ficheros subidos desde este dispositivo se copian en la carpeta local %1$s para evitar la pérdida de datos cuando se sincroniza un único archivo con varias cuentas.\n\nDebido a este cambio, todos los ficheros subidos con versiones anteriores de esta aplicación fueron copiados a la carpeta %2$s. Sin embargo, un error impidió que se completara esta operación durante la sincronización de la cuenta. Puede dejar los archivos tal y como están y eliminar el enlace a %3$s o mover los archivos a la carpeta %1$s y mantener el enlace a %4$s.\n\nDebajo se muestran los archivos locales y los archivos remotos en %5$s a los que fueron enlazados.</string>
   <string name="sync_current_folder_was_removed">La carpeta local %1$s no existe.</string>
   <string name="foreign_files_move">Mover todo</string>
@@ -193,7 +202,7 @@
   <string name="foreign_files_fail">No se han podido mover algunos archivos</string>
   <string name="foreign_files_local_text">Local: %1$s</string>
   <string name="foreign_files_remote_text">Remoto: %1$s</string>
-  <string name="upload_query_move_foreign_files">No hay suficiente espacio para copiar los archivos seleccionados en la carpeta %1$s. ¿Te gustaría moverlos entonces?</string>
+  <string name="upload_query_move_foreign_files">No hay suficiente espacio para copiar los archivos seleccionados en la carpeta %1$s. ¿Quiere moverlos en lugar de copiarlos?</string>
   <string name="pass_code_enter_pass_code">Por favor introduzca su código</string>
   <string name="pass_code_configure_your_pass_code">Introduzca su contraseña</string>
   <string name="pass_code_configure_your_pass_code_explanation">La contraseña será requerida cada vez que la aplicación sea iniciada</string>
@@ -204,6 +213,7 @@
   <string name="pass_code_removed">Código de acceso borrado</string>
   <string name="pass_code_stored">Contraseña almacenada</string>
   <string name="biometric_not_hardware_detected">Este dispositivo no tiene soporte para autenticación biométrica</string>
+  <string name="biometric_prompt_subtitle">Iniciar sesión con su credencial biométrica</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>
@@ -224,6 +234,7 @@
   <string name="media_play_pause_description">Botón de reproducción o pausa </string>
   <string name="media_forward_description">Botón avance rápido</string>
   <string name="upload_from_camera_title">Imagenes desde la cámara</string>
+  <string name="auth_getting_authorization">Obteniendo autorización...</string>
   <string name="auth_no_net_conn_title">Sin conexión de red</string>
   <string name="auth_nossl_plain_ok_title">Conexión segura no disponible.</string>
   <string name="auth_connection_established">Conexión establecida</string>
@@ -260,6 +271,7 @@
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">Realmente quiere eliminar la cuenta %1$s?</string>
   <string name="confirmation_remove_public_share_title">Eliminar enlace</string>
+  <string name="confirmation_remove_share_message">Realmente quieres dejar de compartir %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -319,6 +331,7 @@
   <string name="confirmation_disable_pictures_upload_message">¿Seguro/a que desea deshabilitar esta función? Las imagenes pendientes no se subirán</string>
   <string name="confirmation_disable_videos_upload_message">¿Seguro/a que desea deshabilitar esta función? Los videos pendientes no se subirán</string>
   <string name="conflict_title">Conflicto con archivo</string>
+  <string name="conflict_description">Hay un conflicto en el archivo %1$s, tap para resolverlo</string>
   <string name="conflict_message">¿Cuáles archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambos</string>
   <string name="conflict_use_local_version">versión local</string>
@@ -329,6 +342,8 @@
   <string name="prefs_camera_picture_upload_path_title">Ruta de carga de imagenes</string>
   <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su
 		administrador.</string>
+  <string name="unshare_link_file_error">No se pudo dejar de compartir este archivo o carpeta</string>
+  <string name="update_link_file_error">No se pudo actualizar este archivo o carpeta</string>
   <string name="share_link_password_title">Introduzca una contraseña</string>
   <string name="share_link_empty_password">Debe introducir una contraseña</string>
   <string name="activity_chooser_send_file_title">Enviar</string>
@@ -360,6 +375,7 @@
   <string name="log_send_history_button">Mandar historial.</string>
   <string name="log_send_no_mail_app">Aplicación para enviar registros no encontrada. Por favor instale una aplicación de correo.</string>
   <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
+  <string name="log_progress_dialog_text">Cargando datos...</string>
   <string name="actionbar_select_all">Seleccionar todo</string>
   <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Aquí no hay nada. ¡Puede agregar una carpeta!</string>
@@ -396,6 +412,8 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de la Camera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">El archivo original será...</string>
+  <string name="prefs_camera_upload_behaviour_title">El archivo original será...</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">dejado en la carpeta original</string>
@@ -415,6 +433,7 @@
   <string name="share_via_link_expiration_date_label">Caducidad</string>
   <string name="share_via_link_password_label">Contraseña</string>
   <string name="share_via_link_password_title">Asegurado</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">Descargar / Ver / Subir</string>
   <string name="share_get_public_link_button">Obtener enlace</string>
   <string name="share_with_title">Compartir con</string>
   <string name="share_with_edit_title">Compartir con %1$s</string>
@@ -429,9 +448,9 @@
   <string name="share_privilege_can_edit_create">crear</string>
   <string name="share_privilege_can_edit_change">cambio</string>
   <string name="share_privilege_can_edit_delete">borrar</string>
-  <string name="edit_share_unshare">Parar de compatir</string>
+  <string name="edit_share_unshare">Dejar de compatir</string>
   <string name="edit_share_done">hecho</string>
-    <string name="manage_space_title">Gestionar espacio</string>
+  <string name="manage_space_title">Gestionar espacio</string>
   <string name="manage_space_description">Las opciones, certificados y Bases de Datos de %1$s\'s serán borrados permanentemente. \n\nLos archibos bajados no serán tocados. .\n\nEste proceso tardará algún tiempo.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>
   <string name="manage_space_error">No se han podido eliminar algunos archivos</string>
@@ -459,7 +478,7 @@
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Contraseña *</string>
   <string name="share_via_link_expiration_date_enforced_label">Caducidad *</string>
-  <string name="share_via_link_expiration_date_explanation_label">El enlace público expirará no más tarde de %1$d días después de su creación</string>
+  <string name="share_via_link_expiration_date_explanation_label">El enlace público expirará a más tardar %1$d días después de su creación</string>
   <string name="share_via_link_default_name_template">%1$s enlace</string>
   <string name="share_via_link_empty_password">La contraseña está vacía</string>
   <string name="private_link_info">Este es un enlace privado, solo las personas que tienen acceso al archivo/carpeta pueden usarlo. Úsalo como un enlace permanente para ti mismo o para señalar a otros a los archivos dentro de las acciones.</string>
@@ -474,6 +493,8 @@
   <string name="file_sync_notification_channel_description">Ver resultados de la sincronización de archivos</string>
   <string name="rate_dialog_title">Calificar %1$s app!</string>
   <string name="button_no_thanks_name">NO, GRACIAS</string>
+  <string name="button_later_name">DESPUÉS</string>
+  <string name="button_rate_now_name">CALIFICAR AHORA</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionados</item>
@@ -483,6 +504,7 @@
   <string name="welcome_feature_1_title">Gestionar todos tus archivos sincronizados</string>
   <string name="welcome_feature_2_title">Compartir archivos y carpetas</string>
   <string name="welcome_feature_2_text">Puedes compartir en privado o públicamente</string>
+  <string name="welcome_feature_3_title">Multicuenta</string>
   <string name="welcome_feature_3_text">Conectar a todos tus servidores ownCloud</string>
   <string name="welcome_feature_4_title">Cargas de la cámara</string>
   <string name="welcome_feature_5_title">Video streaming</string>
