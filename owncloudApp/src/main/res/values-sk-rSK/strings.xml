@@ -414,6 +414,8 @@
   <string name="share_privilege_can_edit_delete">vymazať</string>
   <string name="edit_share_unshare">Ukončenie zdieľania</string>
   <string name="edit_share_done">Hotovo</string>
+  <string name="action_upload_retry">Skúsiť znova</string>
+  <string name="action_upload_clear">Vyčistiť</string>
   <string name="manage_space_title">Spravovať prestor</string>
   <string name="manage_space_description">Nastavenia, certifikaty databazy a servera z %1$s budú trvalo odstránené. \n\nStiahnuté súbory budú ponechané.\n\nTento proces môžete spustiť iba raz.</string>
   <string name="manage_space_clear_data">Vyčistenie dát.</string>
