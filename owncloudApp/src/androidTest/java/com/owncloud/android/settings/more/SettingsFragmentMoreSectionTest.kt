@@ -157,13 +157,13 @@ class SettingsFragmentMoreSectionTest {
         onView(withText(R.string.prefs_category_more)).check(matches(isDisplayed()))
         assertEquals(PREFERENCE_MORE_CATEGORY, prefMoreCategory.key)
         assertEquals(context.getString(R.string.prefs_category_more), prefMoreCategory.title)
-        assertEquals(null, prefMoreCategory.summary)
+        assertNull(prefMoreCategory.summary)
         assertTrue(prefMoreCategory.isVisible)
 
         onView(withText(R.string.prefs_help)).check(matches(isDisplayed()))
         assertEquals(PREFERENCE_HELP, prefHelp?.key)
         assertEquals(context.getString(R.string.prefs_help), prefHelp?.title)
-        assertEquals(null, prefHelp?.summary)
+        assertNull(prefHelp?.summary)
         assertTrue(prefHelp?.isVisible == true)
         assertTrue(prefHelp?.isEnabled == true)
 
@@ -178,28 +178,28 @@ class SettingsFragmentMoreSectionTest {
         onView(withText(R.string.prefs_recommend)).check(matches(isDisplayed()))
         assertEquals(PREFERENCE_RECOMMEND, prefRecommend?.key)
         assertEquals(context.getString(R.string.prefs_recommend), prefRecommend?.title)
-        assertEquals(null, prefRecommend?.summary)
+        assertNull(prefRecommend?.summary)
         assertTrue(prefRecommend?.isVisible == true)
         assertTrue(prefRecommend?.isEnabled == true)
 
         onView(withText(R.string.prefs_feedback)).check(matches(isDisplayed()))
         assertEquals(PREFERENCE_FEEDBACK, prefFeedback?.key)
         assertEquals(context.getString(R.string.prefs_feedback), prefFeedback?.title)
-        assertEquals(null, prefFeedback?.summary)
+        assertNull(prefFeedback?.summary)
         assertTrue(prefFeedback?.isVisible == true)
         assertTrue(prefFeedback?.isEnabled == true)
 
         onView(withText(R.string.prefs_privacy_policy)).check(matches(isDisplayed()))
         assertEquals(PREFERENCE_PRIVACY_POLICY, prefPrivacyPolicy?.key)
         assertEquals(context.getString(R.string.prefs_privacy_policy), prefPrivacyPolicy?.title)
-        assertEquals(null, prefPrivacyPolicy?.summary)
+        assertNull(prefPrivacyPolicy?.summary)
         assertTrue(prefPrivacyPolicy?.isVisible == true)
         assertTrue(prefPrivacyPolicy?.isEnabled == true)
 
         onView(withText(R.string.prefs_imprint)).check(matches(isDisplayed()))
         assertEquals(PREFERENCE_IMPRINT, prefImprint?.key)
         assertEquals(context.getString(R.string.prefs_imprint), prefImprint?.title)
-        assertEquals(null, prefImprint?.summary)
+        assertNull(prefImprint?.summary)
         assertTrue(prefImprint?.isVisible == true)
 
         val appVersion = BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.COMMIT_SHA1
