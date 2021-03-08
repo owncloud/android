@@ -35,6 +35,8 @@ import androidx.preference.PreferenceFragmentCompat
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
+import com.owncloud.android.extensions.goToUrl
+import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
@@ -236,7 +238,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         if (settingsViewModel.isHelpEnabled()) {
             prefHelp?.setOnPreferenceClickListener {
                 val helpUrl = settingsViewModel.getHelpUrl()
-                goToUrl(helpUrl)
+                requireActivity().goToUrl(helpUrl)
                 true
             }
         } else {
@@ -247,7 +249,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         if (settingsViewModel.isSyncEnabled()) {
             prefSync?.setOnPreferenceClickListener {
                 val syncUrl = settingsViewModel.getSyncUrl()
-                goToUrl(syncUrl)
+                requireActivity().goToUrl(syncUrl)
                 true
             }
         } else {
@@ -257,19 +259,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Recommend
         if (settingsViewModel.isRecommendEnabled()) {
             prefRecommend?.setOnPreferenceClickListener {
-                val intent = Intent(Intent.ACTION_SENDTO)
-                intent.data = Uri.parse(getString(R.string.mail_recommend))
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
                 val appName = getString(R.string.app_name)
                 val downloadUrl = getString(R.string.url_app_download)
 
+                val recommendEmail = getString(R.string.mail_recommend)
                 val recommendSubject = String.format(getString(R.string.recommend_subject), appName)
                 val recommendText = String.format(getString(R.string.recommend_text), appName, downloadUrl)
 
-                intent.putExtra(Intent.EXTRA_SUBJECT, recommendSubject)
-                intent.putExtra(Intent.EXTRA_TEXT, recommendText)
-                startActivity(intent)
+                requireActivity().sendEmail(recommendEmail, recommendSubject, recommendText)
                 true
             }
         } else {
@@ -281,12 +278,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
             prefFeedback?.setOnPreferenceClickListener {
                 val feedbackMail = getString(R.string.mail_feedback)
                 val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
-                val intent = Intent(Intent.ACTION_SENDTO)
-                intent.putExtra(Intent.EXTRA_SUBJECT, feedback)
 
-                intent.data = Uri.parse(feedbackMail)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                requireActivity().sendEmail(feedbackMail, feedback, null)
                 true
             }
         } else {
@@ -308,7 +301,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         if (settingsViewModel.isImprintEnabled()) {
             prefImprint?.setOnPreferenceClickListener {
                 val imprintUrl = settingsViewModel.getImprintUrl()
-                goToUrl(imprintUrl)
+                requireActivity().goToUrl(imprintUrl)
                 true
             }
         } else {
@@ -318,7 +311,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // About app
         prefAboutApp?.let {
             it.title = String.format(getString(R.string.about_android), getString(R.string.app_name))
-            val appVersion = BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.COMMIT_SHA1
+            val appVersion = "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE} ${BuildConfig.COMMIT_SHA1}"
             it.summary = String.format(getString(R.string.about_version), appVersion)
             it.setOnPreferenceClickListener {
                 // Enable logs with 5 taps, to be done when logs section is approached
@@ -336,14 +329,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         prefBiometric?.isChecked = false
         prefBiometric?.isEnabled = false
         prefBiometric?.summary = summary
-    }
-
-    private fun goToUrl(url: String) {
-        if (url.isNotEmpty()) {
-            val uriUrl = Uri.parse(url)
-            val intent = Intent(Intent.ACTION_VIEW, uriUrl)
-            startActivity(intent)
-        }
     }
 
     companion object {
