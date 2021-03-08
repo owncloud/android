@@ -61,11 +61,16 @@ fun Activity.goToUrl(url: String) {
     }
 }
 
-fun Activity.sendEmail(email: String, subject: String?, text: String?) {
-    val intent = Intent(Intent.ACTION_SENDTO)
-    intent.data = Uri.parse(email)
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    intent.putExtra(Intent.EXTRA_SUBJECT, subject)
-    intent.putExtra(Intent.EXTRA_TEXT, text)
+fun Activity.sendEmail(
+    email: String,
+    subject: String? = null,
+    text: String? = null
+) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        data = Uri.parse(email)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        putExtra(Intent.EXTRA_SUBJECT, subject)
+        putExtra(Intent.EXTRA_TEXT, text)
+    }
     startActivity(intent)
 }
