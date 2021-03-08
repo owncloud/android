@@ -26,6 +26,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.testutil.OC_BASE_URL
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import io.mockk.every
@@ -367,11 +368,11 @@ class SettingsViewModelTest : ViewModelTest() {
 
     @Test
     fun `get help url - ok`() {
-        every { contextProvider.getString(any())} returns EXAMPLE_URL
+        every { contextProvider.getString(any())} returns OC_BASE_URL
 
         val helpUrl = settingsViewModel.getHelpUrl()
 
-        assertEquals(EXAMPLE_URL, helpUrl)
+        assertEquals(OC_BASE_URL, helpUrl)
 
         verify(exactly = 1) {
             contextProvider.getString(R.string.url_help)
@@ -393,11 +394,11 @@ class SettingsViewModelTest : ViewModelTest() {
 
     @Test
     fun `get sync url - ok`() {
-        every { contextProvider.getString(any())} returns EXAMPLE_URL
+        every { contextProvider.getString(any())} returns OC_BASE_URL
 
         val syncUrl = settingsViewModel.getSyncUrl()
 
-        assertEquals(EXAMPLE_URL, syncUrl)
+        assertEquals(OC_BASE_URL, syncUrl)
 
         verify(exactly = 1) {
             contextProvider.getString(R.string.url_sync_calendar_contacts)
@@ -523,19 +524,15 @@ class SettingsViewModelTest : ViewModelTest() {
 
     @Test
     fun `get imprint url - ok`() {
-        every { contextProvider.getString(any())} returns EXAMPLE_URL
+        every { contextProvider.getString(any())} returns OC_BASE_URL
 
         val imprintUrl = settingsViewModel.getImprintUrl()
 
-        assertEquals(EXAMPLE_URL, imprintUrl)
+        assertEquals(OC_BASE_URL, imprintUrl)
 
         verify(exactly = 1) {
             contextProvider.getString(R.string.url_imprint)
         }
-    }
-
-    companion object {
-        private const val EXAMPLE_URL = "URL"
     }
 
 }
