@@ -266,7 +266,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 val recommendSubject = String.format(getString(R.string.recommend_subject), appName)
                 val recommendText = String.format(getString(R.string.recommend_text), appName, downloadUrl)
 
-                requireActivity().sendEmail(recommendEmail, recommendSubject, recommendText)
+                requireActivity().sendEmail(email = recommendEmail, subject = recommendSubject, text = recommendText)
                 true
             }
         } else {
@@ -279,7 +279,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 val feedbackMail = getString(R.string.mail_feedback)
                 val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
 
-                requireActivity().sendEmail(feedbackMail, feedback, null)
+                requireActivity().sendEmail(email = feedbackMail, subject = feedback)
                 true
             }
         } else {
