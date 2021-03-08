@@ -167,7 +167,7 @@
   <string name="uploader_upload_text_filename_hint">Jméno souboru</string>
   <string name="uploader_upload_camera_upload_files">Nahrávám soubory z fotoparátu</string>
   <string name="uploader_upload_available_offline_files">Nahrávání dostupných offline souborů</string>
-  <string name="uploader_upload_requested_from_wifi_files">Nahrávání vyžádáno wifi soubory</string>
+  <string name="uploader_upload_requested_from_wifi_files">Vyžádáno nahrávání souborů</string>
   <string name="ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
   <string name="uploads_view_title">Nahrání</string>
   <string name="uploads_view_group_current_uploads">Aktuální</string>
