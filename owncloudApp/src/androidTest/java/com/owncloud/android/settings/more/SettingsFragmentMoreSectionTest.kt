@@ -224,8 +224,8 @@ class SettingsFragmentMoreSectionTest {
             prefAboutApp.title
         )
         assertEquals(String.format(context.getString(R.string.about_version), appVersion), prefAboutApp.summary)
-        assertTrue(prefAboutApp.isVisible == true)
-        assertTrue(prefAboutApp.isEnabled == true)
+        assertTrue(prefAboutApp.isVisible)
+        assertTrue(prefAboutApp.isEnabled)
     }
 
     @Test
