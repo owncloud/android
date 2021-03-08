@@ -31,6 +31,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK_NO_SSL
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK_SSL
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.lib.resources.status.RemoteServerInfo
 import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.createRemoteOperationResultMock
@@ -39,6 +40,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -49,7 +51,11 @@ class OCRemoteServerInfoDataSourceTest {
     private val clientManager: ClientManager = mockk(relaxed = true)
     private val ocClientMocked: OwnCloudClient = mockk(relaxed = true)
 
-    private val ocOwncloudVersion = OwnCloudVersion("10.3.2")
+    private val OC_REMOTE_SERVER_INFO = RemoteServerInfo(
+        ownCloudVersion = OwnCloudVersion(OC_SERVER_INFO.ownCloudVersion),
+        baseUrl = OC_SERVER_INFO.baseUrl,
+        isSecureConnection = OC_SERVER_INFO.isSecureConnection
+    )
     private val basicAuthHeader = "basic realm=\"owncloud\", charset=\"utf-8\""
     private val bearerHeader = "bearer realm=\"owncloud\""
     private val authHeadersBasic = listOf(basicAuthHeader)
@@ -155,7 +161,7 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test
     fun getRemoteStatusIsSecureConnection() {
-        val expectedValue = Pair(ocOwncloudVersion, true)
+        val expectedValue = OC_REMOTE_SERVER_INFO.copy(isSecureConnection = true)
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         val currentValue = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
@@ -168,7 +174,7 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test
     fun getRemoteStatusIsNotSecureConnection() {
-        val expectedValue = Pair(ocOwncloudVersion, false)
+        val expectedValue = OC_REMOTE_SERVER_INFO.copy(isSecureConnection = false)
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         val currentValue = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
@@ -181,7 +187,7 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test(expected = OwncloudVersionNotSupportedException::class)
     fun getRemoteStatusOwncloudVersionNotSupported() {
-        val expectedValue = Pair(OwnCloudVersion("9.0.0"), false)
+        val expectedValue = OC_REMOTE_SERVER_INFO.copy(ownCloudVersion = OwnCloudVersion("9.0.0"))
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
@@ -189,14 +195,14 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test
     fun getRemoteStatusOwncloudVersionHidden() {
-        val expectedValue = Pair(OwnCloudVersion(""), false)
+        val expectedValue = OC_REMOTE_SERVER_INFO.copy(ownCloudVersion = OwnCloudVersion(""))
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
 
         val remoteStatus = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
 
-        assertEquals(true, remoteStatus.first.isVersionHidden)
+        assertTrue(remoteStatus.ownCloudVersion.isVersionHidden)
         verify { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
     }
 
@@ -214,9 +220,7 @@ class OCRemoteServerInfoDataSourceTest {
         val expectedValue =
             OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = true)
 
-        prepareRemoteStatusToBeRetrieved(
-            Pair(OwnCloudVersion(expectedValue.ownCloudVersion), expectedValue.isSecureConnection)
-        )
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO.copy(isSecureConnection = true))
         prepareAuthorizationMethodToBeRetrieved(expectedValue.authenticationMethod, true)
 
         val currentValue = ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
@@ -231,9 +235,7 @@ class OCRemoteServerInfoDataSourceTest {
         val expectedValue =
             OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = false)
 
-        prepareRemoteStatusToBeRetrieved(
-            Pair(OwnCloudVersion(expectedValue.ownCloudVersion), expectedValue.isSecureConnection)
-        )
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO.copy(isSecureConnection = false))
         prepareAuthorizationMethodToBeRetrieved(expectedValue.authenticationMethod, true)
 
         val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl)
@@ -248,9 +250,7 @@ class OCRemoteServerInfoDataSourceTest {
         val expectedValue =
             OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BEARER_TOKEN, isSecureConnection = true)
 
-        prepareRemoteStatusToBeRetrieved(
-            Pair(OwnCloudVersion(expectedValue.ownCloudVersion), expectedValue.isSecureConnection)
-        )
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO.copy(isSecureConnection = true))
         prepareAuthorizationMethodToBeRetrieved(expectedValue.authenticationMethod, true)
 
         val currentValue = ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
@@ -265,9 +265,7 @@ class OCRemoteServerInfoDataSourceTest {
         val expectedValue =
             OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = true)
 
-        prepareRemoteStatusToBeRetrieved(
-            Pair(OwnCloudVersion(expectedValue.ownCloudVersion), expectedValue.isSecureConnection)
-        )
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO.copy(isSecureConnection = true))
         prepareAuthorizationMethodToBeRetrieved(expectedValue.authenticationMethod, true)
 
         val currentValue = ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
@@ -279,13 +277,7 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test(expected = NoConnectionWithServerException::class)
     fun getServerInfoNoConnection() {
-        val expectedValue =
-            OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = true)
-
-        prepareRemoteStatusToBeRetrieved(
-            Pair(OwnCloudVersion(expectedValue.ownCloudVersion), expectedValue.isSecureConnection),
-            NoConnectionWithServerException()
-        )
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO, NoConnectionWithServerException())
 
         ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
 
@@ -318,17 +310,17 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     private fun prepareRemoteStatusToBeRetrieved(
-        expectedPair: Pair<OwnCloudVersion, Boolean>,
+        expectedConfig: RemoteServerInfo,
         exception: Exception? = null
     ) {
-        val expectedResultCode = when (expectedPair.second) {
+        val expectedResultCode = when (expectedConfig.isSecureConnection) {
             true -> OK_SSL
             false -> OK_NO_SSL
         }
 
-        val remoteStatusResultMocked: RemoteOperationResult<OwnCloudVersion> =
+        val remoteStatusResultMocked: RemoteOperationResult<RemoteServerInfo> =
             createRemoteOperationResultMock(
-                data = expectedPair.first,
+                data = expectedConfig,
                 isSuccess = true,
                 resultCode = expectedResultCode,
                 exception = exception

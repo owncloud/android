@@ -27,6 +27,7 @@ import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
 import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation;
 import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.lib.resources.status.RemoteServerInfo;
 import com.owncloud.android.operations.common.SyncOperation;
 import timber.log.Timber;
 
@@ -56,9 +57,9 @@ public class SyncCapabilitiesOperation extends SyncOperation<RemoteCapability> {
             // server version is important; this fallback will try to get it from status.php
             // if capabilities API is not available.
             GetRemoteStatusOperation getStatus = new GetRemoteStatusOperation();
-            RemoteOperationResult<OwnCloudVersion> statusResult = getStatus.execute(client);
+            RemoteOperationResult<RemoteServerInfo> statusResult = getStatus.execute(client);
             if (statusResult.isSuccess()) {
-                serverVersion = statusResult.getData();
+                serverVersion = statusResult.getData().getOwnCloudVersion();
             }
         }
 
