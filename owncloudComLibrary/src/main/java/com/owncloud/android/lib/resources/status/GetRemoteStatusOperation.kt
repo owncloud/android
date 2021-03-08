@@ -25,17 +25,14 @@ package com.owncloud.android.lib.resources.status
 
 import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.http.HttpConstants
-import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_PREFIX
+import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_PREFIX
+import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
 import org.json.JSONException
-import org.json.JSONObject
 import timber.log.Timber
-import java.net.URL
-import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLException
 
 /**
  * Checks if the server is valid
@@ -45,116 +42,44 @@ import javax.net.ssl.SSLException
  * @author David González Verdugo
  * @author Abel García de Prada
  */
-class GetRemoteStatusOperation : RemoteOperation<OwnCloudVersion>() {
-    private lateinit var latestResult: RemoteOperationResult<OwnCloudVersion>
+class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<OwnCloudVersion> {
+    public override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
+        client.baseUri = buildFullHttpsUrl(client.baseUri)
 
-        val baseUriStr = client.baseUri.toString()
-        if (baseUriStr.startsWith(HTTP_PREFIX) || baseUriStr.startsWith(
-                HTTPS_PREFIX
-            )) {
-            tryConnection(client)
-        } else {
-            client.baseUri = Uri.parse(HTTPS_PREFIX + baseUriStr)
-            val httpsSuccess = tryConnection(client)
-            if (!httpsSuccess && !latestResult.isSslRecoverableException) {
-                Timber.d("Establishing secure connection failed, trying non secure connection")
-                client.baseUri = Uri.parse(HTTP_PREFIX + baseUriStr)
-                tryConnection(client)
-            }
+        var result = tryToConnect(client)
+        if (!(result.code == ResultCode.OK || result.code == ResultCode.OK_SSL) && !result.isSslRecoverableException) {
+            Timber.d("Establishing secure connection failed, trying non secure connection")
+            client.baseUri = client.baseUri.buildUpon().scheme(HTTP_SCHEME).build()
+            result = tryToConnect(client)
         }
-        return latestResult
+
+        return result
     }
 
-    private fun tryConnection(client: OwnCloudClient): Boolean {
-        var successfulConnection = false
-        val baseUrlSt = client.baseUri.toString()
-        try {
-            var getMethod = GetMethod(URL(baseUrlSt + OwnCloudClient.STATUS_PATH)).apply {
-                setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-                setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-            }
-            client.setFollowRedirects(false)
-            var isRedirectToNonSecureConnection = false
-            var status: Int
-            try {
-                status = client.executeHttpMethod(getMethod)
-                latestResult =
-                    if (isSuccess(status)) RemoteOperationResult(ResultCode.OK)
-                    else RemoteOperationResult(getMethod)
-
-            } catch (sslE: SSLException) {
-                latestResult = RemoteOperationResult(sslE)
-                return successfulConnection
-            }
-
-            var redirectedLocation = latestResult.redirectedLocation
-            while (!redirectedLocation.isNullOrEmpty() && !latestResult.isSuccess) {
-                isRedirectToNonSecureConnection =
-                    isRedirectToNonSecureConnection ||
-                            (baseUrlSt.startsWith(HTTPS_PREFIX) && redirectedLocation.startsWith(
-                                HTTP_PREFIX
-                            ))
-
-                getMethod = GetMethod(URL(redirectedLocation)).apply {
-                    setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-                    setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-                }
-
-                status = client.executeHttpMethod(getMethod)
-                latestResult = RemoteOperationResult(getMethod)
-                redirectedLocation = latestResult.redirectedLocation
-            }
-
-            if (isSuccess(status)) {
-                val respJSON = JSONObject(getMethod.getResponseBodyAsString())
-                if (!respJSON.getBoolean(NODE_INSTALLED)) {
-                    latestResult = RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
-                } else {
-                    val version = respJSON.getString(NODE_VERSION)
-                    val ocVersion = OwnCloudVersion(version)
-                    // the version object will be returned even if the version is invalid, no error code;
-                    // every app will decide how to act if (ocVersion.isVersionValid() == false)
-                    latestResult = if (isRedirectToNonSecureConnection) {
-                        RemoteOperationResult(ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
-                    } else {
-                        if (baseUrlSt.startsWith(HTTPS_PREFIX)) RemoteOperationResult(ResultCode.OK_SSL)
-                        else RemoteOperationResult(ResultCode.OK_NO_SSL)
-                    }
-                    latestResult.data = ocVersion
-                    successfulConnection = true
-                }
-            } else {
-                latestResult = RemoteOperationResult(getMethod)
-            }
+    private fun tryToConnect(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
+        val baseUrl = client.baseUri.toString()
+        client.setFollowRedirects(false)
+        return try {
+            val requester = StatusRequester()
+            val requestResult = requester.requestAndFollowRedirects(baseUrl, client)
+            requester.handleRequestResult(requestResult, baseUrl)
         } catch (e: JSONException) {
-            latestResult = RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
+            RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
         } catch (e: Exception) {
-            latestResult = RemoteOperationResult(e)
+            RemoteOperationResult(e)
         }
-        when {
-            latestResult.isSuccess -> Timber.i("Connection check at $baseUrlSt successful: ${latestResult.logMessage}")
-
-            latestResult.isException ->
-                Timber.e(latestResult.exception, "Connection check at $baseUrlSt: ${latestResult.logMessage}")
-
-            else -> Timber.e("Connection check at $baseUrlSt failed: ${latestResult.logMessage}")
-        }
-        return successfulConnection
     }
-
-    private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
-        /**
-         * Maximum time to wait for a response from the server when the connection is being tested,
-         * in MILLISECONDs.
-         */
-        private const val TRY_CONNECTION_TIMEOUT: Long = 5000
-        private const val NODE_INSTALLED = "installed"
-        private const val NODE_VERSION = "version"
-        private const val HTTPS_PREFIX = "https://"
-        private const val HTTP_PREFIX = "http://"
+        fun usesHttpOrHttps(uri: Uri) =
+            uri.toString().startsWith(HTTPS_PREFIX) || uri.toString().startsWith(HTTP_PREFIX)
+
+        fun buildFullHttpsUrl(baseUri: Uri): Uri {
+            if (usesHttpOrHttps(baseUri)) {
+                return baseUri
+            }
+            return Uri.parse("$HTTPS_PREFIX$baseUri")
+        }
     }
 }

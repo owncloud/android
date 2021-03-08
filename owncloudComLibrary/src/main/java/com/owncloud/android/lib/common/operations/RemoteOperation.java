@@ -258,11 +258,6 @@ public abstract class RemoteOperation<T> implements Runnable {
 
         final RemoteOperationResult resultToSend = runOperation();
 
-        if (mAccount != null && mContext != null) {
-            // Save Client Cookies
-            AccountUtils.saveClient(mClient, mAccount, mContext);
-        }
-
         if (mListenerHandler != null && mListener != null) {
             mListenerHandler.post(() ->
                     mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend));

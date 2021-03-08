@@ -27,6 +27,9 @@ package com.owncloud.android.lib.common;
 import android.content.Context;
 import android.net.Uri;
 
+import com.owncloud.android.lib.common.http.HttpClient;
+import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation;
+
 public class OwnCloudClientFactory {
 
     /**
@@ -42,8 +45,14 @@ public class OwnCloudClientFactory {
 
         client.setFollowRedirects(followRedirects);
 
-        client.setContext(context);
+        HttpClient.setContext(context);
+        retrieveCookiesFromMiddleware(client);
 
         return client;
+    }
+
+    private static void retrieveCookiesFromMiddleware(OwnCloudClient client) {
+        final GetRemoteStatusOperation statusOperation = new GetRemoteStatusOperation();
+        statusOperation.run(client);
     }
 }

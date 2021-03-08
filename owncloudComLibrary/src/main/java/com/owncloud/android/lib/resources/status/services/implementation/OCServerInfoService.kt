@@ -23,7 +23,7 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.lib.resources.status.RemoteServerInfo
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
 
 class OCServerInfoService : ServerInfoService {
@@ -41,6 +41,6 @@ class OCServerInfoService : ServerInfoService {
     override fun getRemoteStatus(
         path: String,
         client: OwnCloudClient
-    ): RemoteOperationResult<OwnCloudVersion> =
+    ): RemoteOperationResult<RemoteServerInfo> =
         GetRemoteStatusOperation().execute(client)
 }
