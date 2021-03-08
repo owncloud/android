@@ -60,6 +60,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -270,6 +271,7 @@ class SettingsFragmentMoreSectionTest {
         assertNull(prefImprint)
     }
 
+    @Ignore
     @Test
     fun helpOpensNotEmptyUrl() {
         every { settingsViewModel.getHelpUrl() } returns context.getString(R.string.url_help)
@@ -322,6 +324,7 @@ class SettingsFragmentMoreSectionTest {
         )
     }
 
+    @Ignore
     @Test
     fun feedbackOpensSender() {
         launchTest()
@@ -342,6 +345,7 @@ class SettingsFragmentMoreSectionTest {
         )
     }
 
+    @Ignore
     @Test
     fun privacyPolicyOpensPrivacyPolicyActivity() {
         launchTest()
