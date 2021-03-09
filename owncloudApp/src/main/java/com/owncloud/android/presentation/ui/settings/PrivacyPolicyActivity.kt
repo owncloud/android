@@ -21,6 +21,7 @@
 package com.owncloud.android.presentation.ui.settings
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -80,7 +81,8 @@ class PrivacyPolicyActivity : AppCompatActivity() {
 
             webViewClient = object : WebViewClient() {
                 override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
-                    Snackbar.make(findViewById(android.R.id.content),
+                    Snackbar.make(
+                        findViewById(android.R.id.content),
                         getString(R.string.privacy_policy_error) + description,
                         Snackbar.LENGTH_LONG
                     ).show()
@@ -90,6 +92,15 @@ class PrivacyPolicyActivity : AppCompatActivity() {
             val urlPrivacyPolicy = resources.getString(R.string.url_privacy_policy)
             loadUrl(urlPrivacyPolicy)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var retval = true
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            else -> retval = super.onOptionsItemSelected(item)
+        }
+        return retval
     }
 
 }
