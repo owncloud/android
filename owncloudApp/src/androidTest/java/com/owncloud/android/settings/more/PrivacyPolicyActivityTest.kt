@@ -23,6 +23,7 @@ package com.owncloud.android.settings.more
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.sugar.Web.onWebView
@@ -59,6 +60,11 @@ class PrivacyPolicyActivityTest {
     @Test
     fun checkTitle() {
         onView(withText(R.string.actionbar_privacy_policy)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun checkProgressbar() {
+        onView(withId(R.id.syncProgressBar)).check(matches(isDisplayed()))
     }
 
     @Test
