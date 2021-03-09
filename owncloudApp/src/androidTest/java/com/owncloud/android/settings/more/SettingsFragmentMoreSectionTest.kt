@@ -48,9 +48,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
+import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
-import com.owncloud.android.ui.activity.PrivacyPolicyActivity
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
