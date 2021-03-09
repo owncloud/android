@@ -37,11 +37,11 @@ import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
-import com.owncloud.android.ui.activity.PrivacyPolicyActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {

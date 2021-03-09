@@ -73,6 +73,9 @@
         android:allowBackup="false"
         tools:targetApi="n">
         <activity
+            android:name=".presentation.ui.settings.PrivacyPolicyActivity">
+        </activity>
+        <activity
             android:name=".presentation.ui.settings.SettingsActivity">
         </activity>
         <activity
@@ -251,7 +254,6 @@
             android:name=".ui.activity.ManageSpaceActivity"
             android:label="@string/manage_space_title"
             android:theme="@style/Theme.ownCloud" />
-        <activity android:name=".ui.activity.PrivacyPolicyActivity" />
         <activity
             android:name=".ui.preview.PreviewVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
