@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Jesús Recio @jesmrec
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,7 +29,7 @@ import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import androidx.test.espresso.web.webdriver.Locator
-import androidx.test.rule.ActivityTestRule
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import org.hamcrest.Matchers.containsString
@@ -36,11 +38,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class OCSettingsPrivacyPolicyTest {
+class PrivacyPolicyActivityTest {
 
     @Rule
     @JvmField
-    val activityRule = ActivityTestRule(PrivacyPolicyActivity::class.java, true, true)
+    val activityRule = ActivityScenarioRule(PrivacyPolicyActivity::class.java)
 
     private val introductionID = "et-main-area"
     private val introductionText = "Imprint"
