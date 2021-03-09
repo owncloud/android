@@ -29,7 +29,7 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.ui.activity.PrivacyPolicyActivity
+import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import org.hamcrest.Matchers.containsString
 import org.junit.After
 import org.junit.Before
