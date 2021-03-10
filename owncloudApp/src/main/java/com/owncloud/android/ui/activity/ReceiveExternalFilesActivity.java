@@ -10,7 +10,7 @@
  * @author Abel García de Prada
  * @author John Kalimeris
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -128,8 +128,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private UploadBroadcastReceiver mUploadBroadcastReceiver;
-    private ReceiveExternalFilesAdapter mAdapter;
-    private Menu mMainMenu;
+    // this is inited laizly, when an acocunt is selected. If no account is selected but an instance of this would
+    // be crated it would result in an null pointer exception.
+    private ReceiveExternalFilesAdapter mAdapter = null;
+    private ListView mListView;
     private boolean mSyncInProgress = false;
     private boolean mAccountSelected;
     private boolean mAccountSelectionShowing;
@@ -149,7 +151,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        prepareStreamsToUpload();
+        prepareStreamsToUpload(); //streams need to be prepared before super.onCreate() is called
 
         if (savedInstanceState == null) {
             mParents = new Stack<>();
@@ -168,6 +170,21 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (mAccountSelected) {
             setAccount(savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT));
         }
+
+        //init ui
+        setContentView(R.layout.uploader_layout);
+
+        mSortOptionsView = findViewById(R.id.options_layout);
+        if (mSortOptionsView != null) {
+            mSortOptionsView.setOnSortOptionsListener(this);
+            mSortOptionsView.setOnCreateFolderListener(this);
+            mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
+        }
+
+        mEmptyListMessage = findViewById(R.id.empty_list_view);
+
+        mListView = findViewById(android.R.id.list);
+        mListView.setOnItemClickListener(this);
 
         // Listen for sync messages
         IntentFilter syncIntentFilter = new IntentFilter(RefreshFolderOperation.
@@ -192,6 +209,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
             fm.beginTransaction()
                     .add(taskRetainerFragment, TaskRetainerFragment.FTAG_TASK_RETAINER_FRAGMENT).commit();
         }   // else, Fragment already created and retained across configuration change
+
+
     }
 
     @Override
@@ -225,7 +244,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     protected void onAccountSet(boolean stateWasRecovered) {
         super.onAccountSet(mAccountWasRestored);
         initTargetFolder();
-        populateDirectoryList();
+        updateDirectoryList();
     }
 
     @Override
@@ -323,7 +342,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             mParents.pop();
             String full_path = generatePath(mParents);
             startSyncFolderOperation(getStorageManager().getFileByPath(full_path));
-            populateDirectoryList();
+            updateDirectoryList();
         }
     }
 
@@ -346,7 +365,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             OCFile folderToEnter = files.get(position);
             startSyncFolderOperation(folderToEnter);
             mParents.push(folderToEnter.getFileName());
-            populateDirectoryList();
+            updateDirectoryList();
         }
     }
 
@@ -394,58 +413,43 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 // account at this point
                 // since account setup can set only one account at time
                 setAccount(accounts[0]);
-                populateDirectoryList();
+                updateDirectoryList();
             }
         }
     }
 
-    private void populateDirectoryList() {
-        setContentView(R.layout.uploader_layout);
-        initToolbar();
-
-        mSortOptionsView = findViewById(R.id.options_layout);
-        if (mSortOptionsView != null) {
-            mSortOptionsView.setOnSortOptionsListener(this);
-            mSortOptionsView.setOnCreateFolderListener(this);
-            mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
-        }
-
-        ListView mListView = findViewById(android.R.id.list);
-        mEmptyListMessage = findViewById(R.id.empty_list_view);
+    private void updateDirectoryList() {
+        initToolbar(mParents.peek());
 
         String full_path = generatePath(mParents);
-
         Timber.d("Populating view with content of : %s", full_path);
-
         mFile = getStorageManager().getFileByPath(full_path);
         if (mFile != null) {
-            Vector<OCFile> files = getStorageManager().getFolderContent(mFile);
-            files = sortFileList(files);
-
-            mAdapter = new ReceiveExternalFilesAdapter(
-                    this, files, getStorageManager(), getAccount());
-            mListView.setAdapter(mAdapter);
+            if(mAdapter == null) {
+                mAdapter = new ReceiveExternalFilesAdapter(
+                        this, getStorageManager(), getAccount());
+                mListView.setAdapter(mAdapter);
+            }
+            Vector<OCFile> files = sortFileList(getStorageManager().getFolderContent(mFile));
+            mAdapter.setNewItemVector(files);
 
             Button btnChooseFolder = findViewById(R.id.uploader_choose_folder);
             btnChooseFolder.setOnClickListener(this);
 
             Button btnNewFolder = findViewById(R.id.uploader_cancel);
             btnNewFolder.setOnClickListener(this);
-
-            mListView.setOnItemClickListener(this);
         }
     }
 
     /**
      * This activity is special, so we won't use the ToolbarActivity method to initialize the actionbar.
      */
-    private void initToolbar() {
+    private void initToolbar(String current_dir) {
         Toolbar toolbar = findViewById(R.id.standard_toolbar);
         ConstraintLayout rootToolbar = findViewById(R.id.root_toolbar);
         toolbar.setVisibility(View.VISIBLE);
         rootToolbar.setVisibility(View.GONE);
 
-        String current_dir = mParents.peek();
         String actionBarTitle;
         if (current_dir.equals("")) {
             actionBarTitle = getString(R.string.uploader_top_message);
@@ -592,7 +596,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private void onCreateFolderOperationFinish(CreateFolderOperation operation,
                                                RemoteOperationResult result) {
         if (result.isSuccess()) {
-            populateDirectoryList();
+            updateDirectoryList();
         } else {
             try {
                 showSnackMessage(
@@ -642,7 +646,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mSearchView.setOnQueryTextFocusChangeListener(this);
         mSearchView.setOnQueryTextListener(this);
 
-        mMainMenu = menu;
         return true;
     }
 
@@ -802,7 +805,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                         }
 
                         if (currentDir.getRemotePath().equals(synchFolderRemotePath)) {
-                            populateDirectoryList();
+                            updateDirectoryList();
                         }
                         mFile = currentFile;
                     }
