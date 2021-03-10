@@ -153,9 +153,9 @@
   <string name="change_password">Сменить пароль</string>
   <string name="delete_account">Удалить аккаунт</string>
   <string name="create_account">Создать учётную запись</string>
-  <string name="upload_chooser_title">Закачать из</string>
+  <string name="upload_chooser_title">Загрузить из</string>
   <string name="uploader_info_dirname">Имя каталога</string>
-  <string name="uploader_upload_in_progress_ticker">Закачка…</string>
+  <string name="uploader_upload_in_progress_ticker">Загрузка…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Загружается %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Загрузка завершена</string>
   <string name="uploader_upload_succeeded_content_single">%1$s загружено</string>
@@ -556,4 +556,5 @@
   <string name="get_base_url_error">Узнать базу сервера, было невозможно</string>
   <string name="prefs_http_logs">Записывать в лог-файл HTTP запросы и ответы</string>
   <string name="prefs_logs_summary">В логах может содержаться чувствительная информация. Отправка логов третьим лицам находится под вашей ответственностью</string>
+  <string name="synchronizing_account">Синхронизация аккаунта</string>
 </resources>
