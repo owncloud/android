@@ -22,7 +22,6 @@ package com.owncloud.android.presentation.ui.settings
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -31,8 +30,9 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.google.android.material.snackbar.Snackbar
+import androidx.core.view.isVisible
 import com.owncloud.android.R
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.utils.PreferenceUtils
 
 /**
@@ -45,11 +45,10 @@ class PrivacyPolicyActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.standard_toolbar).apply {
             setTitle(R.string.actionbar_privacy_policy)
-            visibility = View.VISIBLE
+            isVisible = true
         }
-        findViewById<ConstraintLayout>(R.id.root_toolbar).apply {
-            visibility = View.GONE
-        }
+        findViewById<ConstraintLayout>(R.id.root_toolbar).isVisible = false
+
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -74,18 +73,14 @@ class PrivacyPolicyActivity : AppCompatActivity() {
                 override fun onProgressChanged(view: WebView, progress: Int) {
                     progressBar.progress = progress //Set the web page loading progress
                     if (progress == 100) {
-                        progressBar.visibility = View.GONE
+                        progressBar.isVisible = false
                     }
                 }
             }
 
             webViewClient = object : WebViewClient() {
                 override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
-                    Snackbar.make(
-                        findViewById(android.R.id.content),
-                        getString(R.string.privacy_policy_error) + description,
-                        Snackbar.LENGTH_LONG
-                    ).show()
+                    showMessageInSnackbar(message = getString(R.string.privacy_policy_error) + description)
                 }
             }
 
