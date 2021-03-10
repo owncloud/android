@@ -33,6 +33,7 @@ import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
+import com.owncloud.android.utils.matchers.isDisplayed
 import org.hamcrest.Matchers.containsString
 import org.junit.After
 import org.junit.Before
@@ -48,10 +49,6 @@ class PrivacyPolicyActivityTest {
     private val introductionID = "et-main-area"
     private val introductionText = "Imprint"
 
-    @Before
-    fun setUp() {
-    }
-
     @After
     fun tearDown() {
         onWebView().reset()
@@ -64,7 +61,7 @@ class PrivacyPolicyActivityTest {
 
     @Test
     fun checkProgressbar() {
-        onView(withId(R.id.syncProgressBar)).check(matches(isDisplayed()))
+        R.id.syncProgressBar.isDisplayed(true)
     }
 
     @Test
