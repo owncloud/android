@@ -23,10 +23,10 @@ package com.owncloud.android.presentation.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.ui.activity.FileDisplayActivity
@@ -38,10 +38,10 @@ class SettingsActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.standard_toolbar).apply {
             setTitle(R.string.actionbar_settings)
-            visibility = View.VISIBLE
+            isVisible = true
         }
         findViewById<ConstraintLayout>(R.id.root_toolbar).apply {
-            visibility = View.GONE
+            isVisible = false
         }
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
