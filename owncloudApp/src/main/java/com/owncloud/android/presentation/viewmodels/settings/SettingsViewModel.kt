@@ -22,11 +22,13 @@ package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 
@@ -34,6 +36,8 @@ class SettingsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
     private val contextProvider: ContextProvider
 ) : ViewModel() {
+
+    private val logsProvider = LogsProvider(contextProvider.getContext())
 
     fun isPatternSet() = preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
 
@@ -92,4 +96,11 @@ class SettingsViewModel(
     fun isImprintEnabled() = contextProvider.getBoolean(R.bool.imprint_enabled)
 
     fun getImprintUrl() = contextProvider.getString(R.string.url_imprint)
+
+    fun shouldLogHttpRequests(value: Boolean) = logsProvider.shouldLogHttpRequests(value)
+
+    fun isDeveloperByClicks() =
+        preferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0) >= MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER
+
+    fun isDeveloperByMainApp() = MainApp.isDeveloper
 }

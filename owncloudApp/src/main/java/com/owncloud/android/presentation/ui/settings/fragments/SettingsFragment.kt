@@ -31,6 +31,7 @@ import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceScreen
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
@@ -40,6 +41,7 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
+import com.owncloud.android.ui.activity.LogHistoryActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -126,7 +128,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         manageSecuritySettings()
         manageMoreSettings()
-
     }
 
     private fun manageSecuritySettings() {
@@ -335,6 +336,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         private const val PREFERENCE_MORE_CATEGORY = "more_category"
 
         const val PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows"
+
         private const val PREFERENCE_HELP = "help"
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
         private const val PREFERENCE_RECOMMEND = "recommend"
