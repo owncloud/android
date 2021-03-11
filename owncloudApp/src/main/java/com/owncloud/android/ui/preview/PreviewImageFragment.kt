@@ -148,7 +148,7 @@ class PreviewImageFragment : FileFragment() {
         account = requireArguments().getParcelable(PreviewAudioFragment.EXTRA_ACCOUNT)
         checkNotNull(account) { "Instanced with a NULL ownCloud Account" }
         checkNotNull(file) { "Instanced with a NULL OCFile" }
-        check(file.isDown()) { "There is no local file to preview" }
+        check(file.isAvailableLocally) { "There is no local file to preview" }
 
         binding.message.isVisible = false
         binding.progressWheel.isVisible = true
