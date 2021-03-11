@@ -350,7 +350,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // click on folder in the list
         Timber.d("on item click");
-        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile);
+        // get current representation of files:
+        // This does not necessarily mean this is the content of the current folder.
+        // If the user searches for a folder mAdapter.getFiles() returnes only the folders/files
+        // that match the currently entered search query.
+        Vector<OCFile> tmpfiles = mAdapter.getFiles();
         tmpfiles = sortFileList(tmpfiles);
 
         if (tmpfiles.size() <= 0) {
