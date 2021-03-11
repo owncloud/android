@@ -48,15 +48,10 @@
         app:key="logs_category"
         app:title="@string/actionbar_logger">
 
-        <CheckBoxPreference
-            app:iconSpaceReserved="false"
-            app:key="set_httpLogs"
-            app:title="@string/prefs_http_logs"/>
         <Preference
-            app:iconSpaceReserved="false"
-            app:key="logger"
-            app:summary="@string/prefs_logs_summary"
-            app:title="@string/log_open_logs_view"/>
+            app:icon="@drawable/ic_baseline_description_24"
+            app:title="@string/prefs_enable_logging"
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"/>
 
     </PreferenceCategory>
 
