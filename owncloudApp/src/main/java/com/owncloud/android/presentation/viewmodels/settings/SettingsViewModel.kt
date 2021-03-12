@@ -22,11 +22,11 @@ package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.PassCodeActivity
@@ -99,8 +99,8 @@ class SettingsViewModel(
 
     fun shouldLogHttpRequests(value: Boolean) = logsProvider.shouldLogHttpRequests(value)
 
-    fun isDeveloperByClicks() =
-        preferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0) >= MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER
+    fun setEnableLogging(value: Boolean) =
+        preferencesProvider.putBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, value)
 
-    fun isDeveloperByMainApp() = MainApp.isDeveloper
+    fun isEnableLoggingOn() = preferencesProvider.getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
 }

@@ -19,6 +19,7 @@
 
     <SwitchPreferenceCompat
         app:iconSpaceReserved="false"
+        app:key="enable_logging"
         app:title="@string/prefs_enable_logging"
         app:summary="@string/prefs_enable_logging_summary" />
     <CheckBoxPreference

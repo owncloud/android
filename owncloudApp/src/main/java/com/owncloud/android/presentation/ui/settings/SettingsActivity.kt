@@ -27,11 +27,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.ui.activity.FileDisplayActivity
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity(),
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -55,15 +58,35 @@ class SettingsActivity : AppCompatActivity() {
             .commit()
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                intent = Intent(this, FileDisplayActivity::class.java).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                if (supportFragmentManager.findFragmentByTag("logs") != null) {
+                    supportFragmentManager.popBackStack()
+                    supportActionBar?.setTitle(R.string.actionbar_settings)
+                } else {
+                    intent = Intent(this, FileDisplayActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
+        val fragment = supportFragmentManager.fragmentFactory.instantiate(
+            classLoader,
+            pref.fragment)
+        var tag: String? = null
+        if (pref.key.equals(SettingsFragment.PREFERENCE_LOGS_SUBSECTION)) tag = "logs"
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.settings_container, fragment, tag)
+            .addToBackStack(null)
+            .commit()
+        supportActionBar?.setTitle(R.string.actionbar_logger)
+        return true
     }
 }
