@@ -35,7 +35,7 @@ class TransferProviderImpl(
     private val context: Context
 ) : TransferProvider {
 
-    override fun downloadFile(account: Account, file: OCFile): UUID? {
+    override fun downloadFile(account: Account, file: OCFile): UUID {
         val inputData = workDataOf(
             DownloadFileWorker.KEY_PARAM_ACCOUNT to account.name,
             DownloadFileWorker.KEY_PARAM_FILE_ID to file.id
