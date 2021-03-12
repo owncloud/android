@@ -50,6 +50,7 @@
 
         <Preference
             app:icon="@drawable/ic_baseline_description_24"
+            app:key="logs_subsection"
             app:title="@string/prefs_enable_logging"
             app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"/>
 
