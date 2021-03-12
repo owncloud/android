@@ -26,7 +26,7 @@ import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceScreen
+import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.LogHistoryActivity
@@ -37,16 +37,39 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
     // ViewModel
     private val settingsViewModel by viewModel<SettingsViewModel>()
 
-    private var prefLogsCategory: PreferenceCategory? = null
+    private var prefEnableLogging: SwitchPreferenceCompat? = null
     private var prefHttpLogs: CheckBoxPreference? = null
     private var prefLogsView: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_logs, rootKey)
 
-        prefLogsCategory = findPreference(PREFERENCE_LOGS_CATEGORY)
+
+
+        prefEnableLogging = findPreference(PREFERENCE_ENABLE_LOGGING)
         prefHttpLogs = findPreference(PREFERENCE_LOG_HTTP)
         prefLogsView = findPreference(PREFERENCE_LOGGER)
+
+        if (!settingsViewModel.isEnableLoggingOn()) {
+            prefHttpLogs?.isVisible = false
+            prefLogsView?.isVisible = false
+        }
+
+        prefEnableLogging?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+            val value = newValue as Boolean
+            settingsViewModel.setEnableLogging(value)
+
+            if (value) {
+                prefHttpLogs?.isVisible = true
+                prefLogsView?.isVisible = true
+            } else {
+                settingsViewModel.shouldLogHttpRequests(value)
+                prefHttpLogs?.isChecked = false
+                prefHttpLogs?.isVisible = false
+                prefLogsView?.isVisible = false
+            }
+            true
+        }
 
         prefHttpLogs?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
             settingsViewModel.shouldLogHttpRequests(newValue as Boolean)
@@ -59,21 +82,13 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
                 startActivity(intent)
                 true
             }
-
-            /*if (settingsViewModel.isDeveloperByClicks()) {
-                prefScreen?.addPreference(prefLogsCategory)
-            } else if (!settingsViewModel.isDeveloperByMainApp()) {
-                prefScreen?.removePreference(prefLogsCategory)
-            }*/
         }
     }
 
     companion object {
-        private const val PREFERENCE_SCREEN = "preference_screen"
-        private const val PREFERENCE_LOGS_CATEGORY = "logs_category"
-
-        private const val PREFERENCE_LOG_HTTP = "set_httpLogs"
-        private const val PREFERENCE_LOGGER = "logger"
+        const val PREFERENCE_ENABLE_LOGGING = "enable_logging"
+        const val PREFERENCE_LOG_HTTP = "set_httpLogs"
+        const val PREFERENCE_LOGGER = "logger"
     }
 
 }
