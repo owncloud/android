@@ -36,6 +36,8 @@ import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.db.PreferenceManager.PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER
+import com.owncloud.android.db.PreferenceManager.PREF__LEGACY_CLICK_DEV_MENU
 import com.owncloud.android.dependecyinjection.commonModule
 import com.owncloud.android.dependecyinjection.localDataSourceModule
 import com.owncloud.android.dependecyinjection.remoteDataSourceModule
@@ -161,7 +163,7 @@ class MainApp : Application() {
     fun startLogIfDeveloper() {
         isDeveloper =
             BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                .getInt(CLICK_DEV_MENU, CLICKS_DEFAULT) > CLICKS_NEEDED_TO_BE_DEVELOPER
+                .getInt(PREF__LEGACY_CLICK_DEV_MENU, CLICKS_DEFAULT) > PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER
 
         if (isDeveloper) {
             val dataFolder = dataFolder
@@ -218,8 +220,6 @@ class MainApp : Application() {
     }
 
     companion object {
-        const val CLICK_DEV_MENU = "clickDeveloperMenu"
-        const val CLICKS_NEEDED_TO_BE_DEVELOPER = 5
         private const val BETA_VERSION = "beta"
         private const val CLICKS_DEFAULT = 0
 
