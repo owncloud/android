@@ -21,7 +21,7 @@ buildscript {
         koinVersion = '2.1.6'
 
         // WorkManager
-        workManagerVersion= "2.4.0"
+        workManagerVersion= "2.5.0"
 
         // Testing
         mockkVersion = '1.12.0'

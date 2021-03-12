@@ -23,7 +23,6 @@ import android.content.Context
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
-import com.google.common.util.concurrent.ListenableFuture
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.providers.impl.TransferProviderImpl
 import timber.log.Timber
@@ -56,7 +55,7 @@ class TransferManager(
             TRANSFER_TAG_DOWNLOAD,
             file.id.toString(),
             account.name
-        ).get()
+        )
 
         // Check if this download is in progress.
         var isEnqueued = false
@@ -73,11 +72,12 @@ class TransferManager(
         return isEnqueued
     }
 
-    private fun getWorkInfoFromTags(vararg tags: String): ListenableFuture<MutableList<WorkInfo>> {
-        return getWorkManager()
+    private fun getWorkInfoFromTags(vararg tags: String): List<WorkInfo> {
+        val workers = getWorkManager()
             .getWorkInfos(
                 WorkQuery.Builder.fromTags(tags.toList()).build()
-            )
+            ).get()
+        return workers.filter { it.tags.containsAll(tags.toList()) }
     }
 
     private fun getWorkManager() = WorkManager.getInstance(context)
