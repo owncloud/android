@@ -22,7 +22,7 @@ buildscript {
         mockkVersion = '1.11.0'
 
         // WorkManager
-        workManagerVersion= "2.4.0"
+        workManagerVersion= "2.5.0"
 
         // Testing
         junitVersion = "4.13.2"
