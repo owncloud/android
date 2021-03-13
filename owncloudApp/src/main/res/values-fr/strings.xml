@@ -452,7 +452,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="share_via_link_create_title">Créer un lien de partage</string>
   <string name="share_via_link_edit_title">Modifier le lien de partage</string>
   <string name="share_via_link_name_label">Nom du lien</string>
-  <string name="share_cancel_public_link_button">Anuler</string>
+  <string name="share_cancel_public_link_button">Annuler</string>
   <string name="share_confirm_public_link_button">Enregistrer</string>
   <string name="share_via_link_expiration_date_label">Expiration</string>
   <string name="share_via_link_password_label">Mot de passe</string>
