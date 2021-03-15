@@ -22,6 +22,7 @@ package com.owncloud.android.presentation.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -35,13 +36,14 @@ import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class SettingsActivity : AppCompatActivity(),
     PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
         val toolbar = findViewById<Toolbar>(R.id.standard_toolbar).apply {
-            setTitle(R.string.actionbar_settings)
             isVisible = true
+            setTitle(R.string.actionbar_settings)
         }
         findViewById<ConstraintLayout>(R.id.root_toolbar).apply {
             isVisible = false
@@ -57,7 +59,6 @@ class SettingsActivity : AppCompatActivity(),
             )
             .commit()
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -81,12 +82,21 @@ class SettingsActivity : AppCompatActivity(),
             classLoader,
             pref.fragment)
         var tag: String? = null
-        if (pref.key.equals(SettingsFragment.PREFERENCE_LOGS_SUBSECTION)) tag = "logs"
+        var titleId: Int? = null
+        if (pref.key.equals(SettingsFragment.PREFERENCE_LOGS_SUBSECTION)) {
+            tag = "logs"
+            titleId = R.string.actionbar_logger
+        }
         supportFragmentManager.beginTransaction()
             .replace(R.id.settings_container, fragment, tag)
             .addToBackStack(null)
             .commit()
-        supportActionBar?.setTitle(R.string.actionbar_logger)
+        supportActionBar?.setTitle(titleId!!)
         return true
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        supportActionBar?.setTitle(R.string.actionbar_settings)
     }
 }
