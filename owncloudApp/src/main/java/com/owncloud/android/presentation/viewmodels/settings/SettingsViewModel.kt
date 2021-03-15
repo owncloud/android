@@ -34,10 +34,9 @@ import com.owncloud.android.ui.activity.PatternLockActivity
 
 class SettingsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
-    private val contextProvider: ContextProvider
+    private val contextProvider: ContextProvider,
+    private val logsProvider: LogsProvider
 ) : ViewModel() {
-
-    private val logsProvider = LogsProvider(contextProvider.getContext())
 
     fun isPatternSet() = preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
 

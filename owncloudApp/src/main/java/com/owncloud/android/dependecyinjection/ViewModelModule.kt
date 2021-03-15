@@ -42,5 +42,5 @@ val viewModelModule = module {
 
     viewModel { OCAuthenticationViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { OAuthViewModel(get(), get(), get(), get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get()) }
 }
