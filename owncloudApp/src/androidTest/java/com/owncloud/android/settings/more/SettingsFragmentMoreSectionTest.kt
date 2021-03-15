@@ -72,6 +72,7 @@ class SettingsFragmentMoreSectionTest {
     private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
 
     private lateinit var prefSecurityCategory: PreferenceCategory
+    private lateinit var prefLogsCategory: PreferenceCategory
     private lateinit var prefMoreCategory: PreferenceCategory
     private var prefHelp: Preference? = null
     private var prefSync: Preference? = null
@@ -137,6 +138,7 @@ class SettingsFragmentMoreSectionTest {
 
         fragmentScenario.onFragment { fragment ->
             prefSecurityCategory = fragment.findPreference(PREFERENCE_SECURITY_CATEGORY)!!
+            prefLogsCategory = fragment.findPreference(PREFERENCE_LOGS_CATEGORY)!!
             prefMoreCategory = fragment.findPreference(PREFERENCE_MORE_CATEGORY)!!
             if (helpEnabled) prefHelp = fragment.findPreference(PREFERENCE_HELP)!!
             if (syncEnabled) prefSync = fragment.findPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)!!
@@ -148,6 +150,7 @@ class SettingsFragmentMoreSectionTest {
         }
 
         prefSecurityCategory.isVisible = false
+        prefLogsCategory.isVisible = false
     }
 
     @Test
@@ -202,7 +205,7 @@ class SettingsFragmentMoreSectionTest {
         assertNull(prefImprint?.summary)
         assertTrue(prefImprint?.isVisible == true)
 
-        val appVersion = BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.COMMIT_SHA1
+        val appVersion = "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE} ${BuildConfig.COMMIT_SHA1}"
         onView(
             withText(
                 String.format(
@@ -354,7 +357,7 @@ class SettingsFragmentMoreSectionTest {
         intended(hasComponent(PrivacyPolicyActivity::class.java.name))
     }
 
-    @Test
+    /*@Test
     fun imprintOpensUrl() {
         every { settingsViewModel.getImprintUrl() } returns "https://owncloud.com/mobile"
 
@@ -364,11 +367,13 @@ class SettingsFragmentMoreSectionTest {
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
         intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
         intended(hasData("https://owncloud.com/mobile"))
-    }
+    }*/
 
     companion object {
         private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
+        private const val PREFERENCE_LOGS_CATEGORY = "logs_category"
         private const val PREFERENCE_MORE_CATEGORY = "more_category"
+
         private const val PREFERENCE_HELP = "help"
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
         private const val PREFERENCE_RECOMMEND = "recommend"
