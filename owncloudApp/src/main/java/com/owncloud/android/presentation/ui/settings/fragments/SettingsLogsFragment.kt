@@ -44,8 +44,6 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_logs, rootKey)
 
-
-
         prefEnableLogging = findPreference(PREFERENCE_ENABLE_LOGGING)
         prefHttpLogs = findPreference(PREFERENCE_LOG_HTTP)
         prefLogsView = findPreference(PREFERENCE_LOGGER)
