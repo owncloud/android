@@ -54,6 +54,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
+import kotlinx.coroutines.delay
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -151,6 +152,9 @@ class SettingsFragmentMoreSectionTest {
 
         prefSecurityCategory.isVisible = false
         prefLogsCategory.isVisible = false
+
+        // Not a good solution but tests only pass if this is here
+        Thread.sleep(250)
     }
 
     @Test
