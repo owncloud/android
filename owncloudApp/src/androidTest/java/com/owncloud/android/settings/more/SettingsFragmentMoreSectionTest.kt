@@ -357,7 +357,7 @@ class SettingsFragmentMoreSectionTest {
         intended(hasComponent(PrivacyPolicyActivity::class.java.name))
     }
 
-    /*@Test
+    @Test
     fun imprintOpensUrl() {
         every { settingsViewModel.getImprintUrl() } returns "https://owncloud.com/mobile"
 
@@ -367,7 +367,7 @@ class SettingsFragmentMoreSectionTest {
         val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
         intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
         intended(hasData("https://owncloud.com/mobile"))
-    }*/
+    }
 
     companion object {
         private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
