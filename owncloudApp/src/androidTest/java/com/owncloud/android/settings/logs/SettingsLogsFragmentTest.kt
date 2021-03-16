@@ -39,7 +39,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
-import com.owncloud.android.ui.activity.LogHistoryActivity
+import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk
