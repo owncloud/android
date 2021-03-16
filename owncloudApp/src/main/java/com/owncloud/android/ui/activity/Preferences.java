@@ -53,6 +53,7 @@ import com.owncloud.android.data.preferences.datasources.implementation.SharedPr
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
+import com.owncloud.android.presentation.ui.settings.LogHistoryActivity;
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity;
 import com.owncloud.android.providers.LogsProvider;
 import com.owncloud.android.utils.DisplayUtils;
