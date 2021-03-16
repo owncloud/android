@@ -18,12 +18,13 @@
  *
  */
 
-package com.owncloud.android.ui.activity
+package com.owncloud.android.presentation.ui.settings
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
+import com.owncloud.android.ui.activity.ToolbarActivity
 import info.hannes.logcat.BothLogsFragment
 import info.hannes.logcat.LogcatFragment
 import info.hannes.timber.fileLoggingTree
