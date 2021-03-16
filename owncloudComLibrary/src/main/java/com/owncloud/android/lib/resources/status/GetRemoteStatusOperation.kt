@@ -31,6 +31,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.json.JSONException
 import timber.log.Timber
 
@@ -63,7 +64,9 @@ class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
         return try {
             val requester = StatusRequester()
             val requestResult = requester.requestAndFollowRedirects(baseUrl, client)
-            requester.handleRequestResult(requestResult, baseUrl)
+            requester.handleRequestResult(requestResult, baseUrl).also {
+                client.baseUri = Uri.parse(it.data.baseUrl)
+            }
         } catch (e: JSONException) {
             RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
         } catch (e: Exception) {
