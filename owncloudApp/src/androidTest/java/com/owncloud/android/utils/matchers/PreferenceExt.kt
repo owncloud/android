@@ -36,9 +36,9 @@ fun verifyPreference(
     visible: Boolean,
     enabled: Boolean? = null
 ) {
-    onView(withText(title)).check(matches(isDisplayed()))
+    if (visible) onView(withText(title)).check(matches(isDisplayed()))
     summary?.let {
-        onView(withText(it)).check(matches(isDisplayed()))
+        if (visible) onView(withText(it)).check(matches(isDisplayed()))
         assertEquals(it, preference?.summary)
     }
     assertEquals(key, preference?.key)
