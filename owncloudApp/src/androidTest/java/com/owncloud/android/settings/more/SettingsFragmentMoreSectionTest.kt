@@ -24,7 +24,6 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_SENDTO
 import android.content.Intent.EXTRA_SUBJECT
 import android.content.Intent.EXTRA_TEXT
 import android.net.Uri
@@ -34,7 +33,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
@@ -43,7 +41,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasFlag
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
@@ -51,14 +48,14 @@ import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import com.owncloud.android.utils.matchers.verifyPreference
+import com.owncloud.android.utils.mockIntent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.hamcrest.Matchers.allOf
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -160,79 +157,71 @@ class SettingsFragmentMoreSectionTest {
     fun moreView() {
         launchTest()
 
-        onView(withText(R.string.prefs_category_more)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_MORE_CATEGORY, prefMoreCategory.key)
-        assertEquals(context.getString(R.string.prefs_category_more), prefMoreCategory.title)
-        assertNull(prefMoreCategory.summary)
-        assertTrue(prefMoreCategory.isVisible)
+        verifyPreference(
+            preference = prefMoreCategory,
+            key = PREFERENCE_MORE_CATEGORY,
+            title = context.getString(R.string.prefs_category_more),
+            visible = true
+        )
 
-        onView(withText(R.string.prefs_help)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_HELP, prefHelp?.key)
-        assertEquals(context.getString(R.string.prefs_help), prefHelp?.title)
-        assertNull(prefHelp?.summary)
-        assertTrue(prefHelp?.isVisible == true)
-        assertTrue(prefHelp?.isEnabled == true)
+        verifyPreference(
+            preference = prefHelp,
+            key = PREFERENCE_HELP,
+            title = context.getString(R.string.prefs_help),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_sync_calendar_contacts)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_sync_calendar_contacts_summary)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_SYNC_CALENDAR_CONTACTS, prefSync?.key)
-        assertEquals(context.getString(R.string.prefs_sync_calendar_contacts), prefSync?.title)
-        assertEquals(context.getString(R.string.prefs_sync_calendar_contacts_summary), prefSync?.summary)
-        assertTrue(prefSync?.isVisible == true)
-        assertTrue(prefSync?.isEnabled == true)
+        verifyPreference(
+            preference = prefSync,
+            key = PREFERENCE_SYNC_CALENDAR_CONTACTS,
+            title = context.getString(R.string.prefs_sync_calendar_contacts),
+            summary = context.getString(R.string.prefs_sync_calendar_contacts_summary),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_recommend)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_RECOMMEND, prefRecommend?.key)
-        assertEquals(context.getString(R.string.prefs_recommend), prefRecommend?.title)
-        assertNull(prefRecommend?.summary)
-        assertTrue(prefRecommend?.isVisible == true)
-        assertTrue(prefRecommend?.isEnabled == true)
+        verifyPreference(
+            preference = prefRecommend,
+            key = PREFERENCE_RECOMMEND,
+            title = context.getString(R.string.prefs_recommend),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_feedback)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_FEEDBACK, prefFeedback?.key)
-        assertEquals(context.getString(R.string.prefs_feedback), prefFeedback?.title)
-        assertNull(prefFeedback?.summary)
-        assertTrue(prefFeedback?.isVisible == true)
-        assertTrue(prefFeedback?.isEnabled == true)
+        verifyPreference(
+            preference = prefFeedback,
+            key = PREFERENCE_FEEDBACK,
+            title = context.getString(R.string.prefs_feedback),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_privacy_policy)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_PRIVACY_POLICY, prefPrivacyPolicy?.key)
-        assertEquals(context.getString(R.string.prefs_privacy_policy), prefPrivacyPolicy?.title)
-        assertNull(prefPrivacyPolicy?.summary)
-        assertTrue(prefPrivacyPolicy?.isVisible == true)
-        assertTrue(prefPrivacyPolicy?.isEnabled == true)
+        verifyPreference(
+            preference = prefPrivacyPolicy,
+            key = PREFERENCE_PRIVACY_POLICY,
+            title = context.getString(R.string.prefs_privacy_policy),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_imprint)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_IMPRINT, prefImprint?.key)
-        assertEquals(context.getString(R.string.prefs_imprint), prefImprint?.title)
-        assertNull(prefImprint?.summary)
-        assertTrue(prefImprint?.isVisible == true)
+        verifyPreference(
+            preference = prefImprint,
+            key = PREFERENCE_IMPRINT,
+            title = context.getString(R.string.prefs_imprint),
+            visible = true,
+            enabled = true
+        )
 
         val appVersion = "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE} ${BuildConfig.COMMIT_SHA1}"
-        onView(
-            withText(
-                String.format(
-                    context.getString(R.string.about_android),
-                    context.getString(R.string.app_name)
-                )
-            )
-        ).check(matches(isDisplayed()))
-        onView(
-            withText(
-                String.format(
-                    context.getString(R.string.about_version),
-                    appVersion
-                )
-            )
-        ).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_ABOUT_APP, prefAboutApp.key)
-        assertEquals(
-            String.format(context.getString(R.string.about_android), context.getString(R.string.app_name)),
-            prefAboutApp.title
+        verifyPreference(
+            preference = prefAboutApp,
+            key = PREFERENCE_ABOUT_APP,
+            title = String.format(context.getString(R.string.about_android), context.getString(R.string.app_name)),
+            summary = String.format(context.getString(R.string.about_version), appVersion),
+            visible = true,
+            enabled = true
         )
-        assertEquals(String.format(context.getString(R.string.about_version), appVersion), prefAboutApp.summary)
-        assertTrue(prefAboutApp.isVisible)
-        assertTrue(prefAboutApp.isEnabled)
     }
 
     @Test
@@ -285,8 +274,7 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_help)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_VIEW)
         intended(hasData(context.getString(R.string.url_help)))
     }
 
@@ -297,8 +285,7 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_sync_calendar_contacts)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_VIEW)
         intended(hasData(context.getString(R.string.url_sync_calendar_contacts)))
     }
 
@@ -307,11 +294,10 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_recommend)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(ACTION_SENDTO)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
-                hasAction(ACTION_SENDTO), hasExtra(
+                hasAction(Intent.ACTION_SENDTO), hasExtra(
                     EXTRA_SUBJECT, String.format(
                         context.getString(R.string.recommend_subject),
                         context.getString(R.string.app_name)
@@ -336,11 +322,10 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_feedback)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(ACTION_SENDTO)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
-                hasAction(ACTION_SENDTO),
+                hasAction(Intent.ACTION_SENDTO),
                 hasExtra(
                     EXTRA_SUBJECT,
                     "Android v" + BuildConfig.VERSION_NAME + " - " + context.getText(R.string.prefs_feedback)
@@ -367,9 +352,16 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_imprint)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_VIEW)
         intended(hasData("https://owncloud.com/mobile"))
+    }
+
+    private fun getPreference(key: String): Preference? {
+        var preference: Preference? = null
+        fragmentScenario.onFragment { fragment ->
+            preference = fragment.findPreference(key)
+        }
+        return preference
     }
 
     companion object {

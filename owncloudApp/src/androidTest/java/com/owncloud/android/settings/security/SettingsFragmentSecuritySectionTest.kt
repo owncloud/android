@@ -44,6 +44,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
 import io.mockk.mockk
@@ -130,51 +131,49 @@ class SettingsFragmentSecuritySectionTest {
 
     @Test
     fun securityView() {
-        onView(withText(R.string.prefs_category_security)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_SECURITY_CATEGORY, prefSecurityCategory.key)
-        assertEquals(context.getString(R.string.prefs_category_security), prefSecurityCategory.title)
-        assertEquals(null, prefSecurityCategory.summary)
-        assertTrue(prefSecurityCategory.isVisible)
+        verifyPreference(
+            preference = prefSecurityCategory,
+            key = PREFERENCE_SECURITY_CATEGORY,
+            title = context.getString(R.string.prefs_category_security),
+            visible = true
+        )
 
-        onView(withText(R.string.prefs_passcode)).check(matches(isDisplayed()))
-        assertEquals(PassCodeActivity.PREFERENCE_SET_PASSCODE, prefPasscode.key)
-        assertEquals(context.getString(R.string.prefs_passcode), prefPasscode.title)
-        assertEquals(null, prefPasscode.summary)
-        assertTrue(prefPasscode.isVisible)
-        assertTrue(prefPasscode.isEnabled)
+        verifyPreference(
+            preference = prefPasscode,
+            key = PassCodeActivity.PREFERENCE_SET_PASSCODE,
+            title = context.getString(R.string.prefs_passcode),
+            visible = true,
+            enabled = true
+        )
         assertFalse(prefPasscode.isChecked)
 
-        onView(withText(R.string.prefs_pattern)).check(matches(isDisplayed()))
-        assertEquals(PatternLockActivity.PREFERENCE_SET_PATTERN, prefPattern.key)
-        assertEquals(context.getString(R.string.prefs_pattern), prefPattern.title)
-        assertEquals(null, prefPattern.summary)
-        assertTrue(prefPattern.isVisible)
-        assertTrue(prefPattern.isEnabled)
+        verifyPreference(
+            preference = prefPattern,
+            key = PatternLockActivity.PREFERENCE_SET_PATTERN,
+            title = context.getString(R.string.prefs_pattern),
+            visible = true,
+            enabled = true
+        )
         assertFalse(prefPattern.isChecked)
 
-        onView(withText(R.string.prefs_biometric)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_biometric_summary)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
-        assertEquals(BiometricActivity.PREFERENCE_SET_BIOMETRIC, prefBiometric.key)
-        assertEquals(context.getString(R.string.prefs_biometric), prefBiometric.title)
-        assertEquals(context.getString(R.string.prefs_biometric_summary), prefBiometric.summary)
-        assertTrue(prefBiometric.isVisible)
-        assertFalse(prefBiometric.isEnabled)
+        verifyPreference(
+            preference = prefBiometric,
+            key = BiometricActivity.PREFERENCE_SET_BIOMETRIC,
+            title = context.getString(R.string.prefs_biometric),
+            summary = context.getString(R.string.prefs_biometric_summary),
+            visible = true,
+            enabled = false
+        )
         assertFalse(prefBiometric.isChecked)
 
-        onView(withText(R.string.prefs_touches_with_other_visible_windows)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_touches_with_other_visible_windows_summary)).check(matches(isDisplayed()))
-        assertEquals(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, prefTouchesWithOtherVisibleWindows.key)
-        assertEquals(
-            context.getString(R.string.prefs_touches_with_other_visible_windows),
-            prefTouchesWithOtherVisibleWindows.title
+        verifyPreference(
+            preference = prefTouchesWithOtherVisibleWindows,
+            key = SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
+            title = context.getString(R.string.prefs_touches_with_other_visible_windows),
+            summary = context.getString(R.string.prefs_touches_with_other_visible_windows_summary),
+            visible = true,
+            enabled = true
         )
-        assertEquals(
-            context.getString(R.string.prefs_touches_with_other_visible_windows_summary),
-            prefTouchesWithOtherVisibleWindows.summary
-        )
-        assertTrue(prefTouchesWithOtherVisibleWindows.isVisible)
-        assertTrue(prefTouchesWithOtherVisibleWindows.isEnabled)
         assertFalse(prefTouchesWithOtherVisibleWindows.isChecked)
     }
 
