@@ -48,3 +48,13 @@ fun mockIntent(
     val intentResult = Instrumentation.ActivityResult(resultCode, result)
     intending(hasAction(action)).respondWith(intentResult)
 }
+
+@JvmName("mockIntentNoExtras")
+fun mockIntent(
+    resultCode: Int = Activity.RESULT_OK,
+    action: String
+) {
+    val result = Intent()
+    val intentResult = Instrumentation.ActivityResult(resultCode, result)
+    intending(hasAction(action)).respondWith(intentResult)
+}
