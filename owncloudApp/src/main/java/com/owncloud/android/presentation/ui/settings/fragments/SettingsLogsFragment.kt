@@ -24,12 +24,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
-import com.owncloud.android.ui.activity.LogHistoryActivity
+import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsLogsFragment : PreferenceFragmentCompat() {
