@@ -70,39 +70,6 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test
-    fun getAuthenticationMethodFollowRedirections() {
-        val checkPathExistenceResultFollowRedirectionMocked: RemoteOperationResult<Boolean> =
-            createRemoteOperationResultMock(
-                data = true,
-                isSuccess = true,
-                redirectedLocation = OC_SERVER_INFO.baseUrl
-            )
-        val checkPathExistenceResultMocked: RemoteOperationResult<Boolean> =
-            createRemoteOperationResultMock(
-                data = true,
-                isSuccess = true,
-                resultCode = OK_SSL,
-                authenticationHeader = authHeadersBasic,
-                httpCode = HTTP_UNAUTHORIZED
-            )
-
-        every {
-            ocServerInfoService.checkPathExistence(redirectedLocation, false, ocClientMocked)
-        } returns checkPathExistenceResultFollowRedirectionMocked
-
-        every {
-            ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked)
-        } returns checkPathExistenceResultMocked
-
-        val authenticationMethod = ocRemoteServerInfoDatasource.getAuthenticationMethod(redirectedLocation)
-
-        assertNotNull(authenticationMethod)
-        assertEquals(AuthenticationMethod.BASIC_HTTP_AUTH, authenticationMethod)
-
-        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
-    }
-
-    @Test
     fun getAuthenticationMethodBasic() {
         val expectedValue = AuthenticationMethod.BASIC_HTTP_AUTH
         prepareAuthorizationMethodToBeRetrieved(expectedValue)
