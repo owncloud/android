@@ -26,25 +26,23 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 
-fun verifyPreference(
-    preference: Preference?,
-    key: String,
-    title: String,
-    summary: String? = null,
+fun Preference.verifyPreference(
+    keyPref: String,
+    titlePref: String,
+    summaryPref: String? = null,
     visible: Boolean,
     enabled: Boolean? = null
 ) {
-    if (visible) onView(withText(title)).check(matches(isDisplayed()))
-    summary?.let {
+    if (visible) onView(withText(titlePref)).check(matches(isDisplayed()))
+    summaryPref?.let {
         if (visible) onView(withText(it)).check(matches(isDisplayed()))
-        assertEquals(it, preference?.summary)
+        assertEquals(it, summary)
     }
-    assertEquals(key, preference?.key)
-    assertEquals(title, preference?.title)
-    assertTrue(preference?.isVisible == visible)
+    assertEquals(keyPref, key)
+    assertEquals(titlePref, title)
+    assertEquals(visible, isVisible)
     enabled?.let {
-        assertTrue(preference?.isEnabled == it)
+        assertEquals(enabled, isEnabled)
     }
 }

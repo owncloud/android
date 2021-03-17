@@ -87,7 +87,7 @@ public class PassCodeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         /// protection against screen recording
-        if (!MainApp.Companion.isDeveloper()) {
+        if (!MainApp.Companion.getEnabledLogging()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         } // else, let it go, or taking screenshots & testing will not be possible
 

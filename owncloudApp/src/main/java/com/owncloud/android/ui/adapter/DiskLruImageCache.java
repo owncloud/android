@@ -81,17 +81,17 @@ public class DiskLruImageCache {
             if (writeBitmapToFile(data, editor)) {
                 mDiskCache.flush();
                 editor.commit();
-                if (MainApp.Companion.isDeveloper()) {
+                if (MainApp.Companion.getEnabledLogging()) {
                    Timber.d( "cache_test_DISK_ image put on disk cache %s", validKey );
                 }
             } else {
                 editor.abort();
-                if (MainApp.Companion.isDeveloper()) {
+                if (MainApp.Companion.getEnabledLogging()) {
                     Timber.d( "cache_test_DISK_ ERROR on: image put on disk cache %s", validKey );
                 }
             }
         } catch (IOException e) {
-            if (MainApp.Companion.isDeveloper()) {
+            if (MainApp.Companion.getEnabledLogging()) {
                 Timber.d( "cache_test_DISK_ ERROR on: image put on disk cache %s", validKey );
             }
             try {
@@ -129,7 +129,7 @@ public class DiskLruImageCache {
             }
         }
 
-        if (MainApp.Companion.isDeveloper()) {
+        if (MainApp.Companion.getEnabledLogging()) {
             Timber.d(bitmap == null ? "not found" : "image read from disk %s", validKey);
         }
 
