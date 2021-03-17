@@ -29,15 +29,12 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.view.WindowManager
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.db.PreferenceManager.PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER
-import com.owncloud.android.db.PreferenceManager.PREF__LEGACY_CLICK_DEV_MENU
 import com.owncloud.android.dependecyinjection.commonModule
 import com.owncloud.android.dependecyinjection.localDataSourceModule
 import com.owncloud.android.dependecyinjection.remoteDataSourceModule
@@ -47,7 +44,7 @@ import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.lib.common.utils.LoggingHelper
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
@@ -62,7 +59,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import timber.log.Timber
-import java.io.File
 
 /**
  * Main Application of the project
@@ -77,7 +73,7 @@ class MainApp : Application() {
 
         appContext = applicationContext
 
-        startLogIfDeveloper()
+        startLogsIfEnabled()
 
         OwnCloudClient.setContext(appContext)
 
@@ -95,7 +91,7 @@ class MainApp : Application() {
                 val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
                 val patternCodeEnabled = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
-                if (!isDeveloper) {
+                if (!enabledLogging) {
                     // To enable biometric you need to enable passCode or pattern, so no need to add check to if
                     if (passCodeEnabled || patternCodeEnabled) {
                         activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
@@ -160,21 +156,12 @@ class MainApp : Application() {
         initDependencyInjection()
     }
 
-    fun startLogIfDeveloper() {
-        isDeveloper =
-            BuildConfig.DEBUG || PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                .getInt(PREF__LEGACY_CLICK_DEV_MENU, CLICKS_DEFAULT) > PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER
+    fun startLogsIfEnabled() {
+        enabledLogging = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                .getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
 
-        if (isDeveloper) {
-            val dataFolder = dataFolder
-
-            // Set folder for store logs
-            LoggingHelper.startLogging(
-                File(Environment.getExternalStorageDirectory().absolutePath + File.separator + dataFolder), dataFolder
-            )
-            Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
-
-            LogsProvider(applicationContext).initHttpLogs()
+        if (enabledLogging) {
+            LogsProvider(applicationContext).startLogging()
         }
     }
 
@@ -221,11 +208,10 @@ class MainApp : Application() {
 
     companion object {
         private const val BETA_VERSION = "beta"
-        private const val CLICKS_DEFAULT = 0
 
         lateinit var appContext: Context
             private set
-        var isDeveloper: Boolean = false
+        var enabledLogging: Boolean = false
             private set
 
         /**

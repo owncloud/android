@@ -110,7 +110,7 @@ public class AvailableOfflineSyncJobService extends JobService {
                 File localFile = new File(localPath);
 
                 if (localFile.lastModified() <= fileForAccount.first.getLastSyncDateForData() &&
-                        MainApp.Companion.isDeveloper()) {
+                        MainApp.Companion.getEnabledLogging()) {
                     Timber.i("File " + fileForAccount.first.getRemotePath() + " already synchronized " +
                             "in account " + fileForAccount.second + ", ignoring");
                     continue;
@@ -128,7 +128,7 @@ public class AvailableOfflineSyncJobService extends JobService {
          * @param accountName          account to synchronize the available offline file with
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
-            if (MainApp.Companion.isDeveloper()) {
+            if (MainApp.Companion.getEnabledLogging()) {
                 Timber.i("Requested synchronization for file %1s in account %2s",
                         availableOfflineFile.getRemotePath(), accountName);
             }

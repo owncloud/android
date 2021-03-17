@@ -32,6 +32,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class SettingsActivity : AppCompatActivity(),
@@ -43,13 +44,17 @@ class SettingsActivity : AppCompatActivity(),
 
         val toolbar = findViewById<Toolbar>(R.id.standard_toolbar).apply {
             isVisible = true
-            setTitle(R.string.actionbar_settings)
         }
         findViewById<ConstraintLayout>(R.id.root_toolbar).apply {
             isVisible = false
         }
         setSupportActionBar(toolbar)
+        updateToolbarTitle()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        supportFragmentManager.addOnBackStackChangedListener { updateToolbarTitle() }
+
+        if (savedInstanceState != null) return
 
         supportFragmentManager
             .beginTransaction()
@@ -60,12 +65,20 @@ class SettingsActivity : AppCompatActivity(),
             .commit()
     }
 
+    private fun updateToolbarTitle() {
+        val titleId = when (supportFragmentManager.fragments.lastOrNull()) {
+            is SettingsLogsFragment -> R.string.actionbar_logger
+            else -> R.string.actionbar_settings
+        }
+
+        supportActionBar?.setTitle(titleId)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                if (supportFragmentManager.findFragmentByTag("logs") != null) {
+                if (supportFragmentManager.backStackEntryCount > 0) {
                     supportFragmentManager.popBackStack()
-                    supportActionBar?.setTitle(R.string.actionbar_settings)
                 } else {
                     intent = Intent(this, FileDisplayActivity::class.java).apply {
                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -81,22 +94,11 @@ class SettingsActivity : AppCompatActivity(),
         val fragment = supportFragmentManager.fragmentFactory.instantiate(
             classLoader,
             pref.fragment)
-        var tag: String? = null
-        var titleId: Int? = null
-        if (pref.key.equals(SettingsFragment.PREFERENCE_LOGS_SUBSECTION)) {
-            tag = "logs"
-            titleId = R.string.actionbar_logger
-        }
+
         supportFragmentManager.beginTransaction()
-            .replace(R.id.settings_container, fragment, tag)
+            .replace(R.id.settings_container, fragment)
             .addToBackStack(null)
             .commit()
-        supportActionBar?.setTitle(titleId!!)
         return true
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        supportActionBar?.setTitle(R.string.actionbar_settings)
     }
 }

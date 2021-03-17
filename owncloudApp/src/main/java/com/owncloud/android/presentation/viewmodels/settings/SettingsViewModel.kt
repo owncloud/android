@@ -21,9 +21,13 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
+import android.os.Environment
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.BuildConfig
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.lib.common.utils.LoggingHelper
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
@@ -31,6 +35,8 @@ import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
+import timber.log.Timber
+import java.io.File
 
 class SettingsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
@@ -98,8 +104,14 @@ class SettingsViewModel(
 
     fun shouldLogHttpRequests(value: Boolean) = logsProvider.shouldLogHttpRequests(value)
 
-    fun setEnableLogging(value: Boolean) =
+    fun setEnableLogging(value: Boolean) {
         preferencesProvider.putBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, value)
+        if (value) {
+            logsProvider.startLogging()
+        } else {
+            logsProvider.stopLogging()
+        }
+    }
 
-    fun isEnableLoggingOn() = preferencesProvider.getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
+    fun isLoggingEnabled() = preferencesProvider.getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
 }

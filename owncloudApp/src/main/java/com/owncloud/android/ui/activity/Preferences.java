@@ -545,7 +545,7 @@ public class Preferences extends PreferenceActivity {
                             Toast.LENGTH_SHORT).show();
                 }
                 mPreferencesProvider.putInt(PREF__LEGACY_CLICK_DEV_MENU, clickCount + 1);
-                ((MainApp) getApplication()).startLogIfDeveloper(); // read value to global variable
+                ((MainApp) getApplication()).startLogsIfEnabled(); // read value to global variable
 
                 return true;
             });
@@ -557,7 +557,7 @@ public class Preferences extends PreferenceActivity {
         PreferenceScreen preferenceScreen = (PreferenceScreen) findPreference(PREFERENCE_SCREEN);
         if (mPreferencesProvider.getInt(PREF__LEGACY_CLICK_DEV_MENU, 0) >= PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER && pLogger == null) {
             preferenceScreen.addPreference(preferenceCategory);
-        } else if (!MainApp.Companion.isDeveloper() && pLogger != null) {
+        } else if (!MainApp.Companion.getEnabledLogging() && pLogger != null) {
             preferenceScreen.removePreference(preferenceCategory);
         }
     }

@@ -95,7 +95,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         super.onCreate(savedInstanceState)
 
         // Protection against screen recording
-        if (!MainApp.isDeveloper) {
+        if (!MainApp.enabledLogging) {
             window.addFlags(FLAG_SECURE)
         } // else, let it go, or taking screenshots & testing will not be possible
 

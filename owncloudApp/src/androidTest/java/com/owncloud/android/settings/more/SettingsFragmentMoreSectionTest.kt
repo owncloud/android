@@ -54,7 +54,6 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
-import kotlinx.coroutines.delay
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertEquals

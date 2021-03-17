@@ -216,7 +216,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         Timber.v("onCreate() end")
 
-        if (resources.getBoolean(R.bool.enable_rate_me_feature) && !MainApp.isDeveloper) {
+        if (resources.getBoolean(R.bool.enable_rate_me_feature) && !MainApp.enabledLogging) {
             AppRater.appLaunched(this, packageName)
         }
     }

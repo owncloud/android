@@ -218,7 +218,7 @@ public class SynchronizeFileOperation extends SyncOperation {
             }
         }
 
-        if (MainApp.Companion.isDeveloper()) {
+        if (MainApp.Companion.getEnabledLogging()) {
             Timber.i("Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() + ": " + result.getLogMessage());
         }
 

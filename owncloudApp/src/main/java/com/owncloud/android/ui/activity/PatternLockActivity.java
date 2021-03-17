@@ -73,7 +73,7 @@ public class PatternLockActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!MainApp.Companion.isDeveloper()) {
+        if (!MainApp.Companion.getEnabledLogging()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
         setContentView(R.layout.activity_pattern_lock);
