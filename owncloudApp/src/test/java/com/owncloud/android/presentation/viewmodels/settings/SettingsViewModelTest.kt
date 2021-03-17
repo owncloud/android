@@ -53,7 +53,7 @@ class SettingsViewModelTest : ViewModelTest() {
     fun setUp() {
         preferencesProvider = mockk()
         contextProvider = mockk()
-        logsProvider = mockk()
+        logsProvider = mockk(relaxUnitFun = true)
 
         settingsViewModel = SettingsViewModel(
             preferencesProvider,
@@ -542,8 +542,6 @@ class SettingsViewModelTest : ViewModelTest() {
 
     @Test
     fun `should log http requests - ok`() {
-        every { logsProvider.shouldLogHttpRequests(any())} returns Unit
-
         settingsViewModel.shouldLogHttpRequests(true)
 
         verify(exactly = 1) {
@@ -552,13 +550,26 @@ class SettingsViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `set enable logging - ok`() {
+    fun `set enable logging - ok - true`() {
         every { preferencesProvider.putBoolean(any(),any())} returns Unit
 
         settingsViewModel.setEnableLogging(true)
 
         verify(exactly = 1) {
             preferencesProvider.putBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, true)
+            logsProvider.startLogging()
+        }
+    }
+
+    @Test
+    fun `set enable logging - ok - false`() {
+        every { preferencesProvider.putBoolean(any(),any())} returns Unit
+
+        settingsViewModel.setEnableLogging(false)
+
+        verify(exactly = 1) {
+            preferencesProvider.putBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
+            logsProvider.stopLogging()
         }
     }
 
