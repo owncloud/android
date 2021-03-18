@@ -38,7 +38,7 @@ import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.google.android.material.snackbar.Snackbar;
-import com.owncloud.android.MainApp;
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -73,7 +73,7 @@ public class PatternLockActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!MainApp.Companion.getEnabledLogging()) {
+        if (!BuildConfig.DEBUG) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
         setContentView(R.layout.activity_pattern_lock);
