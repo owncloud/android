@@ -40,7 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.owncloud.android.MainApp;
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -87,7 +87,7 @@ public class PassCodeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         /// protection against screen recording
-        if (!MainApp.Companion.getEnabledLogging()) {
+        if (!BuildConfig.DEBUG) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         } // else, let it go, or taking screenshots & testing will not be possible
 
