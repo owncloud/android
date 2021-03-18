@@ -335,8 +335,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         const val PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows"
 
-        const val PREFERENCE_LOGS_SUBSECTION = "logs_subsection"
-
         private const val PREFERENCE_HELP = "help"
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
         private const val PREFERENCE_RECOMMEND = "recommend"
