@@ -35,7 +35,6 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragm
 import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class SettingsActivity : AppCompatActivity() {
-    //PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
