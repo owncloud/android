@@ -85,14 +85,7 @@ class SettingsFragmentMoreSectionTest {
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        settingsViewModel = mockk(relaxed = true)
-
-        prefHelp = null
-        prefSync = null
-        prefRecommend = null
-        prefFeedback = null
-        prefPrivacyPolicy = null
-        prefImprint = null
+        settingsViewModel = mockk(relaxUnitFun = true)
 
         stopKoin()
 
@@ -116,6 +109,14 @@ class SettingsFragmentMoreSectionTest {
         unmockkAll()
     }
 
+    private fun getPreference(key: String): Preference? {
+        var preference: Preference? = null
+        fragmentScenario.onFragment { fragment ->
+            preference = fragment.findPreference(key)
+        }
+        return preference
+    }
+
     private fun launchTest(
         helpEnabled: Boolean = true,
         syncEnabled: Boolean = true,
@@ -133,16 +134,11 @@ class SettingsFragmentMoreSectionTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
 
+        // These categories and preferences are not brandable
         fragmentScenario.onFragment { fragment ->
             prefSecurityCategory = fragment.findPreference(PREFERENCE_SECURITY_CATEGORY)!!
             prefLogsCategory = fragment.findPreference(PREFERENCE_LOGS_CATEGORY)!!
             prefMoreCategory = fragment.findPreference(PREFERENCE_MORE_CATEGORY)!!
-            if (helpEnabled) prefHelp = fragment.findPreference(PREFERENCE_HELP)!!
-            if (syncEnabled) prefSync = fragment.findPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)!!
-            if (recommendEnabled) prefRecommend = fragment.findPreference(PREFERENCE_RECOMMEND)!!
-            if (feedbackEnabled) prefFeedback = fragment.findPreference(PREFERENCE_FEEDBACK)!!
-            if (privacyPolicyEnabled) prefPrivacyPolicy = fragment.findPreference(PREFERENCE_PRIVACY_POLICY)!!
-            if (imprintEnabled) prefImprint = fragment.findPreference(PREFERENCE_IMPRINT)!!
             prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
         }
 
@@ -164,6 +160,7 @@ class SettingsFragmentMoreSectionTest {
             visible = true
         )
 
+        prefHelp = getPreference(PREFERENCE_HELP)
         verifyPreference(
             preference = prefHelp,
             key = PREFERENCE_HELP,
@@ -172,6 +169,7 @@ class SettingsFragmentMoreSectionTest {
             enabled = true
         )
 
+        prefSync = getPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)
         verifyPreference(
             preference = prefSync,
             key = PREFERENCE_SYNC_CALENDAR_CONTACTS,
@@ -181,6 +179,7 @@ class SettingsFragmentMoreSectionTest {
             enabled = true
         )
 
+        prefRecommend = getPreference(PREFERENCE_RECOMMEND)
         verifyPreference(
             preference = prefRecommend,
             key = PREFERENCE_RECOMMEND,
@@ -189,6 +188,7 @@ class SettingsFragmentMoreSectionTest {
             enabled = true
         )
 
+        prefFeedback = getPreference(PREFERENCE_FEEDBACK)
         verifyPreference(
             preference = prefFeedback,
             key = PREFERENCE_FEEDBACK,
@@ -197,6 +197,7 @@ class SettingsFragmentMoreSectionTest {
             enabled = true
         )
 
+        prefPrivacyPolicy = getPreference(PREFERENCE_PRIVACY_POLICY)
         verifyPreference(
             preference = prefPrivacyPolicy,
             key = PREFERENCE_PRIVACY_POLICY,
@@ -205,6 +206,7 @@ class SettingsFragmentMoreSectionTest {
             enabled = true
         )
 
+        prefImprint = getPreference(PREFERENCE_IMPRINT)
         verifyPreference(
             preference = prefImprint,
             key = PREFERENCE_IMPRINT,
@@ -227,6 +229,7 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun helpNotEnabledView() {
         launchTest(helpEnabled = false)
+        prefHelp = getPreference(PREFERENCE_HELP)
 
         assertNull(prefHelp)
     }
@@ -234,6 +237,7 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun syncNotEnabledView() {
         launchTest(syncEnabled = false)
+        prefSync = getPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)
 
         assertNull(prefSync)
     }
@@ -241,6 +245,7 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun recommendNotEnabledView() {
         launchTest(recommendEnabled = false)
+        prefRecommend = getPreference(PREFERENCE_RECOMMEND)
 
         assertNull(prefRecommend)
     }
@@ -248,6 +253,7 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun feedbackNotEnabledView() {
         launchTest(feedbackEnabled = false)
+        prefFeedback = getPreference(PREFERENCE_FEEDBACK)
 
         assertNull(prefFeedback)
     }
@@ -255,6 +261,7 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun privacyPolicyNotEnabledView() {
         launchTest(privacyPolicyEnabled = false)
+        prefPrivacyPolicy = getPreference(PREFERENCE_PRIVACY_POLICY)
 
         assertNull(prefPrivacyPolicy)
     }
@@ -262,11 +269,11 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun imprintNotEnabledView() {
         launchTest(imprintEnabled = false)
+        prefImprint = getPreference(PREFERENCE_IMPRINT)
 
         assertNull(prefImprint)
     }
 
-    @Ignore
     @Test
     fun helpOpensNotEmptyUrl() {
         every { settingsViewModel.getHelpUrl() } returns context.getString(R.string.url_help)
@@ -316,7 +323,6 @@ class SettingsFragmentMoreSectionTest {
         )
     }
 
-    @Ignore
     @Test
     fun feedbackOpensSender() {
         launchTest()
@@ -336,7 +342,6 @@ class SettingsFragmentMoreSectionTest {
         )
     }
 
-    @Ignore
     @Test
     fun privacyPolicyOpensPrivacyPolicyActivity() {
         launchTest()
@@ -354,14 +359,6 @@ class SettingsFragmentMoreSectionTest {
         onView(withText(R.string.prefs_imprint)).perform(click())
         mockIntent(action = Intent.ACTION_VIEW)
         intended(hasData("https://owncloud.com/mobile"))
-    }
-
-    private fun getPreference(key: String): Preference? {
-        var preference: Preference? = null
-        fragmentScenario.onFragment { fragment ->
-            preference = fragment.findPreference(key)
-        }
-        return preference
     }
 
     companion object {
