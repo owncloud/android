@@ -33,6 +33,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
 import org.hamcrest.Matchers.allOf
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -42,6 +43,7 @@ class LogHistoryActivityTest {
     @JvmField
     val activityRule = ActivityScenarioRule(LogHistoryActivity::class.java)
 
+    @Ignore
     @Test
     fun itemsToolbar() {
         onView(
