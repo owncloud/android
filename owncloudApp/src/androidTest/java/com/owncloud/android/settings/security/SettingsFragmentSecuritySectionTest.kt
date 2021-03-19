@@ -84,13 +84,20 @@ class SettingsFragmentSecuritySectionTest {
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        settingsViewModel = mockk(relaxed = true)
+        settingsViewModel = mockk(relaxUnitFun = true)
         mockkStatic(BiometricManager::class)
         biometricManager = mockk()
 
         every { BiometricManager.getBiometricManager(any()) } returns biometricManager
         every { biometricManager.onActivityStarted(any()) } returns Unit
         every { biometricManager.onActivityStopped(any()) } returns Unit
+
+        every { settingsViewModel.isHelpEnabled() } returns false
+        every { settingsViewModel.isSyncEnabled() } returns false
+        every { settingsViewModel.isRecommendEnabled() } returns false
+        every { settingsViewModel.isFeedbackEnabled() } returns false
+        every { settingsViewModel.isPrivacyPolicyEnabled() } returns false
+        every { settingsViewModel.isImprintEnabled() } returns false
 
         stopKoin()
 
@@ -179,12 +186,16 @@ class SettingsFragmentSecuritySectionTest {
 
     @Test
     fun passcodeOpen() {
+        every { settingsViewModel.isPatternSet() } returns false
+
         onView(withText(R.string.prefs_passcode)).perform(click())
         intended(hasComponent(PassCodeActivity::class.java.name))
     }
 
     @Test
     fun patternOpen() {
+        every { settingsViewModel.isPasscodeSet() } returns false
+
         onView(withText(R.string.prefs_pattern)).perform(click())
         intended(hasComponent(PatternLockActivity::class.java.name))
     }
@@ -402,8 +413,6 @@ class SettingsFragmentSecuritySectionTest {
 
     @Test
     fun touchesEnable() {
-        every { settingsViewModel.setPrefTouchesWithOtherVisibleWindows(any())} returns Unit
-
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
         onView(withText(R.string.common_yes)).perform(click())
         assertTrue(prefTouchesWithOtherVisibleWindows.isChecked)
@@ -418,8 +427,6 @@ class SettingsFragmentSecuritySectionTest {
 
     @Test
     fun touchesDisable() {
-        every { settingsViewModel.setPrefTouchesWithOtherVisibleWindows(any())} returns Unit
-
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
         onView(withText(R.string.common_yes)).perform(click())
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
