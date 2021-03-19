@@ -140,6 +140,7 @@ class OCSettingsPasscodeTest {
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
+    @Ignore
     @Test
     fun cancelSecondTry() {
         //Open Activity in passcode creation mode
@@ -155,6 +156,7 @@ class OCSettingsPasscodeTest {
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
+    @Ignore
     @Test
     fun deletePasscodeView() {
         //Save a passcode in Preferences
