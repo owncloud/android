@@ -81,6 +81,7 @@ class OCSettingsPasscodeTest {
         onView(withId(R.id.cancel)).check(matches(isDisplayed()))
     }
 
+    @Ignore
     @Test
     fun firstTry() {
         //Open Activity in passcode creation mode
