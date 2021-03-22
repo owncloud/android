@@ -62,6 +62,7 @@ public class UriUploader {
 
     public enum UriUploaderResultCode {
         OK,
+        COPY_THEN_UPLOAD,
         ERROR_UNKNOWN,
         ERROR_NO_FILE_TO_UPLOAD,
         ERROR_READ_PERMISSION_NOT_GRANTED
@@ -114,12 +115,14 @@ public class UriUploader {
 
             if (!contentUris.isEmpty()) {
                 /// content: uris will be copied to temporary files before calling {@link FileUploader}
-                copyThenUpload(contentUris.toArray(new Uri[0]),
-                        contentRemotePaths.toArray(new String[0]));
+                copyThenUpload(contentUris.toArray(new Uri[0]), contentRemotePaths.toArray(new String[0]));
+
+                // Listen to CopyAndUploadContentUrisTask before killing the app or a SecurityException may appear.
+                // At least when receiving files to upload.
+                mCode = UriUploaderResultCode.COPY_THEN_UPLOAD;
 
             } else if (schemeFileCounter == 0) {
                 mCode = UriUploaderResultCode.ERROR_NO_FILE_TO_UPLOAD;
-
             }
 
         } catch (SecurityException e) {

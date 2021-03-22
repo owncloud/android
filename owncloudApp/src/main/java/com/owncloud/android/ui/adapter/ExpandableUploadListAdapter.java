@@ -741,6 +741,9 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
             clear.setText(mParentActivity.getString(R.string.action_upload_clear));
             clear.setOnClickListener(v -> mOptionsInUploadListClickListener.onClick(UploadListFragment.OptionsInUploadList.CLEAR_SUCCESSFUL));
             retry.setVisibility(View.GONE);
+        } else {
+            clear.setVisibility(View.GONE);
+            retry.setVisibility(View.GONE);
         }
         return convertView;
     }
