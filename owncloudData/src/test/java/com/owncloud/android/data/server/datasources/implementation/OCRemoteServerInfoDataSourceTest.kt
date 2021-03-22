@@ -17,18 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.server.datasources
+package com.owncloud.android.data.server.datasources.implementation
 
-import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerInfoDataSource
+import com.owncloud.android.data.ClientManager
+import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.SpecificServiceUnavailableException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
+import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants.HTTP_SERVICE_UNAVAILABLE
 import com.owncloud.android.lib.common.http.HttpConstants.HTTP_UNAUTHORIZED
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK_NO_SSL
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK_SSL
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
+import com.owncloud.android.lib.resources.status.RemoteServerInfo
 import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.createRemoteOperationResultMock
@@ -37,15 +40,22 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class OCRemoteServerInfoDataSourceTest {
     private lateinit var ocRemoteServerInfoDatasource: OCRemoteServerInfoDataSource
 
-    private val ocInfoService: OCServerInfoService = mockk()
+    private val ocServerInfoService: OCServerInfoService = mockk()
+    private val clientManager: ClientManager = mockk(relaxed = true)
+    private val ocClientMocked: OwnCloudClient = mockk(relaxed = true)
 
-    private val ocOwncloudVersion = OwnCloudVersion("10.3.2")
+    private val OC_REMOTE_SERVER_INFO = RemoteServerInfo(
+        ownCloudVersion = OwnCloudVersion(OC_SERVER_INFO.ownCloudVersion),
+        baseUrl = OC_SERVER_INFO.baseUrl,
+        isSecureConnection = OC_SERVER_INFO.isSecureConnection
+    )
     private val basicAuthHeader = "basic realm=\"owncloud\", charset=\"utf-8\""
     private val bearerHeader = "bearer realm=\"owncloud\""
     private val authHeadersBasic = listOf(basicAuthHeader)
@@ -54,40 +64,9 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Before
     fun init() {
-        ocRemoteServerInfoDatasource = OCRemoteServerInfoDataSource(ocInfoService)
-    }
+        ocRemoteServerInfoDatasource = OCRemoteServerInfoDataSource(ocServerInfoService, clientManager)
 
-    @Test
-    fun getAuthenticationMethodFollowRedirections() {
-        val checkPathExistenceResultFollowRedirectionMocked: RemoteOperationResult<Boolean> =
-            createRemoteOperationResultMock(
-                data = true,
-                isSuccess = true,
-                redirectedLocation = OC_SERVER_INFO.baseUrl
-            )
-        val checkPathExistenceResultMocked: RemoteOperationResult<Boolean> =
-            createRemoteOperationResultMock(
-                data = true,
-                isSuccess = true,
-                resultCode = OK_SSL,
-                authenticationHeader = authHeadersBasic,
-                httpCode = HTTP_UNAUTHORIZED
-            )
-
-        every {
-            ocInfoService.checkPathExistence(redirectedLocation, false)
-        } returns checkPathExistenceResultFollowRedirectionMocked
-
-        every {
-            ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
-        } returns checkPathExistenceResultMocked
-
-        val authenticationMethod = ocRemoteServerInfoDatasource.getAuthenticationMethod(redirectedLocation)
-
-        assertNotNull(authenticationMethod)
-        assertEquals(AuthenticationMethod.BASIC_HTTP_AUTH, authenticationMethod)
-
-        verify { ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
+        every { clientManager.getClientForUnExistingAccount(any(), any()) } returns ocClientMocked
     }
 
     @Test
@@ -100,7 +79,7 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(expectedValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
+        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
     }
 
     @Test
@@ -113,7 +92,7 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(expectedValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
+        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
     }
 
     @Test
@@ -126,7 +105,7 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(expectedValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false) }
+        verify { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
     }
 
     @Test(expected = SpecificServiceUnavailableException::class)
@@ -141,7 +120,7 @@ class OCRemoteServerInfoDataSourceTest {
     @Test(expected = Exception::class)
     fun getAuthenticationMethodException() {
         every {
-            ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
+            ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked)
         } throws Exception()
 
         ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SERVER_INFO.baseUrl)
@@ -149,7 +128,7 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test
     fun getRemoteStatusIsSecureConnection() {
-        val expectedValue = Pair(ocOwncloudVersion, true)
+        val expectedValue = OC_REMOTE_SERVER_INFO.copy(isSecureConnection = true)
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         val currentValue = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
@@ -157,12 +136,12 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(currentValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+        verify { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
     }
 
     @Test
     fun getRemoteStatusIsNotSecureConnection() {
-        val expectedValue = Pair(ocOwncloudVersion, false)
+        val expectedValue = OC_REMOTE_SERVER_INFO.copy(isSecureConnection = false)
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         val currentValue = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
@@ -170,12 +149,12 @@ class OCRemoteServerInfoDataSourceTest {
         assertNotNull(currentValue)
         assertEquals(expectedValue, currentValue)
 
-        verify { ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+        verify { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
     }
 
     @Test(expected = OwncloudVersionNotSupportedException::class)
     fun getRemoteStatusOwncloudVersionNotSupported() {
-        val expectedValue = Pair(OwnCloudVersion("9.0.0"), false)
+        val expectedValue = OC_REMOTE_SERVER_INFO.copy(ownCloudVersion = OwnCloudVersion("9.0.0"))
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
@@ -183,24 +162,94 @@ class OCRemoteServerInfoDataSourceTest {
 
     @Test
     fun getRemoteStatusOwncloudVersionHidden() {
-        val expectedValue = Pair(OwnCloudVersion(""), false)
+        val expectedValue = OC_REMOTE_SERVER_INFO.copy(ownCloudVersion = OwnCloudVersion(""))
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
         ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
 
         val remoteStatus = ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
 
-        assertEquals(true, remoteStatus.first.isVersionHidden)
-        verify { ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl) }
+        assertTrue(remoteStatus.ownCloudVersion.isVersionHidden)
+        verify { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
     }
 
     @Test(expected = Exception::class)
     fun getRemoteStatusException() {
         every {
-            ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl)
+            ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked)
         } throws Exception()
 
         ocRemoteServerInfoDatasource.getRemoteStatus(OC_SERVER_INFO.baseUrl)
+    }
+
+    @Test
+    fun getServerInfoBasicAndSecureConnection() {
+        val expectedValue =
+            OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = true)
+
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO.copy(isSecureConnection = true))
+        prepareAuthorizationMethodToBeRetrieved(expectedValue.authenticationMethod, true)
+
+        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
+        assertEquals(expectedValue, currentValue)
+
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
+        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+    }
+
+    @Test
+    fun getServerInfoBasicAndInSecureConnection() {
+        val expectedValue =
+            OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = false)
+
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO.copy(isSecureConnection = false))
+        prepareAuthorizationMethodToBeRetrieved(expectedValue.authenticationMethod, true)
+
+        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl)
+        assertEquals(expectedValue, currentValue)
+
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
+        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+    }
+
+    @Test
+    fun getServerInfoBearerAndSecureConnection() {
+        val expectedValue =
+            OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BEARER_TOKEN, isSecureConnection = true)
+
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO.copy(isSecureConnection = true))
+        prepareAuthorizationMethodToBeRetrieved(expectedValue.authenticationMethod, true)
+
+        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
+        assertEquals(expectedValue, currentValue)
+
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
+        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+    }
+
+    @Test
+    fun getServerInfoBearerAndInSecureConnection() {
+        val expectedValue =
+            OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH, isSecureConnection = true)
+
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO.copy(isSecureConnection = true))
+        prepareAuthorizationMethodToBeRetrieved(expectedValue.authenticationMethod, true)
+
+        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
+        assertEquals(expectedValue, currentValue)
+
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
+        verify(exactly = 1) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
+    }
+
+    @Test(expected = NoConnectionWithServerException::class)
+    fun getServerInfoNoConnection() {
+        prepareRemoteStatusToBeRetrieved(OC_REMOTE_SERVER_INFO, NoConnectionWithServerException())
+
+        ocRemoteServerInfoDatasource.getServerInfo(OC_SERVER_INFO.baseUrl)
+
+        verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked) }
+        verify(exactly = 0) { ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked) }
     }
 
     private fun prepareAuthorizationMethodToBeRetrieved(
@@ -223,25 +272,29 @@ class OCRemoteServerInfoDataSourceTest {
             )
 
         every {
-            ocInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
+            ocServerInfoService.checkPathExistence(OC_SERVER_INFO.baseUrl, false, ocClientMocked)
         } returns checkPathExistenceResultMocked
     }
 
-    private fun prepareRemoteStatusToBeRetrieved(expectedPair: Pair<OwnCloudVersion, Boolean>) {
-        val expectedResultCode = when (expectedPair.second) {
+    private fun prepareRemoteStatusToBeRetrieved(
+        expectedConfig: RemoteServerInfo,
+        exception: Exception? = null
+    ) {
+        val expectedResultCode = when (expectedConfig.isSecureConnection) {
             true -> OK_SSL
             false -> OK_NO_SSL
         }
 
-        val remoteStatusResultMocked: RemoteOperationResult<OwnCloudVersion> =
+        val remoteStatusResultMocked: RemoteOperationResult<RemoteServerInfo> =
             createRemoteOperationResultMock(
-                data = expectedPair.first,
+                data = expectedConfig,
                 isSuccess = true,
-                resultCode = expectedResultCode
+                resultCode = expectedResultCode,
+                exception = exception
             )
 
         every {
-            ocInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl)
+            ocServerInfoService.getRemoteStatus(OC_SERVER_INFO.baseUrl, ocClientMocked)
         } returns remoteStatusResultMocked
     }
 }

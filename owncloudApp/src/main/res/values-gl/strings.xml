@@ -484,10 +484,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_privilege_can_edit_delete">eliminar</string>
   <string name="edit_share_unshare">Deter a compartición</string>
   <string name="edit_share_done">feito</string>
-  <string name="action_retry_uploads">Tentar de novo os envíos fallados</string>
-  <string name="action_clear_failed_uploads">Limpar os envíos fallados</string>
-  <string name="action_clear_successful_uploads">Limpar os envíos satisfactorios</string>
-  <string name="action_clear_finished_uploads">Limpar os envíos rematados</string>
+  <string name="action_upload_retry">Tentar de novo</string>
+  <string name="action_upload_clear">Limpar</string>
   <string name="manage_space_title">Administrar o espazo</string>
   <string name="manage_space_description">Van ser eliminados de xeito permanente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
   <string name="manage_space_clear_data">Limpar os datos</string>
@@ -551,10 +549,13 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_4_text">As súas imaxes ou vídeos enviaranse automaticamente</string>
   <string name="welcome_feature_5_title">Fluxo de vídeo</string>
   <string name="welcome_feature_5_text">Reproduza os seus vídeos sen descargalos</string>
+  <string name="welcome_feature_6_title">Redeseño da barra de ferramentas</string>
+  <string name="welcome_feature_6_text">Acceda á xestión de contas na barra de ferramentas</string>
   <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
   <string name="common_not_found">non foi atopado</string>
   <string name="supports_oauth2_error">Non foi posible saber se OAuth2 é compatíbel</string>
   <string name="get_base_url_error">Non foi posíbel saber cal é o URL base do servidor</string>
   <string name="prefs_http_logs">Rexistro de solicitudes e respostas HTTP</string>
   <string name="prefs_logs_summary">Os rexistros poden conter información confidencial. Compartir rexistros con outras persoas é responsabilidade exclusiva do usuario</string>
+  <string name="synchronizing_account">Sincronizando a conta</string>
 </resources>

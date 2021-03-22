@@ -284,12 +284,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimetype(), file.getFileName()));
-                if (file.getRemoteId() != null && file.isImage()) {
+                if (file.getRemoteId() != null) {
                     // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.getRemoteId());
-                    if (thumbnail != null && !file.needsUpdateThumbnail()) {
+                    if (thumbnail != null) {
                         fileIcon.setImageBitmap(thumbnail);
-                    } else {
+                    }
+                    if (file.needsUpdateThumbnail()) {
                         // generate new Thumbnail
                         if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
                             final ThumbnailsCacheManager.ThumbnailGenerationTask task =

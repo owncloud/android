@@ -37,6 +37,7 @@
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
+  <string name="prefs_biometric">生物识别锁</string>
   <string name="prefs_biometric_summary">使用密码或图案锁定以启用此选项</string>
   <string name="confirmation_touches_with_other_windows_title">你确定要启用此功能吗？</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
@@ -459,10 +460,8 @@
   <string name="share_privilege_can_edit_delete">删除</string>
   <string name="edit_share_unshare">停止共享</string>
   <string name="edit_share_done">完成</string>
-  <string name="action_retry_uploads">重试失败</string>
-  <string name="action_clear_failed_uploads">清除失败</string>
-  <string name="action_clear_successful_uploads">清除成功</string>
-  <string name="action_clear_finished_uploads">清除所有完成任务</string>
+  <string name="action_upload_retry">重试</string>
+  <string name="action_upload_clear">清除</string>
   <string name="manage_space_title">管理空间</string>
   <string name="manage_space_description"> %1$s 的设置，数据库以及服务器证书将会被永久删除。
 \n\n 已下载的文件将会被保留。\n\n完成此操作需要一些时间。</string>

@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2019 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,24 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.domain.authentication.oauth
 
-package com.owncloud.android.data.user.datasources.mapper
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
+import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 
-import com.owncloud.android.domain.mappers.RemoteMapper
-import com.owncloud.android.domain.user.model.UserInfo
-import com.owncloud.android.lib.resources.users.RemoteUserInfo
+class RequestTokenUseCase(
+    private val oAuthRepository: OAuthRepository
+) : BaseUseCaseWithResult<TokenResponse, RequestTokenUseCase.Params>() {
 
-class RemoteUserInfoMapper : RemoteMapper<UserInfo, RemoteUserInfo> {
-    override fun toModel(remote: RemoteUserInfo?): UserInfo? =
-        remote?.let {
-            UserInfo(
-                id = it.id,
-                displayName = it.displayName,
-                email = it.email
-            )
-        }
+    override fun run(params: Params): TokenResponse {
+        return oAuthRepository.performTokenRequest(params.tokenRequest)
+    }
 
-    // Not needed
-    override fun toRemote(model: UserInfo?): RemoteUserInfo? = null
-
+    data class Params(
+        val tokenRequest: TokenRequest
+    )
 }

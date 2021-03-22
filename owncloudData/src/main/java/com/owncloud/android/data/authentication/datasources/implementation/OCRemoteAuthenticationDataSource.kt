@@ -18,23 +18,20 @@
  */
 package com.owncloud.android.data.authentication.datasources.implementation
 
-import android.content.Context
-import android.net.Uri
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
+import com.owncloud.android.data.user.datasources.implementation.toDomain
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0
-import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation
 
 class OCRemoteAuthenticationDataSource(
-    private val context: Context,
-    private val remoteUserInfoMapper: RemoteUserInfoMapper
+    private val clientManager: ClientManager
 ) : RemoteAuthenticationDataSource {
     override fun loginBasic(serverPath: String, username: String, password: String): Pair<UserInfo, String?> =
         login(OwnCloudCredentialsFactory.newBasicCredentials(username, password), serverPath)
@@ -43,12 +40,12 @@ class OCRemoteAuthenticationDataSource(
         login(OwnCloudCredentialsFactory.newBearerCredentials(username, accessToken), serverPath)
 
     private fun login(ownCloudCredentials: OwnCloudCredentials, serverPath: String): Pair<UserInfo, String?> {
-        val url: Uri = Uri.parse(serverPath)
 
         val client: OwnCloudClient =
-            OwnCloudClientFactory.createOwnCloudClient(url, context, true).apply {
-                credentials = ownCloudCredentials
-            }
+            clientManager.getClientForUnExistingAccount(
+                path = serverPath,
+                requiresNewClient = false
+            ).apply { credentials = ownCloudCredentials }
 
         val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation("/", true)
         executeRemoteOperation { checkPathExistenceRemoteOperation.execute(client) }
@@ -62,11 +59,8 @@ class OCRemoteAuthenticationDataSource(
 
         executeRemoteOperation {
             GetRemoteUserInfoOperation().execute(client)
-        }.let { userInfo = remoteUserInfoMapper.toModel(it)!! }
+        }.let { userInfo = it.toDomain() }
 
-        return Pair(
-            userInfo,
-            userBaseUri
-        )
+        return Pair(userInfo, userBaseUri)
     }
 }

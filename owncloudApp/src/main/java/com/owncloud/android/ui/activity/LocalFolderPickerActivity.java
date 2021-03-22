@@ -140,11 +140,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
         });
 
         // init toolbar
-        setupToolbar();
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(true);
-        }
+        setupStandardToolbar(null, true, true, true);
         updateActionBar();
 
         Timber.v("onCreate() end");
@@ -164,9 +160,11 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             boolean mayBrowseUp = mayBrowseUp();
-            actionBar.setHomeButtonEnabled(mayBrowseUp);
-            actionBar.setDisplayHomeAsUpEnabled(mayBrowseUp);
-            actionBar.setTitle(mayBrowseUp ? mCurrentFolder.getName() : File.separator);
+            updateStandardToolbar(
+                    mayBrowseUp ? mCurrentFolder.getName() : File.separator,
+                    mayBrowseUp,
+                    mayBrowseUp
+            );
         } else {
             Timber.w("Action bar missing in action");
         }

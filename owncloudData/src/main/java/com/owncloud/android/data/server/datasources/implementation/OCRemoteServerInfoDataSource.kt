@@ -19,29 +19,31 @@
 
 package com.owncloud.android.data.server.datasources.implementation
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.SpecificServiceUnavailableException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
+import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.lib.common.http.HttpConstants
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.network.WebdavUtils.normalizeProtocolPrefix
+import com.owncloud.android.lib.resources.status.RemoteServerInfo
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
-import com.owncloud.android.lib.resources.status.OwnCloudVersion
 
 class OCRemoteServerInfoDataSource(
-    private val serverInfoService: ServerInfoService
+    private val serverInfoService: ServerInfoService,
+    private val clientManager: ClientManager
 ) : RemoteServerInfoDataSource {
 
-    /* Basically, tries to access to the root folder without authorization and analyzes the response.*/
-    override fun getAuthenticationMethod(path: String): AuthenticationMethod {
-        // Step 1: check whether the root folder exists, following redirections
-        var checkPathExistenceResult = serverInfoService.checkPathExistence(path, isUserLogged = false)
-        var redirectionLocation = checkPathExistenceResult.redirectedLocation
-        while (!redirectionLocation.isNullOrEmpty()) {
-            checkPathExistenceResult = serverInfoService.checkPathExistence(redirectionLocation, isUserLogged = false)
-            redirectionLocation = checkPathExistenceResult.redirectedLocation
-        }
+    // Basically, tries to access to the root folder without authorization and analyzes the response.
+    fun getAuthenticationMethod(path: String): AuthenticationMethod {
+        // Use the same client across the whole login process to keep cookies updated.
+        val owncloudClient = clientManager.getClientForUnExistingAccount(path, false)
+
+        // Step 1: check whether the root folder exists.
+        val checkPathExistenceResult =
+            serverInfoService.checkPathExistence(path, isUserLogged = false, client = owncloudClient)
 
         // Step 2: Check if server is available (If server is in maintenance for example, throw exception with specific message)
         if (checkPathExistenceResult.httpCode == HttpConstants.HTTP_SERVICE_UNAVAILABLE) {
@@ -69,17 +71,36 @@ class OCRemoteServerInfoDataSource(
         return authenticationMethod
     }
 
-    override fun getRemoteStatus(path: String): Pair<OwnCloudVersion, Boolean> {
-        val remoteStatusResult = serverInfoService.getRemoteStatus(path)
+    fun getRemoteStatus(path: String): RemoteServerInfo {
+        val ownCloudClient = clientManager.getClientForUnExistingAccount(path, true)
 
-        val ownCloudVersion = executeRemoteOperation {
+        val remoteStatusResult = serverInfoService.getRemoteStatus(path, ownCloudClient)
+
+        val remoteServerInfo = executeRemoteOperation {
             remoteStatusResult
         }
 
-        if (!ownCloudVersion.isServerVersionSupported && !ownCloudVersion.isVersionHidden) {
+        if (!remoteServerInfo.ownCloudVersion.isServerVersionSupported && !remoteServerInfo.ownCloudVersion.isVersionHidden) {
             throw OwncloudVersionNotSupportedException()
         }
 
-        return Pair(ownCloudVersion, remoteStatusResult.code == RemoteOperationResult.ResultCode.OK_SSL)
+        return remoteServerInfo
+    }
+
+    override fun getServerInfo(path: String): ServerInfo {
+        // First step: check the status of the server (including its version)
+        val remoteServerInfo = getRemoteStatus(path)
+        val normalizedProtocolPrefix =
+            normalizeProtocolPrefix(remoteServerInfo.baseUrl, remoteServerInfo.isSecureConnection)
+
+        // Second step: get authentication method required by the server
+        val authenticationMethod = getAuthenticationMethod(normalizedProtocolPrefix)
+
+        return ServerInfo(
+            ownCloudVersion = remoteServerInfo.ownCloudVersion.version,
+            baseUrl = normalizedProtocolPrefix,
+            authenticationMethod = authenticationMethod,
+            isSecureConnection = remoteServerInfo.isSecureConnection
+        )
     }
 }

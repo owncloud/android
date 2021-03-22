@@ -353,7 +353,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 updatedLocalFile.setFileName(remoteFile.getFileName());
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag(localFile.getEtag());
-                if (!updatedLocalFile.isFolder() && updatedLocalFile.isImage() &&
+                if (!updatedLocalFile.isFolder() &&
                         remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
                     updatedLocalFile.setNeedsUpdateThumbnail(true);
                 }
@@ -367,6 +367,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                             OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
                     );
                 }
+                // new files need to update thumbnails
+                updatedLocalFile.setNeedsUpdateThumbnail(true);
             }
 
             /// check and fix, if needed, local storage path

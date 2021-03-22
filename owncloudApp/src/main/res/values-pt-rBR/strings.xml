@@ -483,10 +483,8 @@
   <string name="share_privilege_can_edit_delete">excluir</string>
   <string name="edit_share_unshare">Parar compartilhamento</string>
   <string name="edit_share_done">finalizado</string>
-  <string name="action_retry_uploads">Falha, tentar novamente</string>
-  <string name="action_clear_failed_uploads">Limpar falha</string>
-  <string name="action_clear_successful_uploads">Limpado com sucesso</string>
-  <string name="action_clear_finished_uploads">Limpar tudo finalizado</string>
+  <string name="action_upload_retry">Repetir</string>
+  <string name="action_upload_clear">Limpar</string>
   <string name="manage_space_title">Gerenciar o espaço</string>
   <string name="manage_space_description">Definições, certificados de banco de dados e servidor de dados %1$s serão excluído permanentemente. \n\nArquivos baixados serão mantidos inalterados. \n\nEste processo pode demorar algum tempo.</string>
   <string name="manage_space_clear_data">Limpar dados</string>
@@ -550,10 +548,13 @@
   <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
   <string name="welcome_feature_5_title">Transmissão de vídeo</string>
   <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
+  <string name="welcome_feature_6_title">Redesenho da barra de ferramentas</string>
+  <string name="welcome_feature_6_text">Acesso do gerenciamento da conta dentro da barra de ferramentas</string>
   <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
   <string name="common_not_found">não foi encontrado</string>
   <string name="supports_oauth2_error">Não foi possível  saber se OAuth2 é suportada</string>
   <string name="get_base_url_error">Não foi possível saber a url base do servidor</string>
   <string name="prefs_http_logs">Registrar solicitações e respostas HTTP</string>
   <string name="prefs_logs_summary">Os logs podem conter informações confidenciais. O compartilhamento de registros com outras pessoas é de responsabilidade exclusiva do usuário</string>
+  <string name="synchronizing_account">Sincronizando conta</string>
 </resources>

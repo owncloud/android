@@ -153,9 +153,9 @@
   <string name="change_password">Сменить пароль</string>
   <string name="delete_account">Удалить аккаунт</string>
   <string name="create_account">Создать учётную запись</string>
-  <string name="upload_chooser_title">Закачать из</string>
+  <string name="upload_chooser_title">Загрузить из</string>
   <string name="uploader_info_dirname">Имя каталога</string>
-  <string name="uploader_upload_in_progress_ticker">Закачка…</string>
+  <string name="uploader_upload_in_progress_ticker">Загрузка…</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Загружается %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Загрузка завершена</string>
   <string name="uploader_upload_succeeded_content_single">%1$s загружено</string>
@@ -483,10 +483,8 @@
   <string name="share_privilege_can_edit_delete">удалить</string>
   <string name="edit_share_unshare">Остановить общий доступ</string>
   <string name="edit_share_done">завершено</string>
-  <string name="action_retry_uploads">Повторить неудавшиеся</string>
-  <string name="action_clear_failed_uploads">Очистить неудавшиеся</string>
-  <string name="action_clear_successful_uploads">Очистить удавшиеся</string>
-  <string name="action_clear_finished_uploads">Очистить завершённые</string>
+  <string name="action_upload_retry">Повторить</string>
+  <string name="action_upload_clear">Очистить</string>
   <string name="manage_space_title">Управление свободным местом</string>
   <string name="manage_space_description">Настройки, сертификаты базы данных и сервера из данных %1$s будут удалены навсегда. \n\nЗагруженные файлы будут сохранены нетронутыми. \n\nЭтот процесс может занять некоторое время.</string>
   <string name="manage_space_clear_data">Очистить данные</string>
@@ -558,4 +556,5 @@
   <string name="get_base_url_error">Узнать базу сервера, было невозможно</string>
   <string name="prefs_http_logs">Записывать в лог-файл HTTP запросы и ответы</string>
   <string name="prefs_logs_summary">В логах может содержаться чувствительная информация. Отправка логов третьим лицам находится под вашей ответственностью</string>
+  <string name="synchronizing_account">Синхронизация аккаунта</string>
 </resources>

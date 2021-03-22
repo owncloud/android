@@ -262,16 +262,16 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.ownCloud.Toolbar">
-        </activity>
-
-        <activity
-            android:name="net.openid.appauth.RedirectUriReceiverActivity"
-            tools:node="replace">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="@string/oauth2_redirect_uri_scheme"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/oauth2_redirect_uri_path"
+                    android:scheme="@string/oauth2_redirect_uri_scheme" />
+
             </intent-filter>
         </activity>
     </application>

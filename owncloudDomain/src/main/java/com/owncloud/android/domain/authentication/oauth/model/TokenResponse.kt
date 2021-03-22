@@ -17,22 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.user.datasources.mapper
+package com.owncloud.android.domain.authentication.oauth.model
 
-import com.owncloud.android.domain.mappers.RemoteMapper
-import com.owncloud.android.domain.user.model.UserAvatar
-import com.owncloud.android.lib.resources.users.RemoteAvatarData
-
-class RemoteUserAvatarMapper : RemoteMapper<UserAvatar, RemoteAvatarData> {
-    override fun toModel(remote: RemoteAvatarData?): UserAvatar? =
-        remote?.let {
-            UserAvatar(
-                avatarData = it.avatarData,
-                eTag = it.eTag,
-                mimeType = it.mimeType
-            )
-        }
-
-    // Not needed
-    override fun toRemote(model: UserAvatar?): RemoteAvatarData? = null
-}
+data class TokenResponse(
+    val accessToken: String,
+    val expiresIn: Int,
+    val refreshToken: String?,
+    val tokenType: String,
+    val userId: String?,
+    val scope: String?,
+    val additionalParameters: Map<String, String>?
+)

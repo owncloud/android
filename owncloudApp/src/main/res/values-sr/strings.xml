@@ -344,8 +344,7 @@
   <string name="share_privilege_can_edit_delete">обриши</string>
   <string name="edit_share_unshare">Заустави дељење</string>
   <string name="edit_share_done">завршено</string>
-  <string name="action_clear_finished_uploads">Очисти све завршене</string>
-  <string name="manage_space_title">Управљање простором</string>
+    <string name="manage_space_title">Управљање простором</string>
   <string name="manage_space_clear_data">Очисти податке</string>
   <string name="manage_space_error">Неки фајлови нису могли бити обрисани.</string>
   <string name="permission_storage_access">Додатне дозволе су потребне за отпремање и преузимање фајлова.</string>

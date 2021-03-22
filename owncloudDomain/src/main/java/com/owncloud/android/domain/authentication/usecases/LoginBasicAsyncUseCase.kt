@@ -45,6 +45,6 @@ class LoginBasicAsyncUseCase(
         val serverInfo: ServerInfo?,
         val username: String,
         val password: String,
-        val updateAccountWithUsername: String?
+        val updateAccountWithUsername: String? = null
     )
 }

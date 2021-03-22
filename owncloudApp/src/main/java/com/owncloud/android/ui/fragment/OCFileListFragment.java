@@ -728,17 +728,6 @@ public class OCFileListFragment extends ExtendedListFragment implements
         }
     }
 
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
-        MenuItem item = menu.findItem(R.id.action_sync_account);
-        if (item != null) {
-            item.setVisible(mFileListOption.isAllFiles());
-            item.setEnabled(mFileListOption.isAllFiles());
-        }
-    }
-
     /**
      * Call this, when the user presses the up button.
      * <p>
@@ -1277,5 +1266,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 Snackbar.LENGTH_LONG
         );
         snackbar.show();
+    }
+
+    public void setSearchListener(SearchView searchView){
+        searchView.setOnQueryTextFocusChangeListener(this);
+        searchView.setOnQueryTextListener(this);
     }
 }

@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Konta</string>
   <string name="prefs_manage_accounts">Zarządzaj kontami</string>
   <string name="prefs_passcode">Blokada hasłem</string>
+  <string name="prefs_biometric">blokada biometryczna</string>
   <string name="prefs_biometric_summary">Wprowadź kod PIN lub wzór odblokowania aby odblokować tę opcję</string>
   <string name="confirmation_touches_with_other_windows_title">Czy jesteś pewny, że chcesz włączyć tą funkcję?</string>
   <string name="prefs_camera_picture_upload">Wrzucanie obrazków</string>
@@ -74,6 +75,7 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Pliki</string>
   <string name="bottom_nav_uploads">Wrzucone</string>
+  <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Linki</string>
   <string name="recommend_subject">Wypróbuj %1$s na swoim smartphonie!</string>
   <string name="recommend_text">Chciałbym zaprosić Cię do używania %1$s na swoim smartfonie!\nŚciągnij tutaj: %2$s</string>
@@ -223,6 +225,9 @@
   <string name="pass_code_wrong">Kod PIN nieprawidłowy</string>
   <string name="pass_code_removed">Kod PIN został usunięty</string>
   <string name="pass_code_stored">Kod PIN został zapisany</string>
+  <string name="biometric_not_hardware_detected">To urządzenie nie wspiera uwierzytelniania biometrycznego</string>
+  <string name="biometric_not_enrolled">Zarejestruj co najmniej jedno uwierzytelnienie biometryczne</string>
+  <string name="biometric_prompt_title">Zalogowano biometrycznie</string>
   <string name="media_notif_ticker">%1$s odtwarzacz muzyki</string>
   <string name="media_state_playing">%1$s (odtwarzany)</string>
   <string name="media_state_loading">%1$s (wczytywany)</string>
@@ -341,8 +346,10 @@
   <string name="confirmation_disable_camera_uploads_title">Potwierdź</string>
   <string name="confirmation_disable_pictures_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące obrazy nie zostaną wrzucone</string>
   <string name="confirmation_disable_videos_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące filmy nie zostaną wrzucone</string>
+  <string name="proper_pics_folder_warning_camera_upload">Upewnij się, że wskazany folder jest tym samym folderem używanym przez aparat do zapisu. W innym przypadku nie zarejestruje twoich zdjęć. Miej na uwadze że zdjęcia zostaną wysłane w ciągu przynajmniej 15 minut od ich powstania.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Upewnij się, że wskazany folder jest tym samym folderem używanym przez aparat do zapisu. W innym przypadku nie zarejestruje twoich filmów. Miej na uwadze że filmy zostaną wysłane w ciągu przynajmniej 15 minut od ich powstania.</string>
   <string name="conflict_title">Konflikt pliku</string>
-  <string name="conflict_description">W pliku %1$swystąpił konflikt, stuknij żeby go rozwiązać</string>
+  <string name="conflict_description">W pliku %1$swystąpił konflikt, naciśnij żeby go rozwiązać</string>
   <string name="conflict_message">Które pliki chcesz zachować? Jeśli wybierzesz obie wersje, do nazwy pliku lokalnego zostanie dodana liczba.</string>
   <string name="conflict_keep_both">Zatrzymaj oba</string>
   <string name="conflict_use_local_version">wersja lokalna</string>
@@ -351,6 +358,8 @@
   <string name="preview_image_error_unknown_format">Ten obrazek nie może zostać wyświetlony</string>
   <string name="error__upload__local_file_not_copied">%1$s nie może zostać skopiowany do lokalnego folderu %2$s</string>
   <string name="prefs_camera_picture_upload_path_title">Ścieżka wrzucania obrazu</string>
+  <string name="get_shares_error">Nie było możliwe otrzymanie wspólnych udziałów z serwera</string>
+  <string name="get_sharees_error">Nie było możliwe otrzymanie użytkowników i grup z serwera</string>
   <string name="get_capabilities_error">Pobranie właściwości z serwera nie było możliwe</string>
   <string name="share_link_no_support_share_api">Przepraszamy, ale współdzielenie nie jest włączone na Twoim serwerze. Proszę skontaktuj się z
 		administratorem.</string>
@@ -384,6 +393,7 @@
   <string name="drawer_manage_accounts">Zarządzaj kontami</string>
   <string name="auth_redirect_non_secure_connection_title">Bezpieczne połączenie jest przekierowywane przez niezabezpieczone trasy.</string>
   <string name="actionbar_logger">Logi</string>
+  <string name="log_open_logs_view">Otwórz widok log</string>
   <string name="log_send_history_button">Wyślij historię</string>
   <string name="log_send_no_mail_app">Brak aplikacji do wysyłania logów. Zainstaluj klienta poczty.</string>
   <string name="log_send_mail_subject">%1$s Logi aplikacji Android</string>
@@ -466,10 +476,8 @@
   <string name="share_privilege_can_edit_delete">usuń</string>
   <string name="edit_share_unshare">Cofnij udostępnianie</string>
   <string name="edit_share_done">zakończono</string>
-  <string name="action_retry_uploads">Wystąpił błąd podczas ponawiania</string>
-  <string name="action_clear_failed_uploads">Wystąpił błąd podczas czyszczenia</string>
-  <string name="action_clear_successful_uploads">Czyszczenie zakończone pomyślnie</string>
-  <string name="action_clear_finished_uploads">Wyczyszczono wszystkie</string>
+  <string name="action_upload_retry">Powtórz</string>
+  <string name="action_upload_clear">Wyczyść</string>
   <string name="manage_space_title">Zarządzaj przestrzenią</string>
   <string name="manage_space_description">Ustawienia, baza danych i certyfikaty serwera %1$s zostaną trwale skasowane.\n\nPobrane pliki pozostaną na swoich miejscach.\n\nTen proces zajmie trochę czasu.</string>
   <string name="manage_space_clear_data">Wyczyść dane</string>
@@ -528,11 +536,14 @@
   <string name="welcome_feature_1_text">Możesz kopiować, przenosić, usuwać</string>
   <string name="welcome_feature_2_title">Udostępnij pliki i foldery</string>
   <string name="welcome_feature_2_text">Możesz udostępniać prywatnie i publicznie</string>
+  <string name="welcome_feature_3_title">Konto multi</string>
   <string name="welcome_feature_3_text">Podłącz do twoich wszystkich serwerów ownCloud</string>
   <string name="welcome_feature_4_title">Wrzucanie kamery</string>
   <string name="welcome_feature_4_text">Automatyczne wysyłanie twoich zdjęć oraz wideo </string>
   <string name="welcome_feature_5_title">Wideotransmisja</string>
   <string name="welcome_feature_5_text">Odtwarzaj twoje pliki wideo bez pobierania</string>
-  <string name="no_borwser_installed_alert">Przeglądarka nie jest zainstalowana. Zainstaluj przeglądarkę by umożliwić bezpieczne logowanie.</string>
+  <string name="no_borwser_installed_alert">Nie wykryto żadnej zainstalowanej przeglądarki. Zainstaluj przeglądarkę by umożliwić bezpieczne logowanie.</string>
   <string name="common_not_found">nie znaleziono</string>
+  <string name="supports_oauth2_error">Nie było możliwe stwierdzenie czy OAuth2 jest wspierane</string>
+  <string name="get_base_url_error">Nie było możliwe znalezienie adresu URL serwera</string>
 </resources>

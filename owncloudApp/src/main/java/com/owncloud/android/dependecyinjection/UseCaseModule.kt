@@ -19,6 +19,9 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
+import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
+import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
@@ -48,6 +51,11 @@ val useCaseModule = module {
     factory { LoginOAuthAsyncUseCase(get()) }
     factory { SupportsOAuth2UseCase(get()) }
     factory { GetBaseUrlUseCase(get()) }
+
+    // OAuth
+    factory { OIDCDiscoveryUseCase(get()) }
+    factory { RequestTokenUseCase(get()) }
+    factory { RegisterClientUseCase(get()) }
 
     // Capabilities
     factory { GetCapabilitiesAsLiveDataUseCase(get()) }

@@ -5,7 +5,7 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -42,14 +42,12 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -91,13 +89,14 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private TransferProgressController mProgressController;
 
     private Handler mainHandler;
-    private SimpleExoPlayerView simpleExoPlayerView;
+    private PlayerView exoPlayerView;
 
     private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
     private ImageButton fullScreenButton;
 
+    private boolean mExoPlayerBooted = false;
     private boolean mAutoplay;
     private long mPlaybackPosition;
 
@@ -169,7 +168,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         mProgressBar = view.findViewById(R.id.syncProgressBar);
         mProgressBar.setVisibility(View.GONE);
 
-        simpleExoPlayerView = view.findViewById(R.id.video_player);
+        exoPlayerView = view.findViewById(R.id.video_player);
 
         fullScreenButton = view.findViewById(R.id.fullscreen_button);
 
@@ -235,11 +234,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         Timber.v("onResume");
 
         preparePlayer();
-
-        if (player != null) {
-            player.seekTo(mPlaybackPosition);
-            player.setPlayWhenReady(mAutoplay);
-        }
     }
 
     @Override
@@ -280,6 +274,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         if (resultCode == Activity.RESULT_OK) {
             mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
             mPlaybackPosition = data.getExtras().getLong(PreviewVideoActivity.EXTRA_START_POSITION);
+            mExoPlayerBooted = false;
         }
     }
 
@@ -348,13 +343,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         // additional restrictions for this fragment
 
-        MenuItem item = menu.findItem(R.id.action_sync_account);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        item = menu.findItem(R.id.action_search);
+        MenuItem item = menu.findItem(R.id.action_search);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
@@ -378,7 +367,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             }
             case R.id.action_remove_file: {
                 RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstance(getFile());
-                dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
+                dialog.show(getParentFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }
             case R.id.action_see_details: {
@@ -423,8 +412,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         // Create a default TrackSelector
         mainHandler = new Handler();
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+        AdaptiveTrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
         // Video streaming is only supported at Jelly Bean or higher Android versions (>= API 16)
@@ -436,7 +425,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         player.addListener(this);
 
         // Bind the player to the view.
-        simpleExoPlayerView.setPlayer(player);
+        exoPlayerView.setPlayer(player);
 
         // Prepare video player asynchronously
         new PrepareVideoPlayerAsyncTask(getActivity(), this,
@@ -523,19 +512,15 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         // If player is already, show full screen button
         if (playbackState == ExoPlayer.STATE_READY) {
             fullScreenButton.setVisibility(View.VISIBLE);
+            if (player != null && !mExoPlayerBooted) {
+                mExoPlayerBooted = true;
+                player.seekTo(mPlaybackPosition);
+                player.setPlayWhenReady(mAutoplay);
+            }
+
         } else if (playbackState == ExoPlayer.STATE_ENDED) {
             fullScreenButton.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onPositionDiscontinuity() {
-        // Do nothing
-    }
-
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
-        // Do nothing
     }
 
     // File extra methods

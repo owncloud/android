@@ -34,12 +34,10 @@ import android.accounts.AuthenticatorException
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.ComponentName
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.content.SyncRequest
 import android.content.pm.PackageManager
 import android.content.res.Resources.NotFoundException
 import android.net.Uri
@@ -49,6 +47,7 @@ import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
@@ -60,8 +59,6 @@ import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.db.PreferenceManager.getSortOrder
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
@@ -97,7 +94,6 @@ import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.Extras
-import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.android.synthetic.main.nav_coordinator_layout.*
@@ -191,7 +187,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         setContentView(R.layout.activity_main)
 
         // setup toolbar
-        setupToolbar()
+        setupRootToolbar(
+            isSearchEnabled = true,
+            title = getString(R.string.default_display_name_for_root_folder),
+        )
 
         // setup drawer
         setupDrawer()
@@ -200,9 +199,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         leftFragmentContainer = findViewById(R.id.left_fragment_container)
         rightFragmentContainer = findViewById(R.id.right_fragment_container)
-
-        // Action bar setup
-        supportActionBar?.setHomeButtonEnabled(true)
 
         // Init Fragment without UI to retain AsyncTask across configuration changes
         val fm = supportFragmentManager
@@ -322,7 +318,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             } else {
                 file?.isFolder?.let { isFolder ->
                     updateFragmentsVisibility(!isFolder)
-                    updateActionBarTitleAndHomeButton(if (isFolder) null else file)
+                    updateToolbar(if (isFolder) null else file)
                 }
             }
         }
@@ -330,6 +326,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private fun createMinFragments() {
         val listOfFiles = OCFileListFragment.newInstance(false, fileListOption, false, false, true)
+        listOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
@@ -347,7 +344,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             secondFragment?.let {
                 setSecondFragment(it)
                 updateFragmentsVisibility(true)
-                updateActionBarTitleAndHomeButton(file)
+                updateToolbar(file)
             } ?: cleanSecondFragment()
 
         } else {
@@ -423,7 +420,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     fun showOrHideBottomNavBar(show: Boolean) {
-        bottom_nav_view.visibility = if (show) View.VISIBLE else View.GONE
+        bottom_nav_view.isVisible = show
     }
 
     private fun updateFragmentsVisibility(existsSecondFragment: Boolean) {
@@ -455,18 +452,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             tr.commit()
         }
         updateFragmentsVisibility(false)
-        updateActionBarTitleAndHomeButton(null)
+        updateToolbar(null)
     }
 
     fun refreshListOfFilesFragment(reloadData: Boolean) {
         val fileListFragment = listOfFilesFragment
         fileListFragment?.listDirectory(reloadData)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.action_sync_account).isVisible = !isDrawerOpen()
-
-        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -496,9 +487,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             R.id.action_select_all -> {
                 listOfFilesFragment?.selectAll()
             }
-            R.id.action_sync_account -> {
-                startSynchronization()
-            }
             android.R.id.home -> {
                 val second = secondFragment
                 val currentDir = currentDir
@@ -517,23 +505,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun startSynchronization() {
-        Timber.d("Got to start sync")
-        Timber.d("Requesting sync for ${account.name} at ${MainApp.authority} with new API")
-        val builder = SyncRequest.Builder()
-        builder.setSyncAdapter(account, MainApp.authority)
-        builder.setExpedited(true)
-        builder.setManual(true)
-        builder.syncOnce()
-
-        // Fix bug in Android Lollipop when you click on refresh the whole account
-        val extras = Bundle()
-        builder.setExtras(extras)
-
-        val request = builder.build()
-        ContentResolver.requestSync(request)
     }
 
     /**
@@ -973,7 +944,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         R.id.ListLayout,
                         String.format(getString(R.string.filedetails_renamed_in_upload_msg), newName)
                     )
-                    updateActionBarTitleAndHomeButton(file)
+                    updateToolbar(file)
                 }
             }
         }
@@ -1147,24 +1118,24 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         val detailFragment = FileDetailFragment.newInstance(file, account)
         setSecondFragment(detailFragment)
         updateFragmentsVisibility(true)
-        updateActionBarTitleAndHomeButton(file)
+        updateToolbar(file)
         setFile(file)
     }
 
-    override fun updateActionBarTitleAndHomeButton(chosenFileFromParam: OCFile?) {
-        var chosenFile = chosenFileFromParam
-        if (chosenFile == null) {
-            chosenFile = file     // if no file is passed, current file decides
-        }
-        super.updateActionBarTitleAndHomeButton(chosenFile!!)
-        if (chosenFile?.remotePath == OCFile.ROOT_PATH && (!fileListOption.isAllFiles())) {
+    private fun updateToolbar(chosenFileFromParam: OCFile?) {
+        val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
+
+        if (chosenFile == null || chosenFile.remotePath == OCFile.ROOT_PATH) {
             val title =
-                when {
-                    fileListOption.isAvailableOffline() -> resources.getString(R.string.drawer_item_only_available_offline)
-                    fileListOption.isSharedByLink() -> resources.getString(R.string.drawer_item_shared_by_link_files)
-                    else -> null // Should not happen -> will show R.string.app_name
+                when (fileListOption) {
+                    FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
+                    FileListOption.SHARED_BY_LINK -> getString(R.string.drawer_item_shared_by_link_files)
+                    FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                 }
-            updateActionBarTitleAndHomeButtonByString(title)
+            setupRootToolbar(title, isSearchEnabled = true)
+            listOfFilesFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
+        } else {
+            updateStandardToolbar(chosenFile.fileName, true, true)
         }
     }
 
@@ -1377,7 +1348,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 renamedFile = storageManager.getFileById(renamedFile!!.fileId)
                 file = renamedFile
                 details.onFileMetadataChanged(renamedFile)
-                updateActionBarTitleAndHomeButton(renamedFile)
+                updateToolbar(renamedFile)
             }
 
             if (storageManager.getFileById(renamedFile!!.parentId) == currentDir) {
@@ -1577,7 +1548,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         )
         setSecondFragment(mediaFragment)
         updateFragmentsVisibility(true)
-        updateActionBarTitleAndHomeButton(file)
+        updateToolbar(file)
         setFile(file)
     }
 
@@ -1597,7 +1568,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         )
         setSecondFragment(mediaFragment)
         updateFragmentsVisibility(true)
-        updateActionBarTitleAndHomeButton(file)
+        updateToolbar(file)
         setFile(file)
     }
 
@@ -1613,7 +1584,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         )
         setSecondFragment(textPreviewFragment)
         updateFragmentsVisibility(true)
-        updateActionBarTitleAndHomeButton(file)
+        updateToolbar(file)
         setFile(file)
     }
 
@@ -1630,7 +1601,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         fileWaitingToPreview = file
         fileOperationsHelper.syncFile(file)
         updateFragmentsVisibility(true)
-        updateActionBarTitleAndHomeButton(file)
+        updateToolbar(file)
         setFile(file)
     }
 
@@ -1699,7 +1670,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 fileListOption = newFileListOption
                 file = storageManager.getFileByPath(OCFile.ROOT_PATH)
                 listOfFilesFragment?.updateFileListOption(newFileListOption)
-                updateActionBarTitleAndHomeButton(null)
+                updateToolbar(null)
             } else {
                 super.navigateToOption(FileListOption.ALL_FILES)
             }

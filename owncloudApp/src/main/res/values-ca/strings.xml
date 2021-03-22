@@ -37,6 +37,7 @@
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gestió de comptes</string>
   <string name="prefs_passcode">Contrasenya</string>
+  <string name="prefs_biometric">Bloqueig biomètric  </string>
   <string name="prefs_biometric_summary">Activa la contrasenya o el patró de desbloqueig per activar aquesta opció</string>
   <string name="confirmation_touches_with_other_windows_title">Segur que voleu habilitar aquesta funció?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilitzeu aquesta característica sota la vostra responsabilitat, aplicacions malicioses podrien executar accions sense que us adonesiu fent servir altres vistes.</string>
@@ -76,11 +77,15 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Arxius</string>
   <string name="bottom_nav_uploads">Càrrega</string>
+  <string name="bottom_nav_offline">Fora de línia </string>
   <string name="bottom_nav_links">Enllaços</string>
   <string name="recommend_subject">Proveu %1$s a un telèfon avançat!</string>
   <string name="recommend_text">Vull invitar-te a utilitzar %1$s al teu smartphone!\nDescarrega-ho aqui: %2$s</string>
   <string name="error_reason">ja que</string>
   <string name="auth_failure_snackbar">Autentificació denegada</string>
+  <string name="server_not_supported">La versió del servidor és inferior a 10 i per tant no s\' admet, si us plau actualitzeu el servidor a la versió més recent.
+
+</string>
   <string name="auth_failure_snackbar_action">Canvia de compte</string>
   <string name="auth_oauth_failure">El token d\'accés ha caducat o no és vàlid. Inicieu la sessió de nou per recuperar l’accés</string>
   <string name="auth_oauth_failure_snackbar_action">Inicia la sessió</string>
@@ -225,6 +230,10 @@
   <string name="pass_code_wrong">Codi d\'accés incorrecte</string>
   <string name="pass_code_removed">Codi d\'accés eliminat</string>
   <string name="pass_code_stored">Codi d\'accés guardat</string>
+  <string name="biometric_not_hardware_detected">Aquest dispositiu no admet autentificació biomètrica. </string>
+  <string name="biometric_not_enrolled">Registrar al menys una característica biomètrica per poder utilitzar aquesta funció. </string>
+  <string name="biometric_prompt_title">Inici de sessió biomètric.</string>
+  <string name="biometric_prompt_subtitle">Inicieu la sessió amb la vostra credencial biomètrica</string>
   <string name="media_notif_ticker">reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (sonant)</string>
   <string name="media_state_loading">%1$s (carregant)</string>
@@ -389,6 +398,7 @@
   <string name="drawer_manage_accounts">Gestió de comptes</string>
   <string name="auth_redirect_non_secure_connection_title">La connexió segura està essent redirigida a través d\'una ruta insegura</string>
   <string name="actionbar_logger">Registre</string>
+  <string name="log_open_logs_view">Obre la vista de registres.</string>
   <string name="log_send_history_button">Enviar història</string>
   <string name="log_send_no_mail_app">No es troba aplicació per enviar els registres. Si us plau, instal·la una aplicació de email.</string>
   <string name="log_send_mail_subject">%1$s app de registres Android</string>
@@ -470,10 +480,8 @@
   <string name="share_privilege_can_edit_delete">elimina</string>
   <string name="edit_share_unshare">Deixar de compartir</string>
   <string name="edit_share_done">Fet</string>
-  <string name="action_retry_uploads">Re-intent fallit.</string>
-  <string name="action_clear_failed_uploads">Neteja fallida</string>
-  <string name="action_clear_successful_uploads">Neteja exitosa</string>
-  <string name="action_clear_finished_uploads">Netejat correctament</string>
+  <string name="action_upload_retry">Torna-ho a intentar</string>
+  <string name="action_upload_clear">Neteja</string>
   <string name="manage_space_title">Gestió d\'espai</string>
   <string name="manage_space_description">La configuració, base de dades i certificats del servidor %1$s s\'esborraran de forma permanent.\n\nEls arxius descarregats quedaran intactes.\n\nAquest procés tardarà una mica.</string>
   <string name="manage_space_clear_data">Neteja dades</string>
@@ -504,13 +512,13 @@
   <string name="share_via_link_expiration_date_enforced_label">Caduca *</string>
   <string name="share_via_link_expiration_date_explanation_label">Els enllaços públics caducaran abans de %1$d dies de la seva creació</string>
   <string name="share_via_link_default_name_template">enllaç %1$s</string>
-  <string name="share_via_link_empty_password">La contrassenya és buida</string>
+  <string name="share_via_link_empty_password">La contrasenya és buida</string>
   <string name="private_link_info">Enllaç privat, només les persones que tenen accés al fitxer/carpeta el podran utilitzar. </string>
   <string name="file_private_link_error">Enllaç privat no disponible per aquest fitxer</string>
-  <string name="download_notification_channel_name">Descàrregues</string>
+  <string name="download_notification_channel_name">Baixades</string>
   <string name="download_notification_channel_description">Veure el fitxer en descàrrega i progrés</string>
-  <string name="upload_notification_channel_name">Càrrega</string>
-  <string name="upload_notification_channel_description">Veure els fitxers carregats i progrés</string>
+  <string name="upload_notification_channel_name">Pujades</string>
+  <string name="upload_notification_channel_description">Veure els fitxers pujats i progrés</string>
   <string name="media_service_notification_channel_name">Reproductor de música</string>
   <string name="media_service_notification_channel_description">Veure el reproductor de música</string>
   <string name="file_sync_notification_channel_name">Sincronitza fitxers</string>
@@ -533,9 +541,14 @@
   <string name="welcome_feature_2_text">Pots compartir privadament o públicament</string>
   <string name="welcome_feature_3_title">Multi compte</string>
   <string name="welcome_feature_3_text">Connectar a tots els teus servidors Owncloud</string>
-  <string name="welcome_feature_4_title">Fotos Càmara</string>
+  <string name="welcome_feature_4_title">Fotos Càmera</string>
   <string name="welcome_feature_4_text">Fotos i Vídeos carregats automàticament</string>
   <string name="welcome_feature_5_title">Transmissió de vídeo</string>
   <string name="welcome_feature_5_text">Reprodueix els vídeos sense descarregar-los</string>
   <string name="no_borwser_installed_alert">Ningun navegador instal·lat. Si us plau, instal·la un navegador per permetre un inici de sessió segur.</string>
+  <string name="common_not_found">No s\' ha trobat</string>
+  <string name="supports_oauth2_error">No s\' ha pogut saber si s\' admet OAuth2 </string>
+  <string name="get_base_url_error">No ha sigut possible conèixer l\'URL del servidor</string>
+  <string name="prefs_http_logs">Registre de sol·licituds i respostes HTTP</string>
+  <string name="prefs_logs_summary">Els registres poden contenir informació sensible. Compartir els registres amb altres és responsabilitat exclusiva de l’usuari</string>
 </resources>

@@ -66,4 +66,9 @@
     <dimen name="bottom_sheet_fragment_arrow_icon_size">18dp</dimen>
     <dimen name="bottom_sheet_fragment_divider_height">1dp</dimen>
 
+    <!-- ownCloud toolbar -->
+    <dimen name="toolbar_card_corner_radius">6dp</dimen>
+    <dimen name="toolbar_title_text_size">20sp</dimen>
+    <dimen name="toolbar_avatar_size">48dp</dimen>
+    <dimen name="toolbar_avatar_radius">16dp</dimen>
 </resources>

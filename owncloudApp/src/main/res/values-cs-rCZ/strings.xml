@@ -71,6 +71,7 @@
   <string name="pattern_removed">Gesto odstraněno</string>
   <string name="pattern_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte gesto</string>
   <string name="passcode_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte bezpečnostní kód</string>
+  <string name="pattern_no_longer_required">Gesto již nebude vyžadováno</string>
   <string name="pattern_configure_your_pattern_explanation">Gesto bude vyžadováno při každém startu aplikace</string>
   <string name="pass_code_locked">Uzamčeno bezpečnostním kódem</string>
   <string name="pattern_locked">Uzamčeno gestem</string>
@@ -166,7 +167,7 @@
   <string name="uploader_upload_text_filename_hint">Jméno souboru</string>
   <string name="uploader_upload_camera_upload_files">Nahrávám soubory z fotoparátu</string>
   <string name="uploader_upload_available_offline_files">Nahrávání dostupných offline souborů</string>
-  <string name="uploader_upload_requested_from_wifi_files">Nahrávání vyžádáno wifi soubory</string>
+  <string name="uploader_upload_requested_from_wifi_files">Vyžádáno nahrávání souborů</string>
   <string name="ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
   <string name="uploads_view_title">Nahrání</string>
   <string name="uploads_view_group_current_uploads">Aktuální</string>
@@ -229,6 +230,7 @@
   <string name="pass_code_removed">Bezpečnostní kód odstraněn</string>
   <string name="pass_code_stored">Bezpečnostní kód uložen</string>
   <string name="biometric_not_hardware_detected">Toto zařízení nepodoporuje biometrickou autentizaci</string>
+  <string name="biometric_not_enrolled">Povolte alespoň jeden biometrický způsob ověření k používání této specialitky</string>
   <string name="biometric_prompt_title">Biometrické přihlášení</string>
   <string name="biometric_prompt_subtitle">Přihlásit se s použitím biometrických přihlašovacích údajů</string>
   <string name="media_notif_ticker">Hudební přehrávač %1$s</string>
@@ -396,6 +398,7 @@ správce systému.</string>
   <string name="drawer_manage_accounts">Spravovat účty</string>
   <string name="auth_redirect_non_secure_connection_title">Zabezpečené spojení je přesměrováváno nezabezpečenou trasou.</string>
   <string name="actionbar_logger">Logy</string>
+  <string name="log_open_logs_view">Otevřít log</string>
   <string name="log_send_history_button">Historie odesílání</string>
   <string name="log_send_no_mail_app">Nenalezena aplikace pro odesílání logů. Nainstalujte prosím emailovou aplikaci.</string>
   <string name="log_send_mail_subject">%1$s logy aplikace pro Android</string>
@@ -478,10 +481,8 @@ správce systému.</string>
   <string name="share_privilege_can_edit_delete">smazat</string>
   <string name="edit_share_unshare">Ukončit sdílení</string>
   <string name="edit_share_done">dokončeno</string>
-  <string name="action_retry_uploads">Opakovat neúspěšné</string>
-  <string name="action_clear_failed_uploads">Vyčištit neúspěšné</string>
-  <string name="action_clear_successful_uploads">Vyčištit úspěšné</string>
-  <string name="action_clear_finished_uploads">Vyčistit všechny ukončené</string>
+  <string name="action_upload_retry">Zkusit znovu</string>
+  <string name="action_upload_clear">Vyčistit</string>
   <string name="manage_space_title">Spravovat úložný prostor</string>
   <string name="manage_space_description">Nastavení, databáze a certifikáty serverů z %1$s data budou permanentně smazány. \n\nStažené soubory nebudou rozbaleny.\n\nTento proces může chvíli trvat.</string>
   <string name="manage_space_clear_data">Vyčistit data</string>
@@ -551,4 +552,7 @@ správce systému.</string>
   <string name="common_not_found">nebylo nalezeno</string>
   <string name="supports_oauth2_error">Nebylo možné zjistit, zda-li je OAuth2 podporováno</string>
   <string name="get_base_url_error">Nebylo možné zjistit základní URL adresu serveru</string>
+  <string name="prefs_http_logs">Logovat HTTP požadavky a odpovědi</string>
+  <string name="prefs_logs_summary">Log může obsahovat citlivé informace. Sdílení je pouze na vaší zodpovědnosti.</string>
+  <string name="synchronizing_account">Synchronizuji účet</string>
 </resources>

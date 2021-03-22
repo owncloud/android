@@ -29,6 +29,8 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCRemot
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
+import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
+import com.owncloud.android.data.oauth.datasource.impl.RemoteOAuthDataSourceImpl
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
 import com.owncloud.android.data.server.datasources.implementation.OCRemoteServerInfoDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
@@ -39,13 +41,12 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRem
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserAvatarMapper
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserInfoMapper
-import com.owncloud.android.data.user.datasources.mapper.RemoteUserQuotaMapper
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.resources.files.services.FileService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
+import com.owncloud.android.lib.resources.oauth.services.OIDCService
+import com.owncloud.android.lib.resources.oauth.services.implementation.OCOIDCService
 import com.owncloud.android.lib.resources.shares.services.ShareService
 import com.owncloud.android.lib.resources.shares.services.ShareeService
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
@@ -67,23 +68,22 @@ val remoteDataSourceModule = module {
     single<CapabilityService> { OCCapabilityService(get()) }
     single<FileService> { OCFileService(get()) }
     single<ServerInfoService> { OCServerInfoService() }
+    single<OIDCService> { OCOIDCService() }
     single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
 
-    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(androidContext(), get()) }
+    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
     factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
     factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
-    factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get()) }
+    factory<RemoteOAuthDataSource> { RemoteOAuthDataSourceImpl(get(), get()) }
+    factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
-    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), get(), get(), get(), androidContext().resources.getDimension(
+    factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), androidContext().resources.getDimension(
                 R.dimen.file_avatar_size
             ).toInt()) }
 
     factory { RemoteCapabilityMapper() }
     factory { RemoteShareMapper() }
     factory { RemoteShareeMapper() }
-    factory { RemoteUserAvatarMapper() }
-    factory { RemoteUserInfoMapper() }
-    factory { RemoteUserQuotaMapper() }
 }

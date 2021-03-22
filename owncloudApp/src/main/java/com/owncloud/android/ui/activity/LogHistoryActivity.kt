@@ -34,7 +34,13 @@ class LogHistoryActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.logs)
-        setupToolbar()
+
+        setupStandardToolbar(
+            title = getString(R.string.actionbar_logger),
+            displayHomeAsUpEnabled = false,
+            displayShowTitleEnabled = true,
+            homeButtonEnabled = false,
+        )
 
         // Check that the activity is using the layout version with the fragment_container FrameLayout
         if (findViewById<View>(R.id.fragment_container) != null) {

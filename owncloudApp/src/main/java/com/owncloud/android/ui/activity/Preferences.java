@@ -61,7 +61,15 @@ import timber.log.Timber;
 
 import java.io.File;
 
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED;
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH;
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY;
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_BEHAVIOUR;
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH;
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_SOURCE;
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED;
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH;
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY;
 
 /**
  * An Activity that allows the user to change the application's settings.
@@ -79,15 +87,7 @@ public class Preferences extends PreferenceActivity {
     private static final int ACTION_CONFIRM_PASSCODE = 6;
     private static final int ACTION_REQUEST_PATTERN = 7;
     private static final int ACTION_CONFIRM_PATTERN = 8;
-    private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS = "camera_picture_uploads";
-    private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH = "camera_picture_uploads_path";
     private static final String PREFERENCE_CAMERA_UPLOADS_CATEGORY = "camera_uploads_category";
-    private static final String PREFERENCE_CAMERA_PICTURE_UPLOADS_ON_WIFI = "camera_picture_uploads_on_wifi";
-    private static final String PREFERENCE_CAMERA_VIDEO_UPLOADS = "camera_video_uploads";
-    private static final String PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH = "camera_video_uploads_path";
-    private static final String PREFERENCE_CAMERA_VIDEO_UPLOADS_ON_WIFI = "camera_video_uploads_on_wifi";
-    private static final String PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH = "camera_uploads_source_path";
-    private static final String PREFERENCE_CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
     private static final String PREFERENCE_SECURITY_CATEGORY = "security_category";
     private static final String PREFERENCE_LOGS_CATEGORY = "logs_category";
     private static final String PREFERENCE_MORE_CATEGORY = "more";
@@ -175,9 +175,9 @@ public class Preferences extends PreferenceActivity {
          */
 
         // Pictures
-        mPrefCameraPictureUploads = (CheckBoxPreference) findPreference(PREFERENCE_CAMERA_PICTURE_UPLOADS);
+        mPrefCameraPictureUploads = (CheckBoxPreference) findPreference(PREF__CAMERA_PICTURE_UPLOADS_ENABLED);
 
-        mPrefCameraPictureUploadsPath = findPreference(PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH);
+        mPrefCameraPictureUploadsPath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_PATH);
         if (mPrefCameraPictureUploadsPath != null) {
 
             mPrefCameraPictureUploadsPath.setOnPreferenceClickListener(preference -> {
@@ -193,7 +193,7 @@ public class Preferences extends PreferenceActivity {
 
         mPrefCameraUploadsCategory = (PreferenceCategory) findPreference(PREFERENCE_CAMERA_UPLOADS_CATEGORY);
 
-        mPrefCameraPictureUploadsWiFi = findPreference(PREFERENCE_CAMERA_PICTURE_UPLOADS_ON_WIFI);
+        mPrefCameraPictureUploadsWiFi = findPreference(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY);
 
         toggleCameraUploadsPictureOptions(true, mPrefCameraPictureUploads.isChecked());
 
@@ -208,9 +208,9 @@ public class Preferences extends PreferenceActivity {
         });
 
         // Videos
-        mPrefCameraVideoUploads = (CheckBoxPreference) findPreference(PREFERENCE_CAMERA_VIDEO_UPLOADS);
+        mPrefCameraVideoUploads = (CheckBoxPreference) findPreference(PREF__CAMERA_VIDEO_UPLOADS_ENABLED);
 
-        mPrefCameraVideoUploadsPath = findPreference(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH);
+        mPrefCameraVideoUploadsPath = findPreference(PREF__CAMERA_VIDEO_UPLOADS_PATH);
         if (mPrefCameraVideoUploadsPath != null) {
             mPrefCameraVideoUploadsPath.setOnPreferenceClickListener(preference -> {
                 if (!mUploadVideoPath.endsWith(File.separator)) {
@@ -223,18 +223,18 @@ public class Preferences extends PreferenceActivity {
             });
         }
 
-        mPrefCameraVideoUploadsWiFi = findPreference(PREFERENCE_CAMERA_VIDEO_UPLOADS_ON_WIFI);
+        mPrefCameraVideoUploadsWiFi = findPreference(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY);
         toggleCameraUploadsVideoOptions(true, mPrefCameraVideoUploads.isChecked());
 
         mPrefCameraVideoUploads.setOnPreferenceChangeListener((preference, newValue) -> {
             toggleCameraUploadsVideoOptions(false, (Boolean) newValue);
             toggleCameraUploadsCommonOptions(
                     (Boolean) newValue,
-                    ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+                    mPrefCameraPictureUploads.isChecked());
             return true;
         });
 
-        mPrefCameraUploadsSourcePath = findPreference(PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH);
+        mPrefCameraUploadsSourcePath = findPreference(PREF__CAMERA_UPLOADS_SOURCE);
         if (mPrefCameraUploadsSourcePath != null) {
             mPrefCameraUploadsSourcePath.setOnPreferenceClickListener(preference -> {
                 if (!mSourcePath.endsWith(File.separator)) {
@@ -251,7 +251,7 @@ public class Preferences extends PreferenceActivity {
             Timber.e("Lost preference PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH");
         }
 
-        mPrefCameraUploadsBehaviour = findPreference(PREFERENCE_CAMERA_UPLOADS_BEHAVIOUR);
+        mPrefCameraUploadsBehaviour = findPreference(PREF__CAMERA_UPLOADS_BEHAVIOUR);
         toggleCameraUploadsCommonOptions(
                 mPrefCameraVideoUploads.isChecked(),
                 mPrefCameraPictureUploads.isChecked()
@@ -366,7 +366,7 @@ public class Preferences extends PreferenceActivity {
             );
         }
 
-        /**
+        /*
          * Logs
          */
         PreferenceCategory pCategoryLogs = (PreferenceCategory) findPreference(PREFERENCE_LOGS_CATEGORY);
@@ -391,7 +391,7 @@ public class Preferences extends PreferenceActivity {
         });
         showDeveloperItems(pCategoryLogs);
 
-        /**
+        /*
          * More
          */
         PreferenceCategory pCategoryMore = (PreferenceCategory) findPreference(PREFERENCE_MORE_CATEGORY);
@@ -879,7 +879,7 @@ public class Preferences extends PreferenceActivity {
      * Load picture upload path set on preferences
      */
     private void loadCameraUploadsPicturePath() {
-        mUploadPath = mPreferencesProvider.getString(PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH,
+        mUploadPath = mPreferencesProvider.getString(PREF__CAMERA_PICTURE_UPLOADS_PATH,
                 PREF__CAMERA_UPLOADS_DEFAULT_PATH);
         mPrefCameraPictureUploadsPath.setSummary(
                 DisplayUtils.getPathWithoutLastSlash(mUploadPath)
@@ -890,14 +890,14 @@ public class Preferences extends PreferenceActivity {
      * Save the "Picture upload path" on preferences
      */
     private void saveCameraUploadsPicturePathOnPreferences() {
-        mPreferencesProvider.putString(PREFERENCE_CAMERA_PICTURE_UPLOADS_PATH, mUploadPath);
+        mPreferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_PATH, mUploadPath);
     }
 
     /**
      * Load video upload path set on preferences
      */
     private void loadCameraUploadsVideoPath() {
-        mUploadVideoPath = mPreferencesProvider.getString(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH,
+        mUploadVideoPath = mPreferencesProvider.getString(PREF__CAMERA_VIDEO_UPLOADS_PATH,
                 PREF__CAMERA_UPLOADS_DEFAULT_PATH);
         mPrefCameraVideoUploadsPath.setSummary(DisplayUtils.getPathWithoutLastSlash(mUploadVideoPath));
     }
@@ -906,7 +906,7 @@ public class Preferences extends PreferenceActivity {
      * Save the "Video upload path" on preferences
      */
     private void saveCameraUploadsVideoPathOnPreferences() {
-        mPreferencesProvider.putString(PREFERENCE_CAMERA_VIDEO_UPLOADS_PATH, mUploadVideoPath);
+        mPreferencesProvider.putString(PREF__CAMERA_VIDEO_UPLOADS_PATH, mUploadVideoPath);
     }
 
     /**
@@ -914,7 +914,7 @@ public class Preferences extends PreferenceActivity {
      */
     private void loadCameraUploadsSourcePath() {
         mSourcePath = mPreferencesProvider.getString(
-                PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH,
+                PREF__CAMERA_UPLOADS_SOURCE,
                 CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
         );
         if (mPrefCameraUploadsSourcePath != null) {
@@ -937,7 +937,7 @@ public class Preferences extends PreferenceActivity {
      * Save the "Camera folder" path on preferences
      */
     private void saveCameraUploadsSourcePathOnPreferences() {
-        mPreferencesProvider.putString(PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH, mSourcePath);
+        mPreferencesProvider.putString(PREF__CAMERA_UPLOADS_SOURCE, mSourcePath);
     }
 
     private void enableBiometric() {
