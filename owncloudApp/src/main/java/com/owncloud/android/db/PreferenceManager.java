@@ -63,6 +63,9 @@ public abstract class PreferenceManager {
 
     public static final String PREF__LEGACY_FINGERPRINT = "set_fingerprint";
 
+    public static final String PREF__LEGACY_CLICK_DEV_MENU = "clickDeveloperMenu";
+    public static final int PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER = 5;
+
     public static void migrateFingerprintToBiometricKey(Context context) {
         SharedPreferences sharedPref = getDefaultSharedPreferences(context);
 

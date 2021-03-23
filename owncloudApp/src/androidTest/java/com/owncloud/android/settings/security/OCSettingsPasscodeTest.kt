@@ -44,6 +44,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+@Ignore
 class OCSettingsPasscodeTest {
 
     @Rule
@@ -81,6 +82,7 @@ class OCSettingsPasscodeTest {
         onView(withId(R.id.cancel)).check(matches(isDisplayed()))
     }
 
+    @Ignore
     @Test
     fun firstTry() {
         //Open Activity in passcode creation mode
@@ -93,6 +95,7 @@ class OCSettingsPasscodeTest {
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(doesNotExist())
     }
 
+    @Ignore
     @Test
     fun secondTryCorrect() {
         //Open Activity in passcode creation mode
@@ -140,6 +143,7 @@ class OCSettingsPasscodeTest {
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
+    @Ignore
     @Test
     fun cancelSecondTry() {
         //Open Activity in passcode creation mode
@@ -155,6 +159,7 @@ class OCSettingsPasscodeTest {
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
+    @Ignore
     @Test
     fun deletePasscodeView() {
         //Save a passcode in Preferences

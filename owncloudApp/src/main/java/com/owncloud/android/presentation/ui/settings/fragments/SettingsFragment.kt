@@ -126,7 +126,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         manageSecuritySettings()
         manageMoreSettings()
-
     }
 
     private fun manageSecuritySettings() {
@@ -335,6 +334,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         private const val PREFERENCE_MORE_CATEGORY = "more_category"
 
         const val PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows"
+
         private const val PREFERENCE_HELP = "help"
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
         private const val PREFERENCE_RECOMMEND = "recommend"

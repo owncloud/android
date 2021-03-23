@@ -53,6 +53,7 @@ import com.owncloud.android.data.preferences.datasources.implementation.SharedPr
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
+import com.owncloud.android.presentation.ui.settings.LogHistoryActivity;
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity;
 import com.owncloud.android.providers.LogsProvider;
 import com.owncloud.android.utils.DisplayUtils;
@@ -71,6 +72,8 @@ import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_SOU
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED;
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH;
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY;
+import static com.owncloud.android.db.PreferenceManager.PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER;
+import static com.owncloud.android.db.PreferenceManager.PREF__LEGACY_CLICK_DEV_MENU;
 
 /**
  * An Activity that allows the user to change the application's settings.
@@ -529,20 +532,20 @@ public class Preferences extends PreferenceActivity {
             ));
             mAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
             mAboutApp.setOnPreferenceClickListener(preference -> {
-                int clickCount = mPreferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0);
-                if (mPreferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0) > MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
+                int clickCount = mPreferencesProvider.getInt(PREF__LEGACY_CLICK_DEV_MENU, 0);
+                if (mPreferencesProvider.getInt(PREF__LEGACY_CLICK_DEV_MENU, 0) > PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER) {
                     return true;
-                } else if (mPreferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0) ==
-                        MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER) {
+                } else if (mPreferencesProvider.getInt(PREF__LEGACY_CLICK_DEV_MENU, 0) ==
+                        PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER) {
                     showDeveloperItems(pCategoryLogs);
                 } else if (clickCount > 0) {
                     Toast.makeText(this,
                             getString(R.string.clicks_to_be_developer,
-                                    MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER - clickCount),
+                                    PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER - clickCount),
                             Toast.LENGTH_SHORT).show();
                 }
-                mPreferencesProvider.putInt(MainApp.CLICK_DEV_MENU, clickCount + 1);
-                ((MainApp) getApplication()).startLogIfDeveloper(); // read value to global variable
+                mPreferencesProvider.putInt(PREF__LEGACY_CLICK_DEV_MENU, clickCount + 1);
+                ((MainApp) getApplication()).startLogsIfEnabled(); // read value to global variable
 
                 return true;
             });
@@ -552,9 +555,9 @@ public class Preferences extends PreferenceActivity {
     private void showDeveloperItems(PreferenceCategory preferenceCategory) {
         Preference pLogger = findPreference(PREFERENCE_LOGGER);
         PreferenceScreen preferenceScreen = (PreferenceScreen) findPreference(PREFERENCE_SCREEN);
-        if (mPreferencesProvider.getInt(MainApp.CLICK_DEV_MENU, 0) >= MainApp.CLICKS_NEEDED_TO_BE_DEVELOPER && pLogger == null) {
+        if (mPreferencesProvider.getInt(PREF__LEGACY_CLICK_DEV_MENU, 0) >= PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER && pLogger == null) {
             preferenceScreen.addPreference(preferenceCategory);
-        } else if (!MainApp.Companion.isDeveloper() && pLogger != null) {
+        } else if (!MainApp.Companion.getEnabledLogging() && pLogger != null) {
             preferenceScreen.removePreference(preferenceCategory);
         }
     }

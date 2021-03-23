@@ -26,13 +26,16 @@ import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 
 class SettingsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
-    private val contextProvider: ContextProvider
+    private val contextProvider: ContextProvider,
+    private val logsProvider: LogsProvider
 ) : ViewModel() {
 
     fun isPatternSet() = preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
@@ -92,4 +95,17 @@ class SettingsViewModel(
     fun isImprintEnabled() = contextProvider.getBoolean(R.bool.imprint_enabled)
 
     fun getImprintUrl() = contextProvider.getString(R.string.url_imprint)
+
+    fun shouldLogHttpRequests(value: Boolean) = logsProvider.shouldLogHttpRequests(value)
+
+    fun setEnableLogging(value: Boolean) {
+        preferencesProvider.putBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, value)
+        if (value) {
+            logsProvider.startLogging()
+        } else {
+            logsProvider.stopLogging()
+        }
+    }
+
+    fun isLoggingEnabled() = preferencesProvider.getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
 }

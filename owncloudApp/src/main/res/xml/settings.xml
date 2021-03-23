@@ -15,7 +15,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:key="preference_screen">
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
@@ -39,6 +40,19 @@
             app:key="touches_with_other_visible_windows"
             app:summary="@string/prefs_touches_with_other_visible_windows_summary"
             app:title="@string/prefs_touches_with_other_visible_windows" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="logs_category"
+        app:title="@string/actionbar_logger">
+
+        <Preference
+            app:icon="@drawable/ic_baseline_description_24"
+            app:key="logs_subsection"
+            app:title="@string/prefs_enable_logging"
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"/>
 
     </PreferenceCategory>
 

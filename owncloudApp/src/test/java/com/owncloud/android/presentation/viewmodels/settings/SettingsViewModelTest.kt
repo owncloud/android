@@ -24,8 +24,10 @@ import android.content.Intent
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.testutil.OC_BASE_URL
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
@@ -45,15 +47,18 @@ class SettingsViewModelTest : ViewModelTest() {
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
     private lateinit var contextProvider: ContextProvider
+    private lateinit var logsProvider: LogsProvider
 
     @Before
     fun setUp() {
         preferencesProvider = mockk()
         contextProvider = mockk()
+        logsProvider = mockk(relaxUnitFun = true)
 
         settingsViewModel = SettingsViewModel(
             preferencesProvider,
-            contextProvider
+            contextProvider,
+            logsProvider
         )
     }
 
@@ -532,6 +537,65 @@ class SettingsViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             contextProvider.getString(R.string.url_imprint)
+        }
+    }
+
+    @Test
+    fun `should log http requests - ok`() {
+        settingsViewModel.shouldLogHttpRequests(true)
+
+        verify(exactly = 1) {
+            logsProvider.shouldLogHttpRequests(true)
+        }
+    }
+
+    @Test
+    fun `set enable logging - ok - true`() {
+        every { preferencesProvider.putBoolean(any(),any())} returns Unit
+
+        settingsViewModel.setEnableLogging(true)
+
+        verify(exactly = 1) {
+            preferencesProvider.putBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, true)
+            logsProvider.startLogging()
+        }
+    }
+
+    @Test
+    fun `set enable logging - ok - false`() {
+        every { preferencesProvider.putBoolean(any(),any())} returns Unit
+
+        settingsViewModel.setEnableLogging(false)
+
+        verify(exactly = 1) {
+            preferencesProvider.putBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
+            logsProvider.stopLogging()
+        }
+    }
+
+    @Test
+    fun `is enable logging on - ok - true`() {
+        every { preferencesProvider.getBoolean(any(), any())} returns true
+
+        val enableLoggingOn = settingsViewModel.isLoggingEnabled()
+
+        assertTrue(enableLoggingOn)
+
+        verify(exactly = 1) {
+            preferencesProvider.getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
+        }
+    }
+
+    @Test
+    fun `is enable logging on - ok - false`() {
+        every { preferencesProvider.getBoolean(any(), any())} returns false
+
+        val enableLoggingOn = settingsViewModel.isLoggingEnabled()
+
+        assertFalse(enableLoggingOn)
+
+        verify(exactly = 1) {
+            preferencesProvider.getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
         }
     }
 
