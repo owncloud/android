@@ -44,7 +44,7 @@ The ownCloud server also maintains an ownCloud specific log file. This log file 
 
 You can view the server log file using the web interface or you can open it directly from the file system in the ownCloud server data directory.
 
-You can find more information about ownCloud server logging at {owncloud-docs-server-logging}.
+Please see the {owncloud-docs-server-logging}[ownCloud server logging] pages to read more.
 
 === Webserver Log Files
 
@@ -55,12 +55,11 @@ It can be helpful to view your webserver's error log file to isolate any ownClou
 
 The ownCloud Android app sends the `X-REQUEST-ID` header with every request. You'll find the `X-REQUEST-ID` in the `owncloud.log`, and you can configure your webserver to add the `X-REQUEST-ID` to the logs. {owncloud-docs-server-tracing}[Here] you can find more information.
 
-You can find more information about Apache logging at this {apache-docs-logging}[link].
+Please see the {apache-docs-logging}[Apache logging] pages to get more information.
 
 == Tools
 
 === mitmproxy
 
-mitmproxy is an interactive man-in-the-middle proxy for HTTP and HTTPS with a console interface. At ownCloud we use it a lot to investigate every detail of HTTP requests and responses:
-{mitmproxy-url}
+{mitmproxy-url}[mitmproxy] is an interactive man-in-the-middle proxy for HTTP and HTTPS with a console interface. At ownCloud we use it a lot to investigate every detail of HTTP requests and responses.
 
