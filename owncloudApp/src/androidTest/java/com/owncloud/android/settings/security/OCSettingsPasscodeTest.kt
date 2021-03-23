@@ -94,6 +94,7 @@ class OCSettingsPasscodeTest {
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(doesNotExist())
     }
 
+    @Ignore
     @Test
     fun secondTryCorrect() {
         //Open Activity in passcode creation mode
