@@ -70,15 +70,37 @@ class DownloadFileWorker(
     lateinit var downloadRemoteFileOperation: DownloadRemoteFileOperation
     lateinit var ocFile: OCFile
 
+    /**
+     * Temporal path for this file to be downloaded.
+     */
+    private val temporalFilePath
+        get() = temporalFolderPath + ocFile.remotePath
+
+    /**
+     * Temporal path where every file of this account will be downloaded.
+     */
+    private val temporalFolderPath
+        get() = FileStorageUtils.getTemporalPath(accountName)
+
+    /**
+     * Final path where this file should be stored.
+     *
+     * In case this file was previously downloaded, override it. Otherwise,
+     * @see FileStorageUtils.getDefaultSavePathFor
+     */
+    private val finalLocationForFile: String
+        get() = ocFile.storagePath.takeUnless { it.isNullOrBlank() }
+            ?: FileStorageUtils.getDefaultSavePathFor(accountName, ocFile)
+
     override suspend fun doWork(): Result {
 
         // Params
         accountName = workerParameters.inputData.getString(KEY_PARAM_ACCOUNT) as String
         val fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1)
 
-        // If file is null, return failure. TODO: Try to improve this with a specific message.
         val ocFile: OCFile? = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId)).getDataOrNull()
 
+        // If file is not found in the database or file is a folder, return failure.
         if (ocFile == null || ocFile.isFolder) {
             Timber.d("PARAM: $fileId OCFILE : ${ocFile?.remotePath} is folder ${ocFile?.isFolder}")
             return Result.failure()
@@ -86,16 +108,10 @@ class DownloadFileWorker(
             this.ocFile = ocFile
         }
 
-        downloadRemoteFileOperation = DownloadRemoteFileOperation(
-            ocFile.remotePath,
-            FileStorageUtils.getTemporalPath(accountName)
-        ).also {
-            it.addDatatransferProgressListener(this)
-        }
-
         return try {
-            downloadFile()
-            saveDownloadedFile()
+            downloadFileToTemporalFile()
+            moveTemporalFileToFinalLocation()
+            updateDatabaseWithLatestInfoForThisFile()
             notifyDownloadResult(null)
         } catch (throwable: Throwable) {
             // clean up and log
@@ -105,66 +121,67 @@ class DownloadFileWorker(
     }
 
     /**
-     * Download a file and throw an exception if something goes wrong
+     * Download the file or throw an exception if something goes wrong.
+     * We will initialize a listener to update the notification according to the download progress.
+     *
+     * File will be downloaded to a temporalFolder in the RemoteOperation.
+     * @see temporalFolderPath for the temporal location
      */
-    private fun downloadFile(): Boolean {
-        /// download will be performed to a temporal file, then moved to the final location
-        val tmpFile = File(temporalPath)
+    private fun downloadFileToTemporalFile() {
+        downloadRemoteFileOperation = DownloadRemoteFileOperation(
+            ocFile.remotePath,
+            temporalFolderPath
+        ).also {
+            it.addDatatransferProgressListener(this)
+        }
 
         // It will throw an exception if something goes wrong.
         executeRemoteOperation {
             downloadRemoteFileOperation.execute(client)
         }
-
-        if (FileStorageUtils.getUsableSpace() < tmpFile.length()) {
-            Timber.w("Not enough space to copy %s", tmpFile.absolutePath)
-        }
-
-        val newFile = File(savePathForFile)
-        Timber.d("Save path: %s", newFile.absolutePath)
-        val parent: File? = newFile.parentFile
-        val created = parent?.mkdirs()
-        parent?.let {
-            Timber.d("Creation of parent folder ${it.absolutePath} succeeded: $created")
-            Timber.d("Parent folder ${it.absolutePath} is directory: ${it.isDirectory} exists: ${it.exists()}")
-        }
-        val moved = tmpFile.renameTo(newFile)
-        Timber.d("New file ${newFile.absolutePath} is directory: ${newFile.isDirectory} and exists: ${newFile.exists()}")
-        if (!moved) {
-            throw LocalStorageNotMovedException()
-        }
-
-        return true
     }
 
     /**
-     * Updates the OC File after a successful download.
+     * Move the temporal file to the final location.
+     * @see temporalFilePath for the temporal location
+     * @see finalLocationForFile for the final one
      */
-    private fun saveDownloadedFile() {
+    private fun moveTemporalFileToFinalLocation() {
+        val temporalLocation = File(temporalFilePath)
+
+        if (FileStorageUtils.getUsableSpace() < temporalLocation.length()) {
+            Timber.w("Not enough space to copy %s", temporalLocation.absolutePath)
+        }
+
+        val finalLocation = File(finalLocationForFile)
+        finalLocation.parentFile?.mkdirs()
+        val movedToTheFinalLocation = temporalLocation.renameTo(finalLocation)
+
+        if (!movedToTheFinalLocation) {
+            throw LocalStorageNotMovedException()
+        }
+    }
+
+    /**
+     * Update the database with latest details about this file.
+     *
+     * We will ask for thumbnails after a download
+     * We will update info about the file (modification timestamp and etag)
+     * We will update info about local storage (where it was stored and its size)
+     */
+    private fun updateDatabaseWithLatestInfoForThisFile() {
         ocFile.apply {
             needsToUpdateThumbnail = true
             modificationTimestamp = downloadRemoteFileOperation.modificationTimestamp
             etag = downloadRemoteFileOperation.etag
-            storagePath = savePathForFile
-            length = (File(savePathForFile).length())
+            storagePath = finalLocationForFile
+            length = (File(finalLocationForFile).length())
         }
         saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(ocFile))
 
         //mStorageManager.triggerMediaScan(file.getStoragePath())
         //mStorageManager.saveConflict(file, null)
     }
-
-    private val temporalPath
-        get() = temporalFolder + ocFile.remotePath
-
-    private val temporalFolder
-        get() = FileStorageUtils.getTemporalPath(accountName)
-
-    private val savePathForFile: String
-        get() =
-            // re-downloads should be done over the original file
-            ocFile.storagePath.takeUnless { it.isNullOrBlank() }
-                ?: FileStorageUtils.getDefaultSavePathFor(accountName, ocFile)
 
     /**
      * Notify download result and then return Worker Result.
@@ -214,7 +231,7 @@ class DownloadFileWorker(
             }
 
             val contextText = ErrorMessageAdapter.getMessageFromOperation(
-                typeOfOperation = TransferDownload(savePathForFile),
+                typeOfOperation = TransferDownload(finalLocationForFile),
                 throwable = throwable,
                 resources = appContext.resources
             )
@@ -260,7 +277,7 @@ class DownloadFileWorker(
         val contentText = String.format(
             appContext.getString(R.string.downloader_download_in_progress_content),
             percent,
-            File(this.savePathForFile).name
+            File(this.finalLocationForFile).name
         )
 
         // Set current progress. Observers will listen.
