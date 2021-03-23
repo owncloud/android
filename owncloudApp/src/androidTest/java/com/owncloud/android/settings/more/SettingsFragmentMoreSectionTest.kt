@@ -20,8 +20,6 @@
 
 package com.owncloud.android.settings.more
 
-import android.app.Activity
-import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.EXTRA_SUBJECT
@@ -35,7 +33,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
@@ -57,7 +54,6 @@ import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertNull
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -153,74 +149,66 @@ class SettingsFragmentMoreSectionTest {
     fun moreView() {
         launchTest()
 
-        verifyPreference(
-            preference = prefMoreCategory,
-            key = PREFERENCE_MORE_CATEGORY,
-            title = context.getString(R.string.prefs_category_more),
+        prefMoreCategory.verifyPreference(
+            keyPref = PREFERENCE_MORE_CATEGORY,
+            titlePref = context.getString(R.string.prefs_category_more),
             visible = true
         )
 
         prefHelp = getPreference(PREFERENCE_HELP)
-        verifyPreference(
-            preference = prefHelp,
-            key = PREFERENCE_HELP,
-            title = context.getString(R.string.prefs_help),
+        prefHelp?.verifyPreference(
+            keyPref = PREFERENCE_HELP,
+            titlePref = context.getString(R.string.prefs_help),
             visible = true,
             enabled = true
         )
 
         prefSync = getPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)
-        verifyPreference(
-            preference = prefSync,
-            key = PREFERENCE_SYNC_CALENDAR_CONTACTS,
-            title = context.getString(R.string.prefs_sync_calendar_contacts),
-            summary = context.getString(R.string.prefs_sync_calendar_contacts_summary),
+        prefSync?.verifyPreference(
+            keyPref = PREFERENCE_SYNC_CALENDAR_CONTACTS,
+            titlePref = context.getString(R.string.prefs_sync_calendar_contacts),
+            summaryPref = context.getString(R.string.prefs_sync_calendar_contacts_summary),
             visible = true,
             enabled = true
         )
 
         prefRecommend = getPreference(PREFERENCE_RECOMMEND)
-        verifyPreference(
-            preference = prefRecommend,
-            key = PREFERENCE_RECOMMEND,
-            title = context.getString(R.string.prefs_recommend),
+        prefRecommend?.verifyPreference(
+            keyPref = PREFERENCE_RECOMMEND,
+            titlePref = context.getString(R.string.prefs_recommend),
             visible = true,
             enabled = true
         )
 
         prefFeedback = getPreference(PREFERENCE_FEEDBACK)
-        verifyPreference(
-            preference = prefFeedback,
-            key = PREFERENCE_FEEDBACK,
-            title = context.getString(R.string.prefs_feedback),
+        prefFeedback?.verifyPreference(
+            keyPref = PREFERENCE_FEEDBACK,
+            titlePref = context.getString(R.string.prefs_feedback),
             visible = true,
             enabled = true
         )
 
         prefPrivacyPolicy = getPreference(PREFERENCE_PRIVACY_POLICY)
-        verifyPreference(
-            preference = prefPrivacyPolicy,
-            key = PREFERENCE_PRIVACY_POLICY,
-            title = context.getString(R.string.prefs_privacy_policy),
+        prefPrivacyPolicy?.verifyPreference(
+            keyPref = PREFERENCE_PRIVACY_POLICY,
+            titlePref = context.getString(R.string.prefs_privacy_policy),
             visible = true,
             enabled = true
         )
 
         prefImprint = getPreference(PREFERENCE_IMPRINT)
-        verifyPreference(
-            preference = prefImprint,
-            key = PREFERENCE_IMPRINT,
-            title = context.getString(R.string.prefs_imprint),
+        prefImprint?.verifyPreference(
+            keyPref = PREFERENCE_IMPRINT,
+            titlePref = context.getString(R.string.prefs_imprint),
             visible = true,
             enabled = true
         )
 
         val appVersion = "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE} ${BuildConfig.COMMIT_SHA1}"
-        verifyPreference(
-            preference = prefAboutApp,
-            key = PREFERENCE_ABOUT_APP,
-            title = String.format(context.getString(R.string.about_android), context.getString(R.string.app_name)),
-            summary = String.format(context.getString(R.string.about_version), appVersion),
+        prefAboutApp.verifyPreference(
+            keyPref = PREFERENCE_ABOUT_APP,
+            titlePref = String.format(context.getString(R.string.about_android), context.getString(R.string.app_name)),
+            summaryPref = String.format(context.getString(R.string.about_version), appVersion),
             visible = true,
             enabled = true
         )
