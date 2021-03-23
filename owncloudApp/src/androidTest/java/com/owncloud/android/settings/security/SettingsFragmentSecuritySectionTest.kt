@@ -51,7 +51,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.hamcrest.Matchers.not
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -138,46 +137,41 @@ class SettingsFragmentSecuritySectionTest {
 
     @Test
     fun securityView() {
-        verifyPreference(
-            preference = prefSecurityCategory,
-            key = PREFERENCE_SECURITY_CATEGORY,
-            title = context.getString(R.string.prefs_category_security),
+        prefSecurityCategory.verifyPreference(
+            keyPref = PREFERENCE_SECURITY_CATEGORY,
+            titlePref = context.getString(R.string.prefs_category_security),
             visible = true
         )
 
-        verifyPreference(
-            preference = prefPasscode,
-            key = PassCodeActivity.PREFERENCE_SET_PASSCODE,
-            title = context.getString(R.string.prefs_passcode),
+        prefPasscode.verifyPreference(
+            keyPref = PassCodeActivity.PREFERENCE_SET_PASSCODE,
+            titlePref = context.getString(R.string.prefs_passcode),
             visible = true,
             enabled = true
         )
         assertFalse(prefPasscode.isChecked)
 
-        verifyPreference(
-            preference = prefPattern,
-            key = PatternLockActivity.PREFERENCE_SET_PATTERN,
-            title = context.getString(R.string.prefs_pattern),
+        prefPattern.verifyPreference(
+            keyPref = PatternLockActivity.PREFERENCE_SET_PATTERN,
+            titlePref = context.getString(R.string.prefs_pattern),
             visible = true,
             enabled = true
         )
         assertFalse(prefPattern.isChecked)
 
-        verifyPreference(
-            preference = prefBiometric,
-            key = BiometricActivity.PREFERENCE_SET_BIOMETRIC,
-            title = context.getString(R.string.prefs_biometric),
-            summary = context.getString(R.string.prefs_biometric_summary),
+        prefBiometric.verifyPreference(
+            keyPref = BiometricActivity.PREFERENCE_SET_BIOMETRIC,
+            titlePref = context.getString(R.string.prefs_biometric),
+            summaryPref = context.getString(R.string.prefs_biometric_summary),
             visible = true,
             enabled = false
         )
         assertFalse(prefBiometric.isChecked)
 
-        verifyPreference(
-            preference = prefTouchesWithOtherVisibleWindows,
-            key = SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
-            title = context.getString(R.string.prefs_touches_with_other_visible_windows),
-            summary = context.getString(R.string.prefs_touches_with_other_visible_windows_summary),
+        prefTouchesWithOtherVisibleWindows.verifyPreference(
+            keyPref = SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
+            titlePref = context.getString(R.string.prefs_touches_with_other_visible_windows),
+            summaryPref = context.getString(R.string.prefs_touches_with_other_visible_windows_summary),
             visible = true,
             enabled = true
         )
