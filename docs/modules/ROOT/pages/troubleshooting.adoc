@@ -44,7 +44,7 @@ The ownCloud server also maintains an ownCloud specific log file. This log file 
 
 You can view the server log file using the web interface or you can open it directly from the file system in the ownCloud server data directory.
 
-Please see the {owncloud-docs-server-logging}[ownCloud server logging] pages to read more about.
+Please see the {owncloud-docs-server-logging}[ownCloud server logging] pages to read more.
 
 === Webserver Log Files
 
@@ -62,5 +62,4 @@ Please see the {apache-docs-logging}[Apache logging] pages to get more informati
 === mitmproxy
 
 {mitmproxy-url}[mitmproxy] is an interactive man-in-the-middle proxy for HTTP and HTTPS with a console interface. At ownCloud we use it a lot to investigate every detail of HTTP requests and responses.
-
 
