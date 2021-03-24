@@ -2,17 +2,17 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2021 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -61,7 +61,12 @@ class TransferManager(
         var isEnqueued = false
         downloadWorkersForFile.forEach {
             if (!it.state.isFinished) {
-                isEnqueued = true
+                // Let's cancel a work if it has several retries and enqueue it again
+                if (it.runAttemptCount > MAXIMUM_NUMBER_OF_RETRIES) {
+                    getWorkManager().cancelWorkById(it.id)
+                } else {
+                    isEnqueued = true
+                }
             }
         }
 
@@ -72,6 +77,8 @@ class TransferManager(
         return isEnqueued
     }
 
+    private fun getWorkManager() = WorkManager.getInstance(context)
+
     private fun getWorkInfoFromTags(vararg tags: String): List<WorkInfo> {
         val workers = getWorkManager()
             .getWorkInfos(
@@ -80,5 +87,7 @@ class TransferManager(
         return workers.filter { it.tags.containsAll(tags.toList()) }
     }
 
-    private fun getWorkManager() = WorkManager.getInstance(context)
+    companion object {
+        private const val MAXIMUM_NUMBER_OF_RETRIES = 3
+    }
 }
