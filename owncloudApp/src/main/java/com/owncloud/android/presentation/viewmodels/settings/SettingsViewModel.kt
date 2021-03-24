@@ -25,8 +25,8 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.PassCodeActivity
@@ -76,7 +76,7 @@ class SettingsViewModel(
     }
 
     fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =
-        preferencesProvider.putBoolean(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
+        preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
 
     fun isHelpEnabled() = contextProvider.getBoolean(R.bool.help_enabled)
 
