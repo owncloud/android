@@ -47,11 +47,10 @@ import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.core.view.isVisible
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
@@ -64,6 +63,7 @@ import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
@@ -1475,24 +1475,20 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         val transferManager = TransferManager(applicationContext)
         val id = transferManager.downloadFile(account, file) ?: return
 
-        WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(id).observe(this, {
-            when (it.state) {
-                WorkInfo.State.ENQUEUED -> Toast.makeText(this, "Waiting to download", Toast.LENGTH_SHORT).show()
-                WorkInfo.State.RUNNING -> {
-                    Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show()
-                    Timber.d("Download of ${it.tags} in progress: ${it.progress}")
+        WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(id).observeWorkerTillItFinishes(
+            owner = this,
+            onWorkEnqueued = { Toast.makeText(this, "Waiting to download", Toast.LENGTH_SHORT).show() },
+            onWorkRunning = { progress -> Timber.d("Downloading - Progress $progress") },
+            onWorkSucceeded = {
+                CoroutineScope(Dispatchers.IO).launch {
+                    waitingToSend = storageManager.getFileByPath(file.remotePath)
+                    sendDownloadedFile()
                 }
-                WorkInfo.State.SUCCEEDED -> {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        waitingToSend = storageManager.getFileByPath(file.remotePath)
-                        sendDownloadedFile()
-                    }
-                }
-                WorkInfo.State.FAILED -> Toast.makeText(this, "Download failed", Toast.LENGTH_SHORT).show()
-                WorkInfo.State.BLOCKED -> Toast.makeText(this, "Download blocked", Toast.LENGTH_SHORT).show()
-                WorkInfo.State.CANCELLED -> Toast.makeText(this, "Download cancelled", Toast.LENGTH_SHORT).show()
-            }
-        })
+            },
+            onWorkFailed = { Toast.makeText(this, "Download failed", Toast.LENGTH_SHORT).show() },
+            onWorkBlocked = { Toast.makeText(this, "Download blocked", Toast.LENGTH_SHORT).show() },
+            onWorkCancelled = { Toast.makeText(this, "Download cancelled", Toast.LENGTH_SHORT).show() }
+        )
     }
 
     private fun sendDownloadedFile() {
