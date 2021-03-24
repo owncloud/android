@@ -318,7 +318,7 @@ class DownloadFileWorker(
 
         // Set current progress. Observers will listen.
         CoroutineScope(Dispatchers.IO).launch {
-            val progress = workDataOf(KEY_PROGRESS to percent)
+            val progress = workDataOf(WORKER_KEY_PROGRESS to percent)
             setProgress(progress)
         }
 
@@ -328,6 +328,6 @@ class DownloadFileWorker(
     companion object {
         const val KEY_PARAM_ACCOUNT = "KEY_PARAM_ACCOUNT"
         const val KEY_PARAM_FILE_ID = "KEY_PARAM_FILE_ID"
-        const val KEY_PROGRESS = "KEY_PROGRESS"
+        const val WORKER_KEY_PROGRESS = "KEY_PROGRESS"
     }
 }
