@@ -4,8 +4,6 @@
   <string name="global_name">Emër</string>
   <string name="global_date">Datë</string>
   <string name="global_size">Madhësi</string>
-  <string name="about_android">%1$s për Android</string>
-  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Kërko në këtë dosje</string>
   <string name="actionbar_sync">Fresko llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Përshtypje</string>
   <string name="drawer_help">Ndihmë</string>
   <string name="prefs_category_general">Të përgjithshme</string>
-  <string name="prefs_category_more">Më tepër</string>
-  <string name="prefs_category_security">Siguri</string>
+  <string name="prefs_subsection_more">Më tepër</string>
+  <string name="prefs_subsection_security">Siguri</string>
   <string name="prefs_accounts">Llogari</string>
   <string name="prefs_manage_accounts">Administroni llogari</string>
   <string name="prefs_passcode">Kyçje me kodkalim</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">gabim i panjohur</string>
   <string name="common_pending">Në pritje</string>
   <string name="common_important">E rëndësishme</string>
-  <string name="about_title">Rreth</string>
-  <string name="change_password">Ndryshoni fjalëkalimin</string>
+    <string name="change_password">Ndryshoni fjalëkalimin</string>
   <string name="delete_account">Hiqe llogarinë</string>
   <string name="create_account">Krijoni llogari</string>
   <string name="upload_chooser_title">Ngarkoje prej</string>
@@ -394,8 +391,7 @@
   <string name="drawer_manage_accounts">Administroni llogari</string>
   <string name="auth_redirect_non_secure_connection_title">Lidhja e sigurt është ridrejtuar përmes një rruge të pasigurt.</string>
   <string name="actionbar_logger">Regjistra</string>
-  <string name="log_open_logs_view">Hap pamjen regjistra</string>
-  <string name="log_send_history_button">Historik dërgimesh</string>
+    <string name="log_send_history_button">Historik dërgimesh</string>
   <string name="log_send_no_mail_app">S\’u gjet aplikacion për dërgim regjistrimesh. Ju lutemi, instaloni një aplikacion email-esh.</string>
   <string name="log_send_mail_subject">Regjistra aplikacioni %1$s për Android</string>
   <string name="log_progress_dialog_text">Po ngarkohen të dhëna…</string>

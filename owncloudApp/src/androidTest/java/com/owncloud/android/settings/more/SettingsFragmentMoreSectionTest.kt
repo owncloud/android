@@ -152,7 +152,7 @@ class SettingsFragmentMoreSectionTest {
 
         prefMoreCategory.verifyPreference(
             keyPref = PREFERENCE_MORE_CATEGORY,
-            titlePref = context.getString(R.string.prefs_category_more),
+            titlePref = context.getString(R.string.prefs_subsection_more),
             visible = true
         )
 
@@ -211,11 +211,16 @@ class SettingsFragmentMoreSectionTest {
             enabled = true
         )
 
-        val appVersion = "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE} ${BuildConfig.COMMIT_SHA1}"
         prefAboutApp.verifyPreference(
             keyPref = PREFERENCE_ABOUT_APP,
-            titlePref = String.format(context.getString(R.string.about_android), context.getString(R.string.app_name)),
-            summaryPref = String.format(context.getString(R.string.about_version), appVersion),
+            titlePref = context.getString(R.string.prefs_app_version),
+            summaryPref = String.format(
+                context.getString(R.string.prefs_app_version_summary),
+                context.getString(R.string.app_name),
+                BuildConfig.BUILD_TYPE,
+                BuildConfig.VERSION_NAME,
+                BuildConfig.COMMIT_SHA1
+            ),
             visible = true,
             enabled = true
         )

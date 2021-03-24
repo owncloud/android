@@ -4,8 +4,6 @@
   <string name="global_name">Nume</string>
   <string name="global_date">Data</string>
   <string name="global_size">Mărime</string>
-  <string name="about_android">%1$s pentru Android</string>
-  <string name="about_version">Versiunea %1$s</string>
   <string name="actionbar_search">Caută în acest dosar</string>
   <string name="actionbar_sync">Reîmprospătați contul</string>
   <string name="actionbar_upload">Încarcă</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Păreri</string>
   <string name="drawer_help">Ajutor</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Mai mult</string>
-  <string name="prefs_category_security">Securitate</string>
+  <string name="prefs_subsection_more">Mai mult</string>
+  <string name="prefs_subsection_security">Securitate</string>
   <string name="prefs_accounts">Conturi</string>
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>
@@ -132,8 +130,7 @@
   <string name="common_error_unknown">eroare necunoscută</string>
   <string name="common_pending">În așteptare</string>
   <string name="common_important">Important</string>
-  <string name="about_title">Despre</string>
-  <string name="change_password">Schimbă parola</string>
+    <string name="change_password">Schimbă parola</string>
   <string name="delete_account">Sterge contul</string>
   <string name="create_account">Crează cont</string>
   <string name="upload_chooser_title">Încarcă din</string>

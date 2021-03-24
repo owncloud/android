@@ -27,8 +27,8 @@
   <string name="drawer_feedback">Palaute</string>
   <string name="drawer_help">Ohje</string>
   <string name="prefs_category_general">Yleiset</string>
-  <string name="prefs_category_more">Enemmän</string>
-  <string name="prefs_category_security">Tietoturva</string>
+  <string name="prefs_subsection_more">Enemmän</string>
+  <string name="prefs_subsection_security">Tietoturva</string>
   <string name="prefs_accounts">Tilit</string>
   <string name="prefs_manage_accounts">Tilien hallinta</string>
   <string name="prefs_passcode">Suojakoodilukitus</string>
@@ -121,8 +121,7 @@
   <string name="common_unknown">tuntematon</string>
   <string name="common_pending">Odottaa</string>
   <string name="common_important">Tärkeä</string>
-  <string name="about_title">Tietoja</string>
-  <string name="change_password">Vaihda salasana</string>
+    <string name="change_password">Vaihda salasana</string>
   <string name="delete_account">Poista tili</string>
   <string name="create_account">Luo tili</string>
   <string name="uploader_info_dirname">Kansion nimi</string>

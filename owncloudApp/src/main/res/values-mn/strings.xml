@@ -4,7 +4,7 @@
   <string name="actionbar_upload_files">Файлууд</string>
   <string name="actionbar_settings">Тохиргоо</string>
   <string name="prefs_category_general">Ерөнхий</string>
-  <string name="prefs_category_security">Аюулгүй байдал</string>
+  <string name="prefs_subsection_security">Аюулгүй байдал</string>
   <string name="auth_username">Хэрэглэгчийн нэр</string>
   <string name="auth_password">Нууц үг</string>
   <string name="sync_string_files">Файлууд</string>

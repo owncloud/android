@@ -6,8 +6,6 @@
     <string name="global_date">Date</string>
     <string name="global_size">Size</string>
 
-    <string name="about_android">%1$s for Android</string>
-    <string name="about_version">Version %1$s</string>
     <string name="actionbar_search">Search this folder</string>
     <string name="actionbar_sync">Refresh account</string>
     <string name="actionbar_upload">Upload</string>
@@ -34,8 +32,8 @@
     <string name="drawer_feedback">Feedback</string>
     <string name="drawer_help">Help</string>
     <string name="prefs_category_general">General</string>
-    <string name="prefs_category_more">More</string>
-    <string name="prefs_category_security">Security</string>
+    <string name="prefs_subsection_more">More</string>
+    <string name="prefs_subsection_security">Security</string>
     <string name="prefs_accounts">Accounts</string>
     <string name="prefs_manage_accounts">Manage accounts</string>
     <string name="prefs_passcode">Passcode lock</string>
@@ -63,6 +61,13 @@
     <string name="prefs_remember_last_share_location">Remember share location</string>
     <string name="prefs_remember_last_upload_location_summary">Remember last share upload location</string>
     <string name="prefs_pattern"> Pattern lock </string>
+    <string name="prefs_enable_logging">Enable logging</string>
+    <string name="prefs_enable_logging_summary">When activated, logs may impact performance and include sensitive information. However the logs are not subject to automatic submission to ownCloud servers. Sharing logs with others is sole user responsibility.</string>
+    <string name="prefs_subsection_logging">Logging</string>
+    <string name="prefs_send_feedback">Send feedback</string>
+    <string name="prefs_app_version">App version</string>
+    <string name="prefs_app_version_summary">%1$s %2$s version %3$s (%4$s)</string>
+    <string name="prefs_browse">Browse</string>
     <string name="pattern_enter_pattern">Please enter your pattern</string>
     <string name="pattern_configure_pattern">Enter your pattern</string>
     <string name="pattern_remove_pattern">Remove your pattern</string>
@@ -153,7 +158,6 @@
     <string name="common_error_unknown">unknown error</string>
     <string name="common_pending">Pending</string>
     <string name="common_important">Important</string>
-    <string name="about_title">About</string>
     <string name="change_password">Change password</string>
     <string name="delete_account">Remove account</string>
     <string name="create_account">Create account</string>
@@ -424,7 +428,6 @@
     <string name="auth_redirect_non_secure_connection_title">Secure connection is redirected through an unsecured route.</string>
 
     <string name="actionbar_logger">Logs</string>
-    <string name="log_open_logs_view">Open logs view</string>
     <string name="log_send_history_button">Send history</string>
     <string name="log_send_no_mail_app">No app for sending logs found. Please install a mail app.</string>
     <string name="log_send_mail_subject">%1$s Android app logs</string>
@@ -605,6 +608,7 @@
     <string name="prefs_logs_summary">Logs may contain sensitive information. Sharing logs with others is sole user responsibility</string>
 
     <string name="synchronizing_account">Synchronizing account</string>
-    <string name="prefs_enable_logging">Enable logging</string>
-    <string name="prefs_enable_logging_summary">When activated, logs may impact performance and include sensitive information. However the logs are not subject to automatic submission to ownCloud servers. Sharing logs with others is sole user responsibility.</string>
+    <string name="prefs_subsection_security_summary">Set locks to access the app and allow touches with other visible windows</string>
+    <string name="prefs_subsection_logging_summary">Keep track of logs produced by the execution of the app</string>
+    <string name="prefs_subsection_more_summary">App info, feedback and others</string>
 </resources>

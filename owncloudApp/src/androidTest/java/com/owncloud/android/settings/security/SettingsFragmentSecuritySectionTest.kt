@@ -40,6 +40,7 @@ import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
@@ -120,7 +121,7 @@ class SettingsFragmentSecuritySectionTest {
             prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)!!
             prefTouchesWithOtherVisibleWindows =
-                fragment.findPreference(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)!!
+                fragment.findPreference(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)!!
         }
 
         prefLogsCategory.isVisible = false
@@ -139,7 +140,7 @@ class SettingsFragmentSecuritySectionTest {
     fun securityView() {
         prefSecurityCategory.verifyPreference(
             keyPref = PREFERENCE_SECURITY_CATEGORY,
-            titlePref = context.getString(R.string.prefs_category_security),
+            titlePref = context.getString(R.string.prefs_subsection_security),
             visible = true
         )
 
@@ -169,7 +170,7 @@ class SettingsFragmentSecuritySectionTest {
         assertFalse(prefBiometric.isChecked)
 
         prefTouchesWithOtherVisibleWindows.verifyPreference(
-            keyPref = SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
+            keyPref = SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
             titlePref = context.getString(R.string.prefs_touches_with_other_visible_windows),
             summaryPref = context.getString(R.string.prefs_touches_with_other_visible_windows_summary),
             visible = true,
