@@ -57,8 +57,11 @@ import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FileListOption;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.Extras;
+import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
+
+import java.util.List;
 
 /**
  * Holds a swiping galley where image files contained in an ownCloud directory are shown
@@ -131,11 +134,16 @@ public class PreviewImageActivity extends FileActivity implements
             parentFolder = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
         }
 
+        List<OCFile> imageFiles = getStorageManager().getFolderImages(parentFolder);
+        imageFiles = FileStorageUtils.sortFolder(
+                imageFiles, FileStorageUtils.mSortOrderFileDisp,
+                FileStorageUtils.mSortAscendingFileDisp
+        );
+
         mPreviewImagePagerAdapter = new PreviewImagePagerAdapter(
                 getSupportFragmentManager(),
-                parentFolder,
                 getAccount(),
-                getStorageManager()
+                imageFiles
         );
 
         mViewPager = findViewById(R.id.fragmentPager);
