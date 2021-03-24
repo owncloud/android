@@ -20,6 +20,7 @@
         <Preference
             app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment"
             app:icon="@drawable/ic_baseline_lock_24"
+            app:key="security_subsection"
             app:summary="@string/prefs_subsection_security_summary"
             app:title="@string/prefs_subsection_security" />
 
@@ -27,6 +28,7 @@
             app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"
             app:allowDividerAbove="true"
             app:icon="@drawable/ic_baseline_description_24"
+            app:key="logging_subsection"
             app:summary="@string/prefs_subsection_logging_summary"
             app:title="@string/prefs_subsection_logging" />
 
@@ -34,6 +36,7 @@
             app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment"
             app:allowDividerAbove="true"
             app:icon="@drawable/ic_baseline_add_circle_24"
+            app:key="more_subsection"
             app:summary="@string/prefs_subsection_more_summary"
             app:title="@string/prefs_subsection_more" />
 
