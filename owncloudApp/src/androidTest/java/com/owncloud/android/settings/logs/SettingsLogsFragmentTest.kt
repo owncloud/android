@@ -118,12 +118,14 @@ class SettingsLogsFragmentTest {
         prefHttpLogs.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOG_HTTP,
             titlePref = context.getString(R.string.prefs_http_logs),
-            visible = false
+            visible = true,
+            enabled = false
         )
         prefBrowse.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOGGER,
             titlePref = context.getString(R.string.prefs_browse),
-            visible = false
+            visible = true,
+            enabled = false
         )
     }
 
@@ -141,34 +143,34 @@ class SettingsLogsFragmentTest {
         prefHttpLogs.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOG_HTTP,
             titlePref = context.getString(R.string.prefs_http_logs),
-            visible = true
+            visible = true,
+            enabled = true
         )
         prefBrowse.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOGGER,
             titlePref = context.getString(R.string.prefs_browse),
-            visible = true
+            visible = true,
+            enabled = true
         )
     }
 
     @Test
-    fun enableLoggingMakesSettingsAppear() {
+    fun enableLoggingMakesSettingsEnable() {
         launchTest(enabledLogging = false)
 
         onView(withText(R.string.prefs_enable_logging)).perform(click())
-        onView(withText(R.string.prefs_http_logs)).check(matches(isDisplayed()))
-        assertTrue(prefHttpLogs.isVisible)
-        onView(withText(R.string.prefs_browse)).check(matches(isDisplayed()))
-        assertTrue(prefBrowse.isVisible)
+        assertTrue(prefHttpLogs.isEnabled)
+        assertTrue(prefBrowse.isEnabled)
     }
 
     @Test
-    fun disableLoggingMakesSettingsDisappear() {
+    fun disableLoggingMakesSettingsDisable() {
         launchTest(enabledLogging = false)
 
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         onView(withText(R.string.prefs_enable_logging)).perform(click())
-        assertFalse(prefHttpLogs.isVisible)
-        assertFalse(prefBrowse.isVisible)
+        assertFalse(prefHttpLogs.isEnabled)
+        assertFalse(prefBrowse.isEnabled)
     }
 
     @Test
