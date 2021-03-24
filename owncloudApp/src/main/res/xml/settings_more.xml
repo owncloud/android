@@ -29,12 +29,12 @@
         app:title="@string/prefs_sync_calendar_contacts" />
     <Preference
         app:iconSpaceReserved="false"
-        app:key="recommend"
-        app:title="@string/prefs_recommend" />
+        app:key="feedback"
+        app:title="@string/prefs_send_feedback" />
     <Preference
         app:iconSpaceReserved="false"
-        app:key="feedback"
-        app:title="@string/drawer_feedback" />
+        app:key="recommend"
+        app:title="@string/prefs_recommend" />
     <Preference
         app:iconSpaceReserved="false"
         app:key="privacyPolicy"
@@ -46,6 +46,6 @@
     <Preference
         app:iconSpaceReserved="false"
         app:key="about_app"
-        app:title="@string/about_title" />
+        app:title="@string/prefs_app_version" />
 
 </PreferenceScreen>

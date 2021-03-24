@@ -4,8 +4,6 @@
   <string name="global_name">名稱</string>
   <string name="global_date">日期</string>
   <string name="global_size">大小</string>
-  <string name="about_android">%1$s用於安卓系統</string>
-  <string name="about_version">版本%1$s</string>
   <string name="actionbar_search">搜尋這個目錄</string>
   <string name="actionbar_sync">更新檔案列表</string>
   <string name="actionbar_upload">上傳檔案</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">反饋</string>
   <string name="drawer_help">說明</string>
   <string name="prefs_category_general">一般</string>
-  <string name="prefs_category_more">更多</string>
-  <string name="prefs_category_security">安全性</string>
+  <string name="prefs_subsection_more">更多</string>
+  <string name="prefs_subsection_security">安全性</string>
   <string name="prefs_accounts">帳號</string>
   <string name="prefs_manage_accounts">管理帳號</string>
   <string name="prefs_passcode">密碼鎖</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">未知的錯誤</string>
   <string name="common_pending">等候中</string>
   <string name="common_important">重要</string>
-  <string name="about_title">關於</string>
-  <string name="change_password">變更密碼</string>
+    <string name="change_password">變更密碼</string>
   <string name="delete_account">刪除帳號</string>
   <string name="create_account">建立帳號</string>
   <string name="upload_chooser_title">上傳來自</string>
@@ -396,8 +393,7 @@
   <string name="drawer_manage_accounts">管理帳號</string>
   <string name="auth_redirect_non_secure_connection_title">加密的連線是由一個未加密的連線轉向過來的.</string>
   <string name="actionbar_logger">記錄</string>
-  <string name="log_open_logs_view">開啟記錄視圖</string>
-  <string name="log_send_history_button">傳送歷史</string>
+    <string name="log_send_history_button">傳送歷史</string>
   <string name="log_send_no_mail_app">沒有傳送紀錄的軟體. 請安裝郵件軟體</string>
   <string name="log_send_mail_subject">%1$s Android 應用程式記錄</string>
   <string name="log_progress_dialog_text">資料載入中...</string>

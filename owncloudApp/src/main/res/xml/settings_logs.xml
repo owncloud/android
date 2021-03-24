@@ -29,6 +29,6 @@
     <Preference
         app:iconSpaceReserved="false"
         app:key="logger"
-        app:title="@string/log_open_logs_view"/>
+        app:title="@string/prefs_browse"/>
 
 </PreferenceScreen>

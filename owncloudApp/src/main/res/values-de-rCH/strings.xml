@@ -4,8 +4,6 @@
   <string name="global_name">Name</string>
   <string name="global_date">Datum</string>
   <string name="global_size">Grösse</string>
-  <string name="about_android">%1$s für Android</string>
-  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Diesen Ordner durchsuchen</string>
   <string name="actionbar_sync">Konto aktualisieren</string>
   <string name="actionbar_upload">Datei hochladen</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Rückmeldungen</string>
   <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
-  <string name="prefs_category_more">Mehr</string>
-  <string name="prefs_category_security">Sicherheit</string>
+  <string name="prefs_subsection_more">Mehr</string>
+  <string name="prefs_subsection_security">Sicherheit</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
   <string name="prefs_passcode">PIN gesperrt</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">Unbekannter Fehler</string>
   <string name="common_pending">Ausstehend</string>
   <string name="common_important">Wichtig</string>
-  <string name="about_title">Über</string>
-  <string name="change_password">Passwort ändern</string>
+    <string name="change_password">Passwort ändern</string>
   <string name="delete_account">Benutzerkonto löschen</string>
   <string name="create_account">Account erstellen</string>
   <string name="upload_chooser_title">Hochladen von (Quelle)</string>

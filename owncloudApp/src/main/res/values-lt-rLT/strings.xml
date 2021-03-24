@@ -30,8 +30,8 @@
   <string name="drawer_feedback">Atsiliepimai</string>
   <string name="drawer_help">Pagalba</string>
   <string name="prefs_category_general">Bendras</string>
-  <string name="prefs_category_more">Daugiau</string>
-  <string name="prefs_category_security">Saugumas</string>
+  <string name="prefs_subsection_more">Daugiau</string>
+  <string name="prefs_subsection_security">Saugumas</string>
   <string name="prefs_accounts">Paskyros</string>
   <string name="prefs_manage_accounts">Tvarkyti paskyras</string>
   <string name="prefs_passcode">Užrakto kodas</string>
@@ -128,8 +128,7 @@
   <string name="common_unknown">nežinomas</string>
   <string name="common_pending">Laukiantis</string>
   <string name="common_important">Svarbūs</string>
-  <string name="about_title">Apie</string>
-  <string name="change_password">Pakeisti slaptažodį</string>
+    <string name="change_password">Pakeisti slaptažodį</string>
   <string name="delete_account">Pašalinti paskyrą</string>
   <string name="create_account">Sukurti paskyrą</string>
   <string name="uploader_info_dirname">Katalogo pavadinimas</string>

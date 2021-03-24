@@ -4,8 +4,6 @@
   <string name="global_name">Název</string>
   <string name="global_date">Datum</string>
   <string name="global_size">Velikost</string>
-  <string name="about_android">%1$s pro Android</string>
-  <string name="about_version">Verze %1$s</string>
   <string name="actionbar_search">Hledat v tomto adresáři</string>
   <string name="actionbar_sync">Obnovit účet</string>
   <string name="actionbar_upload">Nahrát</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Odezva</string>
   <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
-  <string name="prefs_category_more">Více</string>
-  <string name="prefs_category_security">Zabezpečení</string>
+  <string name="prefs_subsection_more">Více</string>
+  <string name="prefs_subsection_security">Zabezpečení</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
@@ -145,8 +143,7 @@
   <string name="common_error_unknown">neznámá chyba</string>
   <string name="common_pending">Nevyřízené</string>
   <string name="common_important">Důležité</string>
-  <string name="about_title">O aplikaci</string>
-  <string name="change_password">Změnit heslo</string>
+    <string name="change_password">Změnit heslo</string>
   <string name="delete_account">Odebrat účet</string>
   <string name="create_account">Vytvořit účet</string>
   <string name="upload_chooser_title">Nahrát z</string>
@@ -394,8 +391,7 @@ správce systému.</string>
   <string name="drawer_manage_accounts">Spravovat účty</string>
   <string name="auth_redirect_non_secure_connection_title">Zabezpečené spojení je přesměrováváno nezabezpečenou trasou.</string>
   <string name="actionbar_logger">Logy</string>
-  <string name="log_open_logs_view">Otevřít log</string>
-  <string name="log_send_history_button">Historie odesílání</string>
+    <string name="log_send_history_button">Historie odesílání</string>
   <string name="log_send_no_mail_app">Nenalezena aplikace pro odesílání logů. Nainstalujte prosím emailovou aplikaci.</string>
   <string name="log_send_mail_subject">%1$s logy aplikace pro Android</string>
   <string name="log_progress_dialog_text">Načítání dat…</string>

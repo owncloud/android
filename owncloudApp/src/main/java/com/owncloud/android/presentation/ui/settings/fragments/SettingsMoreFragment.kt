@@ -134,11 +134,13 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         }
 
         // About app
-        prefAboutApp?.let {
-            it.title = String.format(getString(R.string.about_android), getString(R.string.app_name))
-            val appVersion = "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE} ${BuildConfig.COMMIT_SHA1}"
-            it.summary = String.format(getString(R.string.about_version), appVersion)
-        }
+        prefAboutApp?.summary = String.format(
+            getString(R.string.prefs_app_version_summary),
+            getString(R.string.app_name),
+            BuildConfig.BUILD_TYPE,
+            BuildConfig.VERSION_NAME,
+            BuildConfig.COMMIT_SHA1
+        )
     }
 
     companion object {

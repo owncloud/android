@@ -7,8 +7,8 @@
   <string name="actionbar_send_file">Pošalji</string>
   <string name="drawer_open">Otvori</string>
   <string name="drawer_help">Pomoć</string>
-  <string name="prefs_category_more">Više</string>
-  <string name="prefs_category_security">Sigurnost</string>
+  <string name="prefs_subsection_more">Više</string>
+  <string name="prefs_subsection_security">Sigurnost</string>
   <string name="prefs_help">Pomoć</string>
   <string name="auth_username">Korisničko ime</string>
   <string name="auth_password">Lozinka</string>

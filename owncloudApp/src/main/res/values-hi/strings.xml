@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s एंड्रॉयड एप्लिकेशन</string>
-  <string name="about_version">संस्करण %1$s</string>
   <string name="actionbar_sync">खाता रिफ्रेश करें </string>
   <string name="actionbar_upload">अपलोड </string>
   <string name="actionbar_upload_from_apps">अन्य एप्प्स से सामग्री </string>
@@ -15,7 +13,7 @@
   <string name="drawer_open">खोलें</string>
   <string name="drawer_help">सहायता </string>
   <string name="prefs_category_general">सामान्य </string>
-  <string name="prefs_category_more">और अधिक</string>
+  <string name="prefs_subsection_more">और अधिक</string>
   <string name="prefs_accounts">खाते </string>
   <string name="prefs_log_summary_history">यह दर्ज लॉग दिखाता है</string>
   <string name="prefs_log_delete_history_button">हिस्ट्री हटाएं</string>

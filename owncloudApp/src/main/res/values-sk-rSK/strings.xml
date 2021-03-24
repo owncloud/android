@@ -4,8 +4,6 @@
   <string name="global_name">Názov</string>
   <string name="global_date">Dátum</string>
   <string name="global_size">Veľkosť</string>
-  <string name="about_android">%1$s pre Android</string>
-  <string name="about_version">Verzia %1$s</string>
   <string name="actionbar_search">Hľadať tento adresár</string>
   <string name="actionbar_sync">Obnoviť účet</string>
   <string name="actionbar_upload">Nahraj súbor</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Spätná väzba</string>
   <string name="drawer_help">Pomoc</string>
   <string name="prefs_category_general">Všeobecné</string>
-  <string name="prefs_category_more">Viac</string>
-  <string name="prefs_category_security">Zabezpečenie</string>
+  <string name="prefs_subsection_more">Viac</string>
+  <string name="prefs_subsection_security">Zabezpečenie</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Správa účtov</string>
   <string name="prefs_passcode">Heslo</string>
@@ -113,8 +111,7 @@
   <string name="common_unknown">neznámy</string>
   <string name="common_pending">Čaká</string>
   <string name="common_important">Dôležité</string>
-  <string name="about_title">O</string>
-  <string name="change_password">Zmeniť heslo</string>
+    <string name="change_password">Zmeniť heslo</string>
   <string name="delete_account">Odstrániť účet</string>
   <string name="create_account">Vytvoriť účet</string>
   <string name="uploader_info_dirname">Názov priečinka</string>

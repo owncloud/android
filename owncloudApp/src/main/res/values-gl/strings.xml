@@ -4,8 +4,6 @@
   <string name="global_name">Nome</string>
   <string name="global_date">Data</string>
   <string name="global_size">Tamaño</string>
-  <string name="about_android">%1$s para Android</string>
-  <string name="about_version">Versión %1$s</string>
   <string name="actionbar_search">Buscar neste cartafol</string>
   <string name="actionbar_sync">Actualizar a conta</string>
   <string name="actionbar_upload">Enviar</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Comentarios</string>
   <string name="drawer_help">Axuda</string>
   <string name="prefs_category_general">Xeral</string>
-  <string name="prefs_category_more">Máis</string>
-  <string name="prefs_category_security">Seguridade</string>
+  <string name="prefs_subsection_more">Máis</string>
+  <string name="prefs_subsection_security">Seguridade</string>
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Xestionar as contas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
@@ -147,8 +145,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="common_error_unknown">erro descoñecido</string>
   <string name="common_pending">Pendentes</string>
   <string name="common_important">Importante</string>
-  <string name="about_title">Sobre</string>
-  <string name="change_password">Cambiar o contrasinal</string>
+    <string name="change_password">Cambiar o contrasinal</string>
   <string name="delete_account">Retirar a conta</string>
   <string name="create_account">Crear unha conta</string>
   <string name="upload_chooser_title">Enviar dende</string>
@@ -397,8 +394,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="drawer_manage_accounts">Xestionar as contas</string>
   <string name="auth_redirect_non_secure_connection_title">A conexión segura está a ser redirixida a través dunha ruta non segura.</string>
   <string name="actionbar_logger">Rexistros</string>
-  <string name="log_open_logs_view">Abrir o visor de rexistros</string>
-  <string name="log_send_history_button">Enviar o historial</string>
+    <string name="log_send_history_button">Enviar o historial</string>
   <string name="log_send_no_mail_app">Non se atopou unha aplicación para enviar os rexistros. Instale unha aplicación de correo!</string>
   <string name="log_send_mail_subject">Rexistros da aplicación %1$s Android</string>
   <string name="log_progress_dialog_text">Cargando os datos...</string>

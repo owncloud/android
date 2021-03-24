@@ -48,8 +48,7 @@
   <string name="common_error">Fehler</string>
   <string name="common_loading">Lade …</string>
   <string name="common_error_unknown">Unbekannter Fehler</string>
-  <string name="about_title">Über</string>
-  <string name="change_password">Passwort ändern</string>
+    <string name="change_password">Passwort ändern</string>
   <string name="create_account">Konto erstellen</string>
   <string name="upload_chooser_title">Hochladen von …</string>
   <string name="uploader_info_dirname">Ordner Name</string>

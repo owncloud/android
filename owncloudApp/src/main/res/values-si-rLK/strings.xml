@@ -6,7 +6,7 @@
   <string name="drawer_open">විවෘත කරන්න</string>
   <string name="drawer_help">උදව්</string>
   <string name="prefs_category_general">සාමාන්‍යයෙන්</string>
-  <string name="prefs_category_more">වැඩි</string>
+  <string name="prefs_subsection_more">වැඩි</string>
   <string name="prefs_accounts">ගිණුම්</string>
   <string name="prefs_manage_accounts">ගිණුම් කළමනාකරනය</string>
   <string name="prefs_help">උදව්</string>
@@ -34,8 +34,7 @@
   <string name="common_yes">ඔව්</string>
   <string name="common_no">එපා</string>
     <string name="common_error">දෝශය</string>
-  <string name="about_title">පිළිබඳව</string>
-  <string name="change_password">මුරපදය වෙනස් කිරීම</string>
+    <string name="change_password">මුරපදය වෙනස් කිරීම</string>
   <string name="create_account">ගිණුම සාදන්න</string>
   <string name="uploader_info_dirname">ෆොල්ඩරයේ නම</string>
   <string name="uploader_upload_succeeded_ticker">උඩුගත කිරීම සාර්ථකයි</string>

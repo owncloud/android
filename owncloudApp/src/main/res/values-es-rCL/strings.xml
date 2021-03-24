@@ -35,8 +35,7 @@
     <string name="common_error">Error</string>
   <string name="common_loading">Cargando …</string>
   <string name="common_error_unknown">Error desconocido</string>
-  <string name="about_title">Acerca de</string>
-  <string name="create_account">Crear cuenta</string>
+    <string name="create_account">Crear cuenta</string>
   <string name="upload_chooser_title">Subir desde…</string>
   <string name="uploader_info_dirname">Nombre del directorio</string>
   <string name="uploader_upload_in_progress_ticker">Subiendo</string>

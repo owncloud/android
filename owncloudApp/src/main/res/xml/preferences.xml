@@ -57,7 +57,7 @@
 
     <PreferenceCategory
         android:key="security_category"
-        android:title="@string/prefs_category_security">
+        android:title="@string/prefs_subsection_security">
         <android.preference.CheckBoxPreference
             android:key="set_pincode"
             android:title="@string/prefs_passcode" />
@@ -82,12 +82,12 @@
         <Preference
             android:key="logger"
             android:summary="@string/prefs_logs_summary"
-            android:title="@string/log_open_logs_view" />
+            android:title="@string/prefs_browse" />
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="more"
-        android:title="@string/prefs_category_more">
+        android:title="@string/prefs_subsection_more">
         <Preference
             android:key="help"
             android:title="@string/prefs_help" />
@@ -110,7 +110,7 @@
         <Preference
             android:id="@+id/about_app"
             android:key="about_app"
-            android:title="@string/about_title" />
+            android:title="@string/prefs_app_version" />
     </PreferenceCategory>
 
 </PreferenceScreen>

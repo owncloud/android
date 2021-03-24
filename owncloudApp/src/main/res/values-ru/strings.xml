@@ -4,8 +4,6 @@
   <string name="global_name">Название</string>
   <string name="global_date">Дата</string>
   <string name="global_size">Размер</string>
-  <string name="about_android">%1$s для Андроида</string>
-  <string name="about_version">Версия %1$s</string>
   <string name="actionbar_search">Поиск в текущей папке</string>
   <string name="actionbar_sync">Синхронизировать</string>
   <string name="actionbar_upload">Загрузить</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Обратная связь</string>
   <string name="drawer_help">Помощь</string>
   <string name="prefs_category_general">Основные</string>
-  <string name="prefs_category_more">Больше</string>
-  <string name="prefs_category_security">Безопасность</string>
+  <string name="prefs_subsection_more">Больше</string>
+  <string name="prefs_subsection_security">Безопасность</string>
   <string name="prefs_accounts">Учётные записи</string>
   <string name="prefs_manage_accounts">Управление аккаунтами</string>
   <string name="prefs_passcode">Блокировка кодом</string>
@@ -147,8 +145,7 @@
   <string name="common_error_unknown">неизвестная ошибка</string>
   <string name="common_pending">Ожидается</string>
   <string name="common_important">Важный</string>
-  <string name="about_title">О программе</string>
-  <string name="change_password">Сменить пароль</string>
+    <string name="change_password">Сменить пароль</string>
   <string name="delete_account">Удалить аккаунт</string>
   <string name="create_account">Создать учётную запись</string>
   <string name="upload_chooser_title">Загрузить из</string>
@@ -397,8 +394,7 @@
   <string name="drawer_manage_accounts">Управление аккаунтами</string>
   <string name="auth_redirect_non_secure_connection_title">Безопасное соединение перенаправлено через небезопасный маршрут.</string>
   <string name="actionbar_logger">Журналы</string>
-  <string name="log_open_logs_view">Открыть лог-файл приложения</string>
-  <string name="log_send_history_button">История отправок</string>
+    <string name="log_send_history_button">История отправок</string>
   <string name="log_send_no_mail_app">Программа для отправки журналов не найдена. Пожалуйста установите почтовую программу.</string>
   <string name="log_send_mail_subject">Журналы %1$s для Android</string>
   <string name="log_progress_dialog_text">Загрузка данных…</string>

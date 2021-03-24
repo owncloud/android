@@ -4,8 +4,6 @@
   <string name="global_name">Όνομα</string>
   <string name="global_date">Ημερομηνία</string>
   <string name="global_size">Μέγεθος</string>
-  <string name="about_android">%1$s για Android</string>
-  <string name="about_version">Έκδοση %1$s</string>
   <string name="actionbar_search">Αναζήτηση σε αυτό το φάκελο</string>
   <string name="actionbar_sync">Ανανέωση λογαριασμού</string>
   <string name="actionbar_upload">Μεταφόρτωση</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Σχόλια </string>
   <string name="drawer_help">Βοήθεια</string>
   <string name="prefs_category_general">Γενικά</string>
-  <string name="prefs_category_more">Περισσότερα</string>
-  <string name="prefs_category_security">Ασφάλεια</string>
+  <string name="prefs_subsection_more">Περισσότερα</string>
+  <string name="prefs_subsection_security">Ασφάλεια</string>
   <string name="prefs_accounts">Λογαριασμοί</string>
   <string name="prefs_manage_accounts">Διαχείριση λογαριασμών</string>
   <string name="prefs_passcode">Κλείδωμα με κωδικό</string>
@@ -144,8 +142,7 @@
   <string name="common_error_unknown">άγνωστο σφάλμα</string>
   <string name="common_pending">Εκκρεμεί</string>
   <string name="common_important">Σημαντικό </string>
-  <string name="about_title">Περί</string>
-  <string name="change_password">Αλλαγή συνθηματικού</string>
+    <string name="change_password">Αλλαγή συνθηματικού</string>
   <string name="delete_account">Αφαίρεση λογαριασμού</string>
   <string name="create_account">Δημιουργία λογαριασμού</string>
   <string name="upload_chooser_title">Μεταφόρτωση από</string>

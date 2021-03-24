@@ -4,8 +4,6 @@
   <string name="global_name">Име</string>
   <string name="global_date">Дата</string>
   <string name="global_size">Размер</string>
-  <string name="about_android">%1$sза Android</string>
-  <string name="about_version">Версия %1$s</string>
   <string name="actionbar_search">Търсене в тази папка</string>
   <string name="actionbar_sync">Обновяване на профила</string>
   <string name="actionbar_upload">Качване</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Обратна Връзка</string>
   <string name="drawer_help">Помощ</string>
   <string name="prefs_category_general">Общи</string>
-  <string name="prefs_category_more">Още</string>
-  <string name="prefs_category_security">Сигурност</string>
+  <string name="prefs_subsection_more">Още</string>
+  <string name="prefs_subsection_security">Сигурност</string>
   <string name="prefs_accounts">Профили</string>
   <string name="prefs_manage_accounts">Управление на профилите</string>
   <string name="prefs_passcode">Заключваща парола</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">неизвестна грешка</string>
   <string name="common_pending">Чакащо</string>
   <string name="common_important">Важно</string>
-  <string name="about_title">Относно</string>
-  <string name="change_password">Промяна на парола</string>
+    <string name="change_password">Промяна на парола</string>
   <string name="delete_account">Премахване на профила</string>
   <string name="create_account">Създаване на профил</string>
   <string name="upload_chooser_title">Качване от</string>

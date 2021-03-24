@@ -4,8 +4,6 @@
   <string name="global_name">Ime</string>
   <string name="global_date">Datum</string>
   <string name="global_size">Velikost</string>
-  <string name="about_android">%1$s za Android</string>
-  <string name="about_version">Verzija %1$s</string>
   <string name="actionbar_search">Preiščite to mapo</string>
   <string name="actionbar_sync">Osveži račun</string>
   <string name="actionbar_upload">Pošiljanje</string>
@@ -31,8 +29,8 @@
   <string name="drawer_feedback">Pošlji sporočilo razvijalcem programa</string>
   <string name="drawer_help">Pomoč</string>
   <string name="prefs_category_general">Splošno</string>
-  <string name="prefs_category_more">Več</string>
-  <string name="prefs_category_security">Varnost</string>
+  <string name="prefs_subsection_more">Več</string>
+  <string name="prefs_subsection_security">Varnost</string>
   <string name="prefs_accounts">Računi</string>
   <string name="prefs_manage_accounts">Upravljanje z računi</string>
   <string name="prefs_passcode">Zakleni dostop s kodo PIN</string>
@@ -134,8 +132,7 @@
   <string name="common_error_unknown">neznana napaka</string>
   <string name="common_pending">V čakanju ...</string>
   <string name="common_important">Pomembno</string>
-  <string name="about_title">O oblaku %1$s</string>
-  <string name="change_password">Spremeni geslo</string>
+    <string name="change_password">Spremeni geslo</string>
   <string name="delete_account">Odstrani račun</string>
   <string name="create_account">Ustvari račun</string>
   <string name="upload_chooser_title">Naloženo iz</string>

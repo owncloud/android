@@ -4,8 +4,6 @@
   <string name="global_name">Nama</string>
   <string name="global_date">Tanggal</string>
   <string name="global_size">Ukuran</string>
-  <string name="about_android">%1$suntuk Android</string>
-  <string name="about_version">Versi %1$s</string>
   <string name="actionbar_search">Cari folder ini</string>
   <string name="actionbar_sync">Segarkan akun</string>
   <string name="actionbar_upload">Unggah</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Umpan balik</string>
   <string name="drawer_help">Bantuan</string>
   <string name="prefs_category_general">Umum</string>
-  <string name="prefs_category_more">Lainnya</string>
-  <string name="prefs_category_security">Keamanan</string>
+  <string name="prefs_subsection_more">Lainnya</string>
+  <string name="prefs_subsection_security">Keamanan</string>
   <string name="prefs_accounts">Akun</string>
   <string name="prefs_manage_accounts">Kelola akun</string>
   <string name="prefs_passcode">Kunci kode sandi</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">Kesalahan tidak diketahui</string>
   <string name="common_pending">Tertunda</string>
   <string name="common_important">Penting</string>
-  <string name="about_title">Tentang</string>
-  <string name="change_password">Ubah sandi</string>
+    <string name="change_password">Ubah sandi</string>
   <string name="delete_account">Hapus akun</string>
   <string name="create_account">Buat akun</string>
   <string name="upload_chooser_title">Unggah dari</string>

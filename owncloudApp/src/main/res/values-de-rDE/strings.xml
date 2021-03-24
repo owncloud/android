@@ -4,8 +4,6 @@
   <string name="global_name">Name</string>
   <string name="global_date">Datum</string>
   <string name="global_size">Größe</string>
-  <string name="about_android">%1$s Android App</string>
-  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Ordner durchsuchen</string>
   <string name="actionbar_sync">Konto aktualisieren</string>
   <string name="actionbar_upload">Datei hochladen</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Rückmeldungen</string>
   <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
-  <string name="prefs_category_more">Mehr</string>
-  <string name="prefs_category_security">Sicherheit</string>
+  <string name="prefs_subsection_more">Mehr</string>
+  <string name="prefs_subsection_security">Sicherheit</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
   <string name="prefs_passcode">PIN gesperrt</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">Unbekannter Fehler</string>
   <string name="common_pending">Ausstehend</string>
   <string name="common_important">Wichtig</string>
-  <string name="about_title">Über</string>
-  <string name="change_password">Passwort ändern</string>
+    <string name="change_password">Passwort ändern</string>
   <string name="delete_account">Benutzerkonto löschen</string>
   <string name="create_account">Account erstellen</string>
   <string name="upload_chooser_title">Dateien hochladen von...</string>
@@ -396,8 +393,7 @@
   <string name="drawer_manage_accounts">Konten verwalten</string>
   <string name="auth_redirect_non_secure_connection_title">Die gesicherte Verbindung wird auf eine unsichere Route weitergeleitet.</string>
   <string name="actionbar_logger">Protokolle</string>
-  <string name="log_open_logs_view">Log-Ansicht öffnen</string>
-  <string name="log_send_history_button">Verlauf senden</string>
+    <string name="log_send_history_button">Verlauf senden</string>
   <string name="log_send_no_mail_app">Keine App zum Versenden der Meldungen gefunden. Bitte installieren Sie die Mail-App!</string>
   <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
   <string name="log_progress_dialog_text">Lade Daten…</string>

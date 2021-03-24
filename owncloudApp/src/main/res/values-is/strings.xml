@@ -4,8 +4,6 @@
   <string name="global_name">Heiti</string>
   <string name="global_date">Dagsetning</string>
   <string name="global_size">Stærð</string>
-  <string name="about_android">%1$s fyrir Android</string>
-  <string name="about_version">Útgáfa %1$s</string>
   <string name="actionbar_search">Leita í þessari möppu</string>
   <string name="actionbar_sync">Endurlesa aðgang</string>
   <string name="actionbar_upload">Senda inn</string>
@@ -31,8 +29,8 @@
   <string name="drawer_feedback">Umsögn</string>
   <string name="drawer_help">Hjálp</string>
   <string name="prefs_category_general">Almennt</string>
-  <string name="prefs_category_more">Meira</string>
-  <string name="prefs_category_security">Öryggi</string>
+  <string name="prefs_subsection_more">Meira</string>
+  <string name="prefs_subsection_security">Öryggi</string>
   <string name="prefs_accounts">Notandaaðgangar</string>
   <string name="prefs_manage_accounts">Sýsla með notandaaðganga</string>
   <string name="prefs_passcode">Læsing með lykilkóða</string>
@@ -125,8 +123,7 @@
   <string name="common_unknown">óþekkt</string>
   <string name="common_pending">Í bið</string>
   <string name="common_important">Mikilvægt</string>
-  <string name="about_title">Um hugbúnaðinn</string>
-  <string name="change_password">Breyta lykilorði</string>
+    <string name="change_password">Breyta lykilorði</string>
   <string name="delete_account">Fjarlægja notandaaðgang</string>
   <string name="create_account">Stofna aðgang</string>
   <string name="upload_chooser_title">Senda inn úr</string>
