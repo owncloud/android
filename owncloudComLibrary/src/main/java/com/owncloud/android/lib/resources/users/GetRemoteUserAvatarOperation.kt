@@ -70,7 +70,7 @@ class GetRemoteUserAvatarOperation(private val avatarDimension: Int) : RemoteOpe
 
                 /// download will be performed to a buffer
                 inputStream = getMethod.getResponseBodyAsStream()
-                val bytesArray = inputStream?.readBytes()?: byteArrayOf()
+                val bytesArray = inputStream?.readBytes() ?: byteArrayOf()
 
                 // TODO check total bytes transferred?
                 Timber.d("Avatar size: Bytes received ${bytesArray.size} of $contentLength")

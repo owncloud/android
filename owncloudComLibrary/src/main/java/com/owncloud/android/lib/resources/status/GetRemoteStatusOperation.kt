@@ -31,7 +31,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.json.JSONException
 import timber.log.Timber
 
