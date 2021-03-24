@@ -60,7 +60,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-class SettingsFragmentMoreSectionTest {
+class SettingsMoreFragmentTest {
 
     private lateinit var fragmentScenario: FragmentScenario<SettingsMoreFragment>
 
