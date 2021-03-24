@@ -21,7 +21,6 @@
 package com.owncloud.android.providers
 
 import android.content.Context
-import android.content.res.Resources
 import com.owncloud.android.utils.ConnectivityUtils
 
 class OCContextProvider(private val context: Context) : ContextProvider {

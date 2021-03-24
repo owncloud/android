@@ -51,7 +51,6 @@ import com.owncloud.android.domain.exceptions.PartialMoveDoneException
 import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.RedirectToNonSecureException
 import com.owncloud.android.domain.exceptions.SSLErrorException
-import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.exceptions.ServerConnectionTimeoutException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.ServerResponseTimeoutException

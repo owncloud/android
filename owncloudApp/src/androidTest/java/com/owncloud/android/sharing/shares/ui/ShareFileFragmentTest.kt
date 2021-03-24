@@ -292,8 +292,7 @@ class ShareFileFragmentTest {
                 error = Throwable("It was not possible to retrieve the shares from server")
             )
         )
-        onView(withId(com.google.android.material.R.id.snackbar_text)).
-            check(matches(withText(R.string.get_shares_error)))
+        onView(withId(com.google.android.material.R.id.snackbar_text)).check(matches(withText(R.string.get_shares_error)))
     }
 
     private fun loadShareFileFragment(

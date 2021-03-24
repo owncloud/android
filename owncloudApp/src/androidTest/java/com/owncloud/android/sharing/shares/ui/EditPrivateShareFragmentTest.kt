@@ -95,7 +95,7 @@ class EditPrivateShareFragmentTest {
     }
 
     @Test
-    fun closeDialog(){
+    fun closeDialog() {
         loadEditPrivateShareFragment()
         onView(withId(R.id.closeButton)).perform(click())
         activityScenario.onActivity { Assert.assertNull(it.getTestFragment()) }
