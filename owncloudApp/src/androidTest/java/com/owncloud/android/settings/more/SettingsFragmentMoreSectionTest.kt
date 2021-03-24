@@ -20,11 +20,8 @@
 
 package com.owncloud.android.settings.more
 
-import android.app.Activity
-import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_SENDTO
 import android.content.Intent.EXTRA_SUBJECT
 import android.content.Intent.EXTRA_TEXT
 import android.net.Uri
@@ -34,16 +31,13 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasFlag
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
@@ -51,16 +45,16 @@ import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import com.owncloud.android.utils.matchers.verifyPreference
+import com.owncloud.android.utils.mockIntent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.hamcrest.Matchers.allOf
 import org.junit.After
-import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -88,14 +82,7 @@ class SettingsFragmentMoreSectionTest {
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        settingsViewModel = mockk(relaxed = true)
-
-        prefHelp = null
-        prefSync = null
-        prefRecommend = null
-        prefFeedback = null
-        prefPrivacyPolicy = null
-        prefImprint = null
+        settingsViewModel = mockk(relaxUnitFun = true)
 
         stopKoin()
 
@@ -119,6 +106,14 @@ class SettingsFragmentMoreSectionTest {
         unmockkAll()
     }
 
+    private fun getPreference(key: String): Preference? {
+        var preference: Preference? = null
+        fragmentScenario.onFragment { fragment ->
+            preference = fragment.findPreference(key)
+        }
+        return preference
+    }
+
     private fun launchTest(
         helpEnabled: Boolean = true,
         syncEnabled: Boolean = true,
@@ -136,16 +131,11 @@ class SettingsFragmentMoreSectionTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
 
+        // These categories and preferences are not brandable
         fragmentScenario.onFragment { fragment ->
             prefSecurityCategory = fragment.findPreference(PREFERENCE_SECURITY_CATEGORY)!!
             prefLogsCategory = fragment.findPreference(PREFERENCE_LOGS_CATEGORY)!!
             prefMoreCategory = fragment.findPreference(PREFERENCE_MORE_CATEGORY)!!
-            if (helpEnabled) prefHelp = fragment.findPreference(PREFERENCE_HELP)!!
-            if (syncEnabled) prefSync = fragment.findPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)!!
-            if (recommendEnabled) prefRecommend = fragment.findPreference(PREFERENCE_RECOMMEND)!!
-            if (feedbackEnabled) prefFeedback = fragment.findPreference(PREFERENCE_FEEDBACK)!!
-            if (privacyPolicyEnabled) prefPrivacyPolicy = fragment.findPreference(PREFERENCE_PRIVACY_POLICY)!!
-            if (imprintEnabled) prefImprint = fragment.findPreference(PREFERENCE_IMPRINT)!!
             prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
         }
 
@@ -160,84 +150,81 @@ class SettingsFragmentMoreSectionTest {
     fun moreView() {
         launchTest()
 
-        onView(withText(R.string.prefs_category_more)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_MORE_CATEGORY, prefMoreCategory.key)
-        assertEquals(context.getString(R.string.prefs_category_more), prefMoreCategory.title)
-        assertNull(prefMoreCategory.summary)
-        assertTrue(prefMoreCategory.isVisible)
+        prefMoreCategory.verifyPreference(
+            keyPref = PREFERENCE_MORE_CATEGORY,
+            titlePref = context.getString(R.string.prefs_category_more),
+            visible = true
+        )
 
-        onView(withText(R.string.prefs_help)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_HELP, prefHelp?.key)
-        assertEquals(context.getString(R.string.prefs_help), prefHelp?.title)
-        assertNull(prefHelp?.summary)
-        assertTrue(prefHelp?.isVisible == true)
-        assertTrue(prefHelp?.isEnabled == true)
+        prefHelp = getPreference(PREFERENCE_HELP)
+        assertNotNull(prefHelp)
+        prefHelp?.verifyPreference(
+            keyPref = PREFERENCE_HELP,
+            titlePref = context.getString(R.string.prefs_help),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_sync_calendar_contacts)).check(matches(isDisplayed()))
-        onView(withText(R.string.prefs_sync_calendar_contacts_summary)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_SYNC_CALENDAR_CONTACTS, prefSync?.key)
-        assertEquals(context.getString(R.string.prefs_sync_calendar_contacts), prefSync?.title)
-        assertEquals(context.getString(R.string.prefs_sync_calendar_contacts_summary), prefSync?.summary)
-        assertTrue(prefSync?.isVisible == true)
-        assertTrue(prefSync?.isEnabled == true)
+        prefSync = getPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)
+        assertNotNull(prefSync)
+        prefSync?.verifyPreference(
+            keyPref = PREFERENCE_SYNC_CALENDAR_CONTACTS,
+            titlePref = context.getString(R.string.prefs_sync_calendar_contacts),
+            summaryPref = context.getString(R.string.prefs_sync_calendar_contacts_summary),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_recommend)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_RECOMMEND, prefRecommend?.key)
-        assertEquals(context.getString(R.string.prefs_recommend), prefRecommend?.title)
-        assertNull(prefRecommend?.summary)
-        assertTrue(prefRecommend?.isVisible == true)
-        assertTrue(prefRecommend?.isEnabled == true)
+        prefRecommend = getPreference(PREFERENCE_RECOMMEND)
+        assertNotNull(prefRecommend)
+        prefRecommend?.verifyPreference(
+            keyPref = PREFERENCE_RECOMMEND,
+            titlePref = context.getString(R.string.prefs_recommend),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_feedback)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_FEEDBACK, prefFeedback?.key)
-        assertEquals(context.getString(R.string.prefs_feedback), prefFeedback?.title)
-        assertNull(prefFeedback?.summary)
-        assertTrue(prefFeedback?.isVisible == true)
-        assertTrue(prefFeedback?.isEnabled == true)
+        prefFeedback = getPreference(PREFERENCE_FEEDBACK)
+        assertNotNull(prefFeedback)
+        prefFeedback?.verifyPreference(
+            keyPref = PREFERENCE_FEEDBACK,
+            titlePref = context.getString(R.string.prefs_feedback),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_privacy_policy)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_PRIVACY_POLICY, prefPrivacyPolicy?.key)
-        assertEquals(context.getString(R.string.prefs_privacy_policy), prefPrivacyPolicy?.title)
-        assertNull(prefPrivacyPolicy?.summary)
-        assertTrue(prefPrivacyPolicy?.isVisible == true)
-        assertTrue(prefPrivacyPolicy?.isEnabled == true)
+        prefPrivacyPolicy = getPreference(PREFERENCE_PRIVACY_POLICY)
+        assertNotNull(prefPrivacyPolicy)
+        prefPrivacyPolicy?.verifyPreference(
+            keyPref = PREFERENCE_PRIVACY_POLICY,
+            titlePref = context.getString(R.string.prefs_privacy_policy),
+            visible = true,
+            enabled = true
+        )
 
-        onView(withText(R.string.prefs_imprint)).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_IMPRINT, prefImprint?.key)
-        assertEquals(context.getString(R.string.prefs_imprint), prefImprint?.title)
-        assertNull(prefImprint?.summary)
-        assertTrue(prefImprint?.isVisible == true)
+        prefImprint = getPreference(PREFERENCE_IMPRINT)
+        assertNotNull(prefImprint)
+        prefImprint?.verifyPreference(
+            keyPref = PREFERENCE_IMPRINT,
+            titlePref = context.getString(R.string.prefs_imprint),
+            visible = true,
+            enabled = true
+        )
 
         val appVersion = "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE} ${BuildConfig.COMMIT_SHA1}"
-        onView(
-            withText(
-                String.format(
-                    context.getString(R.string.about_android),
-                    context.getString(R.string.app_name)
-                )
-            )
-        ).check(matches(isDisplayed()))
-        onView(
-            withText(
-                String.format(
-                    context.getString(R.string.about_version),
-                    appVersion
-                )
-            )
-        ).check(matches(isDisplayed()))
-        assertEquals(PREFERENCE_ABOUT_APP, prefAboutApp.key)
-        assertEquals(
-            String.format(context.getString(R.string.about_android), context.getString(R.string.app_name)),
-            prefAboutApp.title
+        prefAboutApp.verifyPreference(
+            keyPref = PREFERENCE_ABOUT_APP,
+            titlePref = String.format(context.getString(R.string.about_android), context.getString(R.string.app_name)),
+            summaryPref = String.format(context.getString(R.string.about_version), appVersion),
+            visible = true,
+            enabled = true
         )
-        assertEquals(String.format(context.getString(R.string.about_version), appVersion), prefAboutApp.summary)
-        assertTrue(prefAboutApp.isVisible)
-        assertTrue(prefAboutApp.isEnabled)
     }
 
     @Test
     fun helpNotEnabledView() {
         launchTest(helpEnabled = false)
+        prefHelp = getPreference(PREFERENCE_HELP)
 
         assertNull(prefHelp)
     }
@@ -245,6 +232,7 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun syncNotEnabledView() {
         launchTest(syncEnabled = false)
+        prefSync = getPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)
 
         assertNull(prefSync)
     }
@@ -252,6 +240,7 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun recommendNotEnabledView() {
         launchTest(recommendEnabled = false)
+        prefRecommend = getPreference(PREFERENCE_RECOMMEND)
 
         assertNull(prefRecommend)
     }
@@ -259,6 +248,7 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun feedbackNotEnabledView() {
         launchTest(feedbackEnabled = false)
+        prefFeedback = getPreference(PREFERENCE_FEEDBACK)
 
         assertNull(prefFeedback)
     }
@@ -266,6 +256,7 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun privacyPolicyNotEnabledView() {
         launchTest(privacyPolicyEnabled = false)
+        prefPrivacyPolicy = getPreference(PREFERENCE_PRIVACY_POLICY)
 
         assertNull(prefPrivacyPolicy)
     }
@@ -273,11 +264,11 @@ class SettingsFragmentMoreSectionTest {
     @Test
     fun imprintNotEnabledView() {
         launchTest(imprintEnabled = false)
+        prefImprint = getPreference(PREFERENCE_IMPRINT)
 
         assertNull(prefImprint)
     }
 
-    @Ignore
     @Test
     fun helpOpensNotEmptyUrl() {
         every { settingsViewModel.getHelpUrl() } returns context.getString(R.string.url_help)
@@ -285,8 +276,7 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_help)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_VIEW)
         intended(hasData(context.getString(R.string.url_help)))
     }
 
@@ -297,8 +287,7 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_sync_calendar_contacts)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_VIEW)
         intended(hasData(context.getString(R.string.url_sync_calendar_contacts)))
     }
 
@@ -307,11 +296,10 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_recommend)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(ACTION_SENDTO)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
-                hasAction(ACTION_SENDTO), hasExtra(
+                hasAction(Intent.ACTION_SENDTO), hasExtra(
                     EXTRA_SUBJECT, String.format(
                         context.getString(R.string.recommend_subject),
                         context.getString(R.string.app_name)
@@ -330,17 +318,15 @@ class SettingsFragmentMoreSectionTest {
         )
     }
 
-    @Ignore
     @Test
     fun feedbackOpensSender() {
         launchTest()
 
         onView(withText(R.string.prefs_feedback)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(ACTION_SENDTO)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
-                hasAction(ACTION_SENDTO),
+                hasAction(Intent.ACTION_SENDTO),
                 hasExtra(
                     EXTRA_SUBJECT,
                     "Android v" + BuildConfig.VERSION_NAME + " - " + context.getText(R.string.prefs_feedback)
@@ -351,7 +337,6 @@ class SettingsFragmentMoreSectionTest {
         )
     }
 
-    @Ignore
     @Test
     fun privacyPolicyOpensPrivacyPolicyActivity() {
         launchTest()
@@ -367,8 +352,7 @@ class SettingsFragmentMoreSectionTest {
         launchTest()
 
         onView(withText(R.string.prefs_imprint)).perform(click())
-        val intentResult = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent())
-        intending(hasAction(Intent.ACTION_VIEW)).respondWith(intentResult)
+        mockIntent(action = Intent.ACTION_VIEW)
         intended(hasData("https://owncloud.com/mobile"))
     }
 
