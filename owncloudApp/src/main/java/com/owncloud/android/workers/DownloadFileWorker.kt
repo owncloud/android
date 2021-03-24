@@ -2,22 +2,23 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2021 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.workers
 
+import android.accounts.Account
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -26,6 +27,7 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import at.bitfire.dav4jvm.exception.UnauthorizedException
 import com.owncloud.android.R
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
@@ -40,8 +42,12 @@ import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.ui.activity.FileActivity
+import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.errorhandling.TypeOfOperation.TransferDownload
+import com.owncloud.android.ui.preview.PreviewImageActivity
+import com.owncloud.android.ui.preview.PreviewImageFragment.Companion.canBePreviewed
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NOTIFICATION_TIMEOUT_STANDARD
@@ -66,9 +72,11 @@ class DownloadFileWorker(
     private val getFileByIdUseCase: GetFileByIdUseCase by inject()
     private val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
 
-    lateinit var accountName: String
-    lateinit var downloadRemoteFileOperation: DownloadRemoteFileOperation
+    lateinit var account: Account
     lateinit var ocFile: OCFile
+
+    lateinit var downloadRemoteFileOperation: DownloadRemoteFileOperation
+    private var lastPercent = 0
 
     /**
      * Temporal path for this file to be downloaded.
@@ -80,7 +88,7 @@ class DownloadFileWorker(
      * Temporal path where every file of this account will be downloaded.
      */
     private val temporalFolderPath
-        get() = FileStorageUtils.getTemporalPath(accountName)
+        get() = FileStorageUtils.getTemporalPath(account.name)
 
     /**
      * Final path where this file should be stored.
@@ -90,23 +98,13 @@ class DownloadFileWorker(
      */
     private val finalLocationForFile: String
         get() = ocFile.storagePath.takeUnless { it.isNullOrBlank() }
-            ?: FileStorageUtils.getDefaultSavePathFor(accountName, ocFile)
+            ?: FileStorageUtils.getDefaultSavePathFor(account.name, ocFile)
 
     override suspend fun doWork(): Result {
-
-        // Params
-        accountName = workerParameters.inputData.getString(KEY_PARAM_ACCOUNT) as String
+        val accountName = workerParameters.inputData.getString(KEY_PARAM_ACCOUNT)
         val fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1)
 
-        val ocFile: OCFile? = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId)).getDataOrNull()
-
-        // If file is not found in the database or file is a folder, return failure.
-        if (ocFile == null || ocFile.isFolder) {
-            Timber.d("PARAM: $fileId OCFILE : ${ocFile?.remotePath} is folder ${ocFile?.isFolder}")
-            return Result.failure()
-        } else {
-            this.ocFile = ocFile
-        }
+        if (!areParametersValid(accountName, fileId)) return Result.failure()
 
         return try {
             downloadFileToTemporalFile()
@@ -114,10 +112,24 @@ class DownloadFileWorker(
             updateDatabaseWithLatestInfoForThisFile()
             notifyDownloadResult(null)
         } catch (throwable: Throwable) {
-            // clean up and log
             Timber.e(throwable)
             notifyDownloadResult(throwable)
         }
+    }
+
+    /**
+     * Verify that the parameters are valid.
+     *
+     * This verification includes (at the moment):
+     * - Check whether account exists
+     * - Check whether file exists in the database
+     * - Check that the file is not a folder
+     */
+    private fun areParametersValid(accountName: String?, fileId: Long): Boolean {
+        account = AccountUtils.getOwnCloudAccountByName(appContext, accountName) ?: return false
+        ocFile = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId)).getDataOrNull() ?: return false
+
+        return !ocFile.isFolder
     }
 
     /**
@@ -179,6 +191,7 @@ class DownloadFileWorker(
         }
         saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(ocFile))
 
+        // To be done. Probably we will move it out from here.
         //mStorageManager.triggerMediaScan(file.getStoragePath())
         //mStorageManager.saveConflict(file, null)
     }
@@ -200,35 +213,7 @@ class DownloadFileWorker(
             val needsToUpdateCredentials = throwable is UnauthorizedException
             tickerId = if (needsToUpdateCredentials) R.string.downloader_download_failed_credentials_error else tickerId
 
-            val pendingIntent: PendingIntent?
-            if (needsToUpdateCredentials) {
-                // let the user update credentials with one click
-                val updateCredentialsIntent =
-                    Intent(appContext, LoginActivity::class.java).apply {
-                        putExtra(EXTRA_ACCOUNT, accountName)
-                        putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                        addFlags(Intent.FLAG_FROM_BACKGROUND)
-                    }
-                pendingIntent = PendingIntent.getActivity(
-                    appContext,
-                    System.currentTimeMillis().toInt(),
-                    updateCredentialsIntent,
-                    PendingIntent.FLAG_ONE_SHOT
-                )
-
-            } else {
-                // TODO put something smart in showDetailsIntent
-                val showDetailsIntent = Intent()
-                pendingIntent =
-                    PendingIntent.getActivity(
-                        appContext,
-                        System.currentTimeMillis().toInt(),
-                        showDetailsIntent,
-                        0
-                    )
-            }
+            val pendingIntent = if (needsToUpdateCredentials) composePendingIntentToRefreshCredentials() else null
 
             val contextText = ErrorMessageAdapter.getMessageFromOperation(
                 typeOfOperation = TransferDownload(finalLocationForFile),
@@ -265,19 +250,70 @@ class DownloadFileWorker(
         }
     }
 
+    private fun composePendingIntentToRefreshCredentials(): PendingIntent {
+        val updateCredentialsIntent =
+            Intent(appContext, LoginActivity::class.java).apply {
+                putExtra(EXTRA_ACCOUNT, account.name)
+                putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                addFlags(Intent.FLAG_FROM_BACKGROUND)
+            }
+
+        return PendingIntent.getActivity(
+            appContext,
+            System.currentTimeMillis().toInt(),
+            updateCredentialsIntent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
+    }
+
+    private fun composePendingIntentToPreviewFile(): PendingIntent {
+        /// includes a pending intent in the notification showing the details view of the file
+        val showDetailsIntent: Intent =
+            if (canBePreviewed(ocFile)) {
+                Intent(appContext, PreviewImageActivity::class.java)
+            } else {
+                Intent(appContext, FileDisplayActivity::class.java)
+            }.apply {
+                putExtra(FileActivity.EXTRA_FILE, ocFile)
+                putExtra(FileActivity.EXTRA_ACCOUNT, account)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
+
+        return PendingIntent.getActivity(
+            appContext,
+            System.currentTimeMillis().toInt(),
+            showDetailsIntent,
+            0
+        )
+    }
+
     override fun onTransferProgress(
         progressRate: Long,
         totalTransferredSoFar: Long,
         totalToTransfer: Long,
         filePath: String
     ) {
+        val percent: Int = (100.0 * totalTransferredSoFar.toDouble() / totalToTransfer.toDouble()).toInt()
+        if (percent == lastPercent) return
+
         val contentTitle = appContext.getString(R.string.downloader_download_in_progress_ticker)
 
-        val percent: Int = (100.0 * totalTransferredSoFar.toDouble() / totalToTransfer.toDouble()).toInt()
         val contentText = String.format(
             appContext.getString(R.string.downloader_download_in_progress_content),
             percent,
             File(this.finalLocationForFile).name
+        )
+
+        showNotificationWithProgress(
+            maxValue = totalToTransfer.toInt(),
+            progress = totalTransferredSoFar.toInt(),
+            notificationChannelId = DOWNLOAD_NOTIFICATION_CHANNEL_ID,
+            contentText = contentText,
+            contentTitle = contentTitle,
+            fileId = ocFile.id,
+            pendingIntent = composePendingIntentToPreviewFile()
         )
 
         // Set current progress. Observers will listen.
@@ -286,14 +322,7 @@ class DownloadFileWorker(
             setProgress(progress)
         }
 
-        showNotificationWithProgress(
-            maxValue = totalToTransfer.toInt(),
-            progress = totalTransferredSoFar.toInt(),
-            notificationChannelId = DOWNLOAD_NOTIFICATION_CHANNEL_ID,
-            contentText = contentText,
-            contentTitle = contentTitle,
-            fileId = ocFile.id
-        )
+        lastPercent = percent
     }
 
     companion object {

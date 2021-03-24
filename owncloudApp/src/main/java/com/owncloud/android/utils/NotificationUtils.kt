@@ -54,7 +54,7 @@ object NotificationUtils {
         notificationId: Int,
         intent: PendingIntent?,
         onGoing: Boolean = false,
-        timeOut: Long?
+        timeOut: Long?,
     ) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -65,6 +65,7 @@ object NotificationUtils {
             setWhen(System.currentTimeMillis())
             setContentText(contentText)
             setOngoing(onGoing)
+            setAutoCancel(true)
         }
 
         intent?.let {
