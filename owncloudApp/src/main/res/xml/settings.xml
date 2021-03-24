@@ -15,82 +15,23 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:key="preference_screen">
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:key="security_category"
-        app:title="@string/prefs_category_security">
-
-        <CheckBoxPreference
-            app:iconSpaceReserved="false"
-            app:key="set_pincode"
-            app:title="@string/prefs_passcode" />
-        <CheckBoxPreference
-            app:iconSpaceReserved="false"
-            app:key="set_pattern"
-            app:title="@string/prefs_pattern" />
-        <CheckBoxPreference
-            app:iconSpaceReserved="false"
-            app:key="set_biometric"
-            app:title="@string/prefs_biometric" />
-        <CheckBoxPreference
-            app:iconSpaceReserved="false"
-            app:key="touches_with_other_visible_windows"
-            app:summary="@string/prefs_touches_with_other_visible_windows_summary"
-            app:title="@string/prefs_touches_with_other_visible_windows" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:key="logs_category"
-        app:title="@string/actionbar_logger">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <Preference
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment"
+            app:icon="@drawable/ic_baseline_lock_24"
+            app:title="@string/prefs_category_security" />
+
+        <Preference
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"
+            app:allowDividerAbove="true"
             app:icon="@drawable/ic_baseline_description_24"
-            app:key="logs_subsection"
-            app:title="@string/prefs_enable_logging"
-            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"/>
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:key="more_category"
-        app:title="@string/prefs_category_more">
+            app:title="@string/prefs_enable_logging" />
 
         <Preference
-            app:iconSpaceReserved="false"
-            app:key="help"
-            app:title="@string/prefs_help" />
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="syncCalendarContacts"
-            app:summary="@string/prefs_sync_calendar_contacts_summary"
-            app:title="@string/prefs_sync_calendar_contacts" />
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="recommend"
-            app:title="@string/prefs_recommend" />
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="feedback"
-            app:title="@string/drawer_feedback" />
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="privacyPolicy"
-            app:title="@string/prefs_privacy_policy" />
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="imprint"
-            app:title="@string/prefs_imprint" />
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="about_app"
-            app:title="@string/about_title" />
-
-    </PreferenceCategory>
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment"
+            app:allowDividerAbove="true"
+            app:icon="@drawable/ic_baseline_add_circle_24"
+            app:title="@string/prefs_category_more" />
 
 </PreferenceScreen>
