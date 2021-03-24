@@ -49,8 +49,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private var prefPasscode: CheckBoxPreference? = null
     private var prefPattern: CheckBoxPreference? = null
     private var prefBiometric: CheckBoxPreference? = null
-    private var biometricManager: BiometricManager? = null
     private var prefTouchesWithOtherVisibleWindows: CheckBoxPreference? = null
+
+    private var biometricManager: BiometricManager? = null
 
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

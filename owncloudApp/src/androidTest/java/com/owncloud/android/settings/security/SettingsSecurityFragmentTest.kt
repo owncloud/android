@@ -24,7 +24,6 @@ import android.content.Context
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.CheckBoxPreference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -39,7 +38,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
@@ -61,13 +59,10 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-class SettingsFragmentSecuritySectionTest {
+class SettingsSecurityFragmentTest {
 
-    private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
+    private lateinit var fragmentScenario: FragmentScenario<SettingsSecurityFragment>
 
-    private lateinit var prefLogsCategory: PreferenceCategory
-    private lateinit var prefMoreCategory: PreferenceCategory
-    private lateinit var prefSecurityCategory: PreferenceCategory
     private lateinit var prefPasscode: CheckBoxPreference
     private lateinit var prefPattern: CheckBoxPreference
     private lateinit var prefBiometric: CheckBoxPreference
@@ -114,18 +109,12 @@ class SettingsFragmentSecuritySectionTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
-            prefLogsCategory = fragment.findPreference(PREFERENCE_LOGS_CATEGORY)!!
-            prefMoreCategory = fragment.findPreference(PREFERENCE_MORE_CATEGORY)!!
-            prefSecurityCategory = fragment.findPreference(PREFERENCE_SECURITY_CATEGORY)!!
             prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
             prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)!!
             prefTouchesWithOtherVisibleWindows =
                 fragment.findPreference(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)!!
         }
-
-        prefLogsCategory.isVisible = false
-        prefMoreCategory.isVisible = false
 
         Intents.init()
     }
@@ -138,12 +127,6 @@ class SettingsFragmentSecuritySectionTest {
 
     @Test
     fun securityView() {
-        prefSecurityCategory.verifyPreference(
-            keyPref = PREFERENCE_SECURITY_CATEGORY,
-            titlePref = context.getString(R.string.prefs_subsection_security),
-            visible = true
-        )
-
         prefPasscode.verifyPreference(
             keyPref = PassCodeActivity.PREFERENCE_SET_PASSCODE,
             titlePref = context.getString(R.string.prefs_passcode),
@@ -448,11 +431,5 @@ class SettingsFragmentSecuritySectionTest {
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
-    }
-
-    companion object {
-        private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
-        private const val PREFERENCE_LOGS_CATEGORY = "logs_category"
-        private const val PREFERENCE_MORE_CATEGORY = "more_category"
     }
 }

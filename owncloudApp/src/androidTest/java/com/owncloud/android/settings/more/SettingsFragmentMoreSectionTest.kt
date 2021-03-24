@@ -28,7 +28,6 @@ import android.net.Uri
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
@@ -43,7 +42,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
@@ -63,11 +62,8 @@ import org.koin.dsl.module
 
 class SettingsFragmentMoreSectionTest {
 
-    private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
+    private lateinit var fragmentScenario: FragmentScenario<SettingsMoreFragment>
 
-    private lateinit var prefSecurityCategory: PreferenceCategory
-    private lateinit var prefLogsCategory: PreferenceCategory
-    private lateinit var prefMoreCategory: PreferenceCategory
     private var prefHelp: Preference? = null
     private var prefSync: Preference? = null
     private var prefRecommend: Preference? = null
@@ -131,30 +127,15 @@ class SettingsFragmentMoreSectionTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
 
-        // These categories and preferences are not brandable
+        // This preference is not brandable
         fragmentScenario.onFragment { fragment ->
-            prefSecurityCategory = fragment.findPreference(PREFERENCE_SECURITY_CATEGORY)!!
-            prefLogsCategory = fragment.findPreference(PREFERENCE_LOGS_CATEGORY)!!
-            prefMoreCategory = fragment.findPreference(PREFERENCE_MORE_CATEGORY)!!
             prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
         }
-
-        prefSecurityCategory.isVisible = false
-        prefLogsCategory.isVisible = false
-
-        // Not a good solution but tests only pass if this is here
-        Thread.sleep(250)
     }
 
     @Test
     fun moreView() {
         launchTest()
-
-        prefMoreCategory.verifyPreference(
-            keyPref = PREFERENCE_MORE_CATEGORY,
-            titlePref = context.getString(R.string.prefs_subsection_more),
-            visible = true
-        )
 
         prefHelp = getPreference(PREFERENCE_HELP)
         assertNotNull(prefHelp)
@@ -188,7 +169,7 @@ class SettingsFragmentMoreSectionTest {
         assertNotNull(prefFeedback)
         prefFeedback?.verifyPreference(
             keyPref = PREFERENCE_FEEDBACK,
-            titlePref = context.getString(R.string.prefs_feedback),
+            titlePref = context.getString(R.string.prefs_send_feedback),
             visible = true,
             enabled = true
         )
@@ -327,7 +308,7 @@ class SettingsFragmentMoreSectionTest {
     fun feedbackOpensSender() {
         launchTest()
 
-        onView(withText(R.string.prefs_feedback)).perform(click())
+        onView(withText(R.string.prefs_send_feedback)).perform(click())
         mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
@@ -362,10 +343,6 @@ class SettingsFragmentMoreSectionTest {
     }
 
     companion object {
-        private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
-        private const val PREFERENCE_LOGS_CATEGORY = "logs_category"
-        private const val PREFERENCE_MORE_CATEGORY = "more_category"
-
         private const val PREFERENCE_HELP = "help"
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
         private const val PREFERENCE_RECOMMEND = "recommend"
