@@ -52,6 +52,7 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.hamcrest.Matchers.allOf
 import org.junit.After
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
@@ -156,6 +157,7 @@ class SettingsFragmentMoreSectionTest {
         )
 
         prefHelp = getPreference(PREFERENCE_HELP)
+        assertNotNull(prefHelp)
         prefHelp?.verifyPreference(
             keyPref = PREFERENCE_HELP,
             titlePref = context.getString(R.string.prefs_help),
@@ -164,6 +166,7 @@ class SettingsFragmentMoreSectionTest {
         )
 
         prefSync = getPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)
+        assertNotNull(prefSync)
         prefSync?.verifyPreference(
             keyPref = PREFERENCE_SYNC_CALENDAR_CONTACTS,
             titlePref = context.getString(R.string.prefs_sync_calendar_contacts),
@@ -173,6 +176,7 @@ class SettingsFragmentMoreSectionTest {
         )
 
         prefRecommend = getPreference(PREFERENCE_RECOMMEND)
+        assertNotNull(prefRecommend)
         prefRecommend?.verifyPreference(
             keyPref = PREFERENCE_RECOMMEND,
             titlePref = context.getString(R.string.prefs_recommend),
@@ -181,6 +185,7 @@ class SettingsFragmentMoreSectionTest {
         )
 
         prefFeedback = getPreference(PREFERENCE_FEEDBACK)
+        assertNotNull(prefFeedback)
         prefFeedback?.verifyPreference(
             keyPref = PREFERENCE_FEEDBACK,
             titlePref = context.getString(R.string.prefs_feedback),
@@ -189,6 +194,7 @@ class SettingsFragmentMoreSectionTest {
         )
 
         prefPrivacyPolicy = getPreference(PREFERENCE_PRIVACY_POLICY)
+        assertNotNull(prefPrivacyPolicy)
         prefPrivacyPolicy?.verifyPreference(
             keyPref = PREFERENCE_PRIVACY_POLICY,
             titlePref = context.getString(R.string.prefs_privacy_policy),
@@ -197,6 +203,7 @@ class SettingsFragmentMoreSectionTest {
         )
 
         prefImprint = getPreference(PREFERENCE_IMPRINT)
+        assertNotNull(prefImprint)
         prefImprint?.verifyPreference(
             keyPref = PREFERENCE_IMPRINT,
             titlePref = context.getString(R.string.prefs_imprint),
