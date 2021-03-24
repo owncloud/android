@@ -33,8 +33,7 @@
   <string name="common_no">Na</string>
     <string name="common_error">Gwall</string>
   <string name="common_pending">I ddod</string>
-  <string name="about_title">Ynglyn â</string>
-  <string name="create_account">Creu cyfrif</string>
+    <string name="create_account">Creu cyfrif</string>
   <string name="upload_chooser_title">Llwytho i fyny o …</string>
   <string name="uploader_upload_in_progress_ticker">Yn llwytho i fyny …</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Llwytho i fyny %2$s</string>

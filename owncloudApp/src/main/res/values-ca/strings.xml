@@ -4,8 +4,6 @@
   <string name="global_name">Nom</string>
   <string name="global_date">Data</string>
   <string name="global_size">Mida</string>
-  <string name="about_android">1%1$s Per Android</string>
-  <string name="about_version">Versió 1%1$s</string>
   <string name="actionbar_search">Buscar en aquesta carpeta</string>
   <string name="actionbar_sync">Actualitza compte</string>
   <string name="actionbar_upload">Puja un fitxer</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Comentaris</string>
   <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Més</string>
-  <string name="prefs_category_security">Seguretat</string>
+  <string name="prefs_subsection_more">Més</string>
+  <string name="prefs_subsection_security">Seguretat</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gestió de comptes</string>
   <string name="prefs_passcode">Contrasenya</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">error desconegut</string>
   <string name="common_pending">Pendent</string>
   <string name="common_important">Important</string>
-  <string name="about_title">Quant a</string>
-  <string name="change_password">Canvia la contrasenya</string>
+    <string name="change_password">Canvia la contrasenya</string>
   <string name="delete_account">Elimina el compte</string>
   <string name="create_account">Crea un compte</string>
   <string name="upload_chooser_title">pujat desde</string>
@@ -394,8 +391,7 @@
   <string name="drawer_manage_accounts">Gestió de comptes</string>
   <string name="auth_redirect_non_secure_connection_title">La connexió segura està essent redirigida a través d\'una ruta insegura</string>
   <string name="actionbar_logger">Registre</string>
-  <string name="log_open_logs_view">Obre la vista de registres.</string>
-  <string name="log_send_history_button">Enviar història</string>
+    <string name="log_send_history_button">Enviar història</string>
   <string name="log_send_no_mail_app">No es troba aplicació per enviar els registres. Si us plau, instal·la una aplicació de email.</string>
   <string name="log_send_mail_subject">%1$s app de registres Android</string>
   <string name="log_progress_dialog_text">Carregant dades...</string>

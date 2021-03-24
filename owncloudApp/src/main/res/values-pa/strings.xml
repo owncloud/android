@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s ਐਡਰਾਇਡ ਐਪ</string>
-  <string name="about_version">ਵਰਜਨ %1$s</string>
   <string name="actionbar_sync">ਅਕਾਊਂਟ ਤਾਜ਼ਾ ਕਰੋ</string>
   <string name="actionbar_upload">ਅੱਪਲੋਡ</string>
   <string name="actionbar_upload_from_apps">ਹੋਰ ਐਪਸ ਤੋਂ ਸਮੱਗਰੀ</string>
@@ -20,7 +18,7 @@
   <string name="drawer_feedback">ਸੁਝਾਅ</string>
   <string name="drawer_help">ਮਦਦ</string>
   <string name="prefs_category_general">ਆਮ</string>
-  <string name="prefs_category_more">ਹੋਰ</string>
+  <string name="prefs_subsection_more">ਹੋਰ</string>
   <string name="prefs_accounts">ਅਕਾਊਂਟ</string>
   <string name="prefs_manage_accounts">ਅਕਾਊਂਟ ਪ੍ਰਬੰਧਨ</string>
   <string name="prefs_passcode">ਪਾਸਕੋਡ ਲਾਕ</string>
@@ -72,8 +70,7 @@
   <string name="common_loading">…ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
   <string name="common_unknown">ਅਣਜਾਣ</string>
   <string name="common_error_unknown">ਅਣਜਾਣ ਗਲਤੀ</string>
-  <string name="about_title">ਇਸ ਬਾਰੇ</string>
-  <string name="change_password">ਪਾਸਵਰਡ ਬਦਲੋ</string>
+    <string name="change_password">ਪਾਸਵਰਡ ਬਦਲੋ</string>
   <string name="delete_account">ਅਕਾਊਂਟ ਹਟਾਓ</string>
   <string name="create_account">ਅਕਾਊਂਟ ਬਣਾਓ</string>
   <string name="upload_chooser_title">… ਤੋਂ ਅੱਪਲੋਡ</string>

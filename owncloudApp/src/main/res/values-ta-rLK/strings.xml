@@ -8,7 +8,7 @@
   <string name="drawer_open">திறக்க</string>
   <string name="drawer_help">உதவி</string>
   <string name="prefs_category_general">பொதுவான</string>
-  <string name="prefs_category_more">மேலதிக</string>
+  <string name="prefs_subsection_more">மேலதிக</string>
   <string name="prefs_accounts">கணக்குகள்</string>
   <string name="prefs_manage_accounts">கணக்குகளை நிர்வகிக்க</string>
   <string name="prefs_help">உதவி</string>
@@ -35,8 +35,7 @@
     <string name="common_back">பின்னுக்கு</string>
   <string name="common_error">வழு</string>
   <string name="common_pending">நிலுவையிலுள்ள</string>
-  <string name="about_title">பற்றி</string>
-  <string name="change_password">கடவுச்சொல்லை மாற்றுக</string>
+    <string name="change_password">கடவுச்சொல்லை மாற்றுக</string>
   <string name="create_account">கணக்கை உருவாக்குக</string>
   <string name="upload_chooser_title">பதிவேற்றல் படிவம்</string>
   <string name="uploader_info_dirname">கோப்புறை பெயர்</string>

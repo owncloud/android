@@ -27,8 +27,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
@@ -67,9 +65,9 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun updateToolbarTitle() {
         val titleId = when (supportFragmentManager.fragments.lastOrNull()) {
-            is SettingsSecurityFragment -> R.string.prefs_category_security
-            is SettingsLogsFragment -> R.string.prefs_enable_logging
-            is SettingsMoreFragment -> R.string.prefs_category_more
+            is SettingsSecurityFragment -> R.string.prefs_subsection_security
+            is SettingsLogsFragment -> R.string.prefs_subsection_logging
+            is SettingsMoreFragment -> R.string.prefs_subsection_more
             else -> R.string.actionbar_settings
         }
 

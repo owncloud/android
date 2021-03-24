@@ -4,8 +4,6 @@
   <string name="global_name">Nome</string>
   <string name="global_date">Data</string>
   <string name="global_size">Tamanho</string>
-  <string name="about_android">%1$s para Android</string>
-  <string name="about_version">Versão %1$s</string>
   <string name="actionbar_search">Procurar no diretório atual</string>
   <string name="actionbar_sync">Atualizar conta</string>
   <string name="actionbar_upload">Enviar</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Comentários</string>
   <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">Geral</string>
-  <string name="prefs_category_more">Mais</string>
-  <string name="prefs_category_security">Segurança</string>
+  <string name="prefs_subsection_more">Mais</string>
+  <string name="prefs_subsection_security">Segurança</string>
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerenciar contas</string>
   <string name="prefs_passcode">Bloqueio de senha</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">erro desconhecido</string>
   <string name="common_pending">Pendente</string>
   <string name="common_important">Importante</string>
-  <string name="about_title">Sobre</string>
-  <string name="change_password">Alterar senha</string>
+    <string name="change_password">Alterar senha</string>
   <string name="delete_account">Remover conta</string>
   <string name="create_account">Criar conta</string>
   <string name="upload_chooser_title">Enviando de</string>
@@ -396,8 +393,7 @@
   <string name="drawer_manage_accounts">Gerenciar contas</string>
   <string name="auth_redirect_non_secure_connection_title">A conexão segura está redirecionada através de uma rota insegura.</string>
   <string name="actionbar_logger">Logs</string>
-  <string name="log_open_logs_view">Abrir visualização de registros</string>
-  <string name="log_send_history_button">Enviar histórico</string>
+    <string name="log_send_history_button">Enviar histórico</string>
   <string name="log_send_no_mail_app">Nenhum aplicativo para envio de logs foi encontrado. Por favor instale um aplicativo de e-mail</string>
   <string name="log_send_mail_subject">%1$s logs do Android app</string>
   <string name="log_progress_dialog_text">Carregando dados...</string>

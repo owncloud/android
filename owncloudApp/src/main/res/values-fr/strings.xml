@@ -4,8 +4,6 @@
   <string name="global_name">Nom</string>
   <string name="global_date">Date</string>
   <string name="global_size">Taille</string>
-  <string name="about_android">%1$s pour Android</string>
-  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Rechercher dans ce dossier</string>
   <string name="actionbar_sync">Actualiser le compte</string>
   <string name="actionbar_upload">Téléverser</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Retour d’expérience</string>
   <string name="drawer_help">Aide...</string>
   <string name="prefs_category_general">Général</string>
-  <string name="prefs_category_more">Plus</string>
-  <string name="prefs_category_security">Sécurité</string>
+  <string name="prefs_subsection_more">Plus</string>
+  <string name="prefs_subsection_security">Sécurité</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gérer les comptes</string>
   <string name="prefs_passcode">Code de sécurité</string>
@@ -144,8 +142,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="common_error_unknown">Erreur inconnue</string>
   <string name="common_pending">En attente</string>
   <string name="common_important">Important</string>
-  <string name="about_title">À propos</string>
-  <string name="change_password">Changer de mot de passe</string>
+    <string name="change_password">Changer de mot de passe</string>
   <string name="delete_account">Supprimer le compte</string>
   <string name="create_account">Créer un compte</string>
   <string name="upload_chooser_title">Téléversez depuis</string>

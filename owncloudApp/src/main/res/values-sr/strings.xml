@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Андроид апликација</string>
-  <string name="about_version">верзија %1$s</string>
   <string name="actionbar_sync">Освежи налог</string>
   <string name="actionbar_upload">Отпреми</string>
   <string name="actionbar_upload_from_apps">садржај из других апликација</string>
@@ -20,8 +18,8 @@
   <string name="drawer_feedback">Ваше мишљење</string>
   <string name="drawer_help">Помоћ</string>
   <string name="prefs_category_general">Опште</string>
-  <string name="prefs_category_more">Остало</string>
-  <string name="prefs_category_security">Безбедност</string>
+  <string name="prefs_subsection_more">Остало</string>
+  <string name="prefs_subsection_security">Безбедност</string>
   <string name="prefs_accounts">Налози</string>
   <string name="prefs_manage_accounts">Управљање налозима</string>
   <string name="prefs_passcode">Закључавање кодом</string>
@@ -78,8 +76,7 @@
   <string name="common_unknown">непознато</string>
   <string name="common_error_unknown">Непозната грешка</string>
   <string name="common_pending">На чекању</string>
-  <string name="about_title">О програму</string>
-  <string name="change_password">Измени лозинку</string>
+    <string name="change_password">Измени лозинку</string>
   <string name="delete_account">Уклони налог</string>
   <string name="create_account">Отвори налог</string>
   <string name="upload_chooser_title">Отпреми из…</string>

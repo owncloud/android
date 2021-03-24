@@ -526,11 +526,7 @@ public class Preferences extends PreferenceActivity {
          */
         mAboutApp = findPreference(PREFERENCE_ABOUT_APP);
         if (mAboutApp != null) {
-            mAboutApp.setTitle(String.format(
-                    getString(R.string.about_android),
-                    getString(R.string.app_name)
-            ));
-            mAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
+            mAboutApp.setSummary(String.format(getString(R.string.prefs_app_version_summary), getString(R.string.app_name), BuildConfig.BUILD_TYPE, BuildConfig.VERSION_NAME, BuildConfig.COMMIT_SHA1));
             mAboutApp.setOnPreferenceClickListener(preference -> {
                 int clickCount = mPreferencesProvider.getInt(PREF__LEGACY_CLICK_DEV_MENU, 0);
                 if (mPreferencesProvider.getInt(PREF__LEGACY_CLICK_DEV_MENU, 0) > PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER) {

@@ -10,8 +10,8 @@
   <string name="drawer_feedback">უკუკავშირი</string>
   <string name="drawer_help">დახმარება</string>
   <string name="prefs_category_general">ზოგადი</string>
-  <string name="prefs_category_more">უფრო მეტი</string>
-  <string name="prefs_category_security">უსაფრთხოება</string>
+  <string name="prefs_subsection_more">უფრო მეტი</string>
+  <string name="prefs_subsection_security">უსაფრთხოება</string>
   <string name="prefs_accounts">ანგარიში</string>
   <string name="prefs_help">დახმარება</string>
   <string name="prefs_feedback">უკუკავშირი</string>
@@ -39,8 +39,7 @@
     <string name="common_error">შეცდომა</string>
   <string name="common_error_unknown">უცნობი შეცდომა</string>
   <string name="common_pending">მოცდის რეჟიმში</string>
-  <string name="about_title">ჩვენს შესახებ</string>
-  <string name="change_password">პაროლის შეცვლა</string>
+    <string name="change_password">პაროლის შეცვლა</string>
   <string name="create_account">ანგარიშის შექმნა</string>
   <string name="upload_chooser_title">ატვირთე აქედან…</string>
   <string name="uploader_info_dirname">ფოლდერის სახელი</string>

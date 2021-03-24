@@ -4,8 +4,6 @@
   <string name="global_name">Ad</string>
   <string name="global_date">Tarih</string>
   <string name="global_size">Boyut</string>
-  <string name="about_android">Android için %1$s</string>
-  <string name="about_version">Sürüm %1$s</string>
   <string name="actionbar_search">Bu klasörü ara</string>
   <string name="actionbar_sync">Hesabı yenile</string>
   <string name="actionbar_upload">Yükle</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Geribildirim</string>
   <string name="drawer_help">Yardım</string>
   <string name="prefs_category_general">Genel</string>
-  <string name="prefs_category_more">Daha fazla</string>
-  <string name="prefs_category_security">Güvenlik</string>
+  <string name="prefs_subsection_more">Daha fazla</string>
+  <string name="prefs_subsection_security">Güvenlik</string>
   <string name="prefs_accounts">Hesaplar</string>
   <string name="prefs_manage_accounts">Hesapları yönet</string>
   <string name="prefs_passcode">Parola kod kilidi</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">bilinmeyen hata</string>
   <string name="common_pending">Bekliyor</string>
   <string name="common_important">Önemli</string>
-  <string name="about_title">Hakkında</string>
-  <string name="change_password">Parola değiştir</string>
+    <string name="change_password">Parola değiştir</string>
   <string name="delete_account">Hesabı kaldır</string>
   <string name="create_account">Hesap oluştur</string>
   <string name="upload_chooser_title">Şuradan yükle</string>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_version">பதிப்பு எண் %1$s</string>
-  <string name="actionbar_sync">கணக்கை புதுப்பி </string>
+    <string name="actionbar_sync">கணக்கை புதுப்பி </string>
   <string name="actionbar_upload">பதிவேற்று</string>
   <string name="actionbar_upload_from_apps">பிற மென்பொருள்களில் இருந்த ஆவணங்கள்</string>
   <string name="actionbar_upload_files">கோப்புகள்</string>
@@ -11,7 +10,7 @@
   <string name="actionbar_see_details">விவரங்கள்</string>
   <string name="actionbar_send_file">அனுப்பவும்</string>
   <string name="prefs_category_general">பொது</string>
-  <string name="prefs_category_more">மேலும்</string>
+  <string name="prefs_subsection_more">மேலும்</string>
   <string name="prefs_accounts">கணக்குகள்</string>
   <string name="prefs_log_summary">இது சிக்கல்களை பதிவு செய்ய பயன்படுகின்றது</string>
   <string name="prefs_log_summary_history">இது பதிவுசெய்யப்பட்ட பதிகைகள் காட்டுகிறது</string>
