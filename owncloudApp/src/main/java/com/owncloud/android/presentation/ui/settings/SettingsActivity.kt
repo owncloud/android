@@ -32,6 +32,8 @@ import androidx.preference.PreferenceFragmentCompat
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -65,7 +67,9 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun updateToolbarTitle() {
         val titleId = when (supportFragmentManager.fragments.lastOrNull()) {
-            is SettingsLogsFragment -> R.string.actionbar_logger
+            is SettingsSecurityFragment -> R.string.prefs_category_security
+            is SettingsLogsFragment -> R.string.prefs_enable_logging
+            is SettingsMoreFragment -> R.string.prefs_category_more
             else -> R.string.actionbar_settings
         }
 
