@@ -4,7 +4,8 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Abel García de Prada
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,11 +29,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.ui.fragment.FileFragment
-import com.owncloud.android.utils.FileStorageUtils
 import timber.log.Timber
 import java.util.HashMap
 import java.util.HashSet
@@ -40,44 +39,22 @@ import java.util.HashSet
 /**
  * Adapter class that provides Fragment instances
  */
-//public class PreviewImagePagerAdapter extends PagerAdapter {
 class PreviewImagePagerAdapter(
-    fragmentManager: FragmentManager?, parentFolder: OCFile?,
-    account: Account, storageManager: FileDataStorageManager?
+    fragmentManager: FragmentManager,
+    private val account: Account,
+    private val mImageFiles: MutableList<OCFile>
 ) : FragmentStatePagerAdapter(
-    fragmentManager!!
+    fragmentManager
 ) {
-    private var mImageFiles: MutableList<OCFile>
-    private val mAccount: Account
     private val mObsoleteFragments: MutableSet<Any>
     private val mObsoletePositions: MutableSet<Int>
     private val mDownloadErrors: MutableSet<Int>
-    private val mStorageManager: FileDataStorageManager
     private val mCachedFragments: MutableMap<Int, FileFragment>
 
-    /**
-     * Constructor.
-     *
-     * @param fragmentManager [FragmentManager] instance that will handle
-     * the [Fragment]s provided by the adapter.
-     * @param parentFolder    Folder where images will be searched for.
-     * @param storageManager  Bridge to database.
-     */
     init {
-        requireNotNull(fragmentManager) { "NULL FragmentManager instance" }
-        requireNotNull(parentFolder) { "NULL parent folder" }
-        requireNotNull(storageManager) { "NULL storage manager" }
-        mAccount = account
-        mStorageManager = storageManager
-        mImageFiles = mStorageManager.getFolderImages(parentFolder).toMutableList()
-        mImageFiles = FileStorageUtils.sortFolder(
-            mImageFiles, FileStorageUtils.mSortOrderFileDisp,
-            FileStorageUtils.mSortAscendingFileDisp
-        )
         mObsoleteFragments = HashSet()
         mObsoletePositions = HashSet()
         mDownloadErrors = HashSet()
-        //mFragmentManager = fragmentManager;
         mCachedFragments = HashMap()
     }
 
@@ -93,15 +70,15 @@ class PreviewImagePagerAdapter(
         val fragment: Fragment
         when {
             file.isAvailableLocally -> {
-                fragment = PreviewImageFragment.newInstance(file, mAccount, mObsoletePositions.contains(i))
+                fragment = PreviewImageFragment.newInstance(file, account, mObsoletePositions.contains(i))
             }
             mDownloadErrors.contains(i) -> {
-                fragment = FileDownloadFragment.newInstance(file, mAccount, true)
+                fragment = FileDownloadFragment.newInstance(file, account, true)
                 (fragment as FileDownloadFragment).setError(true)
                 mDownloadErrors.remove(i)
             }
             else -> {
-                fragment = FileDownloadFragment.newInstance(file, mAccount, mObsoletePositions.contains(i))
+                fragment = FileDownloadFragment.newInstance(file, account, mObsoletePositions.contains(i))
             }
         }
         mObsoletePositions.remove(i)
@@ -164,9 +141,7 @@ class PreviewImagePagerAdapter(
         super.destroyItem(container, position, `object`)
     }
 
-    fun pendingErrorAt(position: Int): Boolean {
-        return mDownloadErrors.contains(position)
-    }
+    fun pendingErrorAt(position: Int) = mDownloadErrors.contains(position)
 
     /**
      * Reset the image zoom to default value for each CachedFragments
