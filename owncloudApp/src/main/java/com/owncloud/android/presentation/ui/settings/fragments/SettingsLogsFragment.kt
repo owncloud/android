@@ -48,16 +48,16 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
         prefLogsView = findPreference(PREFERENCE_LOGGER)
 
         with(settingsViewModel.isLoggingEnabled()) {
-            prefHttpLogs?.isVisible = this
-            prefLogsView?.isVisible = this
+            prefHttpLogs?.isEnabled = this
+            prefLogsView?.isEnabled = this
         }
 
         prefEnableLogging?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
             val value = newValue as Boolean
             settingsViewModel.setEnableLogging(value)
 
-            prefHttpLogs?.isVisible = value
-            prefLogsView?.isVisible = value
+            prefHttpLogs?.isEnabled = value
+            prefLogsView?.isEnabled = value
             if (!value) {
                 // Disable http logs when global logs are disabled.
                 settingsViewModel.shouldLogHttpRequests(value)
