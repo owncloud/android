@@ -4,8 +4,6 @@
   <string name="global_name">名称</string>
   <string name="global_date">日期</string>
   <string name="global_size">大小</string>
-  <string name="about_android">%1$s Android版</string>
-  <string name="about_version">版本 %1$s</string>
   <string name="actionbar_search">在此文件夹搜索</string>
   <string name="actionbar_sync">刷新帐户</string>
   <string name="actionbar_upload">上传</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">反馈</string>
   <string name="drawer_help">帮助</string>
   <string name="prefs_category_general">常规</string>
-  <string name="prefs_category_more">更多</string>
-  <string name="prefs_category_security">安全</string>
+  <string name="prefs_subsection_more">更多</string>
+  <string name="prefs_subsection_security">安全</string>
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
@@ -137,8 +135,7 @@
   <string name="common_error_unknown">未知错误</string>
   <string name="common_pending">等待</string>
   <string name="common_important">重要</string>
-  <string name="about_title">关于</string>
-  <string name="change_password">修改密码</string>
+    <string name="change_password">修改密码</string>
   <string name="delete_account">删除账号</string>
   <string name="create_account">创建账号</string>
   <string name="upload_chooser_title">上传自</string>

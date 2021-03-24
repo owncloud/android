@@ -4,8 +4,6 @@
   <string name="global_name">Nome</string>
   <string name="global_date">Data</string>
   <string name="global_size">Dimensione</string>
-  <string name="about_android">%1$s per Android</string>
-  <string name="about_version">Versione %1$s</string>
   <string name="actionbar_search">Cerca questa cartella</string>
   <string name="actionbar_sync">Aggiorna account</string>
   <string name="actionbar_upload">Carica un file</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Segnalazioni</string>
   <string name="drawer_help">Aiuto</string>
   <string name="prefs_category_general">Generale</string>
-  <string name="prefs_category_more">Altro</string>
-  <string name="prefs_category_security">Protezione</string>
+  <string name="prefs_subsection_more">Altro</string>
+  <string name="prefs_subsection_security">Protezione</string>
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">Errore sconosciuto</string>
   <string name="common_pending">In corso</string>
   <string name="common_important">Importante</string>
-  <string name="about_title">Informazioni</string>
-  <string name="change_password">Modifica la password</string>
+    <string name="change_password">Modifica la password</string>
   <string name="delete_account">Rimuovi account</string>
   <string name="create_account">Crea account</string>
   <string name="upload_chooser_title">Invia da</string>

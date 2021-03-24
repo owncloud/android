@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_version">versi %1$s</string>
-  <string name="actionbar_upload">Muat naik</string>
+    <string name="actionbar_upload">Muat naik</string>
   <string name="actionbar_upload_files">Fail-fail</string>
   <string name="actionbar_open_with">Buka dengan</string>
   <string name="actionbar_settings">Set</string>
@@ -11,7 +10,7 @@
   <string name="drawer_open">Buka</string>
   <string name="drawer_help">Bantuan</string>
   <string name="prefs_category_general">Umum</string>
-  <string name="prefs_category_more">Lanjutan</string>
+  <string name="prefs_subsection_more">Lanjutan</string>
   <string name="prefs_accounts">Akaun</string>
   <string name="prefs_help">Bantuan</string>
   <string name="auth_username">Nama pengguna</string>
@@ -37,8 +36,7 @@
     <string name="common_back">Kembali</string>
   <string name="common_error">Ralat</string>
   <string name="common_pending">Dalam proses</string>
-  <string name="about_title">Mengenai</string>
-  <string name="change_password">Ubah kata laluan</string>
+    <string name="change_password">Ubah kata laluan</string>
   <string name="uploader_upload_succeeded_ticker">Muatnaik berjaya</string>
   <string name="uploader_upload_failed_ticker">Muatnaik gagal</string>
   <string name="downloader_download_in_progress_ticker">Muatturun....</string>

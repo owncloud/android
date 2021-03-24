@@ -4,8 +4,6 @@
   <string name="global_name">Namn</string>
   <string name="global_date">Datum</string>
   <string name="global_size">Storlek</string>
-  <string name="about_android">\'%1$s\' för Android</string>
-  <string name="about_version">Version \'%1$s\'</string>
   <string name="actionbar_search">Sök i denna map</string>
   <string name="actionbar_sync">Uppdatera konto</string>
   <string name="actionbar_upload">Ladda upp</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Hjälp</string>
   <string name="prefs_category_general">Allmänt</string>
-  <string name="prefs_category_more">Mer</string>
-  <string name="prefs_category_security">Säkerhet</string>
+  <string name="prefs_subsection_more">Mer</string>
+  <string name="prefs_subsection_security">Säkerhet</string>
   <string name="prefs_accounts">Konton</string>
   <string name="prefs_manage_accounts">Hantera konton</string>
   <string name="prefs_passcode">Lösenordslås</string>
@@ -110,8 +108,7 @@
   <string name="common_unknown">okänt</string>
   <string name="common_pending">Väntar</string>
   <string name="common_important">Viktigt</string>
-  <string name="about_title">Om</string>
-  <string name="change_password">Ändra lösenord</string>
+    <string name="change_password">Ändra lösenord</string>
   <string name="delete_account">Radera konto</string>
   <string name="create_account">Skapa konto</string>
   <string name="uploader_info_dirname">Mappnamn</string>

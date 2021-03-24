@@ -4,8 +4,6 @@
   <string name="global_name">Navn</string>
   <string name="global_date">Dato</string>
   <string name="global_size">Størrelse</string>
-  <string name="about_android">%1$s for Android</string>
-  <string name="about_version">Versjon %1$s</string>
   <string name="actionbar_search">Søk i denne mappen</string>
   <string name="actionbar_sync">Oppdater konto</string>
   <string name="actionbar_upload">Last opp</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Tilbakemelding</string>
   <string name="drawer_help">Hjelp</string>
   <string name="prefs_category_general">Generelt</string>
-  <string name="prefs_category_more">Mer</string>
-  <string name="prefs_category_security">Sikkerhet</string>
+  <string name="prefs_subsection_more">Mer</string>
+  <string name="prefs_subsection_security">Sikkerhet</string>
   <string name="prefs_accounts">Kontoer</string>
   <string name="prefs_manage_accounts">Håndter kontoer</string>
   <string name="prefs_passcode">Passordlås</string>
@@ -143,8 +141,7 @@
   <string name="common_error_unknown">ukjent feil</string>
   <string name="common_pending">Venter</string>
   <string name="common_important">Viktig</string>
-  <string name="about_title">Om</string>
-  <string name="change_password">Endre passord</string>
+    <string name="change_password">Endre passord</string>
   <string name="delete_account">Fjern konto</string>
   <string name="create_account">Opprett konto</string>
   <string name="upload_chooser_title">Last opp fra</string>

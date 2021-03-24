@@ -4,8 +4,7 @@
   <string name="global_name">Nome</string>
   <string name="global_date">Data</string>
   <string name="global_size">Tamanho</string>
-  <string name="about_version">Versão %1$s</string>
-  <string name="actionbar_search">Procurar esta pasta</string>
+    <string name="actionbar_search">Procurar esta pasta</string>
   <string name="actionbar_sync">Atualizar conta</string>
   <string name="actionbar_upload">Enviar</string>
   <string name="actionbar_upload_from_apps">Conteúdo de outras aplicações</string>
@@ -28,8 +27,8 @@
   <string name="drawer_feedback">Opinião</string>
   <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">Geral</string>
-  <string name="prefs_category_more">Mais</string>
-  <string name="prefs_category_security">Segurança</string>
+  <string name="prefs_subsection_more">Mais</string>
+  <string name="prefs_subsection_security">Segurança</string>
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerir contas</string>
   <string name="prefs_passcode">Proteção por código</string>
@@ -109,8 +108,7 @@
   <string name="common_unknown">desconhecido</string>
   <string name="common_pending">Pendente</string>
   <string name="common_important">Importante</string>
-  <string name="about_title">Sobre</string>
-  <string name="change_password">Alterar palavra-passe</string>
+    <string name="change_password">Alterar palavra-passe</string>
   <string name="delete_account">Remover conta</string>
   <string name="create_account">Criar conta</string>
   <string name="uploader_info_dirname">Nome da pasta</string>

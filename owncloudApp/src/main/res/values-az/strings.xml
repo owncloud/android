@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_version">versiya %1$s</string>
-  <string name="actionbar_sync">Yenilənmə hesabı</string>
+    <string name="actionbar_sync">Yenilənmə hesabı</string>
   <string name="actionbar_upload">Serverə yüklə</string>
   <string name="actionbar_upload_from_apps">Digər porgramların kontenti</string>
   <string name="actionbar_upload_files">Fayllar</string>
@@ -15,8 +14,8 @@
   <string name="drawer_feedback">Geriyə cavab</string>
   <string name="drawer_help">Kömək</string>
   <string name="prefs_category_general">Ümumi</string>
-  <string name="prefs_category_more">Daha da</string>
-  <string name="prefs_category_security">Təhlükəsizlik</string>
+  <string name="prefs_subsection_more">Daha da</string>
+  <string name="prefs_subsection_security">Təhlükəsizlik</string>
   <string name="prefs_accounts">Hesablar</string>
   <string name="prefs_log_summary">Bu problemlərin jurnal edilməsi üçün istifadə edilir</string>
   <string name="prefs_log_summary_history">Bu, yazılmış jurnalları göstərir</string>
@@ -59,8 +58,7 @@
   <string name="common_loading">Yüklənir…</string>
   <string name="common_error_unknown">Bəlli olmayan səhv baş verdi</string>
   <string name="common_pending">Gözləmə</string>
-  <string name="about_title">Haqqında</string>
-  <string name="change_password">Şifrəni dəyiş</string>
+    <string name="change_password">Şifrəni dəyiş</string>
   <string name="create_account">Hesab yarat</string>
   <string name="upload_chooser_title">Burdan yüklə …</string>
   <string name="uploader_info_dirname">Qovluq adı</string>

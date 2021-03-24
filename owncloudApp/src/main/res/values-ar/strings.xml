@@ -4,8 +4,6 @@
   <string name="global_name">الاسم</string>
   <string name="global_date">التاريخ</string>
   <string name="global_size">الحجم</string>
-  <string name="about_android">%1$s للأندرويد</string>
-  <string name="about_version">إصدار %1$s</string>
   <string name="actionbar_search">بحث في هذا المجلد</string>
   <string name="actionbar_sync">تحديث الحساب</string>
   <string name="actionbar_upload">تحميل</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">ملاحظات</string>
   <string name="drawer_help">تعليمات</string>
   <string name="prefs_category_general">عام</string>
-  <string name="prefs_category_more">المزيد</string>
-  <string name="prefs_category_security">الأمان</string>
+  <string name="prefs_subsection_more">المزيد</string>
+  <string name="prefs_subsection_security">الأمان</string>
   <string name="prefs_accounts">حسابات</string>
   <string name="prefs_manage_accounts">إدارة الحسابات</string>
   <string name="prefs_passcode">قفل رمز المرور</string>
@@ -146,8 +144,7 @@
   <string name="common_error_unknown">خطأ غير معروف</string>
   <string name="common_pending">تعليق</string>
   <string name="common_important">مهم</string>
-  <string name="about_title">عن</string>
-  <string name="change_password">تغيير كلمة المرور</string>
+    <string name="change_password">تغيير كلمة المرور</string>
   <string name="delete_account">حذف الحساب</string>
   <string name="create_account">إنشاء حساب</string>
   <string name="upload_chooser_title">تحميل من</string>
@@ -394,8 +391,7 @@
   <string name="drawer_manage_accounts">إدارة الحسابات</string>
   <string name="auth_redirect_non_secure_connection_title">يُعاد توجيه الاتصال الآمن خلال مسار غير آمن.</string>
   <string name="actionbar_logger">السجلات</string>
-  <string name="log_open_logs_view">افتح عرض السجلات</string>
-  <string name="log_send_history_button">إرسال المحفوظات</string>
+    <string name="log_send_history_button">إرسال المحفوظات</string>
   <string name="log_send_no_mail_app">لم يتم العثور على تطبيق لإرسال السجلات. يُرجى تثبيت تطبيق بريد.</string>
   <string name="log_send_mail_subject">%1$s سجلات تطبيقات الأندرويد</string>
   <string name="log_progress_dialog_text">جارٍ تحميل البيانات…</string>
