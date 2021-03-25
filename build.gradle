@@ -28,7 +28,7 @@ buildscript {
         espressoTestVersion = '3.3.0'
         fragmentTestVersion = "1.1.0"
         uiAutomatorTestVersion = "2.2.0"
-        annotationTestVersion = "1.1.0"
+        annotationTestVersion = "1.2.0"
 
         // Extensions
         ktxVersion = "1.1.0"
