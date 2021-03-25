@@ -74,7 +74,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 prefPasscode?.isChecked = false
 
                 // Do not allow to use biometric lock since Passcode lock has been disabled
-                disableBiometric(getString(R.string.prefs_biometric_summary))
+                disableBiometric()
             } else {
                 showMessageInSnackbar(getString(R.string.pass_code_error_remove))
             }
@@ -100,7 +100,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 prefPattern?.isChecked = false
 
                 // Do not allow to use biometric lock since Pattern lock has been disabled
-                disableBiometric(getString(R.string.prefs_biometric_summary))
+                disableBiometric()
             } else {
                 showMessageInSnackbar(getString(R.string.pattern_error_remove))
             }
@@ -157,7 +157,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
             // Disable biometric lock if Passcode or Pattern locks are disabled
             if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
-                disableBiometric(getString(R.string.prefs_biometric_summary))
+                disableBiometric()
             }
             prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
                 val incomingValue = newValue as Boolean
@@ -204,10 +204,10 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         prefBiometric?.summary = null
     }
 
-    private fun disableBiometric(summary: String) {
+    private fun disableBiometric() {
         prefBiometric?.isChecked = false
         prefBiometric?.isEnabled = false
-        prefBiometric?.summary = summary
+        prefBiometric?.summary = getString(R.string.prefs_biometric_summary)
     }
 
     companion object {
