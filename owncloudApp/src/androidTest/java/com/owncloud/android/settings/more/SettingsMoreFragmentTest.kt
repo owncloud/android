@@ -70,7 +70,6 @@ class SettingsMoreFragmentTest {
     private var prefFeedback: Preference? = null
     private var prefPrivacyPolicy: Preference? = null
     private var prefImprint: Preference? = null
-    private lateinit var prefAboutApp: Preference
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var context: Context
@@ -126,11 +125,6 @@ class SettingsMoreFragmentTest {
         every { settingsViewModel.isImprintEnabled() } returns imprintEnabled
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
-
-        // This preference is not brandable
-        fragmentScenario.onFragment { fragment ->
-            prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
-        }
     }
 
     @Test
@@ -188,20 +182,6 @@ class SettingsMoreFragmentTest {
         prefImprint?.verifyPreference(
             keyPref = PREFERENCE_IMPRINT,
             titlePref = context.getString(R.string.prefs_imprint),
-            visible = true,
-            enabled = true
-        )
-
-        prefAboutApp.verifyPreference(
-            keyPref = PREFERENCE_ABOUT_APP,
-            titlePref = context.getString(R.string.prefs_app_version),
-            summaryPref = String.format(
-                context.getString(R.string.prefs_app_version_summary),
-                context.getString(R.string.app_name),
-                BuildConfig.BUILD_TYPE,
-                BuildConfig.VERSION_NAME,
-                BuildConfig.COMMIT_SHA1
-            ),
             visible = true,
             enabled = true
         )
@@ -349,6 +329,5 @@ class SettingsMoreFragmentTest {
         private const val PREFERENCE_FEEDBACK = "feedback"
         private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
         private const val PREFERENCE_IMPRINT = "imprint"
-        private const val PREFERENCE_ABOUT_APP = "about_app"
     }
 }

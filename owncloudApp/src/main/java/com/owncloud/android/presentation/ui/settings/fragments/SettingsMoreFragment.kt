@@ -45,7 +45,6 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
     private var prefFeedback: Preference? = null
     private var prefPrivacyPolicy: Preference? = null
     private var prefImprint: Preference? = null
-    private var prefAboutApp: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_more, rootKey)
@@ -57,7 +56,6 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         prefFeedback = findPreference(PREFERENCE_FEEDBACK)
         prefPrivacyPolicy = findPreference(PREFERENCE_PRIVACY_POLICY)
         prefImprint = findPreference(PREFERENCE_IMPRINT)
-        prefAboutApp = findPreference(PREFERENCE_ABOUT_APP)
 
         // Help
         if (settingsViewModel.isHelpEnabled()) {
@@ -132,15 +130,6 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         } else {
             moreScreen?.removePreference(prefImprint)
         }
-
-        // About app
-        prefAboutApp?.summary = String.format(
-            getString(R.string.prefs_app_version_summary),
-            getString(R.string.app_name),
-            BuildConfig.BUILD_TYPE,
-            BuildConfig.VERSION_NAME,
-            BuildConfig.COMMIT_SHA1
-        )
     }
 
     companion object {
@@ -151,7 +140,6 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         private const val PREFERENCE_FEEDBACK = "feedback"
         private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
         private const val PREFERENCE_IMPRINT = "imprint"
-        private const val PREFERENCE_ABOUT_APP = "about_app"
     }
 
 }
