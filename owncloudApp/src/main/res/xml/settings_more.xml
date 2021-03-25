@@ -43,9 +43,5 @@
         app:iconSpaceReserved="false"
         app:key="imprint"
         app:title="@string/prefs_imprint" />
-    <Preference
-        app:iconSpaceReserved="false"
-        app:key="about_app"
-        app:title="@string/prefs_app_version" />
 
 </PreferenceScreen>
