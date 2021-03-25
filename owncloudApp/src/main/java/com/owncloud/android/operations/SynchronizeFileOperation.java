@@ -38,6 +38,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.utils.FileStorageUtils;
 import timber.log.Timber;
 
@@ -243,20 +244,23 @@ public class SynchronizeFileOperation extends SyncOperation {
      * @param file OCFile object representing the file to download
      */
     private void requestForDownload(OCFile file) {
-        Intent intent = new Intent(mContext, FileDownloader.class);
-        intent.putExtra(FileDownloader.KEY_ACCOUNT, mAccount);
-        intent.putExtra(FileDownloader.KEY_FILE, file);
+        TransferManager transferManager = new TransferManager(MainApp.Companion.getAppContext());
+        transferManager.downloadFile(mAccount, file);
 
-        // Since in Android O and above the apps in background are not allowed to start background
-        // services and available offline feature may try to do it, this is the way to proceed
-        if (mRequestedFromAvOfflineJobService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            intent.putExtra(FileDownloader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
-            Timber.d("Download file from foreground/background, startForeground() will be called soon");
-            mContext.startForegroundService(intent);
-        } else {
-            Timber.d("Download file from foreground");
-            mContext.startService(intent);
-        }
+//        Intent intent = new Intent(mContext, FileDownloader.class);
+//        intent.putExtra(FileDownloader.KEY_ACCOUNT, mAccount);
+//        intent.putExtra(FileDownloader.KEY_FILE, file);
+//
+//        // Since in Android O and above the apps in background are not allowed to start background
+//        // services and available offline feature may try to do it, this is the way to proceed
+//        if (mRequestedFromAvOfflineJobService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            intent.putExtra(FileDownloader.KEY_IS_AVAILABLE_OFFLINE_FILE, true);
+//            Timber.d("Download file from foreground/background, startForeground() will be called soon");
+//            mContext.startForegroundService(intent);
+//        } else {
+//            Timber.d("Download file from foreground");
+//            mContext.startService(intent);
+//        }
 
         mTransferWasRequested = true;
     }
