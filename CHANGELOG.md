@@ -1,3 +1,27 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+
+
+Summary
+-------
+
+* Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
+
+Details
+-------
+
+* Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
+
+   Apk files could be installed from the app after being downloaded. Installation process will be
+   triggered by the system.
+
+   https://github.com/owncloud/android/issues/2691
+   https://github.com/owncloud/android/pull/3156
+   https://github.com/owncloud/android/pull/316
+
 ## 2.17 (March 2021)
 - Toolbar redesign
 - Show thumbnails for every supported file type
@@ -401,10 +425,10 @@
 - Multi-Window support for Android 7.
 - Size of folders shown in list of files.
 - Sort by size your list of files.
- 
+
 ## 2.1.0 (August 2016)
 - Select and handle multiple files
-- Sync files on tap 
+- Sync files on tap
 - Access files through Documents Provider
 - "Can share" option for federated shares (server 9.1+)
 - Full name shown instead of user name
@@ -486,7 +510,7 @@
 - Bugs fixed:
   + Frequent crashes in folder with several images
   + Sync error in servers with huge quota and external storage enable
-  + Share by link error 
+  + Share by link error
   + Some other crashes and minor bugs
 
 ## 1.7.1 (April 2015)
@@ -510,7 +534,7 @@
 - Uploads:
   + Local thumbnails in section "Files"
   + Multiple selection in "Content from other apps" (Android 4.3+)
-- Gallery: 
+- Gallery:
   + proper handling of EXIF
   + obey sorting in the list of files
 - Settings view updated
