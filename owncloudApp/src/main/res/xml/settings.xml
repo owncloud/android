@@ -40,4 +40,10 @@
             app:summary="@string/prefs_subsection_more_summary"
             app:title="@string/prefs_subsection_more" />
 
+        <Preference
+            app:allowDividerAbove="true"
+            app:iconSpaceReserved="false"
+            app:key="about_app"
+            app:title="@string/prefs_app_version" />
+
 </PreferenceScreen>
