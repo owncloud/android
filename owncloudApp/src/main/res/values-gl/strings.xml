@@ -394,7 +394,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="drawer_manage_accounts">Xestionar as contas</string>
   <string name="auth_redirect_non_secure_connection_title">A conexión segura está a ser redirixida a través dunha ruta non segura.</string>
   <string name="actionbar_logger">Rexistros</string>
-    <string name="log_send_history_button">Enviar o historial</string>
+  <string name="prefs_open_logs_view">Abrir o visor de rexistros</string>
+  <string name="log_send_history_button">Enviar o historial</string>
   <string name="log_send_no_mail_app">Non se atopou unha aplicación para enviar os rexistros. Instale unha aplicación de correo!</string>
   <string name="log_send_mail_subject">Rexistros da aplicación %1$s Android</string>
   <string name="log_progress_dialog_text">Cargando os datos...</string>

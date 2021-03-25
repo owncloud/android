@@ -32,8 +32,12 @@
     <string name="drawer_feedback">Feedback</string>
     <string name="drawer_help">Help</string>
     <string name="prefs_category_general">General</string>
+    <string name="prefs_subsection_logging">Logging</string>
     <string name="prefs_subsection_more">More</string>
     <string name="prefs_subsection_security">Security</string>
+    <string name="prefs_subsection_security_summary">Set locks to access the app and allow touches with other visible windows</string>
+    <string name="prefs_subsection_logging_summary">Keep track of logs produced by the execution of the app</string>
+    <string name="prefs_subsection_more_summary">App info, feedback and others</string>
     <string name="prefs_accounts">Accounts</string>
     <string name="prefs_manage_accounts">Manage accounts</string>
     <string name="prefs_passcode">Passcode lock</string>
@@ -43,6 +47,7 @@
     <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
     <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
     <string name="confirmation_touches_with_other_windows_message">Use this feature under your own responsibility, a malicious application could try to spoof you into performing some actions, unaware, using other views.</string>
+    <string name="prefs_open_logs_view">Open logs view</string>
     <string name="prefs_camera_picture_upload">Picture uploads</string>
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
     <string name="prefs_camera_video_upload">Video uploads</string>
@@ -63,11 +68,9 @@
     <string name="prefs_pattern"> Pattern lock </string>
     <string name="prefs_enable_logging">Enable logging</string>
     <string name="prefs_enable_logging_summary">When activated, logs may impact performance and include sensitive information. However the logs are not subject to automatic submission to ownCloud servers. Sharing logs with others is sole user responsibility.</string>
-    <string name="prefs_subsection_logging">Logging</string>
     <string name="prefs_send_feedback">Send feedback</string>
     <string name="prefs_app_version">App version</string>
     <string name="prefs_app_version_summary">%1$s %2$s version %3$s (%4$s)</string>
-    <string name="prefs_browse">Browse</string>
     <string name="pattern_enter_pattern">Please enter your pattern</string>
     <string name="pattern_configure_pattern">Enter your pattern</string>
     <string name="pattern_remove_pattern">Remove your pattern</string>
@@ -608,7 +611,4 @@
     <string name="prefs_logs_summary">Logs may contain sensitive information. Sharing logs with others is sole user responsibility</string>
 
     <string name="synchronizing_account">Synchronizing account</string>
-    <string name="prefs_subsection_security_summary">Set locks to access the app and allow touches with other visible windows</string>
-    <string name="prefs_subsection_logging_summary">Keep track of logs produced by the execution of the app</string>
-    <string name="prefs_subsection_more_summary">App info, feedback and others</string>
 </resources>

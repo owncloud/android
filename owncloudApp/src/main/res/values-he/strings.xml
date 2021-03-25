@@ -393,7 +393,8 @@
   <string name="drawer_manage_accounts">ניהול חשבונות</string>
   <string name="auth_redirect_non_secure_connection_title">חיבור מאובטח מנותב דרך נתיב לא מאובטח</string>
   <string name="actionbar_logger">לוגים</string>
-    <string name="log_send_history_button">הסטורית שליחה</string>
+  <string name="prefs_open_logs_view">פתיחת תצוגת לוגים</string>
+  <string name="log_send_history_button">הסטורית שליחה</string>
   <string name="log_send_no_mail_app">לא נמצא יישום לשליחת לוגים. יש להתקין יישום mail.</string>
   <string name="log_send_mail_subject">%1$s לוגים של יישום אנדרואיד</string>
   <string name="log_progress_dialog_text">טעינת מידע...</string>
