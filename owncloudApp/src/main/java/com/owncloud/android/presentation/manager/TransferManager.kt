@@ -87,6 +87,21 @@ class TransferManager(
         return workers.filter { it.tags.containsAll(tags.toList()) }
     }
 
+    fun cancelWorkersForAccount(account: Account) {
+        getWorkManager().cancelAllWorkByTag(account.name)
+    }
+
+    fun isDownloadPending(account: Account, file: OCFile): Boolean {
+        return getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name).any { !it.state.isFinished }
+    }
+
+    fun cancelDownloadForFile(file: OCFile) {
+        val workersToCancel = getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, file.id.toString(), file.owner)
+        workersToCancel.forEach {
+            getWorkManager().cancelWorkById(it.id)
+        }
+    }
+
     companion object {
         private const val MAXIMUM_NUMBER_OF_RETRIES = 3
     }
