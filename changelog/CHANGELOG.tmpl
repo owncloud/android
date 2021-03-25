@@ -1,26 +1,53 @@
-Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+{{ $allVersions := . }}
+{{- range $index, $changes := . }}{{ with $changes -}}
+Changelog for ownCloud Android Client [{{ .Version }}] ({{ .Date }})
 =======================================
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client {{ .Version }} relevant to
 ownCloud admins and users.
 
+{{/* creating version compare links */ -}}
+{{ $next := add1 $index -}}
+{{ if ne (len $allVersions) $next -}}
+{{ $previousVersion := (index $allVersions $next).Version -}}
+{{ if eq .Version "unreleased" -}}
+[{{ .Version }}]: https://github.com/owncloud/android/compare/v{{ $previousVersion }}...master
 
+{{- else -}}
+[{{ .Version }}]: https://github.com/owncloud/android/compare/v{{ $previousVersion }}...v{{ .Version }}
+{{- end -}}
+{{ end -}}
+
+{{- /* last version managed by calens, end of the loop */ -}}
+{{ if eq .Version "2.16" -}}
+[{{ .Version }}]: https://github.com/owncloud/android/compare/v2.16...v{{ .Version }}
+{{- end }}
 
 Summary
 -------
-
-* Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
+{{ range $entry := .Entries }}{{ with $entry }}
+* {{ .Type }} - {{ .Title }}: [#{{ .PrimaryID }}]({{ .PrimaryURL }})
+{{- end }}{{ end }}
 
 Details
 -------
+{{ range $entry := .Entries }}{{ with $entry }}
+* {{ .Type }} - {{ .Title }}: [#{{ .PrimaryID }}]({{ .PrimaryURL }})
+{{ range $par := .Paragraphs }}
+   {{ wrapIndent $par 80 3 }}
+{{ end -}}
+{{ range $url := .IssueURLs }}
+   {{ $url -}}
+{{ end -}}
+{{ range $url := .PRURLs }}
+   {{ $url -}}
+{{ end -}}
+{{ range $url := .OtherURLs }}
+   {{ $url -}}
+{{ end }}
+{{ end }}{{ end }}
+{{ end }}{{ end -}}
 
-* Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
-
-   Apk files could be installed from the app after being downloaded. Installation process will be
-   triggered by the system.
-
-   https://github.com/owncloud/android/issues/2691
-   https://github.com/owncloud/android/pull/3156
-   https://github.com/owncloud/android/pull/316
+{{/* Start of old changelog */ -}}
 
 ## 2.17 (March 2021)
 - Toolbar redesign
