@@ -44,8 +44,8 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncThumbnailDrawa
 import com.owncloud.android.datamodel.ThumbnailsCacheManager.ThumbnailGenerationTask
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.files.FileMenuFilter
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
+import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.ui.activity.ComponentsGetter
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
@@ -339,10 +339,11 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
             setTimeModified(file.modificationTimestamp)
 
             // configure UI for depending upon local state of the file
-            val downloaderBinder = mContainerActivity.fileDownloaderBinder
+            val transferManager = TransferManager(appContext)
             val uploaderBinder = mContainerActivity.fileUploaderBinder
+            val safeAccount = mAccount
             if (forcedTransferring ||
-                downloaderBinder != null && downloaderBinder.isDownloading(mAccount, file) ||
+                safeAccount != null && transferManager.isDownloadPending(safeAccount, file) ||
                 uploaderBinder != null && uploaderBinder.isUploading(mAccount, file)
             ) {
                 setButtonsForTransferring()
@@ -373,9 +374,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      */
     private fun setFilename(filename: String) {
         val tv = requireView().findViewById<TextView>(R.id.fdFilename)
-        if (tv != null) {
-            tv.text = filename
-        }
+        tv?.text = filename
     }
 
     /**
@@ -433,9 +432,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      */
     private fun setFilesize(filesize: Long) {
         val tv = requireView().findViewById<TextView>(R.id.fdSize)
-        if (tv != null) {
-            tv.text = DisplayUtils.bytesToHumanReadable(filesize, activity)
-        }
+        tv?.text = DisplayUtils.bytesToHumanReadable(filesize, activity)
     }
 
     /**
@@ -445,9 +442,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      */
     private fun setTimeModified(milliseconds: Long) {
         val tv = requireView().findViewById<TextView>(R.id.fdModified)
-        if (tv != null) {
-            tv.text = DisplayUtils.unixTimeToHumanReadable(milliseconds)
-        }
+        tv?.text = DisplayUtils.unixTimeToHumanReadable(milliseconds)
     }
 
     /**
@@ -459,15 +454,13 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
             requireView().findViewById<View>(R.id.fdProgressBlock).visibility = View.VISIBLE
             val progressText = requireView().findViewById<TextView>(R.id.fdProgressText)
             progressText.visibility = View.VISIBLE
-            val downloaderBinder = mContainerActivity.fileDownloaderBinder
+            val transferManager = TransferManager(appContext)
             val uploaderBinder = mContainerActivity.fileUploaderBinder
-            //if (getFile().isDownloading()) {
-            if (downloaderBinder != null && downloaderBinder.isDownloading(mAccount, file)) {
+            val safeAccount = mAccount
+            if (safeAccount != null && transferManager.isDownloadPending(safeAccount, file)) {
                 progressText.setText(R.string.downloader_download_in_progress_ticker)
-            } else {
-                if (uploaderBinder != null && uploaderBinder.isUploading(mAccount, file)) {
-                    progressText.setText(R.string.uploader_upload_in_progress_ticker)
-                }
+            } else if (uploaderBinder != null && uploaderBinder.isUploading(mAccount, file)) {
+                progressText.setText(R.string.uploader_upload_in_progress_ticker)
             }
         }
     }
