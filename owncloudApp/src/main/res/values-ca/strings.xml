@@ -391,7 +391,8 @@
   <string name="drawer_manage_accounts">Gestió de comptes</string>
   <string name="auth_redirect_non_secure_connection_title">La connexió segura està essent redirigida a través d\'una ruta insegura</string>
   <string name="actionbar_logger">Registre</string>
-    <string name="log_send_history_button">Enviar història</string>
+  <string name="prefs_open_logs_view">Obre la vista de registres.</string>
+  <string name="log_send_history_button">Enviar història</string>
   <string name="log_send_no_mail_app">No es troba aplicació per enviar els registres. Si us plau, instal·la una aplicació de email.</string>
   <string name="log_send_mail_subject">%1$s app de registres Android</string>
   <string name="log_progress_dialog_text">Carregant dades...</string>

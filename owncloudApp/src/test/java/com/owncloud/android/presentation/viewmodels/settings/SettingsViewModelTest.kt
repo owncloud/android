@@ -23,7 +23,7 @@ package com.owncloud.android.presentation.viewmodels.settings
 import android.content.Intent
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
@@ -330,7 +330,7 @@ class SettingsViewModelTest : ViewModelTest() {
         settingsViewModel.setPrefTouchesWithOtherVisibleWindows(true)
 
         verify(exactly = 1) {
-            preferencesProvider.putBoolean(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, true)
+            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, true)
         }
     }
 
@@ -341,7 +341,7 @@ class SettingsViewModelTest : ViewModelTest() {
         settingsViewModel.setPrefTouchesWithOtherVisibleWindows(false)
 
         verify(exactly = 1) {
-            preferencesProvider.putBoolean(SettingsFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false)
+            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false)
         }
     }
 

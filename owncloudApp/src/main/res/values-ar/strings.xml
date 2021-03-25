@@ -391,7 +391,8 @@
   <string name="drawer_manage_accounts">إدارة الحسابات</string>
   <string name="auth_redirect_non_secure_connection_title">يُعاد توجيه الاتصال الآمن خلال مسار غير آمن.</string>
   <string name="actionbar_logger">السجلات</string>
-    <string name="log_send_history_button">إرسال المحفوظات</string>
+  <string name="prefs_open_logs_view">افتح عرض السجلات</string>
+  <string name="log_send_history_button">إرسال المحفوظات</string>
   <string name="log_send_no_mail_app">لم يتم العثور على تطبيق لإرسال السجلات. يُرجى تثبيت تطبيق بريد.</string>
   <string name="log_send_mail_subject">%1$s سجلات تطبيقات الأندرويد</string>
   <string name="log_progress_dialog_text">جارٍ تحميل البيانات…</string>
