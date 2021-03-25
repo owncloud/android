@@ -15,20 +15,33 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:key="more_screen">
 
-    <SwitchPreferenceCompat
-        app:iconSpaceReserved="false"
-        app:key="enable_logging"
-        app:title="@string/prefs_enable_logging"
-        app:summary="@string/prefs_enable_logging_summary" />
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        app:key="set_httpLogs"
-        app:title="@string/prefs_http_logs"/>
     <Preference
         app:iconSpaceReserved="false"
-        app:key="logger"
-        app:title="@string/prefs_open_logs_view"/>
+        app:key="help"
+        app:title="@string/prefs_help" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="syncCalendarContacts"
+        app:summary="@string/prefs_sync_calendar_contacts_summary"
+        app:title="@string/prefs_sync_calendar_contacts" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="feedback"
+        app:title="@string/prefs_send_feedback" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="recommend"
+        app:title="@string/prefs_recommend" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="privacyPolicy"
+        app:title="@string/prefs_privacy_policy" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="imprint"
+        app:title="@string/prefs_imprint" />
 
 </PreferenceScreen>

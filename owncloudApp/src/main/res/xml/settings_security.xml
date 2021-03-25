@@ -15,20 +15,25 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:key="security_screen">
 
-    <SwitchPreferenceCompat
-        app:iconSpaceReserved="false"
-        app:key="enable_logging"
-        app:title="@string/prefs_enable_logging"
-        app:summary="@string/prefs_enable_logging_summary" />
     <CheckBoxPreference
         app:iconSpaceReserved="false"
-        app:key="set_httpLogs"
-        app:title="@string/prefs_http_logs"/>
-    <Preference
+        app:key="set_pincode"
+        app:title="@string/prefs_passcode" />
+    <CheckBoxPreference
         app:iconSpaceReserved="false"
-        app:key="logger"
-        app:title="@string/prefs_open_logs_view"/>
+        app:key="set_pattern"
+        app:title="@string/prefs_pattern" />
+    <CheckBoxPreference
+        app:iconSpaceReserved="false"
+        app:key="set_biometric"
+        app:title="@string/prefs_biometric" />
+    <CheckBoxPreference
+        app:iconSpaceReserved="false"
+        app:key="touches_with_other_visible_windows"
+        app:summary="@string/prefs_touches_with_other_visible_windows_summary"
+        app:title="@string/prefs_touches_with_other_visible_windows" />
 
 </PreferenceScreen>

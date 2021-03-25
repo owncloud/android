@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_version">版本 %1$s</string>
-  <string name="actionbar_upload">上戴</string>
+    <string name="actionbar_upload">上戴</string>
   <string name="actionbar_upload_files">文件</string>
   <string name="actionbar_mkdir">新資料夾</string>
   <string name="actionbar_settings">設定</string>
@@ -12,8 +11,8 @@
   <string name="drawer_feedback">反饋</string>
   <string name="drawer_help">幫助</string>
   <string name="prefs_category_general">一般</string>
-  <string name="prefs_category_more">更多</string>
-  <string name="prefs_category_security">安全</string>
+  <string name="prefs_subsection_more">更多</string>
+  <string name="prefs_subsection_security">安全</string>
   <string name="prefs_accounts">帳號</string>
   <string name="prefs_help">幫助</string>
   <string name="prefs_recommend">推薦給朋友</string>
@@ -40,8 +39,7 @@
   <string name="common_error">錯誤</string>
   <string name="common_loading">戴入中 …</string>
   <string name="common_error_unknown">不明錯誤</string>
-  <string name="about_title">關於</string>
-  <string name="change_password">更改密碼</string>
+    <string name="change_password">更改密碼</string>
   <string name="create_account">建立帳號</string>
   <string name="upload_chooser_title">上戴由 …</string>
   <string name="uploader_info_dirname">資料夾名稱</string>

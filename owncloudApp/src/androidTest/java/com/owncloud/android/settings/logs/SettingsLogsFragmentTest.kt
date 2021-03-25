@@ -29,11 +29,9 @@ import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
@@ -118,12 +116,14 @@ class SettingsLogsFragmentTest {
         prefHttpLogs.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOG_HTTP,
             titlePref = context.getString(R.string.prefs_http_logs),
-            visible = false
+            visible = true,
+            enabled = false
         )
         prefLogsView.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOGGER,
-            titlePref = context.getString(R.string.log_open_logs_view),
-            visible = false
+            titlePref = context.getString(R.string.prefs_open_logs_view),
+            visible = true,
+            enabled = false
         )
     }
 
@@ -141,34 +141,34 @@ class SettingsLogsFragmentTest {
         prefHttpLogs.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOG_HTTP,
             titlePref = context.getString(R.string.prefs_http_logs),
-            visible = true
+            visible = true,
+            enabled = true
         )
         prefLogsView.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOGGER,
-            titlePref = context.getString(R.string.log_open_logs_view),
-            visible = true
+            titlePref = context.getString(R.string.prefs_open_logs_view),
+            visible = true,
+            enabled = true
         )
     }
 
     @Test
-    fun enableLoggingMakesSettingsAppear() {
+    fun enableLoggingMakesSettingsEnable() {
         launchTest(enabledLogging = false)
 
         onView(withText(R.string.prefs_enable_logging)).perform(click())
-        onView(withText(R.string.prefs_http_logs)).check(matches(isDisplayed()))
-        assertTrue(prefHttpLogs.isVisible)
-        onView(withText(R.string.log_open_logs_view)).check(matches(isDisplayed()))
-        assertTrue(prefLogsView.isVisible)
+        assertTrue(prefHttpLogs.isEnabled)
+        assertTrue(prefLogsView.isEnabled)
     }
 
     @Test
-    fun disableLoggingMakesSettingsDisappear() {
+    fun disableLoggingMakesSettingsDisable() {
         launchTest(enabledLogging = false)
 
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         onView(withText(R.string.prefs_enable_logging)).perform(click())
-        assertFalse(prefHttpLogs.isVisible)
-        assertFalse(prefLogsView.isVisible)
+        assertFalse(prefHttpLogs.isEnabled)
+        assertFalse(prefLogsView.isEnabled)
     }
 
     @Test
@@ -193,7 +193,7 @@ class SettingsLogsFragmentTest {
     fun loggerOpen() {
         launchTest(enabledLogging = true)
 
-        onView(withText(R.string.log_open_logs_view)).perform(click())
+        onView(withText(R.string.prefs_open_logs_view)).perform(click())
         intended(hasComponent(LogHistoryActivity::class.java.name))
     }
 

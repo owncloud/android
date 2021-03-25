@@ -28,7 +28,6 @@ import android.net.Uri
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
@@ -43,7 +42,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
@@ -61,20 +60,16 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-class SettingsFragmentMoreSectionTest {
+class SettingsMoreFragmentTest {
 
-    private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
+    private lateinit var fragmentScenario: FragmentScenario<SettingsMoreFragment>
 
-    private lateinit var prefSecurityCategory: PreferenceCategory
-    private lateinit var prefLogsCategory: PreferenceCategory
-    private lateinit var prefMoreCategory: PreferenceCategory
     private var prefHelp: Preference? = null
     private var prefSync: Preference? = null
     private var prefRecommend: Preference? = null
     private var prefFeedback: Preference? = null
     private var prefPrivacyPolicy: Preference? = null
     private var prefImprint: Preference? = null
-    private lateinit var prefAboutApp: Preference
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var context: Context
@@ -130,31 +125,11 @@ class SettingsFragmentMoreSectionTest {
         every { settingsViewModel.isImprintEnabled() } returns imprintEnabled
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
-
-        // These categories and preferences are not brandable
-        fragmentScenario.onFragment { fragment ->
-            prefSecurityCategory = fragment.findPreference(PREFERENCE_SECURITY_CATEGORY)!!
-            prefLogsCategory = fragment.findPreference(PREFERENCE_LOGS_CATEGORY)!!
-            prefMoreCategory = fragment.findPreference(PREFERENCE_MORE_CATEGORY)!!
-            prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
-        }
-
-        prefSecurityCategory.isVisible = false
-        prefLogsCategory.isVisible = false
-
-        // Not a good solution but tests only pass if this is here
-        Thread.sleep(250)
     }
 
     @Test
     fun moreView() {
         launchTest()
-
-        prefMoreCategory.verifyPreference(
-            keyPref = PREFERENCE_MORE_CATEGORY,
-            titlePref = context.getString(R.string.prefs_category_more),
-            visible = true
-        )
 
         prefHelp = getPreference(PREFERENCE_HELP)
         assertNotNull(prefHelp)
@@ -188,7 +163,7 @@ class SettingsFragmentMoreSectionTest {
         assertNotNull(prefFeedback)
         prefFeedback?.verifyPreference(
             keyPref = PREFERENCE_FEEDBACK,
-            titlePref = context.getString(R.string.prefs_feedback),
+            titlePref = context.getString(R.string.prefs_send_feedback),
             visible = true,
             enabled = true
         )
@@ -207,15 +182,6 @@ class SettingsFragmentMoreSectionTest {
         prefImprint?.verifyPreference(
             keyPref = PREFERENCE_IMPRINT,
             titlePref = context.getString(R.string.prefs_imprint),
-            visible = true,
-            enabled = true
-        )
-
-        val appVersion = "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE} ${BuildConfig.COMMIT_SHA1}"
-        prefAboutApp.verifyPreference(
-            keyPref = PREFERENCE_ABOUT_APP,
-            titlePref = String.format(context.getString(R.string.about_android), context.getString(R.string.app_name)),
-            summaryPref = String.format(context.getString(R.string.about_version), appVersion),
             visible = true,
             enabled = true
         )
@@ -322,7 +288,7 @@ class SettingsFragmentMoreSectionTest {
     fun feedbackOpensSender() {
         launchTest()
 
-        onView(withText(R.string.prefs_feedback)).perform(click())
+        onView(withText(R.string.prefs_send_feedback)).perform(click())
         mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
@@ -357,16 +323,11 @@ class SettingsFragmentMoreSectionTest {
     }
 
     companion object {
-        private const val PREFERENCE_SECURITY_CATEGORY = "security_category"
-        private const val PREFERENCE_LOGS_CATEGORY = "logs_category"
-        private const val PREFERENCE_MORE_CATEGORY = "more_category"
-
         private const val PREFERENCE_HELP = "help"
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
         private const val PREFERENCE_RECOMMEND = "recommend"
         private const val PREFERENCE_FEEDBACK = "feedback"
         private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
         private const val PREFERENCE_IMPRINT = "imprint"
-        private const val PREFERENCE_ABOUT_APP = "about_app"
     }
 }

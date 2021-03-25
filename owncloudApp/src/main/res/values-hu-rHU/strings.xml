@@ -4,8 +4,6 @@
   <string name="global_name">Név</string>
   <string name="global_date">Dátum</string>
   <string name="global_size">Méret</string>
-  <string name="about_android">%1$s Android</string>
-  <string name="about_version">%1$s verzió</string>
   <string name="actionbar_search">Keresés ebben a mappában</string>
   <string name="actionbar_sync">Fiók frissítése</string>
   <string name="actionbar_upload">Feltöltés</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Visszajelzés</string>
   <string name="drawer_help">Súgó</string>
   <string name="prefs_category_general">Általános</string>
-  <string name="prefs_category_more">Több</string>
-  <string name="prefs_category_security">Biztonság</string>
+  <string name="prefs_subsection_more">Több</string>
+  <string name="prefs_subsection_security">Biztonság</string>
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
@@ -143,8 +141,7 @@
   <string name="common_error_unknown">ismeretlen hiba</string>
   <string name="common_pending">Folyamatban</string>
   <string name="common_important">Fontos</string>
-  <string name="about_title">Névjegy</string>
-  <string name="change_password">Jelszó megváltoztatása</string>
+    <string name="change_password">Jelszó megváltoztatása</string>
   <string name="delete_account">Fiók eltávolítása</string>
   <string name="create_account">Fiók létrehozása</string>
   <string name="upload_chooser_title">Feltöltés innen</string>
