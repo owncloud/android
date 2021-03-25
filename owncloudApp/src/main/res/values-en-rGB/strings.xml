@@ -393,7 +393,8 @@
   <string name="drawer_manage_accounts">Manage accounts</string>
   <string name="auth_redirect_non_secure_connection_title">Secure connection is redirected through an unsecured route.</string>
   <string name="actionbar_logger">Logs</string>
-    <string name="log_send_history_button">Send history</string>
+  <string name="prefs_open_logs_view">Open logs view</string>
+  <string name="log_send_history_button">Send history</string>
   <string name="log_send_no_mail_app">No app for sending logs found. Please install a mail app.</string>
   <string name="log_send_mail_subject">%1$s Android app logs</string>
   <string name="log_progress_dialog_text">Loading data…</string>

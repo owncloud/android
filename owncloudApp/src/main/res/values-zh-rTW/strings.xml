@@ -393,7 +393,8 @@
   <string name="drawer_manage_accounts">管理帳號</string>
   <string name="auth_redirect_non_secure_connection_title">加密的連線是由一個未加密的連線轉向過來的.</string>
   <string name="actionbar_logger">記錄</string>
-    <string name="log_send_history_button">傳送歷史</string>
+  <string name="prefs_open_logs_view">開啟記錄視圖</string>
+  <string name="log_send_history_button">傳送歷史</string>
   <string name="log_send_no_mail_app">沒有傳送紀錄的軟體. 請安裝郵件軟體</string>
   <string name="log_send_mail_subject">%1$s Android 應用程式記錄</string>
   <string name="log_progress_dialog_text">資料載入中...</string>

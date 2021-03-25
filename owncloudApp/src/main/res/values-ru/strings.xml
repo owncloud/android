@@ -394,7 +394,8 @@
   <string name="drawer_manage_accounts">Управление аккаунтами</string>
   <string name="auth_redirect_non_secure_connection_title">Безопасное соединение перенаправлено через небезопасный маршрут.</string>
   <string name="actionbar_logger">Журналы</string>
-    <string name="log_send_history_button">История отправок</string>
+  <string name="prefs_open_logs_view">Открыть лог-файл приложения</string>
+  <string name="log_send_history_button">История отправок</string>
   <string name="log_send_no_mail_app">Программа для отправки журналов не найдена. Пожалуйста установите почтовую программу.</string>
   <string name="log_send_mail_subject">Журналы %1$s для Android</string>
   <string name="log_progress_dialog_text">Загрузка данных…</string>

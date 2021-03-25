@@ -391,7 +391,8 @@
   <string name="drawer_manage_accounts">Administroni llogari</string>
   <string name="auth_redirect_non_secure_connection_title">Lidhja e sigurt është ridrejtuar përmes një rruge të pasigurt.</string>
   <string name="actionbar_logger">Regjistra</string>
-    <string name="log_send_history_button">Historik dërgimesh</string>
+  <string name="prefs_open_logs_view">Hap pamjen regjistra</string>
+  <string name="log_send_history_button">Historik dërgimesh</string>
   <string name="log_send_no_mail_app">S\’u gjet aplikacion për dërgim regjistrimesh. Ju lutemi, instaloni një aplikacion email-esh.</string>
   <string name="log_send_mail_subject">Regjistra aplikacioni %1$s për Android</string>
   <string name="log_progress_dialog_text">Po ngarkohen të dhëna…</string>

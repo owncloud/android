@@ -391,7 +391,8 @@
   <string name="drawer_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="auth_redirect_non_secure_connection_title">เชื่อมต่อที่ปลอดภัยถูกเปลี่ยนเส้นทางผ่านเราเตอร์ที่ไม่ปลอดภัย</string>
   <string name="actionbar_logger">ไฟล์ log</string>
-    <string name="log_send_history_button">ส่งประวัติการใช้งานย้อนหลัง</string>
+  <string name="prefs_open_logs_view">เปิดมุมมองบันทึก</string>
+  <string name="log_send_history_button">ส่งประวัติการใช้งานย้อนหลัง</string>
   <string name="log_send_no_mail_app">ไม่พบแอปสำหรับส่งข้อมูล log กรุณาติดตั้งแอปสำหรับส่งเมล</string>
   <string name="log_send_mail_subject">%1$s ข้อมูล log สำหรับแอปแอนดรอยด์</string>
   <string name="log_progress_dialog_text">กำลังโหลดข้อมูล ...</string>

@@ -386,7 +386,8 @@
   <string name="drawer_manage_accounts">Zarządzaj kontami</string>
   <string name="auth_redirect_non_secure_connection_title">Bezpieczne połączenie jest przekierowywane przez niezabezpieczone trasy.</string>
   <string name="actionbar_logger">Logi</string>
-    <string name="log_send_history_button">Wyślij historię</string>
+  <string name="prefs_open_logs_view">Otwórz widok log</string>
+  <string name="log_send_history_button">Wyślij historię</string>
   <string name="log_send_no_mail_app">Brak aplikacji do wysyłania logów. Zainstaluj klienta poczty.</string>
   <string name="log_send_mail_subject">%1$s Logi aplikacji Android</string>
   <string name="log_progress_dialog_text">Ładuję dane...</string>

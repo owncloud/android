@@ -38,18 +38,18 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
 
     private var prefEnableLogging: SwitchPreferenceCompat? = null
     private var prefHttpLogs: CheckBoxPreference? = null
-    private var prefBrowse: Preference? = null
+    private var prefLogsView: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_logs, rootKey)
 
         prefEnableLogging = findPreference(PREFERENCE_ENABLE_LOGGING)
         prefHttpLogs = findPreference(PREFERENCE_LOG_HTTP)
-        prefBrowse = findPreference(PREFERENCE_LOGGER)
+        prefLogsView = findPreference(PREFERENCE_LOGGER)
 
         with(settingsViewModel.isLoggingEnabled()) {
             prefHttpLogs?.isEnabled = this
-            prefBrowse?.isEnabled = this
+            prefLogsView?.isEnabled = this
         }
 
         prefEnableLogging?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
@@ -57,7 +57,7 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
             settingsViewModel.setEnableLogging(value)
 
             prefHttpLogs?.isEnabled = value
-            prefBrowse?.isEnabled = value
+            prefLogsView?.isEnabled = value
             if (!value) {
                 // Disable http logs when global logs are disabled.
                 settingsViewModel.shouldLogHttpRequests(value)
@@ -71,7 +71,7 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
             true
         }
 
-        prefBrowse?.let {
+        prefLogsView?.let {
             it.setOnPreferenceClickListener {
                 val intent = Intent(context, LogHistoryActivity::class.java)
                 startActivity(intent)
