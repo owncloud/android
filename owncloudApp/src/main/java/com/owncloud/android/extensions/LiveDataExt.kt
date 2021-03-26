@@ -24,17 +24,22 @@ import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
 import com.owncloud.android.workers.DownloadFileWorker.Companion.WORKER_KEY_PROGRESS
 
-fun LiveData<WorkInfo>.observeWorkerTillItFinishes(
+fun LiveData<WorkInfo?>.observeWorkerTillItFinishes(
     owner: LifecycleOwner,
-    onWorkEnqueued: () -> Unit,
+    onWorkEnqueued: () -> Unit = {},
     onWorkRunning: (progress: Int) -> Unit,
     onWorkSucceeded: () -> Unit,
     onWorkFailed: () -> Unit,
-    onWorkBlocked: () -> Unit,
-    onWorkCancelled: () -> Unit,
+    onWorkBlocked: () -> Unit = {},
+    onWorkCancelled: () -> Unit = {},
 ) {
-    observe(owner, object : Observer<WorkInfo> {
-        override fun onChanged(value: WorkInfo) {
+    observe(owner, object : Observer<WorkInfo?> {
+        override fun onChanged(value: WorkInfo?) {
+            if (value == null) {
+                removeObserver(this)
+                return
+            }
+
             if (value.state.isFinished) {
                 removeObserver(this)
             }
