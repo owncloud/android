@@ -32,9 +32,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.work.WorkInfo
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.ui.controller.TransferProgressController
+import com.owncloud.android.extensions.observeWorkerTillItFinishes
+import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 
@@ -51,7 +55,7 @@ class FileDownloadFragment : FileFragment() {
     private var ignoreFirstSavedState = false
     private var error = false
     private var progressBar: ProgressBar? = null
-    private var progressController: TransferProgressController? = null
+    private var liveData: LiveData<WorkInfo?>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -209,12 +213,28 @@ class FileDownloadFragment : FileFragment() {
     }
 
     private fun listenForTransferProgress() {
-        progressController?.startListeningProgressFor(file, account)
+        val transferManager = TransferManager(MainApp.appContext)
+        account?.let {
+            liveData = transferManager.getLiveDataForDownloadingFile(it, file)
+            liveData?.observeWorkerTillItFinishes(
+                owner = this,
+                onWorkEnqueued = { progressBar?.isIndeterminate = true },
+                onWorkRunning = { progress ->
+                    progressBar?.apply {
+                        isIndeterminate = false
+                        setProgress(progress)
+                        invalidate()
+                    }
+                },
+                onWorkSucceeded = { },
+                onWorkFailed = { }
+            )
+        }
         setButtonsForTransferring(view)
     }
 
     private fun leaveTransferProgress() {
-        progressController?.stopListeningProgressFor(file, account)
+        liveData?.removeObservers(this)
     }
 
     fun setError(error: Boolean) {
