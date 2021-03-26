@@ -35,8 +35,8 @@ import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -343,9 +343,9 @@ public class FileOperationsHelper {
         }
 
         // for both files and folders
-        FileDownloaderBinder downloaderBinder = mFileActivity.getFileDownloaderBinder();
-        if (downloaderBinder != null && downloaderBinder.isDownloading(account, file)) {
-            downloaderBinder.cancel(account, file);
+        TransferManager transferManager = new TransferManager(mFileActivity.getApplicationContext());
+        if (transferManager.isDownloadPending(account, file)) {
+            transferManager.cancelDownloadForFile(file);
         }
         FileUploaderBinder uploaderBinder = mFileActivity.getFileUploaderBinder();
         if (uploaderBinder != null && uploaderBinder.isUploading(account, file)) {
