@@ -22,6 +22,9 @@ import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.work.WorkInfo
+import androidx.work.WorkInfo.State.BLOCKED
+import androidx.work.WorkInfo.State.ENQUEUED
+import androidx.work.WorkInfo.State.RUNNING
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import com.owncloud.android.domain.files.model.OCFile
@@ -51,43 +54,30 @@ class TransferManager(
         return transferProvider.downloadFile(account, file)
     }
 
-    fun getLiveDataForDownloadingFile(account: Account, file: OCFile): LiveData<WorkInfo?>? {
-        val downloadWorkersForFile = getWorkInfoFromTags(
-            TRANSFER_TAG_DOWNLOAD,
-            file.id.toString(),
-            account.name
-        )
+    fun getLiveDataForDownloadingFile(account: Account, file: OCFile): LiveData<MutableList<WorkInfo>> {
+        val workQuery = WorkQuery.Builder
+            .fromTags(listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name))
+            .addStates(listOf(ENQUEUED, RUNNING, BLOCKED))
+            .build()
 
-        var uuidWorker: UUID? = null
-        // Check if this download is in progress.
-        downloadWorkersForFile.forEach {
-            if (!it.state.isFinished) {
-                uuidWorker = it.id
-            }
-        }
-
-        return uuidWorker?.let {
-            getWorkManager().getWorkInfoByIdLiveData(it)
-        }
+        return getWorkManager().getWorkInfosLiveData(workQuery)
     }
 
     private fun isDownloadAlreadyEnqueued(account: Account, file: OCFile): Boolean {
-        val downloadWorkersForFile = getWorkInfoFromTags(
-            TRANSFER_TAG_DOWNLOAD,
-            file.id.toString(),
-            account.name
-        )
+        val workQuery = WorkQuery.Builder
+            .fromTags(listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name))
+            .addStates(listOf(ENQUEUED, RUNNING, BLOCKED))
+            .build()
 
-        // Check if this download is in progress.
+        val downloadWorkersForFile = getWorkManager().getWorkInfos(workQuery).get()
+
         var isEnqueued = false
         downloadWorkersForFile.forEach {
-            if (!it.state.isFinished) {
-                // Let's cancel a work if it has several retries and enqueue it again
-                if (it.runAttemptCount > MAXIMUM_NUMBER_OF_RETRIES) {
-                    getWorkManager().cancelWorkById(it.id)
-                } else {
-                    isEnqueued = true
-                }
+            // Let's cancel a work if it has several retries and enqueue it again
+            if (it.runAttemptCount > MAXIMUM_NUMBER_OF_RETRIES) {
+                getWorkManager().cancelWorkById(it.id)
+            } else {
+                isEnqueued = true
             }
         }
 
