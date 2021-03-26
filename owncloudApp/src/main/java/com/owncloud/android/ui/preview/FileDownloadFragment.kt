@@ -30,13 +30,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
-import timber.log.Timber
 
 /**
  * This Fragment is used to monitor the progress of a file downloading.
@@ -46,18 +46,21 @@ import timber.log.Timber
  * It's necessary to keep a public constructor without parameters; the system uses it when tries to
  * reinstantiate a fragment automatically.
  */
-class FileDownloadFragment : FileFragment(), View.OnClickListener {
-    private var mAccount: Account? = null
-    var mProgressController: TransferProgressController? = null
-    private var mIgnoreFirstSavedState = false
-    private var mError = false
-    private var mProgressBar: ProgressBar? = null
+class FileDownloadFragment : FileFragment() {
+    private var account: Account? = null
+    private var ignoreFirstSavedState = false
+    private var error = false
+    private var progressBar: ProgressBar? = null
+    private var progressController: TransferProgressController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        file = requireArguments().getParcelable<Parcelable>(ARG_FILE) as OCFile?
-        mIgnoreFirstSavedState = requireArguments().getBoolean(ARG_IGNORE_FIRST)
-        mAccount = requireArguments().getParcelable(ARG_ACCOUNT)
+
+        with(requireArguments()) {
+            file = getParcelable<Parcelable>(ARG_FILE) as OCFile?
+            ignoreFirstSavedState = getBoolean(ARG_IGNORE_FIRST)
+            account = getParcelable(ARG_ACCOUNT)
+        }
     }
 
     override fun onCreateView(
@@ -65,39 +68,46 @@ class FileDownloadFragment : FileFragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        if (savedInstanceState != null) {
-            if (!mIgnoreFirstSavedState) {
-                file = savedInstanceState.getParcelable<Parcelable>(EXTRA_FILE) as OCFile?
-                mAccount = savedInstanceState.getParcelable(EXTRA_ACCOUNT)
-                mError = savedInstanceState.getBoolean(EXTRA_ERROR)
-            } else {
-                mIgnoreFirstSavedState = false
-            }
-        }
-        val rootView = inflater.inflate(R.layout.file_download_fragment, container, false)
-        mProgressBar = rootView.findViewById(R.id.progressBar)
-        rootView.findViewById<View>(R.id.cancelBtn).setOnClickListener(this)
-        rootView.filterTouchesWhenObscured =
-            PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-        if (mError) {
-            setButtonsForRemote(rootView)
-        } else {
-            setButtonsForTransferring(rootView)
-        }
-        return rootView
+
+        return inflater.inflate(R.layout.file_download_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedState: Bundle?) {
-        super.onActivityCreated(savedState)
-        mProgressController = TransferProgressController(mContainerActivity)
-        mProgressController!!.setProgressBar(mProgressBar)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        savedInstanceState?.let {
+            if (!ignoreFirstSavedState) {
+                file = it.getParcelable<Parcelable>(EXTRA_FILE) as OCFile?
+                account = it.getParcelable(EXTRA_ACCOUNT)
+                error = it.getBoolean(EXTRA_ERROR)
+            } else {
+                ignoreFirstSavedState = false
+            }
+        }
+
+        view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+
+        progressBar = view.findViewById(R.id.progressBar)
+
+        view.findViewById<View>(R.id.cancelBtn).setOnClickListener {
+            mContainerActivity.fileOperationsHelper.cancelTransference(file)
+            requireActivity().finish()
+        }
+
+        if (error) {
+            setButtonsForRemote(view)
+        } else {
+            setButtonsForTransferring(view)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(EXTRA_FILE, file)
-        outState.putParcelable(EXTRA_ACCOUNT, mAccount)
-        outState.putBoolean(EXTRA_ERROR, mError)
+        outState.apply {
+            putParcelable(EXTRA_FILE, file)
+            putParcelable(EXTRA_ACCOUNT, account)
+            putBoolean(EXTRA_ERROR, error)
+        }
     }
 
     override fun onStart() {
@@ -110,32 +120,20 @@ class FileDownloadFragment : FileFragment(), View.OnClickListener {
         super.onStop()
     }
 
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.cancelBtn -> {
-                mContainerActivity.fileOperationsHelper.cancelTransference(file)
-                requireActivity().finish()
-            }
-            else -> Timber.e("Incorrect view clicked!")
-        }
-    }
-
     /**
      * Enables buttons for a file being downloaded
      */
     private fun setButtonsForTransferring(rootView: View?) {
-        if (rootView != null) {
-            rootView.findViewById<View>(R.id.cancelBtn).visibility = View.VISIBLE
-
-            // show the progress bar for the transfer
-            rootView.findViewById<View>(R.id.progressBar).visibility = View.VISIBLE
-            val progressText = rootView.findViewById<TextView>(R.id.progressText)
-            progressText.setText(R.string.downloader_download_in_progress_ticker)
-            progressText.visibility = View.VISIBLE
-
+        rootView?.run {
+            findViewById<View>(R.id.cancelBtn).isVisible = true
+            findViewById<View>(R.id.progressBar).isVisible = true
+            findViewById<TextView>(R.id.progressText).apply {
+                setText(R.string.downloader_download_in_progress_ticker)
+                isVisible = true
+            }
             // hides the error icon
-            rootView.findViewById<View>(R.id.errorText).visibility = View.GONE
-            rootView.findViewById<View>(R.id.error_image).visibility = View.GONE
+            findViewById<View>(R.id.errorText).isVisible = false
+            findViewById<View>(R.id.error_image).isVisible = false
         }
     }
 
@@ -143,20 +141,19 @@ class FileDownloadFragment : FileFragment(), View.OnClickListener {
      * Enables or disables buttons for a file locally available
      */
     private fun setButtonsForDown(rootView: View?) {
-        if (rootView != null) {
-            rootView.findViewById<View>(R.id.cancelBtn).visibility = View.GONE
-
-            // hides the progress bar
-            rootView.findViewById<View>(R.id.progressBar).visibility = View.GONE
+        rootView?.run {
+            findViewById<View>(R.id.cancelBtn).isVisible = false
+            findViewById<View>(R.id.progressBar).isVisible = false
 
             // updates the text message
-            val progressText = rootView.findViewById<TextView>(R.id.progressText)
-            progressText.setText(R.string.common_loading)
-            progressText.visibility = View.VISIBLE
+            findViewById<TextView>(R.id.progressText).apply {
+                setText(R.string.common_loading)
+                isVisible = true
+            }
 
             // hides the error icon
-            rootView.findViewById<View>(R.id.errorText).visibility = View.GONE
-            rootView.findViewById<View>(R.id.error_image).visibility = View.GONE
+            findViewById<View>(R.id.errorText).isVisible = false
+            findViewById<View>(R.id.error_image).isVisible = false
         }
     }
 
@@ -167,16 +164,16 @@ class FileDownloadFragment : FileFragment(), View.OnClickListener {
      * Currently, this is only used when a download was failed
      */
     private fun setButtonsForRemote(rootView: View?) {
-        if (rootView != null) {
-            rootView.findViewById<View>(R.id.cancelBtn).visibility = View.GONE
+        rootView?.run {
+            findViewById<View>(R.id.cancelBtn).isVisible = false
 
             // hides the progress bar and message
-            rootView.findViewById<View>(R.id.progressBar).visibility = View.GONE
-            rootView.findViewById<View>(R.id.progressText).visibility = View.GONE
+            findViewById<View>(R.id.progressBar).isVisible = false
+            findViewById<View>(R.id.progressText).isVisible = false
 
             // shows the error icon and message
-            rootView.findViewById<View>(R.id.errorText).visibility = View.VISIBLE
-            rootView.findViewById<View>(R.id.error_image).visibility = View.VISIBLE
+            findViewById<View>(R.id.errorText).isVisible = true
+            findViewById<View>(R.id.error_image).isVisible = true
         }
     }
 
@@ -184,24 +181,20 @@ class FileDownloadFragment : FileFragment(), View.OnClickListener {
         listenForTransferProgress()
     }
 
+    // view does not need any update
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
-        if (updatedFile != null) {
-            file = updatedFile
-        }
-        // view does not need any update
+        updatedFile?.let { file = it }
     }
 
+    // view does not need any update
     override fun onFileMetadataChanged() {
-        val storageManager = mContainerActivity.storageManager
-        if (storageManager != null) {
-            file = storageManager.getFileByPath(file.remotePath)
+        mContainerActivity.storageManager?.let {
+            file = it.getFileByPath(file.remotePath)
         }
-        // view does not need any update
     }
 
-    override fun onFileContentChanged() {
-        // view does not need any update, parent activity will replace this fragment
-    }
+    // view does not need any update, parent activity will replace this fragment
+    override fun onFileContentChanged() {}
 
     override fun updateViewForSyncInProgress() {
         setButtonsForTransferring(view)
@@ -216,20 +209,16 @@ class FileDownloadFragment : FileFragment(), View.OnClickListener {
     }
 
     private fun listenForTransferProgress() {
-        if (mProgressController != null) {
-            mProgressController!!.startListeningProgressFor(file, mAccount)
-            setButtonsForTransferring(view)
-        }
+        progressController?.startListeningProgressFor(file, account)
+        setButtonsForTransferring(view)
     }
 
     private fun leaveTransferProgress() {
-        if (mProgressController != null) {
-            mProgressController!!.stopListeningProgressFor(file, mAccount)
-        }
+        progressController?.stopListeningProgressFor(file, account)
     }
 
     fun setError(error: Boolean) {
-        mError = error
+        this.error = error
     }
 
     companion object {
@@ -255,14 +244,14 @@ class FileDownloadFragment : FileFragment(), View.OnClickListener {
          * @param ignoreFirstSavedState     Flag to work around an unexpected behaviour of [FragmentStatePagerAdapter]
          * TODO better solution
          */
-        fun newInstance(file: OCFile?, account: Account?, ignoreFirstSavedState: Boolean): Fragment {
-            val frag = FileDownloadFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_FILE, file)
-            args.putParcelable(ARG_ACCOUNT, account)
-            args.putBoolean(ARG_IGNORE_FIRST, ignoreFirstSavedState)
-            frag.arguments = args
-            return frag
+        fun newInstance(file: OCFile?, account: Account, ignoreFirstSavedState: Boolean): Fragment {
+            val args = Bundle().apply {
+                putParcelable(ARG_FILE, file)
+                putParcelable(ARG_ACCOUNT, account)
+                putBoolean(ARG_IGNORE_FIRST, ignoreFirstSavedState)
+            }
+
+            return FileDownloadFragment().apply { arguments = args }
         }
     }
 }
