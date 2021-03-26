@@ -20,6 +20,7 @@ package com.owncloud.android.presentation.manager
 
 import android.accounts.Account
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
@@ -48,6 +49,26 @@ class TransferManager(
         }
 
         return transferProvider.downloadFile(account, file)
+    }
+
+    fun getLiveDataForDownloadingFile(account: Account, file: OCFile): LiveData<WorkInfo?>? {
+        val downloadWorkersForFile = getWorkInfoFromTags(
+            TRANSFER_TAG_DOWNLOAD,
+            file.id.toString(),
+            account.name
+        )
+
+        var uuidWorker: UUID? = null
+        // Check if this download is in progress.
+        downloadWorkersForFile.forEach {
+            if (!it.state.isFinished) {
+                uuidWorker = it.id
+            }
+        }
+
+        return uuidWorker?.let {
+            getWorkManager().getWorkInfoByIdLiveData(it)
+        }
     }
 
     private fun isDownloadAlreadyEnqueued(account: Account, file: OCFile): Boolean {
@@ -91,9 +112,8 @@ class TransferManager(
         getWorkManager().cancelAllWorkByTag(account.name)
     }
 
-    fun isDownloadPending(account: Account, file: OCFile): Boolean {
-        return getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name).any { !it.state.isFinished }
-    }
+    fun isDownloadPending(account: Account, file: OCFile) =
+        getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name).any { !it.state.isFinished }
 
     fun cancelDownloadForFile(file: OCFile) {
         val workersToCancel = getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, file.id.toString(), file.owner)
