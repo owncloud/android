@@ -23,7 +23,6 @@
  */
 package com.owncloud.android.ui.preview
 
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
@@ -37,6 +36,7 @@ import android.os.Message
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
@@ -58,7 +58,6 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FileListOption
 import com.owncloud.android.ui.fragment.FileFragment
-import com.owncloud.android.ui.preview.PreviewImageActivity
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PreferenceUtils
@@ -67,33 +66,35 @@ import timber.log.Timber
 /**
  * Holds a swiping galley where image files contained in an ownCloud directory are shown
  */
-class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnPageChangeListener,
+class PreviewImageActivity : FileActivity(),
+    FileFragment.ContainerActivity,
+    OnPageChangeListener,
     OnRemoteOperationListener {
-    private var mViewPager: ViewPager? = null
-    private var mPreviewImagePagerAdapter: PreviewImagePagerAdapter? = null
-    private var mSavedPosition = 0
-    private var mHasSavedPosition = false
-    private var mLocalBroadcastManager: LocalBroadcastManager? = null
-    private var mDownloadFinishReceiver: DownloadFinishReceiver? = null
-    private var mFullScreenAnchorView: View? = null
+
+    private lateinit var viewPager: ViewPager
+    private lateinit var previewImagePagerAdapter: PreviewImagePagerAdapter
+    private var savedPosition = 0
+    private var hasSavedPosition = false
+    private var localBroadcastManager: LocalBroadcastManager? = null
+    private var downloadFinishReceiver: DownloadFinishReceiver? = null
+    private var fullScreenAnchorView: View? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.preview_image_activity)
 
         // ActionBar
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeButtonEnabled(true)
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
         }
         showActionBar(false)
 
         /// FullScreen and Immersive Mode
-        mFullScreenAnchorView = window.decorView
-        // to keep our UI controls visibility in line with system bars
-        // visibility
-        mFullScreenAnchorView!!.setOnSystemUiVisibilityChangeListener { flags ->
+        fullScreenAnchorView = window.decorView
+        // to keep our UI controls visibility in line with system bars visibility
+        fullScreenAnchorView?.setOnSystemUiVisibilityChangeListener { flags ->
             val visible = flags and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0
             if (visible) {
                 showActionBar(true)
@@ -103,8 +104,8 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
                 setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
-        window.statusBarColor = resources.getColor(R.color.owncloud_blue_dark_transparent)
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.owncloud_blue_dark_transparent)
+        localBroadcastManager = LocalBroadcastManager.getInstance(this)
     }
 
     private fun initViewPager() {
@@ -118,36 +119,39 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
             // should not be necessary
             parentFolder = storageManager.getFileByPath(OCFile.ROOT_PATH)
         }
-        var imageFiles: List<OCFile?>? = storageManager.getFolderImages(parentFolder)
+
+        var imageFiles: List<OCFile> = storageManager.getFolderImages(parentFolder)
         imageFiles = FileStorageUtils.sortFolder(
-            imageFiles, FileStorageUtils.mSortOrderFileDisp,
+            imageFiles,
+            FileStorageUtils.mSortOrderFileDisp,
             FileStorageUtils.mSortAscendingFileDisp
         )
-        mPreviewImagePagerAdapter = PreviewImagePagerAdapter(
+        previewImagePagerAdapter = PreviewImagePagerAdapter(
             supportFragmentManager,
             account,
             imageFiles
         )
-        mViewPager = findViewById(R.id.fragmentPager)
-        mViewPager.setFilterTouchesWhenObscured(
-            PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
-        )
-        var position = if (mHasSavedPosition) mSavedPosition else mPreviewImagePagerAdapter!!.getFilePosition(file)
-        position = if (position >= 0) position else 0
-        mViewPager.setAdapter(mPreviewImagePagerAdapter)
-        mViewPager.addOnPageChangeListener(this)
-        mViewPager.setCurrentItem(position)
-        if (position == 0) {
-            mViewPager.post(Runnable
-            // this is necessary because mViewPager.setCurrentItem(0) does not trigger
-            // a call to onPageSelected in the first layout request aftet mViewPager.setAdapter(...) ;
-            // see, for example:
-            // https://android.googlesource.com/platform/frameworks/support.git/+/android-6.0
-            // .1_r55/v4/java/android/support/v4/view/ViewPager.java#541
-            // ; or just:
-            // http://stackoverflow.com/questions/11794269/onpageselected-isnt-triggered-when-calling
-            // -setcurrentitem0
-            { onPageSelected(mViewPager.getCurrentItem()) })
+
+        viewPager = findViewById(R.id.fragmentPager)
+        viewPager.apply {
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+
+            var position = if (hasSavedPosition) savedPosition else previewImagePagerAdapter.getFilePosition(file)
+            position = if (position >= 0) position else 0
+            adapter = previewImagePagerAdapter
+            addOnPageChangeListener(this@PreviewImageActivity)
+            currentItem = position
+            if (position == 0) {
+                // this is necessary because viewPager.setCurrentItem(0) does not trigger
+                // a call to onPageSelected in the first layout request after viewPager.setAdapter(...) ;
+                // see, for example:
+                // https://android.googlesource.com/platform/frameworks/support.git/+/android-6.0
+                // .1_r55/v4/java/android/support/v4/view/ViewPager.java#541
+                // ; or just:
+                // http://stackoverflow.com/questions/11794269/onpageselected-isnt-triggered-when-calling
+                // -setcurrentitem0
+                viewPager.post { onPageSelected(viewPager.currentItem) }
+            }
         }
     }
 
@@ -157,17 +161,17 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available
-        delayedHide(INITIAL_HIDE_DELAY)
+        delayedHide()
     }
 
     var mHideSystemUiHandler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
-            hideSystemUI(mFullScreenAnchorView)
+            hideSystemUI(fullScreenAnchorView)
             showActionBar(false)
         }
     }
 
-    private fun delayedHide(delayMillis: Int) {
+    private fun delayedHide(delayMillis: Int = INITIAL_HIDE_DELAY) {
         mHideSystemUiHandler.removeMessages(0)
         mHideSystemUiHandler.sendEmptyMessageDelayed(0, delayMillis.toLong())
     }
@@ -188,14 +192,11 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
         if (operation is RemoveFileOperation) {
             finish()
         } else if (operation is SynchronizeFileOperation) {
-            onSynchronizeFileOperationFinish(operation, result)
+            onSynchronizeFileOperationFinish(result)
         }
     }
 
-    private fun onSynchronizeFileOperationFinish(
-        operation: SynchronizeFileOperation,
-        result: RemoteOperationResult<*>
-    ) {
+    private fun onSynchronizeFileOperationFinish(result: RemoteOperationResult<*>) {
         if (result.isSuccess) {
             invalidateOptionsMenu()
         }
@@ -210,37 +211,21 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
      */
     private inner class PreviewImageServiceConnection : ServiceConnection {
         override fun onServiceConnected(component: ComponentName, service: IBinder) {
-            if (component == ComponentName(
-                    this@PreviewImageActivity,
-                    FileDownloader::class.java
-                )
-            ) {
+            if (component == ComponentName(this@PreviewImageActivity, FileDownloader::class.java)) {
                 Timber.d("onServiceConnected, FileDownloader")
                 mDownloaderBinder = service as FileDownloaderBinder
-            } else if (component == ComponentName(
-                    this@PreviewImageActivity,
-                    FileUploader::class.java
-                )
-            ) {
+            } else if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
                 Timber.d("onServiceConnected, FileUploader")
                 mUploaderBinder = service as FileUploaderBinder
             }
-            mPreviewImagePagerAdapter!!.onTransferServiceConnected()
+            previewImagePagerAdapter.onTransferServiceConnected()
         }
 
         override fun onServiceDisconnected(component: ComponentName) {
-            if (component == ComponentName(
-                    this@PreviewImageActivity,
-                    FileDownloader::class.java
-                )
-            ) {
+            if (component == ComponentName(this@PreviewImageActivity, FileDownloader::class.java)) {
                 Timber.d("Download service suddenly disconnected")
                 mDownloaderBinder = null
-            } else if (component == ComponentName(
-                    this@PreviewImageActivity,
-                    FileUploader::class.java
-                )
-            ) {
+            } else if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
                 Timber.d("Upload service suddenly disconnected")
                 mUploaderBinder = null
             }
@@ -248,8 +233,7 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val returnValue: Boolean
-        returnValue = when (item.itemId) {
+        return when (item.itemId) {
             android.R.id.home -> {
                 if (isDrawerOpen()) {
                     closeDrawer()
@@ -260,21 +244,23 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
             }
             else -> super.onOptionsItemSelected(item)
         }
-        return returnValue
     }
 
     override fun onResume() {
         super.onResume()
-        mDownloadFinishReceiver = DownloadFinishReceiver()
-        val filter = IntentFilter(FileDownloader.getDownloadFinishMessage())
-        filter.addAction(FileDownloader.getDownloadAddedMessage())
-        mLocalBroadcastManager!!.registerReceiver(mDownloadFinishReceiver!!, filter)
+        val filter = IntentFilter(FileDownloader.getDownloadFinishMessage()).apply {
+            addAction(FileDownloader.getDownloadAddedMessage())
+        }
+
+        downloadFinishReceiver = DownloadFinishReceiver().also { downloadReceiver ->
+            localBroadcastManager?.registerReceiver(downloadReceiver, filter)
+        }
     }
 
     public override fun onPause() {
-        if (mDownloadFinishReceiver != null) {
-            mLocalBroadcastManager!!.unregisterReceiver(mDownloadFinishReceiver!!)
-            mDownloadFinishReceiver = null
+        downloadFinishReceiver?.let { downloadReceiver ->
+            localBroadcastManager?.unregisterReceiver(downloadReceiver)
+            downloadFinishReceiver = null
         }
         super.onPause()
     }
@@ -284,13 +270,11 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
     }
 
     override fun showDetails(file: OCFile) {
-        val showDetailsIntent = Intent(this, FileDisplayActivity::class.java)
-        showDetailsIntent.action = FileDisplayActivity.ACTION_DETAILS
-        showDetailsIntent.putExtra(EXTRA_FILE, file)
-        showDetailsIntent.putExtra(
-            EXTRA_ACCOUNT,
-            AccountUtils.getCurrentOwnCloudAccount(this)
-        )
+        val showDetailsIntent = Intent(this, FileDisplayActivity::class.java).apply {
+            action = FileDisplayActivity.ACTION_DETAILS
+            putExtra(EXTRA_FILE, file)
+            putExtra(EXTRA_ACCOUNT, AccountUtils.getCurrentOwnCloudAccount(this@PreviewImageActivity))
+        }
         startActivity(showDetailsIntent)
     }
 
@@ -303,16 +287,16 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
     override fun onPageSelected(position: Int) {
         Timber.d("onPageSelected %s", position)
         if (operationsServiceBinder != null) {
-            mSavedPosition = position
-            mHasSavedPosition = true
-            val currentFile = mPreviewImagePagerAdapter!!.getFileAt(position)
+            savedPosition = position
+            hasSavedPosition = true
+            val currentFile = previewImagePagerAdapter.getFileAt(position)
             updateActionBarTitle(currentFile.fileName)
-            if (!mPreviewImagePagerAdapter!!.pendingErrorAt(position)) {
+            if (!previewImagePagerAdapter.pendingErrorAt(position)) {
                 fileOperationsHelper.syncFile(currentFile)
             }
 
             // Call to reset image zoom to initial state
-            (mViewPager!!.adapter as PreviewImagePagerAdapter?)!!.resetZoom()
+            (viewPager.adapter as PreviewImagePagerAdapter?)?.resetZoom()
         } else {
             // too soon! ; selection of page (first image) was faster than binding of FileOperationsService;
             // wait a bit!
@@ -352,11 +336,9 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
         override fun onReceive(context: Context, intent: Intent) {
             val accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME)
             val downloadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH)
-            if (account.name == accountName &&
-                downloadedRemotePath != null
-            ) {
+            if (account.name == accountName && downloadedRemotePath != null) {
                 val file = storageManager.getFileByPath(downloadedRemotePath)
-                mPreviewImagePagerAdapter!!.onDownloadEvent(
+                previewImagePagerAdapter.onDownloadEvent(
                     file!!,
                     intent.action!!,
                     intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
@@ -365,40 +347,37 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
         }
     }
 
-    @SuppressLint("InlinedApi")
     fun toggleFullScreen() {
-        val visible = (mFullScreenAnchorView!!.systemUiVisibility
-                and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0
+        val safeFullScreenAnchorView = fullScreenAnchorView ?: return
+        val visible = (safeFullScreenAnchorView.systemUiVisibility and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0
         if (visible) {
-            hideSystemUI(mFullScreenAnchorView)
-            // actionBar.hide(); // propagated through OnSystemUiVisibilityChangeListener()
+            hideSystemUI(fullScreenAnchorView)
         } else {
-            showSystemUI(mFullScreenAnchorView)
-            // actionBar.show(); // propagated through OnSystemUiVisibilityChangeListener()
+            showSystemUI(fullScreenAnchorView)
         }
     }
 
     override fun onAccountSet(stateWasRecovered: Boolean) {
         super.onAccountSet(stateWasRecovered)
-        if (account != null) {
-            var file = file
-            /// Validate handled file  (first image to preview)
-            checkNotNull(file) { "Instanced with a NULL OCFile" }
-            require(file.isImage) { "Non-image file passed as argument" }
+        account ?: return
+        var file = file
 
-            // Update file according to DB file, if it is possible
-            if (file.id!! > FileDataStorageManager.ROOT_PARENT_ID) {
-                file = storageManager.getFileById(file.id!!)
-            }
-            if (file != null) {
-                /// Refresh the activity according to the Account and OCFile set
-                setFile(file) // reset after getting it fresh from storageManager
-                updateActionBarTitle(getFile().fileName)
-                initViewPager()
-            } else {
-                // handled file not in the current Account
-                finish()
-            }
+        /// Validate handled file  (first image to preview)
+        checkNotNull(file) { "Instanced with a NULL OCFile" }
+        require(file.isImage) { "Non-image file passed as argument" }
+
+        // Update file according to DB file, if it is possible
+        if (file.id!! > FileDataStorageManager.ROOT_PARENT_ID) {
+            file = storageManager.getFileById(file.id!!)
+        }
+        if (file != null) {
+            /// Refresh the activity according to the Account and OCFile set
+            setFile(file) // reset after getting it fresh from storageManager
+            updateActionBarTitle(getFile().fileName)
+            initViewPager()
+        } else {
+            // handled file not in the current Account
+            finish()
         }
     }
 
@@ -406,9 +385,8 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
         // TODO Auto-generated method stub
     }
 
-    @SuppressLint("InlinedApi")
     private fun hideSystemUI(anchorView: View?) {
-        anchorView!!.systemUiVisibility =
+        anchorView?.systemUiVisibility =
             (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hides NAVIGATION BAR; Android >= 4.0
                     or View.SYSTEM_UI_FLAG_FULLSCREEN // hides STATUS BAR;     Android >= 4.1
                     or View.SYSTEM_UI_FLAG_IMMERSIVE // stays interactive;    Android >= 4.4
@@ -417,9 +395,8 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
     }
 
-    @SuppressLint("InlinedApi")
     private fun showSystemUI(anchorView: View?) {
-        anchorView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE // draw full window;     Android >= 4.1
+        anchorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE // draw full window;     Android >= 4.1
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // draw full window;     Android >= 4.1
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
     }
@@ -439,10 +416,7 @@ class PreviewImageActivity : FileActivity(), FileFragment.ContainerActivity, OnP
     }
 
     private fun updateActionBarTitle(title: String) {
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.title = title
-        }
+        supportActionBar?.title = title
     }
 
     companion object {
