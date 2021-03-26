@@ -30,13 +30,13 @@ import com.owncloud.android.R
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
-import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsMoreFragment : PreferenceFragmentCompat() {
 
     // ViewModel
-    private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val settingsViewModel by viewModel<SettingsMoreViewModel>()
 
     private var moreScreen: PreferenceScreen? = null
     private var prefHelp: Preference? = null

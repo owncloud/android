@@ -27,14 +27,14 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
-import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsLogsFragment : PreferenceFragmentCompat() {
 
     // ViewModel
-    private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val settingsViewModel by viewModel<SettingsLogsViewModel>()
 
     private var prefEnableLogging: SwitchPreferenceCompat? = null
     private var prefHttpLogs: CheckBoxPreference? = null
