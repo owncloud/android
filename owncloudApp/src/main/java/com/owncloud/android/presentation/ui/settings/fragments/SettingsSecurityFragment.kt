@@ -34,7 +34,7 @@ import androidx.preference.PreferenceScreen
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.ui.activity.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
@@ -43,7 +43,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     // ViewModel
-    private val settingsViewModel by viewModel<SettingsViewModel>()
+    private val settingsViewModel by viewModel<SettingsSecurityViewModel>()
 
     private var screenSecurity: PreferenceScreen? = null
     private var prefPasscode: CheckBoxPreference? = null
