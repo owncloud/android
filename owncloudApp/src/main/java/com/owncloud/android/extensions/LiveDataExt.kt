@@ -21,6 +21,7 @@ package com.owncloud.android.extensions
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
 import androidx.work.WorkInfo
 import com.owncloud.android.workers.DownloadFileWorker.Companion.WORKER_KEY_PROGRESS
 
@@ -54,3 +55,6 @@ fun LiveData<WorkInfo?>.observeWorkerTillItFinishes(
         }
     })
 }
+
+fun LiveData<MutableList<WorkInfo>>.transformToObserveJustLastWork(): LiveData<WorkInfo?> =
+    Transformations.map(this) { workers -> workers.lastOrNull() }
