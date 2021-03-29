@@ -36,7 +36,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SettingsMoreFragment : PreferenceFragmentCompat() {
 
     // ViewModel
-    private val settingsViewModel by viewModel<SettingsMoreViewModel>()
+    private val moreViewModel by viewModel<SettingsMoreViewModel>()
 
     private var moreScreen: PreferenceScreen? = null
     private var prefHelp: Preference? = null
@@ -58,9 +58,9 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         prefImprint = findPreference(PREFERENCE_IMPRINT)
 
         // Help
-        if (settingsViewModel.isHelpEnabled()) {
+        if (moreViewModel.isHelpEnabled()) {
             prefHelp?.setOnPreferenceClickListener {
-                val helpUrl = settingsViewModel.getHelpUrl()
+                val helpUrl = moreViewModel.getHelpUrl()
                 requireActivity().goToUrl(helpUrl)
                 true
             }
@@ -69,9 +69,9 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         }
 
         // Sync contacts, calendars and tasks
-        if (settingsViewModel.isSyncEnabled()) {
+        if (moreViewModel.isSyncEnabled()) {
             prefSync?.setOnPreferenceClickListener {
-                val syncUrl = settingsViewModel.getSyncUrl()
+                val syncUrl = moreViewModel.getSyncUrl()
                 requireActivity().goToUrl(syncUrl)
                 true
             }
@@ -80,7 +80,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         }
 
         // Recommend
-        if (settingsViewModel.isRecommendEnabled()) {
+        if (moreViewModel.isRecommendEnabled()) {
             prefRecommend?.setOnPreferenceClickListener {
                 val appName = getString(R.string.app_name)
                 val downloadUrl = getString(R.string.url_app_download)
@@ -97,7 +97,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         }
 
         // Feedback
-        if (settingsViewModel.isFeedbackEnabled()) {
+        if (moreViewModel.isFeedbackEnabled()) {
             prefFeedback?.setOnPreferenceClickListener {
                 val feedbackMail = getString(R.string.mail_feedback)
                 val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
@@ -110,7 +110,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         }
 
         // Privacy policy
-        if (settingsViewModel.isPrivacyPolicyEnabled()) {
+        if (moreViewModel.isPrivacyPolicyEnabled()) {
             prefPrivacyPolicy?.setOnPreferenceClickListener {
                 val intent = Intent(context, PrivacyPolicyActivity::class.java)
                 startActivity(intent)
@@ -121,9 +121,9 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         }
 
         // Imprint
-        if (settingsViewModel.isImprintEnabled()) {
+        if (moreViewModel.isImprintEnabled()) {
             prefImprint?.setOnPreferenceClickListener {
-                val imprintUrl = settingsViewModel.getImprintUrl()
+                val imprintUrl = moreViewModel.getImprintUrl()
                 requireActivity().goToUrl(imprintUrl)
                 true
             }
