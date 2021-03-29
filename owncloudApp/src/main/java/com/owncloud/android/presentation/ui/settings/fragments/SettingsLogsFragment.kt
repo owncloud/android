@@ -34,7 +34,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SettingsLogsFragment : PreferenceFragmentCompat() {
 
     // ViewModel
-    private val settingsViewModel by viewModel<SettingsLogsViewModel>()
+    private val logsViewModel by viewModel<SettingsLogsViewModel>()
 
     private var prefEnableLogging: SwitchPreferenceCompat? = null
     private var prefHttpLogs: CheckBoxPreference? = null
@@ -47,27 +47,27 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
         prefHttpLogs = findPreference(PREFERENCE_LOG_HTTP)
         prefLogsView = findPreference(PREFERENCE_LOGGER)
 
-        with(settingsViewModel.isLoggingEnabled()) {
+        with(logsViewModel.isLoggingEnabled()) {
             prefHttpLogs?.isEnabled = this
             prefLogsView?.isEnabled = this
         }
 
         prefEnableLogging?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
             val value = newValue as Boolean
-            settingsViewModel.setEnableLogging(value)
+            logsViewModel.setEnableLogging(value)
 
             prefHttpLogs?.isEnabled = value
             prefLogsView?.isEnabled = value
             if (!value) {
                 // Disable http logs when global logs are disabled.
-                settingsViewModel.shouldLogHttpRequests(value)
+                logsViewModel.shouldLogHttpRequests(value)
                 prefHttpLogs?.isChecked = false
             }
             true
         }
 
         prefHttpLogs?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-            settingsViewModel.shouldLogHttpRequests(newValue as Boolean)
+            logsViewModel.shouldLogHttpRequests(newValue as Boolean)
             true
         }
 
