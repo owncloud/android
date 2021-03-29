@@ -85,7 +85,7 @@ class PreviewImagePagerAdapter(
         return fragment
     }
 
-    fun getFilePosition(file: OCFile) = mImageFiles.indexOf(file)
+    fun getFilePosition(file: OCFile) = mImageFiles.indexOfFirst { file.id == it.id }
 
     override fun getCount() = mImageFiles.size
 
