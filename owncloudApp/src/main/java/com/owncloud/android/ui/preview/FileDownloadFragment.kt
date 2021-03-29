@@ -38,7 +38,6 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
-import com.owncloud.android.extensions.transformToObserveJustLastWork
 import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
@@ -56,7 +55,7 @@ class FileDownloadFragment : FileFragment() {
     private var ignoreFirstSavedState = false
     private var error = false
     private var progressBar: ProgressBar? = null
-    private var liveData: LiveData<MutableList<WorkInfo>>? = null
+    private var liveData: LiveData<WorkInfo?>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -217,7 +216,7 @@ class FileDownloadFragment : FileFragment() {
         val transferManager = TransferManager(MainApp.appContext)
         account?.let {
             liveData = transferManager.getLiveDataForDownloadingFile(it, file)
-            liveData?.transformToObserveJustLastWork()?.observeWorkerTillItFinishes(
+            liveData?.observeWorkerTillItFinishes(
                 owner = this,
                 onWorkEnqueued = { progressBar?.isIndeterminate = true },
                 onWorkRunning = { progress ->

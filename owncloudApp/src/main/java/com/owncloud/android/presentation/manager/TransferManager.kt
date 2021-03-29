@@ -21,6 +21,7 @@ package com.owncloud.android.presentation.manager
 import android.accounts.Account
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.work.WorkInfo
 import androidx.work.WorkInfo.State.BLOCKED
 import androidx.work.WorkInfo.State.CANCELLED
@@ -30,7 +31,6 @@ import androidx.work.WorkInfo.State.SUCCEEDED
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.extensions.transformToObserveJustLastWork
 import com.owncloud.android.providers.impl.TransferProviderImpl
 import timber.log.Timber
 import java.util.UUID
@@ -43,7 +43,7 @@ class TransferManager(
 
     /**
      * Enqueue a new download and return its uuid.
-     * You can check and observe its progress using
+     * We can check and observe its progress using
      * @see WorkManager.getWorkInfoById and
      * @see WorkManager.getWorkInfoByIdLiveData
      */
@@ -57,29 +57,47 @@ class TransferManager(
         return transferProvider.downloadFile(account, file)
     }
 
-    fun getLiveDataForDownloadingFile(account: Account, file: OCFile): LiveData<MutableList<WorkInfo>> {
-        val workQuery = WorkQuery.Builder
-            .fromTags(listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name))
-            .addStates(listOf(ENQUEUED, RUNNING, BLOCKED))
-            .build()
+    /**
+     * Get a LiveData with the last downloading work info.
+     */
+    fun getLiveDataForDownloadingFile(account: Account, file: OCFile): LiveData<WorkInfo?> {
+        val tagsToFilter = listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name)
+        val workQuery = buildWorkQuery(
+            tags = tagsToFilter,
+            states = listOf(ENQUEUED, RUNNING, BLOCKED)
+        )
 
-        return getWorkManager().getWorkInfosLiveData(workQuery)
+        return Transformations.map(getWorkManager().getWorkInfosLiveData(workQuery)) { listOfDownloads ->
+            listOfDownloads
+                .asReversed()
+                .distinctBy { it.tags }
+                .firstOrNull { it.tags.containsAll(tagsToFilter) }
+        }
     }
 
-    fun getLiveDataForDownloadingFromAccount(account: Account): LiveData<MutableList<WorkInfo>> {
-        val workQuery = WorkQuery.Builder
-            .fromTags(listOf(TRANSFER_TAG_DOWNLOAD, account.name))
-            .addStates(listOf(SUCCEEDED, CANCELLED, BLOCKED))
-            .build()
+    /**
+     * Get a LiveData with the lasts downloads from an account
+     */
+    fun getLiveDataForFinishedDownloadsFromAccount(account: Account): LiveData<List<WorkInfo>> {
+        val tagsToFilter = listOf(TRANSFER_TAG_DOWNLOAD, account.name)
+        val workQuery = buildWorkQuery(
+            tags = tagsToFilter,
+            states = listOf(SUCCEEDED, CANCELLED, BLOCKED)
+        )
 
-        return getWorkManager().getWorkInfosLiveData(workQuery)
+        return Transformations.map(getWorkManager().getWorkInfosLiveData(workQuery)) { listOfDownloads ->
+            listOfDownloads
+                .asReversed()
+                .distinctBy { it.tags }
+                .filter { it.tags.containsAll(tagsToFilter) }
+        }
     }
 
     private fun isDownloadAlreadyEnqueued(account: Account, file: OCFile): Boolean {
-        val workQuery = WorkQuery.Builder
-            .fromTags(listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name))
-            .addStates(listOf(ENQUEUED, RUNNING, BLOCKED))
-            .build()
+        val workQuery = buildWorkQuery(
+            tags = listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name),
+            states = listOf(ENQUEUED, RUNNING, BLOCKED),
+        )
 
         val downloadWorkersForFile = getWorkManager().getWorkInfos(workQuery).get()
 
@@ -102,21 +120,60 @@ class TransferManager(
 
     private fun getWorkManager() = WorkManager.getInstance(context)
 
+    /**
+     * Get a list of WorkInfo that matches EVERY tag.
+     */
     private fun getWorkInfoFromTags(vararg tags: String): List<WorkInfo> {
         val workers = getWorkManager()
             .getWorkInfos(
-                WorkQuery.Builder.fromTags(tags.toList()).build()
+                buildWorkQuery(tags = tags.toList())
             ).get()
         return workers.filter { it.tags.containsAll(tags.toList()) }
     }
 
-    fun cancelWorkersForAccount(account: Account) {
-        getWorkManager().cancelAllWorkByTag(account.name)
-    }
+    /**
+     * Take care with WorkQueries. It will return workers that match at least ONE of the tags.
+     * If we perform a query with tags {"account@server", "2"}, [WorkManager.getWorkInfos] will return workers that
+     * contains at least ONE of the tags, but not both of them. If we want workers that match every tag,
+     * @see getWorkInfoFromTags
+     */
+    private fun buildWorkQuery(
+        tags: List<String>,
+        states: List<WorkInfo.State> = listOf(),
+    ): WorkQuery = WorkQuery.Builder
+        .fromTags(tags)
+        .addStates(states)
+        .build()
 
-    fun isDownloadPending(account: Account, file: OCFile) =
+    /**
+     * Check if a download is pending. It could be enqueued, downloading or blocked.
+     * @param account - Owner of the file
+     * @param file - File to check whether it is pending.
+     *
+     * @return true if the download is pending.
+     */
+    fun isDownloadPending(account: Account, file: OCFile): Boolean =
         getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name).any { !it.state.isFinished }
 
+    /**
+     * Cancel every pending download for an account. Note that cancellation is a best-effort
+     * policy and work that is already executing may continue to run.
+     *
+     * @param account
+     */
+    fun cancelDownloadForAccount(account: Account) {
+        val workersToCancel = getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, account.name)
+        workersToCancel.forEach {
+            getWorkManager().cancelWorkById(it.id)
+        }
+    }
+
+    /**
+     * Cancel every pending download for file. Note that cancellation is a best-effort
+     * policy and work that is already executing may continue to run.
+     *
+     * @param file to cancel
+     */
     fun cancelDownloadForFile(file: OCFile) {
         val workersToCancel = getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, file.id.toString(), file.owner)
         workersToCancel.forEach {
