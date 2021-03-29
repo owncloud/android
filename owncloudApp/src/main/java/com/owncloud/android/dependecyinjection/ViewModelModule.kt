@@ -32,6 +32,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUplo
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.ui.preview.PreviewImageViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -55,4 +56,6 @@ val viewModelModule = module {
     viewModel { SettingsPictureUploadsViewModel(get(), get()) }
     viewModel { SettingsVideoUploadsViewModel(get(), get()) }
     viewModel { FilesViewModel(get(), get(), get()) }
+
+    viewModel { PreviewImageViewModel(get(), get(), get()) }
 }

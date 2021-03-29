@@ -21,11 +21,13 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.presentation.manager.AvatarManager
+import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.impl.OCContextProvider
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -36,4 +38,5 @@ val commonModule = module {
     factory<ContextProvider> { OCContextProvider(androidContext()) }
     single { LogsProvider(get()) }
     single { CameraUploadsHandlerProvider(androidContext()) }
+    single { TransferManager(androidApplication()) }
 }
