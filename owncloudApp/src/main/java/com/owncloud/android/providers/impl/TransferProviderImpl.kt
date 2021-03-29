@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,6 +35,16 @@ class TransferProviderImpl(
     private val context: Context
 ) : TransferProvider {
 
+    /**
+     * We will use [WorkManager] to perform downloads.
+     * We will send the file Id and the owner account as parameters. We cannot send complex objects as parameters.
+     * The worker will retrieve the file from database and the account from the account manager to make it work.
+     * The worker will have 3 tags. FileId, Account and the operation TAG.
+     * This is helpful if we want to cancel or observe enqueued workers when an account, of a file is removed.
+     * In that case, we will cancel every worker with that TAG
+     *
+     * @return UUID - UUID for the enqueued worker. It is important if we want to observe its process.
+     */
     override fun downloadFile(account: Account, file: OCFile): UUID {
         val inputData = workDataOf(
             DownloadFileWorker.KEY_PARAM_ACCOUNT to account.name,
