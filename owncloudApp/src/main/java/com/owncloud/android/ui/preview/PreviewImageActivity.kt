@@ -23,11 +23,8 @@
  */
 package com.owncloud.android.ui.preview
 
-import android.content.BroadcastReceiver
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.Handler
@@ -41,12 +38,14 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.work.WorkInfo
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
+import com.owncloud.android.files.services.FileDownloader.getDownloadFinishMessage
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener
@@ -58,9 +57,9 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FileListOption
 import com.owncloud.android.ui.fragment.FileFragment
-import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PreferenceUtils
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 /**
@@ -71,12 +70,13 @@ class PreviewImageActivity : FileActivity(),
     OnPageChangeListener,
     OnRemoteOperationListener {
 
+    private val previewImageViewModel: PreviewImageViewModel by inject()
+
     private lateinit var viewPager: ViewPager
     private lateinit var previewImagePagerAdapter: PreviewImagePagerAdapter
     private var savedPosition = 0
     private var hasSavedPosition = false
     private var localBroadcastManager: LocalBroadcastManager? = null
-    private var downloadFinishReceiver: DownloadFinishReceiver? = null
     private var fullScreenAnchorView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,6 +106,25 @@ class PreviewImageActivity : FileActivity(),
         }
         window.statusBarColor = ContextCompat.getColor(this, R.color.owncloud_blue_dark_transparent)
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
+    }
+
+    private fun startObservingFinishedDownloads() {
+        previewImageViewModel.startListeningToDownloadsFromAccount(account = account)
+        previewImageViewModel.downloads.observe(this) { pairFileWork ->
+            if (pairFileWork.isEmpty()) return@observe
+
+            pairFileWork.forEach { fileWork ->
+                previewImagePagerAdapter.onDownloadEvent(
+                    fileWork.first,
+                    getDownloadFinishMessage(),
+                    fileWork.second.state == WorkInfo.State.SUCCEEDED
+                )
+            }
+        }
+    }
+
+    private fun stopObservingWorkers() {
+        previewImageViewModel.downloads.removeObservers(this)
     }
 
     private fun initViewPager() {
@@ -153,6 +172,7 @@ class PreviewImageActivity : FileActivity(),
                 viewPager.post { onPageSelected(viewPager.currentItem) }
             }
         }
+        startObservingFinishedDownloads()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -248,20 +268,11 @@ class PreviewImageActivity : FileActivity(),
 
     override fun onResume() {
         super.onResume()
-        val filter = IntentFilter(FileDownloader.getDownloadFinishMessage()).apply {
-            addAction(FileDownloader.getDownloadAddedMessage())
-        }
-
-        downloadFinishReceiver = DownloadFinishReceiver().also { downloadReceiver ->
-            localBroadcastManager?.registerReceiver(downloadReceiver, filter)
-        }
+        startObservingFinishedDownloads()
     }
 
     public override fun onPause() {
-        downloadFinishReceiver?.let { downloadReceiver ->
-            localBroadcastManager?.unregisterReceiver(downloadReceiver)
-            downloadFinishReceiver = null
-        }
+        stopObservingWorkers()
         super.onPause()
     }
 
@@ -324,28 +335,6 @@ class PreviewImageActivity : FileActivity(),
      * @param positionOffsetPixels Value in pixels indicating the offset from position.
      */
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-    /**
-     * Class waiting for broadcast events from the [FileDownloader] service.
-     *
-     *
-     * Updates the UI when a download is started or finished, provided that it is relevant for the
-     * folder displayed in the gallery.
-     */
-    private inner class DownloadFinishReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME)
-            val downloadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH)
-            if (account.name == accountName && downloadedRemotePath != null) {
-                val file = storageManager.getFileByPath(downloadedRemotePath)
-                previewImagePagerAdapter.onDownloadEvent(
-                    file!!,
-                    intent.action!!,
-                    intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
-                )
-            }
-        }
-    }
 
     fun toggleFullScreen() {
         val safeFullScreenAnchorView = fullScreenAnchorView ?: return
