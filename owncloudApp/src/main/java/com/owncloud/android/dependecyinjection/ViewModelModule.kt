@@ -38,6 +38,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUpload
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
+import com.owncloud.android.ui.preview.PreviewImageViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -66,4 +67,6 @@ val viewModelModule = module {
     viewModel { LogListViewModel(get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get()) }
     viewModel { FilesViewModel(get(), get(), get()) }
+
+    viewModel { PreviewImageViewModel(get(), get(), get()) }
 }
