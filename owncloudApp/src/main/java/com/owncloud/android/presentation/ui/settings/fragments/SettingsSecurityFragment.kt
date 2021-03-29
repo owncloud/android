@@ -43,7 +43,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
     // ViewModel
-    private val settingsViewModel by viewModel<SettingsSecurityViewModel>()
+    private val securityViewModel by viewModel<SettingsSecurityViewModel>()
 
     private var screenSecurity: PreferenceScreen? = null
     private var prefPasscode: CheckBoxPreference? = null
@@ -56,7 +56,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val passcodeEnableResult = settingsViewModel.handleEnablePasscode(result.data)
+            val passcodeEnableResult = securityViewModel.handleEnablePasscode(result.data)
             if (passcodeEnableResult.isSuccess) {
                 prefPasscode?.isChecked = true
 
@@ -69,7 +69,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private val disablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val passcodeDisableResult = settingsViewModel.handleDisablePasscode(result.data)
+            val passcodeDisableResult = securityViewModel.handleDisablePasscode(result.data)
             if (passcodeDisableResult.isSuccess) {
                 prefPasscode?.isChecked = false
 
@@ -82,7 +82,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private val enablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val patternEnableResult = settingsViewModel.handleEnablePattern(result.data)
+            val patternEnableResult = securityViewModel.handleEnablePattern(result.data)
             if (patternEnableResult.isSuccess) {
                 prefPattern?.isChecked = true
 
@@ -95,7 +95,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private val disablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val patternDisableResult = settingsViewModel.handleDisablePattern(result.data)
+            val patternDisableResult = securityViewModel.handleDisablePattern(result.data)
             if (patternDisableResult.isSuccess) {
                 prefPattern?.isChecked = false
 
@@ -117,7 +117,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
         // Passcode lock
         prefPasscode?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-            if (settingsViewModel.isPatternSet()) {
+            if (securityViewModel.isPatternSet()) {
                 showMessageInSnackbar(getString(R.string.pattern_already_set))
             } else {
                 val intent = Intent(activity, PassCodeActivity::class.java)
@@ -134,7 +134,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
         // Pattern lock
         prefPattern?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-            if (settingsViewModel.isPasscodeSet()) {
+            if (securityViewModel.isPasscodeSet()) {
                 showMessageInSnackbar(getString(R.string.passcode_already_set))
             } else {
                 val intent = Intent(activity, PatternLockActivity::class.java)
@@ -188,7 +188,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                         .setPositiveButton(
                             getString(R.string.common_yes)
                         ) { dialog: DialogInterface?, which: Int ->
-                            settingsViewModel.setPrefTouchesWithOtherVisibleWindows(true)
+                            securityViewModel.setPrefTouchesWithOtherVisibleWindows(true)
                             prefTouchesWithOtherVisibleWindows?.isChecked = true
                         }
                         .show()
