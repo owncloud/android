@@ -23,6 +23,7 @@ package com.owncloud.android.dependecyinjection
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.presentation.manager.AvatarManager
 import com.owncloud.android.providers.AccountProvider
+import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
@@ -41,4 +42,5 @@ val commonModule = module {
     single { WorkManagerProvider(androidContext()) }
     single { AccountProvider(androidContext()) }
     single { UploadsStorageManager(androidApplication().contentResolver) }
+    single { TransferManager(androidApplication()) }
 }
