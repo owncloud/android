@@ -43,7 +43,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment
-import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
@@ -71,13 +71,13 @@ class SettingsMoreFragmentTest {
     private var prefPrivacyPolicy: Preference? = null
     private var prefImprint: Preference? = null
 
-    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var moreViewModel: SettingsMoreViewModel
     private lateinit var context: Context
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        settingsViewModel = mockk(relaxUnitFun = true)
+        moreViewModel = mockk(relaxUnitFun = true)
 
         stopKoin()
 
@@ -86,7 +86,7 @@ class SettingsMoreFragmentTest {
             modules(
                 module(override = true) {
                     viewModel {
-                        settingsViewModel
+                        moreViewModel
                     }
                 }
             )
@@ -117,12 +117,12 @@ class SettingsMoreFragmentTest {
         privacyPolicyEnabled: Boolean = true,
         imprintEnabled: Boolean = true,
     ) {
-        every { settingsViewModel.isHelpEnabled() } returns helpEnabled
-        every { settingsViewModel.isSyncEnabled() } returns syncEnabled
-        every { settingsViewModel.isRecommendEnabled() } returns recommendEnabled
-        every { settingsViewModel.isFeedbackEnabled() } returns feedbackEnabled
-        every { settingsViewModel.isPrivacyPolicyEnabled() } returns privacyPolicyEnabled
-        every { settingsViewModel.isImprintEnabled() } returns imprintEnabled
+        every { moreViewModel.isHelpEnabled() } returns helpEnabled
+        every { moreViewModel.isSyncEnabled() } returns syncEnabled
+        every { moreViewModel.isRecommendEnabled() } returns recommendEnabled
+        every { moreViewModel.isFeedbackEnabled() } returns feedbackEnabled
+        every { moreViewModel.isPrivacyPolicyEnabled() } returns privacyPolicyEnabled
+        every { moreViewModel.isImprintEnabled() } returns imprintEnabled
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
     }
@@ -237,7 +237,7 @@ class SettingsMoreFragmentTest {
 
     @Test
     fun helpOpensNotEmptyUrl() {
-        every { settingsViewModel.getHelpUrl() } returns context.getString(R.string.url_help)
+        every { moreViewModel.getHelpUrl() } returns context.getString(R.string.url_help)
 
         launchTest()
 
@@ -248,7 +248,7 @@ class SettingsMoreFragmentTest {
 
     @Test
     fun syncOpensNotEmptyUrl() {
-        every { settingsViewModel.getSyncUrl() } returns context.getString(R.string.url_sync_calendar_contacts)
+        every { moreViewModel.getSyncUrl() } returns context.getString(R.string.url_sync_calendar_contacts)
 
         launchTest()
 
@@ -313,7 +313,7 @@ class SettingsMoreFragmentTest {
 
     @Test
     fun imprintOpensUrl() {
-        every { settingsViewModel.getImprintUrl() } returns "https://owncloud.com/mobile"
+        every { moreViewModel.getImprintUrl() } returns "https://owncloud.com/mobile"
 
         launchTest()
 
@@ -330,4 +330,5 @@ class SettingsMoreFragmentTest {
         private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
         private const val PREFERENCE_IMPRINT = "imprint"
     }
+
 }
