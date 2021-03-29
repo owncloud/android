@@ -23,11 +23,14 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.work.WorkInfo
 import androidx.work.WorkInfo.State.BLOCKED
+import androidx.work.WorkInfo.State.CANCELLED
 import androidx.work.WorkInfo.State.ENQUEUED
 import androidx.work.WorkInfo.State.RUNNING
+import androidx.work.WorkInfo.State.SUCCEEDED
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.extensions.transformToObserveJustLastWork
 import com.owncloud.android.providers.impl.TransferProviderImpl
 import timber.log.Timber
 import java.util.UUID
@@ -58,6 +61,15 @@ class TransferManager(
         val workQuery = WorkQuery.Builder
             .fromTags(listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name))
             .addStates(listOf(ENQUEUED, RUNNING, BLOCKED))
+            .build()
+
+        return getWorkManager().getWorkInfosLiveData(workQuery)
+    }
+
+    fun getLiveDataForDownloadingFromAccount(account: Account): LiveData<MutableList<WorkInfo>> {
+        val workQuery = WorkQuery.Builder
+            .fromTags(listOf(TRANSFER_TAG_DOWNLOAD, account.name))
+            .addStates(listOf(SUCCEEDED, CANCELLED, BLOCKED))
             .build()
 
         return getWorkManager().getWorkInfosLiveData(workQuery)
