@@ -37,7 +37,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
-import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk
@@ -60,13 +60,13 @@ class SettingsLogsFragmentTest {
     private lateinit var prefHttpLogs: CheckBoxPreference
     private lateinit var prefLogsView: Preference
 
-    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var logsViewModel: SettingsLogsViewModel
     private lateinit var context: Context
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        settingsViewModel = mockk(relaxUnitFun = true)
+        logsViewModel = mockk(relaxUnitFun = true)
 
         stopKoin()
 
@@ -75,7 +75,7 @@ class SettingsLogsFragmentTest {
             modules(
                 module(override = true) {
                     viewModel {
-                        settingsViewModel
+                        logsViewModel
                     }
                 }
             )
@@ -92,7 +92,7 @@ class SettingsLogsFragmentTest {
     }
 
     private fun launchTest(enabledLogging: Boolean) {
-        every { settingsViewModel.isLoggingEnabled() } returns enabledLogging
+        every { logsViewModel.isLoggingEnabled() } returns enabledLogging
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
