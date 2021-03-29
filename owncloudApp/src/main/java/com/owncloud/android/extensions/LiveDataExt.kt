@@ -55,6 +55,3 @@ fun LiveData<WorkInfo?>.observeWorkerTillItFinishes(
         }
     })
 }
-
-fun LiveData<MutableList<WorkInfo>>.transformToObserveJustLastWork(): LiveData<WorkInfo?> =
-    Transformations.map(this) { workers -> workers.lastOrNull() }

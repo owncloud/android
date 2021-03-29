@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,5 +35,5 @@ interface TransferProvider {
      * @see WorkManager.getWorkInfoById and
      * @see WorkManager.getWorkInfoByIdLiveData
      */
-    fun downloadFile(account: Account, file: OCFile): UUID?
+    fun downloadFile(account: Account, file: OCFile): UUID
 }
