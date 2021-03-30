@@ -985,12 +985,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 }
                 case R.id.action_send_file: {
                     // Obtain the file
-<<<<<<< HEAD
-                    if (!singleFile.isDown()) {  // Download the file
-=======
                     if (!singleFile.isAvailableLocally()) {  // Download the file
                         Timber.d("%s : File must be downloaded", singleFile.getRemotePath());
->>>>>>> Apply code review suggestions
                         ((FileDisplayActivity) mContainerActivity).startDownloadForSending(singleFile);
                     } else {
                         mContainerActivity.getFileOperationsHelper().sendDownloadedFile(singleFile);
