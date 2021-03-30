@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run Calens Docker
-        uses: addnab/docker-run-action@v1
+        uses: addnab/docker-run-action@v3
         with:
           options: -v ${{github.workspace}}:/workspace -w /workspace
           image: toolhippie/calens:latest
