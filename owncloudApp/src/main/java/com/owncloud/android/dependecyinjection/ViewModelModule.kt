@@ -27,6 +27,7 @@ import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
+import com.owncloud.android.presentation.viewmodels.files.FileDetailsViewModel
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
@@ -44,7 +45,6 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUpload
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
-import com.owncloud.android.ui.fragment.FileDetailViewModel
 import com.owncloud.android.ui.preview.PreviewImageViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -80,7 +80,7 @@ val viewModelModule = module {
     viewModel { PatternViewModel(get()) }
     viewModel { BiometricViewModel(get(), get()) }
     viewModel { ReleaseNotesViewModel(get(), get()) }
-    viewModel { FileDetailViewModel(get(), get(), get(), get(), get()) }
+    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { FilesViewModel(get(), get(), get()) }
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
