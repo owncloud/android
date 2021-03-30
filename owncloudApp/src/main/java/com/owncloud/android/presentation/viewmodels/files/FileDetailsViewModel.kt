@@ -37,6 +37,7 @@ import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class FileDetailsViewModel(
     private val transferManager: TransferManager,
@@ -49,8 +50,10 @@ class FileDetailsViewModel(
 
     private val currentAccountName: String = AccountUtils.getCurrentOwnCloudAccount(contextProvider.getContext()).name
 
-    private val _downloads = MediatorLiveData<WorkInfo?>()
-    val downloads: LiveData<WorkInfo?> = _downloads
+    val pendingDownloads = MediatorLiveData<WorkInfo?>()
+
+    private val _ongoingDownload = MediatorLiveData<WorkInfo?>()
+    val ongoingDownload: LiveData<WorkInfo?> = _ongoingDownload
 
     private val _openInWebUriLiveData: MediatorLiveData<Event<UIResult<String>>> = MediatorLiveData()
     val openInWebUriLiveData: LiveData<Event<UIResult<String>>> = _openInWebUriLiveData
@@ -65,8 +68,17 @@ class FileDetailsViewModel(
     }
 
     fun startListeningToDownloadsFromAccountAndFile(account: Account, file: OCFile) {
-        _downloads.addSource(transferManager.getLiveDataForDownloadingFile(account, file)) { workInfo ->
-            _downloads.postValue(workInfo)
+        pendingDownloads.addSource(transferManager.getLiveDataForDownloadingFile(account, file)) { workInfo ->
+            if (workInfo != null) {
+                startListeningToWorkInfo(uuid = workInfo.id)
+                pendingDownloads.postValue(workInfo)
+            }
+        }
+    }
+
+    private fun startListeningToWorkInfo(uuid: UUID) {
+        _ongoingDownload.addSource(transferManager.getWorkInfoByIdLiveData(uuid)) {
+            _ongoingDownload.postValue(it)
         }
     }
 
