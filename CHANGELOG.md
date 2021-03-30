@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
+* Enhancement - Align previews actions: [#3155](https://github.com/owncloud/android/issues/3155)
 
 Details
 -------
@@ -20,7 +21,15 @@ Details
 
    https://github.com/owncloud/android/issues/2691
    https://github.com/owncloud/android/pull/3156
-   https://github.com/owncloud/android/pull/316
+   https://github.com/owncloud/android/pull/3162
+
+* Enhancement - Align previews actions: [#3155](https://github.com/owncloud/android/issues/3155)
+
+   We've aligned the behaviour for every preview fragment. Images, videos, audios and texts show
+   the same actions now.
+
+   https://github.com/owncloud/android/issues/3155
+   https://github.com/owncloud/android/pull/3177
 
 ## 2.17 (March 2021)
 - Toolbar redesign
