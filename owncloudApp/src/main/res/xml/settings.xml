@@ -27,10 +27,25 @@
         <Preference
             app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"
             app:allowDividerAbove="true"
-            app:icon="@drawable/ic_baseline_description_24"
+            app:icon="@drawable/ic_logs"
             app:key="logging_subsection"
             app:summary="@string/prefs_subsection_logging_summary"
             app:title="@string/prefs_subsection_logging" />
+
+        <Preference
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment"
+            app:allowDividerAbove="true"
+            app:icon="@drawable/ic_picture_uploads"
+            app:key="picture_uploads_subsection"
+            app:summary="@string/prefs_subsection_picture_uploads_summary"
+            app:title="@string/prefs_subsection_picture_uploads" />
+
+        <Preference
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment"
+            app:icon="@drawable/ic_video_uploads"
+            app:key="video_uploads_subsection"
+            app:summary="@string/prefs_subsection_video_uploads_summary"
+            app:title="@string/prefs_subsection_video_uploads" />
 
         <Preference
             app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment"
