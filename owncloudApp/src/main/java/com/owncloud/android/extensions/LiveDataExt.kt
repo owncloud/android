@@ -21,7 +21,6 @@ package com.owncloud.android.extensions
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
 import androidx.work.WorkInfo
 import com.owncloud.android.workers.DownloadFileWorker.Companion.WORKER_KEY_PROGRESS
 
@@ -33,11 +32,14 @@ fun LiveData<WorkInfo?>.observeWorkerTillItFinishes(
     onWorkFailed: () -> Unit,
     onWorkBlocked: () -> Unit = {},
     onWorkCancelled: () -> Unit = {},
+    removeObserverAfterNull: Boolean = true,
 ) {
     observe(owner, object : Observer<WorkInfo?> {
         override fun onChanged(value: WorkInfo?) {
             if (value == null) {
-                removeObserver(this)
+                if (removeObserverAfterNull) {
+                    removeObserver(this)
+                }
                 return
             }
 
