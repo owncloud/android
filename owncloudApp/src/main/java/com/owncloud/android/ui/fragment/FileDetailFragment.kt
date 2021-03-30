@@ -34,11 +34,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.R
@@ -49,12 +48,14 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.manager.TransferManager
+import com.owncloud.android.presentation.viewmodels.files.FileDetailsViewModel
 import com.owncloud.android.ui.activity.ComponentsGetter
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
@@ -75,61 +76,48 @@ import timber.log.Timber
  * This Fragment is used to display the details about a file.
  */
 class FileDetailFragment : FileFragment(), View.OnClickListener {
-    private var mLayout: Int
-    private var mView: View? = null
-    private var mAccount: Account? = null
-    private var mProgressController: TransferProgressController? = null
+    private var account: Account? = null
+    private var progressController: TransferProgressController? = null
 
-    private val fileDetailViewModel: FileDetailViewModel by viewModel()
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setHasOptionsMenu(true)
-        mProgressController = TransferProgressController(activity as ComponentsGetter?)
-        val progressBar = mView!!.findViewById<ProgressBar>(R.id.fdProgressBar)
-        mProgressController!!.setProgressBar(progressBar)
-
-        // Allow or disallow touches with other visible windows
-        if (mLayout == R.layout.file_details_fragment) {
-            val fileDetailsLayout = requireActivity().findViewById<RelativeLayout>(R.id.fileDetailsLayout)
-            fileDetailsLayout.filterTouchesWhenObscured =
-                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-        } else {
-            val fileDetailsEmptyLayout = requireActivity().findViewById<LinearLayout>(R.id.fileDetailsEmptyLayout)
-            fileDetailsEmptyLayout.filterTouchesWhenObscured =
-                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-        }
-    }
+    private val fileDetailsViewModel: FileDetailsViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
+
         file = requireArguments().getParcelable(ARG_FILE)
-        mAccount = requireArguments().getParcelable(ARG_ACCOUNT)
+        account = requireArguments().getParcelable(ARG_ACCOUNT)
         if (savedInstanceState != null) {
             file = savedInstanceState.getParcelable(FileActivity.EXTRA_FILE)
-            mAccount = savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT)
+            account = savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT)
         }
-        if (file != null && mAccount != null) {
-            mLayout = R.layout.file_details_fragment
+
+        return inflater.inflate(R.layout.file_details_fragment, container, false).apply {
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
         }
-        mView = inflater.inflate(mLayout, null)
-        if (mLayout == R.layout.file_details_fragment) {
-            requireView().findViewById<View>(R.id.fdCancelBtn).setOnClickListener(this)
-        }
-        updateFileDetails(false, false)
-        return mView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fileDetailViewModel.capabilities.observe(viewLifecycleOwner) { ocCapability: OCCapability? ->
+        progressController = TransferProgressController(activity as ComponentsGetter?).also {
+            it.setProgressBar(view.findViewById<ProgressBar>(R.id.fdProgressBar))
+        }
+
+        updateFileDetails(false, false)
+
+        view.findViewById<View>(R.id.fdCancelBtn).setOnClickListener {
+            (mContainerActivity as FileDisplayActivity).cancelTransference(file)
+            fileDetailsViewModel.cancelCurrentDownload(file)
+        }
+
+        fileDetailsViewModel.capabilities.observe(viewLifecycleOwner) { ocCapability: OCCapability? ->
             if (ocCapability != null && ocCapability.isOpenInWebAllowed()) {
                 // Show or hide openInWeb option. Hidden by default.
                 requireActivity().invalidateOptionsMenu()
             }
         }
 
-        fileDetailViewModel.openInWebUriLiveData.observe(viewLifecycleOwner, Event.EventObserver<UIResult<String>> { uiResult: UIResult<String?> ->
+        fileDetailsViewModel.openInWebUriLiveData.observe(viewLifecycleOwner, Event.EventObserver<UIResult<String>> { uiResult: UIResult<String?> ->
             if (uiResult is UIResult.Success) {
                 val builder = CustomTabsIntent.Builder().build()
                 builder.launchUrl(
@@ -155,27 +143,53 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(FileActivity.EXTRA_FILE, file)
-        outState.putParcelable(FileActivity.EXTRA_ACCOUNT, mAccount)
+        outState.putParcelable(FileActivity.EXTRA_ACCOUNT, account)
     }
 
     override fun onStart() {
         super.onStart()
-        mProgressController!!.startListeningProgressFor(file, mAccount)
+        progressController?.startListeningProgressFor(file, account)
+        startObservingProgressForDownload()
     }
 
     override fun onStop() {
-        mProgressController!!.stopListeningProgressFor(file, mAccount)
+        progressController?.stopListeningProgressFor(file, account)
+        stopObservingWorkers()
         super.onStop()
     }
 
+    private fun startObservingProgressForDownload() {
+        fileDetailsViewModel.startListeningToDownloadsFromAccountAndFile(file = file, account = account!!)
+        val progressBar = requireView().findViewById<ProgressBar>(R.id.fdProgressBar)
+        fileDetailsViewModel.downloads.observeWorkerTillItFinishes(
+            owner = this,
+            onWorkEnqueued = { progressBar?.isIndeterminate = true },
+            onWorkRunning = { progress ->
+                progressBar?.apply {
+                    isIndeterminate = false
+                    setProgress(progress)
+                    invalidate()
+                }
+            },
+            onWorkSucceeded = { updateFileDetails(false, false) },
+            onWorkFailed = { },
+            onWorkCancelled = { },
+            removeObserverAfterNull = false
+        )
+    }
+
+    private fun stopObservingWorkers() {
+        fileDetailsViewModel.downloads.removeObservers(this)
+    }
+
     override fun onTransferServiceConnected() {
-        if (mProgressController != null) {
-            mProgressController!!.startListeningProgressFor(file, mAccount)
+        if (progressController != null) {
+            progressController!!.startListeningProgressFor(file, account)
         }
         updateFileDetails(false, false) // TODO - really?
     }
 
-    override fun onFileMetadataChanged(updatedFile: OCFile) {
+    override fun onFileMetadataChanged(updatedFile: OCFile?) {
         if (updatedFile != null) {
             file = updatedFile
         }
@@ -198,10 +212,6 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         updateFileDetails(false, false)
     }
 
-    override fun getView(): View? {
-        return if (super.getView() == null) mView else super.getView()
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -216,44 +226,45 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         if (mContainerActivity.storageManager != null) {
-            val mf = FileMenuFilter(
+            val fileMenuFilter = FileMenuFilter(
                 file,
                 mContainerActivity.storageManager.account,
                 mContainerActivity,
                 activity
             )
-            mf.filter(menu, false, false, false, false)
+            fileMenuFilter.filter(
+                menu,
+                false,
+                false,
+                false,
+                false
+            )
+        }
+
+        // additional restriction for this fragment 
+        menu.findItem(R.id.action_see_details)?.apply {
+            isVisible = false
+            isEnabled = false
         }
 
         // additional restriction for this fragment
-        var item = menu.findItem(R.id.action_see_details)
-        if (item != null) {
-            item.isVisible = false
-            item.isEnabled = false
+        menu.findItem(R.id.action_move)?.apply {
+            isVisible = false
+            isEnabled = false
         }
 
         // additional restriction for this fragment
-        item = menu.findItem(R.id.action_move)
-        if (item != null) {
-            item.isVisible = false
-            item.isEnabled = false
+        menu.findItem(R.id.action_copy)?.apply {
+            isVisible = false
+            isEnabled = false
         }
-
-        // additional restriction for this fragment
-        item = menu.findItem(R.id.action_copy)
-        if (item != null) {
-            item.isVisible = false
-            item.isEnabled = false
+        menu.findItem(R.id.action_search)?.apply {
+            isVisible = false
+            isEnabled = false
         }
-        item = menu.findItem(R.id.action_search)
-        if (item != null) {
-            item.isVisible = false
-            item.isEnabled = false
-        }
-        item = menu.findItem(R.id.action_open_in_web)
-        if (item != null) {
-            item.isVisible = fileDetailViewModel.isOpenInWebAvailable()
-            item.isEnabled = fileDetailViewModel.isOpenInWebAvailable()
+        menu.findItem(R.id.action_open_in_web)?.apply {
+            isVisible = fileDetailsViewModel.isOpenInWebAvailable()
+            isEnabled = fileDetailsViewModel.isOpenInWebAvailable()
         }
     }
 
@@ -272,12 +283,12 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
             }
             R.id.action_remove_file -> {
                 val dialog = RemoveFilesDialogFragment.newInstance(file)
-                dialog.show(requireFragmentManager(), FTAG_CONFIRMATION)
+                dialog.show(parentFragmentManager, FTAG_CONFIRMATION)
                 true
             }
             R.id.action_rename_file -> {
                 val dialog = RenameFileDialogFragment.newInstance(file)
-                dialog.show(requireFragmentManager(), FTAG_RENAME_FILE)
+                dialog.show(parentFragmentManager, FTAG_RENAME_FILE)
                 true
             }
             R.id.action_cancel_sync -> {
@@ -308,7 +319,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
                 true
             }
             R.id.action_open_in_web -> {
-                fileDetailViewModel.openInWeb(file.remoteId!!)
+                fileDetailsViewModel.openInWeb(file.remoteId!!)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -363,63 +374,42 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     }
 
     /**
-     * Check if the fragment was created with an empty layout. An empty fragment can't show file details, must be
-     * replaced.
-     *
-     * @return True when the fragment was created with the empty layout.
-     */
-    val isEmpty: Boolean
-        get() = mLayout == R.layout.file_details_empty || file == null || mAccount == null
-
-    /**
      * Updates the view with all relevant details about that file.
      *
      * @param forcedTransferring Flag signaling if the file should be considered as downloading or uploading,
-     * although [FileDownloaderBinder.isDownloading]  and
-     * [FileUploaderBinder.isUploading] return false.
+     * although [TransferManager.isDownloadPending] and [FileUploaderBinder.isUploading] return false.
      * @param refresh            If 'true', try to refresh the whole file from the database
      */
     private fun updateFileDetails(forcedTransferring: Boolean, refresh: Boolean) {
-        if (readyToShow()) {
-            val storageManager = mContainerActivity.storageManager
-            if (refresh && storageManager != null) {
-                file = storageManager.getFileByPath(file.remotePath)
-            }
-            val file = file
+        val storageManager = mContainerActivity.storageManager
+        if (refresh && storageManager != null) {
+            file = storageManager.getFileByPath(file.remotePath)
+        }
+        val file = file
 
-            // set file details
-            setFilename(file.fileName)
-            setFiletype(file)
-            setFilesize(file.length)
-            setTimeModified(file.modificationTimestamp)
+        // set file details
+        setFilename(file.fileName)
+        setFiletype(file)
+        setFilesize(file.length)
+        setTimeModified(file.modificationTimestamp)
 
-            // configure UI for depending upon local state of the file
-            val transferManager = TransferManager(appContext)
-            val uploaderBinder = mContainerActivity.fileUploaderBinder
-            val safeAccount = mAccount
-            if (forcedTransferring ||
-                safeAccount != null && transferManager.isDownloadPending(safeAccount, file) ||
-                uploaderBinder != null && uploaderBinder.isUploading(mAccount, file)
-            ) {
-                setButtonsForTransferring()
-            } else if (file.isAvailableLocally) {
-                setButtonsForDown()
-            } else {
-                // TODO load default preview image; when the local file is removed, the preview
-                // remains there
-                setButtonsForRemote()
-            }
+        // configure UI for depending upon local state of the file
+        val transferManager = TransferManager(appContext)
+        val uploaderBinder = mContainerActivity.fileUploaderBinder
+        val safeAccount = account
+        if (forcedTransferring ||
+            safeAccount != null && transferManager.isDownloadPending(safeAccount, file) ||
+            uploaderBinder != null && uploaderBinder.isUploading(account, file)
+        ) {
+            setButtonsForTransferring()
+        } else if (file.isAvailableLocally) {
+            setButtonsForLocallyAvailable()
+        } else {
+            // TODO load default preview image; when the local file is removed, the preview
+            // remains there
+            setButtonsForRemote()
         }
         requireView().invalidate()
-    }
-
-    /**
-     * Checks if the fragment is ready to show details of a OCFile
-     *
-     * @return 'True' when the fragment is ready to show details of a file
-     */
-    private fun readyToShow(): Boolean {
-        return file != null && mAccount != null && mLayout == R.layout.file_details_fragment
     }
 
     /**
@@ -428,8 +418,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      * @param filename to set
      */
     private fun setFilename(filename: String) {
-        val tv = requireView().findViewById<TextView>(R.id.fdFilename)
-        tv?.text = filename
+        requireView().findViewById<TextView>(R.id.fdFilename)?.text = filename
     }
 
     /**
@@ -439,43 +428,37 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      */
     private fun setFiletype(file: OCFile) {
         val mimetype = file.mimeType
-        val tv = requireView().findViewById<TextView>(R.id.fdType)
-        if (tv != null) {
-            // mimetype      MIME type to set
-            val printableMimetype = DisplayUtils.convertMIMEtoPrettyPrint(mimetype)
-            tv.text = printableMimetype
+
+        requireView().findViewById<TextView>(R.id.fdType)?.apply {
+            text = DisplayUtils.convertMIMEtoPrettyPrint(mimetype)
         }
-        val iv = requireView().findViewById<ImageView>(R.id.fdIcon)
-        if (iv != null) {
+
+        val imageView = requireView().findViewById<ImageView>(R.id.fdIcon)
+        if (imageView != null) {
             var thumbnail: Bitmap?
-            iv.tag = file.id
+            imageView.tag = file.id
             if (file.isImage) {
                 val tagId = file.remoteId.toString()
                 thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(tagId)
                 if (thumbnail != null && !file.needsToUpdateThumbnail) {
-                    iv.setImageBitmap(thumbnail)
+                    imageView.setImageBitmap(thumbnail)
                 } else {
                     // generate new Thumbnail
-                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, iv)) {
-                        val task = ThumbnailGenerationTask(
-                            iv, mAccount
-                        )
+
+                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, imageView)) {
+                        val task = ThumbnailGenerationTask(imageView, account)
                         if (thumbnail == null) {
                             thumbnail = ThumbnailsCacheManager.mDefaultImg
                         }
-                        val asyncDrawable = AsyncThumbnailDrawable(
-                            appContext.resources,
-                            thumbnail,
-                            task
-                        )
-                        iv.setImageDrawable(asyncDrawable)
+                        val asyncDrawable = AsyncThumbnailDrawable(appContext.resources, thumbnail, task)
+                        imageView.setImageDrawable(asyncDrawable)
                         task.execute(file)
                     }
                 }
             } else {
                 // Name of the file, to deduce the icon to use in case the MIME type is not precise enough
                 val filename = file.fileName
-                iv.setImageResource(MimetypeIconUtil.getFileTypeIconId(mimetype, filename))
+                imageView.setImageResource(MimetypeIconUtil.getFileTypeIconId(mimetype, filename))
             }
         }
     }
@@ -486,8 +469,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      * @param filesize in bytes to set
      */
     private fun setFilesize(filesize: Long) {
-        val tv = requireView().findViewById<TextView>(R.id.fdSize)
-        tv?.text = DisplayUtils.bytesToHumanReadable(filesize, activity)
+        requireView().findViewById<TextView>(R.id.fdSize)?.text = DisplayUtils.bytesToHumanReadable(filesize, activity)
     }
 
     /**
@@ -496,52 +478,43 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      * @param milliseconds Unix time to set
      */
     private fun setTimeModified(milliseconds: Long) {
-        val tv = requireView().findViewById<TextView>(R.id.fdModified)
-        tv?.text = DisplayUtils.unixTimeToHumanReadable(milliseconds)
+        requireView().findViewById<TextView>(R.id.fdModified)?.text = DisplayUtils.unixTimeToHumanReadable(milliseconds)
     }
 
     /**
      * Enables or disables buttons for a file being downloaded
      */
     private fun setButtonsForTransferring() {
-        if (!isEmpty) {
-            // show the progress bar for the transfer
-            requireView().findViewById<View>(R.id.fdProgressBlock).visibility = View.VISIBLE
-            val progressText = requireView().findViewById<TextView>(R.id.fdProgressText)
-            progressText.visibility = View.VISIBLE
-            val transferManager = TransferManager(appContext)
-            val uploaderBinder = mContainerActivity.fileUploaderBinder
-            val safeAccount = mAccount
-            if (safeAccount != null && transferManager.isDownloadPending(safeAccount, file)) {
-                progressText.setText(R.string.downloader_download_in_progress_ticker)
-            } else if (uploaderBinder != null && uploaderBinder.isUploading(mAccount, file)) {
-                progressText.setText(R.string.uploader_upload_in_progress_ticker)
-            }
+        // show the progress bar for the transfer
+        requireView().findViewById<View>(R.id.fdProgressBlock).isVisible = true
+        val progressText = requireView().findViewById<TextView>(R.id.fdProgressText)
+        progressText.isVisible = true
+        val transferManager = TransferManager(appContext)
+        val uploaderBinder = mContainerActivity.fileUploaderBinder
+        val safeAccount = account
+        if (safeAccount != null && transferManager.isDownloadPending(safeAccount, file)) {
+            progressText.setText(R.string.downloader_download_in_progress_ticker)
+        } else if (uploaderBinder != null && uploaderBinder.isUploading(account, file)) {
+            progressText.setText(R.string.uploader_upload_in_progress_ticker)
         }
     }
 
     /**
      * Enables or disables buttons for a file locally available
      */
-    private fun setButtonsForDown() {
-        if (!isEmpty) {
-            // hides the progress bar
-            requireView().findViewById<View>(R.id.fdProgressBlock).visibility = View.GONE
-            val progressText = requireView().findViewById<TextView>(R.id.fdProgressText)
-            progressText.visibility = View.GONE
-        }
+    private fun setButtonsForLocallyAvailable() {
+        // hides the progress bar
+        requireView().findViewById<View>(R.id.fdProgressBlock)?.isVisible = false
+        requireView().findViewById<TextView>(R.id.fdProgressText)?.isVisible = false
     }
 
     /**
      * Enables or disables buttons for a file not locally available
      */
     private fun setButtonsForRemote() {
-        if (!isEmpty) {
-            // hides the progress bar
-            requireView().findViewById<View>(R.id.fdProgressBlock).visibility = View.GONE
-            val progressText = requireView().findViewById<TextView>(R.id.fdProgressText)
-            progressText.visibility = View.GONE
-        }
+        // hides the progress bar
+        requireView().findViewById<View>(R.id.fdProgressBlock)?.isVisible = false
+        requireView().findViewById<TextView>(R.id.fdProgressText)?.isVisible = false
     }
 
     companion object {
@@ -560,24 +533,15 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
          * @param account      An ownCloud account; needed to start downloads
          * @return New fragment with arguments set
          */
-        fun newInstance(fileToDetail: OCFile?, account: Account?): FileDetailFragment {
-            val frag = FileDetailFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_FILE, fileToDetail)
-            args.putParcelable(ARG_ACCOUNT, account)
-            frag.arguments = args
-            return frag
-        }
-    }
+        fun newInstance(fileToDetail: OCFile, account: Account): FileDetailFragment {
+            val args = Bundle().apply {
+                putParcelable(ARG_FILE, fileToDetail)
+                putParcelable(ARG_ACCOUNT, account)
+            }
 
-    /**
-     * Creates an empty details fragment.
-     *
-     *
-     * It's necessary to keep a public constructor without parameters; the system uses it when tries
-     * to reinstantiate a fragment automatically.
-     */
-    init {
-        mLayout = R.layout.file_details_empty
+            return FileDetailFragment().apply {
+                arguments = args
+            }
+        }
     }
 }
