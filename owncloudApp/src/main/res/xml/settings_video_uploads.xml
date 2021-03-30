@@ -19,8 +19,37 @@
 
     <SwitchPreferenceCompat
         app:iconSpaceReserved="false"
-        app:key="enable_picture_uploads"
+        app:key="enable_video_uploads"
         app:summary="@string/prefs_camera_video_upload_summary"
         app:title="@string/prefs_camera_video_upload" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="video_uploads_path"
+        app:title="@string/prefs_camera_picture_upload_path_title" />
+    <CheckBoxPreference
+        app:iconSpaceReserved="false"
+        app:key="video_uploads_on_wifi"
+        app:title="@string/camera_picture_upload_on_wifi" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="video_uploads_source_path"
+        app:title="@string/prefs_camera_upload_source_path_title" />
+    <ListPreference
+        app:iconSpaceReserved="false"
+        app:defaultValue="NOTHING"
+        app:dialogTitle="@string/prefs_camera_upload_behaviour_dialogTitle"
+        app:entries="@array/pref_behaviour_entries"
+        app:entryValues="@array/pref_behaviour_entryValues"
+        app:key="video_uploads_behaviour"
+        app:summary="%s"
+        app:title="@string/prefs_camera_upload_behaviour_title" />
+    <!--<com.owncloud.android.ui.dialog.OwnCloudListPreference
+        app:defaultValue="NOTHING"
+        app:dialogTitle="@string/prefs_camera_upload_behaviour_dialogTitle"
+        app:entries="@array/pref_behaviour_entries"
+        app:entryValues="@array/pref_behaviour_entryValues"
+        app:key="video_uploads_behaviour"
+        app:summary="%s"
+        app:title="@string/prefs_camera_upload_behaviour_title" />-->
 
 </PreferenceScreen>
