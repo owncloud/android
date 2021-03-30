@@ -15,8 +15,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <SwitchPreferenceCompat
         app:iconSpaceReserved="false"
@@ -34,8 +33,9 @@
     <Preference
         app:iconSpaceReserved="false"
         app:key="picture_uploads_source_path"
-        android:title="@string/prefs_camera_upload_source_path_title" />
-    <com.owncloud.android.ui.dialog.OwnCloudListPreference
+        app:title="@string/prefs_camera_upload_source_path_title" />
+    <ListPreference
+        app:iconSpaceReserved="false"
         app:defaultValue="NOTHING"
         app:dialogTitle="@string/prefs_camera_upload_behaviour_dialogTitle"
         app:entries="@array/pref_behaviour_entries"
@@ -43,5 +43,13 @@
         app:key="picture_uploads_behaviour"
         app:summary="%s"
         app:title="@string/prefs_camera_upload_behaviour_title" />
+    <!--<com.owncloud.android.ui.dialog.OwnCloudListPreference
+        app:defaultValue="NOTHING"
+        app:dialogTitle="@string/prefs_camera_upload_behaviour_dialogTitle"
+        app:entries="@array/pref_behaviour_entries"
+        app:entryValues="@array/pref_behaviour_entryValues"
+        app:key="picture_uploads_behaviour2"
+        app:summary="%s"
+        app:title="@string/prefs_camera_upload_behaviour_title" />-->
 
 </PreferenceScreen>
