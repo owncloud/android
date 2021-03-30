@@ -25,17 +25,29 @@ import androidx.lifecycle.ViewModel
 import androidx.work.WorkInfo
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.manager.TransferManager
+import java.util.UUID
 
 class FileDetailsViewModel(
     private val transferManager: TransferManager,
 ) : ViewModel() {
 
-    private val _downloads = MediatorLiveData<WorkInfo?>()
-    val downloads: LiveData<WorkInfo?> = _downloads
+    val pendingDownloads = MediatorLiveData<WorkInfo?>()
+
+    private val _ongoingDownload = MediatorLiveData<WorkInfo?>()
+    val ongoingDownload: LiveData<WorkInfo?> = _ongoingDownload
 
     fun startListeningToDownloadsFromAccountAndFile(account: Account, file: OCFile) {
-        _downloads.addSource(transferManager.getLiveDataForDownloadingFile(account, file)) { workInfo ->
-            _downloads.postValue(workInfo)
+        pendingDownloads.addSource(transferManager.getLiveDataForDownloadingFile(account, file)) { workInfo ->
+            if (workInfo != null) {
+                startListeningToWorkInfo(uuid = workInfo.id)
+                pendingDownloads.postValue(workInfo)
+            }
+        }
+    }
+
+    private fun startListeningToWorkInfo(uuid: UUID) {
+        _ongoingDownload.addSource(transferManager.getWorkInfoByIdLiveData(uuid)) {
+            _ongoingDownload.postValue(it)
         }
     }
 

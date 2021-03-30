@@ -75,6 +75,8 @@ class TransferManager(
         }
     }
 
+    fun getWorkInfoByIdLiveData(uuid: UUID): LiveData<WorkInfo?> = getWorkManager().getWorkInfoByIdLiveData(uuid)
+
     /**
      * Get a LiveData with the lasts downloads from an account
      */
