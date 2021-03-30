@@ -123,7 +123,8 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     private fun startObservingProgressForDownload() {
         fileDetailsViewModel.startListeningToDownloadsFromAccountAndFile(file = file, account = account!!)
         val progressBar = requireView().findViewById<ProgressBar>(R.id.fdProgressBar)
-        fileDetailsViewModel.downloads.observeWorkerTillItFinishes(
+        fileDetailsViewModel.pendingDownloads.observe(this) { }
+        fileDetailsViewModel.ongoingDownload.observeWorkerTillItFinishes(
             owner = this,
             onWorkEnqueued = { progressBar?.isIndeterminate = true },
             onWorkRunning = { progress ->
@@ -141,7 +142,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     }
 
     private fun stopObservingWorkers() {
-        fileDetailsViewModel.downloads.removeObservers(this)
+        fileDetailsViewModel.ongoingDownload.removeObservers(this)
     }
 
     override fun onTransferServiceConnected() {
