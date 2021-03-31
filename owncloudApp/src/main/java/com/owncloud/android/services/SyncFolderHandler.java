@@ -20,7 +20,6 @@ package com.owncloud.android.services;
 
 import android.accounts.Account;
 import android.accounts.AccountsException;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -29,15 +28,12 @@ import android.util.Pair;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.IndexedForest;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.utils.Extras;
-import com.owncloud.android.utils.FileStorageUtils;
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -128,7 +124,6 @@ class SyncFolderHandler extends Handler {
 
                 mService.dispatchResultToOperationListeners(mCurrentSyncOperation, result);
 
-                sendBroadcastFinishedSyncFolder(account, remotePath, result != null && result.isSuccess());
             }
         }
     }
@@ -136,9 +131,6 @@ class SyncFolderHandler extends Handler {
     public void add(Account account, String remotePath, SynchronizeFolderOperation syncFolderOperation) {
         Pair<String, String> putResult =
                 mPendingOperations.putIfAbsent(account.name, remotePath, syncFolderOperation);
-        if (putResult != null) {
-            sendBroadcastNewSyncFolder(account, remotePath);    // TODO upgrade!
-        }
     }
 
     /**
@@ -165,30 +157,5 @@ class SyncFolderHandler extends Handler {
                 mCurrentSyncOperation.cancel();
             }
         }
-    }
-
-    /**
-     * TODO review this method when "folder synchronization" replaces "folder download";
-     * this is a fast and ugly patch.
-     */
-    private void sendBroadcastNewSyncFolder(Account account, String remotePath) {
-        Intent added = new Intent(FileDownloader.getDownloadAddedMessage());
-        added.putExtra(Extras.EXTRA_ACCOUNT_NAME, account.name);
-        added.putExtra(Extras.EXTRA_REMOTE_PATH, remotePath);
-        added.putExtra(Extras.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name) + remotePath);
-        mLocalBroadcastManager.sendBroadcast(added);
-    }
-
-    /**
-     * TODO review this method when "folder synchronization" replaces "folder download";
-     * this is a fast and ugly patch.
-     */
-    private void sendBroadcastFinishedSyncFolder(Account account, String remotePath, boolean success) {
-        Intent finished = new Intent(FileDownloader.getDownloadFinishMessage());
-        finished.putExtra(Extras.EXTRA_ACCOUNT_NAME, account.name);
-        finished.putExtra(Extras.EXTRA_REMOTE_PATH, remotePath);
-        finished.putExtra(Extras.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name) + remotePath);
-        finished.putExtra(Extras.EXTRA_DOWNLOAD_RESULT, success);
-        mLocalBroadcastManager.sendBroadcast(finished);
     }
 }
