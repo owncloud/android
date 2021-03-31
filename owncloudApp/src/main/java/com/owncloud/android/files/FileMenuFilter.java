@@ -32,8 +32,8 @@ import androidx.fragment.app.FragmentActivity;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
@@ -275,10 +275,10 @@ public class FileMenuFilter {
         if (mComponentsGetter != null && !mFiles.isEmpty() && mAccount != null) {
             OperationsServiceBinder opsBinder = mComponentsGetter.getOperationsServiceBinder();
             FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
-            FileDownloaderBinder downloaderBinder = mComponentsGetter.getFileDownloaderBinder();
+            TransferManager transferManager = new TransferManager(mContext);
             synchronizing = (
                     anyFileSynchronizing(opsBinder) ||      // comparing local and remote
-                            anyFileDownloading(downloaderBinder) ||
+                            anyFileDownloading(transferManager) ||
                             anyFileUploading(uploaderBinder)
             );
         }
@@ -295,12 +295,10 @@ public class FileMenuFilter {
         return synchronizing;
     }
 
-    private boolean anyFileDownloading(FileDownloaderBinder downloaderBinder) {
+    private boolean anyFileDownloading(TransferManager transferManager) {
         boolean downloading = false;
-        if (downloaderBinder != null) {
-            for (int i = 0; !downloading && i < mFiles.size(); i++) {
-                downloading = downloaderBinder.isDownloading(mAccount, mFiles.get(i));
-            }
+        for (int i = 0; !downloading && i < mFiles.size(); i++) {
+            downloading = transferManager.isDownloadPending(mAccount, mFiles.get(i));
         }
         return downloading;
     }

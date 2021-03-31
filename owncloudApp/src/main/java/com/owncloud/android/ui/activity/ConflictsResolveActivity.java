@@ -21,13 +21,12 @@
 
 package com.owncloud.android.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
+import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.Decision;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.OnConflictDecisionMadeListener;
@@ -63,10 +62,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 break;
             case SERVER:
                 // use server version -> delete local, request download
-                Intent intent = new Intent(this, FileDownloader.class);
-                intent.putExtra(FileDownloader.KEY_ACCOUNT, getAccount());
-                intent.putExtra(FileDownloader.KEY_FILE, getFile());
-                startService(intent);
+                new TransferManager(getApplicationContext()).downloadFile(getAccount(), getFile());
                 finish();
                 return;
             default:
