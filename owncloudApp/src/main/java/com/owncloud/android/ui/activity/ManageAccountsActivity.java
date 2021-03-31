@@ -46,8 +46,8 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.services.OperationsService;
@@ -79,7 +79,6 @@ public class ManageAccountsActivity extends FileActivity
     private String mAccountBeingRemoved;
     private AccountListAdapter mAccountListAdapter;
     protected FileUploader.FileUploaderBinder mUploaderBinder = null;
-    protected FileDownloader.FileDownloaderBinder mDownloaderBinder = null;
     private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
     Set<String> mOriginalAccounts;
     String mOriginalCurrentAccount;
@@ -178,11 +177,6 @@ public class ManageAccountsActivity extends FileActivity
      * Initialize ComponentsGetters.
      */
     private void initializeComponentGetters() {
-        mDownloadServiceConnection = newTransferenceServiceConnection();
-        if (mDownloadServiceConnection != null) {
-            bindService(new Intent(this, FileDownloader.class), mDownloadServiceConnection,
-                    Context.BIND_AUTO_CREATE);
-        }
         mUploadServiceConnection = newTransferenceServiceConnection();
         if (mUploadServiceConnection != null) {
             bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
@@ -313,9 +307,7 @@ public class ManageAccountsActivity extends FileActivity
                 if (mUploaderBinder != null) {
                     mUploaderBinder.cancel(account);
                 }
-                if (mDownloaderBinder != null) {
-                    mDownloaderBinder.cancel(account);
-                }
+                new TransferManager(getApplicationContext()).cancelDownloadForAccount(account);
             }
 
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
@@ -388,11 +380,6 @@ public class ManageAccountsActivity extends FileActivity
 
     // Methods for ComponentsGetter
     @Override
-    public FileDownloader.FileDownloaderBinder getFileDownloaderBinder() {
-        return mDownloaderBinder;
-    }
-
-    @Override
     public FileUploader.FileUploaderBinder getFileUploaderBinder() {
         return mUploaderBinder;
     }
@@ -423,11 +410,7 @@ public class ManageAccountsActivity extends FileActivity
 
         @Override
         public void onServiceConnected(ComponentName component, IBinder service) {
-
-            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileDownloader.class))) {
-                mDownloaderBinder = (FileDownloader.FileDownloaderBinder) service;
-
-            } else if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
+            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
                 Timber.d("Upload service connected");
                 mUploaderBinder = (FileUploader.FileUploaderBinder) service;
             }
@@ -435,10 +418,7 @@ public class ManageAccountsActivity extends FileActivity
 
         @Override
         public void onServiceDisconnected(ComponentName component) {
-            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileDownloader.class))) {
-                Timber.d("Download service suddenly disconnected");
-                mDownloaderBinder = null;
-            } else if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
+            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
                 Timber.d("Upload service suddenly disconnected");
                 mUploaderBinder = null;
             }

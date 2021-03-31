@@ -24,12 +24,9 @@ package com.owncloud.android.operations;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.OwnCloudClient;
