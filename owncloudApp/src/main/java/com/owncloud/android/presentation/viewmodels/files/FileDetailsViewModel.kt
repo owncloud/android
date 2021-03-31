@@ -30,12 +30,17 @@ import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDa
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.ui.activity.FileDisplayActivity
+import com.owncloud.android.ui.preview.PreviewAudioFragment
+import com.owncloud.android.ui.preview.PreviewTextFragment
+import com.owncloud.android.ui.preview.PreviewVideoFragment
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -44,8 +49,9 @@ class FileDetailsViewModel(
     private val openInWebUseCase: GetUrlToOpenInWebUseCase,
     refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
     getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
-    val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val getFileByIdUseCase: GetFileByIdUseCase,
     val contextProvider: ContextProvider,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
     private val currentAccountName: String = AccountUtils.getCurrentOwnCloudAccount(contextProvider.getContext()).name
@@ -97,5 +103,27 @@ class FileDetailsViewModel(
             showLoading = false,
             requiresConnection = true,
         )
+    }
+
+    // TODO: I don't like this at all. Move navigation to a common place.
+    fun navigateToPreviewOrOpenFile(fileDisplayActivity: FileDisplayActivity, file: OCFile) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val useCaseResult = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = file.id!!))
+            val fileWaitingToPreview = useCaseResult.getDataOrNull()
+            viewModelScope.launch(coroutinesDispatcherProvider.main) {
+                when {
+                    PreviewAudioFragment.canBePreviewed(fileWaitingToPreview) -> {
+                        fileDisplayActivity.startAudioPreview(fileWaitingToPreview!!, 0)
+                    }
+                    PreviewVideoFragment.canBePreviewed(fileWaitingToPreview) -> {
+                        fileDisplayActivity.startVideoPreview(fileWaitingToPreview!!, 0)
+                    }
+                    PreviewTextFragment.canBePreviewed(fileWaitingToPreview) -> {
+                        fileDisplayActivity.startTextPreview(fileWaitingToPreview)
+                    }
+                    else -> fileDisplayActivity.fileOperationsHelper.openFile(fileWaitingToPreview)
+                }
+            }
+        }
     }
 }
