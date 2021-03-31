@@ -1,7 +1,9 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2017 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -95,10 +97,15 @@ public class CameraUploadsHandler {
                     getUploadPathForVideos());
         }
 
-        extras.putString(Extras.EXTRA_CAMERA_UPLOADS_SOURCE_PATH, mCameraUploadsConfig.getSourcePath());
+        extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_SOURCE_PATH, mCameraUploadsConfig.getSourcePathPictures());
 
-        extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
-                getBehaviourAfterUpload());
+        extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_SOURCE_PATH, mCameraUploadsConfig.getSourcePathVideos());
+
+        extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
+                getBehaviourAfterUploadPictures());
+
+        extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
+                getBehaviourAfterUploadVideos());
 
         builder.setExtras(extras);
 

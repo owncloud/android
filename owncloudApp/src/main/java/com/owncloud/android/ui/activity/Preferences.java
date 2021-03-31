@@ -65,10 +65,10 @@ import java.io.File;
 
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED;
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH;
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE;
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY;
-import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_BEHAVIOUR;
+import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR;
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH;
-import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_SOURCE;
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED;
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH;
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY;
@@ -238,7 +238,7 @@ public class Preferences extends PreferenceActivity {
             return true;
         });
 
-        mPrefCameraUploadsSourcePath = findPreference(PREF__CAMERA_UPLOADS_SOURCE);
+        mPrefCameraUploadsSourcePath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE);
         if (mPrefCameraUploadsSourcePath != null) {
             mPrefCameraUploadsSourcePath.setOnPreferenceClickListener(preference -> {
                 if (!mSourcePath.endsWith(File.separator)) {
@@ -255,7 +255,7 @@ public class Preferences extends PreferenceActivity {
             Timber.e("Lost preference PREFERENCE_CAMERA_UPLOADS_SOURCE_PATH");
         }
 
-        mPrefCameraUploadsBehaviour = findPreference(PREF__CAMERA_UPLOADS_BEHAVIOUR);
+        mPrefCameraUploadsBehaviour = findPreference(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR);
         toggleCameraUploadsCommonOptions(
                 mPrefCameraVideoUploads.isChecked(),
                 mPrefCameraPictureUploads.isChecked()
@@ -909,7 +909,7 @@ public class Preferences extends PreferenceActivity {
      */
     private void loadCameraUploadsSourcePath() {
         mSourcePath = mPreferencesProvider.getString(
-                PREF__CAMERA_UPLOADS_SOURCE,
+                PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
                 CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
         );
         if (mPrefCameraUploadsSourcePath != null) {
@@ -932,7 +932,7 @@ public class Preferences extends PreferenceActivity {
      * Save the "Camera folder" path on preferences
      */
     private void saveCameraUploadsSourcePathOnPreferences() {
-        mPreferencesProvider.putString(PREF__CAMERA_UPLOADS_SOURCE, mSourcePath);
+        mPreferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_SOURCE, mSourcePath);
     }
 
     private void enableBiometric() {
