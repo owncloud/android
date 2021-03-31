@@ -22,24 +22,24 @@
     <PreferenceCategory
         android:key="camera_uploads_category"
         android:title="@string/prefs_category_camera_upload">
-        <com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
+        <CheckBoxPreference
             android:key="camera_picture_uploads"
             android:summary="@string/prefs_subsection_picture_uploads_summary"
             android:title="@string/prefs_camera_picture_upload" />
         <com.owncloud.android.ui.PreferenceWithLongSummary
             android:key="camera_picture_uploads_path"
             android:title="@string/prefs_camera_picture_upload_path_title" />
-        <com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
+        <CheckBoxPreference
             android:key="camera_picture_uploads_on_wifi"
             android:title="@string/camera_picture_upload_on_wifi" />
-        <com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
+        <CheckBoxPreference
             android:key="camera_video_uploads"
             android:summary="@string/prefs_subsection_video_uploads_summary"
             android:title="@string/prefs_camera_video_upload" />
         <com.owncloud.android.ui.PreferenceWithLongSummary
             android:key="camera_video_uploads_path"
             android:title="@string/prefs_camera_video_upload_path_title" />
-        <com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
+        <CheckBoxPreference
             android:key="camera_video_uploads_on_wifi"
             android:title="@string/camera_video_upload_on_wifi" />
         <com.owncloud.android.ui.PreferenceWithLongSummary
@@ -58,16 +58,16 @@
     <PreferenceCategory
         android:key="security_category"
         android:title="@string/prefs_subsection_security">
-        <android.preference.CheckBoxPreference
+        <CheckBoxPreference
             android:key="set_pincode"
             android:title="@string/prefs_passcode" />
-        <android.preference.CheckBoxPreference
+        <CheckBoxPreference
             android:key="set_pattern"
             android:title="@string/prefs_pattern" />
-        <android.preference.CheckBoxPreference
+        <CheckBoxPreference
             android:key="set_biometric"
             android:title="@string/prefs_biometric" />
-        <android.preference.CheckBoxPreference
+        <CheckBoxPreference
             android:key="touches_with_other_visible_windows"
             android:summary="@string/prefs_touches_with_other_visible_windows_summary"
             android:title="@string/prefs_touches_with_other_visible_windows" />
@@ -76,7 +76,7 @@
     <PreferenceCategory
         android:key="logs_category"
         android:title="@string/actionbar_logger">
-        <android.preference.CheckBoxPreference
+        <CheckBoxPreference
             android:key="set_httpLogs"
             android:title="@string/prefs_http_logs" />
         <Preference
