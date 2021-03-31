@@ -130,11 +130,18 @@ class FileDetailFragment : FileFragment() {
                     invalidate()
                 }
             },
-            onWorkSucceeded = { updateFileDetails(false, false) },
+            onWorkSucceeded = { handleSuccessDownload() },
             onWorkFailed = { },
             onWorkCancelled = { },
             removeObserverAfterNull = false
         )
+    }
+
+    private fun handleSuccessDownload() {
+        updateFileDetails(false, false)
+
+        val fileDisplayActivity = activity as FileDisplayActivity
+        fileDetailsViewModel.navigateToPreviewOrOpenFile(fileDisplayActivity, file)
     }
 
     private fun stopObservingWorkers() {
