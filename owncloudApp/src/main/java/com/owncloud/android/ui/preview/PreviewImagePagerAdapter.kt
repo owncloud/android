@@ -30,9 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.ui.fragment.FileFragment
-import timber.log.Timber
 import java.util.HashMap
 import java.util.HashSet
 
@@ -159,12 +157,10 @@ class PreviewImagePagerAdapter(
     fun onDownloadEvent(file: OCFile, action: String, success: Boolean) {
         val position = getFilePosition(file)
         if (position >= 0) {
-            if (action == FileDownloader.getDownloadFinishMessage()) {
-                if (success) {
-                    updateFile(position, file)
-                } else {
-                    updateWithDownloadError(position)
-                }
+            if (success) {
+                updateFile(position, file)
+            } else {
+                updateWithDownloadError(position)
             }
             val fragment = mCachedFragments[position]
             if (fragment is FileDownloadFragment && success) {
@@ -172,8 +168,6 @@ class PreviewImagePagerAdapter(
                 // only if the download succeded. If not trigger an error
                 notifyDataSetChanged()
             } else fragment?.onSyncEvent(action, success, null)
-        } else {
-            Timber.d("Download finished, but the fragment is offscreen")
         }
     }
 }
