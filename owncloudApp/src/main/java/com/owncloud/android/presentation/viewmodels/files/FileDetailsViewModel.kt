@@ -22,13 +22,23 @@ import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.presentation.manager.TransferManager
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.ui.activity.FileDisplayActivity
+import com.owncloud.android.ui.preview.PreviewAudioFragment
+import com.owncloud.android.ui.preview.PreviewTextFragment
+import com.owncloud.android.ui.preview.PreviewVideoFragment
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 class FileDetailsViewModel(
     private val transferManager: TransferManager,
+    private val getFileByIdUseCase: GetFileByIdUseCase,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
     val pendingDownloads = MediatorLiveData<WorkInfo?>()
@@ -53,5 +63,27 @@ class FileDetailsViewModel(
 
     fun cancelCurrentDownload(file: OCFile) {
         transferManager.cancelDownloadForFile(file)
+    }
+
+    // TODO: I don't like this at all. Move navigation to a common place.
+    fun navigateToPreviewOrOpenFile(fileDisplayActivity: FileDisplayActivity, file: OCFile) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val useCaseResult = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = file.id!!))
+            val fileWaitingToPreview = useCaseResult.getDataOrNull()
+            viewModelScope.launch(coroutinesDispatcherProvider.main) {
+                when {
+                    PreviewAudioFragment.canBePreviewed(fileWaitingToPreview) -> {
+                        fileDisplayActivity.startAudioPreview(fileWaitingToPreview!!, 0)
+                    }
+                    PreviewVideoFragment.canBePreviewed(fileWaitingToPreview) -> {
+                        fileDisplayActivity.startVideoPreview(fileWaitingToPreview!!, 0)
+                    }
+                    PreviewTextFragment.canBePreviewed(fileWaitingToPreview) -> {
+                        fileDisplayActivity.startTextPreview(fileWaitingToPreview)
+                    }
+                    else -> fileDisplayActivity.fileOperationsHelper.openFile(fileWaitingToPreview)
+                }
+            }
+        }
     }
 }
