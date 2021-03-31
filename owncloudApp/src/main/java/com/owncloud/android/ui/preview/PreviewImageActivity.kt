@@ -43,9 +43,6 @@ import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.files.services.FileDownloader
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
-import com.owncloud.android.files.services.FileDownloader.getDownloadFinishMessage
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener
@@ -53,6 +50,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
+import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FileListOption
@@ -116,7 +114,7 @@ class PreviewImageActivity : FileActivity(),
             pairFileWork.forEach { fileWork ->
                 previewImagePagerAdapter.onDownloadEvent(
                     fileWork.first,
-                    getDownloadFinishMessage(),
+                    if (fileWork.second.state.isFinished) TransferManager.DOWNLOAD_FINISH_MESSAGE else TransferManager.DOWNLOAD_ADDED_MESSAGE,
                     fileWork.second.state == WorkInfo.State.SUCCEEDED
                 )
             }
@@ -231,10 +229,7 @@ class PreviewImageActivity : FileActivity(),
      */
     private inner class PreviewImageServiceConnection : ServiceConnection {
         override fun onServiceConnected(component: ComponentName, service: IBinder) {
-            if (component == ComponentName(this@PreviewImageActivity, FileDownloader::class.java)) {
-                Timber.d("onServiceConnected, FileDownloader")
-                mDownloaderBinder = service as FileDownloaderBinder
-            } else if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
+            if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
                 Timber.d("onServiceConnected, FileUploader")
                 mUploaderBinder = service as FileUploaderBinder
             }
@@ -242,10 +237,7 @@ class PreviewImageActivity : FileActivity(),
         }
 
         override fun onServiceDisconnected(component: ComponentName) {
-            if (component == ComponentName(this@PreviewImageActivity, FileDownloader::class.java)) {
-                Timber.d("Download service suddenly disconnected")
-                mDownloaderBinder = null
-            } else if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
+            if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
                 Timber.d("Upload service suddenly disconnected")
                 mUploaderBinder = null
             }

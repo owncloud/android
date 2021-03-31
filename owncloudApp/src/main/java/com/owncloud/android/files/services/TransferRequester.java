@@ -51,12 +51,10 @@ import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAM
  */
 
 /**
- * Facade class providing methods to ease requesting commands to transfer services {@link FileUploader} and
- * {@link FileDownloader}.
+ * Facade class providing methods to ease requesting commands to transfer services {@link FileUploader}.
  * <p>
  * Protects client objects from the verbosity of {@link android.content.Intent}s.
  * <p>
- * TODO add methods for {@link FileDownloader}, right now it's just about uploads
  */
 
 public class TransferRequester {
@@ -265,29 +263,6 @@ public class TransferRequester {
 
         if (scheduled) {
             Timber.d("Scheduled upload retry for %1s in %2s", remotePath, accountName);
-        }
-    }
-
-    /**
-     * Schedule a future retry of a download, to be done when a connection via an unmetered network (free Wifi)
-     * is available.
-     *
-     * @param context     Caller {@link Context}.
-     * @param jobId       Identifier to set to the retry job.
-     * @param accountName Local name of the OC account where the download will be retried.
-     * @param remotePath  Full path of the file to download, relative to root of the OC account.
-     */
-    void scheduleDownload(Context context, int jobId, String accountName, String remotePath) {
-        boolean scheduled = scheduleTransfer(
-                context,
-                RetryDownloadJobService.class,
-                jobId,
-                accountName,
-                remotePath
-        );
-
-        if (scheduled) {
-            Timber.d("Scheduled download retry for %1s in %2s", remotePath, accountName);
         }
     }
 
