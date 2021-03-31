@@ -185,5 +185,9 @@ class TransferManager(
 
     companion object {
         private const val MAXIMUM_NUMBER_OF_RETRIES = 3
+
+        // Temporary solution. Probably we won't need it.
+        const val DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED"
+        const val DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH"
     }
 }

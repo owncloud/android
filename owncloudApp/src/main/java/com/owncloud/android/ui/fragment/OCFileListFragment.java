@@ -64,13 +64,14 @@ import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.UIResult;
+import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView;
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
 import com.owncloud.android.presentation.ui.files.SortOptionsView;
 import com.owncloud.android.presentation.ui.files.SortOrder;
 import com.owncloud.android.presentation.ui.files.SortType;
 import com.owncloud.android.presentation.ui.files.ViewType;
-import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -915,8 +916,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * @return 'true' if the file is being downloaded, 'false' otherwise.
      */
     private boolean fileIsDownloading(OCFile file) {
-        return mContainerActivity.getFileDownloaderBinder().isDownloading(
-                ((FileActivity) mContainerActivity).getAccount(), file);
+        return new TransferManager(getContext()).isDownloadPending(
+                ((FileActivity) mContainerActivity).getAccount(),
+                file
+        );
     }
 
     public void selectAll() {
