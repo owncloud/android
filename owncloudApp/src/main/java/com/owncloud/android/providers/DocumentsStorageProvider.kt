@@ -25,7 +25,6 @@
 package com.owncloud.android.providers
 
 import android.accounts.Account
-import android.content.Intent
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.graphics.Point
@@ -45,7 +44,6 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
-import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -56,6 +54,7 @@ import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
+import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.ui.activity.PassCodeActivity
@@ -102,12 +101,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             ocFile = getFileByIdOrException(docId)
 
             if (!ocFile.isAvailableLocally) {
-                val intent = Intent(context, FileDownloader::class.java).apply {
-                    putExtra(FileDownloader.KEY_ACCOUNT, getAccountFromFileId(docId))
-                    putExtra(FileDownloader.KEY_FILE, ocFile)
-                }
-
-                context?.startService(intent)
+                TransferManager(MainApp.appContext).downloadFile(getAccountFromFileId(docId)!!, ocFile)
 
                 do {
                     if (!waitOrGetCancelled(signal)) {
