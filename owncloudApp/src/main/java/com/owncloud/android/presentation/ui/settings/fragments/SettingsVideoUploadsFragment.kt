@@ -21,10 +21,25 @@
 package com.owncloud.android.presentation.ui.settings.fragments
 
 import android.os.Bundle
+import androidx.preference.CheckBoxPreference
+import androidx.preference.ListPreference
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
+import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
+
+    // ViewModel
+    private val videosViewModel by viewModel<SettingsVideoUploadsViewModel>()
+
+    private var prefEnableVideoUploads: SwitchPreferenceCompat? = null
+    private var prefVideoUploadsPath: Preference? = null
+    private var prefVideoUploadsOnWifi: CheckBoxPreference? = null
+    private var prefVideoUploadsSourcePath: Preference? = null
+    private var prefVideoUploadsBehaviour: ListPreference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_video_uploads, rootKey)

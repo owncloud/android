@@ -1,9 +1,11 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Shashvat Kedia
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -48,16 +50,18 @@ public abstract class PreferenceManager {
     private static final String AUTO_PREF__SORT_ORDER_UPLOAD = "sortOrderUpload";
     private static final String AUTO_PREF__SORT_ASCENDING_UPLOAD = "sortAscendingUpload";
 
-    public static final String PREF__CAMERA_PICTURE_UPLOADS_ENABLED = "camera_picture_uploads";
-    public static final String PREF__CAMERA_VIDEO_UPLOADS_ENABLED = "camera_video_uploads";
-    public static final String PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY = "camera_picture_uploads_on_wifi";
-    public static final String PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY = "camera_video_uploads_on_wifi";
+    public static final String PREF__CAMERA_PICTURE_UPLOADS_ENABLED = "enable_picture_uploads";
+    public static final String PREF__CAMERA_VIDEO_UPLOADS_ENABLED = "enable_video_uploads";
+    public static final String PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY = "picture_uploads_on_wifi";
+    public static final String PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY = "video_uploads_on_wifi";
     private static final String PREF__CAMERA_UPLOADS_ACCOUNT_NAME = "camera_uploads_account_name";  // NEW - not
     // saved yet
-    public static final String PREF__CAMERA_PICTURE_UPLOADS_PATH = "camera_picture_uploads_path";
-    public static final String PREF__CAMERA_VIDEO_UPLOADS_PATH = "camera_video_uploads_path";
-    public static final String PREF__CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
-    public static final String PREF__CAMERA_UPLOADS_SOURCE = "camera_uploads_source_path";
+    public static final String PREF__CAMERA_PICTURE_UPLOADS_PATH = "picture_uploads_path";
+    public static final String PREF__CAMERA_VIDEO_UPLOADS_PATH = "video_uploads_path";
+    public static final String PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR = "picture_uploads_behaviour";
+    public static final String PREF__CAMERA_PICTURE_UPLOADS_SOURCE = "picture_uploads_source_path";
+    public static final String PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR = "video_uploads_behaviour";
+    public static final String PREF__CAMERA_VIDEO_UPLOADS_SOURCE = "video_uploads_source_path";
 
     public static final String PREF__CAMERA_UPLOADS_DEFAULT_PATH = "/CameraUpload";
 
@@ -131,15 +135,27 @@ public abstract class PreferenceManager {
         result.setUploadPathForVideos(
                 uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
         );
-        result.setBehaviourAfterUpload(
+        result.setBehaviourAfterUploadPictures(
                 prefs.getString(
-                        PREF__CAMERA_UPLOADS_BEHAVIOUR,
+                        PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR,
                         context.getResources().getStringArray(R.array.pref_behaviour_entryValues)[0]
                 )
         );
-        result.setSourcePath(
+        result.setBehaviourAfterUploadVideos(
                 prefs.getString(
-                        PREF__CAMERA_UPLOADS_SOURCE,
+                        PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR,
+                        context.getResources().getStringArray(R.array.pref_behaviour_entryValues)[0]
+                )
+        );
+        result.setSourcePathPictures(
+                prefs.getString(
+                        PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+                        CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
+                )
+        );
+        result.setSourcePathVideos(
+                prefs.getString(
+                        PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
                         CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
                 )
         );
@@ -265,8 +281,10 @@ public abstract class PreferenceManager {
         private String mUploadAccountName;      // same for both audio & video
         private String mUploadPathForPictures;
         private String mUploadPathForVideos;
-        private String mBehaviourAfterUpload;
-        private String mSourcePath;             // same for both audio & video
+        private String mBehaviourAfterUploadPictures;
+        private String mBehaviourAfterUploadVideos;
+        private String mSourcePathPictures;
+        private String mSourcePathVideos;
 
         public boolean isEnabledForPictures() {
             return mEnabledForPictures;
@@ -324,23 +342,42 @@ public abstract class PreferenceManager {
             mUploadPathForVideos = uploadPathForVideos;
         }
 
-        public int getBehaviourAfterUpload() {
-            if (mBehaviourAfterUpload.equalsIgnoreCase("MOVE")) {
+        public int getBehaviourAfterUploadPictures() {
+            if (mBehaviourAfterUploadPictures.equalsIgnoreCase("MOVE")) {
                 return FileUploader.LOCAL_BEHAVIOUR_MOVE;
             }
-            return FileUploader.LOCAL_BEHAVIOUR_FORGET; // "NOTHING
+            return FileUploader.LOCAL_BEHAVIOUR_FORGET; // "NOTHING"
         }
 
-        public void setBehaviourAfterUpload(String behaviourAfterUpload) {
-            mBehaviourAfterUpload = behaviourAfterUpload;
+        public void setBehaviourAfterUploadPictures(String behaviourAfterUploadPictures) {
+            mBehaviourAfterUploadPictures = behaviourAfterUploadPictures;
         }
 
-        public String getSourcePath() {
-            return mSourcePath;
+        public int getBehaviourAfterUploadVideos() {
+            if (mBehaviourAfterUploadVideos.equalsIgnoreCase("MOVE")) {
+                return FileUploader.LOCAL_BEHAVIOUR_MOVE;
+            }
+            return FileUploader.LOCAL_BEHAVIOUR_FORGET; // "NOTHING"
         }
 
-        public void setSourcePath(String sourcePath) {
-            mSourcePath = sourcePath;
+        public void setBehaviourAfterUploadVideos(String behaviourAfterUploadVideos) {
+            mBehaviourAfterUploadVideos = behaviourAfterUploadVideos;
+        }
+
+        public String getSourcePathPictures() {
+            return mSourcePathPictures;
+        }
+
+        public void setSourcePathPictures(String sourcePathPictures) {
+            mSourcePathPictures = sourcePathPictures;
+        }
+
+        public String getSourcePathVideos() {
+            return mSourcePathVideos;
+        }
+
+        public void setSourcePathVideos(String sourcePathVideos) {
+            mSourcePathVideos = sourcePathVideos;
         }
     }
 }
