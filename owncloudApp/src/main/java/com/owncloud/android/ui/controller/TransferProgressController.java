@@ -24,7 +24,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.UiThread;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.ui.activity.ComponentsGetter;
@@ -49,10 +48,10 @@ public class TransferProgressController implements OnDatatransferProgressListene
 
     /**
      * Sets the progress bar that will updated with file transfer progress
-     *
+     * <p>
      * Accepts null input to stop updating any view.
      *
-     * @param progressBar   Progress bar to update with progress transfer.
+     * @param progressBar Progress bar to update with progress transfer.
      */
     public void setProgressBar(ProgressBar progressBar) {
         mProgressBar = progressBar;
@@ -75,27 +74,17 @@ public class TransferProgressController implements OnDatatransferProgressListene
     }
 
     /**
-     * Subscribes the controller to monitor transfers of the received file both in {@link FileDownloader} and
-     * {@link FileUploader} services, if available.
-     *
+     * Subscribes the controller to monitor transfers of the received file in {@link FileUploader} services, if
+     * available.
+     * <p>
      * This method may be called several times for the same file, resulting in a single subscription.
      *
-     * @param file          File to monitor in transfer services.
-     * @param account       ownCloud account containing file.
+     * @param file    File to monitor in transfer services.
+     * @param account ownCloud account containing file.
      */
     @UiThread
     public void startListeningProgressFor(OCFile file, Account account) {
-        FileDownloader.FileDownloaderBinder downloaderBinder = mComponentsGetter.getFileDownloaderBinder();
         FileUploader.FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
-
-        if (downloaderBinder != null) {
-            downloaderBinder.addDatatransferProgressListener(this, account, file);
-            if (mProgressBar != null && downloaderBinder.isDownloading(account, file)) {
-                mProgressBar.setIndeterminate(true);
-            }
-        } else {
-            Timber.i("Download service not ready to notify progress");
-        }
 
         if (uploaderBinder != null) {
             uploaderBinder.addDatatransferProgressListener(this, account, file);
@@ -108,17 +97,13 @@ public class TransferProgressController implements OnDatatransferProgressListene
     }
 
     /**
-     * Unsubscribes the controller from {@link FileDownloader} and {@link FileUploader} services.
+     * Unsubscribes the controller from {@link FileUploader} service.
      *
-     * @param file          File to stop monitoring in transfer services.
-     * @param account       ownCloud account containing file.
+     * @param file    File to stop monitoring in transfer services.
+     * @param account ownCloud account containing file.
      */
     @UiThread
     public void stopListeningProgressFor(OCFile file, Account account) {
-        if (mComponentsGetter.getFileDownloaderBinder() != null) {
-            mComponentsGetter.getFileDownloaderBinder().
-                    removeDatatransferProgressListener(this, account, file);
-        }
         if (mComponentsGetter.getFileUploaderBinder() != null) {
             mComponentsGetter.getFileUploaderBinder().
                     removeDatatransferProgressListener(this, account, file);
@@ -129,13 +114,13 @@ public class TransferProgressController implements OnDatatransferProgressListene
     }
 
     /**
-     * Implementation of {@link OnDatatransferProgressListener}, called from {@link FileUploader} or
-     * {@link FileDownloader} to report the trasnfer progress of a monitored file.
+     * Implementation of {@link OnDatatransferProgressListener}, called from {@link FileUploader} to report the
+     * transfer progress of a monitored file.
      *
-     * @param progressRate              Bytes transferred from the previous call.
-     * @param totalTransferredSoFar     Total of bytes transferred so far.
-     * @param totalToTransfer           Total of bytes to transfer.
-     * @param filename                  Name of the transferred file.
+     * @param progressRate          Bytes transferred from the previous call.
+     * @param totalTransferredSoFar Total of bytes transferred so far.
+     * @param totalToTransfer       Total of bytes to transfer.
+     * @param filename              Name of the transferred file.
      */
     @Override
     public void onTransferProgress(

@@ -65,8 +65,6 @@ import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.files.services.FileDownloader
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.files.services.TransferRequester
@@ -122,7 +120,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private var syncBroadcastReceiver: SyncBroadcastReceiver? = null
     private var uploadBroadcastReceiver: UploadBroadcastReceiver? = null
-    private var downloadBroadcastReceiver: DownloadBroadcastReceiver? = null
     private var lastSslUntrustedServerResult: RemoteOperationResult<*>? = null
 
     private var leftFragmentContainer: View? = null
@@ -723,14 +720,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         uploadBroadcastReceiver = UploadBroadcastReceiver()
         localBroadcastManager!!.registerReceiver(uploadBroadcastReceiver!!, uploadIntentFilter)
 
-        // Listen for download messages
-        val downloadIntentFilter = IntentFilter(
-            FileDownloader.getDownloadAddedMessage()
-        )
-        downloadIntentFilter.addAction(FileDownloader.getDownloadFinishMessage())
-        downloadBroadcastReceiver = DownloadBroadcastReceiver()
-        localBroadcastManager!!.registerReceiver(downloadBroadcastReceiver!!, downloadIntentFilter)
-
         Timber.v("onResume() end")
     }
 
@@ -743,10 +732,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (uploadBroadcastReceiver != null) {
             localBroadcastManager!!.unregisterReceiver(uploadBroadcastReceiver!!)
             uploadBroadcastReceiver = null
-        }
-        if (downloadBroadcastReceiver != null) {
-            localBroadcastManager!!.unregisterReceiver(downloadBroadcastReceiver!!)
-            downloadBroadcastReceiver = null
         }
 
         super.onPause()
@@ -992,15 +977,16 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     /**
-     * Class waiting for broadcast events from the [FileDownloader] service.
+     * Class waiting for broadcast events from the old FileDownloader service.
      *
+     * TODO: Check if this is useful with new implementation.
      *
      * Updates the UI when a download is started or finished, provided that it is relevant for the
      * current folder.
      */
-    private inner class DownloadBroadcastReceiver : BroadcastReceiver() {
+    private inner class DownloadReceiver() {
 
-        override fun onReceive(context: Context, intent: Intent) {
+         fun refreshSecondFragmentAfterADownload(context: Context, intent: Intent) {
             val sameAccount = isSameAccount(intent)
             val downloadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH)
             val isDescendant = isDescendant(downloadedRemotePath)
@@ -1059,7 +1045,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         // the user browsed to other file ; forget the automatic preview
                         fileWaitingToPreview = null
 
-                    } else if (downloadEvent == FileDownloader.getDownloadFinishMessage()) {
+                    } else if (downloadEvent == TransferManager.DOWNLOAD_FINISH_MESSAGE) {
                         //  replace the right panel if waiting for preview
                         val waitedPreview = fileWaitingToPreview?.remotePath == downloadedRemotePath
                         if (waitedPreview) {
@@ -1156,41 +1142,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private inner class ListServiceConnection : ServiceConnection {
 
         override fun onServiceConnected(component: ComponentName, service: IBinder) {
-            if (component == ComponentName(this@FileDisplayActivity, FileDownloader::class.java)) {
-                Timber.d("Download service connected")
-                mDownloaderBinder = service as FileDownloaderBinder
-
-                if (fileWaitingToPreview != null) {
-                    if (storageManager != null) {
-                        // update the file
-                        fileWaitingToPreview = storageManager.getFileById(fileWaitingToPreview!!.id!!)
-                        if (!fileWaitingToPreview!!.isAvailableLocally) {
-                            // If the file to preview isn't downloaded yet, check if it is being
-                            // downloaded in this moment or not
-                            requestForDownload()
-                        }
-                    }
-                }
-
-                if (file != null && mDownloaderBinder.isDownloading(account, file)) {
-
-                    // If the file is being downloaded, assure that the fragment to show is details
-                    // fragment, not the streaming video fragment which has been previously
-                    // set in chooseInitialSecondFragment method
-
-                    val secondFragment = secondFragment
-                    if (secondFragment != null && secondFragment is PreviewVideoFragment) {
-                        cleanSecondFragment()
-
-                        showDetails(file)
-                    }
-                }
-
-            } else if (component == ComponentName(
-                    this@FileDisplayActivity,
-                    FileUploader::class.java
-                )
-            ) {
+            if (component == ComponentName(this@FileDisplayActivity, FileUploader::class.java)) {
                 Timber.d("Upload service connected")
                 mUploaderBinder = service as FileUploaderBinder
             } else {
@@ -1203,18 +1155,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         override fun onServiceDisconnected(component: ComponentName) {
-            if (component == ComponentName(
-                    this@FileDisplayActivity,
-                    FileDownloader::class.java
-                )
-            ) {
-                Timber.d("Download service disconnected")
-                mDownloaderBinder = null
-            } else if (component == ComponentName(
-                    this@FileDisplayActivity,
-                    FileUploader::class.java
-                )
-            ) {
+            if (component == ComponentName(this@FileDisplayActivity, FileUploader::class.java)) {
                 Timber.d("Upload service disconnected")
                 mUploaderBinder = null
             }
@@ -1385,7 +1326,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 refreshListOfFilesFragment(false)
                 val secondFragment = secondFragment
                 if (secondFragment != null && syncedFile == secondFragment.file) {
-                    secondFragment.onSyncEvent(FileDownloader.getDownloadAddedMessage(), false, null)
+                    secondFragment.onSyncEvent(TransferManager.DOWNLOAD_ADDED_MESSAGE, false, null)
                     invalidateOptionsMenu()
                 }
 
@@ -1404,19 +1345,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             fileWaitingToPreview = null
         }
 
-    }
-
-    private fun requestForDownload() {
-        val account = account
-
-        //if (!fileWaitingToPreview.isDownloading()) {
-        // If the file is not being downloaded, start the download
-        if (!mDownloaderBinder.isDownloading(account, fileWaitingToPreview)) {
-            val i = Intent(this, FileDownloader::class.java)
-            i.putExtra(FileDownloader.KEY_ACCOUNT, account)
-            i.putExtra(FileDownloader.KEY_FILE, fileWaitingToPreview)
-            startService(i)
-        }
     }
 
     override fun onSavedCertificate() {
@@ -1621,7 +1549,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             if (!file.fileExists) {
                 cleanSecondFragment()
             } else {
-                secondFragment.onSyncEvent(FileDownloader.getDownloadFinishMessage(), false, null)
+                secondFragment.onSyncEvent(TransferManager.DOWNLOAD_FINISH_MESSAGE, false, null)
             }
         }
 

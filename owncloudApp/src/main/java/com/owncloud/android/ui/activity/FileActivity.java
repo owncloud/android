@@ -41,8 +41,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileDownloader;
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
@@ -108,9 +106,8 @@ public class FileActivity extends DrawerActivity
 
     private boolean mResumed = false;
 
-    protected FileDownloaderBinder mDownloaderBinder = null;
     protected FileUploaderBinder mUploaderBinder = null;
-    private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
+    private ServiceConnection mUploadServiceConnection = null;
 
     /**
      * Loads the ownCloud {@link Account} and main {@link OCFile} to be handled by the instance of
@@ -150,11 +147,6 @@ public class FileActivity extends DrawerActivity
         bindService(new Intent(this, OperationsService.class), mOperationsServiceConnection,
                 Context.BIND_AUTO_CREATE);
 
-        mDownloadServiceConnection = newTransferenceServiceConnection();
-        if (mDownloadServiceConnection != null) {
-            bindService(new Intent(this, FileDownloader.class), mDownloadServiceConnection,
-                    Context.BIND_AUTO_CREATE);
-        }
         mUploadServiceConnection = newTransferenceServiceConnection();
         if (mUploadServiceConnection != null) {
             bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
@@ -191,10 +183,7 @@ public class FileActivity extends DrawerActivity
             unbindService(mOperationsServiceConnection);
             mOperationsServiceBinder = null;
         }
-        if (mDownloadServiceConnection != null) {
-            unbindService(mDownloadServiceConnection);
-            mDownloadServiceConnection = null;
-        }
+
         if (mUploadServiceConnection != null) {
             unbindService(mUploadServiceConnection);
             mUploadServiceConnection = null;
@@ -418,11 +407,6 @@ public class FileActivity extends DrawerActivity
                 dismissLoadingDialog();
             }
         }
-    }
-
-    @Override
-    public FileDownloaderBinder getFileDownloaderBinder() {
-        return mDownloaderBinder;
     }
 
     @Override
