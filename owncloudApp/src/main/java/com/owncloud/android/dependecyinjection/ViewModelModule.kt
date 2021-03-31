@@ -80,7 +80,7 @@ val viewModelModule = module {
     viewModel { PatternViewModel(get()) }
     viewModel { BiometricViewModel(get(), get()) }
     viewModel { ReleaseNotesViewModel(get(), get()) }
-    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { FilesViewModel(get(), get(), get()) }
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
