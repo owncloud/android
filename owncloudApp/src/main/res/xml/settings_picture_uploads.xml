@@ -43,13 +43,5 @@
         app:key="picture_uploads_behaviour"
         app:summary="%s"
         app:title="@string/prefs_camera_upload_behaviour_title" />
-    <!--<com.owncloud.android.ui.dialog.OwnCloudListPreference
-        app:defaultValue="NOTHING"
-        app:dialogTitle="@string/prefs_camera_upload_behaviour_dialogTitle"
-        app:entries="@array/pref_behaviour_entries"
-        app:entryValues="@array/pref_behaviour_entryValues"
-        app:key="picture_uploads_behaviour2"
-        app:summary="%s"
-        app:title="@string/prefs_camera_upload_behaviour_title" />-->
 
 </PreferenceScreen>
