@@ -90,22 +90,20 @@ public class CameraUploadsHandler {
         if (mCameraUploadsConfig.isEnabledForPictures()) {
             extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_PATH, mCameraUploadsConfig.
                     getUploadPathForPictures());
+            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_SOURCE_PATH, mCameraUploadsConfig.
+                    getSourcePathPictures());
+            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
+                    getBehaviourAfterUploadPictures());
         }
 
         if (mCameraUploadsConfig.isEnabledForVideos()) {
             extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_PATH, mCameraUploadsConfig.
                     getUploadPathForVideos());
+            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_SOURCE_PATH, mCameraUploadsConfig.
+                    getSourcePathVideos());
+            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
+                    getBehaviourAfterUploadVideos());
         }
-
-        extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_SOURCE_PATH, mCameraUploadsConfig.getSourcePathPictures());
-
-        extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_SOURCE_PATH, mCameraUploadsConfig.getSourcePathVideos());
-
-        extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
-                getBehaviourAfterUploadPictures());
-
-        extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
-                getBehaviourAfterUploadVideos());
 
         builder.setExtras(extras);
 

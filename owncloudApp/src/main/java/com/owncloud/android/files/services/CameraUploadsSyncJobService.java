@@ -121,8 +121,8 @@ public class CameraUploadsSyncJobService extends JobService {
             String localCameraPicturesPath = mCameraUploadsPicturesSourcePath;
             String localCameraVideosPath = mCameraUploadsVideosSourcePath;
 
-            File[] localPictureFiles = new File[0];
-            File[] localVideoFiles = new File[0];
+            File[] localPictureFiles = null;
+            File[] localVideoFiles = null;
 
             if (localCameraPicturesPath != null) {
                 File cameraPicturesFolder = new File(localCameraPicturesPath);
@@ -135,29 +135,36 @@ public class CameraUploadsSyncJobService extends JobService {
             }
 
             if (localPictureFiles != null) {
-                localPictureFiles = orderFilesByCreationTimestamp(localPictureFiles);
+                orderFilesByCreationTimestamp(localPictureFiles);
 
                 for (File localFile : localPictureFiles) {
-                    // Maybe improve this and put the conditions here instead of inside handleFile...
-                    handleFile(localFile);
+                    String fileName = localFile.getName();
+                    String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
+                    boolean isImage = mimeType.startsWith("image/");
+                    if (isImage) {
+                        handleFile(localFile);
+                    }
                 }
             }
 
             if (localVideoFiles != null) {
-                localVideoFiles = orderFilesByCreationTimestamp(localVideoFiles);
+                orderFilesByCreationTimestamp(localVideoFiles);
 
                 for (File localFile : localVideoFiles) {
-                    handleFile(localFile);
+                    String fileName = localFile.getName();
+                    String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
+                    boolean isVideo = mimeType.startsWith("video/");
+                    if (isVideo) {
+                        handleFile(localFile);
+                    }
                 }
             }
 
             Timber.d("All files synced, finishing job");
         }
 
-        private File[] orderFilesByCreationTimestamp(File[] localFiles) {
+        private void orderFilesByCreationTimestamp(File[] localFiles) {
             Arrays.sort(localFiles, (file1, file2) -> Long.compare(file1.lastModified(), file2.lastModified()));
-
-            return localFiles;
         }
 
         /**
@@ -169,25 +176,9 @@ public class CameraUploadsSyncJobService extends JobService {
         private synchronized void handleFile(File localFile) {
 
             String fileName = localFile.getName();
-
             String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
             boolean isImage = mimeType.startsWith("image/");
             boolean isVideo = mimeType.startsWith("video/");
-
-            if (!isImage && !isVideo) {
-                Timber.d("Ignoring %s", fileName);
-                return;
-            }
-
-            if (isImage && mCameraUploadsPicturesPath == null) {
-                Timber.d("Camera uploads disabled for images, ignoring %s", fileName);
-                return;
-            }
-
-            if (isVideo && mCameraUploadsVideosPath == null) {
-                Timber.d("Camera uploads disabled for videos, ignoring %s", fileName);
-                return;
-            }
 
             String remotePath = (isImage ? mCameraUploadsPicturesPath : mCameraUploadsVideosPath) + fileName;
 
