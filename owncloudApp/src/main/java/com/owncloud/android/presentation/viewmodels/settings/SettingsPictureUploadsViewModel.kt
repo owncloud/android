@@ -21,6 +21,45 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.files.services.CameraUploadsHandler
+import com.owncloud.android.providers.ContextProvider
 
-class SettingsPictureUploadsViewModel : ViewModel() {
+class SettingsPictureUploadsViewModel(
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val contextProvider: ContextProvider
+) : ViewModel() {
+
+    private val configuration = PreferenceManager.getCameraUploadsConfiguration(contextProvider.getContext())
+    private val cameraUploadsHandler = CameraUploadsHandler(configuration)
+
+    private var uploadPath: String? = null
+    private var uploadSourcePath: String? = null
+
+    fun isPictureUploadEnabled() =
+        preferencesProvider.getBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
+
+    fun setEnablePictureUpload(value: Boolean) =
+        preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, value)
+
+    fun updatePicturesLastSync() = cameraUploadsHandler.updatePicturesLastSync(contextProvider.getContext(), 0)
+
+    fun loadPictureUploadsPath() {
+        uploadPath = preferencesProvider.getString(
+            PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH,
+            PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
+        )
+    }
+
+    fun getPictureUploadsPath() = uploadPath
+
+    fun loadPictureUploadsSourcePath() {
+        uploadSourcePath = preferencesProvider.getString(
+            PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+            PreferenceManager.CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
+        )
+    }
+
+    fun getPictureUploadsSourcePath() = uploadSourcePath
 }
