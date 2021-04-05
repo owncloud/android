@@ -16,6 +16,11 @@ android {
         }
     }
     namespace "com.owncloud.android.testutil"
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
