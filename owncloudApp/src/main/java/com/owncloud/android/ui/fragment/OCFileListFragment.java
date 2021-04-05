@@ -898,14 +898,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 } else if (PreviewVideoFragment.canBePreviewed(file) &&
                         !fileIsDownloading(file)) {
                     // FIXME: 13/10/2020 : New_arch: Av.Offline
-//                    // Available offline exception, don't initialize streaming
-//                    if (!file.isAvailableLocally() && file.isAvailableOffline()) {
-//                        // sync file content, then open with external apps
-//                        ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
-//                    } else {
-//                        // media preview
-//                        ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
-//                    }
+                    // Available offline exception, don't initialize streaming
+                    // if (!file.isAvailableLocally() && file.isAvailableOffline()) {
+                    if (file.isAvailableLocally()) {
+                        // sync file content, then open with external apps
+                        ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
+                    } else {
+                        // media preview
+                        ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
+                    }
 
                     // If the file is already downloaded sync it, just to update it if there is a
                     // new available file version
