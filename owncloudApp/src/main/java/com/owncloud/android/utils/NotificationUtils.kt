@@ -26,6 +26,8 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Process
@@ -73,10 +75,21 @@ object NotificationUtils {
         }
 
         timeOut?.let {
+            // [setTimeoutAfter] was introduced in API 26.
+            // https://developer.android.com/reference/android/app/Notification.Builder#setTimeoutAfter(long)
             notificationBuilder.setTimeoutAfter(it)
         }
 
         notificationManager.notify(notificationId, notificationBuilder.build())
+
+        // Remove success notification for devices with API < 26 with a workaround
+        if (SDK_INT < Build.VERSION_CODES.O && timeOut != null) {
+            cancelWithDelay(
+                notificationManager = notificationManager,
+                notificationId = notificationId,
+                delayInMillis = timeOut
+            )
+        }
     }
 
     @JvmStatic
