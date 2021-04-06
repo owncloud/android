@@ -91,4 +91,11 @@ class SettingsPictureUploadsViewModel(
         uploadSourcePath = data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
         preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE, uploadSourcePath!!)
     }
+
+    fun schedulePictureUploadsSyncJob() {
+        if (configuration.isEnabledForPictures) {
+            cameraUploadsHandler.setCameraUploadsConfig(configuration)
+            cameraUploadsHandler.scheduleCameraUploadsSyncJob(contextProvider.getContext())
+        }
+    }
 }

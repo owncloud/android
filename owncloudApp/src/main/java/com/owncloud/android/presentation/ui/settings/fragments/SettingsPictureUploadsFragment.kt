@@ -33,6 +33,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
@@ -147,6 +148,11 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         }
     }
 
+    override fun onStop() {
+        picturesViewModel.schedulePictureUploadsSyncJob()
+        super.onStop()
+    }
+
     private fun enableSettings(value: Boolean) {
         prefPictureUploadsPath?.isEnabled = value
         prefPictureUploadsOnWifi?.isEnabled = value
@@ -161,5 +167,4 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             .setPositiveButton(getString(android.R.string.ok), null)
             .show()
     }
-
 }
