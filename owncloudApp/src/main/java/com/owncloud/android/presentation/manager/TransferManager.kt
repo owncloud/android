@@ -23,9 +23,11 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.work.WorkInfo
+import androidx.work.WorkInfo.State
 import androidx.work.WorkInfo.State.BLOCKED
 import androidx.work.WorkInfo.State.CANCELLED
 import androidx.work.WorkInfo.State.ENQUEUED
+import androidx.work.WorkInfo.State.FAILED
 import androidx.work.WorkInfo.State.RUNNING
 import androidx.work.WorkInfo.State.SUCCEEDED
 import androidx.work.WorkManager
@@ -40,6 +42,8 @@ class TransferManager(
 ) {
 
     private val transferProvider = TransferProviderImpl(context)
+    private fun getTagsForDownload(file: OCFile, account: Account) =
+        listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name)
 
     /**
      * Enqueue a new download and return its uuid.
@@ -61,17 +65,14 @@ class TransferManager(
      * Get a LiveData with the last downloading work info.
      */
     fun getLiveDataForDownloadingFile(account: Account, file: OCFile): LiveData<WorkInfo?> {
-        val tagsToFilter = listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name)
+        val tagsToFilter = getTagsForDownload(file, account)
         val workQuery = buildWorkQuery(
             tags = tagsToFilter,
-            states = listOf(ENQUEUED, RUNNING, BLOCKED)
+            states = PENDING_WORK_STATUS
         )
 
         return Transformations.map(getWorkManager().getWorkInfosLiveData(workQuery)) { listOfDownloads ->
-            listOfDownloads
-                .asReversed()
-                .distinctBy { it.tags }
-                .firstOrNull { it.tags.containsAll(tagsToFilter) }
+            listOfDownloads.firstOrNull { it.tags.containsAll(tagsToFilter) }
         }
     }
 
@@ -84,7 +85,7 @@ class TransferManager(
         val tagsToFilter = listOf(TRANSFER_TAG_DOWNLOAD, account.name)
         val workQuery = buildWorkQuery(
             tags = tagsToFilter,
-            states = listOf(SUCCEEDED, CANCELLED, BLOCKED)
+            states = FINISHED_WORK_STATUS
         )
 
         return Transformations.map(getWorkManager().getWorkInfosLiveData(workQuery)) { listOfDownloads ->
@@ -96,12 +97,14 @@ class TransferManager(
     }
 
     private fun isDownloadAlreadyEnqueued(account: Account, file: OCFile): Boolean {
+        val tagsToFilter = getTagsForDownload(file, account)
         val workQuery = buildWorkQuery(
-            tags = listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name),
-            states = listOf(ENQUEUED, RUNNING, BLOCKED),
+            tags = tagsToFilter,
+            states = PENDING_WORK_STATUS,
         )
 
-        val downloadWorkersForFile = getWorkManager().getWorkInfos(workQuery).get()
+        val downloadWorkersForFile =
+            getWorkManager().getWorkInfos(workQuery).get().filter { it.tags.containsAll(tagsToFilter) }
 
         var isEnqueued = false
         downloadWorkersForFile.forEach {
@@ -125,12 +128,12 @@ class TransferManager(
     /**
      * Get a list of WorkInfo that matches EVERY tag.
      */
-    private fun getWorkInfoFromTags(vararg tags: String): List<WorkInfo> {
+    private fun getWorkInfoFromTags(tags: List<String>): List<WorkInfo> {
         val workers = getWorkManager()
             .getWorkInfos(
-                buildWorkQuery(tags = tags.toList())
+                buildWorkQuery(tags = tags)
             ).get()
-        return workers.filter { it.tags.containsAll(tags.toList()) }
+        return workers.filter { it.tags.containsAll(tags) }
     }
 
     /**
@@ -141,7 +144,7 @@ class TransferManager(
      */
     private fun buildWorkQuery(
         tags: List<String>,
-        states: List<WorkInfo.State> = listOf(),
+        states: List<State> = listOf(),
     ): WorkQuery = WorkQuery.Builder
         .fromTags(tags)
         .addStates(states)
@@ -155,7 +158,7 @@ class TransferManager(
      * @return true if the download is pending.
      */
     fun isDownloadPending(account: Account, file: OCFile): Boolean =
-        getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name).any { !it.state.isFinished }
+        getWorkInfoFromTags(getTagsForDownload(file, account)).any { !it.state.isFinished }
 
     /**
      * Cancel every pending download for an account. Note that cancellation is a best-effort
@@ -164,7 +167,7 @@ class TransferManager(
      * @param account
      */
     fun cancelDownloadForAccount(account: Account) {
-        val workersToCancel = getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, account.name)
+        val workersToCancel = getWorkInfoFromTags(listOf(TRANSFER_TAG_DOWNLOAD, account.name))
         workersToCancel.forEach {
             getWorkManager().cancelWorkById(it.id)
         }
@@ -177,7 +180,7 @@ class TransferManager(
      * @param file to cancel
      */
     fun cancelDownloadForFile(file: OCFile) {
-        val workersToCancel = getWorkInfoFromTags(TRANSFER_TAG_DOWNLOAD, file.id.toString(), file.owner)
+        val workersToCancel = getWorkInfoFromTags(listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), file.owner))
         workersToCancel.forEach {
             getWorkManager().cancelWorkById(it.id)
         }
@@ -189,5 +192,8 @@ class TransferManager(
         // Temporary solution. Probably we won't need it.
         const val DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED"
         const val DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH"
+
+        private val PENDING_WORK_STATUS = listOf(ENQUEUED, RUNNING, BLOCKED)
+        private val FINISHED_WORK_STATUS = listOf(SUCCEEDED, FAILED, CANCELLED)
     }
 }
