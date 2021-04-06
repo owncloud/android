@@ -42,6 +42,7 @@
         app:entryValues="@array/pref_behaviour_entryValues"
         app:key="picture_uploads_behaviour"
         app:summary="%s"
-        app:title="@string/prefs_camera_upload_behaviour_title" />
+        app:title="@string/prefs_camera_upload_behaviour_title"
+        app:negativeButtonText=""/>
 
 </PreferenceScreen>
