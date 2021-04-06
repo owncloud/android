@@ -20,11 +20,16 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.files.services.CameraUploadsHandler
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.ui.activity.LocalFolderPickerActivity
+import com.owncloud.android.ui.activity.UploadPathActivity
+import java.io.File
 
 class SettingsPictureUploadsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
@@ -62,4 +67,28 @@ class SettingsPictureUploadsViewModel(
     }
 
     fun getPictureUploadsSourcePath() = uploadSourcePath
+
+    fun handleSelectPictureUploadsPath(data: Intent?) {
+        val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
+        uploadPath = folderToUpload?.remotePath
+        preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH, uploadPath!!)
+    }
+
+    fun handleSelectPictureUploadsSourcePath(data: Intent?) {
+        // If the source path has changed, update camera uploads last sync
+        var previousSourcePath = uploadSourcePath
+
+        if (previousSourcePath?.endsWith(File.separator) == true) {
+            previousSourcePath = previousSourcePath.substring(0, previousSourcePath.length - 1)
+        }
+
+        if (previousSourcePath != data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)) {
+            val currentTimeStamp = System.currentTimeMillis()
+            cameraUploadsHandler.updatePicturesLastSync(contextProvider.getContext(), currentTimeStamp)
+            cameraUploadsHandler.updateVideosLastSync(contextProvider.getContext(), currentTimeStamp)
+        }
+
+        uploadSourcePath = data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
+        preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE, uploadSourcePath!!)
+    }
 }

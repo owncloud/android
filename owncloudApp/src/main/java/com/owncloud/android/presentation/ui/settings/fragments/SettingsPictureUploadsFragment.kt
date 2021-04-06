@@ -39,6 +39,7 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PA
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
+import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -58,7 +59,17 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     private val selectPictureUploadsPathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+            picturesViewModel.handleSelectPictureUploadsPath(result.data)
+            prefPictureUploadsPath?.summary =
+                DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsPath())
+        }
 
+    private val selectPictureUploadsSourcePathLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+            picturesViewModel.handleSelectPictureUploadsSourcePath(result.data)
+            prefPictureUploadsSourcePath?.summary =
+                DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsSourcePath())
         }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -121,6 +132,17 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             val intent = Intent(activity, UploadPathActivity::class.java)
             intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, uploadPath)
             selectPictureUploadsPathLauncher.launch(intent)
+            true
+        }
+
+        prefPictureUploadsSourcePath?.setOnPreferenceClickListener {
+            var sourcePath = picturesViewModel.getPictureUploadsSourcePath()
+            if (sourcePath?.endsWith(File.separator) == false) {
+                sourcePath += File.separator
+            }
+            val intent = Intent(activity, LocalFolderPickerActivity::class.java)
+            intent.putExtra(LocalFolderPickerActivity.EXTRA_PATH, sourcePath)
+            selectPictureUploadsSourcePathLauncher.launch(intent)
             true
         }
     }
