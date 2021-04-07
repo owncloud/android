@@ -552,4 +552,5 @@
   <string name="get_base_url_error">S\’qe e mundur të dihej URL-ja bazë e shërbyesit</string>
   <string name="prefs_http_logs">Regjistro kërkesa dhe përgjigje HTTP</string>
   <string name="prefs_logs_summary">Regjistra mund të përmbajnë të dhëna rezervat. Për ndarje me të tjerët të regjistrave përgjegjësi mban thjesht përdoruesi</string>
+  <string name="synchronizing_account">Po njëkohësohet llogari</string>
 </resources>
