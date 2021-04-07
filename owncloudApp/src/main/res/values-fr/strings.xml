@@ -337,8 +337,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="placeholder_filesize">389 Ko</string>
   <string name="placeholder_timestamp">18/05/2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
-  <string name="camera_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
+  <string name="prefs_camera_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmer</string>
   <string name="confirmation_disable_pictures_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les images en suspens ne seront pas téléversées</string>
   <string name="confirmation_disable_videos_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les vidéos en suspens ne seront pas téléversées</string>

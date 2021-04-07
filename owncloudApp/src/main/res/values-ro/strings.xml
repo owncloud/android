@@ -319,8 +319,8 @@
   <string name="placeholder_filesize">389 KO</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Încărcare fotografii doar pe conexiunea wifi</string>
-  <string name="camera_video_upload_on_wifi">Încărcare videoclipuri doar pe conexiunea wifi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Încărcare fotografii doar pe conexiunea wifi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Încărcare videoclipuri doar pe conexiunea wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmare</string>
   <string name="conflict_title">Conflict de fișiere</string>
   <string name="conflict_message">Care fișiere doriți să păstrați? Dacă selectați „ambele”, fișierului local i se va adăuga un număr numelui său.</string>

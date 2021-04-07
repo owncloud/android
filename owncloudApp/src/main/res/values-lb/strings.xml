@@ -246,8 +246,8 @@
   <string name="placeholder_filesize">389kB</string>
   <string name="placeholder_timestamp">18.05.2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">D\'Biller nëmmen iwwer WiFi eroplueden</string>
-  <string name="camera_video_upload_on_wifi">D\'Videoen nëmmen iwwer WiFi eroplueden</string>
+  <string name="prefs_camera_picture_upload_on_wifi">D\'Biller nëmmen iwwer WiFi eroplueden</string>
+  <string name="prefs_camera_video_upload_on_wifi">D\'Videoen nëmmen iwwer WiFi eroplueden</string>
   <string name="conflict_title">Fichier-Konflikt</string>
   <string name="conflict_message">Wéi eng Fichiere wëlls de halen? Wann s de déi zwou Versiounen auswiels kritt d\' kopéierte Fichier eng Nummer bei den Numm derbäi gesat</string>
   <string name="conflict_keep_both">Béid halen</string>

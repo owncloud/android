@@ -272,8 +272,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Nahrávanie obrázkov je povolené len cez WIFI</string>
-  <string name="camera_video_upload_on_wifi">Nahrávanie videí je povolené len cez WIFI</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Nahrávanie obrázkov je povolené len cez WIFI</string>
+  <string name="prefs_camera_video_upload_on_wifi">Nahrávanie videí je povolené len cez WIFI</string>
   <string name="confirmation_disable_camera_uploads_title">Potvrď</string>
   <string name="confirmation_disable_pictures_upload_message">Vážne chcete vypnúť túto funkcionalitu ?
 Čakajúce obrázky nebudú nahrané</string>

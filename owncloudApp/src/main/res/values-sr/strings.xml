@@ -243,8 +243,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 ПоП</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Отпремај слике само на бежичној мрежи</string>
-  <string name="camera_video_upload_on_wifi">Отпремај видео само на бежичној мрежи</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Отпремај слике само на бежичној мрежи</string>
+  <string name="prefs_camera_video_upload_on_wifi">Отпремај видео само на бежичној мрежи</string>
   <string name="conflict_title">Сукоб фајлова</string>
   <string name="conflict_message">Које фајлове желите да задржите? Ако изаберете обе верзије, локалном фајлу ће бити додат број у назив.</string>
   <string name="conflict_keep_both">Задржи оба</string>
