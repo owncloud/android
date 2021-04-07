@@ -29,6 +29,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewMod
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -51,4 +52,5 @@ val viewModelModule = module {
     viewModel { SettingsLogsViewModel(get(), get()) }
     viewModel { SettingsMoreViewModel(get()) }
     viewModel { SettingsPictureUploadsViewModel(get(), get()) }
+    viewModel { SettingsVideoUploadsViewModel(get(), get()) }
 }

@@ -339,8 +339,8 @@
   <string name="placeholder_filesize">389 กิโลไบต์</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">อัปโหลดรูปภาพผ่านทาง wifi เท่านั้น</string>
-  <string name="camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง wifi เท่านั้น</string>
+  <string name="prefs_camera_picture_upload_on_wifi">อัปโหลดรูปภาพผ่านทาง wifi เท่านั้น</string>
+  <string name="prefs_camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง wifi เท่านั้น</string>
   <string name="confirmation_disable_camera_uploads_title">ยืนยัน</string>
   <string name="confirmation_disable_pictures_upload_message">ต้องการปิดใช้งานคุณลักษณะนี้? รูปภาพที่ค้างอยู่จะไม่ถูกอัปโหลด</string>
   <string name="confirmation_disable_videos_upload_message">ต้องการปิดใช้งานคุณลักษณะนี้? วีดีโอที่ค้างอยู่จะไม่ถูกอัปโหลด</string>

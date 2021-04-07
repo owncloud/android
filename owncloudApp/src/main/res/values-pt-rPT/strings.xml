@@ -287,8 +287,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Enviar as imagens apenas via wi-fi</string>
-  <string name="camera_video_upload_on_wifi">Enviar vídeos apenas via wi-fi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Enviar as imagens apenas via wi-fi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Enviar vídeos apenas via wi-fi</string>
   <string name="confirmation_disable_camera_uploads_title">Confirme</string>
   <string name="conflict_title">Conflito de ficheiro</string>
   <string name="conflict_message">Quais os ficheiros que pretende manter? Se seleccionar ambas as versões, o ficheiro local irá ter um número adicionado ao seu nome.</string>

@@ -287,8 +287,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Ladda upp bilder endast via wifi</string>
-  <string name="camera_video_upload_on_wifi">Ladda upp videor endast via wifi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Ladda upp bilder endast via wifi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Ladda upp videor endast via wifi</string>
   <string name="conflict_title">Filkonflikt</string>
   <string name="conflict_message">Vilka filer vill du behålla? Om du markerar båda kommer den lokala filen få ett nummer tillagt i slutet på filnamnet.</string>
   <string name="conflict_keep_both">Behåll båda</string>

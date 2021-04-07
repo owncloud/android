@@ -260,8 +260,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Xubir semeyes namái per WiFi</string>
-  <string name="camera_video_upload_on_wifi">Xubir vídeos namái per WIFI</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Xubir semeyes namái per WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Xubir vídeos namái per WIFI</string>
   <string name="conflict_title">Conflictu nel ficheru</string>
   <string name="conflict_message">¿Qué ficheros quies caltener? Si seleiciones dambes versiones, el ficheru llocal va tener un númberu amestáu al so nome</string>
   <string name="conflict_keep_both">Caltener dambos</string>

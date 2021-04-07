@@ -280,8 +280,8 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Laadi pilte üles ainult üle wifi</string>
-  <string name="camera_video_upload_on_wifi">Laadi videod üles ainult WiFi-t kasutades</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Laadi pilte üles ainult üle wifi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Laadi videod üles ainult WiFi-t kasutades</string>
   <string name="confirmation_disable_camera_uploads_title">Kinnita</string>
   <string name="conflict_title">Failikonflikt</string>
   <string name="conflict_message">Millist faili sa soovid säilitada? Kui valid mõlemad versioonid, siis lisatakse kohaliku faili nimele number.</string>

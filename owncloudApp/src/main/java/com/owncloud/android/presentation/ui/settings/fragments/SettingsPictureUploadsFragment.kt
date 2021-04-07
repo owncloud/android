@@ -21,7 +21,6 @@
 package com.owncloud.android.presentation.ui.settings.fragments
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
@@ -33,12 +32,12 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
-import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
+import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
@@ -107,20 +106,24 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             if (value) {
                 picturesViewModel.setEnablePictureUpload(value)
                 enableSettings(value)
-                showSimpleDialog(getString(R.string.proper_pics_folder_warning_camera_upload))
+                showAlertDialog(
+                    title = getString(R.string.common_important),
+                    message = getString(R.string.proper_pics_folder_warning_camera_upload)
+                )
                 true
             } else {
-                AlertDialog.Builder(activity)
-                    .setTitle(getString(R.string.confirmation_disable_camera_uploads_title))
-                    .setMessage(getString(R.string.confirmation_disable_pictures_upload_message))
-                    .setNegativeButton(getString(R.string.common_no), null)
-                    .setPositiveButton(getString(R.string.common_yes)) { dialog: DialogInterface?, which: Int ->
+                showAlertDialog(
+                    title = getString(R.string.confirmation_disable_camera_uploads_title),
+                    message = getString(R.string.confirmation_disable_pictures_upload_message),
+                    positiveButtonText = getString(R.string.common_yes),
+                    positiveButtonListener = { dialog: DialogInterface?, which: Int ->
                         picturesViewModel.updatePicturesLastSync()
                         picturesViewModel.setEnablePictureUpload(value)
                         prefEnablePictureUploads?.isChecked = false
                         enableSettings(false)
-                    }
-                    .show()
+                    },
+                    negativeButtonText = getString(R.string.common_no)
+                )
                 false
             }
         }
@@ -158,13 +161,5 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsOnWifi?.isEnabled = value
         prefPictureUploadsSourcePath?.isEnabled = value
         prefPictureUploadsBehaviour?.isEnabled = value
-    }
-
-    private fun showSimpleDialog(message: String) {
-        AlertDialog.Builder(activity)
-            .setTitle(R.string.common_important)
-            .setMessage(message)
-            .setPositiveButton(getString(android.R.string.ok), null)
-            .show()
     }
 }

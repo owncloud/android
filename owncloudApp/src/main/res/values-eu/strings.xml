@@ -287,8 +287,8 @@ Mesedez, baimendu berriz</string>
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Igo irudiak bakarrik WIFIren bidez</string>
-  <string name="camera_video_upload_on_wifi">Igo bideoak bakarrik WIFIren bidez</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Igo irudiak bakarrik WIFIren bidez</string>
+  <string name="prefs_camera_video_upload_on_wifi">Igo bideoak bakarrik WIFIren bidez</string>
   <string name="confirmation_disable_camera_uploads_title">Baieztatu</string>
   <string name="conflict_keep_both">Mantendu biak</string>
   <string name="conflict_use_local_version">bertako bertsioa</string>

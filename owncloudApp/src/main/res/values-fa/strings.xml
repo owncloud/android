@@ -302,8 +302,8 @@
   <string name="placeholder_filesize">389 کیلو بایت</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 بعد از ظهر</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">بارگذاری عکس‌ها فقط با وای‌فای</string>
-  <string name="camera_video_upload_on_wifi">بارگذاری ویدیوها فقط با وای‌فای</string>
+  <string name="prefs_camera_picture_upload_on_wifi">بارگذاری عکس‌ها فقط با وای‌فای</string>
+  <string name="prefs_camera_video_upload_on_wifi">بارگذاری ویدیوها فقط با وای‌فای</string>
   <string name="confirmation_disable_camera_uploads_title">تایید</string>
   <string name="conflict_title">تضاد در فایل</string>
   <string name="conflict_message">کدام فایل را می‌خواهید نگه دارید ؟ اگر هردو نسخه را میخواهید، یک عدد به اول نام فایل محلی اضافه خواهد شد.</string>
