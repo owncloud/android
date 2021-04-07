@@ -97,7 +97,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_picture_upload)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_camera_picture_upload_summary)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
-        onView(withText(R.string.camera_picture_upload_on_wifi)).check(doesNotExist())
+        onView(withText(R.string.prefs_camera_picture_upload_on_wifi)).check(doesNotExist())
     }
 
     @Test
@@ -106,7 +106,7 @@ class OCSettingsCameraUploadsTest {
         onView(withText(R.string.prefs_camera_video_upload)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_camera_video_upload_summary)).check(matches(isDisplayed()))
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(doesNotExist())
-        onView(withText(R.string.camera_video_upload_on_wifi)).check(doesNotExist())
+        onView(withText(R.string.prefs_camera_video_upload_on_wifi)).check(doesNotExist())
     }
 
     @Test
@@ -132,7 +132,7 @@ class OCSettingsCameraUploadsTest {
         //Asserts
         assertTrue(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(matches(isDisplayed()))
-        onView(withText(R.string.camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -142,7 +142,7 @@ class OCSettingsCameraUploadsTest {
         //Asserts
         assertTrue(mPrefCameraVideoUploads.isChecked)
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
-        onView(withText(R.string.camera_video_upload_on_wifi)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_video_upload_on_wifi)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -153,7 +153,7 @@ class OCSettingsCameraUploadsTest {
         //Asserts
         assertFalse(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(doesNotExist())
-        onView(withText(R.string.camera_picture_upload_on_wifi)).check(doesNotExist())
+        onView(withText(R.string.prefs_camera_picture_upload_on_wifi)).check(doesNotExist())
     }
 
     @Test
@@ -164,7 +164,7 @@ class OCSettingsCameraUploadsTest {
         //Asserts
         assertTrue(mPrefCameraPictureUploads.isChecked)
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).check(matches(isDisplayed()))
-        onView(withText(R.string.camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_picture_upload_on_wifi)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -175,7 +175,7 @@ class OCSettingsCameraUploadsTest {
         //Asserts
         assertFalse(mPrefCameraVideoUploads.isChecked)
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(doesNotExist())
-        onView(withText(R.string.camera_video_upload_on_wifi)).check(doesNotExist())
+        onView(withText(R.string.prefs_camera_video_upload_on_wifi)).check(doesNotExist())
     }
 
     @Test
@@ -186,7 +186,7 @@ class OCSettingsCameraUploadsTest {
         //Asserts
         assertTrue(mPrefCameraVideoUploads.isChecked)
         onView(withText(R.string.prefs_camera_video_upload_path_title)).check(matches(isDisplayed()))
-        onView(withText(R.string.camera_video_upload_on_wifi)).check(matches(isDisplayed()))
+        onView(withText(R.string.prefs_camera_video_upload_on_wifi)).check(matches(isDisplayed()))
     }
 
     @Test

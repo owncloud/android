@@ -31,7 +31,7 @@
             android:title="@string/prefs_camera_picture_upload_path_title" />
         <CheckBoxPreference
             android:key="picture_uploads_on_wifi"
-            android:title="@string/camera_picture_upload_on_wifi" />
+            android:title="@string/prefs_camera_picture_upload_on_wifi" />
         <CheckBoxPreference
             android:key="enable_video_uploads"
             android:summary="@string/prefs_subsection_video_uploads_summary"
@@ -41,7 +41,7 @@
             android:title="@string/prefs_camera_video_upload_path_title" />
         <CheckBoxPreference
             android:key="video_uploads_on_wifi"
-            android:title="@string/camera_video_upload_on_wifi" />
+            android:title="@string/prefs_camera_video_upload_on_wifi" />
         <com.owncloud.android.ui.PreferenceWithLongSummary
             android:key="picture_uploads_source_path"
             android:title="@string/prefs_camera_upload_source_path_title" />

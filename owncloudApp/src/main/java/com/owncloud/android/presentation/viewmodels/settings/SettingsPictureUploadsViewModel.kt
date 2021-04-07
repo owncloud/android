@@ -85,7 +85,6 @@ class SettingsPictureUploadsViewModel(
         if (previousSourcePath != data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)) {
             val currentTimeStamp = System.currentTimeMillis()
             cameraUploadsHandler.updatePicturesLastSync(contextProvider.getContext(), currentTimeStamp)
-            cameraUploadsHandler.updateVideosLastSync(contextProvider.getContext(), currentTimeStamp)
         }
 
         uploadSourcePath = data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)

@@ -56,6 +56,10 @@
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
     <string name="prefs_camera_video_upload">Video uploads</string>
     <string name="prefs_camera_video_upload_summary">Automatically upload videos recorded by camera</string>
+    <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
+    <string name="prefs_camera_video_upload_path_title">Video upload path</string>
+    <string name="prefs_camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
+    <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
     <string name="prefs_log_title">Enable logging</string>
     <string name="prefs_log_summary">This is used to log problems</string>
     <string name="prefs_log_title_history">Logging history</string>
@@ -372,8 +376,6 @@
     <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
     <string name="placeholder_media_time">12:23:45</string>
 
-    <string name="camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
-    <string name="camera_video_upload_on_wifi">Upload videos via wifi only</string>
     <string name="confirmation_disable_camera_uploads_title">Confirm</string>
     <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded</string>
     <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
@@ -390,7 +392,6 @@
     <string name="preview_image_error_unknown_format">This image cannot be shown</string>
 
     <string name="error__upload__local_file_not_copied">%1$s could not be copied to %2$s local folder</string>
-    <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
 
     <string name="get_shares_error">It was not possible to retrieve the shares from server</string>
     <string name="get_sharees_error">It was not possible to retrieve users and groups from server</string>
@@ -461,7 +462,6 @@
 
     <string name="prefs_category_camera_upload">Camera uploads</string>
 
-    <string name="prefs_camera_video_upload_path_title">Video upload path</string>
     <string name="sync_folder_failed_content">Synchronization of %1$s folder could not be completed</string>
 
     <string name="shared_subject_header">shared</string>

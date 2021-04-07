@@ -333,8 +333,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Μεταφόρτωση φωτογραφιών μόνο μέσω wifi</string>
-  <string name="camera_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Μεταφόρτωση φωτογραφιών μόνο μέσω wifi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Επιβεβαίωση</string>
   <string name="confirmation_disable_pictures_upload_message">Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε αυτήν τη λειτουργία; Οι φωτογραφίες που εκκρεμούν δεν θα μεταφορτωθούν</string>
   <string name="confirmation_disable_videos_upload_message">Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε αυτήν τη λειτουργία; Τα βίντεο που εκκρεμούν δεν θα μεταφορτωθούν</string>

@@ -343,8 +343,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
-  <string name="camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Bevestigen</string>
   <string name="confirmation_disable_pictures_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande afbeeldingen worden niet geuploade</string>
   <string name="confirmation_disable_videos_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande video’s worden niet geuploade</string>

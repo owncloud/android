@@ -319,8 +319,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Upload billeder udelukkende via wifi</string>
-  <string name="camera_video_upload_on_wifi">Upload videoer udelukkende via wifi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Upload billeder udelukkende via wifi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Upload videoer udelukkende via wifi</string>
   <string name="conflict_title">Filkonflikt</string>
   <string name="conflict_message">Hvilke filer ønsker du at beholde? Hvis du vælger begge versioner, så vil den lokale fil få et tal tilføjet til sit navn.</string>
   <string name="conflict_keep_both">Behold begge</string>

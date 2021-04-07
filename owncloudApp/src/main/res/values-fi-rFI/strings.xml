@@ -294,8 +294,8 @@
   <string name="placeholder_filesize">389 kt</string>
   <string name="placeholder_timestamp">18.5.2012 12.23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Lähetä kuvat vain wifi-yhteyden kautta</string>
-  <string name="camera_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Lähetä kuvat vain wifi-yhteyden kautta</string>
+  <string name="prefs_camera_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
   <string name="confirmation_disable_camera_uploads_title">Vahvista</string>
   <string name="confirmation_disable_pictures_upload_message">Oletko varma, että haluat poistaa toiminnon käytöstä? Jonossa olevia kuvia ei lähetetä.</string>
   <string name="confirmation_disable_videos_upload_message">Oletko varma, että haluat poistaa toiminnon käytöstä? Jonossa olevia videoita ei lähetetä.</string>

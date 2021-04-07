@@ -25,11 +25,11 @@
     <Preference
         app:iconSpaceReserved="false"
         app:key="video_uploads_path"
-        app:title="@string/prefs_camera_picture_upload_path_title" />
+        app:title="@string/prefs_camera_video_upload_path_title" />
     <CheckBoxPreference
         app:iconSpaceReserved="false"
         app:key="video_uploads_on_wifi"
-        app:title="@string/camera_picture_upload_on_wifi" />
+        app:title="@string/prefs_camera_video_upload_on_wifi" />
     <Preference
         app:iconSpaceReserved="false"
         app:key="video_uploads_source_path"

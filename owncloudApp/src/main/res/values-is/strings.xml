@@ -310,8 +310,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 EH</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Senda inn myndir einungis um þráðlaus net</string>
-  <string name="camera_video_upload_on_wifi">Senda inn myndskeið einungis um þráðlaus net</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Senda inn myndir einungis um þráðlaus net</string>
+  <string name="prefs_camera_video_upload_on_wifi">Senda inn myndskeið einungis um þráðlaus net</string>
   <string name="confirmation_disable_camera_uploads_title">Staðfesta</string>
   <string name="conflict_title">Árekstur skráa</string>
   <string name="conflict_message">Ef þú velur báðar útgáfur, þá mun verða bætt tölustaf aftan við heiti skrárinnar á tölvunni.</string>

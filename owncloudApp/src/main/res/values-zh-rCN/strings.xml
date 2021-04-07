@@ -324,8 +324,8 @@
   <string name="placeholder_filesize">389字节</string>
   <string name="placeholder_timestamp">2012/05/18 下午12:23 </string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">仅通过 WIFI 上传照片</string>
-  <string name="camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
+  <string name="prefs_camera_picture_upload_on_wifi">仅通过 WIFI 上传照片</string>
+  <string name="prefs_camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
   <string name="confirmation_disable_camera_uploads_title">确认</string>
   <string name="confirmation_disable_pictures_upload_message">你确定要禁用这项功能吗？未上传的图片将不会被上传</string>
   <string name="confirmation_disable_videos_upload_message">你确定要禁用这项功能吗？未上传的视频将不会被上传</string>

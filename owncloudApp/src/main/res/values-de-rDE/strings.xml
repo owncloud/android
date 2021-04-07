@@ -340,8 +340,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">18.05.2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Fotos nur über WLAN hochladen</string>
-  <string name="camera_video_upload_on_wifi">Videos nur über WLAN hochladen</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Fotos nur über WLAN hochladen</string>
+  <string name="prefs_camera_video_upload_on_wifi">Videos nur über WLAN hochladen</string>
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Bilder werden nicht hochgeladen.</string>
   <string name="confirmation_disable_videos_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Videos werden nicht hochgeladen.</string>

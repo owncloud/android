@@ -309,8 +309,8 @@
   <string name="placeholder_filesize">389 КБ</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Завантажувати картинки лише за наявності WiFi</string>
-  <string name="camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Завантажувати картинки лише за наявності WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Підтвердити</string>
   <string name="conflict_title">Конфлікт файлу</string>
   <string name="conflict_message">Які файли Ви хочете залишити? Якщо Ви оберете обидві версії, локальний файл матиме номер, що додається до його імені.</string>
