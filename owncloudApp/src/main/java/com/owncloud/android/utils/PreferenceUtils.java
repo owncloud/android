@@ -1,4 +1,4 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David González Verdugo
@@ -22,11 +22,11 @@ package com.owncloud.android.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment;
 
 public class PreferenceUtils {
     public static boolean shouldDisallowTouchesWithOtherVisibleWindows(Context context) {
         SharedPreferences appPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
-        return !appPrefs.getBoolean(Preferences.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false);
+        return !appPrefs.getBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false);
     }
 }
