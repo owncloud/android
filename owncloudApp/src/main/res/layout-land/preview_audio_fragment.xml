@@ -39,7 +39,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/media_controller">
+        app:layout_constraintBottom_toTopOf="@id/media_controller"
+        android:elevation="16dp"
+        android:outlineProvider="paddedBounds"
+        android:clipToPadding="false">
 
         <ImageView
             android:id="@+id/image_preview"
@@ -48,6 +51,15 @@
             android:contentDescription="@string/preview_image_description"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_place_holder_music_cover_art"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_preview_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/preview_image_description"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_place_holder_music_cover_art_overlay"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </FrameLayout>
