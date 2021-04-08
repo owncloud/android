@@ -111,9 +111,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.Preferences"
-            android:theme="@style/Theme.ownCloud" />
-        <activity
             android:name=".ui.preview.PreviewImageActivity"
             android:theme="@style/Theme.ownCloud.Overlay" />
 
