@@ -20,23 +20,23 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
+import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.files.services.CameraUploadsHandler
-import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
 import java.io.File
 
 class SettingsPictureUploadsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
-    private val contextProvider: ContextProvider
-) : ViewModel() {
+    private val applicationContext: Application
+) : AndroidViewModel(applicationContext) {
 
-    private val configuration = PreferenceManager.getCameraUploadsConfiguration(contextProvider.getContext())
+    private val configuration = PreferenceManager.getCameraUploadsConfiguration(applicationContext)
     private val cameraUploadsHandler = CameraUploadsHandler(configuration)
 
     private var uploadPath: String? = null
@@ -48,7 +48,7 @@ class SettingsPictureUploadsViewModel(
     fun setEnablePictureUpload(value: Boolean) =
         preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, value)
 
-    fun updatePicturesLastSync() = cameraUploadsHandler.updatePicturesLastSync(contextProvider.getContext(), 0)
+    fun updatePicturesLastSync() = cameraUploadsHandler.updatePicturesLastSync(applicationContext, 0)
 
     fun loadPictureUploadsPath() {
         uploadPath = preferencesProvider.getString(
@@ -84,7 +84,7 @@ class SettingsPictureUploadsViewModel(
 
         if (previousSourcePath != data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)) {
             val currentTimeStamp = System.currentTimeMillis()
-            cameraUploadsHandler.updatePicturesLastSync(contextProvider.getContext(), currentTimeStamp)
+            cameraUploadsHandler.updatePicturesLastSync(applicationContext, currentTimeStamp)
         }
 
         uploadSourcePath = data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
@@ -94,7 +94,7 @@ class SettingsPictureUploadsViewModel(
     fun schedulePictureUploadsSyncJob() {
         if (configuration.isEnabledForPictures) {
             cameraUploadsHandler.setCameraUploadsConfig(configuration)
-            cameraUploadsHandler.scheduleCameraUploadsSyncJob(contextProvider.getContext())
+            cameraUploadsHandler.scheduleCameraUploadsSyncJob(applicationContext)
         }
     }
 }
