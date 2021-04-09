@@ -20,24 +20,20 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.files.services.CameraUploadsHandler
+import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
 import java.io.File
 
 class SettingsVideoUploadsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
-    private val applicationContext: Application
-) : AndroidViewModel(applicationContext) {
-
-    private val configuration = PreferenceManager.getCameraUploadsConfiguration(applicationContext)
-    private val cameraUploadsHandler = CameraUploadsHandler(configuration)
+    private val cameraUploadsHandlerProvider: CameraUploadsHandlerProvider
+) : ViewModel() {
 
     private var uploadPath: String? = null
     private var uploadSourcePath: String? = null
@@ -48,7 +44,7 @@ class SettingsVideoUploadsViewModel(
     fun setEnableVideoUpload(value: Boolean) =
         preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED, value)
 
-    fun updateVideosLastSync() = cameraUploadsHandler.updateVideosLastSync(applicationContext, 0)
+    fun updateVideosLastSync() = cameraUploadsHandlerProvider.updateVideosLastSync(0)
 
     fun loadVideoUploadsPath() {
         uploadPath = preferencesProvider.getString(
@@ -84,17 +80,12 @@ class SettingsVideoUploadsViewModel(
 
         if (previousSourcePath != data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)) {
             val currentTimeStamp = System.currentTimeMillis()
-            cameraUploadsHandler.updateVideosLastSync(applicationContext, currentTimeStamp)
+            cameraUploadsHandlerProvider.updateVideosLastSync(currentTimeStamp)
         }
 
         uploadSourcePath = data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
         preferencesProvider.putString(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE, uploadSourcePath!!)
     }
 
-    fun scheduleVideoUploadsSyncJob() {
-        if (configuration.isEnabledForVideos) {
-            cameraUploadsHandler.setCameraUploadsConfig(configuration)
-            cameraUploadsHandler.scheduleCameraUploadsSyncJob(applicationContext)
-        }
-    }
+    fun scheduleVideoUploadsSyncJob() = cameraUploadsHandlerProvider.scheduleVideoUploadsSyncJob()
 }
