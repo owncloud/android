@@ -20,15 +20,17 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.os.Environment
+import android.content.Intent
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
+import com.owncloud.android.ui.activity.LocalFolderPickerActivity
+import com.owncloud.android.ui.activity.UploadPathActivity
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
@@ -38,7 +40,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 @ExperimentalCoroutinesApi
 class SettingsPictureUploadsViewModelTest : ViewModelTest() {
@@ -48,6 +49,7 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
 
     private val examplePath = "/Example/Path"
     private val exampleSourcePath = "/Example/Source/Path"
+    private val exampleRemotePath = "/Example/Remote/Path"
 
     @Before
     fun setUp() {
@@ -133,7 +135,7 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `get picture uploads path - ok - no load before`() {
+    fun `get picture uploads path - ko - no load before`() {
         val uploadPath = picturesViewModel.getPictureUploadsPath()
 
         assertNull(uploadPath)
@@ -151,13 +153,24 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
 
     @Test
     fun `load picture uploads source path - ok`() {
+        mockkStatic(PreferenceManager.CameraUploadsConfiguration::class)
+
         every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
+        // It has to be "" for the test to pass
+        every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
 
         picturesViewModel.loadPictureUploadsSourcePath()
+
+        verify(exactly = 1) {
+            preferencesProvider.getString(
+                PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+                PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
+            )
+        }
     }
 
     @Test
-    fun `get picture uploads source path - ok - no load before`() {
+    fun `get picture uploads source path - ko - no load before`() {
         val uploadSourcePath = picturesViewModel.getPictureUploadsSourcePath()
 
         assertNull(uploadSourcePath)
@@ -168,11 +181,106 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
         mockkStatic(PreferenceManager.CameraUploadsConfiguration::class)
 
         every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
-        every { PreferenceManager.CameraUploadsConfiguration.DEFAULT_SOURCE_PATH } returns ""
+        every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
 
         picturesViewModel.loadPictureUploadsSourcePath()
         val uploadSourcePath = picturesViewModel.getPictureUploadsSourcePath()
 
         assertEquals(exampleSourcePath, uploadSourcePath)
+    }
+
+    @Test
+    fun `handle select picture uploads path - ok`() {
+        val data: Intent = mockk()
+        val ocFile: OCFile = mockk()
+
+        every { ocFile.remotePath } returns exampleRemotePath
+        every { data.getParcelableExtra<OCFile>(any()) } returns ocFile
+
+        picturesViewModel.handleSelectPictureUploadsPath(data)
+
+        verify(exactly = 1) {
+            data.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
+            ocFile.remotePath
+            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH, exampleRemotePath)
+        }
+    }
+
+    @Test(expected = NullPointerException::class)
+    fun `handle select picture uploads path - ko - data intent is null`() {
+        picturesViewModel.handleSelectPictureUploadsPath(null)
+    }
+
+    @Test(expected = NullPointerException::class)
+    fun `handle select picture uploads path - ko - folder to upload is null`() {
+        val data: Intent = mockk()
+
+        every { data.getParcelableExtra<OCFile>(any()) } returns null
+
+        picturesViewModel.handleSelectPictureUploadsPath(data)
+
+        verify(exactly = 1) {
+            data.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
+        }
+    }
+
+    @Test
+    fun `handle select picture uploads source path - ok - source path hasn't changed`() {
+        val data: Intent = mockk()
+        mockkStatic(PreferenceManager.CameraUploadsConfiguration::class)
+
+        every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
+        // It has to be "" for the test to pass
+        every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
+        every { data.getStringExtra(any()) } returns exampleSourcePath
+
+        picturesViewModel.loadPictureUploadsSourcePath()
+        picturesViewModel.handleSelectPictureUploadsSourcePath(data)
+
+        verify(exactly = 2) {
+            data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
+        }
+        verify(exactly = 1) {
+            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE, exampleSourcePath)
+        }
+    }
+
+    @Test
+    fun `handle select picture uploads source path - ok - source path has changed`() {
+        val data: Intent = mockk()
+        val sourcePath = "/New/Source/Path"
+        mockkStatic(PreferenceManager.CameraUploadsConfiguration::class)
+
+        every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
+        // It has to be "" for the test to pass
+        every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
+        every { data.getStringExtra(any()) } returns sourcePath
+
+        picturesViewModel.loadPictureUploadsSourcePath()
+        picturesViewModel.handleSelectPictureUploadsSourcePath(data)
+        val newSourcePath = picturesViewModel.getPictureUploadsSourcePath()
+        assertEquals(sourcePath, newSourcePath)
+
+        verify(exactly = 2) {
+            data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
+        }
+        verify(exactly = 1) {
+            cameraUploadsHandlerProvider.updatePicturesLastSync(any())
+            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE, sourcePath)
+        }
+    }
+
+    @Test(expected = NullPointerException::class)
+    fun `handle select picture uploads source path - ko - data intent is null`() {
+        picturesViewModel.handleSelectPictureUploadsSourcePath(null)
+    }
+
+    @Test
+    fun `schedule picture uploads sync job - ok`() {
+        picturesViewModel.schedulePictureUploadsSyncJob()
+
+        verify(exactly = 1) {
+            cameraUploadsHandlerProvider.schedulePictureUploadsSyncJob()
+        }
     }
 }
