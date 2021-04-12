@@ -42,7 +42,7 @@ class SettingsLogsViewModelTest : ViewModelTest() {
 
     @Before
     fun setUp() {
-        preferencesProvider = mockk()
+        preferencesProvider = mockk(relaxUnitFun = true)
         logsProvider = mockk(relaxUnitFun = true)
 
         logsViewModel = SettingsLogsViewModel(
@@ -67,8 +67,6 @@ class SettingsLogsViewModelTest : ViewModelTest() {
 
     @Test
     fun `set enable logging - ok - true`() {
-        every { preferencesProvider.putBoolean(any(),any())} returns Unit
-
         logsViewModel.setEnableLogging(true)
 
         verify(exactly = 1) {
@@ -79,8 +77,6 @@ class SettingsLogsViewModelTest : ViewModelTest() {
 
     @Test
     fun `set enable logging - ok - false`() {
-        every { preferencesProvider.putBoolean(any(),any())} returns Unit
-
         logsViewModel.setEnableLogging(false)
 
         verify(exactly = 1) {
