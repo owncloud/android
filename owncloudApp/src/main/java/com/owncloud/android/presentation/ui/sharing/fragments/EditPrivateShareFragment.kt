@@ -288,8 +288,8 @@ class EditPrivateShareFragment : DialogFragment() {
                         }
                     }
 
-                    if (!(file?.isFolder == true && isChecked && file?.isSharedWithMe == true)       // see (1)
-                        || isFederated
+                    if (!(file?.isFolder == true && isChecked && file?.isSharedWithMe == true) ||       // see (1)
+                        isFederated
                     ) {
                         updatePermissionsToShare()
                     }
@@ -312,7 +312,7 @@ class EditPrivateShareFragment : DialogFragment() {
                     syncCanEditSwitch(compound, isChecked)
                     updatePermissionsToShare()
                 }
-            }// updatePermissionsToShare()   // see (1)
+            } // updatePermissionsToShare()   // see (1)
             // (1) These modifications result in an exceptional UI behaviour for the case
             // where the switch 'can edit' is enabled for a *reshared folder*; if the same
             // behaviour was applied than for owned folder, and the user did not have full
