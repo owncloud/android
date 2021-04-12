@@ -43,7 +43,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Before
     fun setUp() {
-        preferencesProvider = mockk()
+        preferencesProvider = mockk(relaxUnitFun = true)
         securityViewModel = SettingsSecurityViewModel(preferencesProvider)
     }
 
@@ -84,8 +84,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         val passcode = "1111"
 
         every { data.getStringExtra(any()) } returns passcode
-        every { preferencesProvider.putString(any(), any()) } returns Unit
-        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
         val passcodeEnableResult = securityViewModel.handleEnablePasscode(data)
 
@@ -131,8 +129,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         val passcode = "111"
 
         every { data.getStringExtra(any()) } returns passcode
-        every { preferencesProvider.putString(any(), any()) } returns Unit
-        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
         val passcodeEnableResult = securityViewModel.handleEnablePasscode(data)
 
@@ -150,8 +146,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         val passcode = "11111"
 
         every { data.getStringExtra(any()) } returns passcode
-        every { preferencesProvider.putString(any(), any()) } returns Unit
-        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
         val passcodeEnableResult = securityViewModel.handleEnablePasscode(data)
 
@@ -168,7 +162,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         val data: Intent = mockk()
 
         every { data.getBooleanExtra(any(), any()) } returns true
-        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
         val passcodeDisableResult = securityViewModel.handleDisablePasscode(data)
 
@@ -234,8 +227,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         val pattern = "pattern"
 
         every { data.getStringExtra(any()) } returns pattern
-        every { preferencesProvider.putString(any(), any()) } returns Unit
-        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
         val patternEnableResult = securityViewModel.handleEnablePattern(data)
 
@@ -275,7 +266,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         val data: Intent = mockk()
 
         every { data.getBooleanExtra(any(), any()) } returns true
-        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
 
         val patternDisableResult = securityViewModel.handleDisablePattern(data)
 
@@ -311,8 +301,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `set pref touches with other visible windows - ok - true`() {
-        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
-
         securityViewModel.setPrefTouchesWithOtherVisibleWindows(true)
 
         verify(exactly = 1) {
@@ -322,8 +310,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `set pref touches with other visible windows - ok - false`() {
-        every { preferencesProvider.putBoolean(any(), any()) } returns Unit
-
         securityViewModel.setPrefTouchesWithOtherVisibleWindows(false)
 
         verify(exactly = 1) {
