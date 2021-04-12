@@ -63,6 +63,16 @@
 
 
 
+
+
+
+
+
+
+
+
+
+    
     
     <bool name="sync_calendar_contacts_enabled">true</bool>
     <bool name="imprint_enabled">false</bool>
