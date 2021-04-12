@@ -237,4 +237,8 @@ public class FileStorageUtils {
 
         return dir.delete();
     }
+
+    public static String getDefaultSourcePath() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera";
+    }
 }

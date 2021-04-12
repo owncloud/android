@@ -58,7 +58,7 @@ class SettingsVideoUploadsViewModel(
     fun loadVideoUploadsSourcePath() {
         uploadSourcePath = preferencesProvider.getString(
             PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-            PreferenceManager.CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
+            PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
         )
     }
 

@@ -150,13 +150,13 @@ public abstract class PreferenceManager {
         result.setSourcePathPictures(
                 prefs.getString(
                         PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-                        CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
+                        CameraUploadsConfiguration.getDefaultSourcePath()
                 )
         );
         result.setSourcePathVideos(
                 prefs.getString(
                         PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-                        CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
+                        CameraUploadsConfiguration.getDefaultSourcePath()
                 )
         );
         return result;
@@ -270,10 +270,6 @@ public abstract class PreferenceManager {
      */
     public static class CameraUploadsConfiguration {
 
-        public static final String DEFAULT_SOURCE_PATH = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM
-        ).getAbsolutePath() + "/Camera";
-
         private boolean mEnabledForPictures;
         private boolean mEnabledForVideos;
         private boolean mWifiOnlyForPictures;
@@ -285,6 +281,10 @@ public abstract class PreferenceManager {
         private String mBehaviourAfterUploadVideos;
         private String mSourcePathPictures;
         private String mSourcePathVideos;
+
+        public static String getDefaultSourcePath() {
+            return FileStorageUtils.getDefaultSourcePath();
+        }
 
         public boolean isEnabledForPictures() {
             return mEnabledForPictures;
