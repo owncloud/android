@@ -176,7 +176,7 @@ class ShareXMLParser {
                 name.equals(NODE_ELEMENT, ignoreCase = true) -> {
                     readElement(parser, shares)
                 }
-                name.equals(NODE_ID, ignoreCase = true) -> {// Parse Create XML Response
+                name.equals(NODE_ID, ignoreCase = true) -> { // Parse Create XML Response
                     share = RemoteShare()
                     val value = readNode(parser, NODE_ID)
                     share.id = value

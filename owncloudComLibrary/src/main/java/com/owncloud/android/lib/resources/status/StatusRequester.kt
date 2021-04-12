@@ -45,9 +45,9 @@ internal class StatusRequester {
         redirectedToNonSecureLocationBefore: Boolean,
         baseUrl: String,
         redirectedUrl: String
-    ) = redirectedToNonSecureLocationBefore
-            || (baseUrl.startsWith(HTTPS_SCHEME)
-            && !redirectedUrl.startsWith(HTTPS_SCHEME))
+    ) = redirectedToNonSecureLocationBefore ||
+            (baseUrl.startsWith(HTTPS_SCHEME) &&
+            !redirectedUrl.startsWith(HTTPS_SCHEME))
 
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
         /** Redirection with different endpoint.
