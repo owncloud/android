@@ -50,7 +50,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
-import com.owncloud.android.presentation.manager.TransferManager
+import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
+import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FileListOption
@@ -114,7 +115,7 @@ class PreviewImageActivity : FileActivity(),
             pairFileWork.forEach { fileWork ->
                 previewImagePagerAdapter.onDownloadEvent(
                     fileWork.first,
-                    if (fileWork.second.state.isFinished) TransferManager.DOWNLOAD_FINISH_MESSAGE else TransferManager.DOWNLOAD_ADDED_MESSAGE,
+                    if (fileWork.second.state.isFinished) DOWNLOAD_FINISH_MESSAGE else DOWNLOAD_ADDED_MESSAGE,
                     fileWork.second.state == WorkInfo.State.SUCCEEDED
                 )
             }
