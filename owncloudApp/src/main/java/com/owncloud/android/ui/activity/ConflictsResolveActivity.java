@@ -26,11 +26,15 @@ import android.os.Bundle;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
-import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.Decision;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.OnConflictDecisionMadeListener;
+import com.owncloud.android.usecases.transfers.DownloadFileUseCase;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Wrapper activity which will be launched if keep-in-sync file will be modified by external
@@ -62,7 +66,9 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 break;
             case SERVER:
                 // use server version -> delete local, request download
-                new TransferManager(getApplicationContext()).downloadFile(getAccount(), getFile());
+                @NotNull Lazy<DownloadFileUseCase> downloadFileUseCase = inject(DownloadFileUseCase.class);
+                DownloadFileUseCase.Params downloadFileParams = new DownloadFileUseCase.Params(getAccount(), getFile());
+                downloadFileUseCase.getValue().execute(downloadFileParams);
                 finish();
                 return;
             default:
