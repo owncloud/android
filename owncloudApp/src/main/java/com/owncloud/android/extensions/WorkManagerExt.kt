@@ -41,8 +41,9 @@ fun WorkManager.getWorkInfoByTags(tags: List<String>): List<WorkInfo> =
  *
  * @return true if the download is pending.
  */
-fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean =
-    this.getWorkInfoByTags(getTagsForDownload(file, account)).any { !it.state.isFinished }
+fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean = false
+// TODO: https://github.com/owncloud/android/issues/2872#issuecomment-817572474
+//  this.getWorkInfoByTags(getTagsForDownload(file, account)).any { !it.state.isFinished }
 
 fun getTagsForDownload(file: OCFile, account: Account) =
     listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name)
