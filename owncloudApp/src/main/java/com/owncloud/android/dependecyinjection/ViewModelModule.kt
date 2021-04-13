@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Abel García de Prada
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -47,5 +48,5 @@ val viewModelModule = module {
     viewModel { FilesViewModel(get(), get(), get()) }
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
-    viewModel { FileDetailsViewModel(get(), get(), get()) }
+    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get()) }
 }

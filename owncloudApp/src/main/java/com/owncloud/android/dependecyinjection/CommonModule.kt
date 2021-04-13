@@ -20,8 +20,8 @@
 
 package com.owncloud.android.dependecyinjection
 
+import androidx.work.WorkManager
 import com.owncloud.android.presentation.manager.AvatarManager
-import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.impl.OCContextProvider
@@ -34,5 +34,5 @@ val commonModule = module {
     single { AvatarManager() }
     single { CoroutinesDispatcherProvider() }
     factory<ContextProvider> { OCContextProvider(androidContext()) }
-    single { TransferManager(androidApplication()) }
+    single { WorkManager.getInstance(androidApplication()) }
 }
