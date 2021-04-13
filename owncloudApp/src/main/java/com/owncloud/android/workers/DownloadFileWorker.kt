@@ -49,6 +49,7 @@ import com.owncloud.android.ui.errorhandling.TypeOfOperation.TransferDownload
 import com.owncloud.android.ui.preview.PreviewImageActivity
 import com.owncloud.android.ui.preview.PreviewImageFragment.Companion.canBePreviewed
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
+import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_ID_DEFAULT
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NOTIFICATION_TIMEOUT_STANDARD
 import com.owncloud.android.utils.NotificationUtils.createBasicNotification
@@ -101,10 +102,7 @@ class DownloadFileWorker(
             ?: FileStorageUtils.getDefaultSavePathFor(account.name, ocFile)
 
     override suspend fun doWork(): Result {
-        val accountName = workerParameters.inputData.getString(KEY_PARAM_ACCOUNT)
-        val fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1)
-
-        if (!areParametersValid(accountName, fileId)) return Result.failure()
+        if (!areParametersValid()) return Result.failure()
 
         return try {
             downloadFileToTemporalFile()
@@ -125,7 +123,10 @@ class DownloadFileWorker(
      * - Check whether file exists in the database
      * - Check that the file is not a folder
      */
-    private fun areParametersValid(accountName: String?, fileId: Long): Boolean {
+    private fun areParametersValid(): Boolean {
+        val accountName = workerParameters.inputData.getString(KEY_PARAM_ACCOUNT)
+        val fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1)
+
         account = AccountUtils.getOwnCloudAccountByName(appContext, accountName) ?: return false
         ocFile = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId)).getDataOrNull() ?: return false
 
@@ -210,10 +211,11 @@ class DownloadFileWorker(
                 R.string.downloader_download_failed_ticker
             }
 
-            val needsToUpdateCredentials = throwable is UnauthorizedException
-            tickerId = if (needsToUpdateCredentials) R.string.downloader_download_failed_credentials_error else tickerId
-
-            val pendingIntent = if (needsToUpdateCredentials) composePendingIntentToRefreshCredentials() else null
+            var pendingIntent: PendingIntent? = null
+            if (throwable is UnauthorizedException) {
+                tickerId = R.string.downloader_download_failed_credentials_error
+                pendingIntent = composePendingIntentToRefreshCredentials()
+            }
 
             val contextText = ErrorMessageAdapter.getMessageFromOperation(
                 typeOfOperation = TransferDownload(finalLocationForFile),
@@ -232,7 +234,7 @@ class DownloadFileWorker(
                 context = appContext,
                 contentTitle = appContext.getString(tickerId),
                 notificationChannelId = DOWNLOAD_NOTIFICATION_CHANNEL_ID,
-                notificationId = ocFile.id!!.toInt(),
+                notificationId = DOWNLOAD_NOTIFICATION_ID_DEFAULT,
                 intent = pendingIntent,
                 contentText = contextText,
                 timeOut = timeOut
@@ -297,24 +299,6 @@ class DownloadFileWorker(
     ) {
         val percent: Int = (100.0 * totalTransferredSoFar.toDouble() / totalToTransfer.toDouble()).toInt()
         if (percent == lastPercent) return
-
-        val contentTitle = appContext.getString(R.string.downloader_download_in_progress_ticker)
-
-        val contentText = String.format(
-            appContext.getString(R.string.downloader_download_in_progress_content),
-            percent,
-            File(this.finalLocationForFile).name
-        )
-
-        showNotificationWithProgress(
-            maxValue = totalToTransfer.toInt(),
-            progress = totalTransferredSoFar.toInt(),
-            notificationChannelId = DOWNLOAD_NOTIFICATION_CHANNEL_ID,
-            contentText = contentText,
-            contentTitle = contentTitle,
-            fileId = ocFile.id,
-            pendingIntent = composePendingIntentToPreviewFile()
-        )
 
         // Set current progress. Observers will listen.
         CoroutineScope(Dispatchers.IO).launch {
