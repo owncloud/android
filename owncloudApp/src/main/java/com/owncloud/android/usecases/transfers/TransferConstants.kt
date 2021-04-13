@@ -16,24 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.presentation.manager
 
-package com.owncloud.android.providers
+const val TRANSFER_TAG_DOWNLOAD = "DOWNLOAD_TAG"
 
-import android.accounts.Account
-import androidx.work.WorkManager
-import com.owncloud.android.domain.files.model.OCFile
-import java.util.UUID
+const val MAXIMUM_NUMBER_OF_RETRIES = 3
 
-/**
- * Facade to execute transfer operations. Should be only handled by Transfer Manager.
- */
-interface TransferProvider {
-
-    /**
-     * Enqueue a new download and return its uuid.
-     * You can check and observe its progress using
-     * @see WorkManager.getWorkInfoById and
-     * @see WorkManager.getWorkInfoByIdLiveData
-     */
-    fun downloadFile(account: Account, file: OCFile): UUID
-}
+// Temporary solution. Probably we won't need it.
+const val DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED"
+const val DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH"
