@@ -35,15 +35,19 @@ import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import com.owncloud.android.usecases.transfers.CancelDownloadForFileUseCase;
 import com.owncloud.android.utils.UriUtilsKt;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.util.Collection;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 public class FileOperationsHelper {
 
@@ -334,10 +338,11 @@ public class FileOperationsHelper {
         }
 
         // for both files and folders
-        TransferManager transferManager = new TransferManager(mFileActivity.getApplicationContext());
-        if (transferManager.isDownloadPending(account, file)) {
-            transferManager.cancelDownloadForFile(file);
-        }
+        @NotNull Lazy<CancelDownloadForFileUseCase> cancelDownloadForFileUseCaseLazy =
+                inject(CancelDownloadForFileUseCase.class);
+        CancelDownloadForFileUseCase.Params cancelDownloadParams = new CancelDownloadForFileUseCase.Params(file);
+        cancelDownloadForFileUseCaseLazy.getValue().execute(cancelDownloadParams);
+
         FileUploaderBinder uploaderBinder = mFileActivity.getFileUploaderBinder();
         if (uploaderBinder != null && uploaderBinder.isUploading(account, file)) {
             uploaderBinder.cancel(account, file);

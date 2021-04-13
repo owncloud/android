@@ -35,9 +35,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.presentation.manager.TransferManager;
+import com.owncloud.android.usecases.transfers.DownloadFileUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Operation synchronizing the properties and contents of an OC file between local and remote copies.
@@ -245,8 +249,9 @@ public class SynchronizeFileOperation extends SyncOperation {
      * @param file OCFile object representing the file to download
      */
     private void requestForDownload(OCFile file) {
-        TransferManager transferManager = new TransferManager(MainApp.Companion.getAppContext());
-        transferManager.downloadFile(mAccount, file);
+        @NotNull Lazy<DownloadFileUseCase> downloadFileUseCase = inject(DownloadFileUseCase.class);
+        DownloadFileUseCase.Params downloadFileParams = new DownloadFileUseCase.Params(mAccount, file);
+        downloadFileUseCase.getValue().execute(downloadFileParams);
 
 //        Intent intent = new Intent(mContext, FileDownloader.class);
 //        intent.putExtra(FileDownloader.KEY_ACCOUNT, mAccount);

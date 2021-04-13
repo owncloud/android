@@ -54,11 +54,11 @@ import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
-import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.usecases.transfers.DownloadFileUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NotificationUtils
 import org.koin.android.ext.android.inject
@@ -101,7 +101,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
             ocFile = getFileByIdOrException(docId)
 
             if (!ocFile.isAvailableLocally) {
-                TransferManager(MainApp.appContext).downloadFile(getAccountFromFileId(docId)!!, ocFile)
+                val downloadFileUseCase: DownloadFileUseCase by inject()
+
+                downloadFileUseCase.execute(DownloadFileUseCase.Params(getAccountFromFileId(docId)!!, ocFile))
 
                 do {
                     if (!waitOrGetCancelled(signal)) {
