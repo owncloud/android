@@ -24,21 +24,26 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
-import com.owncloud.android.presentation.manager.TransferManager
+import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.preview.PreviewAudioFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoFragment
+import com.owncloud.android.usecases.transfers.CancelDownloadForFileUseCase
+import com.owncloud.android.usecases.transfers.GetLiveDataForDownloadingFileUseCase
 import kotlinx.coroutines.launch
 import java.util.UUID
 
 class FileDetailsViewModel(
-    private val transferManager: TransferManager,
+    private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
+    private val getLiveDataForDownloadingFileUseCase: GetLiveDataForDownloadingFileUseCase,
+    private val workManager: WorkManager,
     private val getFileByIdUseCase: GetFileByIdUseCase,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     val pendingDownloads = MediatorLiveData<WorkInfo?>()
@@ -47,7 +52,9 @@ class FileDetailsViewModel(
     val ongoingDownload: LiveData<WorkInfo?> = _ongoingDownload
 
     fun startListeningToDownloadsFromAccountAndFile(account: Account, file: OCFile) {
-        pendingDownloads.addSource(transferManager.getLiveDataForDownloadingFile(account, file)) { workInfo ->
+        pendingDownloads.addSource(
+            getLiveDataForDownloadingFileUseCase.execute(GetLiveDataForDownloadingFileUseCase.Params(account, file))
+        ) { workInfo ->
             if (workInfo != null) {
                 startListeningToWorkInfo(uuid = workInfo.id)
                 pendingDownloads.postValue(workInfo)
@@ -56,13 +63,18 @@ class FileDetailsViewModel(
     }
 
     private fun startListeningToWorkInfo(uuid: UUID) {
-        _ongoingDownload.addSource(transferManager.getWorkInfoByIdLiveData(uuid)) {
+        _ongoingDownload.addSource(
+            workManager.getWorkInfoByIdLiveData(uuid)
+        ) {
             _ongoingDownload.postValue(it)
         }
     }
 
+    fun isDownloadPending(account: Account, file: OCFile): Boolean =
+        workManager.isDownloadPending(account, file)
+
     fun cancelCurrentDownload(file: OCFile) {
-        transferManager.cancelDownloadForFile(file)
+        cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(file))
     }
 
     // TODO: I don't like this at all. Move navigation to a common place.

@@ -26,13 +26,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
-import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.transfers.GetLiveDataForFinishedDownloadsFromAccountUseCase
 import kotlinx.coroutines.launch
 
 class PreviewImageViewModel(
-    private val transferManager: TransferManager,
     private val getFileByIdUseCase: GetFileByIdUseCase,
+    private val getLiveDataForFinishedDownloadsFromAccountUseCase: GetLiveDataForFinishedDownloadsFromAccountUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -40,7 +40,9 @@ class PreviewImageViewModel(
     val downloads: LiveData<List<Pair<OCFile, WorkInfo>>> = _downloads
 
     fun startListeningToDownloadsFromAccount(account: Account) {
-        _downloads.addSource(transferManager.getLiveDataForFinishedDownloadsFromAccount(account)) { listOfWorkInfo ->
+        _downloads.addSource(
+            getLiveDataForFinishedDownloadsFromAccountUseCase.execute(GetLiveDataForFinishedDownloadsFromAccountUseCase.Params(account))
+        ) { listOfWorkInfo ->
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
                 val finalList = getListOfPairs(listOfWorkInfo)
                 _downloads.postValue(finalList)
