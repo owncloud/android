@@ -54,7 +54,6 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.presentation.viewmodels.files.FileDetailsViewModel
 import com.owncloud.android.ui.activity.ComponentsGetter
 import com.owncloud.android.ui.activity.FileActivity
@@ -385,7 +384,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      * Updates the view with all relevant details about that file.
      *
      * @param forcedTransferring Flag signaling if the file should be considered as downloading or uploading,
-     * although [TransferManager.isDownloadPending] and [FileUploaderBinder.isUploading] return false.
+     * although [FileDetailsViewModel.isDownloadPending] and [FileUploaderBinder.isUploading] return false.
      * @param refresh            If 'true', try to refresh the whole file from the database
      */
     private fun updateFileDetails(forcedTransferring: Boolean, refresh: Boolean) {
@@ -402,11 +401,10 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         setTimeModified(file.modificationTimestamp)
 
         // configure UI for depending upon local state of the file
-        val transferManager = TransferManager(appContext)
         val uploaderBinder = mContainerActivity.fileUploaderBinder
         val safeAccount = account
         if (forcedTransferring ||
-            safeAccount != null && transferManager.isDownloadPending(safeAccount, file) ||
+            safeAccount != null && fileDetailsViewModel.isDownloadPending(safeAccount, file) ||
             uploaderBinder != null && uploaderBinder.isUploading(account, file)
         ) {
             setButtonsForTransferring()
@@ -497,10 +495,9 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         requireView().findViewById<View>(R.id.fdProgressBlock).isVisible = true
         val progressText = requireView().findViewById<TextView>(R.id.fdProgressText)
         progressText.isVisible = true
-        val transferManager = TransferManager(appContext)
         val uploaderBinder = mContainerActivity.fileUploaderBinder
         val safeAccount = account
-        if (safeAccount != null && transferManager.isDownloadPending(safeAccount, file)) {
+        if (safeAccount != null && fileDetailsViewModel.isDownloadPending(safeAccount, file)) {
             progressText.setText(R.string.downloader_download_in_progress_ticker)
         } else if (uploaderBinder != null && uploaderBinder.isUploading(account, file)) {
             progressText.setText(R.string.uploader_upload_in_progress_ticker)

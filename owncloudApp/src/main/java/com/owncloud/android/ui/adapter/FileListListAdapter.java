@@ -45,6 +45,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.work.WorkManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
@@ -53,9 +54,9 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment;
-import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.DisplayUtils;
@@ -328,7 +329,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private void setIconPinAccordingToFilesLocalState(ImageView localStateView, OCFile file) {
         // local state
         localStateView.bringToFront();
-        final TransferManager transferManager = new TransferManager(mContext);
+        final WorkManager workManager = WorkManager.getInstance(mContext);
         final FileUploaderBinder uploaderBinder =
                 mTransferServiceGetter.getFileUploaderBinder();
         final OperationsServiceBinder opsBinder =
@@ -340,7 +341,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             //syncing
             localStateView.setImageResource(R.drawable.sync_pin);
             localStateView.setVisibility(View.VISIBLE);
-        } else if (transferManager.isDownloadPending(mAccount, file)) {
+        } else if (WorkManagerExtKt.isDownloadPending(workManager, mAccount, file)) {
             // downloading
             localStateView.setImageResource(R.drawable.sync_pin);
             localStateView.setVisibility(View.VISIBLE);

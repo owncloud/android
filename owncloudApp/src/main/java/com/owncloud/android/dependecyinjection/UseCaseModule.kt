@@ -58,6 +58,11 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
+import com.owncloud.android.usecases.transfers.CancelDownloadForFileUseCase
+import com.owncloud.android.usecases.transfers.CancelDownloadsForAccountUseCase
+import com.owncloud.android.usecases.transfers.DownloadFileUseCase
+import com.owncloud.android.usecases.transfers.GetLiveDataForDownloadingFileUseCase
+import com.owncloud.android.usecases.transfers.GetLiveDataForFinishedDownloadsFromAccountUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -96,6 +101,13 @@ val useCaseModule = module {
     factory { GetShareesAsyncUseCase(get()) }
     factory { GetSharesAsLiveDataUseCase(get()) }
     factory { RefreshSharesFromServerAsyncUseCase(get()) }
+
+    // Transfers
+    factory { CancelDownloadForFileUseCase(get()) }
+    factory { CancelDownloadsForAccountUseCase(get()) }
+    factory { DownloadFileUseCase(get()) }
+    factory { GetLiveDataForDownloadingFileUseCase(get()) }
+    factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }
