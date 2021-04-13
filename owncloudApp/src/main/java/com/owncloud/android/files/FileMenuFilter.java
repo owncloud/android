@@ -30,11 +30,12 @@ import android.view.MenuItem;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.work.WorkManager;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
@@ -275,10 +276,9 @@ public class FileMenuFilter {
         if (mComponentsGetter != null && !mFiles.isEmpty() && mAccount != null) {
             OperationsServiceBinder opsBinder = mComponentsGetter.getOperationsServiceBinder();
             FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
-            TransferManager transferManager = new TransferManager(mContext);
             synchronizing = (
                     anyFileSynchronizing(opsBinder) ||      // comparing local and remote
-                            anyFileDownloading(transferManager) ||
+                            anyFileDownloading() ||
                             anyFileUploading(uploaderBinder)
             );
         }
@@ -295,10 +295,11 @@ public class FileMenuFilter {
         return synchronizing;
     }
 
-    private boolean anyFileDownloading(TransferManager transferManager) {
+    private boolean anyFileDownloading() {
+        WorkManager workManager = WorkManager.getInstance(mContext);
         boolean downloading = false;
         for (int i = 0; !downloading && i < mFiles.size(); i++) {
-            downloading = transferManager.isDownloadPending(mAccount, mFiles.get(i));
+            downloading = WorkManagerExtKt.isDownloadPending(workManager, mAccount, mFiles.get(i));
         }
         return downloading;
     }

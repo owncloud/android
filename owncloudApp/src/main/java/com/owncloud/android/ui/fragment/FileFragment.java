@@ -26,8 +26,10 @@ import android.content.Context;
 import androidx.fragment.app.Fragment;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.ui.activity.ComponentsGetter;
+
+import static com.owncloud.android.presentation.manager.TransferConstantsKt.DOWNLOAD_ADDED_MESSAGE;
+import static com.owncloud.android.presentation.manager.TransferConstantsKt.DOWNLOAD_FINISH_MESSAGE;
 
 /**
  * Common methods for {@link Fragment}s containing {@link OCFile}s
@@ -99,10 +101,10 @@ public abstract class FileFragment extends Fragment {
             }
             updateViewForSyncOff();
 
-        } else if (syncEvent.equals(TransferManager.DOWNLOAD_ADDED_MESSAGE)) {
+        } else if (syncEvent.equals(DOWNLOAD_ADDED_MESSAGE)) {
             updateViewForSyncInProgress();
 
-        } else if (syncEvent.equals(TransferManager.DOWNLOAD_FINISH_MESSAGE)) {
+        } else if (syncEvent.equals(DOWNLOAD_FINISH_MESSAGE)) {
             if (success) {
                 if (updatedFile != null) {
                     onFileMetadataChanged(updatedFile);
