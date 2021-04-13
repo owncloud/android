@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author David Crespo Ríos
  *
@@ -80,7 +81,7 @@ val viewModelModule = module {
     viewModel { PatternViewModel(get()) }
     viewModel { BiometricViewModel(get(), get()) }
     viewModel { ReleaseNotesViewModel(get(), get()) }
-    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { FilesViewModel(get(), get(), get()) }
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }

@@ -48,7 +48,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.services.OperationsService;
@@ -58,6 +57,7 @@ import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
 import com.owncloud.android.usecases.CancelUploadFromAccountUseCase;
+import com.owncloud.android.usecases.transfers.CancelDownloadsForAccountUseCase;
 import com.owncloud.android.utils.PreferenceUtils;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
@@ -319,9 +319,13 @@ public class ManageAccountsActivity extends FileActivity
                 if (mUploaderBinder != null) {
                     mUploaderBinder.cancel(account);
                 }
-                CancelUploadFromAccountUseCase cancelUploadFromAccountUseCase = new CancelUploadFromAccountUseCase(WorkManager.getInstance(getBaseContext()));
+                CancelUploadFromAccountUseCase cancelUploadFromAccountUseCase =
+                        new CancelUploadFromAccountUseCase(WorkManager.getInstance(getBaseContext()));
                 cancelUploadFromAccountUseCase.execute(new CancelUploadFromAccountUseCase.Params(account.name));
-                new TransferManager(getApplicationContext()).cancelDownloadForAccount(account);
+
+                CancelDownloadsForAccountUseCase cancelDownloadsForAccountUseCase =
+                        new CancelDownloadsForAccountUseCase(WorkManager.getInstance(getBaseContext()));
+                cancelDownloadsForAccountUseCase.execute(new CancelDownloadsForAccountUseCase.Params(account));
             }
 
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);

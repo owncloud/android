@@ -34,13 +34,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.work.WorkInfo
-import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
-import com.owncloud.android.presentation.manager.TransferManager
 import com.owncloud.android.ui.fragment.FileFragment
+import com.owncloud.android.usecases.transfers.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.utils.PreferenceUtils
+import org.koin.android.ext.android.inject
 
 /**
  * This Fragment is used to monitor the progress of a file downloading.
@@ -213,9 +213,10 @@ class FileDownloadFragment : FileFragment() {
     }
 
     private fun listenForTransferProgress() {
-        val transferManager = TransferManager(MainApp.appContext)
+        val getLiveDataForDownloadingFileUseCase: GetLiveDataForDownloadingFileUseCase by inject()
         account?.let {
-            liveData = transferManager.getLiveDataForDownloadingFile(it, file)
+            liveData =
+                getLiveDataForDownloadingFileUseCase.execute(GetLiveDataForDownloadingFileUseCase.Params(it, file))
             liveData?.observeWorkerTillItFinishes(
                 owner = this,
                 onWorkEnqueued = { progressBar?.isIndeterminate = true },
