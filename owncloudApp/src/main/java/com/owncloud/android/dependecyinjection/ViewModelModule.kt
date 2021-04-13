@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2021 ownCloud GmbH.
@@ -74,5 +75,5 @@ val viewModelModule = module {
     viewModel { FilesViewModel(get(), get(), get()) }
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
-    viewModel { FileDetailsViewModel(get(), get(), get()) }
+    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get()) }
 }

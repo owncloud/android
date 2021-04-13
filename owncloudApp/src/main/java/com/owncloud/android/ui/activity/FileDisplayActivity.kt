@@ -81,7 +81,8 @@ import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
-import com.owncloud.android.presentation.manager.TransferManager
+import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
+import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
@@ -96,6 +97,7 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
+import com.owncloud.android.usecases.transfers.DownloadFileUseCase
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
@@ -103,6 +105,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
@@ -1000,7 +1003,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         // the user browsed to other file ; forget the automatic preview
                         fileWaitingToPreview = null
 
-                    } else if (downloadEvent == TransferManager.DOWNLOAD_FINISH_MESSAGE) {
+                    } else if (downloadEvent == DOWNLOAD_FINISH_MESSAGE) {
                         //  replace the right panel if waiting for preview
                         val waitedPreview = fileWaitingToPreview?.remotePath == downloadedRemotePath
                         if (waitedPreview) {
@@ -1281,7 +1284,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 refreshListOfFilesFragment(false)
                 val secondFragment = secondFragment
                 if (secondFragment != null && syncedFile == secondFragment.file) {
-                    secondFragment.onSyncEvent(TransferManager.DOWNLOAD_ADDED_MESSAGE, false, null)
+                    secondFragment.onSyncEvent(DOWNLOAD_ADDED_MESSAGE, false, null)
                     invalidateOptionsMenu()
                 }
 
@@ -1355,8 +1358,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private fun requestForDownload(file: OCFile?) {
         if (file == null) return
-        val transferManager = TransferManager(applicationContext)
-        val id = transferManager.downloadFile(account, file) ?: return
+        val downloadFileUseCase: DownloadFileUseCase by inject()
+
+        val id = downloadFileUseCase.execute(DownloadFileUseCase.Params(account, file)) ?: return
 
         WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(id).observeWorkerTillItFinishes(
             owner = this,
@@ -1504,7 +1508,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             if (!file.fileExists) {
                 cleanSecondFragment()
             } else {
-                secondFragment.onSyncEvent(TransferManager.DOWNLOAD_FINISH_MESSAGE, false, null)
+                secondFragment.onSyncEvent(DOWNLOAD_FINISH_MESSAGE, false, null)
             }
         }
 
