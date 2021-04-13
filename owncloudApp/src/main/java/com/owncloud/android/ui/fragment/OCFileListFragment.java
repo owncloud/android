@@ -55,6 +55,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.work.WorkManager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -65,10 +66,10 @@ import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ThrowableExtKt;
+import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.presentation.UIResult;
-import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView;
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
 import com.owncloud.android.presentation.ui.files.SortOptionsView;
@@ -930,7 +931,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * @return 'true' if the file is being downloaded, 'false' otherwise.
      */
     private boolean fileIsDownloading(OCFile file) {
-        return new TransferManager(getContext()).isDownloadPending(
+        return WorkManagerExtKt.isDownloadPending(
+                WorkManager.getInstance(getContext()),
                 ((FileActivity) mContainerActivity).getAccount(),
                 file
         );
