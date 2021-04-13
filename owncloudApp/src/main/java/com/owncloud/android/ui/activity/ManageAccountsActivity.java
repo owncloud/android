@@ -47,7 +47,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.presentation.manager.TransferManager;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.services.OperationsService;
@@ -55,12 +54,17 @@ import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
+import com.owncloud.android.usecases.transfers.CancelDownloadsForAccountUseCase;
 import com.owncloud.android.utils.PreferenceUtils;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * An Activity that allows the user to manage accounts.
@@ -307,7 +311,11 @@ public class ManageAccountsActivity extends FileActivity
                 if (mUploaderBinder != null) {
                     mUploaderBinder.cancel(account);
                 }
-                new TransferManager(getApplicationContext()).cancelDownloadForAccount(account);
+                @NotNull Lazy<CancelDownloadsForAccountUseCase> cancelDownloadsForAccountUseCaseLazy =
+                        inject(CancelDownloadsForAccountUseCase.class);
+                CancelDownloadsForAccountUseCase.Params cancelDownloadParams =
+                        new CancelDownloadsForAccountUseCase.Params(account);
+                cancelDownloadsForAccountUseCaseLazy.getValue().execute(cancelDownloadParams);
             }
 
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
