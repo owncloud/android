@@ -229,7 +229,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             ) {
                 // Show explanation to the user and then request permission
                 val snackbar = Snackbar.make(
-                    findViewById(R.id.ListLayout),
+                    findViewById(R.id.list_layout),
                     R.string.permission_storage_access,
                     Snackbar.LENGTH_INDEFINITE
                 )
@@ -419,7 +419,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         transaction.commit()
     }
 
-    fun showOrHideBottomNavBar(show: Boolean) {
+    fun showBottomNavBar(show: Boolean) {
         bottom_nav_view.isVisible = show
     }
 
@@ -430,13 +430,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
             if (rightFragmentContainer?.visibility != View.VISIBLE) {
                 rightFragmentContainer?.visibility = View.VISIBLE
-                showOrHideBottomNavBar(show = false)
             }
-
+            showBottomNavBar(show = false)
         } else {
             if (leftFragmentContainer?.visibility != View.VISIBLE) {
                 leftFragmentContainer?.visibility = View.VISIBLE
-                showOrHideBottomNavBar(show = true)
+                showBottomNavBar(show = true)
             }
             if (rightFragmentContainer?.visibility != View.GONE) {
                 rightFragmentContainer?.visibility = View.GONE
@@ -581,7 +580,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         } else {
             Timber.d("User clicked on 'Update' with no selection")
-            showMessageInSnackbar(R.id.ListLayout, getString(R.string.filedisplay_no_file_selected))
+            showMessageInSnackbar(R.id.list_layout, getString(R.string.filedisplay_no_file_selected))
         }
     }
 
@@ -785,7 +784,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     if (currentDir == null) {
                         // current folder was removed from the server
                         showMessageInSnackbar(
-                            R.id.ListLayout,
+                            R.id.list_layout,
                             String.format(
                                 getString(R.string.sync_current_folder_was_removed),
                                 synchFolderRemotePath
@@ -861,7 +860,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     if (synchResult.httpPhrase == "Error: Call to a member function getUID() on null") {
                         showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                     } else {
-                        showMessageInSnackbar(R.id.ListLayout, synchResult.httpPhrase)
+                        showMessageInSnackbar(R.id.list_layout, synchResult.httpPhrase)
                     }
                 } else {
                     showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
@@ -941,7 +940,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 if (renamedInUpload) {
                     val newName = File(uploadedRemotePath).name
                     showMessageInSnackbar(
-                        R.id.ListLayout,
+                        R.id.list_layout,
                         String.format(getString(R.string.filedetails_renamed_in_upload_msg), newName)
                     )
                     updateToolbar(file)
@@ -1249,7 +1248,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (listOfFilesFragment!!.isSingleItemChecked || result.isException || !result.isSuccess) {
             if (result.code != ResultCode.FORBIDDEN || result.code == ResultCode.FORBIDDEN && operation.isLastFileToRemove) {
                 showMessageInSnackbar(
-                    R.id.ListLayout,
+                    R.id.list_layout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
             }
@@ -1295,7 +1294,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else {
             try {
                 showMessageInSnackbar(
-                    R.id.ListLayout,
+                    R.id.list_layout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
 
@@ -1319,7 +1318,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else {
             try {
                 showMessageInSnackbar(
-                    R.id.ListLayout,
+                    R.id.list_layout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
 
@@ -1357,7 +1356,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         } else {
             showMessageInSnackbar(
-                R.id.ListLayout,
+                R.id.list_layout,
                 ErrorMessageAdapter.getResultMessage(result, operation, resources)
             )
 
@@ -1385,7 +1384,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
             } else if (secondFragment == null) {
                 showMessageInSnackbar(
-                    R.id.ListLayout,
+                    R.id.list_layout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
             }
@@ -1416,7 +1415,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else {
             try {
                 showMessageInSnackbar(
-                    R.id.ListLayout,
+                    R.id.list_layout,
                     ErrorMessageAdapter.getResultMessage(result, operation, resources)
                 )
             } catch (e: NotFoundException) {
