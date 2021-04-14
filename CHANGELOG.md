@@ -8,11 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix navbar is visible in file preview screen after rotation: [#3184](https://github.com/owncloud/android/pull/3184)
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
 * Enhancement - Align previews actions: [#3155](https://github.com/owncloud/android/issues/3155)
 
 Details
 -------
+
+* Bugfix - Fix navbar is visible in file preview screen after rotation: [#3184](https://github.com/owncloud/android/pull/3184)
+
+   We've fixed a glitch where the navigation bar became visible in a file preview screen when
+   rotating the device.
+
+   https://github.com/owncloud/android/issues/3139
+   https://github.com/owncloud/android/pull/3184
 
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
 
