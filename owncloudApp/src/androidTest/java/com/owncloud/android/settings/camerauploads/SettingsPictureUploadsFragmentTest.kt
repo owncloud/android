@@ -38,7 +38,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
@@ -212,16 +211,14 @@ class SettingsPictureUploadsFragmentTest {
     }
 
     @Test
-    fun openUploadPathPicker() {
+    fun openPictureUploadPathPicker() {
         firstEnablePictureUploads()
         onView(withText(R.string.prefs_camera_picture_upload_path_title)).perform(click())
-        val folderToUpload: OCFile = mockk()
         intended(hasComponent(UploadPathActivity::class.java.name))
-        hasExtra(UploadPathActivity.EXTRA_FOLDER, folderToUpload)
     }
 
     @Test
-    fun openUploadSourcePathPicker() {
+    fun openPictureUploadSourcePathPicker() {
         firstEnablePictureUploads()
         val cameraFolder = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DCIM
