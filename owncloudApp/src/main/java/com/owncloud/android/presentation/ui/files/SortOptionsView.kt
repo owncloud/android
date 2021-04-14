@@ -87,8 +87,8 @@ class SortOptionsView @JvmOverloads constructor(
         }
     }
 
-    fun selectAdditionalView(additionalView: AdditionalView){
-        when(additionalView){
+    fun selectAdditionalView(additionalView: AdditionalView) {
+        when (additionalView) {
             AdditionalView.CREATE_FOLDER -> {
                 view_type_selector.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_create_dir))
                 view_type_selector.setOnClickListener {

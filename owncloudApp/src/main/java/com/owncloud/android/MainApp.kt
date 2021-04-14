@@ -22,8 +22,8 @@
 package com.owncloud.android
 
 import android.app.Activity
-import android.app.NotificationManager.IMPORTANCE_LOW
 import android.app.Application
+import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -111,7 +111,7 @@ class MainApp : Application() {
                     WhatsNewActivity.runIfNeeded(activity)
                 }
 
-                PreferenceManager.migrateFingerprintToBiometricKey(applicationContext);
+                PreferenceManager.migrateFingerprintToBiometricKey(applicationContext)
             }
 
             override fun onActivityStarted(activity: Activity) {

@@ -60,7 +60,7 @@ abstract class ToolbarActivity : BaseActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(displayShowTitleEnabled)
     }
 
-     open fun setupRootToolbar(
+    open fun setupRootToolbar(
         title: String,
         isSearchEnabled: Boolean
     ) {
@@ -116,7 +116,7 @@ abstract class ToolbarActivity : BaseActivity() {
         title: String = getString(R.string.default_display_name_for_root_folder),
         displayHomeAsUpEnabled: Boolean = true,
         homeButtonEnabled: Boolean = true
-    ){
+    ) {
         if (standard_toolbar?.isVisible == true) {
             supportActionBar?.title = title
             supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
