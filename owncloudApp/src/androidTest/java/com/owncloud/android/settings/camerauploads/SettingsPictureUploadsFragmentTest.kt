@@ -22,6 +22,7 @@ package com.owncloud.android.settings.camerauploads
 
 import android.content.Context
 import android.os.Build
+import android.os.Environment
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.CheckBoxPreference
@@ -31,14 +32,19 @@ import androidx.preference.SwitchPreferenceCompat
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
+import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
+import com.owncloud.android.ui.activity.LocalFolderPickerActivity
+import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.matchers.verifyPreference
-import com.owncloud.android.utils.mockIntent
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.After
@@ -192,11 +198,31 @@ class SettingsPictureUploadsFragmentTest {
     @Test
     fun openUploadPathPicker() {
         firstEnablePictureUploads()
-        onView(withText(R.string.prefs_camera_picture_upload_path_title))
-        // I think in this case we don't need action
-        //mockIntent(
-        //    action =
-        //)
+        onView(withText(R.string.prefs_camera_picture_upload_path_title)).perform(click())
+        /*val folderToUpload: OCFile = mockk()
+
+        every { folderToUpload.remotePath } returns "/Upload/Path/"
+
+        intended(hasComponent(UploadPathActivity::class.java.name))
+        hasExtra(UploadPathActivity.EXTRA_FOLDER, folderToUpload)*/
+    }
+
+    @Test
+    fun openUploadSourcePathPicker() {
+        firstEnablePictureUploads()
+        val cameraFolder = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_DCIM
+        ).absolutePath + "/Camera"
+        onView(
+            withText(
+                String.format(
+                    context.getString(R.string.prefs_camera_upload_source_path_title),
+                    context.getString(R.string.prefs_camera_upload_source_path_title_required)
+                )
+            )
+        ).perform(click())
+        intended(hasComponent(LocalFolderPickerActivity::class.java.name))
+        hasExtra(LocalFolderPickerActivity.EXTRA_PATH, cameraFolder)
     }
 
     private fun firstEnablePictureUploads() {
