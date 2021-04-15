@@ -81,14 +81,10 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsSourcePath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE)
         prefPictureUploadsBehaviour = findPreference(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)
 
-        with(picturesViewModel.isPictureUploadEnabled()) {
-            enableSettings(this)
-        }
+        enablePictureUploads(picturesViewModel.isPictureUploadEnabled())
 
-        picturesViewModel.loadPictureUploadsPath()
         prefPictureUploadsPath?.summary =
             DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsPath())
-        picturesViewModel.loadPictureUploadsSourcePath()
         prefPictureUploadsSourcePath?.summary =
             DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsSourcePath())
         val comment =
@@ -105,7 +101,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
 
             if (value) {
                 picturesViewModel.setEnablePictureUpload(value)
-                enableSettings(value)
+                enablePictureUploads(value)
                 showAlertDialog(
                     title = getString(R.string.common_important),
                     message = getString(R.string.proper_pics_folder_warning_camera_upload)
@@ -120,7 +116,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                         picturesViewModel.updatePicturesLastSync()
                         picturesViewModel.setEnablePictureUpload(value)
                         prefEnablePictureUploads?.isChecked = false
-                        enableSettings(false)
+                        enablePictureUploads(false)
                     },
                     negativeButtonText = getString(R.string.common_no)
                 )
@@ -156,7 +152,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         super.onStop()
     }
 
-    private fun enableSettings(value: Boolean) {
+    private fun enablePictureUploads(value: Boolean) {
         prefPictureUploadsPath?.isEnabled = value
         prefPictureUploadsOnWifi?.isEnabled = value
         prefPictureUploadsSourcePath?.isEnabled = value

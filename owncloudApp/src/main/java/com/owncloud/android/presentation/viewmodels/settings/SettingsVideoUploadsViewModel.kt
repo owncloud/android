@@ -35,9 +35,6 @@ class SettingsVideoUploadsViewModel(
     private val cameraUploadsHandlerProvider: CameraUploadsHandlerProvider
 ) : ViewModel() {
 
-    private var uploadPath: String? = null
-    private var uploadSourcePath: String? = null
-
     fun isVideoUploadEnabled() =
         preferencesProvider.getBoolean(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false)
 
@@ -46,45 +43,40 @@ class SettingsVideoUploadsViewModel(
 
     fun updateVideosLastSync() = cameraUploadsHandlerProvider.updateVideosLastSync(0)
 
-    fun loadVideoUploadsPath() {
-        uploadPath = preferencesProvider.getString(
-            PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH,
-            PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
-        )
-    }
+    fun getVideoUploadsPath() = preferencesProvider.getString(
+        PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH,
+        PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
+    )
 
-    fun getVideoUploadsPath() = uploadPath
-
-    fun loadVideoUploadsSourcePath() {
-        uploadSourcePath = preferencesProvider.getString(
-            PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-            PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
-        )
-    }
-
-    fun getVideoUploadsSourcePath() = uploadSourcePath
+    fun getVideoUploadsSourcePath() = preferencesProvider.getString(
+        PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
+        PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
+    )
 
     fun handleSelectVideoUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
-        uploadPath = folderToUpload?.remotePath
-        preferencesProvider.putString(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH, uploadPath!!)
+        folderToUpload?.remotePath?.let {
+            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH, it)
+        }
     }
 
     fun handleSelectVideoUploadsSourcePath(data: Intent?) {
         // If the source path has changed, update camera uploads last sync
-        var previousSourcePath = uploadSourcePath
+        var previousSourcePath = preferencesProvider.getString(
+            PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
+            PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
+        )
 
-        if (previousSourcePath?.endsWith(File.separator) == true) {
-            previousSourcePath = previousSourcePath.substring(0, previousSourcePath.length - 1)
-        }
+        previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)
 
         if (previousSourcePath != data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)) {
             val currentTimeStamp = System.currentTimeMillis()
             cameraUploadsHandlerProvider.updateVideosLastSync(currentTimeStamp)
         }
 
-        uploadSourcePath = data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
-        preferencesProvider.putString(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE, uploadSourcePath!!)
+        data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)?.let {
+            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE, it)
+        }
     }
 
     fun scheduleVideoUploadsSyncJob() = cameraUploadsHandlerProvider.scheduleVideoUploadsSyncJob()

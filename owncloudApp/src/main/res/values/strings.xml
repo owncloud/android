@@ -54,11 +54,11 @@
     <string name="prefs_subsection_video_uploads_summary">Manage location and behaviour of the videos uploaded automatically</string>
     <string name="prefs_camera_picture_upload">Picture uploads</string>
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
+    <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
+    <string name="prefs_camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
     <string name="prefs_camera_video_upload">Video uploads</string>
     <string name="prefs_camera_video_upload_summary">Automatically upload videos recorded by camera</string>
-    <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
     <string name="prefs_camera_video_upload_path_title">Video upload path</string>
-    <string name="prefs_camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
     <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
     <string name="prefs_log_title">Enable logging</string>
     <string name="prefs_log_summary">This is used to log problems</string>
