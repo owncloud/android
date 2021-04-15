@@ -39,15 +39,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
-import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment
-import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
-import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
-import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk
@@ -72,21 +66,19 @@ class SettingsVideoUploadsFragmentTest {
     private lateinit var prefVideoUploadsBehaviour: ListPreference
 
     private lateinit var videosViewModel: SettingsVideoUploadsViewModel
-    private lateinit var drawerViewModel: DrawerViewModel
     private lateinit var context: Context
+
+    private val exampleUploadPath = "/Upload/Path"
+    private val exampleUploadSourcePath = "/Upload/Source/Path"
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         videosViewModel = mockk(relaxUnitFun = true)
-        drawerViewModel = mockk(relaxed = true)
-        val userInfoAsyncUseCase: GetUserInfoAsyncUseCase = mockk(relaxed = true)
 
-        every { videosViewModel.getVideoUploadsPath() } returns "/Upload/Path/"
-        every { videosViewModel.getVideoUploadsSourcePath() } returns "/Upload/Source/Path/"
+        every { videosViewModel.getVideoUploadsPath() } returns exampleUploadPath
+        every { videosViewModel.getVideoUploadsSourcePath() } returns exampleUploadSourcePath
         every { videosViewModel.isVideoUploadEnabled() } returns false
-        every { drawerViewModel.getCurrentAccount(any()) } returns OC_ACCOUNT
-        every { userInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Error(NoConnectionWithServerException())
 
         stopKoin()
 
@@ -96,12 +88,6 @@ class SettingsVideoUploadsFragmentTest {
                 module(override = true) {
                     viewModel {
                         videosViewModel
-                    }
-                    viewModel {
-                        drawerViewModel
-                    }
-                    factory {
-                        userInfoAsyncUseCase
                     }
                 }
             )
@@ -139,7 +125,7 @@ class SettingsVideoUploadsFragmentTest {
         prefVideoUploadsPath.verifyPreference(
             keyPref = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH,
             titlePref = context.getString(R.string.prefs_camera_video_upload_path_title),
-            summaryPref = "/Upload/Path",
+            summaryPref = exampleUploadPath,
             visible = true,
             enabled = false
         )
@@ -162,7 +148,7 @@ class SettingsVideoUploadsFragmentTest {
         prefVideoUploadsSourcePath.verifyPreference(
             keyPref = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
             titlePref = String.format(prefVideoUploadsSourcePath.title.toString(), comment),
-            summaryPref = "/Upload/Source/Path",
+            summaryPref = exampleUploadSourcePath,
             visible = true,
             enabled = false
         )
@@ -179,11 +165,7 @@ class SettingsVideoUploadsFragmentTest {
     @Test
     fun enableVideoUploads() {
         firstEnableVideoUploads()
-        assertTrue(prefEnableVideoUploads.isChecked)
-        assertTrue(prefVideoUploadsPath.isEnabled)
-        assertTrue(prefVideoUploadsOnWifi.isEnabled)
-        assertTrue(prefVideoUploadsSourcePath.isEnabled)
-        assertTrue(prefVideoUploadsBehaviour.isEnabled)
+        checkPreferencesEnabled(true)
     }
 
     @Test
@@ -191,11 +173,7 @@ class SettingsVideoUploadsFragmentTest {
         firstEnableVideoUploads()
         onView(withText(R.string.prefs_camera_video_upload)).perform(click())
         onView(withText(R.string.common_yes)).perform(click())
-        assertFalse(prefEnableVideoUploads.isChecked)
-        assertFalse(prefVideoUploadsPath.isEnabled)
-        assertFalse(prefVideoUploadsOnWifi.isEnabled)
-        assertFalse(prefVideoUploadsSourcePath.isEnabled)
-        assertFalse(prefVideoUploadsBehaviour.isEnabled)
+        checkPreferencesEnabled(false)
     }
 
     @Test
@@ -203,18 +181,7 @@ class SettingsVideoUploadsFragmentTest {
         firstEnableVideoUploads()
         onView(withText(R.string.prefs_camera_video_upload)).perform(click())
         onView(withText(R.string.common_no)).perform(click())
-        assertTrue(prefEnableVideoUploads.isChecked)
-        assertTrue(prefVideoUploadsPath.isEnabled)
-        assertTrue(prefVideoUploadsOnWifi.isEnabled)
-        assertTrue(prefVideoUploadsSourcePath.isEnabled)
-        assertTrue(prefVideoUploadsBehaviour.isEnabled)
-    }
-
-    @Test
-    fun openVideoUploadPathPicker() {
-        firstEnableVideoUploads()
-        onView(withText(R.string.prefs_camera_video_upload_path_title)).perform(click())
-        intended(hasComponent(UploadPathActivity::class.java.name))
+        checkPreferencesEnabled(true)
     }
 
     @Test
@@ -238,5 +205,21 @@ class SettingsVideoUploadsFragmentTest {
     private fun firstEnableVideoUploads() {
         onView(withText(R.string.prefs_camera_video_upload)).perform(click())
         onView(withText(android.R.string.ok)).perform(click())
+    }
+
+    private fun checkPreferencesEnabled(enabled: Boolean) {
+        if (enabled) {
+            assertTrue(prefEnableVideoUploads.isChecked)
+            assertTrue(prefVideoUploadsPath.isEnabled)
+            assertTrue(prefVideoUploadsOnWifi.isEnabled)
+            assertTrue(prefVideoUploadsSourcePath.isEnabled)
+            assertTrue(prefVideoUploadsBehaviour.isEnabled)
+        } else {
+            assertFalse(prefEnableVideoUploads.isChecked)
+            assertFalse(prefVideoUploadsPath.isEnabled)
+            assertFalse(prefVideoUploadsOnWifi.isEnabled)
+            assertFalse(prefVideoUploadsSourcePath.isEnabled)
+            assertFalse(prefVideoUploadsBehaviour.isEnabled)
+        }
     }
 }
