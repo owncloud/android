@@ -53,10 +53,10 @@ class FileDetailsViewModel(
     getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
     val contextProvider: ContextProvider,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
-    private val getLiveDataForDownloadingFileUseCase: GetLiveDataForDownloadingFileUseCase,
-    private val workManager: WorkManager,
     private val getFileByIdUseCase: GetFileByIdUseCase,
+    private val getLiveDataForDownloadingFileUseCase: GetLiveDataForDownloadingFileUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val workManager: WorkManager,
 ) : ViewModel() {
 
     private val currentAccountName: String = AccountUtils.getCurrentOwnCloudAccount(contextProvider.getContext()).name

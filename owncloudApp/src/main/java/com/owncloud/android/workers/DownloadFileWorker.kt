@@ -45,7 +45,7 @@ import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import com.owncloud.android.ui.errorhandling.TypeOfOperation.TransferDownload
+import com.owncloud.android.ui.errorhandling.TransferOperation.Download
 import com.owncloud.android.ui.preview.PreviewImageActivity
 import com.owncloud.android.ui.preview.PreviewImageFragment.Companion.canBePreviewed
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
@@ -217,8 +217,8 @@ class DownloadFileWorker(
                 pendingIntent = composePendingIntentToRefreshCredentials()
             }
 
-            val contextText = ErrorMessageAdapter.getMessageFromOperation(
-                typeOfOperation = TransferDownload(finalLocationForFile),
+            val contextText = ErrorMessageAdapter.getMessageFromTransfer(
+                transferOperation = Download(finalLocationForFile),
                 throwable = throwable,
                 resources = appContext.resources
             )

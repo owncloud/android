@@ -31,14 +31,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
-import com.owncloud.android.operations.DownloadFileOperation
 import com.owncloud.android.operations.MoveFileOperation
 import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
 import com.owncloud.android.operations.UploadFileOperation
-import com.owncloud.android.ui.errorhandling.TypeOfOperation.TransferDownload
+import com.owncloud.android.ui.errorhandling.TransferOperation.Download
 import java.io.File
 import java.net.SocketTimeoutException
 
@@ -49,7 +48,7 @@ import java.net.SocketTimeoutException
 
 class ErrorMessageAdapter {
 
-    private class Formatter internal constructor(internal val r: Resources) {
+    private class Formatter(val r: Resources) {
 
         fun format(resId: Int): String {
             return r.getString(resId)
@@ -78,27 +77,27 @@ class ErrorMessageAdapter {
 
     companion object {
 
-        fun getMessageFromOperation(
-            typeOfOperation: TypeOfOperation,
+        fun getMessageFromTransfer(
+            transferOperation: TransferOperation,
             throwable: Throwable?,
             resources: Resources
         ): String {
             val f = Formatter(resources)
 
             if (throwable == null) {
-                return when (typeOfOperation) {
-                    is TransferDownload -> {
+                return when (transferOperation) {
+                    is Download -> {
                         f.format(
                             R.string.downloader_download_succeeded_content,
-                            File(typeOfOperation.downloadPath).name
+                            File(transferOperation.downloadPath).name
                         )
                     }
                 }
             } else {
-                val genericMessage = when (typeOfOperation) {
-                    is TransferDownload -> f.format(
+                val genericMessage = when (transferOperation) {
+                    is Download -> f.format(
                         R.string.downloader_download_failed_content,
-                        File(typeOfOperation.downloadPath).name
+                        File(transferOperation.downloadPath).name
                     )
                 }
                 return throwable.parseError(genericMessage, resources, true).toString()
@@ -126,10 +125,6 @@ class ErrorMessageAdapter {
                         R.string.uploader_upload_succeeded_content_single,
                         operation.fileName
                     )
-                    is DownloadFileOperation -> return f.format(
-                        R.string.downloader_download_succeeded_content,
-                        File(operation.savePath).name
-                    )
                     is RemoveFileOperation -> return f.format(R.string.remove_success_msg)
                 }
             }
@@ -152,7 +147,6 @@ class ErrorMessageAdapter {
                         R.string.forbidden_permissions,
                         R.string.uploader_upload_forbidden_permissions
                     )
-                    if (operation is DownloadFileOperation) f.forbidden(R.string.downloader_download_forbidden_permissions)
                     if (operation is RemoveFileOperation) f.forbidden(R.string.forbidden_permissions_delete)
                     if (operation is RenameFileOperation) f.forbidden(R.string.forbidden_permissions_rename)
                     if (operation is CreateFolderOperation) f.forbidden(R.string.forbidden_permissions_create)
@@ -168,8 +162,6 @@ class ErrorMessageAdapter {
                 ResultCode.FILE_NOT_FOUND -> {
                     if (operation is UploadFileOperation)
                         f.format(R.string.uploads_view_upload_status_failed_folder_error)
-                    if (operation is DownloadFileOperation)
-                        f.format(R.string.downloader_download_forbidden_permissions)
                     if (operation is RenameFileOperation) f.format(R.string.rename_server_fail_msg)
                     if (operation is MoveFileOperation) f.format(R.string.move_file_not_found)
                     if (operation is SynchronizeFolderOperation)
@@ -255,10 +247,6 @@ class ErrorMessageAdapter {
 
             return when (operation) {
                 is UploadFileOperation -> f.format(R.string.uploader_upload_failed_content_single, operation.fileName)
-                is DownloadFileOperation -> f.format(
-                    R.string.downloader_download_failed_content,
-                    File(operation.savePath).name
-                )
                 is RemoveFileOperation -> f.format(R.string.remove_fail_msg)
                 is RenameFileOperation -> f.format(R.string.rename_server_fail_msg)
                 is CreateFolderOperation -> f.format(R.string.create_dir_fail_msg)
