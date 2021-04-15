@@ -39,15 +39,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
-import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment
-import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
-import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
-import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk
@@ -72,7 +66,6 @@ class SettingsPictureUploadsFragmentTest {
     private lateinit var prefPictureUploadsBehaviour: ListPreference
 
     private lateinit var picturesViewModel: SettingsPictureUploadsViewModel
-    private lateinit var drawerViewModel: DrawerViewModel
     private lateinit var context: Context
 
     private val exampleUploadPath = "/Upload/Path"
@@ -82,14 +75,10 @@ class SettingsPictureUploadsFragmentTest {
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         picturesViewModel = mockk(relaxUnitFun = true)
-        drawerViewModel = mockk(relaxed = true)
-        val userInfoAsyncUseCase: GetUserInfoAsyncUseCase = mockk(relaxed = true)
 
         every { picturesViewModel.getPictureUploadsPath() } returns exampleUploadPath
         every { picturesViewModel.getPictureUploadsSourcePath() } returns exampleUploadSourcePath
         every { picturesViewModel.isPictureUploadEnabled() } returns false
-        every { drawerViewModel.getCurrentAccount(any()) } returns OC_ACCOUNT
-        every { userInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Error(NoConnectionWithServerException())
 
         stopKoin()
 
@@ -99,12 +88,6 @@ class SettingsPictureUploadsFragmentTest {
                 module(override = true) {
                     viewModel {
                         picturesViewModel
-                    }
-                    viewModel {
-                        drawerViewModel
-                    }
-                    factory {
-                        userInfoAsyncUseCase
                     }
                 }
             )
@@ -199,13 +182,6 @@ class SettingsPictureUploadsFragmentTest {
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
         onView(withText(R.string.common_no)).perform(click())
         checkPreferencesEnabled(true)
-    }
-
-    @Test
-    fun openPictureUploadPathPicker() {
-        firstEnablePictureUploads()
-        onView(withText(R.string.prefs_camera_picture_upload_path_title)).perform(click())
-        intended(hasComponent(UploadPathActivity::class.java.name))
     }
 
     @Test
