@@ -44,7 +44,6 @@ import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -947,7 +946,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      */
     private inner class DownloadReceiver() {
 
-         fun refreshSecondFragmentAfterADownload(context: Context, intent: Intent) {
+        fun refreshSecondFragmentAfterADownload(context: Context, intent: Intent) {
             val sameAccount = isSameAccount(intent)
             val downloadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH)
             val isDescendant = isDescendant(downloadedRemotePath)
@@ -1374,7 +1373,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(id).observeWorkerTillItFinishes(
             owner = this,
-            onWorkEnqueued = { Toast.makeText(this, "Waiting to download", Toast.LENGTH_SHORT).show() },
+            onWorkEnqueued = {
+                showMessageInSnackbar(
+                    message = String.format(getString(R.string.downloader_download_enqueued_ticker), file.fileName)
+                )
+            },
             onWorkRunning = { progress -> Timber.d("Downloading - Progress $progress") },
             onWorkSucceeded = {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -1382,9 +1385,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     sendDownloadedFile()
                 }
             },
-            onWorkFailed = { Toast.makeText(this, "Download failed", Toast.LENGTH_SHORT).show() },
-            onWorkBlocked = { Toast.makeText(this, "Download blocked", Toast.LENGTH_SHORT).show() },
-            onWorkCancelled = { Toast.makeText(this, "Download cancelled", Toast.LENGTH_SHORT).show() }
+            onWorkFailed = {
+                showMessageInSnackbar(
+                    message = String.format(getString(R.string.downloader_download_failed_ticker), file.fileName)
+                )
+            },
         )
     }
 
