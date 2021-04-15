@@ -109,7 +109,8 @@ class MainApp : Application() {
                     WhatsNewActivity.runIfNeeded(activity)
                 }
 
-                PreferenceManager.migrateFingerprintToBiometricKey(applicationContext);
+                PreferenceManager.migrateFingerprintToBiometricKey(applicationContext)
+                PreferenceManager.deleteOldSettingsPreferences(applicationContext)
             }
 
             override fun onActivityStarted(activity: Activity) {
