@@ -81,14 +81,10 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsSourcePath = findPreference(PREF__CAMERA_VIDEO_UPLOADS_SOURCE)
         prefVideoUploadsBehaviour = findPreference(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)
 
-        with(videosViewModel.isVideoUploadEnabled()) {
-            enableSettings(this)
-        }
+        enableVideoUploads(videosViewModel.isVideoUploadEnabled())
 
-        videosViewModel.loadVideoUploadsPath()
         prefVideoUploadsPath?.summary =
             DisplayUtils.getPathWithoutLastSlash(videosViewModel.getVideoUploadsPath())
-        videosViewModel.loadVideoUploadsSourcePath()
         prefVideoUploadsSourcePath?.summary =
             DisplayUtils.getPathWithoutLastSlash(videosViewModel.getVideoUploadsSourcePath())
         val comment =
@@ -105,7 +101,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
 
             if (value) {
                 videosViewModel.setEnableVideoUpload(value)
-                enableSettings(value)
+                enableVideoUploads(value)
                 showAlertDialog(
                     title = getString(R.string.common_important),
                     message = getString(R.string.proper_videos_folder_warning_camera_upload)
@@ -120,7 +116,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                         videosViewModel.updateVideosLastSync()
                         videosViewModel.setEnableVideoUpload(value)
                         prefEnableVideoUploads?.isChecked = false
-                        enableSettings(false)
+                        enableVideoUploads(false)
                     },
                     negativeButtonText = getString(R.string.common_no)
                 )
@@ -156,7 +152,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         super.onStop()
     }
 
-    private fun enableSettings(value: Boolean) {
+    private fun enableVideoUploads(value: Boolean) {
         prefVideoUploadsPath?.isEnabled = value
         prefVideoUploadsOnWifi?.isEnabled = value
         prefVideoUploadsSourcePath?.isEnabled = value

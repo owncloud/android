@@ -26,7 +26,6 @@ package com.owncloud.android.db;
 import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Environment;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -50,6 +49,17 @@ public abstract class PreferenceManager {
     private static final String AUTO_PREF__SORT_ORDER_UPLOAD = "sortOrderUpload";
     private static final String AUTO_PREF__SORT_ASCENDING_UPLOAD = "sortAscendingUpload";
 
+    // Legacy preferences - done in version 2.18
+    public static final String PREF__LEGACY_CLICK_DEV_MENU = "clickDeveloperMenu";
+    public static final String PREF__LEGACY_CAMERA_PICTURE_UPLOADS_ENABLED = "camera_picture_uploads";
+    public static final String PREF__LEGACY_CAMERA_VIDEO_UPLOADS_ENABLED = "camera_video_uploads";
+    public static final String PREF__LEGACY_CAMERA_PICTURE_UPLOADS_WIFI_ONLY = "camera_picture_uploads_on_wifi";
+    public static final String PREF__LEGACY_CAMERA_VIDEO_UPLOADS_WIFI_ONLY = "camera_video_uploads_on_wifi";
+    public static final String PREF__LEGACY_CAMERA_PICTURE_UPLOADS_PATH = "camera_picture_uploads_path";
+    public static final String PREF__LEGACY_CAMERA_VIDEO_UPLOADS_PATH = "camera_video_uploads_path";
+    public static final String PREF__LEGACY_CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
+    public static final String PREF__LEGACY_CAMERA_UPLOADS_SOURCE = "camera_uploads_source_path";
+
     public static final String PREF__CAMERA_PICTURE_UPLOADS_ENABLED = "enable_picture_uploads";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_ENABLED = "enable_video_uploads";
     public static final String PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY = "picture_uploads_on_wifi";
@@ -67,9 +77,6 @@ public abstract class PreferenceManager {
 
     public static final String PREF__LEGACY_FINGERPRINT = "set_fingerprint";
 
-    public static final String PREF__LEGACY_CLICK_DEV_MENU = "clickDeveloperMenu";
-    public static final int PREF__LEGACY_CLICKS_NEEDED_TO_BE_DEVELOPER = 5;
-
     public static void migrateFingerprintToBiometricKey(Context context) {
         SharedPreferences sharedPref = getDefaultSharedPreferences(context);
 
@@ -81,6 +88,39 @@ public abstract class PreferenceManager {
             editor.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, currentFingerprintValue);
             editor.apply();
         }
+    }
+
+    public static void deleteOldSettingsPreferences(Context context) {
+        SharedPreferences sharedPref = getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (sharedPref.contains(PREF__LEGACY_CLICK_DEV_MENU)) {
+            editor.remove(PREF__LEGACY_CLICK_DEV_MENU);
+        }
+        if (sharedPref.contains(PREF__LEGACY_CAMERA_PICTURE_UPLOADS_ENABLED)) {
+            editor.remove(PREF__LEGACY_CAMERA_PICTURE_UPLOADS_ENABLED);
+        }
+        if (sharedPref.contains(PREF__LEGACY_CAMERA_VIDEO_UPLOADS_ENABLED)) {
+            editor.remove(PREF__LEGACY_CAMERA_VIDEO_UPLOADS_ENABLED);
+        }
+        if (sharedPref.contains(PREF__LEGACY_CAMERA_PICTURE_UPLOADS_WIFI_ONLY)) {
+            editor.remove(PREF__LEGACY_CAMERA_PICTURE_UPLOADS_WIFI_ONLY);
+        }
+        if (sharedPref.contains(PREF__LEGACY_CAMERA_VIDEO_UPLOADS_WIFI_ONLY)) {
+            editor.remove(PREF__LEGACY_CAMERA_VIDEO_UPLOADS_WIFI_ONLY);
+        }
+        if (sharedPref.contains(PREF__LEGACY_CAMERA_PICTURE_UPLOADS_PATH)) {
+            editor.remove(PREF__LEGACY_CAMERA_PICTURE_UPLOADS_PATH);
+        }
+        if (sharedPref.contains(PREF__LEGACY_CAMERA_VIDEO_UPLOADS_PATH)) {
+            editor.remove(PREF__LEGACY_CAMERA_VIDEO_UPLOADS_PATH);
+        }
+        if (sharedPref.contains(PREF__LEGACY_CAMERA_UPLOADS_BEHAVIOUR)) {
+            editor.remove(PREF__LEGACY_CAMERA_UPLOADS_BEHAVIOUR);
+        }
+        if (sharedPref.contains(PREF__LEGACY_CAMERA_UPLOADS_SOURCE)) {
+            editor.remove(PREF__LEGACY_CAMERA_UPLOADS_SOURCE);
+        }
+        editor.apply();
     }
 
     public static boolean cameraPictureUploadEnabled(Context context) {
@@ -283,7 +323,7 @@ public abstract class PreferenceManager {
         private String mSourcePathVideos;
 
         public static String getDefaultSourcePath() {
-            return FileStorageUtils.getDefaultSourcePath();
+            return FileStorageUtils.getDefaultCameraSourcePath();
         }
 
         public boolean isEnabledForPictures() {

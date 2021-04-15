@@ -75,6 +75,9 @@ class SettingsPictureUploadsFragmentTest {
     private lateinit var drawerViewModel: DrawerViewModel
     private lateinit var context: Context
 
+    private val exampleUploadPath = "/Upload/Path"
+    private val exampleUploadSourcePath = "/Upload/Source/Path"
+
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -82,8 +85,8 @@ class SettingsPictureUploadsFragmentTest {
         drawerViewModel = mockk(relaxed = true)
         val userInfoAsyncUseCase: GetUserInfoAsyncUseCase = mockk(relaxed = true)
 
-        every { picturesViewModel.getPictureUploadsPath() } returns "/Upload/Path/"
-        every { picturesViewModel.getPictureUploadsSourcePath() } returns "/Upload/Source/Path/"
+        every { picturesViewModel.getPictureUploadsPath() } returns exampleUploadPath
+        every { picturesViewModel.getPictureUploadsSourcePath() } returns exampleUploadSourcePath
         every { picturesViewModel.isPictureUploadEnabled() } returns false
         every { drawerViewModel.getCurrentAccount(any()) } returns OC_ACCOUNT
         every { userInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Error(NoConnectionWithServerException())
@@ -139,7 +142,7 @@ class SettingsPictureUploadsFragmentTest {
         prefPictureUploadsPath.verifyPreference(
             keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH,
             titlePref = context.getString(R.string.prefs_camera_picture_upload_path_title),
-            summaryPref = "/Upload/Path",
+            summaryPref = exampleUploadPath,
             visible = true,
             enabled = false
         )
@@ -162,7 +165,7 @@ class SettingsPictureUploadsFragmentTest {
         prefPictureUploadsSourcePath.verifyPreference(
             keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
             titlePref = String.format(prefPictureUploadsSourcePath.title.toString(), comment),
-            summaryPref = "/Upload/Source/Path",
+            summaryPref = exampleUploadSourcePath,
             visible = true,
             enabled = false
         )
@@ -179,11 +182,7 @@ class SettingsPictureUploadsFragmentTest {
     @Test
     fun enablePictureUploads() {
         firstEnablePictureUploads()
-        assertTrue(prefEnablePictureUploads.isChecked)
-        assertTrue(prefPictureUploadsPath.isEnabled)
-        assertTrue(prefPictureUploadsOnWifi.isEnabled)
-        assertTrue(prefPictureUploadsSourcePath.isEnabled)
-        assertTrue(prefPictureUploadsBehaviour.isEnabled)
+        checkPreferencesEnabled(true)
     }
 
     @Test
@@ -191,11 +190,7 @@ class SettingsPictureUploadsFragmentTest {
         firstEnablePictureUploads()
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
         onView(withText(R.string.common_yes)).perform(click())
-        assertFalse(prefEnablePictureUploads.isChecked)
-        assertFalse(prefPictureUploadsPath.isEnabled)
-        assertFalse(prefPictureUploadsOnWifi.isEnabled)
-        assertFalse(prefPictureUploadsSourcePath.isEnabled)
-        assertFalse(prefPictureUploadsBehaviour.isEnabled)
+        checkPreferencesEnabled(false)
     }
 
     @Test
@@ -203,11 +198,7 @@ class SettingsPictureUploadsFragmentTest {
         firstEnablePictureUploads()
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
         onView(withText(R.string.common_no)).perform(click())
-        assertTrue(prefEnablePictureUploads.isChecked)
-        assertTrue(prefPictureUploadsPath.isEnabled)
-        assertTrue(prefPictureUploadsOnWifi.isEnabled)
-        assertTrue(prefPictureUploadsSourcePath.isEnabled)
-        assertTrue(prefPictureUploadsBehaviour.isEnabled)
+        checkPreferencesEnabled(true)
     }
 
     @Test
@@ -238,5 +229,21 @@ class SettingsPictureUploadsFragmentTest {
     private fun firstEnablePictureUploads() {
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
         onView(withText(android.R.string.ok)).perform(click())
+    }
+
+    private fun checkPreferencesEnabled(enabled: Boolean) {
+        if (enabled) {
+            assertTrue(prefEnablePictureUploads.isChecked)
+            assertTrue(prefPictureUploadsPath.isEnabled)
+            assertTrue(prefPictureUploadsOnWifi.isEnabled)
+            assertTrue(prefPictureUploadsSourcePath.isEnabled)
+            assertTrue(prefPictureUploadsBehaviour.isEnabled)
+        } else {
+            assertFalse(prefEnablePictureUploads.isChecked)
+            assertFalse(prefPictureUploadsPath.isEnabled)
+            assertFalse(prefPictureUploadsOnWifi.isEnabled)
+            assertFalse(prefPictureUploadsSourcePath.isEnabled)
+            assertFalse(prefPictureUploadsBehaviour.isEnabled)
+        }
     }
 }

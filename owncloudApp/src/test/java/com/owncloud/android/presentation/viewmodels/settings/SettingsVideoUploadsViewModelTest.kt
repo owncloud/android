@@ -36,7 +36,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -121,10 +120,11 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `load video uploads path - ok`() {
+    fun `get video uploads path - ok`() {
         every { preferencesProvider.getString(any(), any()) } returns examplePath
+        val uploadPath = videosViewModel.getVideoUploadsPath()
 
-        videosViewModel.loadVideoUploadsPath()
+        assertEquals(examplePath, uploadPath)
 
         verify(exactly = 1) {
             preferencesProvider.getString(
@@ -135,31 +135,15 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `get video uploads path - ko - no load before`() {
-        val uploadPath = videosViewModel.getVideoUploadsPath()
-
-        assertNull(uploadPath)
-    }
-
-    @Test
-    fun `get video uploads path - ok - load before`() {
-        every { preferencesProvider.getString(any(), any()) } returns examplePath
-
-        videosViewModel.loadVideoUploadsPath()
-        val uploadPath = videosViewModel.getVideoUploadsPath()
-
-        assertEquals(examplePath, uploadPath)
-    }
-
-    @Test
-    fun `load video uploads source path - ok`() {
+    fun `get video uploads source path - ok`() {
         mockkStatic(PreferenceManager.CameraUploadsConfiguration::class)
 
         every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
-        // It has to be "" for the test to pass
         every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
 
-        videosViewModel.loadVideoUploadsSourcePath()
+        val uploadSourcePath = videosViewModel.getVideoUploadsSourcePath()
+
+        assertEquals(exampleSourcePath, uploadSourcePath)
 
         verify(exactly = 1) {
             preferencesProvider.getString(
@@ -167,26 +151,6 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
                 PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
             )
         }
-    }
-
-    @Test
-    fun `get video uploads source path - ko - no load before`() {
-        val uploadSourcePath = videosViewModel.getVideoUploadsSourcePath()
-
-        assertNull(uploadSourcePath)
-    }
-
-    @Test
-    fun `get video uploads source path - ok - load before`() {
-        mockkStatic(PreferenceManager.CameraUploadsConfiguration::class)
-
-        every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
-        every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
-
-        videosViewModel.loadVideoUploadsSourcePath()
-        val uploadSourcePath = videosViewModel.getVideoUploadsSourcePath()
-
-        assertEquals(exampleSourcePath, uploadSourcePath)
     }
 
     @Test
@@ -206,12 +170,7 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
         }
     }
 
-    @Test(expected = NullPointerException::class)
-    fun `handle select video uploads path - ko - data intent is null`() {
-        videosViewModel.handleSelectVideoUploadsPath(null)
-    }
-
-    @Test(expected = NullPointerException::class)
+    @Test
     fun `handle select video uploads path - ko - folder to upload is null`() {
         val data: Intent = mockk()
 
@@ -234,7 +193,6 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
         every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
         every { data.getStringExtra(any()) } returns exampleSourcePath
 
-        videosViewModel.loadVideoUploadsSourcePath()
         videosViewModel.handleSelectVideoUploadsSourcePath(data)
 
         verify(exactly = 2) {
@@ -256,8 +214,10 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
         every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
         every { data.getStringExtra(any()) } returns sourcePath
 
-        videosViewModel.loadVideoUploadsSourcePath()
         videosViewModel.handleSelectVideoUploadsSourcePath(data)
+
+        every { preferencesProvider.getString(any(), any()) } returns sourcePath
+
         val newSourcePath = videosViewModel.getVideoUploadsSourcePath()
         assertEquals(sourcePath, newSourcePath)
 
@@ -268,11 +228,6 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
             cameraUploadsHandlerProvider.updateVideosLastSync(any())
             preferencesProvider.putString(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE, sourcePath)
         }
-    }
-
-    @Test(expected = NullPointerException::class)
-    fun `handle select video uploads source path - ko - data intent is null`() {
-        videosViewModel.handleSelectVideoUploadsSourcePath(null)
     }
 
     @Test
