@@ -158,34 +158,47 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     }
 
     private fun startObservingProgressForDownload() {
-        fileDetailsViewModel.startListeningToDownloadsFromAccountAndFile(file = file, account = account!!)
-        val progressBar = requireView().findViewById<ProgressBar>(R.id.fdProgressBar)
+        val safeAccount = account ?: return
+
+        fileDetailsViewModel.startListeningToDownloadsFromAccountAndFile(file = file, account = safeAccount)
         fileDetailsViewModel.pendingDownloads.observe(this) { }
         fileDetailsViewModel.ongoingDownload.observeWorkerTillItFinishes(
             owner = this,
-            onWorkEnqueued = { progressBar?.isIndeterminate = true },
-            onWorkRunning = { progress ->
-                progressBar?.apply {
-                    isIndeterminate = false
-                    setProgress(progress)
-                    invalidate()
-                }
-            },
+            onWorkEnqueued = { handleDownloadEnqueued() },
+            onWorkRunning = { progress -> handleRunningDownload(progress) },
             onWorkSucceeded = { handleSuccessDownload() },
-            onWorkFailed = { },
-            onWorkCancelled = { },
+            onWorkFailed = { showMessageInSnackbar(getString(R.string.downloader_download_failed_ticker)) },
+            onWorkCancelled = { showMessageInSnackbar(getString(R.string.downloader_download_canceled_ticker)) },
             removeObserverAfterNull = false
         )
     }
 
+    private fun handleDownloadEnqueued() {
+        requireView().findViewById<View>(R.id.fdProgressBlock).isVisible = true
+
+        requireView().findViewById<TextView>(R.id.fdProgressText).apply {
+            isVisible = true
+            text = String.format(getString(R.string.downloader_download_enqueued_ticker), file.fileName)
+        }
+    }
+
+    private fun handleRunningDownload(progress: Int) {
+        requireView().findViewById<ProgressBar>(R.id.fdProgressBar).apply {
+            isIndeterminate = false
+            setProgress(progress)
+            invalidate()
+        }
+    }
+
     private fun handleSuccessDownload() {
-        updateFileDetails(false, false)
+        updateFileDetails(forcedTransferring = false, refresh = false)
 
         val fileDisplayActivity = activity as FileDisplayActivity
         fileDetailsViewModel.navigateToPreviewOrOpenFile(fileDisplayActivity, file)
     }
 
     private fun stopObservingWorkers() {
+        fileDetailsViewModel.pendingDownloads.removeObservers(this)
         fileDetailsViewModel.ongoingDownload.removeObservers(this)
     }
 
@@ -304,6 +317,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
             }
             R.id.action_download_file, R.id.action_sync_file -> {
                 mContainerActivity.fileOperationsHelper.syncFile(file)
+                startObservingProgressForDownload()
                 true
             }
             R.id.action_send_file -> {
@@ -497,9 +511,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         progressText.isVisible = true
         val uploaderBinder = mContainerActivity.fileUploaderBinder
         val safeAccount = account
-        if (safeAccount != null && fileDetailsViewModel.isDownloadPending(safeAccount, file)) {
-            progressText.setText(R.string.downloader_download_in_progress_ticker)
-        } else if (uploaderBinder != null && uploaderBinder.isUploading(account, file)) {
+        if (safeAccount != null && uploaderBinder != null && uploaderBinder.isUploading(safeAccount, file)) {
             progressText.setText(R.string.uploader_upload_in_progress_ticker)
         }
     }
