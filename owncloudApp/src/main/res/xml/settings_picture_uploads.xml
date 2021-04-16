@@ -41,7 +41,7 @@
         app:entries="@array/pref_behaviour_entries"
         app:entryValues="@array/pref_behaviour_entryValues"
         app:key="picture_uploads_behaviour"
-        app:summary="%s"
+        app:useSimpleSummaryProvider="true"
         app:title="@string/prefs_camera_upload_behaviour_title"
         app:negativeButtonText=""/>
 
