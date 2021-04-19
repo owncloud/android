@@ -35,11 +35,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.ListView
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
+import com.owncloud.android.databinding.SearchUsersGroupsLayoutBinding
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
@@ -48,7 +49,6 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.sharing.ShareUserListAdapter
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.PreferenceUtils
-import kotlinx.android.synthetic.main.search_users_groups_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -83,6 +83,9 @@ class SearchShareesFragment : Fragment(),
         )
     }
 
+    private var _binding: SearchUsersGroupsLayoutBinding? = null
+    private val binding get() = _binding!!
+
     /**
      * {@inheritDoc}
      */
@@ -100,13 +103,16 @@ class SearchShareesFragment : Fragment(),
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.search_users_groups_layout, container, false)
+    ): View {
+        _binding = SearchUsersGroupsLayoutBinding.inflate(inflater, container, false)
+        return binding.root.apply {
+            // Allow or disallow touches with other visible windows
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        }
+    }
 
-        // Allow or disallow touches with other visible windows
-        view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         // Get the SearchView and set the searchable configuration
         val searchView = view.findViewById<SearchView>(R.id.searchView)
         val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
@@ -130,8 +136,6 @@ class SearchShareesFragment : Fragment(),
                 return false   // let it for the parent listener in the hierarchy / default behaviour
             }
         })
-
-        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -172,13 +176,11 @@ class SearchShareesFragment : Fragment(),
         )
 
         // Show data
-        val usersList = requireView().findViewById<ListView>(R.id.searchUsersListView)
-
         if (privateShares.isNotEmpty()) {
-            usersList.visibility = View.VISIBLE
-            usersList.adapter = userGroupsAdapter
+            binding.searchUsersListView.isVisible = true
+            binding.searchUsersListView.adapter = userGroupsAdapter
         } else {
-            usersList.visibility = View.GONE
+            binding.searchUsersListView.isVisible = false
         }
     }
 
@@ -194,16 +196,16 @@ class SearchShareesFragment : Fragment(),
     override fun onStart() {
         super.onStart()
         // focus the search view and request the software keyboard be shown
-        val searchView = requireView().findViewById<View>(R.id.searchView)
-        if (searchView.requestFocus()) {
+        if (binding.searchView.requestFocus()) {
             val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(searchView.findFocus(), InputMethodManager.SHOW_IMPLICIT)
+            imm.showSoftInput(binding.searchView.findFocus(), InputMethodManager.SHOW_IMPLICIT)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         hideSoftKeyboard()
+        _binding = null
     }
 
     override fun onDetach() {
@@ -215,7 +217,7 @@ class SearchShareesFragment : Fragment(),
         view?.let {
             view?.findViewById<View>(R.id.searchView)?.let {
                 val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(searchView.windowToken, 0)
+                imm.hideSoftInputFromWindow(binding.searchView.windowToken, 0)
             }
         }
     }
