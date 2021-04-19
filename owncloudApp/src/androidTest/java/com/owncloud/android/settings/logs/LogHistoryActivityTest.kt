@@ -50,9 +50,6 @@ class LogHistoryActivityTest {
         ).check(
             matches(isDisplayed())
         )
-        //Values not i18n
-        onView(withText("LOGCAT")).check(matches(isDisplayed()))
-        onView(withText("LOGFILE")).check(matches(isDisplayed()))
     }
 
     @Test

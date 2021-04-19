@@ -41,7 +41,6 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 
-@Ignore("Some collisions with Settings tests.")
 class SortBottomSheetFragmentTest {
 
     private lateinit var fragmentScenario: FragmentScenario<SortBottomSheetFragment>
