@@ -393,7 +393,6 @@
   <string name="drawer_manage_accounts">Gestionar cuentas</string>
   <string name="auth_redirect_non_secure_connection_title">La conexión segura está siendo redirigida por una ruta insegura.</string>
   <string name="actionbar_logger">Logs</string>
-  <string name="log_open_logs_view">Abrir vista de registros</string>
   <string name="log_send_history_button">Mandar historial.</string>
   <string name="log_send_no_mail_app">Aplicación para enviar registros no encontrada. Por favor instale una aplicación de correo.</string>
   <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
