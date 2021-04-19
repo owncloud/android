@@ -51,14 +51,12 @@ class OCSettingsLocalFolderPickerTest {
 
     //Activity is finished after assertion is checked. Will think whether the following
     //two tests make sense
-    @Ignore
     @Test
     fun cancelButtonDismiss() {
         onView(withId(R.id.folder_picker_btn_cancel)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
 
-    @Ignore
     @Test
     fun chooseButtonDismiss() {
         onView(withId(R.id.folder_picker_btn_choose)).perform(click())
