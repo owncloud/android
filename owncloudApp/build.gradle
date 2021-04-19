@@ -162,6 +162,10 @@ android {
         unitTests.returnDefaultValues = true
         animationsDisabled = true
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 // Updates output file names of a given variant to format
