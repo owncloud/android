@@ -435,7 +435,7 @@
   <string name="prefs_camera_upload_source_path_title">Pasta da câmera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">exigido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Arquivo original será</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Arquivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Arquivo original será</string>
   <string name="upload_copy_files">Copiar o arquivo</string>
   <string name="upload_move_files">Mover o arquivo</string>

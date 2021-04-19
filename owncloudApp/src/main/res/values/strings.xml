@@ -487,7 +487,7 @@
     <string name="prefs_camera_upload_source_path_title">Camera folder (%1$s)</string>
     <string name="prefs_camera_upload_source_path_title_required">required</string>
     <string name="prefs_camera_upload_source_path_title_optional">optional</string>
-    <string name="prefs_camera_upload_behaviour_dialogTitle">Original file will be</string>
+    <string name="prefs_camera_upload_behaviour_dialog_title">Original file will be</string>
     <string name="prefs_camera_upload_behaviour_title">Original file will be</string>
     <string name="upload_copy_files">Copy file</string>
     <string name="upload_move_files">Move file</string>

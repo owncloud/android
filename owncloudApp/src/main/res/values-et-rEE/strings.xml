@@ -353,7 +353,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="file_list__footer__files_and_folders">%1$d faili, %2$d kausta</string>
   <string name="prefs_camera_upload_source_path_title_required">nõutud</string>
   <string name="prefs_camera_upload_source_path_title_optional">valikuline</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Algne fail</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Algne fail</string>
   <string name="prefs_camera_upload_behaviour_title">Algne failAlgne fail</string>
   <string name="upload_copy_files">Kopeeri fail</string>
   <string name="upload_move_files">Liiguta fail</string>
