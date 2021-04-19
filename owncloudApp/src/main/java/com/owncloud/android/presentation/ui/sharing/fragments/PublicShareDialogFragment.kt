@@ -35,9 +35,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
+import com.owncloud.android.databinding.SharePublicDialogBinding
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
@@ -51,8 +52,7 @@ import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityVie
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
 import com.owncloud.android.utils.DateUtils
-import kotlinx.android.synthetic.main.share_public_dialog.*
-import kotlinx.android.synthetic.main.share_public_dialog.view.*
+import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -101,7 +101,7 @@ class PublicShareDialogFragment : DialogFragment() {
         get() = file?.isFolder == true || publicShare?.isFolder == true
 
     private val isPasswordVisible: Boolean
-        get() = view != null && shareViaLinkPasswordValue.inputType and
+        get() = view != null && binding.shareViaLinkPasswordValue.inputType and
                 InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
 
     private// Parse expiration date and convert it to milliseconds
@@ -109,7 +109,7 @@ class PublicShareDialogFragment : DialogFragment() {
     val expirationDateValueInMillis: Long
         get() {
             var publicLinkExpirationDateInMillis: Long = -1
-            val expirationDate = shareViaLinkExpirationValue?.text.toString()
+            val expirationDate = binding.shareViaLinkExpirationValue.text.toString()
             if (expirationDate.isNotEmpty()) {
                 try {
                     publicLinkExpirationDateInMillis =
@@ -147,6 +147,9 @@ class PublicShareDialogFragment : DialogFragment() {
         )
     }
 
+    private var _binding: SharePublicDialogBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -166,78 +169,87 @@ class PublicShareDialogFragment : DialogFragment() {
     private fun updating(): Boolean = publicShare != null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.share_public_dialog, container, false)
+    ): View {
+        _binding = SharePublicDialogBinding.inflate(inflater, container, false)
+        return binding.root.apply {
+            // Allow or disallow touches with other visible windows
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        }
+    }
 
-        Timber.v("onCreateView")
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Get and set the values saved previous to the screen rotation, if any
         if (savedInstanceState != null) {
             val expirationDate = savedInstanceState.getString(KEY_EXPIRATION_DATE)
             if (!expirationDate.isNullOrEmpty()) {
-                view.shareViaLinkExpirationValue?.visibility = View.VISIBLE
-                view.shareViaLinkExpirationValue?.text = expirationDate
+                binding.shareViaLinkExpirationValue.isVisible = true
+                binding.shareViaLinkExpirationValue.text = expirationDate
             }
         }
 
+        initTitleAndLabels()
+        initPasswordListener()
+        initExpirationListener()
+        initPasswordFocusChangeListener()
+        initPasswordToggleListener()
+
+        binding.saveButton.setOnClickListener { onSaveShareSetting() }
+        binding.cancelButton.setOnClickListener { dismiss() }
+    }
+
+    private fun initTitleAndLabels() {
         if (updating()) {
-            view.publicShareDialogTitle?.setText(R.string.share_via_link_edit_title)
-            view.shareViaLinkNameValue?.setText(publicShare?.name)
+            binding.publicShareDialogTitle.setText(R.string.share_via_link_edit_title)
+            binding.shareViaLinkNameValue.setText(publicShare?.name)
 
             when (publicShare?.permissions) {
                 RemoteShare.CREATE_PERMISSION_FLAG
                         or RemoteShare.DELETE_PERMISSION_FLAG
                         or RemoteShare.UPDATE_PERMISSION_FLAG
                         or RemoteShare.READ_PERMISSION_FLAG ->
-                    view.shareViaLinkEditPermissionReadAndWrite.isChecked = true
-                RemoteShare.CREATE_PERMISSION_FLAG -> view.shareViaLinkEditPermissionUploadFiles.isChecked = true
-                else -> view.shareViaLinkEditPermissionReadOnly.isChecked = true
+                    binding.shareViaLinkEditPermissionReadAndWrite.isChecked = true
+                RemoteShare.CREATE_PERMISSION_FLAG -> binding.shareViaLinkEditPermissionUploadFiles.isChecked = true
+                else -> binding.shareViaLinkEditPermissionReadOnly.isChecked = true
             }
 
             if (publicShare?.isPasswordProtected == true) {
-                setPasswordSwitchChecked(view, true)
-                view.shareViaLinkPasswordValue?.visibility = View.VISIBLE
-                view.shareViaLinkPasswordValue?.hint = getString(R.string.share_via_link_default_password)
+                setPasswordSwitchChecked()
+                binding.shareViaLinkPasswordValue.isVisible = true
+                binding.shareViaLinkPasswordValue.hint = getString(R.string.share_via_link_default_password)
             }
 
             if (publicShare?.expirationDate != 0L) {
-                setExpirationDateSwitchChecked(view, true)
+                setExpirationDateSwitchChecked()
                 val formattedDate = ExpirationDatePickerDialogFragment.getDateFormat().format(
                     Date(publicShare?.expirationDate!!)
                 )
-                view.shareViaLinkExpirationValue?.visibility = View.VISIBLE
-                view.shareViaLinkExpirationValue?.text = formattedDate
+                binding.shareViaLinkExpirationValue.isVisible = true
+                binding.shareViaLinkExpirationValue.text = formattedDate
             }
 
         } else {
-            view.shareViaLinkNameValue?.setText(arguments?.getString(ARG_DEFAULT_LINK_NAME, ""))
+            binding.shareViaLinkNameValue.setText(arguments?.getString(ARG_DEFAULT_LINK_NAME, ""))
         }
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initPasswordListener()
-        initExpirationListener()
-        initPasswordFocusChangeListener()
-        initPasswordToggleListener()
-
-        saveButton.setOnClickListener { onSaveShareSetting() }
-        cancelButton.setOnClickListener { dismiss() }
     }
 
     private fun onSaveShareSetting() {
         // Get data filled by user
-        val publicLinkName = shareViaLinkNameValue?.text.toString()
-        var publicLinkPassword: String? = shareViaLinkPasswordValue?.text.toString()
+        val publicLinkName = binding.shareViaLinkNameValue.text.toString()
+        var publicLinkPassword: String? = binding.shareViaLinkPasswordValue.text.toString()
         val publicLinkExpirationDateInMillis = expirationDateValueInMillis
 
         val publicLinkPermissions: Int
         val publicUploadPermission: Boolean
 
-        when (shareViaLinkEditPermissionGroup?.checkedRadioButtonId) {
+        when (binding.shareViaLinkEditPermissionGroup.checkedRadioButtonId) {
             R.id.shareViaLinkEditPermissionUploadFiles -> {
                 publicLinkPermissions = RemoteShare.CREATE_PERMISSION_FLAG
                 publicUploadPermission = true
@@ -270,9 +282,9 @@ class PublicShareDialogFragment : DialogFragment() {
                 account?.name!!
             )
         } else { // Updating an existing public share
-            if (!shareViaLinkPasswordSwitch.isChecked) {
+            if (!binding.shareViaLinkPasswordSwitch.isChecked) {
                 publicLinkPassword = ""
-            } else if (shareViaLinkPasswordValue.text.isEmpty()) {
+            } else if (binding.shareViaLinkPasswordValue.text.isEmpty()) {
                 // User has not added a new password, so do not update it
                 publicLinkPassword = null
             }
@@ -289,7 +301,7 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     private fun initPasswordFocusChangeListener() {
-        shareViaLinkPasswordValue?.setOnFocusChangeListener { v: View, hasFocus: Boolean ->
+        binding.shareViaLinkPasswordValue.setOnFocusChangeListener { v: View, hasFocus: Boolean ->
             if (v.id == R.id.shareViaLinkPasswordValue) {
                 onPasswordFocusChanged(hasFocus)
             }
@@ -297,7 +309,7 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     private fun initPasswordToggleListener() {
-        shareViaLinkPasswordValue?.setOnTouchListener(object : RightDrawableOnTouchListener() {
+        binding.shareViaLinkPasswordValue.setOnTouchListener(object : RightDrawableOnTouchListener() {
             override fun onDrawableTouch(event: MotionEvent): Boolean {
                 if (event.action == MotionEvent.ACTION_UP) {
                     onViewPasswordClick()
@@ -369,9 +381,9 @@ class PublicShareDialogFragment : DialogFragment() {
             } else {
                 showPassword()
             }
-            shareViaLinkPasswordValue?.setSelection(
-                shareViaLinkPasswordValue.selectionStart,
-                shareViaLinkPasswordValue.selectionEnd
+            binding.shareViaLinkPasswordValue.setSelection(
+                binding.shareViaLinkPasswordValue.selectionStart,
+                binding.shareViaLinkPasswordValue.selectionEnd
             )
         }
     }
@@ -381,38 +393,29 @@ class PublicShareDialogFragment : DialogFragment() {
             R.drawable.ic_view_black
         else
             R.drawable.ic_hide_black
-        if (view != null) {
-            shareViaLinkPasswordValue?.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
-        }
+        binding.shareViaLinkPasswordValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0)
     }
 
     private fun hidePasswordButton() {
-        if (view != null) {
-            shareViaLinkPasswordValue?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-        }
+        binding.shareViaLinkPasswordValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
     }
 
     private fun showPassword() {
-        if (view != null) {
-            shareViaLinkPasswordValue?.inputType = InputType.TYPE_CLASS_TEXT or
-                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or
-                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-            showViewPasswordButton()
-        }
+        binding.shareViaLinkPasswordValue.inputType = InputType.TYPE_CLASS_TEXT or
+                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or
+                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        showViewPasswordButton()
     }
 
     private fun hidePassword() {
-        if (view != null) {
-            shareViaLinkPasswordValue?.inputType = InputType.TYPE_CLASS_TEXT or
-                    InputType.TYPE_TEXT_VARIATION_PASSWORD or
-                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-            showViewPasswordButton()
-        }
+        binding.shareViaLinkPasswordValue.inputType = InputType.TYPE_CLASS_TEXT or
+                InputType.TYPE_TEXT_VARIATION_PASSWORD or
+                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        showViewPasswordButton()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Timber.d("onActivityCreated")
 
         observeCapabilities()
         observePublicShareCreation()
@@ -421,7 +424,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(KEY_EXPIRATION_DATE, shareViaLinkExpirationValue?.text.toString())
+        outState.putString(KEY_EXPIRATION_DATE, binding.shareViaLinkExpirationValue.text.toString())
     }
 
     override fun onAttach(context: Context) {
@@ -499,7 +502,7 @@ class PublicShareDialogFragment : DialogFragment() {
      */
     private fun initPasswordListener() {
         onPasswordInteractionListener = OnPasswordInteractionListener()
-        shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(onPasswordInteractionListener)
+        binding.shareViaLinkPasswordSwitch.setOnCheckedChangeListener(onPasswordInteractionListener)
     }
 
     /**
@@ -514,18 +517,18 @@ class PublicShareDialogFragment : DialogFragment() {
          */
         override fun onCheckedChanged(switchView: CompoundButton, isChecked: Boolean) {
             if (isChecked) {
-                shareViaLinkPasswordValue?.visibility = View.VISIBLE
-                shareViaLinkPasswordValue?.requestFocus()
+                binding.shareViaLinkPasswordValue.isVisible = true
+                binding.shareViaLinkPasswordValue.requestFocus()
 
                 // Show keyboard to fill in the password
                 val mgr = activity?.getSystemService(
                     Context.INPUT_METHOD_SERVICE
                 ) as InputMethodManager?
-                mgr?.showSoftInput(shareViaLinkPasswordValue, InputMethodManager.SHOW_IMPLICIT)
+                mgr?.showSoftInput(binding.shareViaLinkPasswordValue, InputMethodManager.SHOW_IMPLICIT)
 
             } else {
-                shareViaLinkPasswordValue?.visibility = View.GONE
-                shareViaLinkPasswordValue?.text?.clear()
+                binding.shareViaLinkPasswordValue.isVisible = false
+                binding.shareViaLinkPasswordValue.text?.clear()
             }
         }
     }
@@ -537,9 +540,9 @@ class PublicShareDialogFragment : DialogFragment() {
      */
     private fun initExpirationListener() {
         onExpirationDateInteractionListener = OnExpirationDateInteractionListener()
-        shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(onExpirationDateInteractionListener)
-        shareViaLinkExpirationLabel?.setOnClickListener(onExpirationDateInteractionListener)
-        shareViaLinkExpirationValue?.setOnClickListener(onExpirationDateInteractionListener)
+        binding.shareViaLinkExpirationSwitch.setOnCheckedChangeListener(onExpirationDateInteractionListener)
+        binding.shareViaLinkExpirationLabel.setOnClickListener(onExpirationDateInteractionListener)
+        binding.shareViaLinkExpirationValue.setOnClickListener(onExpirationDateInteractionListener)
     }
 
     /**
@@ -573,8 +576,8 @@ class PublicShareDialogFragment : DialogFragment() {
                     ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
                 )
             } else {
-                shareViaLinkExpirationValue?.visibility = View.INVISIBLE
-                shareViaLinkExpirationValue?.text = ""
+                binding.shareViaLinkExpirationValue.visibility = View.INVISIBLE
+                binding.shareViaLinkExpirationValue.text = ""
             }
         }
 
@@ -604,15 +607,15 @@ class PublicShareDialogFragment : DialogFragment() {
          * @param date date selected by the user
          */
         override fun onDateSet(date: String) {
-            shareViaLinkExpirationValue?.visibility = View.VISIBLE
-            shareViaLinkExpirationValue?.text = date
+            binding.shareViaLinkExpirationValue.isVisible = true
+            binding.shareViaLinkExpirationValue.text = date
         }
 
         override fun onCancelDatePicker() {
 
             // If the date has not been set yet, uncheck the toggle
-            if (shareViaLinkExpirationSwitch.isChecked && shareViaLinkExpirationValue?.text.isNullOrBlank()) {
-                shareViaLinkExpirationSwitch.isChecked = false
+            if (binding.shareViaLinkExpirationSwitch.isChecked && binding.shareViaLinkExpirationValue.text.isNullOrBlank()) {
+                binding.shareViaLinkExpirationSwitch.isChecked = false
             }
         }
     }
@@ -645,7 +648,7 @@ class PublicShareDialogFragment : DialogFragment() {
         )
 
         if (capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE && isSharedFolder) {
-            shareViaLinkEditPermissionGroup?.visibility = View.VISIBLE
+            binding.shareViaLinkEditPermissionGroup.isVisible = true
         }
 
         // Show file listing option if all the following is true:
@@ -658,12 +661,12 @@ class PublicShareDialogFragment : DialogFragment() {
                     capabilities?.filesSharingPublicSupportsUploadOnly == CapabilityBooleanType.TRUE &&
                     capabilities?.filesSharingPublicUpload == CapabilityBooleanType.TRUE)
         ) {
-            shareViaLinkEditPermissionGroup?.visibility = View.GONE
+            binding.shareViaLinkEditPermissionGroup.isVisible = false
         }
 
         // Show default date enforced by the server, if any
         if (!updating() && capabilities?.filesSharingPublicExpireDateDays ?: 0 > 0) {
-            setExpirationDateSwitchChecked(checked = true)
+            setExpirationDateSwitchChecked()
 
             val formattedDate = SimpleDateFormat.getDateInstance().format(
                 DateUtils.addDaysToDate(
@@ -672,49 +675,51 @@ class PublicShareDialogFragment : DialogFragment() {
                 )
             )
 
-            shareViaLinkExpirationValue?.visibility = View.VISIBLE
-            shareViaLinkExpirationValue?.text = formattedDate
+            binding.shareViaLinkExpirationValue.apply {
+                isVisible = true
+                text = formattedDate
+            }
         }
 
         // Hide expiration date switch if date is enforced to prevent it is removed
         if (capabilities?.filesSharingPublicExpireDateEnforced == CapabilityBooleanType.TRUE) {
-            shareViaLinkExpirationLabel?.text = getString(R.string.share_via_link_expiration_date_enforced_label)
-            shareViaLinkExpirationSwitch?.visibility = View.GONE
-            shareViaLinkExpirationExplanationLabel?.visibility = View.VISIBLE
-            shareViaLinkExpirationExplanationLabel?.text = getString(
+            binding.shareViaLinkExpirationLabel.text = getString(R.string.share_via_link_expiration_date_enforced_label)
+            binding.shareViaLinkExpirationSwitch.isVisible = false
+            binding.shareViaLinkExpirationExplanationLabel.isVisible = true
+            binding.shareViaLinkExpirationExplanationLabel.text = getString(
                 R.string.share_via_link_expiration_date_explanation_label,
                 capabilities?.filesSharingPublicExpireDateDays
             )
         }
 
         // Set password label when opening the dialog
-        if (shareViaLinkEditPermissionReadOnly.isChecked &&
+        if (binding.shareViaLinkEditPermissionReadOnly.isChecked &&
             capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE ||
-            shareViaLinkEditPermissionReadAndWrite.isChecked &&
+            binding.shareViaLinkEditPermissionReadAndWrite.isChecked &&
             capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE ||
-            shareViaLinkEditPermissionUploadFiles.isChecked &&
+            binding.shareViaLinkEditPermissionUploadFiles.isChecked &&
             capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE
         ) {
             setPasswordEnforced()
         }
 
         // Set password label depending on the checked permission option
-        shareViaLinkEditPermissionGroup?.setOnCheckedChangeListener { _, checkedId ->
-            public_link_error_message?.isGone = true
+        binding.shareViaLinkEditPermissionGroup.setOnCheckedChangeListener { _, checkedId ->
+            binding.publicLinkErrorMessage.isVisible = false
 
-            if (checkedId == shareViaLinkEditPermissionReadOnly.id) {
+            if (checkedId == binding.shareViaLinkEditPermissionReadOnly.id) {
                 if (capabilities?.filesSharingPublicPasswordEnforcedReadOnly == CapabilityBooleanType.TRUE) {
                     setPasswordEnforced()
                 } else {
                     setPasswordNotEnforced()
                 }
-            } else if (checkedId == shareViaLinkEditPermissionReadAndWrite.id) {
+            } else if (checkedId == binding.shareViaLinkEditPermissionReadAndWrite.id) {
                 if (capabilities?.filesSharingPublicPasswordEnforcedReadWrite == CapabilityBooleanType.TRUE) {
                     setPasswordEnforced()
                 } else {
                     setPasswordNotEnforced()
                 }
-            } else if (checkedId == shareViaLinkEditPermissionUploadFiles.id) {
+            } else if (checkedId == binding.shareViaLinkEditPermissionUploadFiles.id) {
                 if (capabilities?.filesSharingPublicPasswordEnforcedUploadOnly == CapabilityBooleanType.TRUE) {
                     setPasswordEnforced()
                 } else {
@@ -736,44 +741,40 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     private fun setPasswordNotEnforced() {
-        shareViaLinkPasswordLabel?.text = getString(R.string.share_via_link_password_label)
-        shareViaLinkPasswordSwitch?.visibility = View.VISIBLE
-        if (!shareViaLinkPasswordSwitch.isChecked) {
-            shareViaLinkPasswordValue?.visibility = View.GONE
+        binding.shareViaLinkPasswordLabel.text = getString(R.string.share_via_link_password_label)
+        binding.shareViaLinkPasswordSwitch.isVisible = true
+        if (!binding.shareViaLinkPasswordSwitch.isChecked) {
+            binding.shareViaLinkPasswordValue.isVisible = false
         }
     }
 
     private fun setPasswordEnforced() {
-        shareViaLinkPasswordLabel?.text = getString(R.string.share_via_link_password_enforced_label)
-        shareViaLinkPasswordSwitch?.isChecked = true
-        shareViaLinkPasswordSwitch?.visibility = View.GONE
-        shareViaLinkPasswordValue?.visibility = View.VISIBLE
+        binding.shareViaLinkPasswordLabel.text = getString(R.string.share_via_link_password_enforced_label)
+        binding.shareViaLinkPasswordSwitch.isChecked = true
+        binding.shareViaLinkPasswordSwitch.isVisible = false
+        binding.shareViaLinkPasswordValue.isVisible = true
     }
 
     /**
      * Show error when creating or updating the public share, if any
      */
     private fun showError(genericErrorMessage: String, throwable: Throwable?) {
-        public_link_error_message?.text = throwable?.parseError(genericErrorMessage, resources)
-        public_link_error_message?.visibility = View.VISIBLE
+        binding.publicLinkErrorMessage.text = throwable?.parseError(genericErrorMessage, resources)
+        binding.publicLinkErrorMessage.isVisible = true
     }
 
-    private fun setPasswordSwitchChecked(view: View, checked: Boolean) {
-        view.shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(null)
-        view.shareViaLinkPasswordSwitch?.isChecked = checked
-        view.shareViaLinkPasswordSwitch?.setOnCheckedChangeListener(onPasswordInteractionListener)
-    }
-
-    private fun setExpirationDateSwitchChecked(view: View? = null, checked: Boolean) {
-        if (view != null) {
-            view.shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(null)
-            view.shareViaLinkExpirationSwitch?.isChecked = checked
-            view.shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(onExpirationDateInteractionListener)
-        } else {
-            shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(null)
-            shareViaLinkExpirationSwitch?.isChecked = checked
-            shareViaLinkExpirationSwitch?.setOnCheckedChangeListener(onExpirationDateInteractionListener)
+    private fun setPasswordSwitchChecked() {
+        binding.shareViaLinkPasswordSwitch.apply {
+            setOnCheckedChangeListener(null)
+            isChecked = true
+            setOnCheckedChangeListener(onPasswordInteractionListener)
         }
+    }
+
+    private fun setExpirationDateSwitchChecked() {
+        binding.shareViaLinkExpirationSwitch.setOnCheckedChangeListener(null)
+        binding.shareViaLinkExpirationSwitch.isChecked = true
+        binding.shareViaLinkExpirationSwitch.setOnCheckedChangeListener(onExpirationDateInteractionListener)
     }
 
     companion object {
@@ -798,13 +799,13 @@ class PublicShareDialogFragment : DialogFragment() {
             account: Account,
             defaultLinkName: String
         ): PublicShareDialogFragment {
-            val publicShareDialogFragment = PublicShareDialogFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_FILE, fileToShare)
-            args.putParcelable(ARG_ACCOUNT, account)
-            args.putString(ARG_DEFAULT_LINK_NAME, defaultLinkName)
-            publicShareDialogFragment.arguments = args
-            return publicShareDialogFragment
+            val args = Bundle().apply {
+                putParcelable(ARG_FILE, fileToShare)
+                putParcelable(ARG_ACCOUNT, account)
+                putString(ARG_DEFAULT_LINK_NAME, defaultLinkName)
+            }
+
+            return PublicShareDialogFragment().apply { arguments = args }
         }
 
         /**
@@ -819,13 +820,13 @@ class PublicShareDialogFragment : DialogFragment() {
             account: Account,
             publicShare: OCShare
         ): PublicShareDialogFragment {
-            val publicShareDialogFragment = PublicShareDialogFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_FILE, fileToShare)
-            args.putParcelable(ARG_ACCOUNT, account)
-            args.putParcelable(ARG_SHARE, publicShare)
-            publicShareDialogFragment.arguments = args
-            return publicShareDialogFragment
+            val args = Bundle().apply {
+                putParcelable(ARG_FILE, fileToShare)
+                putParcelable(ARG_ACCOUNT, account)
+                putParcelable(ARG_SHARE, publicShare)
+            }
+
+            return PublicShareDialogFragment().apply { arguments = args }
         }
     }
 }
