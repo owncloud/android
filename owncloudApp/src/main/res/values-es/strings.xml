@@ -435,7 +435,7 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Archivo original será</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Archivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Archivo original será</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>

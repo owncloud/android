@@ -435,7 +435,7 @@
   <string name="prefs_camera_upload_source_path_title">相機資料夾 (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">必填</string>
   <string name="prefs_camera_upload_source_path_title_optional">選填</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">原始檔案將是</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">原始檔案將是</string>
   <string name="prefs_camera_upload_behaviour_title">原始檔案將</string>
   <string name="upload_copy_files">複製檔案</string>
   <string name="upload_move_files">移動檔案</string>

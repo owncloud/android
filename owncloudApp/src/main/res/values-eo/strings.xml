@@ -237,7 +237,7 @@
   <string name="file_list__footer__files">%1$d dosieroj</string>
   <string name="file_list__footer__files_and_folder">%1$d dosieroj, 1 dosierujo</string>
   <string name="file_list__footer__files_and_folders">%1$d dosieroj, %2$d dosierujoj</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Origina dosiero estos…</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Origina dosiero estos…</string>
   <string name="prefs_camera_upload_behaviour_title">Origina dosiero estos…</string>
   <string name="upload_copy_files">Kopii dosieron</string>
   <string name="upload_move_files">Movi dosieron</string>

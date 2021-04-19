@@ -434,7 +434,7 @@
   <string name="prefs_camera_upload_source_path_title">Kamera klasörü (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">gerekli</string>
   <string name="prefs_camera_upload_source_path_title_optional">isteğe bağlı</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Orjinal dosya şu olacak</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Orjinal dosya şu olacak</string>
   <string name="prefs_camera_upload_behaviour_title">şu olacak</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>

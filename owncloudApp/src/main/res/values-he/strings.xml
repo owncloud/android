@@ -435,7 +435,7 @@
   <string name="prefs_camera_upload_source_path_title">תיקיית מצלמה (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">נדרש</string>
   <string name="prefs_camera_upload_source_path_title_optional">אופציונלי</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">קובץ מקורי יהיה</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">קובץ מקורי יהיה</string>
   <string name="prefs_camera_upload_behaviour_title">קובץ מקורי יהיה</string>
   <string name="upload_copy_files">העתקת קובץ</string>
   <string name="upload_move_files">העברת קובץ</string>
