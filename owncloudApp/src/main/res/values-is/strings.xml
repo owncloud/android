@@ -393,7 +393,7 @@
   <string name="prefs_camera_upload_source_path_title">Myndavélarmappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">krafist</string>
   <string name="prefs_camera_upload_source_path_title_optional">valkvætt</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Upprunaleg skrá verður</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Upprunaleg skrá verður</string>
   <string name="prefs_camera_upload_behaviour_title">Upprunaleg skrá verður</string>
   <string name="upload_copy_files">Afrita skrá</string>
   <string name="upload_move_files">Færa skrá</string>

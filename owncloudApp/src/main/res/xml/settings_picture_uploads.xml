@@ -37,7 +37,7 @@
     <ListPreference
         app:iconSpaceReserved="false"
         app:defaultValue="NOTHING"
-        app:dialogTitle="@string/prefs_camera_upload_behaviour_dialogTitle"
+        app:dialogTitle="@string/prefs_camera_upload_behaviour_dialog_title"
         app:entries="@array/pref_behaviour_entries"
         app:entryValues="@array/pref_behaviour_entryValues"
         app:key="picture_uploads_behaviour"

@@ -399,7 +399,7 @@
   <string name="prefs_camera_upload_source_path_title">Dosarul camerei (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">necesar</string>
   <string name="prefs_camera_upload_source_path_title_optional">opțional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Fișierul original va fi</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Fișierul original va fi</string>
   <string name="prefs_camera_upload_behaviour_title">Fișierul original va fi</string>
   <string name="upload_copy_files">Copiază fișier</string>
   <string name="upload_move_files">Mută fișier</string>

@@ -432,7 +432,7 @@
   <string name="prefs_camera_upload_source_path_title">Папка за камерата (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">задължителен</string>
   <string name="prefs_camera_upload_source_path_title_optional">по избор</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Оригиналният файл ще бъде</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Оригиналният файл ще бъде</string>
   <string name="prefs_camera_upload_behaviour_title">Оригиналният файл ще бъде</string>
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>

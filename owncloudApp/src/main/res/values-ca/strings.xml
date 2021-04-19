@@ -433,7 +433,7 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de la Càmera(%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerit</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">L\'arxiu original serà</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">L\'arxiu original serà</string>
   <string name="prefs_camera_upload_behaviour_title">L\'arxiu original serà</string>
   <string name="upload_copy_files">Copiar fitxer</string>
   <string name="upload_move_files">Moure fitxer</string>

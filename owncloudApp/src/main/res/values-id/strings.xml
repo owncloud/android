@@ -425,7 +425,7 @@
   <string name="prefs_camera_upload_source_path_title">Folder kamera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Diperlukan</string>
   <string name="prefs_camera_upload_source_path_title_optional">Pilihan</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">File asli akan di</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">File asli akan di</string>
   <string name="prefs_camera_upload_behaviour_title">File asli akan di</string>
   <string name="upload_copy_files">Salin file</string>
   <string name="upload_move_files">Pindahkan file</string>
