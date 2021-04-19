@@ -43,7 +43,6 @@ class LogHistoryActivityTest {
     @JvmField
     val activityRule = ActivityScenarioRule(LogHistoryActivity::class.java)
 
-    @Ignore
     @Test
     fun itemsToolbar() {
         onView(
