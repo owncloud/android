@@ -57,6 +57,7 @@ import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
+import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -96,7 +97,6 @@ import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
-import kotlinx.android.synthetic.main.nav_coordinator_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -147,6 +147,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private val isFabOpen: Boolean
         get() = listOfFilesFragment?.fabMain?.isExpanded ?: false
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.v("onCreate() start")
 
@@ -184,7 +186,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         /// USER INTERFACE
 
         // Inflate and set the layout view
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         // setup toolbar
         setupRootToolbar(
@@ -420,7 +424,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     fun showBottomNavBar(show: Boolean) {
-        bottom_nav_view.isVisible = show
+        binding.navCoordinatorLayout.bottomNavView.isVisible = show
     }
 
     private fun updateFragmentsVisibility(existsSecondFragment: Boolean) {
