@@ -28,10 +28,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.owncloud.android.R
+import com.owncloud.android.databinding.SharePublicLinkItemBinding
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.utils.PreferenceUtils
-import kotlinx.android.synthetic.main.share_public_link_item.view.*
 
 /**
  * Adapter to show a list of public links
@@ -42,40 +41,42 @@ class SharePublicLinkListAdapter(
     private var publicLinks: List<OCShare>,
     private val listener: SharePublicLinkAdapterListener
 ) : ArrayAdapter<OCShare>(mContext, resource) {
+
+    private lateinit var binding: SharePublicLinkItemBinding
+
     init {
         publicLinks = publicLinks.sortedBy { it.name }
     }
 
     override fun getCount(): Int = publicLinks.size
 
-    override fun getItem(position: Int): OCShare? = publicLinks[position]
+    override fun getItem(position: Int): OCShare = publicLinks[position]
 
     override fun getItemId(position: Int): Long = 0
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflator = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflator.inflate(R.layout.share_public_link_item, parent, false)
-
-        // Allow or disallow touches with other visible windows
-        view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
+        binding = SharePublicLinkItemBinding.inflate(inflator).apply {
+            root.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(mContext)
+        }
 
         if (publicLinks.size > position) {
             val share = publicLinks[position]
 
             // If there's no name, set the token as name
-            view.publicLinkName.text = if (share.name.isNullOrEmpty()) share.token else share.name
+            binding.publicLinkName.text = if (share.name.isNullOrEmpty()) share.token else share.name
 
             // bind listener to get link
-            view.getPublicLinkButton.setOnClickListener { listener.copyOrSendPublicLink(publicLinks[position]) }
+            binding.getPublicLinkButton.setOnClickListener { listener.copyOrSendPublicLink(publicLinks[position]) }
 
             // bind listener to delete
-            view.deletePublicLinkButton.setOnClickListener { listener.removeShare(publicLinks[position]) }
+            binding.deletePublicLinkButton.setOnClickListener { listener.removeShare(publicLinks[position]) }
 
             // bind listener to edit
-            view.editPublicLinkButton.setOnClickListener { listener.editPublicShare(publicLinks[position]) }
+            binding.editPublicLinkButton.setOnClickListener { listener.editPublicShare(publicLinks[position]) }
         }
 
-        return view
+        return binding.root
     }
 
     interface SharePublicLinkAdapterListener {
