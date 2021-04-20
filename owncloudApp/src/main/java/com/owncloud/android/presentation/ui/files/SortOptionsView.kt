@@ -20,15 +20,15 @@ package com.owncloud.android.presentation.ui.files
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
+import com.owncloud.android.databinding.SortOptionsLayoutBinding
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.presentation.ui.files.SortOrder.Companion.fromPreference
 import com.owncloud.android.presentation.ui.files.SortType.Companion.fromPreference
 import com.owncloud.android.utils.FileStorageUtils
-import kotlinx.android.synthetic.main.sort_options_layout.view.*
 
 class SortOptionsView @JvmOverloads constructor(
     context: Context,
@@ -39,10 +39,13 @@ class SortOptionsView @JvmOverloads constructor(
     var onSortOptionsListener: SortOptionsListener? = null
     var onCreateFolderListener: CreateFolderListener? = null
 
+    private var _binding: SortOptionsLayoutBinding? = null
+    private val binding get() = _binding!!
+
     // Enable list view by default.
     var viewTypeSelected: ViewType = ViewType.VIEW_TYPE_LIST
         set(viewType) {
-            view_type_selector.setImageDrawable(ContextCompat.getDrawable(context, viewType.getOppositeViewType().toDrawableRes()))
+            binding.viewTypeSelector.setImageDrawable(ContextCompat.getDrawable(context, viewType.getOppositeViewType().toDrawableRes()))
             field = viewType
         }
 
@@ -53,19 +56,19 @@ class SortOptionsView @JvmOverloads constructor(
                 // TODO: Should be changed directly, not here.
                 sortOrderSelected = sortOrderSelected.getOppositeSortOrder()
             }
-            sort_type_title.text = context.getText(sortType.toStringRes())
+            binding.sortTypeTitle.text = context.getText(sortType.toStringRes())
             field = sortType
         }
 
     // Enable sort ascending by default.
     var sortOrderSelected: SortOrder = SortOrder.SORT_ORDER_ASCENDING
         set(sortOrder) {
-            sort_type_icon.setImageDrawable(ContextCompat.getDrawable(context, sortOrder.toDrawableRes()))
+            binding.sortTypeIcon.setImageDrawable(ContextCompat.getDrawable(context, sortOrder.toDrawableRes()))
             field = sortOrder
         }
 
     init {
-        View.inflate(context, R.layout.sort_options_layout, this)
+        _binding = SortOptionsLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
         // Select sort type and order according to preference.
         val sortBy = PreferenceManager.getSortOrder(getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
@@ -74,13 +77,13 @@ class SortOptionsView @JvmOverloads constructor(
         val isAscending = PreferenceManager.getSortAscending(getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
         sortOrderSelected = fromPreference(isAscending)
 
-        sort_type_selector.setOnClickListener {
+        binding.sortTypeSelector.setOnClickListener {
             onSortOptionsListener?.onSortTypeListener(
                 sortTypeSelected,
                 sortOrderSelected
             )
         }
-        view_type_selector.setOnClickListener {
+        binding.viewTypeSelector.setOnClickListener {
             onSortOptionsListener?.onViewTypeListener(
                 viewTypeSelected.getOppositeViewType()
             )
@@ -90,14 +93,14 @@ class SortOptionsView @JvmOverloads constructor(
     fun selectAdditionalView(additionalView: AdditionalView) {
         when (additionalView) {
             AdditionalView.CREATE_FOLDER -> {
-                view_type_selector.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_create_dir))
-                view_type_selector.setOnClickListener {
+                binding.viewTypeSelector.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_create_dir))
+                binding.viewTypeSelector.setOnClickListener {
                     onCreateFolderListener?.onCreateFolderListener()
                 }
             }
             AdditionalView.VIEW_TYPE -> {
                 viewTypeSelected = viewTypeSelected
-                view_type_selector.setOnClickListener {
+                binding.viewTypeSelector.setOnClickListener {
                     onSortOptionsListener?.onViewTypeListener(
                         viewTypeSelected.getOppositeViewType()
                     )
