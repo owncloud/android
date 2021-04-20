@@ -23,7 +23,7 @@
 package com.owncloud.android.ui.activity
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class FileListOption : Parcelable {
