@@ -28,13 +28,14 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.utils.AvatarUtils
-import kotlinx.android.synthetic.main.owncloud_toolbar.*
 
 /**
  * Base class providing toolbar registration functionality, see [.setupToolbar].
@@ -53,8 +54,10 @@ abstract class ToolbarActivity : BaseActivity() {
     ) {
         useStandardToolbar(true)
 
-        title?.let { standard_toolbar?.title = it }
-        setSupportActionBar(standard_toolbar)
+        val standardToolbar = getStandardToolbar()
+
+        title?.let { standardToolbar.title = it }
+        setSupportActionBar(standardToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
         supportActionBar?.setHomeButtonEnabled(homeButtonEnabled)
         supportActionBar?.setDisplayShowTitleEnabled(displayShowTitleEnabled)
@@ -108,8 +111,8 @@ abstract class ToolbarActivity : BaseActivity() {
     }
 
     private fun useStandardToolbar(isToolbarStandard: Boolean) {
-        root_toolbar?.isVisible = !isToolbarStandard
-        standard_toolbar?.isVisible = isToolbarStandard
+        getRootToolbar().isVisible = !isToolbarStandard
+        getStandardToolbar().isVisible = isToolbarStandard
     }
 
     open fun updateStandardToolbar(
@@ -117,7 +120,8 @@ abstract class ToolbarActivity : BaseActivity() {
         displayHomeAsUpEnabled: Boolean = true,
         homeButtonEnabled: Boolean = true
     ) {
-        if (standard_toolbar?.isVisible == true) {
+
+        if (getStandardToolbar().isVisible) {
             supportActionBar?.title = title
             supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
             supportActionBar?.setHomeButtonEnabled(homeButtonEnabled)
@@ -125,6 +129,10 @@ abstract class ToolbarActivity : BaseActivity() {
             setupStandardToolbar(title, displayHomeAsUpEnabled, displayHomeAsUpEnabled, true)
         }
     }
+
+    private fun getRootToolbar(): ConstraintLayout = findViewById(R.id.root_toolbar)
+
+    private fun getStandardToolbar(): Toolbar = findViewById(R.id.standard_toolbar)
 
     /**
      * checks if the given file is the root folder.
