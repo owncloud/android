@@ -197,7 +197,6 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
         arguments?.let {
             file = it.getParcelable(ARG_FILE)
             account = it.getParcelable(ARG_ACCOUNT)
@@ -210,9 +209,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Timber.d("onCreateView")
-
+    ): View {
         // Inflate the layout for this fragment
         _binding = ShareFileLayoutBinding.inflate(inflater, container, false)
         return binding.root.apply {
