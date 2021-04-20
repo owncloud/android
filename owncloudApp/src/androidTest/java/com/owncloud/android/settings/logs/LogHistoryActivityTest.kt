@@ -22,18 +22,14 @@
 package com.owncloud.android.settings.logs
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
 import org.hamcrest.Matchers.allOf
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -50,16 +46,5 @@ class LogHistoryActivityTest {
         ).check(
             matches(isDisplayed())
         )
-    }
-
-    @Test
-    fun itemsLogLevel() {
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
-        //Values not i18n
-        onView(withText("Verbose")).check(matches(isDisplayed()))
-        onView(withText("Debug")).check(matches(isDisplayed()))
-        onView(withText("Info")).check(matches(isDisplayed()))
-        onView(withText("Warning")).check(matches(isDisplayed()))
-        onView(withText("Error")).check(matches(isDisplayed()))
     }
 }

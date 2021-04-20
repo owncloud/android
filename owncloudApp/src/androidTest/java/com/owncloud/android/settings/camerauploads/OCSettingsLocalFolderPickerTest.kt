@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Jesús Recio @jesmrec
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,17 +22,17 @@
 package com.owncloud.android.settings.camerauploads
 
 import android.os.Environment
+import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.rule.ActivityTestRule
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
-import org.junit.Assert.assertTrue
-import org.junit.Ignore
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
@@ -38,9 +40,7 @@ class OCSettingsLocalFolderPickerTest {
 
     @Rule
     @JvmField
-    val activityRule = ActivityTestRule(LocalFolderPickerActivity::class.java, true, true)
-
-    private val errorMessage = "Activity not finished"
+    val activityRule = ActivityScenarioRule(LocalFolderPickerActivity::class.java)
 
     @Test
     fun localFolderPickerView() {
@@ -54,13 +54,13 @@ class OCSettingsLocalFolderPickerTest {
     @Test
     fun cancelButtonDismiss() {
         onView(withId(R.id.folder_picker_btn_cancel)).perform(click())
-        assertTrue(errorMessage, activityRule.activity.isFinishing)
+        assertEquals(Lifecycle.State.DESTROYED, activityRule.scenario.state)
     }
 
     @Test
     fun chooseButtonDismiss() {
         onView(withId(R.id.folder_picker_btn_choose)).perform(click())
-        assertTrue(errorMessage, activityRule.activity.isFinishing)
+        assertEquals(Lifecycle.State.DESTROYED, activityRule.scenario.state)
     }
 
     @Test
