@@ -35,12 +35,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
-import androidx.lifecycle.Observer
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
@@ -52,11 +56,6 @@ import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.utils.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.nav_coordinator_layout.*
-import kotlinx.android.synthetic.main.nav_drawer_content.*
-import kotlinx.android.synthetic.main.nav_drawer_footer.*
-import kotlinx.android.synthetic.main.nav_drawer_header.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import kotlin.math.ceil
@@ -90,26 +89,26 @@ abstract class DrawerActivity : ToolbarActivity() {
     protected open fun setupDrawer() {
 
         // Allow or disallow touches with other visible windows
-        drawer_layout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
-        nav_view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        getDrawerLayout()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        getNavView()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
         // Set background header image and logo, if any
         if (resources.getBoolean(R.bool.use_drawer_background_header)) {
-            nav_view.getHeaderView(0).drawer_header_background?.setImageResource(R.drawable.drawer_header_background)
+            getDrawerHeaderBackground()?.setImageResource(R.drawable.drawer_header_background)
         }
         if (resources.getBoolean(R.bool.use_drawer_logo)) {
-            drawer_logo?.setImageResource(R.drawable.drawer_logo)
+            getDrawerLogo()?.setImageResource(R.drawable.drawer_logo)
         }
 
-        nav_view.getHeaderView(0).drawer_account_chooser_toogle?.setImageResource(R.drawable.ic_down)
+        getDrawerAccountChooserToogle()?.setImageResource(R.drawable.ic_down)
         isAccountChooserActive = false
 
         //Notch support
-        nav_view.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+        getNavView()?.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     v.rootWindowInsets.displayCutout?.let {
-                        nav_view.getHeaderView(0).drawer_active_user?.layoutParams?.height =
+                        getDrawerActiveUser()?.layoutParams?.height =
                             DisplayUtils.getDrawerHeaderHeight(it.safeInsetTop, resources)
                     }
                 }
@@ -117,11 +116,11 @@ abstract class DrawerActivity : ToolbarActivity() {
 
             override fun onViewDetachedFromWindow(v: View) {}
         })
-        setupDrawerContent(nav_view)
-        nav_view.getHeaderView(0).drawer_active_user?.setOnClickListener { toggleAccountList() }
+        setupDrawerContent()
+        getDrawerActiveUser()?.setOnClickListener { toggleAccountList() }
 
         drawerToggle =
-            object : ActionBarDrawerToggle(this, drawer_layout, R.string.drawer_open, R.string.drawer_close) {
+            object : ActionBarDrawerToggle(this, getDrawerLayout(), R.string.drawer_open, R.string.drawer_close) {
                 /** Called when a drawer has settled in a completely closed state.  */
                 override fun onDrawerClosed(view: View) {
                     super.onDrawerClosed(view)
@@ -142,16 +141,16 @@ abstract class DrawerActivity : ToolbarActivity() {
             }
 
         // Set the drawer toggle as the DrawerListener
-        drawer_layout.addDrawerListener(drawerToggle as ActionBarDrawerToggle)
+        getDrawerLayout()?.addDrawerListener(drawerToggle as ActionBarDrawerToggle)
         drawerToggle?.isDrawerIndicatorEnabled = false
     }
 
     /**
      * setup drawer content, basically setting the item selected listener.
      *
-     * @param navigationView the drawers navigation view
      */
-    protected open fun setupDrawerContent(navigationView: NavigationView) {
+    protected open fun setupDrawerContent() {
+        val navigationView: NavigationView = getNavView() ?: return
         // Disable help or feedback on customization
         if (!resources.getBoolean(R.bool.help_enabled)) {
             navigationView.menu.removeItem(R.id.drawer_menu_help)
@@ -160,7 +159,7 @@ abstract class DrawerActivity : ToolbarActivity() {
             navigationView.menu.removeItem(R.id.drawer_menu_feedback)
         }
         navigationView.setNavigationItemSelectedListener { menuItem: MenuItem ->
-            drawer_layout.closeDrawers()
+            getDrawerLayout()?.closeDrawers()
             when (menuItem.itemId) {
                 R.id.nav_settings -> {
                     val settingsIntent = Intent(applicationContext, Preferences::class.java)
@@ -186,7 +185,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     fun setCheckedItemAtBottomBar(checkedMenuItem: Int) {
-        bottom_nav_view.menu.findItem(checkedMenuItem).isChecked = true
+        getBottomNavigationView()?.menu?.findItem(checkedMenuItem)?.isChecked = true
     }
 
     /**
@@ -197,10 +196,10 @@ abstract class DrawerActivity : ToolbarActivity() {
      */
     open fun setupNavigationBottomBar(menuItemId: Int) {
         // Allow or disallow touches with other visible windows
-        bottom_nav_view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        getBottomNavigationView()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         setCheckedItemAtBottomBar(menuItemId)
-        bottom_nav_view.setOnNavigationItemSelectedListener { menuItem: MenuItem ->
-            bottomBarNavigationTo(menuItem.itemId, bottom_nav_view.selectedItemId == menuItem.itemId)
+        getBottomNavigationView()?.setOnNavigationItemSelectedListener { menuItem: MenuItem ->
+            bottomBarNavigationTo(menuItem.itemId, getBottomNavigationView()?.selectedItemId == menuItem.itemId)
             true
         }
     }
@@ -268,20 +267,20 @@ abstract class DrawerActivity : ToolbarActivity() {
      *
      * @return `true` if the drawer is open, else `false`
      */
-    open fun isDrawerOpen(): Boolean = drawer_layout?.isDrawerOpen(GravityCompat.START) ?: false
+    open fun isDrawerOpen(): Boolean = getDrawerLayout()?.isDrawerOpen(GravityCompat.START) ?: false
 
     /**
      * closes the drawer.
      */
     open fun closeDrawer() {
-        drawer_layout?.closeDrawer(GravityCompat.START)
+        getDrawerLayout()?.closeDrawer(GravityCompat.START)
     }
 
     /**
      * opens the drawer.
      */
     open fun openDrawer() {
-        drawer_layout?.openDrawer(GravityCompat.START)
+        getDrawerLayout()?.openDrawer(GravityCompat.START)
     }
 
     /**
@@ -291,7 +290,7 @@ abstract class DrawerActivity : ToolbarActivity() {
      * [DrawerLayout.LOCK_MODE_LOCKED_CLOSED] or [DrawerLayout.LOCK_MODE_LOCKED_OPEN].
      */
     open fun setDrawerLockMode(lockMode: Int) {
-        drawer_layout?.setDrawerLockMode(lockMode)
+        getDrawerLayout()?.setDrawerLockMode(lockMode)
     }
 
     /**
@@ -299,7 +298,7 @@ abstract class DrawerActivity : ToolbarActivity() {
      */
     private fun updateAccountList() {
         val accounts = drawerViewModel.getAccounts(this)
-        if (nav_view != null && drawer_layout != null) {
+        if (getNavView() != null && getDrawerLayout() != null) {
             if (accounts.isNotEmpty()) {
                 repopulateAccountList(accounts)
                 setAccountInDrawer(drawerViewModel.getCurrentAccount(this) ?: accounts.first())
@@ -307,7 +306,7 @@ abstract class DrawerActivity : ToolbarActivity() {
 
                 // activate second/end account avatar
                 accountsWithAvatars[1]?.let { account ->
-                    nav_view.getHeaderView(0).drawer_account_end?.let {
+                    getDrawerAccountEnd()?.let {
                         AvatarUtils().loadAvatarForAccount(
                             imageView = it,
                             account = account,
@@ -316,12 +315,12 @@ abstract class DrawerActivity : ToolbarActivity() {
                     }
                 }
                 if (accountsWithAvatars[1] == null) {
-                    nav_view.getHeaderView(0).drawer_account_end?.isVisible = false
+                    getDrawerAccountEnd()?.isVisible = false
                 }
 
                 // activate third/middle account avatar
                 accountsWithAvatars[2]?.let { account ->
-                    nav_view.getHeaderView(0).drawer_account_middle?.let {
+                    getDrawerAccountMiddle()?.let {
                         AvatarUtils().loadAvatarForAccount(
                             imageView = it,
                             account = account,
@@ -330,11 +329,11 @@ abstract class DrawerActivity : ToolbarActivity() {
                     }
                 }
                 if (accountsWithAvatars[2] == null) {
-                    nav_view.getHeaderView(0).drawer_account_middle?.isVisible = false
+                    getDrawerAccountMiddle()?.isVisible = false
                 }
             } else {
-                nav_view.getHeaderView(0).drawer_account_end?.isVisible = false
-                nav_view.getHeaderView(0).drawer_account_middle?.isVisible = false
+                getDrawerAccountEnd()?.isVisible = false
+                getDrawerAccountMiddle()?.isVisible = false
             }
         }
     }
@@ -345,13 +344,15 @@ abstract class DrawerActivity : ToolbarActivity() {
      * @param accounts list of accounts
      */
     private fun repopulateAccountList(accounts: List<Account>) {
+        val navigationView = getNavView() ?: return
+        val navigationMenu = navigationView.menu
         // remove all accounts from list
-        nav_view.menu.removeGroup(R.id.drawer_menu_accounts)
+        navigationMenu.removeGroup(R.id.drawer_menu_accounts)
 
         // add all accounts to list except current one
         accounts.filter { it.name != account.name }.forEach {
             val accountMenuItem: MenuItem =
-                nav_view.menu.add(R.id.drawer_menu_accounts, Menu.NONE, MENU_ORDER_ACCOUNT, it.name)
+                navigationMenu.add(R.id.drawer_menu_accounts, Menu.NONE, MENU_ORDER_ACCOUNT, it.name)
             AvatarUtils().loadAvatarForAccount(
                 menuItem = accountMenuItem,
                 account = it,
@@ -361,12 +362,12 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
 
         // re-add add-account and manage-accounts
-        nav_view.menu.add(
+        navigationMenu.add(
             R.id.drawer_menu_accounts, R.id.drawer_menu_account_add,
             MENU_ORDER_ACCOUNT_FUNCTION,
             resources.getString(R.string.prefs_add_account)
         ).setIcon(R.drawable.ic_plus_grey)
-        nav_view.menu.add(
+        navigationMenu.add(
             R.id.drawer_menu_accounts, R.id.drawer_menu_account_manage,
             MENU_ORDER_ACCOUNT_FUNCTION,
             resources.getString(R.string.drawer_manage_accounts)
@@ -383,33 +384,33 @@ abstract class DrawerActivity : ToolbarActivity() {
         Timber.d("Update Quota")
         val account = drawerViewModel.getCurrentAccount(this) ?: return
         drawerViewModel.getStoredQuota(account.name)
-        drawerViewModel.userQuota.observe(this, Observer { event ->
+        drawerViewModel.userQuota.observe(this, { event ->
             when (event.peekContent()) {
                 is UIResult.Success -> {
                     event.peekContent().getStoredData()?.let { userQuota ->
                         when {
                             userQuota.available < 0 -> { // Pending, unknown or unlimited free storage
-                                account_quota_bar?.run {
+                                getAccountQuotaBar()?.run {
                                     isVisible = true
                                     progress = 0
                                 }
-                                account_quota_text?.text = String.format(
+                                getAccountQuotaText()?.text = String.format(
                                     getString(R.string.drawer_unavailable_free_storage),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, this)
                                 )
 
                             }
                             userQuota.available == 0L -> { // Quota 0, guest users
-                                account_quota_bar?.isVisible = false
-                                account_quota_text?.text = getString(R.string.drawer_unavailable_used_storage)
+                                getAccountQuotaBar()?.isVisible = false
+                                getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
                             }
                             else -> { // Limited quota
                                 // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
-                                account_quota_bar?.run {
+                                getAccountQuotaBar()?.run {
                                     progress = ceil(userQuota.getRelative()).toInt()
                                     isVisible = true
                                 }
-                                account_quota_text?.text = String.format(
+                                getAccountQuotaText()?.text = String.format(
                                     getString(R.string.drawer_quota),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, this),
                                     DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this),
@@ -419,8 +420,8 @@ abstract class DrawerActivity : ToolbarActivity() {
                         }
                     }
                 }
-                is UIResult.Loading -> account_quota_text?.text = getString(R.string.drawer_loading_quota)
-                is UIResult.Error -> account_quota_text?.text = getString(R.string.drawer_unavailable_used_storage)
+                is UIResult.Loading -> getAccountQuotaText()?.text = getString(R.string.drawer_loading_quota)
+                is UIResult.Error -> getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
             }
         })
     }
@@ -439,17 +440,17 @@ abstract class DrawerActivity : ToolbarActivity() {
      * @param account the account to be set in the drawer
      */
     protected fun setAccountInDrawer(account: Account) {
-        if (drawer_layout != null) {
-            nav_view.getHeaderView(0).drawer_username_full.text = account.name
+        if (getDrawerLayout() != null) {
+            getDrawerUserNameFull()?.text = account.name
             try {
                 val ocAccount = OwnCloudAccount(account, this)
-                nav_view.getHeaderView(0).drawer_username.text = ocAccount.displayName
+                getDrawerUserName()?.text = ocAccount.displayName
             } catch (e: Exception) {
                 Timber.w("Couldn't read display name of account; using account name instead")
-                nav_view.getHeaderView(0).drawer_username?.text = AccountUtils.getUsernameOfAccount(account.name)
+                getDrawerUserName()?.text = AccountUtils.getUsernameOfAccount(account.name)
             }
 
-            nav_view.getHeaderView(0).drawer_current_account?.let {
+            getDrawerCurrentAccount()?.let {
                 AvatarUtils().loadAvatarForAccount(
                     imageView = it,
                     account = account,
@@ -472,13 +473,13 @@ abstract class DrawerActivity : ToolbarActivity() {
      * depending on the #mIsAccountChooserActive flag shows the account chooser or the standard menu.
      */
     private fun showMenu() {
-        if (nav_view != null) {
-            val accountCount = drawerViewModel.getAccounts(this).size
-            nav_view.getHeaderView(0).drawer_account_chooser_toogle?.setImageResource(if (isAccountChooserActive) R.drawable.ic_up else R.drawable.ic_down)
-            nav_view.menu.setGroupVisible(R.id.drawer_menu_accounts, isAccountChooserActive)
-            nav_view.menu.setGroupVisible(R.id.drawer_menu_settings_etc, !isAccountChooserActive)
-            drawer_logo?.isVisible = !isAccountChooserActive || accountCount < USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD
-        }
+        val navigationView = getNavView() ?: return
+
+        val accountCount = drawerViewModel.getAccounts(this).size
+        getDrawerAccountChooserToogle()?.setImageResource(if (isAccountChooserActive) R.drawable.ic_up else R.drawable.ic_down)
+        navigationView.menu.setGroupVisible(R.id.drawer_menu_accounts, isAccountChooserActive)
+        navigationView.menu.setGroupVisible(R.id.drawer_menu_settings_etc, !isAccountChooserActive)
+        getDrawerLogo()?.isVisible = !isAccountChooserActive || accountCount < USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD
     }
 
     /**
@@ -487,8 +488,9 @@ abstract class DrawerActivity : ToolbarActivity() {
      * @param menuItemId the menu item to be highlighted
      */
     protected open fun setDrawerMenuItemChecked(menuItemId: Int) {
-        if (nav_view != null && nav_view.menu != null && nav_view.menu.findItem(menuItemId) != null) {
-            nav_view.menu.findItem(menuItemId).isChecked = true
+        val navigationView = getNavView()
+        if (navigationView != null && navigationView.menu.findItem(menuItemId) != null) {
+            navigationView.menu.findItem(menuItemId).isChecked = true
             checkedMenuItem = menuItemId
         } else {
             Timber.w("setDrawerMenuItemChecked has been called with invalid menu-item-ID")
@@ -607,13 +609,38 @@ abstract class DrawerActivity : ToolbarActivity() {
         accountsWithAvatars[2] = otherAccounts.getOrNull(1)
     }
 
+    private fun getDrawerLayout(): DrawerLayout? = findViewById(R.id.drawer_layout)
+    private fun getNavView(): NavigationView? = findViewById(R.id.nav_view)
+    private fun getDrawerLogo(): AppCompatImageView? = findViewById(R.id.drawer_logo)
+    private fun getBottomNavigationView(): BottomNavigationView? = findViewById(R.id.bottom_nav_view)
+    private fun getAccountQuotaText(): TextView? = findViewById(R.id.account_quota_text)
+    private fun getAccountQuotaBar(): ProgressBar? = findViewById(R.id.account_quota_bar)
+    private fun getDrawerAccountChooserToogle() = findNavigationViewChildById(R.id.drawer_account_chooser_toogle) as ImageView?
+    private fun getDrawerAccountEnd() = findNavigationViewChildById(R.id.drawer_account_end) as ImageView?
+    private fun getDrawerAccountMiddle() = findNavigationViewChildById(R.id.drawer_account_middle) as ImageView?
+    private fun getDrawerActiveUser() = findNavigationViewChildById(R.id.drawer_active_user) as ConstraintLayout?
+    private fun getDrawerCurrentAccount() = findNavigationViewChildById(R.id.drawer_current_account) as AppCompatImageView?
+    private fun getDrawerHeaderBackground() = findNavigationViewChildById(R.id.drawer_header_background) as ImageView?
+    private fun getDrawerUserName(): TextView? = findNavigationViewChildById(R.id.drawer_username) as TextView?
+    private fun getDrawerUserNameFull(): TextView? = findNavigationViewChildById(R.id.drawer_username_full) as TextView?
+
+    /**
+     * Finds a view that was identified by the id attribute from the drawer header.
+     *
+     * @param id the view's id
+     * @return The view if found or `null` otherwise.
+     */
+    private fun findNavigationViewChildById(id: Int): View {
+        return (findViewById<View>(R.id.nav_view) as NavigationView).getHeaderView(0).findViewById(id)
+    }
+
     /**
      * Adds other listeners to react on changes of the drawer layout.
      *
      * @param listener Object interested in changes of the drawer layout.
      */
     open fun addDrawerListener(listener: DrawerListener) {
-        drawer_layout?.addDrawerListener(listener)
+        getDrawerLayout()?.addDrawerListener(listener)
     }
 
     abstract fun navigateToOption(fileListOption: FileListOption)
