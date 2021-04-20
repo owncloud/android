@@ -21,11 +21,11 @@ package com.owncloud.android.presentation.ui.common
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
-import kotlinx.android.synthetic.main.bottom_sheet_fragment_item.view.*
+import com.owncloud.android.databinding.BottomSheetFragmentItemBinding
 
 class BottomSheetFragmentItemView @JvmOverloads constructor(
     context: Context,
@@ -33,26 +33,29 @@ class BottomSheetFragmentItemView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : ConstraintLayout(context, attrs, defStyle) {
 
+    private var _binding: BottomSheetFragmentItemBinding? = null
+    private val binding get() = _binding!!
+
     var itemIcon: Drawable?
-        get() = item_icon.drawable
+        get() = binding.itemIcon.drawable
         set(value) {
-            item_icon.setImageDrawable(value)
+            binding.itemIcon.setImageDrawable(value)
         }
 
     var title: CharSequence?
-        get() = item_title.text
+        get() = binding.itemTitle.text
         set(value) {
-            item_title.text = value
+            binding.itemTitle.text = value
         }
 
     var itemAdditionalIcon: Drawable?
-        get() = item_additional_icon.drawable
+        get() = binding.itemAdditionalIcon.drawable
         set(value) {
-            item_additional_icon.setImageDrawable(value)
+            binding.itemAdditionalIcon.setImageDrawable(value)
         }
 
     init {
-        View.inflate(context, R.layout.bottom_sheet_fragment_item, this)
+        _binding = BottomSheetFragmentItemBinding.inflate(LayoutInflater.from(context), this, true)
 
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.BottomSheetFragmentItemView, 0, 0)
         try {
@@ -66,8 +69,8 @@ class BottomSheetFragmentItemView @JvmOverloads constructor(
     fun setSelected(iconAdditional: Int) {
         itemAdditionalIcon = ContextCompat.getDrawable(context, iconAdditional)
         val selectedColor = ContextCompat.getColor(context, R.color.primary)
-        item_icon?.setColorFilter(selectedColor)
-        item_title.setTextColor(selectedColor)
-        item_additional_icon.setColorFilter(selectedColor)
+        binding.itemIcon.setColorFilter(selectedColor)
+        binding.itemTitle.setTextColor(selectedColor)
+        binding.itemAdditionalIcon.setColorFilter(selectedColor)
     }
 }
