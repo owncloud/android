@@ -115,7 +115,7 @@ class SettingsMoreFragmentTest {
         recommendEnabled: Boolean = true,
         feedbackEnabled: Boolean = true,
         privacyPolicyEnabled: Boolean = true,
-        imprintEnabled: Boolean = true,
+        imprintEnabled: Boolean = true
     ) {
         every { moreViewModel.isHelpEnabled() } returns helpEnabled
         every { moreViewModel.isSyncEnabled() } returns syncEnabled
