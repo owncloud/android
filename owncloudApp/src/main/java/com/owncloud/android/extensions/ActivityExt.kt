@@ -70,7 +70,7 @@ fun Activity.sendEmail(
         data = Uri.parse(email)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         putExtra(Intent.EXTRA_SUBJECT, subject)
-        putExtra(Intent.EXTRA_TEXT, text)
+        if (text != null) putExtra(Intent.EXTRA_TEXT, text)
     }
     startActivity(intent)
 }
