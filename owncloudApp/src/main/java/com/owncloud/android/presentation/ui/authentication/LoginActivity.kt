@@ -360,10 +360,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     Timber.d("Service discovery: ${it.peekContent().getStoredData()}")
                     oidcSupported = true
                     it.peekContent().getStoredData()?.let { oidcServerConfiguration ->
-                        registerClient(
-                            oidcServerConfiguration.authorizationEndpoint.toUri(),
-                            oidcServerConfiguration.registrationEndpoint
-                        )
+                        val registrationEndpoint = oidcServerConfiguration.registrationEndpoint
+                        if (registrationEndpoint != null) {
+                            registerClient(
+                                oidcServerConfiguration.authorizationEndpoint.toUri(),
+                                registrationEndpoint
+                            )
+                        } else {
+                            performGetAuthorizationCodeRequest(oidcServerConfiguration.authorizationEndpoint.toUri())
+                        }
                     }
                 }
                 is UIResult.Error -> {

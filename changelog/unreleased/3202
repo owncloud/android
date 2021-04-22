@@ -1,0 +1,8 @@
+Bugfix: Fix a bug when some fields where not retrieved from OIDC Discovery
+
+Problem when requesting the OIDC discovery was fixed. Some fields were handled
+as mandatory, but they are recommended according to the docs. It prevented from
+a proper login. Now it is possible to login as expected when some fields are not retrieved.
+
+https://github.com/owncloud/android/pull/3202
+https://github.com/owncloud/android-library/pull/392
