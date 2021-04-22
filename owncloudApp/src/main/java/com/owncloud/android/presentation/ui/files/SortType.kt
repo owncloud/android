@@ -23,7 +23,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.owncloud.android.R
 import com.owncloud.android.utils.FileStorageUtils
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class SortType : Parcelable {

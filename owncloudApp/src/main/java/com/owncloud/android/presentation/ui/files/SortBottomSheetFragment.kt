@@ -24,14 +24,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.owncloud.android.R
-import kotlinx.android.synthetic.main.sort_bottom_sheet_fragment.*
+import com.owncloud.android.databinding.SortBottomSheetFragmentBinding
+import com.owncloud.android.utils.PreferenceUtils
 
 class SortBottomSheetFragment : BottomSheetDialogFragment() {
     var sortDialogListener: SortDialogListener? = null
 
     lateinit var sortType: SortType
     lateinit var sortOrder: SortOrder
+
+    private var _binding: SortBottomSheetFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,20 +46,31 @@ class SortBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.sort_bottom_sheet_fragment, container, false)
+    ): View {
+        _binding = SortBottomSheetFragmentBinding.inflate(inflater, container, false)
+        return binding.root.apply {
+            // Allow or disallow touches with other visible windows
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         when (sortType) {
-            SortType.SORT_TYPE_BY_NAME -> sort_by_name.setSelected(sortOrder.toDrawableRes())
-            SortType.SORT_TYPE_BY_SIZE -> sort_by_size.setSelected(sortOrder.toDrawableRes())
-            SortType.SORT_TYPE_BY_DATE -> sort_by_date.setSelected(sortOrder.toDrawableRes())
+            SortType.SORT_TYPE_BY_NAME -> binding.sortByName.setSelected(sortOrder.toDrawableRes())
+            SortType.SORT_TYPE_BY_SIZE -> binding.sortBySize.setSelected(sortOrder.toDrawableRes())
+            SortType.SORT_TYPE_BY_DATE -> binding.sortByDate.setSelected(sortOrder.toDrawableRes())
         }
 
-        sort_by_name.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_NAME) }
-        sort_by_size.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_SIZE) }
-        sort_by_date.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_DATE) }
+        binding.sortByName.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_NAME) }
+        binding.sortBySize.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_SIZE) }
+        binding.sortByDate.setOnClickListener { onSortClick(SortType.SORT_TYPE_BY_DATE) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     override fun onStart() {
@@ -85,12 +99,11 @@ class SortBottomSheetFragment : BottomSheetDialogFragment() {
             sortType: SortType,
             sortOrder: SortOrder
         ): SortBottomSheetFragment {
-            val fragment = SortBottomSheetFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_SORT_TYPE, sortType)
-            args.putParcelable(ARG_SORT_ORDER, sortOrder)
-            fragment.arguments = args
-            return fragment
+            val args = Bundle().apply {
+                putParcelable(ARG_SORT_TYPE, sortType)
+                putParcelable(ARG_SORT_ORDER, sortOrder)
+            }
+            return SortBottomSheetFragment().apply { arguments = args }
         }
     }
 }

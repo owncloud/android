@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 
 def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
@@ -161,6 +161,10 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
         animationsDisabled = true
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
