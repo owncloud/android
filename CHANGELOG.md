@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix navbar is visible in file preview screen after rotation: [#3184](https://github.com/owncloud/android/pull/3184)
+* Bugfix - Fix a bug when some fields where not retrieved from OIDC Discovery: [#3202](https://github.com/owncloud/android/pull/3202)
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
 * Enhancement - Align previews actions: [#3155](https://github.com/owncloud/android/issues/3155)
@@ -23,6 +24,15 @@ Details
 
    https://github.com/owncloud/android/issues/3139
    https://github.com/owncloud/android/pull/3184
+
+* Bugfix - Fix a bug when some fields where not retrieved from OIDC Discovery: [#3202](https://github.com/owncloud/android/pull/3202)
+
+   Problem when requesting the OIDC discovery was fixed. Some fields were handled as mandatory,
+   but they are recommended according to the docs. It prevented from a proper login. Now it is
+   possible to login as expected when some fields are not retrieved.
+
+   https://github.com/owncloud/android/pull/3202
+   https://github.com/owncloud/android-library/pull/392
 
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
 
