@@ -18,16 +18,16 @@ Details
 
 * Bugfix - Fix navbar is visible in file preview screen after rotation: [#3184](https://github.com/owncloud/android/pull/3184)
 
-   We've fixed a glitch where the navigation bar became visible in a file preview screen when
-   rotating the device.
+   Glitch was fixed where the navigation bar became visible in a file preview screen when rotating
+   the device.
 
    https://github.com/owncloud/android/issues/3139
    https://github.com/owncloud/android/pull/3184
 
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
 
-   We replaced the blank view in the music preview player with styled up cover art. For music files
-   that does not have cover art embodied we made it display a place holder.
+   Blank view in the music preview player with styled up cover art was replaced. For music files
+   that does not have cover art embodied, it is displayed a placeholder.
 
    https://github.com/owncloud/android/issues/3121
    https://github.com/owncloud/android/pull/3182
@@ -43,7 +43,7 @@ Details
 
 * Enhancement - Align previews actions: [#3155](https://github.com/owncloud/android/issues/3155)
 
-   We've aligned the behaviour for every preview fragment. Images, videos, audios and texts show
+   Behaviour was aligned through every preview fragment. Images, videos, audios and texts show
    the same actions now.
 
    https://github.com/owncloud/android/issues/3155
