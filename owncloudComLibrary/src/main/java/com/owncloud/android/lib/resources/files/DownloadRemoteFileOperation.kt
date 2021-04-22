@@ -50,8 +50,9 @@ class DownloadRemoteFileOperation(
     localFolderPath: String
 ) : RemoteOperation<Unit>() {
 
-    private val mCancellationRequested = AtomicBoolean(false)
-    private val mDataTransferListeners: MutableSet<OnDatatransferProgressListener> = HashSet()
+    private val cancellationRequested = AtomicBoolean(false)
+    private val dataTransferListeners: MutableSet<OnDatatransferProgressListener> = HashSet()
+
     var modificationTimestamp: Long = 0
         private set
 
@@ -59,21 +60,20 @@ class DownloadRemoteFileOperation(
         private set
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
-        var result: RemoteOperationResult<Unit>
-
         // download will be performed to a temporal file, then moved to the final location
         val tmpFile = File(tmpPath)
 
         // perform the download
-        try {
+        return try {
             tmpFile.parentFile?.mkdirs()
-            result = downloadFile(client, tmpFile)
-            Timber.i("Download of $remotePath to $tmpPath: ${result.logMessage}")
+            downloadFile(client, tmpFile).also { result ->
+                Timber.i("Download of $remotePath to $tmpPath: ${result.logMessage}")
+            }
         } catch (e: Exception) {
-            result = RemoteOperationResult(e)
-            Timber.e(e, "Download of $remotePath to $tmpPath: ${result.logMessage}")
+            RemoteOperationResult<Unit>(e).also { result ->
+                Timber.e(e, "Download of $remotePath to $tmpPath: ${result.logMessage}")
+            }
         }
-        return result
     }
 
     @Throws(Exception::class)
@@ -95,26 +95,27 @@ class DownloadRemoteFileOperation(
                 fos = FileOutputStream(targetFile)
                 var transferred: Long = 0
                 val contentLength = getMethod.getResponseHeader(HttpConstants.CONTENT_LENGTH_HEADER)
-                val totalToTransfer =
-                    if (contentLength != null && contentLength.isNotEmpty()) contentLength.toLong() else 0
+                val totalToTransfer = if (!contentLength.isNullOrEmpty()) {
+                    contentLength.toLong()
+                } else {
+                    0
+                }
                 val bytes = ByteArray(4096)
                 var readResult: Int
                 while (bis.read(bytes).also { readResult = it } != -1) {
-                    synchronized(mCancellationRequested) {
-                        if (mCancellationRequested.get()) {
+                    synchronized(cancellationRequested) {
+                        if (cancellationRequested.get()) {
                             getMethod.abort()
                             throw OperationCancelledException()
                         }
                     }
                     fos.write(bytes, 0, readResult)
                     transferred += readResult.toLong()
-                    synchronized(mDataTransferListeners) {
-                        it = mDataTransferListeners.iterator()
+                    synchronized(dataTransferListeners) {
+                        it = dataTransferListeners.iterator()
                         while (it.hasNext()) {
-                            it.next().onTransferProgress(
-                                readResult.toLong(), transferred, totalToTransfer,
-                                targetFile.name
-                            )
+                            it.next()
+                                .onTransferProgress(readResult.toLong(), transferred, totalToTransfer, targetFile.name)
                         }
                     }
                 }
@@ -170,15 +171,14 @@ class DownloadRemoteFileOperation(
     private val tmpPath: String = localFolderPath + remotePath
 
     fun addDatatransferProgressListener(listener: OnDatatransferProgressListener) {
-        synchronized(mDataTransferListeners) { mDataTransferListeners.add(listener) }
+        synchronized(dataTransferListeners) { dataTransferListeners.add(listener) }
     }
 
     fun removeDatatransferProgressListener(listener: OnDatatransferProgressListener?) {
-        synchronized(mDataTransferListeners) { mDataTransferListeners.remove(listener) }
+        synchronized(dataTransferListeners) { dataTransferListeners.remove(listener) }
     }
 
     fun cancel() {
-        mCancellationRequested.set(true) // atomic set; there is no need of synchronizing it
+        cancellationRequested.set(true) // atomic set; there is no need of synchronizing it
     }
-
 }
