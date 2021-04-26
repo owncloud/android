@@ -101,13 +101,10 @@ class SettingsVideoUploadsFragmentTest {
             prefVideoUploadsSourcePath = fragment.findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE)!!
             prefVideoUploadsBehaviour = fragment.findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)!!
         }
-
-        Intents.init()
     }
 
     @After
     fun tearDown() {
-        Intents.release()
         androidx.preference.PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit()
     }
 
@@ -184,13 +181,13 @@ class SettingsVideoUploadsFragmentTest {
         checkPreferencesEnabled(true)
     }
 
-    @Ignore
     @Test
     fun openVideoUploadSourcePathPicker() {
         firstEnableVideoUploads()
         val cameraFolder = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DCIM
         ).absolutePath + "/Camera"
+        Intents.init()
         onView(
             withText(
                 String.format(
@@ -201,6 +198,8 @@ class SettingsVideoUploadsFragmentTest {
         ).perform(click())
         intended(hasComponent(LocalFolderPickerActivity::class.java.name))
         hasExtra(LocalFolderPickerActivity.EXTRA_PATH, cameraFolder)
+        Intents.release()
+        onView(withText(android.R.string.cancel)).perform(click())
     }
 
     private fun firstEnableVideoUploads() {
