@@ -262,6 +262,8 @@ class SettingsMoreFragmentTest {
         launchTest()
 
         onView(withText(R.string.prefs_recommend)).perform(click())
+        // Delay needed since depending on the performance of the device where tests are executed,
+        // sender can interfere with the subsequent tests
         Thread.sleep(1000)
         mockIntent(action = Intent.ACTION_SENDTO)
         intended(
@@ -290,6 +292,8 @@ class SettingsMoreFragmentTest {
         launchTest()
 
         onView(withText(R.string.prefs_send_feedback)).perform(click())
+        // Delay needed since depending on the performance of the device where tests are executed,
+        // sender can interfere with the subsequent tests
         Thread.sleep(1000)
         mockIntent(action = Intent.ACTION_SENDTO)
         intended(
