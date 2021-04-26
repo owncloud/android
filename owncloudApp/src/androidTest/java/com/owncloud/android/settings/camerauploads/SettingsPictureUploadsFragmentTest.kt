@@ -184,6 +184,7 @@ class SettingsPictureUploadsFragmentTest {
         checkPreferencesEnabled(true)
     }
 
+    @Ignore
     @Test
     fun openPictureUploadSourcePathPicker() {
         firstEnablePictureUploads()

@@ -262,6 +262,7 @@ class SettingsMoreFragmentTest {
         launchTest()
 
         onView(withText(R.string.prefs_recommend)).perform(click())
+        Thread.sleep(1000)
         mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
@@ -289,6 +290,7 @@ class SettingsMoreFragmentTest {
         launchTest()
 
         onView(withText(R.string.prefs_send_feedback)).perform(click())
+        Thread.sleep(1000)
         mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(

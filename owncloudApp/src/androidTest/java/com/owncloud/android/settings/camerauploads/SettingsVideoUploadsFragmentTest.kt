@@ -184,6 +184,7 @@ class SettingsVideoUploadsFragmentTest {
         checkPreferencesEnabled(true)
     }
 
+    @Ignore
     @Test
     fun openVideoUploadSourcePathPicker() {
         firstEnableVideoUploads()
