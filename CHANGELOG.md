@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fix navbar is visible in file preview screen after rotation: [#3184](https://github.com/owncloud/android/pull/3184)
 * Bugfix - Fix a bug when some fields where not retrieved from OIDC Discovery: [#3202](https://github.com/owncloud/android/pull/3202)
+* Bugfix - Snackbar in passcode view is not displayed: [#2722](https://github.com/owncloud/android/issues/2722)
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
 * Enhancement - Move to AndroidX Preference and new structure for settings: [#2867](https://github.com/owncloud/android/issues/2867)
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
@@ -34,6 +35,14 @@ Details
 
    https://github.com/owncloud/android/pull/3202
    https://github.com/owncloud/android-library/pull/392
+
+* Bugfix - Snackbar in passcode view is not displayed: [#2722](https://github.com/owncloud/android/issues/2722)
+
+   Snackbar telling about an error in a failed enter or reenter of the passcode wasn't visible.
+   Now, the message is shown in a text just below the passcode input.
+
+   https://github.com/owncloud/android/issues/2722
+   https://github.com/owncloud/android/pull/3210
 
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
 
