@@ -48,30 +48,30 @@ import java.net.SocketTimeoutException
 
 class ErrorMessageAdapter {
 
-    private class Formatter(val r: Resources) {
+    private class Formatter(val resources: Resources) {
 
         fun format(resId: Int): String {
-            return r.getString(resId)
+            return resources.getString(resId)
         }
 
         fun format(resId: Int, m1: String?): String {
-            return String.format(r.getString(resId), m1)
+            return String.format(resources.getString(resId), m1)
         }
 
         fun format(resId: Int, m1: Int): String {
-            return String.format(r.getString(resId), r.getString(m1))
+            return String.format(resources.getString(resId), resources.getString(m1))
         }
 
         fun format(resId: Int, m1: String, m2: String): String {
-            return String.format(r.getString(resId), m1, m2)
+            return String.format(resources.getString(resId), m1, m2)
         }
 
         fun format(resId: Int, m1: String?, m2: Int): String {
-            return String.format(r.getString(resId), m1, r.getString(m2))
+            return String.format(resources.getString(resId), m1, resources.getString(m2))
         }
 
         fun forbidden(resId1: Int): String {
-            return String.format(r.getString(R.string.forbidden_permissions), r.getString(resId1))
+            return String.format(resources.getString(R.string.forbidden_permissions), resources.getString(resId1))
         }
     }
 
@@ -82,12 +82,12 @@ class ErrorMessageAdapter {
             throwable: Throwable?,
             resources: Resources
         ): String {
-            val f = Formatter(resources)
+            val formatter = Formatter(resources)
 
             if (throwable == null) {
                 return when (transferOperation) {
                     is Download -> {
-                        f.format(
+                        formatter.format(
                             R.string.downloader_download_succeeded_content,
                             File(transferOperation.downloadPath).name
                         )
@@ -95,7 +95,7 @@ class ErrorMessageAdapter {
                 }
             } else {
                 val genericMessage = when (transferOperation) {
-                    is Download -> f.format(
+                    is Download -> formatter.format(
                         R.string.downloader_download_failed_content,
                         File(transferOperation.downloadPath).name
                     )
@@ -118,73 +118,73 @@ class ErrorMessageAdapter {
             operation: RemoteOperation<*>?,
             resources: Resources
         ): String {
-            val f = Formatter(resources)
+            val formatter = Formatter(resources)
             if (result.isSuccess) {
                 when (operation) {
-                    is UploadFileOperation -> return f.format(
+                    is UploadFileOperation -> return formatter.format(
                         R.string.uploader_upload_succeeded_content_single,
                         operation.fileName
                     )
-                    is RemoveFileOperation -> return f.format(R.string.remove_success_msg)
+                    is RemoveFileOperation -> return formatter.format(R.string.remove_success_msg)
                 }
             }
 
             if (operation is SynchronizeFileOperation && !operation.transferWasRequested()) {
-                return f.format(R.string.sync_file_nothing_to_do_msg)
+                return formatter.format(R.string.sync_file_nothing_to_do_msg)
             }
 
             return when (result.code) {
-                ResultCode.LOCAL_STORAGE_FULL -> f.format(
+                ResultCode.LOCAL_STORAGE_FULL -> formatter.format(
                     R.string.error__upload__local_file_not_copied,
                     (operation as UploadFileOperation).fileName, R.string.app_name
                 )
-                ResultCode.LOCAL_STORAGE_NOT_COPIED -> f.format(
+                ResultCode.LOCAL_STORAGE_NOT_COPIED -> formatter.format(
                     R.string.error__upload__local_file_not_copied,
                     (operation as UploadFileOperation).fileName, R.string.app_name
                 )
                 ResultCode.FORBIDDEN -> {
-                    if (operation is UploadFileOperation) f.format(
+                    if (operation is UploadFileOperation) formatter.format(
                         R.string.forbidden_permissions,
                         R.string.uploader_upload_forbidden_permissions
                     )
-                    if (operation is RemoveFileOperation) f.forbidden(R.string.forbidden_permissions_delete)
-                    if (operation is RenameFileOperation) f.forbidden(R.string.forbidden_permissions_rename)
-                    if (operation is CreateFolderOperation) f.forbidden(R.string.forbidden_permissions_create)
-                    if (operation is MoveFileOperation) f.forbidden(R.string.forbidden_permissions_move)
-                    if (operation is CopyFileOperation) f.forbidden(R.string.forbidden_permissions_copy) else f.format(
+                    if (operation is RemoveFileOperation) formatter.forbidden(R.string.forbidden_permissions_delete)
+                    if (operation is RenameFileOperation) formatter.forbidden(R.string.forbidden_permissions_rename)
+                    if (operation is CreateFolderOperation) formatter.forbidden(R.string.forbidden_permissions_create)
+                    if (operation is MoveFileOperation) formatter.forbidden(R.string.forbidden_permissions_move)
+                    if (operation is CopyFileOperation) formatter.forbidden(R.string.forbidden_permissions_copy) else formatter.format(
                         R.string.filename_forbidden_charaters_from_server
                     )
                 }
                 ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER ->
-                    f.format(R.string.filename_forbidden_charaters_from_server)
+                    formatter.format(R.string.filename_forbidden_charaters_from_server)
                 ResultCode.QUOTA_EXCEEDED ->
-                    f.format(R.string.failed_upload_quota_exceeded_text)
+                    formatter.format(R.string.failed_upload_quota_exceeded_text)
                 ResultCode.FILE_NOT_FOUND -> {
                     if (operation is UploadFileOperation)
-                        f.format(R.string.uploads_view_upload_status_failed_folder_error)
-                    if (operation is RenameFileOperation) f.format(R.string.rename_server_fail_msg)
-                    if (operation is MoveFileOperation) f.format(R.string.move_file_not_found)
+                        formatter.format(R.string.uploads_view_upload_status_failed_folder_error)
+                    if (operation is RenameFileOperation) formatter.format(R.string.rename_server_fail_msg)
+                    if (operation is MoveFileOperation) formatter.format(R.string.move_file_not_found)
                     if (operation is SynchronizeFolderOperation)
-                        f.format(
+                        formatter.format(
                             R.string.sync_current_folder_was_removed,
                             File(operation.folderPath).name
                         )
                     if (operation is CopyFileOperation)
-                        f.format(R.string.copy_file_not_found) else f.format(R.string.rename_local_fail_msg)
+                        formatter.format(R.string.copy_file_not_found) else formatter.format(R.string.rename_local_fail_msg)
                 }
                 ResultCode.INVALID_LOCAL_FILE_NAME ->
-                    f.format(R.string.rename_local_fail_msg)
+                    formatter.format(R.string.rename_local_fail_msg)
                 ResultCode.INVALID_CHARACTER_IN_NAME ->
-                    f.format(R.string.filename_forbidden_characters)
-                ResultCode.INVALID_MOVE_INTO_DESCENDANT -> f.format(R.string.move_file_invalid_into_descendent)
+                    formatter.format(R.string.filename_forbidden_characters)
+                ResultCode.INVALID_MOVE_INTO_DESCENDANT -> formatter.format(R.string.move_file_invalid_into_descendent)
                 ResultCode.INVALID_OVERWRITE -> {
-                    if (operation is MoveFileOperation) f.format(R.string.move_file_invalid_overwrite)
-                    if (operation is CopyFileOperation) f.format(R.string.copy_file_invalid_overwrite)
-                    else f.format(R.string.move_file_error)
+                    if (operation is MoveFileOperation) formatter.format(R.string.move_file_invalid_overwrite)
+                    if (operation is CopyFileOperation) formatter.format(R.string.copy_file_invalid_overwrite)
+                    else formatter.format(R.string.move_file_error)
                 }
-                ResultCode.CONFLICT -> f.format(R.string.move_file_error)
+                ResultCode.CONFLICT -> formatter.format(R.string.move_file_error)
                 ResultCode.INVALID_COPY_INTO_DESCENDANT ->
-                    f.format(R.string.copy_file_invalid_into_descendent)
+                    formatter.format(R.string.copy_file_invalid_into_descendent)
                 else -> getCommonMessageForResult(operation, result, resources)
             }
         }
@@ -203,29 +203,29 @@ class ErrorMessageAdapter {
             res: Resources
         ): String {
 
-            val f = Formatter(res)
+            val formatter = Formatter(res)
 
             if (result.isSuccess) return ""
             return when (result.code) {
-                ResultCode.WRONG_CONNECTION -> f.format(R.string.network_error_socket_exception)
-                ResultCode.NO_NETWORK_CONNECTION -> f.format(R.string.error_no_network_connection)
+                ResultCode.WRONG_CONNECTION -> formatter.format(R.string.network_error_socket_exception)
+                ResultCode.NO_NETWORK_CONNECTION -> formatter.format(R.string.error_no_network_connection)
                 ResultCode.TIMEOUT ->
-                    if (result.exception is SocketTimeoutException) f.format(R.string.network_error_socket_timeout_exception)
-                    else f.format(R.string.network_error_connect_timeout_exception)
-                ResultCode.HOST_NOT_AVAILABLE -> f.format(R.string.network_host_not_available)
-                ResultCode.SERVICE_UNAVAILABLE -> f.format(R.string.service_unavailable)
-                ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED -> f.format(R.string.ssl_certificate_not_trusted)
-                ResultCode.BAD_OC_VERSION -> f.format(R.string.auth_bad_oc_version_title)
-                ResultCode.INCORRECT_ADDRESS -> f.format(R.string.auth_incorrect_address_title)
-                ResultCode.SSL_ERROR -> f.format(R.string.auth_ssl_general_error_title)
-                ResultCode.UNAUTHORIZED -> f.format(R.string.auth_unauthorized)
-                ResultCode.INSTANCE_NOT_CONFIGURED -> f.format(R.string.auth_not_configured_title)
-                ResultCode.FILE_NOT_FOUND -> f.format(R.string.auth_incorrect_path_title)
-                ResultCode.OAUTH2_ERROR -> f.format(R.string.auth_oauth_error)
-                ResultCode.OAUTH2_ERROR_ACCESS_DENIED -> f.format(R.string.auth_oauth_error_access_denied)
-                ResultCode.ACCOUNT_NOT_NEW -> f.format(R.string.auth_account_not_new)
-                ResultCode.ACCOUNT_NOT_THE_SAME -> f.format(R.string.auth_account_not_the_same)
-                ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION -> f.format(R.string.auth_redirect_non_secure_connection_title)
+                    if (result.exception is SocketTimeoutException) formatter.format(R.string.network_error_socket_timeout_exception)
+                    else formatter.format(R.string.network_error_connect_timeout_exception)
+                ResultCode.HOST_NOT_AVAILABLE -> formatter.format(R.string.network_host_not_available)
+                ResultCode.SERVICE_UNAVAILABLE -> formatter.format(R.string.service_unavailable)
+                ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED -> formatter.format(R.string.ssl_certificate_not_trusted)
+                ResultCode.BAD_OC_VERSION -> formatter.format(R.string.auth_bad_oc_version_title)
+                ResultCode.INCORRECT_ADDRESS -> formatter.format(R.string.auth_incorrect_address_title)
+                ResultCode.SSL_ERROR -> formatter.format(R.string.auth_ssl_general_error_title)
+                ResultCode.UNAUTHORIZED -> formatter.format(R.string.auth_unauthorized)
+                ResultCode.INSTANCE_NOT_CONFIGURED -> formatter.format(R.string.auth_not_configured_title)
+                ResultCode.FILE_NOT_FOUND -> formatter.format(R.string.auth_incorrect_path_title)
+                ResultCode.OAUTH2_ERROR -> formatter.format(R.string.auth_oauth_error)
+                ResultCode.OAUTH2_ERROR_ACCESS_DENIED -> formatter.format(R.string.auth_oauth_error_access_denied)
+                ResultCode.ACCOUNT_NOT_NEW -> formatter.format(R.string.auth_account_not_new)
+                ResultCode.ACCOUNT_NOT_THE_SAME -> formatter.format(R.string.auth_account_not_the_same)
+                ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION -> formatter.format(R.string.auth_redirect_non_secure_connection_title)
                 else -> if (result.httpPhrase != null && result.httpPhrase.isNotEmpty())
                     result.httpPhrase else getGenericErrorMessageForOperation(operation, result, res)
             }
@@ -243,21 +243,21 @@ class ErrorMessageAdapter {
             result: RemoteOperationResult<*>,
             res: Resources
         ): String {
-            val f = Formatter(res)
+            val formatter = Formatter(res)
 
             return when (operation) {
-                is UploadFileOperation -> f.format(R.string.uploader_upload_failed_content_single, operation.fileName)
-                is RemoveFileOperation -> f.format(R.string.remove_fail_msg)
-                is RenameFileOperation -> f.format(R.string.rename_server_fail_msg)
-                is CreateFolderOperation -> f.format(R.string.create_dir_fail_msg)
-                is MoveFileOperation -> f.format(R.string.move_file_error)
-                is SynchronizeFolderOperation -> f.format(
+                is UploadFileOperation -> formatter.format(R.string.uploader_upload_failed_content_single, operation.fileName)
+                is RemoveFileOperation -> formatter.format(R.string.remove_fail_msg)
+                is RenameFileOperation -> formatter.format(R.string.rename_server_fail_msg)
+                is CreateFolderOperation -> formatter.format(R.string.create_dir_fail_msg)
+                is MoveFileOperation -> formatter.format(R.string.move_file_error)
+                is SynchronizeFolderOperation -> formatter.format(
                     R.string.sync_folder_failed_content,
                     File(operation.folderPath).name
                 )
-                is CopyFileOperation -> f.format(R.string.copy_file_error)
+                is CopyFileOperation -> formatter.format(R.string.copy_file_error)
                 // if everything else fails
-                else -> if (result.isSuccess) f.format(android.R.string.ok) else f.format(R.string.common_error_unknown)
+                else -> if (result.isSuccess) formatter.format(android.R.string.ok) else formatter.format(R.string.common_error_unknown)
             }
         }
     }

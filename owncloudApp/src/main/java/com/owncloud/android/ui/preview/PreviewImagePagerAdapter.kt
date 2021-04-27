@@ -41,9 +41,8 @@ class PreviewImagePagerAdapter(
     fragmentManager: FragmentManager,
     private val account: Account,
     private val mImageFiles: MutableList<OCFile>
-) : FragmentStatePagerAdapter(
-    fragmentManager
-) {
+) : FragmentStatePagerAdapter(fragmentManager) {
+
     private val mObsoleteFragments: MutableSet<Any>
     private val mObsoletePositions: MutableSet<Int>
     private val mDownloadErrors: MutableSet<Int>
@@ -165,7 +164,7 @@ class PreviewImagePagerAdapter(
             val fragment = mCachedFragments[position]
             if (fragment is FileDownloadFragment && success) {
                 // trigger the creation of new PreviewImageFragment to replace current FileDownloadFragment
-                // only if the download succeded. If not trigger an error
+                // only if the download succeeded. If not trigger an error
                 notifyDataSetChanged()
             } else fragment?.onSyncEvent(action, success, null)
         }

@@ -103,7 +103,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
             if (!ocFile.isAvailableLocally) {
                 val downloadFileUseCase: DownloadFileUseCase by inject()
 
-                downloadFileUseCase.execute(DownloadFileUseCase.Params(getAccountFromFileId(docId)!!, ocFile))
+                getAccountFromFileId(docId)?.let { account ->
+                    downloadFileUseCase.execute(DownloadFileUseCase.Params(account, ocFile))
+                }
 
                 do {
                     if (!waitOrGetCancelled(signal)) {
