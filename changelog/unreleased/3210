@@ -1,0 +1,6 @@
+Bugfix: Snackbar in passcode view is not displayed
+
+Snackbar telling about an error in a failed enter or reenter of the passcode
+wasn't visible. Now, the message is shown in a text just below the passcode input.
+
+https://github.com/owncloud/android/issues/2722 https://github.com/owncloud/android/pull/3210
