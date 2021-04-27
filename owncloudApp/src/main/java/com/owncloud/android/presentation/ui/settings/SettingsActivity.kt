@@ -31,7 +31,9 @@ import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment
 import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -67,6 +69,8 @@ class SettingsActivity : AppCompatActivity() {
         val titleId = when (supportFragmentManager.fragments.lastOrNull()) {
             is SettingsSecurityFragment -> R.string.prefs_subsection_security
             is SettingsLogsFragment -> R.string.prefs_subsection_logging
+            is SettingsPictureUploadsFragment -> R.string.prefs_subsection_picture_uploads
+            is SettingsVideoUploadsFragment -> R.string.prefs_subsection_video_uploads
             is SettingsMoreFragment -> R.string.prefs_subsection_more
             else -> R.string.actionbar_settings
         }

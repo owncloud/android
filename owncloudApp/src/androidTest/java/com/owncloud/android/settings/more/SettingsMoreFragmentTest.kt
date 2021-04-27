@@ -115,7 +115,7 @@ class SettingsMoreFragmentTest {
         recommendEnabled: Boolean = true,
         feedbackEnabled: Boolean = true,
         privacyPolicyEnabled: Boolean = true,
-        imprintEnabled: Boolean = true,
+        imprintEnabled: Boolean = true
     ) {
         every { moreViewModel.isHelpEnabled() } returns helpEnabled
         every { moreViewModel.isSyncEnabled() } returns syncEnabled
@@ -262,6 +262,9 @@ class SettingsMoreFragmentTest {
         launchTest()
 
         onView(withText(R.string.prefs_recommend)).perform(click())
+        // Delay needed since depending on the performance of the device where tests are executed,
+        // sender can interfere with the subsequent tests
+        Thread.sleep(1000)
         mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
@@ -289,6 +292,9 @@ class SettingsMoreFragmentTest {
         launchTest()
 
         onView(withText(R.string.prefs_send_feedback)).perform(click())
+        // Delay needed since depending on the performance of the device where tests are executed,
+        // sender can interfere with the subsequent tests
+        Thread.sleep(1000)
         mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
