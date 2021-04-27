@@ -85,6 +85,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
 
         file = requireArguments().getParcelable(ARG_FILE)
         account = requireArguments().getParcelable(ARG_ACCOUNT)
+
         if (savedInstanceState != null) {
             file = savedInstanceState.getParcelable(FileActivity.EXTRA_FILE)
             account = savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT)
@@ -99,10 +100,10 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         progressController = TransferProgressController(activity as ComponentsGetter?).also {
-            it.setProgressBar(view.findViewById<ProgressBar>(R.id.fdProgressBar))
+            it.setProgressBar(view.findViewById(R.id.fdProgressBar))
         }
 
-        updateFileDetails(false, false)
+        updateFileDetails(forcedTransferring = false, refresh = false)
 
         view.findViewById<View>(R.id.fdCancelBtn).setOnClickListener {
             (mContainerActivity as FileDisplayActivity).cancelTransference(file)
@@ -153,7 +154,6 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
 
     override fun onStop() {
         progressController?.stopListeningProgressFor(file, account)
-        stopObservingWorkers()
         super.onStop()
     }
 
@@ -161,19 +161,22 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         val safeAccount = account ?: return
 
         fileDetailsViewModel.startListeningToDownloadsFromAccountAndFile(file = file, account = safeAccount)
-        fileDetailsViewModel.pendingDownloads.observe(this) { }
+        fileDetailsViewModel.pendingDownloads.observe(viewLifecycleOwner) { }
         fileDetailsViewModel.ongoingDownload.observeWorkerTillItFinishes(
-            owner = this,
-            onWorkEnqueued = { handleDownloadEnqueued() },
-            onWorkRunning = { progress -> handleRunningDownload(progress) },
-            onWorkSucceeded = { handleSuccessDownload() },
+            owner = viewLifecycleOwner,
+            onWorkEnqueued = { updateLayoutForEnqueuedDownload() },
+            onWorkRunning = { progress -> updateLayoutForRunningDownload(progress) },
+            onWorkSucceeded = { updateLayoutForSucceededDownload() },
             onWorkFailed = { showMessageInSnackbar(getString(R.string.downloader_download_failed_ticker)) },
-            onWorkCancelled = { showMessageInSnackbar(getString(R.string.downloader_download_canceled_ticker)) },
+            onWorkCancelled = {
+                setButtonsForRemote()
+                showMessageInSnackbar(getString(R.string.downloader_download_canceled_ticker))
+            },
             removeObserverAfterNull = false
         )
     }
 
-    private fun handleDownloadEnqueued() {
+    private fun updateLayoutForEnqueuedDownload() {
         requireView().findViewById<View>(R.id.fdProgressBlock).isVisible = true
 
         requireView().findViewById<TextView>(R.id.fdProgressText).apply {
@@ -182,7 +185,11 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         }
     }
 
-    private fun handleRunningDownload(progress: Int) {
+    private fun updateLayoutForRunningDownload(progress: Int) {
+        requireView().findViewById<View>(R.id.fdProgressBlock).isVisible = true
+
+        setButtonsForTransferring()
+
         requireView().findViewById<ProgressBar>(R.id.fdProgressBar).apply {
             isIndeterminate = false
             setProgress(progress)
@@ -190,59 +197,46 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         }
     }
 
-    private fun handleSuccessDownload() {
+    private fun updateLayoutForSucceededDownload() {
         updateFileDetails(forcedTransferring = false, refresh = false)
 
         val fileDisplayActivity = activity as FileDisplayActivity
         fileDetailsViewModel.navigateToPreviewOrOpenFile(fileDisplayActivity, file)
     }
 
-    private fun stopObservingWorkers() {
-        fileDetailsViewModel.pendingDownloads.removeObservers(this)
-        fileDetailsViewModel.ongoingDownload.removeObservers(this)
-    }
-
     override fun onTransferServiceConnected() {
-        if (progressController != null) {
-            progressController!!.startListeningProgressFor(file, account)
-        }
-        updateFileDetails(false, false) // TODO - really?
+        progressController?.startListeningProgressFor(file, account)
+        updateFileDetails(forcedTransferring = false, refresh = false) // TODO - really?
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
         if (updatedFile != null) {
             file = updatedFile
         }
-        updateFileDetails(false, false)
+        updateFileDetails(forcedTransferring = false, refresh = false)
     }
 
     override fun onFileMetadataChanged() {
-        updateFileDetails(false, true)
+        updateFileDetails(forcedTransferring = false, refresh = true)
     }
 
     override fun onFileContentChanged() {
-        setFiletype(file) // to update thumbnail
+        setFileType(file) // to update thumbnail
     }
 
     override fun updateViewForSyncInProgress() {
-        updateFileDetails(true, false)
+        updateFileDetails(forcedTransferring = true, refresh = false)
     }
 
     override fun updateViewForSyncOff() {
-        updateFileDetails(false, false)
+        updateFileDetails(forcedTransferring = false, refresh = false)
     }
 
-    /**
-     * {@inheritDoc}
-     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.file_actions_menu, menu)
     }
 
-    /**
-     * {@inheritDoc}
-     */
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         if (mContainerActivity.storageManager != null) {
@@ -408,26 +402,31 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         }
         val file = file
 
-        // set file details
-        setFilename(file.fileName)
-        setFiletype(file)
-        setFilesize(file.length)
-        setTimeModified(file.modificationTimestamp)
+        // Update layout with file details
+        with(file) {
+            setFilename(fileName)
+            setFileType(this)
+            setFileSize(length)
+            setTimeModified(modificationTimestamp)
+        }
 
         // configure UI for depending upon local state of the file
         val uploaderBinder = mContainerActivity.fileUploaderBinder
         val safeAccount = account
-        if (forcedTransferring ||
-            safeAccount != null && fileDetailsViewModel.isDownloadPending(safeAccount, file) ||
-            uploaderBinder != null && uploaderBinder.isUploading(account, file)
-        ) {
-            setButtonsForTransferring()
-        } else if (file.isAvailableLocally) {
-            setButtonsForLocallyAvailable()
-        } else {
-            // TODO load default preview image; when the local file is removed, the preview
-            // remains there
-            setButtonsForRemote()
+        val transferring = forcedTransferring ||
+                safeAccount != null && fileDetailsViewModel.isDownloadPending(safeAccount, file) ||
+                uploaderBinder != null && uploaderBinder.isUploading(account, file)
+
+        when {
+            transferring -> {
+                setButtonsForTransferring()
+            }
+            file.isAvailableLocally -> {
+                setButtonsForLocallyAvailable()
+            }
+            else -> {
+                setButtonsForRemote()
+            }
         }
         requireView().invalidate()
     }
@@ -446,7 +445,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      *
      * @param file : An [OCFile]
      */
-    private fun setFiletype(file: OCFile) {
+    private fun setFileType(file: OCFile) {
         val mimetype = file.mimeType
 
         requireView().findViewById<TextView>(R.id.fdType)?.apply {
@@ -486,10 +485,10 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     /**
      * Updates the file size in view
      *
-     * @param filesize in bytes to set
+     * @param fileSize in bytes to set
      */
-    private fun setFilesize(filesize: Long) {
-        requireView().findViewById<TextView>(R.id.fdSize)?.text = DisplayUtils.bytesToHumanReadable(filesize, activity)
+    private fun setFileSize(fileSize: Long) {
+        requireView().findViewById<TextView>(R.id.fdSize)?.text = DisplayUtils.bytesToHumanReadable(fileSize, activity)
     }
 
     /**
