@@ -69,6 +69,7 @@ public class PassCodeActivity extends BaseActivity {
     private Button mBCancel;
     private TextView mPassCodeHdr;
     private TextView mPassCodeHdrExplanation;
+    private TextView mPassCodeError;
     private EditText[] mPassCodeEditTexts = new EditText[4];
 
     private String[] mPassCodeDigits = {"", "", "", ""};
@@ -105,6 +106,7 @@ public class PassCodeActivity extends BaseActivity {
         mPassCodeHdrExplanation.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         );
+        mPassCodeError = findViewById(R.id.error);
         mPassCodeEditTexts[0] = findViewById(R.id.txt0);
         mPassCodeEditTexts[0].requestFocus();
         getWindow().setSoftInputMode(
@@ -311,6 +313,7 @@ public class PassCodeActivity extends BaseActivity {
         if (ACTION_CHECK.equals(getIntent().getAction())) {
             if (checkPassCode()) {
                 /// pass code accepted in request, user is allowed to access the app
+                mPassCodeError.setVisibility(View.INVISIBLE);
                 hideSoftKeyboard();
                 finish();
 
@@ -324,6 +327,7 @@ public class PassCodeActivity extends BaseActivity {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(KEY_CHECK_RESULT, true);
                 setResult(RESULT_OK, resultIntent);
+                mPassCodeError.setVisibility(View.INVISIBLE);
                 hideSoftKeyboard();
                 DocumentProviderUtils.Companion.notifyDocumentProviderRoots(getApplicationContext());
                 finish();
@@ -335,8 +339,8 @@ public class PassCodeActivity extends BaseActivity {
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
             /// enabling pass code
             if (!mConfirmingPassCode) {
+                mPassCodeError.setVisibility(View.INVISIBLE);
                 requestPassCodeConfirmation();
-
             } else if (confirmPassCode()) {
                 /// confirmed: user typed the same pass code twice
                 savePassCodeAndExit();
@@ -352,13 +356,8 @@ public class PassCodeActivity extends BaseActivity {
     private void showErrorAndRestart(int errorMessage, int headerMessage,
                                      int explanationVisibility) {
         Arrays.fill(mPassCodeDigits, null);
-        CharSequence errorSeq = getString(errorMessage);
-        Snackbar snackbar = Snackbar.make(
-                findViewById(android.R.id.content),
-                errorSeq,
-                Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
+        mPassCodeError.setText(errorMessage);
+        mPassCodeError.setVisibility(View.VISIBLE);
         mPassCodeHdr.setText(headerMessage);                // TODO check if really needed
         mPassCodeHdrExplanation.setVisibility(explanationVisibility); // TODO check if really needed
         clearBoxes();
