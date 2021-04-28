@@ -7,7 +7,7 @@ buildscript {
 
         // Android jetpack
         archLifecycleVersion = "2.1.0"
-        roomVersion = "2.2.6"
+        roomVersion = "2.3.0"
         appCompat = "1.2.0"
         sqliteVersion = "2.1.0"
         lifecycleLiveData = "2.3.1"
