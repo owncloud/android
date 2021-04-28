@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fix navbar is visible in file preview screen after rotation: [#3184](https://github.com/owncloud/android/pull/3184)
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
+* Enhancement - Move to AndroidX Preference and new structure for settings: [#2867](https://github.com/owncloud/android/issues/2867)
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
 * Enhancement - Align previews actions: [#3155](https://github.com/owncloud/android/issues/3155)
 
@@ -31,6 +32,16 @@ Details
 
    https://github.com/owncloud/android/issues/3121
    https://github.com/owncloud/android/pull/3182
+
+* Enhancement - Move to AndroidX Preference and new structure for settings: [#2867](https://github.com/owncloud/android/issues/2867)
+
+   Settings have been updated to use the current Android's recommendation, AndroidX framework.
+   In addition, they have been reorganized into subsections for a better understanding and
+   navigation structure. Also, new features have been added: now, source path and behaviour in
+   auto uploads can be chosen differently for pictures and videos.
+
+   https://github.com/owncloud/android/issues/2867
+   https://github.com/owncloud/android/pull/3143
 
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
 
