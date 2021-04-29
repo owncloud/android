@@ -45,7 +45,9 @@ import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.resources.files.services.ChunkService
 import com.owncloud.android.lib.resources.files.services.FileService
+import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.lib.resources.oauth.services.implementation.OCOIDCService
@@ -69,6 +71,7 @@ val remoteDataSourceModule = module {
 
     single<CapabilityService> { OCCapabilityService(get()) }
     single<FileService> { OCFileService(get()) }
+    single<ChunkService> { OCChunkService(get()) }
     single<ServerInfoService> { OCServerInfoService() }
     single<OIDCService> { OCOIDCService() }
     single<ShareService> { OCShareService(get()) }
