@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.resources.files;
+package com.owncloud.android.lib.resources.files
 
 import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -46,7 +46,7 @@ import java.net.URL
  * @author Abel García de Prada
  */
 open class RemoveRemoteFileOperation(
-    private val mRemotePath: String
+    private val remotePath: String
 ) : RemoteOperation<Unit>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
@@ -54,14 +54,14 @@ open class RemoveRemoteFileOperation(
         try {
             val srcWebDavUri = getSrcWebDavUriForClient(client)
             val deleteMethod = DeleteMethod(
-                URL(srcWebDavUri.toString() + WebdavUtils.encodePath(mRemotePath))
+                URL(srcWebDavUri.toString() + WebdavUtils.encodePath(remotePath))
             )
             val status = client.executeHttpMethod(deleteMethod)
             result = if (isSuccess(status)) RemoteOperationResult<Unit>(ResultCode.OK) else RemoteOperationResult<Unit>(deleteMethod)
-            Timber.i("Remove $mRemotePath: ${result.logMessage}")
+            Timber.i("Remove $remotePath: ${result.logMessage}")
         } catch (e: Exception) {
             result = RemoteOperationResult<Unit>(e)
-            Timber.e(e, "Remove $mRemotePath: ${result.logMessage}")
+            Timber.e(e, "Remove $remotePath: ${result.logMessage}")
         }
         return result
     }

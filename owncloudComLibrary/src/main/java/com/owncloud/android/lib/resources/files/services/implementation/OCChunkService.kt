@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2021 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -21,36 +21,16 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.resources.files.services
 
+package com.owncloud.android.lib.resources.files.services.implementation
+
+import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.Service
-import com.owncloud.android.lib.resources.files.RemoteFile
+import com.owncloud.android.lib.resources.files.chunks.RemoveRemoteChunksFolderOperation
+import com.owncloud.android.lib.resources.files.services.ChunkService
 
-interface FileService : Service {
-    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String>
+class OCChunkService(override val client: OwnCloudClient) : ChunkService {
 
-    fun checkPathExistence(
-        path: String,
-        isUserLogged: Boolean
-    ): RemoteOperationResult<Boolean>
-
-    fun createFolder(
-        remotePath: String,
-        createFullPath: Boolean,
-        isChunkFolder: Boolean = false
-    ): RemoteOperationResult<Unit>
-
-    fun downloadFile(
-        remotePath: String,
-        localTempPath: String
-    ): RemoteOperationResult<Unit>
-
-    fun refreshFolder(
-        remotePath: String
-    ): RemoteOperationResult<ArrayList<RemoteFile>>
-
-    fun removeFile(
-        remotePath: String
-    ): RemoteOperationResult<Unit>
+    override fun removeFile(remotePath: String): RemoteOperationResult<Unit> =
+        RemoveRemoteChunksFolderOperation(remotePath = remotePath).execute(client)
 }
