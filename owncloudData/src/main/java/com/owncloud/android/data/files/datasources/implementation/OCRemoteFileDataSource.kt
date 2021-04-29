@@ -61,4 +61,11 @@ class OCRemoteFileDataSource(
         }.let { listOfRemote ->
             listOfRemote.map { remoteFile -> remoteFileMapper.toModel(remoteFile)!! }
         }
+
+    override fun removeFile(remotePath: String) =
+        executeRemoteOperation {
+            clientManager.getFileService().removeFile(
+                remotePath = remotePath
+            )
+        }
 }
