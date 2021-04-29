@@ -80,4 +80,7 @@ class OCLocalFileDataSource(
         fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(file)!!)
     }
 
+    override fun removeFile(fileId: Long) {
+        fileDao.deleteFileWithId(fileId)
+    }
 }

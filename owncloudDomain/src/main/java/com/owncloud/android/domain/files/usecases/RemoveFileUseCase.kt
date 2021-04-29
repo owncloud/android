@@ -20,6 +20,7 @@ package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.files.model.OCFile
 
 class RemoveFileUseCase(
     private val fileRepository: FileRepository
@@ -28,13 +29,13 @@ class RemoveFileUseCase(
     override fun run(params: Params) {
 
         return fileRepository.removeFile(
-            remotePath = params.remotePath,
+            ocFile = params.file,
             removeOnlyLocalCopy = params.removeOnlyLocalCopy
         )
     }
 
     data class Params(
-        val remotePath: String,
+        val file: OCFile,
         val removeOnlyLocalCopy: Boolean
     )
 }
