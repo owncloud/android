@@ -81,6 +81,10 @@ class OCFileRepository(
         }
     }
 
+    override fun removeFile(remotePath: String, removeOnlyLocalCopy: Boolean) {
+        TODO("Not yet implemented")
+    }
+
     override fun saveFile(file: OCFile) {
         localFileDataSource.saveFile(file)
     }
