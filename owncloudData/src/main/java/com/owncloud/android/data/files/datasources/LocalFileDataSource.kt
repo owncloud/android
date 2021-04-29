@@ -29,4 +29,5 @@ interface LocalFileDataSource {
     fun getFolderImages(folderId: Long): List<OCFile>
     fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
     fun saveFile(file: OCFile)
+    fun removeFile(fileId: Long)
 }
