@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Hjälp</string>
   <string name="prefs_category_general">Allmänt</string>
-  <string name="prefs_subsection_more">Mer</string>
-  <string name="prefs_subsection_security">Säkerhet</string>
   <string name="prefs_accounts">Konton</string>
   <string name="prefs_manage_accounts">Hantera konton</string>
   <string name="prefs_passcode">Lösenordslås</string>
@@ -108,7 +106,7 @@
   <string name="common_unknown">okänt</string>
   <string name="common_pending">Väntar</string>
   <string name="common_important">Viktigt</string>
-    <string name="change_password">Ändra lösenord</string>
+  <string name="change_password">Ändra lösenord</string>
   <string name="delete_account">Radera konto</string>
   <string name="create_account">Skapa konto</string>
   <string name="uploader_info_dirname">Mappnamn</string>
@@ -287,8 +285,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Ladda upp bilder endast via wifi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Ladda upp videor endast via wifi</string>
   <string name="conflict_title">Filkonflikt</string>
   <string name="conflict_message">Vilka filer vill du behålla? Om du markerar båda kommer den lokala filen få ett nummer tillagt i slutet på filnamnet.</string>
   <string name="conflict_keep_both">Behåll båda</string>

@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Visszajelzés</string>
   <string name="drawer_help">Súgó</string>
   <string name="prefs_category_general">Általános</string>
-  <string name="prefs_subsection_more">Több</string>
-  <string name="prefs_subsection_security">Biztonság</string>
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
@@ -42,8 +40,10 @@
   <string name="confirmation_touches_with_other_windows_title">Biztos, hogy engedélyezi ezt a funkciót?</string>
   <string name="prefs_camera_picture_upload">Képfeltöltések</string>
   <string name="prefs_camera_picture_upload_summary">A fényképezőgép által készített képek automatikus feltöltése</string>
+  <string name="prefs_camera_picture_upload_path_title">Képfeltöltési útvonal</string>
   <string name="prefs_camera_video_upload">Videófeltöltések</string>
   <string name="prefs_camera_video_upload_summary">A fényképezőgép által készített videók automatikus feltöltése</string>
+  <string name="prefs_camera_video_upload_path_title">Videó feltöltési útvonal</string>
   <string name="prefs_log_title">Naplózás engedélyezése</string>
   <string name="prefs_log_summary">Ez használható a problémák naplózásához</string>
   <string name="prefs_log_title_history">Naplózás előzménye</string>
@@ -141,7 +141,7 @@
   <string name="common_error_unknown">ismeretlen hiba</string>
   <string name="common_pending">Folyamatban</string>
   <string name="common_important">Fontos</string>
-    <string name="change_password">Jelszó megváltoztatása</string>
+  <string name="change_password">Jelszó megváltoztatása</string>
   <string name="delete_account">Fiók eltávolítása</string>
   <string name="create_account">Fiók létrehozása</string>
   <string name="upload_chooser_title">Feltöltés innen</string>
@@ -331,8 +331,6 @@
   <string name="placeholder_filesize">389 kB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Képeket csak wifin tölthet fel</string>
-  <string name="prefs_camera_video_upload_on_wifi">Videókat csak wifin tölthet fel</string>
   <string name="confirmation_disable_camera_uploads_title">Megerősítés</string>
   <string name="confirmation_disable_pictures_upload_message">Biztos letiltja ezt a funkciót? A függőben lévő képek nem lesznek feltöltve</string>
   <string name="confirmation_disable_videos_upload_message">Biztos letiltja ezt a funkciót? A függőben lévő videók nem lesznek feltöltve</string>
@@ -347,7 +345,6 @@
   <string name="preview_image_description">Előnézeti kép</string>
   <string name="preview_image_error_unknown_format">Ez a kép nem jeleníthető meg</string>
   <string name="error__upload__local_file_not_copied">%1$s nem másolható át a(z) %2$s helyi mappába</string>
-  <string name="prefs_camera_picture_upload_path_title">Képfeltöltési útvonal</string>
   <string name="share_link_no_support_share_api">Sajnáljuk, a megosztás nem engedélyezett ezen a kiszolgálón. Vegye fel a kapcsolatot a
 		rendszergazdával.</string>
   <string name="share_link_password_title">Adjon meg egy jelszót</string>
@@ -398,7 +395,6 @@
   <string name="copy_file_error">H IBA történt egy Fájl Vagy mappa másolásakor</string>
   <string name="forbidden_permissions_copy">egy fájl másolásához</string>
   <string name="prefs_category_camera_upload">Kamerafeltöltések</string>
-  <string name="prefs_camera_video_upload_path_title">Videó feltöltési útvonal</string>
   <string name="sync_folder_failed_content">Szinkronizálást a %1$s mappával nem sikerült befejezni</string>
   <string name="shared_subject_header">megosztva</string>
   <string name="with_you_subject_header">veled</string>
@@ -419,7 +415,6 @@
   <string name="prefs_camera_upload_source_path_title">Kamera mappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">kötelező</string>
   <string name="prefs_camera_upload_source_path_title_optional">választható</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Eredeti fájl lesz</string>
   <string name="prefs_camera_upload_behaviour_title">Eredeti fájl lesz ...</string>
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>

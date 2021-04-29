@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Segnalazioni</string>
   <string name="drawer_help">Aiuto</string>
   <string name="prefs_category_general">Generale</string>
-  <string name="prefs_subsection_more">Altro</string>
-  <string name="prefs_subsection_security">Protezione</string>
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Utilizzare questa funzione con responsabilità, un\'applicazione dannosa potrebbe tentare di derubare l\'utente nell\'eseguire alcune azioni, inconsapevoli, utilizzando altre visualizzazioni.</string>
   <string name="prefs_camera_picture_upload">Caricamento immagini</string>
   <string name="prefs_camera_picture_upload_summary">Carica automaticamente le immagini scattate dalla fotocamera</string>
+  <string name="prefs_camera_picture_upload_path_title">Percorso caricamento immagini</string>
   <string name="prefs_camera_video_upload">Caricamento video</string>
   <string name="prefs_camera_video_upload_summary">Carica automaticamente video registrati dalla videocamera</string>
+  <string name="prefs_camera_video_upload_path_title">Percorso caricamento video</string>
   <string name="prefs_log_title">Abilita la registrazione</string>
   <string name="prefs_log_summary">Usato per registrare i problemi nei log</string>
   <string name="prefs_log_title_history">Cronologia di registrazione</string>
@@ -144,7 +144,7 @@
   <string name="common_error_unknown">Errore sconosciuto</string>
   <string name="common_pending">In corso</string>
   <string name="common_important">Importante</string>
-    <string name="change_password">Modifica la password</string>
+  <string name="change_password">Modifica la password</string>
   <string name="delete_account">Rimuovi account</string>
   <string name="create_account">Crea account</string>
   <string name="upload_chooser_title">Invia da</string>
@@ -340,8 +340,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Carica le immagini solo tramite wifi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Carica i video solo tramite wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Conferma</string>
   <string name="confirmation_disable_pictures_upload_message">Sei sicuro di voler disabilitare questa funzionalità? Le immagini rimanenti non saranno caricate</string>
   <string name="confirmation_disable_videos_upload_message">Sei sicuro di voler disabilitare questa funzionalità? I video immagini rimanenti non saranno caricati</string>
@@ -356,7 +354,6 @@
   <string name="preview_image_description">Anteprima dell\'immagine</string>
   <string name="preview_image_error_unknown_format">Questa immagine non può essere mostrata</string>
   <string name="error__upload__local_file_not_copied">%1$s non può essere copiato nella cartella locale %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Percorso caricamento immagini</string>
   <string name="get_shares_error">Non è stato possibile recuperare le condivisioni dal server</string>
   <string name="get_sharees_error">Non è stato possibile recuperare utenti e gruppi dal server</string>
   <string name="get_capabilities_error">Non è stato possibile recuperare le funzionalità dal server</string>
@@ -413,7 +410,6 @@
   <string name="copy_file_error">Si è verificato un errore durante il tentativo di copiare il file o la cartella</string>
   <string name="forbidden_permissions_copy">per copiare questo file</string>
   <string name="prefs_category_camera_upload">Caricamenti fotocamera</string>
-  <string name="prefs_camera_video_upload_path_title">Percorso caricamento video</string>
   <string name="sync_folder_failed_content">La sincronizzazione della cartella %1$s non può essere completata</string>
   <string name="shared_subject_header">condiviso</string>
   <string name="with_you_subject_header">con te</string>
@@ -434,7 +430,6 @@
   <string name="prefs_camera_upload_source_path_title">Cartella della fotocamera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">richiesto</string>
   <string name="prefs_camera_upload_source_path_title_optional">opzionale</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Il file originale verrà</string>
   <string name="prefs_camera_upload_behaviour_title">Il file originale verrà</string>
   <string name="upload_copy_files">Copia file</string>
   <string name="upload_move_files">Sposta file</string>

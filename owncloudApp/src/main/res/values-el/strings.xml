@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Σχόλια </string>
   <string name="drawer_help">Βοήθεια</string>
   <string name="prefs_category_general">Γενικά</string>
-  <string name="prefs_subsection_more">Περισσότερα</string>
-  <string name="prefs_subsection_security">Ασφάλεια</string>
   <string name="prefs_accounts">Λογαριασμοί</string>
   <string name="prefs_manage_accounts">Διαχείριση λογαριασμών</string>
   <string name="prefs_passcode">Κλείδωμα με κωδικό</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Χρησιμοποιήστε αυτήν τη λειτουργία με δική σας ευθύνη, μια κακόβουλη εφαρμογή θα μπορούσε να προσπαθήσει ώστε να εκτελέσετε κάποιες ενέργειες, χωρίς να γνωρίζετε, χρησιμοποιώντας άλλες προβολές.</string>
   <string name="prefs_camera_picture_upload">Μεταφορτώσεις φωτογραφιών</string>
   <string name="prefs_camera_picture_upload_summary">Αυτόματη μεταφόρτωση φωτογραφιών που ελήφθησαν από την κάμερα</string>
+  <string name="prefs_camera_picture_upload_path_title">Διαδρομή μεταφόρτωσης εικόνων</string>
   <string name="prefs_camera_video_upload">Μεταφόρτωση βίντεο</string>
   <string name="prefs_camera_video_upload_summary">Αυτόματη μεταφόρτωση βίντεο που ελήφθησαν από την κάμερα</string>
+  <string name="prefs_camera_video_upload_path_title">Διαδρομή μεταφορτώσεων βίντεο</string>
   <string name="prefs_log_title">Σύνδεση εφικτή</string>
   <string name="prefs_log_summary">Χρησιμοποιείται για την καταγραφή προβλημάτων</string>
   <string name="prefs_log_title_history">Αρχείο καταγραφής</string>
@@ -142,7 +142,7 @@
   <string name="common_error_unknown">άγνωστο σφάλμα</string>
   <string name="common_pending">Εκκρεμεί</string>
   <string name="common_important">Σημαντικό </string>
-    <string name="change_password">Αλλαγή συνθηματικού</string>
+  <string name="change_password">Αλλαγή συνθηματικού</string>
   <string name="delete_account">Αφαίρεση λογαριασμού</string>
   <string name="create_account">Δημιουργία λογαριασμού</string>
   <string name="upload_chooser_title">Μεταφόρτωση από</string>
@@ -333,8 +333,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Μεταφόρτωση φωτογραφιών μόνο μέσω wifi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Επιβεβαίωση</string>
   <string name="confirmation_disable_pictures_upload_message">Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε αυτήν τη λειτουργία; Οι φωτογραφίες που εκκρεμούν δεν θα μεταφορτωθούν</string>
   <string name="confirmation_disable_videos_upload_message">Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε αυτήν τη λειτουργία; Τα βίντεο που εκκρεμούν δεν θα μεταφορτωθούν</string>
@@ -349,7 +347,6 @@
   <string name="preview_image_description">Προεπισκόπηση εικόνας</string>
   <string name="preview_image_error_unknown_format">Αυτή η εικόνα δεν μπορεί να προβληθεί</string>
   <string name="error__upload__local_file_not_copied">Το %1$s δεν μπόρεσε να αντιγραφεί στον τοπικό φάκελο %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Διαδρομή μεταφόρτωσης εικόνων</string>
   <string name="get_shares_error">Δεν ήταν δυνατή η ανάκτηση των κοινόχρηστων στοιχείων από τον διακομιστή</string>
   <string name="get_sharees_error">Δεν ήταν δυνατή η ανάκτηση χρηστών και ομάδων από διακομιστή</string>
   <string name="get_capabilities_error">Δεν ήταν δυνατή η ανάκτηση των δυνατοτήτων από το διακομιστή</string>
@@ -405,7 +402,6 @@
   <string name="copy_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια αντιγραφής αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_copy">για αντιγραφή αυτού του αρχείου</string>
   <string name="prefs_category_camera_upload">Μεταφορτώσεις κάμερας</string>
-  <string name="prefs_camera_video_upload_path_title">Διαδρομή μεταφορτώσεων βίντεο</string>
   <string name="sync_folder_failed_content">Ο συγχρονισμός του φακέλου %1$s δεν μπορεί να ολοκληρωθεί</string>
   <string name="shared_subject_header">διαμοιρασμένα</string>
   <string name="with_you_subject_header">με εσάς</string>
@@ -426,7 +422,6 @@
   <string name="prefs_camera_upload_source_path_title">Φάκελος κάμερας (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">απαιτείται</string>
   <string name="prefs_camera_upload_source_path_title_optional">προαιρετικό</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Το αρχικό αρχείο θα είναι</string>
   <string name="prefs_camera_upload_behaviour_title">Το αρχικό αρχείο θα είναι</string>
   <string name="upload_copy_files">Αντιγραφή αρχείου</string>
   <string name="upload_move_files">Μετακίνηση αρχείου</string>

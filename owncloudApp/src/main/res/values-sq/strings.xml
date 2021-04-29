@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Përshtypje</string>
   <string name="drawer_help">Ndihmë</string>
   <string name="prefs_category_general">Të përgjithshme</string>
-  <string name="prefs_subsection_more">Më tepër</string>
-  <string name="prefs_subsection_security">Siguri</string>
   <string name="prefs_accounts">Llogari</string>
   <string name="prefs_manage_accounts">Administroni llogari</string>
   <string name="prefs_passcode">Kyçje me kodkalim</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Përgjegjësinë e kësaj veçorie e mbani ju vetë, një aplikacion dashakeq mund të përpiqej t\’ua hidhte duke ju bërë të kryeni, pa e kuptuar, disa veprime, ndërkohë që përdorni pamje të tjera.</string>
   <string name="prefs_camera_picture_upload">Ngarkime fotosh</string>
   <string name="prefs_camera_picture_upload_summary">Fotot e bëra nga kamera ngarkoji vetvetiu</string>
+  <string name="prefs_camera_picture_upload_path_title">Shteg ngarkimesh fotosh</string>
   <string name="prefs_camera_video_upload">Ngarkime videosh</string>
   <string name="prefs_camera_video_upload_summary">Videot e bëra nga kamera ngarkoji vetvetiu</string>
+  <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="prefs_log_title">Aktivizo regjistrimet</string>
   <string name="prefs_log_summary">Kjo përdoret për të regjistruar probleme</string>
   <string name="prefs_log_title_history">Historik regjistrimesh</string>
@@ -144,7 +144,7 @@
   <string name="common_error_unknown">gabim i panjohur</string>
   <string name="common_pending">Në pritje</string>
   <string name="common_important">E rëndësishme</string>
-    <string name="change_password">Ndryshoni fjalëkalimin</string>
+  <string name="change_password">Ndryshoni fjalëkalimin</string>
   <string name="delete_account">Hiqe llogarinë</string>
   <string name="create_account">Krijoni llogari</string>
   <string name="upload_chooser_title">Ngarkoje prej</string>
@@ -339,8 +339,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Fotot ngarkoji vetëm përmes wifi-it</string>
-  <string name="prefs_camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
   <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
@@ -355,7 +353,6 @@
   <string name="preview_image_description">Paraparje figure</string>
   <string name="preview_image_error_unknown_format">Kjo figurë nuk mund të shfaqet</string>
   <string name="error__upload__local_file_not_copied">%1$s s\’u kopjua dot te dosja vendore %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Shteg ngarkimesh fotosh</string>
   <string name="get_shares_error">S\’qe e mundur të merreshin ndarje nga shërbyesi</string>
   <string name="get_sharees_error">S\’qe e mundur të merreshin përdorues dhe grupe nga shërbyesi</string>
   <string name="get_capabilities_error">S\’qe e mundur të merreshin aftësi nga shërbyesi</string>
@@ -391,7 +388,6 @@
   <string name="drawer_manage_accounts">Administroni llogari</string>
   <string name="auth_redirect_non_secure_connection_title">Lidhja e sigurt është ridrejtuar përmes një rruge të pasigurt.</string>
   <string name="actionbar_logger">Regjistra</string>
-  <string name="prefs_open_logs_view">Hap pamjen regjistra</string>
   <string name="log_send_history_button">Historik dërgimesh</string>
   <string name="log_send_no_mail_app">S\’u gjet aplikacion për dërgim regjistrimesh. Ju lutemi, instaloni një aplikacion email-esh.</string>
   <string name="log_send_mail_subject">Regjistra aplikacioni %1$s për Android</string>
@@ -412,7 +408,6 @@
   <string name="copy_file_error">Ndodhi një gabim teksa përpiqej të kopjohej kjo kartelë apo dosje</string>
   <string name="forbidden_permissions_copy">për kopjim të kësaj kartele</string>
   <string name="prefs_category_camera_upload">Ngarkime nga kamera</string>
-  <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="sync_folder_failed_content">Njëkohësimi i dosjes %1$s s\’u plotësua dot</string>
   <string name="shared_subject_header">ndarë</string>
   <string name="with_you_subject_header">me ju</string>
@@ -433,7 +428,6 @@
   <string name="prefs_camera_upload_source_path_title">Dosje kamere (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">e domosdoshme</string>
   <string name="prefs_camera_upload_source_path_title_optional">opsionale</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Kartela origjinale do të jetë</string>
   <string name="prefs_camera_upload_behaviour_title">Kartela origjinale do të jetë</string>
   <string name="upload_copy_files">Kopjoje kartelën</string>
   <string name="upload_move_files">Lëvize kartelën</string>

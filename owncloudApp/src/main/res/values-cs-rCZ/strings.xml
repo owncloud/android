@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Odezva</string>
   <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
-  <string name="prefs_subsection_more">Více</string>
-  <string name="prefs_subsection_security">Zabezpečení</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Použití na vlastní zodpovědnost. Překrývající aplikace se může pokusit ukrást vaše údaje.</string>
   <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
   <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
+  <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
   <string name="prefs_camera_video_upload">Nahrání videa</string>
   <string name="prefs_camera_video_upload_summary">Automaticky nahrát video snímané kamerou</string>
+  <string name="prefs_camera_video_upload_path_title">Cesta k nahrání videa</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
   <string name="prefs_log_title_history">Historie logování</string>
@@ -143,7 +143,7 @@
   <string name="common_error_unknown">neznámá chyba</string>
   <string name="common_pending">Nevyřízené</string>
   <string name="common_important">Důležité</string>
-    <string name="change_password">Změnit heslo</string>
+  <string name="change_password">Změnit heslo</string>
   <string name="delete_account">Odebrat účet</string>
   <string name="create_account">Vytvořit účet</string>
   <string name="upload_chooser_title">Nahrát z</string>
@@ -338,8 +338,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Potvrzení</string>
   <string name="confirmation_disable_pictures_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízené obrázky nebudou nahrány</string>
   <string name="confirmation_disable_videos_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízená videa nebudou nahrána</string>
@@ -354,7 +352,6 @@
   <string name="preview_image_description">Náhled obrázku</string>
   <string name="preview_image_error_unknown_format">Obrázek nelze zobrazit</string>
   <string name="error__upload__local_file_not_copied">%1$s nelze zkopírovat do místního adresáře %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
   <string name="get_shares_error">Nepodařilo se stáhnout ze serveru seznam sdílení</string>
   <string name="get_sharees_error">Nepodařilo se stáhnout ze serveru seznam uživatelů a skupin</string>
   <string name="get_capabilities_error">Nebylo možné získat možnosti ze serveru</string>
@@ -391,7 +388,6 @@ správce systému.</string>
   <string name="drawer_manage_accounts">Spravovat účty</string>
   <string name="auth_redirect_non_secure_connection_title">Zabezpečené spojení je přesměrováváno nezabezpečenou trasou.</string>
   <string name="actionbar_logger">Logy</string>
-  <string name="prefs_open_logs_view">Otevřít log</string>
   <string name="log_send_history_button">Historie odesílání</string>
   <string name="log_send_no_mail_app">Nenalezena aplikace pro odesílání logů. Nainstalujte prosím emailovou aplikaci.</string>
   <string name="log_send_mail_subject">%1$s logy aplikace pro Android</string>
@@ -412,7 +408,6 @@ správce systému.</string>
   <string name="copy_file_error">Při pokusu o zkopírování tohoto souboru či adresáře došlo k chybě</string>
   <string name="forbidden_permissions_copy">pro zkopírování tohoto souboru</string>
   <string name="prefs_category_camera_upload">Nahrávání fotoaparátu</string>
-  <string name="prefs_camera_video_upload_path_title">Cesta k nahrání videa</string>
   <string name="sync_folder_failed_content">Synchronizaci adresáře %1$s nelze dokončit</string>
   <string name="shared_subject_header">sdílené</string>
   <string name="with_you_subject_header">s vámi</string>
@@ -433,7 +428,6 @@ správce systému.</string>
   <string name="prefs_camera_upload_source_path_title">Adresář fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vyžadován</string>
   <string name="prefs_camera_upload_source_path_title_optional">nepovinný</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Původní soubor bude</string>
   <string name="prefs_camera_upload_behaviour_title">Původní soubor bude</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
   <string name="upload_move_files">Přesunout soubor</string>

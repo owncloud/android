@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Rückmeldungen</string>
   <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
-  <string name="prefs_subsection_more">Mehr</string>
-  <string name="prefs_subsection_security">Sicherheit</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
   <string name="prefs_passcode">PIN gesperrt</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Verwenden Sie diese Funktion unter Ihrer eigenen Verantwortung. Eine bösartige Anwendung könnte versuchen, Sie zu täuschen und Sie Aktionen ausführen lassen, die Sie nicht kennen, indem diese andere Ansichten verwenden.</string>
   <string name="prefs_camera_picture_upload">Bild-Upload</string>
   <string name="prefs_camera_picture_upload_summary">Automatisch von der Kamera aufgenommene Bilder hochladen</string>
+  <string name="prefs_camera_picture_upload_path_title">Pfad für den Bild-Upload</string>
   <string name="prefs_camera_video_upload">Video-Upload</string>
   <string name="prefs_camera_video_upload_summary">Automatisch von der Kamera aufgenommene Videos hochladen</string>
+  <string name="prefs_camera_video_upload_path_title">Pfad für den Video-Upload</string>
   <string name="prefs_log_title">Protokollierung aktivieren</string>
   <string name="prefs_log_summary">Dies wird zur Protokollierung von Problemen benutzt</string>
   <string name="prefs_log_title_history">Protokollverlauf</string>
@@ -144,7 +144,7 @@
   <string name="common_error_unknown">Unbekannter Fehler</string>
   <string name="common_pending">Ausstehend</string>
   <string name="common_important">Wichtig</string>
-    <string name="change_password">Passwort ändern</string>
+  <string name="change_password">Passwort ändern</string>
   <string name="delete_account">Benutzerkonto löschen</string>
   <string name="create_account">Account erstellen</string>
   <string name="upload_chooser_title">Dateien hochladen von...</string>
@@ -340,8 +340,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">18.05.2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Fotos nur über WLAN hochladen</string>
-  <string name="prefs_camera_video_upload_on_wifi">Videos nur über WLAN hochladen</string>
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Bilder werden nicht hochgeladen.</string>
   <string name="confirmation_disable_videos_upload_message">Sind Sie sicher dass sie diese Funktion deaktivieren wollen? Die ausstehenden Videos werden nicht hochgeladen.</string>
@@ -356,7 +354,6 @@
   <string name="preview_image_description">Bildvorschau</string>
   <string name="preview_image_error_unknown_format">Dieses Bild kann nicht angezeigt werden</string>
   <string name="error__upload__local_file_not_copied">%1$s konnte nicht in den lokalen %2$s Ordner kopiert werden</string>
-  <string name="prefs_camera_picture_upload_path_title">Pfad für den Bild-Upload</string>
   <string name="get_shares_error">Es war nicht möglich, die Freigaben vom Server abzurufen.</string>
   <string name="get_sharees_error">Es war nicht möglich, Benutzer und Gruppen vom Server abzurufen.</string>
   <string name="get_capabilities_error">Es war nicht möglich, die Fähigkeiten vom Server abzurufen.</string>
@@ -393,7 +390,6 @@
   <string name="drawer_manage_accounts">Konten verwalten</string>
   <string name="auth_redirect_non_secure_connection_title">Die gesicherte Verbindung wird auf eine unsichere Route weitergeleitet.</string>
   <string name="actionbar_logger">Protokolle</string>
-  <string name="prefs_open_logs_view">Log-Ansicht öffnen</string>
   <string name="log_send_history_button">Verlauf senden</string>
   <string name="log_send_no_mail_app">Keine App zum Versenden der Meldungen gefunden. Bitte installieren Sie die Mail-App!</string>
   <string name="log_send_mail_subject">%1$s Android-App Meldungen</string>
@@ -414,7 +410,6 @@
   <string name="copy_file_error">Es ist ein Fehler beim Kopieren dieser Datei oder dieses Ordners aufgetreten</string>
   <string name="forbidden_permissions_copy">um diese Datei zu kopieren</string>
   <string name="prefs_category_camera_upload">Kamera-Uploads</string>
-  <string name="prefs_camera_video_upload_path_title">Pfad für den Video-Upload</string>
   <string name="sync_folder_failed_content">Bei der Synchronisation konnte %1$s Ordner nicht fertig gestellt werden</string>
   <string name="shared_subject_header">geteilt</string>
   <string name="with_you_subject_header">Mit Ihnen</string>
@@ -435,7 +430,6 @@
   <string name="prefs_camera_upload_source_path_title">Kamera-Ordner (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Benötigt</string>
   <string name="prefs_camera_upload_source_path_title_optional">Optional</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Originaldatei wird...</string>
   <string name="prefs_camera_upload_behaviour_title">Originaldatei wird...</string>
   <string name="upload_copy_files">Datei kopieren</string>
   <string name="upload_move_files">Datei verschieben</string>

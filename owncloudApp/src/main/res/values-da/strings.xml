@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Hjælp</string>
   <string name="prefs_category_general">Generel</string>
-  <string name="prefs_subsection_more">Mere</string>
-  <string name="prefs_subsection_security">Sikkerhed</string>
   <string name="prefs_accounts">Konti</string>
   <string name="prefs_manage_accounts">Administrer konti</string>
   <string name="prefs_passcode">Passcode-lås</string>
@@ -137,7 +135,7 @@
   <string name="common_error_unknown">ukendt fejl</string>
   <string name="common_pending">Afventer</string>
   <string name="common_important">Vigtigt</string>
-    <string name="change_password">Skift kodeord</string>
+  <string name="change_password">Skift kodeord</string>
   <string name="delete_account">Fjern konto</string>
   <string name="create_account">Opret konto</string>
   <string name="upload_chooser_title">Upload fra</string>
@@ -319,8 +317,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Upload billeder udelukkende via wifi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Upload videoer udelukkende via wifi</string>
   <string name="conflict_title">Filkonflikt</string>
   <string name="conflict_message">Hvilke filer ønsker du at beholde? Hvis du vælger begge versioner, så vil den lokale fil få et tal tilføjet til sit navn.</string>
   <string name="conflict_keep_both">Behold begge</string>

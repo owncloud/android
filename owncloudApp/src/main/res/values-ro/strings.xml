@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Păreri</string>
   <string name="drawer_help">Ajutor</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_subsection_more">Mai mult</string>
-  <string name="prefs_subsection_security">Securitate</string>
   <string name="prefs_accounts">Conturi</string>
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>
@@ -130,7 +128,7 @@
   <string name="common_error_unknown">eroare necunoscută</string>
   <string name="common_pending">În așteptare</string>
   <string name="common_important">Important</string>
-    <string name="change_password">Schimbă parola</string>
+  <string name="change_password">Schimbă parola</string>
   <string name="delete_account">Sterge contul</string>
   <string name="create_account">Crează cont</string>
   <string name="upload_chooser_title">Încarcă din</string>
@@ -319,8 +317,6 @@
   <string name="placeholder_filesize">389 KO</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Încărcare fotografii doar pe conexiunea wifi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Încărcare videoclipuri doar pe conexiunea wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmare</string>
   <string name="conflict_title">Conflict de fișiere</string>
   <string name="conflict_message">Care fișiere doriți să păstrați? Dacă selectați „ambele”, fișierului local i se va adăuga un număr numelui său.</string>
@@ -399,7 +395,6 @@
   <string name="prefs_camera_upload_source_path_title">Dosarul camerei (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">necesar</string>
   <string name="prefs_camera_upload_source_path_title_optional">opțional</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Fișierul original va fi</string>
   <string name="prefs_camera_upload_behaviour_title">Fișierul original va fi</string>
   <string name="upload_copy_files">Copiază fișier</string>
   <string name="upload_move_files">Mută fișier</string>

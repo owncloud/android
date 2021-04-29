@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Sugerencias</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_subsection_more">Más</string>
-  <string name="prefs_subsection_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Bloqueo con clave</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Utiliza esta funcionalidad bajo tu propia responsabilidad, una aplicación maliciosa podría tratar de engañarte a realizar algunas acciones, sin que te des cuenta, utilizando otras vistas.</string>
   <string name="prefs_camera_picture_upload">Carga de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar imágenes automáticamente tomadas desde la cámara</string>
+  <string name="prefs_camera_picture_upload_path_title">Ruta de carga de la imagen</string>
   <string name="prefs_camera_video_upload">Carga de videos</string>
   <string name="prefs_camera_video_upload_summary">Cargar videos automáticamente tomados desde la cámara</string>
+  <string name="prefs_camera_video_upload_path_title">Ruta de carga del video</string>
   <string name="prefs_log_title">Activar bitacora</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial de la bitacora</string>
@@ -144,7 +144,7 @@
   <string name="common_error_unknown">error desconocido</string>
   <string name="common_pending">Pendientes</string>
   <string name="common_important">Importante</string>
-    <string name="change_password">Cambiar contraseña</string>
+  <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>
   <string name="create_account">Crear cuenta</string>
   <string name="upload_chooser_title">Subir desde</string>
@@ -343,8 +343,6 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Cargar imágenes solamente con WiFi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Cargar videos solamente con WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Está seguro que desea inhabilitar esta funcionalidad? Las imágenes pendientes no serán subidas</string>
   <string name="confirmation_disable_videos_upload_message">¿Está seguro que quiere deshabilitar esta funcionalidad? Los videos pendientes no serán subidos</string>
@@ -359,7 +357,6 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">Esta imagen no puede ser mostrada</string>
   <string name="error__upload__local_file_not_copied">%1$s no pudo ser copiado a la carpeta local %2$s </string>
-  <string name="prefs_camera_picture_upload_path_title">Ruta de carga de la imagen</string>
   <string name="get_shares_error">No fue posible recuperar los compartidos desde el servidor</string>
   <string name="get_sharees_error">No fue posible recuperar los usuarios y grupos desde el servidor</string>
   <string name="get_capabilities_error">No fue posible recuperar los permisos desde el servidor</string>
@@ -416,7 +413,6 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="copy_file_error">Ha ocurrido un error al intentar copiar este archivo o carpeta</string>
   <string name="forbidden_permissions_copy">para copiar este archivo</string>
   <string name="prefs_category_camera_upload">Cargas desde la cámara</string>
-  <string name="prefs_camera_video_upload_path_title">Ruta de carga del video</string>
   <string name="sync_folder_failed_content">La sincronización de la carpeta %1$s no pudo ser completada</string>
   <string name="shared_subject_header">compartido</string>
   <string name="with_you_subject_header">contigo</string>
@@ -437,7 +433,6 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="prefs_camera_upload_source_path_title">Carpeta de la cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">El archivo original debe ser</string>
   <string name="prefs_camera_upload_behaviour_title">El archivo original debe ser</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>

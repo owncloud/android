@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Spätná väzba</string>
   <string name="drawer_help">Pomoc</string>
   <string name="prefs_category_general">Všeobecné</string>
-  <string name="prefs_subsection_more">Viac</string>
-  <string name="prefs_subsection_security">Zabezpečenie</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Správa účtov</string>
   <string name="prefs_passcode">Heslo</string>
@@ -41,8 +39,10 @@
   <string name="confirmation_touches_with_other_windows_title">Vážne si prajete zapnúť túto funkciu ?</string>
   <string name="prefs_camera_picture_upload">Nahrávanie obrázkov.</string>
   <string name="prefs_camera_picture_upload_summary">Automatické nahratie obrázkov z fotoaparátu/kamery</string>
+  <string name="prefs_camera_picture_upload_path_title">Cesta pre nahratie súboru</string>
   <string name="prefs_camera_video_upload">Nahratie videa.</string>
   <string name="prefs_camera_video_upload_summary">Automatické nahratie videií z fotoaparátu/kamery</string>
+  <string name="prefs_camera_video_upload_path_title">Cesta pre nahratie videa</string>
   <string name="prefs_log_title">Povoliť logovanie</string>
   <string name="prefs_log_summary">Toto je použité pre logovanie problémov</string>
   <string name="prefs_log_title_history">História logov</string>
@@ -111,7 +111,7 @@
   <string name="common_unknown">neznámy</string>
   <string name="common_pending">Čaká</string>
   <string name="common_important">Dôležité</string>
-    <string name="change_password">Zmeniť heslo</string>
+  <string name="change_password">Zmeniť heslo</string>
   <string name="delete_account">Odstrániť účet</string>
   <string name="create_account">Vytvoriť účet</string>
   <string name="uploader_info_dirname">Názov priečinka</string>
@@ -272,8 +272,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Nahrávanie obrázkov je povolené len cez WIFI</string>
-  <string name="prefs_camera_video_upload_on_wifi">Nahrávanie videí je povolené len cez WIFI</string>
   <string name="confirmation_disable_camera_uploads_title">Potvrď</string>
   <string name="confirmation_disable_pictures_upload_message">Vážne chcete vypnúť túto funkcionalitu ?
 Čakajúce obrázky nebudú nahrané</string>
@@ -288,7 +286,6 @@
   <string name="preview_image_description">Ukážka obrazu</string>
   <string name="preview_image_error_unknown_format">Obrázok nemožno zobraziť</string>
   <string name="error__upload__local_file_not_copied">%1$s nemožno skopírovať do lokálneho priečinka %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Cesta pre nahratie súboru</string>
   <string name="get_shares_error">Nie je možné načítať zdieľanie so servera</string>
   <string name="get_sharees_error">Nie je možné načítať užívateľov a skupiny so servera</string>
   <string name="get_capabilities_error">Nie je možné načítať parametre so servera</string>
@@ -345,7 +342,6 @@
   <string name="copy_file_error">Počas kopírovania súboru alebo zložky sa vyskytla chyba</string>
   <string name="forbidden_permissions_copy">kopírovať súbor</string>
   <string name="prefs_category_camera_upload">Nahrávky z fotoaparátu</string>
-  <string name="prefs_camera_video_upload_path_title">Cesta pre nahratie videa</string>
   <string name="sync_folder_failed_content">Synchronizáciu priečinka %1$s nebolo možné dokončiť</string>
   <string name="shared_subject_header">zdieľané</string>
   <string name="with_you_subject_header">s vami</string>
@@ -366,7 +362,6 @@
   <string name="prefs_camera_upload_source_path_title">Adresár fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Požaduje sa</string>
   <string name="prefs_camera_upload_source_path_title_optional">Volitelné</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Originálny súbor bude</string>
   <string name="prefs_camera_upload_behaviour_title">Originálny súbor bude</string>
   <string name="upload_copy_files">Kopírovanie súboru</string>
   <string name="upload_move_files">Presunutie súboru</string>

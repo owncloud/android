@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Comentários</string>
   <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">Geral</string>
-  <string name="prefs_subsection_more">Mais</string>
-  <string name="prefs_subsection_security">Segurança</string>
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerenciar contas</string>
   <string name="prefs_passcode">Bloqueio de senha</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Use este recurso sob sua própria responsabilidade, um aplicativo malicioso pode tentar imitá-lo a executar algumas ações, sem saber, usando outras visualizações.</string>
   <string name="prefs_camera_picture_upload">Enviar fotos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotos tiradas pela câmera</string>
+  <string name="prefs_camera_picture_upload_path_title">Caminho para fotos enviadas</string>
   <string name="prefs_camera_video_upload">Enviar vídeos</string>
   <string name="prefs_camera_video_upload_summary">Carregar automaticamente vídeos gravados pela câmera</string>
+  <string name="prefs_camera_video_upload_path_title">Caminho para vídeos enviados</string>
   <string name="prefs_log_title">Habilitar login</string>
   <string name="prefs_log_summary">Isto é usado para registrar(log) os problemas</string>
   <string name="prefs_log_title_history">História de logins</string>
@@ -144,7 +144,7 @@
   <string name="common_error_unknown">erro desconhecido</string>
   <string name="common_pending">Pendente</string>
   <string name="common_important">Importante</string>
-    <string name="change_password">Alterar senha</string>
+  <string name="change_password">Alterar senha</string>
   <string name="delete_account">Remover conta</string>
   <string name="create_account">Criar conta</string>
   <string name="upload_chooser_title">Enviando de</string>
@@ -340,8 +340,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Envio de fotos apenas por wifi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">Tem certeza de que deseja desativar esse recurso? As imagens pendentes não serão carregadas</string>
   <string name="confirmation_disable_videos_upload_message">Tem certeza de que deseja desativar esse recurso? Os vídeos pendentes não serão carregadas</string>
@@ -356,7 +354,6 @@
   <string name="preview_image_description">Pré-visualização da imagem</string>
   <string name="preview_image_error_unknown_format">Esta imagem não pode ser mostrada</string>
   <string name="error__upload__local_file_not_copied">%1$s não pôde ser copiado para pasta local %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Caminho para fotos enviadas</string>
   <string name="get_shares_error">Não foi possível recuperar os compartilhamentos do servidor</string>
   <string name="get_sharees_error">Não foi possível recuperar os usuários e grupos do servidor</string>
   <string name="get_capabilities_error">Não foi possível recuperar os recursos do servidor</string>
@@ -393,7 +390,6 @@
   <string name="drawer_manage_accounts">Gerenciar contas</string>
   <string name="auth_redirect_non_secure_connection_title">A conexão segura está redirecionada através de uma rota insegura.</string>
   <string name="actionbar_logger">Logs</string>
-  <string name="prefs_open_logs_view">Abrir visualização de registros</string>
   <string name="log_send_history_button">Enviar histórico</string>
   <string name="log_send_no_mail_app">Nenhum aplicativo para envio de logs foi encontrado. Por favor instale um aplicativo de e-mail</string>
   <string name="log_send_mail_subject">%1$s logs do Android app</string>
@@ -414,7 +410,6 @@
   <string name="copy_file_error">Ocorreu um erro ao tentar copiar este arquivo ou pasta</string>
   <string name="forbidden_permissions_copy">para copiar este arquivo</string>
   <string name="prefs_category_camera_upload">Envios da câmera</string>
-  <string name="prefs_camera_video_upload_path_title">Caminho para vídeos enviados</string>
   <string name="sync_folder_failed_content">A sincronização da pasta %1$s não pode ser finalizada</string>
   <string name="shared_subject_header">compartilhado</string>
   <string name="with_you_subject_header">com você</string>
@@ -435,7 +430,6 @@
   <string name="prefs_camera_upload_source_path_title">Pasta da câmera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">exigido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Arquivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Arquivo original será</string>
   <string name="upload_copy_files">Copiar o arquivo</string>
   <string name="upload_move_files">Mover o arquivo</string>

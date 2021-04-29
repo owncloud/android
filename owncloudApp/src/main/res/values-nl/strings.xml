@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Help</string>
   <string name="prefs_category_general">Algemeen</string>
-  <string name="prefs_subsection_more">Meer</string>
-  <string name="prefs_subsection_security">Beveiliging</string>
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Accounts beheren</string>
   <string name="prefs_passcode">Pincode slot</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Gebruik deze functie op eigen verantwoordelijkheid. Een kwaadaardig programma zou kunnen proberen u te misleiden om, onbewust, bepaalde acties uit te voeren met behulp van andere weergaven.</string>
   <string name="prefs_camera_picture_upload">Afbeeldingen uploaden</string>
   <string name="prefs_camera_picture_upload_summary">Automatisch afbeeldingen uploaden die met de camera genomen zijn</string>
+  <string name="prefs_camera_picture_upload_path_title">Afbeelding upload bestemming</string>
   <string name="prefs_camera_video_upload">Video’s uploaden</string>
   <string name="prefs_camera_video_upload_summary">Automatisch video’s uploaden die met de camera gemaakt zijn</string>
+  <string name="prefs_camera_video_upload_path_title">Video upload bestemming</string>
   <string name="prefs_log_title">Logging inschakelen</string>
   <string name="prefs_log_summary">Dit wordt gebruikt om problemen te loggen.</string>
   <string name="prefs_log_title_history">Logging geschiedenis</string>
@@ -145,7 +145,7 @@ Download hier: %2$s</string>
   <string name="common_error_unknown">onbekende fout</string>
   <string name="common_pending">In behandeling</string>
   <string name="common_important">Belangrijk</string>
-    <string name="change_password">Wijzig wachtwoord</string>
+  <string name="change_password">Wijzig wachtwoord</string>
   <string name="delete_account">Account uitloggen</string>
   <string name="create_account">Maak account aan</string>
   <string name="upload_chooser_title">Upload vanaf</string>
@@ -343,8 +343,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Bevestigen</string>
   <string name="confirmation_disable_pictures_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande afbeeldingen worden niet geuploade</string>
   <string name="confirmation_disable_videos_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande video’s worden niet geuploade</string>
@@ -359,7 +357,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="preview_image_description">Afbeelding voorbeeld</string>
   <string name="preview_image_error_unknown_format">Deze afbeelding kan niet worden getoond</string>
   <string name="error__upload__local_file_not_copied">%1$s kon niet worden gekopieerd naar de %2$s lokale map</string>
-  <string name="prefs_camera_picture_upload_path_title">Afbeelding upload bestemming</string>
   <string name="get_shares_error">Het was niet mogelijk om de gedeelde bestanden van de server op te halen</string>
   <string name="get_sharees_error">Het was niet mogelijk om gebruikers en groepen van de server op te halen</string>
   <string name="get_capabilities_error">Het was niet mogelijk om de mogelijkheden van de server op te halen</string>
@@ -416,7 +413,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="copy_file_error">Er trad een fout op bij uw poging dit bestand of deze map te kopiëren</string>
   <string name="forbidden_permissions_copy">om dit bestand te kopiëren</string>
   <string name="prefs_category_camera_upload">Camera uploads</string>
-  <string name="prefs_camera_video_upload_path_title">Video upload bestemming</string>
   <string name="sync_folder_failed_content">Synchronisatie van map %1$s kon niet worden voltooid</string>
   <string name="shared_subject_header">gedeeld</string>
   <string name="with_you_subject_header">met u</string>
@@ -437,7 +433,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="prefs_camera_upload_source_path_title">Cameramap (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vereist</string>
   <string name="prefs_camera_upload_source_path_title_optional">optioneel</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Origineel bestand zal zijn</string>
   <string name="prefs_camera_upload_behaviour_title">Origineel bestand zal zijn</string>
   <string name="upload_copy_files">Kopiëren bestand</string>
   <string name="upload_move_files">Verplaatsen bestand</string>

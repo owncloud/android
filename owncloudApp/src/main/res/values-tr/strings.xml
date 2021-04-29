@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Geribildirim</string>
   <string name="drawer_help">Yardım</string>
   <string name="prefs_category_general">Genel</string>
-  <string name="prefs_subsection_more">Daha fazla</string>
-  <string name="prefs_subsection_security">Güvenlik</string>
   <string name="prefs_accounts">Hesaplar</string>
   <string name="prefs_manage_accounts">Hesapları yönet</string>
   <string name="prefs_passcode">Parola kod kilidi</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Bu özelliği kendi sorumluluğunuzda kullanın, kötü amaçlı bir uygulama bazı eylemleri yerine getirirken habersiz, başka görünümler kullanarak sizi kandırmaya çalışabilir.</string>
   <string name="prefs_camera_picture_upload">Fotoğraf yüklemeleri</string>
   <string name="prefs_camera_picture_upload_summary">Kamera ile çekilen fotoğrafları otomatik olarak karşıya yükle</string>
+  <string name="prefs_camera_picture_upload_path_title">Resim yükleme yolu</string>
   <string name="prefs_camera_video_upload">Video yüklemeleri</string>
   <string name="prefs_camera_video_upload_summary">Kamera ile kaydedilen vidyoları otomatik olarak karşıya yükle</string>
+  <string name="prefs_camera_video_upload_path_title">Video yükleme yolu</string>
   <string name="prefs_log_title">Günlüğü etkinleştir</string>
   <string name="prefs_log_summary">Bu, sorunları günlük dosyasına kaydetmek için kullanılır</string>
   <string name="prefs_log_title_history">Günlük geçmişi</string>
@@ -144,7 +144,7 @@
   <string name="common_error_unknown">bilinmeyen hata</string>
   <string name="common_pending">Bekliyor</string>
   <string name="common_important">Önemli</string>
-    <string name="change_password">Parola değiştir</string>
+  <string name="change_password">Parola değiştir</string>
   <string name="delete_account">Hesabı kaldır</string>
   <string name="create_account">Hesap oluştur</string>
   <string name="upload_chooser_title">Şuradan yükle</string>
@@ -340,8 +340,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 ÖS</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Fotoğrafları sadece kablosuz bağlantıda (WiFi) yükle</string>
-  <string name="prefs_camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
   <string name="confirmation_disable_camera_uploads_title">Onayla</string>
   <string name="confirmation_disable_pictures_upload_message">Bu özelliği devre dışı bırakmak istediğinizden emin misiniz? Bekleyen resimler yüklenmeyecek</string>
   <string name="confirmation_disable_videos_upload_message">Bu özelliği devre dışı bırakmak istediğinizden emin misiniz? Bekleyen videolar yüklenmeyecek</string>
@@ -356,7 +354,6 @@
   <string name="preview_image_description">Resim önizleme</string>
   <string name="preview_image_error_unknown_format">Bu resim gösterilemiyor</string>
   <string name="error__upload__local_file_not_copied">%1$s, %2$s yerel klasörüne kopyalanamadı</string>
-  <string name="prefs_camera_picture_upload_path_title">Resim yükleme yolu</string>
   <string name="get_shares_error">Paylaşımlar sunucudan alınamadı</string>
   <string name="get_sharees_error">Sunucudan kullanıcılar ve gruplar alınamadı</string>
   <string name="get_capabilities_error">Yetenekler sunucudan alınamadı</string>
@@ -413,7 +410,6 @@
   <string name="copy_file_error">Bu dosya veya klasörü kopyalamaya çalışılırken bir hata oluştu</string>
   <string name="forbidden_permissions_copy">bu dosyayı kopyalamak için</string>
   <string name="prefs_category_camera_upload">Kamera yüklemeleri</string>
-  <string name="prefs_camera_video_upload_path_title">Video yükleme yolu</string>
   <string name="sync_folder_failed_content">%1$s klasörünün eşitlemesi tamamlanamadı</string>
   <string name="shared_subject_header">sizinle</string>
   <string name="with_you_subject_header">paylaştı</string>
@@ -434,7 +430,6 @@
   <string name="prefs_camera_upload_source_path_title">Kamera klasörü (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">gerekli</string>
   <string name="prefs_camera_upload_source_path_title_optional">isteğe bağlı</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Orjinal dosya şu olacak</string>
   <string name="prefs_camera_upload_behaviour_title">şu olacak</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>

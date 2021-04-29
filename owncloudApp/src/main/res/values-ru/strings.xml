@@ -30,8 +30,6 @@
   <string name="drawer_feedback">Обратная связь</string>
   <string name="drawer_help">Помощь</string>
   <string name="prefs_category_general">Основные</string>
-  <string name="prefs_subsection_more">Больше</string>
-  <string name="prefs_subsection_security">Безопасность</string>
   <string name="prefs_accounts">Учётные записи</string>
   <string name="prefs_manage_accounts">Управление аккаунтами</string>
   <string name="prefs_passcode">Блокировка кодом</string>
@@ -43,8 +41,10 @@
   <string name="confirmation_touches_with_other_windows_message">Используйте на свой страх и риск: вредоносное приложение может попытаться вас обмануть, заставить незаметно выполнить некоторые действия, используя поддельные элементы интерфейса</string>
   <string name="prefs_camera_picture_upload">Загрузка изображений</string>
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
+  <string name="prefs_camera_picture_upload_path_title">Путь загрузки изображений</string>
   <string name="prefs_camera_video_upload">Загрузка видео</string>
   <string name="prefs_camera_video_upload_summary">Автоматически загружать видео, записанные камерой</string>
+  <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
   <string name="prefs_log_title">Включить журналирование</string>
   <string name="prefs_log_summary">Используется для регистрации ошибок</string>
   <string name="prefs_log_title_history">История журналов</string>
@@ -145,7 +145,7 @@
   <string name="common_error_unknown">неизвестная ошибка</string>
   <string name="common_pending">Ожидается</string>
   <string name="common_important">Важный</string>
-    <string name="change_password">Сменить пароль</string>
+  <string name="change_password">Сменить пароль</string>
   <string name="delete_account">Удалить аккаунт</string>
   <string name="create_account">Создать учётную запись</string>
   <string name="upload_chooser_title">Загрузить из</string>
@@ -341,8 +341,6 @@
   <string name="placeholder_filesize">389 КБ</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="prefs_camera_picture_upload_on_wifi">Загрузка изображений только через wifi</string>
-  <string name="prefs_camera_video_upload_on_wifi">Загрузка видео только через wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Подтвердите</string>
   <string name="confirmation_disable_pictures_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие изображения не будут загружены</string>
   <string name="confirmation_disable_videos_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие видеозаписи не будут загружены</string>
@@ -357,7 +355,6 @@
   <string name="preview_image_description">Предпросмотр</string>
   <string name="preview_image_error_unknown_format">Это изображение не может быть отображено</string>
   <string name="error__upload__local_file_not_copied">%1$s невозможно скопировать в локальный каталог %2$s </string>
-  <string name="prefs_camera_picture_upload_path_title">Путь загрузки изображений</string>
   <string name="get_shares_error">Не удалось запросить с сервера список ресурсов общего доступа</string>
   <string name="get_sharees_error">Не удалось запросить с сервера список пользователей и групп</string>
   <string name="get_capabilities_error">Не удалось запросить с сервера список возможностей</string>
@@ -394,7 +391,6 @@
   <string name="drawer_manage_accounts">Управление аккаунтами</string>
   <string name="auth_redirect_non_secure_connection_title">Безопасное соединение перенаправлено через небезопасный маршрут.</string>
   <string name="actionbar_logger">Журналы</string>
-  <string name="prefs_open_logs_view">Открыть лог-файл приложения</string>
   <string name="log_send_history_button">История отправок</string>
   <string name="log_send_no_mail_app">Программа для отправки журналов не найдена. Пожалуйста установите почтовую программу.</string>
   <string name="log_send_mail_subject">Журналы %1$s для Android</string>
@@ -415,7 +411,6 @@
   <string name="copy_file_error">Произошла ошибка во время копирования этого файла или папки</string>
   <string name="forbidden_permissions_copy">для копирования этого файла</string>
   <string name="prefs_category_camera_upload">Загрузки камеры</string>
-  <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
   <string name="sync_folder_failed_content">Синхронизация папки %1$s не может быть завершена</string>
   <string name="shared_subject_header">поделился</string>
   <string name="with_you_subject_header">с вами</string>
@@ -436,7 +431,6 @@
   <string name="prefs_camera_upload_source_path_title">Каталог камеры (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">обязательно</string>
   <string name="prefs_camera_upload_source_path_title_optional">не обязательно</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Исходный файл будет</string>
   <string name="prefs_camera_upload_behaviour_title">Исходный файл будет</string>
   <string name="upload_copy_files">Копировать файл</string>
   <string name="upload_move_files">Переместить файл</string>
