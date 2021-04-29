@@ -81,8 +81,13 @@ class OCFileRepository(
         }
     }
 
-    override fun removeFile(remotePath: String, removeOnlyLocalCopy: Boolean) {
-        TODO("Not yet implemented")
+    override fun removeFile(ocFile: OCFile, removeOnlyLocalCopy: Boolean) {
+        if (!removeOnlyLocalCopy){
+            remoteFileDataSource.removeFile(ocFile.remotePath).also {
+                localFileDataSource.removeFile(ocFile.id!!)
+            }
+        }
+        // TODO: Remove file from local storage
     }
 
     override fun saveFile(file: OCFile) {
