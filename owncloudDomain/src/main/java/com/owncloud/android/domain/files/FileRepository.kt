@@ -30,6 +30,6 @@ interface FileRepository {
     fun getFolderContent(folderId: Long): List<OCFile>
     fun getFolderImages(folderId: Long): List<OCFile>
     fun refreshFolder(remotePath: String)
-    fun removeFile(remotePath: String, removeOnlyLocalCopy: Boolean)
+    fun removeFile(ocFile: OCFile, removeOnlyLocalCopy: Boolean)
     fun saveFile(file: OCFile)
 }
