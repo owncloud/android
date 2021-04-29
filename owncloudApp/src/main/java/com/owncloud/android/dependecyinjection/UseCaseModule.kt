@@ -43,6 +43,7 @@ import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
+import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
@@ -89,6 +90,7 @@ val useCaseModule = module {
     factory { GetFolderContentUseCase(get()) }
     factory { GetFolderImagesUseCase(get()) }
     factory { RefreshFolderFromServerAsyncUseCase(get()) }
+    factory { RemoveFileUseCase(get()) }
     factory { SaveFileOrFolderUseCase(get()) }
 
     // Sharing
