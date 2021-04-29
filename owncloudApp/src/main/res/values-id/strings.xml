@@ -4,8 +4,6 @@
   <string name="global_name">Nama</string>
   <string name="global_date">Tanggal</string>
   <string name="global_size">Ukuran</string>
-  <string name="about_android">%1$suntuk Android</string>
-  <string name="about_version">Versi %1$s</string>
   <string name="actionbar_search">Cari folder ini</string>
   <string name="actionbar_sync">Segarkan akun</string>
   <string name="actionbar_upload">Unggah</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Umpan balik</string>
   <string name="drawer_help">Bantuan</string>
   <string name="prefs_category_general">Umum</string>
-  <string name="prefs_category_more">Lainnya</string>
-  <string name="prefs_category_security">Keamanan</string>
+  <string name="prefs_subsection_more">Lainnya</string>
+  <string name="prefs_subsection_security">Keamanan</string>
   <string name="prefs_accounts">Akun</string>
   <string name="prefs_manage_accounts">Kelola akun</string>
   <string name="prefs_passcode">Kunci kode sandi</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Pola yang salah</string>
   <string name="pattern_reenter_pattern">Harap masukkan kembali pola Anda</string>
   <string name="pattern_not_same_pattern">Pola tidak sama</string>
-  <string name="pattern_stored">Pola Disimpan</string>
-  <string name="pattern_removed">Pola Dihapus</string>
   <string name="pattern_already_set">Pola dan kunci kode sandi tidak dapat diaktifkan pada saat yang sama, harap nonaktifkan pola terlebih dahulu</string>
   <string name="passcode_already_set">Pola dan kunci kode sandi tidak dapat diaktifkan secara bersamaan, harap nonaktifkan kode sandi terlebih dahulu</string>
   <string name="pattern_no_longer_required">Pola tidak akan ditanyakan lagi</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">Kesalahan tidak diketahui</string>
   <string name="common_pending">Tertunda</string>
   <string name="common_important">Penting</string>
-  <string name="about_title">Tentang</string>
-  <string name="change_password">Ubah sandi</string>
+    <string name="change_password">Ubah sandi</string>
   <string name="delete_account">Hapus akun</string>
   <string name="create_account">Buat akun</string>
   <string name="upload_chooser_title">Unggah dari</string>
@@ -228,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">Hapus kode sandi Anda</string>
   <string name="pass_code_mismatch">Kode sandi tidak sama</string>
   <string name="pass_code_wrong">Kode sandi salah</string>
-  <string name="pass_code_removed">Kode sandi dihapus</string>
-  <string name="pass_code_stored">Kode sandi disimpan</string>
   <string name="biometric_not_hardware_detected">Gawai Anda tidak mendukung otentikasi biometrik</string>
   <string name="biometric_not_enrolled">Daftar dengan setidaknya satu biometrik untuk menggunakan fitur ini</string>
   <string name="biometric_prompt_title">Masuk dengan biometrik</string>
@@ -344,8 +337,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">18/05/2012 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Unggah gambar hanya melalui WiFi</string>
-  <string name="camera_video_upload_on_wifi">Unggah video hanya melalui WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Unggah gambar hanya melalui WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Unggah video hanya melalui WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Memastikan</string>
   <string name="confirmation_disable_pictures_upload_message">Anda yakin ingin menonaktifkan fitur ini? Gambar yang tertunda tidak akan diunggah</string>
   <string name="confirmation_disable_videos_upload_message">Anda yakin ingin menonaktifkan feature ini? Video yang tertunda tidak akan diunggah</string>
@@ -432,7 +425,7 @@
   <string name="prefs_camera_upload_source_path_title">Folder kamera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Diperlukan</string>
   <string name="prefs_camera_upload_source_path_title_optional">Pilihan</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">File asli akan di</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">File asli akan di</string>
   <string name="prefs_camera_upload_behaviour_title">File asli akan di</string>
   <string name="upload_copy_files">Salin file</string>
   <string name="upload_move_files">Pindahkan file</string>

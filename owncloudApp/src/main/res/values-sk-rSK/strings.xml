@@ -4,8 +4,6 @@
   <string name="global_name">Názov</string>
   <string name="global_date">Dátum</string>
   <string name="global_size">Veľkosť</string>
-  <string name="about_android">%1$s pre Android</string>
-  <string name="about_version">Verzia %1$s</string>
   <string name="actionbar_search">Hľadať tento adresár</string>
   <string name="actionbar_sync">Obnoviť účet</string>
   <string name="actionbar_upload">Nahraj súbor</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Spätná väzba</string>
   <string name="drawer_help">Pomoc</string>
   <string name="prefs_category_general">Všeobecné</string>
-  <string name="prefs_category_more">Viac</string>
-  <string name="prefs_category_security">Zabezpečenie</string>
+  <string name="prefs_subsection_more">Viac</string>
+  <string name="prefs_subsection_security">Zabezpečenie</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Správa účtov</string>
   <string name="prefs_passcode">Heslo</string>
@@ -65,8 +63,6 @@
   <string name="pattern_incorrect_pattern">Nesprávny vzor</string>
   <string name="pattern_reenter_pattern">Prosím zadaj znovu svoj vzor</string>
   <string name="pattern_not_same_pattern">Vzory nie sú rovnaké</string>
-  <string name="pattern_stored">Vzor bol uložený.</string>
-  <string name="pattern_removed">Vzor bol odstránený</string>
   <string name="pattern_already_set">Vzor a heslo nemôžu byť, zapnuté na raz, prosím vypni najskôr vzor.</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Súbory</string>
@@ -115,8 +111,7 @@
   <string name="common_unknown">neznámy</string>
   <string name="common_pending">Čaká</string>
   <string name="common_important">Dôležité</string>
-  <string name="about_title">O</string>
-  <string name="change_password">Zmeniť heslo</string>
+    <string name="change_password">Zmeniť heslo</string>
   <string name="delete_account">Odstrániť účet</string>
   <string name="create_account">Vytvoriť účet</string>
   <string name="uploader_info_dirname">Názov priečinka</string>
@@ -167,8 +162,6 @@
   <string name="pass_code_remove_your_pass_code">Zmazať svoje heslo</string>
   <string name="pass_code_mismatch">Heslá sa nezhodujú</string>
   <string name="pass_code_wrong">Nesprávne heslo</string>
-  <string name="pass_code_removed">Bezpečnostný kód odstránený</string>
-  <string name="pass_code_stored">Bezpečnostný kód uložený</string>
   <string name="media_notif_ticker">Prehrávač hudby %1$s</string>
   <string name="media_state_playing">%1$s (prehráva)</string>
   <string name="media_state_loading">%1$s (načítava)</string>
@@ -279,8 +272,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Nahrávanie obrázkov je povolené len cez WIFI</string>
-  <string name="camera_video_upload_on_wifi">Nahrávanie videí je povolené len cez WIFI</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Nahrávanie obrázkov je povolené len cez WIFI</string>
+  <string name="prefs_camera_video_upload_on_wifi">Nahrávanie videí je povolené len cez WIFI</string>
   <string name="confirmation_disable_camera_uploads_title">Potvrď</string>
   <string name="confirmation_disable_pictures_upload_message">Vážne chcete vypnúť túto funkcionalitu ?
 Čakajúce obrázky nebudú nahrané</string>
@@ -373,7 +366,7 @@
   <string name="prefs_camera_upload_source_path_title">Adresár fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Požaduje sa</string>
   <string name="prefs_camera_upload_source_path_title_optional">Volitelné</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Originálny súbor bude</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Originálny súbor bude</string>
   <string name="prefs_camera_upload_behaviour_title">Originálny súbor bude</string>
   <string name="upload_copy_files">Kopírovanie súboru</string>
   <string name="upload_move_files">Presunutie súboru</string>

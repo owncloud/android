@@ -5,6 +5,7 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
+ * @author Juan Carlos Garrote Gascón
  * <p>
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
@@ -48,6 +49,7 @@ public class FileStorageUtils {
     public static final int FILE_DISPLAY_SORT = 3;
     public static Integer mSortOrderFileDisp = SORT_NAME;
     public static Boolean mSortAscendingFileDisp = true;
+    public static final String CAMERA_FOLDER = "/Camera";
 
     /**
      * Get local owncloud storage path for accountName.
@@ -236,5 +238,9 @@ public class FileStorageUtils {
         }
 
         return dir.delete();
+    }
+
+    public static String getDefaultCameraSourcePath() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + CAMERA_FOLDER;
     }
 }

@@ -4,8 +4,6 @@
   <string name="global_name">Heiti</string>
   <string name="global_date">Dagsetning</string>
   <string name="global_size">Stærð</string>
-  <string name="about_android">%1$s fyrir Android</string>
-  <string name="about_version">Útgáfa %1$s</string>
   <string name="actionbar_search">Leita í þessari möppu</string>
   <string name="actionbar_sync">Endurlesa aðgang</string>
   <string name="actionbar_upload">Senda inn</string>
@@ -31,8 +29,8 @@
   <string name="drawer_feedback">Umsögn</string>
   <string name="drawer_help">Hjálp</string>
   <string name="prefs_category_general">Almennt</string>
-  <string name="prefs_category_more">Meira</string>
-  <string name="prefs_category_security">Öryggi</string>
+  <string name="prefs_subsection_more">Meira</string>
+  <string name="prefs_subsection_security">Öryggi</string>
   <string name="prefs_accounts">Notandaaðgangar</string>
   <string name="prefs_manage_accounts">Sýsla með notandaaðganga</string>
   <string name="prefs_passcode">Læsing með lykilkóða</string>
@@ -59,8 +57,6 @@
   <string name="pattern_incorrect_pattern">Rangt mynstur</string>
   <string name="pattern_reenter_pattern">Settu aftur inn mynstrið þitt</string>
   <string name="pattern_not_same_pattern">Mynstrin eru ekki eins</string>
-  <string name="pattern_stored">Mynstur geymt</string>
-  <string name="pattern_removed">Mynstur fjarlægt</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Skrár</string>
   <string name="bottom_nav_uploads">Innsendingar</string>
@@ -127,8 +123,7 @@
   <string name="common_unknown">óþekkt</string>
   <string name="common_pending">Í bið</string>
   <string name="common_important">Mikilvægt</string>
-  <string name="about_title">Um hugbúnaðinn</string>
-  <string name="change_password">Breyta lykilorði</string>
+    <string name="change_password">Breyta lykilorði</string>
   <string name="delete_account">Fjarlægja notandaaðgang</string>
   <string name="create_account">Stofna aðgang</string>
   <string name="upload_chooser_title">Senda inn úr</string>
@@ -204,8 +199,6 @@
   <string name="pass_code_remove_your_pass_code">Fjarlægja lykilkóðann þinn</string>
   <string name="pass_code_mismatch">Lykilkóðarnir eru ekki eins</string>
   <string name="pass_code_wrong">Rangur lykilkóði</string>
-  <string name="pass_code_removed">Fjarlægði lykilkóða</string>
-  <string name="pass_code_stored">Geymdi lykilkóða</string>
   <string name="media_notif_ticker">%1$s tónlistarspilari</string>
   <string name="media_state_playing">%1$s (afspilun)</string>
   <string name="media_state_loading">%1$s (hleð)</string>
@@ -317,8 +310,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 EH</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Senda inn myndir einungis um þráðlaus net</string>
-  <string name="camera_video_upload_on_wifi">Senda inn myndskeið einungis um þráðlaus net</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Senda inn myndir einungis um þráðlaus net</string>
+  <string name="prefs_camera_video_upload_on_wifi">Senda inn myndskeið einungis um þráðlaus net</string>
   <string name="confirmation_disable_camera_uploads_title">Staðfesta</string>
   <string name="conflict_title">Árekstur skráa</string>
   <string name="conflict_message">Ef þú velur báðar útgáfur, þá mun verða bætt tölustaf aftan við heiti skrárinnar á tölvunni.</string>
@@ -400,7 +393,7 @@
   <string name="prefs_camera_upload_source_path_title">Myndavélarmappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">krafist</string>
   <string name="prefs_camera_upload_source_path_title_optional">valkvætt</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Upprunaleg skrá verður</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Upprunaleg skrá verður</string>
   <string name="prefs_camera_upload_behaviour_title">Upprunaleg skrá verður</string>
   <string name="upload_copy_files">Afrita skrá</string>
   <string name="upload_move_files">Færa skrá</string>

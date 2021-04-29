@@ -4,8 +4,6 @@
   <string name="global_name">Name</string>
   <string name="global_date">Date</string>
   <string name="global_size">Size</string>
-  <string name="about_android">%1$s for Android</string>
-  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Search this folder</string>
   <string name="actionbar_sync">Refresh account</string>
   <string name="actionbar_upload">Upload</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Help</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">More</string>
-  <string name="prefs_category_security">Security</string>
+  <string name="prefs_subsection_more">More</string>
+  <string name="prefs_subsection_security">Security</string>
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Manage accounts</string>
   <string name="prefs_passcode">Passcode lock</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Incorrect pattern</string>
   <string name="pattern_reenter_pattern">Please re-enter your pattern</string>
   <string name="pattern_not_same_pattern">The patterns are not same</string>
-  <string name="pattern_stored">Pattern Stored</string>
-  <string name="pattern_removed">Pattern Removed</string>
   <string name="pattern_already_set">Pattern and passcode locks cannot be enabled at the same time, please disable pattern first</string>
   <string name="passcode_already_set">Pattern and passcode locks cannot be enabled at the same time, please disable passcode first</string>
   <string name="pattern_no_longer_required">The pattern will not be asked anymore</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">unknown error</string>
   <string name="common_pending">Pending</string>
   <string name="common_important">Important</string>
-  <string name="about_title">About</string>
-  <string name="change_password">Change password</string>
+    <string name="change_password">Change password</string>
   <string name="delete_account">Remove account</string>
   <string name="create_account">Create account</string>
   <string name="upload_chooser_title">Upload from</string>
@@ -228,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">Remove your passcode</string>
   <string name="pass_code_mismatch">The passcodes are not the same</string>
   <string name="pass_code_wrong">Incorrect passcode</string>
-  <string name="pass_code_removed">Passcode removed</string>
-  <string name="pass_code_stored">Passcode stored</string>
   <string name="biometric_not_hardware_detected">This device doesn\'t support biometric authentication</string>
   <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
   <string name="biometric_prompt_title">Biometric log in</string>
@@ -347,8 +340,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
-  <string name="camera_video_upload_on_wifi">Upload videos via wifi only</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
+  <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
   <string name="confirmation_disable_camera_uploads_title">Confirm</string>
   <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded</string>
   <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
@@ -400,7 +393,7 @@
   <string name="drawer_manage_accounts">Manage accounts</string>
   <string name="auth_redirect_non_secure_connection_title">Secure connection is redirected through an unsecured route.</string>
   <string name="actionbar_logger">Logs</string>
-  <string name="log_open_logs_view">Open logs view</string>
+  <string name="prefs_open_logs_view">Open logs view</string>
   <string name="log_send_history_button">Send history</string>
   <string name="log_send_no_mail_app">No app for sending logs found. Please install a mail app.</string>
   <string name="log_send_mail_subject">%1$s Android app logs</string>
@@ -442,7 +435,7 @@
   <string name="prefs_camera_upload_source_path_title">Camera folder (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">required</string>
   <string name="prefs_camera_upload_source_path_title_optional">optional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Original file will be</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Original file will be</string>
   <string name="prefs_camera_upload_behaviour_title">Original file will be</string>
   <string name="upload_copy_files">Copy file</string>
   <string name="upload_move_files">Move file</string>

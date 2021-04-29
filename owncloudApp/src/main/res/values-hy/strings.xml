@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_version">տարբերակ %1$s</string>
-  <string name="actionbar_sync">Թարմացնել հաշիվը</string>
+    <string name="actionbar_sync">Թարմացնել հաշիվը</string>
   <string name="actionbar_upload">Բեռնել</string>
   <string name="actionbar_upload_files">Ֆայլեր</string>
   <string name="actionbar_open_with">Բացել միջոցով</string>
@@ -18,8 +17,8 @@
   <string name="drawer_feedback">Արձագանք</string>
   <string name="drawer_help">Օգնություն</string>
   <string name="prefs_category_general">Ընդհանուր</string>
-  <string name="prefs_category_more">Ավելի</string>
-  <string name="prefs_category_security">Անվտանգություն</string>
+  <string name="prefs_subsection_more">Ավելի</string>
+  <string name="prefs_subsection_security">Անվտանգություն</string>
   <string name="prefs_accounts">Հաշիվներ</string>
   <string name="prefs_passcode">Անցաբառով կողպում</string>
   <string name="prefs_log_delete_history_button">Ջնջել պատմությունը</string>
@@ -54,8 +53,7 @@
   <string name="common_error">Սխալ</string>
   <string name="common_unknown">անհայտ</string>
   <string name="common_error_unknown">Անհայտ սխալ</string>
-  <string name="about_title">Մասին</string>
-  <string name="change_password">Փոխել գաղտնաբառը</string>
+    <string name="change_password">Փոխել գաղտնաբառը</string>
   <string name="delete_account">Ջնջել հաշիվը</string>
   <string name="create_account">Ստեղծել հաշիվ</string>
   <string name="upload_chooser_title">Բեռնել…</string>
@@ -105,8 +103,6 @@
   <string name="pass_code_remove_your_pass_code">Ջնջել քո անցաբառը</string>
   <string name="pass_code_mismatch">Անցաբառերը նույնը չեն</string>
   <string name="pass_code_wrong">Սխալ անցաբառ</string>
-  <string name="pass_code_removed">Անցաբառը ջնջվեց</string>
-  <string name="pass_code_stored">Անցաբառը պահվեց</string>
   <string name="media_notif_ticker">%1$s նվագարկիչ</string>
   <string name="auth_connection_established">Կապը հաստատվեց</string>
   <string name="auth_testing_connection">Փորձարկում եմ կապը</string>

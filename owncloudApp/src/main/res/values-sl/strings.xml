@@ -4,8 +4,6 @@
   <string name="global_name">Ime</string>
   <string name="global_date">Datum</string>
   <string name="global_size">Velikost</string>
-  <string name="about_android">%1$s za Android</string>
-  <string name="about_version">Verzija %1$s</string>
   <string name="actionbar_search">Preiščite to mapo</string>
   <string name="actionbar_sync">Osveži račun</string>
   <string name="actionbar_upload">Pošiljanje</string>
@@ -31,8 +29,8 @@
   <string name="drawer_feedback">Pošlji sporočilo razvijalcem programa</string>
   <string name="drawer_help">Pomoč</string>
   <string name="prefs_category_general">Splošno</string>
-  <string name="prefs_category_more">Več</string>
-  <string name="prefs_category_security">Varnost</string>
+  <string name="prefs_subsection_more">Več</string>
+  <string name="prefs_subsection_security">Varnost</string>
   <string name="prefs_accounts">Računi</string>
   <string name="prefs_manage_accounts">Upravljanje z računi</string>
   <string name="prefs_passcode">Zakleni dostop s kodo PIN</string>
@@ -61,8 +59,6 @@
   <string name="pattern_incorrect_pattern">Napačen vzorec</string>
   <string name="pattern_reenter_pattern">Prosimo ponovno vnesite svoj vzorec</string>
   <string name="pattern_not_same_pattern">Vzorca se ne ujemata</string>
-  <string name="pattern_stored">Vzorec shranjen</string>
-  <string name="pattern_removed">Vzorec odstranjen</string>
   <string name="pattern_no_longer_required">Ne boste več vprašani po vzorcu</string>
   <string name="pattern_configure_your_pattern_explanation">Vzorec bo zahtevan vedno, ko se zažene aplikacija</string>
   <string name="pass_code_locked">Zaklenjeno z geslom</string>
@@ -136,8 +132,7 @@
   <string name="common_error_unknown">neznana napaka</string>
   <string name="common_pending">V čakanju ...</string>
   <string name="common_important">Pomembno</string>
-  <string name="about_title">O oblaku %1$s</string>
-  <string name="change_password">Spremeni geslo</string>
+    <string name="change_password">Spremeni geslo</string>
   <string name="delete_account">Odstrani račun</string>
   <string name="create_account">Ustvari račun</string>
   <string name="upload_chooser_title">Naloženo iz</string>
@@ -213,8 +208,6 @@
   <string name="pass_code_remove_your_pass_code">Odstrani kodo PIN programa</string>
   <string name="pass_code_mismatch">Vpisani kodi PIN nista enaki</string>
   <string name="pass_code_wrong">Napačna koda PIN</string>
-  <string name="pass_code_removed">Koda PIN je odstranjena</string>
-  <string name="pass_code_stored">Koda PIN je shranjena</string>
   <string name="media_notif_ticker">Predvajalnik glasbe %1$s</string>
   <string name="media_state_playing">%1$s (se predvaja)</string>
   <string name="media_state_loading">%1$s (se nalaga)</string>
@@ -326,8 +319,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Pošiljaj slike le prek WiFi</string>
-  <string name="camera_video_upload_on_wifi">Pošiljaj posnetke le prek Wifi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Pošiljaj slike le prek WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Pošiljaj posnetke le prek Wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Potrdi</string>
   <string name="confirmation_disable_pictures_upload_message">Ali ste prepričani, da želite onemogočiti to zmožnost? Slike na čakanju ne bodo poslane.</string>
   <string name="confirmation_disable_videos_upload_message">Ali ste prepričani, da želite onemogočiti to zmožnost? Posnetki na čakanju ne bodo poslani.</string>

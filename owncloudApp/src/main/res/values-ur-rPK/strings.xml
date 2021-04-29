@@ -5,7 +5,7 @@
   <string name="actionbar_send_file">بھجیں</string>
   <string name="drawer_open">کھولیں</string>
   <string name="drawer_help">مدد</string>
-  <string name="prefs_category_more">مزید</string>
+  <string name="prefs_subsection_more">مزید</string>
   <string name="prefs_help">مدد</string>
   <string name="auth_username">یوزر نیم</string>
   <string name="auth_password">پاسورڈ</string>

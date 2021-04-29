@@ -4,8 +4,6 @@
   <string name="global_name">Ім’я</string>
   <string name="global_date">Дата</string>
   <string name="global_size">Розмір</string>
-  <string name="about_android">%1$s для Android</string>
-  <string name="about_version">Версія %1$s</string>
   <string name="actionbar_search">Пошук в цій теці</string>
   <string name="actionbar_sync">Оновити обліковий запис</string>
   <string name="actionbar_upload">Відвантажити</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Зворотній зв\'язок</string>
   <string name="drawer_help">Допомога</string>
   <string name="prefs_category_general">Основне</string>
-  <string name="prefs_category_more">Більше</string>
-  <string name="prefs_category_security">Безпека</string>
+  <string name="prefs_subsection_more">Більше</string>
+  <string name="prefs_subsection_security">Безпека</string>
   <string name="prefs_accounts">Облікові записи</string>
   <string name="prefs_manage_accounts">Управління обліковими записами</string>
   <string name="prefs_passcode">Захистити паролем</string>
@@ -127,8 +125,7 @@
   <string name="common_error_unknown">невідома помилка</string>
   <string name="common_pending">Очікування</string>
   <string name="common_important">Важливий</string>
-  <string name="about_title">Про</string>
-  <string name="change_password">Змінити пароль</string>
+    <string name="change_password">Змінити пароль</string>
   <string name="delete_account">Видалити обліковий запис</string>
   <string name="create_account">Створити обліковий запис</string>
   <string name="upload_chooser_title">Відвантажити з</string>
@@ -204,8 +201,6 @@
   <string name="pass_code_remove_your_pass_code">Видалити пароль</string>
   <string name="pass_code_mismatch">Паролі не співпадають</string>
   <string name="pass_code_wrong">Невірний пароль</string>
-  <string name="pass_code_removed">Пароль видалено</string>
-  <string name="pass_code_stored">Пароль збережено</string>
   <string name="media_notif_ticker">%1$s музичний програвач</string>
   <string name="media_state_playing">%1$s (відтворюється)</string>
   <string name="media_state_loading">%1$s (завантажується)</string>
@@ -314,8 +309,8 @@
   <string name="placeholder_filesize">389 КБ</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Завантажувати картинки лише за наявності WiFi</string>
-  <string name="camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Завантажувати картинки лише за наявності WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Підтвердити</string>
   <string name="conflict_title">Конфлікт файлу</string>
   <string name="conflict_message">Які файли Ви хочете залишити? Якщо Ви оберете обидві версії, локальний файл матиме номер, що додається до його імені.</string>

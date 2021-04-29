@@ -4,8 +4,6 @@
   <string name="global_name">Име</string>
   <string name="global_date">Дата</string>
   <string name="global_size">Размер</string>
-  <string name="about_android">%1$sза Android</string>
-  <string name="about_version">Версия %1$s</string>
   <string name="actionbar_search">Търсене в тази папка</string>
   <string name="actionbar_sync">Обновяване на профила</string>
   <string name="actionbar_upload">Качване</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Обратна Връзка</string>
   <string name="drawer_help">Помощ</string>
   <string name="prefs_category_general">Общи</string>
-  <string name="prefs_category_more">Още</string>
-  <string name="prefs_category_security">Сигурност</string>
+  <string name="prefs_subsection_more">Още</string>
+  <string name="prefs_subsection_security">Сигурност</string>
   <string name="prefs_accounts">Профили</string>
   <string name="prefs_manage_accounts">Управление на профилите</string>
   <string name="prefs_passcode">Заключваща парола</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Неправилна схема</string>
   <string name="pattern_reenter_pattern">Моля, въведете отново своята схема</string>
   <string name="pattern_not_same_pattern">Схемите не са еднакви</string>
-  <string name="pattern_stored">Схемата е запазена</string>
-  <string name="pattern_removed">Схемата е изтрита</string>
   <string name="pattern_already_set">Заключването със схема и парола не може да бъде активно едновременно, моля деактивирайте първо схемата</string>
   <string name="passcode_already_set">Заключването със схема и парола не може да бъде активно едновременно, моля деактивирайте първо паролата</string>
   <string name="pattern_no_longer_required">Схемата повече няма да бъде зададена</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">неизвестна грешка</string>
   <string name="common_pending">Чакащо</string>
   <string name="common_important">Важно</string>
-  <string name="about_title">Относно</string>
-  <string name="change_password">Промяна на парола</string>
+    <string name="change_password">Промяна на парола</string>
   <string name="delete_account">Премахване на профила</string>
   <string name="create_account">Създаване на профил</string>
   <string name="upload_chooser_title">Качване от</string>
@@ -228,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">Премахване на паролата</string>
   <string name="pass_code_mismatch">Паролите не съвпадат</string>
   <string name="pass_code_wrong">Грешна парола</string>
-  <string name="pass_code_removed">Паролата е премахната</string>
-  <string name="pass_code_stored">Паролата е запаметена</string>
   <string name="biometric_not_hardware_detected">Това устройство не поддържа биометрична автенификация.</string>
   <string name="biometric_not_enrolled">Регистрирайте поне един брой биометрични данни за да използвате тази  функция</string>
   <string name="biometric_prompt_title">Биометричен вход</string>
@@ -346,8 +339,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Качване на снимки само през WiFi</string>
-  <string name="camera_video_upload_on_wifi">Качване на видео само през WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Качване на снимки само през WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Качване на видео само през WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Потвърди</string>
   <string name="confirmation_disable_pictures_upload_message">Наистина ли искате да деактивирате тази функция? Изчакващите снимки няма да бъдат качени</string>
   <string name="confirmation_disable_videos_upload_message">Наистина ли искате да деактивирате тази функция? Чакащите видеоклипове няма да бъдат качени</string>
@@ -439,7 +432,7 @@
   <string name="prefs_camera_upload_source_path_title">Папка за камерата (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">задължителен</string>
   <string name="prefs_camera_upload_source_path_title_optional">по избор</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Оригиналният файл ще бъде</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Оригиналният файл ще бъде</string>
   <string name="prefs_camera_upload_behaviour_title">Оригиналният файл ще бъде</string>
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>

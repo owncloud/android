@@ -4,8 +4,6 @@
   <string name="global_name">שם</string>
   <string name="global_date">תאריך</string>
   <string name="global_size">גודל</string>
-  <string name="about_android">%1$s אנדרויד</string>
-  <string name="about_version">גרסה%1$s</string>
   <string name="actionbar_search">חפש בתוך התיקיה</string>
   <string name="actionbar_sync">רענון חשבון</string>
   <string name="actionbar_upload">העלאה</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">משוב</string>
   <string name="drawer_help">עזרה</string>
   <string name="prefs_category_general">כללי</string>
-  <string name="prefs_category_more">יותר</string>
-  <string name="prefs_category_security">אבטחה</string>
+  <string name="prefs_subsection_more">יותר</string>
+  <string name="prefs_subsection_security">אבטחה</string>
   <string name="prefs_accounts">חשבונות</string>
   <string name="prefs_manage_accounts">ניהול חשבונות</string>
   <string name="prefs_passcode">נעילת סיסמא</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">תבנית שגויה</string>
   <string name="pattern_reenter_pattern">נא להזין את התבנית שלך מחדש</string>
   <string name="pattern_not_same_pattern">התבניות שונות</string>
-  <string name="pattern_stored">התבנית נשמרה</string>
-  <string name="pattern_removed">התבנית הוסרה</string>
   <string name="pattern_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את התבנית תחילה</string>
   <string name="passcode_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את הקוד תחילה</string>
   <string name="pattern_no_longer_required">לא תופיע עוד בקשה עם תבנית</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">שגיאה בלתי ידועה</string>
   <string name="common_pending">ממתין</string>
   <string name="common_important">חשוב</string>
-  <string name="about_title">על אודות</string>
-  <string name="change_password">שינוי ססמה</string>
+    <string name="change_password">שינוי ססמה</string>
   <string name="delete_account">הסרת חשבון</string>
   <string name="create_account">יצירת חשבון</string>
   <string name="upload_chooser_title">העלאה מ-</string>
@@ -228,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">יש להסיר את הקוד שלך</string>
   <string name="pass_code_mismatch">הקודים אינם זהים</string>
   <string name="pass_code_wrong">קוד שגוי</string>
-  <string name="pass_code_removed">הקוד הוסר</string>
-  <string name="pass_code_stored">הקוד נשמר</string>
   <string name="biometric_not_hardware_detected">התקן זה אינו תומך באימות ביומטרי</string>
   <string name="biometric_not_enrolled">יש לרשום לפחות מנגנון ביומטרי אחד לשימוש בתכונה זו</string>
   <string name="biometric_prompt_title">התחברות ביומטרית</string>
@@ -347,8 +340,8 @@
   <string name="placeholder_filesize">389 ק״ב</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">העלאת תמונות על בסיס חיבור wifi בלבד</string>
-  <string name="camera_video_upload_on_wifi">העלאת סרטים על בסיס חיבור wifi בלבד</string>
+  <string name="prefs_camera_picture_upload_on_wifi">העלאת תמונות על בסיס חיבור wifi בלבד</string>
+  <string name="prefs_camera_video_upload_on_wifi">העלאת סרטים על בסיס חיבור wifi בלבד</string>
   <string name="confirmation_disable_camera_uploads_title">אישור</string>
   <string name="confirmation_disable_pictures_upload_message">להשבית את התכונה הזאת? התמונות שממתינות לא יועלו</string>
   <string name="confirmation_disable_videos_upload_message">להשבית את התכונה הזאת? הסרטונים שממתינים לא יועלו</string>
@@ -400,7 +393,7 @@
   <string name="drawer_manage_accounts">ניהול חשבונות</string>
   <string name="auth_redirect_non_secure_connection_title">חיבור מאובטח מנותב דרך נתיב לא מאובטח</string>
   <string name="actionbar_logger">לוגים</string>
-  <string name="log_open_logs_view">פתיחת תצוגת לוגים</string>
+  <string name="prefs_open_logs_view">פתיחת תצוגת לוגים</string>
   <string name="log_send_history_button">הסטורית שליחה</string>
   <string name="log_send_no_mail_app">לא נמצא יישום לשליחת לוגים. יש להתקין יישום mail.</string>
   <string name="log_send_mail_subject">%1$s לוגים של יישום אנדרואיד</string>
@@ -442,7 +435,7 @@
   <string name="prefs_camera_upload_source_path_title">תיקיית מצלמה (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">נדרש</string>
   <string name="prefs_camera_upload_source_path_title_optional">אופציונלי</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">קובץ מקורי יהיה</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">קובץ מקורי יהיה</string>
   <string name="prefs_camera_upload_behaviour_title">קובץ מקורי יהיה</string>
   <string name="upload_copy_files">העתקת קובץ</string>
   <string name="upload_move_files">העברת קובץ</string>

@@ -4,8 +4,6 @@
   <string name="global_name">الاسم</string>
   <string name="global_date">التاريخ</string>
   <string name="global_size">الحجم</string>
-  <string name="about_android">%1$s للأندرويد</string>
-  <string name="about_version">إصدار %1$s</string>
   <string name="actionbar_search">بحث في هذا المجلد</string>
   <string name="actionbar_sync">تحديث الحساب</string>
   <string name="actionbar_upload">تحميل</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">ملاحظات</string>
   <string name="drawer_help">تعليمات</string>
   <string name="prefs_category_general">عام</string>
-  <string name="prefs_category_more">المزيد</string>
-  <string name="prefs_category_security">الأمان</string>
+  <string name="prefs_subsection_more">المزيد</string>
+  <string name="prefs_subsection_security">الأمان</string>
   <string name="prefs_accounts">حسابات</string>
   <string name="prefs_manage_accounts">إدارة الحسابات</string>
   <string name="prefs_passcode">قفل رمز المرور</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">نمط غير صحيح</string>
   <string name="pattern_reenter_pattern">يُرجى إعادة إدخال نمطك</string>
   <string name="pattern_not_same_pattern">الأنماط غير متطابقة</string>
-  <string name="pattern_stored">تم تخزين النمط</string>
-  <string name="pattern_removed">تم حذف النمط</string>
   <string name="pattern_already_set">لا يمكن تفعيل أقفال الأنماط ورموز المرور في الوقت نفسه، برجاء تعطيل النمط أولاً</string>
   <string name="passcode_already_set">لا يمكن تفعيل أقفال الأنماط ورموز المرور في الوقت نفسه، برجاء تعطيل رمز المرور أولاً</string>
   <string name="pattern_no_longer_required">لن يُطلب النمط بعد الآن</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">خطأ غير معروف</string>
   <string name="common_pending">تعليق</string>
   <string name="common_important">مهم</string>
-  <string name="about_title">عن</string>
-  <string name="change_password">تغيير كلمة المرور</string>
+    <string name="change_password">تغيير كلمة المرور</string>
   <string name="delete_account">حذف الحساب</string>
   <string name="create_account">إنشاء حساب</string>
   <string name="upload_chooser_title">تحميل من</string>
@@ -228,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">أزِل رمز مرورك</string>
   <string name="pass_code_mismatch">رموز المرور غير متطابقة</string>
   <string name="pass_code_wrong">رمز مرور غير صحيح</string>
-  <string name="pass_code_removed">تمت إزالة رمز المرور</string>
-  <string name="pass_code_stored">تم تخزين رمز المرور</string>
   <string name="biometric_not_hardware_detected">لا يدعم هذا الجهاز المصادقة البيولوجية</string>
   <string name="biometric_not_enrolled">سجِّل بيانات اعتماد بيولوجية واحدة على الأقل لاستخدام هذه الميزة</string>
   <string name="biometric_prompt_title">تسجيل دخول بيولوجي</string>
@@ -346,8 +339,8 @@
   <string name="placeholder_filesize">389 كيلوبايت</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 مساءً</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">تحميل الصور عبر wifi فقط</string>
-  <string name="camera_video_upload_on_wifi">تحميل مقاطع الفيديو عبر wifi فقط</string>
+  <string name="prefs_camera_picture_upload_on_wifi">تحميل الصور عبر wifi فقط</string>
+  <string name="prefs_camera_video_upload_on_wifi">تحميل مقاطع الفيديو عبر wifi فقط</string>
   <string name="confirmation_disable_camera_uploads_title">تأكيد</string>
   <string name="confirmation_disable_pictures_upload_message">هل أنت متأكد أنك ترغب في تعطيل هذه الميزة؟ لن يتم تحميل الصور المعلقة</string>
   <string name="confirmation_disable_videos_upload_message">هل أنت متأكد أنك ترغب في تعطيل هذه الميزة؟ لن يتم تحميل مقاطع الفيديو المعلقة</string>
@@ -398,7 +391,7 @@
   <string name="drawer_manage_accounts">إدارة الحسابات</string>
   <string name="auth_redirect_non_secure_connection_title">يُعاد توجيه الاتصال الآمن خلال مسار غير آمن.</string>
   <string name="actionbar_logger">السجلات</string>
-  <string name="log_open_logs_view">افتح عرض السجلات</string>
+  <string name="prefs_open_logs_view">افتح عرض السجلات</string>
   <string name="log_send_history_button">إرسال المحفوظات</string>
   <string name="log_send_no_mail_app">لم يتم العثور على تطبيق لإرسال السجلات. يُرجى تثبيت تطبيق بريد.</string>
   <string name="log_send_mail_subject">%1$s سجلات تطبيقات الأندرويد</string>
@@ -440,7 +433,7 @@
   <string name="prefs_camera_upload_source_path_title">مجلد الكاميرا (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">مطلوب</string>
   <string name="prefs_camera_upload_source_path_title_optional">اختياري</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">الملف الأصلي</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">الملف الأصلي</string>
   <string name="prefs_camera_upload_behaviour_title">الملف الأصلي</string>
   <string name="upload_copy_files">نسخ الملف</string>
   <string name="upload_move_files">نقل الملف</string>

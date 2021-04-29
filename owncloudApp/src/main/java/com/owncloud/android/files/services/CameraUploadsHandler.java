@@ -1,7 +1,9 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2017 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -88,17 +90,20 @@ public class CameraUploadsHandler {
         if (mCameraUploadsConfig.isEnabledForPictures()) {
             extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_PATH, mCameraUploadsConfig.
                     getUploadPathForPictures());
+            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_SOURCE_PATH, mCameraUploadsConfig.
+                    getSourcePathPictures());
+            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
+                    getBehaviourAfterUploadPictures());
         }
 
         if (mCameraUploadsConfig.isEnabledForVideos()) {
             extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_PATH, mCameraUploadsConfig.
                     getUploadPathForVideos());
+            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_SOURCE_PATH, mCameraUploadsConfig.
+                    getSourcePathVideos());
+            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
+                    getBehaviourAfterUploadVideos());
         }
-
-        extras.putString(Extras.EXTRA_CAMERA_UPLOADS_SOURCE_PATH, mCameraUploadsConfig.getSourcePath());
-
-        extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
-                getBehaviourAfterUpload());
 
         builder.setExtras(extras);
 

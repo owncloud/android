@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Андроид апликација</string>
-  <string name="about_version">верзија %1$s</string>
-  <string name="actionbar_sync">Освежи сметка</string>
+    <string name="actionbar_sync">Освежи сметка</string>
   <string name="actionbar_upload">Подигни</string>
   <string name="actionbar_upload_from_apps">Содржина од други апликации</string>
   <string name="actionbar_upload_files">Датотеки</string>
@@ -23,8 +21,8 @@
   <string name="drawer_feedback">Повратен одговор</string>
   <string name="drawer_help">Помош</string>
   <string name="prefs_category_general">Општо</string>
-  <string name="prefs_category_more">Повеќе</string>
-  <string name="prefs_category_security">Безбедност</string>
+  <string name="prefs_subsection_more">Повеќе</string>
+  <string name="prefs_subsection_security">Безбедност</string>
   <string name="prefs_accounts">Сметки</string>
   <string name="prefs_manage_accounts">Менаџирај корисници</string>
   <string name="prefs_passcode">Заклучено со код</string>
@@ -77,8 +75,7 @@
   <string name="common_loading">Вчитувам …</string>
   <string name="common_error_unknown">Непозната грешка</string>
   <string name="common_pending">Чека</string>
-  <string name="about_title">За</string>
-  <string name="change_password">Смени лозинка</string>
+    <string name="change_password">Смени лозинка</string>
   <string name="create_account">Креирај сметка</string>
   <string name="upload_chooser_title">подигни од …</string>
   <string name="uploader_info_dirname">Име на папка</string>
@@ -118,9 +115,7 @@
   <string name="pass_code_remove_your_pass_code">Избришете го вашиот код</string>
   <string name="pass_code_mismatch">Кодовите не се исти</string>
   <string name="pass_code_wrong">Неточен код</string>
-  <string name="pass_code_removed">Кодот е отстранет</string>
-  <string name="pass_code_stored">Кодот е снимен</string>
-  <string name="media_notif_ticker">%1$s пуштач на музика</string>
+    <string name="media_notif_ticker">%1$s пуштач на музика</string>
   <string name="media_state_playing">%1$s (свири)</string>
   <string name="media_state_loading">%1$s (вчитувам)</string>
   <string name="media_event_done">репродуцирањето на %1$s заврши</string>

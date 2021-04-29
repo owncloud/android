@@ -4,8 +4,6 @@
   <string name="global_name">Ad</string>
   <string name="global_date">Tarih</string>
   <string name="global_size">Boyut</string>
-  <string name="about_android">Android için %1$s</string>
-  <string name="about_version">Sürüm %1$s</string>
   <string name="actionbar_search">Bu klasörü ara</string>
   <string name="actionbar_sync">Hesabı yenile</string>
   <string name="actionbar_upload">Yükle</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Geribildirim</string>
   <string name="drawer_help">Yardım</string>
   <string name="prefs_category_general">Genel</string>
-  <string name="prefs_category_more">Daha fazla</string>
-  <string name="prefs_category_security">Güvenlik</string>
+  <string name="prefs_subsection_more">Daha fazla</string>
+  <string name="prefs_subsection_security">Güvenlik</string>
   <string name="prefs_accounts">Hesaplar</string>
   <string name="prefs_manage_accounts">Hesapları yönet</string>
   <string name="prefs_passcode">Parola kod kilidi</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Geçersiz desen</string>
   <string name="pattern_reenter_pattern">Lütfen deseninizi tekrar girin</string>
   <string name="pattern_not_same_pattern">Desenler aynı değil</string>
-  <string name="pattern_stored">Desen kaydedildi</string>
-  <string name="pattern_removed">Desen kaldırıldı</string>
   <string name="pattern_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, lütfen öncelikle deseni devre dışı bırakınız.</string>
   <string name="passcode_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, lütfen öncelikle parolayı devre dışı bırakınız.</string>
   <string name="pattern_no_longer_required">Desen artık sorulmayacak</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">bilinmeyen hata</string>
   <string name="common_pending">Bekliyor</string>
   <string name="common_important">Önemli</string>
-  <string name="about_title">Hakkında</string>
-  <string name="change_password">Parola değiştir</string>
+    <string name="change_password">Parola değiştir</string>
   <string name="delete_account">Hesabı kaldır</string>
   <string name="create_account">Hesap oluştur</string>
   <string name="upload_chooser_title">Şuradan yükle</string>
@@ -228,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">Parola kodunuzu kaldırın</string>
   <string name="pass_code_mismatch">Parola kodları aynı değil</string>
   <string name="pass_code_wrong">Hatalı parola kodu</string>
-  <string name="pass_code_removed">Parola kodu kaldırıldı</string>
-  <string name="pass_code_stored">Parola kodu depolandı</string>
   <string name="biometric_not_hardware_detected">Bu cihaz biyometrik kimlik doğrulamayı desteklemiyor</string>
   <string name="biometric_not_enrolled">Bu özelliği kullanmak için en az bir biyometrik giriş kaydedilmeli</string>
   <string name="biometric_prompt_title">Biyometrik giriş yap</string>
@@ -347,8 +340,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 ÖS</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Fotoğrafları sadece kablosuz bağlantıda (WiFi) yükle</string>
-  <string name="camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Fotoğrafları sadece kablosuz bağlantıda (WiFi) yükle</string>
+  <string name="prefs_camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
   <string name="confirmation_disable_camera_uploads_title">Onayla</string>
   <string name="confirmation_disable_pictures_upload_message">Bu özelliği devre dışı bırakmak istediğinizden emin misiniz? Bekleyen resimler yüklenmeyecek</string>
   <string name="confirmation_disable_videos_upload_message">Bu özelliği devre dışı bırakmak istediğinizden emin misiniz? Bekleyen videolar yüklenmeyecek</string>
@@ -441,7 +434,7 @@
   <string name="prefs_camera_upload_source_path_title">Kamera klasörü (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">gerekli</string>
   <string name="prefs_camera_upload_source_path_title_optional">isteğe bağlı</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Orjinal dosya şu olacak</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Orjinal dosya şu olacak</string>
   <string name="prefs_camera_upload_behaviour_title">şu olacak</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>

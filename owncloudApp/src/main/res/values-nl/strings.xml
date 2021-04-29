@@ -4,8 +4,6 @@
   <string name="global_name">Naam</string>
   <string name="global_date">Datum</string>
   <string name="global_size">Grootte</string>
-  <string name="about_android">%1$s voor Android</string>
-  <string name="about_version">Versie %1$s</string>
   <string name="actionbar_search">Zoek in deze map</string>
   <string name="actionbar_sync">Account verversen</string>
   <string name="actionbar_upload">Uploaden</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Help</string>
   <string name="prefs_category_general">Algemeen</string>
-  <string name="prefs_category_more">Meer</string>
-  <string name="prefs_category_security">Beveiliging</string>
+  <string name="prefs_subsection_more">Meer</string>
+  <string name="prefs_subsection_security">Beveiliging</string>
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Accounts beheren</string>
   <string name="prefs_passcode">Pincode slot</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Onjuiste vergrendelingspatroon</string>
   <string name="pattern_reenter_pattern">Voer aub opnieuw uw vergrendelingspatroon in</string>
   <string name="pattern_not_same_pattern">De vergrendelingspatronen komen niet overeen</string>
-  <string name="pattern_stored">Vergrendelingspatroon opgeslagen</string>
-  <string name="pattern_removed">Vergrendelingspatroon opgeslagen</string>
   <string name="pattern_already_set">Patroon- en toegangscodes kunnen niet tegelijkertijd actief zijn, deactiveer eerst de patroonbeveiliging</string>
   <string name="passcode_already_set">Patroon- en toegangscodes kunnen niet tegelijkertijd actief zijn, deactiveer eerst de toegangscode</string>
   <string name="pattern_no_longer_required">Het patroon zal niet meer worden gevraagd</string>
@@ -149,8 +145,7 @@ Download hier: %2$s</string>
   <string name="common_error_unknown">onbekende fout</string>
   <string name="common_pending">In behandeling</string>
   <string name="common_important">Belangrijk</string>
-  <string name="about_title">Over</string>
-  <string name="change_password">Wijzig wachtwoord</string>
+    <string name="change_password">Wijzig wachtwoord</string>
   <string name="delete_account">Account uitloggen</string>
   <string name="create_account">Maak account aan</string>
   <string name="upload_chooser_title">Upload vanaf</string>
@@ -231,8 +226,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_remove_your_pass_code">Verwijderen pincode</string>
   <string name="pass_code_mismatch">De pincodes komen niet overeen</string>
   <string name="pass_code_wrong">Onjuiste pincode</string>
-  <string name="pass_code_removed">Pincode verwijderd</string>
-  <string name="pass_code_stored">Pincode opgeslagen</string>
   <string name="biometric_not_hardware_detected">Dit apparaat ondersteunt geen biometrische authenticatie</string>
   <string name="biometric_not_enrolled">Registreer ten minste één biometrie om deze functie te gebruiken</string>
   <string name="biometric_prompt_title">Biometrisch aanmelden</string>
@@ -350,8 +343,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
-  <string name="camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Bevestigen</string>
   <string name="confirmation_disable_pictures_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande afbeeldingen worden niet geuploade</string>
   <string name="confirmation_disable_videos_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande video’s worden niet geuploade</string>
@@ -444,7 +437,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="prefs_camera_upload_source_path_title">Cameramap (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vereist</string>
   <string name="prefs_camera_upload_source_path_title_optional">optioneel</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Origineel bestand zal zijn</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Origineel bestand zal zijn</string>
   <string name="prefs_camera_upload_behaviour_title">Origineel bestand zal zijn</string>
   <string name="upload_copy_files">Kopiëren bestand</string>
   <string name="upload_move_files">Verplaatsen bestand</string>

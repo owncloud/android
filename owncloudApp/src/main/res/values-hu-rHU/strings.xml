@@ -4,8 +4,6 @@
   <string name="global_name">Név</string>
   <string name="global_date">Dátum</string>
   <string name="global_size">Méret</string>
-  <string name="about_android">%1$s Android</string>
-  <string name="about_version">%1$s verzió</string>
   <string name="actionbar_search">Keresés ebben a mappában</string>
   <string name="actionbar_sync">Fiók frissítése</string>
   <string name="actionbar_upload">Feltöltés</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Visszajelzés</string>
   <string name="drawer_help">Súgó</string>
   <string name="prefs_category_general">Általános</string>
-  <string name="prefs_category_more">Több</string>
-  <string name="prefs_category_security">Biztonság</string>
+  <string name="prefs_subsection_more">Több</string>
+  <string name="prefs_subsection_security">Biztonság</string>
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
@@ -66,8 +64,6 @@
   <string name="pattern_incorrect_pattern">Hibás minta</string>
   <string name="pattern_reenter_pattern">Adja meg újra a mintát</string>
   <string name="pattern_not_same_pattern">A minták nem egyeznek</string>
-  <string name="pattern_stored">Minta tárolva</string>
-  <string name="pattern_removed">Minta eltávolítva</string>
   <string name="pattern_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a mintát</string>
   <string name="passcode_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a jelszót</string>
   <string name="pattern_no_longer_required">A minta többé nem lesz bekérve</string>
@@ -145,8 +141,7 @@
   <string name="common_error_unknown">ismeretlen hiba</string>
   <string name="common_pending">Folyamatban</string>
   <string name="common_important">Fontos</string>
-  <string name="about_title">Névjegy</string>
-  <string name="change_password">Jelszó megváltoztatása</string>
+    <string name="change_password">Jelszó megváltoztatása</string>
   <string name="delete_account">Fiók eltávolítása</string>
   <string name="create_account">Fiók létrehozása</string>
   <string name="upload_chooser_title">Feltöltés innen</string>
@@ -225,8 +220,6 @@
   <string name="pass_code_remove_your_pass_code">Jelszó eltávolítása</string>
   <string name="pass_code_mismatch">A jelszavak nem egyeznek</string>
   <string name="pass_code_wrong">Hibás jelszó</string>
-  <string name="pass_code_removed">Jelszó eltávolítva</string>
-  <string name="pass_code_stored">Jelszó eltárolva</string>
   <string name="media_notif_ticker">%1$s zenelejátszó</string>
   <string name="media_state_playing">%1$s (lejátszás)</string>
   <string name="media_state_loading">%1$s (betöltés)</string>
@@ -338,8 +331,8 @@
   <string name="placeholder_filesize">389 kB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Képeket csak wifin tölthet fel</string>
-  <string name="camera_video_upload_on_wifi">Videókat csak wifin tölthet fel</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Képeket csak wifin tölthet fel</string>
+  <string name="prefs_camera_video_upload_on_wifi">Videókat csak wifin tölthet fel</string>
   <string name="confirmation_disable_camera_uploads_title">Megerősítés</string>
   <string name="confirmation_disable_pictures_upload_message">Biztos letiltja ezt a funkciót? A függőben lévő képek nem lesznek feltöltve</string>
   <string name="confirmation_disable_videos_upload_message">Biztos letiltja ezt a funkciót? A függőben lévő videók nem lesznek feltöltve</string>
@@ -426,7 +419,7 @@
   <string name="prefs_camera_upload_source_path_title">Kamera mappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">kötelező</string>
   <string name="prefs_camera_upload_source_path_title_optional">választható</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Eredeti fájl lesz</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Eredeti fájl lesz</string>
   <string name="prefs_camera_upload_behaviour_title">Eredeti fájl lesz ...</string>
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>

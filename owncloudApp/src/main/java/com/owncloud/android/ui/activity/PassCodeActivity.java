@@ -1,4 +1,4 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author Bartek Przybylski
@@ -40,7 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.owncloud.android.MainApp;
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -57,7 +57,7 @@ public class PassCodeActivity extends BaseActivity {
     public final static String KEY_PASSCODE = "KEY_PASSCODE";
     public final static String KEY_CHECK_RESULT = "KEY_CHECK_RESULT";
 
-    // NOTE: PREFERENCE_SET_PASSCODE must have the same value as preferences.xml-->android:key for passcode preference
+    // NOTE: PREFERENCE_SET_PASSCODE must have the same value as settings_security.xml-->android:key for passcode preference
     public final static String PREFERENCE_SET_PASSCODE = "set_pincode";
 
     public final static String PREFERENCE_PASSCODE_D = "PrefPinCode";
@@ -87,7 +87,7 @@ public class PassCodeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         /// protection against screen recording
-        if (!MainApp.Companion.isDeveloper()) {
+        if (!BuildConfig.DEBUG) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         } // else, let it go, or taking screenshots & testing will not be possible
 

@@ -4,8 +4,6 @@
   <string name="global_name">ชื่อ</string>
   <string name="global_date">วันที่</string>
   <string name="global_size">ขนาด</string>
-  <string name="about_android">%1$sสำหรับแอนดรอยด์ </string>
-  <string name="about_version">เวอร์ชัน %1$s</string>
   <string name="actionbar_search">ค้นหาโฟลเดอร์นี้</string>
   <string name="actionbar_sync">ฟื้นฟูบัญชี</string>
   <string name="actionbar_upload">อัปโหลดไฟล์</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">ข้อเสนอแนะ</string>
   <string name="drawer_help">ช่วยเหลือ</string>
   <string name="prefs_category_general">ทั่วไป</string>
-  <string name="prefs_category_more">เพิ่มเติม</string>
-  <string name="prefs_category_security">ความปลอดภัย</string>
+  <string name="prefs_subsection_more">เพิ่มเติม</string>
+  <string name="prefs_subsection_security">ความปลอดภัย</string>
   <string name="prefs_accounts">บัญชี</string>
   <string name="prefs_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="prefs_passcode">ล็อครหัสปลดล็อค</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">รูปแบบไม่ถูกต้อง</string>
   <string name="pattern_reenter_pattern">โปรดกรอกรูปแบบของคุณอีกครั้ง</string>
   <string name="pattern_not_same_pattern">รูปแบบไม่เหมือนกัน</string>
-  <string name="pattern_stored">รูปแบบที่เก็บไว้</string>
-  <string name="pattern_removed">ลบรูปแบบแล้ว</string>
   <string name="pattern_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดการใช้รูปแบบก่อน</string>
   <string name="passcode_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดใช้งานรหัสผ่านก่อน</string>
   <string name="pattern_no_longer_required">จะไม่ถามเรื่องรูปแบบอีกต่อไป</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">เกิดข้อผิดพลาดที่ไม่รู้จัก</string>
   <string name="common_pending">อยู่ระหว่างดำเนินการ</string>
   <string name="common_important">สำคัญ</string>
-  <string name="about_title">เกี่ยวกับเรา</string>
-  <string name="change_password">เปลี่ยนรหัสผ่าน</string>
+    <string name="change_password">เปลี่ยนรหัสผ่าน</string>
   <string name="delete_account">ลบบัญชี</string>
   <string name="create_account">สร้างบัญชีใหม่</string>
   <string name="upload_chooser_title">อัปโหลดจาก</string>
@@ -228,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">ลบรหัสปลดล็อคของคุณ</string>
   <string name="pass_code_mismatch">รหัสปลดล็อคของคุณไม่ตรงกัน</string>
   <string name="pass_code_wrong">รหัสปลดล็อคไม่ถูกต้อง</string>
-  <string name="pass_code_removed">ลบรหัสปลดล็อค</string>
-  <string name="pass_code_stored">รหัสปลดล็อคที่เก็บไว้</string>
   <string name="biometric_not_hardware_detected">อุปกรณ์นี้ไม่รองรับการใช้งานไบโอเมตริกซ์</string>
   <string name="biometric_not_enrolled">จำเป็นต้องเพิ่มอย่างน้อยหนึ่งไบโอเมตริกซ์เพื่อใช้เปิดการใช้งานฟีดเจอร์นี้</string>
   <string name="biometric_prompt_title">เข้าสู่ระบบด้วยไบโอเมตริกซ์</string>
@@ -346,8 +339,8 @@
   <string name="placeholder_filesize">389 กิโลไบต์</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">อัปโหลดรูปภาพผ่านทาง wifi เท่านั้น</string>
-  <string name="camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง wifi เท่านั้น</string>
+  <string name="prefs_camera_picture_upload_on_wifi">อัปโหลดรูปภาพผ่านทาง wifi เท่านั้น</string>
+  <string name="prefs_camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง wifi เท่านั้น</string>
   <string name="confirmation_disable_camera_uploads_title">ยืนยัน</string>
   <string name="confirmation_disable_pictures_upload_message">ต้องการปิดใช้งานคุณลักษณะนี้? รูปภาพที่ค้างอยู่จะไม่ถูกอัปโหลด</string>
   <string name="confirmation_disable_videos_upload_message">ต้องการปิดใช้งานคุณลักษณะนี้? วีดีโอที่ค้างอยู่จะไม่ถูกอัปโหลด</string>
@@ -398,7 +391,7 @@
   <string name="drawer_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="auth_redirect_non_secure_connection_title">เชื่อมต่อที่ปลอดภัยถูกเปลี่ยนเส้นทางผ่านเราเตอร์ที่ไม่ปลอดภัย</string>
   <string name="actionbar_logger">ไฟล์ log</string>
-  <string name="log_open_logs_view">เปิดมุมมองบันทึก</string>
+  <string name="prefs_open_logs_view">เปิดมุมมองบันทึก</string>
   <string name="log_send_history_button">ส่งประวัติการใช้งานย้อนหลัง</string>
   <string name="log_send_no_mail_app">ไม่พบแอปสำหรับส่งข้อมูล log กรุณาติดตั้งแอปสำหรับส่งเมล</string>
   <string name="log_send_mail_subject">%1$s ข้อมูล log สำหรับแอปแอนดรอยด์</string>
@@ -440,7 +433,7 @@
   <string name="prefs_camera_upload_source_path_title">โฟลเดอร์ของกล้อง (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
   <string name="prefs_camera_upload_source_path_title_optional">ตัวเลือก</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">ไฟล์ต้นฉบับจะเป็น</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="prefs_camera_upload_behaviour_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>

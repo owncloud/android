@@ -4,8 +4,6 @@
   <string name="global_name">Nombre</string>
   <string name="global_date">Fecha</string>
   <string name="global_size">Tamaño</string>
-  <string name="about_android">%1$spara Android</string>
-  <string name="about_version">Versión %1$s</string>
   <string name="actionbar_search">Buscar en esta carpeta</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Sugerencias</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Más</string>
-  <string name="prefs_category_security">Seguridad</string>
+  <string name="prefs_subsection_more">Más</string>
+  <string name="prefs_subsection_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Bloqueo con clave</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_reenter_pattern">Por favor ingresa nuevamente tu patrón</string>
   <string name="pattern_not_same_pattern">Los patrones difieren entre sí</string>
-  <string name="pattern_stored">Patrón almacenado</string>
-  <string name="pattern_removed">Patrón eliminado</string>
   <string name="pattern_already_set">El patrón y la clave de desbloqueo no pueden estar activos al mismo tiempo, por favor desactiva primero el patrón</string>
   <string name="passcode_already_set">El patrón y la clave de desbloqueo no pueden estar activos al mismo tiempo, por favor desactiva primero la clave</string>
   <string name="pattern_no_longer_required">El patrón no se volverá a solicitar</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">error desconocido</string>
   <string name="common_pending">Pendientes</string>
   <string name="common_important">Importante</string>
-  <string name="about_title">Acerca de</string>
-  <string name="change_password">Cambiar contraseña</string>
+    <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>
   <string name="create_account">Crear cuenta</string>
   <string name="upload_chooser_title">Subir desde</string>
@@ -232,8 +227,6 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="pass_code_remove_your_pass_code">Eliminar tu contraseña</string>
   <string name="pass_code_mismatch">Las contraseñas no son iguales</string>
   <string name="pass_code_wrong">Contraseña incorrecta</string>
-  <string name="pass_code_removed">Contraseña eliminada</string>
-  <string name="pass_code_stored">Contraseña almacenada</string>
   <string name="biometric_not_hardware_detected">Este dispositivo no soporta autenticación biométrica.</string>
   <string name="biometric_not_enrolled">Registra al menos un dato biométrico para usar esta funcionalidad.</string>
   <string name="biometric_prompt_title">Inicio de sesión biométrico</string>
@@ -350,8 +343,8 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Cargar imágenes solamente con WiFi</string>
-  <string name="camera_video_upload_on_wifi">Cargar videos solamente con WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Cargar imágenes solamente con WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Cargar videos solamente con WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Está seguro que desea inhabilitar esta funcionalidad? Las imágenes pendientes no serán subidas</string>
   <string name="confirmation_disable_videos_upload_message">¿Está seguro que quiere deshabilitar esta funcionalidad? Los videos pendientes no serán subidos</string>
@@ -444,7 +437,7 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="prefs_camera_upload_source_path_title">Carpeta de la cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">El archivo original debe ser</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">El archivo original debe ser</string>
   <string name="prefs_camera_upload_behaviour_title">El archivo original debe ser</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>

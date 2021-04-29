@@ -1,8 +1,10 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -64,8 +66,10 @@ public class CameraUploadsSyncJobService extends JobService {
         private OCCameraUploadSync mOCCameraUploadSync;
         private String mCameraUploadsPicturesPath;
         private String mCameraUploadsVideosPath;
-        private String mCameraUploadsSourcePath;
-        private int mCameraUploadsBehaviorAfterUpload;
+        private String mCameraUploadsPicturesSourcePath;
+        private String mCameraUploadsVideosSourcePath;
+        private int mCameraUploadsPicturesBehaviorAfterUpload;
+        private int mCameraUploadsVideosBehaviorAfterUpload;
 
         public CameraUploadsSyncJobTask(JobService mCameraUploadsSyncJobService) {
             this.mCameraUploadsSyncJobService = mCameraUploadsSyncJobService;
@@ -91,9 +95,12 @@ public class CameraUploadsSyncJobService extends JobService {
 
             mCameraUploadsPicturesPath = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_PATH);
             mCameraUploadsVideosPath = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_PATH);
-            mCameraUploadsSourcePath = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_SOURCE_PATH);
-            mCameraUploadsBehaviorAfterUpload = jobParams[0].getExtras().
-                    getInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD);
+            mCameraUploadsPicturesSourcePath = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_SOURCE_PATH);
+            mCameraUploadsPicturesBehaviorAfterUpload = jobParams[0].getExtras().
+                    getInt(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_BEHAVIOR_AFTER_UPLOAD);
+            mCameraUploadsVideosSourcePath = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_SOURCE_PATH);
+            mCameraUploadsVideosBehaviorAfterUpload = jobParams[0].getExtras().
+                    getInt(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_BEHAVIOR_AFTER_UPLOAD);
 
             syncFiles();
 
@@ -110,31 +117,54 @@ public class CameraUploadsSyncJobService extends JobService {
          */
         private void syncFiles() {
 
-            //Get local images and videos
-            String localCameraPath = mCameraUploadsSourcePath;
+            // Get local images and videos
+            String localCameraPicturesPath = mCameraUploadsPicturesSourcePath;
+            String localCameraVideosPath = mCameraUploadsVideosSourcePath;
 
-            File[] localFiles = new File[0];
+            File[] localPictureFiles = null;
+            File[] localVideoFiles = null;
 
-            if (localCameraPath != null) {
-                File cameraFolder = new File(localCameraPath);
-                localFiles = cameraFolder.listFiles();
+            if (localCameraPicturesPath != null) {
+                File cameraPicturesFolder = new File(localCameraPicturesPath);
+                localPictureFiles = cameraPicturesFolder.listFiles();
             }
 
-            if (localFiles != null) {
-                localFiles = orderFilesByCreationTimestamp(localFiles);
+            if (localCameraVideosPath != null) {
+                File cameraVideosFolder = new File(localCameraVideosPath);
+                localVideoFiles = cameraVideosFolder.listFiles();
+            }
 
-                for (File localFile : localFiles) {
-                    handleFile(localFile);
+            if (localPictureFiles != null) {
+                orderFilesByCreationTimestamp(localPictureFiles);
+
+                for (File localFile : localPictureFiles) {
+                    String fileName = localFile.getName();
+                    String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
+                    boolean isImage = mimeType.startsWith("image/");
+                    if (isImage) {
+                        handleFile(localFile);
+                    }
+                }
+            }
+
+            if (localVideoFiles != null) {
+                orderFilesByCreationTimestamp(localVideoFiles);
+
+                for (File localFile : localVideoFiles) {
+                    String fileName = localFile.getName();
+                    String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
+                    boolean isVideo = mimeType.startsWith("video/");
+                    if (isVideo) {
+                        handleFile(localFile);
+                    }
                 }
             }
 
             Timber.d("All files synced, finishing job");
         }
 
-        private File[] orderFilesByCreationTimestamp(File[] localFiles) {
+        private void orderFilesByCreationTimestamp(File[] localFiles) {
             Arrays.sort(localFiles, (file1, file2) -> Long.compare(file1.lastModified(), file2.lastModified()));
-
-            return localFiles;
         }
 
         /**
@@ -146,32 +176,18 @@ public class CameraUploadsSyncJobService extends JobService {
         private synchronized void handleFile(File localFile) {
 
             String fileName = localFile.getName();
-
             String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
             boolean isImage = mimeType.startsWith("image/");
             boolean isVideo = mimeType.startsWith("video/");
-
-            if (!isImage && !isVideo) {
-                Timber.d("Ignoring %s", fileName);
-                return;
-            }
-
-            if (isImage && mCameraUploadsPicturesPath == null) {
-                Timber.d("Camera uploads disabled for images, ignoring %s", fileName);
-                return;
-            }
-
-            if (isVideo && mCameraUploadsVideosPath == null) {
-                Timber.d("Camera uploads disabled for videos, ignoring %s", fileName);
-                return;
-            }
 
             String remotePath = (isImage ? mCameraUploadsPicturesPath : mCameraUploadsVideosPath) + fileName;
 
             int createdBy = isImage ? UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE :
                     UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO;
 
-            String localPath = mCameraUploadsSourcePath + File.separator + fileName;
+            String localPath = (isImage ? mCameraUploadsPicturesSourcePath : mCameraUploadsVideosSourcePath) + File.separator + fileName;
+
+            int behaviour = isImage ? mCameraUploadsPicturesBehaviorAfterUpload : mCameraUploadsVideosBehaviorAfterUpload;
 
             mOCCameraUploadSync = mCameraUploadsSyncStorageManager.getCameraUploadSync(null, null,
                     null);
@@ -204,7 +220,7 @@ public class CameraUploadsSyncJobService extends JobService {
                     mAccount,
                     localPath,
                     remotePath,
-                    mCameraUploadsBehaviorAfterUpload,
+                    behaviour,
                     mimeType,
                     true,           // create parent folder if not existent
                     createdBy

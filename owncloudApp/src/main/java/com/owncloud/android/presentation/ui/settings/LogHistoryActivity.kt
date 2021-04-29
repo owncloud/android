@@ -18,29 +18,33 @@
  *
  */
 
-package com.owncloud.android.ui.activity
+package com.owncloud.android.presentation.ui.settings
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import info.hannes.logcat.BothLogsFragment
 import info.hannes.logcat.LogcatFragment
 import info.hannes.timber.fileLoggingTree
 
-class LogHistoryActivity : ToolbarActivity() {
+class LogHistoryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.logs)
 
-        setupStandardToolbar(
-            title = getString(R.string.actionbar_logger),
-            displayHomeAsUpEnabled = false,
-            displayShowTitleEnabled = true,
-            homeButtonEnabled = false,
-        )
+        val toolbar = findViewById<Toolbar>(R.id.standard_toolbar).apply {
+            setTitle(R.string.actionbar_logger)
+            isVisible = true
+        }
+        findViewById<ConstraintLayout>(R.id.root_toolbar).isVisible = false
+
+        setSupportActionBar(toolbar)
 
         // Check that the activity is using the layout version with the fragment_container FrameLayout
         if (findViewById<View>(R.id.fragment_container) != null) {

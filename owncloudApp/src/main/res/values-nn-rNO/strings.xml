@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android program</string>
-  <string name="about_version">utgåve %1$s</string>
   <string name="actionbar_sync">Oppdater konto</string>
   <string name="actionbar_upload">Last opp</string>
   <string name="actionbar_upload_from_apps">Innhald frå andre program</string>
@@ -20,8 +18,8 @@
   <string name="drawer_feedback">Tilbakemelding</string>
   <string name="drawer_help">Hjelp</string>
   <string name="prefs_category_general">Generelt</string>
-  <string name="prefs_category_more">Meir</string>
-  <string name="prefs_category_security">Tryggleik</string>
+  <string name="prefs_subsection_more">Meir</string>
+  <string name="prefs_subsection_security">Tryggleik</string>
   <string name="prefs_accounts">Kontoar</string>
   <string name="prefs_manage_accounts">Handter kontoar</string>
   <string name="prefs_passcode">Passkodelås</string>
@@ -91,8 +89,7 @@
   <string name="common_unknown">ukjend</string>
   <string name="common_error_unknown">Ukjend feil</string>
   <string name="common_pending">Under vegs</string>
-  <string name="about_title">Om</string>
-  <string name="change_password">Endra passord</string>
+    <string name="change_password">Endra passord</string>
   <string name="delete_account">Fjern konto</string>
   <string name="create_account">Lag konto</string>
   <string name="upload_chooser_title">Last opp frå …</string>
@@ -166,8 +163,6 @@
   <string name="pass_code_remove_your_pass_code">Fjern kode</string>
   <string name="pass_code_mismatch">Koder er ikkje like</string>
   <string name="pass_code_wrong">Feil kode</string>
-  <string name="pass_code_removed">Kode fjerna</string>
-  <string name="pass_code_stored">Kode lagra</string>
   <string name="media_notif_ticker">%1$s musikk spelar</string>
   <string name="media_state_playing">%1$s (spelar)</string>
   <string name="media_state_loading">%1$s (lastar)</string>
@@ -228,8 +223,8 @@
   <string name="ssl_validator_btn_details_see">Detaljar</string>
   <string name="placeholder_timestamp">18.05.2012 12:23 </string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Last opp kun med trådlaust nett</string>
-  <string name="camera_video_upload_on_wifi">Last opp video kun med trådlaust nett</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Last opp kun med trådlaust nett</string>
+  <string name="prefs_camera_video_upload_on_wifi">Last opp video kun med trådlaust nett</string>
   <string name="conflict_title">Fil konflikt</string>
   <string name="conflict_keep_both">Behald båe</string>
   <string name="conflict_use_local_version">lokal versjon</string>

@@ -4,8 +4,6 @@
   <string name="global_name">Nimi</string>
   <string name="global_date">Kuupäev</string>
   <string name="global_size">Suurus</string>
-  <string name="about_android">%1$s Androidile</string>
-  <string name="about_version">Versioon %1$s</string>
   <string name="actionbar_search">Otsi sellest kaustast</string>
   <string name="actionbar_sync">Värskenda kontot</string>
   <string name="actionbar_upload">Lae fail üles</string>
@@ -30,8 +28,8 @@
   <string name="drawer_feedback">Tagasiside</string>
   <string name="drawer_help">Abiinfo</string>
   <string name="prefs_category_general">Üldine</string>
-  <string name="prefs_category_more">Rohkem</string>
-  <string name="prefs_category_security">Turvalisus</string>
+  <string name="prefs_subsection_more">Rohkem</string>
+  <string name="prefs_subsection_security">Turvalisus</string>
   <string name="prefs_accounts">Kontod</string>
   <string name="prefs_manage_accounts">Halda kontosid</string>
   <string name="prefs_passcode">Parooli lukk</string>
@@ -56,8 +54,6 @@
   <string name="pattern_incorrect_pattern">Vigane muster</string>
   <string name="pattern_reenter_pattern">Palun sisesta muster uuesti</string>
   <string name="pattern_not_same_pattern">Mustrid pole samad</string>
-  <string name="pattern_stored">Muster on salvestatud</string>
-  <string name="pattern_removed">Muster on eemaldatud</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Failid</string>
   <string name="bottom_nav_uploads">Üleslaadimised</string>
@@ -114,8 +110,7 @@
   <string name="common_error_unknown">tundmatu tõrge</string>
   <string name="common_pending">Ootel</string>
   <string name="common_important">Tähtis</string>
-  <string name="about_title">Info</string>
-  <string name="change_password">Muuda parooli</string>
+    <string name="change_password">Muuda parooli</string>
   <string name="delete_account">Eemalda konto</string>
   <string name="create_account">Loo konto</string>
   <string name="uploader_info_dirname">Kausta nimi</string>
@@ -183,8 +178,6 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="pass_code_remove_your_pass_code">Eemalda oma parool</string>
   <string name="pass_code_mismatch">Paroolid pole samad</string>
   <string name="pass_code_wrong">Vale parool</string>
-  <string name="pass_code_removed">Parool on eemaldatud</string>
-  <string name="pass_code_stored">Parool on salvestatud</string>
   <string name="media_notif_ticker">%1$s muusika mängija</string>
   <string name="media_state_playing">%1$s (mängib)</string>
   <string name="media_state_loading">%1$s (laeb)</string>
@@ -287,8 +280,8 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Laadi pilte üles ainult üle wifi</string>
-  <string name="camera_video_upload_on_wifi">Laadi videod üles ainult WiFi-t kasutades</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Laadi pilte üles ainult üle wifi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Laadi videod üles ainult WiFi-t kasutades</string>
   <string name="confirmation_disable_camera_uploads_title">Kinnita</string>
   <string name="conflict_title">Failikonflikt</string>
   <string name="conflict_message">Millist faili sa soovid säilitada? Kui valid mõlemad versioonid, siis lisatakse kohaliku faili nimele number.</string>
@@ -360,7 +353,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="file_list__footer__files_and_folders">%1$d faili, %2$d kausta</string>
   <string name="prefs_camera_upload_source_path_title_required">nõutud</string>
   <string name="prefs_camera_upload_source_path_title_optional">valikuline</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Algne fail</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Algne fail</string>
   <string name="prefs_camera_upload_behaviour_title">Algne failAlgne fail</string>
   <string name="upload_copy_files">Kopeeri fail</string>
   <string name="upload_move_files">Liiguta fail</string>

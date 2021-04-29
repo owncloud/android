@@ -4,8 +4,6 @@
   <string name="global_name">Emër</string>
   <string name="global_date">Datë</string>
   <string name="global_size">Madhësi</string>
-  <string name="about_android">%1$s për Android</string>
-  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Kërko në këtë dosje</string>
   <string name="actionbar_sync">Fresko llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Përshtypje</string>
   <string name="drawer_help">Ndihmë</string>
   <string name="prefs_category_general">Të përgjithshme</string>
-  <string name="prefs_category_more">Më tepër</string>
-  <string name="prefs_category_security">Siguri</string>
+  <string name="prefs_subsection_more">Më tepër</string>
+  <string name="prefs_subsection_security">Siguri</string>
   <string name="prefs_accounts">Llogari</string>
   <string name="prefs_manage_accounts">Administroni llogari</string>
   <string name="prefs_passcode">Kyçje me kodkalim</string>
@@ -67,8 +65,6 @@
   <string name="pattern_incorrect_pattern">Rregullsi e pasaktë</string>
   <string name="pattern_reenter_pattern">Ju lutemi, rijepeni rregullsinë tuaj</string>
   <string name="pattern_not_same_pattern">Rregullsitë s\’janë të njëjta</string>
-  <string name="pattern_stored">Rregullsia u Depozitua</string>
-  <string name="pattern_removed">Rregullsia u Hoq</string>
   <string name="pattern_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni rregullsinë</string>
   <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
   <string name="pattern_no_longer_required">S\’do të pyetet më për rregullsinë</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">gabim i panjohur</string>
   <string name="common_pending">Në pritje</string>
   <string name="common_important">E rëndësishme</string>
-  <string name="about_title">Rreth</string>
-  <string name="change_password">Ndryshoni fjalëkalimin</string>
+    <string name="change_password">Ndryshoni fjalëkalimin</string>
   <string name="delete_account">Hiqe llogarinë</string>
   <string name="create_account">Krijoni llogari</string>
   <string name="upload_chooser_title">Ngarkoje prej</string>
@@ -228,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">Hiqeni kodkalimin tuaj</string>
   <string name="pass_code_mismatch">Kodkalimet s\’janë të njëjtë</string>
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
-  <string name="pass_code_removed">Kodkalimi u hoq</string>
-  <string name="pass_code_stored">Kodkalimi u depozitua</string>
   <string name="biometric_not_hardware_detected">Kjo pajisje nuk mbulon mirëfilltësime biometrike</string>
   <string name="biometric_not_enrolled">Që të përdorni këtë veçori, regjistroni të paktën një palë kredenciale biometrike</string>
   <string name="biometric_prompt_title">Hyrje biometrike</string>
@@ -346,8 +339,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Fotot ngarkoji vetëm përmes wifi-it</string>
-  <string name="camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Fotot ngarkoji vetëm përmes wifi-it</string>
+  <string name="prefs_camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
   <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
   <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
   <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
@@ -398,7 +391,7 @@
   <string name="drawer_manage_accounts">Administroni llogari</string>
   <string name="auth_redirect_non_secure_connection_title">Lidhja e sigurt është ridrejtuar përmes një rruge të pasigurt.</string>
   <string name="actionbar_logger">Regjistra</string>
-  <string name="log_open_logs_view">Hap pamjen regjistra</string>
+  <string name="prefs_open_logs_view">Hap pamjen regjistra</string>
   <string name="log_send_history_button">Historik dërgimesh</string>
   <string name="log_send_no_mail_app">S\’u gjet aplikacion për dërgim regjistrimesh. Ju lutemi, instaloni një aplikacion email-esh.</string>
   <string name="log_send_mail_subject">Regjistra aplikacioni %1$s për Android</string>
@@ -440,7 +433,7 @@
   <string name="prefs_camera_upload_source_path_title">Dosje kamere (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">e domosdoshme</string>
   <string name="prefs_camera_upload_source_path_title_optional">opsionale</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Kartela origjinale do të jetë</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Kartela origjinale do të jetë</string>
   <string name="prefs_camera_upload_behaviour_title">Kartela origjinale do të jetë</string>
   <string name="upload_copy_files">Kopjoje kartelën</string>
   <string name="upload_move_files">Lëvize kartelën</string>

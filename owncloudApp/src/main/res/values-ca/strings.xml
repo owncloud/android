@@ -4,8 +4,6 @@
   <string name="global_name">Nom</string>
   <string name="global_date">Data</string>
   <string name="global_size">Mida</string>
-  <string name="about_android">1%1$s Per Android</string>
-  <string name="about_version">Versió 1%1$s</string>
   <string name="actionbar_search">Buscar en aquesta carpeta</string>
   <string name="actionbar_sync">Actualitza compte</string>
   <string name="actionbar_upload">Puja un fitxer</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Comentaris</string>
   <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Més</string>
-  <string name="prefs_category_security">Seguretat</string>
+  <string name="prefs_subsection_more">Més</string>
+  <string name="prefs_subsection_security">Seguretat</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gestió de comptes</string>
   <string name="prefs_passcode">Contrasenya</string>
@@ -65,8 +63,6 @@
   <string name="pattern_incorrect_pattern">Patró incorrecte</string>
   <string name="pattern_reenter_pattern">Repeteix el patró, si us plau</string>
   <string name="pattern_not_same_pattern">Els patrons no son iguals</string>
-  <string name="pattern_stored">Patró desat</string>
-  <string name="pattern_removed">Patró borrat</string>
   <string name="pattern_already_set">El patró i la contrasenya no poden ser activats al mateix moment. Desactiva primer el patró si us plau.</string>
   <string name="passcode_already_set">El patró i la contrasenya no poden ser activats al mateix moment. Desactiva la contrasenya si us plau.</string>
   <string name="pattern_no_longer_required">No demanar mai més el patró</string>
@@ -148,8 +144,7 @@
   <string name="common_error_unknown">error desconegut</string>
   <string name="common_pending">Pendent</string>
   <string name="common_important">Important</string>
-  <string name="about_title">Quant a</string>
-  <string name="change_password">Canvia la contrasenya</string>
+    <string name="change_password">Canvia la contrasenya</string>
   <string name="delete_account">Elimina el compte</string>
   <string name="create_account">Crea un compte</string>
   <string name="upload_chooser_title">pujat desde</string>
@@ -228,8 +223,6 @@
   <string name="pass_code_remove_your_pass_code">Elimina el codi d\'accés</string>
   <string name="pass_code_mismatch">Els codis d\'accés no coincideixen</string>
   <string name="pass_code_wrong">Codi d\'accés incorrecte</string>
-  <string name="pass_code_removed">Codi d\'accés eliminat</string>
-  <string name="pass_code_stored">Codi d\'accés guardat</string>
   <string name="biometric_not_hardware_detected">Aquest dispositiu no admet autentificació biomètrica. </string>
   <string name="biometric_not_enrolled">Registrar al menys una característica biomètrica per poder utilitzar aquesta funció. </string>
   <string name="biometric_prompt_title">Inici de sessió biomètric.</string>
@@ -346,8 +339,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Pujar les fotos només via WiFi</string>
-  <string name="camera_video_upload_on_wifi">Pujar videos només via WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Pujar les fotos només via WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Pujar videos només via WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Confirma</string>
   <string name="confirmation_disable_pictures_upload_message">Estàs segur que vols desactivar aquesta funció? Les fotos pendents no es carregaran.</string>
   <string name="confirmation_disable_videos_upload_message">Estàs segur que vols desactivar aquesta funció? Les fotos pendents no es carregaran.</string>
@@ -398,7 +391,7 @@
   <string name="drawer_manage_accounts">Gestió de comptes</string>
   <string name="auth_redirect_non_secure_connection_title">La connexió segura està essent redirigida a través d\'una ruta insegura</string>
   <string name="actionbar_logger">Registre</string>
-  <string name="log_open_logs_view">Obre la vista de registres.</string>
+  <string name="prefs_open_logs_view">Obre la vista de registres.</string>
   <string name="log_send_history_button">Enviar història</string>
   <string name="log_send_no_mail_app">No es troba aplicació per enviar els registres. Si us plau, instal·la una aplicació de email.</string>
   <string name="log_send_mail_subject">%1$s app de registres Android</string>
@@ -440,7 +433,7 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de la Càmera(%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerit</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">L\'arxiu original serà</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">L\'arxiu original serà</string>
   <string name="prefs_camera_upload_behaviour_title">L\'arxiu original serà</string>
   <string name="upload_copy_files">Copiar fitxer</string>
   <string name="upload_move_files">Moure fitxer</string>

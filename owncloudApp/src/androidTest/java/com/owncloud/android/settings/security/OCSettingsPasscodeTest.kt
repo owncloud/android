@@ -111,7 +111,6 @@ class OCSettingsPasscodeTest {
     }
 
     @Test
-    @Ignore
     fun secondTryIncorrect() {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)

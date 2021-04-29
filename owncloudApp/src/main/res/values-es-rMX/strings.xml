@@ -4,8 +4,6 @@
   <string name="global_name">Nombre</string>
   <string name="global_date">Fecha</string>
   <string name="global_size">Tamaño</string>
-  <string name="about_android">%1$s para Android</string>
-  <string name="about_version">Versión %1$s</string>
   <string name="actionbar_search">Buscar en esta carpeta</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Mensajes de retroalimentación</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Más</string>
-  <string name="prefs_category_security">Seguridad</string>
+  <string name="prefs_subsection_more">Más</string>
+  <string name="prefs_subsection_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
@@ -59,8 +57,6 @@
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_not_same_pattern">Los patrones introducidos son diferentes</string>
-  <string name="pattern_stored">Patrón almacenado</string>
-  <string name="pattern_removed">Patrón eliminado</string>
   <string name="pass_code_locked">Asegurar con contraseña</string>
   <string name="pattern_locked">Asegurar con patrón</string>
   <!--Bottom navigation bar-->
@@ -133,8 +129,7 @@
   <string name="common_error_unknown">Error desconocido</string>
   <string name="common_pending">Pendiente</string>
   <string name="common_important">Importante</string>
-  <string name="about_title">Acerca de</string>
-  <string name="change_password">Cambiar contraseña</string>
+    <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>
   <string name="create_account">Crear cuenta</string>
   <string name="upload_chooser_title">Subir desde</string>
@@ -210,8 +205,6 @@
   <string name="pass_code_remove_your_pass_code">Borre su contraseña</string>
   <string name="pass_code_mismatch">Los códigos de acceso no son idénticos</string>
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
-  <string name="pass_code_removed">Código de acceso borrado</string>
-  <string name="pass_code_stored">Contraseña almacenada</string>
   <string name="biometric_not_hardware_detected">Este dispositivo no tiene soporte para autenticación biométrica</string>
   <string name="biometric_prompt_subtitle">Iniciar sesión con su credencial biométrica</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
@@ -325,8 +318,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
-  <string name="camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
+  <string name="prefs_camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Seguro/a que desea deshabilitar esta función? Las imagenes pendientes no se subirán</string>
   <string name="confirmation_disable_videos_upload_message">¿Seguro/a que desea deshabilitar esta función? Los videos pendientes no se subirán</string>
@@ -412,7 +405,7 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de la Camera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">El archivo original será...</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">El archivo original será...</string>
   <string name="prefs_camera_upload_behaviour_title">El archivo original será...</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>

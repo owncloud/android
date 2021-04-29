@@ -4,8 +4,6 @@
   <string name="global_name">Navn</string>
   <string name="global_date">Dato</string>
   <string name="global_size">Størrelse</string>
-  <string name="about_android">%1$s for Android</string>
-  <string name="about_version">Versjon %1$s</string>
   <string name="actionbar_search">Søk i denne mappen</string>
   <string name="actionbar_sync">Oppdater konto</string>
   <string name="actionbar_upload">Last opp</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Tilbakemelding</string>
   <string name="drawer_help">Hjelp</string>
   <string name="prefs_category_general">Generelt</string>
-  <string name="prefs_category_more">Mer</string>
-  <string name="prefs_category_security">Sikkerhet</string>
+  <string name="prefs_subsection_more">Mer</string>
+  <string name="prefs_subsection_security">Sikkerhet</string>
   <string name="prefs_accounts">Kontoer</string>
   <string name="prefs_manage_accounts">Håndter kontoer</string>
   <string name="prefs_passcode">Passordlås</string>
@@ -64,8 +62,6 @@
   <string name="pattern_incorrect_pattern">Feil mønster</string>
   <string name="pattern_reenter_pattern">Legg inn mønsteret på nytt</string>
   <string name="pattern_not_same_pattern">Mønstrene er ikke like</string>
-  <string name="pattern_stored">Mønster lagret</string>
-  <string name="pattern_removed">Mønster fjernet</string>
   <string name="pattern_already_set">Låsemønster og passordlås kan ikke være aktiv samtidig. Deaktivert mønster først</string>
   <string name="passcode_already_set">Mønsterlås og passordlås kan ikke være aktiv samtidig. Deaktivert passord først</string>
   <string name="pattern_no_longer_required">Det vil ikke bli spurt om mønsteret mer</string>
@@ -145,8 +141,7 @@
   <string name="common_error_unknown">ukjent feil</string>
   <string name="common_pending">Venter</string>
   <string name="common_important">Viktig</string>
-  <string name="about_title">Om</string>
-  <string name="change_password">Endre passord</string>
+    <string name="change_password">Endre passord</string>
   <string name="delete_account">Fjern konto</string>
   <string name="create_account">Opprett konto</string>
   <string name="upload_chooser_title">Last opp fra</string>
@@ -224,8 +219,6 @@
   <string name="pass_code_remove_your_pass_code">Fjern passordet ditt</string>
   <string name="pass_code_mismatch">Passordene er ikke like</string>
   <string name="pass_code_wrong">Feil passord</string>
-  <string name="pass_code_removed">Passord fjernet</string>
-  <string name="pass_code_stored">Passord lagret</string>
   <string name="biometric_not_hardware_detected">Denne enheten støtter ikke autentisering ved biometri</string>
   <string name="biometric_not_enrolled">Registrer minst 1 biometri for å bruke dette</string>
   <string name="biometric_prompt_title">Biometrisk innlogging</string>
@@ -341,8 +334,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">18.05.2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Last opp bilder kun via WiFi</string>
-  <string name="camera_video_upload_on_wifi">Last opp videoer kun via WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Last opp bilder kun via WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Last opp videoer kun via WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Bekreft</string>
   <string name="confirmation_disable_pictures_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende bildene vil ikke bli opplastet</string>
   <string name="confirmation_disable_videos_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende videoene vil ikke bli lastet opp</string>
@@ -431,7 +424,7 @@
   <string name="prefs_camera_upload_source_path_title">Kamera-mappe (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">obligatorisk</string>
   <string name="prefs_camera_upload_source_path_title_optional">valgfri</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Den originale filen vil bli</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Den originale filen vil bli</string>
   <string name="prefs_camera_upload_behaviour_title">Den originale filen vil bli</string>
   <string name="upload_copy_files">Kopier fil</string>
   <string name="upload_move_files">Flytt fil</string>

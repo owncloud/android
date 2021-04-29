@@ -4,7 +4,7 @@
   <string name="actionbar_settings">అమరికలు</string>
   <string name="actionbar_send_file">పంపించు</string>
   <string name="drawer_help">సహాయం</string>
-  <string name="prefs_category_more">మరిన్ని</string>
+  <string name="prefs_subsection_more">మరిన్ని</string>
   <string name="prefs_help">సహాయం</string>
   <string name="auth_username">వాడుకరి పేరు</string>
   <string name="auth_password">సంకేతపదం</string>

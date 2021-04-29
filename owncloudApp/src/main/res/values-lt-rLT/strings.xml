@@ -30,8 +30,8 @@
   <string name="drawer_feedback">Atsiliepimai</string>
   <string name="drawer_help">Pagalba</string>
   <string name="prefs_category_general">Bendras</string>
-  <string name="prefs_category_more">Daugiau</string>
-  <string name="prefs_category_security">Saugumas</string>
+  <string name="prefs_subsection_more">Daugiau</string>
+  <string name="prefs_subsection_security">Saugumas</string>
   <string name="prefs_accounts">Paskyros</string>
   <string name="prefs_manage_accounts">Tvarkyti paskyras</string>
   <string name="prefs_passcode">Užrakto kodas</string>
@@ -58,8 +58,6 @@
   <string name="pattern_incorrect_pattern">Neteisingas užraktas</string>
   <string name="pattern_reenter_pattern">Įveskite užraktą dar kartą</string>
   <string name="pattern_not_same_pattern">Nesutampa užraktas</string>
-  <string name="pattern_stored">Užraktas išsaugotas</string>
-  <string name="pattern_removed">Užraktas pašalintas</string>
   <string name="pattern_already_set">Modelio ir frazės užraktai negali būti įjungti vienu metu, prašome išjungti modelio užraktą</string>
   <string name="passcode_already_set">Modelio ir frazės užraktai negali būti įjungti vienu metu, prašome išjungti frazės užraktą</string>
   <string name="pattern_no_longer_required">Daugiau modelio užraktas nebus klausiamas</string>
@@ -130,8 +128,7 @@
   <string name="common_unknown">nežinomas</string>
   <string name="common_pending">Laukiantis</string>
   <string name="common_important">Svarbūs</string>
-  <string name="about_title">Apie</string>
-  <string name="change_password">Pakeisti slaptažodį</string>
+    <string name="change_password">Pakeisti slaptažodį</string>
   <string name="delete_account">Pašalinti paskyrą</string>
   <string name="create_account">Sukurti paskyrą</string>
   <string name="uploader_info_dirname">Katalogo pavadinimas</string>
@@ -202,8 +199,6 @@
   <string name="pass_code_remove_your_pass_code">Užrakto pašalinimas</string>
   <string name="pass_code_mismatch">Nesutampa užraktas</string>
   <string name="pass_code_wrong">Neteisingas užraktas</string>
-  <string name="pass_code_removed">Užraktas pašalintas</string>
-  <string name="pass_code_stored">Užraktas išsaugotas</string>
   <string name="media_notif_ticker">%1$s muzikos grotuvas</string>
   <string name="media_state_playing">%1$s (grojama)</string>
   <string name="media_state_loading">%1$s (įkeliama)</string>
@@ -312,8 +307,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Įkelti nuotraukas tik veikiant WiFi</string>
-  <string name="camera_video_upload_on_wifi">Įkelti video tik veikiant WiFi</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Įkelti nuotraukas tik veikiant WiFi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Įkelti video tik veikiant WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Patvirtinti</string>
   <string name="confirmation_disable_pictures_upload_message">Ar tikrai norite išjungti šią funkciją? Laukiančios nuotraukos nebus nusiųstos</string>
   <string name="confirmation_disable_videos_upload_message">Ar tikrai norite išjungti šią funkciją? Laukiantys video nebus nusiųsti</string>

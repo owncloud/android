@@ -5,7 +5,8 @@ changelog before we are tagging a new release.
 
 ## Create Changelog items
 Create a file according to the [template](TEMPLATE.md) for each 
-feature, fix, change...  in the [unreleased](./unreleased) folder. The following change types are possible: `Bugfix, Change, Enhancement, Security`.
+feature, fix, change...  in the [unreleased](./unreleased) folder. The file should be named after
+the # of the merged PR it is describing. The following change types are possible: `Bugfix, Change, Enhancement, Security`.
 
 ## Automated Changelog build and commit
 - After each merge to master, the CHANGELOG.md file is automatically updated and the new version will be committed to master while skipping CI.

@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">Android-aplikaĵo %1$s</string>
-  <string name="about_version">eldono %1$s</string>
   <string name="actionbar_sync">Freŝigi konton</string>
   <string name="actionbar_upload">Alŝuti dosieron</string>
   <string name="actionbar_upload_from_apps">Enhavo el aliaj aplikaĵoj</string>
@@ -20,8 +18,8 @@
   <string name="drawer_open">Malfermi</string>
   <string name="drawer_help">Helpo</string>
   <string name="prefs_category_general">Ĝeneralo</string>
-  <string name="prefs_category_more">Pli</string>
-  <string name="prefs_category_security">Sekuro</string>
+  <string name="prefs_subsection_more">Pli</string>
+  <string name="prefs_subsection_security">Sekuro</string>
   <string name="prefs_accounts">Kontoj</string>
   <string name="prefs_manage_accounts">Administri kontojn</string>
   <string name="prefs_log_delete_history_button">Forviŝi historion</string>
@@ -63,8 +61,7 @@
   <string name="common_unknown">nekonata</string>
   <string name="common_error_unknown">Nekonata eraro</string>
   <string name="common_pending">Traktotaj</string>
-  <string name="about_title">Pri</string>
-  <string name="change_password">Ŝanĝi la pasvorton</string>
+    <string name="change_password">Ŝanĝi la pasvorton</string>
   <string name="delete_account">Forigi konton</string>
   <string name="create_account">Krei konton</string>
   <string name="upload_chooser_title">Alŝuti dosieron el…</string>
@@ -240,7 +237,7 @@
   <string name="file_list__footer__files">%1$d dosieroj</string>
   <string name="file_list__footer__files_and_folder">%1$d dosieroj, 1 dosierujo</string>
   <string name="file_list__footer__files_and_folders">%1$d dosieroj, %2$d dosierujoj</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Origina dosiero estos…</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Origina dosiero estos…</string>
   <string name="prefs_camera_upload_behaviour_title">Origina dosiero estos…</string>
   <string name="upload_copy_files">Kopii dosieron</string>
   <string name="upload_move_files">Movi dosieron</string>
