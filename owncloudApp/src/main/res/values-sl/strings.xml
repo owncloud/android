@@ -29,6 +29,8 @@
   <string name="drawer_feedback">Pošlji sporočilo razvijalcem programa</string>
   <string name="drawer_help">Pomoč</string>
   <string name="prefs_category_general">Splošno</string>
+  <string name="prefs_subsection_more">Več</string>
+  <string name="prefs_subsection_security">Varnost</string>
   <string name="prefs_accounts">Računi</string>
   <string name="prefs_manage_accounts">Upravljanje z računi</string>
   <string name="prefs_passcode">Zakleni dostop s kodo PIN</string>
@@ -37,9 +39,11 @@
   <string name="prefs_camera_picture_upload">Hipno pošiljanje slik</string>
   <string name="prefs_camera_picture_upload_summary">Hipno pošiljanje slik, zajetih s kamero, na strežnik</string>
   <string name="prefs_camera_picture_upload_path_title">Mapa v oblaku za odlaganje slik</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Pošiljaj slike le prek WiFi</string>
   <string name="prefs_camera_video_upload">Hipno pošiljanje posnetkov</string>
   <string name="prefs_camera_video_upload_summary">Hipno pošiljanje posnetkov, zajetih s kamero, na strežnik</string>
   <string name="prefs_camera_video_upload_path_title">Mapa v oblaku za odlaganje posnetkov</string>
+  <string name="prefs_camera_video_upload_on_wifi">Pošiljaj posnetke le prek Wifi</string>
   <string name="prefs_log_title">Omogoči beleženje</string>
   <string name="prefs_log_summary">Uporablja se za beleženje težav in napak</string>
   <string name="prefs_log_title_history">Zgodovina beleženja</string>
@@ -53,6 +57,7 @@
   <string name="prefs_remember_last_share_location">Zapomni si mesto souporabe</string>
   <string name="prefs_remember_last_upload_location_summary">Zapomni si zadnje mesto za pošiljanje v oblak</string>
   <string name="prefs_pattern">Odklepanje z vzorcem</string>
+  <string name="prefs_enable_logging">Omogoči beleženje</string>
   <string name="pattern_enter_pattern">Prosimo vnesite svoj vzorec</string>
   <string name="pattern_configure_pattern">Vnesite svoj vzorec</string>
   <string name="pattern_remove_pattern">Odstranite svoj vzorec</string>

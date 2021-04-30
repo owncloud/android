@@ -30,6 +30,9 @@
   <string name="drawer_feedback">משוב</string>
   <string name="drawer_help">עזרה</string>
   <string name="prefs_category_general">כללי</string>
+  <string name="prefs_subsection_logging">התחברות</string>
+  <string name="prefs_subsection_more">יותר</string>
+  <string name="prefs_subsection_security">אבטחה</string>
   <string name="prefs_accounts">חשבונות</string>
   <string name="prefs_manage_accounts">ניהול חשבונות</string>
   <string name="prefs_passcode">נעילת סיסמא</string>
@@ -39,12 +42,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">מאפשר מגע כאשר התצוגה מוסתרת על ידי חלון גלוי אחר. יש לאפשר זאת לשימוש ביישומי סינון קלים.</string>
   <string name="confirmation_touches_with_other_windows_title">האם באמת לאפשר תכונה זו?</string>
   <string name="confirmation_touches_with_other_windows_message">יש לשתמש בתכונה זו באחריותך הבלבדית, יישום זדוני יכול לנסות לגרום לך לבצע כמה פעולות, לא רצוניות, באמצעות תצוגות אחרות.</string>
+  <string name="prefs_open_logs_view">פתיחת תצוגת לוגים</string>
   <string name="prefs_camera_picture_upload">העלאת תמונות</string>
   <string name="prefs_camera_picture_upload_summary">העלאת תמונות שצולמו במצלמה באופן אוטומטי</string>
   <string name="prefs_camera_picture_upload_path_title">נתיב העלאת תמונות</string>
+  <string name="prefs_camera_picture_upload_on_wifi">העלאת תמונות על בסיס חיבור wifi בלבד</string>
   <string name="prefs_camera_video_upload">העלאת סרטונים</string>
   <string name="prefs_camera_video_upload_summary">העלאת סרטונים שהוקלטו במצלמה</string>
   <string name="prefs_camera_video_upload_path_title">נתיב להעלאת סרטונים</string>
+  <string name="prefs_camera_video_upload_on_wifi">העלאת סרטים על בסיס חיבור wifi בלבד</string>
   <string name="prefs_log_title">מאפשר התחברות</string>
   <string name="prefs_log_summary">משמש לתיעוד בעיות</string>
   <string name="prefs_log_title_history">הסטורית התחברות</string>
@@ -59,6 +65,9 @@
   <string name="prefs_remember_last_share_location">לזכור מקום שיתוף</string>
   <string name="prefs_remember_last_upload_location_summary">לזכור מיקום שיתוף העלאה אחרון</string>
   <string name="prefs_pattern">נעילה בתבנית</string>
+  <string name="prefs_enable_logging">מאפשר התחברות</string>
+  <string name="prefs_enable_logging_summary">כאשר מופעל, יומני תיעוד עלולים להשפיע על הביצועים ולכלול מידע רגיש. עם זאת, היומנים אינם כפופים להגשה אוטומטית לשרתים של ownCloud. שיתוף יומנים עם אחרים הנו באחריות הבלעדית של המשתמש.</string>
+  <string name="prefs_send_feedback">שליחת משוב</string>
   <string name="pattern_enter_pattern">נא להזין את התבנית שלך</string>
   <string name="pattern_configure_pattern">נא להזין את התבנית שלך</string>
   <string name="pattern_remove_pattern">הסרת התבנית שלך</string>
@@ -430,6 +439,7 @@
   <string name="prefs_camera_upload_source_path_title">תיקיית מצלמה (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">נדרש</string>
   <string name="prefs_camera_upload_source_path_title_optional">אופציונלי</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">קובץ מקורי יהיה</string>
   <string name="prefs_camera_upload_behaviour_title">קובץ מקורי יהיה</string>
   <string name="upload_copy_files">העתקת קובץ</string>
   <string name="upload_move_files">העברת קובץ</string>

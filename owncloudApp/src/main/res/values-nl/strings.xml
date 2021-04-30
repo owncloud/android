@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Help</string>
   <string name="prefs_category_general">Algemeen</string>
+  <string name="prefs_subsection_logging">Logging</string>
+  <string name="prefs_subsection_more">Meer</string>
+  <string name="prefs_subsection_security">Beveiliging</string>
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Accounts beheren</string>
   <string name="prefs_passcode">Pincode slot</string>
@@ -42,9 +45,11 @@
   <string name="prefs_camera_picture_upload">Afbeeldingen uploaden</string>
   <string name="prefs_camera_picture_upload_summary">Automatisch afbeeldingen uploaden die met de camera genomen zijn</string>
   <string name="prefs_camera_picture_upload_path_title">Afbeelding upload bestemming</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
   <string name="prefs_camera_video_upload">Video’s uploaden</string>
   <string name="prefs_camera_video_upload_summary">Automatisch video’s uploaden die met de camera gemaakt zijn</string>
   <string name="prefs_camera_video_upload_path_title">Video upload bestemming</string>
+  <string name="prefs_camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
   <string name="prefs_log_title">Logging inschakelen</string>
   <string name="prefs_log_summary">Dit wordt gebruikt om problemen te loggen.</string>
   <string name="prefs_log_title_history">Logging geschiedenis</string>
@@ -59,6 +64,8 @@
   <string name="prefs_remember_last_share_location">Onthoud de share locatie</string>
   <string name="prefs_remember_last_upload_location_summary">Onthoud de laatste upload locatie</string>
   <string name="prefs_pattern">Patroonvergrendeling</string>
+  <string name="prefs_enable_logging">Logging inschakelen</string>
+  <string name="prefs_send_feedback">Stuur feedback</string>
   <string name="pattern_enter_pattern">Voer aub de vergrendelingspatroon in</string>
   <string name="pattern_configure_pattern">Voer de vergrendelingspatroon in</string>
   <string name="pattern_remove_pattern">Verwijder uw vergrendelingspatroon</string>
@@ -433,6 +440,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="prefs_camera_upload_source_path_title">Cameramap (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vereist</string>
   <string name="prefs_camera_upload_source_path_title_optional">optioneel</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Origineel bestand zal zijn</string>
   <string name="prefs_camera_upload_behaviour_title">Origineel bestand zal zijn</string>
   <string name="upload_copy_files">Kopiëren bestand</string>
   <string name="upload_move_files">Verplaatsen bestand</string>

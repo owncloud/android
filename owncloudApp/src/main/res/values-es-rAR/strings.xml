@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Sugerencias</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
+  <string name="prefs_subsection_logging">Registrando</string>
+  <string name="prefs_subsection_more">Más</string>
+  <string name="prefs_subsection_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Bloqueo con clave</string>
@@ -42,9 +45,11 @@
   <string name="prefs_camera_picture_upload">Carga de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar imágenes automáticamente tomadas desde la cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de carga de la imagen</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Cargar imágenes solamente con WiFi</string>
   <string name="prefs_camera_video_upload">Carga de videos</string>
   <string name="prefs_camera_video_upload_summary">Cargar videos automáticamente tomados desde la cámara</string>
   <string name="prefs_camera_video_upload_path_title">Ruta de carga del video</string>
+  <string name="prefs_camera_video_upload_on_wifi">Cargar videos solamente con WiFi</string>
   <string name="prefs_log_title">Activar bitacora</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial de la bitacora</string>
@@ -59,6 +64,8 @@
   <string name="prefs_remember_last_share_location">Recordar compartir ubicación </string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ultima ubicación compartida de subida</string>
   <string name="prefs_pattern">Patrón de bloqueo</string>
+  <string name="prefs_enable_logging">Activar bitacora</string>
+  <string name="prefs_send_feedback">Enviar comentarios</string>
   <string name="pattern_enter_pattern">Por favor ingrese su patrón</string>
   <string name="pattern_configure_pattern">Ingrese su patrón</string>
   <string name="pattern_remove_pattern">Eliminar su patrón</string>
@@ -433,6 +440,7 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="prefs_camera_upload_source_path_title">Carpeta de la cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">El archivo original debe ser</string>
   <string name="prefs_camera_upload_behaviour_title">El archivo original debe ser</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>

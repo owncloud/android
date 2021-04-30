@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Hjælp</string>
   <string name="prefs_category_general">Generel</string>
+  <string name="prefs_subsection_more">Mere</string>
+  <string name="prefs_subsection_security">Sikkerhed</string>
   <string name="prefs_accounts">Konti</string>
   <string name="prefs_manage_accounts">Administrer konti</string>
   <string name="prefs_passcode">Passcode-lås</string>
@@ -41,8 +43,10 @@
   <string name="confirmation_touches_with_other_windows_message">Anvend denne egenskab under eget ansvar, et ondsindet program vil kunne forsøge at narre dig til at udføre handlinger, uden din viden, der bruger andre visninger.</string>
   <string name="prefs_camera_picture_upload">Billede uploads</string>
   <string name="prefs_camera_picture_upload_summary">Upload automatisk billeder taget med kamera</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Upload billeder udelukkende via wifi</string>
   <string name="prefs_camera_video_upload">Videoupload</string>
   <string name="prefs_camera_video_upload_summary">Automatisk upload af videoer optaget med kamera</string>
+  <string name="prefs_camera_video_upload_on_wifi">Upload videoer udelukkende via wifi</string>
   <string name="prefs_log_title">Slå logning til</string>
   <string name="prefs_log_summary">Dette bruges til at logregistrere problemer</string>
   <string name="prefs_log_title_history">Logningshistorik</string>
@@ -57,6 +61,7 @@
   <string name="prefs_remember_last_share_location">Husk delt placering</string>
   <string name="prefs_remember_last_upload_location_summary">Husk seneste delte placering for overførsel</string>
   <string name="prefs_pattern">Mønsterlås</string>
+  <string name="prefs_enable_logging">Slå logning til</string>
   <string name="pattern_enter_pattern">Angiv venligst mønster</string>
   <string name="pattern_configure_pattern">Angiv dit mønster</string>
   <string name="pattern_remove_pattern">Slet dit mønster</string>

@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Spätná väzba</string>
   <string name="drawer_help">Pomoc</string>
   <string name="prefs_category_general">Všeobecné</string>
+  <string name="prefs_subsection_more">Viac</string>
+  <string name="prefs_subsection_security">Zabezpečenie</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Správa účtov</string>
   <string name="prefs_passcode">Heslo</string>
@@ -40,9 +42,11 @@
   <string name="prefs_camera_picture_upload">Nahrávanie obrázkov.</string>
   <string name="prefs_camera_picture_upload_summary">Automatické nahratie obrázkov z fotoaparátu/kamery</string>
   <string name="prefs_camera_picture_upload_path_title">Cesta pre nahratie súboru</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Nahrávanie obrázkov je povolené len cez WIFI</string>
   <string name="prefs_camera_video_upload">Nahratie videa.</string>
   <string name="prefs_camera_video_upload_summary">Automatické nahratie videií z fotoaparátu/kamery</string>
   <string name="prefs_camera_video_upload_path_title">Cesta pre nahratie videa</string>
+  <string name="prefs_camera_video_upload_on_wifi">Nahrávanie videí je povolené len cez WIFI</string>
   <string name="prefs_log_title">Povoliť logovanie</string>
   <string name="prefs_log_summary">Toto je použité pre logovanie problémov</string>
   <string name="prefs_log_title_history">História logov</string>
@@ -57,6 +61,7 @@
   <string name="prefs_remember_last_share_location">Zapamätať umiestnenie zdieľania</string>
   <string name="prefs_remember_last_upload_location_summary">Zapamätať posledné umiestnenie pre nahranie zdieľaných súborov</string>
   <string name="prefs_pattern">Zamknutie vzorom</string>
+  <string name="prefs_enable_logging">Povoliť logovanie</string>
   <string name="pattern_enter_pattern">Prosím vlož svoj vzor</string>
   <string name="pattern_configure_pattern">Vlož svoj vzor</string>
   <string name="pattern_remove_pattern">Odstráň svoj vzor</string>
@@ -362,6 +367,7 @@
   <string name="prefs_camera_upload_source_path_title">Adresár fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Požaduje sa</string>
   <string name="prefs_camera_upload_source_path_title_optional">Volitelné</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Originálny súbor bude</string>
   <string name="prefs_camera_upload_behaviour_title">Originálny súbor bude</string>
   <string name="upload_copy_files">Kopírovanie súboru</string>
   <string name="upload_move_files">Presunutie súboru</string>

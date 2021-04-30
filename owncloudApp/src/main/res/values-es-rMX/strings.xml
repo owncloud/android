@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Mensajes de retroalimentación</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
+  <string name="prefs_subsection_more">Más</string>
+  <string name="prefs_subsection_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
@@ -39,9 +41,11 @@
   <string name="prefs_camera_picture_upload">Cargar imagenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar fotos automáticamente tomadas por la cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de carga de imagenes</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
   <string name="prefs_camera_video_upload">Cargar videos</string>
   <string name="prefs_camera_video_upload_summary">Cargar automáticamente los videos tomadas por la cámara</string>
   <string name="prefs_camera_video_upload_path_title">Ruta de carga de videos</string>
+  <string name="prefs_camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
@@ -55,6 +59,7 @@
   <string name="prefs_imprint">pie de imprenta</string>
   <string name="prefs_remember_last_share_location">Recordar la ubicación de los archivos compartidos</string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
+  <string name="prefs_enable_logging">Habilitar registro</string>
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_not_same_pattern">Los patrones introducidos son diferentes</string>
   <string name="pass_code_locked">Asegurar con contraseña</string>
@@ -401,6 +406,7 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de la Camera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">El archivo original será...</string>
   <string name="prefs_camera_upload_behaviour_title">El archivo original será...</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>

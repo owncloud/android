@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Tilbakemelding</string>
   <string name="drawer_help">Hjelp</string>
   <string name="prefs_category_general">Generelt</string>
+  <string name="prefs_subsection_more">Mer</string>
+  <string name="prefs_subsection_security">Sikkerhet</string>
   <string name="prefs_accounts">Kontoer</string>
   <string name="prefs_manage_accounts">Håndter kontoer</string>
   <string name="prefs_passcode">Passordlås</string>
@@ -39,9 +41,11 @@
   <string name="prefs_camera_picture_upload">Bilde-opplastninger</string>
   <string name="prefs_camera_picture_upload_summary">Last opp bilder tatt med kamera automatisk</string>
   <string name="prefs_camera_picture_upload_path_title">Bilde opplastings-sti</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Last opp bilder kun via WiFi</string>
   <string name="prefs_camera_video_upload">Video-opplastninger</string>
   <string name="prefs_camera_video_upload_summary">Automatisk last opp videoer tatt med kamera</string>
   <string name="prefs_camera_video_upload_path_title">Video opplastings-sti</string>
+  <string name="prefs_camera_video_upload_on_wifi">Last opp videoer kun via WiFi</string>
   <string name="prefs_log_title">Aktiver loggføring</string>
   <string name="prefs_log_summary">Denne er brukt til å loggføre problemer</string>
   <string name="prefs_log_title_history">Loggføringshistorikk</string>
@@ -56,6 +60,7 @@
   <string name="prefs_remember_last_share_location">Husk delt plassering</string>
   <string name="prefs_remember_last_upload_location_summary">Husk sist delt plassering for opplasting</string>
   <string name="prefs_pattern">Mønsterlås</string>
+  <string name="prefs_enable_logging">Aktiver loggføring</string>
   <string name="pattern_enter_pattern">Legg inn mønsteret ditt</string>
   <string name="pattern_configure_pattern">Legg inn mønsteret ditt</string>
   <string name="pattern_remove_pattern">Fjern mønsteret ditt</string>
@@ -420,6 +425,7 @@
   <string name="prefs_camera_upload_source_path_title">Kamera-mappe (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">obligatorisk</string>
   <string name="prefs_camera_upload_source_path_title_optional">valgfri</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Den originale filen vil bli</string>
   <string name="prefs_camera_upload_behaviour_title">Den originale filen vil bli</string>
   <string name="upload_copy_files">Kopier fil</string>
   <string name="upload_move_files">Flytt fil</string>

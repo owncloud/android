@@ -29,15 +29,20 @@
   <string name="drawer_feedback">Umsögn</string>
   <string name="drawer_help">Hjálp</string>
   <string name="prefs_category_general">Almennt</string>
+  <string name="prefs_subsection_logging">Logging</string>
+  <string name="prefs_subsection_more">Meira</string>
+  <string name="prefs_subsection_security">Öryggi</string>
   <string name="prefs_accounts">Notandaaðgangar</string>
   <string name="prefs_manage_accounts">Sýsla með notandaaðganga</string>
   <string name="prefs_passcode">Læsing með lykilkóða</string>
   <string name="prefs_camera_picture_upload">Innsendar myndir</string>
   <string name="prefs_camera_picture_upload_summary">Hlaða sjálfvirkt inn myndum teknum á myndavél</string>
   <string name="prefs_camera_picture_upload_path_title">Innsendingarslóð fyrir myndir</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Senda inn myndir einungis um þráðlaus net</string>
   <string name="prefs_camera_video_upload">Innsend myndskeið</string>
   <string name="prefs_camera_video_upload_summary">Hlaða sjálfvirkt inn myndskeiðum teknum á myndavél</string>
   <string name="prefs_camera_video_upload_path_title">Innsendingarslóð fyrir myndskeið</string>
+  <string name="prefs_camera_video_upload_on_wifi">Senda inn myndskeið einungis um þráðlaus net</string>
   <string name="prefs_log_title">Virkja skráningu í annál</string>
   <string name="prefs_log_summary">Þetta er notað til að skrá vandamál</string>
   <string name="prefs_log_title_history">Ferill annálsskráningar</string>
@@ -51,6 +56,8 @@
   <string name="prefs_remember_last_share_location">Muna staðsetningu sameignar</string>
   <string name="prefs_remember_last_upload_location_summary">Muna staðsetningu á síðustu innhleðslu sameignar</string>
   <string name="prefs_pattern">Læsing með mynstri</string>
+  <string name="prefs_enable_logging">Virkja skráningu í annál</string>
+  <string name="prefs_send_feedback">Send feedback</string>
   <string name="pattern_enter_pattern">Settu inn mynstrið þitt</string>
   <string name="pattern_configure_pattern">Settu inn mynstrið þitt</string>
   <string name="pattern_remove_pattern">Fjarlægðu mynstrið þitt</string>
@@ -389,6 +396,7 @@
   <string name="prefs_camera_upload_source_path_title">Myndavélarmappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">krafist</string>
   <string name="prefs_camera_upload_source_path_title_optional">valkvætt</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Upprunaleg skrá verður</string>
   <string name="prefs_camera_upload_behaviour_title">Upprunaleg skrá verður</string>
   <string name="upload_copy_files">Afrita skrá</string>
   <string name="upload_move_files">Færa skrá</string>

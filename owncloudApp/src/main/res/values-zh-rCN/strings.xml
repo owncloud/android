@@ -30,6 +30,9 @@
   <string name="drawer_feedback">反馈</string>
   <string name="drawer_help">帮助</string>
   <string name="prefs_category_general">常规</string>
+  <string name="prefs_subsection_logging">日志</string>
+  <string name="prefs_subsection_more">更多</string>
+  <string name="prefs_subsection_security">安全</string>
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
@@ -39,9 +42,11 @@
   <string name="prefs_camera_picture_upload">图片上传</string>
   <string name="prefs_camera_picture_upload_summary">自动上传相机拍摄的图片</string>
   <string name="prefs_camera_picture_upload_path_title">图片上传路径</string>
+  <string name="prefs_camera_picture_upload_on_wifi">仅通过 WIFI 上传照片</string>
   <string name="prefs_camera_video_upload">视频上传</string>
   <string name="prefs_camera_video_upload_summary">自动上传相机拍摄的视频</string>
   <string name="prefs_camera_video_upload_path_title">视频上传路径</string>
+  <string name="prefs_camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
   <string name="prefs_log_title">开启日志</string>
   <string name="prefs_log_summary">用于记录问题</string>
   <string name="prefs_log_title_history">历史日志</string>
@@ -56,6 +61,8 @@
   <string name="prefs_remember_last_share_location">记住共享位置</string>
   <string name="prefs_remember_last_upload_location_summary">记住上次共享上传的位置</string>
   <string name="prefs_pattern">图案锁</string>
+  <string name="prefs_enable_logging">开启日志</string>
+  <string name="prefs_send_feedback">发送反馈</string>
   <string name="pattern_enter_pattern">请输入图案</string>
   <string name="pattern_configure_pattern">输入图案</string>
   <string name="pattern_remove_pattern">移除图案</string>
@@ -409,6 +416,7 @@
   <string name="prefs_camera_upload_source_path_title">相机文件夹 (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">必需</string>
   <string name="prefs_camera_upload_source_path_title_optional">可选</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">原始文件将会</string>
   <string name="prefs_camera_upload_behaviour_title">原始文件将会</string>
   <string name="upload_copy_files">复制文件</string>
   <string name="upload_move_files">移动文件</string>

@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Comentaris</string>
   <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">General</string>
+  <string name="prefs_subsection_more">Més</string>
+  <string name="prefs_subsection_security">Seguretat</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gestió de comptes</string>
   <string name="prefs_passcode">Contrasenya</string>
@@ -37,12 +39,15 @@
   <string name="prefs_biometric_summary">Activa la contrasenya o el patró de desbloqueig per activar aquesta opció</string>
   <string name="confirmation_touches_with_other_windows_title">Segur que voleu habilitar aquesta funció?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilitzeu aquesta característica sota la vostra responsabilitat, aplicacions malicioses podrien executar accions sense que us adonesiu fent servir altres vistes.</string>
+  <string name="prefs_open_logs_view">Obre la vista de registres.</string>
   <string name="prefs_camera_picture_upload">Imatges pujades</string>
   <string name="prefs_camera_picture_upload_summary">Carrega automàticament les fotografies fetes amb la càmera</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de pujada de les fotos</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Pujar les fotos només via WiFi</string>
   <string name="prefs_camera_video_upload">Pujades de vídeos</string>
   <string name="prefs_camera_video_upload_summary">Carrega automàticament els vídeos fets amb la càmera</string>
   <string name="prefs_camera_video_upload_path_title">Vídeos</string>
+  <string name="prefs_camera_video_upload_on_wifi">Pujar videos només via WiFi</string>
   <string name="prefs_log_title">Habilita els registres</string>
   <string name="prefs_log_summary">Això s\'usa per registrar problemes</string>
   <string name="prefs_log_title_history">Historial dels registres</string>
@@ -57,6 +62,7 @@
   <string name="prefs_remember_last_share_location">Recorda la ubicació de la unitat compartida</string>
   <string name="prefs_remember_last_upload_location_summary">Recorda la ubicació de l\'última càrrega</string>
   <string name="prefs_pattern">Patró de bloqueig</string>
+  <string name="prefs_enable_logging">Habilita els registres</string>
   <string name="pattern_enter_pattern">Introdueix el patró</string>
   <string name="pattern_configure_pattern">Introdueix el patró</string>
   <string name="pattern_remove_pattern">Borra el patró</string>
@@ -428,6 +434,7 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de la Càmera(%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerit</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">L\'arxiu original serà</string>
   <string name="prefs_camera_upload_behaviour_title">L\'arxiu original serà</string>
   <string name="upload_copy_files">Copiar fitxer</string>
   <string name="upload_move_files">Moure fitxer</string>

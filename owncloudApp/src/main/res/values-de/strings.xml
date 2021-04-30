@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Rückmeldungen</string>
   <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
+  <string name="prefs_subsection_logging">Protokollierung</string>
+  <string name="prefs_subsection_more">Mehr</string>
+  <string name="prefs_subsection_security">Sicherheit</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
   <string name="prefs_passcode">PIN gesperrt</string>
@@ -39,12 +42,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen auch zulassen, wenn die Ansicht von einer anderen App überladen wird. Aktiviere diese Option, um zum Beispiel Lichtfilter-Apps verwenden zu können.</string>
   <string name="confirmation_touches_with_other_windows_title">Willst Du diese Funktion wirklich einschalten?</string>
   <string name="confirmation_touches_with_other_windows_message">Verwende diese Funktion auf eigene Verantwortung. Eine bösartige Anwendung könnte versuchen deine Touchgesten zu missbrauchen und so Aktionen zu provozieren, die du nicht beabsichtigt hast. ownCloud verbietet solchen Apps normalerweise den Zugriff auf die App.</string>
+  <string name="prefs_open_logs_view">Log-Ansicht öffnen</string>
   <string name="prefs_camera_picture_upload">Bilder</string>
   <string name="prefs_camera_picture_upload_summary">Automatischer Upload von Fotos</string>
   <string name="prefs_camera_picture_upload_path_title">Speicherpfad für hochgeladene Bilder</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Bilder nur über Wifi hochladen</string>
   <string name="prefs_camera_video_upload">Video-Uploads</string>
   <string name="prefs_camera_video_upload_summary">Automatischer Upload von Videos</string>
   <string name="prefs_camera_video_upload_path_title">Pfad für Video-Upload</string>
+  <string name="prefs_camera_video_upload_on_wifi">Videos nur über Wifi hochladen</string>
   <string name="prefs_log_title">Protokollierung aktivieren</string>
   <string name="prefs_log_summary">Dies wird zur Protokollierung von Problemen genutzt</string>
   <string name="prefs_log_title_history">Log Historie</string>
@@ -59,6 +65,9 @@
   <string name="prefs_remember_last_share_location">Speicherort für Shares merken</string>
   <string name="prefs_remember_last_upload_location_summary">Speicherort für Uploads merken</string>
   <string name="prefs_pattern">Mustersperre</string>
+  <string name="prefs_enable_logging">Protokollierung aktivieren</string>
+  <string name="prefs_enable_logging_summary">Wenn aktiviert, können Protokolle die Leistung beeinträchtigen und sensible Informationen enthalten. Die Protokolle unterliegen jedoch nicht der automatischen Übertragung an ownCloud Server. Die Weitergabe von Protokollen an andere liegt in der alleinigen Verantwortung des Benutzers.</string>
+  <string name="prefs_send_feedback">Feedback senden</string>
   <string name="pattern_enter_pattern">Bitte gib dein Muster ein</string>
   <string name="pattern_configure_pattern">Gib dein Muster ein</string>
   <string name="pattern_remove_pattern">Entferne dein Muster</string>
@@ -430,6 +439,7 @@
   <string name="prefs_camera_upload_source_path_title">Kamera-Ordner (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Benötigt</string>
   <string name="prefs_camera_upload_source_path_title_optional">Optional</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Originale Datei wird</string>
   <string name="prefs_camera_upload_behaviour_title">Originale Datei wird</string>
   <string name="upload_copy_files">kopiere Datei</string>
   <string name="upload_move_files">verschiebe Datei</string>

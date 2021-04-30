@@ -30,6 +30,9 @@
   <string name="drawer_feedback">ข้อเสนอแนะ</string>
   <string name="drawer_help">ช่วยเหลือ</string>
   <string name="prefs_category_general">ทั่วไป</string>
+  <string name="prefs_subsection_logging">กำลังเก็บบันทึก</string>
+  <string name="prefs_subsection_more">ขยาย</string>
+  <string name="prefs_subsection_security">ความปลอดภัย</string>
   <string name="prefs_accounts">บัญชี</string>
   <string name="prefs_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="prefs_passcode">ล็อครหัสปลดล็อค</string>
@@ -39,12 +42,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอปกรองแสง</string>
   <string name="confirmation_touches_with_other_windows_title">คุณแน่ใจหรือว่าต้องการเปิดใช้งานคุณลักษณะนี้?</string>
   <string name="confirmation_touches_with_other_windows_message">ใช้คุณสมบัตินี้ภายใต้ความรับผิดชอบของคุณ แอปพลิเคชันที่เป็นอันตรายอาจพยายามหลอกให้คุณทำการกระทำบางอย่างแบบไม่รู้ตัวโดยใช้มุมมองอื่น</string>
+  <string name="prefs_open_logs_view">เปิดมุมมองบันทึก</string>
   <string name="prefs_camera_picture_upload">อัปโหลดรูปภาพ</string>
   <string name="prefs_camera_picture_upload_summary">อัปโหลดภาพที่ถ่ายด้วยกล้องโดยอัตโนมัติ</string>
   <string name="prefs_camera_picture_upload_path_title">เส้นทางการอัปโหลดรูปภาพ</string>
+  <string name="prefs_camera_picture_upload_on_wifi">อัปโหลดรูปภาพผ่านทาง wifi เท่านั้น</string>
   <string name="prefs_camera_video_upload">อัปโหลดวิดีโอ</string>
   <string name="prefs_camera_video_upload_summary">อัปโหลดวิดีโอที่บันทึกด้วยกล้องโดยอัตโนมัติ</string>
   <string name="prefs_camera_video_upload_path_title">เส้นทางการอัปโหลดวิดีโอ</string>
+  <string name="prefs_camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง wifi เท่านั้น</string>
   <string name="prefs_log_title">เปิดใช้ระบบบันทึกข้อมูล</string>
   <string name="prefs_log_summary">นี้จะใช้เพื่อบันทึกปัญหาที่เกิดขึ้น</string>
   <string name="prefs_log_title_history">ประวัติย้อนหลังการใช้งาน</string>
@@ -59,6 +65,9 @@
   <string name="prefs_remember_last_share_location">จดจำตำแหน่งที่ใช้ร่วมกัน</string>
   <string name="prefs_remember_last_upload_location_summary">จดจำตำแหน่งล่าสุดที่ใช้ร่วมกัน</string>
   <string name="prefs_pattern">รูปแบบการล็อค</string>
+  <string name="prefs_enable_logging">เปิดใช้ระบบบันทึกข้อมูล</string>
+  <string name="prefs_enable_logging_summary">เมื่อเปิดใช้งาน log อาจส่งผลต่อประสิทธิภาพและรวมถึงข้อมูลที่ละเอียดอ่อน อย่างไรก็ตาม log จะไม่ถูกส่งไปยังเซิร์ฟเวอร์ ownCloud โดยอัตโนมัติ การแชร์ log กับผู้อื่นถือเป็นความรับผิดชอบของผู้ใช้แต่เพียงผู้เดียว</string>
+  <string name="prefs_send_feedback">ส่งความคิดเห็น</string>
   <string name="pattern_enter_pattern">โปรดกรอกรูปแบบของคุณ</string>
   <string name="pattern_configure_pattern">รูปแบบของคุณ</string>
   <string name="pattern_remove_pattern">ลบรูปแบบของคุณ</string>
@@ -428,6 +437,7 @@
   <string name="prefs_camera_upload_source_path_title">โฟลเดอร์ของกล้อง (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
   <string name="prefs_camera_upload_source_path_title_optional">ตัวเลือก</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="prefs_camera_upload_behaviour_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>

@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Umpan balik</string>
   <string name="drawer_help">Bantuan</string>
   <string name="prefs_category_general">Umum</string>
+  <string name="prefs_subsection_more">Lainnya</string>
+  <string name="prefs_subsection_security">Keamanan</string>
   <string name="prefs_accounts">Akun</string>
   <string name="prefs_manage_accounts">Kelola akun</string>
   <string name="prefs_passcode">Kunci kode sandi</string>
@@ -42,9 +44,11 @@
   <string name="prefs_camera_picture_upload">Unggah gambar</string>
   <string name="prefs_camera_picture_upload_summary">Otomatis unggah gambar yang diambil kamera</string>
   <string name="prefs_camera_picture_upload_path_title">Jalur unggah gambar</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Unggah gambar hanya melalui WiFi</string>
   <string name="prefs_camera_video_upload">Unggahan video</string>
   <string name="prefs_camera_video_upload_summary">Unggah video yang direkam secara otomatis oleh kamera</string>
   <string name="prefs_camera_video_upload_path_title">Jalur unggah video</string>
+  <string name="prefs_camera_video_upload_on_wifi">Unggah video hanya melalui WiFi</string>
   <string name="prefs_log_title">Aktifkan pencatatan</string>
   <string name="prefs_log_summary">Ini digunakan untuk mencatat masalah</string>
   <string name="prefs_log_title_history">History pencatatan</string>
@@ -59,6 +63,7 @@
   <string name="prefs_remember_last_share_location">Ingat lokasi berbagi</string>
   <string name="prefs_remember_last_upload_location_summary">Ingat lokasi unggahan berbagi terakhir</string>
   <string name="prefs_pattern">Kunci pola</string>
+  <string name="prefs_enable_logging">Aktifkan pencatatan</string>
   <string name="pattern_enter_pattern">Silakan masukkan pola Anda</string>
   <string name="pattern_configure_pattern">Masukkan pola Anda</string>
   <string name="pattern_remove_pattern">Hapus pola Anda</string>
@@ -421,6 +426,7 @@
   <string name="prefs_camera_upload_source_path_title">Folder kamera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Diperlukan</string>
   <string name="prefs_camera_upload_source_path_title_optional">Pilihan</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">File asli akan di</string>
   <string name="prefs_camera_upload_behaviour_title">File asli akan di</string>
   <string name="upload_copy_files">Salin file</string>
   <string name="upload_move_files">Pindahkan file</string>

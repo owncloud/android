@@ -28,6 +28,8 @@
   <string name="drawer_feedback">フィードバック</string>
   <string name="drawer_help">ヘルプ</string>
   <string name="prefs_category_general">一般</string>
+  <string name="prefs_subsection_more">もっと見る</string>
+  <string name="prefs_subsection_security">セキュリティ</string>
   <string name="prefs_accounts">アカウント</string>
   <string name="prefs_manage_accounts">アカウント管理</string>
   <string name="prefs_passcode">パスコードロック</string>
@@ -35,9 +37,11 @@
   <string name="prefs_camera_picture_upload">ピクチャーアップロード</string>
   <string name="prefs_camera_picture_upload_summary">カメラで撮影した画像を自動アップロード</string>
   <string name="prefs_camera_picture_upload_path_title">ピクチャーアップロードパス</string>
+  <string name="prefs_camera_picture_upload_on_wifi">WiFi経由でのみ画像をアップロード</string>
   <string name="prefs_camera_video_upload">動画アップロード</string>
   <string name="prefs_camera_video_upload_summary">カメラで撮影した動画を自動アップロード</string>
   <string name="prefs_camera_video_upload_path_title">動画アップロードパス</string>
+  <string name="prefs_camera_video_upload_on_wifi">WiFi経由でのみ動画をアップロード</string>
   <string name="prefs_log_title">ログの有効化</string>
   <string name="prefs_log_summary">これは問題をログに記録するのに使用します。</string>
   <string name="prefs_log_title_history">ログの履歴</string>
@@ -50,6 +54,7 @@
   <string name="prefs_remember_last_share_location">共有場所を記憶する</string>
   <string name="prefs_remember_last_upload_location_summary">最後に共有アップロードした場所を記憶する</string>
   <string name="prefs_pattern">パターンロック</string>
+  <string name="prefs_enable_logging">ログの有効化</string>
   <string name="pattern_enter_pattern">パターンを入力してください</string>
   <string name="pattern_configure_pattern">パターンを入力</string>
   <string name="pattern_remove_pattern">パターンを削除</string>

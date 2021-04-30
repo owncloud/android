@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Comentarios</string>
   <string name="drawer_help">Axuda</string>
   <string name="prefs_category_general">Xeral</string>
+  <string name="prefs_subsection_logging">Rexistrando</string>
+  <string name="prefs_subsection_more">Máis</string>
+  <string name="prefs_subsection_security">Seguridade</string>
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Xestionar as contas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
@@ -39,12 +42,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques cando a vista estea escurecida por outra xanela visíbel. Activar o emprego de aplis de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Confirma que quere activar esta característica?</string>
   <string name="confirmation_touches_with_other_windows_message">Empregue esta característica baixo a súa responsabilidade, unha aplicación maliciosa podería tentar enganalo para que realice algunhas accións, sen decatarse, empregando outras vistas.</string>
+  <string name="prefs_open_logs_view">Abrir o visor de rexistros</string>
   <string name="prefs_camera_picture_upload">Envío de imaxe</string>
   <string name="prefs_camera_picture_upload_summary">Enviar instantaneamente as fotos tiradas coa cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de envío de imaxes</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Enviar imaxes só a través de WiFi</string>
   <string name="prefs_camera_video_upload">Envío de vídeos</string>
   <string name="prefs_camera_video_upload_summary">Enviar instantaneamente os vídeos gravados coa cámara</string>
   <string name="prefs_camera_video_upload_path_title">Ruta de envío de vídeos</string>
+  <string name="prefs_camera_video_upload_on_wifi">Enviar os vídeos só a través de WiFi</string>
   <string name="prefs_log_title">Activar o rexistro</string>
   <string name="prefs_log_summary">Isto empregase para rexistrar os problemas</string>
   <string name="prefs_log_title_history">Historial do rexistro</string>
@@ -59,6 +65,9 @@
   <string name="prefs_remember_last_share_location">Lembrar a localización da compartición</string>
   <string name="prefs_remember_last_upload_location_summary">Lembrar a localización do envío da última compartición</string>
   <string name="prefs_pattern">Bloqueo por patrón</string>
+  <string name="prefs_enable_logging">Activar o rexistro</string>
+  <string name="prefs_enable_logging_summary">Cando se activa, os rexistros poden impactar no rendemento e incluír información confidencial. Non obstante, os rexistros non están suxeitos a envío automático aos servidores ownCloud. Compartir rexistros con outros é responsabilidade exclusiva do usuario.</string>
+  <string name="prefs_send_feedback">Enviar comentarios</string>
   <string name="pattern_enter_pattern">Faga o seu patrón</string>
   <string name="pattern_configure_pattern">Faga o seu patrón</string>
   <string name="pattern_remove_pattern">Retirar o seu patrón</string>
@@ -431,6 +440,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="prefs_camera_upload_source_path_title">Cartafol da cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requirido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">O ficheiro orixinal vai ser</string>
   <string name="prefs_camera_upload_behaviour_title">O ficheiro orixinal vai ser</string>
   <string name="upload_copy_files">Copiar ficheiro</string>
   <string name="upload_move_files">Mover ficheiro</string>

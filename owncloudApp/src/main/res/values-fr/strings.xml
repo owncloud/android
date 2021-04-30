@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Retour d’expérience</string>
   <string name="drawer_help">Aide...</string>
   <string name="prefs_category_general">Général</string>
+  <string name="prefs_subsection_logging">connexion</string>
+  <string name="prefs_subsection_more">Plus</string>
+  <string name="prefs_subsection_security">Sécurité</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gérer les comptes</string>
   <string name="prefs_passcode">Code de sécurité</string>
@@ -40,9 +43,11 @@
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
   <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
   <string name="prefs_camera_video_upload_summary">Téléverser automatiquement les vidéos enregistrées par la caméra</string>
   <string name="prefs_camera_video_upload_path_title">Chemin d\'accès au répertoire de téléversement des vidéos</string>
+  <string name="prefs_camera_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="prefs_log_title">Activer la journalisation</string>
   <string name="prefs_log_summary">Utilisé pour enregistrer les problèmes dans les logs</string>
   <string name="prefs_log_title_history">Historique de la journalisation</string>
@@ -57,6 +62,8 @@
   <string name="prefs_remember_last_share_location">Mémoriser l\'emplacement de partage</string>
   <string name="prefs_remember_last_upload_location_summary">Mémoriser le dernier emplacement de téléversement</string>
   <string name="prefs_pattern">Verrouillage par motif</string>
+  <string name="prefs_enable_logging">Activer la journalisation</string>
+  <string name="prefs_send_feedback">Envoyez des commentaires</string>
   <string name="pattern_enter_pattern">Veuillez saisir votre schéma</string>
   <string name="pattern_configure_pattern">Saisissez votre schéma</string>
   <string name="pattern_remove_pattern">Supprimer votre schéma</string>
@@ -425,6 +432,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="prefs_camera_upload_source_path_title">Dossier de l\'appareil photo (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Requis</string>
   <string name="prefs_camera_upload_source_path_title_optional">Optionnel</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Le fichier original sera</string>
   <string name="prefs_camera_upload_behaviour_title">Le fichier original sera</string>
   <string name="upload_copy_files">Copier le fichier</string>
   <string name="upload_move_files">Déplacer le fichier</string>

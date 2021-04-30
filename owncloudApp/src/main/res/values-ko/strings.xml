@@ -26,6 +26,8 @@
   <string name="drawer_feedback">피드백</string>
   <string name="drawer_help">도움말</string>
   <string name="prefs_category_general">일반</string>
+  <string name="prefs_subsection_more">더 보기</string>
+  <string name="prefs_subsection_security">보안</string>
   <string name="prefs_accounts">계정</string>
   <string name="prefs_manage_accounts">계정 관리</string>
   <string name="prefs_passcode">암호 잠금</string>
@@ -33,9 +35,11 @@
   <string name="prefs_camera_picture_upload">사진 업로드</string>
   <string name="prefs_camera_picture_upload_summary">카메라로 찍은 사진 자동으로 업로드</string>
   <string name="prefs_camera_picture_upload_path_title">사진 업로드 경로</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Wi-Fi에서만 사진 업로드</string>
   <string name="prefs_camera_video_upload">동영상 업로드</string>
   <string name="prefs_camera_video_upload_summary">카메라로 찍은 동영상 자동으로 업로드</string>
   <string name="prefs_camera_video_upload_path_title">동영상 업로드 경로</string>
+  <string name="prefs_camera_video_upload_on_wifi">Wi-Fi에서만 동영상 업로드</string>
   <string name="prefs_log_title">로그 활성화</string>
   <string name="prefs_log_summary">문제점을 기록하는 데 사용됩니다</string>
   <string name="prefs_log_title_history">과거 기록</string>
@@ -48,6 +52,7 @@
   <string name="prefs_remember_last_share_location">공유 위치 기억하기</string>
   <string name="prefs_remember_last_upload_location_summary">마지막 공유 업로드 위치 기억하기</string>
   <string name="prefs_pattern">패턴 잠금</string>
+  <string name="prefs_enable_logging">로그 활성화</string>
   <string name="pattern_enter_pattern">패턴을 입력해 주세요</string>
   <string name="pattern_configure_pattern">패턴 입력</string>
   <string name="pattern_remove_pattern">패턴 제거</string>

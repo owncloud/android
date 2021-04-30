@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Segnalazioni</string>
   <string name="drawer_help">Aiuto</string>
   <string name="prefs_category_general">Generale</string>
+  <string name="prefs_subsection_more">Altro</string>
+  <string name="prefs_subsection_security">Protezione</string>
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
@@ -42,9 +44,11 @@
   <string name="prefs_camera_picture_upload">Caricamento immagini</string>
   <string name="prefs_camera_picture_upload_summary">Carica automaticamente le immagini scattate dalla fotocamera</string>
   <string name="prefs_camera_picture_upload_path_title">Percorso caricamento immagini</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Carica le immagini solo tramite wifi</string>
   <string name="prefs_camera_video_upload">Caricamento video</string>
   <string name="prefs_camera_video_upload_summary">Carica automaticamente video registrati dalla videocamera</string>
   <string name="prefs_camera_video_upload_path_title">Percorso caricamento video</string>
+  <string name="prefs_camera_video_upload_on_wifi">Carica i video solo tramite wifi</string>
   <string name="prefs_log_title">Abilita la registrazione</string>
   <string name="prefs_log_summary">Usato per registrare i problemi nei log</string>
   <string name="prefs_log_title_history">Cronologia di registrazione</string>
@@ -59,6 +63,8 @@
   <string name="prefs_remember_last_share_location">Ricorda la posizione della condivisione</string>
   <string name="prefs_remember_last_upload_location_summary">Ricorda l\'ultima posizione di caricamento della condivisione</string>
   <string name="prefs_pattern">Blocco con sequenza</string>
+  <string name="prefs_enable_logging">Abilita la registrazione</string>
+  <string name="prefs_send_feedback">Invia segnalazione</string>
   <string name="pattern_enter_pattern">Per favore inserisci la tua sequenza</string>
   <string name="pattern_configure_pattern">Inserisci la tua sequenza</string>
   <string name="pattern_remove_pattern">Rimuovere la sequenza</string>
@@ -430,6 +436,7 @@
   <string name="prefs_camera_upload_source_path_title">Cartella della fotocamera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">richiesto</string>
   <string name="prefs_camera_upload_source_path_title_optional">opzionale</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Il file originale verrà</string>
   <string name="prefs_camera_upload_behaviour_title">Il file originale verrà</string>
   <string name="upload_copy_files">Copia file</string>
   <string name="upload_move_files">Sposta file</string>

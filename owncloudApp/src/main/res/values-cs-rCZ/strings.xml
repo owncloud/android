@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Odezva</string>
   <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
+  <string name="prefs_subsection_more">Více</string>
+  <string name="prefs_subsection_security">Zabezpečení</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
@@ -39,12 +41,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Povolit dotek s aplikacemi, které mohou překrýt toto okno. Nutné pro povolení při použití filtrů světla.</string>
   <string name="confirmation_touches_with_other_windows_title">Jste si jisti, že chcete povolit tuto funkci?</string>
   <string name="confirmation_touches_with_other_windows_message">Použití na vlastní zodpovědnost. Překrývající aplikace se může pokusit ukrást vaše údaje.</string>
+  <string name="prefs_open_logs_view">Otevřít log</string>
   <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
   <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
   <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
   <string name="prefs_camera_video_upload">Nahrání videa</string>
   <string name="prefs_camera_video_upload_summary">Automaticky nahrát video snímané kamerou</string>
   <string name="prefs_camera_video_upload_path_title">Cesta k nahrání videa</string>
+  <string name="prefs_camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
   <string name="prefs_log_title_history">Historie logování</string>
@@ -59,6 +64,8 @@
   <string name="prefs_remember_last_share_location">Zapamatovat umístění sdílení</string>
   <string name="prefs_remember_last_upload_location_summary">Zapamatovat poslední umístění pro nahrání sdílených souborů</string>
   <string name="prefs_pattern">Zámek gestem</string>
+  <string name="prefs_enable_logging">Povolit logování</string>
+  <string name="prefs_send_feedback">Odeslat názor</string>
   <string name="pattern_enter_pattern">Prosím, zadejte gesto</string>
   <string name="pattern_configure_pattern">Zadejte gesto</string>
   <string name="pattern_remove_pattern">Odstranit gesto</string>
@@ -428,6 +435,7 @@ správce systému.</string>
   <string name="prefs_camera_upload_source_path_title">Adresář fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vyžadován</string>
   <string name="prefs_camera_upload_source_path_title_optional">nepovinný</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Původní soubor bude</string>
   <string name="prefs_camera_upload_behaviour_title">Původní soubor bude</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
   <string name="upload_move_files">Přesunout soubor</string>

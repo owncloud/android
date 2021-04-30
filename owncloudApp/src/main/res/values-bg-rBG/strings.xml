@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Обратна Връзка</string>
   <string name="drawer_help">Помощ</string>
   <string name="prefs_category_general">Общи</string>
+  <string name="prefs_subsection_more">Още</string>
+  <string name="prefs_subsection_security">Сигурност</string>
   <string name="prefs_accounts">Профили</string>
   <string name="prefs_manage_accounts">Управление на профилите</string>
   <string name="prefs_passcode">Заключваща парола</string>
@@ -42,9 +44,11 @@
   <string name="prefs_camera_picture_upload">Качване на снимки</string>
   <string name="prefs_camera_picture_upload_summary">Автоматично качване на снимки направени от камерата</string>
   <string name="prefs_camera_picture_upload_path_title">Път за качване на снимка</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Качване на снимки само през WiFi</string>
   <string name="prefs_camera_video_upload">Качване на видео</string>
   <string name="prefs_camera_video_upload_summary">Автоматично качване на видео напавено от камерата</string>
   <string name="prefs_camera_video_upload_path_title">Път за качване на видео</string>
+  <string name="prefs_camera_video_upload_on_wifi">Качване на видео само през WiFi</string>
   <string name="prefs_log_title">Разреши влизане</string>
   <string name="prefs_log_summary">Използва се за докладване на проблеми</string>
   <string name="prefs_log_title_history">История на влизанията</string>
@@ -59,6 +63,7 @@
   <string name="prefs_remember_last_share_location">Запомни мястото за споделяне</string>
   <string name="prefs_remember_last_upload_location_summary">Запомни мястото на последната споделена папка</string>
   <string name="prefs_pattern">Схема за заключване</string>
+  <string name="prefs_enable_logging">Разреши влизане</string>
   <string name="pattern_enter_pattern">Моля въведете вашата схема</string>
   <string name="pattern_configure_pattern">Въведете схема</string>
   <string name="pattern_remove_pattern">Премахване на вашата схема</string>
@@ -428,6 +433,7 @@
   <string name="prefs_camera_upload_source_path_title">Папка за камерата (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">задължителен</string>
   <string name="prefs_camera_upload_source_path_title_optional">по избор</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Оригиналният файл ще бъде</string>
   <string name="prefs_camera_upload_behaviour_title">Оригиналният файл ще бъде</string>
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>

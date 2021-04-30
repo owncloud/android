@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Help</string>
   <string name="prefs_category_general">General</string>
+  <string name="prefs_subsection_logging">Logging</string>
+  <string name="prefs_subsection_more">More</string>
+  <string name="prefs_subsection_security">Security</string>
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Manage accounts</string>
   <string name="prefs_passcode">Passcode lock</string>
@@ -39,12 +42,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
   <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
   <string name="confirmation_touches_with_other_windows_message">Use this feature under your own responsibility, a malicious application could try to spoof you into performing some actions, unaware, using other views.</string>
+  <string name="prefs_open_logs_view">Open logs view</string>
   <string name="prefs_camera_picture_upload">Picture uploads</string>
   <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
   <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
   <string name="prefs_camera_video_upload">Video uploads</string>
   <string name="prefs_camera_video_upload_summary">Automatically upload videos recorded by camera</string>
   <string name="prefs_camera_video_upload_path_title">Video upload path</string>
+  <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
   <string name="prefs_log_title">Enable logging</string>
   <string name="prefs_log_summary">This is used to log problems</string>
   <string name="prefs_log_title_history">Logging history</string>
@@ -59,6 +65,8 @@
   <string name="prefs_remember_last_share_location">Remember share location</string>
   <string name="prefs_remember_last_upload_location_summary">Remember last share upload location</string>
   <string name="prefs_pattern"> Pattern lock </string>
+  <string name="prefs_enable_logging">Enable logging</string>
+  <string name="prefs_send_feedback">Send feedback</string>
   <string name="pattern_enter_pattern">Please enter your pattern</string>
   <string name="pattern_configure_pattern">Enter your pattern</string>
   <string name="pattern_remove_pattern">Remove your pattern</string>
@@ -430,6 +438,7 @@
   <string name="prefs_camera_upload_source_path_title">Camera folder (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">required</string>
   <string name="prefs_camera_upload_source_path_title_optional">optional</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Original file will be</string>
   <string name="prefs_camera_upload_behaviour_title">Original file will be</string>
   <string name="upload_copy_files">Copy file</string>
   <string name="upload_move_files">Move file</string>

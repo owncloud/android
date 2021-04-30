@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Обратная связь</string>
   <string name="drawer_help">Помощь</string>
   <string name="prefs_category_general">Основные</string>
+  <string name="prefs_subsection_logging">Журналирование</string>
+  <string name="prefs_subsection_more">Больше</string>
+  <string name="prefs_subsection_security">Безопасность</string>
   <string name="prefs_accounts">Учётные записи</string>
   <string name="prefs_manage_accounts">Управление аккаунтами</string>
   <string name="prefs_passcode">Блокировка кодом</string>
@@ -39,12 +42,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешает взаимодействие, когда есть перекрытие другим видимым или прозрачным окном. Это нужно, если вы используете приложения для фильтрации света от экрана. Перекрывающее приложение сможет получать информацию о взаимодействии.</string>
   <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>
   <string name="confirmation_touches_with_other_windows_message">Используйте на свой страх и риск: вредоносное приложение может попытаться вас обмануть, заставить незаметно выполнить некоторые действия, используя поддельные элементы интерфейса</string>
+  <string name="prefs_open_logs_view">Открыть лог-файл приложения</string>
   <string name="prefs_camera_picture_upload">Загрузка изображений</string>
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
   <string name="prefs_camera_picture_upload_path_title">Путь загрузки изображений</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Загрузка изображений только через wifi</string>
   <string name="prefs_camera_video_upload">Загрузка видео</string>
   <string name="prefs_camera_video_upload_summary">Автоматически загружать видео, записанные камерой</string>
   <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
+  <string name="prefs_camera_video_upload_on_wifi">Загрузка видео только через wifi</string>
   <string name="prefs_log_title">Включить журналирование</string>
   <string name="prefs_log_summary">Используется для регистрации ошибок</string>
   <string name="prefs_log_title_history">История журналов</string>
@@ -59,6 +65,9 @@
   <string name="prefs_remember_last_share_location">Запомнить расположение общего ресурса</string>
   <string name="prefs_remember_last_upload_location_summary">Запомнить расположение загрузки последней публикации</string>
   <string name="prefs_pattern">Графический ключ</string>
+  <string name="prefs_enable_logging">Включить журналирование</string>
+  <string name="prefs_enable_logging_summary">Активная запись лог файлов может влиять на расход ресурсов. Также они могут содержать конфиденциальную информацию. Обмен лог-файлами подлежит исключительно ответственности пользователя. Автоматическая загрузка лог-файлов на серверы ownCloud исключена.</string>
+  <string name="prefs_send_feedback">Отправить свой отзыв</string>
   <string name="pattern_enter_pattern">Пожалуйста, введите графический ключ</string>
   <string name="pattern_configure_pattern">Введите графический ключ</string>
   <string name="pattern_remove_pattern">Удалить графический ключ</string>
@@ -431,6 +440,7 @@
   <string name="prefs_camera_upload_source_path_title">Каталог камеры (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">обязательно</string>
   <string name="prefs_camera_upload_source_path_title_optional">не обязательно</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Исходный файл будет</string>
   <string name="prefs_camera_upload_behaviour_title">Исходный файл будет</string>
   <string name="upload_copy_files">Копировать файл</string>
   <string name="upload_move_files">Переместить файл</string>

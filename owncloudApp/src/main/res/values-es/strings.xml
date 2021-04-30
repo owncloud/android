@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Sugerencias</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
+  <string name="prefs_subsection_logging">Registrando</string>
+  <string name="prefs_subsection_more">Más</string>
+  <string name="prefs_subsection_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
@@ -39,12 +42,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permite los toques  cuando la vista está oculta por otra ventana visible. Habilítelo para utilizar aplicaciones de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilice esta función bajo su propia responsabilidad, una aplicación malintencionada podría intentar engañarlo para que realice algunas acciones, sin darse cuenta, usando otras pantallas.</string>
+  <string name="prefs_open_logs_view">Abrir vista de registros</string>
   <string name="prefs_camera_picture_upload">Cargas de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Carga automáticamente las fotos tomadas por cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de subida de imagenes</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
   <string name="prefs_camera_video_upload">Cargas de videos</string>
   <string name="prefs_camera_video_upload_summary">Cargue automáticamente los videos  grabados por cámara</string>
   <string name="prefs_camera_video_upload_path_title">Ruta de subida de videos</string>
+  <string name="prefs_camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
@@ -59,6 +65,9 @@
   <string name="prefs_remember_last_share_location">Recordar ubicación de compartidos</string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
   <string name="prefs_pattern">Patrón de bloqueo</string>
+  <string name="prefs_enable_logging">Habilitar registro</string>
+  <string name="prefs_enable_logging_summary">Cuando se activan, los logs pueden afectar el rendimiento e incluir información confidencial. Sin embargo, los logs no están sujetos al envío automático a los servidores ownCloud. Compartir logs con otros es responsabilidad exclusiva del usuario.</string>
+  <string name="prefs_send_feedback">Enviar comentarios</string>
   <string name="pattern_enter_pattern"> Por favor, ingrese el patrón</string>
   <string name="pattern_configure_pattern">Ingrese el patrón</string>
   <string name="pattern_remove_pattern">Borrar el patrón</string>
@@ -430,6 +439,7 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Archivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Archivo original será</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>

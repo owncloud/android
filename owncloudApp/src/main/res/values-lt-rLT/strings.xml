@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Atsiliepimai</string>
   <string name="drawer_help">Pagalba</string>
   <string name="prefs_category_general">Bendras</string>
+  <string name="prefs_subsection_more">Daugiau</string>
+  <string name="prefs_subsection_security">Saugumas</string>
   <string name="prefs_accounts">Paskyros</string>
   <string name="prefs_manage_accounts">Tvarkyti paskyras</string>
   <string name="prefs_passcode">Užrakto kodas</string>
@@ -37,9 +39,11 @@
   <string name="prefs_camera_picture_upload">Nuotraukų įkėlimai</string>
   <string name="prefs_camera_picture_upload_summary">Automatiškai įkelti nuotraukas iš kameros</string>
   <string name="prefs_camera_picture_upload_path_title">Nuotraukų įkėlimo kelias</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Įkelti nuotraukas tik veikiant WiFi</string>
   <string name="prefs_camera_video_upload">Video įkėlimai</string>
   <string name="prefs_camera_video_upload_summary">Automatiškai įkelti video iš kameros</string>
   <string name="prefs_camera_video_upload_path_title">Video įkėlimo kelias</string>
+  <string name="prefs_camera_video_upload_on_wifi">Įkelti video tik veikiant WiFi</string>
   <string name="prefs_log_title">Įjungti žurnalą</string>
   <string name="prefs_log_summary">Tai naudojama problemų žurnalo vedimui</string>
   <string name="prefs_log_title_history">Žurnalo istorija</string>
@@ -52,6 +56,7 @@
   <string name="prefs_remember_last_share_location">Prisiminti bendrinimo vietą</string>
   <string name="prefs_remember_last_upload_location_summary">Prisiminti paskutinio bendrinimo įkėlimo vietą</string>
   <string name="prefs_pattern">Modelio užraktas</string>
+  <string name="prefs_enable_logging">Įjungti žurnalą</string>
   <string name="pattern_enter_pattern">Įveskite savo modelį</string>
   <string name="pattern_configure_pattern">Įveskite savo modelį</string>
   <string name="pattern_remove_pattern">Užrakto pašalinimas</string>

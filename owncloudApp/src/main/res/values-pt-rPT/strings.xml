@@ -27,11 +27,15 @@
   <string name="drawer_feedback">Opinião</string>
   <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">Geral</string>
+  <string name="prefs_subsection_more">Mais</string>
+  <string name="prefs_subsection_security">Segurança</string>
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerir contas</string>
   <string name="prefs_passcode">Proteção por código</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotografias tiradas pela camera</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Enviar as imagens apenas via wi-fi</string>
   <string name="prefs_camera_video_upload_path_title">Caminho do envio de vídeo</string>
+  <string name="prefs_camera_video_upload_on_wifi">Enviar vídeos apenas via wi-fi</string>
   <string name="prefs_log_title">Ativar registo de alterações</string>
   <string name="prefs_log_summary">É utilizado para registar problemas</string>
   <string name="prefs_log_title_history">Histórico de registos de alterações</string>
@@ -43,6 +47,8 @@
   <string name="prefs_imprint">Marca</string>
   <string name="prefs_remember_last_share_location">Lembrar localização de partilha</string>
   <string name="prefs_remember_last_upload_location_summary">Lembrar a última localização de partilha dos carregamentos</string>
+  <string name="prefs_enable_logging">Ativar registo de alterações</string>
+  <string name="prefs_send_feedback">Enviar opinião</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Ficheiros</string>
   <string name="bottom_nav_uploads">Envios</string>

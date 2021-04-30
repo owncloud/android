@@ -30,6 +30,9 @@
   <string name="drawer_feedback">反饋</string>
   <string name="drawer_help">說明</string>
   <string name="prefs_category_general">一般</string>
+  <string name="prefs_subsection_logging">記錄中</string>
+  <string name="prefs_subsection_more">更多</string>
+  <string name="prefs_subsection_security">安全性</string>
   <string name="prefs_accounts">帳號</string>
   <string name="prefs_manage_accounts">管理帳號</string>
   <string name="prefs_passcode">密碼鎖</string>
@@ -39,12 +42,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">當視圖被另一個可見窗口遮擋時，允許觸摸。 啟用它以使用濾光應用程序。</string>
   <string name="confirmation_touches_with_other_windows_title">您確定要啟用這個功能？</string>
   <string name="confirmation_touches_with_other_windows_message">使用此功能由您自己負責，惡意應用程式可能試圖欺騙您執行某些未覺察到的使用其他視圖的操作。</string>
+  <string name="prefs_open_logs_view">開啟記錄視圖</string>
   <string name="prefs_camera_picture_upload">圖片上傳</string>
   <string name="prefs_camera_picture_upload_summary">自動地上傳相機照片</string>
   <string name="prefs_camera_picture_upload_path_title">圖片上傳路徑</string>
+  <string name="prefs_camera_picture_upload_on_wifi">經由 wifi 上傳圖片</string>
   <string name="prefs_camera_video_upload">影片上傳</string>
   <string name="prefs_camera_video_upload_summary">將照相機所拍攝完成的影像自動地上傳</string>
   <string name="prefs_camera_video_upload_path_title">影片上傳路徑</string>
+  <string name="prefs_camera_video_upload_on_wifi">經由 wifi 上傳視訊</string>
   <string name="prefs_log_title">啓用記錄</string>
   <string name="prefs_log_summary">這個用來記錄執行的動作以找出問題點</string>
   <string name="prefs_log_title_history">歷史記錄</string>
@@ -59,6 +65,8 @@
   <string name="prefs_remember_last_share_location">記住分享位置</string>
   <string name="prefs_remember_last_upload_location_summary">記住上次分享上傳位置</string>
   <string name="prefs_pattern">圖案鎖</string>
+  <string name="prefs_enable_logging">啓用記錄</string>
+  <string name="prefs_send_feedback">發送反饋</string>
   <string name="pattern_enter_pattern">請輸入你的圖案</string>
   <string name="pattern_configure_pattern">確認你的圖案</string>
   <string name="pattern_remove_pattern">移除你的模式</string>
@@ -430,6 +438,7 @@
   <string name="prefs_camera_upload_source_path_title">相機資料夾 (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">必填</string>
   <string name="prefs_camera_upload_source_path_title_optional">選填</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">原始檔案將</string>
   <string name="prefs_camera_upload_behaviour_title">原始檔案將</string>
   <string name="upload_copy_files">複製檔案</string>
   <string name="upload_move_files">移動檔案</string>

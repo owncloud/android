@@ -30,11 +30,15 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Hjälp</string>
   <string name="prefs_category_general">Allmänt</string>
+  <string name="prefs_subsection_more">Mer</string>
+  <string name="prefs_subsection_security">Säkerhet</string>
   <string name="prefs_accounts">Konton</string>
   <string name="prefs_manage_accounts">Hantera konton</string>
   <string name="prefs_passcode">Lösenordslås</string>
   <string name="prefs_biometric">Biometrisk lås</string>
   <string name="prefs_biometric_summary">Aktivera lösenord eller mönsterlås för att aktivera det här alternativet</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Ladda upp bilder endast via wifi</string>
+  <string name="prefs_camera_video_upload_on_wifi">Ladda upp videor endast via wifi</string>
   <string name="prefs_log_title">Aktivera Loggning</string>
   <string name="prefs_log_summary">Används för att logga problem</string>
   <string name="prefs_log_title_history">Logghistorik</string>
@@ -46,6 +50,7 @@
   <string name="prefs_imprint">Imprint</string>
   <string name="prefs_remember_last_share_location">Kom ihåg plats för delat</string>
   <string name="prefs_remember_last_upload_location_summary">Kom ihåg senaste uppladdningsplats vid dela</string>
+  <string name="prefs_enable_logging">Aktivera Loggning</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Filer</string>
   <string name="bottom_nav_uploads">Uppladdningar</string>

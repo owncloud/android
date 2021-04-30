@@ -27,6 +27,8 @@
   <string name="drawer_feedback">Palaute</string>
   <string name="drawer_help">Ohje</string>
   <string name="prefs_category_general">Yleiset</string>
+  <string name="prefs_subsection_more">Lisää</string>
+  <string name="prefs_subsection_security">Tietoturva</string>
   <string name="prefs_accounts">Tilit</string>
   <string name="prefs_manage_accounts">Tilien hallinta</string>
   <string name="prefs_passcode">Suojakoodilukitus</string>
@@ -34,9 +36,11 @@
   <string name="prefs_camera_picture_upload">Kuvien lähetys</string>
   <string name="prefs_camera_picture_upload_summary">Lähetä automaattisesti kameralla otetut kuvat</string>
   <string name="prefs_camera_picture_upload_path_title">Kansio lähetetyille kuville</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Lähetä kuvat vain wifi-yhteyden kautta</string>
   <string name="prefs_camera_video_upload">Videoiden lähetys</string>
   <string name="prefs_camera_video_upload_summary">Lähetä automaattisesti kameralla kuvatut videot</string>
   <string name="prefs_camera_video_upload_path_title">Kansio lähetetyille videoille</string>
+  <string name="prefs_camera_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
   <string name="prefs_log_title">Käytä lokitusta</string>
   <string name="prefs_log_summary">Tätä käytetään ongelmien lokitukseen</string>
   <string name="prefs_log_title_history">Lokihistoria</string>
@@ -49,6 +53,7 @@
   <string name="prefs_remember_last_share_location">Muista jaon sijainti</string>
   <string name="prefs_remember_last_upload_location_summary">Muista viimeisin jaon lähetyssijainti</string>
   <string name="prefs_pattern">Kuviolukitus</string>
+  <string name="prefs_enable_logging">Käytä lokitusta</string>
   <string name="pattern_enter_pattern">Ole hyvä ja syötä kuviosi</string>
   <string name="pattern_configure_pattern">Syötä kuviosi</string>
   <string name="pattern_remove_pattern">Poista kuviosi</string>

@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Зворотній зв\'язок</string>
   <string name="drawer_help">Допомога</string>
   <string name="prefs_category_general">Основне</string>
+  <string name="prefs_subsection_logging">Ведення журналу </string>
+  <string name="prefs_subsection_more">Більше</string>
+  <string name="prefs_subsection_security">Безпека</string>
   <string name="prefs_accounts">Облікові записи</string>
   <string name="prefs_manage_accounts">Управління обліковими записами</string>
   <string name="prefs_passcode">Захистити паролем</string>
@@ -38,9 +41,11 @@
   <string name="prefs_camera_picture_upload">Завантаження зображень</string>
   <string name="prefs_camera_picture_upload_summary">Автоматично завантажувати зображення з камери</string>
   <string name="prefs_camera_picture_upload_path_title">Шлях для завантаження зображень</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Завантажувати картинки лише за наявності WiFi</string>
   <string name="prefs_camera_video_upload">Завантаження відео</string>
   <string name="prefs_camera_video_upload_summary">Автоматично завантажувати відео з камери</string>
   <string name="prefs_camera_video_upload_path_title">Шлях для завантаження відео</string>
+  <string name="prefs_camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
   <string name="prefs_log_title">Увімкнути ведення журналу</string>
   <string name="prefs_log_summary">Використовується для реєстрації помилок</string>
   <string name="prefs_log_title_history">Історія журналювання</string>
@@ -55,6 +60,8 @@
   <string name="prefs_remember_last_share_location">Запам\'ятати позицію</string>
   <string name="prefs_remember_last_upload_location_summary">Запам\'ятати останній опублікований шлях завантаження</string>
   <string name="prefs_pattern">Графічний ключ</string>
+  <string name="prefs_enable_logging">Увімкнути ведення журналу</string>
+  <string name="prefs_send_feedback">Відправити відгук</string>
   <string name="pattern_enter_pattern">Будь ласка, введіть ваш шаблон</string>
   <string name="pattern_configure_pattern">Введіть ваш візерунок</string>
   <string name="pattern_incorrect_pattern">Невірний шаблон</string>

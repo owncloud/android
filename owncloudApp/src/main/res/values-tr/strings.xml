@@ -30,6 +30,9 @@
   <string name="drawer_feedback">Geribildirim</string>
   <string name="drawer_help">Yardım</string>
   <string name="prefs_category_general">Genel</string>
+  <string name="prefs_subsection_logging">Günlükleme</string>
+  <string name="prefs_subsection_more">Daha fazla</string>
+  <string name="prefs_subsection_security">Güvenlik</string>
   <string name="prefs_accounts">Hesaplar</string>
   <string name="prefs_manage_accounts">Hesapları yönet</string>
   <string name="prefs_passcode">Parola kod kilidi</string>
@@ -42,9 +45,11 @@
   <string name="prefs_camera_picture_upload">Fotoğraf yüklemeleri</string>
   <string name="prefs_camera_picture_upload_summary">Kamera ile çekilen fotoğrafları otomatik olarak karşıya yükle</string>
   <string name="prefs_camera_picture_upload_path_title">Resim yükleme yolu</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Fotoğrafları sadece kablosuz bağlantıda (WiFi) yükle</string>
   <string name="prefs_camera_video_upload">Video yüklemeleri</string>
   <string name="prefs_camera_video_upload_summary">Kamera ile kaydedilen vidyoları otomatik olarak karşıya yükle</string>
   <string name="prefs_camera_video_upload_path_title">Video yükleme yolu</string>
+  <string name="prefs_camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
   <string name="prefs_log_title">Günlüğü etkinleştir</string>
   <string name="prefs_log_summary">Bu, sorunları günlük dosyasına kaydetmek için kullanılır</string>
   <string name="prefs_log_title_history">Günlük geçmişi</string>
@@ -59,6 +64,8 @@
   <string name="prefs_remember_last_share_location">Konum paylaşmayı hatırla</string>
   <string name="prefs_remember_last_upload_location_summary">Son paylaşma yükleme konumunu hatırla</string>
   <string name="prefs_pattern">Desen kilidi</string>
+  <string name="prefs_enable_logging">Günlüğü etkinleştir</string>
+  <string name="prefs_send_feedback">Geribildirim yolla</string>
   <string name="pattern_enter_pattern">Lütfen deseninizi girin</string>
   <string name="pattern_configure_pattern">Deseninizi girin</string>
   <string name="pattern_remove_pattern">Deseninizi kaldırın</string>
@@ -430,6 +437,7 @@
   <string name="prefs_camera_upload_source_path_title">Kamera klasörü (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">gerekli</string>
   <string name="prefs_camera_upload_source_path_title_optional">isteğe bağlı</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">şu olacak</string>
   <string name="prefs_camera_upload_behaviour_title">şu olacak</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>

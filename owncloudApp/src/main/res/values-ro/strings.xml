@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Păreri</string>
   <string name="drawer_help">Ajutor</string>
   <string name="prefs_category_general">General</string>
+  <string name="prefs_subsection_more">Mai mult</string>
+  <string name="prefs_subsection_security">Securitate</string>
   <string name="prefs_accounts">Conturi</string>
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>
@@ -37,8 +39,10 @@
   <string name="confirmation_touches_with_other_windows_title">Ești sigur că dorești activarea acestei funcții?</string>
   <string name="prefs_camera_picture_upload">Încărcări fotografii</string>
   <string name="prefs_camera_picture_upload_summary">Încarcă automat fotografiile create cu camera</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Încărcare fotografii doar pe conexiunea wifi</string>
   <string name="prefs_camera_video_upload">Încărcări videoclipuri</string>
   <string name="prefs_camera_video_upload_summary">Încarcă automat clipurile video înregistrate cu camera</string>
+  <string name="prefs_camera_video_upload_on_wifi">Încărcare videoclipuri doar pe conexiunea wifi</string>
   <string name="prefs_log_title">Activează înregistrarea / jurnalizarea activităților</string>
   <string name="prefs_log_summary">Acesta este folosit pentru a înregistra problemele</string>
   <string name="prefs_log_title_history">Istoric activități jurnalizate</string>
@@ -53,6 +57,7 @@
   <string name="prefs_remember_last_share_location">Reține contribuie locația</string>
   <string name="prefs_remember_last_upload_location_summary">Reține locația fișierului încărcat precedent</string>
   <string name="prefs_pattern">Model pentru blocare</string>
+  <string name="prefs_enable_logging">Activează înregistrarea / jurnalizarea activităților</string>
   <string name="pattern_enter_pattern">Te rog introdu modelul</string>
   <string name="pattern_configure_pattern">Introdu modelul</string>
   <string name="pattern_remove_pattern">Șterge modelul</string>
@@ -395,6 +400,7 @@
   <string name="prefs_camera_upload_source_path_title">Dosarul camerei (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">necesar</string>
   <string name="prefs_camera_upload_source_path_title_optional">opțional</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Fișierul original va fi</string>
   <string name="prefs_camera_upload_behaviour_title">Fișierul original va fi</string>
   <string name="upload_copy_files">Copiază fișier</string>
   <string name="upload_move_files">Mută fișier</string>

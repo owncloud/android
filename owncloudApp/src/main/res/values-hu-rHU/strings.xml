@@ -30,6 +30,8 @@
   <string name="drawer_feedback">Visszajelzés</string>
   <string name="drawer_help">Súgó</string>
   <string name="prefs_category_general">Általános</string>
+  <string name="prefs_subsection_more">Több</string>
+  <string name="prefs_subsection_security">Biztonság</string>
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
@@ -41,9 +43,11 @@
   <string name="prefs_camera_picture_upload">Képfeltöltések</string>
   <string name="prefs_camera_picture_upload_summary">A fényképezőgép által készített képek automatikus feltöltése</string>
   <string name="prefs_camera_picture_upload_path_title">Képfeltöltési útvonal</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Képeket csak wifin tölthet fel</string>
   <string name="prefs_camera_video_upload">Videófeltöltések</string>
   <string name="prefs_camera_video_upload_summary">A fényképezőgép által készített videók automatikus feltöltése</string>
   <string name="prefs_camera_video_upload_path_title">Videó feltöltési útvonal</string>
+  <string name="prefs_camera_video_upload_on_wifi">Videókat csak wifin tölthet fel</string>
   <string name="prefs_log_title">Naplózás engedélyezése</string>
   <string name="prefs_log_summary">Ez használható a problémák naplózásához</string>
   <string name="prefs_log_title_history">Naplózás előzménye</string>
@@ -58,6 +62,7 @@
   <string name="prefs_remember_last_share_location">Emlékezzen a megosztás helyére</string>
   <string name="prefs_remember_last_upload_location_summary">Az utolsó megosztás feltöltési helyének megjegyzése</string>
   <string name="prefs_pattern">Mintazár</string>
+  <string name="prefs_enable_logging">Naplózás engedélyezése</string>
   <string name="pattern_enter_pattern">Adja meg a mintáját</string>
   <string name="pattern_configure_pattern">Minta megadása</string>
   <string name="pattern_remove_pattern">Minta eltávolítása</string>
@@ -415,6 +420,7 @@
   <string name="prefs_camera_upload_source_path_title">Kamera mappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">kötelező</string>
   <string name="prefs_camera_upload_source_path_title_optional">választható</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Eredeti fájl lesz ...</string>
   <string name="prefs_camera_upload_behaviour_title">Eredeti fájl lesz ...</string>
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>
