@@ -20,15 +20,19 @@
 
 package com.owncloud.android.presentation.ui.settings.fragments
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
+import com.owncloud.android.utils.DisplayUtils
+import com.owncloud.android.utils.PermissionUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsLogsFragment : PreferenceFragmentCompat() {
@@ -46,6 +50,10 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
         prefEnableLogging = findPreference(PREFERENCE_ENABLE_LOGGING)
         prefHttpLogs = findPreference(PREFERENCE_LOG_HTTP)
         prefLogsView = findPreference(PREFERENCE_LOGGER)
+
+        if (PermissionUtil.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            PermissionUtil.requestWriteExternalStoreagePermission(requireActivity())
+        }
 
         with(logsViewModel.isLoggingEnabled()) {
             prefHttpLogs?.isEnabled = this
@@ -79,6 +87,8 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
             }
         }
     }
+
+
 
     companion object {
         const val PREFERENCE_ENABLE_LOGGING = "enable_logging"

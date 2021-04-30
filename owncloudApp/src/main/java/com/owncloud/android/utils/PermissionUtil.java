@@ -18,7 +18,7 @@ public class PermissionUtil {
      * Determine whether <em>the app</em> has been granted a particular permission.
      *
      * @param permission The name of the permission being checked.
-     * @return <code>true</code> if app has the permission, or <code>false</code> if not.
+     * @return <code>false</code> if app has the permission, or <code>true</code> if not.
      */
     public static boolean checkSelfPermission(Context context, String permission) {
         return ContextCompat.checkSelfPermission(context, permission)
