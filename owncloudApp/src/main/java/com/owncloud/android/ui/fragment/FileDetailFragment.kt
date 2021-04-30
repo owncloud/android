@@ -59,7 +59,7 @@ import com.owncloud.android.ui.activity.ComponentsGetter
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.controller.TransferProgressController
-import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment
 import com.owncloud.android.ui.preview.PreviewAudioFragment
 import com.owncloud.android.ui.preview.PreviewImageFragment
