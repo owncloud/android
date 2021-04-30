@@ -41,12 +41,6 @@ android {
         // Room Database Tests
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
-
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
 }
 
 dependencies {

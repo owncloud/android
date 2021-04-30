@@ -43,12 +43,6 @@ class OCRemoteServerInfoDataSource(
 
         var checkPathExistenceResult =
             serverInfoService.checkPathExistence(path, isUserLogged = false, owncloudClient)
-        var redirectionLocation = checkPathExistenceResult.redirectedLocation
-        while (!redirectionLocation.isNullOrEmpty()) {
-            checkPathExistenceResult =
-                serverInfoService.checkPathExistence(redirectionLocation, isUserLogged = false, owncloudClient)
-            redirectionLocation = checkPathExistenceResult.redirectedLocation
-        }
 
         // Step 2: Check if server is available (If server is in maintenance for example, throw exception with specific message)
         if (checkPathExistenceResult.httpCode == HttpConstants.HTTP_SERVICE_UNAVAILABLE) {
