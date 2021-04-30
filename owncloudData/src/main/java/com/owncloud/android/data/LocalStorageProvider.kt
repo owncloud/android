@@ -73,4 +73,15 @@ class LocalStorageProvider(
      * that can be in the accountName since 0.1.190B
      */
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
+
+    fun deleteLocalFile(storagePath: String?): Boolean {
+        storagePath ?: return true
+        val fileToDelete = File(storagePath)
+
+        if (!fileToDelete.exists()) {
+            return true
+        }
+
+        return fileToDelete.deleteRecursively()
+    }
 }

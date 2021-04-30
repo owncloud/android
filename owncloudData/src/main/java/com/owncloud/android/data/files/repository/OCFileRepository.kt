@@ -20,15 +20,18 @@
 
 package com.owncloud.android.data.files.repository
 
+import com.owncloud.android.data.LocalStorageProvider
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
+import timber.log.Timber
 
 class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
-    private val remoteFileDataSource: RemoteFileDataSource
+    private val remoteFileDataSource: RemoteFileDataSource,
+    private val localStorageProvider: LocalStorageProvider
 ) : FileRepository {
     override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
         remoteFileDataSource.checkPathExistence(path, userLogged)
@@ -79,15 +82,38 @@ class OCFileRepository(
     }
 
     override fun removeFile(ocFile: OCFile, removeOnlyLocalCopy: Boolean) {
-        if (!removeOnlyLocalCopy){
+        if (!removeOnlyLocalCopy) {
             remoteFileDataSource.removeFile(ocFile.remotePath).also {
-                localFileDataSource.removeFile(ocFile.id!!)
+                if (ocFile.isFolder) {
+                    removeFolderRecursively(ocFile)
+                } else {
+                    localFileDataSource.removeFile(ocFile.id!!)
+                }
             }
         }
-        // TODO: Remove file from local storage
+        Timber.d("Files removed!")
     }
 
     override fun saveFile(file: OCFile) {
         localFileDataSource.saveFile(file)
+    }
+
+    private fun removeFolderRecursively(ocFile: OCFile) {
+        val folderContent = localFileDataSource.getFolderContent(ocFile.id!!)
+
+        folderContent.forEach { file ->
+            if (file.isFolder) {
+                removeFolderRecursively(file)
+            } else {
+                removeFile(file)
+            }
+        }
+
+        removeFile(ocFile)
+    }
+
+    private fun removeFile(ocFile: OCFile) {
+        localStorageProvider.deleteLocalFile(ocFile.storagePath)
+        localFileDataSource.removeFile(ocFile.id!!)
     }
 }
