@@ -158,6 +158,18 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
             return result // return the file size
         }
         return 0
+
+    }
+
+    fun deleteLocalFile(storagePath: String?): Boolean {
+        storagePath ?: return true
+        val fileToDelete = File(storagePath)
+
+        if (!fileToDelete.exists()) {
+            return true
+        }
+
+        return fileToDelete.deleteRecursively()
     }
 
     companion object {
