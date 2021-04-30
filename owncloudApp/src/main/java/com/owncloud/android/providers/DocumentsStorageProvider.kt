@@ -44,6 +44,7 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -330,14 +331,13 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val file = getFileByIdOrException(docId)
 
-        RemoveFileOperation(file.remotePath, false, true).apply {
-            execute(currentStorageManager, context).also {
-                checkOperationResult(
+        val removeFileUseCase: RemoveFileUseCase by inject()
+        removeFileUseCase.execute(RemoveFileUseCase.Params(file, false)).also {
+            checkUseCaseResult(
                     it,
                     file.parentId.toString()
                 )
             }
-        }
     }
 
     override fun copyDocument(sourceDocumentId: String, targetParentDocumentId: String): String {
@@ -411,6 +411,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun checkUseCaseResult(result: UseCaseResult<Any>, folderToNotify: String) {
         if (!result.isSuccess) {
+            Timber.e(result.getThrowableOrNull()!!)
             if (result.getThrowableOrNull() is FileNameException) {
                 throw UnsupportedOperationException("Operation contains at least one invalid character")
             }
