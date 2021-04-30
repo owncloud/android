@@ -126,6 +126,17 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
      */
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
 
+    fun deleteLocalFile(storagePath: String?): Boolean {
+        storagePath ?: return true
+        val fileToDelete = File(storagePath)
+
+        if (!fileToDelete.exists()) {
+            return true
+        }
+
+        return fileToDelete.deleteRecursively()
+    }
+
     companion object {
         private const val CAMERA_FOLDER = "/Camera"
         private const val LOGS_FOLDER_NAME = "/logs/"
