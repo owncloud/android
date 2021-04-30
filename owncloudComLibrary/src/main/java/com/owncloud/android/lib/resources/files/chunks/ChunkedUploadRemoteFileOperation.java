@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.files.chunks;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.PutMethod;
 import com.owncloud.android.lib.common.network.ChunkFromFileRequestBody;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
@@ -94,10 +95,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 break;
             } else {
                 mPutMethod = new PutMethod(new URL(uriPrefix + File.separator + chunkIndex), mFileRequestBody);
-
-                if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
-                    mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
-                }
 
                 if (chunkIndex == chunkCount - 1) {
                     // Added a high timeout to the last chunk due to when the last chunk
