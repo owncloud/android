@@ -50,7 +50,7 @@ import com.owncloud.android.media.MediaService
 import com.owncloud.android.media.MediaServiceBinder
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import timber.log.Timber
