@@ -42,13 +42,7 @@ class OCRemoteServerInfoDataSource(
         val owncloudClient = clientManager.getClientForAnonymousCredentials(path, false)
 
         var checkPathExistenceResult =
-            serverInfoService.checkPathExistence(path, isUserLoggedIn = false, client = owncloudClient)
-        var redirectionLocation = checkPathExistenceResult.redirectedLocation
-        while (!redirectionLocation.isNullOrEmpty()) {
-            checkPathExistenceResult =
-                serverInfoService.checkPathExistence(redirectionLocation, isUserLoggedIn = false, client = owncloudClient)
-            redirectionLocation = checkPathExistenceResult.redirectedLocation
-        }
+            serverInfoService.checkPathExistence(path, isUserLoggedIn = false, owncloudClient)
 
         // Step 2: Check if server is available (If server is in maintenance for example, throw exception with specific message)
         if (checkPathExistenceResult.httpCode == HttpConstants.HTTP_SERVICE_UNAVAILABLE) {
