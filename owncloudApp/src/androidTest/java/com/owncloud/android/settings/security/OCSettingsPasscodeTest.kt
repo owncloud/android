@@ -37,6 +37,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.ui.activity.PassCodeActivity
+import com.owncloud.android.utils.matchers.isDisplayed
+import com.owncloud.android.utils.matchers.withText
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
@@ -70,15 +72,22 @@ class OCSettingsPasscodeTest {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        onView(withId(R.id.header)).check(matches(isDisplayed()))
-        onView(withId(R.id.explanation)).check(matches(isDisplayed()))
-        onView(withText(R.string.pass_code_configure_your_pass_code)).check(matches(isDisplayed()))
-        onView(withText(R.string.pass_code_configure_your_pass_code_explanation)).check(matches(isDisplayed()))
+        with(R.id.header) {
+            isDisplayed(true)
+            withText(R.string.pass_code_configure_your_pass_code)
+        }
+        with(R.id.explanation) {
+            isDisplayed(true)
+            withText(R.string.pass_code_configure_your_pass_code_explanation)
+        }
         onView(withId(R.id.txt0)).check(matches(isDisplayed()))
         onView(withId(R.id.txt1)).check(matches(isDisplayed()))
         onView(withId(R.id.txt2)).check(matches(isDisplayed()))
         onView(withId(R.id.txt3)).check(matches(isDisplayed()))
-        onView(withId(R.id.cancel)).check(matches(isDisplayed()))
+        with(R.id.cancel) {
+            isDisplayed(true)
+            withText(android.R.string.cancel)
+        }
     }
 
     @Test
@@ -89,7 +98,10 @@ class OCSettingsPasscodeTest {
         //First typing
         typePasscode(defaultPassCode)
 
-        onView(withText(R.string.pass_code_reenter_your_pass_code)).check(matches(isDisplayed()))
+        with(R.id.header) {
+            isDisplayed(true)
+            withText(R.string.pass_code_reenter_your_pass_code)
+        }
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(doesNotExist())
     }
 
@@ -120,10 +132,18 @@ class OCSettingsPasscodeTest {
         //Second typing
         typePasscode(wrongPassCode)
 
-        onView(withText(R.string.pass_code_reenter_your_pass_code)).check(doesNotExist())
-        onView(withText(R.string.pass_code_configure_your_pass_code)).check(matches(isDisplayed()))
-        onView(withText(R.string.pass_code_configure_your_pass_code_explanation)).check(matches(isDisplayed()))
-        onView(withText(R.string.pass_code_mismatch)).check(matches(isDisplayed()))
+        with(R.id.header) {
+            isDisplayed(true)
+            withText(R.string.pass_code_configure_your_pass_code)
+        }
+        with(R.id.explanation) {
+            isDisplayed(true)
+            withText(R.string.pass_code_configure_your_pass_code_explanation)
+        }
+        with(R.id.error) {
+            isDisplayed(true)
+            withText(R.string.pass_code_mismatch)
+        }
     }
 
     @Test
@@ -162,7 +182,10 @@ class OCSettingsPasscodeTest {
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
-        onView(withText(R.string.pass_code_remove_your_pass_code)).check(matches(isDisplayed()))
+        with(R.id.header) {
+            isDisplayed(true)
+            withText(R.string.pass_code_remove_your_pass_code)
+        }
     }
 
     @Test
@@ -190,7 +213,14 @@ class OCSettingsPasscodeTest {
         //Type incorrect passcode
         typePasscode(wrongPassCode)
 
-        onView(withText(R.string.pass_code_enter_pass_code)).check(matches(isDisplayed()))
+        with(R.id.header) {
+            isDisplayed(true)
+            withText(R.string.pass_code_enter_pass_code)
+        }
+        with(R.id.error) {
+            isDisplayed(true)
+            withText(R.string.pass_code_wrong)
+        }
     }
 
     private fun openPasscodeActivity(mode: String) {
