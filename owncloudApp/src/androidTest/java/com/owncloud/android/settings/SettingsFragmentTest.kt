@@ -28,26 +28,38 @@ import androidx.preference.Preference
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
+import io.mockk.every
+import io.mockk.mockk
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 class SettingsFragmentTest {
 
     private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
 
-    private lateinit var prefSecurity: Preference
-    private lateinit var prefLogging: Preference
-    private lateinit var prefMore: Preference
+    private lateinit var subsectionSecurity: Preference
+    private lateinit var subsectionLogging: Preference
+    private lateinit var subsectionPictureUploads: Preference
+    private lateinit var subsectionVideoUploads: Preference
+    private lateinit var subsectionMore: Preference
     private lateinit var prefAboutApp: Preference
 
+    private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var context: Context
 
     private lateinit var version: String
@@ -55,13 +67,21 @@ class SettingsFragmentTest {
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
-        fragmentScenario.onFragment { fragment ->
-            prefSecurity = fragment.findPreference(PREFERENCE_SECURITY)!!
-            prefLogging = fragment.findPreference(PREFERENCE_LOGGING)!!
-            prefMore = fragment.findPreference(PREFERENCE_MORE)!!
-            prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
+        settingsViewModel = mockk(relaxUnitFun = true)
+
+        stopKoin()
+
+        startKoin {
+            context
+            modules(
+                module(override = true) {
+                    viewModel {
+                        settingsViewModel
+                    }
+                }
+            )
         }
+
         version = String.format(
             context.getString(R.string.prefs_app_version_summary),
             context.getString(R.string.app_name),
@@ -69,28 +89,51 @@ class SettingsFragmentTest {
             BuildConfig.VERSION_NAME,
             BuildConfig.COMMIT_SHA1
         )
+
+        Intents.init()
+    }
+
+    @After
+    fun tearDown() {
+        Intents.release()
+    }
+
+    private fun launchTest(attachedAccount: Boolean) {
+        every { settingsViewModel.isThereAttachedAccount() } returns attachedAccount
+
+        fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
+        fragmentScenario.onFragment { fragment ->
+            subsectionSecurity = fragment.findPreference(SUBSECTION_SECURITY)!!
+            subsectionLogging = fragment.findPreference(SUBSECTION_LOGGING)!!
+            subsectionPictureUploads = fragment.findPreference(SUBSECTION_PICTURE_UPLOADS)!!
+            subsectionVideoUploads = fragment.findPreference(SUBSECTION_VIDEO_UPLOADS)!!
+            subsectionMore = fragment.findPreference(SUBSECTION_MORE)!!
+            prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
+        }
     }
 
     @Test
-    fun settingsView() {
-        prefSecurity.verifyPreference(
-            keyPref = PREFERENCE_SECURITY,
+    fun settingsViewCommon() {
+        launchTest(false)
+
+        subsectionSecurity.verifyPreference(
+            keyPref = SUBSECTION_SECURITY,
             titlePref = context.getString(R.string.prefs_subsection_security),
             summaryPref = context.getString(R.string.prefs_subsection_security_summary),
             visible = true,
             enabled = true
         )
 
-        prefLogging.verifyPreference(
-            keyPref = PREFERENCE_LOGGING,
+        subsectionLogging.verifyPreference(
+            keyPref = SUBSECTION_LOGGING,
             titlePref = context.getString(R.string.prefs_subsection_logging),
             summaryPref = context.getString(R.string.prefs_subsection_logging_summary),
             visible = true,
             enabled = true
         )
 
-        prefMore.verifyPreference(
-            keyPref = PREFERENCE_MORE,
+        subsectionMore.verifyPreference(
+            keyPref = SUBSECTION_MORE,
             titlePref = context.getString(R.string.prefs_subsection_more),
             summaryPref = context.getString(R.string.prefs_subsection_more_summary),
             visible = true,
@@ -107,7 +150,49 @@ class SettingsFragmentTest {
     }
 
     @Test
+    fun settingsViewNoAccountAttached() {
+        launchTest(false)
+
+        subsectionPictureUploads.verifyPreference(
+            keyPref = SUBSECTION_PICTURE_UPLOADS,
+            titlePref = context.getString(R.string.prefs_subsection_picture_uploads),
+            summaryPref = context.getString(R.string.prefs_subsection_picture_uploads_summary),
+            visible = false
+        )
+
+        subsectionVideoUploads.verifyPreference(
+            keyPref = SUBSECTION_VIDEO_UPLOADS,
+            titlePref = context.getString(R.string.prefs_subsection_video_uploads),
+            summaryPref = context.getString(R.string.prefs_subsection_video_uploads_summary),
+            visible = false
+        )
+    }
+
+    @Test
+    fun settingsViewAccountAttached() {
+        launchTest(true)
+
+        subsectionPictureUploads.verifyPreference(
+            keyPref = SUBSECTION_PICTURE_UPLOADS,
+            titlePref = context.getString(R.string.prefs_subsection_picture_uploads),
+            summaryPref = context.getString(R.string.prefs_subsection_picture_uploads_summary),
+            visible = true,
+            enabled = true
+        )
+
+        subsectionVideoUploads.verifyPreference(
+            keyPref = SUBSECTION_VIDEO_UPLOADS,
+            titlePref = context.getString(R.string.prefs_subsection_video_uploads),
+            summaryPref = context.getString(R.string.prefs_subsection_video_uploads_summary),
+            visible = true,
+            enabled = true
+        )
+    }
+
+    @Test
     fun clickOnAppVersion() {
+        launchTest(false)
+
         onView(withText(R.string.prefs_app_version)).perform(click())
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
 
@@ -116,9 +201,11 @@ class SettingsFragmentTest {
     }
 
     companion object {
-        private const val PREFERENCE_SECURITY = "security_subsection"
-        private const val PREFERENCE_LOGGING = "logging_subsection"
-        private const val PREFERENCE_MORE = "more_subsection"
+        private const val SUBSECTION_SECURITY = "security_subsection"
+        private const val SUBSECTION_LOGGING = "logging_subsection"
+        private const val SUBSECTION_PICTURE_UPLOADS = "picture_uploads_subsection"
+        private const val SUBSECTION_VIDEO_UPLOADS = "video_uploads_subsection"
+        private const val SUBSECTION_MORE = "more_subsection"
         private const val PREFERENCE_ABOUT_APP = "about_app"
     }
 }
