@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:filterTouchesWhenObscured="true"
-        android:padding="8dp">
+        android:padding="@dimen/standard_half_padding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -261,8 +261,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="7dp"
-                android:layout_marginBottom="7dp"
+                android:layout_marginEnd="@dimen/standard_half_margin"
+                android:layout_marginBottom="@dimen/standard_half_margin"
                 android:gravity="end">
 
                 <Button

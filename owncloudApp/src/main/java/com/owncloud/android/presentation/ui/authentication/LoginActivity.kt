@@ -160,7 +160,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         binding.settingsLink.setOnClickListener {
-            val settingsIntent = Intent(applicationContext, SettingsActivity::class.java)
+            val settingsIntent = Intent(this, SettingsActivity::class.java)
             startActivity(settingsIntent)
         }
 

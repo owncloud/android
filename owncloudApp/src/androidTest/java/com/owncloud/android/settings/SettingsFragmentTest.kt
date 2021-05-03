@@ -28,7 +28,6 @@ import androidx.preference.Preference
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
@@ -39,7 +38,6 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -89,13 +87,6 @@ class SettingsFragmentTest {
             BuildConfig.VERSION_NAME,
             BuildConfig.COMMIT_SHA1
         )
-
-        Intents.init()
-    }
-
-    @After
-    fun tearDown() {
-        Intents.release()
     }
 
     private fun launchTest(attachedAccount: Boolean) {
@@ -114,7 +105,7 @@ class SettingsFragmentTest {
 
     @Test
     fun settingsViewCommon() {
-        launchTest(false)
+        launchTest(attachedAccount = false)
 
         subsectionSecurity.verifyPreference(
             keyPref = SUBSECTION_SECURITY,
@@ -151,7 +142,7 @@ class SettingsFragmentTest {
 
     @Test
     fun settingsViewNoAccountAttached() {
-        launchTest(false)
+        launchTest(attachedAccount = false)
 
         subsectionPictureUploads.verifyPreference(
             keyPref = SUBSECTION_PICTURE_UPLOADS,
@@ -170,7 +161,7 @@ class SettingsFragmentTest {
 
     @Test
     fun settingsViewAccountAttached() {
-        launchTest(true)
+        launchTest(attachedAccount = true)
 
         subsectionPictureUploads.verifyPreference(
             keyPref = SUBSECTION_PICTURE_UPLOADS,
@@ -191,7 +182,7 @@ class SettingsFragmentTest {
 
     @Test
     fun clickOnAppVersion() {
-        launchTest(false)
+        launchTest(attachedAccount = false)
 
         onView(withText(R.string.prefs_app_version)).perform(click())
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?

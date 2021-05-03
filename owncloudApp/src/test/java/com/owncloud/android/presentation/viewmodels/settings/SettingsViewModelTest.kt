@@ -23,11 +23,11 @@ package com.owncloud.android.presentation.viewmodels.settings
 import android.accounts.Account
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.testutil.OC_ACCOUNT
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -45,15 +45,9 @@ class SettingsViewModelTest : ViewModelTest() {
         settingsViewModel = SettingsViewModel(contextProvider)
     }
 
-    @After
-    override fun tearDown() {
-        super.tearDown()
-    }
-
     @Test
     fun `is there attached account - ok - true`() {
-        val account: Account = mockk()
-        every { contextProvider.getCurrentOwnCloudAccount() } returns account
+        every { contextProvider.getCurrentOwnCloudAccount() } returns OC_ACCOUNT
 
         val attachedAccount = settingsViewModel.isThereAttachedAccount()
 

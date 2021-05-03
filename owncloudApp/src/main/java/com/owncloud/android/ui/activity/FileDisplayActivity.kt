@@ -225,7 +225,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        if (PermissionUtil.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        if (PermissionUtil.isPermissionNotGranted(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             // Check if we should show an explanation
             if (PermissionUtil.shouldShowRequestPermissionRationale(
                     this,

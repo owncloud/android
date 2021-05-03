@@ -242,8 +242,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginEnd="@dimen/standard_margin"
+                android:layout_marginBottom="@dimen/standard_margin"
                 android:gravity="end"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

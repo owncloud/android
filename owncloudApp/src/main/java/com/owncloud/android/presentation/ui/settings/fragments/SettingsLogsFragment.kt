@@ -49,7 +49,7 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
         prefHttpLogs = findPreference(PREFERENCE_LOG_HTTP)
         prefLogsView = findPreference(PREFERENCE_LOGGER)
 
-        if (PermissionUtil.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        if (PermissionUtil.isPermissionNotGranted(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             PermissionUtil.requestWriteExternalStoreagePermission(requireActivity())
         }
 

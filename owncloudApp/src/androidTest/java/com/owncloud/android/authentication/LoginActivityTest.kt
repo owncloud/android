@@ -645,6 +645,7 @@ class LoginActivityTest {
         intended(hasComponent(SettingsActivity::class.java.name))
 
         Intents.release()
+        activityScenario.close()
     }
 
     private fun checkBasicFieldsVisibility(
