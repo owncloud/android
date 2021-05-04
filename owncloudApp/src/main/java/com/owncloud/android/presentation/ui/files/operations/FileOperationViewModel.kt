@@ -39,8 +39,8 @@ class FileOperationViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
-    private val _removeFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
-    val removeFileLiveData: LiveData<Event<UIResult<OCFile>>> = _removeFileLiveData
+    private val _removeFileLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
+    val removeFileLiveData: LiveData<Event<UIResult<List<OCFile>>>> = _removeFileLiveData
 
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
@@ -50,25 +50,23 @@ class FileOperationViewModel(
 
     private fun removeOperation(fileOperation: FileOperation.RemoveOperation) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            fileOperation.listOfFilesToRemove.forEach {
-                _removeFileLiveData.postValue(Event(UIResult.Loading(it)))
-                // If usecase requires connection and is not connected, it is not needed to execute use case.
-                if (!contextProvider.isConnected()) {
-                    _removeFileLiveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
-                    Timber.w("${removeFileUseCase.javaClass.simpleName} will not be executed due to lack of network connection")
-                    return@launch
-                }
-                val useCaseResult = removeFileUseCase.execute(RemoveFileUseCase.Params(it, fileOperation.removeOnlyLocalCopy))
-
-                Timber.d("Use case executed: ${removeFileUseCase.javaClass.simpleName} with result: $useCaseResult")
-
-                if (useCaseResult.isSuccess) {
-                    _removeFileLiveData.postValue(Event(UIResult.Success(it)))
-                } else if (useCaseResult.isError) {
-                    _removeFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
-                }
-
+            _removeFileLiveData.postValue(Event(UIResult.Loading()))
+            // If usecase requires connection and is not connected, it is not needed to execute use case.
+            if (!contextProvider.isConnected()) {
+                _removeFileLiveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
+                Timber.w("${removeFileUseCase.javaClass.simpleName} will not be executed due to lack of network connection")
+                return@launch
             }
+            val useCaseResult = removeFileUseCase.execute(RemoveFileUseCase.Params(fileOperation.listOfFilesToRemove, fileOperation.removeOnlyLocalCopy))
+
+            Timber.d("Use case executed: ${removeFileUseCase.javaClass.simpleName} with result: $useCaseResult")
+
+            if (useCaseResult.isSuccess) {
+                _removeFileLiveData.postValue(Event(UIResult.Success(fileOperation.listOfFilesToRemove)))
+            } else if (useCaseResult.isError) {
+                _removeFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
+            }
+
         }
     }
 }
