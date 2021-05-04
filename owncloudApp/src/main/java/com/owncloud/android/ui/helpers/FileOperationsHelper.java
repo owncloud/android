@@ -295,34 +295,6 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Start operations to delete one or several files
-     *
-     * @param files         Files to delete
-     * @param onlyLocalCopy When 'true' only local copy of the files is removed; otherwise files are also deleted
-     *                      in the server.
-     */
-    public void removeFiles(Collection<OCFile> files, boolean onlyLocalCopy) {
-        int countOfFilesToRemove = 0;
-        boolean isLastFileToRemove = false;
-        for (OCFile file : files) {
-            countOfFilesToRemove++;
-            // RemoveFile
-            Intent service = new Intent(mFileActivity, OperationsService.class);
-            service.setAction(OperationsService.ACTION_REMOVE);
-            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            service.putExtra(OperationsService.EXTRA_REMOVE_ONLY_LOCAL, onlyLocalCopy);
-            if (countOfFilesToRemove == files.size()) {
-                isLastFileToRemove = true;
-            }
-            service.putExtra(OperationsService.EXTRA_IS_LAST_FILE_TO_REMOVE, isLastFileToRemove);
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-        }
-
-        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-    }
-
-    /**
      * Cancel the transference in downloads (files/folders) and file uploads
      *
      * @param file OCFile
