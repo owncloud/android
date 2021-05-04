@@ -52,7 +52,6 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.MoveFileOperation;
-import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
@@ -70,17 +69,14 @@ public class OperationsService extends Service {
     public static final String EXTRA_SERVER_URL = "SERVER_URL";
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
     public static final String EXTRA_NEWNAME = "NEWNAME";
-    public static final String EXTRA_REMOVE_ONLY_LOCAL = "REMOVE_LOCAL_COPY";
     public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
     public static final String EXTRA_SYNC_REGULAR_FILES = "SYNC_REGULAR_FILES";
-    public static final String EXTRA_IS_LAST_FILE_TO_REMOVE = "EXTRA_IS_LAST_FILE_TO_REMOVE";
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
     public static final String ACTION_RENAME = "RENAME";
-    public static final String ACTION_REMOVE = "REMOVE";
     public static final String ACTION_SYNC_FILE = "SYNC_FILE";
     public static final String ACTION_SYNC_FOLDER = "SYNC_FOLDER";
     public static final String ACTION_MOVE_FILE = "MOVE_FILE";
@@ -279,8 +275,6 @@ public class OperationsService extends Service {
             if (itemToQueue != null) {
                 mServiceHandler.mPendingOperations.add(itemToQueue);
                 Intent executeOperation = new Intent(OperationsService.this, OperationsService.class);
-                executeOperation.putExtra(EXTRA_IS_LAST_FILE_TO_REMOVE,
-                        operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE, false));
                 startService(executeOperation);
                 return itemToQueue.second.hashCode();
             } else {
@@ -461,15 +455,6 @@ public class OperationsService extends Service {
                             String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
                             String newName = operationIntent.getStringExtra(EXTRA_NEWNAME);
                             operation = new RenameFileOperation(remotePath, newName);
-
-                            break;
-                        }
-                        case ACTION_REMOVE: {
-                            // Remove file or folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            boolean onlyLocalCopy = operationIntent.getBooleanExtra(EXTRA_REMOVE_ONLY_LOCAL, false);
-                            operation = new RemoveFileOperation(remotePath, onlyLocalCopy,
-                                    operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE, false));
 
                             break;
                         }
