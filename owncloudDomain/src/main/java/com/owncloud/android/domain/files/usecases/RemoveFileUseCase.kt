@@ -28,14 +28,16 @@ class RemoveFileUseCase(
 
     override fun run(params: Params) {
 
+        require(params.listOfFilesToRemove.isNotEmpty())
+
         return fileRepository.removeFile(
-            ocFile = params.file,
+            listOfFilesToRemove = params.listOfFilesToRemove,
             removeOnlyLocalCopy = params.removeOnlyLocalCopy
         )
     }
 
     data class Params(
-        val file: OCFile,
+        val listOfFilesToRemove: List<OCFile>,
         val removeOnlyLocalCopy: Boolean
     )
 }
