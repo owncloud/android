@@ -51,6 +51,7 @@ import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.extensions.goToUrl
+import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
@@ -226,12 +227,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun openFeedback() {
         val feedbackMail = getString(R.string.mail_feedback)
         val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.drawer_feedback)
-        val intent = Intent(Intent.ACTION_SENDTO).apply {
-            putExtra(Intent.EXTRA_SUBJECT, feedback)
-            data = Uri.parse(feedbackMail)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        startActivity(intent)
+        sendEmail(email = feedbackMail, subject = feedback)
     }
 
     /**
