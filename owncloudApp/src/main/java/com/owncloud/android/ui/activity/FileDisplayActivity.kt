@@ -85,8 +85,6 @@ import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
-import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationListener
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
@@ -111,6 +109,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 import java.util.ArrayList
@@ -120,7 +119,7 @@ import kotlin.coroutines.CoroutineContext
  * Displays, what files the user has available in his ownCloud. This is the main view.
  */
 class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
-    CoroutineScope, ISecurityEnforced, FileOperationListener {
+    CoroutineScope, ISecurityEnforced {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -143,7 +142,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private var localBroadcastManager: LocalBroadcastManager? = null
 
-    private val fileOperationViewModel: FileOperationViewModel by inject()
+    private val fileOperationViewModel: FileOperationViewModel by viewModel()
 
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
@@ -1177,6 +1176,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     refreshListOfFilesFragment(true)
                 }
                 invalidateOptionsMenu()
+                dismissLoadingDialog()
             }
             is UIResult.Error -> {
                 showErrorInSnackbar(R.id.list_layout, uiResult.getThrowableOrNull())
@@ -1184,6 +1184,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 if (uiResult.getThrowableOrNull() is SSLRecoverablePeerUnverifiedException) {
                     showUntrustedCertDialogForThrowable(uiResult.getThrowableOrNull())
                 }
+                dismissLoadingDialog()
             }
         }
     }
@@ -1581,6 +1582,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         manageOptionLockSelected(type)
     }
 
+    private fun startListeningToOperations() {
+        fileOperationViewModel.removeFileLiveData.observe(this, Event.EventObserver {
+            onRemoveFileOperationResult(it)
+        })
+    }
+
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
@@ -1598,15 +1605,5 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
         const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
         const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
-    }
-
-    private fun startListeningToOperations() {
-        fileOperationViewModel.removeFileLiveData.observe(this, Event.EventObserver {
-            onRemoveFileOperationResult(it)
-        })
-    }
-
-    override fun performOperation(fileOperation: FileOperation) {
-        fileOperationViewModel.performOperation(fileOperation)
     }
 }
