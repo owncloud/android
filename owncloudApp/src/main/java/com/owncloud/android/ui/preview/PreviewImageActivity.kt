@@ -48,7 +48,6 @@ import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
@@ -208,9 +207,7 @@ class PreviewImageActivity : FileActivity(),
 
     override fun onRemoteOperationFinish(operation: RemoteOperation<*>?, result: RemoteOperationResult<*>) {
         super.onRemoteOperationFinish(operation, result)
-        if (operation is RemoveFileOperation) {
-            finish()
-        } else if (operation is SynchronizeFileOperation) {
+        if (operation is SynchronizeFileOperation) {
             onSynchronizeFileOperationFinish(result)
         }
     }
