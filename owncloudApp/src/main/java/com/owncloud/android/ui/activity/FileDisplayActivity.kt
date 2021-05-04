@@ -1149,9 +1149,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     /**
      * Updates the view associated to the activity after the finish of an operation trying to
      * remove a file.
-     *
-     * @param operation Removal operation performed.
-     * @param result    Result of the removal.
      */
     private fun onRemoveFileOperationResult(
         uiResult: UIResult<List<OCFile>>
@@ -1161,30 +1158,40 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 showLoadingDialog(R.string.wait_a_moment)
             }
             is UIResult.Success -> {
-                val lastRemovedFile = uiResult.getStoredData()?.last()
-                val second = secondFragment
-                if (second != null && lastRemovedFile == second.file) {
-                    if (second is PreviewAudioFragment) {
-                        second.stopPreview()
-                    } else if (second is PreviewVideoFragment) {
-                        second.releasePlayer()
+                dismissLoadingDialog()
+
+                val listOfFilesRemoved = uiResult.data ?: return
+                val lastRemovedFile = listOfFilesRemoved.last()
+                val singleRemoval = listOfFilesRemoved.size == 1
+
+                if (singleRemoval) {
+                    showMessageInSnackbar(message = getString(R.string.remove_success_msg))
+                }
+
+                // Clean second fragment and refresh first one
+                val secondFragment = secondFragment
+                if (secondFragment?.file == lastRemovedFile) {
+                    if (secondFragment is PreviewAudioFragment) {
+                        secondFragment.stopPreview()
+                    } else if (secondFragment is PreviewVideoFragment) {
+                        secondFragment.releasePlayer()
                     }
-                    file = storageManager.getFileById(lastRemovedFile!!.parentId!!)
+                    file = storageManager.getFileById(lastRemovedFile.parentId!!)
                     cleanSecondFragment()
                 }
-                if (storageManager.getFileById(lastRemovedFile!!.parentId!!) == currentDir) {
+                if (storageManager.getFileById(lastRemovedFile.parentId!!) == currentDir) {
                     refreshListOfFilesFragment(true)
                 }
                 invalidateOptionsMenu()
-                dismissLoadingDialog()
             }
             is UIResult.Error -> {
-                showErrorInSnackbar(R.id.list_layout, uiResult.getThrowableOrNull())
+                dismissLoadingDialog()
+
+                showErrorInSnackbar(R.string.remove_fail_msg, uiResult.getThrowableOrNull())
 
                 if (uiResult.getThrowableOrNull() is SSLRecoverablePeerUnverifiedException) {
                     showUntrustedCertDialogForThrowable(uiResult.getThrowableOrNull())
                 }
-                dismissLoadingDialog()
             }
         }
     }
