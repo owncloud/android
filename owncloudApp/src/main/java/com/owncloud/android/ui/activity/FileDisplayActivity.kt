@@ -61,8 +61,11 @@ import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
@@ -75,12 +78,15 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.MoveFileOperation
 import com.owncloud.android.operations.RefreshFolderOperation
-import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
+import com.owncloud.android.presentation.ui.files.operations.FileOperation
+import com.owncloud.android.presentation.ui.files.operations.FileOperationListener
+import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
@@ -115,7 +121,7 @@ import kotlin.coroutines.CoroutineContext
  */
 
 class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
-    CoroutineScope {
+    CoroutineScope, FileOperationListener {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -137,6 +143,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private var waitingToSend: OCFile? = null
 
     private var localBroadcastManager: LocalBroadcastManager? = null
+
+    private val fileOperationViewModel: FileOperationViewModel by inject()
 
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
@@ -256,6 +264,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         setBackgroundText()
+
+        startListeningToOperations()
     }
 
     override fun onRequestPermissionsResult(
@@ -1175,7 +1185,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         super.onRemoteOperationFinish(operation, result)
 
         when (operation) {
-            is RemoveFileOperation -> onRemoveFileOperationFinish(operation, result)
             is RenameFileOperation -> onRenameFileOperationFinish(operation, result)
             is SynchronizeFileOperation -> onSynchronizeFileOperationFinish(operation, result)
             is MoveFileOperation -> onMoveFileOperationFinish(operation, result)
@@ -1190,40 +1199,36 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * @param operation Removal operation performed.
      * @param result    Result of the removal.
      */
-    private fun onRemoveFileOperationFinish(
-        operation: RemoveFileOperation,
-        result: RemoteOperationResult<*>
+    private fun onRemoveFileOperationResult(
+        uiResult: UIResult<OCFile>
     ) {
-
-        if (listOfFilesFragment!!.isSingleItemChecked || result.isException || !result.isSuccess) {
-            if (result.code != ResultCode.FORBIDDEN || result.code == ResultCode.FORBIDDEN && operation.isLastFileToRemove) {
-                showMessageInSnackbar(
-                    R.id.list_layout,
-                    ErrorMessageAdapter.getResultMessage(result, operation, resources)
-                )
+        when (uiResult) {
+            is UIResult.Loading -> {
+                showLoadingDialog(R.string.wait_a_moment)
             }
-        }
-
-        if (result.isSuccess) {
-            val removedFile = operation.file
-            val second = secondFragment
-            if (second != null && removedFile == second.file) {
-                if (second is PreviewAudioFragment) {
-                    second.stopPreview()
-                } else if (second is PreviewVideoFragment) {
-                    second.releasePlayer()
+            is UIResult.Success -> {
+                val removedFile = uiResult.getStoredData()
+                val second = secondFragment
+                if (second != null && removedFile == second.file) {
+                    if (second is PreviewAudioFragment) {
+                        second.stopPreview()
+                    } else if (second is PreviewVideoFragment) {
+                        second.releasePlayer()
+                    }
+                    file = storageManager.getFileById(removedFile!!.parentId!!)
+                    cleanSecondFragment()
                 }
-                file = storageManager.getFileById(removedFile.parentId!!)
-                cleanSecondFragment()
+                if (storageManager.getFileById(removedFile!!.parentId!!) == currentDir) {
+                    refreshListOfFilesFragment(true)
+                }
+                invalidateOptionsMenu()
             }
-            if (storageManager.getFileById(removedFile.parentId!!) == currentDir) {
-                refreshListOfFilesFragment(true)
-            }
-            invalidateOptionsMenu()
-        } else {
-            if (result.isSslRecoverableException) {
-                lastSslUntrustedServerResult = result
-                showUntrustedCertDialog(lastSslUntrustedServerResult)
+            is UIResult.Error -> {
+                showErrorInSnackbar(R.id.list_layout, uiResult.getThrowableOrNull())
+
+                if (uiResult.getThrowableOrNull() is SSLRecoverablePeerUnverifiedException) {
+                    showUntrustedCertDialogForThrowable(uiResult.getThrowableOrNull())
+                }
             }
         }
     }
@@ -1634,5 +1639,15 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
         const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
         const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
+    }
+
+    private fun startListeningToOperations() {
+        fileOperationViewModel.removeFileLiveData.observe(this, Event.EventObserver {
+            onRemoveFileOperationResult(it)
+        })
+    }
+
+    override fun performOperation(fileOperation: FileOperation) {
+        fileOperationViewModel.performOperation(fileOperation)
     }
 }
