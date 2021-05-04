@@ -175,6 +175,24 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
+    fun `remove file - ok`() {
+        every { dao.deleteFileWithId(any()) } returns Unit
+
+        localDataSource.removeFile(DUMMY_FILE_ENTITY.id)
+
+        verify { dao.deleteFileWithId(DUMMY_FILE_ENTITY.id) }
+    }
+
+    @Test(expected = Exception::class)
+    fun `remove file - ko`() {
+        every { dao.deleteFileWithId(any()) } throws Exception()
+
+        localDataSource.removeFile(DUMMY_FILE_ENTITY.id)
+
+        verify { dao.deleteFileWithId(DUMMY_FILE_ENTITY.id) }
+    }
+
+    @Test
     fun `save file - ok`() {
         every { dao.mergeRemoteAndLocalFile(any()) } returns 1
 
