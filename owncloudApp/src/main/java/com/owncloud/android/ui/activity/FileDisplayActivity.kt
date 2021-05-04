@@ -1154,25 +1154,25 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * @param result    Result of the removal.
      */
     private fun onRemoveFileOperationResult(
-        uiResult: UIResult<OCFile>
+        uiResult: UIResult<List<OCFile>>
     ) {
         when (uiResult) {
             is UIResult.Loading -> {
                 showLoadingDialog(R.string.wait_a_moment)
             }
             is UIResult.Success -> {
-                val removedFile = uiResult.getStoredData()
+                val lastRemovedFile = uiResult.getStoredData()?.last()
                 val second = secondFragment
-                if (second != null && removedFile == second.file) {
+                if (second != null && lastRemovedFile == second.file) {
                     if (second is PreviewAudioFragment) {
                         second.stopPreview()
                     } else if (second is PreviewVideoFragment) {
                         second.releasePlayer()
                     }
-                    file = storageManager.getFileById(removedFile!!.parentId!!)
+                    file = storageManager.getFileById(lastRemovedFile!!.parentId!!)
                     cleanSecondFragment()
                 }
-                if (storageManager.getFileById(removedFile!!.parentId!!) == currentDir) {
+                if (storageManager.getFileById(lastRemovedFile!!.parentId!!) == currentDir) {
                     refreshListOfFilesFragment(true)
                 }
                 invalidateOptionsMenu()
