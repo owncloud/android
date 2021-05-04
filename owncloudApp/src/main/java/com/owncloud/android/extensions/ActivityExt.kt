@@ -53,10 +53,13 @@ fun Activity.showErrorInToast(
         ).show()
     }
 
-fun Activity.goToUrl(url: String) {
+fun Activity.goToUrl(
+    url: String,
+    flags: Int = 0) {
     if (url.isNotEmpty()) {
         val uriUrl = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uriUrl)
+        if (flags != 0) intent.addFlags(flags)
         startActivity(intent)
     }
 }

@@ -55,6 +55,7 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
@@ -657,10 +658,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 isVisible = true
                 text = String.format(getString(R.string.auth_register), getString(R.string.app_name))
                 setOnClickListener {
-                    val openWelcomeLinkIntent =
-                        Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.welcome_link_url)))
                     setResult(Activity.RESULT_CANCELED)
-                    startActivity(openWelcomeLinkIntent)
+                    goToUrl(url = getString(R.string.welcome_link_url))
                 }
             } else isVisible = false
         }
