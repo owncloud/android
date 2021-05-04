@@ -23,6 +23,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -51,20 +52,24 @@ class FileOperationViewModel(
     private fun removeOperation(fileOperation: FileOperation.RemoveOperation) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             _removeFileLiveData.postValue(Event(UIResult.Loading()))
-            // If usecase requires connection and is not connected, it is not needed to execute use case.
+
             if (!contextProvider.isConnected()) {
                 _removeFileLiveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
                 Timber.w("${removeFileUseCase.javaClass.simpleName} will not be executed due to lack of network connection")
                 return@launch
             }
-            val useCaseResult = removeFileUseCase.execute(RemoveFileUseCase.Params(fileOperation.listOfFilesToRemove, fileOperation.removeOnlyLocalCopy))
+            val useCaseResult =
+                removeFileUseCase.execute(RemoveFileUseCase.Params(fileOperation.listOfFilesToRemove, fileOperation.removeOnlyLocalCopy))
 
             Timber.d("Use case executed: ${removeFileUseCase.javaClass.simpleName} with result: $useCaseResult")
 
-            if (useCaseResult.isSuccess) {
-                _removeFileLiveData.postValue(Event(UIResult.Success(fileOperation.listOfFilesToRemove)))
-            } else if (useCaseResult.isError) {
-                _removeFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())))
+            when (useCaseResult) {
+                is UseCaseResult.Success -> {
+                    _removeFileLiveData.postValue(Event(UIResult.Success(fileOperation.listOfFilesToRemove)))
+                }
+                is UseCaseResult.Error -> {
+                    _removeFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
+                }
             }
 
         }
