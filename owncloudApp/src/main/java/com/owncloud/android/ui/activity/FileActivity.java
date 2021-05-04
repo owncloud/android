@@ -378,6 +378,21 @@ public class FileActivity extends DrawerActivity
         }
     }
 
+    /**
+     * Show untrusted cert dialog
+     */
+    public void showUntrustedCertDialogForThrowable(Throwable throwable) {
+        // Show a dialog with the certificate info
+        FragmentManager fm = getSupportFragmentManager();
+        SslUntrustedCertDialog dialog = (SslUntrustedCertDialog) fm.findFragmentByTag(DIALOG_UNTRUSTED_CERT);
+        if (dialog == null) {
+            dialog = SslUntrustedCertDialog.newInstanceForFullSslError(
+                    (CertificateCombinedException) throwable);
+            FragmentTransaction ft = fm.beginTransaction();
+            dialog.show(ft, DIALOG_UNTRUSTED_CERT);
+        }
+    }
+
     private void onSynchronizeFileOperationFinish(SynchronizeFileOperation operation,
                                                   RemoteOperationResult result) {
         invalidateOptionsMenu();
