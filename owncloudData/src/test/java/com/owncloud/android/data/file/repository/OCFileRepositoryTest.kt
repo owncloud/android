@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -19,6 +19,7 @@
 
 package com.owncloud.android.data.file.repository
 
+import com.owncloud.android.data.LocalStorageProvider
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.repository.OCFileRepository
@@ -37,7 +38,8 @@ class OCFileRepositoryTest {
 
     private val remoteFileDataSource = mockk<RemoteFileDataSource>(relaxed = true)
     private val localFileDataSource = mockk<LocalFileDataSource>(relaxed = true)
-    private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource)
+    private val localStorageProvider = mockk<LocalStorageProvider>()
+    private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource, localStorageProvider)
 
     private val folderToFetch = OC_FOLDER
     private val listOfFilesRetrieved = listOf(
