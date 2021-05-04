@@ -21,14 +21,14 @@
 package com.owncloud.android.presentation.ui.files.removefile
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationListener
+import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.ArrayList
 
 /**
@@ -39,11 +39,7 @@ import java.util.ArrayList
 class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
 
     private lateinit var targetFiles: ArrayList<OCFile>
-
-    /**
-     * Reference to file operation listener
-     */
-    private var listener: FileOperationListener? = null
+    private val fileOperationViewModel: FileOperationViewModel by sharedViewModel()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -52,27 +48,11 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         return dialog
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        try {
-            listener = requireActivity() as FileOperationListener
-        } catch (e: IllegalStateException) {
-            throw IllegalStateException(requireActivity().toString() + " must implement OnShareFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-
-        listener = null
-    }
-
     /**
      * Performs the removal of the target file, both locally and in the server.
      */
     override fun onConfirmation(callerTag: String) {
-        listener?.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = false))
+        fileOperationViewModel.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = false))
         dismiss()
     }
 
@@ -80,7 +60,7 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
      * Performs the removal of the local copy of the target file
      */
     override fun onCancel(callerTag: String) {
-        listener?.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = true))
+        fileOperationViewModel.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = true))
         dismiss()
     }
 
