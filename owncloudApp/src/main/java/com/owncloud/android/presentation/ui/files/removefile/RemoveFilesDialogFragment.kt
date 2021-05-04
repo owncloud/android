@@ -21,10 +21,12 @@
 package com.owncloud.android.presentation.ui.files.removefile
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.ui.activity.ComponentsGetter
+import com.owncloud.android.presentation.ui.files.operations.FileOperation
+import com.owncloud.android.presentation.ui.files.operations.FileOperationListener
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 import java.util.ArrayList
@@ -36,29 +38,50 @@ import java.util.ArrayList
  */
 class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
 
-    private var targetFiles: ArrayList<OCFile>? = null
+    private lateinit var targetFiles: ArrayList<OCFile>
+
+    /**
+     * Reference to file operation listener
+     */
+    private var listener: FileOperationListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        targetFiles = requireArguments().getParcelableArrayList(ARG_TARGET_FILES)
+        targetFiles = requireArguments().getParcelableArrayList(ARG_TARGET_FILES) ?: arrayListOf()
         setOnConfirmationListener(this)
         return dialog
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        try {
+            listener = requireActivity() as FileOperationListener
+        } catch (e: IllegalStateException) {
+            throw IllegalStateException(requireActivity().toString() + " must implement OnShareFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        listener = null
     }
 
     /**
      * Performs the removal of the target file, both locally and in the server.
      */
     override fun onConfirmation(callerTag: String) {
-        val componentsGetter = activity as ComponentsGetter?
-        componentsGetter?.fileOperationsHelper?.removeFiles(targetFiles, false)
+        listener?.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = false))
+        dismiss()
     }
 
     /**
      * Performs the removal of the local copy of the target file
      */
     override fun onCancel(callerTag: String) {
-        val componentsGetter = activity as ComponentsGetter?
-        componentsGetter?.fileOperationsHelper?.removeFiles(targetFiles, true)
+        listener?.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = true))
+        dismiss()
     }
 
     override fun onNeutral(callerTag: String) {
