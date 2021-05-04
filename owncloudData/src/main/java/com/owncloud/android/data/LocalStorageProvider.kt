@@ -26,6 +26,7 @@ package com.owncloud.android.data
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Environment
+import com.owncloud.android.domain.files.model.OCFile
 import java.io.File
 
 class LocalStorageProvider(
@@ -74,9 +75,12 @@ class LocalStorageProvider(
      */
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
 
-    fun deleteLocalFile(storagePath: String?): Boolean {
-        storagePath ?: return true
-        val fileToDelete = File(storagePath)
+    /**
+     * Best-effort to remove the file locally. If storage path is null, let's try to remove it anyway.
+     */
+    fun deleteLocalFile(ocFile: OCFile): Boolean {
+        val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
+        val fileToDelete = File(safeStoragePath)
 
         if (!fileToDelete.exists()) {
             return true
