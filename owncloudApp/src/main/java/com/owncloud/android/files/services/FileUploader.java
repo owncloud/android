@@ -62,8 +62,8 @@ import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.chunks.RemoveRemoteChunksFolderOperation;
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
-import com.owncloud.android.operations.RemoveChunksFolderOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
@@ -73,6 +73,7 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.NotificationUtils;
 import com.owncloud.android.utils.SecurityUtils;
+import kotlin.Unit;
 import timber.log.Timber;
 
 import java.io.File;
@@ -920,11 +921,11 @@ public class FileUploader extends Service
     }
 
     private void removeChunksFolder(long ocUploadId) {
-        RemoveChunksFolderOperation remoteChunksFolderOperation = new RemoveChunksFolderOperation(
+        RemoveRemoteChunksFolderOperation remoteChunksFolderOperation = new RemoveRemoteChunksFolderOperation(
                 String.valueOf(ocUploadId)
         );
 
-        RemoteOperationResult result = remoteChunksFolderOperation.execute(mUploadClient);
+        RemoteOperationResult<Unit> result = remoteChunksFolderOperation.execute(mUploadClient);
 
         if (!result.isSuccess()) {
             Timber.e("Error deleting chunks folder after cancelling chunked upload");
