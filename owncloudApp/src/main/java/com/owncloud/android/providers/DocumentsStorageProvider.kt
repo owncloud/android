@@ -331,7 +331,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val file = getFileByIdOrException(docId)
 
         val removeFileUseCase: RemoveFileUseCase by inject()
-        removeFileUseCase.execute(RemoveFileUseCase.Params(file, false)).also {
+        removeFileUseCase.execute(RemoveFileUseCase.Params(listOf(file), false)).also {
             checkUseCaseResult(
                     it,
                     file.parentId.toString()

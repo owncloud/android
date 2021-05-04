@@ -84,17 +84,19 @@ class OCFileRepository(
         }
     }
 
-    override fun removeFile(ocFile: OCFile, removeOnlyLocalCopy: Boolean) {
-        if (!removeOnlyLocalCopy) {
-            remoteFileDataSource.removeFile(ocFile.remotePath).also {
-                if (ocFile.isFolder) {
-                    removeFolderRecursively(ocFile)
-                } else {
-                    localFileDataSource.removeFile(ocFile.id!!)
+    override fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean) {
+        listOfFilesToRemove.forEach { ocFile ->
+            if (!removeOnlyLocalCopy) {
+                remoteFileDataSource.removeFile(ocFile.remotePath).also {
+                    if (ocFile.isFolder) {
+                        removeFolderRecursively(ocFile)
+                    } else {
+                        localFileDataSource.removeFile(ocFile.id!!)
+                    }
                 }
             }
+            Timber.d("Files removed!")
         }
-        Timber.d("Files removed!")
     }
 
     override fun saveFile(file: OCFile) {
