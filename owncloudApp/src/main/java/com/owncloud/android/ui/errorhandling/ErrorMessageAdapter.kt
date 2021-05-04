@@ -32,7 +32,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.MoveFileOperation
-import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
@@ -125,7 +124,6 @@ class ErrorMessageAdapter {
                         R.string.uploader_upload_succeeded_content_single,
                         operation.fileName
                     )
-                    is RemoveFileOperation -> return formatter.format(R.string.remove_success_msg)
                 }
             }
 
@@ -147,7 +145,6 @@ class ErrorMessageAdapter {
                         R.string.forbidden_permissions,
                         R.string.uploader_upload_forbidden_permissions
                     )
-                    if (operation is RemoveFileOperation) formatter.forbidden(R.string.forbidden_permissions_delete)
                     if (operation is RenameFileOperation) formatter.forbidden(R.string.forbidden_permissions_rename)
                     if (operation is CreateFolderOperation) formatter.forbidden(R.string.forbidden_permissions_create)
                     if (operation is MoveFileOperation) formatter.forbidden(R.string.forbidden_permissions_move)
@@ -247,7 +244,6 @@ class ErrorMessageAdapter {
 
             return when (operation) {
                 is UploadFileOperation -> formatter.format(R.string.uploader_upload_failed_content_single, operation.fileName)
-                is RemoveFileOperation -> formatter.format(R.string.remove_fail_msg)
                 is RenameFileOperation -> formatter.format(R.string.rename_server_fail_msg)
                 is CreateFolderOperation -> formatter.format(R.string.create_dir_fail_msg)
                 is MoveFileOperation -> formatter.format(R.string.move_file_error)
