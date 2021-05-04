@@ -28,6 +28,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import com.owncloud.android.data.extension.moveRecursively
 import timber.log.Timber
+import com.owncloud.android.domain.files.model.OCFile
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
@@ -161,9 +162,12 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
 
     }
 
-    fun deleteLocalFile(storagePath: String?): Boolean {
-        storagePath ?: return true
-        val fileToDelete = File(storagePath)
+    /**
+     * Best-effort to remove the file locally. If storage path is null, let's try to remove it anyway.
+     */
+    fun deleteLocalFile(ocFile: OCFile): Boolean {
+        val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
+        val fileToDelete = File(safeStoragePath)
 
         if (!fileToDelete.exists()) {
             return true
