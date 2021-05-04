@@ -51,13 +51,14 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
+import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FileListOption
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PreferenceUtils
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 /**
@@ -68,7 +69,8 @@ class PreviewImageActivity : FileActivity(),
     OnPageChangeListener,
     OnRemoteOperationListener {
 
-    private val previewImageViewModel: PreviewImageViewModel by inject()
+    private val previewImageViewModel: PreviewImageViewModel by viewModel()
+    private val fileOperationViewModel: FileOperationViewModel by viewModel()
 
     private lateinit var viewPager: ViewPager
     private lateinit var previewImagePagerAdapter: PreviewImagePagerAdapter
@@ -125,6 +127,14 @@ class PreviewImageActivity : FileActivity(),
         previewImageViewModel.downloads.removeObservers(this)
     }
 
+    private fun startObservingFileOperations() {
+        fileOperationViewModel.removeFileLiveData.observe(this, {
+            if (it.getContentIfNotHandled()?.isSuccess == true) {
+                finish()
+            }
+        })
+    }
+
     private fun initViewPager() {
         // get parent from path
         val parentPath = file.remotePath.substring(
@@ -171,6 +181,7 @@ class PreviewImageActivity : FileActivity(),
             }
         }
         startObservingFinishedDownloads()
+        startObservingFileOperations()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
