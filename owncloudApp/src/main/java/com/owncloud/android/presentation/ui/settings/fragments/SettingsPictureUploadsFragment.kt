@@ -135,6 +135,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             }
             val intent = Intent(activity, UploadPathActivity::class.java)
             intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, uploadPath)
+            intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_ACCOUNT, picturesViewModel.getPictureUploadsAccount())
             selectPictureUploadsPathLauncher.launch(intent)
             true
         }

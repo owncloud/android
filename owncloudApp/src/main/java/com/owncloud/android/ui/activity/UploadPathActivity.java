@@ -22,6 +22,7 @@ import android.accounts.Account;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
 
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
@@ -30,6 +31,7 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
         OnClickListener, OnEnforceableRefreshListener {
 
     public static final String KEY_CAMERA_UPLOAD_PATH = "CAMERA_UPLOAD_PATH";
+    public static final String KEY_CAMERA_UPLOAD_ACCOUNT = "CAMERA_UPLOAD_ACCOUNT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,10 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
         OCFile folder = new OCFile(cameraUploadPath);
 
         setFile(folder);
+
+        // Account may differ from current one. We need to show the picker for this one, not current.
+        String accountName = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_ACCOUNT);
+        setAccount(AccountUtils.getOwnCloudAccountByName(this, accountName));
     }
 
     /**
