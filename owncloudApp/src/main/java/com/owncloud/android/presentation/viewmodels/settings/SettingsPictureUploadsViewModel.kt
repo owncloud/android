@@ -20,12 +20,12 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.accounts.Account
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
@@ -41,8 +41,14 @@ class SettingsPictureUploadsViewModel(
     fun isPictureUploadEnabled() =
         preferencesProvider.getBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
 
-    fun setEnablePictureUpload(value: Boolean) =
+    fun setEnablePictureUpload(value: Boolean) {
         preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, value)
+
+        if (value) {
+            // Use current account as default
+            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME, accountProvider.getCurrentOwnCloudAccount().name)
+        }
+    }
 
     fun updatePicturesLastSync() = cameraUploadsHandlerProvider.updatePicturesLastSync(0)
 

@@ -106,6 +106,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             if (value) {
                 picturesViewModel.setEnablePictureUpload(value)
                 enablePictureUploads(value)
+                prefPictureUploadsAccount?.value = picturesViewModel.getPictureUploadsAccount()
                 showAlertDialog(
                     title = getString(R.string.common_important),
                     message = getString(R.string.proper_pics_folder_warning_camera_upload)
