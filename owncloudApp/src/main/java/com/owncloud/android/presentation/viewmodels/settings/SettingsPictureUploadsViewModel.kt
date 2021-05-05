@@ -20,11 +20,13 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
+import android.accounts.Account
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
@@ -32,7 +34,8 @@ import java.io.File
 
 class SettingsPictureUploadsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
-    private val cameraUploadsHandlerProvider: CameraUploadsHandlerProvider
+    private val cameraUploadsHandlerProvider: CameraUploadsHandlerProvider,
+    private val accountProvider: AccountProvider
 ) : ViewModel() {
 
     fun isPictureUploadEnabled() =
@@ -42,6 +45,13 @@ class SettingsPictureUploadsViewModel(
         preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, value)
 
     fun updatePicturesLastSync() = cameraUploadsHandlerProvider.updatePicturesLastSync(0)
+
+    fun getPictureUploadsAccount() = preferencesProvider.getString(
+        PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
+        null
+    )
+
+    fun getAccountsNames(): Array<String> = accountProvider.getAccounts().map { it.name }.toTypedArray()
 
     fun getPictureUploadsPath() = preferencesProvider.getString(
         PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH,

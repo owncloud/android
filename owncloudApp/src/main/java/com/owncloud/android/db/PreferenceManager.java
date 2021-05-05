@@ -72,6 +72,7 @@ public abstract class PreferenceManager {
     public static final String PREF__CAMERA_PICTURE_UPLOADS_SOURCE = "picture_uploads_source_path";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR = "video_uploads_behaviour";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_SOURCE = "video_uploads_source_path";
+    public static final String PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME = "picture_uploads_account_name";
 
     public static final String PREF__CAMERA_UPLOADS_DEFAULT_PATH = "/CameraUpload";
 
