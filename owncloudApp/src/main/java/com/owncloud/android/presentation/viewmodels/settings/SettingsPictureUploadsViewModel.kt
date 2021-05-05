@@ -25,7 +25,11 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
@@ -46,45 +50,51 @@ class SettingsPictureUploadsViewModel(
 
         if (value) {
             // Use current account as default
-            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME, accountProvider.getCurrentOwnCloudAccount().name)
+            preferencesProvider.putString(
+                key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
+                value = accountProvider.getCurrentOwnCloudAccount().name
+            )
         } else {
             // Reset fields after disabling the feature
-            preferencesProvider.removePreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH)
-            preferencesProvider.removePreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)
+            preferencesProvider.removePreference(key = PREF__CAMERA_PICTURE_UPLOADS_PATH)
+            preferencesProvider.removePreference(key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)
         }
     }
 
     fun updatePicturesLastSync() = cameraUploadsHandlerProvider.updatePicturesLastSync(0)
 
     fun getPictureUploadsAccount() = preferencesProvider.getString(
-        PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
-        null
+        key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
+        defaultValue = null
     )
 
     fun getAccountsNames(): Array<String> = accountProvider.getAccounts().map { it.name }.toTypedArray()
 
     fun getPictureUploadsPath() = preferencesProvider.getString(
-        PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH,
-        PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
+        key = PREF__CAMERA_PICTURE_UPLOADS_PATH,
+        defaultValue = PREF__CAMERA_UPLOADS_DEFAULT_PATH
     )
 
     fun getPictureUploadsSourcePath() = preferencesProvider.getString(
-        PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-        PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
+        key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+        defaultValue = CameraUploadsConfiguration.getDefaultSourcePath()
     )
 
     fun handleSelectPictureUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
-            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH, it)
+            preferencesProvider.putString(
+                key = PREF__CAMERA_PICTURE_UPLOADS_PATH,
+                value = it
+            )
         }
     }
 
     fun handleSelectPictureUploadsSourcePath(data: Intent?) {
         // If the source path has changed, update camera uploads last sync
         var previousSourcePath = preferencesProvider.getString(
-            PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-            PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
+            key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+            defaultValue = CameraUploadsConfiguration.getDefaultSourcePath()
         )
 
         previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)
@@ -95,7 +105,10 @@ class SettingsPictureUploadsViewModel(
         }
 
         data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)?.let {
-            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE, it)
+            preferencesProvider.putString(
+                key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+                value = it
+            )
         }
     }
 
