@@ -79,6 +79,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -635,6 +636,7 @@ class LoginActivityTest {
         verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
 
+    @Ignore("Makes subsequent tests crash")
     @Test
     fun settingsLink() {
         Intents.init()
