@@ -47,6 +47,10 @@ class SettingsPictureUploadsViewModel(
         if (value) {
             // Use current account as default
             preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME, accountProvider.getCurrentOwnCloudAccount().name)
+        } else {
+            // Reset fields after disabling the feature
+            preferencesProvider.removePreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH)
+            preferencesProvider.removePreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)
         }
     }
 

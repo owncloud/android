@@ -122,6 +122,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                         picturesViewModel.setEnablePictureUpload(value)
                         prefEnablePictureUploads?.isChecked = false
                         enablePictureUploads(false)
+                        resetPreferencesAfterDisablingPicturesUploads()
                     },
                     negativeButtonText = getString(R.string.common_no)
                 )
@@ -181,6 +182,11 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsSourcePath?.isEnabled = value
         prefPictureUploadsBehaviour?.isEnabled = value
         prefPictureUploadsAccount?.isEnabled = value
+    }
+
+    private fun resetPreferencesAfterDisablingPicturesUploads() {
+        prefPictureUploadsAccount?.value = null
+        prefPictureUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsPath())
     }
 
     companion object {
