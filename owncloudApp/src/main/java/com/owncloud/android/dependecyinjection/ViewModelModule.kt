@@ -30,6 +30,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewMod
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -49,6 +50,7 @@ val viewModelModule = module {
 
     viewModel { OCAuthenticationViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { OAuthViewModel(get(), get(), get(), get()) }
+    viewModel { SettingsViewModel(get()) }
     viewModel { SettingsSecurityViewModel(get()) }
     viewModel { SettingsLogsViewModel(get(), get()) }
     viewModel { SettingsMoreViewModel(get()) }

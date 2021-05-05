@@ -29,15 +29,27 @@ import androidx.preference.PreferenceFragmentCompat
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
+    // ViewModel
+    private val settingsViewModel by viewModel<SettingsViewModel>()
+
+    private var subsectionPictureUploads: Preference? = null
+    private var subsectionVideoUploads: Preference? = null
     private var prefAboutApp: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
+        subsectionPictureUploads = findPreference(SUBSECTION_PICTURE_UPLOADS)
+        subsectionVideoUploads = findPreference(SUBSECTION_VIDEO_UPLOADS)
         prefAboutApp = findPreference(PREFERENCE_ABOUT_APP)
+
+        subsectionPictureUploads?.isVisible = settingsViewModel.isThereAttachedAccount()
+        subsectionVideoUploads?.isVisible = settingsViewModel.isThereAttachedAccount()
 
         prefAboutApp?.apply {
             summary = String.format(
@@ -59,6 +71,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     companion object {
         private const val PREFERENCE_ABOUT_APP = "about_app"
+        private const val SUBSECTION_PICTURE_UPLOADS = "picture_uploads_subsection"
+        private const val SUBSECTION_VIDEO_UPLOADS = "video_uploads_subsection"
     }
 
 }

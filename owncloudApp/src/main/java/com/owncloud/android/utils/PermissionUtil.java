@@ -15,12 +15,12 @@ public class PermissionUtil {
 
     /**
      * Wrapper method for ContextCompat.checkSelfPermission().
-     * Determine whether <em>the app</em> has been granted a particular permission.
+     * Determine whether <em>the app</em> has not been granted a particular permission.
      *
      * @param permission The name of the permission being checked.
-     * @return <code>true</code> if app has the permission, or <code>false</code> if not.
+     * @return <code>true</code> if the app has not been granted the permission, or <code>false</code> if it has.
      */
-    public static boolean checkSelfPermission(Context context, String permission) {
+    public static boolean isPermissionNotGranted(Context context, String permission) {
         return ContextCompat.checkSelfPermission(context, permission)
                 != android.content.pm.PackageManager.PERMISSION_GRANTED;
     }

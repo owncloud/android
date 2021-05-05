@@ -15,6 +15,7 @@ Summary
 * Enhancement - Move to AndroidX Preference and new structure for settings: [#2867](https://github.com/owncloud/android/issues/2867)
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
 * Enhancement - Align previews actions: [#3155](https://github.com/owncloud/android/issues/3155)
+* Enhancement - Settings accessible even when no account is attached: [#2638](https://github.com/owncloud/android/issues/2638)
 
 Details
 -------
@@ -78,6 +79,15 @@ Details
 
    https://github.com/owncloud/android/issues/3155
    https://github.com/owncloud/android/pull/3177
+
+* Enhancement - Settings accessible even when no account is attached: [#2638](https://github.com/owncloud/android/issues/2638)
+
+   Now, settings can be accessed via a button in the login screen, removing the necessity to have an
+   attached account. However, auto picture and video uploads won't be available until an account
+   is registered in the app.
+
+   https://github.com/owncloud/android/issues/2638
+   https://github.com/owncloud/android/pull/3218
 
 ## 2.17 (March 2021)
 - Toolbar redesign

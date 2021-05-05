@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,7 +21,9 @@
 
 package com.owncloud.android.providers
 
+import android.accounts.Account
 import android.content.Context
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.utils.ConnectivityUtils
 
 class OCContextProvider(private val context: Context) : ContextProvider {
@@ -33,5 +36,9 @@ class OCContextProvider(private val context: Context) : ContextProvider {
 
     override fun isConnected(): Boolean {
         return ConnectivityUtils.isAppConnected(context)
+    }
+
+    override fun getCurrentOwnCloudAccount(): Account? {
+        return AccountUtils.getCurrentOwnCloudAccount(context)
     }
 }
