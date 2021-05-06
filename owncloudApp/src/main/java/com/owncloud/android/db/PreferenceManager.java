@@ -64,7 +64,7 @@ public abstract class PreferenceManager {
     public static final String PREF__CAMERA_VIDEO_UPLOADS_ENABLED = "enable_video_uploads";
     public static final String PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY = "picture_uploads_on_wifi";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY = "video_uploads_on_wifi";
-    private static final String PREF__CAMERA_UPLOADS_ACCOUNT_NAME = "camera_uploads_account_name";  // NEW - not
+    public static final String PREF__CAMERA_UPLOADS_ACCOUNT_NAME = "camera_uploads_account_name";  // NEW - not
     // saved yet
     public static final String PREF__CAMERA_PICTURE_UPLOADS_PATH = "picture_uploads_path";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_PATH = "video_uploads_path";

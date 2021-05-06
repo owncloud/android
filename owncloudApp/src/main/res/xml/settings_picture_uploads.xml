@@ -15,7 +15,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:key="preference_screen_picture_uploads">
 
     <SwitchPreferenceCompat
@@ -23,6 +24,14 @@
         app:key="enable_picture_uploads"
         app:summary="@string/prefs_camera_picture_upload_summary"
         app:title="@string/prefs_camera_picture_upload" />
+    <ListPreference
+        android:negativeButtonText=""
+        app:dialogTitle="@string/prefs_camera_upload_account"
+        app:iconSpaceReserved="false"
+        app:key="picture_uploads_account_name"
+        app:negativeButtonText=""
+        app:title="@string/prefs_camera_upload_account"
+        app:useSimpleSummaryProvider="true" />
     <Preference
         app:iconSpaceReserved="false"
         app:key="picture_uploads_path"
