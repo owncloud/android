@@ -21,11 +21,11 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.AccountProvider
 
 class SettingsViewModel(
-    private val contextProvider: ContextProvider
+    private val accountProvider: AccountProvider
 ) : ViewModel() {
 
-    fun isThereAttachedAccount() = contextProvider.getCurrentOwnCloudAccount() != null
+    fun isThereAttachedAccount() = accountProvider.getCurrentOwnCloudAccount() != null
 }

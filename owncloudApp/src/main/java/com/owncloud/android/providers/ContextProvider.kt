@@ -21,7 +21,6 @@
 
 package com.owncloud.android.providers
 
-import android.accounts.Account
 import android.content.Context
 
 interface ContextProvider {
@@ -30,6 +29,4 @@ interface ContextProvider {
     fun getString(id: Int): String
     fun getContext(): Context
     fun isConnected(): Boolean
-    fun getCurrentOwnCloudAccount(): Account?
-
 }

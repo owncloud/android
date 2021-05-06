@@ -20,9 +20,8 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.accounts.Account
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
-import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.testutil.OC_ACCOUNT
 import io.mockk.every
 import io.mockk.mockk
@@ -36,38 +35,38 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class SettingsViewModelTest : ViewModelTest() {
     private lateinit var settingsViewModel: SettingsViewModel
-    private lateinit var contextProvider: ContextProvider
+    private lateinit var accountProvider: AccountProvider
 
     @Before
     fun setUp() {
-        contextProvider = mockk()
+        accountProvider = mockk()
 
-        settingsViewModel = SettingsViewModel(contextProvider)
+        settingsViewModel = SettingsViewModel(accountProvider)
     }
 
     @Test
     fun `is there attached account - ok - true`() {
-        every { contextProvider.getCurrentOwnCloudAccount() } returns OC_ACCOUNT
+        every { accountProvider.getCurrentOwnCloudAccount() } returns OC_ACCOUNT
 
         val attachedAccount = settingsViewModel.isThereAttachedAccount()
 
         assertTrue(attachedAccount)
 
         verify(exactly = 1) {
-            contextProvider.getCurrentOwnCloudAccount()
+            accountProvider.getCurrentOwnCloudAccount()
         }
     }
 
     @Test
     fun `is there attached account - ok - false`() {
-        every { contextProvider.getCurrentOwnCloudAccount() } returns null
+        every { accountProvider.getCurrentOwnCloudAccount() } returns null
 
         val attachedAccount = settingsViewModel.isThereAttachedAccount()
 
         assertFalse(attachedAccount)
 
         verify(exactly = 1) {
-            contextProvider.getCurrentOwnCloudAccount()
+            accountProvider.getCurrentOwnCloudAccount()
         }
     }
 }
