@@ -38,7 +38,12 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
-import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
@@ -46,8 +51,8 @@ import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -65,12 +70,14 @@ class SettingsVideoUploadsFragmentTest {
     private lateinit var prefVideoUploadsOnWifi: CheckBoxPreference
     private lateinit var prefVideoUploadsSourcePath: Preference
     private lateinit var prefVideoUploadsBehaviour: ListPreference
+    private lateinit var prefVideoUploadsAccount: ListPreference
 
     private lateinit var videosViewModel: SettingsVideoUploadsViewModel
     private lateinit var context: Context
 
     private val exampleUploadPath = "/Upload/Path"
     private val exampleUploadSourcePath = "/Upload/Source/Path"
+    private val listOfLoggedAccounts = arrayOf("first", "second", "third")
 
     @Before
     fun setUp() {
@@ -80,6 +87,8 @@ class SettingsVideoUploadsFragmentTest {
         every { videosViewModel.getVideoUploadsPath() } returns exampleUploadPath
         every { videosViewModel.getVideoUploadsSourcePath() } returns exampleUploadSourcePath
         every { videosViewModel.isVideoUploadEnabled() } returns false
+        every { videosViewModel.getAccountsNames() } returns listOfLoggedAccounts
+        every { videosViewModel.getVideoUploadsAccount() } returns listOfLoggedAccounts.first()
 
         stopKoin()
 
@@ -96,11 +105,12 @@ class SettingsVideoUploadsFragmentTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
-            prefEnableVideoUploads = fragment.findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED)!!
-            prefVideoUploadsPath = fragment.findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH)!!
-            prefVideoUploadsOnWifi = fragment.findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY)!!
-            prefVideoUploadsSourcePath = fragment.findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE)!!
-            prefVideoUploadsBehaviour = fragment.findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)!!
+            prefEnableVideoUploads = fragment.findPreference(PREF__CAMERA_VIDEO_UPLOADS_ENABLED)!!
+            prefVideoUploadsPath = fragment.findPreference(PREF__CAMERA_VIDEO_UPLOADS_PATH)!!
+            prefVideoUploadsOnWifi = fragment.findPreference(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY)!!
+            prefVideoUploadsSourcePath = fragment.findPreference(PREF__CAMERA_VIDEO_UPLOADS_SOURCE)!!
+            prefVideoUploadsBehaviour = fragment.findPreference(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)!!
+            prefVideoUploadsAccount = fragment.findPreference(PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)!!
         }
     }
 
@@ -112,7 +122,7 @@ class SettingsVideoUploadsFragmentTest {
     @Test
     fun videoUploadsView() {
         prefEnableVideoUploads.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED,
+            keyPref = PREF__CAMERA_VIDEO_UPLOADS_ENABLED,
             titlePref = context.getString(R.string.prefs_camera_video_upload),
             summaryPref = context.getString(R.string.prefs_camera_video_upload_summary),
             visible = true,
@@ -121,7 +131,7 @@ class SettingsVideoUploadsFragmentTest {
         assertFalse(prefEnableVideoUploads.isChecked)
 
         prefVideoUploadsPath.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH,
+            keyPref = PREF__CAMERA_VIDEO_UPLOADS_PATH,
             titlePref = context.getString(R.string.prefs_camera_video_upload_path_title),
             summaryPref = exampleUploadPath,
             visible = true,
@@ -129,7 +139,7 @@ class SettingsVideoUploadsFragmentTest {
         )
 
         prefVideoUploadsOnWifi.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY,
+            keyPref = PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY,
             titlePref = context.getString(R.string.prefs_camera_video_upload_on_wifi),
             visible = true,
             enabled = false
@@ -144,7 +154,7 @@ class SettingsVideoUploadsFragmentTest {
                 R.string.prefs_camera_upload_source_path_title_required
             )
         prefVideoUploadsSourcePath.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
+            keyPref = PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
             titlePref = String.format(prefVideoUploadsSourcePath.title.toString(), comment),
             summaryPref = exampleUploadSourcePath,
             visible = true,
@@ -152,9 +162,17 @@ class SettingsVideoUploadsFragmentTest {
         )
 
         prefVideoUploadsBehaviour.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR,
+            keyPref = PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR,
             titlePref = context.getString(R.string.prefs_camera_upload_behaviour_title),
             summaryPref = context.getString(R.string.pref_behaviour_entries_keep_file),
+            visible = true,
+            enabled = false
+        )
+
+        prefVideoUploadsAccount.verifyPreference(
+            keyPref = PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME,
+            titlePref = context.getString(R.string.prefs_video_upload_account),
+            summaryPref = prefVideoUploadsAccount.context.getString(androidx.preference.R.string.not_set),
             visible = true,
             enabled = false
         )
@@ -164,6 +182,7 @@ class SettingsVideoUploadsFragmentTest {
     fun enableVideoUploads() {
         firstEnableVideoUploads()
         checkPreferencesEnabled(true)
+        checkPreferencesInitialized()
     }
 
     @Test
@@ -172,6 +191,7 @@ class SettingsVideoUploadsFragmentTest {
         onView(withText(R.string.prefs_camera_video_upload)).perform(click())
         onView(withText(R.string.common_yes)).perform(click())
         checkPreferencesEnabled(false)
+        checkPreferencesReset()
     }
 
     @Test
@@ -210,18 +230,21 @@ class SettingsVideoUploadsFragmentTest {
     }
 
     private fun checkPreferencesEnabled(enabled: Boolean) {
-        if (enabled) {
-            assertTrue(prefEnableVideoUploads.isChecked)
-            assertTrue(prefVideoUploadsPath.isEnabled)
-            assertTrue(prefVideoUploadsOnWifi.isEnabled)
-            assertTrue(prefVideoUploadsSourcePath.isEnabled)
-            assertTrue(prefVideoUploadsBehaviour.isEnabled)
-        } else {
-            assertFalse(prefEnableVideoUploads.isChecked)
-            assertFalse(prefVideoUploadsPath.isEnabled)
-            assertFalse(prefVideoUploadsOnWifi.isEnabled)
-            assertFalse(prefVideoUploadsSourcePath.isEnabled)
-            assertFalse(prefVideoUploadsBehaviour.isEnabled)
-        }
+        assertEquals(enabled, prefEnableVideoUploads.isChecked)
+        assertEquals(enabled, prefVideoUploadsPath.isEnabled)
+        assertEquals(enabled, prefVideoUploadsOnWifi.isEnabled)
+        assertEquals(enabled, prefVideoUploadsSourcePath.isEnabled)
+        assertEquals(enabled, prefVideoUploadsBehaviour.isEnabled)
+        assertEquals(enabled, prefVideoUploadsAccount.isEnabled)
+    }
+
+    private fun checkPreferencesInitialized() {
+        assertEquals(listOfLoggedAccounts.first(), prefVideoUploadsAccount.summary)
+        assertEquals(exampleUploadPath, prefVideoUploadsPath.summary)
+    }
+
+    private fun checkPreferencesReset() {
+        assertEquals(context.getString(androidx.preference.R.string.not_set), prefVideoUploadsAccount.summary)
+        assertEquals(videosViewModel.getVideoUploadsPath(), prefVideoUploadsPath.summary)
     }
 }

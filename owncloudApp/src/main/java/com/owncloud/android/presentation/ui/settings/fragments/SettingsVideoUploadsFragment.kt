@@ -166,6 +166,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsOnWifi?.isEnabled = value
         prefVideoUploadsSourcePath?.isEnabled = value
         prefVideoUploadsBehaviour?.isEnabled = value
+        prefVideoUploadsAccount?.isEnabled = value
     }
 
     private fun resetPreferencesAfterDisablingVideosUploads() {
