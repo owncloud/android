@@ -177,6 +177,7 @@ class SettingsPictureUploadsFragmentTest {
     fun enablePictureUploads() {
         firstEnablePictureUploads()
         checkPreferencesEnabled(true)
+        checkPreferencesInitialized()
     }
 
     @Test
@@ -185,6 +186,7 @@ class SettingsPictureUploadsFragmentTest {
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
         onView(withText(R.string.common_yes)).perform(click())
         checkPreferencesEnabled(false)
+        checkPreferencesReset()
     }
 
     @Test
@@ -229,5 +231,15 @@ class SettingsPictureUploadsFragmentTest {
         assertEquals(enabled, prefPictureUploadsSourcePath.isEnabled)
         assertEquals(enabled, prefPictureUploadsBehaviour.isEnabled)
         assertEquals(enabled, prefPictureUploadsAccount.isEnabled)
+    }
+
+    private fun checkPreferencesInitialized() {
+        assertEquals(listOfLoggedAccounts.first(), prefPictureUploadsAccount.summary)
+        assertEquals(exampleUploadPath, prefPictureUploadsPath.summary)
+    }
+
+    private fun checkPreferencesReset() {
+        assertEquals(context.getString(androidx.preference.R.string.not_set), prefPictureUploadsAccount.summary)
+        assertEquals(picturesViewModel.getPictureUploadsPath(), prefPictureUploadsPath.summary)
     }
 }
