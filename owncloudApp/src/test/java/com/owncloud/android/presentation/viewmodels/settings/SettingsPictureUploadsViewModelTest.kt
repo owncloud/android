@@ -24,8 +24,15 @@ import android.content.Intent
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
+import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
+import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
 import io.mockk.every
@@ -45,6 +52,7 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
     private lateinit var picturesViewModel: SettingsPictureUploadsViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
     private lateinit var cameraUploadsHandlerProvider: CameraUploadsHandlerProvider
+    private lateinit var accountProvider: AccountProvider
 
     private val examplePath = "/Example/Path"
     private val exampleSourcePath = "/Example/Source/Path"
@@ -54,10 +62,12 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
         cameraUploadsHandlerProvider = mockk(relaxUnitFun = true)
+        accountProvider = mockk()
 
         picturesViewModel = SettingsPictureUploadsViewModel(
             preferencesProvider,
-            cameraUploadsHandlerProvider
+            cameraUploadsHandlerProvider,
+            accountProvider
         )
     }
 
@@ -75,29 +85,32 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
         assertTrue(pictureUploadEnabled)
 
         verify(exactly = 1) {
-            preferencesProvider.getBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
+            preferencesProvider.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
         }
     }
 
     @Test
     fun `is picture upload enabled - ok - false`() {
-        every { preferencesProvider.getBoolean(any(), any())} returns false
+        every { preferencesProvider.getBoolean(any(), any()) } returns false
 
         val pictureUploadEnabled = picturesViewModel.isPictureUploadEnabled()
 
         assertFalse(pictureUploadEnabled)
 
         verify(exactly = 1) {
-            preferencesProvider.getBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
+            preferencesProvider.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
         }
     }
 
     @Test
     fun `set enable picture upload - ok - true`() {
+        every { accountProvider.getCurrentOwnCloudAccount() } returns OC_ACCOUNT
+
         picturesViewModel.setEnablePictureUpload(true)
 
         verify(exactly = 1) {
-            preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, true)
+            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME, OC_ACCOUNT.name)
+            preferencesProvider.putBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, true)
         }
     }
 
@@ -106,7 +119,9 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
         picturesViewModel.setEnablePictureUpload(false)
 
         verify(exactly = 1) {
-            preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
+            preferencesProvider.putBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
+            preferencesProvider.removePreference(key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)
+            preferencesProvider.removePreference(key = PREF__CAMERA_PICTURE_UPLOADS_PATH)
         }
     }
 
@@ -129,8 +144,8 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             preferencesProvider.getString(
-                PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH,
-                PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
+                PREF__CAMERA_PICTURE_UPLOADS_PATH,
+                PREF__CAMERA_UPLOADS_DEFAULT_PATH
             )
         }
     }
@@ -148,7 +163,7 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             preferencesProvider.getString(
-                PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+                PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
                 PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
             )
         }
@@ -167,7 +182,7 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
         verify(exactly = 1) {
             data.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
             ocFile.remotePath
-            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH, exampleRemotePath)
+            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_PATH, exampleRemotePath)
         }
     }
 
@@ -200,7 +215,7 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
             data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
         }
         verify(exactly = 1) {
-            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE, exampleSourcePath)
+            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_SOURCE, exampleSourcePath)
         }
     }
 
@@ -227,7 +242,7 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
         }
         verify(exactly = 1) {
             cameraUploadsHandlerProvider.updatePicturesLastSync(any())
-            preferencesProvider.putString(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE, sourcePath)
+            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_SOURCE, sourcePath)
         }
     }
 

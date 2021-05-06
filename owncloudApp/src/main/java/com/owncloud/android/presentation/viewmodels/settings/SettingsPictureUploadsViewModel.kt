@@ -49,11 +49,13 @@ class SettingsPictureUploadsViewModel(
         preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, value)
 
         if (value) {
-            // Use current account as default
-            preferencesProvider.putString(
-                key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
-                value = accountProvider.getCurrentOwnCloudAccount().name
-            )
+            // Use current account as default. It should never be null. If no accounts are attached, picture uploads are hidden
+            accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
+                preferencesProvider.putString(
+                    key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
+                    value = name
+                )
+            }
         } else {
             // Reset fields after disabling the feature
             preferencesProvider.removePreference(key = PREF__CAMERA_PICTURE_UPLOADS_PATH)

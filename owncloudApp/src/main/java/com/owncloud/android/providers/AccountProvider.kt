@@ -26,6 +26,6 @@ import com.owncloud.android.authentication.AccountUtils
 class AccountProvider(
     private val context: Context
 ) {
-    fun getCurrentOwnCloudAccount(): Account = AccountUtils.getCurrentOwnCloudAccount(context)
+    fun getCurrentOwnCloudAccount(): Account? = AccountUtils.getCurrentOwnCloudAccount(context)
     fun getAccounts(): Array<Account> = AccountUtils.getAccounts(context)
 }
