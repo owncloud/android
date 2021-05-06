@@ -166,7 +166,7 @@ class SettingsPictureUploadsFragmentTest {
 
         prefPictureUploadsAccount.verifyPreference(
             keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
-            titlePref = context.getString(R.string.prefs_camera_upload_account),
+            titlePref = context.getString(R.string.prefs_picture_upload_account),
             summaryPref = prefPictureUploadsAccount.context.getString(androidx.preference.R.string.not_set),
             visible = true,
             enabled = false

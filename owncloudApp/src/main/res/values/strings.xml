@@ -483,7 +483,8 @@
     <string name="file_list__footer__files">%1$d files</string>
     <string name="file_list__footer__files_and_folder">%1$d files, 1 folder</string>
     <string name="file_list__footer__files_and_folders">%1$d files, %2$d folders</string>
-    <string name="prefs_camera_upload_account">Account to upload pictures</string>
+    <string name="prefs_picture_upload_account">Account to upload pictures</string>
+    <string name="prefs_video_upload_account">Account to upload videos</string>
     <string name="prefs_camera_upload_source_path_title">Camera folder (%1$s)</string>
     <string name="prefs_camera_upload_source_path_title_required">required</string>
     <string name="prefs_camera_upload_source_path_title_optional">optional</string>

@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
@@ -32,16 +33,39 @@ import java.io.File
 
 class SettingsVideoUploadsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
-    private val cameraUploadsHandlerProvider: CameraUploadsHandlerProvider
+    private val cameraUploadsHandlerProvider: CameraUploadsHandlerProvider,
+    private val accountProvider: AccountProvider
 ) : ViewModel() {
 
     fun isVideoUploadEnabled() =
         preferencesProvider.getBoolean(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false)
 
-    fun setEnableVideoUpload(value: Boolean) =
+    fun setEnableVideoUpload(value: Boolean) {
         preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED, value)
 
+        if (value) {
+            // Use current account as default. It should never be null. If no accounts are attached, video uploads are hidden
+            accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
+                preferencesProvider.putString(
+                    key = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME,
+                    value = name
+                )
+            }
+        } else {
+            // Reset fields after disabling the feature
+            preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH)
+            preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)
+        }
+    }
+
     fun updateVideosLastSync() = cameraUploadsHandlerProvider.updateVideosLastSync(0)
+
+    fun getVideoUploadsAccount() = preferencesProvider.getString(
+        key = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
+        defaultValue = null
+    )
+
+    fun getAccountsNames(): Array<String> = accountProvider.getAccounts().map { it.name }.toTypedArray()
 
     fun getVideoUploadsPath() = preferencesProvider.getString(
         PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH,
