@@ -62,7 +62,6 @@ import com.owncloud.android.db.PreferenceManager.getSortOrder
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.services.FileUploader
@@ -1171,10 +1170,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 // Clean second fragment and refresh first one
                 val secondFragment = secondFragment
                 if (secondFragment?.file == lastRemovedFile) {
-                    if (secondFragment is PreviewAudioFragment) {
-                        secondFragment.stopPreview()
-                    } else if (secondFragment is PreviewVideoFragment) {
-                        secondFragment.releasePlayer()
+                    when (secondFragment) {
+                        is PreviewAudioFragment -> {
+                            secondFragment.stopPreview()
+                        }
+                        is PreviewVideoFragment -> {
+                            secondFragment.releasePlayer()
+                        }
                     }
                     file = storageManager.getFileById(lastRemovedFile.parentId!!)
                     cleanSecondFragment()
