@@ -677,21 +677,6 @@ class FileDataStorageManager : KoinComponent {
 //        return updatedCount > 0
     }
 
-    fun removeFolder(folder: OCFile?, removeDBData: Boolean, removeLocalContent: Boolean): Boolean {
-        return false
-        // FIXME: 13/10/2020 : New_arch: Remove file
-//        var success = true
-//        if (folder != null && folder.isFolder) {
-//            if (removeDBData && folder.fileId != -1L) {
-//                success = removeFolderInDb(folder)
-//            }
-//            if (removeLocalContent && success) {
-//                success = removeLocalFolder(folder)
-//            }
-//        }
-//        return success
-    }
-
     /**
      * Updates database and file system for a file or folder that was moved to a different location.
      *
