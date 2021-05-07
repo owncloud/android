@@ -23,9 +23,11 @@ package com.owncloud.android.data.files.repository
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
+import timber.log.Timber
 
 class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
@@ -83,7 +85,11 @@ class OCFileRepository(
     override fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean) {
         listOfFilesToRemove.forEach { ocFile ->
             if (!removeOnlyLocalCopy) {
-                remoteFileDataSource.removeFile(ocFile.remotePath)
+                try {
+                    remoteFileDataSource.removeFile(ocFile.remotePath)
+                } catch (fileNotFoundException: FileNotFoundException) {
+                    Timber.i("File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
+                }
             }
             if (ocFile.isFolder) {
                 removeFolderRecursively(ocFile, removeOnlyLocalCopy)
