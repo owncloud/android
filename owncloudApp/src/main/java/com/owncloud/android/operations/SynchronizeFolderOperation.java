@@ -38,6 +38,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.ui.files.operations.FileOperation;
+import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel;
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -271,17 +273,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     }
 
     private void removeLocalFolder() {
-        FileDataStorageManager storageManager = getStorageManager();
-        if (storageManager.fileExists(mLocalFolder.getId())) {
-            String currentSavePath = FileStorageUtils.getSavePath(mAccount.name);
-            storageManager.removeFolder(
-                    mLocalFolder,
-                    true,
-                    (mLocalFolder.isAvailableLocally() &&
-                            mLocalFolder.getStoragePath().startsWith(currentSavePath)
-                    )
-            );
-        }
+        FileOperationViewModel fileOperationViewModel = get(FileOperationViewModel.class);
+        ArrayList<OCFile> list = new ArrayList<>();
+        list.add(mLocalFolder);
+        FileOperation.RemoveOperation removeOperation = new FileOperation.RemoveOperation(list, false);
+        fileOperationViewModel.performOperation(removeOperation);
     }
 
     /**
