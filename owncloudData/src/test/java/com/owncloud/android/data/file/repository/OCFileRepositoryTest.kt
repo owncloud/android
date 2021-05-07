@@ -23,6 +23,7 @@ import com.owncloud.android.data.LocalStorageProvider
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.repository.OCFileRepository
+import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
@@ -292,6 +293,20 @@ class OCFileRepositoryTest {
         verify(exactly = 2) { localFileDataSource.getFolderContent(any()) }
         // Removing initial folder + listOfFilesToRemove.size + file inside a folder in listOfFilesToRemove
         verify(exactly = listOfFileToRemove.size + 2) {
+            localFileDataSource.removeFile(any())
+            localStorageProvider.deleteLocalFile(any())
+        }
+    }
+
+    @Test
+    fun `remove file - ko - file not found exception`() {
+        every { remoteFileDataSource.removeFile(any()) } throws FileNotFoundException()
+        every { localStorageProvider.deleteLocalFile(any()) } returns true
+
+        ocFileRepository.removeFile(listOfFilesToRemove = listOf(OC_FILE), removeOnlyLocalCopy = false)
+
+        verify(exactly = 1) {
+            remoteFileDataSource.removeFile(any())
             localFileDataSource.removeFile(any())
             localStorageProvider.deleteLocalFile(any())
         }
