@@ -61,7 +61,8 @@ public class CameraUploadsSyncJobService extends JobService {
 
         private final JobService mCameraUploadsSyncJobService;
 
-        private Account mAccount;
+        private Account mCameraUploadsVideosAccount;
+        private Account mCameraUploadsPicturesAccount;
         private CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager;
         private OCCameraUploadSync mOCCameraUploadSync;
         private String mCameraUploadsPicturesPath;
@@ -88,8 +89,10 @@ public class CameraUploadsSyncJobService extends JobService {
                 return jobParams[0];
             }
 
-            String accountName = jobParams[0].getExtras().getString(Extras.EXTRA_ACCOUNT_NAME);
-            mAccount = AccountUtils.getOwnCloudAccountByName(mCameraUploadsSyncJobService, accountName);
+            String accountNameForPictureUploads = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_ACCOUNT);
+            mCameraUploadsPicturesAccount = AccountUtils.getOwnCloudAccountByName(mCameraUploadsSyncJobService, accountNameForPictureUploads);
+            String accountNameForVideoUploads = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_ACCOUNT);
+            mCameraUploadsVideosAccount = AccountUtils.getOwnCloudAccountByName(mCameraUploadsSyncJobService, accountNameForVideoUploads);
             mCameraUploadsSyncStorageManager = new CameraUploadsSyncStorageManager(
                     mCameraUploadsSyncJobService.getContentResolver());
 
@@ -188,6 +191,7 @@ public class CameraUploadsSyncJobService extends JobService {
             String localPath = (isImage ? mCameraUploadsPicturesSourcePath : mCameraUploadsVideosSourcePath) + File.separator + fileName;
 
             int behaviour = isImage ? mCameraUploadsPicturesBehaviorAfterUpload : mCameraUploadsVideosBehaviorAfterUpload;
+            Account account = isImage ? mCameraUploadsPicturesAccount : mCameraUploadsVideosAccount;
 
             mOCCameraUploadSync = mCameraUploadsSyncStorageManager.getCameraUploadSync(null, null,
                     null);
@@ -217,7 +221,7 @@ public class CameraUploadsSyncJobService extends JobService {
             TransferRequester requester = new TransferRequester();
             requester.uploadNewFile(
                     mCameraUploadsSyncJobService,
-                    mAccount,
+                    account,
                     localPath,
                     remotePath,
                     behaviour,
@@ -229,8 +233,8 @@ public class CameraUploadsSyncJobService extends JobService {
             // Update timestamps once the first picture/video has been enqueued
             updateTimestamps(isImage, isVideo, localFile.lastModified());
 
-            if (mAccount != null) {
-                Timber.i("Requested upload of %1s to %2s in %3s", localPath, remotePath, mAccount.name);
+            if (account != null) {
+                Timber.i("Requested upload of %1s to %2s in %3s", localPath, remotePath, account.name);
             } else {
                 Timber.w("Requested upload of %1s to %2s with no account!!", localPath, remotePath);
             }
