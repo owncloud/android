@@ -57,7 +57,12 @@ open class RemoveRemoteFileOperation(
                 URL(srcWebDavUri.toString() + WebdavUtils.encodePath(remotePath))
             )
             val status = client.executeHttpMethod(deleteMethod)
-            result = if (isSuccess(status)) RemoteOperationResult<Unit>(ResultCode.OK) else RemoteOperationResult<Unit>(deleteMethod)
+
+            result = if (isSuccess(status)) {
+                RemoteOperationResult<Unit>(ResultCode.OK)
+            } else {
+                RemoteOperationResult<Unit>(deleteMethod)
+            }
             Timber.i("Remove $remotePath: ${result.logMessage}")
         } catch (e: Exception) {
             result = RemoteOperationResult<Unit>(e)
