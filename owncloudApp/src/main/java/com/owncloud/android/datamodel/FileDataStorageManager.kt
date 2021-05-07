@@ -625,48 +625,6 @@ class FileDataStorageManager : KoinComponent {
 //        return updatedCount > 0
     }
 
-    fun removeFile(file: OCFile?, removeDBData: Boolean, removeLocalCopy: Boolean): Boolean {
-        return false
-        // FIXME: 13/10/2020 : New_arch: Remove file
-//        var success = true
-//        if (file != null) {
-//            if (file.isFolder) {
-//                success = removeFolder(file, removeDBData, removeLocalCopy)
-//
-//            } else {
-//                if (removeDBData) {
-//                    val fileUri = ContentUris.withAppendedId(CONTENT_URI_FILE, file.fileId)
-//                    val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
-//                    val whereArgs = arrayOf(account.name, file.remotePath)
-//                    val deleted =
-//                        try {
-//                            performDelete(fileUri, where, whereArgs)
-//                        } catch (e: RemoteException) {
-//                            Timber.e(e)
-//                            0
-//                        }
-//                    success = success and (deleted > 0)
-//                }
-//                val localPath = file.storagePath
-//                if (removeLocalCopy && file.isDown && localPath != null && success) {
-//                    success = File(localPath).delete()
-//                    if (success) {
-//                        deleteFileInMediaScan(localPath)
-//                        if (!removeDBData) {
-//                            // maybe unnecessary, but should be checked TODO remove if unnecessary
-//                            file.storagePath = null
-//                            saveFile(file)
-//                            saveConflict(file, null)
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            success = false
-//        }
-//        return success
-    }
-
     fun removeFolder(folder: OCFile?, removeDBData: Boolean, removeLocalContent: Boolean): Boolean {
         return false
         // FIXME: 13/10/2020 : New_arch: Remove file
@@ -679,72 +637,6 @@ class FileDataStorageManager : KoinComponent {
 //                success = removeLocalFolder(folder)
 //            }
 //        }
-//        return success
-    }
-
-    private fun removeFolderInDb(folder: OCFile): Boolean {
-        return false
-        // FIXME: 13/10/2020 : New_arch: Remove file
-//        val folderUri =
-//            Uri.withAppendedPath(CONTENT_URI_DIR, "" + folder.fileId) // URI for recursive deletion
-//        val where = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH=?"
-//        val whereArgs = arrayOf(account.name, folder.remotePath)
-//        return try {
-//            performDelete(url = folderUri, where = where, selectionArgs = whereArgs) > 0
-//        } catch (e: RemoteException) {
-//            Timber.e(e)
-//            false
-//        }
-    }
-
-    private fun removeLocalFolder(folder: OCFile): Boolean {
-        return false
-        // FIXME: 13/10/2020 : New_arch: Remove file
-//        var success = true
-//        val localFolderPath = FileStorageUtils.getDefaultSavePathFor(account.name, folder)
-//        val localFolder = File(localFolderPath)
-//        if (localFolder.exists()) {
-//            // stage 1: remove the local files already registered in the files database
-//            val files = getFolderContent(folder.fileId)
-//            for (file in files) {
-//                if (file.isFolder) {
-//                    success = success and removeLocalFolder(file)
-//                } else {
-//                    if (file.isDown) {
-//                        val localFile = File(file.storagePath)
-//                        success = success and localFile.delete()
-//                        if (success) {
-//                            // notify MediaScanner about removed file
-//                            deleteFileInMediaScan(file.storagePath)
-//                            file.storagePath = null
-//                            saveFile(file)
-//                        }
-//                    }
-//                }
-//            }
-//
-//            // stage 2: remove the folder itself and any local file inside out of sync;
-//            //          for instance, after clearing the app cache or reinstalling
-//            success = success and removeLocalFolder(localFolder)
-//        }
-//        return success
-    }
-
-    private fun removeLocalFolder(localFolder: File): Boolean {
-        return false
-        // FIXME: 13/10/2020 : New_arch: Remove file
-//        var success = true
-//        val localFiles = localFolder.listFiles()
-//        if (localFiles != null) {
-//            for (localFile in localFiles) {
-//                success = if (localFile.isDirectory) {
-//                    success and removeLocalFolder(localFile)
-//                } else {
-//                    success and localFile.delete()
-//                }
-//            }
-//        }
-//        success = success and localFolder.delete()
 //        return success
     }
 
