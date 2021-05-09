@@ -33,6 +33,7 @@
   <string name="prefs_subsection_logging">Regjistrim</string>
   <string name="prefs_subsection_more">Më tepër</string>
   <string name="prefs_subsection_security">Siguri</string>
+  <string name="prefs_subsection_security_summary">Caktoni kyçje për hyrje në aplikacion dhe lejim prekjeje me dritare të tjera të dukshme</string>
   <string name="prefs_subsection_logging_summary">Ndiq regjistra të prodhuar nga ekzekutimi i aplikacionit</string>
   <string name="prefs_subsection_more_summary">Hollësi aplikacioni, përshtypje dhe të tjera</string>
   <string name="prefs_accounts">Llogari</string>
@@ -555,6 +556,9 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
+  <string name="welcome_feature_6_title">Rregullimet u ristrukturuan</string>
+  <string name="welcome_feature_6_text">Rregullimet kanë një pamje të re</string>
+  <string name="welcome_feature_7_text">Fotot/videot tuaja u ngarkuan automatikisht te një llogari e bashkëngjitur</string>
   <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
   <string name="common_not_found">s\’u gjet</string>
   <string name="supports_oauth2_error">S\’qe e mundur të dihej nëse mbulohet OAuth2</string>
