@@ -83,8 +83,8 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsSourcePath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE)
         prefPictureUploadsBehaviour = findPreference(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)
         prefPictureUploadsAccount = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)?.apply {
-            entries = picturesViewModel.getAccountsNames()
-            entryValues = picturesViewModel.getAccountsNames()
+            entries = picturesViewModel.getLoggedAccountNames()
+            entryValues = picturesViewModel.getLoggedAccountNames()
         }
 
         enablePictureUploads(picturesViewModel.isPictureUploadEnabled())

@@ -83,8 +83,8 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsSourcePath = findPreference(PREF__CAMERA_VIDEO_UPLOADS_SOURCE)
         prefVideoUploadsBehaviour = findPreference(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)
         prefVideoUploadsAccount = findPreference<ListPreference>(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)?.apply {
-            entries = videosViewModel.getAccountsNames()
-            entryValues = videosViewModel.getAccountsNames()
+            entries = videosViewModel.getLoggedAccountNames()
+            entryValues = videosViewModel.getLoggedAccountNames()
         }
 
         enableVideoUploads(videosViewModel.isVideoUploadEnabled())

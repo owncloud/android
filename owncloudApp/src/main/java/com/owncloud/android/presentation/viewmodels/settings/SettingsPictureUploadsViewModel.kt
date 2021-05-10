@@ -70,7 +70,7 @@ class SettingsPictureUploadsViewModel(
         defaultValue = null
     )
 
-    fun getAccountsNames(): Array<String> = accountProvider.getAccounts().map { it.name }.toTypedArray()
+    fun getLoggedAccountNames(): Array<String> = accountProvider.getLoggedAccounts().map { it.name }.toTypedArray()
 
     fun getPictureUploadsPath() = preferencesProvider.getString(
         key = PREF__CAMERA_PICTURE_UPLOADS_PATH,

@@ -70,7 +70,7 @@ class SettingsVideoUploadsViewModel(
         defaultValue = null
     )
 
-    fun getAccountsNames(): Array<String> = accountProvider.getAccounts().map { it.name }.toTypedArray()
+    fun getLoggedAccountNames(): Array<String> = accountProvider.getLoggedAccounts().map { it.name }.toTypedArray()
 
     fun getVideoUploadsPath() = preferencesProvider.getString(
         key = PREF__CAMERA_VIDEO_UPLOADS_PATH,

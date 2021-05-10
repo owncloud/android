@@ -27,5 +27,5 @@ class AccountProvider(
     private val context: Context
 ) {
     fun getCurrentOwnCloudAccount(): Account? = AccountUtils.getCurrentOwnCloudAccount(context)
-    fun getAccounts(): Array<Account> = AccountUtils.getAccounts(context)
+    fun getLoggedAccounts(): Array<Account> = AccountUtils.getAccounts(context)
 }

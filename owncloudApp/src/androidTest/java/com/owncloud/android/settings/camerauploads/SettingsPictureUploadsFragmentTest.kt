@@ -82,7 +82,7 @@ class SettingsPictureUploadsFragmentTest {
         every { picturesViewModel.getPictureUploadsPath() } returns exampleUploadPath
         every { picturesViewModel.getPictureUploadsSourcePath() } returns exampleUploadSourcePath
         every { picturesViewModel.isPictureUploadEnabled() } returns false
-        every { picturesViewModel.getAccountsNames() } returns listOfLoggedAccounts
+        every { picturesViewModel.getLoggedAccountNames() } returns listOfLoggedAccounts
         every { picturesViewModel.getPictureUploadsAccount() } returns listOfLoggedAccounts.first()
 
         stopKoin()

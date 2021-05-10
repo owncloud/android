@@ -87,7 +87,7 @@ class SettingsVideoUploadsFragmentTest {
         every { videosViewModel.getVideoUploadsPath() } returns exampleUploadPath
         every { videosViewModel.getVideoUploadsSourcePath() } returns exampleUploadSourcePath
         every { videosViewModel.isVideoUploadEnabled() } returns false
-        every { videosViewModel.getAccountsNames() } returns listOfLoggedAccounts
+        every { videosViewModel.getLoggedAccountNames() } returns listOfLoggedAccounts
         every { videosViewModel.getVideoUploadsAccount() } returns listOfLoggedAccounts.first()
 
         stopKoin()
