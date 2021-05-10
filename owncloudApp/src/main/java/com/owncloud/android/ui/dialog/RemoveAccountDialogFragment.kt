@@ -96,6 +96,7 @@ class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDi
          * Public factory method to create new RemoveAccountDialogFragment instances.
          *
          * @param account Account to remove.
+         * @param accountAttachedToCameraUploads true if camera uploads are enabled for this account. Removing the account will disable camera uploads.
          * @return Dialog ready to show.
          */
         @JvmStatic
