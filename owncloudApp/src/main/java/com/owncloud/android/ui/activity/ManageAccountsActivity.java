@@ -46,10 +46,12 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.files.services.CameraUploadsHandler;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
+import com.owncloud.android.providers.CameraUploadsHandlerProvider;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
@@ -226,8 +228,10 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public void removeAccount(Account account) {
         mAccountBeingRemoved = account.name;
+        CameraUploadsHandlerProvider cameraUploadsHandlerProvider = new CameraUploadsHandlerProvider(this);
         RemoveAccountDialogFragment dialog = RemoveAccountDialogFragment.newInstance(
-                account
+                account,
+                cameraUploadsHandlerProvider.hasCameraUploadsAttached(account.name)
         );
         dialog.show(getSupportFragmentManager(), RemoveAccountDialogFragment.FTAG_CONFIRMATION);
     }

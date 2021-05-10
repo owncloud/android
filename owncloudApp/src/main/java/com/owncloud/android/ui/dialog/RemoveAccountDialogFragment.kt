@@ -29,6 +29,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.DocumentsContract
 import com.owncloud.android.R
+import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 
 /**
@@ -70,6 +71,10 @@ class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDi
         val callback = parentActivity as AccountManagerCallback<Boolean>?
         am.removeAccount(targetAccount, callback, Handler())
 
+        // Reset camera uploads if they were enabled for this account
+        val cameraUploadsHandlerProvider = CameraUploadsHandlerProvider(requireContext())
+        cameraUploadsHandlerProvider.resetCameraUploadsForAccount(targetAccount!!.name)
+
         // Notify removal to Document Provider
         val authority = resources.getString(R.string.document_provider_authority)
         val rootsUri = DocumentsContract.buildRootsUri(authority)
@@ -94,9 +99,14 @@ class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDi
          * @return Dialog ready to show.
          */
         @JvmStatic
-        fun newInstance(account: Account): RemoveAccountDialogFragment {
+        fun newInstance(account: Account, accountAttachedToCameraUploads: Boolean): RemoveAccountDialogFragment {
+            val dialogMessage = if (accountAttachedToCameraUploads) {
+                R.string.confirmation_remove_account_alert_camera_uploads
+            } else {
+                R.string.confirmation_remove_account_alert
+            }
             val args = Bundle().apply {
-                putInt(ARG_MESSAGE_RESOURCE_ID, R.string.confirmation_remove_account_alert)
+                putInt(ARG_MESSAGE_RESOURCE_ID, dialogMessage)
                 putStringArray(ARG_MESSAGE_ARGUMENTS, arrayOf(account.name))
                 putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes)
                 putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no)

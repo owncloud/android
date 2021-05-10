@@ -315,6 +315,7 @@
     <string name="confirmation_remove_folder_alert">Do you really want to remove %1$s and its contents?</string>
     <string name="confirmation_remove_local">Local only</string>
     <string name="confirmation_remove_account_alert">Do you really want to remove the account %1$s?</string>
+    <string name="confirmation_remove_account_alert_camera_uploads">Do you really want to remove the account %1$s? This account has camera uploads attached, removing the account will disable the camera uploads.</string>
     <string name="confirmation_remove_public_share_title">Remove link</string>
     <string name="confirmation_remove_private_share_title">Remove private share</string>
     <string name="confirmation_remove_share_message">Do you really want to remove %1$s share?</string>
