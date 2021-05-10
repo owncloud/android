@@ -25,7 +25,6 @@
 package com.owncloud.android.lib.resources.files.chunks;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.PutMethod;
 import com.owncloud.android.lib.common.network.ChunkFromFileRequestBody;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
@@ -40,7 +39,6 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.util.concurrent.TimeUnit;
 
-import static com.owncloud.android.lib.common.http.HttpConstants.IF_MATCH_HEADER;
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
