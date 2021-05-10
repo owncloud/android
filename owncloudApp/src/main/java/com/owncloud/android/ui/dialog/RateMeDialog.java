@@ -22,8 +22,6 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -103,7 +101,7 @@ public class RateMeDialog extends DialogFragment {
             try {
                 ActivityExtKt.goToUrl(requireActivity(), MARKET_DETAILS_URI + packageName, flags);
             } catch (ActivityNotFoundException e) {
-                ActivityExtKt.goToUrl(requireActivity(), PLAY_STORE_URI + packageName, 0);
+                ActivityExtKt.goToUrl(requireActivity(), PLAY_STORE_URI + packageName, null);
             }
             dialog.dismiss();
         });
