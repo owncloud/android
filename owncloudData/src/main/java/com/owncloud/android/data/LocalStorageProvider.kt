@@ -56,6 +56,10 @@ class LocalStorageProvider(
     @SuppressLint("UsableSpace")
     fun getUsableSpace(): Long = getPrimaryStorageDirectory().usableSpace
 
+    fun getDefaultCameraSourcePath(): String {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + CAMERA_FOLDER
+    }
+
     /**
      * Return the root path of primary shared/external storage directory for this application.
      * For example: /storage/emulated/0/owncloud
@@ -73,4 +77,8 @@ class LocalStorageProvider(
      * that can be in the accountName since 0.1.190B
      */
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
+
+    companion object {
+        private const val CAMERA_FOLDER = "/Camera"
+    }
 }
