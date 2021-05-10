@@ -2,125 +2,108 @@
  * ownCloud Android client application
  *
  * @author David A. Velasco
- * Copyright (C) 2016 ownCloud GmbH.
- * <p>
+ * @author Abel García de Prada
+ * Copyright (C) 2021 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.ui.dialog;
+package com.owncloud.android.ui.dialog
+
+import android.accounts.Account
+import android.accounts.AccountManager
+import android.accounts.AccountManagerCallback
+import android.app.Activity
+import android.app.Dialog
+import android.os.Bundle
+import android.os.Handler
+import android.provider.DocumentsContract
+import com.owncloud.android.R
+import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 
 /**
  * Dialog requiring confirmation before removing an OC Account.
- * <p>
+ *
  * Removes the account if the user confirms.
- * <p>
+ *
  * Container Activity needs to implement AccountManagerCallback<Boolean>.
- */
+</Boolean> */
+class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.app.Activity;
-import android.app.Dialog;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.provider.DocumentsContract;
+    private var targetAccount: Account? = null
 
-import androidx.annotation.NonNull;
-import com.owncloud.android.R;
-import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
-
-public class RemoveAccountDialogFragment extends ConfirmationDialogFragment
-        implements ConfirmationDialogFragmentListener {
-
-    private Account mTargetAccount;
-
-    private static final String ARG_TARGET_ACCOUNT = "TARGET_ACCOUNT";
-
-    /**
-     * Public factory method to create new RemoveAccountDialogFragment instances.
-     *
-     * @param account Account to remove.
-     * @return Dialog ready to show.
-     */
-    public static RemoveAccountDialogFragment newInstance(Account account) {
-        if (account == null) {
-            throw new IllegalArgumentException("Cannot remove a NULL account");
-        }
-
-        RemoveAccountDialogFragment frag = new RemoveAccountDialogFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_MESSAGE_RESOURCE_ID, R.string.confirmation_remove_account_alert);
-        args.putStringArray(ARG_MESSAGE_ARGUMENTS, new String[]{account.name});
-        args.putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes);
-        args.putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no);
-        args.putInt(ARG_NEGATIVE_BTN_RES, -1);
-        args.putParcelable(ARG_TARGET_ACCOUNT, account);
-        frag.setArguments(args);
-
-        return frag;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         // checked here to fail soon in case of wrong usage
         try {
-            AccountManagerCallback<Boolean> a = (AccountManagerCallback<Boolean>) getActivity();
-        } catch (ClassCastException c) {
-            throw new IllegalStateException(
-                    "Container Activity needs to implement (AccountManagerCallback<Boolean>)", c
-            );
+            activity as AccountManagerCallback<Boolean>?
+        } catch (c: ClassCastException) {
+            throw IllegalStateException(
+                "Container Activity needs to implement (AccountManagerCallback<Boolean>)", c
+            )
         }
     }
 
-    @Override
-    @NonNull
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        mTargetAccount = getArguments().getParcelable(ARG_TARGET_ACCOUNT);
-
-        setOnConfirmationListener(this);
-
-        return dialog;
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        targetAccount = requireArguments().getParcelable(ARG_TARGET_ACCOUNT)
+        setOnConfirmationListener(this)
+        return dialog
     }
 
     /**
      * Performs the removal of the target account.
      */
-    @Override
-    public void onConfirmation(String callerTag) {
-        Activity parentActivity = getActivity();
-        AccountManager am = AccountManager.get(parentActivity);
-        AccountManagerCallback<Boolean> callback = (AccountManagerCallback<Boolean>) parentActivity;
-        am.removeAccount(mTargetAccount, callback, new Handler());
+    override fun onConfirmation(callerTag: String) {
+        val parentActivity: Activity? = activity
+        val am = AccountManager.get(parentActivity)
+        val callback = parentActivity as AccountManagerCallback<Boolean>?
+        am.removeAccount(targetAccount, callback, Handler())
 
         // Notify removal to Document Provider
-        String authority = getResources().getString(R.string.document_provider_authority);
-        Uri rootsUri = DocumentsContract.buildRootsUri(authority);
-        if (getContext() != null) {
-            getContext().getContentResolver().notifyChange(rootsUri, null);
+        val authority = resources.getString(R.string.document_provider_authority)
+        val rootsUri = DocumentsContract.buildRootsUri(authority)
+        requireContext().contentResolver.notifyChange(rootsUri, null)
+    }
+
+    override fun onCancel(callerTag: String) {
+        // nothing to do here
+    }
+
+    override fun onNeutral(callerTag: String) {
+        // nothing to do here
+    }
+
+    companion object {
+        private const val ARG_TARGET_ACCOUNT = "TARGET_ACCOUNT"
+
+        /**
+         * Public factory method to create new RemoveAccountDialogFragment instances.
+         *
+         * @param account Account to remove.
+         * @return Dialog ready to show.
+         */
+        @JvmStatic
+        fun newInstance(account: Account): RemoveAccountDialogFragment {
+            val args = Bundle().apply {
+                putInt(ARG_MESSAGE_RESOURCE_ID, R.string.confirmation_remove_account_alert)
+                putStringArray(ARG_MESSAGE_ARGUMENTS, arrayOf(account.name))
+                putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes)
+                putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no)
+                putInt(ARG_NEGATIVE_BTN_RES, -1)
+                putParcelable(ARG_TARGET_ACCOUNT, account)
+            }
+            return RemoveAccountDialogFragment().apply { arguments = args }
         }
-    }
-
-    @Override
-    public void onCancel(String callerTag) {
-        // nothing to do here
-    }
-
-    @Override
-    public void onNeutral(String callerTag) {
-        // nothing to do here
     }
 }
