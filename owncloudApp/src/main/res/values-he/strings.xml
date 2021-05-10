@@ -232,8 +232,7 @@
   <string name="pass_code_remove_your_pass_code">יש להסיר את הקוד שלך</string>
   <string name="pass_code_mismatch">הקודים אינם זהים</string>
   <string name="pass_code_wrong">קוד שגוי</string>
-  <string name="biometric_not_hardware_detected">התקן זה אינו תומך באימות ביומטרי</string>
-  <string name="biometric_not_enrolled">יש לרשום לפחות מנגנון ביומטרי אחד לשימוש בתכונה זו</string>
+    <string name="biometric_not_enrolled">יש לרשום לפחות מנגנון ביומטרי אחד לשימוש בתכונה זו</string>
   <string name="biometric_prompt_title">התחברות ביומטרית</string>
   <string name="biometric_prompt_subtitle">התחברות תוך שימוש באישורי אימות ביומטריים</string>
   <string name="media_notif_ticker">נגנן המוזיקה %1$s</string>

@@ -155,25 +155,23 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         } else if (prefBiometric != null) {
             biometricManager = BiometricManager.getBiometricManager(activity)
 
-            // Disable biometric lock if Passcode or Pattern locks are disabled
-            if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
-                disableBiometric()
-            }
-            prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-                val incomingValue = newValue as Boolean
-
-                // Biometric not supported
-                if (incomingValue && biometricManager?.isHardwareDetected == false) {
-                    showMessageInSnackbar(getString(R.string.biometric_not_hardware_detected))
-                    return@setOnPreferenceChangeListener false
+            if (biometricManager?.isHardwareDetected == false) { // Biometric not supported
+                screenSecurity?.removePreference(prefBiometric)
+            } else {
+                if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { // Disable biometric lock if Passcode or Pattern locks are disabled
+                    disableBiometric()
                 }
 
-                // No biometric enrolled yet
-                if (incomingValue && biometricManager?.hasEnrolledBiometric() == false) {
-                    showMessageInSnackbar(getString(R.string.biometric_not_enrolled))
-                    return@setOnPreferenceChangeListener false
+                prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+                    val incomingValue = newValue as Boolean
+
+                    // No biometric enrolled yet
+                    if (incomingValue && biometricManager?.hasEnrolledBiometric() == false) {
+                        showMessageInSnackbar(getString(R.string.biometric_not_enrolled))
+                        return@setOnPreferenceChangeListener false
+                    }
+                    true
                 }
-                true
             }
         }
 

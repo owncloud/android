@@ -230,8 +230,7 @@
   <string name="pass_code_remove_your_pass_code">Parola kodunuzu kaldırın</string>
   <string name="pass_code_mismatch">Parola kodları aynı değil</string>
   <string name="pass_code_wrong">Hatalı parola kodu</string>
-  <string name="biometric_not_hardware_detected">Bu cihaz biyometrik kimlik doğrulamayı desteklemiyor</string>
-  <string name="biometric_not_enrolled">Bu özelliği kullanmak için en az bir biyometrik giriş kaydedilmeli</string>
+    <string name="biometric_not_enrolled">Bu özelliği kullanmak için en az bir biyometrik giriş kaydedilmeli</string>
   <string name="biometric_prompt_title">Biyometrik giriş yap</string>
   <string name="biometric_prompt_subtitle">Biyometrik kimlik bilgilerinizi kullanarak giriş yapın</string>
   <string name="media_notif_ticker">%1$s müzik çalar</string>

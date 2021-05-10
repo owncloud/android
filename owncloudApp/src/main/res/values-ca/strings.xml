@@ -229,8 +229,7 @@
   <string name="pass_code_remove_your_pass_code">Elimina el codi d\'accés</string>
   <string name="pass_code_mismatch">Els codis d\'accés no coincideixen</string>
   <string name="pass_code_wrong">Codi d\'accés incorrecte</string>
-  <string name="biometric_not_hardware_detected">Aquest dispositiu no admet autentificació biomètrica. </string>
-  <string name="biometric_not_enrolled">Registrar al menys una característica biomètrica per poder utilitzar aquesta funció. </string>
+    <string name="biometric_not_enrolled">Registrar al menys una característica biomètrica per poder utilitzar aquesta funció. </string>
   <string name="biometric_prompt_title">Inici de sessió biomètric.</string>
   <string name="biometric_prompt_subtitle">Inicieu la sessió amb la vostra credencial biomètrica</string>
   <string name="media_notif_ticker">reproductor de música %1$s</string>

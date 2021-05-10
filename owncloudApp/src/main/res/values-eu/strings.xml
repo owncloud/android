@@ -181,8 +181,7 @@
   <string name="pass_code_remove_your_pass_code">Ezabatu zure pasahitza</string>
   <string name="pass_code_mismatch">Pasahitzak ez dira berdinak</string>
   <string name="pass_code_wrong">Pasahitza ez da zuzena</string>
-  <string name="biometric_not_hardware_detected">Gailu honek ez du hatz-marka bidezko autentikazioa onartzen.</string>
-  <string name="media_notif_ticker">%1$s musika erreproduzigailua</string>
+    <string name="media_notif_ticker">%1$s musika erreproduzigailua</string>
   <string name="media_state_playing">%1$s (jotzen)</string>
   <string name="media_state_loading">%1$s (kargatzen)</string>
   <string name="media_event_done">%1$s erreprodukzioa amaitua</string>

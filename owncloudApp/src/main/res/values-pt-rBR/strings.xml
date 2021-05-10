@@ -245,8 +245,7 @@
   <string name="pass_code_wrong">Código de acesso incorreto</string>
   <string name="pass_code_error_set">Ocorreu um erro ao configurar o bloqueio da senha</string>
   <string name="pass_code_error_remove">Ocorreu um erro ao remover o bloqueio da senha</string>
-  <string name="biometric_not_hardware_detected">Este dispositivo não suporta a autenticação biométrica</string>
-  <string name="biometric_not_enrolled">Registre pelo menos uma biométria para usar esse recurso</string>
+    <string name="biometric_not_enrolled">Registre pelo menos uma biométria para usar esse recurso</string>
   <string name="biometric_prompt_title">Conexão biométrica</string>
   <string name="biometric_prompt_subtitle">Conectar usando sua credencial biométrica</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
