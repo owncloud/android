@@ -1,0 +1,8 @@
+Enhancement: Fixed account for camera uploads
+
+Camera uploads will be uploaded to a fixed account independently of the current account.
+Removing the account attached to camera uploads will disable this feature.
+User will be warned when removing an account that has camera uploads attached.
+
+https://github.com/owncloud/android/issues/3166
+https://github.com/owncloud/android/pull/3226
