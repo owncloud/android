@@ -39,7 +39,6 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.util.concurrent.TimeUnit;
 
-import static com.owncloud.android.lib.common.http.HttpConstants.IF_MATCH_HEADER;
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
@@ -94,10 +93,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 break;
             } else {
                 mPutMethod = new PutMethod(new URL(uriPrefix + File.separator + chunkIndex), mFileRequestBody);
-
-                if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
-                    mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
-                }
 
                 if (chunkIndex == chunkCount - 1) {
                     // Added a high timeout to the last chunk due to when the last chunk
