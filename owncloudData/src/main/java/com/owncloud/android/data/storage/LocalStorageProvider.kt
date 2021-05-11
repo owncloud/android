@@ -66,6 +66,19 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     ): String = getAccountDirectoryPath(accountName) + remotePath
 
     /**
+     * Get expected remote path for a file creation, rename, move etc
+     */
+    fun getExpectedRemotePath(remotePath: String, newName: String, isFolder: Boolean): String {
+        var parent = (File(remotePath)).parent ?: throw IllegalArgumentException()
+        parent = if (parent.endsWith(File.separator)) parent else parent + File.separator
+        val newRemotePath = parent + newName
+        if (isFolder) {
+            newRemotePath.plus(File.separator)
+        }
+        return newRemotePath
+    }
+
+    /**
      * Get absolute path to tmp folder inside datafolder in sd-card for given accountName.
      */
     fun getTemporalPath(
