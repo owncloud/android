@@ -39,10 +39,8 @@ class RenameFileUseCase(
         if (!fileNameValidator.validate(newNameTrimmed)) throw FileNameException(type = FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS)
 
         return fileRepository.renameFile(
-            oldName = params.ocFileToRename.fileName,
-            oldRemotePath = params.ocFileToRename.remotePath,
+            ocFile = params.ocFileToRename,
             newName = params.newName,
-            isFolder = params.ocFileToRename.isFolder
         )
     }
 
