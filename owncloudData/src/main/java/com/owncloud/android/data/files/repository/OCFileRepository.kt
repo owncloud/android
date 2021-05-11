@@ -23,7 +23,7 @@ package com.owncloud.android.data.files.repository
 import com.owncloud.android.data.LocalStorageProvider
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
-import com.owncloud.android.domain.exceptions.ConflictException
+import com.owncloud.android.domain.exceptions.FileAlreadyExistsException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.MIME_DIR
@@ -147,13 +147,29 @@ class OCFileRepository(
         }
     }
 
-    override fun renameFile(oldName: String, oldRemotePath: String, newName: String, isFolder: Boolean) {
-        remoteFileDataSource.renameFile(
-            oldName = oldName,
-            oldRemotePath = oldRemotePath,
+    override fun renameFile(ocFile: OCFile, newName: String) {
+        // 1. Compose new remote path
+        val newRemotePath = localStorageProvider.getExpectedRemotePath(
+            remotePath = ocFile.remotePath,
             newName = newName,
-            isFolder = isFolder
+            isFolder = ocFile.isFolder
         )
+
+        // 2. Check if file already exists in database
+        if (localFileDataSource.getFileByRemotePath(newRemotePath, ocFile.owner) != null) {
+            throw FileAlreadyExistsException()
+        }
+
+        // 3. Perform remote operation
+        remoteFileDataSource.renameFile(
+            oldName = ocFile.fileName,
+            oldRemotePath = ocFile.remotePath,
+            newName = newName,
+            isFolder = ocFile.isFolder
+        )
+
+        // 4. Save new remote path in the local database
+        localFileDataSource.saveFile(ocFile.copy(remotePath = newRemotePath))
     }
 
     override fun saveFile(file: OCFile) {
