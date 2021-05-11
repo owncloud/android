@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2019 ownCloud GmbH.
+ *   Copyright (C) 2021 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,20 @@
  *
  */
 
-package com.owncloud.android.lib.resources.files;
+package com.owncloud.android.lib.resources.files
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod;
-import com.owncloud.android.lib.common.network.WebdavUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import timber.log.Timber;
-
-import java.io.File;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod
+import com.owncloud.android.lib.common.network.WebdavUtils
+import com.owncloud.android.lib.common.operations.RemoteOperation
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import com.owncloud.android.lib.common.utils.isOneOf
+import timber.log.Timber
+import java.io.File
+import java.net.URL
+import java.util.concurrent.TimeUnit
 
 /**
  * Remote operation performing the rename of a remote file or folder in the ownCloud server.
@@ -43,77 +43,58 @@ import java.util.concurrent.TimeUnit;
  * @author David A. Velasco
  * @author masensio
  */
-public class RenameRemoteFileOperation extends RemoteOperation {
+class RenameRemoteFileOperation(
+    private val oldName: String,
+    private val oldRemotePath: String,
+    private val newName: String,
+    isFolder: Boolean,
+) : RemoteOperation<Unit>() {
 
-    private static final int RENAME_READ_TIMEOUT = 600000;
-    private static final int RENAME_CONNECTION_TIMEOUT = 5000;
+    private var newRemotePath: String? = null
 
-    private String mOldName;
-    private String mOldRemotePath;
-    private String mNewName;
-    private String mNewRemotePath;
-
-    /**
-     * Constructor
-     *
-     * @param oldName       Old name of the file.
-     * @param oldRemotePath Old remote path of the file.
-     * @param newName       New name to set as the name of file.
-     * @param isFolder      'true' for folder and 'false' for files
-     */
-    public RenameRemoteFileOperation(String oldName, String oldRemotePath, String newName,
-                                     boolean isFolder) {
-        mOldName = oldName;
-        mOldRemotePath = oldRemotePath;
-        mNewName = newName;
-
-        String parent = (new File(mOldRemotePath)).getParent();
-        parent = (parent.endsWith(File.separator)) ? parent : parent + File.separator;
-        mNewRemotePath = parent + mNewName;
+    init {
+        var parent = (File(oldRemotePath)).parent!!
+        parent = if (parent.endsWith(File.separator)) parent else parent + File.separator
+        newRemotePath = parent + newName
         if (isFolder) {
-            mNewRemotePath += File.separator;
+            newRemotePath.plus(File.separator)
         }
     }
 
-    /**
-     * Performs the rename operation.
-     *
-     * @param client Client object to communicate with the remote ownCloud server.
-     */
-    @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
+        var result: RemoteOperationResult<Unit>
         try {
-            if (mNewName.equals(mOldName)) {
-                return new RemoteOperationResult<>(ResultCode.OK);
+            if (newName == oldName) {
+                return RemoteOperationResult<Unit>(ResultCode.OK)
             }
 
             if (targetPathIsUsed(client)) {
-                return new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
+                return RemoteOperationResult<Unit>(ResultCode.INVALID_OVERWRITE)
             }
 
-            final MoveMethod move = new MoveMethod(
-                    new URL(client.getUserFilesWebDavUri() +
-                    WebdavUtils.encodePath(mOldRemotePath)),
-                    client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mNewRemotePath), false);
+            val moveMethod: MoveMethod = MoveMethod(
+                url = URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(oldRemotePath)),
+                destinationUrl = client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(newRemotePath),
+                forceOverride = false
+            ).apply {
+                setReadTimeout(RENAME_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                setConnectionTimeout(RENAME_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
+            }
+            val status = client.executeHttpMethod(moveMethod)
 
-            move.setReadTimeout(RENAME_READ_TIMEOUT, TimeUnit.SECONDS);
-            move.setConnectionTimeout(RENAME_READ_TIMEOUT, TimeUnit.SECONDS);
+            result = if (isSuccess(status)) {
+                RemoteOperationResult<Unit>(ResultCode.OK)
+            } else {
+                RemoteOperationResult<Unit>(moveMethod)
+            }
 
-            final int status = client.executeHttpMethod(move);
-            final RemoteOperationResult result =
-                    (status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT)
-                            ? new RemoteOperationResult<>(ResultCode.OK)
-                            : new RemoteOperationResult<>(move);
-
-            Timber.i("Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " + result.getLogMessage());
-            client.exhaustResponse(move.getResponseBodyAsStream());
-            return result;
-        } catch (Exception e) {
-            final RemoteOperationResult result = new RemoteOperationResult<>(e);
-            Timber.e(e,
-                    "Rename " + mOldRemotePath + " to " + ((mNewRemotePath == null) ? mNewName : mNewRemotePath) + ":" +
-                            " " + result.getLogMessage());
-            return result;
+            Timber.i("Rename $oldRemotePath to $newRemotePath: ${result.logMessage}")
+            client.exhaustResponse(moveMethod.getResponseBodyAsStream())
+            return result
+        } catch (exception: Exception) {
+            result = RemoteOperationResult<Unit>(exception)
+            Timber.e(exception, "Rename $oldRemotePath to $newName: ${result.logMessage}")
+            return result
         }
     }
 
@@ -122,10 +103,16 @@ public class RenameRemoteFileOperation extends RemoteOperation {
      *
      * @return 'True' if the target path is already used by an existing file.
      */
-    private boolean targetPathIsUsed(OwnCloudClient client) {
-        CheckPathExistenceRemoteOperation checkPathExistenceRemoteOperation =
-                new CheckPathExistenceRemoteOperation(mNewRemotePath, false);
-        RemoteOperationResult exists = checkPathExistenceRemoteOperation.execute(client);
-        return exists.isSuccess();
+    private fun targetPathIsUsed(client: OwnCloudClient): Boolean {
+        val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation(newRemotePath, false)
+        val exists = checkPathExistenceRemoteOperation.execute(client)
+        return exists.isSuccess
+    }
+
+    private fun isSuccess(status: Int) = status.isOneOf(HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
+
+    companion object {
+        private const val RENAME_READ_TIMEOUT = 10_000L
+        private const val RENAME_CONNECTION_TIMEOUT = 5_000L
     }
 }
