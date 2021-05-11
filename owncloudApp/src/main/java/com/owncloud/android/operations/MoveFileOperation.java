@@ -82,8 +82,7 @@ public class MoveFileOperation extends SyncOperation {
         }
         MoveRemoteFileOperation operation = new MoveRemoteFileOperation(
                 mSrcPath,
-                finalRemotePath,
-                false
+                finalRemotePath
         );
         result = operation.execute(client);
 
