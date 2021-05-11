@@ -147,6 +147,15 @@ class OCFileRepository(
         }
     }
 
+    override fun renameFile(oldName: String, oldRemotePath: String, newName: String, isFolder: Boolean) {
+        remoteFileDataSource.renameFile(
+            oldName = oldName,
+            oldRemotePath = oldRemotePath,
+            newName = newName,
+            isFolder = isFolder
+        )
+    }
+
     override fun saveFile(file: OCFile) {
         localFileDataSource.saveFile(file)
     }
