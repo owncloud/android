@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2021 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -21,126 +21,109 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.resources.files
 
-package com.owncloud.android.lib.resources.files;
-
-import android.net.Uri;
-
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod;
-import com.owncloud.android.lib.common.network.WebdavUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import timber.log.Timber;
-
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
+import android.net.Uri
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod
+import com.owncloud.android.lib.common.network.WebdavUtils
+import com.owncloud.android.lib.common.operations.RemoteOperation
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import com.owncloud.android.lib.common.utils.isOneOf
+import timber.log.Timber
+import java.net.URL
+import java.util.concurrent.TimeUnit
 
 /**
  * Remote operation moving a remote file or folder in the ownCloud server to a different folder
  * in the same account.
- * <p>
+ *
  * Allows renaming the moving file/folder at the same time.
  *
  * @author David A. Velasco
  * @author David González Verdugo
+ * @author Abel García de Prada
  */
-public class MoveRemoteFileOperation extends RemoteOperation {
-
-    private static final int MOVE_READ_TIMEOUT = 600000;
-    private static final int MOVE_CONNECTION_TIMEOUT = 5000;
-
-    private String mSrcRemotePath;
-    private String mTargetRemotePath;
-    private boolean mOverwrite;
-
-    protected boolean moveChunkedFile = false;
-    protected String mFileLastModifTimestamp;
-    protected long mFileLength;
-
-    /**
-     * Constructor.
-     * <p>
-     * TODO Paths should finish in "/" in the case of folders. ?
-     *
-     * @param srcRemotePath    Remote path of the file/folder to move.
-     * @param targetRemotePath Remote path desired for the file/folder after moving it.
-     */
-    public MoveRemoteFileOperation(String srcRemotePath,
-                                   String targetRemotePath,
-                                   boolean overwrite) {
-
-        mSrcRemotePath = srcRemotePath;
-        mTargetRemotePath = targetRemotePath;
-        mOverwrite = overwrite;
-    }
+open class MoveRemoteFileOperation(
+    private val sourceRemotePath: String,
+    private val targetRemotePath: String,
+    private val forceOverwrite: Boolean
+) : RemoteOperation<Unit>() {
 
     /**
      * Performs the rename operation.
      *
      * @param client Client object to communicate with the remote ownCloud server.
      */
-    @Override
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        if (mTargetRemotePath.equals(mSrcRemotePath)) {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
+        if (targetRemotePath == sourceRemotePath) {
             // nothing to do!
-            return new RemoteOperationResult<>(ResultCode.OK);
+            return RemoteOperationResult(ResultCode.OK)
         }
 
-        if (mTargetRemotePath.startsWith(mSrcRemotePath)) {
-            return new RemoteOperationResult<>(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
+        if (targetRemotePath.startsWith(sourceRemotePath)) {
+            return RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT)
         }
 
         /// perform remote operation
-        RemoteOperationResult result;
+        var result: RemoteOperationResult<Unit>
         try {
             // After finishing a chunked upload, we have to move the resulting file from uploads folder to files one,
             // so this uri has to be customizable
-            Uri srcWebDavUri = moveChunkedFile ? client.getUploadsWebDavUri() : client.getUserFilesWebDavUri();
-
-            final MoveMethod move = new MoveMethod(
-                    new URL(srcWebDavUri + WebdavUtils.encodePath(mSrcRemotePath)),
-                    client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
-                    mOverwrite);
-
-            if (moveChunkedFile) {
-                move.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
-                move.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, String.valueOf(mFileLength));
+            val srcWebDavUri = getSrcWebDavUriForClient(client)
+            val moveMethod = MoveMethod(
+                url = URL(srcWebDavUri.toString() + WebdavUtils.encodePath(sourceRemotePath)),
+                destinationUrl = client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(targetRemotePath),
+                forceOverride = forceOverwrite
+            ).apply {
+                addRequestHeaders(this)
+                setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS)
+                setConnectionTimeout(MOVE_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             }
 
-            move.setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS);
-            move.setConnectionTimeout(MOVE_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
+            val status = client.executeHttpMethod(moveMethod)
 
-            final int status = client.executeHttpMethod(move);
-            /// process response
             if (isSuccess(status)) {
-                result = new RemoteOperationResult<>(ResultCode.OK);
-            } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !mOverwrite) {
-
-                result = new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
-                client.exhaustResponse(move.getResponseBodyAsStream());
+                result = RemoteOperationResult<Unit>(ResultCode.OK)
+            } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !forceOverwrite) {
+                result = RemoteOperationResult<Unit>(ResultCode.INVALID_OVERWRITE)
+                client.exhaustResponse(moveMethod.getResponseBodyAsStream())
 
                 /// for other errors that could be explicitly handled, check first:
                 /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
-
             } else {
-                result = new RemoteOperationResult<>(move);
-                client.exhaustResponse(move.getResponseBodyAsStream());
+                result = RemoteOperationResult<Unit>(moveMethod)
+                client.exhaustResponse(moveMethod.getResponseBodyAsStream())
             }
 
-            Timber.i("Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " + result.getLogMessage());
+            Timber.i("Move $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
+        } catch (e: Exception) {
+            result = RemoteOperationResult<Unit>(e)
+            Timber.e(e, "Move $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
 
-        } catch (Exception e) {
-            result = new RemoteOperationResult<>(e);
-            Timber.e(e, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " + result.getLogMessage());
         }
-
-        return result;
+        return result
     }
 
-    protected boolean isSuccess(int status) {
-        return status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT;
+    /**
+     * For standard moves, we will use [OwnCloudClient.getUserFilesWebDavUri].
+     * In case we need a different source Uri, override this method.
+     */
+    open fun getSrcWebDavUriForClient(client: OwnCloudClient): Uri = client.userFilesWebDavUri
+
+    /**
+     * For standard moves, we won't need any special headers.
+     * In case new headers are needed, override this method
+     */
+    open fun addRequestHeaders(moveMethod: MoveMethod) {
+    }
+
+    protected fun isSuccess(status: Int) = status.isOneOf(HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
+
+    companion object {
+        private const val MOVE_READ_TIMEOUT = 10L
+        private const val MOVE_CONNECTION_TIMEOUT = 6L
     }
 }

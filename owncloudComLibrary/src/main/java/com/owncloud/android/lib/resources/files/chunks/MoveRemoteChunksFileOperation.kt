@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2021 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -21,30 +21,40 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.resources.files.chunks
 
-package com.owncloud.android.lib.resources.files.chunks;
-
-import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation;
+import android.net.Uri
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod
+import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation
 
 /**
  * Remote operation to move the file built from chunks after uploading it
  *
  * @author David González Verdugo
+ * @author Abel García de Prada
  */
-public class MoveRemoteChunksFileOperation extends MoveRemoteFileOperation {
+class MoveRemoteChunksFileOperation(
+    sourceRemotePath: String,
+    targetRemotePath: String,
+    overwrite: Boolean,
+    private val fileLastModificationTimestamp: String,
+    private val fileLength: Long
+) : MoveRemoteFileOperation(
+    sourceRemotePath = sourceRemotePath,
+    targetRemotePath = targetRemotePath,
+    forceOverwrite = overwrite
+) {
 
-    /**
-     * Constructor.
-     *
-     * @param srcRemotePath    Remote path of the file/folder to move.
-     * @param targetRemotePath Remove path desired for the file/folder after moving it.
-     * @param overwrite
-     */
-    public MoveRemoteChunksFileOperation(String srcRemotePath, String targetRemotePath, boolean overwrite,
-                                         String fileLastModifTimestamp, long fileLength) {
-        super(srcRemotePath, targetRemotePath, overwrite);
-        moveChunkedFile = true;
-        mFileLastModifTimestamp = fileLastModifTimestamp;
-        mFileLength = fileLength;
+    override fun getSrcWebDavUriForClient(client: OwnCloudClient): Uri = client.uploadsWebDavUri
+
+    override fun addRequestHeaders(moveMethod: MoveMethod) {
+        super.addRequestHeaders(moveMethod)
+
+        moveMethod.apply {
+            addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, fileLastModificationTimestamp)
+            addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, fileLength.toString())
+        }
     }
 }
