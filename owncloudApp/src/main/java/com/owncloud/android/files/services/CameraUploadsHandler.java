@@ -92,7 +92,8 @@ public class CameraUploadsHandler {
                     getSourcePathPictures());
             extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
                     getBehaviourAfterUploadPictures());
-            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_ACCOUNT, mCameraUploadsConfig.getUploadAccountNameForPictures());
+            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_ACCOUNT, mCameraUploadsConfig.
+                    getUploadAccountNameForPictures());
         }
 
         if (mCameraUploadsConfig.isEnabledForVideos()) {
@@ -102,7 +103,8 @@ public class CameraUploadsHandler {
                     getSourcePathVideos());
             extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
                     getBehaviourAfterUploadVideos());
-            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_ACCOUNT, mCameraUploadsConfig.getUploadAccountNameForVideos());
+            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_ACCOUNT, mCameraUploadsConfig.
+                    getUploadAccountNameForVideos());
         }
 
         builder.setExtras(extras);

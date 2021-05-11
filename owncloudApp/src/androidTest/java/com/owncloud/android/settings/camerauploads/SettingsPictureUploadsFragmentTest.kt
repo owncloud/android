@@ -39,6 +39,12 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
@@ -100,12 +106,12 @@ class SettingsPictureUploadsFragmentTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
-            prefEnablePictureUploads = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED)!!
-            prefPictureUploadsPath = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH)!!
-            prefPictureUploadsOnWifi = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY)!!
-            prefPictureUploadsSourcePath = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE)!!
-            prefPictureUploadsBehaviour = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)!!
-            prefPictureUploadsAccount = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)!!
+            prefEnablePictureUploads = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_ENABLED)!!
+            prefPictureUploadsPath = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_PATH)!!
+            prefPictureUploadsOnWifi = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY)!!
+            prefPictureUploadsSourcePath = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE)!!
+            prefPictureUploadsBehaviour = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)!!
+            prefPictureUploadsAccount = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)!!
         }
     }
 
@@ -117,7 +123,7 @@ class SettingsPictureUploadsFragmentTest {
     @Test
     fun pictureUploadsView() {
         prefEnablePictureUploads.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_ENABLED,
             titlePref = context.getString(R.string.prefs_camera_picture_upload),
             summaryPref = context.getString(R.string.prefs_camera_picture_upload_summary),
             visible = true,
@@ -126,7 +132,7 @@ class SettingsPictureUploadsFragmentTest {
         assertFalse(prefEnablePictureUploads.isChecked)
 
         prefPictureUploadsPath.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_PATH,
             titlePref = context.getString(R.string.prefs_camera_picture_upload_path_title),
             summaryPref = exampleUploadPath,
             visible = true,
@@ -134,7 +140,7 @@ class SettingsPictureUploadsFragmentTest {
         )
 
         prefPictureUploadsOnWifi.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY,
             titlePref = context.getString(R.string.prefs_camera_picture_upload_on_wifi),
             visible = true,
             enabled = false
@@ -149,7 +155,7 @@ class SettingsPictureUploadsFragmentTest {
                 R.string.prefs_camera_upload_source_path_title_required
             )
         prefPictureUploadsSourcePath.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
             titlePref = String.format(prefPictureUploadsSourcePath.title.toString(), comment),
             summaryPref = exampleUploadSourcePath,
             visible = true,
@@ -157,7 +163,7 @@ class SettingsPictureUploadsFragmentTest {
         )
 
         prefPictureUploadsBehaviour.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR,
             titlePref = context.getString(R.string.prefs_camera_upload_behaviour_title),
             summaryPref = context.getString(R.string.pref_behaviour_entries_keep_file),
             visible = true,
@@ -165,7 +171,7 @@ class SettingsPictureUploadsFragmentTest {
         )
 
         prefPictureUploadsAccount.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
             titlePref = context.getString(R.string.prefs_picture_upload_account),
             summaryPref = prefPictureUploadsAccount.context.getString(androidx.preference.R.string.not_set),
             visible = true,

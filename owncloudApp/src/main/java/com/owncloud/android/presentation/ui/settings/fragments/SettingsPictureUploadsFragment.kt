@@ -102,7 +102,11 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             )
         prefPictureUploadsSourcePath?.title = String.format(prefPictureUploadsSourcePath?.title.toString(), comment)
 
-        prefEnablePictureUploads?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+        initPreferenceListeners()
+    }
+
+    private fun initPreferenceListeners() {
+        prefEnablePictureUploads?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
             val value = newValue as Boolean
 
             if (value) {
@@ -119,10 +123,9 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                     title = getString(R.string.confirmation_disable_camera_uploads_title),
                     message = getString(R.string.confirmation_disable_pictures_upload_message),
                     positiveButtonText = getString(R.string.common_yes),
-                    positiveButtonListener = { dialog: DialogInterface?, which: Int ->
+                    positiveButtonListener = { _: DialogInterface?, _: Int ->
                         picturesViewModel.updatePicturesLastSync()
                         picturesViewModel.setEnablePictureUpload(value)
-                        prefEnablePictureUploads?.isChecked = false
                         enablePictureUploads(false)
                         resetPreferencesAfterDisablingPicturesUploads()
                     },
@@ -162,6 +165,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     }
 
     private fun enablePictureUploads(value: Boolean) {
+        prefEnablePictureUploads?.isChecked = value
         prefPictureUploadsPath?.isEnabled = value
         prefPictureUploadsOnWifi?.isEnabled = value
         prefPictureUploadsSourcePath?.isEnabled = value
