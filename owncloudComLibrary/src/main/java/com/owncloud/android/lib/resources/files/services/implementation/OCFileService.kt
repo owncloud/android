@@ -33,6 +33,7 @@ import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.RemoteFile
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation
+import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation
 import com.owncloud.android.lib.resources.files.services.FileService
 
 class OCFileService(override val client: OwnCloudClient) : FileService {
@@ -78,11 +79,30 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
             targetRemotePath = targetRemotePath,
         ).execute(client)
 
-    override fun refreshFolder(remotePath: String): RemoteOperationResult<ArrayList<RemoteFile>> =
+    override fun refreshFolder(
+        remotePath: String
+    ): RemoteOperationResult<ArrayList<RemoteFile>> =
         ReadRemoteFolderOperation(
             remotePath = remotePath
         ).execute(client)
 
-    override fun removeFile(remotePath: String): RemoteOperationResult<Unit> =
-        RemoveRemoteFileOperation(remotePath = remotePath).execute(client)
+    override fun removeFile(
+        remotePath: String
+    ): RemoteOperationResult<Unit> =
+        RemoveRemoteFileOperation(
+            remotePath = remotePath
+        ).execute(client)
+
+    override fun renameFile(
+        oldName: String,
+        oldRemotePath: String,
+        newName: String,
+        isFolder: Boolean
+    ): RemoteOperationResult<Unit> =
+        RenameRemoteFileOperation(
+            oldName = oldName,
+            oldRemotePath = oldRemotePath,
+            newName = newName,
+            isFolder = isFolder
+        ).execute(client)
 }

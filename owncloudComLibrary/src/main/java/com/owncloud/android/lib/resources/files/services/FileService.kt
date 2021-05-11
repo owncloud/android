@@ -58,4 +58,11 @@ interface FileService : Service {
     fun removeFile(
         remotePath: String
     ): RemoteOperationResult<Unit>
+
+    fun renameFile(
+        oldName: String,
+        oldRemotePath: String,
+        newName: String,
+        isFolder: Boolean,
+    ): RemoteOperationResult<Unit>
 }
