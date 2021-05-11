@@ -232,8 +232,7 @@
   <string name="pass_code_remove_your_pass_code">ลบรหัสปลดล็อคของคุณ</string>
   <string name="pass_code_mismatch">รหัสปลดล็อคของคุณไม่ตรงกัน</string>
   <string name="pass_code_wrong">รหัสปลดล็อคไม่ถูกต้อง</string>
-  <string name="biometric_not_hardware_detected">อุปกรณ์นี้ไม่รองรับการใช้งานไบโอเมตริกซ์</string>
-  <string name="biometric_not_enrolled">จำเป็นต้องเพิ่มอย่างน้อยหนึ่งไบโอเมตริกซ์เพื่อใช้เปิดการใช้งานฟีดเจอร์นี้</string>
+    <string name="biometric_not_enrolled">จำเป็นต้องเพิ่มอย่างน้อยหนึ่งไบโอเมตริกซ์เพื่อใช้เปิดการใช้งานฟีดเจอร์นี้</string>
   <string name="biometric_prompt_title">เข้าสู่ระบบด้วยไบโอเมตริกซ์</string>
   <string name="biometric_prompt_subtitle">เข้าสู่ระบบโดยใช้ไบโอเมตริกซ์ของคุณ</string>
   <string name="media_notif_ticker">เล่นเพลง %1$s</string>

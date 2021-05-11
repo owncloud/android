@@ -12,6 +12,7 @@ Summary
 * Bugfix - Fix a bug when some fields where not retrieved from OIDC Discovery: [#3202](https://github.com/owncloud/android/pull/3202)
 * Bugfix - Snackbar in passcode view is not displayed: [#2722](https://github.com/owncloud/android/issues/2722)
 * Change - Error handling for pattern lock: [#3215](https://github.com/owncloud/android/issues/3215)
+* Change - Hide biometrical if device does not support it: [#3217](https://github.com/owncloud/android/issues/3217)
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
 * Enhancement - Move to AndroidX Preference and new structure for settings: [#2867](https://github.com/owncloud/android/issues/2867)
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
@@ -53,6 +54,15 @@ Details
 
    https://github.com/owncloud/android/issues/3215
    https://github.com/owncloud/android/pull/3221
+
+* Change - Hide biometrical if device does not support it: [#3217](https://github.com/owncloud/android/issues/3217)
+
+   Biometric lock preference in "Security" settings subsection was shown even when the device
+   didn't support biometrics (if it was Android 6.0 or later versions). Now, the preference is
+   only shown if the device has the suitable hardware for it.
+
+   https://github.com/owncloud/android/issues/3217
+   https://github.com/owncloud/android/pull/3230
 
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
 

@@ -233,8 +233,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="pass_code_remove_your_pass_code">Retirar o seu código de seguridade</string>
   <string name="pass_code_mismatch">Os códigos de seguridade non son iguais</string>
   <string name="pass_code_wrong">Código de seguridade incorrecto</string>
-  <string name="biometric_not_hardware_detected">Este dispositivo non admite a autenticación biométrica</string>
-  <string name="biometric_not_enrolled">Rexístrese polo menos unha biometría para usar esta característica</string>
+    <string name="biometric_not_enrolled">Rexístrese polo menos unha biometría para usar esta característica</string>
   <string name="biometric_prompt_title">Acceso biométrico</string>
   <string name="biometric_prompt_subtitle">Acceda empregando a súa credencial biométrica</string>
   <string name="media_notif_ticker">%1$s reprodutor musical</string>

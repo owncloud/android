@@ -228,8 +228,7 @@
   <string name="pass_code_remove_your_pass_code">Премахване на паролата</string>
   <string name="pass_code_mismatch">Паролите не съвпадат</string>
   <string name="pass_code_wrong">Грешна парола</string>
-  <string name="biometric_not_hardware_detected">Това устройство не поддържа биометрична автенификация.</string>
-  <string name="biometric_not_enrolled">Регистрирайте поне един брой биометрични данни за да използвате тази  функция</string>
+    <string name="biometric_not_enrolled">Регистрирайте поне един брой биометрични данни за да използвате тази  функция</string>
   <string name="biometric_prompt_title">Биометричен вход</string>
   <string name="biometric_prompt_subtitle">Вход чрез биометрични данни</string>
   <string name="media_notif_ticker">%1$s музикален плеър</string>

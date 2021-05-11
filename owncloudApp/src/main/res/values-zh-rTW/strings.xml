@@ -231,8 +231,7 @@
   <string name="pass_code_remove_your_pass_code">移除您的密碼鎖密碼</string>
   <string name="pass_code_mismatch">密碼不相符</string>
   <string name="pass_code_wrong">不正確的密碼</string>
-  <string name="biometric_not_hardware_detected">此裝置不支持生物特徵驗證</string>
-  <string name="biometric_not_enrolled">註冊至少一個生物特徵以使用此功能</string>
+    <string name="biometric_not_enrolled">註冊至少一個生物特徵以使用此功能</string>
   <string name="biometric_prompt_title">生物識別登入</string>
   <string name="biometric_prompt_subtitle">登入使用您的生物特徵憑證</string>
   <string name="media_notif_ticker">%1$s 音樂播放器</string>

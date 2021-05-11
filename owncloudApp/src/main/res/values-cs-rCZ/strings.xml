@@ -229,8 +229,7 @@
   <string name="pass_code_remove_your_pass_code">Odstraňte svůj bezpečnostní kód</string>
   <string name="pass_code_mismatch">Bezpečnostní kód se liší</string>
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
-  <string name="biometric_not_hardware_detected">Toto zařízení nepodoporuje biometrickou autentizaci</string>
-  <string name="biometric_not_enrolled">Povolte alespoň jeden biometrický způsob ověření k používání této specialitky</string>
+    <string name="biometric_not_enrolled">Povolte alespoň jeden biometrický způsob ověření k používání této specialitky</string>
   <string name="biometric_prompt_title">Biometrické přihlášení</string>
   <string name="biometric_prompt_subtitle">Přihlásit se s použitím biometrických přihlašovacích údajů</string>
   <string name="media_notif_ticker">Hudební přehrávač %1$s</string>

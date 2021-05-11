@@ -233,8 +233,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_remove_your_pass_code">Verwijderen pincode</string>
   <string name="pass_code_mismatch">De pincodes komen niet overeen</string>
   <string name="pass_code_wrong">Onjuiste pincode</string>
-  <string name="biometric_not_hardware_detected">Dit apparaat ondersteunt geen biometrische authenticatie</string>
-  <string name="biometric_not_enrolled">Registreer ten minste één biometrie om deze functie te gebruiken</string>
+    <string name="biometric_not_enrolled">Registreer ten minste één biometrie om deze functie te gebruiken</string>
   <string name="biometric_prompt_title">Biometrisch aanmelden</string>
   <string name="biometric_prompt_subtitle">Aanmelden met uw biometrische gegevens</string>
   <string name="media_notif_ticker">%1$s muziekspeler</string>

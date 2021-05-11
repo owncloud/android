@@ -252,7 +252,6 @@
     <string name="pass_code_error_set">An error occurred while setting the passcode lock</string>
     <string name="pass_code_error_remove">An error occurred while removing the passcode lock</string>
 
-    <string name="biometric_not_hardware_detected">This device doesn\'t support biometric authentication</string>
     <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
     <string name="biometric_prompt_title">Biometric log in</string>
     <string name="biometric_prompt_subtitle">Log in using your biometric credential</string>
