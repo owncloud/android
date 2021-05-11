@@ -22,8 +22,6 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -37,6 +35,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
+import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
 
@@ -95,20 +94,14 @@ public class RateMeDialog extends DialogFragment {
             if (getArguments() != null) {
                 packageName = getArguments().getString(APP_PACKAGE_NAME);
             }
-            Uri uri = Uri.parse(MARKET_DETAILS_URI + packageName);
-            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-
             /// To count with Play market back stack, After pressing back button,
             /// to taken back to our application, we need to add following flags to intent.
             int flags =
                     Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-            goToMarket.addFlags(flags);
-
             try {
-                startActivity(goToMarket);
+                ActivityExtKt.goToUrl(requireActivity(), MARKET_DETAILS_URI + packageName, flags);
             } catch (ActivityNotFoundException e) {
-                getActivity().startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(PLAY_STORE_URI + packageName)));
+                ActivityExtKt.goToUrl(requireActivity(), PLAY_STORE_URI + packageName, null);
             }
             dialog.dismiss();
         });
