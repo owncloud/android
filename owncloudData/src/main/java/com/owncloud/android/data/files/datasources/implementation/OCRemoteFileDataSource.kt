@@ -45,7 +45,7 @@ class OCRemoteFileDataSource(
         remotePath: String,
         createFullPath: Boolean,
         isChunksFolder: Boolean
-    ): Unit = executeRemoteOperation {
+    ) = executeRemoteOperation {
         clientManager.getFileService().createFolder(
             remotePath = remotePath,
             createFullPath = createFullPath,
@@ -102,7 +102,9 @@ class OCRemoteFileDataSource(
         )
     }
 
-    override fun refreshFolder(remotePath: String): List<OCFile> =
+    override fun refreshFolder(
+        remotePath: String
+    ): List<OCFile> =
         // Assert not null, service should return an empty list if no files there.
         executeRemoteOperation {
             clientManager.getFileService().refreshFolder(
@@ -112,10 +114,25 @@ class OCRemoteFileDataSource(
             listOfRemote.map { remoteFile -> remoteFileMapper.toModel(remoteFile)!! }
         }
 
-    override fun removeFile(remotePath: String) =
-        executeRemoteOperation {
-            clientManager.getFileService().removeFile(
-                remotePath = remotePath
-            )
-        }
+    override fun removeFile(
+        remotePath: String
+    ) = executeRemoteOperation {
+        clientManager.getFileService().removeFile(
+            remotePath = remotePath
+        )
+    }
+
+    override fun renameFile(
+        oldName: String,
+        oldRemotePath: String,
+        newName: String,
+        isFolder: Boolean
+    ) = executeRemoteOperation {
+        clientManager.getFileService().renameFile(
+            oldName = oldName,
+            oldRemotePath = oldRemotePath,
+            newName = newName,
+            isFolder = isFolder
+        )
+    }
 }
