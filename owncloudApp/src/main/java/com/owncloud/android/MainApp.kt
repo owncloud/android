@@ -75,8 +75,6 @@ class MainApp : Application() {
 
         startLogsIfEnabled()
 
-        OwnCloudClient.setContext(appContext)
-
         createNotificationChannels()
 
         SingleSessionManager.setUserAgent(userAgent)

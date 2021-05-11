@@ -29,6 +29,7 @@ buildscript {
         fragmentTestVersion = "1.1.0"
         uiAutomatorTestVersion = "2.2.0"
         annotationTestVersion = "1.2.0"
+        robolectricVersion = "4.4"
 
         // Extensions
         ktxVersion = "1.1.0"

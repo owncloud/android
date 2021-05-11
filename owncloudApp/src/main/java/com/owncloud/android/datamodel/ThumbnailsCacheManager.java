@@ -280,7 +280,7 @@ public class ThumbnailsCacheManager {
                         try {
                             String uri = getPreviewUrl(file, mAccount);
                             Timber.d("URI: %s", uri);
-                            get = new GetMethod(new URL(uri));
+                            get = new GetMethod(mClient, new URL(uri));
                             int status = mClient.executeHttpMethod(get);
                             if (status == HttpConstants.HTTP_OK) {
                                 InputStream inputStream = get.getResponseBodyAsStream();
