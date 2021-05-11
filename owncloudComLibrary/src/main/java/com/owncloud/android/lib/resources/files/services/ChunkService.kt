@@ -35,7 +35,6 @@ interface ChunkService : Service {
     fun moveFile(
         sourceRemotePath: String,
         targetRemotePath: String,
-        overwrite: Boolean,
         fileLastModificationTimestamp: String,
         fileLength: Long
     ): RemoteOperationResult<Unit>

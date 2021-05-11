@@ -72,12 +72,10 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
     override fun moveFile(
         sourceRemotePath: String,
         targetRemotePath: String,
-        forceOverwrite: Boolean
     ): RemoteOperationResult<Unit> =
         MoveRemoteFileOperation(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
-            forceOverwrite = forceOverwrite
         ).execute(client)
 
     override fun refreshFolder(remotePath: String): RemoteOperationResult<ArrayList<RemoteFile>> =

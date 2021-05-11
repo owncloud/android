@@ -38,15 +38,13 @@ class OCChunkService(override val client: OwnCloudClient) : ChunkService {
     override fun moveFile(
         sourceRemotePath: String,
         targetRemotePath: String,
-        overwrite: Boolean,
         fileLastModificationTimestamp: String,
         fileLength: Long
     ): RemoteOperationResult<Unit> =
         MoveRemoteChunksFileOperation(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
-            overwrite = overwrite,
             fileLastModificationTimestamp = fileLastModificationTimestamp,
-            fileLength = fileLength
+            fileLength = fileLength,
         ).execute(client)
 }

@@ -38,13 +38,11 @@ import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation
 class MoveRemoteChunksFileOperation(
     sourceRemotePath: String,
     targetRemotePath: String,
-    overwrite: Boolean,
     private val fileLastModificationTimestamp: String,
     private val fileLength: Long
 ) : MoveRemoteFileOperation(
     sourceRemotePath = sourceRemotePath,
     targetRemotePath = targetRemotePath,
-    forceOverwrite = overwrite
 ) {
 
     override fun getSrcWebDavUriForClient(client: OwnCloudClient): Uri = client.uploadsWebDavUri

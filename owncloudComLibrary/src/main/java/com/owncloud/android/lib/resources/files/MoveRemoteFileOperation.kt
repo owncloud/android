@@ -49,7 +49,6 @@ import java.util.concurrent.TimeUnit
 open class MoveRemoteFileOperation(
     private val sourceRemotePath: String,
     private val targetRemotePath: String,
-    private val forceOverwrite: Boolean
 ) : RemoteOperation<Unit>() {
 
     /**
@@ -76,7 +75,6 @@ open class MoveRemoteFileOperation(
             val moveMethod = MoveMethod(
                 url = URL(srcWebDavUri.toString() + WebdavUtils.encodePath(sourceRemotePath)),
                 destinationUrl = client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(targetRemotePath),
-                forceOverride = forceOverwrite
             ).apply {
                 addRequestHeaders(this)
                 setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS)
@@ -85,17 +83,21 @@ open class MoveRemoteFileOperation(
 
             val status = client.executeHttpMethod(moveMethod)
 
-            if (isSuccess(status)) {
-                result = RemoteOperationResult<Unit>(ResultCode.OK)
-            } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !forceOverwrite) {
-                result = RemoteOperationResult<Unit>(ResultCode.INVALID_OVERWRITE)
-                client.exhaustResponse(moveMethod.getResponseBodyAsStream())
+            when {
+                isSuccess(status) -> {
+                    result = RemoteOperationResult<Unit>(ResultCode.OK)
+                }
+                isPreconditionFailed(status) -> {
+                    result = RemoteOperationResult<Unit>(ResultCode.INVALID_OVERWRITE)
+                    client.exhaustResponse(moveMethod.getResponseBodyAsStream())
 
-                /// for other errors that could be explicitly handled, check first:
-                /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
-            } else {
-                result = RemoteOperationResult<Unit>(moveMethod)
-                client.exhaustResponse(moveMethod.getResponseBodyAsStream())
+                    /// for other errors that could be explicitly handled, check first:
+                    /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
+                }
+                else -> {
+                    result = RemoteOperationResult<Unit>(moveMethod)
+                    client.exhaustResponse(moveMethod.getResponseBodyAsStream())
+                }
             }
 
             Timber.i("Move $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
@@ -120,7 +122,9 @@ open class MoveRemoteFileOperation(
     open fun addRequestHeaders(moveMethod: MoveMethod) {
     }
 
-    protected fun isSuccess(status: Int) = status.isOneOf(HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
+    private fun isSuccess(status: Int) = status.isOneOf(HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
+
+    private fun isPreconditionFailed(status: Int) = status == HttpConstants.HTTP_PRECONDITION_FAILED
 
     companion object {
         private const val MOVE_READ_TIMEOUT = 10L

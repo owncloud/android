@@ -49,7 +49,6 @@ interface FileService : Service {
     fun moveFile(
         sourceRemotePath: String,
         targetRemotePath: String,
-        forceOverwrite: Boolean,
     ): RemoteOperationResult<Unit>
 
     fun refreshFolder(
