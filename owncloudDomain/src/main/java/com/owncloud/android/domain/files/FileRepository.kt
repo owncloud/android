@@ -33,6 +33,6 @@ interface FileRepository {
     fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
     fun refreshFolder(remotePath: String)
     fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean)
-    fun renameFile(oldName: String, oldRemotePath: String, newName: String, isFolder: Boolean)
+    fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)
 }
