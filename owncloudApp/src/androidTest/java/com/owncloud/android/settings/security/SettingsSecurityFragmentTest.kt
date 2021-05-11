@@ -156,14 +156,16 @@ class SettingsSecurityFragmentTest {
         checkCommonPreferences()
 
         assertNotNull(prefBiometric)
-        prefBiometric?.verifyPreference(
-            keyPref = BiometricActivity.PREFERENCE_SET_BIOMETRIC,
-            titlePref = context.getString(R.string.prefs_biometric),
-            summaryPref = context.getString(R.string.prefs_biometric_summary),
-            visible = true,
-            enabled = false
-        )
-        assertFalse(prefBiometric!!.isChecked)
+        prefBiometric?.run {
+            verifyPreference(
+                keyPref = BiometricActivity.PREFERENCE_SET_BIOMETRIC,
+                titlePref = context.getString(R.string.prefs_biometric),
+                summaryPref = context.getString(R.string.prefs_biometric_summary),
+                visible = true,
+                enabled = false
+            )
+            assertFalse(isChecked)
+        }
     }
 
     @Test
