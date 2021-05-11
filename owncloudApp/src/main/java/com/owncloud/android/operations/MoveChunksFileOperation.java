@@ -53,7 +53,6 @@ public class MoveChunksFileOperation extends MoveFileOperation {
         MoveRemoteChunksFileOperation operation = new MoveRemoteChunksFileOperation(
                 mSrcPath,
                 mTargetParentPath,
-                false,
                 mFileLastModifTimestamp,
                 mFileLength
         );
