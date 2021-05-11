@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fix navbar is visible in file preview screen after rotation: [#3184](https://github.com/owncloud/android/pull/3184)
 * Bugfix - Fix a bug when some fields where not retrieved from OIDC Discovery: [#3202](https://github.com/owncloud/android/pull/3202)
 * Bugfix - Snackbar in passcode view is not displayed: [#2722](https://github.com/owncloud/android/issues/2722)
+* Bugfix - Fixed problem when a file is edited externally: [#2752](https://github.com/owncloud/android/issues/2752)
 * Change - Error handling for pattern lock: [#3215](https://github.com/owncloud/android/issues/3215)
 * Change - Hide biometrical if device does not support it: [#3217](https://github.com/owncloud/android/issues/3217)
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
@@ -46,6 +47,14 @@ Details
 
    https://github.com/owncloud/android/issues/2722
    https://github.com/owncloud/android/pull/3210
+
+* Bugfix - Fixed problem when a file is edited externally: [#2752](https://github.com/owncloud/android/issues/2752)
+
+   If an external editor modifies a file, the new size will not match when it is assembled in server
+   side. Fixed by removing the if-match header from the proper place
+
+   https://github.com/owncloud/android/issues/2752
+   https://github.com/owncloud/android/pull/3220
 
 * Change - Error handling for pattern lock: [#3215](https://github.com/owncloud/android/issues/3215)
 
