@@ -561,10 +561,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
             // requestUploadOfFilesFromFileSystem(data,resultCode);
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == Activity.RESULT_OK) {
-            handler.postDelayed(
-                { requestMoveOperation(data!!) },
-                DELAY_TO_REQUEST_OPERATIONS_LATER
-            )
+             requestMoveOperation(data!!)
 
         } else if (requestCode == REQUEST_CODE__COPY_FILES && resultCode == Activity.RESULT_OK) {
             handler.postDelayed(
