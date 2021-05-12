@@ -26,6 +26,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
@@ -35,6 +36,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class FileOperationViewModel(
+    private val moveFileUseCase: MoveFileUseCase,
     private val removeFileUseCase: RemoveFileUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
@@ -43,9 +45,39 @@ class FileOperationViewModel(
     private val _removeFileLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
     val removeFileLiveData: LiveData<Event<UIResult<List<OCFile>>>> = _removeFileLiveData
 
+    private val _moveFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
+    val moveFileLiveData: LiveData<Event<UIResult<OCFile>>> = _moveFileLiveData
+
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
+            is FileOperation.MoveOperation -> moveOperation(fileOperation)
             is FileOperation.RemoveOperation -> removeOperation(fileOperation)
+        }
+    }
+
+    private fun moveOperation(fileOperation: FileOperation.MoveOperation) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            _moveFileLiveData.postValue(Event(UIResult.Loading()))
+
+            if (!contextProvider.isConnected()) {
+                _moveFileLiveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
+                Timber.w("${moveFileUseCase.javaClass.simpleName} will not be executed due to lack of network connection")
+                return@launch
+            }
+            val useCaseResult =
+                moveFileUseCase.execute(MoveFileUseCase.Params(fileOperation.listOfFilesToMove, fileOperation.targetFolder))
+
+            Timber.d("Use case executed: ${moveFileUseCase.javaClass.simpleName} with result: $useCaseResult")
+
+            when (useCaseResult) {
+                is UseCaseResult.Success -> {
+                    _moveFileLiveData.postValue(Event(UIResult.Success(fileOperation.targetFolder)))
+                }
+                is UseCaseResult.Error -> {
+                    _moveFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
+                }
+            }
+
         }
     }
 
