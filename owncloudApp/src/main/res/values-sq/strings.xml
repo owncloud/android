@@ -245,7 +245,7 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_error_set">Ndodhi një gabim teksa ujdisej kyçje frazëkalimi</string>
   <string name="pass_code_error_remove">Ndodhi një gabim teksa hiqej kyçje frazëkalimi</string>
-    <string name="biometric_not_enrolled">Që të përdorni këtë veçori, regjistroni të paktën një palë kredenciale biometrike</string>
+  <string name="biometric_not_enrolled">Që të përdorni këtë veçori, regjistroni të paktën një palë kredenciale biometrike</string>
   <string name="biometric_prompt_title">Hyrje biometrike</string>
   <string name="biometric_prompt_subtitle">Bëni hyrjen duke përdorur kredencialet tuaja biometrike</string>
   <string name="media_notif_ticker">Lojtësi %1$s i muzikës</string>

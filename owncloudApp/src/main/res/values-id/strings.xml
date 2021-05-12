@@ -228,7 +228,7 @@
   <string name="pass_code_remove_your_pass_code">Hapus kode sandi Anda</string>
   <string name="pass_code_mismatch">Kode sandi tidak sama</string>
   <string name="pass_code_wrong">Kode sandi salah</string>
-    <string name="biometric_not_enrolled">Daftar dengan setidaknya satu biometrik untuk menggunakan fitur ini</string>
+  <string name="biometric_not_enrolled">Daftar dengan setidaknya satu biometrik untuk menggunakan fitur ini</string>
   <string name="biometric_prompt_title">Masuk dengan biometrik</string>
   <string name="media_notif_ticker">Pemutar musik %1$s</string>
   <string name="media_state_playing">%1$s (dimainkan)</string>

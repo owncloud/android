@@ -233,7 +233,7 @@
   <string name="pass_code_remove_your_pass_code">Убрать код</string>
   <string name="pass_code_mismatch">Коды не совпадают</string>
   <string name="pass_code_wrong">Некоррентный код</string>
-    <string name="biometric_not_enrolled">Чтобы пользоваться этой возможностью, зарегистрируйте хотя-бы одну биометрию</string>
+  <string name="biometric_not_enrolled">Чтобы пользоваться этой возможностью, зарегистрируйте хотя-бы одну биометрию</string>
   <string name="biometric_prompt_title">Биометрический вход</string>
   <string name="biometric_prompt_subtitle">Вход с использованием ваших индивидуальных биометрических данных</string>
   <string name="media_notif_ticker">%1$s аудиоплеер</string>

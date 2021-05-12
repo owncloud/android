@@ -232,7 +232,7 @@
   <string name="pass_code_remove_your_pass_code">PIN entfernen</string>
   <string name="pass_code_mismatch">Die PINs stimmen nicht überein</string>
   <string name="pass_code_wrong">PIN nicht korrekt</string>
-    <string name="biometric_not_enrolled">Registrieren Sie mindestens ein biometrisches Merkmal, um diese Funktion zu nutzen</string>
+  <string name="biometric_not_enrolled">Registrieren Sie mindestens ein biometrisches Merkmal, um diese Funktion zu nutzen</string>
   <string name="biometric_prompt_title">Biometrisches Einloggen</string>
   <string name="biometric_prompt_subtitle">Melden Sie sich mit Ihrem biometrischen Merkmal an</string>
   <string name="media_notif_ticker">%1$s Musikplayer</string>

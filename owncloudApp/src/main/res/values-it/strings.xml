@@ -229,7 +229,7 @@
   <string name="pass_code_remove_your_pass_code">Rimuovi il tuo codice segreto</string>
   <string name="pass_code_mismatch">I codici segreti non corrispondono</string>
   <string name="pass_code_wrong">Codice segreto non corretto</string>
-    <string name="biometric_not_enrolled">Registrare almeno un impronta per utilizzare questa funzione</string>
+  <string name="biometric_not_enrolled">Registrare almeno un impronta per utilizzare questa funzione</string>
   <string name="biometric_prompt_title">Accesso biometrico</string>
   <string name="biometric_prompt_subtitle">Accedi utilizzando le tue credenziali biometriche</string>
   <string name="media_notif_ticker">Lettore musicale %1$s</string>

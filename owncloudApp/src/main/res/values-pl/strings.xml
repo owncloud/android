@@ -224,7 +224,7 @@
   <string name="pass_code_remove_your_pass_code">Usuń swój kod PIN</string>
   <string name="pass_code_mismatch">Podane hasła nie są takie same</string>
   <string name="pass_code_wrong">Kod PIN nieprawidłowy</string>
-    <string name="biometric_not_enrolled">Zarejestruj co najmniej jedno uwierzytelnienie biometryczne</string>
+  <string name="biometric_not_enrolled">Zarejestruj co najmniej jedno uwierzytelnienie biometryczne</string>
   <string name="biometric_prompt_title">Zalogowano biometrycznie</string>
   <string name="media_notif_ticker">%1$s odtwarzacz muzyki</string>
   <string name="media_state_playing">%1$s (odtwarzany)</string>

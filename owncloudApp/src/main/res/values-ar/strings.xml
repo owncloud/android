@@ -231,7 +231,7 @@
   <string name="pass_code_remove_your_pass_code">أزِل رمز مرورك</string>
   <string name="pass_code_mismatch">رموز المرور غير متطابقة</string>
   <string name="pass_code_wrong">رمز مرور غير صحيح</string>
-    <string name="biometric_not_enrolled">سجِّل بيانات اعتماد بيولوجية واحدة على الأقل لاستخدام هذه الميزة</string>
+  <string name="biometric_not_enrolled">سجِّل بيانات اعتماد بيولوجية واحدة على الأقل لاستخدام هذه الميزة</string>
   <string name="biometric_prompt_title">تسجيل دخول بيولوجي</string>
   <string name="biometric_prompt_subtitle">سجِّل الدخول باستخدام بيانات اعتماد بيولوجية</string>
   <string name="media_notif_ticker">%1$s مُشغل الموسيقى</string>

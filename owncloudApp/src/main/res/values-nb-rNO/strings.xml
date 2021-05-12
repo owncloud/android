@@ -224,7 +224,7 @@
   <string name="pass_code_remove_your_pass_code">Fjern passordet ditt</string>
   <string name="pass_code_mismatch">Passordene er ikke like</string>
   <string name="pass_code_wrong">Feil passord</string>
-    <string name="biometric_not_enrolled">Registrer minst 1 biometri for å bruke dette</string>
+  <string name="biometric_not_enrolled">Registrer minst 1 biometri for å bruke dette</string>
   <string name="biometric_prompt_title">Biometrisk innlogging</string>
   <string name="biometric_prompt_subtitle">Logg inn med din biometri</string>
   <string name="media_notif_ticker">%1$s musikkspiller</string>
