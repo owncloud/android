@@ -33,12 +33,10 @@ class OCRemoteFileDataSource(
     override fun checkPathExistence(
         path: String,
         checkUserCredentials: Boolean
-    ): Boolean = executeRemoteOperation {
-        clientManager.getFileService().checkPathExistence(
-            path = path,
-            isUserLogged = checkUserCredentials
-        )
-    }
+    ): Boolean = clientManager.getFileService().checkPathExistence(
+        path = path,
+        isUserLogged = checkUserCredentials
+    ).data
 
     override fun createFolder(
         remotePath: String,
@@ -50,6 +48,45 @@ class OCRemoteFileDataSource(
             createFullPath = createFullPath,
             isChunkFolder = isChunksFolder
         )
+    }
+
+    /**
+     * Checks if remotePath does not exist in the server and returns it, or adds
+     * a suffix to it in order to avoid the server file is overwritten.
+     *
+     * @param remotePath
+     * @return
+     */
+    override fun getAvailableRemotePath(remotePath: String): String {
+        var checkExistsFile = checkPathExistence(remotePath, false)
+        if (!checkExistsFile) {
+            return remotePath
+        }
+
+        val pos = remotePath.lastIndexOf(".")
+        var suffix: String
+        var extension = ""
+        if (pos >= 0) {
+            extension = remotePath.substring(pos + 1)
+            remotePath.apply {
+                substring(0, pos)
+            }
+        }
+        var count = 2
+        do {
+            suffix = " ($count)"
+            checkExistsFile = if (pos >= 0) {
+                checkPathExistence("${remotePath.substringBeforeLast('.', "")}$suffix.$extension", false)
+            } else {
+                checkPathExistence(remotePath + suffix, false)
+            }
+            count++
+        } while (checkExistsFile)
+        return if (pos >= 0) {
+            "${remotePath.substringBeforeLast('.', "")}$suffix.$extension"
+        } else {
+            remotePath + suffix
+        }
     }
 
     override fun moveFile(
