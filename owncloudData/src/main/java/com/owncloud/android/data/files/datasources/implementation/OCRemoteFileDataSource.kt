@@ -52,6 +52,16 @@ class OCRemoteFileDataSource(
         )
     }
 
+    override fun moveFile(
+        sourceRemotePath: String,
+        targetRemotePath: String
+    ) = executeRemoteOperation {
+        clientManager.getFileService().moveFile(
+            sourceRemotePath = sourceRemotePath,
+            targetRemotePath = targetRemotePath
+        )
+    }
+
     override fun refreshFolder(remotePath: String): List<OCFile> =
         // Assert not null, service should return an empty list if no files there.
         executeRemoteOperation {
