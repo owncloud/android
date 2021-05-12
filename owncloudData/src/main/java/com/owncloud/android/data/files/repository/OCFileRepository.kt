@@ -28,14 +28,13 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
 import timber.log.Timber
+import java.io.File
 
 class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
     private val remoteFileDataSource: RemoteFileDataSource,
     private val localStorageProvider: LocalStorageProvider
 ) : FileRepository {
-    override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
-        remoteFileDataSource.checkPathExistence(path, userLogged)
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
         remoteFileDataSource.getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId)
@@ -77,7 +76,22 @@ class OCFileRepository(
         localFileDataSource.getFolderImages(folderId)
 
     override fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile) {
-        TODO("Not yet implemented")
+        listOfFilesToMove.forEach { ocFile ->
+
+            // 1. Get the final remote path for this file.
+            val expectedRemotePath: String = targetFile.remotePath + ocFile.fileName
+            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath).apply {
+                if (ocFile.isFolder) {
+                    plus(File.separator)
+                }
+            }
+
+            // 2. Try to move files in server
+            remoteFileDataSource.moveFile(
+                sourceRemotePath = ocFile.remotePath,
+                targetRemotePath = finalRemotePath
+            )
+        }
     }
 
     override fun refreshFolder(remotePath: String) {
