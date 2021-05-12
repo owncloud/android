@@ -55,33 +55,6 @@ class OCFileRepositoryTest {
     )
 
     @Test
-    fun `check path existence - ok`() {
-        every { remoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, false) } returns true
-
-        ocFileRepository.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
-
-        verify(exactly = 1) {
-            remoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
-        }
-    }
-
-    @Test(expected = NoConnectionWithServerException::class)
-    fun `check path existence - ko - no connection exception`() {
-        every {
-            remoteFileDataSource.checkPathExistence(
-                OC_SERVER_INFO.baseUrl,
-                false
-            )
-        } throws NoConnectionWithServerException()
-
-        ocFileRepository.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
-
-        verify(exactly = 1) {
-            remoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, false)
-        }
-    }
-
-    @Test
     fun `create folder - ok`() {
         every { remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false) } returns Unit
 
