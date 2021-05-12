@@ -1188,7 +1188,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         when (operation) {
             is RenameFileOperation -> onRenameFileOperationFinish(operation, result)
             is SynchronizeFileOperation -> onSynchronizeFileOperationFinish(operation, result)
-            is MoveFileOperation -> onMoveFileOperationFinish(operation, result)
             is CopyFileOperation -> onCopyFileOperationFinish(operation, result)
         }
     }
@@ -1249,27 +1248,24 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     /**
      * Updates the view associated to the activity after the finish of an operation trying to move a
      * file.
-     *
-     * @param operation Move operation performed.
-     * @param result    Result of the move operation.
      */
     private fun onMoveFileOperationFinish(
-        operation: MoveFileOperation,
-        result: RemoteOperationResult<*>
+        uiResult: UIResult<OCFile>
     ) {
-        if (result.isSuccess) {
-            refreshListOfFilesFragment(true)
-        } else {
-            try {
-                showMessageInSnackbar(
-                    R.id.list_layout,
-                    ErrorMessageAdapter.getResultMessage(result, operation, resources)
-                )
-
-            } catch (e: NotFoundException) {
-                Timber.e(e, "Error while trying to show fail message")
+        when (uiResult) {
+            is UIResult.Loading -> {
+                showLoadingDialog(R.string.wait_a_moment)
             }
+            is UIResult.Success -> {
+                dismissLoadingDialog()
 
+                refreshListOfFilesFragment(true)
+            }
+            is UIResult.Error -> {
+                dismissLoadingDialog()
+
+                showErrorInSnackbar(R.string.move_file_error, uiResult.error)
+            }
         }
     }
 
@@ -1638,6 +1634,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private fun startListeningToOperations() {
         fileOperationViewModel.removeFileLiveData.observe(this, Event.EventObserver {
             onRemoveFileOperationResult(it)
+        })
+        fileOperationViewModel.moveFileLiveData.observe(this, Event.EventObserver {
+            onMoveFileOperationFinish(it)
         })
     }
 
