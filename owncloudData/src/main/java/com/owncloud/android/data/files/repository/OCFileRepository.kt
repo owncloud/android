@@ -73,6 +73,10 @@ class OCFileRepository(
     override fun getFolderImages(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderImages(folderId)
 
+    override fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile) {
+        TODO("Not yet implemented")
+    }
+
     override fun refreshFolder(remotePath: String) {
         remoteFileDataSource.refreshFolder(remotePath).also {
             localFileDataSource.saveFilesInFolder(
