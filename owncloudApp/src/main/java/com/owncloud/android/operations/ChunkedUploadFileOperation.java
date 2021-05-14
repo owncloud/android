@@ -30,6 +30,7 @@ import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService;
 import com.owncloud.android.operations.common.SyncOperation;
 
 import java.io.File;
@@ -95,13 +96,13 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
         return syncOperation.execute(getClient(), getStorageManager());
     }
 
-    private RemoteOperationResult moveChunksFileToFinalDestination(String fileLastModifTimestamp, long fileLength) {
-        SyncOperation syncOperation = new MoveChunksFileOperation(
+    private void moveChunksFileToFinalDestination(String fileLastModifTimestamp, long fileLength) {
+        OCChunkService ocChunkService = new OCChunkService(getClient());
+        ocChunkService.moveFile(
                 mTransferId + File.separator + FileUtils.FINAL_CHUNKS_FILE,
                 mFile.getRemotePath(),
                 fileLastModifTimestamp,
                 fileLength
         );
-        return syncOperation.execute(getClient(), getStorageManager());
     }
 }
