@@ -72,6 +72,30 @@ abstract class FileDao {
         }
     }
 
+    @Transaction
+    open fun moveFile(
+        sourceFile: OCFileEntity,
+        targetFile: OCFileEntity,
+        finalRemotePath: String,
+        finalStoragePath: String?
+    ) {
+        // 1. Update target size
+        insert(
+            targetFile.copy(
+                length = targetFile.length + sourceFile.length
+            ).apply { id = targetFile.id }
+        )
+
+        // 2. Update remote path, storage path, parent file
+        insert(
+            sourceFile.copy(
+                parentId = targetFile.id,
+                remotePath = finalRemotePath,
+                storagePath = finalStoragePath
+            ).apply { id = sourceFile.id }
+        )
+    }
+
     @Query(DELETE_FILE_WITH_ID)
     abstract fun deleteFileWithId(id: Long)
 
