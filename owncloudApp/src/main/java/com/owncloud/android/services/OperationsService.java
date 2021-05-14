@@ -49,7 +49,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.operations.CopyFileOperation;
-import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
@@ -77,7 +76,6 @@ public class OperationsService extends Service {
     public static final String ACTION_RENAME = "RENAME";
     public static final String ACTION_SYNC_FILE = "SYNC_FILE";
     public static final String ACTION_SYNC_FOLDER = "SYNC_FOLDER";
-    public static final String ACTION_MOVE_FILE = "MOVE_FILE";
     public static final String ACTION_COPY_FILE = "COPY_FILE";
     public static final String ACTION_CHECK_CURRENT_CREDENTIALS = "CHECK_CURRENT_CREDENTIALS";
 
@@ -478,14 +476,6 @@ public class OperationsService extends Service {
                                     false,
                                     syncContentOfRegularFiles
                             );
-
-                            break;
-                        }
-                        case ACTION_MOVE_FILE: {
-                            // Move file/folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            String newParentPath = operationIntent.getStringExtra(EXTRA_NEW_PARENT_PATH);
-                            operation = new MoveFileOperation(remotePath, newParentPath);
 
                             break;
                         }
