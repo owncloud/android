@@ -88,6 +88,16 @@ class OCFileRepository(
                 sourceRemotePath = ocFile.remotePath,
                 targetRemotePath = finalRemotePath
             )
+
+            // 3. Update database with latest changes
+            localFileDataSource.moveFile(
+                sourceFile = ocFile,
+                targetFile = targetFile,
+                finalRemotePath = finalRemotePath,
+                finalStoragePath = localStorageProvider.getDefaultSavePathFor(targetFile.owner, finalRemotePath)
+            )
+
+            // 4. TODO: Update local storage
         }
     }
 
