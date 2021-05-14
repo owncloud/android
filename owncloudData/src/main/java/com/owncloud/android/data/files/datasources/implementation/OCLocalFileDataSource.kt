@@ -64,6 +64,14 @@ class OCLocalFileDataSource(
             ocFileMapper.toModel(it)!!
         }
 
+    override fun moveFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String) =
+        fileDao.moveFile(
+            sourceFile = ocFileMapper.toEntity(sourceFile)!!,
+            targetFile = ocFileMapper.toEntity(targetFile)!!,
+            finalRemotePath = finalRemotePath,
+            finalStoragePath = sourceFile.storagePath?.let { finalStoragePath }
+        )
+
     override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
         // Insert first folder container
         // TODO: If it is root, add 0 as parent Id
