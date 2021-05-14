@@ -31,7 +31,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
-import com.owncloud.android.operations.MoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
@@ -147,7 +146,6 @@ class ErrorMessageAdapter {
                     )
                     if (operation is RenameFileOperation) formatter.forbidden(R.string.forbidden_permissions_rename)
                     if (operation is CreateFolderOperation) formatter.forbidden(R.string.forbidden_permissions_create)
-                    if (operation is MoveFileOperation) formatter.forbidden(R.string.forbidden_permissions_move)
                     if (operation is CopyFileOperation) formatter.forbidden(R.string.forbidden_permissions_copy) else formatter.format(
                         R.string.filename_forbidden_characters_from_server
                     )
@@ -160,7 +158,6 @@ class ErrorMessageAdapter {
                     if (operation is UploadFileOperation)
                         formatter.format(R.string.uploads_view_upload_status_failed_folder_error)
                     if (operation is RenameFileOperation) formatter.format(R.string.rename_server_fail_msg)
-                    if (operation is MoveFileOperation) formatter.format(R.string.move_file_not_found)
                     if (operation is SynchronizeFolderOperation)
                         formatter.format(
                             R.string.sync_current_folder_was_removed,
@@ -173,9 +170,7 @@ class ErrorMessageAdapter {
                     formatter.format(R.string.rename_local_fail_msg)
                 ResultCode.INVALID_CHARACTER_IN_NAME ->
                     formatter.format(R.string.filename_forbidden_characters)
-                ResultCode.INVALID_MOVE_INTO_DESCENDANT -> formatter.format(R.string.move_file_invalid_into_descendent)
                 ResultCode.INVALID_OVERWRITE -> {
-                    if (operation is MoveFileOperation) formatter.format(R.string.move_file_invalid_overwrite)
                     if (operation is CopyFileOperation) formatter.format(R.string.copy_file_invalid_overwrite)
                     else formatter.format(R.string.move_file_error)
                 }
@@ -246,7 +241,6 @@ class ErrorMessageAdapter {
                 is UploadFileOperation -> formatter.format(R.string.uploader_upload_failed_content_single, operation.fileName)
                 is RenameFileOperation -> formatter.format(R.string.rename_server_fail_msg)
                 is CreateFolderOperation -> formatter.format(R.string.create_dir_fail_msg)
-                is MoveFileOperation -> formatter.format(R.string.move_file_error)
                 is SynchronizeFolderOperation -> formatter.format(
                     R.string.sync_folder_failed_content,
                     File(operation.folderPath).name
