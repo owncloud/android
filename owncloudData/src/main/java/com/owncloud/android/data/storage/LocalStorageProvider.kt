@@ -141,6 +141,21 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         return fileToDelete.deleteRecursively()
     }
 
+    fun moveLocalFile(ocFile: OCFile, finalStoragePath: String) {
+        val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
+        val fileToMove = File(safeStoragePath)
+
+        if (!fileToMove.exists()) {
+            return
+        }
+        val targetFile = File(finalStoragePath)
+        val targetFolder = targetFile.parentFile
+        if (targetFolder != null && !targetFolder.exists()) {
+            targetFolder.mkdirs()
+        }
+        fileToMove.renameTo(targetFile)
+    }
+
     companion object {
         private const val CAMERA_FOLDER = "/Camera"
         private const val LOGS_FOLDER_NAME = "/logs/"
