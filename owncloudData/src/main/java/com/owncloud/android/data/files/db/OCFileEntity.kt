@@ -46,6 +46,9 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_STORAGE_PAT
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_TREE_ETAG
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBNAIL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta._ID
+import com.owncloud.android.domain.ext.isOneOf
+import com.owncloud.android.domain.files.model.MIME_DIR
+import com.owncloud.android.domain.files.model.MIME_DIR_UNIX
 
 @Entity(
     tableName = FILES_TABLE_NAME
@@ -80,6 +83,14 @@ data class OCFileEntity(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    /**
+     * Use this to find out if this file is a folder.
+     *
+     * @return true if it is a folder
+     */
+    val isFolder
+        get() = mimeType.isOneOf(MIME_DIR, MIME_DIR_UNIX)
 
     companion object {
         fun fromCursor(cursor: Cursor): OCFileEntity {
