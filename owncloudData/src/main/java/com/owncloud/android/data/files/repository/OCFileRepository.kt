@@ -23,6 +23,7 @@ package com.owncloud.android.data.files.repository
 import com.owncloud.android.data.LocalStorageProvider
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.MIME_DIR
@@ -85,10 +86,27 @@ class OCFileRepository(
             val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFile.owner, finalRemotePath)
 
             // 2. Try to move files in server
-            remoteFileDataSource.moveFile(
-                sourceRemotePath = ocFile.remotePath,
-                targetRemotePath = finalRemotePath
-            )
+            try {
+                remoteFileDataSource.moveFile(
+                    sourceRemotePath = ocFile.remotePath,
+                    targetRemotePath = finalRemotePath
+                )
+            } catch (targetNodeDoesNotExist: ConflictException) {
+                // Target node does not exist anymore. Remove target folder from database and local storage and return
+                removeFolderRecursively(ocFile = targetFile, removeOnlyLocalCopy = false)
+                return@moveFile
+            } catch (sourceFileDoesNotExist: FileNotFoundException) {
+                // Source file does not exist anymore. Remove file from database and local storage and continue
+                if (ocFile.isFolder) {
+                    removeFolderRecursively(ocFile = ocFile, removeOnlyLocalCopy = false)
+                } else {
+                    removeFile(
+                        ocFile = ocFile,
+                        onlyLocalCopy = false
+                    )
+                }
+                return@forEach
+            }
 
             // 3. Update database with latest changes
             localFileDataSource.moveFile(
