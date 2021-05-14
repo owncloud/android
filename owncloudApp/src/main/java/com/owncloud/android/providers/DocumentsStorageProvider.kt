@@ -44,12 +44,12 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.CopyFileOperation
-import com.owncloud.android.operations.MoveFileOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
@@ -332,10 +332,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val removeFileUseCase: RemoveFileUseCase by inject()
         removeFileUseCase.execute(RemoveFileUseCase.Params(listOf(file), false)).also {
             checkUseCaseResult(
-                    it,
-                    file.parentId.toString()
-                )
-            }
+                it,
+                file.parentId.toString()
+            )
+        }
     }
 
     override fun copyDocument(sourceDocumentId: String, targetParentDocumentId: String): String {
@@ -380,19 +380,21 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val targetParentDocId = targetParentDocumentId.toLong()
         val targetParentFile = getFileByIdOrException(targetParentDocId)
 
-        MoveFileOperation(
-            sourceFile.remotePath,
-            targetParentFile.remotePath
-        ).apply {
-            execute(currentStorageManager, context).also { result ->
-                syncRequired = false
-                checkOperationResult(result, targetParentFile.id.toString())
-                //Returns the document id of the document moved to the target destination
-                var newPath = targetParentFile.remotePath + sourceFile.fileName
-                if (sourceFile.isFolder) newPath += File.separator
-                val newFile = getFileByPathOrException(newPath)
-                return newFile.id.toString()
-            }
+        val moveFileUseCase: MoveFileUseCase by inject()
+
+        moveFileUseCase.execute(
+            MoveFileUseCase.Params(
+                listOfFilesToMove = listOf(sourceFile),
+                targetFile = targetParentFile
+            )
+        ).also { result ->
+            syncRequired = false
+            checkUseCaseResult(result, targetParentFile.id.toString())
+            //Returns the document id of the document moved to the target destination
+            var newPath = targetParentFile.remotePath + sourceFile.fileName
+            if (sourceFile.isFolder) newPath += File.separator
+            val newFile = getFileByPathOrException(newPath)
+            return newFile.id.toString()
         }
     }
 
