@@ -24,6 +24,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.owncloud.android.data.ProviderMeta
+import java.io.File.separatorChar
 
 @Dao
 abstract class FileDao {
@@ -86,7 +87,35 @@ abstract class FileDao {
             ).apply { id = targetFile.id }
         )
 
-        // 2. Update remote path, storage path, parent file
+        // 2. Update source
+        if (sourceFile.isFolder) {
+            // Update remote path and storage path when moving a folder
+            moveFolder(
+                sourceFolder = sourceFile,
+                targetFile = targetFile,
+                targetRemotePath = finalRemotePath,
+                targetStoragePath = finalStoragePath
+            )
+        } else {
+            // Update remote path, storage path, parent file when moving a file
+            moveSingleFile(
+                sourceFile = sourceFile,
+                targetFile = targetFile,
+                finalRemotePath = finalRemotePath,
+                finalStoragePath = finalStoragePath
+            )
+        }
+    }
+
+    @Query(DELETE_FILE_WITH_ID)
+    abstract fun deleteFileWithId(id: Long)
+
+    private fun moveSingleFile(
+        sourceFile: OCFileEntity,
+        targetFile: OCFileEntity,
+        finalRemotePath: String,
+        finalStoragePath: String?
+    ) {
         insert(
             sourceFile.copy(
                 parentId = targetFile.id,
@@ -96,8 +125,49 @@ abstract class FileDao {
         )
     }
 
-    @Query(DELETE_FILE_WITH_ID)
-    abstract fun deleteFileWithId(id: Long)
+    private fun moveFolder(
+        sourceFolder: OCFileEntity,
+        targetFile: OCFileEntity,
+        targetRemotePath: String,
+        targetStoragePath: String?
+    ) {
+        // 1. Move the folder
+        val folderRemotePath =
+            targetRemotePath.trimEnd(separatorChar).plus(separatorChar)
+        val folderStoragePath =
+            targetStoragePath?.trimEnd(separatorChar)?.plus(separatorChar)
+
+        moveSingleFile(
+            sourceFile = sourceFolder,
+            targetFile = targetFile,
+            finalRemotePath = folderRemotePath,
+            finalStoragePath = folderStoragePath
+        )
+
+        // 2. Move its content
+        val folderContent = getFolderContent(sourceFolder.id)
+
+        folderContent.forEach { file ->
+            val remotePathForChild = folderRemotePath.plus(file.name)
+            val storagePathForChild = folderStoragePath?.plus(file.name)
+
+            if (file.isFolder) {
+                moveFolder(
+                    sourceFolder = file,
+                    targetFile = sourceFolder,
+                    targetRemotePath = remotePathForChild,
+                    targetStoragePath = storagePathForChild
+                )
+            } else {
+                moveSingleFile(
+                    sourceFile = file,
+                    targetFile = sourceFolder,
+                    finalRemotePath = remotePathForChild,
+                    finalStoragePath = storagePathForChild
+                )
+            }
+        }
+    }
 
     companion object {
         private const val SELECT_FILE_WITH_ID =
