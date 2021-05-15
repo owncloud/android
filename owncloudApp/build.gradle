@@ -26,6 +26,10 @@ dependencies {
     implementation "androidx.sqlite:sqlite-ktx:$sqliteVersion"
     implementation "androidx.biometric:biometric:$biometricVersion"
 
+    // Kotlin Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+
     // Image loading
     implementation 'com.github.bumptech.glide:glide:4.12.0'
 

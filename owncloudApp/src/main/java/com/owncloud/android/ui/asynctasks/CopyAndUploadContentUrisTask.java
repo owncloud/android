@@ -25,7 +25,6 @@ import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
@@ -44,7 +43,7 @@ import java.lang.ref.WeakReference;
 /**
  * AsyncTask to copy a file from a uri in a temporal file
  */
-public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, ResultCode> {
+public class CopyAndUploadContentUrisTask extends CoroutinesTask<Object, Void, ResultCode> {
 
     /**
      * Helper method building a correct array of parameters to be passed to {@link #execute(Object[])} )}

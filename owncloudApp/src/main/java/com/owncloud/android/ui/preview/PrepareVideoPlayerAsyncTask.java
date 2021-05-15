@@ -5,7 +5,6 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Base64;
 
@@ -23,6 +22,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.ui.asynctasks.CoroutinesTask;
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * Task for prepare video player asynchronously
  */
-public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSource> {
+public class PrepareVideoPlayerAsyncTask extends CoroutinesTask<Object, Void, MediaSource> {
 
     private Context mContext;
     private final WeakReference<OnPrepareVideoPlayerTaskListener> mListener;

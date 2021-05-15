@@ -12,6 +12,7 @@ buildscript {
         sqliteVersion = "2.1.0"
         lifecycleLiveData = "2.3.1"
         biometricVersion="1.0.1"
+        coroutinesVersion= "1.4.2"
 
         // Kotlin
         kotlinVersion = "1.4.32"

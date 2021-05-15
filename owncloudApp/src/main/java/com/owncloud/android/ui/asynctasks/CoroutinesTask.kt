@@ -1,4 +1,4 @@
-package com.owncloud.android.ui.preview
+package com.owncloud.android.ui.asynctasks
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

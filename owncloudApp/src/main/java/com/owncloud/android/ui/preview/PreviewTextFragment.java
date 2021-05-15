@@ -21,7 +21,6 @@
 package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,6 +38,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.ui.asynctasks.CoroutinesTask;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
@@ -178,7 +178,7 @@ public class PreviewTextFragment extends FileFragment {
     /**
      * Reads the file to preview and shows its contents. Too critical to be anonymous.
      */
-    private class TextLoadAsyncTask extends AsyncTask<Object, Void, StringWriter> {
+    private class TextLoadAsyncTask extends CoroutinesTask<Object, Void, StringWriter> {
         private final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
         private final WeakReference<TextView> mTextViewReference;
 
