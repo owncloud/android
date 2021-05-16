@@ -33,6 +33,9 @@
   <string name="prefs_subsection_logging">กำลังเก็บบันทึก</string>
   <string name="prefs_subsection_more">ขยาย</string>
   <string name="prefs_subsection_security">ความปลอดภัย</string>
+  <string name="prefs_subsection_security_summary">ตั้งค่าเพื่อล็อคเข้าถึงแอปและอนุญาตให้สัมผัสกับหน้าต่างอื่นๆ ที่มองเห็นได้</string>
+  <string name="prefs_subsection_logging_summary">เก็บ Log ที่เกิดจากการทำงานของแอป</string>
+  <string name="prefs_subsection_more_summary">ข้อมูลแอปฯ ข้อเสนอแนะ และอื่นๆ</string>
   <string name="prefs_accounts">บัญชี</string>
   <string name="prefs_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="prefs_passcode">ล็อครหัสปลดล็อค</string>
@@ -43,6 +46,10 @@
   <string name="confirmation_touches_with_other_windows_title">คุณแน่ใจหรือว่าต้องการเปิดใช้งานคุณลักษณะนี้?</string>
   <string name="confirmation_touches_with_other_windows_message">ใช้คุณสมบัตินี้ภายใต้ความรับผิดชอบของคุณ แอปพลิเคชันที่เป็นอันตรายอาจพยายามหลอกให้คุณทำการกระทำบางอย่างแบบไม่รู้ตัวโดยใช้มุมมองอื่น</string>
   <string name="prefs_open_logs_view">เปิดมุมมองบันทึก</string>
+  <string name="prefs_subsection_picture_uploads">อัปโหลดรูปภาพอัตโนมัติ</string>
+  <string name="prefs_subsection_picture_uploads_summary">จัดการตำแหน่งและพฤติกรรมของรูปภาพที่อัปโหลดโดยอัตโนมัติ</string>
+  <string name="prefs_subsection_video_uploads">อัปโหลดวิดีโออัตโนมัติ</string>
+  <string name="prefs_subsection_video_uploads_summary">จัดการตำแหน่งและพฤติกรรมของวิดีโอที่อัปโหลดโดยอัตโนมัติ</string>
   <string name="prefs_camera_picture_upload">อัปโหลดรูปภาพ</string>
   <string name="prefs_camera_picture_upload_summary">อัปโหลดภาพที่ถ่ายด้วยกล้องโดยอัตโนมัติ</string>
   <string name="prefs_camera_picture_upload_path_title">เส้นทางการอัปโหลดรูปภาพ</string>
@@ -68,12 +75,16 @@
   <string name="prefs_enable_logging">เปิดใช้ระบบบันทึกข้อมูล</string>
   <string name="prefs_enable_logging_summary">เมื่อเปิดใช้งาน log อาจส่งผลต่อประสิทธิภาพและรวมถึงข้อมูลที่ละเอียดอ่อน อย่างไรก็ตาม log จะไม่ถูกส่งไปยังเซิร์ฟเวอร์ ownCloud โดยอัตโนมัติ การแชร์ log กับผู้อื่นถือเป็นความรับผิดชอบของผู้ใช้แต่เพียงผู้เดียว</string>
   <string name="prefs_send_feedback">ส่งความคิดเห็น</string>
+  <string name="prefs_app_version">เวอร์ชันของแอป</string>
+  <string name="prefs_app_version_summary">%1$s %2$s เวอร์ชัน %3$s (%4$s)</string>
   <string name="pattern_enter_pattern">โปรดกรอกรูปแบบของคุณ</string>
   <string name="pattern_configure_pattern">รูปแบบของคุณ</string>
   <string name="pattern_remove_pattern">ลบรูปแบบของคุณ</string>
   <string name="pattern_incorrect_pattern">รูปแบบไม่ถูกต้อง</string>
   <string name="pattern_reenter_pattern">โปรดกรอกรูปแบบของคุณอีกครั้ง</string>
   <string name="pattern_not_same_pattern">รูปแบบไม่เหมือนกัน</string>
+  <string name="pattern_error_set">เกิดข้อผิดพลาดขณะกำลังตั้งค่ารหัสปลดล็อค</string>
+  <string name="pattern_error_remove">เกิดข้อผิดพลาดขณะกำลังลบรหัสปลดล็อค</string>
   <string name="pattern_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดการใช้รูปแบบก่อน</string>
   <string name="passcode_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดใช้งานรหัสผ่านก่อน</string>
   <string name="pattern_no_longer_required">จะไม่ถามเรื่องรูปแบบอีกต่อไป</string>
@@ -232,6 +243,8 @@
   <string name="pass_code_remove_your_pass_code">ลบรหัสปลดล็อคของคุณ</string>
   <string name="pass_code_mismatch">รหัสปลดล็อคของคุณไม่ตรงกัน</string>
   <string name="pass_code_wrong">รหัสปลดล็อคไม่ถูกต้อง</string>
+  <string name="pass_code_error_set">เกิดข้อผิดพลาดขณะตั้งค่ารหัสปลดล็อค</string>
+  <string name="pass_code_error_remove">เกิดข้อผิดพลาดขณะนำรหัสปลดล็อคออก</string>
   <string name="biometric_not_enrolled">จำเป็นต้องเพิ่มอย่างน้อยหนึ่งไบโอเมตริกซ์เพื่อใช้เปิดการใช้งานฟีดเจอร์นี้</string>
   <string name="biometric_prompt_title">เข้าสู่ระบบด้วยไบโอเมตริกซ์</string>
   <string name="biometric_prompt_subtitle">เข้าสู่ระบบโดยใช้ไบโอเมตริกซ์ของคุณ</string>
@@ -354,7 +367,7 @@
   <string name="proper_videos_folder_warning_camera_upload">โปรดตรวจสอบให้แน่ใจว่าโฟลเดอร์ที่เลือกเป็นตำแหน่งที่กล้องที่คุณใช้บันทึกวิดีโอ มิฉะนั้นคุณสมบัตินี้จะไม่สามารถตรวจจับวิดีโอของคุณ โปรดทราบว่าระบบจะอัปโหลดวิดีโออย่างน้อย 15 นาทีหลังจากบันทึก</string>
   <string name="conflict_title">ไฟล์ที่มีปัญหา</string>
   <string name="conflict_description">แตะเพื่อแก้ปัญหาไฟล์ %1$s</string>
-  <string name="conflict_message">ต้องการวางทับไฟล์เดิม? ถ้าเลือกเก็บทั้ง 2 เวอร์ชันอีกไฟล์หนึ่งจะถูกเพิ่มตัวเลขเข้าไปในชื่อ</string>
+  <string name="conflict_message">ต้องการวางทับไฟล์เดิม? ถ้าเลือกเก็บทั้งหมด สำหรับไฟล์เวอร์ชันใหม่จะถูกเพิ่มตัวเลขในท้ายชื่อ</string>
   <string name="conflict_keep_both">เก็บไว้ทั้งสองอย่าง</string>
   <string name="conflict_use_local_version">เวอร์ชันปัจจุบัน</string>
   <string name="conflict_use_server_version">เวอร์ชันเซิร์ฟเวอร์</string>
@@ -541,6 +554,10 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัปโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
+  <string name="welcome_feature_6_title">ปรับโครงสร้างการตั้งค่าใหม่</string>
+  <string name="welcome_feature_6_text">มีการตั้งค่ามุมมองใหม่</string>
+  <string name="welcome_feature_7_title">รีเซ็ตการอัปโหลดกล้องแล้ว</string>
+  <string name="welcome_feature_7_text">รูปภาพ / วิดีโอของคุณถูกอัปโหลดโดยอัตโนมัติไปยังบัญชีที่แนบมา</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
   <string name="common_not_found">ไม่พบข้อมูลใดๆ</string>
   <string name="supports_oauth2_error">มันเป็นไปไม่ได้ที่จะรู้ว่ารองรับการใช้งาน OAuth2</string>
