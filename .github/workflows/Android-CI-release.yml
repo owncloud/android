@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Publish apk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - name: Install JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 8
+      - name: "Build Changelog"
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v1.8.0
+        with:
+          commitMode: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Find Tag
+        id: tagger
+        uses: jimschubert/query-tag-action@v2
+        with:
+          skip-unshallow: 'true'
+          commit-ish: HEAD
+      - name: Install Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.1.2
+      - name: Decrypt keystore
+        run: ./signing/decrypt.sh
+        env:
+          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+      - name: Build project
+        run: ./gradlew clean assembleRelease
+        env:
+          TAG_VERSION: ${{ github.ref }}
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          ALIAS_NAME: ${{ secrets.ALIAS_NAME }}
+          ALIAS_PASS: ${{ secrets.ALIAS_PASS }}
+      - run: |
+          assetsAPK=$(find . -name *.apk | while read -r asset ; do echo "-a $asset" ; done)
+          hub release create ${assetsAPK} -m "${{steps.tagger.outputs.tag}}" "${{steps.tagger.outputs.tag}}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.ref }}
+      - name: cleanup keystore
+        run: ./signing/cleanup.sh

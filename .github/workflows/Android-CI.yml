@@ -1,0 +1,67 @@
+name: PullRequest
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  Build:
+    name: Build & Test
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          submodules: true
+          fetch-depth: 0 # 0 indicates all history
+      - run: git fetch --all || echo "==> Accept any result"
+      - name: set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 8
+      - name: Install Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.1.2
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
+#      - name: Run instrumentation tests
+#        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.2
+#        with:
+#          cmd: ./gradlew cAT -Pandroid.testInstrumentationRunnerArguments.notAnnotation=com.owncloud.android.testutil.annotation.FailsOnGithubAction --continue
+#          api: 28
+#          tag: default
+#          abi: x86
+#      - uses: actions/upload-artifact@v2.2.3
+#        if: ${{ always() }}
+#        with:
+#          name: owncloudApp-Espresso-test-report
+#          path: ${{ github.workspace }}/**/build/reports/androidTests/connected/*
+#      - name: Save logcat output
+#        uses: actions/upload-artifact@v2.2.3
+#        if: failure()
+#        with:
+#          name: ownCloud-logcat
+#          path: artifacts/logcat.log
+  Check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - name: Install JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 8
+      - name: Install Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.1.2
+      - name: Code checks
+        run: ./gradlew check
+      - name: Archive Lint report
+        uses: actions/upload-artifact@v2.2.3
+        if: ${{ always() }}
+        with:
+          name: ownCloud-Lint-report
+          path: lint-app-report.html
