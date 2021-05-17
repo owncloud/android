@@ -1,0 +1,6 @@
+Bugfix: Fix permissions were displayed in share creation view after rotation
+
+Permissions view was shown when creating a share for a file after rotation.
+Capabilities were taken into account just once. Now, the permissions view is shown only when capabilities match.
+
+https://github.com/owncloud/android/issues/3204 https://github.com/owncloud/android/pull/3234

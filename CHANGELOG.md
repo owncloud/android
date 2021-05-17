@@ -12,6 +12,7 @@ Summary
 * Bugfix - Fix a bug when some fields where not retrieved from OIDC Discovery: [#3202](https://github.com/owncloud/android/pull/3202)
 * Bugfix - Snackbar in passcode view is not displayed: [#2722](https://github.com/owncloud/android/issues/2722)
 * Bugfix - Fixed problem when a file is edited externally: [#2752](https://github.com/owncloud/android/issues/2752)
+* Bugfix - Fix permissions were displayed in share creation view after rotation: [#3204](https://github.com/owncloud/android/issues/3204)
 * Change - Error handling for pattern lock: [#3215](https://github.com/owncloud/android/issues/3215)
 * Change - Hide biometrical if device does not support it: [#3217](https://github.com/owncloud/android/issues/3217)
 * Enhancement - Replace blank view in music player with cover art: [#3121](https://github.com/owncloud/android/issues/3121)
@@ -55,6 +56,14 @@ Details
 
    https://github.com/owncloud/android/issues/2752
    https://github.com/owncloud/android/pull/3220
+
+* Bugfix - Fix permissions were displayed in share creation view after rotation: [#3204](https://github.com/owncloud/android/issues/3204)
+
+   Permissions view was shown when creating a share for a file after rotation. Capabilities were
+   taken into account just once. Now, the permissions view is shown only when capabilities match.
+
+   https://github.com/owncloud/android/issues/3204
+   https://github.com/owncloud/android/pull/3234
 
 * Change - Error handling for pattern lock: [#3215](https://github.com/owncloud/android/issues/3215)
 

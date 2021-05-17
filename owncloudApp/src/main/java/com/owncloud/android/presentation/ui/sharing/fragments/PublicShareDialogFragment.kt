@@ -444,8 +444,8 @@ class PublicShareDialogFragment : DialogFragment() {
     private fun observeCapabilities() {
         ocCapabilityViewModel.capabilities.observe(
             this,
-            EventObserver { uiResult ->
-                when (uiResult) {
+            { event ->
+                when (val uiResult = event.peekContent()) {
                     is UIResult.Success -> {
                         updateCapabilities(uiResult.data)
                         listener?.dismissLoading()
