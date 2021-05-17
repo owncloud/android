@@ -20,7 +20,6 @@
 package com.owncloud.android.extensions
 
 import android.content.res.Resources
-import androidx.annotation.StringRes
 import com.owncloud.android.R
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
@@ -30,6 +29,7 @@ import com.owncloud.android.domain.exceptions.ForbiddenException
 import com.owncloud.android.domain.exceptions.IncorrectAddressException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
+import com.owncloud.android.domain.exceptions.MoveIntoDescendantException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
@@ -72,7 +72,8 @@ fun Throwable.parseError(
                 }
                 resources.getString(stringId)
             }
-            is ForbiddenException -> { resources.getString(R.string.forbidden_permissions)}
+            is MoveIntoDescendantException -> resources.getString(R.string.move_file_invalid_into_descendent)
+            is ForbiddenException -> resources.getString(R.string.forbidden_permissions)
             is FileNotFoundException -> resources.getString(R.string.common_not_found)
             is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
             is OAuth2ErrorException -> resources.getString(R.string.auth_oauth_error)
