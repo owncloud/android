@@ -19,6 +19,7 @@
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.exceptions.MoveIntoDescendantException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
@@ -30,8 +31,13 @@ class MoveFileUseCase(
 
         require(params.listOfFilesToMove.isNotEmpty())
 
+        val listWithoutDescendantItems = params.listOfFilesToMove.dropWhile {
+            params.targetFile.remotePath.startsWith(it.remotePath)
+        }
+        if (listWithoutDescendantItems.isEmpty()) throw MoveIntoDescendantException()
+
         return fileRepository.moveFile(
-            listOfFilesToMove = params.listOfFilesToMove,
+            listOfFilesToMove = listWithoutDescendantItems,
             targetFile = params.targetFile
         )
     }
