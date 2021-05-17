@@ -847,7 +847,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
      */
     @Override
     public void onTmpFilesCopied(ResultCode result) {
-        dismissLoadingDialog();
+        try {
+            dismissLoadingDialog();
+        } catch (IllegalStateException illegalStateException) {
+            Timber.e(illegalStateException);
+        }
         finish();
     }
 
