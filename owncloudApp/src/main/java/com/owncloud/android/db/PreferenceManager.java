@@ -59,19 +59,20 @@ public abstract class PreferenceManager {
     public static final String PREF__LEGACY_CAMERA_VIDEO_UPLOADS_PATH = "camera_video_uploads_path";
     public static final String PREF__LEGACY_CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
     public static final String PREF__LEGACY_CAMERA_UPLOADS_SOURCE = "camera_uploads_source_path";
+    public static final String PREF__LEGACY_CAMERA_UPLOADS_ACCOUNT_NAME = "camera_uploads_account_name";
 
     public static final String PREF__CAMERA_PICTURE_UPLOADS_ENABLED = "enable_picture_uploads";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_ENABLED = "enable_video_uploads";
     public static final String PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY = "picture_uploads_on_wifi";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY = "video_uploads_on_wifi";
-    private static final String PREF__CAMERA_UPLOADS_ACCOUNT_NAME = "camera_uploads_account_name";  // NEW - not
-    // saved yet
     public static final String PREF__CAMERA_PICTURE_UPLOADS_PATH = "picture_uploads_path";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_PATH = "video_uploads_path";
     public static final String PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR = "picture_uploads_behaviour";
     public static final String PREF__CAMERA_PICTURE_UPLOADS_SOURCE = "picture_uploads_source_path";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR = "video_uploads_behaviour";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_SOURCE = "video_uploads_source_path";
+    public static final String PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME = "picture_uploads_account_name";
+    public static final String PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME = "video_uploads_account_name";
 
     public static final String PREF__CAMERA_UPLOADS_DEFAULT_PATH = "/CameraUpload";
 
@@ -120,6 +121,9 @@ public abstract class PreferenceManager {
         if (sharedPref.contains(PREF__LEGACY_CAMERA_UPLOADS_SOURCE)) {
             editor.remove(PREF__LEGACY_CAMERA_UPLOADS_SOURCE);
         }
+        if (sharedPref.contains(PREF__LEGACY_CAMERA_UPLOADS_ACCOUNT_NAME)) {
+            editor.remove(PREF__LEGACY_CAMERA_UPLOADS_ACCOUNT_NAME);
+        }
         editor.apply();
     }
 
@@ -154,12 +158,11 @@ public abstract class PreferenceManager {
         result.setWifiOnlyForVideos(
                 prefs.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY, false)
         );
-        Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(context);
-        result.setUploadAccountName(
-                prefs.getString(
-                        PREF__CAMERA_UPLOADS_ACCOUNT_NAME,
-                        (currentAccount == null) ? "" : currentAccount.name
-                )
+        result.setUploadAccountNameForPictures(
+                prefs.getString(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME, "" )
+        );
+        result.setUploadAccountNameForVideos(
+                prefs.getString(PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME, "" )
         );
         String uploadPath = prefs.getString(
                 PREF__CAMERA_PICTURE_UPLOADS_PATH,
@@ -314,7 +317,8 @@ public abstract class PreferenceManager {
         private boolean mEnabledForVideos;
         private boolean mWifiOnlyForPictures;
         private boolean mWifiOnlyForVideos;
-        private String mUploadAccountName;      // same for both audio & video
+        private String mUploadAccountNameForPictures;
+        private String mUploadAccountNameForVideos;
         private String mUploadPathForPictures;
         private String mUploadPathForVideos;
         private String mBehaviourAfterUploadPictures;
@@ -358,12 +362,20 @@ public abstract class PreferenceManager {
             mWifiOnlyForVideos = wifiOnlyForVideos;
         }
 
-        public String getUploadAccountName() {
-            return mUploadAccountName;
+        public String getUploadAccountNameForPictures() {
+            return mUploadAccountNameForPictures;
         }
 
-        public void setUploadAccountName(String uploadAccountName) {
-            mUploadAccountName = uploadAccountName;
+        public String getUploadAccountNameForVideos() {
+            return mUploadAccountNameForVideos;
+        }
+
+        public void setUploadAccountNameForPictures(String uploadAccountName) {
+            mUploadAccountNameForPictures = uploadAccountName;
+        }
+
+        public void setUploadAccountNameForVideos(String uploadAccountName) {
+            mUploadAccountNameForVideos = uploadAccountName;
         }
 
         public String getUploadPathForPictures() {

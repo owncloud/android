@@ -39,6 +39,12 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
@@ -46,8 +52,8 @@ import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -65,12 +71,14 @@ class SettingsPictureUploadsFragmentTest {
     private lateinit var prefPictureUploadsOnWifi: CheckBoxPreference
     private lateinit var prefPictureUploadsSourcePath: Preference
     private lateinit var prefPictureUploadsBehaviour: ListPreference
+    private lateinit var prefPictureUploadsAccount: ListPreference
 
     private lateinit var picturesViewModel: SettingsPictureUploadsViewModel
     private lateinit var context: Context
 
     private val exampleUploadPath = "/Upload/Path"
     private val exampleUploadSourcePath = "/Upload/Source/Path"
+    private val listOfLoggedAccounts = arrayOf("first", "second", "third")
 
     @Before
     fun setUp() {
@@ -80,6 +88,8 @@ class SettingsPictureUploadsFragmentTest {
         every { picturesViewModel.getPictureUploadsPath() } returns exampleUploadPath
         every { picturesViewModel.getPictureUploadsSourcePath() } returns exampleUploadSourcePath
         every { picturesViewModel.isPictureUploadEnabled() } returns false
+        every { picturesViewModel.getLoggedAccountNames() } returns listOfLoggedAccounts
+        every { picturesViewModel.getPictureUploadsAccount() } returns listOfLoggedAccounts.first()
 
         stopKoin()
 
@@ -96,11 +106,12 @@ class SettingsPictureUploadsFragmentTest {
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
-            prefEnablePictureUploads = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED)!!
-            prefPictureUploadsPath = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH)!!
-            prefPictureUploadsOnWifi = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY)!!
-            prefPictureUploadsSourcePath = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE)!!
-            prefPictureUploadsBehaviour = fragment.findPreference(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)!!
+            prefEnablePictureUploads = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_ENABLED)!!
+            prefPictureUploadsPath = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_PATH)!!
+            prefPictureUploadsOnWifi = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY)!!
+            prefPictureUploadsSourcePath = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE)!!
+            prefPictureUploadsBehaviour = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)!!
+            prefPictureUploadsAccount = fragment.findPreference(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)!!
         }
     }
 
@@ -112,7 +123,7 @@ class SettingsPictureUploadsFragmentTest {
     @Test
     fun pictureUploadsView() {
         prefEnablePictureUploads.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_ENABLED,
             titlePref = context.getString(R.string.prefs_camera_picture_upload),
             summaryPref = context.getString(R.string.prefs_camera_picture_upload_summary),
             visible = true,
@@ -121,7 +132,7 @@ class SettingsPictureUploadsFragmentTest {
         assertFalse(prefEnablePictureUploads.isChecked)
 
         prefPictureUploadsPath.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_PATH,
             titlePref = context.getString(R.string.prefs_camera_picture_upload_path_title),
             summaryPref = exampleUploadPath,
             visible = true,
@@ -129,7 +140,7 @@ class SettingsPictureUploadsFragmentTest {
         )
 
         prefPictureUploadsOnWifi.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY,
             titlePref = context.getString(R.string.prefs_camera_picture_upload_on_wifi),
             visible = true,
             enabled = false
@@ -144,7 +155,7 @@ class SettingsPictureUploadsFragmentTest {
                 R.string.prefs_camera_upload_source_path_title_required
             )
         prefPictureUploadsSourcePath.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
             titlePref = String.format(prefPictureUploadsSourcePath.title.toString(), comment),
             summaryPref = exampleUploadSourcePath,
             visible = true,
@@ -152,9 +163,17 @@ class SettingsPictureUploadsFragmentTest {
         )
 
         prefPictureUploadsBehaviour.verifyPreference(
-            keyPref = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR,
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR,
             titlePref = context.getString(R.string.prefs_camera_upload_behaviour_title),
             summaryPref = context.getString(R.string.pref_behaviour_entries_keep_file),
+            visible = true,
+            enabled = false
+        )
+
+        prefPictureUploadsAccount.verifyPreference(
+            keyPref = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
+            titlePref = context.getString(R.string.prefs_picture_upload_account),
+            summaryPref = prefPictureUploadsAccount.context.getString(androidx.preference.R.string.not_set),
             visible = true,
             enabled = false
         )
@@ -164,6 +183,7 @@ class SettingsPictureUploadsFragmentTest {
     fun enablePictureUploads() {
         firstEnablePictureUploads()
         checkPreferencesEnabled(true)
+        checkPreferencesInitialized()
     }
 
     @Test
@@ -172,6 +192,7 @@ class SettingsPictureUploadsFragmentTest {
         onView(withText(R.string.prefs_camera_picture_upload)).perform(click())
         onView(withText(R.string.common_yes)).perform(click())
         checkPreferencesEnabled(false)
+        checkPreferencesReset()
     }
 
     @Test
@@ -210,18 +231,21 @@ class SettingsPictureUploadsFragmentTest {
     }
 
     private fun checkPreferencesEnabled(enabled: Boolean) {
-        if (enabled) {
-            assertTrue(prefEnablePictureUploads.isChecked)
-            assertTrue(prefPictureUploadsPath.isEnabled)
-            assertTrue(prefPictureUploadsOnWifi.isEnabled)
-            assertTrue(prefPictureUploadsSourcePath.isEnabled)
-            assertTrue(prefPictureUploadsBehaviour.isEnabled)
-        } else {
-            assertFalse(prefEnablePictureUploads.isChecked)
-            assertFalse(prefPictureUploadsPath.isEnabled)
-            assertFalse(prefPictureUploadsOnWifi.isEnabled)
-            assertFalse(prefPictureUploadsSourcePath.isEnabled)
-            assertFalse(prefPictureUploadsBehaviour.isEnabled)
-        }
+        assertEquals(enabled, prefEnablePictureUploads.isChecked)
+        assertEquals(enabled, prefPictureUploadsPath.isEnabled)
+        assertEquals(enabled, prefPictureUploadsOnWifi.isEnabled)
+        assertEquals(enabled, prefPictureUploadsSourcePath.isEnabled)
+        assertEquals(enabled, prefPictureUploadsBehaviour.isEnabled)
+        assertEquals(enabled, prefPictureUploadsAccount.isEnabled)
+    }
+
+    private fun checkPreferencesInitialized() {
+        assertEquals(listOfLoggedAccounts.first(), prefPictureUploadsAccount.summary)
+        assertEquals(exampleUploadPath, prefPictureUploadsPath.summary)
+    }
+
+    private fun checkPreferencesReset() {
+        assertEquals(context.getString(androidx.preference.R.string.not_set), prefPictureUploadsAccount.summary)
+        assertEquals(picturesViewModel.getPictureUploadsPath(), prefPictureUploadsPath.summary)
     }
 }

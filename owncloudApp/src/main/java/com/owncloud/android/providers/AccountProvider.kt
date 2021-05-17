@@ -1,31 +1,31 @@
 /**
  * ownCloud Android client application
  *
- * @author Juan Carlos Garrote Gascón
+ * @author Abel García de Prada
  *
  * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
+package com.owncloud.android.providers
 
-package com.owncloud.android.presentation.viewmodels.settings
+import android.accounts.Account
+import android.content.Context
+import com.owncloud.android.authentication.AccountUtils
 
-import androidx.lifecycle.ViewModel
-import com.owncloud.android.providers.AccountProvider
-
-class SettingsViewModel(
-    private val accountProvider: AccountProvider
-) : ViewModel() {
-
-    fun isThereAttachedAccount() = accountProvider.getCurrentOwnCloudAccount() != null
+class AccountProvider(
+    private val context: Context
+) {
+    fun getCurrentOwnCloudAccount(): Account? = AccountUtils.getCurrentOwnCloudAccount(context)
+    fun getLoggedAccounts(): Array<Account> = AccountUtils.getAccounts(context)
 }

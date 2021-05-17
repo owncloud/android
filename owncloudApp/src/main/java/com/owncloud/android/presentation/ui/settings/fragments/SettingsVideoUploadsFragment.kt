@@ -32,6 +32,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH
@@ -55,6 +56,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     private var prefVideoUploadsOnWifi: CheckBoxPreference? = null
     private var prefVideoUploadsSourcePath: Preference? = null
     private var prefVideoUploadsBehaviour: ListPreference? = null
+    private var prefVideoUploadsAccount: ListPreference? = null
 
     private val selectVideoUploadsPathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -80,6 +82,10 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsOnWifi = findPreference(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY)
         prefVideoUploadsSourcePath = findPreference(PREF__CAMERA_VIDEO_UPLOADS_SOURCE)
         prefVideoUploadsBehaviour = findPreference(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)
+        prefVideoUploadsAccount = findPreference<ListPreference>(PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)?.apply {
+            entries = videosViewModel.getLoggedAccountNames()
+            entryValues = videosViewModel.getLoggedAccountNames()
+        }
 
         enableVideoUploads(videosViewModel.isVideoUploadEnabled())
 
@@ -96,12 +102,17 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
             )
         prefVideoUploadsSourcePath?.title = String.format(prefVideoUploadsSourcePath?.title.toString(), comment)
 
-        prefEnableVideoUploads?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+        initPreferenceListeners()
+    }
+
+    private fun initPreferenceListeners() {
+        prefEnableVideoUploads?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
             val value = newValue as Boolean
 
             if (value) {
                 videosViewModel.setEnableVideoUpload(value)
                 enableVideoUploads(value)
+                prefVideoUploadsAccount?.value = videosViewModel.getVideoUploadsAccount()
                 showAlertDialog(
                     title = getString(R.string.common_important),
                     message = getString(R.string.proper_videos_folder_warning_camera_upload)
@@ -112,11 +123,11 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                     title = getString(R.string.confirmation_disable_camera_uploads_title),
                     message = getString(R.string.confirmation_disable_videos_upload_message),
                     positiveButtonText = getString(R.string.common_yes),
-                    positiveButtonListener = { dialog: DialogInterface?, which: Int ->
+                    positiveButtonListener = { _: DialogInterface?, _: Int ->
                         videosViewModel.updateVideosLastSync()
                         videosViewModel.setEnableVideoUpload(value)
-                        prefEnableVideoUploads?.isChecked = false
                         enableVideoUploads(false)
+                        resetPreferencesAfterDisablingVideosUploads()
                     },
                     negativeButtonText = getString(R.string.common_no)
                 )
@@ -131,6 +142,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
             }
             val intent = Intent(activity, UploadPathActivity::class.java)
             intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, uploadPath)
+            intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_ACCOUNT, videosViewModel.getVideoUploadsAccount())
             selectVideoUploadsPathLauncher.launch(intent)
             true
         }
@@ -153,9 +165,16 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     }
 
     private fun enableVideoUploads(value: Boolean) {
+        prefEnableVideoUploads?.isChecked = value
         prefVideoUploadsPath?.isEnabled = value
         prefVideoUploadsOnWifi?.isEnabled = value
         prefVideoUploadsSourcePath?.isEnabled = value
         prefVideoUploadsBehaviour?.isEnabled = value
+        prefVideoUploadsAccount?.isEnabled = value
+    }
+
+    private fun resetPreferencesAfterDisablingVideosUploads() {
+        prefVideoUploadsAccount?.value = null
+        prefVideoUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(videosViewModel.getVideoUploadsPath())
     }
 }

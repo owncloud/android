@@ -32,6 +32,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
@@ -55,6 +56,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     private var prefPictureUploadsOnWifi: CheckBoxPreference? = null
     private var prefPictureUploadsSourcePath: Preference? = null
     private var prefPictureUploadsBehaviour: ListPreference? = null
+    private var prefPictureUploadsAccount: ListPreference? = null
 
     private val selectPictureUploadsPathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -80,6 +82,10 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsOnWifi = findPreference(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY)
         prefPictureUploadsSourcePath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE)
         prefPictureUploadsBehaviour = findPreference(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)
+        prefPictureUploadsAccount = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)?.apply {
+            entries = picturesViewModel.getLoggedAccountNames()
+            entryValues = picturesViewModel.getLoggedAccountNames()
+        }
 
         enablePictureUploads(picturesViewModel.isPictureUploadEnabled())
 
@@ -96,12 +102,17 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             )
         prefPictureUploadsSourcePath?.title = String.format(prefPictureUploadsSourcePath?.title.toString(), comment)
 
-        prefEnablePictureUploads?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+        initPreferenceListeners()
+    }
+
+    private fun initPreferenceListeners() {
+        prefEnablePictureUploads?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
             val value = newValue as Boolean
 
             if (value) {
                 picturesViewModel.setEnablePictureUpload(value)
                 enablePictureUploads(value)
+                prefPictureUploadsAccount?.value = picturesViewModel.getPictureUploadsAccount()
                 showAlertDialog(
                     title = getString(R.string.common_important),
                     message = getString(R.string.proper_pics_folder_warning_camera_upload)
@@ -112,11 +123,11 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                     title = getString(R.string.confirmation_disable_camera_uploads_title),
                     message = getString(R.string.confirmation_disable_pictures_upload_message),
                     positiveButtonText = getString(R.string.common_yes),
-                    positiveButtonListener = { dialog: DialogInterface?, which: Int ->
+                    positiveButtonListener = { _: DialogInterface?, _: Int ->
                         picturesViewModel.updatePicturesLastSync()
                         picturesViewModel.setEnablePictureUpload(value)
-                        prefEnablePictureUploads?.isChecked = false
                         enablePictureUploads(false)
+                        resetPreferencesAfterDisablingPicturesUploads()
                     },
                     negativeButtonText = getString(R.string.common_no)
                 )
@@ -131,6 +142,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             }
             val intent = Intent(activity, UploadPathActivity::class.java)
             intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, uploadPath)
+            intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_ACCOUNT, picturesViewModel.getPictureUploadsAccount())
             selectPictureUploadsPathLauncher.launch(intent)
             true
         }
@@ -153,9 +165,16 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     }
 
     private fun enablePictureUploads(value: Boolean) {
+        prefEnablePictureUploads?.isChecked = value
         prefPictureUploadsPath?.isEnabled = value
         prefPictureUploadsOnWifi?.isEnabled = value
         prefPictureUploadsSourcePath?.isEnabled = value
         prefPictureUploadsBehaviour?.isEnabled = value
+        prefPictureUploadsAccount?.isEnabled = value
+    }
+
+    private fun resetPreferencesAfterDisablingPicturesUploads() {
+        prefPictureUploadsAccount?.value = null
+        prefPictureUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsPath())
     }
 }

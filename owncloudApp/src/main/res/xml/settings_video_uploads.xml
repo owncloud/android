@@ -22,6 +22,13 @@
         app:key="enable_video_uploads"
         app:summary="@string/prefs_camera_video_upload_summary"
         app:title="@string/prefs_camera_video_upload" />
+    <ListPreference
+        app:dialogTitle="@string/prefs_video_upload_account"
+        app:iconSpaceReserved="false"
+        app:key="video_uploads_account_name"
+        app:negativeButtonText=""
+        app:title="@string/prefs_video_upload_account"
+        app:useSimpleSummaryProvider="true" />
     <Preference
         app:iconSpaceReserved="false"
         app:key="video_uploads_path"
@@ -35,13 +42,14 @@
         app:key="video_uploads_source_path"
         app:title="@string/prefs_camera_upload_source_path_title" />
     <ListPreference
-        app:iconSpaceReserved="false"
         app:defaultValue="NOTHING"
         app:dialogTitle="@string/prefs_camera_upload_behaviour_dialog_title"
         app:entries="@array/pref_behaviour_entries"
         app:entryValues="@array/pref_behaviour_entryValues"
+        app:iconSpaceReserved="false"
+        app:negativeButtonText=""
         app:key="video_uploads_behaviour"
-        app:useSimpleSummaryProvider="true"
-        app:title="@string/prefs_camera_upload_behaviour_title" />
+        app:title="@string/prefs_camera_upload_behaviour_title"
+        app:useSimpleSummaryProvider="true" />
 
 </PreferenceScreen>

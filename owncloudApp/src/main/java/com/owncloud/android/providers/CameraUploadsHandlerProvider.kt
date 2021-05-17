@@ -21,6 +21,7 @@
 package com.owncloud.android.providers
 
 import android.content.Context
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.files.services.CameraUploadsHandler
 
@@ -46,6 +47,29 @@ class CameraUploadsHandlerProvider(
         if (configuration.isEnabledForVideos) {
             cameraUploadsHandler.setCameraUploadsConfig(configuration)
             cameraUploadsHandler.scheduleCameraUploadsSyncJob(context)
+        }
+    }
+
+    fun hasCameraUploadsAttached(accountName: String): Boolean {
+        val cameraUploadsConfiguration = PreferenceManager.getCameraUploadsConfiguration(context)
+
+        return accountName == cameraUploadsConfiguration.uploadAccountNameForPictures ||
+                accountName == cameraUploadsConfiguration.uploadAccountNameForVideos
+    }
+
+    fun resetCameraUploadsForAccount(accountName: String) {
+        val preferencesProvider = SharedPreferencesProviderImpl(context)
+        val cameraUploadsConfiguration = PreferenceManager.getCameraUploadsConfiguration(context)
+
+        if (accountName == cameraUploadsConfiguration.uploadAccountNameForPictures) {
+            preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
+            preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH)
+            preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)
+        }
+        if (accountName == cameraUploadsConfiguration.uploadAccountNameForVideos) {
+            preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false)
+            preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH)
+            preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)
         }
     }
 }

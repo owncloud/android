@@ -20,6 +20,7 @@ Summary
 * Enhancement - Support for apk files: [#2691](https://github.com/owncloud/android/issues/2691)
 * Enhancement - Align previews actions: [#3155](https://github.com/owncloud/android/issues/3155)
 * Enhancement - Settings accessible even when no account is attached: [#2638](https://github.com/owncloud/android/issues/2638)
+* Enhancement - Fixed account for camera uploads: [#3166](https://github.com/owncloud/android/issues/3166)
 
 Details
 -------
@@ -125,6 +126,15 @@ Details
 
    https://github.com/owncloud/android/issues/2638
    https://github.com/owncloud/android/pull/3218
+
+* Enhancement - Fixed account for camera uploads: [#3166](https://github.com/owncloud/android/issues/3166)
+
+   Camera uploads will be uploaded to a fixed account independently of the current account.
+   Removing the account attached to camera uploads will disable this feature. User will be warned
+   when removing an account that has camera uploads attached.
+
+   https://github.com/owncloud/android/issues/3166
+   https://github.com/owncloud/android/pull/3226
 
 ## 2.17 (March 2021)
 - Toolbar redesign

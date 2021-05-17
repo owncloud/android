@@ -21,9 +21,7 @@
 
 package com.owncloud.android.providers
 
-import android.accounts.Account
 import android.content.Context
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.utils.ConnectivityUtils
 
 class OCContextProvider(private val context: Context) : ContextProvider {
@@ -36,9 +34,5 @@ class OCContextProvider(private val context: Context) : ContextProvider {
 
     override fun isConnected(): Boolean {
         return ConnectivityUtils.isAppConnected(context)
-    }
-
-    override fun getCurrentOwnCloudAccount(): Account? {
-        return AccountUtils.getCurrentOwnCloudAccount(context)
     }
 }
