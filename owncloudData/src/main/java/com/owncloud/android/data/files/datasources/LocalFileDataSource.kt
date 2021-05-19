@@ -31,4 +31,5 @@ interface LocalFileDataSource {
     fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
     fun saveFile(file: OCFile)
     fun removeFile(fileId: Long)
+    fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String)
 }

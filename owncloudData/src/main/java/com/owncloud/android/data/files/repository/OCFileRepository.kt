@@ -170,7 +170,11 @@ class OCFileRepository(
         )
 
         // 4. Save new remote path in the local database
-        localFileDataSource.saveFile(ocFile.copy(remotePath = newRemotePath))
+        localFileDataSource.renameFile(
+            fileToRename = ocFile,
+            finalRemotePath = newRemotePath,
+            finalStoragePath = localStorageProvider.getDefaultSavePathFor(ocFile.owner, newRemotePath)
+        )
     }
 
     override fun saveFile(file: OCFile) {
