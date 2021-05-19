@@ -19,7 +19,6 @@
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.validator.FileNameValidator
@@ -31,12 +30,7 @@ class RenameFileUseCase(
     private val fileNameValidator = FileNameValidator()
 
     override fun run(params: Params) {
-
-        val newNameTrimmed = params.newName.trim()
-
-        if (newNameTrimmed.isBlank()) throw FileNameException(type = FileNameException.FileNameExceptionType.FILE_NAME_EMPTY)
-
-        if (!fileNameValidator.validate(newNameTrimmed)) throw FileNameException(type = FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS)
+        fileNameValidator.validateOrThrowException(params.newName)
 
         return fileRepository.renameFile(
             ocFile = params.ocFileToRename,
