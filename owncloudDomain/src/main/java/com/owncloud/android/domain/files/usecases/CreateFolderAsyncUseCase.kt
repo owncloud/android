@@ -19,9 +19,6 @@
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.exceptions.validation.FileNameException
-import com.owncloud.android.domain.exceptions.validation.FileNameException.FileNameExceptionType.FILE_NAME_EMPTY
-import com.owncloud.android.domain.exceptions.validation.FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.validator.FileNameValidator
@@ -33,17 +30,11 @@ class CreateFolderAsyncUseCase(
     private val fileNameValidator = FileNameValidator()
 
     override fun run(params: Params) {
+        fileNameValidator.validateOrThrowException(params.folderName)
 
-        val folderNameTrimmed = params.folderName.trim()
-
-        if (folderNameTrimmed.isBlank()) throw FileNameException(type = FILE_NAME_EMPTY)
-
-        if (!fileNameValidator.validate(folderNameTrimmed)) throw FileNameException(type = FILE_NAME_FORBIDDEN_CHARACTERS)
-
-        val remotePath = params.parentFile.remotePath.plus(folderNameTrimmed).plus(OCFile.PATH_SEPARATOR)
+        val remotePath = params.parentFile.remotePath.plus(params.folderName).plus(OCFile.PATH_SEPARATOR)
         return fileRepository.createFolder(remotePath = remotePath, parentFolder = params.parentFile)
     }
 
     data class Params(val folderName: String, val parentFile: OCFile)
-
 }

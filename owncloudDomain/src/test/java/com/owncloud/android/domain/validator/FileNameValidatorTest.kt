@@ -19,7 +19,10 @@
 
 package com.owncloud.android.domain.validator
 
-import org.junit.Assert
+import com.owncloud.android.domain.exceptions.validation.FileNameException
+import com.owncloud.android.domain.exceptions.validation.FileNameException.FileNameExceptionType
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class FileNameValidatorTest {
@@ -28,22 +31,45 @@ class FileNameValidatorTest {
 
     @Test
     fun `validate name - ok`() {
-        Assert.assertTrue(validator.validate("Photos"))
+        val result = runCatching { validator.validateOrThrowException("Photos") }
+        assertEquals(Unit, result.getOrNull())
+    }
+
+    @Test
+    fun `validate name - ko - empty`() {
+        val result = runCatching { validator.validateOrThrowException("    ") }
+
+        validateExceptionAndType(result, FileNameExceptionType.FILE_NAME_EMPTY)
     }
 
     @Test
     fun `validate name - ko - back slash`() {
-        Assert.assertFalse(validator.validate("/Photos"))
+        val result = runCatching { validator.validateOrThrowException("/Photos") }
+
+        validateExceptionAndType(result, FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS)
     }
 
     @Test
     fun `validate name - ko - forward slash`() {
-        Assert.assertFalse(validator.validate("\\Photos"))
+        val result = runCatching { validator.validateOrThrowException("\\Photos") }
+
+        validateExceptionAndType(result, FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS)
     }
 
     @Test
     fun `validate name - ko - both slashes()`() {
-        Assert.assertFalse(validator.validate("\\Photos/"))
-    }
+        val result = runCatching { validator.validateOrThrowException("\\Photos/") }
 
+        validateExceptionAndType(result, FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS)
+    }
+}
+
+private fun validateExceptionAndType(
+    result: Result<Unit>,
+    type: FileNameExceptionType
+) {
+    with(result.exceptionOrNull()) {
+        assertTrue(this is FileNameException)
+        assertEquals(type, (this as FileNameException).type)
+    }
 }

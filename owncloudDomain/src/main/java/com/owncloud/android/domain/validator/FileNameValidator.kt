@@ -18,11 +18,19 @@
  */
 package com.owncloud.android.domain.validator
 
+import com.owncloud.android.domain.exceptions.validation.FileNameException
 import java.util.regex.Pattern
 
 class FileNameValidator {
 
-    fun validate(string: String): Boolean = !FILE_NAME_REGEX.containsMatchIn(string)
+    @Throws(FileNameException::class)
+    fun validateOrThrowException(string: String) {
+        if (string.trim().isBlank()) {
+            throw FileNameException(type = FileNameException.FileNameExceptionType.FILE_NAME_EMPTY)
+        } else if (FILE_NAME_REGEX.containsMatchIn(string)) {
+            throw FileNameException(type = FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS)
+        }
+    }
 
     companion object {
         // Regex to check both slashes '/' and '\'
