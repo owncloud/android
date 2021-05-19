@@ -23,19 +23,19 @@ package com.owncloud.android.data.files.repository
 import com.owncloud.android.data.LocalStorageProvider
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
 import timber.log.Timber
+import java.io.File
 
 class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
     private val remoteFileDataSource: RemoteFileDataSource,
     private val localStorageProvider: LocalStorageProvider
 ) : FileRepository {
-    override fun checkPathExistence(path: String, userLogged: Boolean): Boolean =
-        remoteFileDataSource.checkPathExistence(path, userLogged)
 
     override fun createFolder(
         remotePath: String,
@@ -72,6 +72,54 @@ class OCFileRepository(
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderImages(folderId)
+
+    override fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile) {
+        listOfFilesToMove.forEach { ocFile ->
+
+            // 1. Get the final remote path for this file.
+            val expectedRemotePath: String = targetFile.remotePath + ocFile.fileName
+            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath).apply {
+                if (ocFile.isFolder) {
+                    plus(File.separator)
+                }
+            }
+            val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFile.owner, finalRemotePath)
+
+            // 2. Try to move files in server
+            try {
+                remoteFileDataSource.moveFile(
+                    sourceRemotePath = ocFile.remotePath,
+                    targetRemotePath = finalRemotePath
+                )
+            } catch (targetNodeDoesNotExist: ConflictException) {
+                // Target node does not exist anymore. Remove target folder from database and local storage and return
+                removeFolderRecursively(ocFile = targetFile, removeOnlyLocalCopy = false)
+                return@moveFile
+            } catch (sourceFileDoesNotExist: FileNotFoundException) {
+                // Source file does not exist anymore. Remove file from database and local storage and continue
+                if (ocFile.isFolder) {
+                    removeFolderRecursively(ocFile = ocFile, removeOnlyLocalCopy = false)
+                } else {
+                    removeFile(
+                        ocFile = ocFile,
+                        onlyLocalCopy = false
+                    )
+                }
+                return@forEach
+            }
+
+            // 3. Update database with latest changes
+            localFileDataSource.moveFile(
+                sourceFile = ocFile,
+                targetFile = targetFile,
+                finalRemotePath = finalRemotePath,
+                finalStoragePath = finalStoragePath
+            )
+
+            // 4. Update local storage
+            localStorageProvider.moveLocalFile(ocFile, finalStoragePath)
+        }
+    }
 
     override fun refreshFolder(remotePath: String) {
         remoteFileDataSource.refreshFolder(remotePath).also {

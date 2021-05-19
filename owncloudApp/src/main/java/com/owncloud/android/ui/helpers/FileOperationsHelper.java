@@ -331,24 +331,6 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Start operations to move one or several files
-     *
-     * @param files        Files to move
-     * @param targetFolder Folder where the files while be moved into
-     */
-    public void moveFiles(Collection<OCFile> files, OCFile targetFolder) {
-        for (OCFile file : files) {
-            Intent service = new Intent(mFileActivity, OperationsService.class);
-            service.setAction(OperationsService.ACTION_MOVE_FILE);
-            service.putExtra(OperationsService.EXTRA_NEW_PARENT_PATH, targetFolder.getRemotePath());
-            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-        }
-        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-    }
-
-    /**
      * Start operations to copy one or several files
      *
      * @param files        Files to copy

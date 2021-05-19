@@ -26,6 +26,10 @@ interface RemoteFileDataSource {
 
     fun createFolder(remotePath: String, createFullPath: Boolean, isChunksFolder: Boolean)
 
+    fun getAvailableRemotePath(remotePath: String): String
+
+    fun moveFile(sourceRemotePath: String, targetRemotePath: String)
+
     fun refreshFolder(remotePath: String): List<OCFile>
 
     fun removeFile(remotePath: String)
