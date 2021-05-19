@@ -4,131 +4,103 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2021 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
+package com.owncloud.android.ui.dialog
 
-package com.owncloud.android.ui.dialog;
+import android.app.Dialog
+import android.content.DialogInterface
+import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import com.owncloud.android.R
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.lib.resources.files.FileUtils
+import com.owncloud.android.ui.activity.ComponentsGetter
+import com.owncloud.android.utils.PreferenceUtils
 
 /**
- * Dialog to input a new name for an {@link OCFile} being renamed.
- * <p>
+ * Dialog to input a new name for an [OCFile] being renamed.
+ *
+ *
  * Triggers the rename operation.
  */
-
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager.LayoutParams;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
-import com.google.android.material.snackbar.Snackbar;
-import com.owncloud.android.R;
-import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.lib.resources.files.FileUtils;
-import com.owncloud.android.ui.activity.ComponentsGetter;
-import com.owncloud.android.utils.PreferenceUtils;
-
 /**
- *  Dialog to input a new name for a file or folder to rename.  
+ * Dialog to input a new name for a file or folder to rename.
  *
- *  Triggers the rename operation when name is confirmed.
+ * Triggers the rename operation when name is confirmed.
  */
-public class RenameFileDialogFragment
-        extends DialogFragment implements DialogInterface.OnClickListener {
+class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
-    private static final String ARG_TARGET_FILE = "TARGET_FILE";
+    private var targetFile: OCFile? = null
 
-    /**
-     * Public factory method to create new RenameFileDialogFragment instances.
-     *
-     * @param file            File to rename.
-     * @return Dialog ready to show.
-     */
-    public static RenameFileDialogFragment newInstance(OCFile file) {
-        RenameFileDialogFragment frag = new RenameFileDialogFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_TARGET_FILE, file);
-        frag.setArguments(args);
-        return frag;
-
-    }
-
-    private OCFile mTargetFile;
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mTargetFile = getArguments().getParcelable(ARG_TARGET_FILE);
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        targetFile = requireArguments().getParcelable(ARG_TARGET_FILE)
 
         // Inflate the layout for the dialog
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View v = inflater.inflate(R.layout.edit_box_dialog, null);
+        val inflater = requireActivity().layoutInflater
+        val view = inflater.inflate(R.layout.edit_box_dialog, null)
 
         // Allow or disallow touches with other visible windows
-        v.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
-        );
+        view.filterTouchesWhenObscured =
+            PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
 
         // Setup layout 
-        String currentName = mTargetFile.getFileName();
-        EditText inputText = v.findViewById(R.id.user_input);
-        inputText.setText(currentName);
-        int selectionStart = 0;
-        int extensionStart = mTargetFile.isFolder() ? -1 : currentName.lastIndexOf(".");
-        int selectionEnd = (extensionStart >= 0) ? extensionStart : currentName.length();
+        val currentName = targetFile!!.fileName
+        val inputText = view.findViewById<EditText>(R.id.user_input)
+        inputText.setText(currentName)
+        val selectionStart = 0
+        val extensionStart = if (targetFile!!.isFolder) -1 else currentName.lastIndexOf(".")
+        val selectionEnd = if (extensionStart >= 0) extensionStart else currentName.length
         if (selectionStart >= 0 && selectionEnd >= 0) {
             inputText.setSelection(
-                    Math.min(selectionStart, selectionEnd),
-                    Math.max(selectionStart, selectionEnd));
+                selectionStart.coerceAtMost(selectionEnd),
+                selectionStart.coerceAtLeast(selectionEnd)
+            )
         }
-        inputText.requestFocus();
+        inputText.requestFocus()
 
-        // Build the dialog  
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(v)
-                .setPositiveButton(android.R.string.ok, this)
-                .setNegativeButton(android.R.string.cancel, this)
-                .setTitle(R.string.rename_dialog_title);
-        Dialog d = builder.create();
-        d.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        return d;
+        // Build the dialog
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setView(view)
+            .setPositiveButton(android.R.string.ok, this)
+            .setNegativeButton(android.R.string.cancel, this)
+            .setTitle(R.string.rename_dialog_title)
+        val dialog: Dialog = builder.create()
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        return dialog
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
+    override fun onClick(dialog: DialogInterface, which: Int) {
         if (which == AlertDialog.BUTTON_POSITIVE) {
-            String newFileName =
-                    ((TextView) (getDialog().findViewById(R.id.user_input)))
-                            .getText().toString().trim();
-
-            if (newFileName.length() <= 0) {
-                showSnackMessage(R.string.filename_empty);
-                return;
+            // These checks are done in the RenameFileUseCase too, we could remove them too.
+            val newFileName = (getDialog()!!.findViewById<View>(R.id.user_input) as TextView).text.toString()
+            if (newFileName.isBlank()) {
+                showSnackMessage(R.string.filename_empty)
+                return
             }
-
             if (!FileUtils.isValidName(newFileName)) {
-                showSnackMessage(R.string.filename_forbidden_characters_from_server);
-                return;
+                showSnackMessage(R.string.filename_forbidden_characters_from_server)
+                return
             }
-
-            ((ComponentsGetter) getActivity()).getFileOperationsHelper().
-                    renameFile(mTargetFile, newFileName);
+            (requireActivity() as ComponentsGetter).fileOperationsHelper.renameFile(targetFile, newFileName)
         }
     }
 
@@ -137,12 +109,27 @@ public class RenameFileDialogFragment
      *
      * @param messageResource       Message to show.
      */
-    private void showSnackMessage(int messageResource) {
-        Snackbar snackbar = Snackbar.make(
-                getActivity().findViewById(android.R.id.content),
-                messageResource,
-                Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
+    private fun showSnackMessage(messageResource: Int) {
+        showMessageInSnackbar(
+            message = getString(messageResource)
+        )
+    }
+
+    companion object {
+        private const val ARG_TARGET_FILE = "TARGET_FILE"
+
+        /**
+         * Public factory method to create new RenameFileDialogFragment instances.
+         *
+         * @param file            File to rename.
+         * @return Dialog ready to show.
+         */
+        @JvmStatic
+        fun newInstance(file: OCFile?): RenameFileDialogFragment {
+            val args = Bundle().apply {
+                putParcelable(ARG_TARGET_FILE, file)
+            }
+            return RenameFileDialogFragment().apply { arguments = args }
+        }
     }
 }
