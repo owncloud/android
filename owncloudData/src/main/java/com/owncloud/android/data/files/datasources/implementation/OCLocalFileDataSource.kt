@@ -91,4 +91,13 @@ class OCLocalFileDataSource(
     override fun removeFile(fileId: Long) {
         fileDao.deleteFileWithId(fileId)
     }
+
+    override fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String) {
+        fileDao.moveFile(
+            sourceFile = ocFileMapper.toEntity(fileToRename)!!,
+            targetFile = fileDao.getFileById(fileToRename.parentId!!)!!,
+            finalRemotePath = finalRemotePath,
+            finalStoragePath = fileToRename.storagePath?.let { finalStoragePath }
+        )
+    }
 }
