@@ -304,6 +304,7 @@
   <string name="confirmation_remove_folder_alert">Doni vërtet të hiqet %1$s dhe lënda e tij?</string>
   <string name="confirmation_remove_local">Vetëm vendorja</string>
   <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">Kjo llogari ka të bashkëngjitura ngarkime nga kamera, heqja e llogarisë do të çaktivizojë ngarkimet nga kamera. Doni vërtet të hiqet llogaria %1$s?</string>
   <string name="confirmation_remove_public_share_title">Hiqe lidhjen</string>
   <string name="confirmation_remove_private_share_title">Hiqe ndarjen private</string>
   <string name="confirmation_remove_share_message">Doni vërtet të hiqet ndarja %1$s?</string>
@@ -446,6 +447,8 @@
   <string name="file_list__footer__files">%1$d kartelë</string>
   <string name="file_list__footer__files_and_folder">%1$d kartela, 1 dosje</string>
   <string name="file_list__footer__files_and_folders">%1$d kartela, %2$d dosje</string>
+  <string name="prefs_picture_upload_account">Llogari ku të ngarkohen foto</string>
+  <string name="prefs_video_upload_account">Llogari ku të ngarkohen video</string>
   <string name="prefs_camera_upload_source_path_title">Dosje kamere (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">e domosdoshme</string>
   <string name="prefs_camera_upload_source_path_title_optional">opsionale</string>
@@ -557,7 +560,7 @@
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
   <string name="welcome_feature_6_title">Rregullimet u ristrukturuan</string>
   <string name="welcome_feature_6_text">Rregullimet kanë një pamje të re</string>
-  <string name="welcome_feature_7_text">Fotot/videot tuaja u ngarkuan automatikisht te një llogari e bashkëngjitur</string>
+  <string name="welcome_feature_7_title">Ngarkimet e kamerës u kthyen te parazgjedhjet</string>
   <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
   <string name="common_not_found">s\’u gjet</string>
   <string name="supports_oauth2_error">S\’qe e mundur të dihej nëse mbulohet OAuth2</string>

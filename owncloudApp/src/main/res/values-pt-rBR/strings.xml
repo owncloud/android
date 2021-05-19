@@ -560,7 +560,6 @@
   <string name="welcome_feature_6_title">Configurações reestruturadas</string>
   <string name="welcome_feature_6_text">As configurações têm uma atualizada visão nova</string>
   <string name="welcome_feature_7_title">Os envios da câmera foram redefinidos</string>
-  <string name="welcome_feature_7_text">Suas fotos/vídeos são carregados automaticamente para uma conta anexada</string>
   <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
   <string name="common_not_found">não foi encontrado</string>
   <string name="supports_oauth2_error">Não foi possível  saber se OAuth2 é suportada</string>
