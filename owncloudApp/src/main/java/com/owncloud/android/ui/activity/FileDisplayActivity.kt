@@ -77,7 +77,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.RefreshFolderOperation
-import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
@@ -1147,7 +1146,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         super.onRemoteOperationFinish(operation, result)
 
         when (operation) {
-            is RenameFileOperation -> onRenameFileOperationFinish(operation, result)
             is SynchronizeFileOperation -> onSynchronizeFileOperationFinish(operation, result)
             is CopyFileOperation -> onCopyFileOperationFinish(operation, result)
         }
@@ -1262,32 +1260,35 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * @param result    Result of the renaming.
      */
     private fun onRenameFileOperationFinish(
-        operation: RenameFileOperation,
-        result: RemoteOperationResult<*>
+        uiResult: UIResult<OCFile>
     ) {
-        var renamedFile: OCFile? = operation.file
-        if (result.isSuccess) {
-            val details = secondFragment
-            if (details != null && renamedFile == details.file) {
-                renamedFile = storageManager.getFileById(renamedFile!!.id!!)
-                file = renamedFile
-                details.onFileMetadataChanged(renamedFile)
-                updateToolbar(renamedFile)
+        when (uiResult) {
+            is UIResult.Loading -> {
+                showLoadingDialog(R.string.wait_a_moment)
             }
+            is UIResult.Success -> {
+                dismissLoadingDialog()
 
-            if (storageManager.getFileById(renamedFile!!.parentId!!) == currentDir) {
-                refreshListOfFilesFragment(true)
+                val details = secondFragment
+                if (details != null && uiResult.data == details.file) {
+                    val updatedRenamedFile = storageManager.getFileById(uiResult.data!!.id!!)
+                    file = updatedRenamedFile
+                    details.onFileMetadataChanged(updatedRenamedFile)
+                    updateToolbar(updatedRenamedFile)
+                }
+
+                if (storageManager.getFileById(uiResult.data!!.parentId!!) == currentDir) {
+                    refreshListOfFilesFragment(true)
+                }
             }
+            is UIResult.Error -> {
+                dismissLoadingDialog()
 
-        } else {
-            showMessageInSnackbar(
-                R.id.list_layout,
-                ErrorMessageAdapter.getResultMessage(result, operation, resources)
-            )
+                showErrorInSnackbar(R.string.rename_server_fail_msg, uiResult.error)
 
-            if (result.isSslRecoverableException) {
-                lastSslUntrustedServerResult = result
-                showUntrustedCertDialog(lastSslUntrustedServerResult)
+                if (uiResult.getThrowableOrNull() is SSLRecoverablePeerUnverifiedException) {
+                    showUntrustedCertDialogForThrowable(uiResult.getThrowableOrNull())
+                }
             }
         }
     }
@@ -1616,11 +1617,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun startListeningToOperations() {
+        fileOperationViewModel.moveFileLiveData.observe(this, Event.EventObserver {
+            onMoveFileOperationFinish(it)
+        })
         fileOperationViewModel.removeFileLiveData.observe(this, Event.EventObserver {
             onRemoveFileOperationResult(it)
         })
-        fileOperationViewModel.moveFileLiveData.observe(this, Event.EventObserver {
-            onMoveFileOperationFinish(it)
+        fileOperationViewModel.renameFileLiveData.observe(this, Event.EventObserver {
+            onRenameFileOperationFinish(it)
         })
     }
 
