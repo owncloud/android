@@ -50,8 +50,8 @@ class FileOperationViewModel(
     private val _removeFileLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
     val removeFileLiveData: LiveData<Event<UIResult<List<OCFile>>>> = _removeFileLiveData
 
-    private val _renameFileLiveData = MediatorLiveData<Event<UIResult<Unit>>>()
-    val renameFileLiveData: LiveData<Event<UIResult<Unit>>> = _renameFileLiveData
+    private val _renameFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
+    val renameFileLiveData: LiveData<Event<UIResult<OCFile>>> = _renameFileLiveData
 
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
@@ -129,7 +129,7 @@ class FileOperationViewModel(
 
             when (useCaseResult) {
                 is UseCaseResult.Success -> {
-                    _renameFileLiveData.postValue(Event(UIResult.Success()))
+                    _renameFileLiveData.postValue(Event(UIResult.Success(fileOperation.ocFileToRename)))
                 }
                 is UseCaseResult.Error -> {
                     _renameFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
