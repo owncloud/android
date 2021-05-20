@@ -23,6 +23,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
@@ -62,77 +63,57 @@ class FileOperationViewModel(
     }
 
     private fun moveOperation(fileOperation: FileOperation.MoveOperation) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            _moveFileLiveData.postValue(Event(UIResult.Loading()))
-
-            if (!contextProvider.isConnected()) {
-                _moveFileLiveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
-                Timber.w("${moveFileUseCase.javaClass.simpleName} will not be executed due to lack of network connection")
-                return@launch
-            }
-            val useCaseResult =
-                moveFileUseCase.execute(MoveFileUseCase.Params(fileOperation.listOfFilesToMove, fileOperation.targetFolder))
-
-            Timber.d("Use case executed: ${moveFileUseCase.javaClass.simpleName} with result: $useCaseResult")
-
-            when (useCaseResult) {
-                is UseCaseResult.Success -> {
-                    _moveFileLiveData.postValue(Event(UIResult.Success(fileOperation.targetFolder)))
-                }
-                is UseCaseResult.Error -> {
-                    _moveFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
-                }
-            }
-
-        }
+        runOperation(
+            liveData = _moveFileLiveData,
+            useCase = moveFileUseCase,
+            useCaseParams = MoveFileUseCase.Params(fileOperation.listOfFilesToMove, fileOperation.targetFolder),
+            postValue = fileOperation.targetFolder
+        )
     }
 
     private fun removeOperation(fileOperation: FileOperation.RemoveOperation) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            _removeFileLiveData.postValue(Event(UIResult.Loading()))
-
-            if (!contextProvider.isConnected()) {
-                _removeFileLiveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
-                Timber.w("${removeFileUseCase.javaClass.simpleName} will not be executed due to lack of network connection")
-                return@launch
-            }
-            val useCaseResult =
-                removeFileUseCase.execute(RemoveFileUseCase.Params(fileOperation.listOfFilesToRemove, fileOperation.removeOnlyLocalCopy))
-
-            Timber.d("Use case executed: ${removeFileUseCase.javaClass.simpleName} with result: $useCaseResult")
-
-            when (useCaseResult) {
-                is UseCaseResult.Success -> {
-                    _removeFileLiveData.postValue(Event(UIResult.Success(fileOperation.listOfFilesToRemove)))
-                }
-                is UseCaseResult.Error -> {
-                    _removeFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
-                }
-            }
-
-        }
+        runOperation(
+            liveData = _removeFileLiveData,
+            useCase = removeFileUseCase,
+            useCaseParams = RemoveFileUseCase.Params(fileOperation.listOfFilesToRemove, fileOperation.removeOnlyLocalCopy),
+            postValue = fileOperation.listOfFilesToRemove
+        )
     }
 
     private fun renameOperation(fileOperation: FileOperation.RenameOperation) {
+        runOperation(
+            liveData = _renameFileLiveData,
+            useCase = renameFileUseCase,
+            useCaseParams = RenameFileUseCase.Params(fileOperation.ocFileToRename, fileOperation.newName),
+            postValue = fileOperation.ocFileToRename
+        )
+    }
+
+    private fun <Type, Params, PostResult> runOperation(
+        liveData: MediatorLiveData<Event<UIResult<PostResult>>>,
+        useCase: BaseUseCaseWithResult<Type, Params>,
+        useCaseParams: Params,
+        postValue: PostResult? = null
+    ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            _renameFileLiveData.postValue(Event(UIResult.Loading()))
+            liveData.postValue(Event(UIResult.Loading()))
 
             if (!contextProvider.isConnected()) {
-                _renameFileLiveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
-                Timber.w("${renameFileUseCase.javaClass.simpleName} will not be executed due to lack of network connection")
+                liveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
+                Timber.w("${useCase.javaClass.simpleName} will not be executed due to lack of network connection")
                 return@launch
             }
-            val useCaseResult =
-                renameFileUseCase.execute(RenameFileUseCase.Params(fileOperation.ocFileToRename, fileOperation.newName))
 
-            Timber.d("Use case executed: ${renameFileUseCase.javaClass.simpleName} with result: $useCaseResult")
+            val useCaseResult = useCase.execute(useCaseParams).also {
+                Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $it")
+            }
 
             when (useCaseResult) {
                 is UseCaseResult.Success -> {
-                    _renameFileLiveData.postValue(Event(UIResult.Success(fileOperation.ocFileToRename)))
+                    liveData.postValue(Event(UIResult.Success(postValue)))
                 }
                 is UseCaseResult.Error -> {
-                    _renameFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
+                    liveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
                 }
             }
         }
