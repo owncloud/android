@@ -175,6 +175,12 @@ class OCFileRepository(
             finalRemotePath = newRemotePath,
             finalStoragePath = localStorageProvider.getDefaultSavePathFor(ocFile.owner, newRemotePath)
         )
+
+        // 5. Update local storage
+        localStorageProvider.moveLocalFile(
+            ocFile = ocFile,
+            finalStoragePath = localStorageProvider.getDefaultSavePathFor(ocFile.owner, newRemotePath)
+        )
     }
 
     override fun saveFile(file: OCFile) {
