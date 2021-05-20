@@ -46,12 +46,12 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
+import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.RefreshFolderOperation
-import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
@@ -309,13 +309,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val file = getFileByIdOrException(docId)
 
-        RenameFileOperation(file.remotePath, displayName).apply {
-            execute(currentStorageManager, context).also {
-                checkOperationResult(
-                    it,
-                    file.parentId.toString()
-                )
-            }
+        val renameFileUseCase: RenameFileUseCase by inject()
+        renameFileUseCase.execute(RenameFileUseCase.Params(file, displayName)).also {
+            checkUseCaseResult(
+                it,
+                file.parentId.toString()
+            )
         }
 
         return null
