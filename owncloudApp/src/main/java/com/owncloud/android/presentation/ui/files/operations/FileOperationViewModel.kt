@@ -28,6 +28,7 @@ import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
+import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
@@ -38,20 +39,25 @@ import timber.log.Timber
 class FileOperationViewModel(
     private val moveFileUseCase: MoveFileUseCase,
     private val removeFileUseCase: RemoveFileUseCase,
+    private val renameFileUseCase: RenameFileUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
+    private val _moveFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
+    val moveFileLiveData: LiveData<Event<UIResult<OCFile>>> = _moveFileLiveData
+
     private val _removeFileLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
     val removeFileLiveData: LiveData<Event<UIResult<List<OCFile>>>> = _removeFileLiveData
 
-    private val _moveFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
-    val moveFileLiveData: LiveData<Event<UIResult<OCFile>>> = _moveFileLiveData
+    private val _renameFileLiveData = MediatorLiveData<Event<UIResult<Unit>>>()
+    val renameFileLiveData: LiveData<Event<UIResult<Unit>>> = _renameFileLiveData
 
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
             is FileOperation.MoveOperation -> moveOperation(fileOperation)
             is FileOperation.RemoveOperation -> removeOperation(fileOperation)
+            is FileOperation.RenameOperation -> renameOperation(fileOperation)
         }
     }
 
@@ -104,6 +110,31 @@ class FileOperationViewModel(
                 }
             }
 
+        }
+    }
+
+    private fun renameOperation(fileOperation: FileOperation.RenameOperation) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            _renameFileLiveData.postValue(Event(UIResult.Loading()))
+
+            if (!contextProvider.isConnected()) {
+                _renameFileLiveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
+                Timber.w("${renameFileUseCase.javaClass.simpleName} will not be executed due to lack of network connection")
+                return@launch
+            }
+            val useCaseResult =
+                renameFileUseCase.execute(RenameFileUseCase.Params(fileOperation.ocFileToRename, fileOperation.newName))
+
+            Timber.d("Use case executed: ${renameFileUseCase.javaClass.simpleName} with result: $useCaseResult")
+
+            when (useCaseResult) {
+                is UseCaseResult.Success -> {
+                    _renameFileLiveData.postValue(Event(UIResult.Success()))
+                }
+                is UseCaseResult.Error -> {
+                    _renameFileLiveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
+                }
+            }
         }
     }
 }
