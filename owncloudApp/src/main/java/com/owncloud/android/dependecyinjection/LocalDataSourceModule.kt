@@ -32,7 +32,6 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
-import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource
 import org.koin.android.ext.koin.androidContext
@@ -46,12 +45,11 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
 
     factory { OCCapabilityMapper() }
-    factory { OCShareMapper() }
 
     single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get(), get()) }
-    factory<LocalShareDataSource> { OCLocalShareDataSource(get(), get()) }
+    factory<LocalShareDataSource> { OCLocalShareDataSource(get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
 }
