@@ -51,7 +51,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.operations.CopyFileOperation;
-import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -67,7 +66,6 @@ public class OperationsService extends Service {
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     public static final String EXTRA_SERVER_URL = "SERVER_URL";
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
-    public static final String EXTRA_NEWNAME = "NEWNAME";
     public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
@@ -75,7 +73,6 @@ public class OperationsService extends Service {
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
-    public static final String ACTION_RENAME = "RENAME";
     public static final String ACTION_SYNC_FILE = "SYNC_FILE";
     public static final String ACTION_SYNC_FOLDER = "SYNC_FOLDER";
     public static final String ACTION_COPY_FILE = "COPY_FILE";
@@ -448,14 +445,6 @@ public class OperationsService extends Service {
                 String action = operationIntent.getAction();
                 if (action != null) {
                     switch (action) {
-                        case ACTION_RENAME: {
-                            // Rename file or folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            String newName = operationIntent.getStringExtra(EXTRA_NEWNAME);
-                            operation = new RenameFileOperation(remotePath, newName);
-
-                            break;
-                        }
                         case ACTION_SYNC_FILE: {
                             // Sync file
                             String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
