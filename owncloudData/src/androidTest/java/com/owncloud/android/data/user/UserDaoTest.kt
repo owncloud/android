@@ -21,9 +21,10 @@ package com.owncloud.android.data.user
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.data.OwncloudDatabase
-import com.owncloud.android.data.user.datasources.mapper.UserQuotaMapper
+import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource.Companion.toEntity
+import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource.Companion.toModel
+import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_QUOTA
 import org.junit.Assert.assertEquals
@@ -41,7 +42,6 @@ class UserDaoTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var userDao: UserDao
-    private val userQuotaMapper = UserQuotaMapper()
 
     @Before
     fun setUp() {
@@ -57,23 +57,23 @@ class UserDaoTest {
 
     @Test
     fun insertQuotaForAccount() {
-        userDao.insert(userQuotaMapper.toEntity(OC_USER_QUOTA)!!.copy(accountName = OC_ACCOUNT_NAME))
+        userDao.insert(OC_USER_QUOTA.toEntity(OC_ACCOUNT_NAME))
 
         val userQuotaEntity = userDao.getQuotaForAccount(OC_ACCOUNT_NAME)
 
         assertNotNull(userQuotaEntity)
-        assertEquals(OC_USER_QUOTA, userQuotaMapper.toModel(userQuotaEntity))
+        assertEquals(OC_USER_QUOTA, userQuotaEntity?.toModel())
     }
 
     @Test
     fun replaceQuotaForAccount() {
-        userDao.insert(userQuotaMapper.toEntity(OC_USER_QUOTA)!!.copy(accountName = OC_ACCOUNT_NAME))
-        userDao.insert(userQuotaMapper.toEntity(OC_USER_QUOTA.copy(available = -3))!!.copy(accountName = OC_ACCOUNT_NAME))
+        userDao.insert(OC_USER_QUOTA.toEntity(OC_ACCOUNT_NAME))
+        userDao.insert(OC_USER_QUOTA.toEntity(OC_ACCOUNT_NAME).copy(available = -3))
 
         val userQuotaEntity = userDao.getQuotaForAccount(OC_ACCOUNT_NAME)
 
         assertNotNull(userQuotaEntity)
-        assertEquals(OC_USER_QUOTA.copy(available = -3), userQuotaMapper.toModel(userQuotaEntity))
+        assertEquals(OC_USER_QUOTA.copy(available = -3), userQuotaEntity?.toModel())
     }
 
     @Test

@@ -21,7 +21,7 @@ package com.owncloud.android.data.user.datasources
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.UserQuotaMapper
+import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource.Companion.toEntity
 import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_QUOTA
@@ -38,9 +38,8 @@ import org.junit.rules.TestRule
 class OCLocalUserDataSourceTest {
     private lateinit var ocLocalUserDataSource: OCLocalUserDataSource
     private val ocUserQuotaDao = mockk<UserDao>(relaxed = true)
-    private val ocUserQuotaMapper = UserQuotaMapper()
 
-    private val userQuotaEntity = ocUserQuotaMapper.toEntity(OC_USER_QUOTA)!!.copy(accountName = OC_ACCOUNT_NAME)
+    private val userQuotaEntity = OC_USER_QUOTA.toEntity(accountName = OC_ACCOUNT_NAME)
 
     @Rule
     @JvmField
@@ -48,7 +47,7 @@ class OCLocalUserDataSourceTest {
 
     @Before
     fun init() {
-        ocLocalUserDataSource = OCLocalUserDataSource(ocUserQuotaDao, ocUserQuotaMapper)
+        ocLocalUserDataSource = OCLocalUserDataSource(ocUserQuotaDao)
     }
 
     @Test

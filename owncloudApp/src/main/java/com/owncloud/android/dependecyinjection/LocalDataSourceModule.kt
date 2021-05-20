@@ -3,7 +3,7 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,7 +35,6 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLoc
 import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.UserQuotaMapper
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -48,12 +47,11 @@ val localDataSourceModule = module {
 
     factory { OCCapabilityMapper() }
     factory { OCShareMapper() }
-    factory { UserQuotaMapper() }
 
     single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get(), get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get(), get()) }
-    factory<LocalUserDataSource> { OCLocalUserDataSource(get(), get()) }
+    factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
 }
