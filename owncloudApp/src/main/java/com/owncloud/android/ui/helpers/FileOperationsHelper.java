@@ -327,18 +327,6 @@ public class FileOperationsHelper {
         //        }
     }
 
-    public void renameFile(OCFile file, String newFilename) {
-        // RenameFile
-        Intent service = new Intent(mFileActivity, OperationsService.class);
-        service.setAction(OperationsService.ACTION_RENAME);
-        service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-        service.putExtra(OperationsService.EXTRA_NEWNAME, newFilename);
-        mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-
-        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-    }
-
     /**
      * Cancel the transference in downloads (files/folders) and file uploads
      *
