@@ -557,6 +557,7 @@
   <string name="welcome_feature_6_title">ปรับโครงสร้างการตั้งค่าใหม่</string>
   <string name="welcome_feature_6_text">มีการตั้งค่ามุมมองใหม่</string>
   <string name="welcome_feature_7_title">รีเซ็ตการอัปโหลดกล้องแล้ว</string>
+  <string name="welcome_feature_8_text">รูปภาพ / วิดีโอของคุณถูกอัปโหลดโดยอัตโนมัติไปยังบัญชีที่แนบมา</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
   <string name="common_not_found">ไม่พบข้อมูลใดๆ</string>
   <string name="supports_oauth2_error">มันเป็นไปไม่ได้ที่จะรู้ว่ารองรับการใช้งาน OAuth2</string>
