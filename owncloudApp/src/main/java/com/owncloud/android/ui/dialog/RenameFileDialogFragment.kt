@@ -34,8 +34,10 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.lib.resources.files.FileUtils
-import com.owncloud.android.ui.activity.ComponentsGetter
+import com.owncloud.android.presentation.ui.files.operations.FileOperation
+import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.utils.PreferenceUtils
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
  * Dialog to input a new name for a file or folder to rename.
@@ -45,6 +47,7 @@ import com.owncloud.android.utils.PreferenceUtils
 class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
     private var targetFile: OCFile? = null
+    private val filesViewModel: FileOperationViewModel by sharedViewModel()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         targetFile = requireArguments().getParcelable(ARG_TARGET_FILE)
@@ -74,15 +77,15 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
         inputText.requestFocus()
 
         // Build the dialog
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setView(view)
-            .setPositiveButton(android.R.string.ok, this)
-            .setNegativeButton(android.R.string.cancel, this)
-            .setTitle(R.string.rename_dialog_title)
-        val dialog: Dialog = builder.create()
-        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        dialog.avoidScreenshotsIfNeeded()
-        return dialog
+        return AlertDialog.Builder(requireActivity()).apply {
+            setView(view)
+            setPositiveButton(android.R.string.ok, this@RenameFileDialogFragment)
+            setNegativeButton(android.R.string.cancel, this@RenameFileDialogFragment)
+            setTitle(R.string.rename_dialog_title)
+        }.create().apply {
+            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+            avoidScreenshotsIfNeeded()
+        }
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
@@ -97,7 +100,7 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
                 showSnackMessage(R.string.filename_forbidden_characters_from_server)
                 return
             }
-            (requireActivity() as ComponentsGetter).fileOperationsHelper.renameFile(targetFile, newFileName)
+            filesViewModel.performOperation(FileOperation.RenameOperation(targetFile!!, newFileName))
         }
     }
 
