@@ -31,7 +31,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
-import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
 import com.owncloud.android.operations.UploadFileOperation
@@ -144,7 +143,6 @@ class ErrorMessageAdapter {
                         R.string.forbidden_permissions,
                         R.string.uploader_upload_forbidden_permissions
                     )
-                    if (operation is RenameFileOperation) formatter.forbidden(R.string.forbidden_permissions_rename)
                     if (operation is CreateFolderOperation) formatter.forbidden(R.string.forbidden_permissions_create)
                     if (operation is CopyFileOperation) formatter.forbidden(R.string.forbidden_permissions_copy) else formatter.format(
                         R.string.filename_forbidden_characters_from_server
@@ -157,7 +155,6 @@ class ErrorMessageAdapter {
                 ResultCode.FILE_NOT_FOUND -> {
                     if (operation is UploadFileOperation)
                         formatter.format(R.string.uploads_view_upload_status_failed_folder_error)
-                    if (operation is RenameFileOperation) formatter.format(R.string.rename_server_fail_msg)
                     if (operation is SynchronizeFolderOperation)
                         formatter.format(
                             R.string.sync_current_folder_was_removed,
@@ -239,7 +236,6 @@ class ErrorMessageAdapter {
 
             return when (operation) {
                 is UploadFileOperation -> formatter.format(R.string.uploader_upload_failed_content_single, operation.fileName)
-                is RenameFileOperation -> formatter.format(R.string.rename_server_fail_msg)
                 is CreateFolderOperation -> formatter.format(R.string.create_dir_fail_msg)
                 is SynchronizeFolderOperation -> formatter.format(
                     R.string.sync_folder_failed_content,
