@@ -23,7 +23,7 @@ package com.owncloud.android.data.capabilities.datasources
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
+import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toEntity
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.testutil.OC_CAPABILITY
@@ -41,10 +41,9 @@ import org.junit.rules.TestRule
 class OCLocalCapabilitiesDataSourceTest {
     private lateinit var ocLocalCapabilitiesDataSource: OCLocalCapabilitiesDataSource
     private val ocCapabilityDao = mockk<OCCapabilityDao>(relaxed = true)
-    private val ocCapabilityMapper = OCCapabilityMapper()
 
     private val ocCapability = OC_CAPABILITY.copy(id = 0)
-    private val ocCapabilityEntity = ocCapabilityMapper.toEntity(ocCapability)
+    private val ocCapabilityEntity = ocCapability.toEntity()
 
     @Rule
     @JvmField
@@ -55,7 +54,6 @@ class OCLocalCapabilitiesDataSourceTest {
         ocLocalCapabilitiesDataSource =
             OCLocalCapabilitiesDataSource(
                 ocCapabilityDao,
-                ocCapabilityMapper
             )
     }
 
@@ -87,7 +85,7 @@ class OCLocalCapabilitiesDataSourceTest {
 
     @Test
     fun getCapabilitiesForAccount() {
-        every { ocCapabilityDao.getCapabilitiesForAccount(any()) } returns ocCapabilityEntity!!
+        every { ocCapabilityDao.getCapabilitiesForAccount(any()) } returns ocCapabilityEntity
 
         val capabilityEmitted = ocLocalCapabilitiesDataSource.getCapabilityForAccount(ocCapability.accountName!!)
 
@@ -96,7 +94,7 @@ class OCLocalCapabilitiesDataSourceTest {
 
     @Test
     fun getCapabilitiesForAccountNull() {
-        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns MutableLiveData<OCCapabilityEntity>()
+        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns MutableLiveData()
 
         val capabilityEmitted =
             ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(ocCapability.accountName!!)
@@ -111,6 +109,6 @@ class OCLocalCapabilitiesDataSourceTest {
 
         ocLocalCapabilitiesDataSource.insert(listOf(ocCapability))
 
-        verify(exactly = 1) { ocCapabilityDao.replace(listOf(ocCapabilityEntity!!)) }
+        verify(exactly = 1) { ocCapabilityDao.replace(listOf(ocCapabilityEntity)) }
     }
 }
