@@ -54,7 +54,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is help enabled - ok - true`() {
-        every { contextProvider.getBoolean(any())} returns true
+        every { contextProvider.getBoolean(any()) } returns true
 
         val helpEnabled = moreViewModel.isHelpEnabled()
 
@@ -67,7 +67,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is help enabled - ok - false`() {
-        every { contextProvider.getBoolean(any())} returns false
+        every { contextProvider.getBoolean(any()) } returns false
 
         val helpEnabled = moreViewModel.isHelpEnabled()
 
@@ -80,7 +80,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `get help url - ok`() {
-        every { contextProvider.getString(any())} returns OC_BASE_URL
+        every { contextProvider.getString(any()) } returns OC_BASE_URL
 
         val helpUrl = moreViewModel.getHelpUrl()
 
@@ -93,7 +93,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is sync enabled - ok - true`() {
-        every { contextProvider.getBoolean(any())} returns true
+        every { contextProvider.getBoolean(any()) } returns true
 
         val syncEnabled = moreViewModel.isSyncEnabled()
 
@@ -106,7 +106,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is sync enabled - ok - false`() {
-        every { contextProvider.getBoolean(any())} returns false
+        every { contextProvider.getBoolean(any()) } returns false
 
         val syncEnabled = moreViewModel.isSyncEnabled()
 
@@ -119,7 +119,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `get sync url - ok`() {
-        every { contextProvider.getString(any())} returns OC_BASE_URL
+        every { contextProvider.getString(any()) } returns OC_BASE_URL
 
         val syncUrl = moreViewModel.getSyncUrl()
 
@@ -132,7 +132,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is recommend enabled - ok - true`() {
-        every { contextProvider.getBoolean(any())} returns true
+        every { contextProvider.getBoolean(any()) } returns true
 
         val recommendEnabled = moreViewModel.isRecommendEnabled()
 
@@ -145,7 +145,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is recommend enabled - ok - false`() {
-        every { contextProvider.getBoolean(any())} returns false
+        every { contextProvider.getBoolean(any()) } returns false
 
         val recommendEnabled = moreViewModel.isRecommendEnabled()
 
@@ -158,7 +158,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is feedback enabled - ok - true`() {
-        every { contextProvider.getBoolean(any())} returns true
+        every { contextProvider.getBoolean(any()) } returns true
 
         val feedbackEnabled = moreViewModel.isFeedbackEnabled()
 
@@ -171,7 +171,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is feedback enabled - ok - false`() {
-        every { contextProvider.getBoolean(any())} returns false
+        every { contextProvider.getBoolean(any()) } returns false
 
         val feedbackEnabled = moreViewModel.isFeedbackEnabled()
 
@@ -184,7 +184,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is privacy policy enabled - ok - true`() {
-        every { contextProvider.getBoolean(any())} returns true
+        every { contextProvider.getBoolean(any()) } returns true
 
         val privacyPolicyEnabled = moreViewModel.isPrivacyPolicyEnabled()
 
@@ -197,7 +197,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is privacy policy enabled - ok - false`() {
-        every { contextProvider.getBoolean(any())} returns false
+        every { contextProvider.getBoolean(any()) } returns false
 
         val privacyPolicyEnabled = moreViewModel.isPrivacyPolicyEnabled()
 
@@ -210,7 +210,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is imprint enabled - ok - true`() {
-        every { contextProvider.getBoolean(any())} returns true
+        every { contextProvider.getBoolean(any()) } returns true
 
         val imprintEnabled = moreViewModel.isImprintEnabled()
 
@@ -223,7 +223,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `is imprint enabled - ok - false`() {
-        every { contextProvider.getBoolean(any())} returns false
+        every { contextProvider.getBoolean(any()) } returns false
 
         val imprintEnabled = moreViewModel.isImprintEnabled()
 
@@ -236,7 +236,7 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `get imprint url - ok`() {
-        every { contextProvider.getString(any())} returns OC_BASE_URL
+        every { contextProvider.getString(any()) } returns OC_BASE_URL
 
         val imprintUrl = moreViewModel.getImprintUrl()
 

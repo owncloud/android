@@ -42,7 +42,6 @@ import com.owncloud.android.utils.matchers.withText
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 

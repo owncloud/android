@@ -23,7 +23,6 @@ package com.owncloud.android.settings.more
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.sugar.Web.onWebView
@@ -36,7 +35,6 @@ import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.utils.matchers.isDisplayed
 import org.hamcrest.Matchers.containsString
 import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
