@@ -231,7 +231,7 @@ class SettingsSecurityFragmentTest {
     @Test
     fun patternLockEnabledOk() {
         every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any())} returns UIResult.Success()
+        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Success()
 
         launchTest()
 
@@ -246,7 +246,7 @@ class SettingsSecurityFragmentTest {
     @Test
     fun patternLockEnabledError() {
         every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any())} returns UIResult.Error()
+        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Error()
 
         launchTest()
 
@@ -303,7 +303,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun disablePasscodeOk() {
-        every { securityViewModel.handleDisablePasscode(any())} returns UIResult.Success()
+        every { securityViewModel.handleDisablePasscode(any()) } returns UIResult.Success()
 
         launchTest()
 
@@ -321,7 +321,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun disablePasscodeError() {
-        every { securityViewModel.handleDisablePasscode(any())} returns UIResult.Error()
+        every { securityViewModel.handleDisablePasscode(any()) } returns UIResult.Error()
 
         launchTest()
 
@@ -339,7 +339,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun disablePatternOk() {
-        every { securityViewModel.handleDisablePattern(any())} returns UIResult.Success()
+        every { securityViewModel.handleDisablePattern(any()) } returns UIResult.Success()
 
         launchTest()
 
@@ -357,7 +357,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun disablePatternError() {
-        every { securityViewModel.handleDisablePattern(any())} returns UIResult.Error()
+        every { securityViewModel.handleDisablePattern(any()) } returns UIResult.Error()
 
         launchTest()
 
@@ -458,7 +458,7 @@ class SettingsSecurityFragmentTest {
 
     private fun firstEnablePasscode() {
         every { securityViewModel.isPatternSet() } returns false
-        every { securityViewModel.handleEnablePasscode(any())} returns UIResult.Success()
+        every { securityViewModel.handleEnablePasscode(any()) } returns UIResult.Success()
 
         mockIntent(
             extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
@@ -469,7 +469,7 @@ class SettingsSecurityFragmentTest {
 
     private fun firstEnablePattern() {
         every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any())} returns UIResult.Success()
+        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Success()
 
         mockIntent(
             extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),

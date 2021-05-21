@@ -54,7 +54,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `is pattern set - ok - true`() {
-        every { preferencesProvider.getBoolean(any(), any())} returns true
+        every { preferencesProvider.getBoolean(any(), any()) } returns true
 
         val patternSet = securityViewModel.isPatternSet()
 
@@ -67,7 +67,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `is pattern set - ok - false`() {
-        every { preferencesProvider.getBoolean(any(), any())} returns false
+        every { preferencesProvider.getBoolean(any(), any()) } returns false
 
         val patternSet = securityViewModel.isPatternSet()
 
@@ -95,7 +95,8 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
             for (i in 1..4) {
                 preferencesProvider.putString(
                     PassCodeActivity.PREFERENCE_PASSCODE_D + i,
-                    passcode.substring(i - 1, i))
+                    passcode.substring(i - 1, i)
+                )
             }
             preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         }
@@ -112,7 +113,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     fun `handle enable passcode - ko - passcode is null`() {
         val data: Intent = mockk()
 
-        every { data.getStringExtra(any())} returns null
+        every { data.getStringExtra(any()) } returns null
 
         val passcodeEnableResult = securityViewModel.handleEnablePasscode(data)
 
@@ -197,7 +198,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `is passcode set - ok - true`() {
-        every { preferencesProvider.getBoolean(any(), any())} returns true
+        every { preferencesProvider.getBoolean(any(), any()) } returns true
 
         val passcodeSet = securityViewModel.isPasscodeSet()
 
@@ -210,7 +211,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `is passcode set - ok - false`() {
-        every { preferencesProvider.getBoolean(any(), any())} returns false
+        every { preferencesProvider.getBoolean(any(), any()) } returns false
 
         val passcodeSet = securityViewModel.isPasscodeSet()
 
@@ -250,7 +251,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     fun `handle enable pattern - ko - pattern is null`() {
         val data: Intent = mockk()
 
-        every { data.getStringExtra(any())} returns null
+        every { data.getStringExtra(any()) } returns null
 
         val patternEnableResult = securityViewModel.handleEnablePattern(data)
 

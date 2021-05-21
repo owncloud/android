@@ -87,7 +87,7 @@ class SettingsLogsViewModelTest : ViewModelTest() {
 
     @Test
     fun `is enable logging on - ok - true`() {
-        every { preferencesProvider.getBoolean(any(), any())} returns true
+        every { preferencesProvider.getBoolean(any(), any()) } returns true
 
         val enableLoggingOn = logsViewModel.isLoggingEnabled()
 
@@ -100,7 +100,7 @@ class SettingsLogsViewModelTest : ViewModelTest() {
 
     @Test
     fun `is enable logging on - ok - false`() {
-        every { preferencesProvider.getBoolean(any(), any())} returns false
+        every { preferencesProvider.getBoolean(any(), any()) } returns false
 
         val enableLoggingOn = logsViewModel.isLoggingEnabled()
 
