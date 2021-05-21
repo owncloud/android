@@ -22,7 +22,7 @@ jobs:
           java-version: 11
       - name: "Build Changelog"
         id: changelog
-        uses: mikepenz/release-changelog-builder-action@v1.8.0
+        uses: mikepenz/release-changelog-builder-action@v1.8.1
         with:
           commitMode: true
         env:
