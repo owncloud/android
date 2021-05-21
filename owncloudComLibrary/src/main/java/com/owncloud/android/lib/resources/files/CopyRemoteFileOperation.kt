@@ -21,110 +21,88 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.resources.files
 
-package com.owncloud.android.lib.resources.files;
-
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.methods.webdav.CopyMethod;
-import com.owncloud.android.lib.common.network.WebdavUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import timber.log.Timber;
-
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.methods.webdav.CopyMethod
+import com.owncloud.android.lib.common.network.WebdavUtils
+import com.owncloud.android.lib.common.operations.RemoteOperation
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import timber.log.Timber
+import java.net.URL
+import java.util.concurrent.TimeUnit
 
 /**
- * Remote operation moving a remote file or folder in the ownCloud server to a different folder
+ * Remote operation copying a remote file or folder in the ownCloud server to a different folder
  * in the same account.
  *
- * Allows renaming the moving file/folder at the same time.
+ * Allows renaming the copying file/folder at the same time.
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González V.
+ *
+ * @param srcRemotePath    Remote path of the file/folder to move.
+ * @param targetRemotePath Remove path desired for the file/folder after moving it.
  */
-public class CopyRemoteFileOperation extends RemoteOperation<String> {
-
-    private static final int COPY_READ_TIMEOUT = 600000;
-    private static final int COPY_CONNECTION_TIMEOUT = 5000;
-
-    private String mSrcRemotePath;
-    private String mTargetRemotePath;
-
-    private boolean mOverwrite;
-
-    /**
-     * Constructor.
-     * <p/>
-     * TODO Paths should finish in "/" in the case of folders. ?
-     *
-     * @param srcRemotePath    Remote path of the file/folder to move.
-     * @param targetRemotePath Remove path desired for the file/folder after moving it.
-     */
-    public CopyRemoteFileOperation(String srcRemotePath, String targetRemotePath, boolean overwrite
-    ) {
-        mSrcRemotePath = srcRemotePath;
-        mTargetRemotePath = targetRemotePath;
-        mOverwrite = overwrite;
-    }
-
+class CopyRemoteFileOperation(
+    private val srcRemotePath: String,
+    private val targetRemotePath: String,
+    private val overwrite: Boolean
+) : RemoteOperation<String?>() {
     /**
      * Performs the rename operation.
      *
      * @param client Client object to communicate with the remote ownCloud server.
      */
-    @Override
-    protected RemoteOperationResult<String> run(OwnCloudClient client) {
-
-        if (mTargetRemotePath.equals(mSrcRemotePath)) {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<String?> {
+        if (targetRemotePath == srcRemotePath) {
             // nothing to do!
-            return new RemoteOperationResult<>(ResultCode.OK);
+            return RemoteOperationResult(ResultCode.OK)
         }
-
-        if (mTargetRemotePath.startsWith(mSrcRemotePath)) {
-            return new RemoteOperationResult<>(ResultCode.INVALID_COPY_INTO_DESCENDANT);
+        if (targetRemotePath.startsWith(srcRemotePath)) {
+            return RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT)
         }
 
         /// perform remote operation
-        RemoteOperationResult result;
+        var result: RemoteOperationResult<String?>
         try {
-            CopyMethod copyMethod =
-                    new CopyMethod(
-                            new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mSrcRemotePath)),
-                    client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mTargetRemotePath),
-                    mOverwrite);
-
-            copyMethod.setReadTimeout(COPY_READ_TIMEOUT, TimeUnit.SECONDS);
-            copyMethod.setConnectionTimeout(COPY_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
-
-            final int status = client.executeHttpMethod(copyMethod);
+            val copyMethod = CopyMethod(
+                URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(srcRemotePath)),
+                client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(targetRemotePath),
+                overwrite
+            ).apply {
+                setReadTimeout(COPY_READ_TIMEOUT.toLong(), TimeUnit.SECONDS)
+                setConnectionTimeout(COPY_CONNECTION_TIMEOUT.toLong(), TimeUnit.SECONDS)
+            }
+            val status = client.executeHttpMethod(copyMethod)
 
             if (status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT) {
-                String fileRemoteId = copyMethod.getResponseHeader(HttpConstants.OC_FILE_REMOTE_ID);
-                result = new RemoteOperationResult<>(ResultCode.OK);
-                result.setData(fileRemoteId);
-            } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !mOverwrite) {
-                result = new RemoteOperationResult<>(ResultCode.INVALID_OVERWRITE);
-                client.exhaustResponse(copyMethod.getResponseBodyAsStream());
+                val fileRemoteId = copyMethod.getResponseHeader(HttpConstants.OC_FILE_REMOTE_ID)
+                result = RemoteOperationResult(ResultCode.OK)
+                result.setData(fileRemoteId)
+            } else if (status == HttpConstants.HTTP_PRECONDITION_FAILED && !overwrite) {
+                result = RemoteOperationResult(ResultCode.INVALID_OVERWRITE)
+                client.exhaustResponse(copyMethod.getResponseBodyAsStream())
 
                 /// for other errors that could be explicitly handled, check first:
                 /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
             } else {
-
-                result = new RemoteOperationResult<>(copyMethod);
-                client.exhaustResponse(copyMethod.getResponseBodyAsStream());
+                result = RemoteOperationResult(copyMethod)
+                client.exhaustResponse(copyMethod.getResponseBodyAsStream())
             }
-
-            Timber.i("Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " + result.getLogMessage());
-
-        } catch (Exception e) {
-            result = new RemoteOperationResult<>(e);
-            Timber.e(e, "Copy " + mSrcRemotePath + " to " + mTargetRemotePath + ": " + result.getLogMessage());
+            Timber.i("Copy " + srcRemotePath + " to " + targetRemotePath + ": " + result.logMessage)
+        } catch (e: Exception) {
+            result = RemoteOperationResult(e)
+            Timber.e(e, "Copy " + srcRemotePath + " to " + targetRemotePath + ": " + result.logMessage)
         }
+        return result
+    }
 
-        return result;
+    companion object {
+        private const val COPY_READ_TIMEOUT = 600_000
+        private const val COPY_CONNECTION_TIMEOUT = 5_000
     }
 }
