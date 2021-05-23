@@ -304,6 +304,7 @@
   <string name="confirmation_remove_folder_alert">คุณต้องการลบ %1$s และเนื้อหาของมัน?</string>
   <string name="confirmation_remove_local">เฉพาะในเครื่องเท่านั้น</string>
   <string name="confirmation_remove_account_alert">คุณต้องการลบบัญชี %1$s?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">บัญชีนี้มีการอัปโหลดรูปภาพที่แนบมาจากกล้อง การลบบัญชีจะปิดการอัปโหลดรูปภาพจากกล้อง คุณต้องการลบบัญชี %1$s?</string>
   <string name="confirmation_remove_public_share_title">ลบลิงก์</string>
   <string name="confirmation_remove_private_share_title">ลบการแชร์แบบส่วนตัว</string>
   <string name="confirmation_remove_share_message">คุณต้องการลบแชร์ %1$s?</string>
@@ -446,6 +447,8 @@
   <string name="file_list__footer__files">%1$d ไฟล์</string>
   <string name="file_list__footer__files_and_folder">%1$d ไฟล์, 1 โฟลเดอร์</string>
   <string name="file_list__footer__files_and_folders">%1$d ไฟล์, %2$d โฟลเดอร์</string>
+  <string name="prefs_picture_upload_account">บัญชีสำหรับอัปโหลดรูปภาพ</string>
+  <string name="prefs_video_upload_account">บัญชีสำหรับอัปโหลดวิดีโอ</string>
   <string name="prefs_camera_upload_source_path_title">โฟลเดอร์ของกล้อง (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
   <string name="prefs_camera_upload_source_path_title_optional">ตัวเลือก</string>
@@ -557,6 +560,8 @@
   <string name="welcome_feature_6_title">ปรับโครงสร้างการตั้งค่าใหม่</string>
   <string name="welcome_feature_6_text">มีการตั้งค่ามุมมองใหม่</string>
   <string name="welcome_feature_7_title">รีเซ็ตการอัปโหลดกล้องแล้ว</string>
+  <string name="welcome_feature_7_text">หากคุณต้องการใช้งานต่อไป โปรดไปที่การตั้งค่าและเปิดใช้งานอีกครั้ง</string>
+  <string name="welcome_feature_8_title">บัญชีถาวรสำหรับอัปโหลดรูปภาพจากกล้อง</string>
   <string name="welcome_feature_8_text">รูปภาพ / วิดีโอของคุณถูกอัปโหลดโดยอัตโนมัติไปยังบัญชีที่แนบมา</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
   <string name="common_not_found">ไม่พบข้อมูลใดๆ</string>
