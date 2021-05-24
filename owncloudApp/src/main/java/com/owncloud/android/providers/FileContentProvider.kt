@@ -52,7 +52,7 @@ import com.owncloud.android.data.Executors
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.datasources.mapper.OCCapabilityMapper
+import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
@@ -952,13 +952,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
                 if (cursor.moveToFirst()) {
                     val ocLocalCapabilitiesDataSource: OCLocalCapabilitiesDataSource by inject()
-                    val ocCapabilityMapper: OCCapabilityMapper by inject()
 
                     // Insert capability to the new capabilities table in new database
                     executors.diskIO().execute {
                         ocLocalCapabilitiesDataSource.insert(
                             listOf(OCCapabilityEntity.fromCursor(cursor)).map {
-                                ocCapabilityMapper.toModel(it)!!
+                                it.toModel()
                             }
                         )
                     }
