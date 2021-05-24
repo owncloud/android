@@ -22,8 +22,6 @@ import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_AVATAR
-import com.owncloud.android.testutil.OC_USER_INFO
-import com.owncloud.android.testutil.OC_USER_QUOTA
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -52,7 +50,7 @@ class GetUserAvatarAsyncUseCaseTest {
 
     @Test
     fun getUserAvatarWithUnauthorizedException() {
-        every { userRepository.getUserAvatar(OC_ACCOUNT_NAME) }  throws UnauthorizedException()
+        every { userRepository.getUserAvatar(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 

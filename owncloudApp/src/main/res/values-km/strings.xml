@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_version">ជំនាន់ %1$s</string>
-  <string name="actionbar_sync">គណនីឱ្យថ្មីឡើងវិញ</string>
+    <string name="actionbar_sync">គណនីឱ្យថ្មីឡើងវិញ</string>
   <string name="actionbar_upload">ផ្ទុក​ឡើង</string>
   <string name="actionbar_upload_from_apps">មាតិការ​ពីកម្មវិធីផ្សេងទៀត</string>
   <string name="actionbar_upload_files">ឯកសារ</string>
@@ -15,8 +14,8 @@
   <string name="drawer_feedback">មតិត្រឡប់</string>
   <string name="drawer_help">ជំនួយ</string>
   <string name="prefs_category_general">ទូទៅ</string>
-  <string name="prefs_category_more">ច្រើន​ទៀត</string>
-  <string name="prefs_category_security">សុវត្ថិភាព</string>
+  <string name="prefs_subsection_more">ច្រើន​ទៀត</string>
+  <string name="prefs_subsection_security">សុវត្ថិភាព</string>
   <string name="prefs_accounts">គណនី</string>
   <string name="prefs_log_summary">នេះជាបញ្ហា​សម្រាប់​អ្នក​ដែល​បាន​ចូលទៅកាន់</string>
   <string name="prefs_log_summary_history">នៅទីនេះ​គឺបង្ហាញការដែលបាន​ចូលទៅកាន់</string>
@@ -47,8 +46,7 @@
   <string name="common_loading">កំពុងដំណើរការ</string>
   <string name="common_error_unknown">មិន​ស្គាល់​កំហុស</string>
   <string name="common_pending">កំពុង​រង់ចាំ</string>
-  <string name="about_title">អំពី</string>
-  <string name="change_password">ប្តូរ​ពាក្យសម្ងាត់</string>
+    <string name="change_password">ប្តូរ​ពាក្យសម្ងាត់</string>
   <string name="create_account">បង្កើតគណនី</string>
   <string name="upload_chooser_title">ផ្ទុកឡើងពី…</string>
   <string name="uploader_info_dirname">ឈ្មោះ​ថត</string>

@@ -35,6 +35,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.owncloud.android.R
+import com.owncloud.android.databinding.ShareFileLayoutBinding
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
@@ -49,8 +50,7 @@ import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityVie
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
-import kotlinx.android.synthetic.main.share_file_layout.*
-import kotlinx.android.synthetic.main.share_file_layout.view.*
+import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -189,12 +189,14 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
     }
 
+    private var _binding: ShareFileLayoutBinding? = null
+    private val binding get() = _binding!!
+
     /**
      * {@inheritDoc}
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
         arguments?.let {
             file = it.getParcelable(ARG_FILE)
             account = it.getParcelable(ARG_ACCOUNT)
@@ -207,66 +209,68 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Timber.d("onCreateView")
-
+    ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.share_file_layout, container, false)
+        _binding = ShareFileLayoutBinding.inflate(inflater, container, false)
+        return binding.root.apply {
+            // Allow or disallow touches with other visible windows
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         // Setup layout
         // Image
-        view.shareFileIcon?.setImageResource(
-            MimetypeIconUtil.getFileTypeIconId(
-                file?.mimetype,
-                file?.fileName
-            )
-        )
+        binding.shareFileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file?.mimetype, file?.fileName))
+
         if (file!!.isImage) {
             val remoteId = file?.remoteId.toString()
             val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(remoteId)
             if (thumbnail != null) {
-                view.shareFileIcon?.setImageBitmap(thumbnail)
+                binding.shareFileIcon.setImageBitmap(thumbnail)
             }
         }
         // Name
-        view.shareFileName?.text = file?.fileName
+        binding.shareFileName.text = file?.fileName
 
         // Size
         if (file!!.isFolder) {
-            view.shareFileSize?.visibility = View.GONE
+            binding.shareFileSize.isVisible = false
         } else {
-            view.shareFileSize?.text = DisplayUtils.bytesToHumanReadable(file!!.fileLength, activity)
+            binding.shareFileSize.text = DisplayUtils.bytesToHumanReadable(file!!.fileLength, activity)
         }
 
         // Private link button
         if (file?.privateLink.isNullOrEmpty()) {
-            view.getPrivateLinkButton?.visibility = View.INVISIBLE
+            binding.getPrivateLinkButton.visibility = View.INVISIBLE
         } else {
-            view.getPrivateLinkButton?.visibility = View.VISIBLE
+            binding.getPrivateLinkButton.visibility = View.VISIBLE
         }
 
         // Hide share features sections that are not enabled
         hideSectionsDisabledInBuildTime(view)
 
-        return view
-    }
+        binding.getPrivateLinkButton.setOnClickListener { listener?.copyOrSendPrivateLink(file!!) }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        getPrivateLinkButton?.setOnClickListener { listener?.copyOrSendPrivateLink(file!!) }
-
-        getPrivateLinkButton?.setOnLongClickListener {
+        binding.getPrivateLinkButton.setOnLongClickListener {
             // Show a toast message explaining what a private link is
             Toast.makeText(activity, R.string.private_link_info, Toast.LENGTH_LONG).show()
             true
         }
 
-        addUserButton?.setOnClickListener {
+        binding.addUserButton.setOnClickListener {
             // Show Search Fragment
             listener?.showSearchUsersAndGroups()
         }
 
         //  Add Public Link Button
-        addPublicLinkButton.setOnClickListener {
+        binding.addPublicLinkButton.setOnClickListener {
             // Show Add Public Link Fragment
             listener?.showAddPublicShare(availableDefaultPublicName)
         }
@@ -388,9 +392,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         updatePublicLinkButton()
 
         // Update view depending on updated capabilities
-        shareHeaderDivider?.isVisible = isShareApiEnabled
-        shareWithUsersSection?.isVisible = isShareApiEnabled
-        shareViaLinkSection?.isVisible = isShareApiEnabled && isPublicShareEnabled
+        binding.shareHeaderDivider.isVisible = isShareApiEnabled
+        binding.shareWithUsersSection.isVisible = isShareApiEnabled
+        binding.shareViaLinkSection.isVisible = isShareApiEnabled && isPublicShareEnabled
     }
 
     /**************************************************************************************************************
@@ -421,17 +425,17 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Show data
         if (privateShares.isNotEmpty()) {
-            shareNoUsers?.visibility = View.GONE
-            shareUsersList?.visibility = View.VISIBLE
-            shareUsersList?.adapter = userGroupsAdapter
-            setListViewHeightBasedOnChildren(shareUsersList)
+            binding.shareNoUsers.isVisible = false
+            binding.shareUsersList.isVisible = true
+            binding.shareUsersList.adapter = userGroupsAdapter
+            setListViewHeightBasedOnChildren(binding.shareUsersList)
         } else {
-            shareNoUsers?.visibility = View.VISIBLE
-            shareUsersList?.visibility = View.GONE
+            binding.shareNoUsers.isVisible = true
+            binding.shareUsersList.isVisible = false
         }
 
         // Set Scroll to initial position
-        shareScroll?.scrollTo(0, 0)
+        binding.shareScroll.scrollTo(0, 0)
     }
 
     override fun unshareButtonPressed(share: OCShare) {
@@ -467,10 +471,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         if (!enableMultiplePublicSharing()) {
             if (publicLinks.isNullOrEmpty()) {
-                addPublicLinkButton.visibility = View.VISIBLE
+                binding.addPublicLinkButton.visibility = View.VISIBLE
                 return
             }
-            addPublicLinkButton.visibility = View.INVISIBLE
+            binding.addPublicLinkButton.visibility = View.INVISIBLE
         }
     }
 
@@ -488,19 +492,17 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Show or hide public links and no public links message
         if (!publicLinks.isNullOrEmpty()) {
-            shareNoPublicLinks?.visibility = View.GONE
-            sharePublicLinksList?.visibility = View.VISIBLE
-            sharePublicLinksList?.adapter = publicLinksAdapter
-            sharePublicLinksList?.let {
-                setListViewHeightBasedOnChildren(it)
-            }
+            binding.shareNoPublicLinks.isVisible = false
+            binding.sharePublicLinksList.isVisible = true
+            binding.sharePublicLinksList.adapter = publicLinksAdapter
+            setListViewHeightBasedOnChildren(binding.sharePublicLinksList)
         } else {
-            shareNoPublicLinks?.visibility = View.VISIBLE
-            sharePublicLinksList?.visibility = View.GONE
+            binding.shareNoPublicLinks.isVisible = true
+            binding.sharePublicLinksList.isVisible = false
         }
 
         // Set Scroll to initial position
-        shareScroll?.scrollTo(0, 0)
+        binding.shareScroll.scrollTo(0, 0)
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {
@@ -536,17 +538,17 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Hide share via link section if it is not enabled
         if (!shareViaLinkAllowed) {
-            view.shareViaLinkSection.visibility = View.GONE
+            binding.shareViaLinkSection.isVisible = false
         }
 
         // Hide share with users section if it is not enabled
         if (!shareWithUsersAllowed) {
-            view.shareWithUsersSection?.visibility = View.GONE
+            binding.shareWithUsersSection.isVisible = false
         }
 
         // Hide warning about public links if not enabled
         if (!shareWarningAllowed) {
-            view.shareWarning?.visibility = View.GONE
+            binding.shareWarning.isVisible = false
         }
     }
 
@@ -580,12 +582,11 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
             fileToShare: OCFile,
             account: Account
         ): ShareFileFragment {
-            val fragment = ShareFileFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_FILE, fileToShare)
-            args.putParcelable(ARG_ACCOUNT, account)
-            fragment.arguments = args
-            return fragment
+            val args = Bundle().apply {
+                putParcelable(ARG_FILE, fileToShare)
+                putParcelable(ARG_ACCOUNT, account)
+            }
+            return ShareFileFragment().apply { arguments = args }
         }
 
         fun setListViewHeightBasedOnChildren(listView: ListView) {

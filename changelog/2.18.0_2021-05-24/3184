@@ -1,0 +1,6 @@
+Bugfix: Fix navbar is visible in file preview screen after rotation
+
+Glitch was fixed where the navigation bar became visible in a file preview
+screen when rotating the device.
+
+https://github.com/owncloud/android/pull/3184 https://github.com/owncloud/android/issues/3139

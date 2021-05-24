@@ -46,7 +46,7 @@ class OIDCDiscoveryUseCaseTest {
     }
 
     @Test
-    fun `test perform oidc discovery - ko` (){
+    fun `test perform oidc discovery - ko`() {
         every { repository.performOIDCDiscovery(useCaseParams.baseUrl) } throws ServerNotReachableException()
 
         val useCaseResult = useCase.execute(useCaseParams)

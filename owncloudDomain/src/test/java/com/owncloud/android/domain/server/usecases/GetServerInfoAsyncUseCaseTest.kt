@@ -66,7 +66,7 @@ class GetServerInfoAsyncUseCaseTest {
 
     @Test
     fun getServerInfoWithException() {
-        every { serverInfoRepository.getServerInfo(useCaseParams.serverPath)  } throws Exception()
+        every { serverInfoRepository.getServerInfo(useCaseParams.serverPath) } throws Exception()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -76,6 +76,6 @@ class GetServerInfoAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is Exception)
 
-        verify(exactly = 1) { serverInfoRepository.getServerInfo(useCaseParams.serverPath)}
+        verify(exactly = 1) { serverInfoRepository.getServerInfo(useCaseParams.serverPath) }
     }
 }

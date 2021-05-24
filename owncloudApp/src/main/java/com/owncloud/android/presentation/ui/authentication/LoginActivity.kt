@@ -33,22 +33,20 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View.GONE
 import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import androidx.lifecycle.Observer
-import com.owncloud.android.MainApp
+import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
+import com.owncloud.android.databinding.AccountSetupBinding
 import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
@@ -57,19 +55,20 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
-import kotlinx.android.synthetic.main.account_setup.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -88,6 +87,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private var oidcSupported = false
 
+    private lateinit var binding: AccountSetupBinding
+
     // For handling AbstractAccountAuthenticator responses
     private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
     private var resultBundle: Bundle? = null
@@ -96,7 +97,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         super.onCreate(savedInstanceState)
 
         // Protection against screen recording
-        if (!MainApp.isDeveloper) {
+        if (!BuildConfig.DEBUG) {
             window.addFlags(FLAG_SECURE)
         } // else, let it go, or taking screenshots & testing will not be possible
 
@@ -115,11 +116,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         // UI initialization
-        setContentView(R.layout.account_setup)
+        binding = AccountSetupBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         if (loginAction != ACTION_CREATE) {
-            account_username.isEnabled = false
-            account_username.isFocusable = false
+            binding.accountUsername.isEnabled = false
+            binding.accountUsername.isFocusable = false
         }
 
         if (savedInstanceState == null) {
@@ -131,37 +134,46 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
             userAccount?.let {
                 AccountUtils.getUsernameForAccount(it)?.let { username ->
-                    account_username.setText(username)
+                    binding.accountUsername.setText(username)
                 }
             }
         }
 
-        login_layout.filterTouchesWhenObscured =
+        binding.root.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
 
         initBrandableOptionsUI()
 
-        thumbnail.setOnClickListener { checkOcServer() }
+        binding.thumbnail.setOnClickListener { checkOcServer() }
 
-        embeddedCheckServerButton.setOnClickListener { checkOcServer() }
+        binding.embeddedCheckServerButton.setOnClickListener { checkOcServer() }
 
-        loginButton.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) { // OAuth
                 startOIDCOauthorization()
             } else { // Basic
                 authenticationViewModel.loginBasic(
-                    account_username.text.toString().trim(),
-                    account_password.text.toString(),
+                    binding.accountUsername.text.toString().trim(),
+                    binding.accountPassword.text.toString(),
                     if (loginAction != ACTION_CREATE) userAccount?.name else null
                 )
             }
         }
 
+        binding.settingsLink.setOnClickListener {
+            val settingsIntent = Intent(this, SettingsActivity::class.java)
+            startActivity(settingsIntent)
+        }
+
         accountAuthenticatorResponse = intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
         accountAuthenticatorResponse?.onRequestContinued()
 
+        initLiveDataObservers()
+    }
+
+    private fun initLiveDataObservers() {
         // LiveData observers
-        authenticationViewModel.serverInfo.observe(this, Observer { event ->
+        authenticationViewModel.serverInfo.observe(this, { event ->
             when (event.peekContent()) {
                 is UIResult.Success -> getServerInfoIsSuccess(event.peekContent())
                 is UIResult.Loading -> getServerInfoIsLoading()
@@ -169,7 +181,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             }
         })
 
-        authenticationViewModel.loginResult.observe(this, Observer { event ->
+        authenticationViewModel.loginResult.observe(this, { event ->
             when (event.peekContent()) {
                 is UIResult.Success -> loginIsSuccess(event.peekContent())
                 is UIResult.Loading -> loginIsLoading()
@@ -177,7 +189,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             }
         })
 
-        authenticationViewModel.supportsOAuth2.observe(this, Observer { event ->
+        authenticationViewModel.supportsOAuth2.observe(this, { event ->
             when (event.peekContent()) {
                 is UIResult.Success -> updateAuthTokenTypeAndInstructions(event.peekContent())
                 is UIResult.Error -> showErrorInToast(
@@ -187,7 +199,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             }
         })
 
-        authenticationViewModel.baseUrl.observe(this, Observer { event ->
+        authenticationViewModel.baseUrl.observe(this, { event ->
             when (event.peekContent()) {
                 is UIResult.Success -> updateBaseUrlAndHostInput(event.peekContent())
                 is UIResult.Error -> showErrorInToast(
@@ -199,11 +211,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun checkOcServer() {
-        val uri = hostUrlInput.text.toString().trim()
+        val uri = binding.hostUrlInput.text.toString().trim()
         if (uri.isNotEmpty()) {
             authenticationViewModel.getServerInfo(serverUrl = uri)
         } else {
-            server_status_text.run {
+            binding.serverStatusText.run {
                 text = getString(R.string.auth_can_not_auth_against_server).also { Timber.d(it) }
                 isVisible = true
             }
@@ -213,14 +225,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
         uiResult.getStoredData()?.run {
             serverBaseUrl = baseUrl
-            hostUrlInput.run {
+            binding.hostUrlInput.run {
                 setText(baseUrl)
                 doAfterTextChanged {
                     //If user modifies url, reset fields and force him to check url again
-                    if (authenticationViewModel.serverInfo.value == null || baseUrl != hostUrlInput.text.toString()) {
+                    if (authenticationViewModel.serverInfo.value == null || baseUrl != binding.hostUrlInput.text.toString()) {
                         showOrHideBasicAuthFields(shouldBeVisible = false)
-                        loginButton.isVisible = false
-                        server_status_text.run {
+                        binding.loginButton.isVisible = false
+                        binding.serverStatusText.run {
                             text = ""
                             visibility = INVISIBLE
                         }
@@ -228,7 +240,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 }
             }
 
-            server_status_text.run {
+            binding.serverStatusText.run {
                 if (isSecureConnection) {
                     text = getString(R.string.auth_secure_connection)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, 0, 0)
@@ -236,28 +248,28 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     text = getString(R.string.auth_connection_established)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_open, 0, 0, 0)
                 }
-                visibility = VISIBLE
+                isVisible = true
             }
 
             when (authenticationMethod) {
                 AuthenticationMethod.BASIC_HTTP_AUTH -> {
                     authTokenType = BASIC_TOKEN_TYPE
                     showOrHideBasicAuthFields(shouldBeVisible = true)
-                    account_username.doAfterTextChanged { updateLoginButtonVisibility() }
-                    account_password.doAfterTextChanged { updateLoginButtonVisibility() }
+                    binding.accountUsername.doAfterTextChanged { updateLoginButtonVisibility() }
+                    binding.accountPassword.doAfterTextChanged { updateLoginButtonVisibility() }
                 }
 
                 AuthenticationMethod.BEARER_TOKEN -> {
                     showOrHideBasicAuthFields(shouldBeVisible = false)
                     authTokenType = OAUTH_TOKEN_TYPE
-                    loginButton.visibility = VISIBLE
+                    binding.loginButton.isVisible = true
                 }
 
                 else -> {
-                    server_status_text.run {
+                    binding.serverStatusText.run {
                         text = getString(R.string.auth_unsupported_auth_method)
                         setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
-                        visibility = VISIBLE
+                        isVisible = true
                     }
                 }
             }
@@ -265,10 +277,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun getServerInfoIsLoading() {
-        server_status_text.run {
+        binding.serverStatusText.run {
             text = getString(R.string.auth_testing_connection)
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
-            visibility = VISIBLE
+            isVisible = true
         }
     }
 
@@ -276,25 +288,25 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         when (uiResult.getThrowableOrNull()) {
             is CertificateCombinedException ->
                 showUntrustedCertDialog(uiResult.getThrowableOrNull() as CertificateCombinedException)
-            is OwncloudVersionNotSupportedException -> server_status_text.run {
+            is OwncloudVersionNotSupportedException -> binding.serverStatusText.run {
                 text = getString(R.string.server_not_supported)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
-            is NoNetworkConnectionException -> server_status_text.run {
+            is NoNetworkConnectionException -> binding.serverStatusText.run {
                 text = getString(R.string.error_no_network_connection)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
             }
-            else -> server_status_text.run {
+            else -> binding.serverStatusText.run {
                 text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
         }
-        server_status_text.isVisible = true
+        binding.serverStatusText.isVisible = true
         showOrHideBasicAuthFields(shouldBeVisible = false)
     }
 
     private fun loginIsSuccess(uiResult: UIResult<String>) {
-        auth_status_text.run {
+        binding.authStatusText.run {
             isVisible = false
             text = ""
         }
@@ -313,7 +325,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun loginIsLoading() {
-        auth_status_text.run {
+        binding.authStatusText.run {
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
             isVisible = true
             text = getString(R.string.auth_trying_to_login)
@@ -323,15 +335,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun loginIsError(uiResult: UIResult<String>) {
         when (uiResult.getThrowableOrNull()) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {
-                server_status_text.run {
+                binding.serverStatusText.run {
                     text = getString(R.string.error_no_network_connection)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
                 }
                 showOrHideBasicAuthFields(shouldBeVisible = false)
             }
             else -> {
-                server_status_text.isVisible = false
-                auth_status_text.run {
+                binding.serverStatusText.isVisible = false
+                binding.authStatusText.run {
                     text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
                     isVisible = true
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
@@ -346,7 +358,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      * to use or not
      */
     private fun startOIDCOauthorization() {
-        server_status_text.run {
+        binding.serverStatusText.run {
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
             text = resources.getString(R.string.oauth_login_connection)
         }
@@ -360,10 +372,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     Timber.d("Service discovery: ${it.peekContent().getStoredData()}")
                     oidcSupported = true
                     it.peekContent().getStoredData()?.let { oidcServerConfiguration ->
-                        registerClient(
-                            oidcServerConfiguration.authorizationEndpoint.toUri(),
-                            oidcServerConfiguration.registrationEndpoint
-                        )
+                        val registrationEndpoint = oidcServerConfiguration.registrationEndpoint
+                        if (registrationEndpoint != null) {
+                            registerClient(
+                                oidcServerConfiguration.authorizationEndpoint.toUri(),
+                                registrationEndpoint
+                            )
+                        } else {
+                            performGetAuthorizationCodeRequest(oidcServerConfiguration.authorizationEndpoint.toUri())
+                        }
                     }
                 }
                 is UIResult.Error -> {
@@ -464,7 +481,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
      * OAuth step 2: Exchange the received authorization code for access and refresh tokens
      */
     private fun exchangeAuthorizationCodeForTokens(authorizationCode: String) {
-        server_status_text.text = getString(R.string.auth_getting_authorization)
+        binding.serverStatusText.text = getString(R.string.auth_getting_authorization)
 
         val clientRegistrationInfo = oauthViewModel.registerClient.value?.peekContent()?.getStoredData()
 
@@ -525,7 +542,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val supportsOAuth2 = uiResult.getStoredData()
         authTokenType = if (supportsOAuth2 != null && supportsOAuth2) OAUTH_TOKEN_TYPE else BASIC_TOKEN_TYPE
 
-        instructions_message.run {
+        binding.instructionsMessage.run {
             if (loginAction == ACTION_UPDATE_EXPIRED_TOKEN) {
                 text =
                     if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) {
@@ -533,8 +550,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     } else {
                         getString(R.string.auth_expired_basic_auth_toast)
                     }
-                visibility = VISIBLE
-            } else visibility = GONE
+                isVisible = true
+            } else {
+                isVisible = false
+            }
         }
     }
 
@@ -542,7 +561,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         uiResult.getStoredData()?.let { serverUrl ->
             serverBaseUrl = serverUrl
 
-            hostUrlInput.run {
+            binding.hostUrlInput.run {
                 setText(serverBaseUrl)
                 isEnabled = false
                 isFocusable = false
@@ -572,7 +591,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onCancelCertificate() {
         Timber.d("Server certificate is not trusted")
-        server_status_text.run {
+        binding.serverStatusText.run {
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning, 0, 0, 0)
             text = getString(R.string.ssl_certificate_not_trusted)
         }
@@ -580,7 +599,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onFailedSavingCertificate() {
         Timber.d("Server certificate could not be saved")
-        server_status_text.run {
+        binding.serverStatusText.run {
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_warning, 0, 0, 0)
             text = getString(R.string.ssl_validator_not_saved)
         }
@@ -588,68 +607,66 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     /* Show or hide Basic Auth fields and reset its values */
     private fun showOrHideBasicAuthFields(shouldBeVisible: Boolean) {
-        account_username_container.run {
-            visibility = if (shouldBeVisible) VISIBLE else GONE
+        binding.accountUsernameContainer.run {
+            isVisible = shouldBeVisible
             isFocusable = shouldBeVisible
             isEnabled = shouldBeVisible
             if (shouldBeVisible) requestFocus()
         }
-        account_password_container.run {
-            visibility = if (shouldBeVisible) VISIBLE else GONE
+        binding.accountPasswordContainer.run {
+            isVisible = shouldBeVisible
             isFocusable = shouldBeVisible
             isEnabled = shouldBeVisible
         }
 
         if (!shouldBeVisible) {
-            account_username.setText("")
-            account_password.setText("")
+            binding.accountUsername.setText("")
+            binding.accountPassword.setText("")
         }
 
-        auth_status_text.run {
+        binding.authStatusText.run {
             isVisible = false
             text = ""
         }
-        loginButton.isVisible = false
+        binding.loginButton.isVisible = false
     }
 
     private fun initBrandableOptionsUI() {
         if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
-            hostUrlFrame.visibility = GONE
-            centeredRefreshButton.run {
+            binding.hostUrlFrame.isVisible = false
+            binding.centeredRefreshButton.run {
                 isVisible = true
                 setOnClickListener { checkOcServer() }
             }
         }
 
         if (contextProvider.getString(R.string.server_url).isNotEmpty()) {
-            hostUrlInput.setText(contextProvider.getString(R.string.server_url))
+            binding.hostUrlInput.setText(contextProvider.getString(R.string.server_url))
             checkOcServer()
         }
 
-        login_layout.run {
+        binding.loginLayout.run {
             if (contextProvider.getBoolean(R.bool.use_login_background_image)) {
-                login_background_image.visibility = VISIBLE
+                binding.loginBackgroundImage.isVisible = true
             } else {
                 setBackgroundColor(resources.getColor(R.color.login_background_color))
             }
         }
 
-        welcome_link.run {
+        binding.welcomeLink.run {
             if (contextProvider.getBoolean(R.bool.show_welcome_link)) {
-                visibility = VISIBLE
+                isVisible = true
                 text = String.format(getString(R.string.auth_register), getString(R.string.app_name))
                 setOnClickListener {
-                    val openWelcomeLinkIntent =
-                        Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.welcome_link_url)))
                     setResult(Activity.RESULT_CANCELED)
-                    startActivity(openWelcomeLinkIntent)
+                    goToUrl(url = getString(R.string.welcome_link_url))
                 }
-            } else visibility = GONE
+            } else isVisible = false
         }
     }
 
     private fun updateOAuthStatusIconAndText(authorizationException: Throwable?) {
-        server_status_text.run {
+        binding.serverStatusText.run {
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             text =
                 if (authorizationException is UnauthorizedException) {
@@ -661,8 +678,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun updateLoginButtonVisibility() {
-        loginButton.run {
-            isVisible = account_username.text.toString().isNotBlank() && account_password.text.toString().isNotBlank()
+        binding.loginButton.run {
+            isVisible = binding.accountUsername.text.toString().isNotBlank() && binding.accountPassword.text.toString().isNotBlank()
         }
     }
 

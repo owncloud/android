@@ -20,13 +20,35 @@
 package com.owncloud.android.providers
 
 import android.content.Context
+import android.os.Environment
+import com.owncloud.android.BuildConfig
+import com.owncloud.android.MainApp
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.lib.common.http.LogInterceptor
+import com.owncloud.android.lib.common.utils.LoggingHelper
+import timber.log.Timber
+import java.io.File
 
 class LogsProvider(
     context: Context
 ) {
     private val sharedPreferencesProvider = SharedPreferencesProviderImpl(context)
+
+    fun startLogging() {
+        val dataFolder = MainApp.dataFolder
+
+        // Set folder for store logs
+        LoggingHelper.startLogging(
+            File(Environment.getExternalStorageDirectory().absolutePath + File.separator + dataFolder), dataFolder
+        )
+        Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
+
+        initHttpLogs()
+    }
+
+    fun stopLogging() {
+        LoggingHelper.stopLogging()
+    }
 
     fun initHttpLogs() {
         val httpLogsEnabled: Boolean = sharedPreferencesProvider.getBoolean(PREFERENCE_LOG_HTTP, false)

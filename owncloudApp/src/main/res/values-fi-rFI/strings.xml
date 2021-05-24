@@ -27,16 +27,20 @@
   <string name="drawer_feedback">Palaute</string>
   <string name="drawer_help">Ohje</string>
   <string name="prefs_category_general">Yleiset</string>
-  <string name="prefs_category_more">Enemmän</string>
-  <string name="prefs_category_security">Tietoturva</string>
+  <string name="prefs_subsection_more">Lisää</string>
+  <string name="prefs_subsection_security">Tietoturva</string>
   <string name="prefs_accounts">Tilit</string>
   <string name="prefs_manage_accounts">Tilien hallinta</string>
   <string name="prefs_passcode">Suojakoodilukitus</string>
   <string name="prefs_biometric_summary">Kytke suojakoodilukitus tai kuviolukitus käyttöön jotta voit käyttää tätä vaihtoehtoa</string>
   <string name="prefs_camera_picture_upload">Kuvien lähetys</string>
   <string name="prefs_camera_picture_upload_summary">Lähetä automaattisesti kameralla otetut kuvat</string>
+  <string name="prefs_camera_picture_upload_path_title">Kansio lähetetyille kuville</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Lähetä kuvat vain wifi-yhteyden kautta</string>
   <string name="prefs_camera_video_upload">Videoiden lähetys</string>
   <string name="prefs_camera_video_upload_summary">Lähetä automaattisesti kameralla kuvatut videot</string>
+  <string name="prefs_camera_video_upload_path_title">Kansio lähetetyille videoille</string>
+  <string name="prefs_camera_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
   <string name="prefs_log_title">Käytä lokitusta</string>
   <string name="prefs_log_summary">Tätä käytetään ongelmien lokitukseen</string>
   <string name="prefs_log_title_history">Lokihistoria</string>
@@ -49,14 +53,13 @@
   <string name="prefs_remember_last_share_location">Muista jaon sijainti</string>
   <string name="prefs_remember_last_upload_location_summary">Muista viimeisin jaon lähetyssijainti</string>
   <string name="prefs_pattern">Kuviolukitus</string>
+  <string name="prefs_enable_logging">Käytä lokitusta</string>
   <string name="pattern_enter_pattern">Ole hyvä ja syötä kuviosi</string>
   <string name="pattern_configure_pattern">Syötä kuviosi</string>
   <string name="pattern_remove_pattern">Poista kuviosi</string>
   <string name="pattern_incorrect_pattern">Virheellinen kuvio</string>
   <string name="pattern_reenter_pattern">Syötä kuviosi uudelleen</string>
   <string name="pattern_not_same_pattern">Kuviot eivät vastaa toisiaan</string>
-  <string name="pattern_stored">Kuvio tallennettu</string>
-  <string name="pattern_removed">Kuvio poistettu</string>
   <string name="pattern_already_set">Kuvio- ja suojakoodilukitus eivät voi olla samanaikaisesti käytössä. Ole hyvä ja poista kuviolukistus ensin käytöstä.</string>
   <string name="passcode_already_set">Kuvio- ja suojakoodilukitus eivät voi olla samanaikaisesti käytössä. Ole hyvä ja poista suojakoodilukistus ensin käytöstä.</string>
   <string name="pattern_no_longer_required">Kuviota ei enää kysytä</string>
@@ -123,7 +126,6 @@
   <string name="common_unknown">tuntematon</string>
   <string name="common_pending">Odottaa</string>
   <string name="common_important">Tärkeä</string>
-  <string name="about_title">Tietoja</string>
   <string name="change_password">Vaihda salasana</string>
   <string name="delete_account">Poista tili</string>
   <string name="create_account">Luo tili</string>
@@ -192,8 +194,6 @@
   <string name="pass_code_remove_your_pass_code">Poista suojakoodi käytöstä</string>
   <string name="pass_code_mismatch">Suojakoodit eivät täsmää</string>
   <string name="pass_code_wrong">Virheellinen suojakoodi</string>
-  <string name="pass_code_removed">Suojakoodi poistettu</string>
-  <string name="pass_code_stored">Suojakoodi tallennettu</string>
   <string name="media_notif_ticker">%1$s-musiikkisoitin</string>
   <string name="media_state_playing">%1$s (toistetaan)</string>
   <string name="media_state_loading">%1$s (ladataan)</string>
@@ -299,8 +299,6 @@
   <string name="placeholder_filesize">389 kt</string>
   <string name="placeholder_timestamp">18.5.2012 12.23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Lähetä kuvat vain wifi-yhteyden kautta</string>
-  <string name="camera_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
   <string name="confirmation_disable_camera_uploads_title">Vahvista</string>
   <string name="confirmation_disable_pictures_upload_message">Oletko varma, että haluat poistaa toiminnon käytöstä? Jonossa olevia kuvia ei lähetetä.</string>
   <string name="confirmation_disable_videos_upload_message">Oletko varma, että haluat poistaa toiminnon käytöstä? Jonossa olevia videoita ei lähetetä.</string>
@@ -312,7 +310,6 @@
   <string name="preview_image_description">Kuvan esikatselu</string>
   <string name="preview_image_error_unknown_format">Tätä kuvaa ei voi näyttää</string>
   <string name="error__upload__local_file_not_copied">%1$s ei voitu kopioida %2$s paikalliseen kansioon</string>
-  <string name="prefs_camera_picture_upload_path_title">Kansio lähetetyille kuville</string>
   <string name="share_link_no_support_share_api">Jakaminen ei ole käytössä palvelimellasi. Ota yhteys
 		ylläpitäjään.</string>
   <string name="share_link_password_title">Anna salasana</string>
@@ -362,7 +359,6 @@
   <string name="copy_file_error">Tätä tiedostoa tai kansiota kopioitaessa tapahtui virhe</string>
   <string name="forbidden_permissions_copy">kopioidaksesi tiedosto</string>
   <string name="prefs_category_camera_upload">Kameran lähetykset</string>
-  <string name="prefs_camera_video_upload_path_title">Kansio lähetetyille videoille</string>
   <string name="sync_folder_failed_content">Kansion %1$s synkronointia ei voitu suorittaa kokonaan</string>
   <string name="shared_subject_header">jaettu</string>
   <string name="with_you_subject_header">kanssasi</string>

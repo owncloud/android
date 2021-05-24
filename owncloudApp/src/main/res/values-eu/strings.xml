@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android aplikazioa</string>
-  <string name="about_version">%1$s bertsioa</string>
   <string name="actionbar_sync">Freskatu kontua</string>
   <string name="actionbar_upload">Igo fitxategia</string>
   <string name="actionbar_upload_from_apps">Beste app-en edukia</string>
@@ -21,8 +19,8 @@
   <string name="drawer_feedback">Oharrak</string>
   <string name="drawer_help">Laguntza</string>
   <string name="prefs_category_general">Orokorra</string>
-  <string name="prefs_category_more">Gehiago</string>
-  <string name="prefs_category_security">Segurtasuna</string>
+  <string name="prefs_subsection_more">Gehiago</string>
+  <string name="prefs_subsection_security">Segurtasuna</string>
   <string name="prefs_accounts">Kontuak</string>
   <string name="prefs_manage_accounts">Kontuak kudeatu</string>
   <string name="prefs_passcode">Pasahitza bidezko blokeoa</string>
@@ -49,8 +47,6 @@
   <string name="pattern_incorrect_pattern">Patroia ez da zuzena</string>
   <string name="pattern_reenter_pattern">Mesedez, berriro sartu zure patroia</string>
   <string name="pattern_not_same_pattern">Patroiak ez dira berdinak</string>
-  <string name="pattern_stored">Patroia gordeta</string>
-  <string name="pattern_removed">Patroia Ezabatuta</string>
   <string name="recommend_subject">Probatu %1$s zure telefono adimentsuan!</string>
   <string name="recommend_text">Nik %1$s zure telefono adimentsuan erabitzera gonbidatu nahi zaitut!\nDeskargatu hemen: %2$s</string>
   <string name="auth_failure_snackbar_action">Aldatu kontua</string>
@@ -109,8 +105,7 @@
   <string name="common_unknown">ezezaguna</string>
   <string name="common_error_unknown">Errore ezezaguna</string>
   <string name="common_pending">Zain</string>
-  <string name="about_title">Honi buruz</string>
-  <string name="change_password">Aldatu pasahitza</string>
+    <string name="change_password">Aldatu pasahitza</string>
   <string name="delete_account">Kontua ezabatu</string>
   <string name="create_account">Sortu kontua</string>
   <string name="upload_chooser_title">Igo fitxategia hemendik …</string>
@@ -186,10 +181,7 @@
   <string name="pass_code_remove_your_pass_code">Ezabatu zure pasahitza</string>
   <string name="pass_code_mismatch">Pasahitzak ez dira berdinak</string>
   <string name="pass_code_wrong">Pasahitza ez da zuzena</string>
-  <string name="pass_code_removed">Pasahitza ezabatuta</string>
-  <string name="pass_code_stored">Pasahitza gordeta</string>
-  <string name="biometric_not_hardware_detected">Gailu honek ez du hatz-marka bidezko autentikazioa onartzen.</string>
-  <string name="media_notif_ticker">%1$s musika erreproduzigailua</string>
+    <string name="media_notif_ticker">%1$s musika erreproduzigailua</string>
   <string name="media_state_playing">%1$s (jotzen)</string>
   <string name="media_state_loading">%1$s (kargatzen)</string>
   <string name="media_event_done">%1$s erreprodukzioa amaitua</string>
@@ -294,8 +286,8 @@ Mesedez, baimendu berriz</string>
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Igo irudiak bakarrik WIFIren bidez</string>
-  <string name="camera_video_upload_on_wifi">Igo bideoak bakarrik WIFIren bidez</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Igo irudiak bakarrik WIFIren bidez</string>
+  <string name="prefs_camera_video_upload_on_wifi">Igo bideoak bakarrik WIFIren bidez</string>
   <string name="confirmation_disable_camera_uploads_title">Baieztatu</string>
   <string name="conflict_keep_both">Mantendu biak</string>
   <string name="conflict_use_local_version">bertako bertsioa</string>

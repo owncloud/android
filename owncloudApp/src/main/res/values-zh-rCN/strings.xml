@@ -4,8 +4,6 @@
   <string name="global_name">名称</string>
   <string name="global_date">日期</string>
   <string name="global_size">大小</string>
-  <string name="about_android">%1$s Android版</string>
-  <string name="about_version">版本 %1$s</string>
   <string name="actionbar_search">在此文件夹搜索</string>
   <string name="actionbar_sync">刷新帐户</string>
   <string name="actionbar_upload">上传</string>
@@ -32,8 +30,9 @@
   <string name="drawer_feedback">反馈</string>
   <string name="drawer_help">帮助</string>
   <string name="prefs_category_general">常规</string>
-  <string name="prefs_category_more">更多</string>
-  <string name="prefs_category_security">安全</string>
+  <string name="prefs_subsection_logging">日志</string>
+  <string name="prefs_subsection_more">更多</string>
+  <string name="prefs_subsection_security">安全</string>
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
@@ -42,8 +41,12 @@
   <string name="confirmation_touches_with_other_windows_title">你确定要启用此功能吗？</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
   <string name="prefs_camera_picture_upload_summary">自动上传相机拍摄的图片</string>
+  <string name="prefs_camera_picture_upload_path_title">图片上传路径</string>
+  <string name="prefs_camera_picture_upload_on_wifi">仅通过 WIFI 上传照片</string>
   <string name="prefs_camera_video_upload">视频上传</string>
   <string name="prefs_camera_video_upload_summary">自动上传相机拍摄的视频</string>
+  <string name="prefs_camera_video_upload_path_title">视频上传路径</string>
+  <string name="prefs_camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
   <string name="prefs_log_title">开启日志</string>
   <string name="prefs_log_summary">用于记录问题</string>
   <string name="prefs_log_title_history">历史日志</string>
@@ -58,14 +61,14 @@
   <string name="prefs_remember_last_share_location">记住共享位置</string>
   <string name="prefs_remember_last_upload_location_summary">记住上次共享上传的位置</string>
   <string name="prefs_pattern">图案锁</string>
+  <string name="prefs_enable_logging">开启日志</string>
+  <string name="prefs_send_feedback">发送反馈</string>
   <string name="pattern_enter_pattern">请输入图案</string>
   <string name="pattern_configure_pattern">输入图案</string>
   <string name="pattern_remove_pattern">移除图案</string>
   <string name="pattern_incorrect_pattern">图案不正确</string>
   <string name="pattern_reenter_pattern">请再次输入图案</string>
   <string name="pattern_not_same_pattern">两次图案输入不一致</string>
-  <string name="pattern_stored">图案已保存</string>
-  <string name="pattern_removed">图案已移除</string>
   <string name="pattern_already_set">图案锁和密码锁无法同时启用，请先禁用图案锁</string>
   <string name="passcode_already_set">图案锁和密码锁无法同时启用，请先禁用密码锁</string>
   <string name="pattern_no_longer_required">不再询问输入图案锁</string>
@@ -139,7 +142,6 @@
   <string name="common_error_unknown">未知错误</string>
   <string name="common_pending">等待</string>
   <string name="common_important">重要</string>
-  <string name="about_title">关于</string>
   <string name="change_password">修改密码</string>
   <string name="delete_account">删除账号</string>
   <string name="create_account">创建账号</string>
@@ -218,8 +220,6 @@
   <string name="pass_code_remove_your_pass_code">移除您的密码</string>
   <string name="pass_code_mismatch">密码不一致</string>
   <string name="pass_code_wrong">错误的密码</string>
-  <string name="pass_code_removed">移除的密码</string>
-  <string name="pass_code_stored">存储的密码</string>
   <string name="media_notif_ticker">%1$s 音乐播放器</string>
   <string name="media_state_playing">%1$s (播放中)</string>
   <string name="media_state_loading">%1$s (载入中)</string>
@@ -331,8 +331,6 @@
   <string name="placeholder_filesize">389字节</string>
   <string name="placeholder_timestamp">2012/05/18 下午12:23 </string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">仅通过 WIFI 上传照片</string>
-  <string name="camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
   <string name="confirmation_disable_camera_uploads_title">确认</string>
   <string name="confirmation_disable_pictures_upload_message">你确定要禁用这项功能吗？未上传的图片将不会被上传</string>
   <string name="confirmation_disable_videos_upload_message">你确定要禁用这项功能吗？未上传的视频将不会被上传</string>
@@ -347,7 +345,6 @@
   <string name="preview_image_description">图片预览</string>
   <string name="preview_image_error_unknown_format">无法显示图片</string>
   <string name="error__upload__local_file_not_copied">无法复制 %1$s 到本地目录 %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">图片上传路径</string>
   <string name="share_link_no_support_share_api">抱歉，共享功能未启用。请联系管理员。</string>
   <string name="share_link_file_error">分享这个文件或文件夹是不可能的</string>
   <string name="unshare_link_file_error">取消分享这个文件或文件夹是不可能的</string>
@@ -399,7 +396,6 @@
   <string name="copy_file_error">尝试复制这个文件或文件夹时发生了错误</string>
   <string name="forbidden_permissions_copy">复制这个文件</string>
   <string name="prefs_category_camera_upload">相机上传</string>
-  <string name="prefs_camera_video_upload_path_title">视频上传路径</string>
   <string name="sync_folder_failed_content"> %1$s同步未完成。</string>
   <string name="shared_subject_header">已共享</string>
   <string name="with_you_subject_header">与你</string>
@@ -420,7 +416,7 @@
   <string name="prefs_camera_upload_source_path_title">相机文件夹 (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">必需</string>
   <string name="prefs_camera_upload_source_path_title_optional">可选</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">原始文件将会</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">原始文件将会</string>
   <string name="prefs_camera_upload_behaviour_title">原始文件将会</string>
   <string name="upload_copy_files">复制文件</string>
   <string name="upload_move_files">移动文件</string>

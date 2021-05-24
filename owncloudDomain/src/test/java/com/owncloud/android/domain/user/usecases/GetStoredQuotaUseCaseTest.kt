@@ -21,7 +21,6 @@ package com.owncloud.android.domain.user.usecases
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
-import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.testutil.OC_USER_QUOTA
 import io.mockk.every
 import io.mockk.spyk
@@ -51,7 +50,7 @@ class GetStoredQuotaUseCaseTest {
 
     @Test
     fun getStoredQuotaWithUnauthorizedException() {
-        every { userRepository.getStoredUserQuota(OC_ACCOUNT_NAME) }  throws UnauthorizedException()
+        every { userRepository.getStoredUserQuota(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 

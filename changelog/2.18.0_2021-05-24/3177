@@ -1,0 +1,7 @@
+Enhancement: Align previews actions
+
+Behaviour was aligned through every preview fragment. Images, videos, audios and texts show the same actions now.
+
+
+https://github.com/owncloud/android/issues/3155
+https://github.com/owncloud/android/pull/3177

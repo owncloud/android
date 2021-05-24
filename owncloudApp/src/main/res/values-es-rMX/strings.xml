@@ -4,8 +4,6 @@
   <string name="global_name">Nombre</string>
   <string name="global_date">Fecha</string>
   <string name="global_size">Tamaño</string>
-  <string name="about_android">%1$s para Android</string>
-  <string name="about_version">Versión %1$s</string>
   <string name="actionbar_search">Buscar en esta carpeta</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Mensajes de retroalimentación</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Más</string>
-  <string name="prefs_category_security">Seguridad</string>
+  <string name="prefs_subsection_more">Más</string>
+  <string name="prefs_subsection_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
@@ -42,8 +40,12 @@
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro/a que desea habilitar esta función?</string>
   <string name="prefs_camera_picture_upload">Cargar imagenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar fotos automáticamente tomadas por la cámara</string>
+  <string name="prefs_camera_picture_upload_path_title">Ruta de carga de imagenes</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
   <string name="prefs_camera_video_upload">Cargar videos</string>
   <string name="prefs_camera_video_upload_summary">Cargar automáticamente los videos tomadas por la cámara</string>
+  <string name="prefs_camera_video_upload_path_title">Ruta de carga de videos</string>
+  <string name="prefs_camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
@@ -57,10 +59,9 @@
   <string name="prefs_imprint">pie de imprenta</string>
   <string name="prefs_remember_last_share_location">Recordar la ubicación de los archivos compartidos</string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
+  <string name="prefs_enable_logging">Habilitar registro</string>
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_not_same_pattern">Los patrones introducidos son diferentes</string>
-  <string name="pattern_stored">Patrón almacenado</string>
-  <string name="pattern_removed">Patrón eliminado</string>
   <string name="pass_code_locked">Asegurar con contraseña</string>
   <string name="pattern_locked">Asegurar con patrón</string>
   <!--Bottom navigation bar-->
@@ -133,7 +134,6 @@
   <string name="common_error_unknown">Error desconocido</string>
   <string name="common_pending">Pendiente</string>
   <string name="common_important">Importante</string>
-  <string name="about_title">Acerca de</string>
   <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>
   <string name="create_account">Crear cuenta</string>
@@ -210,9 +210,6 @@
   <string name="pass_code_remove_your_pass_code">Borre su contraseña</string>
   <string name="pass_code_mismatch">Los códigos de acceso no son idénticos</string>
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
-  <string name="pass_code_removed">Código de acceso borrado</string>
-  <string name="pass_code_stored">Contraseña almacenada</string>
-  <string name="biometric_not_hardware_detected">Este dispositivo no tiene soporte para autenticación biométrica</string>
   <string name="biometric_prompt_subtitle">Iniciar sesión con su credencial biométrica</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
@@ -325,8 +322,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
-  <string name="camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Seguro/a que desea deshabilitar esta función? Las imagenes pendientes no se subirán</string>
   <string name="confirmation_disable_videos_upload_message">¿Seguro/a que desea deshabilitar esta función? Los videos pendientes no se subirán</string>
@@ -339,7 +334,6 @@
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">No se puede mostrar la imagen</string>
   <string name="error__upload__local_file_not_copied">%1$s se pudo copiar a la carpeta local %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Ruta de carga de imagenes</string>
   <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su
 		administrador.</string>
   <string name="unshare_link_file_error">No se pudo dejar de compartir este archivo o carpeta</string>
@@ -391,7 +385,6 @@
   <string name="copy_file_error">Hubo un error al tratar de copiar este archivo o carpeta</string>
   <string name="forbidden_permissions_copy">para copiar este archivo</string>
   <string name="prefs_category_camera_upload">Cargas de la cámara</string>
-  <string name="prefs_camera_video_upload_path_title">Ruta de carga de videos</string>
   <string name="sync_folder_failed_content">La sincronización de la carpeta %1$s no se pudo completar</string>
   <string name="shared_subject_header">compartido</string>
   <string name="with_you_subject_header">con usted</string>
@@ -412,7 +405,7 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de la Camera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">El archivo original será...</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">El archivo original será...</string>
   <string name="prefs_camera_upload_behaviour_title">El archivo original será...</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
@@ -433,6 +426,7 @@
   <string name="share_via_link_expiration_date_label">Caducidad</string>
   <string name="share_via_link_password_label">Contraseña</string>
   <string name="share_via_link_password_title">Asegurado</string>
+  <string name="share_via_link_edit_permission_read_only_label">Descargar / Ver</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Descargar / Ver / Subir</string>
   <string name="share_get_public_link_button">Obtener enlace</string>
   <string name="share_with_title">Compartir con</string>

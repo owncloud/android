@@ -1,0 +1,7 @@
+Change: Hide biometrical if device does not support it
+
+Biometric lock preference in "Security" settings subsection was shown even when the
+device didn't support biometrics (if it was Android 6.0 or later versions). Now, the
+preference is only shown if the device has the suitable hardware for it.
+
+https://github.com/owncloud/android/issues/3217 https://github.com/owncloud/android/pull/3230

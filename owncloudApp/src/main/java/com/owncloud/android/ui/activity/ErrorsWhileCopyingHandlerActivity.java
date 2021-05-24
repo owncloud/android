@@ -45,6 +45,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -56,10 +57,10 @@ import java.util.ArrayList;
 /**
  * Activity reporting errors occurred when local files uploaded to an ownCloud account with an app
  * in version under 1.3.16 where being copied to the ownCloud local folder.
- *
+ * <p>
  * Allows the user move the files to the ownCloud local folder. let them unlinked to the remote
  * files.
- *
+ * <p>
  * Shown when the error notification summarizing the list of errors is clicked by the user.
  */
 public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
@@ -188,7 +189,7 @@ public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
     /**
      * Listener method to perform the MOVE / CANCEL action available in this activity.
      *
-     * @param v     Clicked view (button MOVE or CANCEL)
+     * @param v Clicked view (button MOVE or CANCEL)
      */
     @Override
     public void onClick(View v) {
@@ -226,7 +227,7 @@ public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
         /**
          * Performs the movement
          *
-         * @return     'False' when the movement of any file fails.
+         * @return 'False' when the movement of any file fails.
          */
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -254,12 +255,12 @@ public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
 
         /**
          * Updates the activity UI after the movement of local files is tried.
-         *
+         * <p>
          * If the movement was successful for all the files, finishes the activity immediately.
-         *
+         * <p>
          * In other case, the list of remaining files is still available to retry the movement.
          *
-         * @param result      'True' when the movement was successful.
+         * @param result 'True' when the movement was successful.
          */
         @Override
         protected void onPostExecute(Boolean result) {
@@ -276,13 +277,8 @@ public class ErrorsWhileCopyingHandlerActivity extends AppCompatActivity
                 finish();
 
             } else {
-                Snackbar snackbar = Snackbar.make(
-                        findViewById(android.R.id.content),
-                        R.string.foreign_files_fail,
-                        Snackbar.LENGTH_LONG
-                );
-                snackbar.show();
-
+                ActivityExtKt.showMessageInSnackbar(ErrorsWhileCopyingHandlerActivity.this, android.R.id.content,
+                        getString(R.string.foreign_files_fail), Snackbar.LENGTH_LONG);
             }
         }
     }

@@ -9,8 +9,8 @@
   <string name="drawer_feedback">قايتۇرما ئىنكاس</string>
   <string name="drawer_help">ياردەم</string>
   <string name="prefs_category_general">ئادەتتىكى</string>
-  <string name="prefs_category_more">تېخىمۇ كۆپ</string>
-  <string name="prefs_category_security">بىخەتەرلىك</string>
+  <string name="prefs_subsection_more">تېخىمۇ كۆپ</string>
+  <string name="prefs_subsection_security">بىخەتەرلىك</string>
   <string name="prefs_accounts">ھېساباتلار</string>
   <string name="prefs_help">ياردەم</string>
   <string name="prefs_feedback">قايتۇرما ئىنكاس</string>

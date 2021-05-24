@@ -40,7 +40,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
-    single { AccountManager.get(androidContext())}
+    single { AccountManager.get(androidContext()) }
 
     single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }

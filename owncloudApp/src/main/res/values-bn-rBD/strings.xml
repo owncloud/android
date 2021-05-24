@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_version">সংষ্করন %1$s</string>
-  <string name="actionbar_sync">একাউন্ট নবোদ্যম কর</string>
+    <string name="actionbar_sync">একাউন্ট নবোদ্যম কর</string>
   <string name="actionbar_upload">আপলোড</string>
   <string name="actionbar_upload_from_apps">ভিন্ন অ্যাপ’এর কনটেন্ট</string>
   <string name="actionbar_upload_files">ফাইল</string>
@@ -14,8 +13,8 @@
   <string name="drawer_feedback">মতামত</string>
   <string name="drawer_help">সহায়িকা</string>
   <string name="prefs_category_general">সাধারণ</string>
-  <string name="prefs_category_more">বেশী</string>
-  <string name="prefs_category_security">নিরাপত্তা</string>
+  <string name="prefs_subsection_more">বেশী</string>
+  <string name="prefs_subsection_security">নিরাপত্তা</string>
   <string name="prefs_accounts">একাউন্ট</string>
   <string name="prefs_log_summary">সমস্যা তালিকাভুক্ত করার জায়গা</string>
   <string name="prefs_log_summary_history">রেকর্ডেড লগ এখানে দেখেন</string>
@@ -52,8 +51,7 @@
   <string name="common_loading">লোড চলছে....</string>
   <string name="common_error_unknown">অজানা জটিলতা</string>
   <string name="common_pending">মুলতুবি</string>
-  <string name="about_title">সমপরকে</string>
-  <string name="change_password">কূটশব্দ পরিবর্তন করুন</string>
+    <string name="change_password">কূটশব্দ পরিবর্তন করুন</string>
   <string name="create_account">একাউন্ট তেরী কর</string>
   <string name="upload_chooser_title">ফরম আপলোড কর</string>
   <string name="uploader_info_dirname">ফোলডারের নাম</string>

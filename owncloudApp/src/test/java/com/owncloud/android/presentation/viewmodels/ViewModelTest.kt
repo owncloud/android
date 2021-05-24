@@ -59,7 +59,7 @@ open class ViewModelTest {
     fun <DomainModel> assertEmittedValues(
         expectedValues: List<Event<UIResult<DomainModel>>>,
         liveData: LiveData<Event<UIResult<DomainModel>>>
-    ){
+    ) {
         val emittedValues = liveData.getEmittedValues(expectedValues.size) {
             testCoroutineDispatcher.resumeDispatcher()
         }

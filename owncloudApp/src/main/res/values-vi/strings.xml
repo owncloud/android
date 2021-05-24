@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s phần mềm Android</string>
-  <string name="about_version">phiên bản %1$s</string>
   <string name="actionbar_sync">Cập nhật lại tài khoản</string>
   <string name="actionbar_upload">Tải lên</string>
   <string name="actionbar_upload_from_apps">Nội dung từ các ứng dụng khác</string>
@@ -21,7 +19,7 @@
   <string name="drawer_feedback">Phản hồi</string>
   <string name="drawer_help">Giúp đỡ</string>
   <string name="prefs_category_general">Tổng hợp</string>
-  <string name="prefs_category_more">Nhiều hơn</string>
+  <string name="prefs_subsection_more">Nhiều hơn</string>
   <string name="prefs_accounts">Tài khoản</string>
   <string name="prefs_manage_accounts">Quản lý tài khoản</string>
   <string name="prefs_passcode">Khóa mật mã</string>
@@ -97,8 +95,7 @@
   <string name="common_unknown"> Chưa biết</string>
   <string name="common_error_unknown">Lỗi chưa biết</string>
   <string name="common_pending">Đang chờ</string>
-  <string name="about_title">Giới thiệu</string>
-  <string name="change_password">Đổi mật khẩu</string>
+    <string name="change_password">Đổi mật khẩu</string>
   <string name="delete_account">Xóa tài khoản</string>
   <string name="create_account">Tạo tài khoản</string>
   <string name="upload_chooser_title">Tải lên từ …</string>

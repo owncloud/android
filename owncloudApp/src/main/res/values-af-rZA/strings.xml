@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android-toep</string>
-  <string name="about_version">weergawe %1$s</string>
   <string name="actionbar_sync">Verfris rekening</string>
   <string name="actionbar_upload">Laai Op</string>
   <string name="actionbar_upload_from_apps">Inhoud van ander toeps</string>
@@ -20,8 +18,8 @@
   <string name="drawer_feedback">Terugvoer</string>
   <string name="drawer_help">Hulp</string>
   <string name="prefs_category_general">Algemeen</string>
-  <string name="prefs_category_more">Nog</string>
-  <string name="prefs_category_security">Sekuriteit</string>
+  <string name="prefs_subsection_more">Nog</string>
+  <string name="prefs_subsection_security">Sekuriteit</string>
   <string name="prefs_accounts">Rekeninge</string>
   <string name="prefs_manage_accounts">Bestuur rekeninge</string>
   <string name="prefs_passcode">Wagkodeslot</string>
@@ -48,8 +46,7 @@
   <string name="common_error">Fout</string>
   <string name="common_error_unknown">Onbekende fout</string>
   <string name="common_pending">Hangend</string>
-  <string name="about_title">Oor</string>
-  <string name="change_password">Verander wagwoord</string>
+    <string name="change_password">Verander wagwoord</string>
   <string name="delete_account">Verwyder rekening</string>
   <string name="create_account">Skep rekening</string>
   <string name="uploader_info_dirname">Vouernaam</string>
@@ -63,8 +60,6 @@
   <string name="uploads_view_upload_status_failed_permission_error">Toestemmingfout</string>
   <string name="uploads_view_upload_status_conflict">Konflik</string>
   <string name="uploads_view_upload_status_unknown_fail">Onbekende fout</string>
-  <string name="pass_code_removed">Wagkode is verwyder</string>
-  <string name="pass_code_stored">Wagkode is bewaar</string>
   <string name="common_rename">Hernoem</string>
   <string name="common_remove">Verwyder</string>
   <string name="confirmation_remove_public_share_title">Verwyder skakel</string>

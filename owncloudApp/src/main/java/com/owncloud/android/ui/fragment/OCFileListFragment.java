@@ -607,7 +607,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
             // hide FAB in multi selection mode
             setFabEnabled(false);
-            ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(false);
+            ((FileDisplayActivity) mContainerActivity).showBottomNavBar(false);
 
             // Hide sort options view in multi-selection mode
             mSortOptionsView.setVisibility(View.GONE);
@@ -661,7 +661,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             if (!mHideFab) {
                 setFabEnabled(true);
             }
-            ((FileDisplayActivity) mContainerActivity).showOrHideBottomNavBar(true);
+            ((FileDisplayActivity) mContainerActivity).showBottomNavBar(true);
 
             // Show sort options view when multi-selection mode finish
             mSortOptionsView.setVisibility(View.VISIBLE);

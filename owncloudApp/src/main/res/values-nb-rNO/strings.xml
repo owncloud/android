@@ -4,8 +4,6 @@
   <string name="global_name">Navn</string>
   <string name="global_date">Dato</string>
   <string name="global_size">Størrelse</string>
-  <string name="about_android">%1$s for Android</string>
-  <string name="about_version">Versjon %1$s</string>
   <string name="actionbar_search">Søk i denne mappen</string>
   <string name="actionbar_sync">Oppdater konto</string>
   <string name="actionbar_upload">Last opp</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Tilbakemelding</string>
   <string name="drawer_help">Hjelp</string>
   <string name="prefs_category_general">Generelt</string>
-  <string name="prefs_category_more">Mer</string>
-  <string name="prefs_category_security">Sikkerhet</string>
+  <string name="prefs_subsection_more">Mer</string>
+  <string name="prefs_subsection_security">Sikkerhet</string>
   <string name="prefs_accounts">Kontoer</string>
   <string name="prefs_manage_accounts">Håndter kontoer</string>
   <string name="prefs_passcode">Passordlås</string>
@@ -42,8 +40,12 @@
   <string name="confirmation_touches_with_other_windows_title">Er du sikker på at du vil aktivere dette?</string>
   <string name="prefs_camera_picture_upload">Bilde-opplastninger</string>
   <string name="prefs_camera_picture_upload_summary">Last opp bilder tatt med kamera automatisk</string>
+  <string name="prefs_camera_picture_upload_path_title">Bilde opplastings-sti</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Last opp bilder kun via WiFi</string>
   <string name="prefs_camera_video_upload">Video-opplastninger</string>
   <string name="prefs_camera_video_upload_summary">Automatisk last opp videoer tatt med kamera</string>
+  <string name="prefs_camera_video_upload_path_title">Video opplastings-sti</string>
+  <string name="prefs_camera_video_upload_on_wifi">Last opp videoer kun via WiFi</string>
   <string name="prefs_log_title">Aktiver loggføring</string>
   <string name="prefs_log_summary">Denne er brukt til å loggføre problemer</string>
   <string name="prefs_log_title_history">Loggføringshistorikk</string>
@@ -58,14 +60,13 @@
   <string name="prefs_remember_last_share_location">Husk delt plassering</string>
   <string name="prefs_remember_last_upload_location_summary">Husk sist delt plassering for opplasting</string>
   <string name="prefs_pattern">Mønsterlås</string>
+  <string name="prefs_enable_logging">Aktiver loggføring</string>
   <string name="pattern_enter_pattern">Legg inn mønsteret ditt</string>
   <string name="pattern_configure_pattern">Legg inn mønsteret ditt</string>
   <string name="pattern_remove_pattern">Fjern mønsteret ditt</string>
   <string name="pattern_incorrect_pattern">Feil mønster</string>
   <string name="pattern_reenter_pattern">Legg inn mønsteret på nytt</string>
   <string name="pattern_not_same_pattern">Mønstrene er ikke like</string>
-  <string name="pattern_stored">Mønster lagret</string>
-  <string name="pattern_removed">Mønster fjernet</string>
   <string name="pattern_already_set">Låsemønster og passordlås kan ikke være aktiv samtidig. Deaktivert mønster først</string>
   <string name="passcode_already_set">Mønsterlås og passordlås kan ikke være aktiv samtidig. Deaktivert passord først</string>
   <string name="pattern_no_longer_required">Det vil ikke bli spurt om mønsteret mer</string>
@@ -145,7 +146,6 @@
   <string name="common_error_unknown">ukjent feil</string>
   <string name="common_pending">Venter</string>
   <string name="common_important">Viktig</string>
-  <string name="about_title">Om</string>
   <string name="change_password">Endre passord</string>
   <string name="delete_account">Fjern konto</string>
   <string name="create_account">Opprett konto</string>
@@ -224,9 +224,6 @@
   <string name="pass_code_remove_your_pass_code">Fjern passordet ditt</string>
   <string name="pass_code_mismatch">Passordene er ikke like</string>
   <string name="pass_code_wrong">Feil passord</string>
-  <string name="pass_code_removed">Passord fjernet</string>
-  <string name="pass_code_stored">Passord lagret</string>
-  <string name="biometric_not_hardware_detected">Denne enheten støtter ikke autentisering ved biometri</string>
   <string name="biometric_not_enrolled">Registrer minst 1 biometri for å bruke dette</string>
   <string name="biometric_prompt_title">Biometrisk innlogging</string>
   <string name="biometric_prompt_subtitle">Logg inn med din biometri</string>
@@ -341,8 +338,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">18.05.2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Last opp bilder kun via WiFi</string>
-  <string name="camera_video_upload_on_wifi">Last opp videoer kun via WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Bekreft</string>
   <string name="confirmation_disable_pictures_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende bildene vil ikke bli opplastet</string>
   <string name="confirmation_disable_videos_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende videoene vil ikke bli lastet opp</string>
@@ -357,7 +352,6 @@
   <string name="preview_image_description">Bildeforhåndsvisning</string>
   <string name="preview_image_error_unknown_format">Dette bildet kan ikke vises</string>
   <string name="error__upload__local_file_not_copied">%1$s kunne ikke kopieres til lokal mappe %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Bilde opplastings-sti</string>
   <string name="share_link_no_support_share_api">Beklager, deling er ikke skrudd på for din tjener. Ta kontakt med
 		administratoren.</string>
   <string name="share_link_file_error">Det var ikke mulig å dele denne filen eller mappen</string>
@@ -410,7 +404,6 @@
   <string name="copy_file_error">En feil oppstod ved kopiering av denne filen eller mappen</string>
   <string name="forbidden_permissions_copy">å kopiere denne filen</string>
   <string name="prefs_category_camera_upload">Kameraopplasting</string>
-  <string name="prefs_camera_video_upload_path_title">Video opplastings-sti</string>
   <string name="sync_folder_failed_content">Synkronisering av %1$s mappe kunne ikke fullføres</string>
   <string name="shared_subject_header">delte</string>
   <string name="with_you_subject_header">med deg</string>
@@ -431,7 +424,7 @@
   <string name="prefs_camera_upload_source_path_title">Kamera-mappe (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">obligatorisk</string>
   <string name="prefs_camera_upload_source_path_title_optional">valgfri</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Den originale filen vil bli</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Den originale filen vil bli</string>
   <string name="prefs_camera_upload_behaviour_title">Den originale filen vil bli</string>
   <string name="upload_copy_files">Kopier fil</string>
   <string name="upload_move_files">Flytt fil</string>

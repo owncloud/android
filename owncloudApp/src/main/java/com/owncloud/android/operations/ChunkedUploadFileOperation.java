@@ -79,7 +79,7 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
             }
 
             // Step 3, move remote file to final remote destination
-            moveChunksFileToFinalDestination(timeStamp, mFile.getFileLength());
+            moveChunksFileToFinalDestination(timeStamp, originalFile.length());
 
             // Step 4, move local file to final local destination
             moveTemporalOriginalFiles(temporalFile, originalFile, expectedPath, expectedFile);

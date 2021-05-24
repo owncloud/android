@@ -1,0 +1,7 @@
+Enhancement: Support for apk files
+
+Apk files could be installed from the app after being downloaded. Installation process will be triggered by the system.
+
+https://github.com/owncloud/android/issues/2691
+https://github.com/owncloud/android/pull/3156
+https://github.com/owncloud/android/pull/3162

@@ -56,8 +56,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".MainApp"
@@ -72,6 +72,12 @@
         android:allowBackup="false"
         tools:targetApi="n">
         <activity
+            android:name=".presentation.ui.settings.PrivacyPolicyActivity">
+        </activity>
+        <activity
+            android:name=".presentation.ui.settings.SettingsActivity">
+        </activity>
+        <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/Theme.ownCloud.Splash">
             <intent-filter>
@@ -82,8 +88,7 @@
         <activity
             android:name=".ui.activity.FileDisplayActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.activity.ManageAccountsActivity" />
         <activity
             android:name=".ui.activity.ReceiveExternalFilesActivity"
@@ -104,9 +109,6 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.Preferences"
-            android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".ui.preview.PreviewImageActivity"
             android:theme="@style/Theme.ownCloud.Overlay" />
@@ -143,13 +145,11 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".files.services.CameraUploadsSyncJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true">
-        </service>
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".files.services.AvailableOfflineSyncJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-        </service>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <provider
             android:name=".providers.FileContentProvider"
@@ -203,7 +203,7 @@
             android:name=".ui.activity.ErrorsWhileCopyingHandlerActivity"
             android:theme="@style/Theme.ownCloud" />
         <activity
-            android:name=".ui.activity.LogHistoryActivity"
+            android:name=".presentation.ui.settings.LogHistoryActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
         <activity
@@ -250,7 +250,6 @@
             android:name=".ui.activity.ManageSpaceActivity"
             android:label="@string/manage_space_title"
             android:theme="@style/Theme.ownCloud" />
-        <activity android:name=".ui.activity.PrivacyPolicyActivity" />
         <activity
             android:name=".ui.preview.PreviewVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

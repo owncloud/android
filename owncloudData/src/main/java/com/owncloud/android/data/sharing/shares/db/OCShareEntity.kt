@@ -20,7 +20,6 @@
 package com.owncloud.android.data.sharing.shares.db
 
 import android.content.ContentValues
-import android.database.Cursor
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey

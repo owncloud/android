@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ownCloud Android client application
+
+  Copyright (C) 2021 ownCloud GmbH.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <Preference
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment"
+            app:icon="@drawable/ic_lock_colored"
+            app:key="security_subsection"
+            app:summary="@string/prefs_subsection_security_summary"
+            app:title="@string/prefs_subsection_security" />
+
+        <Preference
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"
+            app:allowDividerAbove="true"
+            app:icon="@drawable/ic_logs"
+            app:key="logging_subsection"
+            app:summary="@string/prefs_subsection_logging_summary"
+            app:title="@string/prefs_subsection_logging" />
+
+        <Preference
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment"
+            app:allowDividerAbove="true"
+            app:icon="@drawable/ic_picture_uploads"
+            app:key="picture_uploads_subsection"
+            app:summary="@string/prefs_subsection_picture_uploads_summary"
+            app:title="@string/prefs_subsection_picture_uploads" />
+
+        <Preference
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment"
+            app:icon="@drawable/ic_video_uploads"
+            app:key="video_uploads_subsection"
+            app:summary="@string/prefs_subsection_video_uploads_summary"
+            app:title="@string/prefs_subsection_video_uploads" />
+
+        <Preference
+            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment"
+            app:allowDividerAbove="true"
+            app:icon="@drawable/ic_more"
+            app:key="more_subsection"
+            app:summary="@string/prefs_subsection_more_summary"
+            app:title="@string/prefs_subsection_more" />
+
+        <Preference
+            app:allowDividerAbove="true"
+            app:iconSpaceReserved="false"
+            app:key="about_app"
+            app:title="@string/prefs_app_version" />
+
+</PreferenceScreen>

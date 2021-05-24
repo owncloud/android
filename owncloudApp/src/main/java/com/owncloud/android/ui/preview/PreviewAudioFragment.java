@@ -218,10 +218,10 @@ public class PreviewAudioFragment extends FileFragment {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                 mImagePreview.setImageBitmap(bitmap); //associated cover art in bitmap
             } else {
-                mImagePreview.setImageResource(R.drawable.logo);
+                mImagePreview.setImageResource(R.drawable.ic_place_holder_music_cover_art);
             }
         } catch (Throwable t) {
-            mImagePreview.setImageResource(R.drawable.logo);
+            mImagePreview.setImageResource(R.drawable.ic_place_holder_music_cover_art);
         }
     }
 
@@ -340,6 +340,12 @@ public class PreviewAudioFragment extends FileFragment {
         }
 
         item = menu.findItem(R.id.action_search);
+        if (item != null) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+
+        item = menu.findItem(R.id.action_sync_file);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);

@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:filterTouchesWhenObscured="true"
-        android:padding="8dip">
+        android:padding="@dimen/standard_half_padding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -241,7 +241,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center|bottom">
+                android:gravity="center|bottom"
+                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/welcome_link"
@@ -257,9 +258,27 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/standard_half_margin"
+                android:layout_marginBottom="@dimen/standard_half_margin"
+                android:gravity="end">
+
+                <Button
+                    android:id="@+id/settings_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/actionbar_settings"
+                    android:gravity="center"
+                    android:text="@string/actionbar_settings"
+                    android:textColor="@color/login_text_color" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </RelativeLayout>
 
 </FrameLayout>
-

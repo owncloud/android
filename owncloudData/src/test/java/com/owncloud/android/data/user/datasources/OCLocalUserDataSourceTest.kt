@@ -20,7 +20,6 @@
 package com.owncloud.android.data.user.datasources
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource
 import com.owncloud.android.data.user.datasources.mapper.UserQuotaMapper
 import com.owncloud.android.data.user.db.UserDao

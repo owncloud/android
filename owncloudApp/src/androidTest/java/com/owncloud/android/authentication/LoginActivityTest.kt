@@ -28,7 +28,14 @@ import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.closeSoftKeyboard
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.Visibility
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.owncloud.android.R
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
@@ -47,7 +54,9 @@ import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.KEY_AUTH_TOKEN_TYPE
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.presentation.ui.authentication.OAUTH_TOKEN_TYPE
+import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
@@ -70,6 +79,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -81,6 +91,7 @@ class LoginActivityTest {
     private lateinit var activityScenario: ActivityScenario<LoginActivity>
 
     private lateinit var ocAuthenticationViewModel: OCAuthenticationViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var ocContextProvider: ContextProvider
     private lateinit var context: Context
 
@@ -94,6 +105,7 @@ class LoginActivityTest {
         context = ApplicationProvider.getApplicationContext<Context>()
 
         ocAuthenticationViewModel = mockk(relaxed = true)
+        settingsViewModel = mockk(relaxUnitFun = true)
         ocContextProvider = mockk(relaxed = true)
 
         loginResultLiveData = MutableLiveData()
@@ -105,6 +117,7 @@ class LoginActivityTest {
         every { ocAuthenticationViewModel.serverInfo } returns serverInfoLiveData
         every { ocAuthenticationViewModel.supportsOAuth2 } returns supportsOauth2LiveData
         every { ocAuthenticationViewModel.baseUrl } returns baseUrlLiveData
+        every { settingsViewModel.isThereAttachedAccount() } returns false
 
         stopKoin()
 
@@ -114,6 +127,9 @@ class LoginActivityTest {
                 module(override = true) {
                     viewModel {
                         ocAuthenticationViewModel
+                    }
+                    viewModel {
+                        settingsViewModel
                     }
                     factory {
                         ocContextProvider
@@ -618,6 +634,20 @@ class LoginActivityTest {
         }
 
         verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+    }
+
+    @Ignore("Makes subsequent tests crash")
+    @Test
+    fun settingsLink() {
+        Intents.init()
+        launchTest()
+
+        closeSoftKeyboard()
+        onView(withId(R.id.settings_link)).perform(click())
+        intended(hasComponent(SettingsActivity::class.java.name))
+
+        Intents.release()
+        activityScenario.close()
     }
 
     private fun checkBasicFieldsVisibility(

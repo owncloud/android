@@ -9,8 +9,8 @@
   <string name="drawer_open">Aperi</string>
   <string name="drawer_help">Adjuta</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Plus</string>
-  <string name="prefs_category_security">Securitate</string>
+  <string name="prefs_subsection_more">Plus</string>
+  <string name="prefs_subsection_security">Securitate</string>
   <string name="prefs_accounts">Contos</string>
   <string name="prefs_help">Adjuta</string>
   <string name="auth_username">Nomine de usator</string>
@@ -31,8 +31,7 @@
     <string name="common_back">Retro</string>
   <string name="common_error">Error</string>
   <string name="common_error_unknown">Error Incognite</string>
-  <string name="about_title">A proposito</string>
-  <string name="change_password">Cambiar contrasigno</string>
+    <string name="change_password">Cambiar contrasigno</string>
   <string name="uploader_info_dirname">Nomine de dossier</string>
   <string name="uploads_view_upload_status_cancelled">Cancellate</string>
   <string name="uploads_view_upload_status_unknown_fail">Error Incognite</string>

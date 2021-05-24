@@ -85,6 +85,15 @@
             />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/warning"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"
+        />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/cancel"
         android:theme="@style/Button.Primary"

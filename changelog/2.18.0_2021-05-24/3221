@@ -1,0 +1,6 @@
+Change: Error handling for pattern lock
+
+Error messages when an incorrect pattern was entered were shown in a snackbar. Now,
+they are displayed in a text below the pattern input, just like in the passcode screen.
+
+https://github.com/owncloud/android/issues/3215 https://github.com/owncloud/android/pull/3221

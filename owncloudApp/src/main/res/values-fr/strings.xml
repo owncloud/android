@@ -4,8 +4,6 @@
   <string name="global_name">Nom</string>
   <string name="global_date">Date</string>
   <string name="global_size">Taille</string>
-  <string name="about_android">%1$s pour Android</string>
-  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Rechercher dans ce dossier</string>
   <string name="actionbar_sync">Actualiser le compte</string>
   <string name="actionbar_upload">Téléverser</string>
@@ -32,8 +30,9 @@
   <string name="drawer_feedback">Retour d’expérience</string>
   <string name="drawer_help">Aide...</string>
   <string name="prefs_category_general">Général</string>
-  <string name="prefs_category_more">Plus</string>
-  <string name="prefs_category_security">Sécurité</string>
+  <string name="prefs_subsection_logging">connexion</string>
+  <string name="prefs_subsection_more">Plus</string>
+  <string name="prefs_subsection_security">Sécurité</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gérer les comptes</string>
   <string name="prefs_passcode">Code de sécurité</string>
@@ -43,8 +42,12 @@
   <string name="confirmation_touches_with_other_windows_message">Vous utilisez cette fonctionnalité sous votre propre responsabilité. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l’application.</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
+  <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
   <string name="prefs_camera_video_upload_summary">Téléverser automatiquement les vidéos enregistrées par la caméra</string>
+  <string name="prefs_camera_video_upload_path_title">Chemin d\'accès au répertoire de téléversement des vidéos</string>
+  <string name="prefs_camera_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="prefs_log_title">Activer la journalisation</string>
   <string name="prefs_log_summary">Utilisé pour enregistrer les problèmes dans les logs</string>
   <string name="prefs_log_title_history">Historique de la journalisation</string>
@@ -59,14 +62,14 @@
   <string name="prefs_remember_last_share_location">Mémoriser l\'emplacement de partage</string>
   <string name="prefs_remember_last_upload_location_summary">Mémoriser le dernier emplacement de téléversement</string>
   <string name="prefs_pattern">Verrouillage par motif</string>
+  <string name="prefs_enable_logging">Activer la journalisation</string>
+  <string name="prefs_send_feedback">Envoyez des commentaires</string>
   <string name="pattern_enter_pattern">Veuillez saisir votre schéma</string>
   <string name="pattern_configure_pattern">Saisissez votre schéma</string>
   <string name="pattern_remove_pattern">Supprimer votre schéma</string>
   <string name="pattern_incorrect_pattern">Motif incorrect</string>
   <string name="pattern_reenter_pattern">Veullez refaire votre votre schéma</string>
   <string name="pattern_not_same_pattern">Les motifs ne sont pas identiques</string>
-  <string name="pattern_stored">Modèles entreposés</string>
-  <string name="pattern_removed">Modèles supprimés</string>
   <string name="pattern_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le motif</string>
   <string name="passcode_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le code de sécurité</string>
   <string name="pattern_no_longer_required">La saisie du motif ne vous sera plus demandée</string>
@@ -146,7 +149,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="common_error_unknown">Erreur inconnue</string>
   <string name="common_pending">En attente</string>
   <string name="common_important">Important</string>
-  <string name="about_title">À propos</string>
   <string name="change_password">Changer de mot de passe</string>
   <string name="delete_account">Supprimer le compte</string>
   <string name="create_account">Créer un compte</string>
@@ -227,8 +229,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="pass_code_remove_your_pass_code">Supprimer votre code de sécurité</string>
   <string name="pass_code_mismatch">Les codes de sécurité ne sont pas identiques</string>
   <string name="pass_code_wrong">Code de sécurité incorrect</string>
-  <string name="pass_code_removed">Code de sécurité supprimé</string>
-  <string name="pass_code_stored">Code de sécurité enregistré</string>
   <string name="biometric_prompt_title">Connexion Biométrique</string>
   <string name="biometric_prompt_subtitle">Connectez-vous en utilisant vos données biométriques</string>
   <string name="media_notif_ticker">%1$s lecteur de musique</string>
@@ -344,8 +344,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="placeholder_filesize">389 Ko</string>
   <string name="placeholder_timestamp">18/05/2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
-  <string name="camera_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmer</string>
   <string name="confirmation_disable_pictures_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les images en suspens ne seront pas téléversées</string>
   <string name="confirmation_disable_videos_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les vidéos en suspens ne seront pas téléversées</string>
@@ -360,7 +358,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="preview_image_description">Prévisualisation de l\'image</string>
   <string name="preview_image_error_unknown_format">Cette image ne peut pas être affichée</string>
   <string name="error__upload__local_file_not_copied">%1$s n\'a pas pu être copié dans le dossier local %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
   <string name="get_shares_error">Il était impossible de récupérer les fichiers depuis le server</string>
   <string name="get_sharees_error">Une erreur est survenue lors de la récupération des groupes et utilisateurs depuis le serveur</string>
   <string name="share_link_no_support_share_api">Désolé, le partage n\'est pas disponible sur votre serveur. Veuillez contacter votre administrateur.</string>
@@ -415,7 +412,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="copy_file_error">Une erreur est survenue lors de la copie de ce fichier ou dossier</string>
   <string name="forbidden_permissions_copy">de copier ce fichier</string>
   <string name="prefs_category_camera_upload">Téléversements de la caméra</string>
-  <string name="prefs_camera_video_upload_path_title">Chemin d\'accès au répertoire de téléversement des vidéos</string>
   <string name="sync_folder_failed_content">La synchronisation du dossier %1$s n\'a pas pu être terminée</string>
   <string name="shared_subject_header">a partagé</string>
   <string name="with_you_subject_header">avec vous</string>
@@ -436,7 +432,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="prefs_camera_upload_source_path_title">Dossier de l\'appareil photo (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Requis</string>
   <string name="prefs_camera_upload_source_path_title_optional">Optionnel</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Le fichier original sera</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Le fichier original sera</string>
   <string name="prefs_camera_upload_behaviour_title">Le fichier original sera</string>
   <string name="upload_copy_files">Copier le fichier</string>
   <string name="upload_move_files">Déplacer le fichier</string>

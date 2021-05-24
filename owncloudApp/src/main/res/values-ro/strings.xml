@@ -4,8 +4,6 @@
   <string name="global_name">Nume</string>
   <string name="global_date">Data</string>
   <string name="global_size">Mărime</string>
-  <string name="about_android">%1$s pentru Android</string>
-  <string name="about_version">Versiunea %1$s</string>
   <string name="actionbar_search">Caută în acest dosar</string>
   <string name="actionbar_sync">Reîmprospătați contul</string>
   <string name="actionbar_upload">Încarcă</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Păreri</string>
   <string name="drawer_help">Ajutor</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Mai mult</string>
-  <string name="prefs_category_security">Securitate</string>
+  <string name="prefs_subsection_more">Mai mult</string>
+  <string name="prefs_subsection_security">Securitate</string>
   <string name="prefs_accounts">Conturi</string>
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>
@@ -41,8 +39,10 @@
   <string name="confirmation_touches_with_other_windows_title">Ești sigur că dorești activarea acestei funcții?</string>
   <string name="prefs_camera_picture_upload">Încărcări fotografii</string>
   <string name="prefs_camera_picture_upload_summary">Încarcă automat fotografiile create cu camera</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Încărcare fotografii doar pe conexiunea wifi</string>
   <string name="prefs_camera_video_upload">Încărcări videoclipuri</string>
   <string name="prefs_camera_video_upload_summary">Încarcă automat clipurile video înregistrate cu camera</string>
+  <string name="prefs_camera_video_upload_on_wifi">Încărcare videoclipuri doar pe conexiunea wifi</string>
   <string name="prefs_log_title">Activează înregistrarea / jurnalizarea activităților</string>
   <string name="prefs_log_summary">Acesta este folosit pentru a înregistra problemele</string>
   <string name="prefs_log_title_history">Istoric activități jurnalizate</string>
@@ -57,14 +57,13 @@
   <string name="prefs_remember_last_share_location">Reține contribuie locația</string>
   <string name="prefs_remember_last_upload_location_summary">Reține locația fișierului încărcat precedent</string>
   <string name="prefs_pattern">Model pentru blocare</string>
+  <string name="prefs_enable_logging">Activează înregistrarea / jurnalizarea activităților</string>
   <string name="pattern_enter_pattern">Te rog introdu modelul</string>
   <string name="pattern_configure_pattern">Introdu modelul</string>
   <string name="pattern_remove_pattern">Șterge modelul</string>
   <string name="pattern_incorrect_pattern">Model incorect</string>
   <string name="pattern_reenter_pattern">Te rog reintrodu modelul</string>
   <string name="pattern_not_same_pattern">Modelele nu sunt identice</string>
-  <string name="pattern_stored">Modelul a fost salvat</string>
-  <string name="pattern_removed">Modelul a fost șters</string>
   <string name="pass_code_locked">Blocat cu cod</string>
   <string name="pattern_locked">Blocat cu model</string>
   <!--Bottom navigation bar-->
@@ -134,7 +133,6 @@
   <string name="common_error_unknown">eroare necunoscută</string>
   <string name="common_pending">În așteptare</string>
   <string name="common_important">Important</string>
-  <string name="about_title">Despre</string>
   <string name="change_password">Schimbă parola</string>
   <string name="delete_account">Sterge contul</string>
   <string name="create_account">Crează cont</string>
@@ -211,8 +209,6 @@
   <string name="pass_code_remove_your_pass_code">Șterge parola</string>
   <string name="pass_code_mismatch">Parolele nu se potrivesc</string>
   <string name="pass_code_wrong">Parolă incorectă</string>
-  <string name="pass_code_removed">Parolă ștearsă</string>
-  <string name="pass_code_stored">Parolă stocată</string>
   <string name="biometric_prompt_title">Autentificare biometrică</string>
   <string name="biometric_prompt_subtitle">Autentificare folosind datele biometrice</string>
   <string name="media_notif_ticker">%1$s  player de muzică</string>
@@ -326,8 +322,6 @@
   <string name="placeholder_filesize">389 KO</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Încărcare fotografii doar pe conexiunea wifi</string>
-  <string name="camera_video_upload_on_wifi">Încărcare videoclipuri doar pe conexiunea wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmare</string>
   <string name="conflict_title">Conflict de fișiere</string>
   <string name="conflict_message">Care fișiere doriți să păstrați? Dacă selectați „ambele”, fișierului local i se va adăuga un număr numelui său.</string>
@@ -406,7 +400,7 @@
   <string name="prefs_camera_upload_source_path_title">Dosarul camerei (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">necesar</string>
   <string name="prefs_camera_upload_source_path_title_optional">opțional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Fișierul original va fi</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Fișierul original va fi</string>
   <string name="prefs_camera_upload_behaviour_title">Fișierul original va fi</string>
   <string name="upload_copy_files">Copiază fișier</string>
   <string name="upload_move_files">Mută fișier</string>

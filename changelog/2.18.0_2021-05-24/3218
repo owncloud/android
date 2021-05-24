@@ -1,0 +1,7 @@
+Enhancement: Settings accessible even when no account is attached
+
+Now, settings can be accessed via a button in the login screen, removing the necessity to
+have an attached account. However, auto picture and video uploads won't be available until
+an account is registered in the app.
+
+https://github.com/owncloud/android/issues/2638 https://github.com/owncloud/android/pull/3218

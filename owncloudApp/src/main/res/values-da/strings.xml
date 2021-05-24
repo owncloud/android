@@ -4,8 +4,6 @@
   <string name="global_name">Navn</string>
   <string name="global_date">Dato</string>
   <string name="global_size">Størrelse</string>
-  <string name="about_android">%1$s til Android</string>
-  <string name="about_version">Version %1$s</string>
   <string name="actionbar_search">Søg i mappen</string>
   <string name="actionbar_sync">Genindlæs konto</string>
   <string name="actionbar_upload">Upload</string>
@@ -32,8 +30,8 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Hjælp</string>
   <string name="prefs_category_general">Generel</string>
-  <string name="prefs_category_more">Mere</string>
-  <string name="prefs_category_security">Sikkerhed</string>
+  <string name="prefs_subsection_more">Mere</string>
+  <string name="prefs_subsection_security">Sikkerhed</string>
   <string name="prefs_accounts">Konti</string>
   <string name="prefs_manage_accounts">Administrer konti</string>
   <string name="prefs_passcode">Passcode-lås</string>
@@ -45,8 +43,10 @@
   <string name="confirmation_touches_with_other_windows_message">Anvend denne egenskab under eget ansvar, et ondsindet program vil kunne forsøge at narre dig til at udføre handlinger, uden din viden, der bruger andre visninger.</string>
   <string name="prefs_camera_picture_upload">Billede uploads</string>
   <string name="prefs_camera_picture_upload_summary">Upload automatisk billeder taget med kamera</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Upload billeder udelukkende via wifi</string>
   <string name="prefs_camera_video_upload">Videoupload</string>
   <string name="prefs_camera_video_upload_summary">Automatisk upload af videoer optaget med kamera</string>
+  <string name="prefs_camera_video_upload_on_wifi">Upload videoer udelukkende via wifi</string>
   <string name="prefs_log_title">Slå logning til</string>
   <string name="prefs_log_summary">Dette bruges til at logregistrere problemer</string>
   <string name="prefs_log_title_history">Logningshistorik</string>
@@ -61,14 +61,13 @@
   <string name="prefs_remember_last_share_location">Husk delt placering</string>
   <string name="prefs_remember_last_upload_location_summary">Husk seneste delte placering for overførsel</string>
   <string name="prefs_pattern">Mønsterlås</string>
+  <string name="prefs_enable_logging">Slå logning til</string>
   <string name="pattern_enter_pattern">Angiv venligst mønster</string>
   <string name="pattern_configure_pattern">Angiv dit mønster</string>
   <string name="pattern_remove_pattern">Slet dit mønster</string>
   <string name="pattern_incorrect_pattern">Forkert mønster</string>
   <string name="pattern_reenter_pattern">Angiv dit mønster igen</string>
   <string name="pattern_not_same_pattern">Mønsteret er ikke identisk</string>
-  <string name="pattern_stored">Mønster er gemt</string>
-  <string name="pattern_removed">Mønster er slettet</string>
   <string name="pattern_already_set">Låse til mønster og passcode kan ikke aktiveres på samme tid, slå venligst mønster fra først.</string>
   <string name="passcode_already_set">Låse til mønster og passcode kan ikke aktiveres på samme tid, slå venligst passcode fra først.</string>
   <!--Bottom navigation bar-->
@@ -141,7 +140,6 @@
   <string name="common_error_unknown">ukendt fejl</string>
   <string name="common_pending">Afventer</string>
   <string name="common_important">Vigtigt</string>
-  <string name="about_title">Om</string>
   <string name="change_password">Skift kodeord</string>
   <string name="delete_account">Fjern konto</string>
   <string name="create_account">Opret konto</string>
@@ -218,8 +216,6 @@
   <string name="pass_code_remove_your_pass_code">Fjern din passcode</string>
   <string name="pass_code_mismatch">Passcode\'erne er ikke ens</string>
   <string name="pass_code_wrong">Ukorrekt passcode</string>
-  <string name="pass_code_removed">Passcode blev fjernet</string>
-  <string name="pass_code_stored">Passcode blev gendannet</string>
   <string name="media_notif_ticker">%1$s musikafspiller</string>
   <string name="media_state_playing">%1$s (afspiller)</string>
   <string name="media_state_loading">%1$s (indlæser)</string>
@@ -326,8 +322,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Upload billeder udelukkende via wifi</string>
-  <string name="camera_video_upload_on_wifi">Upload videoer udelukkende via wifi</string>
   <string name="conflict_title">Filkonflikt</string>
   <string name="conflict_message">Hvilke filer ønsker du at beholde? Hvis du vælger begge versioner, så vil den lokale fil få et tal tilføjet til sit navn.</string>
   <string name="conflict_keep_both">Behold begge</string>

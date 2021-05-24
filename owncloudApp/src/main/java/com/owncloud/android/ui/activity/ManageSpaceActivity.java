@@ -34,6 +34,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
+import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
@@ -149,13 +150,8 @@ public class ManageSpaceActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
             if (!result) {
-                Snackbar snackbar = Snackbar.make(
-                        findViewById(android.R.id.content),
-                        R.string.manage_space_clear_data,
-                        Snackbar.LENGTH_LONG
-                );
-                snackbar.show();
-
+                ActivityExtKt.showMessageInSnackbar(ManageSpaceActivity.this, android.R.id.content, getString(R.string.manage_space_clear_data),
+                        Snackbar.LENGTH_LONG);
             } else {
                 finish();
                 System.exit(0);

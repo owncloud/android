@@ -59,8 +59,6 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.domain.files.LIST_MIME_DIR
-import com.owncloud.android.domain.files.MIME_DIR
-import com.owncloud.android.domain.files.MIME_DIR_UNIX
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.android.ext.android.inject
@@ -113,14 +111,13 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
                 count = db.delete(
                     ProviderTableMeta.FILE_TABLE_NAME,
-                    ProviderTableMeta._ID
-                            + "="
-                            + uri.pathSegments[1]
-                            + if (!TextUtils.isEmpty(where))
-                        " AND (" + where
-                                + ")"
-                    else
-                        "", whereArgs
+                    ProviderTableMeta._ID +
+                            "=" +
+                            uri.pathSegments[1] +
+                            if (!TextUtils.isEmpty(where))
+                                " AND (" + where + ")"
+                            else
+                                "", whereArgs
                 )
             }
             DIRECTORY -> {
@@ -151,14 +148,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
                 count += db.delete(
                     ProviderTableMeta.FILE_TABLE_NAME,
-                    ProviderTableMeta._ID
-                            + "="
-                            + uri.pathSegments[1]
-                            + if (!TextUtils.isEmpty(where))
-                        " AND (" + where
-                                + ")"
-                    else
-                        "", whereArgs
+                    ProviderTableMeta._ID + "=" +
+                            uri.pathSegments[1] +
+                            if (!TextUtils.isEmpty(where))
+                                " AND (" + where + ")"
+                            else
+                                "", whereArgs
                 )
             }
             ROOT_DIRECTORY ->
@@ -318,7 +313,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
         val sqlQuery = SQLiteQueryBuilder()
 
-        sqlQuery.setStrict(true)
+        sqlQuery.isStrict = true
         sqlQuery.tables = ProviderTableMeta.FILE_TABLE_NAME
 
         when (uriMatcher.match(uri)) {
@@ -326,19 +321,15 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             DIRECTORY -> {
                 val folderId = uri.pathSegments[1]
                 sqlQuery.appendWhere(
-                    ProviderTableMeta.FILE_PARENT + "="
-                            + folderId
+                    ProviderTableMeta.FILE_PARENT + "=" + folderId
                 )
-                sqlQuery.setProjectionMap(fileProjectionMap)
+                sqlQuery.projectionMap = fileProjectionMap
             }
             SINGLE_FILE -> {
                 if (uri.pathSegments.size > 1) {
-                    sqlQuery.appendWhere(
-                        ProviderTableMeta._ID + "="
-                                + uri.pathSegments[1]
-                    )
+                    sqlQuery.appendWhere(ProviderTableMeta._ID + "=" + uri.pathSegments[1])
                 }
-                sqlQuery.setProjectionMap(fileProjectionMap)
+                sqlQuery.projectionMap = fileProjectionMap
             }
             SHARES -> {
                 val supportSqlQuery = SupportSQLiteQueryBuilder
@@ -361,42 +352,30 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             CAPABILITIES -> {
                 sqlQuery.tables = ProviderTableMeta.CAPABILITIES_TABLE_NAME
                 if (uri.pathSegments.size > 1) {
-                    sqlQuery.appendWhereEscapeString(
-                        ProviderTableMeta._ID + "="
-                                + uri.pathSegments[1]
-                    )
+                    sqlQuery.appendWhereEscapeString(ProviderTableMeta._ID + "=" + uri.pathSegments[1])
                 }
-                sqlQuery.setProjectionMap(capabilityProjectionMap)
+                sqlQuery.projectionMap = capabilityProjectionMap
             }
             UPLOADS -> {
                 sqlQuery.tables = ProviderTableMeta.UPLOADS_TABLE_NAME
                 if (uri.pathSegments.size > 1) {
-                    sqlQuery.appendWhere(
-                        ProviderTableMeta._ID + "="
-                                + uri.pathSegments[1]
-                    )
+                    sqlQuery.appendWhere(ProviderTableMeta._ID + "=" + uri.pathSegments[1])
                 }
-                sqlQuery.setProjectionMap(uploadProjectionMap)
+                sqlQuery.projectionMap = uploadProjectionMap
             }
             CAMERA_UPLOADS_SYNC -> {
                 sqlQuery.tables = ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME
                 if (uri.pathSegments.size > 1) {
-                    sqlQuery.appendWhere(
-                        ProviderTableMeta._ID + "="
-                                + uri.pathSegments[1]
-                    )
+                    sqlQuery.appendWhere(ProviderTableMeta._ID + "=" + uri.pathSegments[1])
                 }
-                sqlQuery.setProjectionMap(cameraUploadSyncProjectionMap)
+                sqlQuery.projectionMap = cameraUploadSyncProjectionMap
             }
             QUOTAS -> {
                 sqlQuery.tables = ProviderTableMeta.USER_QUOTAS_TABLE_NAME
                 if (uri.pathSegments.size > 1) {
-                    sqlQuery.appendWhere(
-                        ProviderTableMeta._ID + "="
-                                + uri.pathSegments[1]
-                    )
+                    sqlQuery.appendWhere(ProviderTableMeta._ID + "=" + uri.pathSegments[1])
                 }
-                sqlQuery.setProjectionMap(quotaProjectionMap)
+                sqlQuery.projectionMap = quotaProjectionMap
             }
             else -> throw IllegalArgumentException("Unknown uri id: $uri")
         }
@@ -489,20 +468,13 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 OwncloudDatabase.getDatabase(context!!).shareDao()
                     .update(OCShareEntity.fromContentValues(it)).toInt()
             } ?: 0
-            CAPABILITIES -> return db.update(
-                ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs
-            )
+            CAPABILITIES -> return db.update(ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs)
             UPLOADS -> {
-                val ret = db.update(
-                    ProviderTableMeta.UPLOADS_TABLE_NAME, values, selection, selectionArgs
-                )
+                val ret = db.update(ProviderTableMeta.UPLOADS_TABLE_NAME, values, selection, selectionArgs)
                 trimSuccessfulUploads(db)
                 return ret
             }
-            CAMERA_UPLOADS_SYNC -> return db.update(
-                ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection,
-                selectionArgs
-            )
+            CAMERA_UPLOADS_SYNC -> return db.update(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection, selectionArgs)
             QUOTAS -> return db.update(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, values, selection, selectionArgs)
             else -> return db.update(
                 ProviderTableMeta.FILE_TABLE_NAME, values, selection, selectionArgs
@@ -585,8 +557,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     // assume there are not local changes pending to upload
                     db.execSQL(
                         "UPDATE " + ProviderTableMeta.FILE_TABLE_NAME +
-                                " SET " + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " = "
-                                + System.currentTimeMillis() +
+                                " SET " + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " = " + System.currentTimeMillis() +
                                 " WHERE " + ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL"
                     )
                     db.setTransactionSuccessful()
@@ -601,14 +572,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 try {
                     db.execSQL(
                         "ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME +
-                                " ADD COLUMN " + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA +
-                                " INTEGER " + " DEFAULT 0"
+                                " ADD COLUMN " + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " INTEGER " + " DEFAULT 0"
                     )
 
                     db.execSQL(
                         "UPDATE " + ProviderTableMeta.FILE_TABLE_NAME +
-                                " SET " + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " = " +
-                                ProviderTableMeta.FILE_MODIFIED +
+                                " SET " + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " = " + ProviderTableMeta.FILE_MODIFIED +
                                 " WHERE " + ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL"
                     )
                     db.setTransactionSuccessful()
@@ -623,9 +592,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 db.beginTransaction()
                 try {
                     db.execSQL(
-                        "ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME +
-                                " ADD COLUMN " + ProviderTableMeta.FILE_ETAG + " TEXT " +
-                                " DEFAULT NULL"
+                        "ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME + " ADD COLUMN " + ProviderTableMeta.FILE_ETAG + " TEXT " + " DEFAULT NULL"
                     )
                     db.setTransactionSuccessful()
                     upgraded = true
@@ -640,14 +607,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 try {
                     db.execSQL(
                         "ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME +
-                                " ADD COLUMN " + ProviderTableMeta.FILE_SHARED_VIA_LINK + " INTEGER " +
-                                " DEFAULT 0"
+                                " ADD COLUMN " + ProviderTableMeta.FILE_SHARED_VIA_LINK + " INTEGER " + " DEFAULT 0"
                     )
 
                     db.execSQL(
                         "ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME +
-                                " ADD COLUMN " + ProviderTableMeta.FILE_PUBLIC_LINK + " TEXT " +
-                                " DEFAULT NULL"
+                                " ADD COLUMN " + ProviderTableMeta.FILE_PUBLIC_LINK + " TEXT " + " DEFAULT NULL"
                     )
 
                     // Create table ocshares
@@ -846,8 +811,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 try {
                     db.execSQL(
                         "ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
-                                " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
-                                + " INTEGER " + " DEFAULT -1"
+                                " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE +
+                                " INTEGER " + " DEFAULT -1"
                     )
                     db.setTransactionSuccessful()
                     upgraded = true
@@ -1038,151 +1003,150 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
     private fun createFilesTable(db: SQLiteDatabase) {
         db.execSQL(
-            "CREATE TABLE " + ProviderTableMeta.FILE_TABLE_NAME + "("
-                    + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + ProviderTableMeta.FILE_NAME + " TEXT, "
-                    + ProviderTableMeta.FILE_PATH + " TEXT, "
-                    + ProviderTableMeta.FILE_PARENT + " INTEGER, "
-                    + ProviderTableMeta.FILE_CREATION + " INTEGER, "
-                    + ProviderTableMeta.FILE_MODIFIED + " INTEGER, "
-                    + ProviderTableMeta.FILE_CONTENT_TYPE + " TEXT, "
-                    + ProviderTableMeta.FILE_CONTENT_LENGTH + " INTEGER, "
-                    + ProviderTableMeta.FILE_STORAGE_PATH + " TEXT, "
-                    + ProviderTableMeta.FILE_ACCOUNT_OWNER + " TEXT, "
-                    + ProviderTableMeta.FILE_LAST_SYNC_DATE + " INTEGER, "
-                    + ProviderTableMeta.FILE_KEEP_IN_SYNC + " INTEGER, "
-                    + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " INTEGER, "
-                    + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " INTEGER, "
-                    + ProviderTableMeta.FILE_ETAG + " TEXT, "
-                    + ProviderTableMeta.FILE_TREE_ETAG + " TEXT, "
-                    + ProviderTableMeta.FILE_SHARED_VIA_LINK + " INTEGER, "
-                    + ProviderTableMeta.FILE_PUBLIC_LINK + " TEXT, "
-                    + ProviderTableMeta.FILE_PERMISSIONS + " TEXT null,"
-                    + ProviderTableMeta.FILE_REMOTE_ID + " TEXT null,"
-                    + ProviderTableMeta.FILE_UPDATE_THUMBNAIL + " INTEGER," //boolean
+            "CREATE TABLE " + ProviderTableMeta.FILE_TABLE_NAME + "(" +
+                    ProviderTableMeta._ID + " INTEGER PRIMARY KEY, " +
+                    ProviderTableMeta.FILE_NAME + " TEXT, " +
+                    ProviderTableMeta.FILE_PATH + " TEXT, " +
+                    ProviderTableMeta.FILE_PARENT + " INTEGER, " +
+                    ProviderTableMeta.FILE_CREATION + " INTEGER, " +
+                    ProviderTableMeta.FILE_MODIFIED + " INTEGER, " +
+                    ProviderTableMeta.FILE_CONTENT_TYPE + " TEXT, " +
+                    ProviderTableMeta.FILE_CONTENT_LENGTH + " INTEGER, " +
+                    ProviderTableMeta.FILE_STORAGE_PATH + " TEXT, " +
+                    ProviderTableMeta.FILE_ACCOUNT_OWNER + " TEXT, " +
+                    ProviderTableMeta.FILE_LAST_SYNC_DATE + " INTEGER, " +
+                    ProviderTableMeta.FILE_KEEP_IN_SYNC + " INTEGER, " +
+                    ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " INTEGER, " +
+                    ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " INTEGER, " +
+                    ProviderTableMeta.FILE_ETAG + " TEXT, " +
+                    ProviderTableMeta.FILE_TREE_ETAG + " TEXT, " +
+                    ProviderTableMeta.FILE_SHARED_VIA_LINK + " INTEGER, " +
+                    ProviderTableMeta.FILE_PUBLIC_LINK + " TEXT, " +
+                    ProviderTableMeta.FILE_PERMISSIONS + " TEXT null," +
+                    ProviderTableMeta.FILE_REMOTE_ID + " TEXT null," +
+                    ProviderTableMeta.FILE_UPDATE_THUMBNAIL + " INTEGER," + //boolean
+                    ProviderTableMeta.FILE_IS_DOWNLOADING + " INTEGER," + //boolean
 
-                    + ProviderTableMeta.FILE_IS_DOWNLOADING + " INTEGER," //boolean
-
-                    + ProviderTableMeta.FILE_ETAG_IN_CONFLICT + " TEXT,"
-                    + ProviderTableMeta.FILE_SHARED_WITH_SHAREE + " INTEGER,"
-                    + ProviderTableMeta.FILE_PRIVATE_LINK + " TEXT );"
+                    ProviderTableMeta.FILE_ETAG_IN_CONFLICT + " TEXT," +
+                    ProviderTableMeta.FILE_SHARED_WITH_SHAREE + " INTEGER," +
+                    ProviderTableMeta.FILE_PRIVATE_LINK + " TEXT );"
         )
     }
 
     private fun createOCSharesTable(db: SQLiteDatabase) {
         // Create ocshares table
         db.execSQL(
-            "CREATE TABLE " + ProviderTableMeta.OCSHARES_TABLE_NAME + "("
-                    + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + "file_source" + " INTEGER, "
-                    + "item_source" + " INTEGER, "
-                    + ProviderTableMeta.OCSHARES_SHARE_TYPE + " INTEGER, "
-                    + ProviderTableMeta.OCSHARES_SHARE_WITH + " TEXT, "
-                    + ProviderTableMeta.OCSHARES_PATH + " TEXT, "
-                    + ProviderTableMeta.OCSHARES_PERMISSIONS + " INTEGER, "
-                    + ProviderTableMeta.OCSHARES_SHARED_DATE + " INTEGER, "
-                    + ProviderTableMeta.OCSHARES_EXPIRATION_DATE + " INTEGER, "
-                    + ProviderTableMeta.OCSHARES_TOKEN + " TEXT, "
-                    + ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME + " TEXT, "
-                    + ProviderTableMeta.OCSHARES_IS_DIRECTORY + " INTEGER, "  // boolean
-                    + "user_id" + " INTEGER, "
-                    + ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " INTEGER,"
-                    + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " TEXT, "
-                    + ProviderTableMeta.OCSHARES_URL + " TEXT, "
-                    + ProviderTableMeta.OCSHARES_NAME + " TEXT );"
+            "CREATE TABLE " + ProviderTableMeta.OCSHARES_TABLE_NAME + "(" +
+                    ProviderTableMeta._ID + " INTEGER PRIMARY KEY, " +
+                    "file_source" + " INTEGER, " +
+                    "item_source" + " INTEGER, " +
+                    ProviderTableMeta.OCSHARES_SHARE_TYPE + " INTEGER, " +
+                    ProviderTableMeta.OCSHARES_SHARE_WITH + " TEXT, " +
+                    ProviderTableMeta.OCSHARES_PATH + " TEXT, " +
+                    ProviderTableMeta.OCSHARES_PERMISSIONS + " INTEGER, " +
+                    ProviderTableMeta.OCSHARES_SHARED_DATE + " INTEGER, " +
+                    ProviderTableMeta.OCSHARES_EXPIRATION_DATE + " INTEGER, " +
+                    ProviderTableMeta.OCSHARES_TOKEN + " TEXT, " +
+                    ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME + " TEXT, " +
+                    ProviderTableMeta.OCSHARES_IS_DIRECTORY + " INTEGER, " + // boolean
+                    "user_id" + " INTEGER, " +
+                    ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " INTEGER," +
+                    ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " TEXT, " +
+                    ProviderTableMeta.OCSHARES_URL + " TEXT, " +
+                    ProviderTableMeta.OCSHARES_NAME + " TEXT );"
         )
     }
 
     private fun createCapabilitiesTable(db: SQLiteDatabase) {
         // Create capabilities table
         db.execSQL(
-            "CREATE TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + "("
-                    + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " TEXT, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_MAYOR + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_MINOR + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_MICRO + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_STRING + " TEXT, "
-                    + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
-                    + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION + " TEXT, "
-                    + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY + " INTEGER, "   // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE + " INTEGER, "  // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY + " INTEGER, " // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, "
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER, "     // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
-                    + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, "     // boolean
-                    + ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING + " INTEGER, "   // boolean
-                    + ProviderTableMeta.CAPABILITIES_FILES_UNDELETE + " INTEGER, "  // boolean
-                    + ProviderTableMeta.CAPABILITIES_FILES_VERSIONING + " INTEGER );"
+            "CREATE TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + "(" +
+                    ProviderTableMeta._ID + " INTEGER PRIMARY KEY, " +
+                    ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME + " TEXT, " +
+                    ProviderTableMeta.CAPABILITIES_VERSION_MAYOR + " INTEGER, " +
+                    ProviderTableMeta.CAPABILITIES_VERSION_MINOR + " INTEGER, " +
+                    ProviderTableMeta.CAPABILITIES_VERSION_MICRO + " INTEGER, " +
+                    ProviderTableMeta.CAPABILITIES_VERSION_STRING + " TEXT, " +
+                    ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, " +
+                    ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, " +
+                    ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION + " TEXT, " +
+                    ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " + // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, " + // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, " +  // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY + " INTEGER, " + // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE + " INTEGER, " + // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY + " INTEGER, " + // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, " + // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS + " INTEGER, " +
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " + // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, " +    // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, " +   // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER, " +    // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, " +   // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, " +    // boolean
+                    ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, " +   // boolean
+                    ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING + " INTEGER, " + // boolean
+                    ProviderTableMeta.CAPABILITIES_FILES_UNDELETE + " INTEGER, " + // boolean
+                    ProviderTableMeta.CAPABILITIES_FILES_VERSIONING + " INTEGER );"
         )   // boolean
     }
 
     private fun createUploadsTable(db: SQLiteDatabase) {
         // Create uploads table
         db.execSQL(
-            "CREATE TABLE " + ProviderTableMeta.UPLOADS_TABLE_NAME + "("
-                    + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + ProviderTableMeta.UPLOADS_LOCAL_PATH + " TEXT, "
-                    + ProviderTableMeta.UPLOADS_REMOTE_PATH + " TEXT, "
-                    + ProviderTableMeta.UPLOADS_ACCOUNT_NAME + " TEXT, "
-                    + ProviderTableMeta.UPLOADS_FILE_SIZE + " LONG, "
-                    + ProviderTableMeta.UPLOADS_STATUS + " INTEGER, "               // UploadStatus
+            "CREATE TABLE " + ProviderTableMeta.UPLOADS_TABLE_NAME + "(" +
+                    ProviderTableMeta._ID + " INTEGER PRIMARY KEY, " +
+                    ProviderTableMeta.UPLOADS_LOCAL_PATH + " TEXT, " +
+                    ProviderTableMeta.UPLOADS_REMOTE_PATH + " TEXT, " +
+                    ProviderTableMeta.UPLOADS_ACCOUNT_NAME + " TEXT, " +
+                    ProviderTableMeta.UPLOADS_FILE_SIZE + " LONG, " +
+                    ProviderTableMeta.UPLOADS_STATUS + " INTEGER, " +  // UploadStatus
 
-                    + ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR + " INTEGER, "      // Upload LocalBehaviour
+                    ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR + " INTEGER, " + // Upload LocalBehaviour
 
-                    + ProviderTableMeta.UPLOADS_UPLOAD_TIME + " INTEGER, "
-                    + ProviderTableMeta.UPLOADS_FORCE_OVERWRITE + " INTEGER, "  // boolean
+                    ProviderTableMeta.UPLOADS_UPLOAD_TIME + " INTEGER, " +
+                    ProviderTableMeta.UPLOADS_FORCE_OVERWRITE + " INTEGER, " +  // boolean
 
-                    + ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER + " INTEGER, "  // boolean
+                    ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER + " INTEGER, " + // boolean
 
-                    + ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP + " INTEGER, "
-                    + ProviderTableMeta.UPLOADS_LAST_RESULT + " INTEGER, "     // Upload LastResult
+                    ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP + " INTEGER, " +
+                    ProviderTableMeta.UPLOADS_LAST_RESULT + " INTEGER, " +   // Upload LastResult
 
-                    + ProviderTableMeta.UPLOADS_CREATED_BY + " INTEGER, "     // Upload createdBy
+                    ProviderTableMeta.UPLOADS_CREATED_BY + " INTEGER, " +  // Upload createdBy
 
-                    + ProviderTableMeta.UPLOADS_TRANSFER_ID + " TEXT );"    // Upload chunkedUploadId
+                    ProviderTableMeta.UPLOADS_TRANSFER_ID + " TEXT );"    // Upload chunkedUploadId
         )
     }
 
     private fun createUserAvatarsTable(db: SQLiteDatabase) {
         db.execSQL(
-            "CREATE TABLE " + ProviderTableMeta.USER_AVATARS__TABLE_NAME + "("
-                    + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + " TEXT, "
-                    + ProviderTableMeta.USER_AVATARS__CACHE_KEY + " TEXT, "
-                    + ProviderTableMeta.USER_AVATARS__MIME_TYPE + " TEXT, "
-                    + ProviderTableMeta.USER_AVATARS__ETAG + " TEXT );"
+            "CREATE TABLE " + ProviderTableMeta.USER_AVATARS__TABLE_NAME + "(" +
+                    ProviderTableMeta._ID + " INTEGER PRIMARY KEY, " +
+                    ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + " TEXT, " +
+                    ProviderTableMeta.USER_AVATARS__CACHE_KEY + " TEXT, " +
+                    ProviderTableMeta.USER_AVATARS__MIME_TYPE + " TEXT, " +
+                    ProviderTableMeta.USER_AVATARS__ETAG + " TEXT );"
         )
     }
 
     private fun createUserQuotaTable(db: SQLiteDatabase) {
         db.execSQL(
-            "CREATE TABLE " + ProviderTableMeta.USER_QUOTAS_TABLE_NAME + "("
-                    + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + " TEXT, "
-                    + ProviderTableMeta.USER_QUOTAS__FREE + " LONG, "
-                    + ProviderTableMeta.USER_QUOTAS__RELATIVE + " LONG, "
-                    + ProviderTableMeta.USER_QUOTAS__TOTAL + " LONG, "
-                    + ProviderTableMeta.USER_QUOTAS__USED + " LONG );"
+            "CREATE TABLE " + ProviderTableMeta.USER_QUOTAS_TABLE_NAME + "(" +
+                    ProviderTableMeta._ID + " INTEGER PRIMARY KEY, " +
+                    ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + " TEXT, " +
+                    ProviderTableMeta.USER_QUOTAS__FREE + " LONG, " +
+                    ProviderTableMeta.USER_QUOTAS__RELATIVE + " LONG, " +
+                    ProviderTableMeta.USER_QUOTAS__TOTAL + " LONG, " +
+                    ProviderTableMeta.USER_QUOTAS__USED + " LONG );"
         )
     }
 
     private fun createCameraUploadsSyncTable(db: SQLiteDatabase) {
         db.execSQL(
-            "CREATE TABLE " + ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME + "("
-                    + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                    + ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP + " INTEGER,"
-                    + ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP + " INTEGER);"
+            "CREATE TABLE " + ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME + "(" +
+                    ProviderTableMeta._ID + " INTEGER PRIMARY KEY, " +
+                    ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP + " INTEGER," +
+                    ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP + " INTEGER);"
         )
     }
 
@@ -1327,13 +1291,13 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         try {
             c = db.rawQuery(
                 "delete from " + ProviderTableMeta.UPLOADS_TABLE_NAME +
-                        " where " + ProviderTableMeta.UPLOADS_STATUS + " == "
-                        + UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED.value +
+                        " where " + ProviderTableMeta.UPLOADS_STATUS + " == " +
+                        UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED.value +
                         " and " + ProviderTableMeta._ID +
                         " not in (select " + ProviderTableMeta._ID +
                         " from " + ProviderTableMeta.UPLOADS_TABLE_NAME +
-                        " where " + ProviderTableMeta.UPLOADS_STATUS + " == "
-                        + UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED.value +
+                        " where " + ProviderTableMeta.UPLOADS_STATUS + " == " +
+                        UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED.value +
                         " order by " + ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP +
                         " desc limit " + MAX_SUCCESSFUL_UPLOADS +
                         ")", null

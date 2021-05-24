@@ -35,15 +35,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.github.chrisbanes.photoview.PhotoView
 import com.owncloud.android.R
+import com.owncloud.android.databinding.PreviewImageFragmentBinding
+import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.ui.controller.TransferProgressController
@@ -51,8 +53,6 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
-import kotlinx.android.synthetic.main.preview_image_fragment.*
-import kotlinx.android.synthetic.main.top_progress_bar.*
 import timber.log.Timber
 import java.io.File
 
@@ -78,6 +78,11 @@ class PreviewImageFragment : FileFragment() {
     private var account: Account? = null
     private var ignoreFirstSavedState = false
 
+    private var _binding: PreviewImageFragmentBinding? = null
+    private val binding get() = _binding!!
+    private var _bindingTopProgress: TopProgressBarBinding? = null
+    private val bindingTopProgress get() = _bindingTopProgress!!
+
     /**
      * {@inheritDoc}
      */
@@ -97,21 +102,31 @@ class PreviewImageFragment : FileFragment() {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.preview_image_fragment, container, false).apply {
+        // Inflate the layout for this fragment
+        _binding = PreviewImageFragmentBinding.inflate(inflater, container, false)
+        _bindingTopProgress = TopProgressBarBinding.bind(binding.root)
+        return binding.root.apply {
+            // Allow or disallow touches with other visible windows
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        _bindingTopProgress = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        photo_view.visibility = View.GONE
-        photo_view.setOnClickListener {
+        binding.photoView.isVisible = false
+        binding.photoView.setOnClickListener {
             (requireActivity() as PreviewImageActivity).toggleFullScreen()
         }
 
         progressController = TransferProgressController(mContainerActivity).apply {
-            setProgressBar(syncProgressBar)
+            setProgressBar(bindingTopProgress.syncProgressBar)
             hideProgressBar()
         }
         savedInstanceState?.let {
@@ -130,11 +145,11 @@ class PreviewImageFragment : FileFragment() {
         checkNotNull(file) { "Instanced with a NULL OCFile" }
         check(file.isDown) { "There is no local file to preview" }
 
-        message.visibility = View.GONE
-        progressWheel.visibility = View.VISIBLE
+        binding.message.isVisible = false
+        binding.progressWheel.isVisible = true
     }
 
-    fun getImageView(): PhotoView = photo_view
+    fun getImageView(): PhotoView = binding.photoView
 
     /**
      * {@inheritDoc}
@@ -297,11 +312,10 @@ class PreviewImageFragment : FileFragment() {
     }
 
     private fun loadAndShowImage() {
-        val requestOptions =
-            RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).apply(RequestOptions.skipMemoryCacheOf(true))
         Glide.with(requireContext())
             .load(File(file.storagePath))
-            .apply(requestOptions)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
             .listener(object : RequestListener<Drawable?> {
                 override fun onLoadFailed(
                     e: GlideException?, model: Any, target: Target<Drawable?>, isFirstResource: Boolean
@@ -318,8 +332,8 @@ class PreviewImageFragment : FileFragment() {
                     return false
                 }
             })
-            .into(photo_view)
-        photo_view.visibility = View.VISIBLE
+            .into(binding.photoView)
+        binding.photoView.isVisible = true
     }
 
     /**
@@ -349,13 +363,12 @@ class PreviewImageFragment : FileFragment() {
          */
         @JvmStatic
         fun newInstance(file: OCFile?, myAccount: Account?, ignoreFirstSavedState: Boolean): PreviewImageFragment {
-            val frag = PreviewImageFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_FILE, file)
-            args.putParcelable(ARG_ACCOUNT, myAccount)
-            args.putBoolean(ARG_IGNORE_FIRST, ignoreFirstSavedState)
-            frag.arguments = args
-            return frag
+            val args = Bundle().apply {
+                putParcelable(ARG_FILE, file)
+                putParcelable(ARG_ACCOUNT, myAccount)
+                putBoolean(ARG_IGNORE_FIRST, ignoreFirstSavedState)
+            }
+            return PreviewImageFragment().apply { arguments = args }
         }
 
         /**

@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Android-App </string>
-  <string name="about_version">Versioun %1$s</string>
   <string name="actionbar_sync">Kont opfrëschen</string>
   <string name="actionbar_upload">Eroplueden</string>
   <string name="actionbar_upload_from_apps">Contenu aus aneren Appen</string>
@@ -20,8 +18,8 @@
   <string name="drawer_feedback">Feedback</string>
   <string name="drawer_help">Hëllef</string>
   <string name="prefs_category_general">Allgemeng</string>
-  <string name="prefs_category_more">Méi</string>
-  <string name="prefs_category_security">Sécherheet</string>
+  <string name="prefs_subsection_more">Méi</string>
+  <string name="prefs_subsection_security">Sécherheet</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konte geréieren</string>
   <string name="prefs_passcode">Passwuert gespaart</string>
@@ -86,8 +84,7 @@
   <string name="common_loading">Et gëtt gelueden …</string>
   <string name="common_unknown">Onbekannt</string>
   <string name="common_error_unknown">Onbekannte Feeler</string>
-  <string name="about_title">Iwwer</string>
-  <string name="change_password">Passwuert änneren</string>
+    <string name="change_password">Passwuert änneren</string>
   <string name="delete_account">De Kont läschen</string>
   <string name="create_account">Kont uleeën</string>
   <string name="upload_chooser_title">Eropluede vun … </string>
@@ -146,8 +143,6 @@
   <string name="pass_code_remove_your_pass_code">D\'Passwuert läschen</string>
   <string name="pass_code_mismatch">D\'Passwierder sinn net d\'selwecht</string>
   <string name="pass_code_wrong">Ongëltegt Passwuert</string>
-  <string name="pass_code_removed">Passwuert geläscht</string>
-  <string name="pass_code_stored">Passwuert gespeichert</string>
   <string name="media_notif_ticker">%1$s Musek-Programm</string>
   <string name="media_state_playing">%1$s (spillt of)</string>
   <string name="media_state_loading">%1$s (lued)</string>
@@ -251,8 +246,8 @@
   <string name="placeholder_filesize">389kB</string>
   <string name="placeholder_timestamp">18.05.2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">D\'Biller nëmmen iwwer WiFi eroplueden</string>
-  <string name="camera_video_upload_on_wifi">D\'Videoen nëmmen iwwer WiFi eroplueden</string>
+  <string name="prefs_camera_picture_upload_on_wifi">D\'Biller nëmmen iwwer WiFi eroplueden</string>
+  <string name="prefs_camera_video_upload_on_wifi">D\'Videoen nëmmen iwwer WiFi eroplueden</string>
   <string name="conflict_title">Fichier-Konflikt</string>
   <string name="conflict_message">Wéi eng Fichiere wëlls de halen? Wann s de déi zwou Versiounen auswiels kritt d\' kopéierte Fichier eng Nummer bei den Numm derbäi gesat</string>
   <string name="conflict_keep_both">Béid halen</string>
@@ -322,7 +317,7 @@
   <string name="file_list__footer__files">%1$d Fichieren</string>
   <string name="file_list__footer__files_and_folder">1 Fichier, %1$d Dossieren</string>
   <string name="file_list__footer__files_and_folders">%1$d Fichieren, %2$d Dossieren</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Den original Fichier gëtt …</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Den original Fichier gëtt …</string>
   <string name="prefs_camera_upload_behaviour_title">Den original Fichier gëtt …</string>
   <string name="upload_copy_files">Fichier kopéieren</string>
   <string name="upload_move_files">Fichier réckelen</string>

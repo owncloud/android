@@ -1,0 +1,6 @@
+Enhancement: Replace blank view in music player with cover art
+
+Blank view in the music preview player with styled up cover art was replaced.
+For music files that does not have cover art embodied, it is displayed a placeholder.
+
+https://github.com/owncloud/android/issues/3121 https://github.com/owncloud/android/pull/3182

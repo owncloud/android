@@ -31,9 +31,10 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
+import com.owncloud.android.databinding.EditShareLayoutBinding
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
@@ -44,8 +45,6 @@ import com.owncloud.android.lib.resources.shares.SharePermissionsBuilder
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
 import com.owncloud.android.utils.PreferenceUtils
-import kotlinx.android.synthetic.main.edit_share_layout.*
-import kotlinx.android.synthetic.main.edit_share_layout.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -78,6 +77,9 @@ class EditPrivateShareFragment : DialogFragment() {
             account?.name
         )
     }
+
+    private var _binding: EditShareLayoutBinding? = null
+    private val binding get() = _binding!!
 
     /**
      * {@inheritDoc}
@@ -112,26 +114,29 @@ class EditPrivateShareFragment : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Timber.d("onCreateView")
+    ): View {
 
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.edit_share_layout, container, false)
+        _binding = EditShareLayoutBinding.inflate(inflater, container, false)
+        return binding.root.apply {
+            // Allow or disallow touches with other visible windows
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        }
+    }
 
-        // Allow or disallow touches with other visible windows
-        view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-
-        view.editShareTitle.text = resources.getString(R.string.share_with_edit_title, share?.sharedWithDisplayName)
-
-        // Setup layout
-        refreshUiFromState()
-
-        return view
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        closeButton.setOnClickListener { dismiss() }
+
+        binding.editShareTitle.text = resources.getString(R.string.share_with_edit_title, share?.sharedWithDisplayName)
+
+        // Setup layout
+        refreshUiFromState()
+
+        binding.closeButton.setOnClickListener { dismiss() }
     }
 
     override fun onAttach(context: Context) {
@@ -155,41 +160,38 @@ class EditPrivateShareFragment : DialogFragment() {
      *
      */
     private fun refreshUiFromState() {
-        val editShareView = view
-        if (editShareView != null) {
-            setPermissionsListening(false)
+        setPermissionsListening(false)
 
-            val sharePermissions = share!!.permissions
-            var compound: CompoundButton
+        val sharePermissions = share!!.permissions
 
-            compound = canShareSwitch
-            compound.isChecked = sharePermissions and RemoteShare.SHARE_PERMISSION_FLAG > 0
+        binding.canShareSwitch.isChecked = sharePermissions and RemoteShare.SHARE_PERMISSION_FLAG > 0
 
-            compound = canEditSwitch
-            val anyUpdatePermission = RemoteShare.CREATE_PERMISSION_FLAG or
-                    RemoteShare.UPDATE_PERMISSION_FLAG or
-                    RemoteShare.DELETE_PERMISSION_FLAG
-            val canEdit = sharePermissions and anyUpdatePermission > 0
-            compound.isChecked = canEdit
+        val anyUpdatePermission = RemoteShare.CREATE_PERMISSION_FLAG or
+                RemoteShare.UPDATE_PERMISSION_FLAG or
+                RemoteShare.DELETE_PERMISSION_FLAG
+        val canEdit = sharePermissions and anyUpdatePermission > 0
+        binding.canEditSwitch.isChecked = canEdit
 
-            if (file!!.isFolder) {
-                /// TODO change areEditOptionsAvailable in order to delete !isFederated
-                // from checking when iOS is ready
-                compound = canEditCreateCheckBox
-                compound.isChecked = sharePermissions and RemoteShare.CREATE_PERMISSION_FLAG > 0
-                compound.visibility = if (canEdit) View.VISIBLE else View.GONE
-
-                compound = canEditChangeCheckBox
-                compound.isChecked = sharePermissions and RemoteShare.UPDATE_PERMISSION_FLAG > 0
-                compound.visibility = if (canEdit) View.VISIBLE else View.GONE
-
-                compound = canEditDeleteCheckBox
-                compound.isChecked = sharePermissions and RemoteShare.DELETE_PERMISSION_FLAG > 0
-                compound.visibility = if (canEdit) View.VISIBLE else View.GONE
+        if (file?.isFolder == true) {
+            /// TODO change areEditOptionsAvailable in order to delete !isFederated
+            // from checking when iOS is ready
+            binding.canEditCreateCheckBox.apply {
+                isChecked = sharePermissions and RemoteShare.CREATE_PERMISSION_FLAG > 0
+                isVisible = canEdit
             }
 
-            setPermissionsListening(true)
+            binding.canEditChangeCheckBox.apply {
+                isChecked = sharePermissions and RemoteShare.UPDATE_PERMISSION_FLAG > 0
+                isVisible = canEdit
+
+            }
+            binding.canEditDeleteCheckBox.apply {
+                isChecked = sharePermissions and RemoteShare.DELETE_PERMISSION_FLAG > 0
+                isVisible = canEdit
+            }
         }
+
+        setPermissionsListening(true)
     }
 
     /**
@@ -203,23 +205,14 @@ class EditPrivateShareFragment : DialogFragment() {
             onPrivilegeChangeListener = OnPrivilegeChangeListener()
         }
         val changeListener = if (enable) onPrivilegeChangeListener else null
-        var compound: CompoundButton
 
-        compound = canShareSwitch
-        compound.setOnCheckedChangeListener(changeListener)
-
-        compound = canEditSwitch
-        compound.setOnCheckedChangeListener(changeListener)
+        binding.canShareSwitch.setOnCheckedChangeListener(changeListener)
+        binding.canEditSwitch.setOnCheckedChangeListener(changeListener)
 
         if (file?.isFolder == true) {
-            compound = canEditCreateCheckBox
-            compound.setOnCheckedChangeListener(changeListener)
-
-            compound = canEditChangeCheckBox
-            compound.setOnCheckedChangeListener(changeListener)
-
-            compound = canEditDeleteCheckBox
-            compound.setOnCheckedChangeListener(changeListener)
+            binding.canEditCreateCheckBox.setOnCheckedChangeListener(changeListener)
+            binding.canEditChangeCheckBox.setOnCheckedChangeListener(changeListener)
+            binding.canEditDeleteCheckBox.setOnCheckedChangeListener(changeListener)
         }
     }
 
@@ -271,7 +264,7 @@ class EditPrivateShareFragment : DialogFragment() {
                             } else {
                                 /// federated share -> enable delete subpermission, as server side; TODO why?
                                 //noinspection ConstantConditions, prevented in the method beginning
-                                subordinate = canEditDeleteCheckBox
+                                subordinate = binding.canEditDeleteCheckBox
                                 if (!subordinate.isChecked) {
                                     toggleDisablingListener(subordinate)
                                 }
@@ -288,8 +281,8 @@ class EditPrivateShareFragment : DialogFragment() {
                         }
                     }
 
-                    if (!(file?.isFolder == true && isChecked && file?.isSharedWithMe == true)       // see (1)
-                        || isFederated
+                    if (!(file?.isFolder == true && isChecked && file?.isSharedWithMe == true) ||       // see (1)
+                        isFederated
                     ) {
                         updatePermissionsToShare()
                     }
@@ -312,7 +305,7 @@ class EditPrivateShareFragment : DialogFragment() {
                     syncCanEditSwitch(compound, isChecked)
                     updatePermissionsToShare()
                 }
-            }// updatePermissionsToShare()   // see (1)
+            } // updatePermissionsToShare()   // see (1)
             // (1) These modifications result in an exceptional UI behaviour for the case
             // where the switch 'can edit' is enabled for a *reshared folder*; if the same
             // behaviour was applied than for owned folder, and the user did not have full
@@ -331,7 +324,7 @@ class EditPrivateShareFragment : DialogFragment() {
          * @param isChecked                 'true' iif subordinateCheckBoxView was checked.
          */
         private fun syncCanEditSwitch(subordinateCheckBoxView: View, isChecked: Boolean) {
-            val canEditCompound = canEditSwitch
+            val canEditCompound = binding.canEditSwitch
             if (isChecked) {
                 if (!canEditCompound.isChecked) {
                     toggleDisablingListener(canEditCompound)
@@ -404,18 +397,19 @@ class EditPrivateShareFragment : DialogFragment() {
      * Updates the permissions of the [RemoteShare] according to the values set in the UI
      */
     private fun updatePermissionsToShare() {
-        private_share_error_message?.isGone = true
+        binding.privateShareErrorMessage.isVisible = false
 
-        val spb = SharePermissionsBuilder()
-        spb.setSharePermission(canShareSwitch.isChecked)
-        if (file?.isFolder == true) {
-            spb.setUpdatePermission(canEditChangeCheckBox.isChecked)
-                .setCreatePermission(canEditCreateCheckBox.isChecked)
-                .setDeletePermission(canEditDeleteCheckBox.isChecked)
-        } else {
-            spb.setUpdatePermission(canEditSwitch.isChecked)
+        val sharePermissionsBuilder = SharePermissionsBuilder().apply {
+            setSharePermission(binding.canShareSwitch.isChecked)
+            if (file?.isFolder == true) {
+                setUpdatePermission(binding.canEditChangeCheckBox.isChecked)
+                setCreatePermission(binding.canEditCreateCheckBox.isChecked)
+                setDeletePermission(binding.canEditDeleteCheckBox.isChecked)
+            } else {
+                setUpdatePermission(binding.canEditSwitch.isChecked)
+            }
         }
-        val permissions = spb.build()
+        val permissions = sharePermissionsBuilder.build()
 
         ocShareViewModel.updatePrivateShare(share?.remoteId!!, permissions, account?.name!!)
     }
@@ -437,8 +431,10 @@ class EditPrivateShareFragment : DialogFragment() {
      * Show error when updating the private share, if any
      */
     private fun showError(genericErrorMessage: String, throwable: Throwable?) {
-        private_share_error_message?.text = throwable?.parseError(genericErrorMessage, resources)
-        private_share_error_message?.visibility = View.VISIBLE
+        binding.privateShareErrorMessage.apply {
+            text = throwable?.parseError(genericErrorMessage, resources)
+            isVisible = true
+        }
     }
 
     companion object {
@@ -460,13 +456,13 @@ class EditPrivateShareFragment : DialogFragment() {
          * @return A new instance of fragment EditPrivateShareFragment.
          */
         fun newInstance(shareToEdit: OCShare, sharedFile: OCFile, account: Account): EditPrivateShareFragment {
-            val fragment = EditPrivateShareFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_SHARE, shareToEdit)
-            args.putParcelable(ARG_FILE, sharedFile)
-            args.putParcelable(ARG_ACCOUNT, account)
-            fragment.arguments = args
-            return fragment
+            val args = Bundle().apply {
+                putParcelable(ARG_SHARE, shareToEdit)
+                putParcelable(ARG_FILE, sharedFile)
+                putParcelable(ARG_ACCOUNT, account)
+            }
+
+            return EditPrivateShareFragment().apply { arguments = args }
         }
     }
 }

@@ -6,6 +6,8 @@
 :android-app-beta-url: https://owncloud.com/beta-testing/#android
 :toc: right
 
+== Introduction
+
 Here you can find some of the most frequently asked questions about the ownCloud Android app.
 
 == Usage

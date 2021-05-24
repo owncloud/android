@@ -38,7 +38,7 @@ import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.google.android.material.snackbar.Snackbar;
-import com.owncloud.android.MainApp;
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -69,11 +69,12 @@ public class PatternLockActivity extends AppCompatActivity {
     private TextView mPatternHeader;
     private TextView mPatternExplanation;
     private PatternLockView mPatternLockView;
+    private TextView mPatternError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!MainApp.Companion.isDeveloper()) {
+        if (!BuildConfig.DEBUG) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
         setContentView(R.layout.activity_pattern_lock);
@@ -95,6 +96,7 @@ public class PatternLockActivity extends AppCompatActivity {
         mPatternExplanation = findViewById(R.id.explanation_pattern);
         mPatternLockView = findViewById(R.id.pattern_lock_view);
         mPatternLockView.clearPattern();
+        mPatternError = findViewById(R.id.error_pattern);
         if (ACTION_CHECK.equals(getIntent().getAction())) {
             /**
              * This block is executed when the user opens the app after setting the pattern lock
@@ -191,6 +193,7 @@ public class PatternLockActivity extends AppCompatActivity {
              * this block takes the pattern input by the user and check it with the pattern intially set by the user.
              */
             if (checkPattern()) {
+                mPatternError.setVisibility(View.INVISIBLE);
                 finish();
             } else {
                 showErrorAndRestart(R.string.pattern_incorrect_pattern,
@@ -202,6 +205,7 @@ public class PatternLockActivity extends AppCompatActivity {
                 Intent result = new Intent();
                 result.putExtra(KEY_CHECK_RESULT, true);
                 setResult(RESULT_OK, result);
+                mPatternError.setVisibility(View.INVISIBLE);
                 DocumentProviderUtils.Companion.notifyDocumentProviderRoots(getApplicationContext());
                 finish();
             } else {
@@ -211,6 +215,7 @@ public class PatternLockActivity extends AppCompatActivity {
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
             //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
             if (!mPatternPresent) {
+                mPatternError.setVisibility(View.INVISIBLE);
                 requestPatternConfirmation();
             } else if (confirmPattern()) {
                 savePatternAndExit();
@@ -260,13 +265,8 @@ public class PatternLockActivity extends AppCompatActivity {
     private void showErrorAndRestart(int errorMessage, int headerMessage,
                                      int explanationVisibility) {
         mPatternValue = null;
-        CharSequence errorSeq = getString(errorMessage);
-        Snackbar snackbar = Snackbar.make(
-                findViewById(android.R.id.content),
-                errorSeq,
-                Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
+        mPatternError.setText(errorMessage);
+        mPatternError.setVisibility(View.VISIBLE);
         mPatternHeader.setText(headerMessage);
         mPatternExplanation.setVisibility(explanationVisibility);
     }

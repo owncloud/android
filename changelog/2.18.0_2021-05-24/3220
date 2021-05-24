@@ -1,0 +1,8 @@
+Bugfix: Fixed problem when a file is edited externally 
+
+If an external editor modifies a file, the new size will not match when it is
+assembled in server side. Fixed by removing the if-match header from the proper place
+
+https://github.com/owncloud/android/issues/2752
+https://github.com/owncloud/android/pull/3220
+

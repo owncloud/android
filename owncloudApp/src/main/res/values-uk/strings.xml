@@ -4,8 +4,6 @@
   <string name="global_name">Ім’я</string>
   <string name="global_date">Дата</string>
   <string name="global_size">Розмір</string>
-  <string name="about_android">%1$s для Android</string>
-  <string name="about_version">Версія %1$s</string>
   <string name="actionbar_search">Пошук в цій теці</string>
   <string name="actionbar_sync">Оновити обліковий запис</string>
   <string name="actionbar_upload">Відвантажити</string>
@@ -32,8 +30,9 @@
   <string name="drawer_feedback">Зворотній зв\'язок</string>
   <string name="drawer_help">Допомога</string>
   <string name="prefs_category_general">Основне</string>
-  <string name="prefs_category_more">Більше</string>
-  <string name="prefs_category_security">Безпека</string>
+  <string name="prefs_subsection_logging">Ведення журналу </string>
+  <string name="prefs_subsection_more">Більше</string>
+  <string name="prefs_subsection_security">Безпека</string>
   <string name="prefs_accounts">Облікові записи</string>
   <string name="prefs_manage_accounts">Управління обліковими записами</string>
   <string name="prefs_passcode">Захистити паролем</string>
@@ -41,8 +40,12 @@
   <string name="confirmation_touches_with_other_windows_title">Ви впевнені, що хочете включити цю функцію?</string>
   <string name="prefs_camera_picture_upload">Завантаження зображень</string>
   <string name="prefs_camera_picture_upload_summary">Автоматично завантажувати зображення з камери</string>
+  <string name="prefs_camera_picture_upload_path_title">Шлях для завантаження зображень</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Завантажувати картинки лише за наявності WiFi</string>
   <string name="prefs_camera_video_upload">Завантаження відео</string>
   <string name="prefs_camera_video_upload_summary">Автоматично завантажувати відео з камери</string>
+  <string name="prefs_camera_video_upload_path_title">Шлях для завантаження відео</string>
+  <string name="prefs_camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
   <string name="prefs_log_title">Увімкнути ведення журналу</string>
   <string name="prefs_log_summary">Використовується для реєстрації помилок</string>
   <string name="prefs_log_title_history">Історія журналювання</string>
@@ -57,6 +60,8 @@
   <string name="prefs_remember_last_share_location">Запам\'ятати позицію</string>
   <string name="prefs_remember_last_upload_location_summary">Запам\'ятати останній опублікований шлях завантаження</string>
   <string name="prefs_pattern">Графічний ключ</string>
+  <string name="prefs_enable_logging">Увімкнути ведення журналу</string>
+  <string name="prefs_send_feedback">Відправити відгук</string>
   <string name="pattern_enter_pattern">Будь ласка, введіть ваш шаблон</string>
   <string name="pattern_configure_pattern">Введіть ваш візерунок</string>
   <string name="pattern_incorrect_pattern">Невірний шаблон</string>
@@ -127,7 +132,6 @@
   <string name="common_error_unknown">невідома помилка</string>
   <string name="common_pending">Очікування</string>
   <string name="common_important">Важливий</string>
-  <string name="about_title">Про</string>
   <string name="change_password">Змінити пароль</string>
   <string name="delete_account">Видалити обліковий запис</string>
   <string name="create_account">Створити обліковий запис</string>
@@ -204,8 +208,6 @@
   <string name="pass_code_remove_your_pass_code">Видалити пароль</string>
   <string name="pass_code_mismatch">Паролі не співпадають</string>
   <string name="pass_code_wrong">Невірний пароль</string>
-  <string name="pass_code_removed">Пароль видалено</string>
-  <string name="pass_code_stored">Пароль збережено</string>
   <string name="media_notif_ticker">%1$s музичний програвач</string>
   <string name="media_state_playing">%1$s (відтворюється)</string>
   <string name="media_state_loading">%1$s (завантажується)</string>
@@ -314,8 +316,6 @@
   <string name="placeholder_filesize">389 КБ</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Завантажувати картинки лише за наявності WiFi</string>
-  <string name="camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
   <string name="confirmation_disable_camera_uploads_title">Підтвердити</string>
   <string name="conflict_title">Конфлікт файлу</string>
   <string name="conflict_message">Які файли Ви хочете залишити? Якщо Ви оберете обидві версії, локальний файл матиме номер, що додається до його імені.</string>
@@ -325,7 +325,6 @@
   <string name="preview_image_description">Попередній перегляд зображення</string>
   <string name="preview_image_error_unknown_format">Не вдалося показати зображення</string>
   <string name="error__upload__local_file_not_copied">%1$s неможливо скопіювати до %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Шлях для завантаження зображень</string>
   <string name="share_link_no_support_share_api">На жаль, обмін не включений на вашому сервері. Будь ласка, зв\'яжіться з вашим адмінистратором.</string>
   <string name="share_link_password_title">Ввести пароль</string>
   <string name="share_link_empty_password">Ви повинні ввести пароль</string>
@@ -374,7 +373,6 @@
   <string name="copy_file_error">Виникла помилка під час спроби скопіювати даний файл чи папку</string>
   <string name="forbidden_permissions_copy">скопіювати даний файл</string>
   <string name="prefs_category_camera_upload">Завантаження з камери</string>
-  <string name="prefs_camera_video_upload_path_title">Шлях для завантаження відео</string>
   <string name="sync_folder_failed_content">Синхронізація теки %1$s неможливо завершити</string>
   <string name="shared_subject_header">поширений</string>
   <string name="with_you_subject_header">з Вами</string>

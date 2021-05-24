@@ -21,8 +21,11 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.presentation.manager.AvatarManager
+import com.owncloud.android.providers.AccountProvider
+import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.OCContextProvider
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -32,4 +35,7 @@ val commonModule = module {
     single { AvatarManager() }
     single { CoroutinesDispatcherProvider() }
     factory<ContextProvider> { OCContextProvider(androidContext()) }
+    single { LogsProvider(get()) }
+    single { CameraUploadsHandlerProvider(androidContext()) }
+    single { AccountProvider(androidContext()) }
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ownCloud Android client application
+
+  Copyright (C) 2021 ownCloud GmbH.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
+        app:key="enable_picture_uploads"
+        app:summary="@string/prefs_camera_picture_upload_summary"
+        app:title="@string/prefs_camera_picture_upload" />
+    <ListPreference
+        app:dialogTitle="@string/prefs_picture_upload_account"
+        app:iconSpaceReserved="false"
+        app:key="picture_uploads_account_name"
+        app:negativeButtonText=""
+        app:title="@string/prefs_picture_upload_account"
+        app:useSimpleSummaryProvider="true" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="picture_uploads_path"
+        app:title="@string/prefs_camera_picture_upload_path_title" />
+    <CheckBoxPreference
+        app:iconSpaceReserved="false"
+        app:key="picture_uploads_on_wifi"
+        app:title="@string/prefs_camera_picture_upload_on_wifi" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="picture_uploads_source_path"
+        app:title="@string/prefs_camera_upload_source_path_title" />
+    <ListPreference
+        app:defaultValue="NOTHING"
+        app:dialogTitle="@string/prefs_camera_upload_behaviour_dialog_title"
+        app:entries="@array/pref_behaviour_entries"
+        app:entryValues="@array/pref_behaviour_entryValues"
+        app:iconSpaceReserved="false"
+        app:key="picture_uploads_behaviour"
+        app:negativeButtonText=""
+        app:title="@string/prefs_camera_upload_behaviour_title"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>

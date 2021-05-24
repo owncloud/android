@@ -25,6 +25,7 @@
     tools:openDrawer="start">
 
     <include
+        android:id="@+id/nav_coordinator_layout"
         layout="@layout/nav_coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

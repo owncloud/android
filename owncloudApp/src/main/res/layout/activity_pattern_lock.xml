@@ -39,6 +39,14 @@
         <requestFocus />
     </com.andrognito.patternlockview.PatternLockView>
 
+    <TextView
+        android:id="@+id/error_pattern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/warning"
+        android:textSize="16sp"/>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/cancel_pattern"
         android:layout_width="wrap_content"

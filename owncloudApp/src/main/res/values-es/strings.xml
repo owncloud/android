@@ -4,8 +4,6 @@
   <string name="global_name">Nombre</string>
   <string name="global_date">Fecha</string>
   <string name="global_size">Tamaño</string>
-  <string name="about_android">%1$s para Android</string>
-  <string name="about_version">Versión %1$s</string>
   <string name="actionbar_search">Buscar esta carpeta</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
@@ -32,8 +30,9 @@
   <string name="drawer_feedback">Sugerencias</string>
   <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Más</string>
-  <string name="prefs_category_security">Seguridad</string>
+  <string name="prefs_subsection_logging">Registrando</string>
+  <string name="prefs_subsection_more">Más</string>
+  <string name="prefs_subsection_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
@@ -43,10 +42,15 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permite los toques  cuando la vista está oculta por otra ventana visible. Habilítelo para utilizar aplicaciones de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilice esta función bajo su propia responsabilidad, una aplicación malintencionada podría intentar engañarlo para que realice algunas acciones, sin darse cuenta, usando otras pantallas.</string>
+  <string name="prefs_open_logs_view">Abrir vista de registros</string>
   <string name="prefs_camera_picture_upload">Cargas de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Carga automáticamente las fotos tomadas por cámara</string>
+  <string name="prefs_camera_picture_upload_path_title">Ruta de subida de imagenes</string>
+  <string name="prefs_camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
   <string name="prefs_camera_video_upload">Cargas de videos</string>
   <string name="prefs_camera_video_upload_summary">Cargue automáticamente los videos  grabados por cámara</string>
+  <string name="prefs_camera_video_upload_path_title">Ruta de subida de videos</string>
+  <string name="prefs_camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
@@ -61,14 +65,15 @@
   <string name="prefs_remember_last_share_location">Recordar ubicación de compartidos</string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
   <string name="prefs_pattern">Patrón de bloqueo</string>
+  <string name="prefs_enable_logging">Habilitar registro</string>
+  <string name="prefs_enable_logging_summary">Cuando se activan, los logs pueden afectar el rendimiento e incluir información confidencial. Sin embargo, los logs no están sujetos al envío automático a los servidores ownCloud. Compartir logs con otros es responsabilidad exclusiva del usuario.</string>
+  <string name="prefs_send_feedback">Enviar comentarios</string>
   <string name="pattern_enter_pattern"> Por favor, ingrese el patrón</string>
   <string name="pattern_configure_pattern">Ingrese el patrón</string>
   <string name="pattern_remove_pattern">Borrar el patrón</string>
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_reenter_pattern">Por favor, reingrese el patrón</string>
   <string name="pattern_not_same_pattern">Los patrones no son iguales</string>
-  <string name="pattern_stored">Patrón almacenado</string>
-  <string name="pattern_removed">Patrón borrado</string>
   <string name="pattern_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el patrón</string>
   <string name="passcode_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el código de bloqueo</string>
   <string name="pattern_no_longer_required">El patrón no será requerido nuevamente</string>
@@ -148,7 +153,6 @@
   <string name="common_error_unknown">error desconocido</string>
   <string name="common_pending">Pendiente</string>
   <string name="common_important">Importante</string>
-  <string name="about_title">Acerca de</string>
   <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>
   <string name="create_account">Crear cuenta</string>
@@ -228,9 +232,6 @@
   <string name="pass_code_remove_your_pass_code">Borre su contraseña</string>
   <string name="pass_code_mismatch">Los códigos de acceso no son idénticos</string>
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
-  <string name="pass_code_removed">Código de acceso borrado</string>
-  <string name="pass_code_stored">Contraseña almacenada</string>
-  <string name="biometric_not_hardware_detected">Este dispositivo no soporta autenticación biométrica</string>
   <string name="biometric_not_enrolled">Registra al menos una característica biométrica para usarla</string>
   <string name="biometric_prompt_title">Inicio de sesión biométrico</string>
   <string name="biometric_prompt_subtitle">Inicia sesión usando tú credencial biométrica</string>
@@ -347,8 +348,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
-  <string name="camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Está seguro de que desea deshabilitar esta opción ?  Las imagenes pendientes no se subiran.</string>
   <string name="confirmation_disable_videos_upload_message">¿Está seguro de que desea deshabilitar esta opción ? Los videos pendientes no se subiran.</string>
@@ -363,7 +362,6 @@
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">No se puede mostrar la imagen</string>
   <string name="error__upload__local_file_not_copied">%1$s se pudo copiar a la carpeta local %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Ruta de subida de imagenes</string>
   <string name="get_shares_error">No se pudieron recuperar los objetos compartidos del servidor</string>
   <string name="get_sharees_error">No se pudieron recuperar los usuarios y grupos del servidor</string>
   <string name="get_capabilities_error">No se pudieron recuperar las propiedades del servidor</string>
@@ -420,7 +418,6 @@
   <string name="copy_file_error">Hubo un error al tratar de copiar este archivo o carpeta</string>
   <string name="forbidden_permissions_copy">para copiar este archivo</string>
   <string name="prefs_category_camera_upload">Subida Camara</string>
-  <string name="prefs_camera_video_upload_path_title">Ruta de subida de videos</string>
   <string name="sync_folder_failed_content">La sincronización de la carpeta %1$s no se pudo completar</string>
   <string name="shared_subject_header">compartido</string>
   <string name="with_you_subject_header">con usted</string>
@@ -441,7 +438,7 @@
   <string name="prefs_camera_upload_source_path_title">Carpeta de cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Archivo original será</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Archivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Archivo original será</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
@@ -550,4 +547,7 @@
   <string name="common_not_found">No se encontró</string>
   <string name="supports_oauth2_error">No fue posible determinar si OAuth2 está soportado</string>
   <string name="get_base_url_error">No fue posible conocer la URL base del servidor</string>
+  <string name="prefs_http_logs">Registrar peticiones y respuestas HTTP</string>
+  <string name="prefs_logs_summary">Los registros pueden contener información sensible. Compartirlos o no es responsabilidad del usuario.</string>
+  <string name="synchronizing_account">Sincronizando cuenta</string>
 </resources>

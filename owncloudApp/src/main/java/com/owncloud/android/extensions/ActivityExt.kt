@@ -20,6 +20,8 @@
 package com.owncloud.android.extensions
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
@@ -50,3 +52,29 @@ fun Activity.showErrorInToast(
             duration
         ).show()
     }
+
+fun Activity.goToUrl(
+    url: String,
+    flags: Int? = null
+) {
+    if (url.isNotEmpty()) {
+        val uriUrl = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, uriUrl)
+        if (flags != null) intent.addFlags(flags)
+        startActivity(intent)
+    }
+}
+
+fun Activity.sendEmail(
+    email: String,
+    subject: String? = null,
+    text: String? = null
+) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        data = Uri.parse(email)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        putExtra(Intent.EXTRA_SUBJECT, subject)
+        if (text != null) putExtra(Intent.EXTRA_TEXT, text)
+    }
+    startActivity(intent)
+}

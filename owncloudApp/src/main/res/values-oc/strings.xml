@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">Aplicacion Android %1$s</string>
-  <string name="about_version">version %1$s</string>
   <string name="actionbar_sync">Actualizar lo compte</string>
   <string name="actionbar_upload">Mandar</string>
   <string name="actionbar_upload_from_apps">Contengut d\'autras aplicacions</string>
@@ -20,8 +18,8 @@
   <string name="drawer_feedback">Comentaris</string>
   <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">General</string>
-  <string name="prefs_category_more">Mai</string>
-  <string name="prefs_category_security">Seguretat</string>
+  <string name="prefs_subsection_more">Mai</string>
+  <string name="prefs_subsection_security">Seguretat</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Maneja comptes</string>
   <string name="prefs_passcode">Còdi de seguretat</string>
@@ -95,8 +93,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="common_unknown">Desconegut</string>
   <string name="common_error_unknown">Error desconeguda </string>
   <string name="common_pending">En espèra</string>
-  <string name="about_title">A prepaus de</string>
-  <string name="change_password">Cambiar de senhal</string>
+    <string name="change_password">Cambiar de senhal</string>
   <string name="delete_account">Suprimir lo compte</string>
   <string name="create_account">Crear un compte</string>
   <string name="upload_chooser_title">Mandar un fichièr dempuèi…</string>
@@ -159,8 +156,6 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="pass_code_remove_your_pass_code">Suprimir vòstre còdi de seguretat</string>
   <string name="pass_code_mismatch">Los còdis de seguretat son pas identics</string>
   <string name="pass_code_wrong">Còdi de seguretat incorrècte</string>
-  <string name="pass_code_removed">Còdi de seguretat suprimit</string>
-  <string name="pass_code_stored">Còdi de seguretat enregistrat</string>
   <string name="media_notif_ticker">%1$s lector de musica</string>
   <string name="media_state_playing">%1$s (lectura)</string>
   <string name="media_state_loading">%1$s (cargament)</string>
@@ -326,7 +321,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="prefs_camera_upload_source_path_title">Dorsièr de l\'aparelh fòto (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Requesit</string>
   <string name="prefs_camera_upload_source_path_title_optional">Opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialogTitle">Lo fichièr original serà…</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Lo fichièr original serà…</string>
   <string name="prefs_camera_upload_behaviour_title">Lo fichièr original serà…</string>
   <string name="upload_copy_files">Copiar lo fichièr</string>
   <string name="upload_move_files">Desplaçar lo fichièr</string>
