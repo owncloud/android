@@ -42,6 +42,7 @@ class UserDaoTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var userDao: UserDao
+    private val userQuotaEntity = OC_USER_QUOTA.toEntity(OC_ACCOUNT_NAME)
 
     @Before
     fun setUp() {
@@ -57,7 +58,7 @@ class UserDaoTest {
 
     @Test
     fun insertQuotaForAccount() {
-        userDao.insert(OC_USER_QUOTA.toEntity(OC_ACCOUNT_NAME))
+        userDao.insert(userQuotaEntity)
 
         val userQuotaEntity = userDao.getQuotaForAccount(OC_ACCOUNT_NAME)
 
@@ -67,8 +68,8 @@ class UserDaoTest {
 
     @Test
     fun replaceQuotaForAccount() {
-        userDao.insert(OC_USER_QUOTA.toEntity(OC_ACCOUNT_NAME))
-        userDao.insert(OC_USER_QUOTA.toEntity(OC_ACCOUNT_NAME).copy(available = -3))
+        userDao.insert(userQuotaEntity)
+        userDao.insert(userQuotaEntity.copy(available = -3))
 
         val userQuotaEntity = userDao.getQuotaForAccount(OC_ACCOUNT_NAME)
 
