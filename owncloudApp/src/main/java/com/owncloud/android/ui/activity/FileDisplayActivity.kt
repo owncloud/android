@@ -62,7 +62,6 @@ import com.owncloud.android.db.PreferenceManager.getSortOrder
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.services.FileUploader
@@ -1246,8 +1245,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * Updates the view associated to the activity after the finish of an operation trying to rename
      * a file.
      *
-     * @param operation Renaming operation performed.
-     * @param result    Result of the renaming.
+     * @param uiResult - UIResult wrapping the file that was renamed
      */
     private fun onRenameFileOperationFinish(
         uiResult: UIResult<OCFile>
@@ -1260,14 +1258,16 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 dismissLoadingDialog()
 
                 val details = secondFragment
-                if (details != null && uiResult.data == details.file) {
-                    val updatedRenamedFile = storageManager.getFileById(uiResult.data!!.id!!)
-                    file = updatedRenamedFile
-                    details.onFileMetadataChanged(updatedRenamedFile)
-                    updateToolbar(updatedRenamedFile)
+                uiResult.data?.id?.let { fileId ->
+                    if (details != null && uiResult.data == details.file) {
+                        val updatedRenamedFile = storageManager.getFileById(fileId)
+                        file = updatedRenamedFile
+                        details.onFileMetadataChanged(updatedRenamedFile)
+                        updateToolbar(updatedRenamedFile)
+                    }
                 }
 
-                if (storageManager.getFileById(uiResult.data!!.parentId!!) == currentDir) {
+                if (uiResult.data?.parentId == currentDir.id) {
                     refreshListOfFilesFragment(true)
                 }
             }
