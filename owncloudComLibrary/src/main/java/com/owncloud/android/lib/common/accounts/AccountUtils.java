@@ -52,17 +52,9 @@ public class AccountUtils {
      */
     public static String getWebDavUrlForAccount(Context context, Account account)
             throws AccountNotFoundException {
-        String webDavUrlForAccount = "";
 
-        try {
-            OwnCloudCredentials ownCloudCredentials = getCredentialsForAccount(context, account);
-            webDavUrlForAccount = getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_FILES_PATH_4_0
-                    + ownCloudCredentials.getUsername();
-        } catch (OperationCanceledException | AuthenticatorException | IOException e) {
-            Timber.e(e);
-        }
-
-        return webDavUrlForAccount;
+        return getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_FILES_PATH_4_0
+                + AccountUtils.getUserId(account, context);
     }
 
     /**
