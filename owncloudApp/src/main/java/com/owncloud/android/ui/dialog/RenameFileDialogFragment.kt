@@ -122,7 +122,7 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
          * @return Dialog ready to show.
          */
         @JvmStatic
-        fun newInstance(file: OCFile?): RenameFileDialogFragment {
+        fun newInstance(file: OCFile): RenameFileDialogFragment {
             val args = Bundle().apply {
                 putParcelable(ARG_TARGET_FILE, file)
             }
