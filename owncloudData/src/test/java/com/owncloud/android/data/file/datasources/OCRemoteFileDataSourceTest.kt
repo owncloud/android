@@ -24,7 +24,6 @@ import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDa
 import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
-import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.createRemoteOperationResultMock

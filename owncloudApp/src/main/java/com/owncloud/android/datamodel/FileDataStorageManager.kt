@@ -311,7 +311,7 @@ class FileDataStorageManager : KoinComponent {
 
     // TODO: New_arch: Remove this and call usecase inside FilesViewModel
     fun saveFile(file: OCFile): Boolean {
-        runBlocking(CoroutinesDispatcherProvider().io){
+        runBlocking(CoroutinesDispatcherProvider().io) {
             val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
 
             val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
