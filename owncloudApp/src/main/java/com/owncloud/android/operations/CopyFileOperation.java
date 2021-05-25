@@ -87,8 +87,7 @@ public class CopyFileOperation extends SyncOperation {
         }
         CopyRemoteFileOperation operation = new CopyRemoteFileOperation(
                 mSrcPath,
-                finalRemotePath,
-                false
+                finalRemotePath
         );
         result = operation.execute(client);
         String targetFileRemoteId = (String) result.getData();
