@@ -61,14 +61,11 @@ import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.domain.files.model.LIST_MIME_DIR
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.utils.FileStorageUtils
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
 import java.util.HashMap
-import com.owncloud.android.datamodel.OCFile as OCFileLegacy
 
 /**
  * The ContentProvider for the ownCloud App.

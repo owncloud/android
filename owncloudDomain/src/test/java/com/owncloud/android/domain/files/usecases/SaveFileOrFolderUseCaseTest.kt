@@ -22,7 +22,6 @@ package com.owncloud.android.domain.files.usecases
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.testutil.OC_FILE
-import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -41,7 +40,7 @@ class SaveFileOrFolderUseCaseTest {
         Assert.assertFalse(useCaseResult.isError)
         Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) {fileRepository.saveFile(useCaseParamsFile.fileToSave)}
+        verify(exactly = 1) { fileRepository.saveFile(useCaseParamsFile.fileToSave) }
     }
 
     @Test
