@@ -24,6 +24,7 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.exceptions.BadOcVersionException
+import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.ForbiddenException
 import com.owncloud.android.domain.exceptions.IncorrectAddressException
@@ -72,6 +73,7 @@ fun Throwable.parseError(
                 resources.getString(stringId)
             }
             is MoveIntoDescendantException -> resources.getString(R.string.move_file_invalid_into_descendent)
+            is CopyIntoDescendantException -> resources.getString(R.string.copy_file_invalid_into_descendent)
             is ForbiddenException -> resources.getString(R.string.forbidden_permissions)
             is FileNotFoundException -> resources.getString(R.string.common_not_found)
             is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
