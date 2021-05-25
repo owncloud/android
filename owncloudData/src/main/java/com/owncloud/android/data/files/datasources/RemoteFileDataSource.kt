@@ -25,6 +25,8 @@ interface RemoteFileDataSource {
     fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
 
+    fun copyFile(sourceRemotePath: String, targetRemotePath: String)
+
     fun createFolder(
         remotePath: String,
         createFullPath: Boolean,

@@ -41,6 +41,10 @@ class OCRemoteFileDataSource(
         isUserLogged = checkUserCredentials
     ).data
 
+    override fun copyFile(sourceRemotePath: String, targetRemotePath: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun createFolder(
         remotePath: String,
         createFullPath: Boolean,
