@@ -23,6 +23,7 @@ package com.owncloud.android.data.files.datasources
 import com.owncloud.android.domain.files.model.OCFile
 
 interface LocalFileDataSource {
+    fun copyFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String)
     fun getFileById(fileId: Long): OCFile?
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getFolderContent(folderId: Long): List<OCFile>

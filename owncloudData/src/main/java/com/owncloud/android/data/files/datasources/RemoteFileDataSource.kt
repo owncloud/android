@@ -27,6 +27,8 @@ interface RemoteFileDataSource {
         checkUserCredentials: Boolean
     ): Boolean
 
+    fun copyFile(sourceRemotePath: String, targetRemotePath: String)
+
     fun createFolder(
         remotePath: String,
         createFullPath: Boolean,

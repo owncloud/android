@@ -63,7 +63,51 @@ class OCFileRepository(
     }
 
     override fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile) {
-        TODO("Not yet implemented")
+        listOfFilesToCopy.forEach { ocFile ->
+
+            // 1. Get the final remote path for this file.
+            val expectedRemotePath: String = targetFolder.remotePath + ocFile.fileName
+            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath).apply {
+                if (ocFile.isFolder) {
+                    plus(File.separator)
+                }
+            }
+            val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFolder.owner, finalRemotePath)
+
+            // 2. Try to copy files in server
+            try {
+                remoteFileDataSource.copyFile(
+                    sourceRemotePath = ocFile.remotePath,
+                    targetRemotePath = finalRemotePath
+                )
+            } catch (targetNodeDoesNotExist: ConflictException) {
+                // Target node does not exist anymore. Remove target folder from database and local storage and return
+                removeFolderRecursively(ocFile = targetFolder, removeOnlyLocalCopy = false)
+                return@copyFile
+            } catch (sourceFileDoesNotExist: FileNotFoundException) {
+                // Source file does not exist anymore. Remove file from database and local storage and continue
+                if (ocFile.isFolder) {
+                    removeFolderRecursively(ocFile = ocFile, removeOnlyLocalCopy = false)
+                } else {
+                    removeFile(
+                        ocFile = ocFile,
+                        onlyLocalCopy = false
+                    )
+                }
+                return@forEach
+            }
+
+            // 3. Update database with latest changes
+            localFileDataSource.copyFile(
+                sourceFile = ocFile,
+                targetFile = targetFolder,
+                finalRemotePath = finalRemotePath,
+                finalStoragePath = finalStoragePath
+            )
+
+            // 4. Update local storage
+            localStorageProvider.copyLocalFile(ocFile, finalStoragePath)
+        }
     }
 
     override fun getFileById(fileId: Long): OCFile? =
