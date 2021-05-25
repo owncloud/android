@@ -64,5 +64,5 @@ val viewModelModule = module {
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
     viewModel { FileDetailsViewModel(get(), get(), get(), get(), get()) }
-    viewModel { FileOperationViewModel(get(), get(), get(), get(), get()) }
+    viewModel { FileOperationViewModel(get(), get(), get(), get(), get(), get()) }
 }
