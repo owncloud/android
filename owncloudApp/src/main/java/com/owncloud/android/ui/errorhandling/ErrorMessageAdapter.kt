@@ -29,7 +29,6 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
@@ -144,7 +143,7 @@ class ErrorMessageAdapter {
                         R.string.uploader_upload_forbidden_permissions
                     )
                     if (operation is CreateFolderOperation) formatter.forbidden(R.string.forbidden_permissions_create)
-                    if (operation is CopyFileOperation) formatter.forbidden(R.string.forbidden_permissions_copy) else formatter.format(
+                    else formatter.format(
                         R.string.filename_forbidden_characters_from_server
                     )
                 }
@@ -160,16 +159,14 @@ class ErrorMessageAdapter {
                             R.string.sync_current_folder_was_removed,
                             File(operation.folderPath).name
                         )
-                    if (operation is CopyFileOperation)
-                        formatter.format(R.string.copy_file_not_found) else formatter.format(R.string.rename_local_fail_msg)
+                    else formatter.format(R.string.rename_local_fail_msg)
                 }
                 ResultCode.INVALID_LOCAL_FILE_NAME ->
                     formatter.format(R.string.rename_local_fail_msg)
                 ResultCode.INVALID_CHARACTER_IN_NAME ->
                     formatter.format(R.string.filename_forbidden_characters)
                 ResultCode.INVALID_OVERWRITE -> {
-                    if (operation is CopyFileOperation) formatter.format(R.string.copy_file_invalid_overwrite)
-                    else formatter.format(R.string.move_file_error)
+                    formatter.format(R.string.move_file_error)
                 }
                 ResultCode.CONFLICT -> formatter.format(R.string.move_file_error)
                 ResultCode.INVALID_COPY_INTO_DESCENDANT ->
@@ -241,7 +238,6 @@ class ErrorMessageAdapter {
                     R.string.sync_folder_failed_content,
                     File(operation.folderPath).name
                 )
-                is CopyFileOperation -> formatter.format(R.string.copy_file_error)
                 // if everything else fails
                 else -> if (result.isSuccess) formatter.format(android.R.string.ok) else formatter.format(R.string.common_error_unknown)
             }
