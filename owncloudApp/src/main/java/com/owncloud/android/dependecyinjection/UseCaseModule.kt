@@ -29,6 +29,7 @@ import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
@@ -79,6 +80,7 @@ val useCaseModule = module {
 
     // Files
     factory { CreateFolderAsyncUseCase(get()) }
+    factory { CopyFileUseCase(get()) }
     factory { GetFileByIdUseCase(get()) }
     factory { GetFileByRemotePathUseCase(get()) }
     factory { GetFolderContentUseCase(get()) }

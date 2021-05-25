@@ -24,6 +24,7 @@ import com.owncloud.android.domain.files.model.OCFile
 
 interface FileRepository {
     fun createFolder(remotePath: String, parentFolder: OCFile)
+    fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile)
     fun getFileById(fileId: Long): OCFile?
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getFolderContent(folderId: Long): List<OCFile>
