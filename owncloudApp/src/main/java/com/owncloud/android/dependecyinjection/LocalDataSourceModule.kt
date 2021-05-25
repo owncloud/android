@@ -32,7 +32,6 @@ import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataS
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
-import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
@@ -53,14 +52,12 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
 
-    factory { OCFileMapper() }
-
     single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
     single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }
-    factory<LocalFileDataSource> { OCLocalFileDataSource(get(), get()) }
+    factory<LocalFileDataSource> { OCLocalFileDataSource(get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
     factory<FolderBackupLocalDataSource> { FolderBackupLocalDataSourceImpl(get()) }
