@@ -38,6 +38,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.res.Resources.NotFoundException
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
@@ -75,7 +76,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
@@ -1148,7 +1148,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         when (operation) {
             is SynchronizeFileOperation -> onSynchronizeFileOperationFinish(operation, result)
-            is CopyFileOperation -> onCopyFileOperationFinish(operation, result)
         }
     }
 
@@ -1233,23 +1232,25 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * Updates the view associated to the activity after the finish of an operation trying to copy a
      * file.
      *
-     * @param operation Copy operation performed.
-     * @param result    Result of the copy operation.
+     * @param uiResult - UIResult wrapping the target folder where files were copied
      */
-    private fun onCopyFileOperationFinish(operation: CopyFileOperation, result: RemoteOperationResult<*>) {
-        if (result.isSuccess) {
-            refreshListOfFilesFragment(true)
-        } else {
-            try {
-                showMessageInSnackbar(
-                    R.id.list_layout,
-                    ErrorMessageAdapter.getResultMessage(result, operation, resources)
-                )
-
-            } catch (e: NotFoundException) {
-                Timber.e(e, "Error while trying to show fail message")
+    private fun onCopyFileOperationFinish(
+        uiResult: UIResult<OCFile>
+    ) {
+        when (uiResult) {
+            is UIResult.Loading -> {
+                showLoadingDialog(R.string.wait_a_moment)
             }
+            is UIResult.Success -> {
+                dismissLoadingDialog()
 
+                refreshListOfFilesFragment(true)
+            }
+            is UIResult.Error -> {
+                dismissLoadingDialog()
+
+                showErrorInSnackbar(R.string.copy_file_error, uiResult.error)
+            }
         }
     }
 
@@ -1619,6 +1620,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun startListeningToOperations() {
+        fileOperationViewModel.copyFileLiveData.observe(this, Event.EventObserver {
+            onCopyFileOperationFinish(it)
+        })
         fileOperationViewModel.moveFileLiveData.observe(this, Event.EventObserver {
             onMoveFileOperationFinish(it)
         })
