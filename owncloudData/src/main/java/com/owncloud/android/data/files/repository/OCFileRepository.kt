@@ -75,10 +75,9 @@ class OCFileRepository(
                     plus(File.separator)
                 }
             }
-            val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFolder.owner, finalRemotePath)
 
             // 2. Try to copy files in server
-            try {
+            val remoteId = try {
                 remoteFileDataSource.copyFile(
                     sourceRemotePath = ocFile.remotePath,
                     targetRemotePath = finalRemotePath
@@ -105,11 +104,8 @@ class OCFileRepository(
                 sourceFile = ocFile,
                 targetFile = targetFolder,
                 finalRemotePath = finalRemotePath,
-                finalStoragePath = finalStoragePath
+                remoteId = remoteId
             )
-
-            // 4. Update local storage
-            localStorageProvider.copyLocalFile(ocFile, finalStoragePath)
         }
     }
 
