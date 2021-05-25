@@ -43,6 +43,7 @@ import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -50,7 +51,6 @@ import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.operations.CopyFileOperation
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
@@ -349,21 +349,21 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val targetParentDocId = targetParentDocumentId.toLong()
         val targetParentFile = getFileByIdOrException(targetParentDocId)
 
-        CopyFileOperation(
-            sourceFile.remotePath,
-            targetParentFile.remotePath
-        ).apply {
-            execute(currentStorageManager, context).also { result ->
-                syncRequired = false
-                checkOperationResult(result, targetParentFile.id.toString())
-                //Returns the document id of the document copied at the target destination
-                var newPath = targetParentFile.remotePath + sourceFile.fileName
-                if (sourceFile.isFolder) {
-                    newPath += File.separator
-                }
-                val newFile = getFileByPathOrException(newPath)
-                return newFile.id.toString()
-            }
+        val copyFileUseCase: CopyFileUseCase by inject()
+
+        copyFileUseCase.execute(
+            CopyFileUseCase.Params(
+                listOfFilesToCopy = listOf(sourceFile),
+                targetFolder = targetParentFile
+            )
+        ).also { result ->
+            syncRequired = false
+            checkUseCaseResult(result, targetParentFile.id.toString())
+            // Returns the document id of the document copied at the target destination
+            var newPath = targetParentFile.remotePath + sourceFile.fileName
+            if (sourceFile.isFolder) newPath += File.separator
+            val newFile = getFileByPathOrException(newPath)
+            return newFile.id.toString()
         }
     }
 
@@ -390,7 +390,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         ).also { result ->
             syncRequired = false
             checkUseCaseResult(result, targetParentFile.id.toString())
-            //Returns the document id of the document moved to the target destination
+            // Returns the document id of the document moved to the target destination
             var newPath = targetParentFile.remotePath + sourceFile.fileName
             if (sourceFile.isFolder) newPath += File.separator
             val newFile = getFileByPathOrException(newPath)
