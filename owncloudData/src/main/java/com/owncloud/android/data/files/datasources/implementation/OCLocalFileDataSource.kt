@@ -18,9 +18,10 @@
  */
 package com.owncloud.android.data.files.datasources.implementation
 
+import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
-import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
 import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
@@ -29,14 +30,13 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
-    private val ocFileMapper: OCFileMapper
 ) : LocalFileDataSource {
 
     override fun getFileById(fileId: Long): OCFile? =
-        ocFileMapper.toModel(fileDao.getFileById(fileId))
+        fileDao.getFileById(fileId)?.toModel()
 
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? {
-        ocFileMapper.toModel(fileDao.getFileByOwnerAndRemotePath(owner, remotePath))?.let { return it }
+        fileDao.getFileByOwnerAndRemotePath(owner, remotePath)?.let { return it.toModel() }
 
         // If root folder do not exists, create and return it.
         if (remotePath == ROOT_PATH) {
@@ -48,7 +48,7 @@ class OCLocalFileDataSource(
                 mimeType = MIME_DIR,
                 modificationTimestamp = 0
             )
-            fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(rootFolder)!!).also { return getFileById(it) }
+            fileDao.mergeRemoteAndLocalFile(rootFolder.toEntity()).also { return getFileById(it) }
         }
 
         return null
@@ -56,18 +56,18 @@ class OCLocalFileDataSource(
 
     override fun getFolderContent(folderId: Long): List<OCFile> =
         fileDao.getFolderContent(folderId = folderId).map {
-            ocFileMapper.toModel(it)!!
+            it.toModel()
         }
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
         fileDao.getFolderByMimeType(folderId = folderId, mimeType = MIME_PREFIX_IMAGE).map {
-            ocFileMapper.toModel(it)!!
+            it.toModel()
         }
 
     override fun moveFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String) =
         fileDao.moveFile(
-            sourceFile = ocFileMapper.toEntity(sourceFile)!!,
-            targetFile = ocFileMapper.toEntity(targetFile)!!,
+            sourceFile = sourceFile.toEntity(),
+            targetFile = targetFile.toEntity(),
             finalRemotePath = finalRemotePath,
             finalStoragePath = sourceFile.storagePath?.let { finalStoragePath }
         )
@@ -75,17 +75,17 @@ class OCLocalFileDataSource(
     override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
         // Insert first folder container
         // TODO: If it is root, add 0 as parent Id
-        val folderId = fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(folder)!!)
+        val folderId = fileDao.mergeRemoteAndLocalFile(folder.toEntity())
 
         // Then, insert files inside
         listOfFiles.forEach {
             // Add parent id to each file
-            fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(it)!!.apply { parentId = folderId })
+            fileDao.mergeRemoteAndLocalFile(it.toEntity().apply { parentId = folderId })
         }
     }
 
     override fun saveFile(file: OCFile) {
-        fileDao.mergeRemoteAndLocalFile(ocFileMapper.toEntity(file)!!)
+        fileDao.mergeRemoteAndLocalFile(file.toEntity())
     }
 
     override fun removeFile(fileId: Long) {
@@ -94,10 +94,68 @@ class OCLocalFileDataSource(
 
     override fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String) {
         fileDao.moveFile(
-            sourceFile = ocFileMapper.toEntity(fileToRename)!!,
+            sourceFile = fileToRename.toEntity(),
             targetFile = fileDao.getFileById(fileToRename.parentId!!)!!,
             finalRemotePath = finalRemotePath,
             finalStoragePath = fileToRename.storagePath?.let { finalStoragePath }
         )
+    }
+
+    companion object {
+        @VisibleForTesting
+        fun OCFileEntity.toModel(): OCFile =
+            OCFile(
+                id = id,
+                parentId = parentId,
+                remotePath = remotePath,
+                owner = owner,
+                permissions = permissions,
+                remoteId = remoteId,
+                privateLink = privateLink,
+                creationTimestamp = creationTimestamp,
+                modificationTimestamp = modificationTimestamp,
+                etag = etag,
+                mimeType = mimeType,
+                length = length,
+                sharedByLink = sharedByLink,
+                sharedWithSharee = sharedWithSharee,
+                storagePath = storagePath,
+                keepInSync = keepInSync,
+                needsToUpdateThumbnail = needsToUpdateThumbnail,
+                fileIsDownloading = fileIsDownloading,
+                lastSyncDateForData = lastSyncDateForData,
+                lastSyncDateForProperties = lastSyncDateForProperties,
+                modifiedAtLastSyncForData = modifiedAtLastSyncForData,
+                etagInConflict = etagInConflict,
+                treeEtag = treeEtag
+            )
+
+        @VisibleForTesting
+        fun OCFile.toEntity(): OCFileEntity =
+            OCFileEntity(
+                parentId = parentId,
+                remotePath = remotePath,
+                owner = owner,
+                permissions = permissions,
+                remoteId = remoteId,
+                privateLink = privateLink,
+                creationTimestamp = creationTimestamp,
+                modificationTimestamp = modificationTimestamp,
+                etag = etag,
+                mimeType = mimeType,
+                length = length,
+                sharedByLink = sharedByLink,
+                sharedWithSharee = sharedWithSharee,
+                storagePath = storagePath,
+                keepInSync = keepInSync,
+                needsToUpdateThumbnail = needsToUpdateThumbnail,
+                fileIsDownloading = fileIsDownloading,
+                lastSyncDateForData = lastSyncDateForData,
+                lastSyncDateForProperties = lastSyncDateForProperties,
+                modifiedAtLastSyncForData = modifiedAtLastSyncForData,
+                etagInConflict = etagInConflict,
+                treeEtag = treeEtag,
+                name = fileName
+            ).apply { this@toEntity.id?.let { modelId -> this.id = modelId } }
     }
 }
