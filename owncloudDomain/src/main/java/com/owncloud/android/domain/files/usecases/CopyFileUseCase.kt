@@ -20,7 +20,6 @@ package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
-import com.owncloud.android.domain.exceptions.MoveIntoDescendantException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
@@ -37,9 +36,9 @@ class CopyFileUseCase(
         }
         if (listWithoutDescendantItems.isEmpty()) throw CopyIntoDescendantException()
 
-        return fileRepository.moveFile(
-            listOfFilesToMove = listWithoutDescendantItems,
-            targetFile = params.targetFolder
+        return fileRepository.copyFile(
+            listOfFilesToCopy = listWithoutDescendantItems,
+            targetFolder = params.targetFolder
         )
     }
 
