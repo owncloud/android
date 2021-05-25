@@ -50,7 +50,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
-import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -66,7 +65,6 @@ public class OperationsService extends Service {
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     public static final String EXTRA_SERVER_URL = "SERVER_URL";
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
-    public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
     public static final String EXTRA_SYNC_REGULAR_FILES = "SYNC_REGULAR_FILES";
@@ -75,7 +73,6 @@ public class OperationsService extends Service {
 
     public static final String ACTION_SYNC_FILE = "SYNC_FILE";
     public static final String ACTION_SYNC_FOLDER = "SYNC_FOLDER";
-    public static final String ACTION_COPY_FILE = "COPY_FILE";
     public static final String ACTION_CHECK_CURRENT_CREDENTIALS = "CHECK_CURRENT_CREDENTIALS";
 
     private ConcurrentMap<Integer, Pair<RemoteOperation, RemoteOperationResult>>
@@ -466,14 +463,6 @@ public class OperationsService extends Service {
                                     false,
                                     syncContentOfRegularFiles
                             );
-
-                            break;
-                        }
-                        case ACTION_COPY_FILE: {
-                            // Copy file/folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            String newParentPath = operationIntent.getStringExtra(EXTRA_NEW_PARENT_PATH);
-                            operation = new CopyFileOperation(remotePath, newParentPath);
 
                             break;
                         }
