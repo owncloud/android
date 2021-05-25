@@ -87,22 +87,24 @@ abstract class FileDao {
             ).apply { id = targetFile.id }
         )
 
-        // 2. Duplicate files
-        if (sourceFile.isFolder) {
-            copyFolder(
-                sourceFolder = sourceFile,
-                targetFile = targetFile,
-                targetRemotePath = finalRemotePath,
-                remoteId = remoteId
+        // 2. Insert a new file with common attributes and retrieved remote id
+        insert(
+            OCFileEntity(
+                parentId = targetFile.id,
+                owner = targetFile.owner,
+                remotePath = finalRemotePath,
+                remoteId = remoteId,
+                length = sourceFile.length,
+                modificationTimestamp = sourceFile.modificationTimestamp,
+                mimeType = sourceFile.mimeType,
+                name = null,
+                needsToUpdateThumbnail = true,
+                etag = "",
+                creationTimestamp = null,
+                permissions = null,
+                treeEtag = ""
             )
-        } else {
-            copySingleFile(
-                sourceFile = sourceFile,
-                targetFile = targetFile,
-                finalRemotePath = finalRemotePath,
-                remoteId = remoteId
-            )
-        }
+        )
     }
 
     @Transaction
@@ -141,71 +143,6 @@ abstract class FileDao {
 
     @Query(DELETE_FILE_WITH_ID)
     abstract fun deleteFileWithId(id: Long)
-
-    private fun copySingleFile(
-        sourceFile: OCFileEntity,
-        targetFile: OCFileEntity,
-        finalRemotePath: String,
-        remoteId: String? = null
-    ) {
-        insert(
-            OCFileEntity(
-                parentId = targetFile.id,
-                owner = targetFile.owner,
-                remotePath = finalRemotePath,
-                remoteId = remoteId,
-                length = sourceFile.length,
-                modificationTimestamp = sourceFile.modificationTimestamp,
-                mimeType = sourceFile.mimeType,
-                name = null,
-                needsToUpdateThumbnail = true,
-                etag = null,
-                creationTimestamp = null,
-                permissions = null
-            )
-        )
-    }
-
-    private fun copyFolder(
-        sourceFolder: OCFileEntity,
-        targetFile: OCFileEntity,
-        targetRemotePath: String,
-        remoteId: String?
-    ) {
-        // 1. Move the folder
-        val folderRemotePath =
-            targetRemotePath.trimEnd(separatorChar).plus(separatorChar)
-
-        copySingleFile(
-            sourceFile = sourceFolder,
-            targetFile = targetFile,
-            finalRemotePath = folderRemotePath,
-            remoteId = remoteId
-        )
-
-        // 2. Move its content
-        val folderContent = getFolderContent(sourceFolder.id)
-
-        folderContent.forEach { file ->
-            val remotePathForChild = folderRemotePath.plus(file.name)
-
-            if (file.isFolder) {
-                copyFolder(
-                    sourceFolder = file,
-                    targetFile = sourceFolder,
-                    targetRemotePath = remotePathForChild,
-                    remoteId = null
-                )
-            } else {
-                copySingleFile(
-                    sourceFile = file,
-                    targetFile = sourceFolder,
-                    finalRemotePath = remotePathForChild,
-                    remoteId = remoteId
-                )
-            }
-        }
-    }
 
     private fun moveSingleFile(
         sourceFile: OCFileEntity,
