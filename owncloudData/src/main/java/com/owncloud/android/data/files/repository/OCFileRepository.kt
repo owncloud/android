@@ -65,6 +65,10 @@ class OCFileRepository(
         }
     }
 
+    override fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile) {
+        TODO("Not yet implemented")
+    }
+
     override fun getFileById(fileId: Long): OCFile? =
         localFileDataSource.getFileById(fileId)
 
