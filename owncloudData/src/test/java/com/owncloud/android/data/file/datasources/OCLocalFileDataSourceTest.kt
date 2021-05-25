@@ -20,7 +20,7 @@
 package com.owncloud.android.data.file.datasources
 
 import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
-import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
+import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource.Companion.toEntity
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.domain.files.model.MIME_DIR
@@ -41,12 +41,10 @@ class OCLocalFileDataSourceTest {
     private lateinit var localDataSource: OCLocalFileDataSource
     private lateinit var dao: FileDao
 
-    private val mapper = OCFileMapper()
-
     @Before
     fun init() {
         dao = spyk()
-        localDataSource = OCLocalFileDataSource(dao, mapper)
+        localDataSource = OCLocalFileDataSource(dao)
     }
 
     @Test
@@ -213,6 +211,6 @@ class OCLocalFileDataSourceTest {
     }
 
     companion object {
-        private val DUMMY_FILE_ENTITY: OCFileEntity = OCFileMapper().toEntity(OC_FILE)!!
+        private val DUMMY_FILE_ENTITY: OCFileEntity = OC_FILE.toEntity()
     }
 }
