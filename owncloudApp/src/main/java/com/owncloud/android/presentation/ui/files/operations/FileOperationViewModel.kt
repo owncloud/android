@@ -27,6 +27,7 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
@@ -38,12 +39,16 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class FileOperationViewModel(
+    private val copyFileUseCase: CopyFileUseCase,
     private val moveFileUseCase: MoveFileUseCase,
     private val removeFileUseCase: RemoveFileUseCase,
     private val renameFileUseCase: RenameFileUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
+
+    private val _copyFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
+    val copyFileLiveData: LiveData<Event<UIResult<OCFile>>> = _copyFileLiveData
 
     private val _moveFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
     val moveFileLiveData: LiveData<Event<UIResult<OCFile>>> = _moveFileLiveData
@@ -59,7 +64,17 @@ class FileOperationViewModel(
             is FileOperation.MoveOperation -> moveOperation(fileOperation)
             is FileOperation.RemoveOperation -> removeOperation(fileOperation)
             is FileOperation.RenameOperation -> renameOperation(fileOperation)
+            is FileOperation.CopyOperation -> copyOperation(fileOperation)
         }
+    }
+
+    private fun copyOperation(fileOperation: FileOperation.CopyOperation) {
+        runOperation(
+            liveData = _copyFileLiveData,
+            useCase = copyFileUseCase,
+            useCaseParams = CopyFileUseCase.Params(fileOperation.listOfFilesToCopy, fileOperation.targetFolder),
+            postValue = fileOperation.targetFolder
+        )
     }
 
     private fun moveOperation(fileOperation: FileOperation.MoveOperation) {
