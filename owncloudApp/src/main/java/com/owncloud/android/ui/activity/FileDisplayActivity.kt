@@ -604,9 +604,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * @param data Intent received
      */
     private fun requestCopyOperation(data: Intent) {
-        val folderToMoveAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
+        val folderToCopyAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
         val files = data.getParcelableArrayListExtra<OCFile>(FolderPickerActivity.EXTRA_FILES)
-        fileOperationsHelper.copyFiles(files, folderToMoveAt)
+        val copyOperation = FileOperation.CopyOperation(listOfFilesToCopy = files.toList(), targetFolder = folderToCopyAt)
+        fileOperationViewModel.performOperation(copyOperation)
     }
 
     override fun onBackPressed() {
