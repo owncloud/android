@@ -70,10 +70,8 @@ class OCFileRepository(
 
             // 1. Get the final remote path for this file.
             val expectedRemotePath: String = targetFolder.remotePath + ocFile.fileName
-            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath).apply {
-                if (ocFile.isFolder) {
-                    plus(File.separator)
-                }
+            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath).let {
+                if (ocFile.isFolder) it.plus(File.separator) else it
             }
 
             // 2. Try to copy files in server
@@ -126,10 +124,8 @@ class OCFileRepository(
 
             // 1. Get the final remote path for this file.
             val expectedRemotePath: String = targetFile.remotePath + ocFile.fileName
-            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath).apply {
-                if (ocFile.isFolder) {
-                    plus(File.separator)
-                }
+            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath).let {
+                if (ocFile.isFolder) it.plus(File.separator) else it
             }
             val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFile.owner, finalRemotePath)
 
