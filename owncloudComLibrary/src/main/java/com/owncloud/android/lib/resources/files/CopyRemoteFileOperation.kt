@@ -51,13 +51,13 @@ import java.util.concurrent.TimeUnit
 class CopyRemoteFileOperation(
     private val srcRemotePath: String,
     private val targetRemotePath: String,
-) : RemoteOperation<String?>() {
+) : RemoteOperation<String>() {
     /**
      * Performs the rename operation.
      *
      * @param client Client object to communicate with the remote ownCloud server.
      */
-    override fun run(client: OwnCloudClient): RemoteOperationResult<String?> {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
         if (targetRemotePath == srcRemotePath) {
             // nothing to do!
             return RemoteOperationResult(ResultCode.OK)
@@ -67,7 +67,7 @@ class CopyRemoteFileOperation(
         }
 
         /// perform remote operation
-        var result: RemoteOperationResult<String?>
+        var result: RemoteOperationResult<String>
         try {
             val copyMethod = CopyMethod(
                 URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(srcRemotePath)),
