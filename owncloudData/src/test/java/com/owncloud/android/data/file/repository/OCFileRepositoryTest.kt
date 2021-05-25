@@ -27,7 +27,6 @@ import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
-import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

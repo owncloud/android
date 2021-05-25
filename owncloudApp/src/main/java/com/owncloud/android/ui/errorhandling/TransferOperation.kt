@@ -19,5 +19,5 @@
 package com.owncloud.android.ui.errorhandling
 
 sealed class TransferOperation {
-    data class Download(val downloadPath: String): TransferOperation()
+    data class Download(val downloadPath: String) : TransferOperation()
 }
