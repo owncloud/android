@@ -102,10 +102,6 @@ class LocalStorageProvider(
         return fileToDelete.deleteRecursively()
     }
 
-    fun copyLocalFile(ocFile: OCFile, finalStoragePath: String) {
-        TODO("Not yet implemented")
-    }
-
     fun moveLocalFile(ocFile: OCFile, finalStoragePath: String) {
         val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
         val fileToMove = File(safeStoragePath)
