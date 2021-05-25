@@ -31,6 +31,9 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
 ) : LocalFileDataSource {
+    override fun copyFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String) {
+        TODO("Not yet implemented")
+    }
 
     override fun getFileById(fileId: Long): OCFile? =
         fileDao.getFileById(fileId)?.toModel()
