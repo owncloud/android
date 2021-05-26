@@ -54,7 +54,7 @@ import com.owncloud.android.lib.resources.files.UploadFileFromContentUriOperatio
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 import timber.log.Timber
 import java.io.File
 

@@ -29,8 +29,8 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
 
 object ViewModelExt : KoinComponent {
