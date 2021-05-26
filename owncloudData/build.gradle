@@ -69,7 +69,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoTestVersion"
     androidTestImplementation "androidx.test.ext:junit:$extJunitVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
     androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
         exclude module: 'objenesis'
     }
