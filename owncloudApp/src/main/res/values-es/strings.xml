@@ -559,7 +559,7 @@
   <string name="welcome_feature_4_text">Tus fotografías/vídeos automáticamente se subirán</string>
   <string name="welcome_feature_5_title">Streaming de video</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-    <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
+  <string name="no_borwser_installed_alert">No hay un navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
   <string name="common_not_found">No se encontró</string>
   <string name="supports_oauth2_error">No fue posible determinar si OAuth2 está soportado</string>
   <string name="get_base_url_error">No fue posible conocer la URL base del servidor</string>
