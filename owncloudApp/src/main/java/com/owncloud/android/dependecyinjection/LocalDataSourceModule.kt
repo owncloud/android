@@ -49,7 +49,7 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
 
     single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
-    single { LocalStorageProvider(dataFolder) }
+    single { LocalStorageProvider(dataFolder, androidContext()) }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }

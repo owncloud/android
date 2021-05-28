@@ -24,13 +24,15 @@
 package com.owncloud.android.data
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
 
 class LocalStorageProvider(
-    private val rootFolderName: String
+    private val rootFolderName: String,
+    private val context: Context
 ) {
     /**
      * Get local storage path for accountName.
@@ -73,7 +75,7 @@ class LocalStorageProvider(
      * Return the primary shared/external storage directory where files will be stored.
      * For example: /storage/emulated/0
      */
-    private fun getPrimaryStorageDirectory(): File = Environment.getExternalStorageDirectory()
+    private fun getPrimaryStorageDirectory(): File = context.filesDir
 
     /**
      * URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names,
