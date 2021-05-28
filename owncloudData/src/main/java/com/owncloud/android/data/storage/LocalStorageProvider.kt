@@ -25,6 +25,7 @@ package com.owncloud.android.data.storage
 
 import android.accounts.Account
 import android.annotation.SuppressLint
+import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import java.io.File
@@ -38,6 +39,14 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     ) : LocalStorageProvider(rootFolderName) {
 
         override fun getPrimaryStorageDirectory(): File = Environment.getExternalStorageDirectory()
+    }
+
+    class ScopedStorageProvider(
+        rootFolderName: String,
+        private val context: Context
+    ) : LocalStorageProvider(rootFolderName) {
+
+        override fun getPrimaryStorageDirectory(): File = context.filesDir
     }
 
     /**

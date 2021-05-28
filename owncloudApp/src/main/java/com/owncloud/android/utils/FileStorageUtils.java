@@ -28,15 +28,18 @@ import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.webkit.MimeTypeMap;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.data.storage.LocalStorageProvider;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.Vector;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Static methods to help in access to local file system.
@@ -53,7 +56,8 @@ public class FileStorageUtils {
     // Let's use the LocalStorageProvider from now on.
     // It is in the data module, and it will be beneficial for new architecture.
     private static LocalStorageProvider getLocalStorageProvider() {
-        return new LocalStorageProvider.LegacyStorageProvider(MainApp.Companion.getDataFolder());
+        @NotNull Lazy<LocalStorageProvider.ScopedStorageProvider> localStorageProvider = inject(LocalStorageProvider.ScopedStorageProvider.class);
+        return localStorageProvider.getValue();
     }
 
     /**
