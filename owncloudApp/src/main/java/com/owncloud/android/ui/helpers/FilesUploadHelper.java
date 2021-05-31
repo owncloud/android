@@ -177,9 +177,7 @@ public class FilesUploadHelper implements Parcelable {
                     activity.getResources().getString(R.string.file_provider_authority), photoFile);
             pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         }
-        if (pictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-            activity.startActivityForResult(pictureIntent, requestCode);
-        }
+        activity.startActivityForResult(pictureIntent, requestCode);
     }
 
     public void onActivityResult(final OnCheckAvailableSpaceListener callback) {
