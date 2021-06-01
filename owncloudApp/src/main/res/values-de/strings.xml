@@ -43,6 +43,8 @@
   <string name="confirmation_touches_with_other_windows_title">Willst Du diese Funktion wirklich einschalten?</string>
   <string name="confirmation_touches_with_other_windows_message">Verwende diese Funktion auf eigene Verantwortung. Eine bösartige Anwendung könnte versuchen deine Touchgesten zu missbrauchen und so Aktionen zu provozieren, die du nicht beabsichtigt hast. ownCloud verbietet solchen Apps normalerweise den Zugriff auf die App.</string>
   <string name="prefs_open_logs_view">Log-Ansicht öffnen</string>
+  <string name="prefs_subsection_picture_uploads">Bilder automatisch hochladen</string>
+  <string name="prefs_subsection_video_uploads">Videos automatisch hochladen</string>
   <string name="prefs_camera_picture_upload">Bilder</string>
   <string name="prefs_camera_picture_upload_summary">Automatischer Upload von Fotos</string>
   <string name="prefs_camera_picture_upload_path_title">Speicherpfad für hochgeladene Bilder</string>
