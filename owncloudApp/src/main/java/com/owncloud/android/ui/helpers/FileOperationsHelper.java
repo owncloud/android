@@ -26,8 +26,6 @@ package com.owncloud.android.ui.helpers;
 import android.accounts.Account;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.webkit.MimeTypeMap;
 
@@ -45,7 +43,6 @@ import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import timber.log.Timber;
 
 import java.util.Collection;
-import java.util.List;
 
 public class FileOperationsHelper {
 
@@ -99,27 +96,14 @@ public class FileOperationsHelper {
                 openFileWithIntent = intentForSavedMimeType;
             }
 
-            List<ResolveInfo> launchables = mFileActivity.getPackageManager().
-                    queryIntentActivities(openFileWithIntent, PackageManager.MATCH_DEFAULT_ONLY);
-
-            if (launchables != null && launchables.size() > 0) {
-                try {
-                    mFileActivity.startActivity(
-                            Intent.createChooser(
-                                    openFileWithIntent, mFileActivity.getString(R.string.actionbar_open_with)
-                            )
-                    );
-                } catch (ActivityNotFoundException anfe) {
-                    mFileActivity.showSnackMessage(
-                            mFileActivity.getString(
-                                    R.string.file_list_no_app_for_file_type
-                            )
-                    );
-                }
-            } else {
-                mFileActivity.showSnackMessage(
-                        mFileActivity.getString(R.string.file_list_no_app_for_file_type)
+            try {
+                mFileActivity.startActivity(
+                        Intent.createChooser(openFileWithIntent, mFileActivity.getString(R.string.actionbar_open_with))
                 );
+            } catch (ActivityNotFoundException anfe) {
+                mFileActivity.showSnackMessage(mFileActivity.getString(
+                        R.string.file_list_no_app_for_file_type
+                ));
             }
 
         } else {
