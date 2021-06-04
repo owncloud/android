@@ -157,7 +157,7 @@ public class FilesUploadHelper implements Parcelable {
 
     private File createImageFile() {
         try {
-            File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            File storageDir = activity.getExternalCacheDir();
             image = File.createTempFile(getCapturedImageName(), ".jpg", storageDir);
             capturedPhotoPath = image.getAbsolutePath();
         } catch (IOException exception) {
