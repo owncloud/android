@@ -6,4 +6,5 @@
     <!-- yes, valid for ALL external storage and not only our app folder, since we can't use @string/data_folder
     as a value for 'path' attribute; in practice, we will only generate URIs in our folders, of course -->
     <files-path name="file" path="/" />
+    <external-cache-path name="file" path="/" />
 </paths>
