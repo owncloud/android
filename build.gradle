@@ -52,6 +52,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.sonarqube" version "3.3"
+}
+
 ext {
     androidX = '1.0.0'
 }
@@ -68,4 +72,19 @@ allprojects {
 
 subprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
+    apply plugin: 'org.sonarqube'
+}
+
+allprojects {
+    group = 'io.sonarcloud'
+    version = '0.2.beta'
+    description = 'gradle-owncloud-android'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "owncloud_android"
+        property "sonar.organization", "owncloud-1"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
