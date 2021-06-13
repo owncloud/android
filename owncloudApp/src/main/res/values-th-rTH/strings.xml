@@ -7,7 +7,7 @@
   <string name="actionbar_search">ค้นหาโฟลเดอร์นี้</string>
   <string name="actionbar_sync">ฟื้นฟูบัญชี</string>
   <string name="actionbar_upload">อัปโหลดไฟล์</string>
-  <string name="actionbar_upload_from_apps">เนื้อหาจากแอปอื่นๆ</string>
+  <string name="actionbar_upload_from_apps">เนื้อหาจากแอปอื่น ๆ</string>
   <string name="actionbar_upload_files">ไฟล์</string>
   <string name="actionbar_open_with">เปิดด้วย</string>
   <string name="actionbar_mkdir">โฟลเดอร์ใหม่</string>
@@ -33,9 +33,9 @@
   <string name="prefs_subsection_logging">กำลังเก็บบันทึก</string>
   <string name="prefs_subsection_more">ขยาย</string>
   <string name="prefs_subsection_security">ความปลอดภัย</string>
-  <string name="prefs_subsection_security_summary">ตั้งค่าเพื่อล็อคเข้าถึงแอปและอนุญาตให้สัมผัสกับหน้าต่างอื่นๆ ที่มองเห็นได้</string>
+  <string name="prefs_subsection_security_summary">ตั้งค่าเพื่อล็อคเข้าถึงแอปและอนุญาตให้สัมผัสกับหน้าต่างอื่น ๆ ที่มองเห็นได้</string>
   <string name="prefs_subsection_logging_summary">เก็บ Log ที่เกิดจากการทำงานของแอป</string>
-  <string name="prefs_subsection_more_summary">ข้อมูลแอปฯ ข้อเสนอแนะ และอื่นๆ</string>
+  <string name="prefs_subsection_more_summary">ข้อมูลแอปฯ ข้อเสนอแนะ และอื่น ๆ</string>
   <string name="prefs_accounts">บัญชี</string>
   <string name="prefs_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="prefs_passcode">ล็อครหัสปลดล็อค</string>
@@ -462,7 +462,7 @@
   <string name="share_file">แชร์ %1$s</string>
   <string name="share_with_user_section_title">ผู้ใช้และกลุ่ม</string>
   <string name="share_no_users">ยังไม่มีข้อมูลที่แชร์กับผู้ใช้ในตอนนี้</string>
-  <string name="share_incompatible_version">เพื่อแชร์กับผู้ใช้อื่นๆ เซิร์ฟเวอร์ของคุณจะต้องเป็นเวอร์ชัน 8.2 ขึ้นไป</string>
+  <string name="share_incompatible_version">เพื่อแชร์กับผู้ใช้อื่น ๆ เซิร์ฟเวอร์ของคุณจะต้องเป็นเวอร์ชัน 8.2 ขึ้นไป</string>
   <string name="share_add_user_or_group">เพิ่มชื่อผู้ใช้งาน หรือชื่อกลุ่ม</string>
   <string name="share_via_link_section_title">ลิงก์สาธารณะ</string>
   <string name="share_via_link_create_title">สร้างแชร์ลิงก์</string>
