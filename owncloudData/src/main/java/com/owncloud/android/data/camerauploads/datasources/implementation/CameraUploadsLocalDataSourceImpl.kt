@@ -82,7 +82,7 @@ class CameraUploadsLocalDataSourceImpl(
     private fun getBehaviorForPreference(keyPreference: String): FolderBackUpConfiguration.Behavior {
         val storedBehaviour = sharedPreferencesProvider.getString(keyPreference, null) ?: return FolderBackUpConfiguration.Behavior.COPY
 
-        return FolderBackUpConfiguration.Behavior.valueOf(storedBehaviour)
+        return FolderBackUpConfiguration.Behavior.fromString(storedBehaviour)
     }
 
     companion object {

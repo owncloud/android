@@ -41,5 +41,17 @@ sealed class FolderBackUpConfiguration(
         wifiOnly: Boolean,
     ) : FolderBackUpConfiguration(accountName, behavior, sourcePath, uploadPath, wifiOnly)
 
-    enum class Behavior { MOVE, COPY }
+    enum class Behavior {
+        MOVE, COPY;
+
+        companion object {
+            fun fromString(string: String): Behavior {
+                return if (string.equals("MOVE", ignoreCase = true)) {
+                    MOVE
+                } else {
+                    COPY
+                }
+            }
+        }
+    }
 }

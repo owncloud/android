@@ -22,6 +22,8 @@ package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration
@@ -34,6 +36,8 @@ import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
+import com.owncloud.android.workers.CameraUploadsWorker
+import timber.log.Timber
 import java.io.File
 
 class SettingsPictureUploadsViewModel(
@@ -114,5 +118,15 @@ class SettingsPictureUploadsViewModel(
         }
     }
 
-    fun schedulePictureUploadsSyncJob() = cameraUploadsHandlerProvider.schedulePictureUploadsSyncJob()
+    fun schedulePictureUploadsSyncJob() {
+        cameraUploadsHandlerProvider.schedulePictureUploadsSyncJob()
+
+        val cameraUploadsWorker = PeriodicWorkRequestBuilder<CameraUploadsWorker>(
+            repeatInterval = CameraUploadsWorker.repeatInterval,
+            repeatIntervalTimeUnit = CameraUploadsWorker.repeatIntervalTimeUnit
+        ).addTag(CameraUploadsWorker.CAMERA_UPLOADS_WORKER)
+            .build()
+
+        WorkManager.getInstance().enqueue(cameraUploadsWorker)
+    }
 }

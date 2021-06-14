@@ -48,6 +48,9 @@ dependencies {
     implementation "org.koin:koin-core:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:2.5.0"
+
     // KTX extensions, see https://developer.android.com/kotlin/ktx.html
     implementation "androidx.core:core-ktx:$ktxCoreVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktxViewModelVersion"
