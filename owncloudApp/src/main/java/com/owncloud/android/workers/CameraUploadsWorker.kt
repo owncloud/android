@@ -1,6 +1,9 @@
 package com.owncloud.android.workers
 
 import android.content.Context
+import android.net.Uri
+import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.owncloud.android.domain.UseCaseResult
@@ -42,20 +45,19 @@ class CameraUploadsWorker(
     ) {
         if (pictureUploadsConfiguration == null) return
 
-        val cameraPictureSourcePath: String = pictureUploadsConfiguration.sourcePath
-        val localPictureFiles: MutableList<File> = mutableListOf()
-        val cameraPicturesFolder = File(cameraPictureSourcePath)
-        localPictureFiles.addAll(cameraPicturesFolder.listFiles() ?: arrayOf())
-        localPictureFiles.sortBy { it.lastModified() }
-
-        if (localPictureFiles.isNotEmpty()) {
-            for (localFile in localPictureFiles) {
-                val fileName = localFile.name
+        val cameraPictureSourceUri: Uri = pictureUploadsConfiguration.sourcePath.toUri()
+        val localPicturesDocumentFiles: MutableList<DocumentFile> = mutableListOf()
+        val documentTree = DocumentFile.fromTreeUri(applicationContext, cameraPictureSourceUri)
+        localPicturesDocumentFiles.addAll(documentTree?.listFiles() ?: arrayOf())
+        localPicturesDocumentFiles.sortBy { it.lastModified() }
+        if (localPicturesDocumentFiles.isNotEmpty()) {
+            for (documentFile in localPicturesDocumentFiles) {
+                val fileName = documentFile.name
                 val mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName)
                 val isImage = mimeType.startsWith("image/")
                 if (isImage) {
-                    // TODO: Upload localFile
-                    Timber.d("Upload ${localFile.name}")
+                    // TODO: Upload document file
+                    Timber.d("Upload document file ${documentFile.name}")
                 }
             }
         }

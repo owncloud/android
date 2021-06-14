@@ -21,6 +21,7 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -96,7 +97,7 @@ class SettingsPictureUploadsViewModel(
         }
     }
 
-    fun handleSelectPictureUploadsSourcePath(data: Intent?) {
+    fun handleSelectPictureUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
         var previousSourcePath = preferencesProvider.getString(
             key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
@@ -105,15 +106,15 @@ class SettingsPictureUploadsViewModel(
 
         previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)
 
-        if (previousSourcePath != data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)) {
+        if (previousSourcePath != contentUriForTree.encodedPath) {
             val currentTimeStamp = System.currentTimeMillis()
             cameraUploadsHandlerProvider.updatePicturesLastSync(currentTimeStamp)
         }
 
-        data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)?.let {
+        contentUriForTree.let {
             preferencesProvider.putString(
                 key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-                value = it
+                value = it.toString()
             )
         }
     }

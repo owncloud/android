@@ -40,7 +40,6 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SO
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
 import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
-import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -69,7 +68,12 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     private val selectPictureUploadsSourcePathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            picturesViewModel.handleSelectPictureUploadsSourcePath(result.data)
+            // here we ask the content resolver to persist the permission for us
+            val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            val contentUriForTree = result.data!!.data!!
+
+            requireContext().contentResolver.takePersistableUriPermission(contentUriForTree, takeFlags)
+            picturesViewModel.handleSelectPictureUploadsSourcePath(contentUriForTree)
             prefPictureUploadsSourcePath?.summary =
                 DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsSourcePath())
         }
@@ -152,8 +156,15 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             if (sourcePath?.endsWith(File.separator) == false) {
                 sourcePath += File.separator
             }
-            val intent = Intent(activity, LocalFolderPickerActivity::class.java)
-            intent.putExtra(LocalFolderPickerActivity.EXTRA_PATH, sourcePath)
+            // Choose a directory using the system's file picker.
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+                addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                            or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                            or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+                )
+            }
             selectPictureUploadsSourcePathLauncher.launch(intent)
             true
         }
