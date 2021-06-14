@@ -25,6 +25,8 @@ import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCLocalAuthenticationDataSource
+import com.owncloud.android.data.camerauploads.datasources.CameraUploadsLocalDataSource
+import com.owncloud.android.data.camerauploads.datasources.implementation.CameraUploadsLocalDataSourceImpl
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
@@ -49,4 +51,5 @@ val localDataSourceModule = module {
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
+    factory<CameraUploadsLocalDataSource> { CameraUploadsLocalDataSourceImpl(get(), get()) }
 }

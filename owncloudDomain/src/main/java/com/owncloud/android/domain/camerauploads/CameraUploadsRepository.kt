@@ -22,7 +22,7 @@ import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguratio
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 
 interface CameraUploadsRepository {
-    fun getCameraUploadsConfiguration(): CameraUploadsConfiguration
-    fun getPictureUploadsConfiguration(): FolderBackUpConfiguration.PictureUploadsConfiguration
-    fun getVideoUploadsConfiguration(): FolderBackUpConfiguration.VideoUploadsConfiguration
+    fun getCameraUploadsConfiguration(): CameraUploadsConfiguration?
+    fun getPictureUploadsConfiguration(): FolderBackUpConfiguration.PictureUploadsConfiguration?
+    fun getVideoUploadsConfiguration(): FolderBackUpConfiguration.VideoUploadsConfiguration?
 }

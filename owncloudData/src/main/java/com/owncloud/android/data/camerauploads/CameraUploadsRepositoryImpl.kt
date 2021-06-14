@@ -24,17 +24,15 @@ import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguratio
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 
 class CameraUploadsRepositoryImpl(
-    cameraUploadsLocalDataSource: CameraUploadsLocalDataSource
+    private val cameraUploadsLocalDataSource: CameraUploadsLocalDataSource
 ) : CameraUploadsRepository {
-    override fun getCameraUploadsConfiguration(): CameraUploadsConfiguration {
-        TODO("Not yet implemented")
-    }
+    override fun getCameraUploadsConfiguration(): CameraUploadsConfiguration? =
+        cameraUploadsLocalDataSource.getCameraUploadsConfiguration()
 
-    override fun getPictureUploadsConfiguration(): FolderBackUpConfiguration.PictureUploadsConfiguration {
-        TODO("Not yet implemented")
-    }
+    override fun getPictureUploadsConfiguration(): FolderBackUpConfiguration.PictureUploadsConfiguration? =
+        cameraUploadsLocalDataSource.getPictureUploadsConfiguration()
 
-    override fun getVideoUploadsConfiguration(): FolderBackUpConfiguration.VideoUploadsConfiguration {
-        TODO("Not yet implemented")
-    }
+    override fun getVideoUploadsConfiguration(): FolderBackUpConfiguration.VideoUploadsConfiguration? =
+        cameraUploadsLocalDataSource.getVideoUploadsConfiguration()
+
 }
