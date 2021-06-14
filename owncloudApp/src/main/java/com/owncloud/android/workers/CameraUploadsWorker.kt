@@ -6,6 +6,7 @@ import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
@@ -17,7 +18,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 class CameraUploadsWorker(
-    appContext: Context,
+    val appContext: Context,
     workerParameters: WorkerParameters
 ) : CoroutineWorker(
     appContext,
@@ -55,9 +56,20 @@ class CameraUploadsWorker(
                 val fileName = documentFile.name
                 val mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName)
                 val isImage = mimeType.startsWith("image/")
+
+                val cameraUploadSync = CameraUploadsSyncStorageManager(appContext.contentResolver).getCameraUploadSync(
+                    null,
+                    null,
+                    null
+                )
+
                 if (isImage) {
-                    // TODO: Upload document file
-                    Timber.d("Upload document file ${documentFile.name}")
+                    if (documentFile.lastModified() <= cameraUploadSync.picturesLastSync) {
+                        Timber.i("Image ${documentFile.name} created before period to check, ignoring... Last Modified: ${documentFile.lastModified()} Last sync: ${cameraUploadSync.picturesLastSync}")
+                    } else {
+                        // TODO: Upload document file
+                        Timber.d("Upload document file ${documentFile.name}")
+                    }
                 }
             }
         }
