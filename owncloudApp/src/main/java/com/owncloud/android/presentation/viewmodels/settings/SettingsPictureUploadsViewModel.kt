@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.viewmodels.settings
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
@@ -35,10 +36,9 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SO
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
-import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.workers.CameraUploadsWorker
-import timber.log.Timber
+import com.owncloud.android.workers.CameraUploadsWorker.Companion.CAMERA_UPLOADS_WORKER
 import java.io.File
 
 class SettingsPictureUploadsViewModel(
@@ -120,14 +120,12 @@ class SettingsPictureUploadsViewModel(
     }
 
     fun schedulePictureUploadsSyncJob() {
-        cameraUploadsHandlerProvider.schedulePictureUploadsSyncJob()
-
         val cameraUploadsWorker = PeriodicWorkRequestBuilder<CameraUploadsWorker>(
             repeatInterval = CameraUploadsWorker.repeatInterval,
             repeatIntervalTimeUnit = CameraUploadsWorker.repeatIntervalTimeUnit
-        ).addTag(CameraUploadsWorker.CAMERA_UPLOADS_WORKER)
+        ).addTag(CAMERA_UPLOADS_WORKER)
             .build()
 
-        WorkManager.getInstance().enqueue(cameraUploadsWorker)
+        WorkManager.getInstance().enqueueUniquePeriodicWork(CAMERA_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.REPLACE, cameraUploadsWorker)
     }
 }

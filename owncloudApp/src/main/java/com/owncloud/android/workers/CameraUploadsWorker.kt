@@ -1,34 +1,24 @@
 package com.owncloud.android.workers
 
-import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.owncloud.android.authentication.AccountUtils
+import androidx.work.workDataOf
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
-import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.lib.common.http.HttpConstants
-import com.owncloud.android.lib.common.http.methods.webdav.PutMethod
-import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.utils.MimetypeIconUtil
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
-import okio.BufferedSink
-import okio.source
+import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.TRANSFER_TAG_CAMERA_UPLOAD
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
 import java.io.File
-import java.io.IOException
-import java.net.URL
 import java.util.concurrent.TimeUnit
 
 class CameraUploadsWorker(
@@ -82,11 +72,12 @@ class CameraUploadsWorker(
                         Timber.i("Image ${documentFile.name} created before period to check, ignoring... Last Modified: ${documentFile.lastModified()} Last sync: ${cameraUploadSync.picturesLastSync}")
                     } else {
                         Timber.d("Upload document file ${documentFile.name}")
-                        uploadDocument(
-                            documentFile.uri,
-                            appContext,
-                            pictureUploadsConfiguration.uploadPath.plus(documentFile.name),
-                            (documentFile.lastModified()/1000L).toString()
+                        enqueueSingleUpload(
+                            contentUri = documentFile.uri,
+                            uploadPath = pictureUploadsConfiguration.uploadPath.plus(documentFile.name),
+                            lastModified = documentFile.lastModified(),
+                            behavior = pictureUploadsConfiguration.behavior.toString(),
+                            accountName = pictureUploadsConfiguration.accountName
                         )
                     }
                 }
@@ -118,40 +109,31 @@ class CameraUploadsWorker(
         }
     }
 
-    class ContentUriRequestBody(
-        private val contentResolver: ContentResolver,
-        private val contentUri: Uri
-    ) : RequestBody() {
+    private fun enqueueSingleUpload(
+        contentUri: Uri,
+        uploadPath: String,
+        lastModified: Long,
+        behavior: String,
+        accountName: String
+    ) {
+        val lastModifiedInSeconds = (lastModified / 1000L).toString()
 
-        override fun contentType(): MediaType? {
-            val contentType = contentResolver.getType(contentUri) ?: return null
-            return contentType.toMediaTypeOrNull()
-        }
+        val inputData = workDataOf(
+            UploadFileFromContentUriWorker.KEY_PARAM_ACCOUNT_NAME to accountName,
+            UploadFileFromContentUriWorker.KEY_PARAM_BEHAVIOR to behavior,
+            UploadFileFromContentUriWorker.KEY_PARAM_CONTENT_URI to contentUri.toString(),
+            UploadFileFromContentUriWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
+            UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
+        )
 
-        override fun writeTo(sink: BufferedSink) {
-            val inputStream = contentResolver.openInputStream(contentUri)
-                ?: throw IOException("Couldn't open content URI for reading: $contentUri")
+        val uploadFileFromContentUriWorker = OneTimeWorkRequestBuilder<UploadFileFromContentUriWorker>()
+            .setInputData(inputData)
+            .addTag(accountName)
+            .addTag(TRANSFER_TAG_CAMERA_UPLOAD)
+            .build()
 
-            inputStream.source().use { source ->
-                sink.writeAll(source)
-            }
-        }
-    }
-
-    fun uploadDocument(contentUri: Uri, context: Context, remotePath: String, lastModified: String) {
-        val requestBody = ContentUriRequestBody(context.contentResolver, contentUri)
-
-        val client = SingleSessionManager.getDefaultSingleton()
-            .getClientFor(OwnCloudAccount(AccountUtils.getCurrentOwnCloudAccount(context), context), context)
-
-        val putMethod = PutMethod(URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)), requestBody)
-
-        putMethod.setRetryOnConnectionFailure(false)
-
-        putMethod.addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, requestBody.contentLength().toString())
-        putMethod.addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, lastModified)
-
-        val status: Int = client.executeHttpMethod(putMethod)
+        WorkManager.getInstance(appContext).enqueue(uploadFileFromContentUriWorker)
+        Timber.i("Upload of ${contentUri.path} has been enqueued.")
     }
 
     companion object {
