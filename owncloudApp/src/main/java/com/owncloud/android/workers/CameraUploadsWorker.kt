@@ -74,7 +74,7 @@ class CameraUploadsWorker(
                         Timber.d("Upload document file ${documentFile.name}")
                         enqueueSingleUpload(
                             contentUri = documentFile.uri,
-                            uploadPath = pictureUploadsConfiguration.uploadPath.plus(documentFile.name),
+                            uploadPath = pictureUploadsConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
                             lastModified = documentFile.lastModified(),
                             behavior = pictureUploadsConfiguration.behavior.toString(),
                             accountName = pictureUploadsConfiguration.accountName

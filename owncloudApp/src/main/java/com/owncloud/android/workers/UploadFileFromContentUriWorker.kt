@@ -104,7 +104,15 @@ class UploadFileFromContentUriWorker(
             addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, lastModified)
         }
 
-        client.executeHttpMethod(putMethod)
+        val result = client.executeHttpMethod(putMethod)
+
+        if (!isSuccess(result)) {
+            throw Throwable(putMethod.statusMessage)
+        }
+    }
+
+    fun isSuccess(status: Int): Boolean {
+        return status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT
     }
 
     companion object {
