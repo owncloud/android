@@ -21,6 +21,7 @@ import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
+import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -58,6 +59,7 @@ class UploadFileFromContentUriWorker(
             // 3- Check the existence of the parent folder for the file to upload
             checkParentFolderExistence()
             // 4- Check collision automatic rename of file to upload in case of name collision in server
+            checkNameCollisionAndGetAnAvailableOneInCase()
             // 5- Perform the upload
             uploadDocument()
             // 6a- If upload succeeds, update database.
@@ -117,6 +119,15 @@ class UploadFileFromContentUriWorker(
             if (!createRemoteFolderResult.isSuccess) {
                 throw Throwable("Parent folder was not created")
             }
+        }
+    }
+
+    private fun checkNameCollisionAndGetAnAvailableOneInCase() {
+        Timber.d("Checking name collision in server")
+        val remotePath = getAvailableRemotePath(getClientForThisUpload(), uploadPath)
+        if (remotePath != null && remotePath != uploadPath) {
+            uploadPath = remotePath
+            Timber.d("Name collision detected, let's rename it to %s", remotePath)
         }
     }
 
