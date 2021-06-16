@@ -10,6 +10,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
@@ -48,6 +49,7 @@ class UploadFileFromContentUriWorker(
             // 1- Check permissions to read are granted
             checkPermissionsToReadDocumentAreGranted()
             // 2- Check file exists
+            checkDocumentFileExists()
             // 3- Check the existence of the parent folder for the file to upload
             // 4- Check collision automatic rename of file to upload in case of name collision in server
             // 5- Perform the upload
@@ -86,6 +88,14 @@ class UploadFileFromContentUriWorker(
         if (documentFile?.canRead() != true) {
             // Permissions not granted. Throw an exception to ask for them.
             throw Throwable("Cannot read the file")
+        }
+    }
+
+    private fun checkDocumentFileExists() {
+        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
+        if (documentFile?.exists() != true && documentFile?.isFile != true) {
+            // File does not exists anymore. Throw an exception to tell the user
+            throw FileNotFoundException()
         }
     }
 
