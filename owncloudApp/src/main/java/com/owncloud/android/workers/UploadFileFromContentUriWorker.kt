@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.owncloud.android.authentication.AccountUtils
@@ -44,7 +45,15 @@ class UploadFileFromContentUriWorker(
         if (!areParametersValid()) return Result.failure()
 
         return try {
+            // 1- Check permissions to read are granted
+            checkPermissionsToReadDocumentAreGranted()
+            // 2- Check file exists
+            // 3- Check the existence of the parent folder for the file to upload
+            // 4- Check collision automatic rename of file to upload in case of name collision in server
+            // 5- Perform the upload
             uploadDocument()
+            // 6a- If upload succeeds, update database.
+            // 6b- If upload fails, save error
             Result.success()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
@@ -70,6 +79,14 @@ class UploadFileFromContentUriWorker(
         lastModified = paramLastModified ?: return false
 
         return true
+    }
+
+    private fun checkPermissionsToReadDocumentAreGranted() {
+        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
+        if (documentFile?.canRead() != true) {
+            // Permissions not granted. Throw an exception to ask for them.
+            throw Throwable("Cannot read the file")
+        }
     }
 
     class ContentUriRequestBody(
