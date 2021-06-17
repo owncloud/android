@@ -166,7 +166,16 @@ class UploadFileFromContentUriWorker(
 
         if (!isSuccess(result)) {
             throw Throwable(putMethod.statusMessage)
+        } else {
+            if (behavior == FolderBackUpConfiguration.Behavior.MOVE) {
+                removeLocalFile()
+            }
         }
+    }
+
+    private fun removeLocalFile() {
+        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
+        documentFile?.delete()
     }
 
     fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
