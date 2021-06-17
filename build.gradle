@@ -75,16 +75,16 @@ subprojects {
     apply plugin: 'org.sonarqube'
 }
 
-allprojects {
-    group = 'io.sonarcloud'
-    version = 'local'
-    description = 'gradle-owncloud-android'
-}
-
 sonarqube {
     properties {
         property "sonar.projectKey", "owncloud_android"
         property "sonar.organization", "owncloud-1"
+        property "sonar.projectVersion", getBranchName()
         property "sonar.host.url", "https://sonarcloud.io"
     }
+}
+
+def getBranchName() {
+    def name = "git rev-parse --abbrev-ref HEAD".execute()
+    return name.text.toString().trim()
 }
