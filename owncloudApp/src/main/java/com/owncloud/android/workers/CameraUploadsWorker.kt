@@ -33,14 +33,16 @@ class CameraUploadsWorker(
     workerParameters
 ), KoinComponent {
 
+    enum class SyncType(val prefixForType: String) { PICTURE_UPLOADS("image/"), VIDEO_UPLOADS("video/") }
+
     private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase by inject()
 
     override suspend fun doWork(): Result {
 
         when (val useCaseResult = getCameraUploadsConfigurationUseCase.execute(Unit)) {
             is UseCaseResult.Success -> {
-                syncCameraPictures(useCaseResult.data?.pictureUploadsConfiguration)
-                syncCameraVideos(useCaseResult.data?.videoUploadsConfiguration)
+                syncFolder(useCaseResult.data?.pictureUploadsConfiguration)
+                syncFolder(useCaseResult.data?.videoUploadsConfiguration)
                 updateTimestamp()
             }
             is UseCaseResult.Error -> {
@@ -48,6 +50,32 @@ class CameraUploadsWorker(
             }
         }
         return Result.success()
+    }
+
+    private fun syncFolder(folderBackUpConfiguration: FolderBackUpConfiguration?) {
+        if (folderBackUpConfiguration == null) return
+
+        val syncType = when (folderBackUpConfiguration) {
+            is FolderBackUpConfiguration.PictureUploadsConfiguration -> SyncType.PICTURE_UPLOADS
+            is FolderBackUpConfiguration.VideoUploadsConfiguration -> SyncType.VIDEO_UPLOADS
+        }
+
+        val localPicturesDocumentFiles: List<DocumentFile> = getFilesReadyToUpload(
+            syncType = syncType,
+            sourcePath = folderBackUpConfiguration.sourcePath
+        )
+
+        if (localPicturesDocumentFiles.isNotEmpty()) {
+            for (documentFile in localPicturesDocumentFiles) {
+                enqueueSingleUpload(
+                    contentUri = documentFile.uri,
+                    uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
+                    lastModified = documentFile.lastModified(),
+                    behavior = folderBackUpConfiguration.behavior.toString(),
+                    accountName = folderBackUpConfiguration.accountName
+                )
+            }
+        }
     }
 
     private fun updateTimestamp() {
@@ -62,68 +90,31 @@ class CameraUploadsWorker(
             OCCameraUploadSync(currentTimestamp, currentTimestamp).apply { id = cameraUploadSync.id })
     }
 
-    private fun getImagesReadyToUpload(pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration): List<DocumentFile> {
-        val lastFolderSync: Long = getLastSyncTimestamp(pictures = true)
+    private fun getFilesReadyToUpload(
+        syncType: SyncType,
+        sourcePath: String
+    ): List<DocumentFile> {
+        val lastFolderSync: Long = getLastSyncTimestamp(syncType)
         val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
 
-        val cameraPictureSourceUri: Uri = pictureUploadsConfiguration.sourcePath.toUri()
-        val documentTree = DocumentFile.fromTreeUri(applicationContext, cameraPictureSourceUri)
+        val sourceUri: Uri = sourcePath.toUri()
+        val documentTree = DocumentFile.fromTreeUri(applicationContext, sourceUri)
         val arrayOfLocalFiles = documentTree?.listFiles() ?: arrayOf()
 
         val filteredList: List<DocumentFile> = arrayOfLocalFiles
             .sortedBy { it.lastModified() }
             .filter { it.lastModified() > lastFolderSync }
-            .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith("image/") }
+            .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType) }
 
-        Timber.i("Last sync picture uploads: ${simpleDateFormat.format(Date(lastFolderSync))}")
-        Timber.i("${arrayOfLocalFiles.size} files found in folder: ${cameraPictureSourceUri.path}")
-        Timber.i("${filteredList.size} files are images and were taken after last sync")
-
-        return filteredList
-    }
-
-    private fun getVideosReadyToUpload(videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration): List<DocumentFile> {
-        val lastFolderSync: Long = getLastSyncTimestamp(pictures = false)
-        val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
-
-        val cameraVideoSourceUri: Uri = videoUploadsConfiguration.sourcePath.toUri()
-        val documentTree = DocumentFile.fromTreeUri(applicationContext, cameraVideoSourceUri)
-        val arrayOfLocalFiles = documentTree?.listFiles() ?: arrayOf()
-
-        val filteredList: List<DocumentFile> = arrayOfLocalFiles
-            .sortedBy { it.lastModified() }
-            .filter { it.lastModified() > lastFolderSync }
-            .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith("video/") }
-
-        Timber.i("Last sync video uploads: ${simpleDateFormat.format(Date(lastFolderSync))}")
-        Timber.i("${arrayOfLocalFiles.size} files found in folder: ${cameraVideoSourceUri.path}")
-        Timber.i("${filteredList.size} files are videos and were taken after last sync")
+        Timber.i("Last sync ${syncType.name}: ${simpleDateFormat.format(Date(lastFolderSync))}")
+        Timber.i("${arrayOfLocalFiles.size} files found in folder: ${sourceUri.path}")
+        Timber.i("${filteredList.size} files are ${syncType.name} and were taken after last sync")
 
         return filteredList
-    }
-
-    private fun syncCameraPictures(
-        pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration?
-    ) {
-        if (pictureUploadsConfiguration == null) return
-
-        val localPicturesDocumentFiles: List<DocumentFile> = getImagesReadyToUpload(pictureUploadsConfiguration)
-
-        if (localPicturesDocumentFiles.isNotEmpty()) {
-            for (documentFile in localPicturesDocumentFiles) {
-                enqueueSingleUpload(
-                    contentUri = documentFile.uri,
-                    uploadPath = pictureUploadsConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
-                    lastModified = documentFile.lastModified(),
-                    behavior = pictureUploadsConfiguration.behavior.toString(),
-                    accountName = pictureUploadsConfiguration.accountName
-                )
-            }
-        }
     }
 
     // We could move this to preferences as we store the picture configuration there.
-    private fun getLastSyncTimestamp(pictures: Boolean): Long {
+    private fun getLastSyncTimestamp(syncType: SyncType): Long {
         val cameraUploadsSyncStorageManager = CameraUploadsSyncStorageManager(appContext.contentResolver)
         val cameraUploadSync = cameraUploadsSyncStorageManager.getCameraUploadSync(
             null,
@@ -141,26 +132,9 @@ class CameraUploadsWorker(
 
             currentTimestamp
         } else {
-            if (pictures) cameraUploadSync.picturesLastSync else cameraUploadSync.videosLastSync
-        }
-    }
-
-    private fun syncCameraVideos(
-        videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration?
-    ) {
-        if (videoUploadsConfiguration == null) return
-
-        val localVideosDocumentFiles: List<DocumentFile> = getVideosReadyToUpload(videoUploadsConfiguration)
-
-        if (localVideosDocumentFiles.isNotEmpty()) {
-            for (documentFile in localVideosDocumentFiles) {
-                enqueueSingleUpload(
-                    contentUri = documentFile.uri,
-                    uploadPath = videoUploadsConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
-                    lastModified = documentFile.lastModified(),
-                    behavior = videoUploadsConfiguration.behavior.toString(),
-                    accountName = videoUploadsConfiguration.accountName
-                )
+            when (syncType) {
+                SyncType.PICTURE_UPLOADS -> cameraUploadSync.picturesLastSync
+                SyncType.VIDEO_UPLOADS -> cameraUploadSync.videosLastSync
             }
         }
     }
