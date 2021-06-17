@@ -49,44 +49,42 @@ class CameraUploadsWorker(
         return Result.success()
     }
 
+    private fun getImagesReadyToUpload(pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration): List<DocumentFile> {
+        val lastFolderSync: Long = getLastSyncTimestamp(pictures = true)
+        val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+
+        val cameraPictureSourceUri: Uri = pictureUploadsConfiguration.sourcePath.toUri()
+        val documentTree = DocumentFile.fromTreeUri(applicationContext, cameraPictureSourceUri)
+        val arrayOfLocalFiles = documentTree?.listFiles() ?: arrayOf()
+
+        val filteredList: List<DocumentFile> = arrayOfLocalFiles
+            .sortedBy { it.lastModified() }
+            .filter { it.lastModified() > lastFolderSync }
+            .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith("image/") }
+
+        Timber.i("Last sync picture uploads: ${simpleDateFormat.format(Date(lastFolderSync))}")
+        Timber.i("${arrayOfLocalFiles.size} files found in folder: ${cameraPictureSourceUri.path}")
+        Timber.i("${filteredList.size} files are images and were taken before last sync")
+
+        return filteredList
+    }
+
     private fun syncCameraPictures(
         pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration?
     ) {
         if (pictureUploadsConfiguration == null) return
 
-        val cameraPictureSourceUri: Uri = pictureUploadsConfiguration.sourcePath.toUri()
-        val localPicturesDocumentFiles: MutableList<DocumentFile> = mutableListOf()
-        val documentTree = DocumentFile.fromTreeUri(applicationContext, cameraPictureSourceUri)
-        localPicturesDocumentFiles.addAll(documentTree?.listFiles() ?: arrayOf())
-        localPicturesDocumentFiles.sortBy { it.lastModified() }
-        val lastFolderSync: Long = getLastSyncTimestamp(pictures = true)
+        val localPicturesDocumentFiles: List<DocumentFile> = getImagesReadyToUpload(pictureUploadsConfiguration)
 
         if (localPicturesDocumentFiles.isNotEmpty()) {
             for (documentFile in localPicturesDocumentFiles) {
-                val fileName = documentFile.name
-                val mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName)
-                val isImage = mimeType.startsWith("image/")
-
-                if (isImage) {
-                    if (documentFile.lastModified() <= lastFolderSync) {
-                        val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
-
-                        Timber.i(
-                            "Image ${documentFile.name} created before period to check, ignoring... Last Modified: ${
-                                simpleDateFormat.format(Date(documentFile.lastModified()))
-                            } Last sync: ${simpleDateFormat.format(Date(lastFolderSync))}"
-                        )
-                    } else {
-                        Timber.d("Upload document file ${documentFile.name}")
-                        enqueueSingleUpload(
-                            contentUri = documentFile.uri,
-                            uploadPath = pictureUploadsConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
-                            lastModified = documentFile.lastModified(),
-                            behavior = pictureUploadsConfiguration.behavior.toString(),
-                            accountName = pictureUploadsConfiguration.accountName
-                        )
-                    }
-                }
+                enqueueSingleUpload(
+                    contentUri = documentFile.uri,
+                    uploadPath = pictureUploadsConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
+                    lastModified = documentFile.lastModified(),
+                    behavior = pictureUploadsConfiguration.behavior.toString(),
+                    accountName = pictureUploadsConfiguration.accountName
+                )
             }
         }
     }
