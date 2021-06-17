@@ -32,13 +32,9 @@ import androidx.preference.SwitchPreferenceCompat
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
-import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
@@ -47,7 +43,6 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SO
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
-import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk
@@ -219,8 +214,8 @@ class SettingsPictureUploadsFragmentTest {
                 )
             )
         ).perform(click())
-        intended(hasComponent(LocalFolderPickerActivity::class.java.name))
-        hasExtra(LocalFolderPickerActivity.EXTRA_PATH, cameraFolder)
+//        intended(hasComponent(LocalFolderPickerActivity::class.java.name))
+//        hasExtra(LocalFolderPickerActivity.EXTRA_PATH, cameraFolder)
         Intents.release()
         onView(withText(android.R.string.cancel)).perform(click())
     }

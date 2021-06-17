@@ -40,7 +40,6 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOUR
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY
 import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
-import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.DisplayUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel

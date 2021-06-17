@@ -230,7 +230,6 @@
             android:icon="@drawable/copy_link"
             android:label="@string/copy_link" />
         <activity android:name=".ui.activity.FolderPickerActivity" />
-        <activity android:name=".ui.activity.LocalFolderPickerActivity" />
         <activity android:name=".ui.activity.UploadPathActivity" />
         <activity
             android:name="com.owncloud.android.presentation.ui.sharing.ShareActivity"
