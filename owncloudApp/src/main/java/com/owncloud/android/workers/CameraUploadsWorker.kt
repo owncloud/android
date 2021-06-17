@@ -10,6 +10,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager
+import com.owncloud.android.datamodel.OCCameraUploadSync
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
@@ -19,6 +20,9 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class CameraUploadsWorker(
@@ -55,21 +59,23 @@ class CameraUploadsWorker(
         val documentTree = DocumentFile.fromTreeUri(applicationContext, cameraPictureSourceUri)
         localPicturesDocumentFiles.addAll(documentTree?.listFiles() ?: arrayOf())
         localPicturesDocumentFiles.sortBy { it.lastModified() }
+        val lastFolderSync: Long = getLastSyncTimestamp(pictures = true)
+
         if (localPicturesDocumentFiles.isNotEmpty()) {
             for (documentFile in localPicturesDocumentFiles) {
                 val fileName = documentFile.name
                 val mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName)
                 val isImage = mimeType.startsWith("image/")
 
-                val cameraUploadSync = CameraUploadsSyncStorageManager(appContext.contentResolver).getCameraUploadSync(
-                    null,
-                    null,
-                    null
-                )
-
                 if (isImage) {
-                    if (documentFile.lastModified() <= cameraUploadSync.picturesLastSync) {
-                        Timber.i("Image ${documentFile.name} created before period to check, ignoring... Last Modified: ${documentFile.lastModified()} Last sync: ${cameraUploadSync.picturesLastSync}")
+                    if (documentFile.lastModified() <= lastFolderSync) {
+                        val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+
+                        Timber.i(
+                            "Image ${documentFile.name} created before period to check, ignoring... Last Modified: ${
+                                simpleDateFormat.format(Date(documentFile.lastModified()))
+                            } Last sync: ${simpleDateFormat.format(Date(lastFolderSync))}"
+                        )
                     } else {
                         Timber.d("Upload document file ${documentFile.name}")
                         enqueueSingleUpload(
@@ -82,6 +88,36 @@ class CameraUploadsWorker(
                     }
                 }
             }
+        }
+    }
+
+    // We could move this to preferences as we store the picture configuration there.
+    private fun getLastSyncTimestamp(pictures: Boolean): Long {
+        val cameraUploadsSyncStorageManager = CameraUploadsSyncStorageManager(appContext.contentResolver)
+        val cameraUploadSync = cameraUploadsSyncStorageManager.getCameraUploadSync(
+            null,
+            null,
+            null
+        )
+        val currentTimestamp = System.currentTimeMillis()
+
+        return if (cameraUploadSync == null) {
+
+            val firstOcCameraUploadSync = OCCameraUploadSync(currentTimestamp, currentTimestamp)
+            cameraUploadsSyncStorageManager.storeCameraUploadSync(firstOcCameraUploadSync)
+
+            Timber.d("Camera uploads initialization at $currentTimestamp")
+
+            currentTimestamp
+        } else {
+            if (pictures) {
+                cameraUploadsSyncStorageManager.updateCameraUploadSync(
+                    OCCameraUploadSync(
+                        cameraUploadSync.picturesLastSync,
+                        cameraUploadSync.videosLastSync
+                    ).apply { id = cameraUploadSync.id })
+                cameraUploadSync.picturesLastSync
+            } else cameraUploadSync.videosLastSync
         }
     }
 
