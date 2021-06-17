@@ -111,12 +111,10 @@ class SettingsPictureUploadsViewModel(
             cameraUploadsHandlerProvider.updatePicturesLastSync(currentTimeStamp)
         }
 
-        contentUriForTree.let {
-            preferencesProvider.putString(
-                key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-                value = it.toString()
-            )
-        }
+        preferencesProvider.putString(
+            key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
+            value = contentUriForTree.toString()
+        )
     }
 
     fun schedulePictureUploadsSyncJob() {

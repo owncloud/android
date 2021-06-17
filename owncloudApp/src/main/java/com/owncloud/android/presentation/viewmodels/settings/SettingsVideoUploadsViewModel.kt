@@ -21,7 +21,11 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration
@@ -32,8 +36,8 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
-import com.owncloud.android.ui.activity.LocalFolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
+import com.owncloud.android.workers.CameraUploadsWorker
 import java.io.File
 
 class SettingsVideoUploadsViewModel(
@@ -92,7 +96,7 @@ class SettingsVideoUploadsViewModel(
         }
     }
 
-    fun handleSelectVideoUploadsSourcePath(data: Intent?) {
+    fun handleSelectVideoUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
         var previousSourcePath = preferencesProvider.getString(
             key = PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
@@ -101,18 +105,25 @@ class SettingsVideoUploadsViewModel(
 
         previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)
 
-        if (previousSourcePath != data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)) {
+        if (previousSourcePath != contentUriForTree.encodedPath) {
             val currentTimeStamp = System.currentTimeMillis()
             cameraUploadsHandlerProvider.updateVideosLastSync(currentTimeStamp)
         }
 
-        data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)?.let {
-            preferencesProvider.putString(
-                key = PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-                value = it
-            )
-        }
+        preferencesProvider.putString(
+            key = PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
+            value = contentUriForTree.toString()
+        )
     }
 
-    fun scheduleVideoUploadsSyncJob() = cameraUploadsHandlerProvider.scheduleVideoUploadsSyncJob()
+    fun scheduleVideoUploadsSyncJob() {
+        val cameraUploadsWorker = PeriodicWorkRequestBuilder<CameraUploadsWorker>(
+            repeatInterval = CameraUploadsWorker.repeatInterval,
+            repeatIntervalTimeUnit = CameraUploadsWorker.repeatIntervalTimeUnit
+        ).addTag(CameraUploadsWorker.CAMERA_UPLOADS_WORKER)
+            .build()
+
+        WorkManager.getInstance()
+            .enqueueUniquePeriodicWork(CameraUploadsWorker.CAMERA_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.REPLACE, cameraUploadsWorker)
+    }
 }

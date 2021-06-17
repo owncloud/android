@@ -41,12 +41,25 @@ class CameraUploadsWorker(
             is UseCaseResult.Success -> {
                 syncCameraPictures(useCaseResult.data?.pictureUploadsConfiguration)
                 syncCameraVideos(useCaseResult.data?.videoUploadsConfiguration)
+                updateTimestamp()
             }
             is UseCaseResult.Error -> {
                 Timber.e(useCaseResult.throwable, "Worker ${useCaseResult.throwable}")
             }
         }
         return Result.success()
+    }
+
+    private fun updateTimestamp() {
+        val currentTimestamp = System.currentTimeMillis()
+        val cameraUploadsSyncStorageManager = CameraUploadsSyncStorageManager(appContext.contentResolver)
+        val cameraUploadSync = cameraUploadsSyncStorageManager.getCameraUploadSync(
+            null,
+            null,
+            null
+        )
+        cameraUploadsSyncStorageManager.updateCameraUploadSync(
+            OCCameraUploadSync(currentTimestamp, currentTimestamp).apply { id = cameraUploadSync.id })
     }
 
     private fun getImagesReadyToUpload(pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration): List<DocumentFile> {
@@ -64,7 +77,27 @@ class CameraUploadsWorker(
 
         Timber.i("Last sync picture uploads: ${simpleDateFormat.format(Date(lastFolderSync))}")
         Timber.i("${arrayOfLocalFiles.size} files found in folder: ${cameraPictureSourceUri.path}")
-        Timber.i("${filteredList.size} files are images and were taken before last sync")
+        Timber.i("${filteredList.size} files are images and were taken after last sync")
+
+        return filteredList
+    }
+
+    private fun getVideosReadyToUpload(videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration): List<DocumentFile> {
+        val lastFolderSync: Long = getLastSyncTimestamp(pictures = false)
+        val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+
+        val cameraVideoSourceUri: Uri = videoUploadsConfiguration.sourcePath.toUri()
+        val documentTree = DocumentFile.fromTreeUri(applicationContext, cameraVideoSourceUri)
+        val arrayOfLocalFiles = documentTree?.listFiles() ?: arrayOf()
+
+        val filteredList: List<DocumentFile> = arrayOfLocalFiles
+            .sortedBy { it.lastModified() }
+            .filter { it.lastModified() > lastFolderSync }
+            .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith("video/") }
+
+        Timber.i("Last sync video uploads: ${simpleDateFormat.format(Date(lastFolderSync))}")
+        Timber.i("${arrayOfLocalFiles.size} files found in folder: ${cameraVideoSourceUri.path}")
+        Timber.i("${filteredList.size} files are videos and were taken after last sync")
 
         return filteredList
     }
@@ -108,14 +141,7 @@ class CameraUploadsWorker(
 
             currentTimestamp
         } else {
-            if (pictures) {
-                cameraUploadsSyncStorageManager.updateCameraUploadSync(
-                    OCCameraUploadSync(
-                        cameraUploadSync.picturesLastSync,
-                        cameraUploadSync.videosLastSync
-                    ).apply { id = cameraUploadSync.id })
-                cameraUploadSync.picturesLastSync
-            } else cameraUploadSync.videosLastSync
+            if (pictures) cameraUploadSync.picturesLastSync else cameraUploadSync.videosLastSync
         }
     }
 
@@ -124,21 +150,17 @@ class CameraUploadsWorker(
     ) {
         if (videoUploadsConfiguration == null) return
 
-        val cameraVideoSourcePath: String = videoUploadsConfiguration.sourcePath
-        val localVideoFiles: MutableList<File> = mutableListOf()
-        val cameraVideoFolder = File(cameraVideoSourcePath)
-        localVideoFiles.addAll(cameraVideoFolder.listFiles() ?: arrayOf())
-        localVideoFiles.sortBy { it.lastModified() }
+        val localVideosDocumentFiles: List<DocumentFile> = getVideosReadyToUpload(videoUploadsConfiguration)
 
-        if (localVideoFiles.isNotEmpty()) {
-            for (localFile in localVideoFiles) {
-                val fileName = localFile.name
-                val mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName)
-                val isVideo = mimeType.startsWith("video/")
-                if (isVideo) {
-                    // TODO: Upload localFile
-                    Timber.d("Upload ${localFile.name}")
-                }
+        if (localVideosDocumentFiles.isNotEmpty()) {
+            for (documentFile in localVideosDocumentFiles) {
+                enqueueSingleUpload(
+                    contentUri = documentFile.uri,
+                    uploadPath = videoUploadsConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
+                    lastModified = documentFile.lastModified(),
+                    behavior = videoUploadsConfiguration.behavior.toString(),
+                    accountName = videoUploadsConfiguration.accountName
+                )
             }
         }
     }
