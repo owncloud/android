@@ -13,8 +13,9 @@ import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.UploadResult
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
-import com.owncloud.android.domain.exceptions.FileNotFoundException
+import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
@@ -56,25 +57,19 @@ class UploadFileFromContentUriWorker(
         if (!areParametersValid()) return Result.failure()
 
         return try {
-            // 1- Check permissions to read are granted
-            checkPermissionsToReadDocumentAreGranted()
-            // 2- Check file exists
             checkDocumentFileExists()
-            // 3- Check the existence of the parent folder for the file to upload
+            checkPermissionsToReadDocumentAreGranted()
             checkParentFolderExistence()
-            // 4- Check collision automatic rename of file to upload in case of name collision in server
             checkNameCollisionAndGetAnAvailableOneInCase()
-            // 5- Perform the upload
             uploadDocument()
-            // 6a- If upload succeeds, update database.
-            updateUploadsDatabaseWithResult()
-            // 6b- If upload fails, save error
+            updateUploadsDatabaseWithResult(null)
             Result.success()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
             if (throwable is NoConnectionWithServerException) {
                 Result.retry()
             } else {
+                updateUploadsDatabaseWithResult(throwable)
                 Result.failure()
             }
         }
@@ -110,7 +105,7 @@ class UploadFileFromContentUriWorker(
         val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
         if (documentFile?.exists() != true && documentFile?.isFile != true) {
             // File does not exists anymore. Throw an exception to tell the user
-            throw FileNotFoundException()
+            throw LocalFileNotFoundException()
         }
     }
 
@@ -185,17 +180,36 @@ class UploadFileFromContentUriWorker(
         documentFile?.delete()
     }
 
-    private fun updateUploadsDatabaseWithResult() {
+    private fun updateUploadsDatabaseWithResult(throwable: Throwable?) {
         val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
 
         val ocUpload = OCUpload(contentUri.encodedPath.toString(), uploadPath, account.name).apply {
-            uploadStatus = UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED
+            uploadStatus = getUploadStatusForThrowable(throwable)
             uploadEndTimestamp = System.currentTimeMillis()
-            lastResult = UploadResult.UPLOADED
+            lastResult = getUploadResultFromThrowable(throwable)
             uploadId = uploadIdInStorageManager
         }
 
         uploadStorageManager.updateUpload(ocUpload)
+    }
+
+    private fun getUploadStatusForThrowable(throwable: Throwable?): UploadsStorageManager.UploadStatus {
+        return if (throwable == null) {
+            UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED
+        } else {
+            UploadsStorageManager.UploadStatus.UPLOAD_FAILED
+        }
+    }
+
+    private fun getUploadResultFromThrowable(throwable: Throwable?): UploadResult {
+        if (throwable == null) return UploadResult.UPLOADED
+
+        return when (throwable) {
+            is LocalFileNotFoundException -> UploadResult.FOLDER_ERROR
+            is NoConnectionWithServerException -> UploadResult.NETWORK_CONNECTION
+            is UnauthorizedException -> UploadResult.CREDENTIAL_ERROR
+            else -> UploadResult.UNKNOWN
+        }
     }
 
     fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
