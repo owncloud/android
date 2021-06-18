@@ -11,9 +11,14 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager
 import com.owncloud.android.datamodel.OCCameraUploadSync
+import com.owncloud.android.datamodel.OCUpload
+import com.owncloud.android.datamodel.UploadsStorageManager
+import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
+import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE
+import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.TRANSFER_TAG_CAMERA_UPLOAD
 import org.koin.core.KoinComponent
@@ -67,12 +72,23 @@ class CameraUploadsWorker(
 
         if (localPicturesDocumentFiles.isNotEmpty()) {
             for (documentFile in localPicturesDocumentFiles) {
+                val uploadId = storeInUploadsDatabase(
+                    documentFile = documentFile,
+                    uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
+                    accountName = folderBackUpConfiguration.accountName,
+                    behavior = folderBackUpConfiguration.behavior,
+                    createdByWorker = when (folderBackUpConfiguration) {
+                        is FolderBackUpConfiguration.PictureUploadsConfiguration -> CREATED_AS_CAMERA_UPLOAD_PICTURE
+                        is FolderBackUpConfiguration.VideoUploadsConfiguration -> CREATED_AS_CAMERA_UPLOAD_VIDEO
+                    }
+                )
                 enqueueSingleUpload(
                     contentUri = documentFile.uri,
                     uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
                     lastModified = documentFile.lastModified(),
                     behavior = folderBackUpConfiguration.behavior.toString(),
-                    accountName = folderBackUpConfiguration.accountName
+                    accountName = folderBackUpConfiguration.accountName,
+                    uploadId = uploadId
                 )
             }
         }
@@ -144,7 +160,8 @@ class CameraUploadsWorker(
         uploadPath: String,
         lastModified: Long,
         behavior: String,
-        accountName: String
+        accountName: String,
+        uploadId: Long
     ) {
         val lastModifiedInSeconds = (lastModified / 1000L).toString()
 
@@ -154,6 +171,7 @@ class CameraUploadsWorker(
             UploadFileFromContentUriWorker.KEY_PARAM_CONTENT_URI to contentUri.toString(),
             UploadFileFromContentUriWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
             UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
+            UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_ID to uploadId
         )
 
         val uploadFileFromContentUriWorker = OneTimeWorkRequestBuilder<UploadFileFromContentUriWorker>()
@@ -164,6 +182,25 @@ class CameraUploadsWorker(
 
         WorkManager.getInstance(appContext).enqueue(uploadFileFromContentUriWorker)
         Timber.i("Upload of ${contentUri.path} has been enqueued.")
+    }
+
+    private fun storeInUploadsDatabase(
+        documentFile: DocumentFile,
+        uploadPath: String,
+        accountName: String,
+        behavior: FolderBackUpConfiguration.Behavior,
+        createdByWorker: Int
+    ): Long {
+        val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
+
+        val ocUpload = OCUpload(documentFile.uri.encodedPath.toString(), uploadPath, accountName).apply {
+            fileSize = documentFile.length()
+            isForceOverwrite = false
+            createdBy = createdByWorker
+            localAction = behavior.ordinal
+            uploadStatus = UploadStatus.UPLOAD_IN_PROGRESS
+        }
+        return uploadStorageManager.storeUpload(ocUpload)
     }
 
     companion object {

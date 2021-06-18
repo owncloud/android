@@ -9,6 +9,9 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.datamodel.OCUpload
+import com.owncloud.android.datamodel.UploadsStorageManager
+import com.owncloud.android.db.UploadResult
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
@@ -46,6 +49,7 @@ class UploadFileFromContentUriWorker(
     lateinit var lastModified: String
     lateinit var behavior: FolderBackUpConfiguration.Behavior
     lateinit var uploadPath: String
+    var uploadIdInStorageManager: Long = -1
 
     override suspend fun doWork(): Result {
 
@@ -63,6 +67,7 @@ class UploadFileFromContentUriWorker(
             // 5- Perform the upload
             uploadDocument()
             // 6a- If upload succeeds, update database.
+            updateUploadsDatabaseWithResult()
             // 6b- If upload fails, save error
             Result.success()
         } catch (throwable: Throwable) {
@@ -81,12 +86,14 @@ class UploadFileFromContentUriWorker(
         val paramLastModified = workerParameters.inputData.getString(KEY_PARAM_LAST_MODIFIED)
         val paramBehavior = workerParameters.inputData.getString(KEY_PARAM_BEHAVIOR)
         val paramContentUri = workerParameters.inputData.getString(KEY_PARAM_CONTENT_URI)
+        val paramUploadId = workerParameters.inputData.getLong(KEY_PARAM_UPLOAD_ID, -1)
 
         account = AccountUtils.getOwnCloudAccountByName(appContext, paramAccountName) ?: return false
         contentUri = paramContentUri?.toUri() ?: return false
         uploadPath = paramUploadPath ?: return false
         behavior = paramBehavior?.let { FolderBackUpConfiguration.Behavior.fromString(it) } ?: return false
         lastModified = paramLastModified ?: return false
+        uploadIdInStorageManager = paramUploadId
 
         return true
     }
@@ -178,6 +185,19 @@ class UploadFileFromContentUriWorker(
         documentFile?.delete()
     }
 
+    private fun updateUploadsDatabaseWithResult() {
+        val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
+
+        val ocUpload = OCUpload(contentUri.encodedPath.toString(), uploadPath, account.name).apply {
+            uploadStatus = UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED
+            uploadEndTimestamp = System.currentTimeMillis()
+            lastResult = UploadResult.UPLOADED
+            uploadId = uploadIdInStorageManager
+        }
+
+        uploadStorageManager.updateUpload(ocUpload)
+    }
+
     fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
         .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
 
@@ -193,5 +213,6 @@ class UploadFileFromContentUriWorker(
         const val KEY_PARAM_CONTENT_URI = "KEY_PARAM_CONTENT_URI"
         const val KEY_PARAM_LAST_MODIFIED = "KEY_PARAM_LAST_MODIFIED"
         const val KEY_PARAM_UPLOAD_PATH = "KEY_PARAM_UPLOAD_PATH"
+        const val KEY_PARAM_UPLOAD_ID = "KEY_PARAM_UPLOAD_ID"
     }
 }
