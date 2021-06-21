@@ -110,7 +110,7 @@ public class OCUpload implements Parcelable {
      * @param accountName       Name of an ownCloud account to update the file to.
      */
     public OCUpload(String localPath, String remotePath, String accountName) {
-        if (localPath == null || !localPath.startsWith(File.separator)) {
+        if (localPath == null) {
             throw new IllegalArgumentException("Local path must be an absolute path in the local file system");
         }
         if (remotePath == null || !remotePath.startsWith(File.separator)) {

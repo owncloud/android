@@ -27,15 +27,19 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.PersistableBundle;
 
+import androidx.documentfile.provider.DocumentFile;
+import androidx.work.WorkManager;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.usecases.UploadFileFromContentUriUseCase;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PowerUtils;
@@ -205,7 +209,11 @@ public class TransferRequester {
      *                                   false otherwise
      */
     private void retry(Context context, Account account, OCUpload upload, boolean requestedFromWifiBackEvent) {
-        if (upload != null) {
+        if (upload == null)  return;
+
+        if (isContentUri(context, upload)) {
+            enqueueRetry(upload, context);
+        } else {
             Intent intent = new Intent(context, FileUploader.class);
             intent.putExtra(FileUploader.KEY_RETRY, true);
             intent.putExtra(FileUploader.KEY_ACCOUNT, account);
@@ -228,6 +236,24 @@ public class TransferRequester {
                 context.startService(intent);
             }
         }
+    }
+
+    private Boolean isContentUri(Context context, OCUpload upload) {
+        return DocumentFile.isDocumentUri(context, Uri.parse(upload.getLocalPath()));
+    }
+
+    private void enqueueRetry(OCUpload upload, Context context){
+        new UploadFileFromContentUriUseCase(WorkManager.getInstance(context)).execute(
+                new UploadFileFromContentUriUseCase.Params(
+                        upload.getAccountName(),
+                        Uri.parse(upload.getLocalPath()),
+                        upload.getUploadEndTimestamp() / 1000 + "",
+                        "COPY",
+                        upload.getRemotePath(),
+                        upload.getUploadId(),
+                        false
+                )
+        );
     }
 
     /**

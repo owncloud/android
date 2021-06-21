@@ -1,3 +1,21 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Abel García de Prada
+ * Copyright (C) 2021 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.owncloud.android.workers
 
 import android.accounts.Account
@@ -183,7 +201,7 @@ class UploadFileFromContentUriWorker(
     private fun updateUploadsDatabaseWithResult(throwable: Throwable?) {
         val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
 
-        val ocUpload = OCUpload(contentUri.encodedPath.toString(), uploadPath, account.name).apply {
+        val ocUpload = OCUpload(contentUri.toString(), uploadPath, account.name).apply {
             uploadStatus = getUploadStatusForThrowable(throwable)
             uploadEndTimestamp = System.currentTimeMillis()
             lastResult = getUploadResultFromThrowable(throwable)

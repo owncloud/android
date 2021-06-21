@@ -1,16 +1,30 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Abel García de Prada
+ * Copyright (C) 2021 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.owncloud.android.workers
 
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
-import androidx.work.Constraints
 import androidx.work.CoroutineWorker
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import androidx.work.workDataOf
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager
 import com.owncloud.android.datamodel.OCCameraUploadSync
 import com.owncloud.android.datamodel.OCUpload
@@ -21,8 +35,8 @@ import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE
 import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO
+import com.owncloud.android.usecases.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil
-import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.TRANSFER_TAG_CAMERA_UPLOAD
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
@@ -169,27 +183,17 @@ class CameraUploadsWorker(
     ) {
         val lastModifiedInSeconds = (lastModified / 1000L).toString()
 
-        val inputData = workDataOf(
-            UploadFileFromContentUriWorker.KEY_PARAM_ACCOUNT_NAME to accountName,
-            UploadFileFromContentUriWorker.KEY_PARAM_BEHAVIOR to behavior,
-            UploadFileFromContentUriWorker.KEY_PARAM_CONTENT_URI to contentUri.toString(),
-            UploadFileFromContentUriWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
-            UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
-            UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_ID to uploadId
+        UploadFileFromContentUriUseCase(WorkManager.getInstance(appContext)).execute(
+            UploadFileFromContentUriUseCase.Params(
+                accountName = accountName,
+                contentUri = contentUri,
+                lastModifiedInSeconds = lastModifiedInSeconds,
+                behavior = behavior,
+                uploadPath = uploadPath,
+                uploadIdInStorageManager = uploadId,
+                wifiOnly = wifiOnly
+            )
         )
-
-        val networkRequired = if (wifiOnly) NetworkType.UNMETERED else NetworkType.CONNECTED
-        val constraints = Constraints.Builder().setRequiredNetworkType(networkRequired).build()
-
-        val uploadFileFromContentUriWorker = OneTimeWorkRequestBuilder<UploadFileFromContentUriWorker>()
-            .setInputData(inputData)
-            .setConstraints(constraints)
-            .addTag(accountName)
-            .addTag(TRANSFER_TAG_CAMERA_UPLOAD)
-            .build()
-
-        WorkManager.getInstance(appContext).enqueue(uploadFileFromContentUriWorker)
-        Timber.i("Upload of ${contentUri.path} has been enqueued.")
     }
 
     private fun storeInUploadsDatabase(
@@ -201,7 +205,7 @@ class CameraUploadsWorker(
     ): Long {
         val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
 
-        val ocUpload = OCUpload(documentFile.uri.encodedPath.toString(), uploadPath, accountName).apply {
+        val ocUpload = OCUpload(documentFile.uri.toString(), uploadPath, accountName).apply {
             fileSize = documentFile.length()
             isForceOverwrite = false
             createdBy = createdByWorker
