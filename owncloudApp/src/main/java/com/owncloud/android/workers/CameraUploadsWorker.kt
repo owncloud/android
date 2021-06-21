@@ -4,7 +4,9 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
+import androidx.work.Constraints
 import androidx.work.CoroutineWorker
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -88,7 +90,8 @@ class CameraUploadsWorker(
                     lastModified = documentFile.lastModified(),
                     behavior = folderBackUpConfiguration.behavior.toString(),
                     accountName = folderBackUpConfiguration.accountName,
-                    uploadId = uploadId
+                    uploadId = uploadId,
+                    wifiOnly = folderBackUpConfiguration.wifiOnly
                 )
             }
         }
@@ -161,7 +164,8 @@ class CameraUploadsWorker(
         lastModified: Long,
         behavior: String,
         accountName: String,
-        uploadId: Long
+        uploadId: Long,
+        wifiOnly: Boolean
     ) {
         val lastModifiedInSeconds = (lastModified / 1000L).toString()
 
@@ -174,8 +178,12 @@ class CameraUploadsWorker(
             UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_ID to uploadId
         )
 
+        val networkRequired = if (wifiOnly) NetworkType.UNMETERED else NetworkType.CONNECTED
+        val constraints = Constraints.Builder().setRequiredNetworkType(networkRequired).build()
+
         val uploadFileFromContentUriWorker = OneTimeWorkRequestBuilder<UploadFileFromContentUriWorker>()
             .setInputData(inputData)
+            .setConstraints(constraints)
             .addTag(accountName)
             .addTag(TRANSFER_TAG_CAMERA_UPLOAD)
             .build()
