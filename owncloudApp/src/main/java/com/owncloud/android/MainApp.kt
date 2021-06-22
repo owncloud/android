@@ -328,5 +328,10 @@ class MainApp : Application() {
             val status = status
             return status
         }
+
+        fun codeSmell6( firstName: String, lastName: String, birthDate: String, gender: String, email: String, mobileNumber: String, country: String,
+            nation: String, status: String, comments: String, id: String, career: String, more: String) {
+
+        }
     }
 }
