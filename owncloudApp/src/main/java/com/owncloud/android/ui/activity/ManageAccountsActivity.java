@@ -42,11 +42,11 @@ import android.widget.ListView;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.work.WorkManager;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.files.services.CameraUploadsHandler;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
@@ -57,6 +57,7 @@ import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
+import com.owncloud.android.usecases.CancelUploadFromAccountUseCase;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
 
@@ -320,6 +321,8 @@ public class ManageAccountsActivity extends FileActivity
                 if (mDownloaderBinder != null) {
                     mDownloaderBinder.cancel(account);
                 }
+                CancelUploadFromAccountUseCase cancelUploadFromAccountUseCase = new CancelUploadFromAccountUseCase(WorkManager.getInstance(getBaseContext()));
+                cancelUploadFromAccountUseCase.execute(new CancelUploadFromAccountUseCase.Params(account.name));
             }
 
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
