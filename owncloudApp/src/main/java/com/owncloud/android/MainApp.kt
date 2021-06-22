@@ -316,5 +316,17 @@ class MainApp : Application() {
             val isMe = firstName + " " + lastName
             return isMe + callMe
         }
+
+        fun codeSmell4( firstName: String, lastName: String, birthDate: String, gender: String, email: String, mobileNumber: String, country: String,
+            nation: String, status: String, comments: String, id: String, career: String, more: String) : String {
+            val status = status
+            return status
+        }
+
+        fun codeSmell5( firstName: String, lastName: String, birthDate: String, gender: String, email: String, mobileNumber: String, country: String,
+            nation: String, status: String, comments: String, id: String, career: String, more: String) : String {
+            val status = status
+            return status
+        }
     }
 }
