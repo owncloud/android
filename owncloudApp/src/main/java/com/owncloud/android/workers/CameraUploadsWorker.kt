@@ -25,6 +25,7 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.owncloud.android.R
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager
 import com.owncloud.android.datamodel.OCCameraUploadSync
 import com.owncloud.android.datamodel.OCUpload
@@ -37,6 +38,8 @@ import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPL
 import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO
 import com.owncloud.android.usecases.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil
+import com.owncloud.android.utils.NotificationUtils
+import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
@@ -86,28 +89,42 @@ class CameraUploadsWorker(
             sourcePath = folderBackUpConfiguration.sourcePath
         )
 
-        if (localPicturesDocumentFiles.isNotEmpty()) {
-            for (documentFile in localPicturesDocumentFiles) {
-                val uploadId = storeInUploadsDatabase(
-                    documentFile = documentFile,
-                    uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
-                    accountName = folderBackUpConfiguration.accountName,
-                    behavior = folderBackUpConfiguration.behavior,
-                    createdByWorker = when (folderBackUpConfiguration) {
-                        is FolderBackUpConfiguration.PictureUploadsConfiguration -> CREATED_AS_CAMERA_UPLOAD_PICTURE
-                        is FolderBackUpConfiguration.VideoUploadsConfiguration -> CREATED_AS_CAMERA_UPLOAD_VIDEO
-                    }
-                )
-                enqueueSingleUpload(
-                    contentUri = documentFile.uri,
-                    uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
-                    lastModified = documentFile.lastModified(),
-                    behavior = folderBackUpConfiguration.behavior.toString(),
-                    accountName = folderBackUpConfiguration.accountName,
-                    uploadId = uploadId,
-                    wifiOnly = folderBackUpConfiguration.wifiOnly
-                )
-            }
+        val contentText = when (syncType) {
+            SyncType.PICTURE_UPLOADS -> R.string.uploader_upload_picture_upload_files
+            SyncType.VIDEO_UPLOADS -> R.string.uploader_upload_video_upload_files
+        }
+
+        NotificationUtils.createBasicNotification(
+            context = appContext,
+            contentTitle = appContext.getString(R.string.uploader_upload_camera_upload_files),
+            contentText = appContext.getString(contentText, localPicturesDocumentFiles.size),
+            notificationChannelId = UPLOAD_NOTIFICATION_CHANNEL_ID,
+            notificationId = System.currentTimeMillis().toInt(),
+            intent = NotificationUtils.composePendingIntentToUploadList(appContext),
+            onGoing = false,
+            timeOut = 5_000
+        )
+
+        for (documentFile in localPicturesDocumentFiles) {
+            val uploadId = storeInUploadsDatabase(
+                documentFile = documentFile,
+                uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
+                accountName = folderBackUpConfiguration.accountName,
+                behavior = folderBackUpConfiguration.behavior,
+                createdByWorker = when (folderBackUpConfiguration) {
+                    is FolderBackUpConfiguration.PictureUploadsConfiguration -> CREATED_AS_CAMERA_UPLOAD_PICTURE
+                    is FolderBackUpConfiguration.VideoUploadsConfiguration -> CREATED_AS_CAMERA_UPLOAD_VIDEO
+                }
+            )
+            enqueueSingleUpload(
+                contentUri = documentFile.uri,
+                uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
+                lastModified = documentFile.lastModified(),
+                behavior = folderBackUpConfiguration.behavior.toString(),
+                accountName = folderBackUpConfiguration.accountName,
+                uploadId = uploadId,
+                wifiOnly = folderBackUpConfiguration.wifiOnly
+            )
         }
     }
 

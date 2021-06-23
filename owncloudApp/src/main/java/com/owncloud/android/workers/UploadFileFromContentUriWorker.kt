@@ -234,7 +234,7 @@ class UploadFileFromContentUriWorker(
         val pendingIntent = if (needsToUpdateCredentials) {
             NotificationUtils.composePendingIntentToRefreshCredentials(appContext, account)
         } else {
-            NotificationUtils.composePendingIntentToUploadList(appContext, account)
+            NotificationUtils.composePendingIntentToUploadList(appContext)
         }
 
         NotificationUtils.createBasicNotification(

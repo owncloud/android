@@ -40,7 +40,6 @@ import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.ui.activity.ConflictsResolveActivity
-import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.UploadListActivity
 import java.util.Random
 
@@ -111,9 +110,8 @@ object NotificationUtils {
         return PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), updateCredentialsIntent, PendingIntent.FLAG_ONE_SHOT)
     }
 
-    fun composePendingIntentToUploadList(context: Context, account: Account): PendingIntent {
+    fun composePendingIntentToUploadList(context: Context): PendingIntent {
         val showUploadListIntent = Intent(context, UploadListActivity::class.java).apply {
-            putExtra(FileActivity.EXTRA_ACCOUNT, account)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
 
