@@ -52,8 +52,6 @@ import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.operations.DownloadFileOperation;
-import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
-import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
@@ -602,20 +600,10 @@ public class FileDownloader extends Service
 
             if (needsToUpdateCredentials) {
                 // let the user update credentials with one click
-                Intent updateAccountCredentials = new Intent(this, LoginActivity.class);
-                updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACCOUNT,
-                        download.getAccount());
-                updateAccountCredentials.putExtra(
-                        AuthenticatorConstants.EXTRA_ACTION,
-                        AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN
-                );
-                updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                updateAccountCredentials.addFlags(Intent.FLAG_FROM_BACKGROUND);
-                getNotificationBuilder()
-                        .setContentIntent(PendingIntent.getActivity(
-                                this, (int) System.currentTimeMillis(), updateAccountCredentials,
-                                PendingIntent.FLAG_ONE_SHOT));
+                PendingIntent pendingIntentToRefreshCredentials =
+                        NotificationUtils.INSTANCE.composePendingIntentToRefreshCredentials(this, download.getAccount());
+
+                getNotificationBuilder().setContentIntent(pendingIntentToRefreshCredentials);
 
             } else {
                 // TODO put something smart in showDetailsIntent
