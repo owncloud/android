@@ -25,7 +25,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 import timber.log.Timber
 
@@ -50,6 +49,7 @@ class UploadFileFromContentUriUseCase(
             .setInputData(inputData)
             .setConstraints(constraints)
             .addTag(params.accountName)
+            .addTag(params.uploadIdInStorageManager.toString())
             .addTag(UploadFileFromContentUriWorker.TRANSFER_TAG_CAMERA_UPLOAD)
             .build()
 
@@ -63,7 +63,7 @@ class UploadFileFromContentUriUseCase(
         val lastModifiedInSeconds: String,
         val behavior: String,
         val uploadPath: String,
-        val uploadIdInStorageManager: Long = -1,
+        val uploadIdInStorageManager: Long,
         val wifiOnly: Boolean
     )
 }

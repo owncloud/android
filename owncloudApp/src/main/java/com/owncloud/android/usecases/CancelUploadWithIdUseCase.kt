@@ -20,24 +20,25 @@ package com.owncloud.android.usecases
 
 import androidx.work.WorkManager
 import com.owncloud.android.MainApp
+import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import timber.log.Timber
 
-class CancelUploadFromAccountUseCase(
+class CancelUploadWithIdUseCase(
     private val workManager: WorkManager
-) : BaseUseCase<Unit, CancelUploadFromAccountUseCase.Params>() {
+) : BaseUseCase<Unit, CancelUploadWithIdUseCase.Params>() {
 
     override fun run(params: Params) {
-        workManager.cancelAllWorkByTag(params.accountName)
+        workManager.cancelAllWorkByTag(params.upload.uploadId.toString())
 
         val uploadsStorageManager = UploadsStorageManager(MainApp.appContext.contentResolver)
-        uploadsStorageManager.removeUploads(params.accountName)
+        uploadsStorageManager.removeUpload(params.upload)
 
-        Timber.i("Uploads of ${params.accountName} has been cancelled.")
+        Timber.i("Upload with id ${params.upload.uploadId} has been cancelled.")
     }
 
     data class Params(
-        val accountName: String,
+        val upload: OCUpload,
     )
 }
