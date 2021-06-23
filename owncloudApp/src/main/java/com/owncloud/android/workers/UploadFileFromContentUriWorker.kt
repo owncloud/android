@@ -26,6 +26,7 @@ import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
@@ -34,6 +35,7 @@ import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
@@ -43,7 +45,9 @@ import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
+import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
+import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -87,6 +91,7 @@ class UploadFileFromContentUriWorker(
             if (throwable is NoConnectionWithServerException) {
                 Result.retry()
             } else {
+                showNotification(throwable)
                 updateUploadsDatabaseWithResult(throwable)
                 Result.failure()
             }
@@ -217,6 +222,31 @@ class UploadFileFromContentUriWorker(
         } else {
             UploadsStorageManager.UploadStatus.UPLOAD_FAILED
         }
+    }
+
+    private fun showNotification(throwable: Throwable) {
+        // check credentials error
+        val needsToUpdateCredentials = throwable is UnauthorizedException
+
+        val tickerId =
+            if (needsToUpdateCredentials) R.string.uploader_upload_failed_credentials_error else R.string.uploader_upload_failed_ticker
+
+        val pendingIntent = if (needsToUpdateCredentials) {
+            NotificationUtils.composePendingIntentToRefreshCredentials(appContext, account)
+        } else {
+            NotificationUtils.composePendingIntentToUploadList(appContext, account)
+        }
+
+        NotificationUtils.createBasicNotification(
+            context = appContext,
+            contentTitle = appContext.getString(tickerId),
+            contentText = throwable.parseError("", appContext.resources, true).toString(),
+            notificationChannelId = UPLOAD_NOTIFICATION_CHANNEL_ID,
+            notificationId = 12,
+            intent = pendingIntent,
+            onGoing = false,
+            timeOut = null
+        )
     }
 
     private fun getUploadResultFromThrowable(throwable: Throwable?): UploadResult {
