@@ -28,7 +28,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
@@ -84,7 +84,7 @@ class SettingsPictureUploadsViewModel(
 
     fun getPictureUploadsSourcePath() = preferencesProvider.getString(
         key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-        defaultValue = CameraUploadsConfiguration.getDefaultSourcePath()
+        defaultValue = PreferenceManager.getDefaultCameraSourcePath()
     )
 
     fun handleSelectPictureUploadsPath(data: Intent?) {
@@ -101,7 +101,7 @@ class SettingsPictureUploadsViewModel(
         // If the source path has changed, update camera uploads last sync
         var previousSourcePath = preferencesProvider.getString(
             key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-            defaultValue = CameraUploadsConfiguration.getDefaultSourcePath()
+            defaultValue = PreferenceManager.getDefaultCameraSourcePath()
         )
 
         previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)

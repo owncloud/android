@@ -28,12 +28,12 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE
+import com.owncloud.android.db.PreferenceManager.getDefaultCameraSourcePath
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
@@ -83,7 +83,7 @@ class SettingsVideoUploadsViewModel(
 
     fun getVideoUploadsSourcePath() = preferencesProvider.getString(
         key = PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-        defaultValue = CameraUploadsConfiguration.getDefaultSourcePath()
+        defaultValue = getDefaultCameraSourcePath()
     )
 
     fun handleSelectVideoUploadsPath(data: Intent?) {
@@ -100,7 +100,7 @@ class SettingsVideoUploadsViewModel(
         // If the source path has changed, update camera uploads last sync
         var previousSourcePath = preferencesProvider.getString(
             key = PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-            defaultValue = CameraUploadsConfiguration.getDefaultSourcePath()
+            defaultValue = getDefaultCameraSourcePath()
         )
 
         previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)

@@ -25,7 +25,7 @@ import android.content.Context;
 
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.datamodel.OCCameraUploadSync;
-import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
+import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration;
 import timber.log.Timber;
 
 /**
@@ -68,8 +68,11 @@ public class CameraUploadsHandler {
     private void initializeCameraUploadSync(CameraUploadsSyncStorageManager cameraUploadsSyncStorageManager,
                                             OCCameraUploadSync ocCameraUploadSync) {
 
+        boolean pictureUploadsEnabled = mCameraUploadsConfig.getPictureUploadsConfiguration() != null;
+        boolean videoUploadsEnabled = mCameraUploadsConfig.getVideoUploadsConfiguration() != null;
+
         // Set synchronization timestamps not needed
-        if (!mCameraUploadsConfig.isEnabledForPictures() && !mCameraUploadsConfig.isEnabledForVideos()) {
+        if (!pictureUploadsEnabled && !videoUploadsEnabled) {
             return;
         }
 
@@ -77,8 +80,8 @@ public class CameraUploadsHandler {
 
         if (ocCameraUploadSync == null) { // No synchronization timestamp for pictures/videos yet
 
-            long firstPicturesTimeStamp = mCameraUploadsConfig.isEnabledForPictures() ? timeStamp : 0;
-            long firstVideosTimeStamp = mCameraUploadsConfig.isEnabledForVideos() ? timeStamp : 0;
+            long firstPicturesTimeStamp = pictureUploadsEnabled ? timeStamp : 0;
+            long firstVideosTimeStamp = videoUploadsEnabled ? timeStamp : 0;
 
             // Initialize synchronization timestamp for pictures or videos in database
             OCCameraUploadSync firstOcCameraUploadSync = new OCCameraUploadSync(firstPicturesTimeStamp,
@@ -90,12 +93,12 @@ public class CameraUploadsHandler {
 
         } else {
 
-            if (ocCameraUploadSync.getPicturesLastSync() == 0 && mCameraUploadsConfig.isEnabledForPictures()) {
+            if (ocCameraUploadSync.getPicturesLastSync() == 0 && pictureUploadsEnabled) {
                 // Pictures synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setPicturesLastSync(timeStamp);
             }
 
-            if (ocCameraUploadSync.getVideosLastSync() == 0 && mCameraUploadsConfig.isEnabledForVideos()) {
+            if (ocCameraUploadSync.getVideosLastSync() == 0 && videoUploadsEnabled) {
                 // Videos synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setVideosLastSync(timeStamp);
             }

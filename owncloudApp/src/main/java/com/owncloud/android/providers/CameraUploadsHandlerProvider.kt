@@ -28,45 +28,45 @@ import com.owncloud.android.files.services.CameraUploadsHandler
 class CameraUploadsHandlerProvider(
     private val context: Context
 ) {
-    private val cameraUploadsHandler = CameraUploadsHandler(PreferenceManager.getCameraUploadsConfiguration(context))
+    private val cameraUploadsHandler = CameraUploadsHandler(PreferenceManager.getCameraUploadsConfiguration())
 
     fun updatePicturesLastSync(timestamp: Long) = cameraUploadsHandler.updatePicturesLastSync(context, timestamp)
 
     fun updateVideosLastSync(timestamp: Long) = cameraUploadsHandler.updateVideosLastSync(context, timestamp)
 
     fun schedulePictureUploadsSyncJob() {
-        val configuration = PreferenceManager.getCameraUploadsConfiguration(context)
-        if (configuration.isEnabledForPictures) {
+        val configuration = PreferenceManager.getCameraUploadsConfiguration()
+        if (configuration.pictureUploadsConfiguration != null) {
             cameraUploadsHandler.setCameraUploadsConfig(configuration)
             cameraUploadsHandler.scheduleCameraUploadsSyncJob(context)
         }
     }
 
     fun scheduleVideoUploadsSyncJob() {
-        val configuration = PreferenceManager.getCameraUploadsConfiguration(context)
-        if (configuration.isEnabledForVideos) {
+        val configuration = PreferenceManager.getCameraUploadsConfiguration()
+        if (configuration.videoUploadsConfiguration != null) {
             cameraUploadsHandler.setCameraUploadsConfig(configuration)
             cameraUploadsHandler.scheduleCameraUploadsSyncJob(context)
         }
     }
 
     fun hasCameraUploadsAttached(accountName: String): Boolean {
-        val cameraUploadsConfiguration = PreferenceManager.getCameraUploadsConfiguration(context)
+        val cameraUploadsConfiguration = PreferenceManager.getCameraUploadsConfiguration()
 
-        return accountName == cameraUploadsConfiguration.uploadAccountNameForPictures ||
-                accountName == cameraUploadsConfiguration.uploadAccountNameForVideos
+        return accountName == cameraUploadsConfiguration.pictureUploadsConfiguration?.accountName ||
+                accountName == cameraUploadsConfiguration.videoUploadsConfiguration?.accountName
     }
 
     fun resetCameraUploadsForAccount(accountName: String) {
         val preferencesProvider = SharedPreferencesProviderImpl(context)
-        val cameraUploadsConfiguration = PreferenceManager.getCameraUploadsConfiguration(context)
+        val cameraUploadsConfiguration = PreferenceManager.getCameraUploadsConfiguration()
 
-        if (accountName == cameraUploadsConfiguration.uploadAccountNameForPictures) {
+        if (accountName == cameraUploadsConfiguration.pictureUploadsConfiguration?.accountName) {
             preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
             preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH)
             preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)
         }
-        if (accountName == cameraUploadsConfiguration.uploadAccountNameForVideos) {
+        if (accountName == cameraUploadsConfiguration.videoUploadsConfiguration?.accountName) {
             preferencesProvider.putBoolean(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false)
             preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH)
             preferencesProvider.removePreference(key = PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)

@@ -65,6 +65,10 @@ class CameraUploadsWorker(
 
         when (val useCaseResult = getCameraUploadsConfigurationUseCase.execute(Unit)) {
             is UseCaseResult.Success -> {
+                if (useCaseResult.data?.areCameraUploadsDisabled() == true) {
+                    cancelWorker()
+                    return Result.success()
+                }
                 syncFolder(useCaseResult.data?.pictureUploadsConfiguration)
                 syncFolder(useCaseResult.data?.videoUploadsConfiguration)
                 updateTimestamp()
@@ -74,6 +78,10 @@ class CameraUploadsWorker(
             }
         }
         return Result.success()
+    }
+
+    private fun cancelWorker() {
+        WorkManager.getInstance(appContext).cancelUniqueWork(CAMERA_UPLOADS_WORKER)
     }
 
     private fun syncFolder(folderBackUpConfiguration: FolderBackUpConfiguration?) {
