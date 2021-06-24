@@ -151,7 +151,7 @@ class UploadFileFromContentUriWorker(
         }
     }
 
-    fun uploadDocument() {
+    private fun uploadDocument() {
         val client = getClientForThisUpload()
         val requestBody = ContentUriRequestBody(appContext.contentResolver, contentUri)
 
@@ -233,7 +233,7 @@ class UploadFileFromContentUriWorker(
         }
     }
 
-    fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
+    private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
         .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
 
     companion object {

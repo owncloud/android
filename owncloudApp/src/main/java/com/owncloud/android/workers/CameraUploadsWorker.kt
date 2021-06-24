@@ -89,21 +89,7 @@ class CameraUploadsWorker(
             sourcePath = folderBackUpConfiguration.sourcePath
         )
 
-        val contentText = when (syncType) {
-            SyncType.PICTURE_UPLOADS -> R.string.uploader_upload_picture_upload_files
-            SyncType.VIDEO_UPLOADS -> R.string.uploader_upload_video_upload_files
-        }
-
-        NotificationUtils.createBasicNotification(
-            context = appContext,
-            contentTitle = appContext.getString(R.string.uploader_upload_camera_upload_files),
-            contentText = appContext.getString(contentText, localPicturesDocumentFiles.size),
-            notificationChannelId = UPLOAD_NOTIFICATION_CHANNEL_ID,
-            notificationId = System.currentTimeMillis().toInt(),
-            intent = NotificationUtils.composePendingIntentToUploadList(appContext),
-            onGoing = false,
-            timeOut = 5_000
-        )
+        showNotification(syncType, localPicturesDocumentFiles.size)
 
         for (documentFile in localPicturesDocumentFiles) {
             val uploadId = storeInUploadsDatabase(
@@ -128,6 +114,27 @@ class CameraUploadsWorker(
         }
     }
 
+    private fun showNotification(
+        syncType: SyncType,
+        numberOfFilesToUpload: Int
+    ) {
+        val contentText = when (syncType) {
+            SyncType.PICTURE_UPLOADS -> R.string.uploader_upload_picture_upload_files
+            SyncType.VIDEO_UPLOADS -> R.string.uploader_upload_video_upload_files
+        }
+
+        NotificationUtils.createBasicNotification(
+            context = appContext,
+            contentTitle = appContext.getString(R.string.uploader_upload_camera_upload_files),
+            contentText = appContext.getString(contentText, numberOfFilesToUpload),
+            notificationChannelId = UPLOAD_NOTIFICATION_CHANNEL_ID,
+            notificationId = System.currentTimeMillis().toInt(),
+            intent = NotificationUtils.composePendingIntentToUploadList(appContext),
+            onGoing = false,
+            timeOut = 5_000
+        )
+    }
+
     private fun updateTimestamp() {
         val currentTimestamp = System.currentTimeMillis()
         val cameraUploadsSyncStorageManager = CameraUploadsSyncStorageManager(appContext.contentResolver)
@@ -137,7 +144,8 @@ class CameraUploadsWorker(
             null
         )
         cameraUploadsSyncStorageManager.updateCameraUploadSync(
-            OCCameraUploadSync(currentTimestamp, currentTimestamp).apply { id = cameraUploadSync.id })
+            OCCameraUploadSync(currentTimestamp, currentTimestamp).apply { id = cameraUploadSync.id }
+        )
     }
 
     private fun getFilesReadyToUpload(

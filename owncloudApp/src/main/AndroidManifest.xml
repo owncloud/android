@@ -144,10 +144,6 @@
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
-            android:name=".files.services.CameraUploadsSyncJobService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
             android:name=".files.services.AvailableOfflineSyncJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
