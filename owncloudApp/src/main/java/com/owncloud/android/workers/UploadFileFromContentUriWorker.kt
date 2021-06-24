@@ -19,7 +19,6 @@
 package com.owncloud.android.workers
 
 import android.accounts.Account
-import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
@@ -28,6 +27,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.UploadResult
@@ -39,25 +39,17 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.lib.common.http.HttpConstants
-import com.owncloud.android.lib.common.http.methods.webdav.PutMethod
-import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
+import com.owncloud.android.lib.resources.files.ContentUriRequestBody
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
+import com.owncloud.android.lib.resources.files.UploadFileFromContentUriOperation
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
-import okio.BufferedSink
-import okio.source
 import org.koin.core.KoinComponent
 import timber.log.Timber
 import java.io.File
-import java.io.IOException
-import java.net.URL
 
 class UploadFileFromContentUriWorker(
     private val appContext: Context,
@@ -88,13 +80,9 @@ class UploadFileFromContentUriWorker(
             Result.success()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
-            if (throwable is NoConnectionWithServerException) {
-                Result.retry()
-            } else {
-                showNotification(throwable)
-                updateUploadsDatabaseWithResult(throwable)
-                Result.failure()
-            }
+            showNotification(throwable)
+            updateUploadsDatabaseWithResult(throwable)
+            Result.failure()
         }
     }
 
@@ -156,45 +144,16 @@ class UploadFileFromContentUriWorker(
         }
     }
 
-    class ContentUriRequestBody(
-        private val contentResolver: ContentResolver,
-        private val contentUri: Uri
-    ) : RequestBody() {
-
-        override fun contentType(): MediaType? {
-            val contentType = contentResolver.getType(contentUri) ?: return null
-            return contentType.toMediaTypeOrNull()
-        }
-
-        override fun writeTo(sink: BufferedSink) {
-            val inputStream = contentResolver.openInputStream(contentUri)
-                ?: throw IOException("Couldn't open content URI for reading: $contentUri")
-
-            inputStream.source().use { source ->
-                sink.writeAll(source)
-            }
-        }
-    }
-
     fun uploadDocument() {
+        val client = getClientForThisUpload()
         val requestBody = ContentUriRequestBody(appContext.contentResolver, contentUri)
 
-        val client = getClientForThisUpload()
+        val uploadFileFromContentUriOperation = UploadFileFromContentUriOperation(uploadPath, lastModified, requestBody)
 
-        val putMethod = PutMethod(URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(uploadPath)), requestBody).apply {
-            setRetryOnConnectionFailure(false)
-            addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, requestBody.contentLength().toString())
-            addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, lastModified)
-        }
+        val result = executeRemoteOperation { uploadFileFromContentUriOperation.execute(client) }
 
-        val result = client.executeHttpMethod(putMethod)
-
-        if (!isSuccess(result)) {
-            throw Throwable(putMethod.statusMessage)
-        } else {
-            if (behavior == FolderBackUpConfiguration.Behavior.MOVE) {
-                removeLocalFile()
-            }
+        if (result == Unit && behavior == FolderBackUpConfiguration.Behavior.MOVE) {
+            removeLocalFile()
         }
     }
 
@@ -262,10 +221,6 @@ class UploadFileFromContentUriWorker(
 
     fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
         .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
-
-    fun isSuccess(status: Int): Boolean {
-        return status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT
-    }
 
     companion object {
         const val TRANSFER_TAG_CAMERA_UPLOAD = "TRANSFER_TAG_CAMERA_UPLOAD"
