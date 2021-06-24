@@ -28,4 +28,40 @@ class AccountProvider(
 ) {
     fun getCurrentOwnCloudAccount(): Account? = AccountUtils.getCurrentOwnCloudAccount(context)
     fun getLoggedAccounts(): Array<Account> = AccountUtils.getAccounts(context)
+
+    fun codeSmell( firstName: String, lastName: String, birthDate: String, gender: String, email: String, mobileNumber: String, country: String,
+        nation: String, status: String, comments: String, id: String, career: String, more: String) : String {
+        val isMe = firstName + " " + lastName
+        return isMe
+    }
+
+    fun codeSmell2( firstName: String, lastName: String, birthDate: String, gender: String, email: String, mobileNumber: String, country: String,
+        nation: String, status: String, comments: String, id: String, career: String, more: String) : String {
+        val myJob = career + " "+ more
+        return myJob
+    }
+
+    fun codeSmell3( firstName: String, lastName: String, birthDate: String, gender: String, email: String, mobileNumber: String, country: String,
+        nation: String, status: String, comments: String, id: String, career: String, more: String) : String {
+        val callMe = mobileNumber + " " + email
+        val isMe = firstName + " " + lastName
+        return isMe + callMe
+    }
+
+    fun codeSmell4( firstName: String, lastName: String, birthDate: String, gender: String, email: String, mobileNumber: String, country: String,
+        nation: String, status: String, comments: String, id: String, career: String, more: String) : String {
+        val status = status
+        return status
+    }
+
+    fun codeSmell5( firstName: String, lastName: String, birthDate: String, gender: String, email: String, mobileNumber: String, country: String,
+        nation: String, status: String, comments: String, id: String, career: String, more: String) : String {
+        val status = status
+        return status
+    }
+
+    fun codeSmell6( firstName: String, lastName: String, birthDate: String, gender: String, email: String, mobileNumber: String, country: String,
+        nation: String, status: String, comments: String, id: String, career: String, more: String) {
+
+    }
 }
