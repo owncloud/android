@@ -151,10 +151,10 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
 
     @Test
     fun `get video uploads source path - ok`() {
-        mockkStatic(PreferenceManager.CameraUploadsConfiguration::class)
+        mockkStatic(PreferenceManager::class)
 
         every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
-        every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
+        every { PreferenceManager.getDefaultCameraSourcePath() } returns ""
 
         val uploadSourcePath = videosViewModel.getVideoUploadsSourcePath()
 
@@ -163,7 +163,7 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
         verify(exactly = 1) {
             preferencesProvider.getString(
                 PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-                PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath()
+                PreferenceManager.getDefaultCameraSourcePath()
             )
         }
     }
@@ -202,11 +202,11 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
     @Test
     fun `handle select video uploads source path - ok - source path hasn't changed`() {
         val data: Intent = mockk()
-        mockkStatic(PreferenceManager.CameraUploadsConfiguration::class)
+        mockkStatic(PreferenceManager::class)
 
         every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
         // It has to be "" for the test to pass
-        every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
+        every { PreferenceManager.getDefaultCameraSourcePath() } returns ""
         every { data.getStringExtra(any()) } returns exampleSourcePath
 
 //        videosViewModel.handleSelectVideoUploadsSourcePath(data)
@@ -224,11 +224,11 @@ class SettingsVideoUploadsViewModelTest : ViewModelTest() {
     fun `handle select video uploads source path - ok - source path has changed`() {
         val data: Intent = mockk()
         val sourcePath = "/New/Source/Path"
-        mockkStatic(PreferenceManager.CameraUploadsConfiguration::class)
+        mockkStatic(PreferenceManager::class)
 
         every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
         // It has to be "" for the test to pass
-        every { PreferenceManager.CameraUploadsConfiguration.getDefaultSourcePath() } returns ""
+        every { PreferenceManager.getDefaultCameraSourcePath() } returns ""
         every { data.getStringExtra(any()) } returns sourcePath
 
 //        videosViewModel.handleSelectVideoUploadsSourcePath(data)
