@@ -32,8 +32,15 @@ import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.UploadResult
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.exceptions.ConflictException
+import com.owncloud.android.domain.exceptions.FileNotFoundException
+import com.owncloud.android.domain.exceptions.ForbiddenException
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.domain.exceptions.QuotaExceededException
+import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
+import com.owncloud.android.domain.exceptions.ServiceUnavailableException
+import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -215,6 +222,13 @@ class UploadFileFromContentUriWorker(
             is LocalFileNotFoundException -> UploadResult.FOLDER_ERROR
             is NoConnectionWithServerException -> UploadResult.NETWORK_CONNECTION
             is UnauthorizedException -> UploadResult.CREDENTIAL_ERROR
+            is FileNotFoundException -> UploadResult.FILE_NOT_FOUND
+            is ConflictException -> UploadResult.CONFLICT_ERROR
+            is ForbiddenException -> UploadResult.PRIVILEDGES_ERROR
+            is ServiceUnavailableException -> UploadResult.SERVICE_UNAVAILABLE
+            is QuotaExceededException -> UploadResult.QUOTA_EXCEEDED
+            is SpecificUnsupportedMediaTypeException -> UploadResult.SPECIFIC_UNSUPPORTED_MEDIA_TYPE
+            is SSLRecoverablePeerUnverifiedException -> UploadResult.SSL_RECOVERABLE_PEER_UNVERIFIED
             else -> UploadResult.UNKNOWN
         }
     }
