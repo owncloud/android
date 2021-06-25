@@ -26,6 +26,7 @@ package com.owncloud.android.data
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Environment
+import androidx.documentfile.provider.DocumentFile
 import java.io.File
 
 class LocalStorageProvider(
@@ -57,7 +58,9 @@ class LocalStorageProvider(
     fun getUsableSpace(): Long = getPrimaryStorageDirectory().usableSpace
 
     fun getDefaultCameraSourcePath(): String {
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + CAMERA_FOLDER
+        return DocumentFile.fromFile(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+        ).createDirectory(CAMERA_FOLDER)?.uri.toString()
     }
 
     /**

@@ -27,6 +27,7 @@ import com.owncloud.android.domain.exceptions.BadOcVersionException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.IncorrectAddressException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
+import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
@@ -68,6 +69,7 @@ fun Throwable.parseError(
             is AccountNotNewException -> resources.getString(R.string.auth_account_not_new)
             is AccountNotTheSameException -> resources.getString(R.string.auth_account_not_the_same)
             is RedirectToNonSecureException -> resources.getString(R.string.auth_redirect_non_secure_connection_title)
+            is LocalFileNotFoundException -> resources.getString(R.string.local_file_not_found_toast)
             else -> resources.getString(R.string.common_error_unknown)
         }
 

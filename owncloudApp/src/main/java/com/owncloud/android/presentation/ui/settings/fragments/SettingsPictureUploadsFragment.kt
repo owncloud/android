@@ -26,6 +26,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -75,7 +76,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             requireContext().contentResolver.takePersistableUriPermission(contentUriForTree, takeFlags)
             picturesViewModel.handleSelectPictureUploadsSourcePath(contentUriForTree)
             prefPictureUploadsSourcePath?.summary =
-                DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsSourcePath())
+                DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsSourcePath()?.toUri()?.path)
         }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -96,7 +97,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsPath?.summary =
             DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsPath())
         prefPictureUploadsSourcePath?.summary =
-            DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsSourcePath())
+            DisplayUtils.getPathWithoutLastSlash(picturesViewModel.getPictureUploadsSourcePath()?.toUri()?.path)
         val comment =
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) getString(
                 R.string.prefs_camera_upload_source_path_title_optional

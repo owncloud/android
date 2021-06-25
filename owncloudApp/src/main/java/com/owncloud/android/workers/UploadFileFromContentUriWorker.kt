@@ -66,12 +66,12 @@ class UploadFileFromContentUriWorker(
     workerParameters
 ), KoinComponent {
 
-    lateinit var account: Account
-    lateinit var contentUri: Uri
-    lateinit var lastModified: String
-    lateinit var behavior: FolderBackUpConfiguration.Behavior
-    lateinit var uploadPath: String
-    var uploadIdInStorageManager: Long = -1
+    private lateinit var account: Account
+    private lateinit var contentUri: Uri
+    private lateinit var lastModified: String
+    private lateinit var behavior: FolderBackUpConfiguration.Behavior
+    private lateinit var uploadPath: String
+    private var uploadIdInStorageManager: Long = -1
 
     override suspend fun doWork(): Result {
 
@@ -135,10 +135,7 @@ class UploadFileFromContentUriWorker(
         val checkPathExistenceResult = checkPathExistenceOperation.execute(getClientForThisUpload())
         if (checkPathExistenceResult.code == ResultCode.FILE_NOT_FOUND) {
             val createRemoteFolderOperation = CreateRemoteFolderOperation(pathToGrant, true)
-            val createRemoteFolderResult = createRemoteFolderOperation.execute(getClientForThisUpload())
-            if (!createRemoteFolderResult.isSuccess) {
-                throw Throwable("Parent folder was not created")
-            }
+            createRemoteFolderOperation.execute(getClientForThisUpload())
         }
     }
 
