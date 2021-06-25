@@ -33,10 +33,15 @@
   <string name="prefs_subsection_logging">Ведення журналу </string>
   <string name="prefs_subsection_more">Більше</string>
   <string name="prefs_subsection_security">Безпека</string>
+  <string name="prefs_subsection_security_summary">Встановити блокування для доступу до додатку та дозволити взаємодію з іншими видимими ​​вікнами</string>
+  <string name="prefs_subsection_logging_summary">Відстежувати журнали, створені під час виконання додатку</string>
+  <string name="prefs_subsection_more_summary">Інформація про додаток, відгуки та інше</string>
   <string name="prefs_accounts">Облікові записи</string>
   <string name="prefs_manage_accounts">Управління обліковими записами</string>
   <string name="prefs_passcode">Захистити паролем</string>
+  <string name="prefs_biometric">Біометричне блокування</string>
   <string name="prefs_biometric_summary">Увімкніть блокування паролем або графічним ключем щоб увімкнути це налаштування</string>
+  <string name="prefs_touches_with_other_visible_windows">Взаємодія з іншими відкритими вікнами</string>
   <string name="confirmation_touches_with_other_windows_title">Ви впевнені, що хочете включити цю функцію?</string>
   <string name="prefs_camera_picture_upload">Завантаження зображень</string>
   <string name="prefs_camera_picture_upload_summary">Автоматично завантажувати зображення з камери</string>
