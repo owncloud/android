@@ -189,6 +189,9 @@
     <string name="uploader_upload_camera_upload_files">Uploading camera upload files</string>
     <string name="uploader_upload_picture_upload_files">%d new pictures will be uploaded</string>
     <string name="uploader_upload_video_upload_files">%d new videos will be uploaded</string>
+    <string name="uploader_upload_camera_upload_source_path_error">Camera Uploads failed</string>
+    <string name="uploader_upload_picture_upload_error">Picture uploads source path is not valid anymore</string>
+    <string name="uploader_upload_video_upload_error">Video uploads source path is not valid anymore</string>
     <string name="uploader_upload_available_offline_files">Uploading available offline files</string>
     <string name="uploader_upload_requested_from_wifi_files">Uploading requested from wifi files</string>
     <string name="ssl_certificate_not_trusted">Server certificate is not trusted</string>

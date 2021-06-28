@@ -57,7 +57,15 @@ class CameraUploadsWorker(
     workerParameters
 ), KoinComponent {
 
-    enum class SyncType(val prefixForType: String) { PICTURE_UPLOADS("image/"), VIDEO_UPLOADS("video/") }
+    enum class SyncType(val prefixForType: String) {
+        PICTURE_UPLOADS("image/"), VIDEO_UPLOADS("video/");
+
+        fun getNotificationId(): Int =
+            when (this) {
+                PICTURE_UPLOADS -> pictureUploadsNotificationId
+                VIDEO_UPLOADS -> videoUploadsNotificationId
+            }
+    }
 
     private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase by inject()
 
@@ -65,19 +73,41 @@ class CameraUploadsWorker(
 
         when (val useCaseResult = getCameraUploadsConfigurationUseCase.execute(Unit)) {
             is UseCaseResult.Success -> {
-                if (useCaseResult.data?.areCameraUploadsDisabled() == true) {
+                val cameraUploadsConfiguration = useCaseResult.data
+                if (cameraUploadsConfiguration == null || cameraUploadsConfiguration.areCameraUploadsDisabled()) {
                     cancelWorker()
                     return Result.success()
                 }
-                syncFolder(useCaseResult.data?.pictureUploadsConfiguration)
-                syncFolder(useCaseResult.data?.videoUploadsConfiguration)
-                updateTimestamp()
+                cameraUploadsConfiguration.pictureUploadsConfiguration?.let { pictureUploadsConfiguration ->
+                    try {
+                        checkSourcePathIsAValidUriOrThrowException(pictureUploadsConfiguration.sourcePath)
+                        syncFolder(pictureUploadsConfiguration)
+                    } catch (illegalArgumentException: IllegalArgumentException) {
+                        showNotificationToUpdateUri(SyncType.PICTURE_UPLOADS)
+                        return Result.failure()
+                    }
+                }
+                cameraUploadsConfiguration.videoUploadsConfiguration?.let { videoUploadsConfiguration ->
+                    try {
+                        checkSourcePathIsAValidUriOrThrowException(videoUploadsConfiguration.sourcePath)
+                        syncFolder(videoUploadsConfiguration)
+                    } catch (illegalArgumentException: IllegalArgumentException) {
+                        showNotificationToUpdateUri(SyncType.VIDEO_UPLOADS)
+                        return Result.failure()
+                    }
+                }
             }
             is UseCaseResult.Error -> {
                 Timber.e(useCaseResult.throwable, "Worker ${useCaseResult.throwable}")
             }
         }
         return Result.success()
+    }
+
+    @Throws(IllegalArgumentException::class)
+    private fun checkSourcePathIsAValidUriOrThrowException(sourcePath: String) {
+        val sourceUri: Uri = sourcePath.toUri()
+        DocumentFile.fromTreeUri(applicationContext, sourceUri)
     }
 
     private fun cancelWorker() {
@@ -105,9 +135,9 @@ class CameraUploadsWorker(
                 uploadPath = folderBackUpConfiguration.uploadPath.plus(File.separator).plus(documentFile.name),
                 accountName = folderBackUpConfiguration.accountName,
                 behavior = folderBackUpConfiguration.behavior,
-                createdByWorker = when (folderBackUpConfiguration) {
-                    is FolderBackUpConfiguration.PictureUploadsConfiguration -> CREATED_AS_CAMERA_UPLOAD_PICTURE
-                    is FolderBackUpConfiguration.VideoUploadsConfiguration -> CREATED_AS_CAMERA_UPLOAD_VIDEO
+                createdByWorker = when (syncType) {
+                    SyncType.PICTURE_UPLOADS -> CREATED_AS_CAMERA_UPLOAD_PICTURE
+                    SyncType.VIDEO_UPLOADS -> CREATED_AS_CAMERA_UPLOAD_VIDEO
                 }
             )
             enqueueSingleUpload(
@@ -120,6 +150,7 @@ class CameraUploadsWorker(
                 wifiOnly = folderBackUpConfiguration.wifiOnly
             )
         }
+        updateTimestamp(syncType)
     }
 
     private fun showNotification(
@@ -136,14 +167,33 @@ class CameraUploadsWorker(
             contentTitle = appContext.getString(R.string.uploader_upload_camera_upload_files),
             contentText = appContext.getString(contentText, numberOfFilesToUpload),
             notificationChannelId = UPLOAD_NOTIFICATION_CHANNEL_ID,
-            notificationId = System.currentTimeMillis().toInt(),
+            notificationId = syncType.getNotificationId(),
             intent = NotificationUtils.composePendingIntentToUploadList(appContext),
             onGoing = false,
             timeOut = 5_000
         )
     }
 
-    private fun updateTimestamp() {
+    private fun showNotificationToUpdateUri(
+        syncType: SyncType
+    ) {
+        val contentText: Int = when (syncType) {
+            SyncType.PICTURE_UPLOADS -> R.string.uploader_upload_picture_upload_error
+            SyncType.VIDEO_UPLOADS -> R.string.uploader_upload_video_upload_error
+        }
+        NotificationUtils.createBasicNotification(
+            context = appContext,
+            contentTitle = appContext.getString(R.string.uploader_upload_camera_upload_source_path_error),
+            contentText = appContext.getString(contentText),
+            notificationChannelId = UPLOAD_NOTIFICATION_CHANNEL_ID,
+            notificationId = syncType.getNotificationId(),
+            intent = NotificationUtils.composePendingIntentToUploadList(appContext),
+            onGoing = false,
+            timeOut = null
+        )
+    }
+
+    private fun updateTimestamp(syncType: SyncType) {
         val currentTimestamp = System.currentTimeMillis()
         val cameraUploadsSyncStorageManager = CameraUploadsSyncStorageManager(appContext.contentResolver)
         val cameraUploadSync = cameraUploadsSyncStorageManager.getCameraUploadSync(
@@ -151,8 +201,11 @@ class CameraUploadsWorker(
             null,
             null
         )
+        val pictureTimestamp = if (syncType == SyncType.PICTURE_UPLOADS) currentTimestamp else cameraUploadSync.picturesLastSync
+        val videoTimestamp = if (syncType == SyncType.VIDEO_UPLOADS) currentTimestamp else cameraUploadSync.videosLastSync
+
         cameraUploadsSyncStorageManager.updateCameraUploadSync(
-            OCCameraUploadSync(currentTimestamp, currentTimestamp).apply { id = cameraUploadSync.id }
+            OCCameraUploadSync(pictureTimestamp, videoTimestamp).apply { id = cameraUploadSync.id }
         )
     }
 
@@ -252,5 +305,7 @@ class CameraUploadsWorker(
         const val CAMERA_UPLOADS_WORKER = "CAMERA_UPLOADS_WORKER"
         const val repeatInterval: Long = 15L
         val repeatIntervalTimeUnit: TimeUnit = TimeUnit.MINUTES
+        private const val pictureUploadsNotificationId = 101
+        private const val videoUploadsNotificationId = 102
     }
 }
