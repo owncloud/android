@@ -46,6 +46,7 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
 
     single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
     single { LocalStorageProvider(dataFolder) }
@@ -54,5 +55,5 @@ val localDataSourceModule = module {
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
-    factory<CameraUploadsLocalDataSource> { CameraUploadsLocalDataSourceImpl(get(), get()) }
+    factory<CameraUploadsLocalDataSource> { CameraUploadsLocalDataSourceImpl(get(), get(), get()) }
 }

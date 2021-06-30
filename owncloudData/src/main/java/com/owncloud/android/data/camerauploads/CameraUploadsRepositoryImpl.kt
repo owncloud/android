@@ -22,17 +22,29 @@ import com.owncloud.android.data.camerauploads.datasources.CameraUploadsLocalDat
 import com.owncloud.android.domain.camerauploads.CameraUploadsRepository
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import kotlinx.coroutines.flow.Flow
 
 class CameraUploadsRepositoryImpl(
     private val cameraUploadsLocalDataSource: CameraUploadsLocalDataSource
 ) : CameraUploadsRepository {
+
     override fun getCameraUploadsConfiguration(): CameraUploadsConfiguration? =
         cameraUploadsLocalDataSource.getCameraUploadsConfiguration()
 
-    override fun getPictureUploadsConfiguration(): FolderBackUpConfiguration.PictureUploadsConfiguration? =
-        cameraUploadsLocalDataSource.getPictureUploadsConfiguration()
+    override fun getPictureUploadsConfigurationStream(): Flow<FolderBackUpConfiguration.PictureUploadsConfiguration?> =
+        cameraUploadsLocalDataSource.getPictureUploadsConfigurationStream()
 
-    override fun getVideoUploadsConfiguration(): FolderBackUpConfiguration.VideoUploadsConfiguration? =
-        cameraUploadsLocalDataSource.getVideoUploadsConfiguration()
+    override fun getVideoUploadsConfigurationStream(): Flow<FolderBackUpConfiguration.VideoUploadsConfiguration?> =
+        cameraUploadsLocalDataSource.getVideoUploadsConfigurationStream()
+
+    override fun savePictureUploadConfiguration(pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration) {
+        cameraUploadsLocalDataSource.savePictureUploadsConfiguration(pictureUploadsConfiguration)
+    }
+
+    override fun saveVideoUploadConfiguration(videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration) {
+        cameraUploadsLocalDataSource.saveVideoUploadsConfiguration(videoUploadsConfiguration)
+    }
+
+    override fun resetPictureUpload() = cameraUploadsLocalDataSource.resetPictureUploads()
 
 }

@@ -20,14 +20,23 @@ package com.owncloud.android.data.camerauploads.datasources.implementation
 
 import com.owncloud.android.data.LocalStorageProvider
 import com.owncloud.android.data.camerauploads.datasources.CameraUploadsLocalDataSource
+import com.owncloud.android.data.camerauploads.db.CameraUploadsDao
+import com.owncloud.android.data.camerauploads.db.FolderBackUpEntity
+import com.owncloud.android.data.camerauploads.db.FolderBackUpEntity.Companion.pictureUploadsName
+import com.owncloud.android.data.camerauploads.db.FolderBackUpEntity.Companion.videoUploadsName
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.PictureUploadsConfiguration
+import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.VideoUploadsConfiguration
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.io.File
 
 class CameraUploadsLocalDataSourceImpl(
     private val sharedPreferencesProvider: SharedPreferencesProvider,
-    private val localStorageProvider: LocalStorageProvider
+    private val localStorageProvider: LocalStorageProvider,
+    private val cameraUploadsDao: CameraUploadsDao,
 ) : CameraUploadsLocalDataSource {
 
     override fun getCameraUploadsConfiguration(): CameraUploadsConfiguration? {
@@ -42,28 +51,58 @@ class CameraUploadsLocalDataSourceImpl(
         )
     }
 
-    override fun getPictureUploadsConfiguration(): FolderBackUpConfiguration.PictureUploadsConfiguration? {
+    override fun getPictureUploadsConfigurationStream(): Flow<PictureUploadsConfiguration?> =
+        cameraUploadsDao.getFolderBackUpConfigurationByNameStream(name = pictureUploadsName).map { it?.toModel() as? PictureUploadsConfiguration }
+
+    override fun getVideoUploadsConfigurationStream(): Flow<VideoUploadsConfiguration?> =
+        cameraUploadsDao.getFolderBackUpConfigurationByNameStream(name = videoUploadsName).map { it?.toModel() as? VideoUploadsConfiguration }
+
+    override fun savePictureUploadsConfiguration(pictureUploadsConfiguration: PictureUploadsConfiguration) {
+        cameraUploadsDao.update(pictureUploadsConfiguration.toEntity())
+    }
+
+    override fun saveVideoUploadsConfiguration(videoUploadsConfiguration: VideoUploadsConfiguration) {
+        cameraUploadsDao.insert(videoUploadsConfiguration.toEntity())
+    }
+
+    override fun resetPictureUploads() {
+        cameraUploadsDao.delete(pictureUploadsName)
+    }
+
+    private fun getPictureUploadsConfiguration(): PictureUploadsConfiguration? =
+        cameraUploadsDao.getFolderBackUpConfigurationByName(name = pictureUploadsName)
+            ?.toModel() as? PictureUploadsConfiguration
+
+    private fun getVideoUploadsConfiguration(): VideoUploadsConfiguration? =
+        cameraUploadsDao.getFolderBackUpConfigurationByName(name = videoUploadsName)
+            ?.toModel() as? VideoUploadsConfiguration
+
+    @Deprecated("Use dao instead of preferences to retrieve the configuration")
+    fun getPictureUploadsConfigurationPreferences(): PictureUploadsConfiguration? {
 
         if (!sharedPreferencesProvider.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)) return null
 
-        return FolderBackUpConfiguration.PictureUploadsConfiguration(
+        return PictureUploadsConfiguration(
             accountName = sharedPreferencesProvider.getString(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME, null) ?: "",
             wifiOnly = sharedPreferencesProvider.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY, false),
             uploadPath = getUploadPathForPreference(PREF__CAMERA_PICTURE_UPLOADS_PATH),
             sourcePath = getSourcePathForPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE),
-            behavior = getBehaviorForPreference(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)
+            behavior = getBehaviorForPreference(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR),
+            lastSyncTimestamp = 0
         )
     }
 
-    override fun getVideoUploadsConfiguration(): FolderBackUpConfiguration.VideoUploadsConfiguration? {
+    @Deprecated("Use dao instead of preferences to retrieve the configuration")
+    fun getVideoUploadsConfigurationPreferences(): VideoUploadsConfiguration? {
         if (!sharedPreferencesProvider.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false)) return null
 
-        return FolderBackUpConfiguration.VideoUploadsConfiguration(
+        return VideoUploadsConfiguration(
             accountName = sharedPreferencesProvider.getString(PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME, null) ?: "",
             wifiOnly = sharedPreferencesProvider.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY, false),
             uploadPath = getUploadPathForPreference(PREF__CAMERA_VIDEO_UPLOADS_PATH),
             sourcePath = getSourcePathForPreference(PREF__CAMERA_VIDEO_UPLOADS_SOURCE),
-            behavior = getBehaviorForPreference(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)
+            behavior = getBehaviorForPreference(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR),
+            lastSyncTimestamp = 0
         )
     }
 
@@ -83,6 +122,37 @@ class CameraUploadsLocalDataSourceImpl(
         val storedBehaviour = sharedPreferencesProvider.getString(keyPreference, null) ?: return FolderBackUpConfiguration.Behavior.COPY
 
         return FolderBackUpConfiguration.Behavior.fromString(storedBehaviour)
+    }
+
+    /**************************************************************************************************************
+     ************************************************* Mappers ****************************************************
+     **************************************************************************************************************/
+    private fun FolderBackUpEntity.toModel() = when (name) {
+        pictureUploadsName -> PictureUploadsConfiguration(
+            accountName = accountName,
+            behavior = FolderBackUpConfiguration.Behavior.fromString(behavior),
+            sourcePath = sourcePath,
+            uploadPath = uploadPath,
+            wifiOnly = wifiOnly,
+            lastSyncTimestamp = lastSyncTimestamp,
+        )
+        videoUploadsName -> VideoUploadsConfiguration(
+            accountName = accountName,
+            behavior = FolderBackUpConfiguration.Behavior.fromString(behavior),
+            sourcePath = sourcePath,
+            uploadPath = uploadPath,
+            wifiOnly = wifiOnly,
+            lastSyncTimestamp = lastSyncTimestamp,
+        )
+        else -> null
+    }
+
+    private fun FolderBackUpConfiguration.toEntity(): FolderBackUpEntity {
+        val name = when (this) {
+            is PictureUploadsConfiguration -> pictureUploadsName
+            is VideoUploadsConfiguration -> videoUploadsName
+        }
+        return FolderBackUpEntity(accountName, behavior.toString(), sourcePath, uploadPath, wifiOnly, name, lastSyncTimestamp)
     }
 
     companion object {

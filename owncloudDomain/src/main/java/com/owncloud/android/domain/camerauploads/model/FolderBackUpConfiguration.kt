@@ -21,9 +21,10 @@ package com.owncloud.android.domain.camerauploads.model
 sealed class FolderBackUpConfiguration(
     val accountName: String,
     val behavior: Behavior,
-    val sourcePath: String,
+    var sourcePath: String,
     val uploadPath: String,
     val wifiOnly: Boolean,
+    var lastSyncTimestamp: Long,
 ) {
     class PictureUploadsConfiguration(
         accountName: String,
@@ -31,7 +32,8 @@ sealed class FolderBackUpConfiguration(
         sourcePath: String,
         uploadPath: String,
         wifiOnly: Boolean,
-    ) : FolderBackUpConfiguration(accountName, behavior, sourcePath, uploadPath, wifiOnly)
+        lastSyncTimestamp: Long,
+    ) : FolderBackUpConfiguration(accountName, behavior, sourcePath, uploadPath, wifiOnly, lastSyncTimestamp)
 
     class VideoUploadsConfiguration(
         accountName: String,
@@ -39,7 +41,8 @@ sealed class FolderBackUpConfiguration(
         sourcePath: String,
         uploadPath: String,
         wifiOnly: Boolean,
-    ) : FolderBackUpConfiguration(accountName, behavior, sourcePath, uploadPath, wifiOnly)
+        lastSyncTimestamp: Long,
+    ) : FolderBackUpConfiguration(accountName, behavior, sourcePath, uploadPath, wifiOnly, lastSyncTimestamp)
 
     enum class Behavior {
         MOVE, COPY;

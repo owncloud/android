@@ -16,19 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.camerauploads.datasources
+package com.owncloud.android.domain.camerauploads.usecases
 
-import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.camerauploads.CameraUploadsRepository
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
-import kotlinx.coroutines.flow.Flow
 
-interface CameraUploadsLocalDataSource {
-    fun getCameraUploadsConfiguration(): CameraUploadsConfiguration?
-    fun getPictureUploadsConfigurationStream(): Flow<FolderBackUpConfiguration.PictureUploadsConfiguration?>
-    fun getVideoUploadsConfigurationStream(): Flow<FolderBackUpConfiguration.VideoUploadsConfiguration?>
+class SavePictureUploadsConfigurationUseCase(
+    private val cameraUploadsRepository: CameraUploadsRepository
+) : BaseUseCaseWithResult<Unit, SavePictureUploadsConfigurationUseCase.Params>() {
 
-    fun savePictureUploadsConfiguration(pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration)
-    fun saveVideoUploadsConfiguration(videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration)
+    override fun run(params: Params) =
+        cameraUploadsRepository.savePictureUploadConfiguration(params.pictureUploadsConfiguration)
 
-    fun resetPictureUploads()
+    data class Params(
+        val pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration
+    )
 }

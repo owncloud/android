@@ -20,9 +20,15 @@ package com.owncloud.android.domain.camerauploads
 
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import kotlinx.coroutines.flow.Flow
 
 interface CameraUploadsRepository {
     fun getCameraUploadsConfiguration(): CameraUploadsConfiguration?
-    fun getPictureUploadsConfiguration(): FolderBackUpConfiguration.PictureUploadsConfiguration?
-    fun getVideoUploadsConfiguration(): FolderBackUpConfiguration.VideoUploadsConfiguration?
+    fun getPictureUploadsConfigurationStream(): Flow<FolderBackUpConfiguration.PictureUploadsConfiguration?>
+    fun getVideoUploadsConfigurationStream(): Flow<FolderBackUpConfiguration.VideoUploadsConfiguration?>
+
+    fun savePictureUploadConfiguration(pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration)
+    fun saveVideoUploadConfiguration(videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration)
+
+    fun resetPictureUpload()
 }

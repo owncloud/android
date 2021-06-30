@@ -27,6 +27,10 @@ import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCas
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
+import com.owncloud.android.domain.camerauploads.usecases.GetPictureUploadsConfigurationStreamUseCase
+import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
+import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
+import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
@@ -85,4 +89,8 @@ val useCaseModule = module {
 
     // Camera Uploads
     factory { GetCameraUploadsConfigurationUseCase(get()) }
+    factory { SavePictureUploadsConfigurationUseCase(get()) }
+    factory { SaveVideoUploadsConfigurationUseCase(get()) }
+    factory { ResetPictureUploadsUseCase(get()) }
+    factory { GetPictureUploadsConfigurationStreamUseCase(get()) }
 }

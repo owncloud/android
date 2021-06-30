@@ -36,9 +36,11 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
 
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
     kapt "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
 
     kapt "org.xerial:sqlite-jdbc:3.34.0" // fix kapt for Apple Silicon https://stackoverflow.com/a/68285501/1079990
