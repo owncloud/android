@@ -60,7 +60,7 @@ class SettingsPictureUploadsViewModel(
         initPictureUploads()
     }
 
-    fun initPictureUploads() {
+    private fun initPictureUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             getPictureUploadsConfigurationStreamUseCase.execute(Unit).collect() { pictureUploadsConfiguration ->
                 _pictureUploads.postValue(pictureUploadsConfiguration)
@@ -79,6 +79,12 @@ class SettingsPictureUploadsViewModel(
         }
     }
 
+    fun disablePictureUploads() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            resetPictureUploadsUseCase.execute(Unit)
+        }
+    }
+
     fun useWifiOnly(wifiOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             savePictureUploadsConfigurationUseCase.execute(
@@ -86,12 +92,6 @@ class SettingsPictureUploadsViewModel(
                     composePictureUploadsConfiguration(wifiOnly = wifiOnly)
                 )
             )
-        }
-    }
-
-    fun disablePictureUploads() {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            resetPictureUploadsUseCase.execute(Unit)
         }
     }
 

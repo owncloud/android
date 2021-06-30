@@ -62,11 +62,15 @@ class CameraUploadsLocalDataSourceImpl(
     }
 
     override fun saveVideoUploadsConfiguration(videoUploadsConfiguration: VideoUploadsConfiguration) {
-        cameraUploadsDao.insert(videoUploadsConfiguration.toEntity())
+        cameraUploadsDao.update(videoUploadsConfiguration.toEntity())
     }
 
     override fun resetPictureUploads() {
         cameraUploadsDao.delete(pictureUploadsName)
+    }
+
+    override fun resetVideoUploads() {
+        cameraUploadsDao.delete(videoUploadsName)
     }
 
     private fun getPictureUploadsConfiguration(): PictureUploadsConfiguration? =

@@ -47,4 +47,6 @@ class CameraUploadsRepositoryImpl(
 
     override fun resetPictureUpload() = cameraUploadsLocalDataSource.resetPictureUploads()
 
+    override fun resetVideoUpload() = cameraUploadsLocalDataSource.resetVideoUploads()
+
 }

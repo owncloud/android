@@ -21,10 +21,10 @@ package com.owncloud.android.domain.camerauploads.usecases
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.CameraUploadsRepository
 
-class ResetPictureUploadsUseCase(
+class ResetVideoUploadsUseCase(
     private val cameraUploadsRepository: CameraUploadsRepository
 ) : BaseUseCase<Unit, Unit>() {
 
     override fun run(params: Unit) =
-        cameraUploadsRepository.resetPictureUpload()
+        cameraUploadsRepository.resetVideoUpload()
 }

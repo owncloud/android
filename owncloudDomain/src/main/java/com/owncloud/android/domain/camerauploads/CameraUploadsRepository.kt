@@ -31,4 +31,5 @@ interface CameraUploadsRepository {
     fun saveVideoUploadConfiguration(videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration)
 
     fun resetPictureUpload()
+    fun resetVideoUpload()
 }

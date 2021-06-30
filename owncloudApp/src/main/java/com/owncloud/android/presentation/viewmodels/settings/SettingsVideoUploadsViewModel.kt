@@ -22,98 +22,131 @@ package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE
 import com.owncloud.android.db.PreferenceManager.getDefaultCameraSourcePath
+import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.usecases.GetVideoUploadsConfigurationStreamUseCase
+import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
+import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
 import com.owncloud.android.providers.AccountProvider
-import com.owncloud.android.providers.CameraUploadsHandlerProvider
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.workers.CameraUploadsWorker
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.io.File
 
 class SettingsVideoUploadsViewModel(
-    private val preferencesProvider: SharedPreferencesProvider,
-    private val cameraUploadsHandlerProvider: CameraUploadsHandlerProvider,
-    private val accountProvider: AccountProvider
+    private val accountProvider: AccountProvider,
+    private val saveVideoUploadsConfigurationUseCase: SaveVideoUploadsConfigurationUseCase,
+    private val getVideoUploadsConfigurationStreamUseCase: GetVideoUploadsConfigurationStreamUseCase,
+    private val resetVideoUploadsUseCase: ResetVideoUploadsUseCase,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
-    fun isVideoUploadEnabled() =
-        preferencesProvider.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false)
+    private val _videoUploads: MutableLiveData<FolderBackUpConfiguration.VideoUploadsConfiguration?> = MutableLiveData()
+    val videoUploads: LiveData<FolderBackUpConfiguration.VideoUploadsConfiguration?> = _videoUploads
 
-    fun setEnableVideoUpload(value: Boolean) {
-        preferencesProvider.putBoolean(PREF__CAMERA_VIDEO_UPLOADS_ENABLED, value)
+    init {
+        initVideoUploads()
+    }
 
-        if (value) {
-            // Use current account as default. It should never be null. If no accounts are attached, video uploads are hidden
-            accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
-                preferencesProvider.putString(
-                    key = PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME,
-                    value = name
-                )
+    private fun initVideoUploads() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            getVideoUploadsConfigurationStreamUseCase.execute(Unit).collect() { videoUploadsConfiguration ->
+                _videoUploads.postValue(videoUploadsConfiguration)
             }
-        } else {
-            // Reset fields after disabling the feature
-            preferencesProvider.removePreference(key = PREF__CAMERA_VIDEO_UPLOADS_PATH)
-            preferencesProvider.removePreference(key = PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)
         }
     }
 
-    fun updateVideosLastSync() = cameraUploadsHandlerProvider.updateVideosLastSync(0)
+    fun enableVideoUploads() {
+        // Use current account as default. It should never be null. If no accounts are attached, video uploads are hidden
+        accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
+            viewModelScope.launch(coroutinesDispatcherProvider.io) {
+                saveVideoUploadsConfigurationUseCase.execute(
+                    SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(accountName = name))
+                )
+            }
+        }
+    }
 
-    fun getVideoUploadsAccount() = preferencesProvider.getString(
-        key = PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME,
-        defaultValue = null
-    )
+    fun disableVideoUploads() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            resetVideoUploadsUseCase.execute(Unit)
+        }
+    }
+
+    fun useWifiOnly(wifiOnly: Boolean) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            saveVideoUploadsConfigurationUseCase.execute(
+                SaveVideoUploadsConfigurationUseCase.Params(
+                    composeVideoUploadsConfiguration(wifiOnly = wifiOnly)
+                )
+            )
+        }
+    }
+
+    fun getVideoUploadsAccount() = _videoUploads.value?.accountName
 
     fun getLoggedAccountNames(): Array<String> = accountProvider.getLoggedAccounts().map { it.name }.toTypedArray()
 
-    fun getVideoUploadsPath() = preferencesProvider.getString(
-        key = PREF__CAMERA_VIDEO_UPLOADS_PATH,
-        defaultValue = PREF__CAMERA_UPLOADS_DEFAULT_PATH
-    )
+    fun getVideoUploadsPath() = _videoUploads.value?.uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH
 
-    fun getVideoUploadsSourcePath() = preferencesProvider.getString(
-        key = PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-        defaultValue = getDefaultCameraSourcePath()
-    )
+    fun getVideoUploadsSourcePath(): String = _videoUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
 
     fun handleSelectVideoUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
-            preferencesProvider.putString(
-                key = PREF__CAMERA_VIDEO_UPLOADS_PATH,
-                value = it
+            viewModelScope.launch(coroutinesDispatcherProvider.io) {
+                saveVideoUploadsConfigurationUseCase.execute(
+                    SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(uploadPath = it))
+                )
+            }
+        }
+    }
+
+    fun handleSelectAccount(accountName: String) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            saveVideoUploadsConfigurationUseCase.execute(
+                SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(accountName = accountName))
+            )
+        }
+    }
+
+    fun handleSelectBehaviour(behaviorString: String) {
+        val behavior = FolderBackUpConfiguration.Behavior.fromString(behaviorString)
+
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            saveVideoUploadsConfigurationUseCase.execute(
+                SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(behavior = behavior))
             )
         }
     }
 
     fun handleSelectVideoUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
-        var previousSourcePath = preferencesProvider.getString(
-            key = PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-            defaultValue = getDefaultCameraSourcePath()
-        )
+        var previousSourcePath = _videoUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
 
         previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)
 
-        if (previousSourcePath != contentUriForTree.encodedPath) {
-            val currentTimeStamp = System.currentTimeMillis()
-            cameraUploadsHandlerProvider.updateVideosLastSync(currentTimeStamp)
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            saveVideoUploadsConfigurationUseCase.execute(
+                SaveVideoUploadsConfigurationUseCase.Params(
+                    composeVideoUploadsConfiguration(
+                        sourcePath = contentUriForTree.toString(),
+                        timestamp = System.currentTimeMillis().takeIf { previousSourcePath != contentUriForTree.encodedPath }
+                    )
+                )
+            )
         }
-
-        preferencesProvider.putString(
-            key = PREF__CAMERA_VIDEO_UPLOADS_SOURCE,
-            value = contentUriForTree.toString()
-        )
     }
 
     fun scheduleVideoUploadsSyncJob() {
@@ -126,4 +159,21 @@ class SettingsVideoUploadsViewModel(
         WorkManager.getInstance()
             .enqueueUniquePeriodicWork(CameraUploadsWorker.CAMERA_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.REPLACE, cameraUploadsWorker)
     }
+
+    private fun composeVideoUploadsConfiguration(
+        accountName: String? = _videoUploads.value?.accountName,
+        uploadPath: String? = _videoUploads.value?.uploadPath,
+        wifiOnly: Boolean? = _videoUploads.value?.wifiOnly,
+        sourcePath: String? = _videoUploads.value?.sourcePath,
+        behavior: FolderBackUpConfiguration.Behavior? = _videoUploads.value?.behavior,
+        timestamp: Long? = _videoUploads.value?.lastSyncTimestamp
+    ): FolderBackUpConfiguration.VideoUploadsConfiguration =
+        FolderBackUpConfiguration.VideoUploadsConfiguration(
+            accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
+            behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
+            sourcePath = sourcePath ?: getDefaultCameraSourcePath(),
+            uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
+            wifiOnly = wifiOnly ?: false,
+            lastSyncTimestamp = timestamp ?: System.currentTimeMillis()
+        )
 }

@@ -168,7 +168,6 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             if (!sourcePath.endsWith(File.separator)) {
                 sourcePath += File.separator
             }
-            // Choose a directory using the system's file picker.
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     putExtra(DocumentsContract.EXTRA_INITIAL_URI, sourcePath)
