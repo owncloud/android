@@ -54,6 +54,9 @@ import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
+import com.owncloud.android.data.migrations.CameraUploadsMigrationToRoom
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
@@ -987,6 +990,43 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     // Drop quotas and avatars from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.USER_QUOTAS_TABLE_NAME + ";")
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.USER_AVATARS__TABLE_NAME + ";")
+                    db.setTransactionSuccessful()
+                    upgraded = true
+                } finally {
+                    db.endTransaction()
+                }
+            }
+
+            if (oldVersion < 34 && newVersion >= 34) {
+                Timber.i("SQL : Entering in the #34 Migrate old camera uploads configuration to room database")
+                db.beginTransaction()
+
+                var pictureUploadsTimestamp: Long = 0
+                var videoUploadsTimestamp: Long = 0
+
+                try {
+                    val cursor = db.query(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, null, null, null, null, null, null)
+
+                    if (cursor.moveToFirst()) {
+                        pictureUploadsTimestamp = cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP))
+                        videoUploadsTimestamp = cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP))
+                    }
+
+                    val sharedPreferencesProvider: SharedPreferencesProvider by inject()
+                    val migrationToRoom = CameraUploadsMigrationToRoom(sharedPreferencesProvider)
+
+                    val pictureUploadsConfiguration = migrationToRoom.getPictureUploadsConfigurationPreferences(pictureUploadsTimestamp)
+                    val videoUploadsConfiguration = migrationToRoom.getVideoUploadsConfigurationPreferences(videoUploadsTimestamp)
+
+                    val backupLocalDataSource: FolderBackupLocalDataSource by inject()
+                    // Insert camera uploads configuration in new database
+                    executors.diskIO().execute {
+                        pictureUploadsConfiguration?.let { backupLocalDataSource.saveFolderBackupConfiguration(it) }
+                        videoUploadsConfiguration?.let { backupLocalDataSource.saveFolderBackupConfiguration(it) }
+                    }
+
+                    // Drop camera uploads timestamps from old database
+                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME + ";")
                     db.setTransactionSuccessful()
                     upgraded = true
                 } finally {
