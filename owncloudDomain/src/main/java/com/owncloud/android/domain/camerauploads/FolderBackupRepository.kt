@@ -22,14 +22,12 @@ import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguratio
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import kotlinx.coroutines.flow.Flow
 
-interface CameraUploadsRepository {
+interface FolderBackupRepository {
     fun getCameraUploadsConfiguration(): CameraUploadsConfiguration?
-    fun getPictureUploadsConfigurationStream(): Flow<FolderBackUpConfiguration.PictureUploadsConfiguration?>
-    fun getVideoUploadsConfigurationStream(): Flow<FolderBackUpConfiguration.VideoUploadsConfiguration?>
 
-    fun savePictureUploadConfiguration(pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration)
-    fun saveVideoUploadConfiguration(videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration)
+    fun getFolderBackupConfigurationStreamByName(name: String): Flow<FolderBackUpConfiguration?>
 
-    fun resetPictureUpload()
-    fun resetVideoUpload()
+    fun saveFolderBackupConfiguration(folderBackUpConfiguration: FolderBackUpConfiguration)
+
+    fun resetFolderBackupConfigurationByName(name: String)
 }

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.camerauploads.db
+package com.owncloud.android.data.folderbackup.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -37,7 +37,5 @@ data class FolderBackUpEntity(
 
     companion object {
         internal const val folderBackUpEntityNameField = "name"
-        internal const val pictureUploadsName = "Picture uploads"
-        internal const val videoUploadsName = "Video uploads"
     }
 }

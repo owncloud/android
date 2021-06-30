@@ -19,8 +19,8 @@
 package com.owncloud.android.domain.camerauploads.model
 
 data class CameraUploadsConfiguration(
-    val pictureUploadsConfiguration: FolderBackUpConfiguration.PictureUploadsConfiguration?,
-    val videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration?
+    val pictureUploadsConfiguration: FolderBackUpConfiguration?,
+    val videoUploadsConfiguration: FolderBackUpConfiguration?
 ) {
     fun areCameraUploadsDisabled() = pictureUploadsConfiguration == null && videoUploadsConfiguration == null
 }

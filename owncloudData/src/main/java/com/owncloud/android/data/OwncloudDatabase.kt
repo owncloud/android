@@ -27,8 +27,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
-import com.owncloud.android.data.camerauploads.db.CameraUploadsDao
-import com.owncloud.android.data.camerauploads.db.FolderBackUpEntity
+import com.owncloud.android.data.folderbackup.db.FolderBackupDao
+import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.migrations.MIGRATION_27_28
@@ -57,7 +57,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
     abstract fun shareDao(): OCShareDao
     abstract fun capabilityDao(): OCCapabilityDao
     abstract fun userDao(): UserDao
-    abstract fun folderBackUpDao(): CameraUploadsDao
+    abstract fun folderBackUpDao(): FolderBackupDao
 
     companion object {
         @Volatile

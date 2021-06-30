@@ -33,6 +33,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
 import com.owncloud.android.domain.camerauploads.usecases.GetPictureUploadsConfigurationStreamUseCase
 import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
@@ -53,8 +54,8 @@ class SettingsPictureUploadsViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
-    private val _pictureUploads: MutableLiveData<FolderBackUpConfiguration.PictureUploadsConfiguration?> = MutableLiveData()
-    val pictureUploads: LiveData<FolderBackUpConfiguration.PictureUploadsConfiguration?> = _pictureUploads
+    private val _pictureUploads: MutableLiveData<FolderBackUpConfiguration?> = MutableLiveData()
+    val pictureUploads: LiveData<FolderBackUpConfiguration?> = _pictureUploads
 
     init {
         initPictureUploads()
@@ -167,13 +168,14 @@ class SettingsPictureUploadsViewModel(
         sourcePath: String? = _pictureUploads.value?.sourcePath,
         behavior: FolderBackUpConfiguration.Behavior? = _pictureUploads.value?.behavior,
         timestamp: Long? = _pictureUploads.value?.lastSyncTimestamp
-    ): FolderBackUpConfiguration.PictureUploadsConfiguration =
-        FolderBackUpConfiguration.PictureUploadsConfiguration(
+    ): FolderBackUpConfiguration =
+        FolderBackUpConfiguration(
             accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
             behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
             sourcePath = sourcePath ?: PreferenceManager.getDefaultCameraSourcePath(),
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
-            lastSyncTimestamp = timestamp ?: System.currentTimeMillis()
+            lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
+            name = _pictureUploads.value?.name ?: pictureUploadsName
         )
 }

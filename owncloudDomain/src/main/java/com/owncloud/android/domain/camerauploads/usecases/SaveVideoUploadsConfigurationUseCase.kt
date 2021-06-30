@@ -19,17 +19,17 @@
 package com.owncloud.android.domain.camerauploads.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.camerauploads.CameraUploadsRepository
+import com.owncloud.android.domain.camerauploads.FolderBackupRepository
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 
 class SaveVideoUploadsConfigurationUseCase(
-    private val cameraUploadsRepository: CameraUploadsRepository
+    private val folderBackupRepository: FolderBackupRepository
 ) : BaseUseCaseWithResult<Unit, SaveVideoUploadsConfigurationUseCase.Params>() {
 
     override fun run(params: Params) =
-        cameraUploadsRepository.saveVideoUploadConfiguration(params.videoUploadsConfiguration)
+        folderBackupRepository.saveFolderBackupConfiguration(params.videoUploadsConfiguration)
 
     data class Params(
-        val videoUploadsConfiguration: FolderBackUpConfiguration.VideoUploadsConfiguration
+        val videoUploadsConfiguration: FolderBackUpConfiguration
     )
 }

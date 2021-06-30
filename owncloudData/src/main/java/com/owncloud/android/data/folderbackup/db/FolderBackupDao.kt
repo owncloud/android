@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.camerauploads.db
+package com.owncloud.android.data.folderbackup.db
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -27,7 +27,7 @@ import com.owncloud.android.data.ProviderMeta
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class CameraUploadsDao {
+abstract class FolderBackupDao {
     @Query(
         "SELECT * from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
                 FolderBackUpEntity.folderBackUpEntityNameField + " = :name"

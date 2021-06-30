@@ -33,6 +33,7 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.db.PreferenceManager.getDefaultCameraSourcePath
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
 import com.owncloud.android.domain.camerauploads.usecases.GetVideoUploadsConfigurationStreamUseCase
 import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
@@ -52,8 +53,8 @@ class SettingsVideoUploadsViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
-    private val _videoUploads: MutableLiveData<FolderBackUpConfiguration.VideoUploadsConfiguration?> = MutableLiveData()
-    val videoUploads: LiveData<FolderBackUpConfiguration.VideoUploadsConfiguration?> = _videoUploads
+    private val _videoUploads: MutableLiveData<FolderBackUpConfiguration?> = MutableLiveData()
+    val videoUploads: LiveData<FolderBackUpConfiguration?> = _videoUploads
 
     init {
         initVideoUploads()
@@ -61,7 +62,7 @@ class SettingsVideoUploadsViewModel(
 
     private fun initVideoUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getVideoUploadsConfigurationStreamUseCase.execute(Unit).collect() { videoUploadsConfiguration ->
+            getVideoUploadsConfigurationStreamUseCase.execute(Unit).collect { videoUploadsConfiguration ->
                 _videoUploads.postValue(videoUploadsConfiguration)
             }
         }
@@ -167,13 +168,14 @@ class SettingsVideoUploadsViewModel(
         sourcePath: String? = _videoUploads.value?.sourcePath,
         behavior: FolderBackUpConfiguration.Behavior? = _videoUploads.value?.behavior,
         timestamp: Long? = _videoUploads.value?.lastSyncTimestamp
-    ): FolderBackUpConfiguration.VideoUploadsConfiguration =
-        FolderBackUpConfiguration.VideoUploadsConfiguration(
+    ): FolderBackUpConfiguration =
+        FolderBackUpConfiguration(
             accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
             behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
             sourcePath = sourcePath ?: getDefaultCameraSourcePath(),
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
-            lastSyncTimestamp = timestamp ?: System.currentTimeMillis()
+            lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
+            name = _videoUploads.value?.name ?: videoUploadsName
         )
 }

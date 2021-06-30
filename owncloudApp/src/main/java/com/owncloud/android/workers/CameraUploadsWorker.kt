@@ -117,9 +117,11 @@ class CameraUploadsWorker(
     private fun syncFolder(folderBackUpConfiguration: FolderBackUpConfiguration?) {
         if (folderBackUpConfiguration == null) return
 
-        val syncType = when (folderBackUpConfiguration) {
-            is FolderBackUpConfiguration.PictureUploadsConfiguration -> SyncType.PICTURE_UPLOADS
-            is FolderBackUpConfiguration.VideoUploadsConfiguration -> SyncType.VIDEO_UPLOADS
+        val syncType = when {
+            folderBackUpConfiguration.isPictureUploads -> SyncType.PICTURE_UPLOADS
+            folderBackUpConfiguration.isVideoUploads -> SyncType.VIDEO_UPLOADS
+            // Else should not happen for the moment. Maybe in upcoming features..
+            else -> SyncType.PICTURE_UPLOADS
         }
 
         val localPicturesDocumentFiles: List<DocumentFile> = getFilesReadyToUpload(

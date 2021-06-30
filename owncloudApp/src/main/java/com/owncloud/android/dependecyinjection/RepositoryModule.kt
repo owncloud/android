@@ -20,9 +20,9 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.data.authentication.repository.OCAuthenticationRepository
-import com.owncloud.android.data.camerauploads.CameraUploadsRepositoryImpl
 import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
 import com.owncloud.android.data.files.repository.OCFileRepository
+import com.owncloud.android.data.folderbackup.FolderBackupRepositoryImpl
 import com.owncloud.android.data.oauth.OAuthRepositoryImpl
 import com.owncloud.android.data.server.repository.OCServerInfoRepository
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
@@ -30,7 +30,7 @@ import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
 import com.owncloud.android.data.user.repository.OCUserRepository
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
-import com.owncloud.android.domain.camerauploads.CameraUploadsRepository
+import com.owncloud.android.domain.camerauploads.FolderBackupRepository
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.server.ServerInfoRepository
@@ -48,5 +48,5 @@ val repositoryModule = module {
     factory<ShareRepository> { OCShareRepository(get(), get()) }
     factory<UserRepository> { OCUserRepository(get(), get()) }
     factory<OAuthRepository> { OAuthRepositoryImpl(get()) }
-    factory<CameraUploadsRepository> { CameraUploadsRepositoryImpl(get()) }
+    factory<FolderBackupRepository> { FolderBackupRepositoryImpl(get()) }
 }
