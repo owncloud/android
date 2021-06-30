@@ -23,33 +23,10 @@ package com.owncloud.android.providers
 import android.content.Context
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.files.services.CameraUploadsHandler
 
 class CameraUploadsHandlerProvider(
     private val context: Context
 ) {
-    private val cameraUploadsHandler = CameraUploadsHandler(PreferenceManager.getCameraUploadsConfiguration())
-
-    fun updatePicturesLastSync(timestamp: Long) = cameraUploadsHandler.updatePicturesLastSync(context, timestamp)
-
-    fun updateVideosLastSync(timestamp: Long) = cameraUploadsHandler.updateVideosLastSync(context, timestamp)
-
-    fun schedulePictureUploadsSyncJob() {
-        val configuration = PreferenceManager.getCameraUploadsConfiguration()
-        if (configuration.pictureUploadsConfiguration != null) {
-            cameraUploadsHandler.setCameraUploadsConfig(configuration)
-            cameraUploadsHandler.scheduleCameraUploadsSyncJob(context)
-        }
-    }
-
-    fun scheduleVideoUploadsSyncJob() {
-        val configuration = PreferenceManager.getCameraUploadsConfiguration()
-        if (configuration.videoUploadsConfiguration != null) {
-            cameraUploadsHandler.setCameraUploadsConfig(configuration)
-            cameraUploadsHandler.scheduleCameraUploadsSyncJob(context)
-        }
-    }
-
     fun hasCameraUploadsAttached(accountName: String): Boolean {
         val cameraUploadsConfiguration = PreferenceManager.getCameraUploadsConfiguration()
 
