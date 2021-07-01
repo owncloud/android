@@ -250,8 +250,4 @@ public abstract class PreferenceManager {
     public static SharedPreferences getDefaultSharedPreferences(Context context) {
         return android.preference.PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
     }
-
-    public static String getDefaultCameraSourcePath() {
-        return FileStorageUtils.getDefaultCameraSourcePath();
-    }
 }

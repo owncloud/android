@@ -31,7 +31,6 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
-import com.owncloud.android.db.PreferenceManager.getDefaultCameraSourcePath
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
 import com.owncloud.android.domain.camerauploads.usecases.GetVideoUploadsConfigurationStreamUseCase
@@ -40,6 +39,7 @@ import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfig
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
+import com.owncloud.android.utils.FileStorageUtils.getDefaultCameraSourcePath
 import com.owncloud.android.workers.CameraUploadsWorker
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

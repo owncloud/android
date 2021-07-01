@@ -30,7 +30,6 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
@@ -40,6 +39,7 @@ import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConf
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
+import com.owncloud.android.utils.FileStorageUtils.getDefaultCameraSourcePath
 import com.owncloud.android.workers.CameraUploadsWorker
 import com.owncloud.android.workers.CameraUploadsWorker.Companion.CAMERA_UPLOADS_WORKER
 import kotlinx.coroutines.flow.collect
@@ -102,7 +102,7 @@ class SettingsPictureUploadsViewModel(
 
     fun getPictureUploadsPath() = _pictureUploads.value?.uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH
 
-    fun getPictureUploadsSourcePath(): String = _pictureUploads.value?.sourcePath ?: PreferenceManager.getDefaultCameraSourcePath()
+    fun getPictureUploadsSourcePath(): String = _pictureUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
 
     fun handleSelectPictureUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
@@ -135,7 +135,7 @@ class SettingsPictureUploadsViewModel(
 
     fun handleSelectPictureUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
-        var previousSourcePath = _pictureUploads.value?.sourcePath ?: PreferenceManager.getDefaultCameraSourcePath()
+        var previousSourcePath = _pictureUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
 
         previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)
 
@@ -172,7 +172,7 @@ class SettingsPictureUploadsViewModel(
         FolderBackUpConfiguration(
             accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
             behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
-            sourcePath = sourcePath ?: PreferenceManager.getDefaultCameraSourcePath(),
+            sourcePath = sourcePath ?: getDefaultCameraSourcePath(),
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
             lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
