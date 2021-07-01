@@ -202,9 +202,9 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
         videosViewModel.scheduleVideoUploads()
-        super.onStop()
+        super.onDestroy()
     }
 
     private fun enableVideoUploads(value: Boolean) {

@@ -202,9 +202,9 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
         picturesViewModel.schedulePictureUploads()
-        super.onStop()
+        super.onDestroy()
     }
 
     private fun enablePictureUploads(value: Boolean) {
