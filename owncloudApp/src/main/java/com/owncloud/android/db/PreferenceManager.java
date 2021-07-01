@@ -26,16 +26,8 @@ package com.owncloud.android.db;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.owncloud.android.domain.UseCaseResult;
-import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration;
-import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase;
 import com.owncloud.android.ui.activity.BiometricActivity;
 import com.owncloud.android.utils.FileStorageUtils;
-import kotlin.Lazy;
-import kotlin.Unit;
-import org.jetbrains.annotations.NotNull;
-
-import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Helper to simplify reading of Preferences all around the app
@@ -123,29 +115,6 @@ public abstract class PreferenceManager {
             editor.remove(PREF__LEGACY_CAMERA_UPLOADS_ACCOUNT_NAME);
         }
         editor.apply();
-    }
-
-    public static boolean cameraPictureUploadEnabled(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false);
-    }
-
-    public static boolean cameraVideoUploadEnabled(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false);
-    }
-
-    public static boolean cameraPictureUploadViaWiFiOnly(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY, false);
-    }
-
-    public static boolean cameraVideoUploadViaWiFiOnly(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY, false);
-    }
-
-    public static CameraUploadsConfiguration getCameraUploadsConfiguration() {
-        @NotNull Lazy<GetCameraUploadsConfigurationUseCase> cameraUploadsConfigurationUseCase = inject(GetCameraUploadsConfigurationUseCase.class);
-        UseCaseResult<CameraUploadsConfiguration> cameraUploadsConfigurationUseCaseResult =
-                cameraUploadsConfigurationUseCase.getValue().execute(Unit.INSTANCE);
-        return cameraUploadsConfigurationUseCaseResult.getDataOrNull();
     }
 
     /**

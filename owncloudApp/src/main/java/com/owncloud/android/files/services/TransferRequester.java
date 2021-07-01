@@ -37,9 +37,7 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
-import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
-import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration;
 import com.owncloud.android.usecases.UploadFileFromContentUriUseCase;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.Extras;
@@ -381,22 +379,8 @@ public class TransferRequester {
         // Get last upload to be retried
         OCUpload ocUpload = uploadsStorageManager.getLastUploadFor(new OCFile(remotePath), accountName);
 
-        CameraUploadsConfiguration cameraUploadsConfiguration = PreferenceManager.getCameraUploadsConfiguration();
-        boolean pictureUploadsWifiOnly = cameraUploadsConfiguration.getPictureUploadsConfiguration() != null &&
-                cameraUploadsConfiguration.getPictureUploadsConfiguration().getWifiOnly();
-        boolean videoUploadsWifiOnly = cameraUploadsConfiguration.getVideoUploadsConfiguration() != null &&
-                cameraUploadsConfiguration.getVideoUploadsConfiguration().getWifiOnly();
-
         // Wifi by default
         int networkType = JobInfo.NETWORK_TYPE_UNMETERED;
-
-        if (ocUpload != null && (ocUpload.getCreatedBy() == CREATED_AS_CAMERA_UPLOAD_PICTURE &&
-                !pictureUploadsWifiOnly || ocUpload.getCreatedBy() == CREATED_AS_CAMERA_UPLOAD_VIDEO &&
-                !videoUploadsWifiOnly)) {
-
-            // Wifi or cellular
-            networkType = JobInfo.NETWORK_TYPE_ANY;
-        }
 
         return networkType;
     }

@@ -209,18 +209,6 @@
             android:name=".ui.activity.WhatsNewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
-
-        <receiver
-            android:name=".broadcastreceivers.ConnectivityActionReceiver"
-            android:enabled="true"
-            android:label="ConnectivityActionReceiver">
-            <intent-filter>
-
-                <!-- action android:name="android.net.conn.CONNECTIVITY_CHANGE"/ -->
-                <action android:name="android.net.wifi.STATE_CHANGE" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".ui.activity.CopyToClipboardActivity"
             android:icon="@drawable/copy_link"

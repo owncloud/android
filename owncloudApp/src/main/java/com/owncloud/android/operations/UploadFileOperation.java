@@ -281,12 +281,6 @@ public class UploadFileOperation extends SyncOperation {
 
         try {
 
-            /// Check that connectivity conditions are met and delays the upload otherwise
-            if (delayForWifi()) {
-                Timber.d("Upload delayed until WiFi is available: %s", getRemotePath());
-                return new RemoteOperationResult(ResultCode.DELAYED_FOR_WIFI);
-            }
-
             /// check if the file continues existing before schedule the operation
             if (!originalFile.exists()) {
                 Timber.d("%s not exists anymore", mOriginalStoragePath);
@@ -467,25 +461,6 @@ public class UploadFileOperation extends SyncOperation {
             }
             getStorageManager().triggerMediaScan(expectedFile.getAbsolutePath());
         }
-    }
-
-    /**
-     * Checks origin of current upload and network type to decide if should be delayed, according to
-     * current user preferences.
-     *
-     * @return 'True' if the upload was delayed until WiFi connectivity is available, 'false' otherwise.
-     */
-    private boolean delayForWifi() {
-        boolean delayCameraUploadsPicture = (
-                isCameraUploadsPicture() && PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext)
-        );
-        boolean delayCameraUploadsVideo = (
-                isCameraUploadsVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext)
-        );
-        return (
-                (delayCameraUploadsPicture || delayCameraUploadsVideo) &&
-                        !ConnectivityUtils.isAppConnectedViaWiFi(mContext)
-        );
     }
 
     /**
