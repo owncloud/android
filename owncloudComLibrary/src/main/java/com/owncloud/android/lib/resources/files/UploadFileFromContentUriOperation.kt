@@ -2,6 +2,7 @@ package com.owncloud.android.lib.resources.files
 
 import android.content.ContentResolver
 import android.net.Uri
+import android.provider.OpenableColumns
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.PutMethod
@@ -57,6 +58,14 @@ class ContentUriRequestBody(
     override fun contentType(): MediaType? {
         val contentType = contentResolver.getType(contentUri) ?: return null
         return contentType.toMediaTypeOrNull()
+    }
+
+    override fun contentLength(): Long {
+        contentResolver.query(contentUri, null, null, null, null)?.use { cursor ->
+            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+            cursor.moveToFirst()
+            return cursor.getLong(sizeIndex)
+        } ?: return -1
     }
 
     override fun writeTo(sink: BufferedSink) {
