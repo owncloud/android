@@ -203,7 +203,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     }
 
     override fun onStop() {
-        videosViewModel.scheduleVideoUploadsSyncJob()
+        videosViewModel.scheduleVideoUploads()
         super.onStop()
     }
 

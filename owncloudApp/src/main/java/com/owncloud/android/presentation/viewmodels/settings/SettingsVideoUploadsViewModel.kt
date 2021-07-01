@@ -26,9 +26,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
@@ -38,9 +35,9 @@ import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCa
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.FileStorageUtils.getDefaultCameraSourcePath
-import com.owncloud.android.workers.CameraUploadsWorker
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.File
@@ -50,7 +47,8 @@ class SettingsVideoUploadsViewModel(
     private val saveVideoUploadsConfigurationUseCase: SaveVideoUploadsConfigurationUseCase,
     private val getVideoUploadsConfigurationStreamUseCase: GetVideoUploadsConfigurationStreamUseCase,
     private val resetVideoUploadsUseCase: ResetVideoUploadsUseCase,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val workManagerProvider: WorkManagerProvider,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private val _videoUploads: MutableLiveData<FolderBackUpConfiguration?> = MutableLiveData()
@@ -150,15 +148,8 @@ class SettingsVideoUploadsViewModel(
         }
     }
 
-    fun scheduleVideoUploadsSyncJob() {
-        val cameraUploadsWorker = PeriodicWorkRequestBuilder<CameraUploadsWorker>(
-            repeatInterval = CameraUploadsWorker.repeatInterval,
-            repeatIntervalTimeUnit = CameraUploadsWorker.repeatIntervalTimeUnit
-        ).addTag(CameraUploadsWorker.CAMERA_UPLOADS_WORKER)
-            .build()
-
-        WorkManager.getInstance()
-            .enqueueUniquePeriodicWork(CameraUploadsWorker.CAMERA_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.REPLACE, cameraUploadsWorker)
+    fun scheduleVideoUploads() {
+        workManagerProvider.enqueueCameraUploadsWorker()
     }
 
     private fun composeVideoUploadsConfiguration(

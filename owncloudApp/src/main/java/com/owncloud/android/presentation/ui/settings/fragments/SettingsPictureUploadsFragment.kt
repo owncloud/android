@@ -203,7 +203,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     }
 
     override fun onStop() {
-        picturesViewModel.schedulePictureUploadsSyncJob()
+        picturesViewModel.schedulePictureUploads()
         super.onStop()
     }
 

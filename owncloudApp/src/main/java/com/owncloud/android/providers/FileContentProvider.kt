@@ -1023,8 +1023,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     executors.diskIO().execute {
                         pictureUploadsConfiguration?.let { backupLocalDataSource.saveFolderBackupConfiguration(it) }
                         videoUploadsConfiguration?.let { backupLocalDataSource.saveFolderBackupConfiguration(it) }
+                        if (pictureUploadsConfiguration != null || videoUploadsConfiguration != null) {
+                            val workManagerProvider: WorkManagerProvider by inject()
+                            workManagerProvider.enqueueCameraUploadsWorker()
+                        }
                     }
-
+                    cursor.close()
                     // Drop camera uploads timestamps from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME + ";")
                     db.setTransactionSuccessful()
