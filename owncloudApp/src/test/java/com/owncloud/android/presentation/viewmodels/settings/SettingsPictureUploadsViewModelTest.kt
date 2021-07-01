@@ -21,38 +21,39 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
+import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.usecases.GetPictureUploadsConfigurationStreamUseCase
+import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
+import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.AccountProvider
-import com.owncloud.android.providers.CameraUploadsHandlerProvider
+import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.ui.activity.UploadPathActivity
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.resetMain
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
+import org.koin.core.context.stopKoin
 
+@Ignore("TODO")
 @ExperimentalCoroutinesApi
 class SettingsPictureUploadsViewModelTest : ViewModelTest() {
     private lateinit var picturesViewModel: SettingsPictureUploadsViewModel
-    private lateinit var preferencesProvider: SharedPreferencesProvider
-    private lateinit var cameraUploadsHandlerProvider: CameraUploadsHandlerProvider
     private lateinit var accountProvider: AccountProvider
+    private lateinit var workManagerProvider: WorkManagerProvider
+
+    private lateinit var savePictureUploadsConfigurationUseCase: SavePictureUploadsConfigurationUseCase
+    private lateinit var getPictureUploadsConfigurationStreamUseCase: GetPictureUploadsConfigurationStreamUseCase
+    private lateinit var resetPictureUploadsUseCase: ResetPictureUploadsUseCase
 
     private val examplePath = "/Example/Path"
     private val exampleSourcePath = "/Example/Source/Path"
@@ -60,112 +61,76 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
 
     @Before
     fun setUp() {
-        preferencesProvider = mockk(relaxUnitFun = true)
-        cameraUploadsHandlerProvider = mockk(relaxUnitFun = true)
         accountProvider = mockk()
+        workManagerProvider = mockk()
+        savePictureUploadsConfigurationUseCase = mockk()
+        getPictureUploadsConfigurationStreamUseCase = mockk()
+        resetPictureUploadsUseCase = mockk()
 
         picturesViewModel = SettingsPictureUploadsViewModel(
-            preferencesProvider,
-            cameraUploadsHandlerProvider,
-            accountProvider
+            accountProvider,
+            savePictureUploadsConfigurationUseCase,
+            getPictureUploadsConfigurationStreamUseCase,
+            resetPictureUploadsUseCase,
+            workManagerProvider,
+            coroutineDispatcherProvider,
         )
     }
 
     @After
     override fun tearDown() {
         super.tearDown()
+        Dispatchers.resetMain()
+        testCoroutineDispatcher.cleanupTestCoroutines()
+
+        stopKoin()
+        unmockkAll()
     }
 
     @Test
-    fun `is picture upload enabled - ok - true`() {
-        every { preferencesProvider.getBoolean(any(), any()) } returns true
-
-        val pictureUploadEnabled = picturesViewModel.isPictureUploadEnabled()
-
-        assertTrue(pictureUploadEnabled)
-
-        verify(exactly = 1) {
-            preferencesProvider.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
-        }
-    }
-
-    @Test
-    fun `is picture upload enabled - ok - false`() {
-        every { preferencesProvider.getBoolean(any(), any()) } returns false
-
-        val pictureUploadEnabled = picturesViewModel.isPictureUploadEnabled()
-
-        assertFalse(pictureUploadEnabled)
-
-        verify(exactly = 1) {
-            preferencesProvider.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
-        }
-    }
-
-    @Test
-    fun `set enable picture upload - ok - true`() {
+    fun `enable picture upload - ok`() {
         every { accountProvider.getCurrentOwnCloudAccount() } returns OC_ACCOUNT
 
-        picturesViewModel.setEnablePictureUpload(true)
+        picturesViewModel.enablePictureUploads()
 
         verify(exactly = 1) {
-            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME, OC_ACCOUNT.name)
-            preferencesProvider.putBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, true)
+            savePictureUploadsConfigurationUseCase.execute(any())
         }
     }
 
     @Test
-    fun `set enable picture upload - ok - false`() {
-        picturesViewModel.setEnablePictureUpload(false)
+    fun `disable picture upload - ok`() {
+        picturesViewModel.disablePictureUploads()
 
         verify(exactly = 1) {
-            preferencesProvider.putBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
-            preferencesProvider.removePreference(key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)
-            preferencesProvider.removePreference(key = PREF__CAMERA_PICTURE_UPLOADS_PATH)
+            resetPictureUploadsUseCase.execute(any())
         }
     }
 
     @Test
-    fun `update pictures last sync - ok`() {
-        picturesViewModel.updatePicturesLastSync()
+    fun `enable only wifi - ok`() {
+        picturesViewModel.useWifiOnly(true)
 
         verify(exactly = 1) {
-            cameraUploadsHandlerProvider.updatePicturesLastSync(0)
+            savePictureUploadsConfigurationUseCase.execute(any())
         }
     }
 
     @Test
-    fun `get picture uploads path - ok`() {
-        every { preferencesProvider.getString(any(), any()) } returns examplePath
-
-        val uploadPath = picturesViewModel.getPictureUploadsPath()
-
-        assertEquals(examplePath, uploadPath)
+    fun `select account - ok`() {
+        picturesViewModel.handleSelectAccount(OC_ACCOUNT.name)
 
         verify(exactly = 1) {
-            preferencesProvider.getString(
-                PREF__CAMERA_PICTURE_UPLOADS_PATH,
-                PREF__CAMERA_UPLOADS_DEFAULT_PATH
-            )
+            savePictureUploadsConfigurationUseCase.execute(any())
         }
     }
 
     @Test
-    fun `get picture uploads source path - ok`() {
-        mockkStatic(PreferenceManager::class)
-
-        every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
-        every { PreferenceManager.getDefaultCameraSourcePath() } returns ""
-
-        val uploadSourcePath = picturesViewModel.getPictureUploadsSourcePath()
-
-        assertEquals(exampleSourcePath, uploadSourcePath)
+    fun `select behavior - ok`() {
+        picturesViewModel.handleSelectBehaviour(FolderBackUpConfiguration.Behavior.MOVE.toString())
 
         verify(exactly = 1) {
-            preferencesProvider.getString(
-                PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-                PreferenceManager.getDefaultCameraSourcePath()
-            )
+            savePictureUploadsConfigurationUseCase.execute(any())
         }
     }
 
@@ -182,78 +147,24 @@ class SettingsPictureUploadsViewModelTest : ViewModelTest() {
         verify(exactly = 1) {
             data.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
             ocFile.remotePath
-            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_PATH, exampleRemotePath)
+            savePictureUploadsConfigurationUseCase.execute(any())
         }
     }
 
-    @Test
-    fun `handle select picture uploads path - ko - folder to upload is null`() {
-        val data: Intent = mockk()
-
-        every { data.getParcelableExtra<OCFile>(any()) } returns null
-
-        picturesViewModel.handleSelectPictureUploadsPath(data)
-
-        verify(exactly = 1) {
-            data.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
-        }
-    }
-
-    @Ignore("Needs to be fixed after local picker removal")
     @Test
     fun `handle select picture uploads source path - ok - source path hasn't changed`() {
-        val data: Intent = mockk()
-        mockkStatic(PreferenceManager::class)
-
-        every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
-        // It has to be "" for the test to pass
-        every { PreferenceManager.getDefaultCameraSourcePath() } returns ""
-        every { data.getStringExtra(any()) } returns exampleSourcePath
-
-//        picturesViewModel.handleSelectPictureUploadsSourcePath(data)
-//
-//        verify(exactly = 2) {
-//            data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
-//        }
-        verify(exactly = 1) {
-            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_SOURCE, exampleSourcePath)
-        }
     }
 
-    @Ignore("Needs to be fixed after local picker removal")
     @Test
     fun `handle select picture uploads source path - ok - source path has changed`() {
-        val data: Intent = mockk()
-        val sourcePath = "/New/Source/Path"
-        mockkStatic(PreferenceManager::class)
-
-        every { preferencesProvider.getString(any(), any()) } returns exampleSourcePath
-        // It has to be "" for the test to pass
-        every { PreferenceManager.getDefaultCameraSourcePath() } returns ""
-        every { data.getStringExtra(any()) } returns sourcePath
-
-//        picturesViewModel.handleSelectPictureUploadsSourcePath(data)
-
-        every { preferencesProvider.getString(any(), any()) } returns sourcePath
-
-        val newSourcePath = picturesViewModel.getPictureUploadsSourcePath()
-        assertEquals(sourcePath, newSourcePath)
-
-//        verify(exactly = 2) {
-//            data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)
-//        }
-        verify(exactly = 1) {
-            cameraUploadsHandlerProvider.updatePicturesLastSync(any())
-            preferencesProvider.putString(PREF__CAMERA_PICTURE_UPLOADS_SOURCE, sourcePath)
-        }
     }
 
     @Test
     fun `schedule picture uploads sync job - ok`() {
-        picturesViewModel.schedulePictureUploadsSyncJob()
+        picturesViewModel.schedulePictureUploads()
 
         verify(exactly = 1) {
-            cameraUploadsHandlerProvider.schedulePictureUploadsSyncJob()
+            workManagerProvider.enqueueCameraUploadsWorker()
         }
     }
 }
