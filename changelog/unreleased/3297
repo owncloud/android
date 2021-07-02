@@ -1,0 +1,6 @@
+Enhancement: Note icon in music player to be branded
+
+The note icon in the music player will have the same color as the toolbar,
+so branded apps can have the icon tinted using their custom theme.
+
+https://github.com/owncloud/android/issues/3272 https://github.com/owncloud/android/pull/3297
