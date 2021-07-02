@@ -17,8 +17,6 @@ buildscript {
         kotlinVersion = "1.5.10"
         coroutinesVersion = "1.5.0-native-mt"
 
-        // Koin
-        koinVersion = "2.1.5"
         mockkVersion = '1.11.0'
 
         // Testing
