@@ -45,4 +45,12 @@ class SettingsMoreViewModel(
     fun isImprintEnabled() = contextProvider.getBoolean(R.bool.imprint_enabled)
 
     fun getImprintUrl() = contextProvider.getString(R.string.url_imprint)
+
+    fun shouldMoreSectionBeVisible() =
+        isHelpEnabled() ||
+                isSyncEnabled() ||
+                isRecommendEnabled() ||
+                isFeedbackEnabled() ||
+                isImprintEnabled() ||
+                isPrivacyPolicyEnabled()
 }
