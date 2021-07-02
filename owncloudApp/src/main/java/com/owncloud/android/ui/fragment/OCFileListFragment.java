@@ -54,21 +54,27 @@ import androidx.appcompat.widget.SearchView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.work.WorkManager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.ThrowableExtKt;
+import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView;
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
 import com.owncloud.android.presentation.ui.files.SortOptionsView;
 import com.owncloud.android.presentation.ui.files.SortOrder;
 import com.owncloud.android.presentation.ui.files.SortType;
 import com.owncloud.android.presentation.ui.files.ViewType;
+import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FileListOption;
@@ -76,8 +82,7 @@ import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
-import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.ui.helpers.SparseBooleanArrayParcelable;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
@@ -86,12 +91,15 @@ import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
+import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.koin.java.KoinJavaComponent.get;
 
 /**
  * A Fragment that lists all files and folders in a given path.
@@ -100,7 +108,7 @@ import java.util.List;
  */
 public class OCFileListFragment extends ExtendedListFragment implements
         SearchView.OnQueryTextListener, View.OnFocusChangeListener, SortOptionsView.SortOptionsListener,
-        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener {
+        SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener, CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
@@ -399,7 +407,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
      */
     private void registerFabMkDirListeners() {
         getFabMkdir().setOnClickListener(v -> {
-            CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+            CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile, this);
             dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
             getFabMain().collapse();
             recordMiniFabClick();
@@ -499,8 +507,28 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     @Override
     public void onCreateFolderListener() {
-        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile, this::onFolderNameSet);
         dialog.show(requireActivity().getSupportFragmentManager(), DIALOG_CREATE_FOLDER);
+
+    }
+
+    @Override
+    public void onFolderNameSet(@NotNull String newFolderName, @NotNull OCFile parentFolder) {
+        FilesViewModel filesViewModel = get(FilesViewModel.class);
+
+        filesViewModel.createFolder(parentFolder, newFolderName);
+        filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
+            UIResult<Unit> uiResult = uiResultEvent.peekContent();
+            if (uiResult.isSuccess()) {
+                listDirectory(true);
+            } else {
+                Throwable throwable = uiResult.getThrowableOrNull();
+                CharSequence errorMessage = ThrowableExtKt.parseError(throwable, getResources().getString(R.string.create_dir_fail_msg),
+                        getResources(), false);
+                showSnackMessage(errorMessage.toString());
+            }
+
+        });
     }
 
     /**
@@ -761,11 +789,12 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
 
-            if (mFileListOption.isAvailableOffline() && !parentDir.isAvailableOffline()) {
-                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
-            }
+            // FIXME: 13/10/2020 : New_arch: Av.Offline
+//            if (mFileListOption.isAvailableOffline() && !parentDir.isAvailableOffline()) {
+//                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
+//            }
 
-            if (mFileListOption.isSharedByLink() && !parentDir.isSharedViaLink()) {
+            if (mFileListOption.isSharedByLink() && !parentDir.getSharedByLink()) {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
             }
 
@@ -856,9 +885,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
                 } else if (PreviewVideoFragment.canBePreviewed(file) &&
                         !fileIsDownloading(file)) {
-
+                    // FIXME: 13/10/2020 : New_arch: Av.Offline
                     // Available offline exception, don't initialize streaming
-                    if (!file.isDown() && file.isAvailableOffline()) {
+                    // if (!file.isAvailableLocally() && file.isAvailableOffline()) {
+                    if (file.isAvailableLocally()) {
                         // sync file content, then open with external apps
                         ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
                     } else {
@@ -868,7 +898,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
                     // If the file is already downloaded sync it, just to update it if there is a
                     // new available file version
-                    if (file.isDown()) {
+                    if (file.isAvailableLocally()) {
                         mContainerActivity.getFileOperationsHelper().syncFile(file);
                     }
                 } else {
@@ -888,8 +918,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * @return 'true' if the file is being downloaded, 'false' otherwise.
      */
     private boolean fileIsDownloading(OCFile file) {
-        return mContainerActivity.getFileDownloaderBinder().isDownloading(
-                ((FileActivity) mContainerActivity).getAccount(), file);
+        return WorkManagerExtKt.isDownloadPending(
+                WorkManager.getInstance(getContext()),
+                ((FileActivity) mContainerActivity).getAccount(),
+                file
+        );
     }
 
     public void selectAll() {
@@ -941,7 +974,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 }
                 case R.id.action_send_file: {
                     // Obtain the file
-                    if (!singleFile.isDown()) {  // Download the file
+                    if (!singleFile.isAvailableLocally()) {  // Download the file
                         Timber.d("%s : File must be downloaded", singleFile.getRemotePath());
                         ((FileDisplayActivity) mContainerActivity).startDownloadForSending(singleFile);
 
@@ -1198,8 +1231,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
             SharedPreferences setting =
                     requireActivity().getSharedPreferences(GRID_IS_PREFERED_PREFERENCE, Context.MODE_PRIVATE);
 
-            if (setting.contains(String.valueOf(fileToTest.getFileId()))) {
-                return setting.getBoolean(String.valueOf(fileToTest.getFileId()), false);
+            if (setting.contains(String.valueOf(fileToTest.getId()))) {
+                return setting.getBoolean(String.valueOf(fileToTest.getId()), false);
             } else {
                 do {
                     if (fileToTest.getParentId() != FileDataStorageManager.ROOT_PARENT_ID) {
@@ -1219,7 +1252,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     }
                     fileToTest = parentDir;
                 } while (endWhile(parentDir, setting));
-                return setting.getBoolean(String.valueOf(fileToTest.getFileId()), false);
+                return setting.getBoolean(String.valueOf(fileToTest.getId()), false);
             }
         } else {
             return false;
@@ -1230,7 +1263,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (parentDir.getRemotePath().compareToIgnoreCase(OCFile.ROOT_PATH) == 0) {
             return false;
         } else {
-            return !setting.contains(String.valueOf(parentDir.getFileId()));
+            return !setting.contains(String.valueOf(parentDir.getId()));
         }
     }
 
@@ -1250,7 +1283,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         );
 
         SharedPreferences.Editor editor = setting.edit();
-        editor.putBoolean(String.valueOf(mFile.getFileId()), setGrid);
+        editor.putBoolean(String.valueOf(mFile.getId()), setGrid);
         editor.apply();
     }
 
@@ -1260,6 +1293,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * @param messageResource Message to show.
      */
     private void showSnackMessage(int messageResource) {
+        Snackbar snackbar = Snackbar.make(
+                requireActivity().findViewById(R.id.coordinator_layout),
+                messageResource,
+                Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
+    }
+
+    private void showSnackMessage(String messageResource) {
         Snackbar snackbar = Snackbar.make(
                 requireActivity().findViewById(R.id.coordinator_layout),
                 messageResource,

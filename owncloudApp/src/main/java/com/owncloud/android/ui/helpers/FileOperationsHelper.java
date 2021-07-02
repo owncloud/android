@@ -33,19 +33,23 @@ import android.webkit.MimeTypeMap;
 
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
-import com.owncloud.android.files.services.AvailableOfflineHandler;
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import com.owncloud.android.usecases.transfers.CancelDownloadForFileUseCase;
+import com.owncloud.android.utils.UriUtilsKt;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.util.Collection;
 import java.util.List;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 public class FileOperationsHelper {
 
@@ -66,8 +70,8 @@ public class FileOperationsHelper {
 
             Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
             intentForSavedMimeType.setDataAndType(
-                    file.getExposedFileUri(mFileActivity),
-                    file.getMimetype()
+                    UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, file),
+                    file.getMimeType()
             );
 
             intentForSavedMimeType.setFlags(
@@ -79,10 +83,10 @@ public class FileOperationsHelper {
                 String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
                         storagePath.substring(storagePath.lastIndexOf('.') + 1)
                 );
-                if (guessedMimeType != null && !guessedMimeType.equals(file.getMimetype())) {
+                if (guessedMimeType != null && !guessedMimeType.equals(file.getMimeType())) {
                     intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
                     intentForGuessedMimeType.setDataAndType(
-                            file.getExposedFileUri(mFileActivity),
+                            UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, file),
                             guessedMimeType
                     );
                     intentForGuessedMimeType.setFlags(
@@ -102,7 +106,7 @@ public class FileOperationsHelper {
             List<ResolveInfo> launchables = mFileActivity.getPackageManager().
                     queryIntentActivities(openFileWithIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-            if (launchables != null && launchables.size() > 0) {
+            if (launchables.size() > 0) {
                 try {
                     mFileActivity.startActivity(
                             Intent.createChooser(
@@ -184,10 +188,10 @@ public class FileOperationsHelper {
         if (file != null) {
             Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
             // set MimeType
-            sendIntent.setType(file.getMimetype());
+            sendIntent.setType(file.getMimeType());
             sendIntent.putExtra(
                     Intent.EXTRA_STREAM,
-                    file.getExposedFileUri(mFileActivity)
+                    UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, file)
             );
             sendIntent.putExtra(Intent.ACTION_SEND, true);      // Send Action
 
@@ -251,90 +255,40 @@ public class FileOperationsHelper {
     }
 
     public void toggleAvailableOffline(OCFile file, boolean isAvailableOffline) {
-        if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT == file.getAvailableOfflineStatus()) {
-            /// files descending of an av-offline folder can't be toggled
-            mFileActivity.showSnackMessage(
-                    mFileActivity.getString(R.string.available_offline_inherited_msg)
-            );
+        // FIXME: 13/10/2020 : New_arch: Av.Offline
 
-        } else {
-            /// update local property, for file and all its descendents (if folder)
-            OCFile.AvailableOfflineStatus targetAvailableOfflineStatus = isAvailableOffline ?
-                    OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE :
-                    OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
-            file.setAvailableOfflineStatus(targetAvailableOfflineStatus);
-            boolean success = mFileActivity.getStorageManager().saveLocalAvailableOfflineStatus(file);
-
-            if (success) {
-                // Schedule job to check to watch for local changes in available offline files and sync them
-                AvailableOfflineHandler availableOfflineHandler = new AvailableOfflineHandler(mFileActivity);
-                availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
-
-                /// immediate content synchronization
-                if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE == file.getAvailableOfflineStatus()) {
-                    syncFile(file);
-                } else {
-                    cancelTransference(file);
-                }
-            } else {
-                /// unexpected error
-                mFileActivity.showSnackMessage(
-                        mFileActivity.getString(R.string.common_error_unknown)
-                );
-            }
-        }
-    }
-
-    public void renameFile(OCFile file, String newFilename) {
-        // RenameFile
-        Intent service = new Intent(mFileActivity, OperationsService.class);
-        service.setAction(OperationsService.ACTION_RENAME);
-        service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-        service.putExtra(OperationsService.EXTRA_NEWNAME, newFilename);
-        mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-
-        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-    }
-
-    /**
-     * Start operations to delete one or several files
-     *
-     * @param files         Files to delete
-     * @param onlyLocalCopy When 'true' only local copy of the files is removed; otherwise files are also deleted
-     *                      in the server.
-     */
-    public void removeFiles(Collection<OCFile> files, boolean onlyLocalCopy) {
-        int countOfFilesToRemove = 0;
-        boolean isLastFileToRemove = false;
-        for (OCFile file : files) {
-            countOfFilesToRemove++;
-            // RemoveFile
-            Intent service = new Intent(mFileActivity, OperationsService.class);
-            service.setAction(OperationsService.ACTION_REMOVE);
-            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            service.putExtra(OperationsService.EXTRA_REMOVE_ONLY_LOCAL, onlyLocalCopy);
-            if (countOfFilesToRemove == files.size()) {
-                isLastFileToRemove = true;
-            }
-            service.putExtra(OperationsService.EXTRA_IS_LAST_FILE_TO_REMOVE, isLastFileToRemove);
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-        }
-
-        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-    }
-
-    public void createFolder(String remotePath, boolean createFullPath) {
-        // Create Folder
-        Intent service = new Intent(mFileActivity, OperationsService.class);
-        service.setAction(OperationsService.ACTION_CREATE_FOLDER);
-        service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        service.putExtra(OperationsService.EXTRA_REMOTE_PATH, remotePath);
-        service.putExtra(OperationsService.EXTRA_CREATE_FULL_PATH, createFullPath);
-        mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-
-        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
+        //        if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT == file.getAvailableOfflineStatus()) {
+        //            /// files descending of an av-offline folder can't be toggled
+        //            mFileActivity.showSnackMessage(
+        //                    mFileActivity.getString(R.string.available_offline_inherited_msg)
+        //            );
+        //
+        //        } else {
+        //            /// update local property, for file and all its descendents (if folder)
+        //            OCFile.AvailableOfflineStatus targetAvailableOfflineStatus = isAvailableOffline ?
+        //                    OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE :
+        //                    OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
+        //            file.setAvailableOfflineStatus(targetAvailableOfflineStatus);
+        //            boolean success = mFileActivity.getStorageManager().saveLocalAvailableOfflineStatus(file);
+        //
+        //            if (success) {
+        //                // Schedule job to check to watch for local changes in available offline files and sync them
+        //                AvailableOfflineHandler availableOfflineHandler = new AvailableOfflineHandler(mFileActivity);
+        //                availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
+        //
+        //                /// immediate content synchronization
+        //                if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE == file.getAvailableOfflineStatus()) {
+        //                    syncFile(file);
+        //                } else {
+        //                    cancelTransference(file);
+        //                }
+        //            } else {
+        //                /// unexpected error
+        //                mFileActivity.showSnackMessage(
+        //                        mFileActivity.getString(R.string.common_error_unknown)
+        //                );
+        //            }
+        //        }
     }
 
     /**
@@ -353,50 +307,15 @@ public class FileOperationsHelper {
         }
 
         // for both files and folders
-        FileDownloaderBinder downloaderBinder = mFileActivity.getFileDownloaderBinder();
-        if (downloaderBinder != null && downloaderBinder.isDownloading(account, file)) {
-            downloaderBinder.cancel(account, file);
-        }
+        @NotNull Lazy<CancelDownloadForFileUseCase> cancelDownloadForFileUseCaseLazy =
+                inject(CancelDownloadForFileUseCase.class);
+        CancelDownloadForFileUseCase.Params cancelDownloadParams = new CancelDownloadForFileUseCase.Params(file);
+        cancelDownloadForFileUseCaseLazy.getValue().execute(cancelDownloadParams);
+
         FileUploaderBinder uploaderBinder = mFileActivity.getFileUploaderBinder();
         if (uploaderBinder != null && uploaderBinder.isUploading(account, file)) {
             uploaderBinder.cancel(account, file);
         }
-    }
-
-    /**
-     * Start operations to move one or several files
-     *
-     * @param files        Files to move
-     * @param targetFolder Folder where the files while be moved into
-     */
-    public void moveFiles(Collection<OCFile> files, OCFile targetFolder) {
-        for (OCFile file : files) {
-            Intent service = new Intent(mFileActivity, OperationsService.class);
-            service.setAction(OperationsService.ACTION_MOVE_FILE);
-            service.putExtra(OperationsService.EXTRA_NEW_PARENT_PATH, targetFolder.getRemotePath());
-            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-        }
-        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-    }
-
-    /**
-     * Start operations to copy one or several files
-     *
-     * @param files        Files to copy
-     * @param targetFolder Folder where the files while be copied into
-     */
-    public void copyFiles(Collection<OCFile> files, OCFile targetFolder) {
-        for (OCFile file : files) {
-            Intent service = new Intent(mFileActivity, OperationsService.class);
-            service.setAction(OperationsService.ACTION_COPY_FILE);
-            service.putExtra(OperationsService.EXTRA_NEW_PARENT_PATH, targetFolder.getRemotePath());
-            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-        }
-        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
     public long getOpIdWaitingFor() {

@@ -29,10 +29,11 @@ import android.view.MenuItem;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.work.WorkManager;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
+import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
@@ -275,10 +276,9 @@ public class FileMenuFilter {
         if (mComponentsGetter != null && !mFiles.isEmpty() && mAccount != null) {
             OperationsServiceBinder opsBinder = mComponentsGetter.getOperationsServiceBinder();
             FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
-            FileDownloaderBinder downloaderBinder = mComponentsGetter.getFileDownloaderBinder();
             synchronizing = (
                     anyFileSynchronizing(opsBinder) ||      // comparing local and remote
-                            anyFileDownloading(downloaderBinder) ||
+                            anyFileDownloading() ||
                             anyFileUploading(uploaderBinder)
             );
         }
@@ -295,12 +295,11 @@ public class FileMenuFilter {
         return synchronizing;
     }
 
-    private boolean anyFileDownloading(FileDownloaderBinder downloaderBinder) {
+    private boolean anyFileDownloading() {
+        WorkManager workManager = WorkManager.getInstance(mContext);
         boolean downloading = false;
-        if (downloaderBinder != null) {
-            for (int i = 0; !downloading && i < mFiles.size(); i++) {
-                downloading = downloaderBinder.isDownloading(mAccount, mFiles.get(i));
-            }
+        for (int i = 0; !downloading && i < mFiles.size(); i++) {
+            downloading = WorkManagerExtKt.isDownloadPending(workManager, mAccount, mFiles.get(i));
         }
         return downloading;
     }
@@ -348,37 +347,39 @@ public class FileMenuFilter {
 
     private boolean anyFileDown() {
         for (OCFile file : mFiles) {
-            if (file.isDown()) {
+            if (file.isAvailableLocally()) {
                 return true;
             }
         }
         return false;
     }
 
+    // FIXME: 13/10/2020 : New_arch: Av.Offline
     private boolean anyFavorite() {
-        for (OCFile file : mFiles) {
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
-                return true;
-            }
-        }
+//        for (OCFile file : mFiles) {
+//            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
+//                return true;
+//            }
+//        }
         return false;
     }
 
+    // FIXME: 13/10/2020 : New_arch: Av.Offline
     private boolean anyUnfavorite() {
-        for (OCFile file : mFiles) {
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
-                return true;
-            }
-        }
+//        for (OCFile file : mFiles) {
+//            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
+//                return true;
+//            }
+//        }
         return false;
-    }
-
+   }
+    // FIXME: 13/10/2020 : New_arch: Shared by Link
     private boolean anyFileSharedWithMe() {
-        for (OCFile file : mFiles) {
-            if (file.isSharedWithMe()) {
-                return true;
-            }
-        }
+//        for (OCFile file : mFiles) {
+//            if (file.isSharedWithMe()) {
+//                return true;
+//            }
+//        }
         return false;
     }
 }

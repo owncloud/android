@@ -30,6 +30,10 @@ import android.webkit.MimeTypeMap;
 
 import timber.log.Timber;
 
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_AUDIO;
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_IMAGE;
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_PREFIX_VIDEO;
+
 /**
  * A helper class for some Uri operations.
  */
@@ -41,9 +45,9 @@ public class UriUtils {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
@@ -101,7 +105,6 @@ public class UriUtils {
     }
 
     /**
-     *
      * @param uri The Uri to check.
      * @return Whether the Uri is from a content provider as kind "content://..."
      */
@@ -112,7 +115,7 @@ public class UriUtils {
     /**
      * Translates a content:// URI referred to a local file file to a path on the local filesystem
      *
-     * @param uri       The URI to resolve
+     * @param uri The URI to resolve
      * @return The path in the file system to the content or null if it could not be found (not a file)
      */
     public static String getLocalPath(Uri uri, Context context) {
@@ -226,13 +229,13 @@ public class UriUtils {
         String mimeType = context.getContentResolver().getType(uri);
         if (mimeType != null) {
             String displayNameColumn;
-            if (mimeType.toLowerCase().startsWith("image/")) {
+            if (mimeType.toLowerCase().startsWith(MIME_PREFIX_IMAGE)) {
                 displayNameColumn = MediaStore.Images.ImageColumns.DISPLAY_NAME;
 
-            } else if (mimeType.toLowerCase().startsWith("video/")) {
+            } else if (mimeType.toLowerCase().startsWith(MIME_PREFIX_VIDEO)) {
                 displayNameColumn = MediaStore.Video.VideoColumns.DISPLAY_NAME;
 
-            } else if (mimeType.toLowerCase().startsWith("audio/")) {
+            } else if (mimeType.toLowerCase().startsWith(MIME_PREFIX_AUDIO)) {
                 displayNameColumn = MediaStore.Audio.AudioColumns.DISPLAY_NAME;
 
             } else {

@@ -22,14 +22,15 @@ package com.owncloud.android.operations;
 import android.accounts.Account;
 import android.content.Context;
 
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService;
 import com.owncloud.android.operations.common.SyncOperation;
 
 import java.io.File;
@@ -60,7 +61,7 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
 
             // Step 2, start to upload chunks
             mUploadOperation = new ChunkedUploadRemoteFileOperation(mTransferId, mFile.getStoragePath(),
-                    mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
+                    mFile.getRemotePath(), mFile.getMimeType(), mFile.getEtagInConflict(), timeStamp);
 
             Iterator<OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
             while (listener.hasNext()) {
@@ -95,13 +96,12 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
         return syncOperation.execute(getClient(), getStorageManager());
     }
 
-    private RemoteOperationResult moveChunksFileToFinalDestination(String fileLastModifTimestamp, long fileLength) {
-        SyncOperation syncOperation = new MoveChunksFileOperation(
-                String.valueOf(mTransferId + File.separator + FileUtils.FINAL_CHUNKS_FILE),
+    private void moveChunksFileToFinalDestination(String fileLastModifTimestamp, long fileLength) {
+        OCChunkService ocChunkService = new OCChunkService(getClient());
+        ocChunkService.moveFile(
+                mTransferId + File.separator + FileUtils.FINAL_CHUNKS_FILE,
                 mFile.getRemotePath(),
                 fileLastModifTimestamp,
-                fileLength
-        );
-        return syncOperation.execute(getClient(), getStorageManager());
+                fileLength);
     }
 }

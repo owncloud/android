@@ -30,7 +30,6 @@ import android.widget.DatePicker;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -48,11 +47,6 @@ public class ExpirationDatePickerDialogFragment
      * Tag for FragmentsManager
      */
     public static final String DATE_PICKER_DIALOG = "DATE_PICKER_DIALOG";
-
-    /**
-     * Parameter constant for {@link OCFile} instance to set the expiration date
-     */
-    private static final String ARG_FILE = "FILE";
 
     /**
      * Parameter constant for date chosen initially

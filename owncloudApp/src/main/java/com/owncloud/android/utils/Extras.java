@@ -29,7 +29,6 @@ public class Extras {
     public static final String EXTRA_LINKED_TO_PATH = "LINKED_TO";
 
     // from FileDownloader
-    public static final String EXTRA_FILE_PATH = "FILE_PATH";
     public static final String EXTRA_DOWNLOAD_RESULT = "RESULT";
 
     // from FileUploader

@@ -46,8 +46,6 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.files.services.CameraUploadsHandler;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
@@ -57,12 +55,17 @@ import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
+import com.owncloud.android.usecases.transfers.CancelDownloadsForAccountUseCase;
 import com.owncloud.android.utils.PreferenceUtils;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * An Activity that allows the user to manage accounts.
@@ -81,7 +84,6 @@ public class ManageAccountsActivity extends FileActivity
     private String mAccountBeingRemoved;
     private AccountListAdapter mAccountListAdapter;
     protected FileUploader.FileUploaderBinder mUploaderBinder = null;
-    protected FileDownloader.FileDownloaderBinder mDownloaderBinder = null;
     private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
     Set<String> mOriginalAccounts;
     String mOriginalCurrentAccount;
@@ -180,11 +182,6 @@ public class ManageAccountsActivity extends FileActivity
      * Initialize ComponentsGetters.
      */
     private void initializeComponentGetters() {
-        mDownloadServiceConnection = newTransferenceServiceConnection();
-        if (mDownloadServiceConnection != null) {
-            bindService(new Intent(this, FileDownloader.class), mDownloadServiceConnection,
-                    Context.BIND_AUTO_CREATE);
-        }
         mUploadServiceConnection = newTransferenceServiceConnection();
         if (mUploadServiceConnection != null) {
             bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
@@ -317,9 +314,11 @@ public class ManageAccountsActivity extends FileActivity
                 if (mUploaderBinder != null) {
                     mUploaderBinder.cancel(account);
                 }
-                if (mDownloaderBinder != null) {
-                    mDownloaderBinder.cancel(account);
-                }
+                @NotNull Lazy<CancelDownloadsForAccountUseCase> cancelDownloadsForAccountUseCaseLazy =
+                        inject(CancelDownloadsForAccountUseCase.class);
+                CancelDownloadsForAccountUseCase.Params cancelDownloadParams =
+                        new CancelDownloadsForAccountUseCase.Params(account);
+                cancelDownloadsForAccountUseCaseLazy.getValue().execute(cancelDownloadParams);
             }
 
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
@@ -392,11 +391,6 @@ public class ManageAccountsActivity extends FileActivity
 
     // Methods for ComponentsGetter
     @Override
-    public FileDownloader.FileDownloaderBinder getFileDownloaderBinder() {
-        return mDownloaderBinder;
-    }
-
-    @Override
     public FileUploader.FileUploaderBinder getFileUploaderBinder() {
         return mUploaderBinder;
     }
@@ -427,11 +421,7 @@ public class ManageAccountsActivity extends FileActivity
 
         @Override
         public void onServiceConnected(ComponentName component, IBinder service) {
-
-            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileDownloader.class))) {
-                mDownloaderBinder = (FileDownloader.FileDownloaderBinder) service;
-
-            } else if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
+            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
                 Timber.d("Upload service connected");
                 mUploaderBinder = (FileUploader.FileUploaderBinder) service;
             }
@@ -439,10 +429,7 @@ public class ManageAccountsActivity extends FileActivity
 
         @Override
         public void onServiceDisconnected(ComponentName component) {
-            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileDownloader.class))) {
-                Timber.d("Download service suddenly disconnected");
-                mDownloaderBinder = null;
-            } else if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
+            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
                 Timber.d("Upload service suddenly disconnected");
                 mUploaderBinder = null;
             }

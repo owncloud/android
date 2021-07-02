@@ -26,7 +26,7 @@ import android.content.Intent;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.ShareType;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -41,7 +41,7 @@ import com.owncloud.android.syncadapter.FileSyncAdapter;
 import timber.log.Timber;
 
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Operation performing a REFRESH on a folder, conceived to be triggered by an action started
@@ -57,6 +57,10 @@ import java.util.Vector;
  * Does NOT travel subfolders to refresh their contents also, UNLESS they are
  * set as AVAILABLE OFFLINE FOLDERS.
  */
+@Deprecated
+// Call RefreshFolderFromServerAsyncUseCase instead. Keep it for the moment.
+// It calls SynchronizeFolderOperation that handles conflicts.
+// At the moment, in new arch we don't handle them.
 public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
 
     public static final String EVENT_SINGLE_FOLDER_CONTENTS_SYNCED =
@@ -197,7 +201,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
                 if (file != null) {
                     ShareType shareType = ShareType.Companion.fromValue(remoteShare.getShareType().getValue());
                     if (shareType.equals(ShareType.PUBLIC_LINK)) {
-                        file.setSharedViaLink(true);
+                        file.setSharedByLink(true);
                     } else if (shareType.equals(ShareType.USER) ||
                             shareType.equals(ShareType.FEDERATED) ||
                             shareType.equals(ShareType.GROUP)) {
@@ -210,9 +214,9 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     }
 
     private void resetShareFlagsInFolderChilds() {
-        Vector<OCFile> files = getStorageManager().getFolderContent(mLocalFolder);
+        List<OCFile> files = getStorageManager().getFolderContent(mLocalFolder);
         for (OCFile file : files) {
-            file.setSharedViaLink(false);
+            file.setSharedByLink(false);
             file.setSharedWithSharee(false);
             getStorageManager().saveFile(file);
         }

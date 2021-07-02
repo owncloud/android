@@ -51,13 +51,14 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import timber.log.Timber;
 
@@ -366,7 +367,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 return true;
             }
             case R.id.action_remove_file: {
-                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstance(getFile());
+                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstanceForSingleFile(getFile());
                 dialog.show(getParentFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }
@@ -488,7 +489,13 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                             // or involving other parts
                             if (previewVideoError.isParentFolderSyncNeeded()) {
                                 // Start to sync the parent file folder
-                                OCFile folder = new OCFile(getFile().getParentRemotePath());
+                                // TODO: Check if startSyncFolderOperation requires a folder or whether it would be enough with the remote path.
+                                OCFile folder = new OCFile(
+                                        getFile().getParentRemotePath(),
+                                        MimeTypeConstantsKt.MIME_DIR,
+                                        OCFile.ROOT_PARENT_ID,
+                                        mAccount.name
+                                );
                                 ((FileDisplayActivity) getActivity()).
                                         startSyncFolderOperation(folder, false);
                             }

@@ -26,6 +26,7 @@ package com.owncloud.android.data
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Environment
+import com.owncloud.android.domain.files.model.OCFile
 import java.io.File
 
 class LocalStorageProvider(
@@ -42,6 +43,19 @@ class LocalStorageProvider(
      * file.
      */
     fun getDefaultSavePathFor(accountName: String?, remotePath: String): String = getSavePath(accountName) + remotePath
+
+    /**
+     * Get expected remote path for a file creation, rename, move etc
+     */
+    fun getExpectedRemotePath(remotePath: String, newName: String, isFolder: Boolean): String {
+        var parent = (File(remotePath)).parent ?: throw IllegalArgumentException()
+        parent = if (parent.endsWith(File.separator)) parent else parent + File.separator
+        val newRemotePath = parent + newName
+        if (isFolder) {
+            newRemotePath.plus(File.separator)
+        }
+        return newRemotePath
+    }
 
     /**
      * Get absolute path to tmp folder inside datafolder in sd-card for given accountName.
@@ -73,4 +87,33 @@ class LocalStorageProvider(
      * that can be in the accountName since 0.1.190B
      */
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
+
+    /**
+     * Best-effort to remove the file locally. If storage path is null, let's try to remove it anyway.
+     */
+    fun deleteLocalFile(ocFile: OCFile): Boolean {
+        val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
+        val fileToDelete = File(safeStoragePath)
+
+        if (!fileToDelete.exists()) {
+            return true
+        }
+
+        return fileToDelete.deleteRecursively()
+    }
+
+    fun moveLocalFile(ocFile: OCFile, finalStoragePath: String) {
+        val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
+        val fileToMove = File(safeStoragePath)
+
+        if (!fileToMove.exists()) {
+            return
+        }
+        val targetFile = File(finalStoragePath)
+        val targetFolder = targetFile.parentFile
+        if (targetFolder != null && !targetFolder.exists()) {
+            targetFolder.mkdirs()
+        }
+        fileToMove.renameTo(targetFile)
+    }
 }

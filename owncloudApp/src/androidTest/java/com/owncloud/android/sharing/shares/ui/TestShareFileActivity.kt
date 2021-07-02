@@ -23,7 +23,7 @@ package com.owncloud.android.sharing.shares.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
 import com.owncloud.android.testing.SingleFragmentActivity

@@ -24,9 +24,12 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.exceptions.BadOcVersionException
+import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
+import com.owncloud.android.domain.exceptions.ForbiddenException
 import com.owncloud.android.domain.exceptions.IncorrectAddressException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
+import com.owncloud.android.domain.exceptions.MoveIntoDescendantException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
@@ -39,6 +42,7 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.ServerResponseTimeoutException
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.domain.exceptions.validation.FileNameException
 import java.util.Locale
 
 fun Throwable.parseError(
@@ -61,8 +65,18 @@ fun Throwable.parseError(
             is IncorrectAddressException -> resources.getString(R.string.auth_incorrect_address_title)
             is SSLErrorException -> resources.getString(R.string.auth_ssl_general_error_title)
             is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
-            is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
+            is FileNameException -> {
+                val stringId = when (this.type) {
+                    FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS -> R.string.filename_forbidden_charaters_from_server
+                    FileNameException.FileNameExceptionType.FILE_NAME_EMPTY -> R.string.filename_empty
+                }
+                resources.getString(stringId)
+            }
+            is MoveIntoDescendantException -> resources.getString(R.string.move_file_invalid_into_descendent)
+            is CopyIntoDescendantException -> resources.getString(R.string.copy_file_invalid_into_descendent)
+            is ForbiddenException -> resources.getString(R.string.forbidden_permissions)
             is FileNotFoundException -> resources.getString(R.string.common_not_found)
+            is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
             is OAuth2ErrorException -> resources.getString(R.string.auth_oauth_error)
             is OAuth2ErrorAccessDeniedException -> resources.getString(R.string.auth_oauth_error_access_denied)
             is AccountNotNewException -> resources.getString(R.string.auth_account_not_new)

@@ -21,7 +21,7 @@ package com.owncloud.android.utils;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.R;
-import com.owncloud.android.domain.files.MimeTypeConstantsKt;
+import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
 
 import java.util.ArrayList;
 import java.util.Arrays;

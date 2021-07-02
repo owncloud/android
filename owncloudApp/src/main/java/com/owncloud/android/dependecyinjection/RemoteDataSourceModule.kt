@@ -29,6 +29,7 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCRemot
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
+import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.datasource.impl.RemoteOAuthDataSourceImpl
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
@@ -43,7 +44,9 @@ import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.resources.files.services.ChunkService
 import com.owncloud.android.lib.resources.files.services.FileService
+import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.lib.resources.oauth.services.implementation.OCOIDCService
@@ -67,6 +70,7 @@ val remoteDataSourceModule = module {
 
     single<CapabilityService> { OCCapabilityService(get()) }
     single<FileService> { OCFileService(get()) }
+    single<ChunkService> { OCChunkService(get()) }
     single<ServerInfoService> { OCServerInfoService() }
     single<OIDCService> { OCOIDCService() }
     single<ShareService> { OCShareService(get()) }
@@ -74,16 +78,19 @@ val remoteDataSourceModule = module {
 
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
     factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
-    factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
+    factory<RemoteFileDataSource> { OCRemoteFileDataSource(get(), get()) }
     factory<RemoteOAuthDataSource> { RemoteOAuthDataSourceImpl(get(), get()) }
     factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
     factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
     factory<RemoteUserDataSource> { OCRemoteUserDataSource(get(), androidContext().resources.getDimension(
                 R.dimen.file_avatar_size
-            ).toInt()) }
+            ).toInt()
+        )
+    }
 
     factory { RemoteCapabilityMapper() }
+    factory { RemoteFileMapper() }
     factory { RemoteShareMapper() }
     factory { RemoteShareeMapper() }
 }

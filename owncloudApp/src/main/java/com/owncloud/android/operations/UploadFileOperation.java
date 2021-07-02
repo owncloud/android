@@ -24,10 +24,9 @@ import android.accounts.Account;
 import android.content.Context;
 import android.net.Uri;
 
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
-import com.owncloud.android.domain.files.MimeTypeConstantsKt;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
@@ -36,16 +35,15 @@ import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
-import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.RemoteFileUtils;
-import com.owncloud.android.utils.UriUtils;
 import timber.log.Timber;
 
 import java.io.File;
@@ -59,6 +57,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_DIR;
+import static com.owncloud.android.utils.UriUtils.URI_CONTENT_SCHEME;
+
 /**
  * Operation performing the update in the ownCloud server
  * of a file that was modified locally.
@@ -68,34 +69,8 @@ public class UploadFileOperation extends SyncOperation {
     public static final int CREATED_BY_USER = 0;
     public static final int CREATED_AS_CAMERA_UPLOAD_PICTURE = 1;
     public static final int CREATED_AS_CAMERA_UPLOAD_VIDEO = 2;
-
-    public static OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType,
-                                                 Context context) {
-
-        // MIME type
-        if (mimeType == null || mimeType.length() <= 0) {
-            mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(localPath);
-        }
-
-        OCFile newFile = new OCFile(remotePath);
-
-        newFile.setStoragePath(localPath);
-        newFile.setLastSyncDateForProperties(0);
-        newFile.setLastSyncDateForData(0);
-
-        // size
-        if (localPath != null && localPath.length() > 0) {
-            File localFile = new File(localPath);
-            newFile.setFileLength(localFile.length());
-            newFile.setLastSyncDateForData(localFile.lastModified());
-        } // don't worry about not assigning size, the problems with localPath
-        // are checked when the UploadFileOperation instance is created
-
-        newFile.setMimetype(mimeType);
-
-        return newFile;
-    }
-
+    protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
+    private final AtomicBoolean mUploadStarted = new AtomicBoolean(false);
     private Account mAccount;
     /**
      * OCFile which is to be uploaded.
@@ -111,22 +86,15 @@ public class UploadFileOperation extends SyncOperation {
     private boolean mForceOverwrite;
     private int mLocalBehaviour;
     private int mCreatedBy;
-
     private boolean mWasRenamed = false;
     private long mOCUploadId;
-
     /**
      * Local path to file which is to be uploaded (before any possible renaming or moving).
      */
     private String mOriginalStoragePath;
     protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     private OnRenameListener mRenameUploadListener;
-
-    protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
-    private final AtomicBoolean mUploadStarted = new AtomicBoolean(false);
-
     private Context mContext;
-
     protected UploadRemoteFileOperation mUploadOperation;
 
     public UploadFileOperation(Account account,
@@ -171,6 +139,33 @@ public class UploadFileOperation extends SyncOperation {
 
     }
 
+    public static OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType,
+                                                 Context context) {
+        // FIXME: 13/10/2020 : New_arch: Upload
+        // MIME type
+        if (mimeType == null || mimeType.length() <= 0) {
+            mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(localPath);
+        }
+
+        OCFile newFile = new OCFile(remotePath, mimeType, (long) 0, "");
+
+        newFile.setStoragePath(localPath);
+        newFile.setLastSyncDateForProperties(0L);
+        newFile.setLastSyncDateForData(0L);
+
+        // size
+        if (localPath != null && localPath.length() > 0) {
+            File localFile = new File(localPath);
+            newFile.setLength(localFile.length());
+            newFile.setLastSyncDateForData(localFile.lastModified());
+        } // don't worry about not assigning size, the problems with localPath
+        // are checked when the UploadFileOperation instance is created
+
+        newFile.setMimeType(mimeType);
+
+        return newFile;
+    }
+
     public Account getAccount() {
         return mAccount;
     }
@@ -204,7 +199,7 @@ public class UploadFileOperation extends SyncOperation {
     }
 
     public String getMimeType() {
-        return mFile.getMimetype();
+        return mFile.getMimeType();
     }
 
     public int getLocalBehaviour() {
@@ -219,15 +214,15 @@ public class UploadFileOperation extends SyncOperation {
         return mWasRenamed;
     }
 
+    public int getCreatedBy() {
+        return mCreatedBy;
+    }
+
     public void setCreatedBy(int createdBy) {
         mCreatedBy = createdBy;
         if (createdBy < CREATED_BY_USER || CREATED_AS_CAMERA_UPLOAD_VIDEO < createdBy) {
             mCreatedBy = CREATED_BY_USER;
         }
-    }
-
-    public int getCreatedBy() {
-        return mCreatedBy;
     }
 
     public boolean isCameraUploadsPicture() {
@@ -238,12 +233,12 @@ public class UploadFileOperation extends SyncOperation {
         return mCreatedBy == CREATED_AS_CAMERA_UPLOAD_VIDEO;
     }
 
-    public void setOCUploadId(long id) {
-        mOCUploadId = id;
-    }
-
     public long getOCUploadId() {
         return mOCUploadId;
+    }
+
+    public void setOCUploadId(long id) {
+        mOCUploadId = id;
     }
 
     public Set<OnDatatransferProgressListener> getDataTransferListeners() {
@@ -305,7 +300,7 @@ public class UploadFileOperation extends SyncOperation {
 
             /// set parent local id in uploading file
             OCFile parent = getStorageManager().getFileByPath(remoteParentPath);
-            mFile.setParentId(parent.getFileId());
+            mFile.setParentId(parent.getId());
 
             /// automatic rename of file to upload in case of name collision in server
             Timber.d("Checking name collision in server");
@@ -408,7 +403,7 @@ public class UploadFileOperation extends SyncOperation {
 
         try {
             mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(), mFile.getRemotePath(),
-                    mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
+                    mFile.getMimeType(), mFile.getEtagInConflict(), timeStamp);
 
             for (OnDatatransferProgressListener dataTransferListener : mDataTransferListeners) {
                 mUploadOperation.addDatatransferProgressListener(dataTransferListener);
@@ -529,9 +524,7 @@ public class UploadFileOperation extends SyncOperation {
             parent = createLocalFolder(parentPath);
         }
         if (parent != null) {
-            OCFile createdFolder = new OCFile(remotePath);
-            createdFolder.setMimetype(MimeTypeConstantsKt.MIME_DIR);
-            createdFolder.setParentId(parent.getFileId());
+            OCFile createdFolder = new OCFile(remotePath, MIME_DIR, parent.getId(), parent.getOwner());
             getStorageManager().saveFile(createdFolder);
             return createdFolder;
         }
@@ -546,20 +539,17 @@ public class UploadFileOperation extends SyncOperation {
      */
     private void createNewOCFile(String newRemotePath) {
         // a new OCFile instance must be created for a new remote path
-        OCFile newFile = new OCFile(newRemotePath);
+        OCFile newFile = new OCFile(newRemotePath, mFile.getMimeType(), mFile.getParentId(), mFile.getOwner());
         newFile.setCreationTimestamp(mFile.getCreationTimestamp());
-        newFile.setFileLength(mFile.getFileLength());
-        newFile.setMimetype(mFile.getMimetype());
+        newFile.setLength(mFile.getLength());
         newFile.setModificationTimestamp(mFile.getModificationTimestamp());
-        newFile.setModificationTimestampAtLastSyncForData(
-                mFile.getModificationTimestampAtLastSyncForData()
-        );
+        newFile.setModifiedAtLastSyncForData(mFile.getModifiedAtLastSyncForData());
         newFile.setEtag(mFile.getEtag());
-        newFile.setAvailableOfflineStatus(mFile.getAvailableOfflineStatus());
+        // FIXME: 19/10/2020 : New_arch: Av.Offline
+        //        newFile.setAvailableOfflineStatus(mFile.getAvailableOfflineStatus());
         newFile.setLastSyncDateForProperties(mFile.getLastSyncDateForProperties());
         newFile.setLastSyncDateForData(mFile.getLastSyncDateForData());
         newFile.setStoragePath(mFile.getStoragePath());
-        newFile.setParentId(mFile.getParentId());
         mOldFile = mFile;
         mFile = newFile;
     }
@@ -631,7 +621,7 @@ public class UploadFileOperation extends SyncOperation {
             try {
                 if (!mOriginalStoragePath.equals(targetFile.getAbsolutePath())) {
                     // In case document provider schema as 'content://'
-                    if (mOriginalStoragePath.startsWith(UriUtils.URI_CONTENT_SCHEME)) {
+                    if (mOriginalStoragePath.startsWith(URI_CONTENT_SCHEME)) {
                         Uri uri = Uri.parse(mOriginalStoragePath);
                         in = mContext.getContentResolver().openInputStream(uri);
                     } else {
@@ -733,8 +723,8 @@ public class UploadFileOperation extends SyncOperation {
      */
     private void saveUploadedFile(OwnCloudClient client) {
         OCFile file = mFile;
-        if (file.fileExists()) {
-            file = getStorageManager().getFileById(file.getFileId());
+        if (file.getFileExists()) {
+            file = getStorageManager().getFileById(file.getId());
         }
         long syncDate = System.currentTimeMillis();
         file.setLastSyncDateForData(syncDate);
@@ -763,7 +753,7 @@ public class UploadFileOperation extends SyncOperation {
             // coincidence; nothing else is needed, the storagePath is right
             // in the instance returned by mCurrentUpload.getFile()
         }
-        file.setNeedsUpdateThumbnail(true);
+        file.setNeedsToUpdateThumbnail(true);
         getStorageManager().saveFile(file);
         getStorageManager().saveConflict(file, null);
 
@@ -772,10 +762,10 @@ public class UploadFileOperation extends SyncOperation {
 
     private void updateOCFile(OCFile file, RemoteFile remoteFile) {
         file.setCreationTimestamp(remoteFile.getCreationTimestamp());
-        file.setFileLength(remoteFile.getLength());
-        file.setMimetype(remoteFile.getMimeType());
+        file.setLength(remoteFile.getLength());
+        file.setMimeType(remoteFile.getMimeType());
         file.setModificationTimestamp(remoteFile.getModifiedTimestamp());
-        file.setModificationTimestampAtLastSyncForData(remoteFile.getModifiedTimestamp());
+        file.setModifiedAtLastSyncForData(remoteFile.getModifiedTimestamp());
         file.setEtag(remoteFile.getEtag());
         file.setRemoteId(remoteFile.getRemoteId());
     }

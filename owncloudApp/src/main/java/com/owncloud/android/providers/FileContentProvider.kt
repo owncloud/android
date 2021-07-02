@@ -54,16 +54,15 @@ import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
-import com.owncloud.android.domain.files.LIST_MIME_DIR
+import com.owncloud.android.domain.files.model.LIST_MIME_DIR
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.utils.FileStorageUtils
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
 import java.util.HashMap
@@ -503,7 +502,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return results
     }
 
-    private inner class DataBaseHelper internal constructor(context: Context?) :
+    private inner class DataBaseHelper(context: Context?) :
         SQLiteOpenHelper(
             context,
             ProviderMeta.DB_NAME,
@@ -994,6 +993,41 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
 
+
+            if (oldVersion < 33 && newVersion >= 33) {
+                Timber.i("SQL : Entering in #33 to migrate ocfiles from SQLite to Room")
+                val cursor = db.query(
+                    ProviderTableMeta.FILE_TABLE_NAME,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+
+                if (cursor.moveToFirst()) {
+                    val files = mutableListOf<OCFileEntity>()
+
+                    do {
+                        files.add(OCFileEntity.fromCursor(cursor))
+                    } while (cursor.moveToNext())
+
+                    // Insert file list to the new files table in new database
+                    val ocFileDao: FileDao by inject()
+                    executors.diskIO().execute {
+                        for (file in files) {
+                            ocFileDao.mergeRemoteAndLocalFile(file)
+                        }
+                    }
+
+                    // TODO: Remove old database once it is not needed anymore.
+                    // FIXME: 29/10/2020 : New_arch: Av.Offline
+                    // Drop old files table from old database
+                    //db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.FILE_TABLE_NAME + ";")
+                }
+            }
+
             if (!upgraded) {
                 Timber.i("SQL : OUT of the ADD in onUpgrade; oldVersion == $oldVersion, newVersion == $newVersion")
             }
@@ -1222,52 +1256,53 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         db: SQLiteDatabase, newAccountName: String,
         oldAccountName: String
     ) {
+        // FIXME: 13/10/2020 : New_arch: Download
 
-        val whereClause = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-                ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL"
-
-        val c = db.query(
-            ProviderTableMeta.FILE_TABLE_NAME, null,
-            whereClause,
-            arrayOf(newAccountName), null, null, null
-        )
-
-        c.use {
-            if (it.moveToFirst()) {
-                // create storage path
-                val oldAccountPath = FileStorageUtils.getSavePath(oldAccountName)
-                val newAccountPath = FileStorageUtils.getSavePath(newAccountName)
-
-                // move files
-                val oldAccountFolder = File(oldAccountPath)
-                val newAccountFolder = File(newAccountPath)
-                oldAccountFolder.renameTo(newAccountFolder)
-
-                // update database
-                do {
-                    // Update database
-                    val oldPath = it.getString(
-                        it.getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH)
-                    )
-                    val file = OCFile(
-                        it.getString(it.getColumnIndex(ProviderTableMeta.FILE_PATH))
-                    )
-                    val newPath = FileStorageUtils.getDefaultSavePathFor(newAccountName, file)
-
-                    val cv = ContentValues()
-                    cv.put(ProviderTableMeta.FILE_STORAGE_PATH, newPath)
-                    db.update(
-                        ProviderTableMeta.FILE_TABLE_NAME,
-                        cv,
-                        ProviderTableMeta.FILE_STORAGE_PATH + "=?",
-                        arrayOf(oldPath)
-                    )
-
-                    Timber.v("SQL : Updated path of downloaded file: old file name == $oldPath, new file name == $newPath")
-
-                } while (it.moveToNext())
-            }
-        }
+//        val whereClause = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
+//                ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL"
+//
+//        val c = db.query(
+//            ProviderTableMeta.FILE_TABLE_NAME, null,
+//            whereClause,
+//            arrayOf(newAccountName), null, null, null
+//        )
+//
+//        c.use {
+//            if (it.moveToFirst()) {
+//                // create storage path
+//                val oldAccountPath = FileStorageUtils.getSavePath(oldAccountName)
+//                val newAccountPath = FileStorageUtils.getSavePath(newAccountName)
+//
+//                // move files
+//                val oldAccountFolder = File(oldAccountPath)
+//                val newAccountFolder = File(newAccountPath)
+//                oldAccountFolder.renameTo(newAccountFolder)
+//
+//                // update database
+//                do {
+//                    // Update database
+//                    val oldPath = it.getString(
+//                        it.getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH)
+//                    )
+//                    val file = OCFileLegacy(
+//                        it.getString(it.getColumnIndex(ProviderTableMeta.FILE_PATH))
+//                    )
+//                    val newPath = FileStorageUtils.getDefaultSavePathFor(newAccountName, file)
+//
+//                    val cv = ContentValues()
+//                    cv.put(ProviderTableMeta.FILE_STORAGE_PATH, newPath)
+//                    db.update(
+//                        ProviderTableMeta.FILE_TABLE_NAME,
+//                        cv,
+//                        ProviderTableMeta.FILE_STORAGE_PATH + "=?",
+//                        arrayOf(oldPath)
+//                    )
+//
+//                    Timber.v("SQL : Updated path of downloaded file: old file name == $oldPath, new file name == $newPath")
+//
+//                } while (it.moveToNext())
+//            }
+//        }
     }
 
     @Throws(FileNotFoundException::class)

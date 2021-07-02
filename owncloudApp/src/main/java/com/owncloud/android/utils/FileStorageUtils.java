@@ -30,13 +30,14 @@ import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.data.LocalStorageProvider;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import timber.log.Timber;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Static methods to help in access to local file system.
@@ -103,26 +104,14 @@ public class FileStorageUtils {
      * @return New OCFile instance representing the remote resource described by remote.
      */
     public static OCFile createOCFileFromRemoteFile(RemoteFile remote) {
-        OCFile file = new OCFile(remote.getRemotePath());
-        file.setCreationTimestamp(remote.getCreationTimestamp());
-        if (remote.isFolder()) {
-            file.setFileLength(remote.getSize());
-        } else {
-            file.setFileLength(remote.getLength());
-        }
-        file.setMimetype(remote.getMimeType());
-        file.setModificationTimestamp(remote.getModifiedTimestamp());
-        file.setEtag(remote.getEtag());
-        file.setPermissions(remote.getPermissions());
-        file.setRemoteId(remote.getRemoteId());
-        file.setPrivateLink(remote.getPrivateLink());
-        return file;
+        RemoteFileMapper remoteFileMapper = new RemoteFileMapper();
+        return remoteFileMapper.toModel(remote);
     }
 
     /**
      * Sorts all filenames, regarding last user decision
      */
-    public static Vector<OCFile> sortFolder(Vector<OCFile> files, int sortOrder, boolean isAscending) {
+    public static List<OCFile> sortFolder(List<OCFile> files, int sortOrder, boolean isAscending) {
         switch (sortOrder) {
             case SORT_NAME:
                 FileStorageUtils.sortByName(files, isAscending);
@@ -141,7 +130,7 @@ public class FileStorageUtils {
     /**
      * Sorts list by Date
      */
-    private static void sortByDate(Vector<OCFile> files, boolean isAscending) {
+    private static void sortByDate(List<OCFile> files, boolean isAscending) {
         final int val;
         if (isAscending) {
             val = 1;
@@ -163,7 +152,7 @@ public class FileStorageUtils {
     /**
      * Sorts list by Size
      */
-    private static void sortBySize(Vector<OCFile> files, boolean isAscending) {
+    private static void sortBySize(List<OCFile> files, boolean isAscending) {
         final int val;
         if (isAscending) {
             val = 1;
@@ -172,8 +161,8 @@ public class FileStorageUtils {
         }
 
         Collections.sort(files, (ocFile1, ocFile2) -> {
-            Long obj1 = ocFile1.getFileLength();
-            return val * obj1.compareTo(ocFile2.getFileLength());
+            Long obj1 = ocFile1.getLength();
+            return val * obj1.compareTo(ocFile2.getLength());
         });
 
     }
@@ -183,7 +172,7 @@ public class FileStorageUtils {
      *
      * @param files files to sort
      */
-    private static void sortByName(Vector<OCFile> files, boolean isAscending) {
+    private static void sortByName(List<OCFile> files, boolean isAscending) {
         final int val;
         if (isAscending) {
             val = 1;

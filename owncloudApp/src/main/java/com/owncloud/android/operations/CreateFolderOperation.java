@@ -21,8 +21,7 @@
 
 package com.owncloud.android.operations;
 
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.domain.files.MimeTypeConstantsKt;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
@@ -36,6 +35,8 @@ import java.io.File;
  * Access to remote operation performing the creation of a new folder in the ownCloud server.
  * Save the new folder in Database
  */
+@Deprecated
+// Call usecase instead of this operation. Remove as soon as possible-
 public class CreateFolderOperation extends SyncOperation {
 
     protected String mRemotePath;
@@ -56,7 +57,8 @@ public class CreateFolderOperation extends SyncOperation {
     protected RemoteOperationResult run(OwnCloudClient client) {
         CreateRemoteFolderOperation createRemoteFolderOperation = new CreateRemoteFolderOperation(
                 mRemotePath,
-                mCreateFullPath
+                mCreateFullPath,
+                false
         );
         RemoteOperationResult result = createRemoteFolderOperation.execute(client);
 
@@ -100,13 +102,14 @@ public class CreateFolderOperation extends SyncOperation {
                 }
             }
         } else { // Create directory on DB
-            newDir = new OCFile(mRemotePath);
-            newDir.setMimetype(MimeTypeConstantsKt.MIME_DIR);
-            long parentId = getStorageManager().
-                    getFileByPath(FileStorageUtils.getParentPath(mRemotePath)).getFileId();
-            newDir.setParentId(parentId);
-            newDir.setModificationTimestamp(System.currentTimeMillis());
-            getStorageManager().saveFile(newDir);
+            // FIXME: 13/10/2020 : New_arch: Migration
+//            newDir = new OCFile(mRemotePath);
+//            newDir.setMimetype(MimeTypeConstantsKt.MIME_DIR);
+//            long parentId = getStorageManager().
+//                    getFileByPath(FileStorageUtils.getParentPath(mRemotePath)).getFileId();
+//            newDir.setParentId(parentId);
+//            newDir.setModificationTimestamp(System.currentTimeMillis());
+//            getStorageManager().saveFile(newDir);
 
             Timber.d("Create directory " + mRemotePath + " in Database");
         }

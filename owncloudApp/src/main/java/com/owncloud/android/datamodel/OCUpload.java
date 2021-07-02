@@ -30,6 +30,7 @@ import android.os.Parcelable;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.MimetypeIconUtil;
@@ -210,9 +211,6 @@ public class OCUpload implements Parcelable {
         return mRemotePath;
     }
 
-    /**
-     * @param remotePath
-     */
     public void setRemotePath(String remotePath) {
         mRemotePath = remotePath;
     }
@@ -285,7 +283,7 @@ public class OCUpload implements Parcelable {
     }
 
     /**
-     * Returns owncloud account as {@link Account} object.  
+     * Returns owncloud account as {@link Account} object.
      */
     public Account getAccount(Context context) {
         return AccountUtils.getOwnCloudAccountByName(context, getAccountName());

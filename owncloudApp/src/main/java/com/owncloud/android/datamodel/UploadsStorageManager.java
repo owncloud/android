@@ -32,6 +32,7 @@ import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.UploadFileOperation;
 import timber.log.Timber;
+import com.owncloud.android.domain.files.model.OCFile;
 
 import java.util.Calendar;
 import java.util.Observable;

@@ -36,10 +36,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ShareFileLayoutBinding
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -227,8 +227,12 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
 
         // Setup layout
         // Image
-        binding.shareFileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file?.mimetype, file?.fileName))
-
+        binding.shareFileIcon.setImageResource(
+            MimetypeIconUtil.getFileTypeIconId(
+                file?.mimeType,
+                file?.fileName
+            )
+        )
         if (file!!.isImage) {
             val remoteId = file?.remoteId.toString()
             val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(remoteId)
@@ -243,7 +247,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         if (file!!.isFolder) {
             binding.shareFileSize.isVisible = false
         } else {
-            binding.shareFileSize.text = DisplayUtils.bytesToHumanReadable(file!!.fileLength, activity)
+            binding.shareFileSize.text = DisplayUtils.bytesToHumanReadable(file!!.length, activity)
         }
 
         // Private link button

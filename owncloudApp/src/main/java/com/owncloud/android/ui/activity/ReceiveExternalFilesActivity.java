@@ -37,7 +37,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -68,14 +67,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
@@ -83,17 +81,19 @@ import com.owncloud.android.presentation.ui.files.SortOptionsView;
 import com.owncloud.android.presentation.ui.files.SortOrder;
 import com.owncloud.android.presentation.ui.files.SortType;
 import com.owncloud.android.presentation.ui.files.ViewType;
+import com.owncloud.android.presentation.UIResult;
+import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
+import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
@@ -102,8 +102,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
+
+import static org.koin.java.KoinJavaComponent.get;
 
 /**
  * This can be used to upload things to an ownCloud instance.
@@ -112,7 +115,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         implements OnItemClickListener, android.view.View.OnClickListener,
         CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener, SortOptionsView.SortOptionsListener,
         SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener, SearchView.OnQueryTextListener,
-        View.OnFocusChangeListener, ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener {
+        View.OnFocusChangeListener, ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener, CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
 
@@ -354,7 +357,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         // This does not necessarily mean this is the content of the current folder.
         // If the user searches for a folder mAdapter.getFiles() returnes only the folders/files
         // that match the currently entered search query.
-        Vector<OCFile> tmpfiles = mAdapter.getFiles();
+        List<OCFile> tmpfiles = mAdapter.getFiles();
         tmpfiles = sortFileList(tmpfiles);
 
         if (tmpfiles.size() <= 0) {
@@ -434,7 +437,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                         this, getStorageManager(), getAccount());
                 mListView.setAdapter(mAdapter);
             }
-            Vector<OCFile> files = sortFileList(getStorageManager().getFolderContent(mFile));
+            Vector<OCFile> files = new Vector<>(sortFileList(getStorageManager().getFolderContent(mFile)));
             mAdapter.setNewItemVector(files);
 
             Button btnChooseFolder = findViewById(R.id.uploader_choose_folder);
@@ -492,7 +495,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         synchFolderOp.execute(getStorageManager(), this, null, null);
     }
 
-    private Vector<OCFile> sortFileList(Vector<OCFile> files) {
+    private List<OCFile> sortFileList(List<OCFile> files) {
         // Read sorting order, default to sort by name ascending
         FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(this, FileStorageUtils.FILE_DISPLAY_SORT);
         FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(this,
@@ -579,39 +582,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     messageResId,
                     messageResTitle
             );
-        }
-    }
-
-    @Override
-    public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
-        super.onRemoteOperationFinish(operation, result);
-
-        if (operation instanceof CreateFolderOperation) {
-            onCreateFolderOperationFinish((CreateFolderOperation) operation, result);
-        }
-
-    }
-
-    /**
-     * Updates the view associated to the activity after the finish of an operation
-     * trying create a new folder
-     *
-     * @param operation Creation operation performed.
-     * @param result    Result of the creation.
-     */
-    private void onCreateFolderOperationFinish(CreateFolderOperation operation,
-                                               RemoteOperationResult result) {
-        if (result.isSuccess()) {
-            updateDirectoryList();
-        } else {
-            try {
-                showSnackMessage(
-                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
-                );
-
-            } catch (NotFoundException e) {
-                Timber.e(e, "Error while trying to show fail message ");
-            }
         }
     }
 
@@ -733,7 +703,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     public void onCreateFolderListener() {
-        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile);
+        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile, this::onFolderNameSet);
         dialog.show(getSupportFragmentManager(), CreateFolderDialogFragment.CREATE_FOLDER_FRAGMENT);
     }
 
@@ -763,6 +733,26 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     public void updateEmptyListMessage(String updateTxt) {
         mEmptyListMessage.setText(updateTxt);
+    }
+
+    @Override
+    public void onFolderNameSet(@NotNull String newFolderName, @NotNull OCFile parentFolder) {
+        FilesViewModel filesViewModel = get(FilesViewModel.class);
+
+        filesViewModel.createFolder(parentFolder, newFolderName);
+        filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
+            UIResult<Unit> uiResult = uiResultEvent.peekContent();
+            if (uiResult.isSuccess()) {
+                updateDirectoryList();
+            } else {
+                Throwable throwable = uiResult.getThrowableOrNull();
+                CharSequence errorMessage = ThrowableExtKt.parseError(throwable,
+                        getResources().getString(R.string.create_dir_fail_msg),
+                        getResources(), false);
+
+                showSnackMessage(errorMessage.toString());
+            }
+        });
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {

@@ -29,6 +29,17 @@ import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.files.usecases.CopyFileUseCase
+import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
+import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
+import com.owncloud.android.domain.files.usecases.MoveFileUseCase
+import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
+import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
+import com.owncloud.android.domain.files.usecases.RenameFileUseCase
+import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -43,14 +54,19 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
+import com.owncloud.android.usecases.transfers.CancelDownloadForFileUseCase
+import com.owncloud.android.usecases.transfers.CancelDownloadsForAccountUseCase
+import com.owncloud.android.usecases.transfers.DownloadFileUseCase
+import com.owncloud.android.usecases.transfers.GetLiveDataForDownloadingFileUseCase
+import com.owncloud.android.usecases.transfers.GetLiveDataForFinishedDownloadsFromAccountUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
     // Authentication
+    factory { GetBaseUrlUseCase(get()) }
     factory { LoginBasicAsyncUseCase(get()) }
     factory { LoginOAuthAsyncUseCase(get()) }
     factory { SupportsOAuth2UseCase(get()) }
-    factory { GetBaseUrlUseCase(get()) }
 
     // OAuth
     factory { OIDCDiscoveryUseCase(get()) }
@@ -62,22 +78,42 @@ val useCaseModule = module {
     factory { GetStoredCapabilitiesUseCase(get()) }
     factory { RefreshCapabilitiesFromServerAsyncUseCase(get()) }
 
+    // Files
+    factory { CreateFolderAsyncUseCase(get()) }
+    factory { CopyFileUseCase(get()) }
+    factory { GetFileByIdUseCase(get()) }
+    factory { GetFileByRemotePathUseCase(get()) }
+    factory { GetFolderContentUseCase(get()) }
+    factory { GetFolderImagesUseCase(get()) }
+    factory { MoveFileUseCase(get()) }
+    factory { RefreshFolderFromServerAsyncUseCase(get()) }
+    factory { RemoveFileUseCase(get()) }
+    factory { RenameFileUseCase(get()) }
+    factory { SaveFileOrFolderUseCase(get()) }
+
     // Sharing
+    factory { CreatePrivateShareAsyncUseCase(get()) }
+    factory { CreatePublicShareAsyncUseCase(get()) }
+    factory { DeleteShareAsyncUseCase(get()) }
+    factory { EditPrivateShareAsyncUseCase(get()) }
+    factory { EditPublicShareAsyncUseCase(get()) }
+    factory { GetShareAsLiveDataUseCase(get()) }
     factory { GetShareesAsyncUseCase(get()) }
     factory { GetSharesAsLiveDataUseCase(get()) }
-    factory { GetShareAsLiveDataUseCase(get()) }
     factory { RefreshSharesFromServerAsyncUseCase(get()) }
-    factory { CreatePrivateShareAsyncUseCase(get()) }
-    factory { EditPrivateShareAsyncUseCase(get()) }
-    factory { CreatePublicShareAsyncUseCase(get()) }
-    factory { EditPublicShareAsyncUseCase(get()) }
-    factory { DeleteShareAsyncUseCase(get()) }
+
+    // Transfers
+    factory { CancelDownloadForFileUseCase(get()) }
+    factory { CancelDownloadsForAccountUseCase(get()) }
+    factory { DownloadFileUseCase(get()) }
+    factory { GetLiveDataForDownloadingFileUseCase(get()) }
+    factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }
+    factory { GetUserAvatarAsyncUseCase(get()) }
     factory { GetUserInfoAsyncUseCase(get()) }
     factory { RefreshUserQuotaFromServerAsyncUseCase(get()) }
-    factory { GetUserAvatarAsyncUseCase(get()) }
 
     // Server
     factory { GetServerInfoAsyncUseCase(get()) }

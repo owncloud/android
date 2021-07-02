@@ -28,16 +28,19 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.resources.files.services.implementation.OCFileService;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.ui.files.operations.FileOperation;
+import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel;
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.utils.FileStorageUtils;
 import timber.log.Timber;
@@ -50,6 +53,8 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.koin.java.KoinJavaComponent.get;
+
 /**
  * Operation performing the synchronization of the list of files contained
  * in a folder identified with its remote path.
@@ -60,76 +65,66 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Does NOT enter in the child folders to synchronize their contents also, BUT requests for a new operation instance
  * doing so.
  */
+@Deprecated
+// Call RefreshFolderFromServerAsyncUseCase instead. Keep it for the moment.
+// It handles conflicts.
+// At the moment, in new arch we don't handle them.
 public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFile>> {
 
-    /**
-     * Time stamp for the synchronization process in progress
-     */
-    private long mCurrentSyncTime;
-
-    /**
-     * Remote path of the folder to synchronize
-     */
-    private String mRemotePath;
-
-    /**
-     * Account where the file to synchronize belongs
-     */
-    private Account mAccount;
-
-    /**
-     * Android context; necessary to send requests to the download service
-     */
-    private Context mContext;
-
-    /**
-     * Locally cached information about folder to synchronize
-     */
-    private OCFile mLocalFolder;
-
-    /**
-     * Counter of conflicts found between local and remote files
-     */
-    private int mConflictsFound;
-
-    /**
-     * Counter of failed operations in synchronization of kept-in-sync files
-     */
-    private int mFailsInFileSyncsFound;
-
-    /**
-     * Map of remote and local paths to files that where locally stored in a location
-     * out of the ownCloud folder and couldn't be copied automatically into it
-     **/
-    private Map<String, String> mForgottenLocalFiles;
-
-    private List<SynchronizeFileOperation> mFilesToSyncContents;
-
-    private List<Intent> mFoldersToSyncContents;
-
     private final AtomicBoolean mCancellationRequested;
-
-    /**
-     * Files and folders contained in the synchronized folder after a successful operation
-     */
-    private List<Pair<OCFile, Boolean>> mFoldersToVisit;
-
-    /**
-     * When 'true', will assume that folder did not change in the server and
-     * will focus only in push any local change to the server (carefully).
-     */
-    private boolean mPushOnly;
-
-    /**
-     * 'True' means that this operation is part of a full account synchronization
-     */
-    private boolean mSyncFullAccount;
-
     /**
      * 'True' means that the contents of all the files in the folder will be synchronized;
      * otherwise, only contents of available offline files will be synchronized.
      */
     private final boolean mSyncContentOfRegularFiles;
+    /**
+     * Time stamp for the synchronization process in progress
+     */
+    private long mCurrentSyncTime;
+    /**
+     * Remote path of the folder to synchronize
+     */
+    private String mRemotePath;
+    /**
+     * Account where the file to synchronize belongs
+     */
+    private Account mAccount;
+    /**
+     * Android context; necessary to send requests to the download service
+     */
+    private Context mContext;
+    /**
+     * Locally cached information about folder to synchronize
+     */
+    private OCFile mLocalFolder;
+    /**
+     * Counter of conflicts found between local and remote files
+     */
+    private int mConflictsFound;
+    /**
+     * Counter of failed operations in synchronization of kept-in-sync files
+     */
+    private int mFailsInFileSyncsFound;
+    /**
+     * Map of remote and local paths to files that where locally stored in a location
+     * out of the ownCloud folder and couldn't be copied automatically into it
+     **/
+    private Map<String, String> mForgottenLocalFiles;
+    private List<SynchronizeFileOperation> mFilesToSyncContents;
+    private List<Intent> mFoldersToSyncContents;
+    /**
+     * Files and folders contained in the synchronized folder after a successful operation
+     */
+    private List<Pair<OCFile, Boolean>> mFoldersToVisit;
+    /**
+     * When 'true', will assume that folder did not change in the server and
+     * will focus only in push any local change to the server (carefully).
+     */
+    private boolean mPushOnly;
+    /**
+     * 'True' means that this operation is part of a full account synchronization
+     */
+    private boolean mSyncFullAccount;
 
     /**
      * Creates a new instance of {@link SynchronizeFolderOperation}.
@@ -200,6 +195,9 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     protected RemoteOperationResult<ArrayList<RemoteFile>> run(OwnCloudClient client) {
         final RemoteOperationResult<ArrayList<RemoteFile>> fetchFolderResult;
 
+        FilesViewModel filesViewModel = get(FilesViewModel.class);
+        filesViewModel.refreshFolder(mRemotePath);
+
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
         mForgottenLocalFiles.clear();
@@ -259,9 +257,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         if (mCancellationRequested.get()) {
             throw new OperationCancelledException();
         }
-
-        ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
-        return readFolderOperation.execute(client);
+        OCFileService ocFileService = new OCFileService(client);
+        return ocFileService.refreshFolder(mRemotePath);
     }
 
     /**
@@ -276,17 +273,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     }
 
     private void removeLocalFolder() {
-        FileDataStorageManager storageManager = getStorageManager();
-        if (storageManager.fileExists(mLocalFolder.getFileId())) {
-            String currentSavePath = FileStorageUtils.getSavePath(mAccount.name);
-            storageManager.removeFolder(
-                    mLocalFolder,
-                    true,
-                    (mLocalFolder.isDown() &&
-                            mLocalFolder.getStoragePath().startsWith(currentSavePath)
-                    )
-            );
-        }
+        FileOperationViewModel fileOperationViewModel = get(FileOperationViewModel.class);
+        ArrayList<OCFile> list = new ArrayList<>();
+        list.add(mLocalFolder);
+        FileOperation.RemoveOperation removeOperation = new FileOperation.RemoveOperation(list, false);
+        fileOperationViewModel.performOperation(removeOperation);
     }
 
     /**
@@ -348,27 +339,29 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
             /// add to updatedFile data about LOCAL STATE (not existing in server)
             updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
+
             if (localFile != null) {
                 updatedLocalFile.copyLocalPropertiesFrom(localFile);
-                updatedLocalFile.setFileName(remoteFile.getFileName());
+//                updatedLocalFile.setFileName(remoteFile.getFileName());
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag(localFile.getEtag());
                 if (!updatedLocalFile.isFolder() &&
                         remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
-                    updatedLocalFile.setNeedsUpdateThumbnail(true);
+                    updatedLocalFile.setNeedsToUpdateThumbnail(true);
                 }
             } else {
-                updatedLocalFile.setParentId(mLocalFolder.getFileId());
+                updatedLocalFile.setParentId(mLocalFolder.getId());
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag("");
                 // new files need to check av-off status of parent folder!
-                if (updatedFolder.isAvailableOffline()) {
-                    updatedLocalFile.setAvailableOfflineStatus(
-                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
-                    );
-                }
+                // FIXME: 19/10/2020 : New_arch: Av.Offline
+//                if (updatedFolder.isAvailableOffline()) {
+//                    updatedLocalFile.setAvailableOfflineStatus(
+//                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+//                    );
+//                }
                 // new files need to update thumbnails
-                updatedLocalFile.setNeedsUpdateThumbnail(true);
+                updatedLocalFile.setNeedsToUpdateThumbnail(true);
             }
 
             /// check and fix, if needed, local storage path
@@ -413,8 +406,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * last synchronization.
      */
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
-
-        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableOffline());
+        // FIXME: 13/10/2020 : New_arch: Av.Offline
+        boolean shouldSyncContents = (mSyncContentOfRegularFiles); // || localFile.isAvailableOffline());
         boolean serverUnchanged;
 
         if (localFile.isFolder()) {

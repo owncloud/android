@@ -26,13 +26,15 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Process
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.ui.activity.ConflictsResolveActivity
 import java.util.Random
 
@@ -43,6 +45,50 @@ object NotificationUtils {
         return NotificationCompat.Builder(context, channelId).apply {
             color = ContextCompat.getColor(context, R.color.primary)
             setSmallIcon(R.drawable.notification_icon)
+        }
+    }
+
+    fun createBasicNotification(
+        context: Context,
+        contentTitle: String,
+        contentText: String,
+        notificationChannelId: String,
+        notificationId: Int,
+        intent: PendingIntent?,
+        onGoing: Boolean = false,
+        timeOut: Long?,
+    ) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val notificationBuilder = newNotificationBuilder(context, notificationChannelId).apply {
+            setContentTitle(contentTitle)
+            color = ContextCompat.getColor(context, R.color.primary)
+            setSmallIcon(R.drawable.notification_icon)
+            setWhen(System.currentTimeMillis())
+            setContentText(contentText)
+            setOngoing(onGoing)
+            setAutoCancel(true)
+        }
+
+        intent?.let {
+            notificationBuilder.setContentIntent(it)
+        }
+
+        timeOut?.let {
+            // [setTimeoutAfter] was introduced in API 26.
+            // https://developer.android.com/reference/android/app/Notification.Builder#setTimeoutAfter(long)
+            notificationBuilder.setTimeoutAfter(it)
+        }
+
+        notificationManager.notify(notificationId, notificationBuilder.build())
+
+        // Remove success notification for devices with API < 26 with a workaround
+        if (SDK_INT < Build.VERSION_CODES.O && timeOut != null) {
+            cancelWithDelay(
+                notificationManager = notificationManager,
+                notificationId = notificationId,
+                delayInMillis = timeOut
+            )
         }
     }
 
@@ -98,8 +144,8 @@ object NotificationUtils {
         var notificationId = 0
 
         // We need a notification id for each file in conflict, let's use the file id but in a safe way
-        if (fileInConflict.fileId.toInt() >= Int.MIN_VALUE && fileInConflict.fileId.toInt() <= Int.MAX_VALUE) {
-            notificationId = fileInConflict.fileId.toInt()
+        if (fileInConflict.id!!.toInt() >= Int.MIN_VALUE && fileInConflict.id!!.toInt() <= Int.MAX_VALUE) {
+            notificationId = fileInConflict.id!!.toInt()
         }
         notificationManager.notify(notificationId, notificationBuilder.build())
     }

@@ -37,9 +37,8 @@ import android.os.Process;
 import android.util.Pair;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -49,11 +48,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
-import com.owncloud.android.operations.CopyFileOperation;
-import com.owncloud.android.operations.CreateFolderOperation;
-import com.owncloud.android.operations.MoveFileOperation;
-import com.owncloud.android.operations.RemoveFileOperation;
-import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -69,29 +63,15 @@ public class OperationsService extends Service {
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     public static final String EXTRA_SERVER_URL = "SERVER_URL";
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
-    public static final String EXTRA_NEWNAME = "NEWNAME";
-    public static final String EXTRA_REMOVE_ONLY_LOCAL = "REMOVE_LOCAL_COPY";
-    public static final String EXTRA_CREATE_FULL_PATH = "CREATE_FULL_PATH";
-    public static final String EXTRA_RESULT = "RESULT";
-    public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
     public static final String EXTRA_SYNC_REGULAR_FILES = "SYNC_REGULAR_FILES";
-    public static final String EXTRA_IS_LAST_FILE_TO_REMOVE = "EXTRA_IS_LAST_FILE_TO_REMOVE";
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
-    public static final String ACTION_RENAME = "RENAME";
-    public static final String ACTION_REMOVE = "REMOVE";
-    public static final String ACTION_CREATE_FOLDER = "CREATE_FOLDER";
     public static final String ACTION_SYNC_FILE = "SYNC_FILE";
     public static final String ACTION_SYNC_FOLDER = "SYNC_FOLDER";
-    public static final String ACTION_MOVE_FILE = "MOVE_FILE";
-    public static final String ACTION_COPY_FILE = "COPY_FILE";
     public static final String ACTION_CHECK_CURRENT_CREDENTIALS = "CHECK_CURRENT_CREDENTIALS";
-
-    public static final String ACTION_OPERATION_ADDED = OperationsService.class.getName() + ".OPERATION_ADDED";
-    public static final String ACTION_OPERATION_FINISHED = OperationsService.class.getName() + ".OPERATION_FINISHED";
 
     private ConcurrentMap<Integer, Pair<RemoteOperation, RemoteOperationResult>>
             mUndispatchedFinishedOperations = new ConcurrentHashMap<>();
@@ -285,8 +265,6 @@ public class OperationsService extends Service {
             if (itemToQueue != null) {
                 mServiceHandler.mPendingOperations.add(itemToQueue);
                 Intent executeOperation = new Intent(OperationsService.this, OperationsService.class);
-                executeOperation.putExtra(EXTRA_IS_LAST_FILE_TO_REMOVE,
-                        operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE, false));
                 startService(executeOperation);
                 return itemToQueue.second.hashCode();
             } else {
@@ -462,31 +440,6 @@ public class OperationsService extends Service {
                 String action = operationIntent.getAction();
                 if (action != null) {
                     switch (action) {
-                        case ACTION_RENAME: {
-                            // Rename file or folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            String newName = operationIntent.getStringExtra(EXTRA_NEWNAME);
-                            operation = new RenameFileOperation(remotePath, newName);
-
-                            break;
-                        }
-                        case ACTION_REMOVE: {
-                            // Remove file or folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            boolean onlyLocalCopy = operationIntent.getBooleanExtra(EXTRA_REMOVE_ONLY_LOCAL, false);
-                            operation = new RemoveFileOperation(remotePath, onlyLocalCopy,
-                                    operationIntent.getBooleanExtra(EXTRA_IS_LAST_FILE_TO_REMOVE, false));
-
-                            break;
-                        }
-                        case ACTION_CREATE_FOLDER: {
-                            // Create Folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            boolean createFullPath = operationIntent.getBooleanExtra(EXTRA_CREATE_FULL_PATH, true);
-                            operation = new CreateFolderOperation(remotePath, createFullPath);
-
-                            break;
-                        }
                         case ACTION_SYNC_FILE: {
                             // Sync file
                             String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
@@ -509,22 +462,6 @@ public class OperationsService extends Service {
                                     false,
                                     syncContentOfRegularFiles
                             );
-
-                            break;
-                        }
-                        case ACTION_MOVE_FILE: {
-                            // Move file/folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            String newParentPath = operationIntent.getStringExtra(EXTRA_NEW_PARENT_PATH);
-                            operation = new MoveFileOperation(remotePath, newParentPath);
-
-                            break;
-                        }
-                        case ACTION_COPY_FILE: {
-                            // Copy file/folder
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            String newParentPath = operationIntent.getStringExtra(EXTRA_NEW_PARENT_PATH);
-                            operation = new CopyFileOperation(remotePath, newParentPath);
 
                             break;
                         }
