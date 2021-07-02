@@ -35,6 +35,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED
@@ -60,6 +61,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     private var prefVideoUploadsSourcePath: Preference? = null
     private var prefVideoUploadsBehaviour: ListPreference? = null
     private var prefVideoUploadsAccount: ListPreference? = null
+    private var prefVideoUploadsLastSync: Preference? = null
 
     private val selectVideoUploadsPathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -85,6 +87,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsPath = findPreference(PREF__CAMERA_VIDEO_UPLOADS_PATH)
         prefVideoUploadsOnWifi = findPreference(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY)
         prefVideoUploadsSourcePath = findPreference(PREF__CAMERA_VIDEO_UPLOADS_SOURCE)
+        prefVideoUploadsLastSync = findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_LAST_SYNC)
         prefVideoUploadsBehaviour = findPreference<ListPreference>(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)?.apply {
             entries = listOf(getString(R.string.pref_behaviour_entries_keep_file), getString(R.string.pref_behaviour_entries_move)).toTypedArray()
             entryValues = listOf(FolderBackUpConfiguration.Behavior.COPY.name, FolderBackUpConfiguration.Behavior.MOVE.name).toTypedArray()
@@ -121,7 +124,8 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                 prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                 prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
                 prefVideoUploadsBehaviour?.value = it.behavior.name
-            }
+                prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
+            } ?: resetFields()
         })
     }
 
@@ -214,5 +218,15 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsSourcePath?.isEnabled = value
         prefVideoUploadsBehaviour?.isEnabled = value
         prefVideoUploadsAccount?.isEnabled = value
+        prefVideoUploadsLastSync?.isEnabled = value
+    }
+
+    private fun resetFields() {
+        prefVideoUploadsAccount?.value = null
+        prefVideoUploadsPath?.summary = null
+        prefVideoUploadsSourcePath?.summary = null
+        prefVideoUploadsOnWifi?.isChecked = false
+        prefVideoUploadsBehaviour?.value = FolderBackUpConfiguration.Behavior.COPY.name
+        prefVideoUploadsLastSync?.summary = null
     }
 }

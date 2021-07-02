@@ -56,6 +56,8 @@ public abstract class PreferenceManager {
     public static final String PREF__CAMERA_VIDEO_UPLOADS_SOURCE = "video_uploads_source_path";
     public static final String PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME = "picture_uploads_account_name";
     public static final String PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME = "video_uploads_account_name";
+    public static final String PREF__CAMERA_PICTURE_UPLOADS_LAST_SYNC = "picture_uploads_last_sync";
+    public static final String PREF__CAMERA_VIDEO_UPLOADS_LAST_SYNC = "video_uploads_last_sync";
     public static final String PREF__CAMERA_UPLOADS_DEFAULT_PATH = "/CameraUpload";
     public static final String PREF__LEGACY_FINGERPRINT = "set_fingerprint";
     /**

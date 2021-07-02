@@ -49,5 +49,9 @@
         app:negativeButtonText=""
         app:title="@string/prefs_camera_upload_behaviour_title"
         app:useSimpleSummaryProvider="true" />
-
+    <Preference
+        app:allowDividerAbove="true"
+        app:iconSpaceReserved="false"
+        app:key="picture_uploads_last_sync"
+        app:title="@string/prefs_camera_upload_last_sync_title" />
 </PreferenceScreen>

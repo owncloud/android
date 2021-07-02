@@ -38,6 +38,7 @@ import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_LAST_SYNC
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
@@ -60,6 +61,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     private var prefPictureUploadsSourcePath: Preference? = null
     private var prefPictureUploadsBehaviour: ListPreference? = null
     private var prefPictureUploadsAccount: ListPreference? = null
+    private var prefPictureUploadsLastSync: Preference? = null
 
     private val selectPictureUploadsPathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -85,6 +87,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsPath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_PATH)
         prefPictureUploadsOnWifi = findPreference(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY)
         prefPictureUploadsSourcePath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE)
+        prefPictureUploadsLastSync = findPreference(PREF__CAMERA_PICTURE_UPLOADS_LAST_SYNC)
         prefPictureUploadsBehaviour = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)?.apply {
             entries = listOf(getString(R.string.pref_behaviour_entries_keep_file), getString(R.string.pref_behaviour_entries_move)).toTypedArray()
             entryValues = listOf(FolderBackUpConfiguration.Behavior.COPY.name, FolderBackUpConfiguration.Behavior.MOVE.name).toTypedArray()
@@ -121,7 +124,8 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                 prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                 prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
                 prefPictureUploadsBehaviour?.value = it.behavior.name
-            }
+                prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
+            } ?: resetFields()
         })
     }
 
@@ -214,5 +218,15 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsSourcePath?.isEnabled = value
         prefPictureUploadsBehaviour?.isEnabled = value
         prefPictureUploadsAccount?.isEnabled = value
+        prefPictureUploadsLastSync?.isEnabled = value
+    }
+
+    private fun resetFields() {
+        prefPictureUploadsAccount?.value = null
+        prefPictureUploadsPath?.summary = null
+        prefPictureUploadsSourcePath?.summary = null
+        prefPictureUploadsOnWifi?.isChecked = false
+        prefPictureUploadsBehaviour?.value = FolderBackUpConfiguration.Behavior.COPY.name
+        prefPictureUploadsLastSync?.summary = null
     }
 }
