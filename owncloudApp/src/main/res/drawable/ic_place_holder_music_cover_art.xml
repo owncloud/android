@@ -6,8 +6,8 @@
   <path
       android:pathData="M0,0h200v200h-200z"
       android:strokeWidth="3.81912"
-      android:fillColor="@color/primary"
-      android:strokeColor="@color/primary"/>
+      android:fillColor="@color/actionbar_start_color"
+      android:strokeColor="@color/actionbar_start_color"/>
   <path
       android:pathData="m78.094,58.945v47.641c-2.664,-1.535 -5.735,-2.484 -9.031,-2.484 -9.98,0 -18.063,8.083 -18.063,18.063 0,9.98 8.083,18.063 18.063,18.063 9.98,0 18.063,-8.083 18.063,-18.063V77.008c14.948,0 29.895,0 44.843,0V107.413c-2.664,-1.535 -5.735,-2.484 -9.031,-2.484 -9.98,0 -18.063,8.083 -18.063,18.063 0,9.98 8.083,18.063 18.063,18.063 9.98,0 18.063,-8.083 18.063,-18.063V58.945c-20.969,0 -41.937,0 -62.906,0z"
       android:strokeWidth="4.516"
