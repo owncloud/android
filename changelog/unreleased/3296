@@ -1,0 +1,6 @@
+Enhancement: Hide "More" section if all options are disabled
+
+A blank view was shown when all options in "More" subsection were disabled. Now, the
+subsection is only shown if at least one option is enabled.
+
+https://github.com/owncloud/android/issues/3271 https://github.com/owncloud/android/pull/3296

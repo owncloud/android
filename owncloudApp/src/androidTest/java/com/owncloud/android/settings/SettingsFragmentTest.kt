@@ -34,6 +34,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
@@ -58,6 +59,7 @@ class SettingsFragmentTest {
     private lateinit var prefAboutApp: Preference
 
     private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var moreViewModel: SettingsMoreViewModel
     private lateinit var context: Context
 
     private lateinit var version: String
@@ -66,6 +68,7 @@ class SettingsFragmentTest {
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         settingsViewModel = mockk(relaxUnitFun = true)
+        moreViewModel = mockk(relaxUnitFun = true)
 
         stopKoin()
 
@@ -75,6 +78,9 @@ class SettingsFragmentTest {
                 module(override = true) {
                     viewModel {
                         settingsViewModel
+                    }
+                    viewModel {
+                        moreViewModel
                     }
                 }
             )
@@ -89,8 +95,9 @@ class SettingsFragmentTest {
         )
     }
 
-    private fun launchTest(attachedAccount: Boolean) {
+    private fun launchTest(attachedAccount: Boolean, moreSectionVisible: Boolean = true) {
         every { settingsViewModel.isThereAttachedAccount() } returns attachedAccount
+        every { moreViewModel.shouldMoreSectionBeVisible() } returns moreSectionVisible
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
@@ -155,6 +162,18 @@ class SettingsFragmentTest {
             keyPref = SUBSECTION_VIDEO_UPLOADS,
             titlePref = context.getString(R.string.prefs_subsection_video_uploads),
             summaryPref = context.getString(R.string.prefs_subsection_video_uploads_summary),
+            visible = false
+        )
+    }
+
+    @Test
+    fun settingsMoreSectionHidden() {
+        launchTest(attachedAccount = false, moreSectionVisible = false)
+
+        subsectionMore.verifyPreference(
+            keyPref = SUBSECTION_MORE,
+            titlePref = context.getString(R.string.prefs_subsection_more),
+            summaryPref = context.getString(R.string.prefs_subsection_more_summary),
             visible = false
         )
     }
