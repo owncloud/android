@@ -444,7 +444,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
             clientId = clientId,
             responseType = ResponseType.CODE.string,
-            scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else ""
+            scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else "",
+            codeChallenge = oauthViewModel.codeChallenge
         )
 
         customTabsIntent.launchUrl(
@@ -501,7 +502,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             tokenEndpoint = tokenEndPoint,
             authorizationCode = authorizationCode,
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
-            clientAuth = clientAuth
+            clientAuth = clientAuth,
+            codeVerifier = oauthViewModel.codeChallenge
         )
 
         oauthViewModel.requestToken(requestToken)

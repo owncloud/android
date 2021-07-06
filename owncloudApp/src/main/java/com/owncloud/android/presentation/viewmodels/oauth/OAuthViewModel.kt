@@ -43,6 +43,8 @@ class OAuthViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
+    val codeChallenge: String = "Generate a cryptographically random string for this code challenge"
+
     private val _oidcDiscovery = MediatorLiveData<Event<UIResult<OIDCServerConfiguration>>>()
     val oidcDiscovery: LiveData<Event<UIResult<OIDCServerConfiguration>>> = _oidcDiscovery
 

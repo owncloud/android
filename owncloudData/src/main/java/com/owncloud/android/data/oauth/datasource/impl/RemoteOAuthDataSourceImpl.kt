@@ -101,7 +101,8 @@ class RemoteOAuthDataSourceImpl(
                     authorizationCode = this.authorizationCode,
                     grantType = this.grantType,
                     redirectUri = this.redirectUri,
-                    clientAuth = this.clientAuth
+                    clientAuth = this.clientAuth,
+                    codeVerifier = this.codeVerifier
                 )
             is TokenRequest.RefreshToken ->
                 TokenRequestParams.RefreshToken(

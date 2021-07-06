@@ -25,10 +25,12 @@ import android.util.Base64
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_CLIENT_ID
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_CODE_CHALLENGE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
+import okhttp3.Challenge
 import java.net.URLEncoder
 
 class OAuthUtils {
@@ -61,13 +63,15 @@ class OAuthUtils {
             redirectUri: String,
             clientId: String,
             responseType: String,
-            scope: String
+            scope: String,
+            codeChallenge: String
         ): Uri =
             authorizationEndpoint.buildUpon()
                 .appendQueryParameter(QUERY_PARAMETER_REDIRECT_URI, redirectUri)
                 .appendQueryParameter(QUERY_PARAMETER_CLIENT_ID, clientId)
                 .appendQueryParameter(QUERY_PARAMETER_RESPONSE_TYPE, responseType)
                 .appendQueryParameter(QUERY_PARAMETER_SCOPE, scope)
+                .appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE, codeChallenge)
                 .build()
 
         fun buildRedirectUri(context: Context): Uri =
