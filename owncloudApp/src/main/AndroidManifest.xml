@@ -242,7 +242,7 @@
         <activity
             android:name=".presentation.ui.authentication.LoginActivity"
             android:exported="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.ownCloud.Toolbar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

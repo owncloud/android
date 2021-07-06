@@ -44,9 +44,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class CameraUploadsWorker(
@@ -220,8 +218,6 @@ class CameraUploadsWorker(
         sourcePath: String,
         lastSyncTimestamp: Long,
     ): List<DocumentFile> {
-        val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
-
         val sourceUri: Uri = sourcePath.toUri()
         val documentTree = DocumentFile.fromTreeUri(applicationContext, sourceUri)
         val arrayOfLocalFiles = documentTree?.listFiles() ?: arrayOf()
@@ -231,7 +227,7 @@ class CameraUploadsWorker(
             .filter { it.lastModified() > lastSyncTimestamp }
             .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType) }
 
-        Timber.i("Last sync ${syncType.name}: ${simpleDateFormat.format(Date(lastSyncTimestamp))}")
+        Timber.i("Last sync ${syncType.name}: ${Date(lastSyncTimestamp)}")
         Timber.i("${arrayOfLocalFiles.size} files found in folder: ${sourceUri.path}")
         Timber.i("${filteredList.size} files are ${syncType.name} and were taken after last sync")
 
