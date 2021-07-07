@@ -36,6 +36,7 @@ import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConf
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
 import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE
 import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO
+import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.usecases.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.NotificationUtils
@@ -182,13 +183,17 @@ class CameraUploadsWorker(
             SyncType.PICTURE_UPLOADS -> R.string.uploader_upload_picture_upload_error
             SyncType.VIDEO_UPLOADS -> R.string.uploader_upload_video_upload_error
         }
+        val notificationKey: String = when (syncType) {
+            SyncType.PICTURE_UPLOADS -> SettingsActivity.NOTIFICATION_INTENT_PICTURES
+            SyncType.VIDEO_UPLOADS -> SettingsActivity.NOTIFICATION_INTENT_VIDEOS
+        }
         NotificationUtils.createBasicNotification(
             context = appContext,
             contentTitle = appContext.getString(R.string.uploader_upload_camera_upload_source_path_error),
             contentText = appContext.getString(contentText),
             notificationChannelId = UPLOAD_NOTIFICATION_CHANNEL_ID,
             notificationId = syncType.getNotificationId(),
-            intent = NotificationUtils.composePendingIntentToUploadList(appContext),
+            intent = NotificationUtils.composePendingIntentToCameraUploads(appContext, notificationKey),
             onGoing = false,
             timeOut = null
         )
