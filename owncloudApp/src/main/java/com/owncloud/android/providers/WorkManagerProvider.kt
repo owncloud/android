@@ -36,6 +36,6 @@ class WorkManagerProvider(
             .build()
 
         WorkManager.getInstance(context)
-            .enqueueUniquePeriodicWork(CameraUploadsWorker.CAMERA_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.REPLACE, cameraUploadsWorker)
+            .enqueueUniquePeriodicWork(CameraUploadsWorker.CAMERA_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.KEEP, cameraUploadsWorker)
     }
 }
