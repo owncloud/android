@@ -159,6 +159,8 @@ class CameraUploadsWorker(
         syncType: SyncType,
         numberOfFilesToUpload: Int
     ) {
+        if (numberOfFilesToUpload == 0) return
+
         val contentText = when (syncType) {
             SyncType.PICTURE_UPLOADS -> R.string.uploader_upload_picture_upload_files
             SyncType.VIDEO_UPLOADS -> R.string.uploader_upload_video_upload_files
