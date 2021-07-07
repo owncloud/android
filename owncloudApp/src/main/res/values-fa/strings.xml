@@ -366,8 +366,7 @@
   <string name="file_list__footer__files_and_folder">%1$d فایل، 1 پوشه</string>
   <string name="file_list__footer__files_and_folders">%1$d فایل, %2$d پوشه</string>
   <string name="prefs_camera_upload_source_path_title_required">ضروری</string>
-  <string name="prefs_camera_upload_source_path_title_optional">اختیاری</string>
-  <string name="upload_copy_files">رونوشت از پرونده</string>
+    <string name="upload_copy_files">رونوشت از پرونده</string>
   <string name="upload_move_files">جابه‌جایی پرونده</string>
   <string name="share_dialog_title">اشتراک گذاری</string>
   <string name="share_file">هم‌رسانی %1$s</string>

@@ -434,8 +434,7 @@
   <string name="file_list__footer__files_and_folders">%1$d file, %2$d cartelle</string>
   <string name="prefs_camera_upload_source_path_title">Cartella della fotocamera (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">richiesto</string>
-  <string name="prefs_camera_upload_source_path_title_optional">opzionale</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Il file originale verrà</string>
+    <string name="prefs_camera_upload_behaviour_dialog_title">Il file originale verrà</string>
   <string name="prefs_camera_upload_behaviour_title">Il file originale verrà</string>
   <string name="upload_copy_files">Copia file</string>
   <string name="upload_move_files">Sposta file</string>

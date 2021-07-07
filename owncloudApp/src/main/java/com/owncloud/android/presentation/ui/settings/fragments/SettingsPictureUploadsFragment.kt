@@ -97,13 +97,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             entryValues = picturesViewModel.getLoggedAccountNames()
         }
 
-        val comment =
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) getString(
-                R.string.prefs_camera_upload_source_path_title_optional
-            )
-            else getString(
-                R.string.prefs_camera_upload_source_path_title_required
-            )
+        val comment = getString(R.string.prefs_camera_upload_source_path_title_required)
         prefPictureUploadsSourcePath?.title = String.format(prefPictureUploadsSourcePath?.title.toString(), comment)
 
         initPreferenceListeners()

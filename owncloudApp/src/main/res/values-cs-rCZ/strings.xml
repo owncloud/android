@@ -433,8 +433,7 @@ správce systému.</string>
   <string name="file_list__footer__files_and_folders">%1$d soubory(ů), %2$d adresáře(ů)</string>
   <string name="prefs_camera_upload_source_path_title">Adresář fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vyžadován</string>
-  <string name="prefs_camera_upload_source_path_title_optional">nepovinný</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Původní soubor bude</string>
+    <string name="prefs_camera_upload_behaviour_dialog_title">Původní soubor bude</string>
   <string name="prefs_camera_upload_behaviour_title">Původní soubor bude</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
   <string name="upload_move_files">Přesunout soubor</string>

@@ -314,8 +314,7 @@
   <string name="file_list__footer__files_and_folder">%1$d фајлова, 1 фасцикла</string>
   <string name="file_list__footer__files_and_folders">%1$d фајлова, %2$d фасцикли</string>
   <string name="prefs_camera_upload_source_path_title_required">неопходно</string>
-  <string name="prefs_camera_upload_source_path_title_optional">опционо</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Оригинални фајл ће бити…</string>
+    <string name="prefs_camera_upload_behaviour_dialog_title">Оригинални фајл ће бити…</string>
   <string name="prefs_camera_upload_behaviour_title">Оригинални фајл ће бити…</string>
   <string name="upload_copy_files">Копирај фајл</string>
   <string name="upload_move_files">Премести фајл</string>
