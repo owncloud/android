@@ -37,7 +37,7 @@ import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
-import com.owncloud.android.utils.FileStorageUtils.getDefaultCameraSourcePath
+import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.File
@@ -99,7 +99,9 @@ class SettingsVideoUploadsViewModel(
 
     fun getVideoUploadsPath() = _videoUploads.value?.uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH
 
-    fun getVideoUploadsSourcePath(): String = _videoUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
+    fun getVideoUploadsSourcePath(): String? = _videoUploads.value?.sourcePath
+
+    fun getDefaultCameraSourcePath(): String = FileStorageUtils.getDefaultCameraSourcePath()
 
     fun handleSelectVideoUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
@@ -134,7 +136,7 @@ class SettingsVideoUploadsViewModel(
         // If the source path has changed, update camera uploads last sync
         var previousSourcePath = _videoUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
 
-        previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)
+        previousSourcePath = previousSourcePath.trimEnd(File.separatorChar)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             saveVideoUploadsConfigurationUseCase.execute(
@@ -163,7 +165,7 @@ class SettingsVideoUploadsViewModel(
         FolderBackUpConfiguration(
             accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
             behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
-            sourcePath = sourcePath ?: getDefaultCameraSourcePath(),
+            sourcePath = sourcePath.orEmpty(),
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
             lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),

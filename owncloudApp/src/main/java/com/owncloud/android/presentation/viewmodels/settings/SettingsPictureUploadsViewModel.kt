@@ -99,7 +99,9 @@ class SettingsPictureUploadsViewModel(
 
     fun getPictureUploadsPath() = _pictureUploads.value?.uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH
 
-    fun getPictureUploadsSourcePath(): String = _pictureUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
+    fun getPictureUploadsSourcePath(): String? = _pictureUploads.value?.sourcePath
+
+    fun getDefaultSourcePath(): String = getDefaultCameraSourcePath()
 
     fun handleSelectPictureUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
@@ -134,7 +136,7 @@ class SettingsPictureUploadsViewModel(
         // If the source path has changed, update camera uploads last sync
         var previousSourcePath = _pictureUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
 
-        previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)
+        previousSourcePath = previousSourcePath.trimEnd(File.separatorChar)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             savePictureUploadsConfigurationUseCase.execute(
@@ -163,7 +165,7 @@ class SettingsPictureUploadsViewModel(
         FolderBackUpConfiguration(
             accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
             behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
-            sourcePath = sourcePath ?: getDefaultCameraSourcePath(),
+            sourcePath = sourcePath.orEmpty(),
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
             lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),

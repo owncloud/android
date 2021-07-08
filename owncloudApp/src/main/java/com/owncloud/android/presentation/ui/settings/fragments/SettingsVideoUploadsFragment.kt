@@ -163,6 +163,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
 
         prefVideoUploadsSourcePath?.setOnPreferenceClickListener {
             var sourcePath = videosViewModel.getVideoUploadsSourcePath()
+                .takeUnless { it.isNullOrBlank() } ?: videosViewModel.getDefaultCameraSourcePath()
             if (!sourcePath.endsWith(File.separator)) {
                 sourcePath += File.separator
             }

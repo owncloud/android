@@ -163,6 +163,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
 
         prefPictureUploadsSourcePath?.setOnPreferenceClickListener {
             var sourcePath = picturesViewModel.getPictureUploadsSourcePath()
+                .takeUnless { it.isNullOrBlank() } ?: picturesViewModel.getDefaultSourcePath()
             if (!sourcePath.endsWith(File.separator)) {
                 sourcePath += File.separator
             }
