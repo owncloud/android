@@ -58,7 +58,7 @@ class UploadFileFromContentUriOperation(
         return try {
             val status = client.executeHttpMethod(putMethod)
             if (isSuccess(status)) {
-                RemoteOperationResult<Unit>(RemoteOperationResult.ResultCode.OK)
+                RemoteOperationResult<Unit>(RemoteOperationResult.ResultCode.OK).apply { data = Unit }
             } else {
                 RemoteOperationResult<Unit>(putMethod)
             }
