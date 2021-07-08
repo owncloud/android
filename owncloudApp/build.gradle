@@ -41,6 +41,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
     kapt "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
 
+    kapt "org.xerial:sqlite-jdbc:3.34.0" // fix kapt for Apple Silicon https://stackoverflow.com/a/68285501/1079990
     implementation "androidx.room:room-runtime:$roomVersion"
 
     // Koin dependency injector
