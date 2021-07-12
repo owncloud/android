@@ -503,7 +503,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             authorizationCode = authorizationCode,
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
             clientAuth = clientAuth,
-            codeVerifier = oauthViewModel.codeChallenge
+            codeVerifier = oauthViewModel.codeVerifier
         )
 
         oauthViewModel.requestToken(requestToken)
