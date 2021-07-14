@@ -1,0 +1,5 @@
+Security: Add PKCE support
+
+PKCE (Proof Key for Code Exchange) support defined in RFC-7636 was added to prevent authorization code interception attacks.
+
+https://github.com/owncloud/android/pull/3310
