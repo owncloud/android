@@ -454,7 +454,7 @@
   <string name="prefs_video_upload_account">Учётная запись для закачки видео</string>
   <string name="prefs_camera_upload_source_path_title">Каталог камеры (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">обязательно</string>
-    <string name="prefs_camera_upload_behaviour_dialog_title">Исходный файл будет</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Исходный файл будет</string>
   <string name="prefs_camera_upload_behaviour_title">Исходный файл будет</string>
   <string name="upload_copy_files">Копировать файл</string>
   <string name="upload_move_files">Переместить файл</string>

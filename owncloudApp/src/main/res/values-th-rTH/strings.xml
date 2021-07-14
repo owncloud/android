@@ -451,7 +451,7 @@
   <string name="prefs_video_upload_account">บัญชีสำหรับอัปโหลดวิดีโอ</string>
   <string name="prefs_camera_upload_source_path_title">โฟลเดอร์ของกล้อง (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
-    <string name="prefs_camera_upload_behaviour_dialog_title">ไฟล์ต้นฉบับจะเป็น</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="prefs_camera_upload_behaviour_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>

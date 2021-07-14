@@ -404,7 +404,7 @@
   <string name="file_list__footer__files_and_folders">%1$d datotek, %2$d map</string>
   <string name="prefs_camera_upload_source_path_title">Mapa kamere (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">zahtevano</string>
-    <string name="upload_copy_files">Kopiraj datoteko</string>
+  <string name="upload_copy_files">Kopiraj datoteko</string>
   <string name="upload_move_files">Premakni datoteko</string>
   <string name="pref_behaviour_entries_keep_file">Ohrani v izvorni mapi</string>
   <string name="pref_behaviour_entries_move">Premakni v mapo programa</string>

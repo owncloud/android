@@ -366,7 +366,7 @@
   <string name="file_list__footer__files_and_folders">%1$d súb., %2$d prieč.</string>
   <string name="prefs_camera_upload_source_path_title">Adresár fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Požaduje sa</string>
-    <string name="prefs_camera_upload_behaviour_dialog_title">Originálny súbor bude</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Originálny súbor bude</string>
   <string name="prefs_camera_upload_behaviour_title">Originálny súbor bude</string>
   <string name="upload_copy_files">Kopírovanie súboru</string>
   <string name="upload_move_files">Presunutie súboru</string>

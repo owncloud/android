@@ -382,7 +382,7 @@
   <string name="file_list__footer__files_and_folders">파일 %1$d개, 폴더 %2$d개</string>
   <string name="prefs_camera_upload_source_path_title">카메라 폴더(%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">필수</string>
-    <string name="upload_copy_files">파일 복사</string>
+  <string name="upload_copy_files">파일 복사</string>
   <string name="upload_move_files">파일 이동</string>
   <string name="pref_behaviour_entries_keep_file">원래 폴더에 유지됨</string>
   <string name="pref_behaviour_entries_move">앱 폴더로 이동함</string>

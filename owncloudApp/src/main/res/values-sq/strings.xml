@@ -451,7 +451,7 @@
   <string name="prefs_video_upload_account">Llogari ku të ngarkohen video</string>
   <string name="prefs_camera_upload_source_path_title">Dosje kamere (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">e domosdoshme</string>
-    <string name="prefs_camera_upload_behaviour_dialog_title">Kartela origjinale do të jetë</string>
+  <string name="prefs_camera_upload_behaviour_dialog_title">Kartela origjinale do të jetë</string>
   <string name="prefs_camera_upload_behaviour_title">Kartela origjinale do të jetë</string>
   <string name="upload_copy_files">Kopjoje kartelën</string>
   <string name="upload_move_files">Lëvize kartelën</string>
