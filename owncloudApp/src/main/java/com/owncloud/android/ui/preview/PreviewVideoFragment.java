@@ -40,7 +40,6 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -419,8 +418,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         // Video streaming is only supported at Jelly Bean or higher Android versions (>= API 16)
 
         // Create the player
-        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector,
-                new DefaultLoadControl());
+        player = new SimpleExoPlayer.Builder(requireContext()).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
 
         player.addListener(this);
 
