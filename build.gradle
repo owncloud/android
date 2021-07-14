@@ -1,9 +1,9 @@
 buildscript {
     ext {
         // SDK
-        sdkCompileVersion = 29
+        sdkCompileVersion = 30
         sdkMinVersion = 21
-        sdkTargetVersion = 29
+        sdkTargetVersion = 30
 
         // Android jetpack
         archLifecycleVersion = "2.1.0"
