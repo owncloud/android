@@ -55,9 +55,9 @@ class OAuthUtils {
     }
 
     companion object {
-        private const val DEFAULT_CODE_VERIFIER_ENTROPY = 64
         private const val ALGORITHM_SHA_256 = "SHA-256"
         private const val CODE_CHALLENGE_METHOD = "S256"
+        private const val DEFAULT_CODE_VERIFIER_ENTROPY = 64
 
         fun buildClientRegistrationRequest(
             registrationEndpoint: String,
