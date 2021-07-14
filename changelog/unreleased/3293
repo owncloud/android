@@ -1,0 +1,7 @@
+Enhancement: Replace picker to select camera folder with native one
+
+The custom picker to select the camera folder was replaced with the native one. Now, it is ready for
+scoped storage and some problems to select a folder in the SD Card were fixed. Also, a new field to show
+the last synchronization timestamp was added.
+
+https://github.com/owncloud/android/issues/2899 https://github.com/owncloud/android/pull/3293

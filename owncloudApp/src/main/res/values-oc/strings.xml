@@ -320,8 +320,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="file_list__footer__files_and_folders">%1$d fichièrs, %2$d dorsièrs</string>
   <string name="prefs_camera_upload_source_path_title">Dorsièr de l\'aparelh fòto (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Requesit</string>
-  <string name="prefs_camera_upload_source_path_title_optional">Opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Lo fichièr original serà…</string>
+    <string name="prefs_camera_upload_behaviour_dialog_title">Lo fichièr original serà…</string>
   <string name="prefs_camera_upload_behaviour_title">Lo fichièr original serà…</string>
   <string name="upload_copy_files">Copiar lo fichièr</string>
   <string name="upload_move_files">Desplaçar lo fichièr</string>

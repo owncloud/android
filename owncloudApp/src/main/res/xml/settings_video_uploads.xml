@@ -44,12 +44,14 @@
     <ListPreference
         app:defaultValue="NOTHING"
         app:dialogTitle="@string/prefs_camera_upload_behaviour_dialog_title"
-        app:entries="@array/pref_behaviour_entries"
-        app:entryValues="@array/pref_behaviour_entryValues"
         app:iconSpaceReserved="false"
         app:negativeButtonText=""
         app:key="video_uploads_behaviour"
         app:title="@string/prefs_camera_upload_behaviour_title"
         app:useSimpleSummaryProvider="true" />
-
+    <Preference
+        app:allowDividerAbove="true"
+        app:iconSpaceReserved="false"
+        app:key="video_uploads_last_sync"
+        app:title="@string/prefs_camera_upload_last_sync_title" />
 </PreferenceScreen>

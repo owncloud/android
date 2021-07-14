@@ -45,8 +45,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.operations.SyncCapabilitiesOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
-import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.activity.ErrorsWhileCopyingHandlerActivity;
 import com.owncloud.android.utils.NotificationUtils;
 import timber.log.Timber;
@@ -423,20 +421,13 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         );
         if (needsToUpdateCredentials) {
             // let the user update credentials with one click
-            Intent updateAccountCredentials = new Intent(getContext(), LoginActivity.class);
-            updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACCOUNT, getAccount());
-            updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACTION,
-                    AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN);
-            updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            updateAccountCredentials.addFlags(Intent.FLAG_FROM_BACKGROUND);
+            PendingIntent pendingIntentToRefreshCredentials =
+                    NotificationUtils.INSTANCE.composePendingIntentToRefreshCredentials(getContext(), getAccount());
+
             notificationBuilder
                     .setTicker(i18n(R.string.sync_fail_ticker_unauthorized))
                     .setContentTitle(i18n(R.string.sync_fail_ticker_unauthorized))
-                    .setContentIntent(PendingIntent.getActivity(
-                            getContext(), (int) System.currentTimeMillis(), updateAccountCredentials,
-                            PendingIntent.FLAG_ONE_SHOT
-                    ))
+                    .setContentIntent(pendingIntentToRefreshCredentials)
                     .setContentText(i18n(R.string.sync_fail_content_unauthorized, getAccount().name));
         } else {
             notificationBuilder

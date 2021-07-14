@@ -47,7 +47,6 @@ public class FileStorageUtils {
     public static final int SORT_DATE = 1;
     public static final int SORT_SIZE = 2;
     public static final int FILE_DISPLAY_SORT = 3;
-    public static final String CAMERA_FOLDER = "/Camera";
     public static Integer mSortOrderFileDisp = SORT_NAME;
     public static Boolean mSortAscendingFileDisp = true;
 
@@ -239,6 +238,6 @@ public class FileStorageUtils {
     }
 
     public static String getDefaultCameraSourcePath() {
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + CAMERA_FOLDER;
+        return getLocalStorageProvider().getDefaultCameraSourcePath();
     }
 }

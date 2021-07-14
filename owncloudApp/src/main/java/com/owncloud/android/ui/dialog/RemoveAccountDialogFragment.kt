@@ -29,8 +29,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.DocumentsContract
 import com.owncloud.android.R
-import com.owncloud.android.providers.CameraUploadsHandlerProvider
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
+import org.koin.java.KoinJavaComponent.inject
 
 /**
  * Dialog requiring confirmation before removing an OC Account.
@@ -40,6 +40,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDia
  * Container Activity needs to implement AccountManagerCallback<Boolean>.
 </Boolean> */
 class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
+    val viewModel: RemoveAccountDialogViewModel by inject(RemoveAccountDialogViewModel::class.java)
 
     private var targetAccount: Account? = null
 
@@ -72,8 +73,7 @@ class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDi
         am.removeAccount(targetAccount, callback, Handler())
 
         // Reset camera uploads if they were enabled for this account
-        val cameraUploadsHandlerProvider = CameraUploadsHandlerProvider(requireContext())
-        cameraUploadsHandlerProvider.resetCameraUploadsForAccount(targetAccount!!.name)
+        viewModel.resetCameraUploadsForAccount(targetAccount!!.name)
 
         // Notify removal to Document Provider
         val authority = resources.getString(R.string.document_provider_authority)

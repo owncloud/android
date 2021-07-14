@@ -438,8 +438,7 @@ Abajo, encontrás la lista con los enlaces a los archivos locales y remotos en %
   <string name="file_list__footer__files_and_folders">%1$d archivos, %2$d carpetas</string>
   <string name="prefs_camera_upload_source_path_title">Carpeta de la cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
-  <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">El archivo original debe ser</string>
+    <string name="prefs_camera_upload_behaviour_dialog_title">El archivo original debe ser</string>
   <string name="prefs_camera_upload_behaviour_title">El archivo original debe ser</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>

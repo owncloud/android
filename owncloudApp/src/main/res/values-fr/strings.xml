@@ -431,8 +431,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="file_list__footer__files_and_folders">%1$d fichiers, %2$d dossiers</string>
   <string name="prefs_camera_upload_source_path_title">Dossier de l\'appareil photo (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Requis</string>
-  <string name="prefs_camera_upload_source_path_title_optional">Optionnel</string>
-  <string name="prefs_camera_upload_behaviour_dialog_title">Le fichier original sera</string>
+    <string name="prefs_camera_upload_behaviour_dialog_title">Le fichier original sera</string>
   <string name="prefs_camera_upload_behaviour_title">Le fichier original sera</string>
   <string name="upload_copy_files">Copier le fichier</string>
   <string name="upload_move_files">Déplacer le fichier</string>

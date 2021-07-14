@@ -378,8 +378,7 @@
   <string name="file_list__footer__files_and_folders">%1$d tiedostoa, %2$d kansiota</string>
   <string name="prefs_camera_upload_source_path_title">Kamerakansio (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vaadittu</string>
-  <string name="prefs_camera_upload_source_path_title_optional">valinnainen</string>
-  <string name="upload_copy_files">Kopioi tiedosto</string>
+    <string name="upload_copy_files">Kopioi tiedosto</string>
   <string name="upload_move_files">Siirrä tiedosto</string>
   <string name="pref_behaviour_entries_keep_file">pidetään alkuperäisessä kansiossa</string>
   <string name="pref_behaviour_entries_move">siirretään sovelluskansioon</string>
