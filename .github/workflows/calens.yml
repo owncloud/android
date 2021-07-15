@@ -3,8 +3,9 @@ name: Calens Changelog
 on:
   push:
     branches:
-    - fix/*
     - feature/*
+    - fix/*
+    - improvement/*
     - release/*
 
 jobs:

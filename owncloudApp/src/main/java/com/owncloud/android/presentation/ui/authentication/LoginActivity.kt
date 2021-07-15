@@ -658,7 +658,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.welcomeLink.run {
             if (contextProvider.getBoolean(R.bool.show_welcome_link)) {
                 isVisible = true
-                text = String.format(getString(R.string.auth_register), getString(R.string.app_name))
+                text = contextProvider.getString(R.string.login_welcome_text).takeUnless { it.isBlank() }
+                    ?: String.format(contextProvider.getString(R.string.auth_register), contextProvider.getString(R.string.app_name))
                 setOnClickListener {
                     setResult(Activity.RESULT_CANCELED)
                     goToUrl(url = getString(R.string.welcome_link_url))

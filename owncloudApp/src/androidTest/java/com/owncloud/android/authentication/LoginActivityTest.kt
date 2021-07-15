@@ -102,7 +102,7 @@ class LoginActivityTest {
 
     @Before
     fun setUp() {
-        context = ApplicationProvider.getApplicationContext<Context>()
+        context = ApplicationProvider.getApplicationContext()
 
         ocAuthenticationViewModel = mockk(relaxed = true)
         settingsViewModel = mockk(relaxUnitFun = true)
@@ -151,6 +151,7 @@ class LoginActivityTest {
         showLoginBackGroundImage: Boolean = true,
         showWelcomeLink: Boolean = true,
         accountType: String = "owncloud",
+        loginWelcomeText: String = "",
         intent: Intent? = null
     ) {
         every { ocContextProvider.getBoolean(R.bool.show_server_url_input) } returns showServerUrlInput
@@ -158,6 +159,8 @@ class LoginActivityTest {
         every { ocContextProvider.getBoolean(R.bool.use_login_background_image) } returns showLoginBackGroundImage
         every { ocContextProvider.getBoolean(R.bool.show_welcome_link) } returns showWelcomeLink
         every { ocContextProvider.getString(R.string.account_type) } returns accountType
+        every { ocContextProvider.getString(R.string.login_welcome_text) } returns loginWelcomeText
+        every { ocContextProvider.getString(R.string.app_name) } returns BRANDED_APP_NAME
 
         activityScenario = if (intent == null) {
             ActivityScenario.launch(LoginActivity::class.java)
@@ -203,6 +206,24 @@ class LoginActivityTest {
         launchTest(showWelcomeLink = false)
 
         assertViewsDisplayed(showWelcomeLink = false)
+    }
+
+    @Test
+    fun initialViewStatus_brandedOptions_customWelcomeText() {
+        launchTest(showWelcomeLink = true, loginWelcomeText = CUSTOM_WELCOME_TEXT)
+
+        assertViewsDisplayed(showWelcomeLink = true)
+
+        R.id.welcome_link.withText(CUSTOM_WELCOME_TEXT)
+    }
+
+    @Test
+    fun initialViewStatus_brandedOptions_defaultWelcomeText() {
+        launchTest(showWelcomeLink = true, loginWelcomeText = "")
+
+        assertViewsDisplayed(showWelcomeLink = true)
+
+        R.id.welcome_link.withText(String.format(ocContextProvider.getString(R.string.auth_register), BRANDED_APP_NAME))
     }
 
     @Test
@@ -734,5 +755,7 @@ class LoginActivityTest {
     companion object {
         val SERVER_INFO_BASIC = OC_SERVER_INFO
         val SERVER_INFO_BEARER = OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BEARER_TOKEN)
+        private const val CUSTOM_WELCOME_TEXT = "Welcome to this test"
+        private const val BRANDED_APP_NAME = "BrandedAppName"
     }
 }
