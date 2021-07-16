@@ -43,7 +43,7 @@ abstract class OCCapabilityDao {
     @Query(SELECT)
     abstract fun getCapabilitiesForAccountAsLiveData(
         accountName: String
-    ): LiveData<OCCapabilityEntity>
+    ): LiveData<OCCapabilityEntity?>
 
     @Query(SELECT)
     abstract fun getCapabilitiesForAccount(
