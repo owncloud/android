@@ -182,6 +182,11 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">Emri i kartelës s\’duhet të jetë më shumë se %d shenja</string>
   <string name="uploader_upload_text_filename_hint">Emër kartele</string>
   <string name="uploader_upload_camera_upload_files">Po ngarkohen kartela ngarkimi nga kamera</string>
+  <string name="uploader_upload_picture_upload_files">Do të ngarkohen %d foto të reja</string>
+  <string name="uploader_upload_video_upload_files">Do të ngarkohen %d video të reja</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Dështuan Ngarkime Nga Kamera</string>
+  <string name="uploader_upload_picture_upload_error">Shtegu i burimit të ngarkimit të fotove s’është më i vlefshëm</string>
+  <string name="uploader_upload_video_upload_error">Shtegu i burimit të ngarkimit të videove s’është më i vlefshëm</string>
   <string name="uploader_upload_available_offline_files">Po ngarkohen kartela për punim jashtë linje</string>
   <string name="uploader_upload_requested_from_wifi_files">Po ngarkohen të kërkuarat nga kartela wifi</string>
   <string name="ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
@@ -453,6 +458,7 @@
   <string name="prefs_camera_upload_source_path_title_required">e domosdoshme</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Kartela origjinale do të jetë</string>
   <string name="prefs_camera_upload_behaviour_title">Kartela origjinale do të jetë</string>
+  <string name="prefs_camera_upload_last_sync_title">Njëkohësimi i fundit</string>
   <string name="upload_copy_files">Kopjoje kartelën</string>
   <string name="upload_move_files">Lëvize kartelën</string>
   <string name="pref_behaviour_entries_keep_file">mbajtur në dosjen origjinale</string>
