@@ -127,7 +127,7 @@
                             android:padding="0dp"
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_arrow_right"
-                            android:tint="@color/login_text_color" />
+                            app:tint="@color/login_text_color" />
 
                         <ImageButton
                             android:id="@+id/embeddedRefreshButton"
