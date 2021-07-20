@@ -33,6 +33,9 @@
   <string name="prefs_subsection_logging">Registrando</string>
   <string name="prefs_subsection_more">Más</string>
   <string name="prefs_subsection_security">Seguridad</string>
+  <string name="prefs_subsection_security_summary">Establecer bloqueos para acceder a la aplicación y permitir toques con otras ventanas visibles</string>
+  <string name="prefs_subsection_logging_summary">Realice un seguimiento de los registros producidos por la ejecución de la aplicación</string>
+  <string name="prefs_subsection_more_summary">Información de la aplicación, feedback y otros</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
@@ -43,6 +46,10 @@
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilice esta función bajo su propia responsabilidad, una aplicación malintencionada podría intentar engañarlo para que realice algunas acciones, sin darse cuenta, usando otras pantallas.</string>
   <string name="prefs_open_logs_view">Abrir vista de registros</string>
+  <string name="prefs_subsection_picture_uploads">Carga automática de imágenes</string>
+  <string name="prefs_subsection_picture_uploads_summary">Gestionar la ubicación y el comportamiento de las imágenes subidas automáticamente</string>
+  <string name="prefs_subsection_video_uploads">Carga automática de videos</string>
+  <string name="prefs_subsection_video_uploads_summary">Administra la ubicación y el comportamiento de los videos subidos automáticamente</string>
   <string name="prefs_camera_picture_upload">Cargas de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Carga automáticamente las fotos tomadas por cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de subida de imagenes</string>
@@ -68,12 +75,16 @@
   <string name="prefs_enable_logging">Habilitar registro</string>
   <string name="prefs_enable_logging_summary">Cuando se activan, los logs pueden afectar el rendimiento e incluir información confidencial. Sin embargo, los logs no están sujetos al envío automático a los servidores ownCloud. Compartir logs con otros es responsabilidad exclusiva del usuario.</string>
   <string name="prefs_send_feedback">Enviar comentarios</string>
+  <string name="prefs_app_version">Versión de la aplicación</string>
+  <string name="prefs_app_version_summary">%1$s%2$sversión%3$s(%4$s)</string>
   <string name="pattern_enter_pattern"> Por favor, ingrese el patrón</string>
   <string name="pattern_configure_pattern">Ingrese el patrón</string>
   <string name="pattern_remove_pattern">Borrar el patrón</string>
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_reenter_pattern">Por favor, reingrese el patrón</string>
   <string name="pattern_not_same_pattern">Los patrones no son iguales</string>
+  <string name="pattern_error_set">Ocurrió un error al configurar el patrón de bloqueo</string>
+  <string name="pattern_error_remove">Ocurrió un error al eliminar el patrón de bloqueo</string>
   <string name="pattern_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el patrón</string>
   <string name="passcode_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el código de bloqueo</string>
   <string name="pattern_no_longer_required">El patrón no será requerido nuevamente</string>
@@ -232,6 +243,8 @@
   <string name="pass_code_remove_your_pass_code">Borre su contraseña</string>
   <string name="pass_code_mismatch">Los códigos de acceso no son idénticos</string>
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
+  <string name="pass_code_error_set">Ocurrió un error al configurar la contraseña de bloqueo</string>
+  <string name="pass_code_error_remove">Ocurrió un error al eliminar la contraseña de bloqueo</string>
   <string name="biometric_not_enrolled">Registra al menos una característica biométrica para usarla</string>
   <string name="biometric_prompt_title">Inicio de sesión biométrico</string>
   <string name="biometric_prompt_subtitle">Inicia sesión usando tú credencial biométrica</string>
@@ -292,6 +305,7 @@
   <string name="confirmation_remove_folder_alert">¿Realmente desea eliminar %1$s y todo su contenido?</string>
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">¿Desea realmente eliminar la cuenta de %1$s?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">Esta cuenta tiene cargas de cámara adjuntas, eliminar la cuenta deshabilitará las cargas de cámara. ¿De verdad quieres eliminar la cuenta? %1$s</string>
   <string name="confirmation_remove_public_share_title">Eliminar enlace</string>
   <string name="confirmation_remove_private_share_title">Eliminar compartición privada</string>
   <string name="confirmation_remove_share_message">¿Realmente deseas eliminar la compartición %1$s?</string>
@@ -435,9 +449,10 @@
   <string name="file_list__footer__files">%1$d archivos</string>
   <string name="file_list__footer__files_and_folder">%1$d archivos, 1 carpeta</string>
   <string name="file_list__footer__files_and_folders">%1$d archivos, %2$d carpetas</string>
+  <string name="prefs_picture_upload_account">Cuenta para subir imágenes</string>
+  <string name="prefs_video_upload_account">Cuenta para subir videos</string>
   <string name="prefs_camera_upload_source_path_title">Carpeta de cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
-  <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Archivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Archivo original será</string>
   <string name="upload_copy_files">Copiar archivo</string>

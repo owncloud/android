@@ -19,6 +19,7 @@
 
 package com.owncloud.android.presentation.viewmodels.authentication
 
+import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
 import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
@@ -38,6 +39,7 @@ import com.owncloud.android.testutil.oauth.OC_TOKEN_REQUEST_REFRESH
 import com.owncloud.android.testutil.oauth.OC_TOKEN_RESPONSE
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.setMain
@@ -74,6 +76,10 @@ class OAuthViewModelTest : ViewModelTest() {
                     }
                 })
         }
+
+        mockkConstructor(OAuthUtils::class)
+        every { anyConstructed<OAuthUtils>().generateRandomCodeVerifier() } returns "CODE VERIFIER"
+        every { anyConstructed<OAuthUtils>().generateCodeChallenge(any()) } returns "CODE CHALLENGE"
 
         getOIDCDiscoveryUseCase = mockk()
         requestTokenUseCase = mockk()

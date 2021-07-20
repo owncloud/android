@@ -23,7 +23,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
-import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
+import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource.Companion.toEntity
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
@@ -41,7 +41,6 @@ class OCShareDaoTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var ocShareDao: OCShareDao
-    private val ocShareMapper = OCShareMapper()
 
     private val privateShareTypeValues = listOf(
         ShareType.USER.value, ShareType.GROUP.value, ShareType.FEDERATED.value
@@ -77,33 +76,27 @@ class OCShareDaoTest {
     fun insertSharesFromDifferentFilesAndRead() {
         ocShareDao.insert(
             listOf(
-                ocShareMapper.toEntity(
-                    OC_PUBLIC_SHARE.copy(
-                        path = "/Photos/",
-                        isFolder = true,
-                        name = "Photos folder link",
-                        shareLink = "http://server:port/s/1",
-                        accountOwner = "admin@server"
-                    )
-                )!!,
-                ocShareMapper.toEntity(
-                    OC_PUBLIC_SHARE.copy(
-                        path = "/Photos/image1.jpg",
-                        isFolder = false,
-                        name = "Image 1 link",
-                        shareLink = "http://server:port/s/2",
-                        accountOwner = "admin@server"
-                    )
-                )!!,
-                ocShareMapper.toEntity(
-                    OC_PRIVATE_SHARE.copy(
-                        path = "/Photos/image2.jpg",
-                        isFolder = false,
-                        shareWith = "username",
-                        sharedWithDisplayName = "John",
-                        accountOwner = "admin@server"
-                    )
-                )!!
+                OC_PUBLIC_SHARE.copy(
+                    path = "/Photos/",
+                    isFolder = true,
+                    name = "Photos folder link",
+                    shareLink = "http://server:port/s/1",
+                    accountOwner = "admin@server"
+                ).toEntity(),
+                OC_PUBLIC_SHARE.copy(
+                    path = "/Photos/image1.jpg",
+                    isFolder = false,
+                    name = "Image 1 link",
+                    shareLink = "http://server:port/s/2",
+                    accountOwner = "admin@server"
+                ).toEntity(),
+                OC_PRIVATE_SHARE.copy(
+                    path = "/Photos/image2.jpg",
+                    isFolder = false,
+                    shareWith = "username",
+                    sharedWithDisplayName = "John",
+                    accountOwner = "admin@server"
+                ).toEntity()
             )
         )
 
@@ -152,33 +145,27 @@ class OCShareDaoTest {
     fun insertSharesFromDifferentAccountsAndRead() {
         ocShareDao.insert(
             listOf(
-                ocShareMapper.toEntity(
-                    OC_PUBLIC_SHARE.copy(
-                        path = "/Documents/document1.docx",
-                        isFolder = false,
-                        accountOwner = "user1@server",
-                        name = "Document 1 link",
-                        shareLink = "http://server:port/s/1"
-                    )
-                )!!,
-                ocShareMapper.toEntity(
-                    OC_PUBLIC_SHARE.copy(
-                        path = "/Documents/document1.docx",
-                        isFolder = false,
-                        accountOwner = "user2@server",
-                        name = "Document 1 link",
-                        shareLink = "http://server:port/s/2"
-                    )
-                )!!,
-                ocShareMapper.toEntity(
-                    OC_PRIVATE_SHARE.copy(
-                        path = "/Documents/document1.docx",
-                        isFolder = false,
-                        accountOwner = "user3@server",
-                        shareWith = "user_name",
-                        sharedWithDisplayName = "Patrick"
-                    )
-                )!!
+                OC_PUBLIC_SHARE.copy(
+                    path = "/Documents/document1.docx",
+                    isFolder = false,
+                    accountOwner = "user1@server",
+                    name = "Document 1 link",
+                    shareLink = "http://server:port/s/1"
+                ).toEntity(),
+                OC_PUBLIC_SHARE.copy(
+                    path = "/Documents/document1.docx",
+                    isFolder = false,
+                    accountOwner = "user2@server",
+                    name = "Document 1 link",
+                    shareLink = "http://server:port/s/2"
+                ).toEntity(),
+                OC_PRIVATE_SHARE.copy(
+                    path = "/Documents/document1.docx",
+                    isFolder = false,
+                    accountOwner = "user3@server",
+                    shareWith = "user_name",
+                    sharedWithDisplayName = "Patrick"
+                ).toEntity()
             )
         )
 
@@ -229,22 +216,18 @@ class OCShareDaoTest {
     fun testAutogenerateId() {
         ocShareDao.insert(
             listOf(
-                ocShareMapper.toEntity(
-                    OC_PUBLIC_SHARE.copy(
-                        path = "/Documents/document1.docx",
-                        accountOwner = "user1@server",
-                        name = "Document 1 link",
-                        shareLink = "http://server:port/s/1"
-                    )
-                )!!,
-                ocShareMapper.toEntity(
-                    OC_PUBLIC_SHARE.copy(
-                        path = "/Documents/document1.docx",
-                        accountOwner = "user1@server",
-                        name = "Document 1 link",
-                        shareLink = "http://server:port/s/1"
-                    )
-                )!!
+                OC_PUBLIC_SHARE.copy(
+                    path = "/Documents/document1.docx",
+                    accountOwner = "user1@server",
+                    name = "Document 1 link",
+                    shareLink = "http://server:port/s/1"
+                ).toEntity(),
+                OC_PUBLIC_SHARE.copy(
+                    path = "/Documents/document1.docx",
+                    accountOwner = "user1@server",
+                    name = "Document 1 link",
+                    shareLink = "http://server:port/s/1"
+                ).toEntity()
             )
         )
 
@@ -399,16 +382,14 @@ class OCShareDaoTest {
         path: String = "/Texts/text1.txt",
         permissions: Int = -1,
         shareWithDisplayName: String = "Steve"
-    ) = ocShareMapper.toEntity(
-        OC_PRIVATE_SHARE.copy(
-            shareType = shareType,
-            shareWith = shareWith,
-            path = path,
-            permissions = permissions,
-            isFolder = false,
-            sharedWithDisplayName = shareWithDisplayName
-        )
-    )!!
+    ) = OC_PRIVATE_SHARE.copy(
+        shareType = shareType,
+        shareWith = shareWith,
+        path = path,
+        permissions = permissions,
+        isFolder = false,
+        sharedWithDisplayName = shareWithDisplayName
+    ).toEntity()
 
     /******************************************************************************************************
      ******************************************* PUBLIC SHARES ********************************************
@@ -530,13 +511,11 @@ class OCShareDaoTest {
         path: String = "/Texts/text1.txt",
         expirationDate: Long = 1000,
         name: String = "Text 1 link"
-    ) = ocShareMapper.toEntity(
-        OC_PUBLIC_SHARE.copy(
-            path = path,
-            expirationDate = expirationDate,
-            isFolder = false,
-            name = name,
-            shareLink = "http://server:port/s/1"
-        )
-    )!!
+    ) = OC_PUBLIC_SHARE.copy(
+        path = path,
+        expirationDate = expirationDate,
+        isFolder = false,
+        name = name,
+        shareLink = "http://server:port/s/1"
+    ).toEntity()
 }

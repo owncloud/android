@@ -33,6 +33,9 @@
   <string name="prefs_subsection_logging">Журналирование</string>
   <string name="prefs_subsection_more">Больше</string>
   <string name="prefs_subsection_security">Безопасность</string>
+  <string name="prefs_subsection_security_summary">Установка блокировок на доступ к приложению и разрешение на соприкосновение с другими видимыми окнами</string>
+  <string name="prefs_subsection_logging_summary">Отслеживание журналов, создаваемых при выполнении приложения</string>
+  <string name="prefs_subsection_more_summary">Информация о приложении, обратная связь, и прочее</string>
   <string name="prefs_accounts">Учётные записи</string>
   <string name="prefs_manage_accounts">Управление аккаунтами</string>
   <string name="prefs_passcode">Блокировка кодом</string>
@@ -43,6 +46,10 @@
   <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>
   <string name="confirmation_touches_with_other_windows_message">Используйте на свой страх и риск: вредоносное приложение может попытаться вас обмануть, заставить незаметно выполнить некоторые действия, используя поддельные элементы интерфейса</string>
   <string name="prefs_open_logs_view">Открыть лог-файл приложения</string>
+  <string name="prefs_subsection_picture_uploads">Автозагрузка изображений</string>
+  <string name="prefs_subsection_picture_uploads_summary">Настройка размещения и поведения изображений, загружаемых автоматически</string>
+  <string name="prefs_subsection_video_uploads">Автозагрузка видео</string>
+  <string name="prefs_subsection_video_uploads_summary">Настройка размещения и поведения видеороликов, загружаемых автоматически</string>
   <string name="prefs_camera_picture_upload">Загрузка изображений</string>
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
   <string name="prefs_camera_picture_upload_path_title">Путь загрузки изображений</string>
@@ -68,12 +75,16 @@
   <string name="prefs_enable_logging">Включить журналирование</string>
   <string name="prefs_enable_logging_summary">Активная запись лог файлов может влиять на расход ресурсов. Также они могут содержать конфиденциальную информацию. Обмен лог-файлами подлежит исключительно ответственности пользователя. Автоматическая загрузка лог-файлов на серверы ownCloud исключена.</string>
   <string name="prefs_send_feedback">Отправить свой отзыв</string>
+  <string name="prefs_app_version">Версия приложения</string>
+  <string name="prefs_app_version_summary">%1$s %2$s версии %3$s (%4$s)</string>
   <string name="pattern_enter_pattern">Пожалуйста, введите графический ключ</string>
   <string name="pattern_configure_pattern">Введите графический ключ</string>
   <string name="pattern_remove_pattern">Удалить графический ключ</string>
   <string name="pattern_incorrect_pattern">Неверный графический ключ</string>
   <string name="pattern_reenter_pattern">Введите графический ключ снова</string>
   <string name="pattern_not_same_pattern">Ключи не совпадают</string>
+  <string name="pattern_error_set">При установке графического ключа произошла ошибка</string>
+  <string name="pattern_error_remove">При удалении графического ключа произошла ошибка</string>
   <string name="pattern_already_set">Сначала отключите графический ключ. Графический ключ и код не могут быть включены одновременно.</string>
   <string name="passcode_already_set">Сначала отключите код. Графический ключ и код не могут быть включены одновременно.</string>
   <string name="pattern_no_longer_required">Графический ключ не будет больше запрашиваться</string>
@@ -233,6 +244,8 @@
   <string name="pass_code_remove_your_pass_code">Убрать код</string>
   <string name="pass_code_mismatch">Коды не совпадают</string>
   <string name="pass_code_wrong">Некоррентный код</string>
+  <string name="pass_code_error_set">При установке кода блокировки произошла ошибка</string>
+  <string name="pass_code_error_remove">При снятии кода блокировки произошла ошибка</string>
   <string name="biometric_not_enrolled">Чтобы пользоваться этой возможностью, зарегистрируйте хотя-бы одну биометрию</string>
   <string name="biometric_prompt_title">Биометрический вход</string>
   <string name="biometric_prompt_subtitle">Вход с использованием ваших индивидуальных биометрических данных</string>
@@ -293,6 +306,7 @@
   <string name="confirmation_remove_folder_alert">Вы действительно хотите удалить %1$s и его содержимое?</string>
   <string name="confirmation_remove_local">Только локально</string>
   <string name="confirmation_remove_account_alert">Вы действительно хотите удалить аккаунт %1$s?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">К этой учётной записи привязаны закачки из камеры; удаление записи отключит закачки из камеры. Вы действительно хотите удалить учётную запись %1$s?</string>
   <string name="confirmation_remove_public_share_title">Удалить ссылку</string>
   <string name="confirmation_remove_private_share_title">Удалить общий доступ</string>
   <string name="confirmation_remove_share_message">Вы действительно хотите удалить общий доступ %1$s?</string>
@@ -436,9 +450,10 @@
   <string name="file_list__footer__files">%1$d файлов</string>
   <string name="file_list__footer__files_and_folder">%1$d файлов, 1 каталог</string>
   <string name="file_list__footer__files_and_folders">%1$d файлов, %2$d каталогов</string>
+  <string name="prefs_picture_upload_account">Учётная запись для закачки изображений</string>
+  <string name="prefs_video_upload_account">Учётная запись для закачки видео</string>
   <string name="prefs_camera_upload_source_path_title">Каталог камеры (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">обязательно</string>
-  <string name="prefs_camera_upload_source_path_title_optional">не обязательно</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Исходный файл будет</string>
   <string name="prefs_camera_upload_behaviour_title">Исходный файл будет</string>
   <string name="upload_copy_files">Копировать файл</string>

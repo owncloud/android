@@ -368,7 +368,6 @@
   <string name="file_list__footer__files_and_folders">%1$d ficheiros, %2$d pastas</string>
   <string name="prefs_camera_upload_source_path_title">Pasta da Camara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">obrigatório</string>
-  <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
   <string name="upload_copy_files">Copiar ficheiro</string>
   <string name="upload_move_files">Mover ficheiro</string>
   <string name="pref_behaviour_entries_keep_file">mantido na pasta original</string>

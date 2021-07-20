@@ -42,27 +42,36 @@ import android.widget.ListView;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.work.WorkManager;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.files.services.CameraUploadsHandler;
+import com.owncloud.android.domain.UseCaseResult;
+import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration;
+import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
-import com.owncloud.android.providers.CameraUploadsHandlerProvider;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
+import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
+import com.owncloud.android.usecases.CancelUploadFromAccountUseCase;
 import com.owncloud.android.utils.PreferenceUtils;
+import kotlin.Lazy;
+import kotlin.Unit;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * An Activity that allows the user to manage accounts.
@@ -87,9 +96,13 @@ public class ManageAccountsActivity extends FileActivity
     String mOriginalCurrentAccount;
     private Drawable mTintedCheck;
 
+    private RemoveAccountDialogViewModel mRemoveAccountDialogViewModel = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        @NotNull Lazy<RemoveAccountDialogViewModel> removeAccountDialogViewModelLazy = inject(RemoveAccountDialogViewModel.class);
+        mRemoveAccountDialogViewModel = removeAccountDialogViewModelLazy.getValue();
 
         mTintedCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white);
         mTintedCheck = DrawableCompat.wrap(mTintedCheck);
@@ -228,10 +241,9 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public void removeAccount(Account account) {
         mAccountBeingRemoved = account.name;
-        CameraUploadsHandlerProvider cameraUploadsHandlerProvider = new CameraUploadsHandlerProvider(this);
         RemoveAccountDialogFragment dialog = RemoveAccountDialogFragment.newInstance(
                 account,
-                cameraUploadsHandlerProvider.hasCameraUploadsAttached(account.name)
+                mRemoveAccountDialogViewModel.hasCameraUploadsAttached(account.name)
         );
         dialog.show(getSupportFragmentManager(), RemoveAccountDialogFragment.FTAG_CONFIRMATION);
     }
@@ -320,6 +332,8 @@ public class ManageAccountsActivity extends FileActivity
                 if (mDownloaderBinder != null) {
                     mDownloaderBinder.cancel(account);
                 }
+                CancelUploadFromAccountUseCase cancelUploadFromAccountUseCase = new CancelUploadFromAccountUseCase(WorkManager.getInstance(getBaseContext()));
+                cancelUploadFromAccountUseCase.execute(new CancelUploadFromAccountUseCase.Params(account.name));
             }
 
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);

@@ -43,12 +43,12 @@ abstract class OCCapabilityDao {
     @Query(SELECT)
     abstract fun getCapabilitiesForAccountAsLiveData(
         accountName: String
-    ): LiveData<OCCapabilityEntity>
+    ): LiveData<OCCapabilityEntity?>
 
     @Query(SELECT)
     abstract fun getCapabilitiesForAccount(
         accountName: String
-    ): OCCapabilityEntity
+    ): OCCapabilityEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocCapability: OCCapabilityEntity): Long

@@ -52,9 +52,12 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+
+    implementation "androidx.legacy:legacy-support-v4:$androidX"
 
     // Room
-    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
 
     // Dependencies for unit tests
@@ -69,7 +72,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoTestVersion"
     androidTestImplementation "androidx.test.ext:junit:$extJunitVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
     androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
         exclude module: 'objenesis'
     }

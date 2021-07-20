@@ -56,13 +56,7 @@ class SettingsActivity : AppCompatActivity() {
 
         if (savedInstanceState != null) return
 
-        supportFragmentManager
-            .beginTransaction()
-            .replace(
-                R.id.settings_container,
-                SettingsFragment()
-            )
-            .commit()
+        redirectToSubsection(intent)
     }
 
     private fun updateToolbarTitle() {
@@ -92,5 +86,24 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun redirectToSubsection(intent: Intent?) {
+        val fragment = when (intent?.getStringExtra(KEY_NOTIFICATION_INTENT)) {
+            NOTIFICATION_INTENT_PICTURES -> SettingsPictureUploadsFragment()
+            NOTIFICATION_INTENT_VIDEOS -> SettingsVideoUploadsFragment()
+            else -> SettingsFragment()
+        }
+
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.settings_container, fragment)
+            .commit()
+    }
+
+    companion object {
+        const val KEY_NOTIFICATION_INTENT = "key_notification_intent"
+        const val NOTIFICATION_INTENT_PICTURES = "picture_uploads"
+        const val NOTIFICATION_INTENT_VIDEOS = "video_uploads"
     }
 }

@@ -437,7 +437,6 @@
   <string name="file_list__footer__files_and_folders">%1$d Dateien, %2$d Ordner</string>
   <string name="prefs_camera_upload_source_path_title">Kamera-Ordner (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Benötigt</string>
-  <string name="prefs_camera_upload_source_path_title_optional">Optional</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Originaldatei wird...</string>
   <string name="prefs_camera_upload_behaviour_title">Originaldatei wird...</string>
   <string name="upload_copy_files">Datei kopieren</string>

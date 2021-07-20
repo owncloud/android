@@ -29,7 +29,8 @@ sealed class TokenRequest(
         tokenEndpoint: String,
         clientAuth: String,
         val authorizationCode: String,
-        val redirectUri: String
+        val redirectUri: String,
+        val codeVerifier: String
     ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.ACCESS_TOKEN.string)
 
     class RefreshToken(

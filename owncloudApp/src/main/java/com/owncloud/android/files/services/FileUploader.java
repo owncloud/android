@@ -65,8 +65,6 @@ import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOp
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.RemoveChunksFolderOperation;
 import com.owncloud.android.operations.UploadFileOperation;
-import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
-import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
@@ -1025,24 +1023,10 @@ public class FileUploader extends Service
 
             if (needsToUpdateCredentials) {
                 // let the user update credentials with one click
-                Intent updateAccountCredentials = new Intent(this, LoginActivity.class);
-                updateAccountCredentials.putExtra(
-                        AuthenticatorConstants.EXTRA_ACCOUNT, upload.getAccount()
-                );
-                updateAccountCredentials.putExtra(
-                        AuthenticatorConstants.EXTRA_ACTION,
-                        AuthenticatorConstants.ACTION_UPDATE_EXPIRED_TOKEN
-                );
+                PendingIntent pendingIntentToRefreshCredentials =
+                        NotificationUtils.INSTANCE.composePendingIntentToRefreshCredentials(this, upload.getAccount());
 
-                updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                updateAccountCredentials.addFlags(Intent.FLAG_FROM_BACKGROUND);
-                mNotificationBuilder.setContentIntent(PendingIntent.getActivity(
-                        this,
-                        (int) System.currentTimeMillis(),
-                        updateAccountCredentials,
-                        PendingIntent.FLAG_ONE_SHOT
-                ));
+                mNotificationBuilder.setContentIntent(pendingIntentToRefreshCredentials);
 
             } else {
                 mNotificationBuilder.setContentText(content);

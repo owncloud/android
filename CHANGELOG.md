@@ -1,3 +1,53 @@
+Changelog for ownCloud Android Client [2.18.1] (2021-07-20)
+=======================================
+The following sections list the changes in ownCloud Android Client 2.18.1 relevant to
+ownCloud admins and users.
+
+[2.18.1]: https://github.com/owncloud/android/compare/v2.18.0...v2.18.1
+
+Summary
+-------
+
+* Security - Add PKCE support: [#3310](https://github.com/owncloud/android/pull/3310)
+* Enhancement - Replace picker to select camera folder with native one: [#2899](https://github.com/owncloud/android/issues/2899)
+* Enhancement - Hide "More" section if all options are disabled: [#3271](https://github.com/owncloud/android/issues/3271)
+* Enhancement - Note icon in music player to be branded: [#3272](https://github.com/owncloud/android/issues/3272)
+
+Details
+-------
+
+* Security - Add PKCE support: [#3310](https://github.com/owncloud/android/pull/3310)
+
+   PKCE (Proof Key for Code Exchange) support defined in RFC-7636 was added to prevent
+   authorization code interception attacks.
+
+   https://github.com/owncloud/android/pull/3310
+
+* Enhancement - Replace picker to select camera folder with native one: [#2899](https://github.com/owncloud/android/issues/2899)
+
+   The custom picker to select the camera folder was replaced with the native one. Now, it is ready
+   for scoped storage and some problems to select a folder in the SD Card were fixed. Also, a new
+   field to show the last synchronization timestamp was added.
+
+   https://github.com/owncloud/android/issues/2899
+   https://github.com/owncloud/android/pull/3293
+
+* Enhancement - Hide "More" section if all options are disabled: [#3271](https://github.com/owncloud/android/issues/3271)
+
+   A blank view was shown when all options in "More" subsection were disabled. Now, the subsection
+   is only shown if at least one option is enabled.
+
+   https://github.com/owncloud/android/issues/3271
+   https://github.com/owncloud/android/pull/3296
+
+* Enhancement - Note icon in music player to be branded: [#3272](https://github.com/owncloud/android/issues/3272)
+
+   The note icon in the music player will have the same color as the toolbar, so branded apps can have
+   the icon tinted using their custom theme.
+
+   https://github.com/owncloud/android/issues/3272
+   https://github.com/owncloud/android/pull/3297
+
 Changelog for ownCloud Android Client [2.18.0] (2021-05-24)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.18.0 relevant to

@@ -26,6 +26,7 @@ package com.owncloud.android.data
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Environment
+import androidx.documentfile.provider.DocumentFile
 import java.io.File
 
 class LocalStorageProvider(
@@ -56,6 +57,12 @@ class LocalStorageProvider(
     @SuppressLint("UsableSpace")
     fun getUsableSpace(): Long = getPrimaryStorageDirectory().usableSpace
 
+    fun getDefaultCameraSourcePath(): String {
+        return DocumentFile.fromFile(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+        ).createDirectory(CAMERA_FOLDER)?.uri.toString()
+    }
+
     /**
      * Return the root path of primary shared/external storage directory for this application.
      * For example: /storage/emulated/0/owncloud
@@ -73,4 +80,8 @@ class LocalStorageProvider(
      * that can be in the accountName since 0.1.190B
      */
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
+
+    companion object {
+        private const val CAMERA_FOLDER = "/Camera"
+    }
 }

@@ -48,7 +48,8 @@ val OC_REMOTE_TOKEN_REQUEST_PARAMS_ACCESS = TokenRequestParams.Authorization(
     clientAuth = OC_TOKEN_REQUEST_ACCESS.clientAuth,
     grantType = OC_TOKEN_REQUEST_ACCESS.grantType,
     authorizationCode = OC_TOKEN_REQUEST_ACCESS.authorizationCode,
-    redirectUri = OC_TOKEN_REQUEST_ACCESS.redirectUri
+    redirectUri = OC_TOKEN_REQUEST_ACCESS.redirectUri,
+    codeVerifier = OC_TOKEN_REQUEST_ACCESS.codeVerifier
 )
 
 val OC_REMOTE_TOKEN_REQUEST_PARAMS_REFRESH = TokenRequestParams.RefreshToken(

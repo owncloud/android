@@ -438,7 +438,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="file_list__footer__files_and_folders">%1$d ficheiros, %2$d cartafoles</string>
   <string name="prefs_camera_upload_source_path_title">Cartafol da cámara (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">requirido</string>
-  <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">O ficheiro orixinal vai ser</string>
   <string name="prefs_camera_upload_behaviour_title">O ficheiro orixinal vai ser</string>
   <string name="upload_copy_files">Copiar ficheiro</string>

@@ -66,6 +66,7 @@
   <string name="prefs_pattern">Desen kilidi</string>
   <string name="prefs_enable_logging">Günlüğü etkinleştir</string>
   <string name="prefs_send_feedback">Geribildirim yolla</string>
+  <string name="prefs_app_version">Uygulama sürümü</string>
   <string name="pattern_enter_pattern">Lütfen deseninizi girin</string>
   <string name="pattern_configure_pattern">Deseninizi girin</string>
   <string name="pattern_remove_pattern">Deseninizi kaldırın</string>
@@ -169,6 +170,8 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">Dosya adı %d karakterden daha uzun olmamalı</string>
   <string name="uploader_upload_text_filename_hint">Dosya adı</string>
   <string name="uploader_upload_camera_upload_files">Kamera yükleme dosyaları yükleniyor</string>
+  <string name="uploader_upload_picture_upload_files">%d yeni fotoğraf yüklenecek</string>
+  <string name="uploader_upload_video_upload_files">%d yeni video yüklenecek</string>
   <string name="uploader_upload_available_offline_files">Erişilebilir çevrimdışı dosyalar yükleniyor</string>
   <string name="uploader_upload_requested_from_wifi_files">Wifi dosyalarından yükleme istendi</string>
   <string name="ssl_certificate_not_trusted">Sunucu sertifikası güvenilir değil</string>
@@ -433,11 +436,13 @@
   <string name="file_list__footer__files">%1$d dosya</string>
   <string name="file_list__footer__files_and_folder">%1$d dosya, 1 klasör</string>
   <string name="file_list__footer__files_and_folders">%1$d dosya, %2$d klasör</string>
+  <string name="prefs_picture_upload_account">Fotoğrafları yükleyecek hesap</string>
+  <string name="prefs_video_upload_account">Videoları yükleyecek hesap</string>
   <string name="prefs_camera_upload_source_path_title">Kamera klasörü (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">gerekli</string>
-  <string name="prefs_camera_upload_source_path_title_optional">isteğe bağlı</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">şu olacak</string>
   <string name="prefs_camera_upload_behaviour_title">şu olacak</string>
+  <string name="prefs_camera_upload_last_sync_title">Son senkronizasyon</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>
   <string name="pref_behaviour_entries_keep_file">özgün klasöründe tutuldu</string>

@@ -25,14 +25,39 @@ import android.util.Base64
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_CLIENT_ID
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_CODE_CHALLENGE
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_CODE_CHALLENGE_METHOD
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import java.net.URLEncoder
+import java.security.MessageDigest
+import java.security.SecureRandom
 
 class OAuthUtils {
+
+    fun generateRandomCodeVerifier(): String {
+        val secureRandom = SecureRandom()
+        val randomBytes = ByteArray(DEFAULT_CODE_VERIFIER_ENTROPY)
+        secureRandom.nextBytes(randomBytes)
+        val encoding = Base64.NO_WRAP or Base64.NO_PADDING or Base64.URL_SAFE
+        return Base64.encodeToString(randomBytes, encoding)
+    }
+
+    fun generateCodeChallenge(codeVerifier: String): String {
+        val bytes = codeVerifier.toByteArray()
+        val messageDigest = MessageDigest.getInstance(ALGORITHM_SHA_256)
+        messageDigest.update(bytes)
+        val digest = messageDigest.digest()
+        val encoding = Base64.NO_WRAP or Base64.NO_PADDING or Base64.URL_SAFE
+        return Base64.encodeToString(digest, encoding)
+    }
+
     companion object {
+        private const val ALGORITHM_SHA_256 = "SHA-256"
+        private const val CODE_CHALLENGE_METHOD = "S256"
+        private const val DEFAULT_CODE_VERIFIER_ENTROPY = 64
 
         fun buildClientRegistrationRequest(
             registrationEndpoint: String,
@@ -61,13 +86,16 @@ class OAuthUtils {
             redirectUri: String,
             clientId: String,
             responseType: String,
-            scope: String
+            scope: String,
+            codeChallenge: String,
         ): Uri =
             authorizationEndpoint.buildUpon()
                 .appendQueryParameter(QUERY_PARAMETER_REDIRECT_URI, redirectUri)
                 .appendQueryParameter(QUERY_PARAMETER_CLIENT_ID, clientId)
                 .appendQueryParameter(QUERY_PARAMETER_RESPONSE_TYPE, responseType)
                 .appendQueryParameter(QUERY_PARAMETER_SCOPE, scope)
+                .appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE, codeChallenge)
+                .appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD)
                 .build()
 
         fun buildRedirectUri(context: Context): Uri =

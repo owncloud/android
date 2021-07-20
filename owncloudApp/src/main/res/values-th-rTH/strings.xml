@@ -7,7 +7,7 @@
   <string name="actionbar_search">ค้นหาโฟลเดอร์นี้</string>
   <string name="actionbar_sync">ฟื้นฟูบัญชี</string>
   <string name="actionbar_upload">อัปโหลดไฟล์</string>
-  <string name="actionbar_upload_from_apps">เนื้อหาจากแอปอื่นๆ</string>
+  <string name="actionbar_upload_from_apps">เนื้อหาจากแอปอื่น ๆ</string>
   <string name="actionbar_upload_files">ไฟล์</string>
   <string name="actionbar_open_with">เปิดด้วย</string>
   <string name="actionbar_mkdir">โฟลเดอร์ใหม่</string>
@@ -33,9 +33,9 @@
   <string name="prefs_subsection_logging">กำลังเก็บบันทึก</string>
   <string name="prefs_subsection_more">ขยาย</string>
   <string name="prefs_subsection_security">ความปลอดภัย</string>
-  <string name="prefs_subsection_security_summary">ตั้งค่าเพื่อล็อคเข้าถึงแอปและอนุญาตให้สัมผัสกับหน้าต่างอื่นๆ ที่มองเห็นได้</string>
+  <string name="prefs_subsection_security_summary">ตั้งค่าเพื่อล็อคเข้าถึงแอปและอนุญาตให้สัมผัสกับหน้าต่างอื่น ๆ ที่มองเห็นได้</string>
   <string name="prefs_subsection_logging_summary">เก็บ Log ที่เกิดจากการทำงานของแอป</string>
-  <string name="prefs_subsection_more_summary">ข้อมูลแอปฯ ข้อเสนอแนะ และอื่นๆ</string>
+  <string name="prefs_subsection_more_summary">ข้อมูลแอปฯ ข้อเสนอแนะ และอื่น ๆ</string>
   <string name="prefs_accounts">บัญชี</string>
   <string name="prefs_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="prefs_passcode">ล็อครหัสปลดล็อค</string>
@@ -451,7 +451,6 @@
   <string name="prefs_video_upload_account">บัญชีสำหรับอัปโหลดวิดีโอ</string>
   <string name="prefs_camera_upload_source_path_title">โฟลเดอร์ของกล้อง (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
-  <string name="prefs_camera_upload_source_path_title_optional">ตัวเลือก</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="prefs_camera_upload_behaviour_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="upload_copy_files">คัดลอกไฟล์</string>
@@ -462,7 +461,7 @@
   <string name="share_file">แชร์ %1$s</string>
   <string name="share_with_user_section_title">ผู้ใช้และกลุ่ม</string>
   <string name="share_no_users">ยังไม่มีข้อมูลที่แชร์กับผู้ใช้ในตอนนี้</string>
-  <string name="share_incompatible_version">เพื่อแชร์กับผู้ใช้อื่นๆ เซิร์ฟเวอร์ของคุณจะต้องเป็นเวอร์ชัน 8.2 ขึ้นไป</string>
+  <string name="share_incompatible_version">เพื่อแชร์กับผู้ใช้อื่น ๆ เซิร์ฟเวอร์ของคุณจะต้องเป็นเวอร์ชัน 8.2 ขึ้นไป</string>
   <string name="share_add_user_or_group">เพิ่มชื่อผู้ใช้งาน หรือชื่อกลุ่ม</string>
   <string name="share_via_link_section_title">ลิงก์สาธารณะ</string>
   <string name="share_via_link_create_title">สร้างแชร์ลิงก์</string>
@@ -557,12 +556,6 @@
   <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัปโหลดโดยอัตโนมัติแล้ว</string>
   <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
   <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
-  <string name="welcome_feature_6_title">ปรับโครงสร้างการตั้งค่าใหม่</string>
-  <string name="welcome_feature_6_text">มีการตั้งค่ามุมมองใหม่</string>
-  <string name="welcome_feature_7_title">รีเซ็ตการอัปโหลดกล้องแล้ว</string>
-  <string name="welcome_feature_7_text">หากคุณต้องการใช้งานต่อไป โปรดไปที่การตั้งค่าและเปิดใช้งานอีกครั้ง</string>
-  <string name="welcome_feature_8_title">บัญชีถาวรสำหรับอัปโหลดรูปภาพจากกล้อง</string>
-  <string name="welcome_feature_8_text">รูปภาพ / วิดีโอของคุณถูกอัปโหลดโดยอัตโนมัติไปยังบัญชีที่แนบมา</string>
   <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
   <string name="common_not_found">ไม่พบข้อมูลใดๆ</string>
   <string name="supports_oauth2_error">มันเป็นไปไม่ได้ที่จะรู้ว่ารองรับการใช้งาน OAuth2</string>

@@ -423,7 +423,6 @@
   <string name="file_list__footer__files_and_folders">%1$d filer, %2$d mapper</string>
   <string name="prefs_camera_upload_source_path_title">Kamera-mappe (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">obligatorisk</string>
-  <string name="prefs_camera_upload_source_path_title_optional">valgfri</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Den originale filen vil bli</string>
   <string name="prefs_camera_upload_behaviour_title">Den originale filen vil bli</string>
   <string name="upload_copy_files">Kopier fil</string>

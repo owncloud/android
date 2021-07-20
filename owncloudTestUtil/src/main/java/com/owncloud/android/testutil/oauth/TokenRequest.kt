@@ -37,5 +37,6 @@ val OC_TOKEN_REQUEST_ACCESS = TokenRequest.AccessToken(
     tokenEndpoint = OC_TOKEN_ENDPOINT,
     clientAuth = OC_CLIENT_AUTH,
     authorizationCode = "4uth0r1z4t10nC0d3",
-    redirectUri = OC_REDIRECT_URI
+    redirectUri = OC_REDIRECT_URI,
+    codeVerifier = "A high-entropy cryptographic random STRING using the unreserved characters"
 )

@@ -187,6 +187,11 @@
     <string name="uploader_upload_text_dialog_filename_error_length_max">Filename must not be more than %d characters</string>
     <string name="uploader_upload_text_filename_hint">Filename</string>
     <string name="uploader_upload_camera_upload_files">Uploading camera upload files</string>
+    <string name="uploader_upload_picture_upload_files">%d new pictures will be uploaded</string>
+    <string name="uploader_upload_video_upload_files">%d new videos will be uploaded</string>
+    <string name="uploader_upload_camera_upload_source_path_error">Camera Uploads failed</string>
+    <string name="uploader_upload_picture_upload_error">Picture uploads source path is not valid anymore</string>
+    <string name="uploader_upload_video_upload_error">Video uploads source path is not valid anymore</string>
     <string name="uploader_upload_available_offline_files">Uploading available offline files</string>
     <string name="uploader_upload_requested_from_wifi_files">Uploading requested from wifi files</string>
     <string name="ssl_certificate_not_trusted">Server certificate is not trusted</string>
@@ -488,9 +493,9 @@
     <string name="prefs_video_upload_account">Account to upload videos</string>
     <string name="prefs_camera_upload_source_path_title">Camera folder (%1$s)</string>
     <string name="prefs_camera_upload_source_path_title_required">required</string>
-    <string name="prefs_camera_upload_source_path_title_optional">optional</string>
     <string name="prefs_camera_upload_behaviour_dialog_title">Original file will be</string>
     <string name="prefs_camera_upload_behaviour_title">Original file will be</string>
+    <string name="prefs_camera_upload_last_sync_title">Last synchronization</string>
     <string name="upload_copy_files">Copy file</string>
     <string name="upload_move_files">Move file</string>
 
@@ -608,12 +613,10 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_6_title">Settings restructured</string>
-    <string name="welcome_feature_6_text">Settings have a new fresh view</string>
-    <string name="welcome_feature_7_title">Camera uploads have been reset</string>
-    <string name="welcome_feature_7_text">If you want to keep using them, please go to Settings and enable again.</string>
-    <string name="welcome_feature_8_title">Fixed account for camera uploads</string>
-    <string name="welcome_feature_8_text">Your pictures/videos automatically uploaded to an attached account</string>
+    <string name="welcome_feature_6_title">Native camera folder picker</string>
+    <string name="welcome_feature_6_text">Select the camera folder using a more intuitive picker</string>
+    <string name="welcome_feature_7_title">Added timestamp field for camera uploads</string>
+    <string name="welcome_feature_7_text">You can see now when the last scan was triggered.</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
 

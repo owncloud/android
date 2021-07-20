@@ -18,23 +18,40 @@
  */
 package com.owncloud.android.data.user.datasources.implementation
 
+import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
-import com.owncloud.android.data.user.datasources.mapper.UserQuotaMapper
 import com.owncloud.android.data.user.db.UserDao
+import com.owncloud.android.data.user.db.UserQuotaEntity
 import com.owncloud.android.domain.user.model.UserQuota
 
 class OCLocalUserDataSource(
-    private val userDao: UserDao,
-    private val userQuotaMapper: UserQuotaMapper
+    private val userDao: UserDao
 ) : LocalUserDataSource {
 
     override fun saveQuotaForAccount(accountName: String, userQuota: UserQuota) =
-        userDao.insert(userQuotaMapper.toEntity(userQuota)!!.copy(accountName = accountName))
+        userDao.insert(userQuota.toEntity(accountName))
 
     override fun getQuotaForAccount(accountName: String): UserQuota? =
-        userQuotaMapper.toModel(userDao.getQuotaForAccount(accountName = accountName))
+        userDao.getQuotaForAccount(accountName = accountName)?.toModel()
 
     override fun deleteQuotaForAccount(accountName: String) {
         userDao.deleteQuotaForAccount(accountName = accountName)
+    }
+
+    companion object {
+        @VisibleForTesting
+        fun UserQuotaEntity.toModel(): UserQuota =
+            UserQuota(
+                available = available,
+                used = used
+            )
+
+        @VisibleForTesting
+        fun UserQuota.toEntity(accountName: String): UserQuotaEntity =
+            UserQuotaEntity(
+                accountName = accountName,
+                available = available,
+                used = used
+            )
     }
 }

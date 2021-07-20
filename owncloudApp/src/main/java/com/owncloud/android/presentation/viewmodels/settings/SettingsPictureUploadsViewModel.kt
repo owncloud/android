@@ -21,98 +21,154 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
+import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import androidx.lifecycle.viewModelScope
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
-import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
+import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
+import com.owncloud.android.domain.camerauploads.usecases.GetPictureUploadsConfigurationStreamUseCase
+import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
+import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
 import com.owncloud.android.providers.AccountProvider
-import com.owncloud.android.providers.CameraUploadsHandlerProvider
-import com.owncloud.android.ui.activity.LocalFolderPickerActivity
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
+import com.owncloud.android.utils.FileStorageUtils.getDefaultCameraSourcePath
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.io.File
 
 class SettingsPictureUploadsViewModel(
-    private val preferencesProvider: SharedPreferencesProvider,
-    private val cameraUploadsHandlerProvider: CameraUploadsHandlerProvider,
-    private val accountProvider: AccountProvider
+    private val accountProvider: AccountProvider,
+    private val savePictureUploadsConfigurationUseCase: SavePictureUploadsConfigurationUseCase,
+    private val getPictureUploadsConfigurationStreamUseCase: GetPictureUploadsConfigurationStreamUseCase,
+    private val resetPictureUploadsUseCase: ResetPictureUploadsUseCase,
+    private val workManagerProvider: WorkManagerProvider,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
-    fun isPictureUploadEnabled() =
-        preferencesProvider.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
+    private val _pictureUploads: MutableLiveData<FolderBackUpConfiguration?> = MutableLiveData()
+    val pictureUploads: LiveData<FolderBackUpConfiguration?> = _pictureUploads
 
-    fun setEnablePictureUpload(value: Boolean) {
-        preferencesProvider.putBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, value)
+    init {
+        initPictureUploads()
+    }
 
-        if (value) {
-            // Use current account as default. It should never be null. If no accounts are attached, picture uploads are hidden
-            accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
-                preferencesProvider.putString(
-                    key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
-                    value = name
-                )
+    private fun initPictureUploads() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            getPictureUploadsConfigurationStreamUseCase.execute(Unit).collect() { pictureUploadsConfiguration ->
+                _pictureUploads.postValue(pictureUploadsConfiguration)
             }
-        } else {
-            // Reset fields after disabling the feature
-            preferencesProvider.removePreference(key = PREF__CAMERA_PICTURE_UPLOADS_PATH)
-            preferencesProvider.removePreference(key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)
         }
     }
 
-    fun updatePicturesLastSync() = cameraUploadsHandlerProvider.updatePicturesLastSync(0)
+    fun enablePictureUploads() {
+        // Use current account as default. It should never be null. If no accounts are attached, picture uploads are hidden
+        accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
+            viewModelScope.launch(coroutinesDispatcherProvider.io) {
+                savePictureUploadsConfigurationUseCase.execute(
+                    SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(accountName = name))
+                )
+            }
+        }
+    }
 
-    fun getPictureUploadsAccount() = preferencesProvider.getString(
-        key = PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME,
-        defaultValue = null
-    )
+    fun disablePictureUploads() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            resetPictureUploadsUseCase.execute(Unit)
+        }
+    }
+
+    fun useWifiOnly(wifiOnly: Boolean) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            savePictureUploadsConfigurationUseCase.execute(
+                SavePictureUploadsConfigurationUseCase.Params(
+                    composePictureUploadsConfiguration(wifiOnly = wifiOnly)
+                )
+            )
+        }
+    }
+
+    fun getPictureUploadsAccount() = _pictureUploads.value?.accountName
 
     fun getLoggedAccountNames(): Array<String> = accountProvider.getLoggedAccounts().map { it.name }.toTypedArray()
 
-    fun getPictureUploadsPath() = preferencesProvider.getString(
-        key = PREF__CAMERA_PICTURE_UPLOADS_PATH,
-        defaultValue = PREF__CAMERA_UPLOADS_DEFAULT_PATH
-    )
+    fun getPictureUploadsPath() = _pictureUploads.value?.uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH
 
-    fun getPictureUploadsSourcePath() = preferencesProvider.getString(
-        key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-        defaultValue = CameraUploadsConfiguration.getDefaultSourcePath()
-    )
+    fun getPictureUploadsSourcePath(): String? = _pictureUploads.value?.sourcePath
+
+    fun getDefaultSourcePath(): String = getDefaultCameraSourcePath()
 
     fun handleSelectPictureUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
-            preferencesProvider.putString(
-                key = PREF__CAMERA_PICTURE_UPLOADS_PATH,
-                value = it
+            viewModelScope.launch(coroutinesDispatcherProvider.io) {
+                savePictureUploadsConfigurationUseCase.execute(
+                    SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(uploadPath = it))
+                )
+            }
+        }
+    }
+
+    fun handleSelectAccount(accountName: String) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            savePictureUploadsConfigurationUseCase.execute(
+                SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(accountName = accountName))
             )
         }
     }
 
-    fun handleSelectPictureUploadsSourcePath(data: Intent?) {
+    fun handleSelectBehaviour(behaviorString: String) {
+        val behavior = FolderBackUpConfiguration.Behavior.fromString(behaviorString)
+
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            savePictureUploadsConfigurationUseCase.execute(
+                SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(behavior = behavior))
+            )
+        }
+    }
+
+    fun handleSelectPictureUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
-        var previousSourcePath = preferencesProvider.getString(
-            key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-            defaultValue = CameraUploadsConfiguration.getDefaultSourcePath()
-        )
+        var previousSourcePath = _pictureUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
 
-        previousSourcePath = previousSourcePath?.trimEnd(File.separatorChar)
+        previousSourcePath = previousSourcePath.trimEnd(File.separatorChar)
 
-        if (previousSourcePath != data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)) {
-            val currentTimeStamp = System.currentTimeMillis()
-            cameraUploadsHandlerProvider.updatePicturesLastSync(currentTimeStamp)
-        }
-
-        data?.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH)?.let {
-            preferencesProvider.putString(
-                key = PREF__CAMERA_PICTURE_UPLOADS_SOURCE,
-                value = it
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            savePictureUploadsConfigurationUseCase.execute(
+                SavePictureUploadsConfigurationUseCase.Params(
+                    composePictureUploadsConfiguration(
+                        sourcePath = contentUriForTree.toString(),
+                        timestamp = System.currentTimeMillis().takeIf { previousSourcePath != contentUriForTree.encodedPath }
+                    )
+                )
             )
         }
     }
 
-    fun schedulePictureUploadsSyncJob() = cameraUploadsHandlerProvider.schedulePictureUploadsSyncJob()
+    fun schedulePictureUploads() {
+        workManagerProvider.enqueueCameraUploadsWorker()
+    }
+
+    private fun composePictureUploadsConfiguration(
+        accountName: String? = _pictureUploads.value?.accountName,
+        uploadPath: String? = _pictureUploads.value?.uploadPath,
+        wifiOnly: Boolean? = _pictureUploads.value?.wifiOnly,
+        sourcePath: String? = _pictureUploads.value?.sourcePath,
+        behavior: FolderBackUpConfiguration.Behavior? = _pictureUploads.value?.behavior,
+        timestamp: Long? = _pictureUploads.value?.lastSyncTimestamp
+    ): FolderBackUpConfiguration =
+        FolderBackUpConfiguration(
+            accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
+            behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
+            sourcePath = sourcePath.orEmpty(),
+            uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
+            wifiOnly = wifiOnly ?: false,
+            lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
+            name = _pictureUploads.value?.name ?: pictureUploadsName
+        )
 }

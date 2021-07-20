@@ -43,6 +43,9 @@ class OAuthViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
+    val codeVerifier: String = OAuthUtils().generateRandomCodeVerifier()
+    val codeChallenge: String = OAuthUtils().generateCodeChallenge(codeVerifier)
+
     private val _oidcDiscovery = MediatorLiveData<Event<UIResult<OIDCServerConfiguration>>>()
     val oidcDiscovery: LiveData<Event<UIResult<OIDCServerConfiguration>>> = _oidcDiscovery
 

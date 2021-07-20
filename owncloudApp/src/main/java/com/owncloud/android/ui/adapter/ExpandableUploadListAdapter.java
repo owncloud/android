@@ -25,6 +25,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.documentfile.provider.DocumentFile;
+import androidx.work.WorkManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -54,6 +57,7 @@ import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.fragment.OptionsInUploadListClickListener;
 import com.owncloud.android.ui.fragment.UploadListFragment;
+import com.owncloud.android.usecases.CancelUploadWithIdUseCase;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -347,11 +351,19 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 rightButton.setImageResource(R.drawable.ic_action_cancel_grey);
                 rightButton.setVisibility(View.VISIBLE);
                 rightButton.setOnClickListener(v -> {
-                    FileUploader.FileUploaderBinder uploaderBinder = mParentActivity.getFileUploaderBinder();
-                    if (uploaderBinder != null) {
-                        uploaderBinder.cancel(upload);
-                        refreshView();
+                    String localPath = upload.getLocalPath();
+                    boolean isDocumentUri = DocumentFile.isDocumentUri(parent.getContext(), Uri.parse(localPath));
+                    if (isDocumentUri) {
+                        CancelUploadWithIdUseCase cancelUploadWithIdUseCase = new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()));
+                        cancelUploadWithIdUseCase.execute(new CancelUploadWithIdUseCase.Params(upload));
+                    } else {
+                        FileUploader.FileUploaderBinder uploaderBinder = mParentActivity.getFileUploaderBinder();
+
+                        if (uploaderBinder != null) {
+                            uploaderBinder.cancel(upload);
+                        }
                     }
+                    refreshView();
                 });
 
             } else if (upload.getUploadStatus() == UploadStatus.UPLOAD_FAILED) {

@@ -365,7 +365,6 @@
   <string name="file_list__footer__files_and_folders">%1$d filer, %2$d mappar</string>
   <string name="prefs_camera_upload_source_path_title">Kameramapp (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">krävs</string>
-  <string name="prefs_camera_upload_source_path_title_optional">valfritt</string>
   <string name="upload_copy_files">Kopiera fil</string>
   <string name="upload_move_files">Flytta fil</string>
   <string name="pref_behaviour_entries_keep_file">behållas i orginalmapp</string>

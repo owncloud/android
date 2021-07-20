@@ -23,7 +23,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
-import com.owncloud.android.data.sharing.shares.datasources.mapper.OCShareMapper
+import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource.Companion.toEntity
+import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource.Companion.toModel
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.domain.sharing.shares.model.ShareType
@@ -43,7 +44,6 @@ import org.junit.Test
 class OCLocalShareDataSourceTest {
     private lateinit var ocLocalSharesDataSource: OCLocalShareDataSource
     private val ocSharesDao = mockkClass(OCShareDao::class)
-    private val ocShareMapper = OCShareMapper()
 
     @Rule
     @JvmField
@@ -60,7 +60,6 @@ class OCLocalShareDataSourceTest {
         ocLocalSharesDataSource =
             OCLocalShareDataSource(
                 ocSharesDao,
-                ocShareMapper
             )
     }
 
@@ -69,20 +68,16 @@ class OCLocalShareDataSourceTest {
      ******************************************************************************************************/
 
     private val privateShares = listOf(
-        ocShareMapper.toEntity(
-            OC_PRIVATE_SHARE.copy(
-                path = "/Docs/doc1.doc",
-                shareWith = "username",
-                sharedWithDisplayName = "Sophie"
-            )
-        )!!,
-        ocShareMapper.toEntity(
-            OC_PRIVATE_SHARE.copy(
-                path = "/Docs/doc1.doc",
-                shareWith = "user.name",
-                sharedWithDisplayName = "Nicole"
-            )
-        )!!
+        OC_PRIVATE_SHARE.copy(
+            path = "/Docs/doc1.doc",
+            shareWith = "username",
+            sharedWithDisplayName = "Sophie"
+        ).toEntity(),
+        OC_PRIVATE_SHARE.copy(
+            path = "/Docs/doc1.doc",
+            shareWith = "user.name",
+            sharedWithDisplayName = "Nicole"
+        ).toEntity()
     )
 
     private val privateShareTypes = listOf(ShareType.USER, ShareType.GROUP, ShareType.FEDERATED)
@@ -165,22 +160,18 @@ class OCLocalShareDataSourceTest {
      ******************************************************************************************************/
 
     private val publicShares = listOf(
-        ocShareMapper.toEntity(
-            OC_PUBLIC_SHARE.copy(
-                path = "/Photos/",
-                isFolder = true,
-                name = "Photos link",
-                shareLink = "http://server:port/s/1"
-            )
-        )!!,
-        ocShareMapper.toEntity(
-            OC_PUBLIC_SHARE.copy(
-                path = "/Photos/",
-                isFolder = true,
-                name = "Photos link 2",
-                shareLink = "http://server:port/s/2"
-            )
-        )!!
+        OC_PUBLIC_SHARE.copy(
+            path = "/Photos/",
+            isFolder = true,
+            name = "Photos link",
+            shareLink = "http://server:port/s/1"
+        ).toEntity(),
+        OC_PUBLIC_SHARE.copy(
+            path = "/Photos/",
+            isFolder = true,
+            name = "Photos link 2",
+            shareLink = "http://server:port/s/2"
+        ).toEntity()
     )
 
     @Test
@@ -236,7 +227,7 @@ class OCLocalShareDataSourceTest {
         every { ocSharesDao.insert(publicShares) } returns expectedValues
 
         val retrievedValues = ocLocalSharesDataSource.insert(
-            publicShares.map { ocShareMapper.toModel(it)!! }
+            publicShares.map { it.toModel() }
         )
 
         assertEquals(expectedValues, retrievedValues)
@@ -267,7 +258,7 @@ class OCLocalShareDataSourceTest {
         every { ocSharesDao.replaceShares(publicShares) } returns expectedValues
 
         val retrievedValues = ocLocalSharesDataSource.replaceShares(
-            publicShares.map { ocShareMapper.toModel(it)!! }
+            publicShares.map { it.toModel() }
         )
 
         assertEquals(expectedValues, retrievedValues)
