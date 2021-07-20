@@ -36,6 +36,6 @@ class OCRemoteShareeDataSource(
         perPage: Int
     ): List<OCSharee> =
         executeRemoteOperation { shareeService.getSharees(searchString, page, perPage) }.let {
-            shareeMapper.toModel(it)!!
+            shareeMapper.toModel(it)
         }
 }

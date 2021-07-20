@@ -216,10 +216,7 @@ class OCLocalAuthenticationDataSource(
             lastAtPos = otherAccount.name.lastIndexOf("@")
             otherHostAndPort = otherAccount.name.substring(lastAtPos + 1)
             otherUsername = otherAccount.name.substring(0, lastAtPos)
-            if (otherHostAndPort == hostAndPort && otherUsername.toLowerCase(currentLocale) == username.toLowerCase(
-                    currentLocale
-                )
-            ) {
+            if (otherHostAndPort == hostAndPort && otherUsername.lowercase(currentLocale) == username.lowercase(currentLocale)) {
                 return otherAccount
             }
         }
