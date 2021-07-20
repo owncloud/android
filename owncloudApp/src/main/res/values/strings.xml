@@ -613,10 +613,6 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_6_title">Native camera folder picker</string>
-    <string name="welcome_feature_6_text">Select the camera folder using a more intuitive picker</string>
-    <string name="welcome_feature_7_title">Added timestamp field for camera uploads</string>
-    <string name="welcome_feature_7_text">You can see now when the last scan was triggered.</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
 
