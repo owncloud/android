@@ -1,4 +1,3 @@
-
 /**
  * ownCloud Android client application
  *
