@@ -1038,6 +1038,21 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
 
+            if (oldVersion < 35 && newVersion >= 35) {
+                Timber.i("SQL : Entering in the #35 Migrate legacy files to scoped storage")
+                db.beginTransaction()
+                try {
+                    db.execSQL(
+                        "UPDATE " + ProviderTableMeta.FILE_TABLE_NAME +
+                                " SET " + ProviderTableMeta.FILE_STORAGE_PATH + " = " + null +
+                                " WHERE " + ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL"
+                    )
+                    db.setTransactionSuccessful()
+                    upgraded = true
+                } finally {
+                    db.endTransaction()
+                }
+            }
             if (!upgraded) {
                 Timber.i("SQL : OUT of the ADD in onUpgrade; oldVersion == $oldVersion, newVersion == $newVersion")
             }
