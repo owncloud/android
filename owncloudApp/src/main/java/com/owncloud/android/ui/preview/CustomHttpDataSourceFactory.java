@@ -20,7 +20,6 @@ package com.owncloud.android.ui.preview;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;

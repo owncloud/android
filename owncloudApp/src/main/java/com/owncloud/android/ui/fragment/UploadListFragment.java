@@ -107,7 +107,7 @@ public class UploadListFragment extends ExpandableListFragment implements Option
     }
 
     public enum OptionsInUploadList {
-        CLEAR_FAILED, CLEAR_SUCCESSFUL, RETRY_FAILED;
+        CLEAR_FAILED, CLEAR_SUCCESSFUL, RETRY_FAILED
     }
 
     @Override
