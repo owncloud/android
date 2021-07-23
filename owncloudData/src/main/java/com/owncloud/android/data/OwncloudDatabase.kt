@@ -27,10 +27,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
-import com.owncloud.android.data.folderbackup.db.FolderBackupDao
-import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
+import com.owncloud.android.data.folderbackup.db.FolderBackupDao
 import com.owncloud.android.data.migrations.MIGRATION_27_28
 import com.owncloud.android.data.migrations.MIGRATION_28_29
 import com.owncloud.android.data.migrations.MIGRATION_29_30
@@ -72,7 +72,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
             MIGRATION_31_32,
             MIGRATION_32_33,
             MIGRATION_33_34,
-            MIGRATION_34_35
+            MIGRATION_34_35,
         )
 
         fun getDatabase(
