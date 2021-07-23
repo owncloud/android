@@ -24,6 +24,7 @@ enum class Permissions(val value: Int) {
     EDIT_PERMISSIONS(3),
     SHARE_PERMISSIONS(17),
     ALL_PERMISSIONS(19),
+
     // FOLDERS
     EDIT_CREATE_PERMISSIONS(5),
     EDIT_CREATE_CHANGE_PERMISSIONS(7),

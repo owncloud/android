@@ -16,11 +16,9 @@
  */
 package third_parties.in.srain.cube;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +30,6 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**

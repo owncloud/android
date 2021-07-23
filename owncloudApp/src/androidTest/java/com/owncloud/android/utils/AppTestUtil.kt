@@ -31,7 +31,7 @@ object AppTestUtil {
         "/Images/img.png"
     ).apply {
         fileId = 1
-        fileName =  "img.png"
+        fileName = "img.png"
         mimetype = ".png"
         privateLink = "privateLink"
     }
@@ -39,7 +39,7 @@ object AppTestUtil {
     val OC_FOLDER = OCFile(
         "/Images/img.png"
     ).apply {
-        fileName =  "/Documents/"
+        fileName = "/Documents/"
         mimetype = MIME_DIR
     }
 }

@@ -120,7 +120,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
     private fun searchForUsersOrGroups(uri: Uri): Cursor? {
         var response: MatrixCursor? = null
 
-        val userQuery = uri.lastPathSegment!!.toLowerCase(Locale.getDefault())
+        val userQuery = uri.lastPathSegment!!.lowercase(Locale.getDefault())
 
         /// need to trust on the AccountUtils to get the current account since the query in the client side is not
         /// directly started by our code, but from SearchView implementation

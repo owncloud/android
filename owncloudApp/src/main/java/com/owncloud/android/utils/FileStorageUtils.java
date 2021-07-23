@@ -25,7 +25,6 @@
 package com.owncloud.android.utils;
 
 import android.annotation.SuppressLint;
-import android.os.Environment;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;

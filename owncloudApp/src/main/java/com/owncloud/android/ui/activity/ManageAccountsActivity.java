@@ -47,9 +47,6 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.domain.UseCaseResult;
-import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration;
-import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
@@ -63,7 +60,6 @@ import com.owncloud.android.ui.helpers.FileOperationsHelper;
 import com.owncloud.android.usecases.CancelUploadFromAccountUseCase;
 import com.owncloud.android.utils.PreferenceUtils;
 import kotlin.Lazy;
-import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 

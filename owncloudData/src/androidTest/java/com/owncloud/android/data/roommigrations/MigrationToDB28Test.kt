@@ -66,7 +66,9 @@ class MigrationToDB28Test : MigrationTest() {
 
     private fun insertDataToTest(database: SupportSQLiteDatabase) {
         database.run {
-            insert(CAPABILITIES_TABLE_NAME, SQLiteDatabase.CONFLICT_NONE,
+            insert(
+                CAPABILITIES_TABLE_NAME,
+                SQLiteDatabase.CONFLICT_NONE,
                 cvWithDefaultValues
             )
             close()
@@ -80,7 +82,7 @@ class MigrationToDB28Test : MigrationTest() {
     }
 
     companion object {
-         val cvWithDefaultValues = ContentValues().apply {
+        val cvWithDefaultValues = ContentValues().apply {
             put(CAPABILITIES_ACCOUNT_NAME, OC_CAPABILITY.accountName)
             put(CAPABILITIES_VERSION_MAYOR, OC_CAPABILITY.versionMayor)
             put(CAPABILITIES_VERSION_MINOR, OC_CAPABILITY.versionMinor)

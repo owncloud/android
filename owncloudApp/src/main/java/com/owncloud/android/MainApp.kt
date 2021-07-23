@@ -159,7 +159,7 @@ class MainApp : Application() {
 
     fun startLogsIfEnabled() {
         enabledLogging = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                .getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
+            .getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
 
         if (enabledLogging) {
             LogsProvider(applicationContext).startLogging()

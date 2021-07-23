@@ -52,7 +52,7 @@ class MigrationToDB33Test : MigrationTest() {
             currentVersion = DB_VERSION_33,
             recoverPreviousData = false,
             insertData = { database -> insertDataToTest(database) },
-            validateMigration = { Unit },
+            validateMigration = { },
             listOfMigrations = arrayOf()
         )
     }

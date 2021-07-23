@@ -53,15 +53,17 @@ class EditPublicShareAsyncUseCaseTest {
         assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { shareRepository.updatePublicShare(
-            OC_SHARE.remoteId,
-            "",
-            "",
-            OC_SHARE.expirationDate,
-            OC_SHARE.permissions,
-            false,
-            OC_SHARE.accountOwner
-        ) }
+        verify(exactly = 1) {
+            shareRepository.updatePublicShare(
+                remoteId = OC_SHARE.remoteId,
+                name = "",
+                password = "",
+                expirationDateInMillis = OC_SHARE.expirationDate,
+                permissions = OC_SHARE.permissions,
+                publicUpload = false,
+                accountName = OC_SHARE.accountOwner
+            )
+        }
     }
 
     @Test
@@ -86,14 +88,16 @@ class EditPublicShareAsyncUseCaseTest {
         assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { shareRepository.updatePublicShare(
-            OC_SHARE.remoteId,
-            "",
-            "",
-            OC_SHARE.expirationDate,
-            OC_SHARE.permissions,
-            false,
-            OC_SHARE.accountOwner
-        ) }
+        verify(exactly = 1) {
+            shareRepository.updatePublicShare(
+                remoteId = OC_SHARE.remoteId,
+                name = "",
+                password = "",
+                expirationDateInMillis = OC_SHARE.expirationDate,
+                permissions = OC_SHARE.permissions,
+                publicUpload = false,
+                accountName = OC_SHARE.accountOwner
+            )
+        }
     }
 }
