@@ -118,7 +118,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                             "=" +
                             uri.pathSegments[1] +
                             if (!TextUtils.isEmpty(where))
-                                " AND (" + where + ")"
+                                " AND ($where)"
                             else
                                 "", whereArgs
                 )
@@ -154,7 +154,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     ProviderTableMeta._ID + "=" +
                             uri.pathSegments[1] +
                             if (!TextUtils.isEmpty(where))
-                                " AND (" + where + ")"
+                                " AND ($where)"
                             else
                                 "", whereArgs
                 )
@@ -320,7 +320,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         sqlQuery.tables = ProviderTableMeta.FILE_TABLE_NAME
 
         when (uriMatcher.match(uri)) {
-            ROOT_DIRECTORY -> sqlQuery.setProjectionMap(fileProjectionMap)
+            ROOT_DIRECTORY -> sqlQuery.projectionMap = fileProjectionMap
             DIRECTORY -> {
                 val folderId = uri.pathSegments[1]
                 sqlQuery.appendWhere(

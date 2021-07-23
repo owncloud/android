@@ -77,7 +77,7 @@ fun Throwable.parseError(
             showJustReason -> {
                 reason
             }
-            else -> "$genericErrorMessage ${resources.getString(R.string.error_reason)} ${reason.toLowerCase(Locale.getDefault())}"
+            else -> "$genericErrorMessage ${resources.getString(R.string.error_reason)} ${reason.lowercase(Locale.getDefault())}"
         }
     }
 }

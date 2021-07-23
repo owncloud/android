@@ -36,7 +36,7 @@ class BottomSheetFragmentItemView @JvmOverloads constructor(
     private var _binding: BottomSheetFragmentItemBinding? = null
     private val binding get() = _binding!!
 
-    var itemIcon: Drawable?
+    private var itemIcon: Drawable?
         get() = binding.itemIcon.drawable
         set(value) {
             binding.itemIcon.setImageDrawable(value)
