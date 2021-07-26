@@ -28,7 +28,8 @@ import android.annotation.SuppressLint;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.data.LocalStorageProvider;
+import com.owncloud.android.data.storage.LegacyStorageProviderImpl;
+import com.owncloud.android.data.storage.LocalStorageProvider;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import timber.log.Timber;
@@ -52,14 +53,14 @@ public class FileStorageUtils {
     // Let's use the LocalStorageProvider from now on.
     // It is in the data module, and it will be beneficial for new architecture.
     private static LocalStorageProvider getLocalStorageProvider() {
-        return new LocalStorageProvider(MainApp.Companion.getDataFolder());
+        return new LegacyStorageProviderImpl(MainApp.Companion.getDataFolder());
     }
 
     /**
      * Get local owncloud storage path for accountName.
      */
     public static String getSavePath(String accountName) {
-        return getLocalStorageProvider().getSavePath(accountName);
+        return getLocalStorageProvider().getAccountDirectoryPath(accountName);
     }
 
     /**

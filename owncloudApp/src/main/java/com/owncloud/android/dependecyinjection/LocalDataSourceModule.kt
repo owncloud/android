@@ -23,7 +23,7 @@ package com.owncloud.android.dependecyinjection
 import android.accounts.AccountManager
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.dataFolder
-import com.owncloud.android.data.LocalStorageProvider
+import com.owncloud.android.data.storage.LegacyStorageProviderImpl
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCLocalAuthenticationDataSource
@@ -35,6 +35,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource
 import org.koin.android.ext.koin.androidContext
@@ -49,7 +50,7 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
 
     single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
-    single { LocalStorageProvider(dataFolder) }
+    single<LocalStorageProvider> { LegacyStorageProviderImpl(dataFolder) }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }
