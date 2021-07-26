@@ -62,6 +62,8 @@ abstract class LocalStorageProvider(private val rootFolderName: String) {
         accountName: String?
     ): String = getRootFolderPath() + "/tmp/" + getEncodedAccountName(accountName)
 
+    fun getLogsPath(): String = getRootFolderPath()
+
     fun getDefaultCameraSourcePath(): String {
         return DocumentFile.fromFile(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
