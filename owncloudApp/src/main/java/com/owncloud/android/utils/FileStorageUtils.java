@@ -28,7 +28,6 @@ import android.annotation.SuppressLint;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.data.storage.LegacyStorageProviderImpl;
 import com.owncloud.android.data.storage.LocalStorageProvider;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
@@ -53,7 +52,7 @@ public class FileStorageUtils {
     // Let's use the LocalStorageProvider from now on.
     // It is in the data module, and it will be beneficial for new architecture.
     private static LocalStorageProvider getLocalStorageProvider() {
-        return new LegacyStorageProviderImpl(MainApp.Companion.getDataFolder());
+        return new LocalStorageProvider.LegacyStorageProvider(MainApp.Companion.getDataFolder());
     }
 
     /**

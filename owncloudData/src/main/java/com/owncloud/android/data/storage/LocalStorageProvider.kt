@@ -1,7 +1,11 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * @author Christian Schabesberger
+ * @author Shashvat Kedia
+ * @author Juan Carlos Garrote Gascón
  * <p>
  * Copyright (C) 2021 ownCloud GmbH.
  * <p>
@@ -25,12 +29,16 @@ import android.os.Environment
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
 
-abstract class LocalStorageProvider(private val rootFolderName: String) {
+sealed class LocalStorageProvider(private val rootFolderName: String) {
 
-    /**
-     * Return the primary shared/external storage directory where files will be stored.
-     */
     abstract fun getPrimaryStorageDirectory(): File
+
+    class LegacyStorageProvider(
+        rootFolderName: String
+    ) : LocalStorageProvider(rootFolderName) {
+
+        override fun getPrimaryStorageDirectory(): File = Environment.getExternalStorageDirectory()
+    }
 
     /**
      * Return the root path of primary shared/external storage directory for this application.
@@ -42,7 +50,7 @@ abstract class LocalStorageProvider(private val rootFolderName: String) {
      * Get local storage path for accountName.
      */
     fun getAccountDirectoryPath(
-        accountName: String
+        accountName: String?
     ): String = getRootFolderPath() + File.separator + getEncodedAccountName(accountName)
 
     /**
@@ -51,7 +59,7 @@ abstract class LocalStorageProvider(private val rootFolderName: String) {
      * file.
      */
     fun getDefaultSavePathFor(
-        accountName: String,
+        accountName: String?,
         remotePath: String
     ): String = getAccountDirectoryPath(accountName) + remotePath
 
