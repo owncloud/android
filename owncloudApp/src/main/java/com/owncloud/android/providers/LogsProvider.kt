@@ -20,10 +20,10 @@
 package com.owncloud.android.providers
 
 import android.content.Context
-import android.os.Environment
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.lib.common.http.LogInterceptor
 import com.owncloud.android.lib.common.utils.LoggingHelper
 import timber.log.Timber
@@ -36,10 +36,12 @@ class LogsProvider(
 
     fun startLogging() {
         val dataFolder = MainApp.dataFolder
+        val localStorageProvider = LocalStorageProvider.LegacyStorageProvider(dataFolder)
 
         // Set folder for store logs
         LoggingHelper.startLogging(
-            File(Environment.getExternalStorageDirectory().absolutePath + File.separator + dataFolder), dataFolder
+            directory = File(localStorageProvider.getLogsPath()),
+            storagePath = dataFolder
         )
         Timber.d("${BuildConfig.BUILD_TYPE} start logging ${BuildConfig.VERSION_NAME} ${BuildConfig.COMMIT_SHA1}")
 
@@ -61,6 +63,6 @@ class LogsProvider(
     }
 
     companion object {
-        const val PREFERENCE_LOG_HTTP = "set_httpLogs"
+        private const val PREFERENCE_LOG_HTTP = "set_httpLogs"
     }
 }
