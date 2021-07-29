@@ -71,7 +71,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         accountName: String?
     ): String = getRootFolderPath() + "/tmp/" + getEncodedAccountName(accountName)
 
-    fun getLogsPath(): String = getRootFolderPath()
+    fun getLogsPath(): String = getRootFolderPath() + "/logs/"
 
     fun getDefaultCameraSourcePath(): String {
         return DocumentFile.fromFile(
