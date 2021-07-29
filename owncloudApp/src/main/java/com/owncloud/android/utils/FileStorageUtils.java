@@ -24,6 +24,7 @@
 
 package com.owncloud.android.utils;
 
+import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.webkit.MimeTypeMap;
 
@@ -234,6 +235,13 @@ public class FileStorageUtils {
         }
 
         return dir.delete();
+    }
+
+    /**
+     * Cleans up unused files, such as deprecated user directories
+     */
+    public static void deleteUnusedUserDirs(Account[] remainingAccounts) {
+        getLocalStorageProvider().deleteUnusedUserDirs(remainingAccounts);
     }
 
     public static String getDefaultCameraSourcePath() {

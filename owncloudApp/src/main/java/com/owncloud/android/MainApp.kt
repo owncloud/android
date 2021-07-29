@@ -21,6 +21,8 @@
  */
 package com.owncloud.android
 
+import android.accounts.AccountManager
+import android.accounts.OnAccountsUpdateListener
 import android.app.Activity
 import android.app.Application
 import android.app.NotificationManager.IMPORTANCE_LOW
@@ -29,7 +31,9 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.WindowManager
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
@@ -53,6 +57,7 @@ import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_NOTIFICATION_CHANNEL_ID
+import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import org.koin.android.ext.koin.androidContext
@@ -83,6 +88,8 @@ class MainApp : Application() {
 
         // initialise thumbnails cache on background thread
         ThumbnailsCacheManager.InitDiskCacheTask().execute()
+
+        cleanupUnusedAccountDirectories()
 
         // register global protection with pass code, pattern lock and biometric lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
@@ -205,6 +212,14 @@ class MainApp : Application() {
             description = getString(R.string.file_sync_notification_channel_description),
             importance = IMPORTANCE_LOW
         )
+    }
+
+    private fun cleanupUnusedAccountDirectories() {
+        val accountManager = AccountManager.get(this)
+        accountManager.addOnAccountsUpdatedListener(OnAccountsUpdateListener {
+            val accounts = AccountUtils.getAccounts(this)
+            FileStorageUtils.deleteUnusedUserDirs(accounts)
+        }, Handler(), false)
     }
 
     companion object {

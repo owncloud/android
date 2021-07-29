@@ -1,0 +1,9 @@
+Enhancement: Delete old user directories in order to free memory
+
+Previously, when users deleted an account the synchronized files of this account
+stayed on the SD-Card. So if the user didn't want them anymore he had to delete
+them manually. Now, the app automatically removes the files associated with an
+account.
+
+https://github.com/owncloud/android/pull/3336
+https://github.com/owncloud/android/issues/125

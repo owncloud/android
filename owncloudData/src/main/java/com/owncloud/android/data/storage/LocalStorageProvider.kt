@@ -23,6 +23,7 @@
  */
 package com.owncloud.android.data.storage
 
+import android.accounts.Account
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Environment
@@ -85,6 +86,37 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
      */
     @SuppressLint("UsableSpace")
     fun getUsableSpace(): Long = getPrimaryStorageDirectory().usableSpace
+
+    /**
+     * Checks if there is user data which does not have a corresponding account in the Account manager.
+     */
+    private fun getDanglingAccountDirs(remainingAccounts: Array<Account>): List<File> {
+        val rootFolder = File(getRootFolderPath())
+        val danglingDirs = mutableListOf<File>()
+        for (dir in rootFolder.listFiles()) {
+            var dirIsOk = false
+            if (dir.name.equals("tmp"))  {
+                dirIsOk = true
+            } else {
+                for (a in remainingAccounts) {
+                    if (dir.name.equals(getEncodedAccountName(a.name))) {
+                        dirIsOk = true
+                    }
+                }
+            }
+            if (!dirIsOk) {
+               danglingDirs.add(dir)
+            }
+        }
+        return danglingDirs
+    }
+
+    open fun deleteUnusedUserDirs(remainingAccounts: Array<Account>) {
+        val danglingDirs = getDanglingAccountDirs(remainingAccounts)
+        for (dd in danglingDirs) {
+            dd.deleteRecursively()
+        }
+    }
 
     /**
      * URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names,
