@@ -24,10 +24,12 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.providers.LogsProvider
+import com.owncloud.android.providers.WorkManagerProvider
 
 class SettingsLogsViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
-    private val logsProvider: LogsProvider
+    private val logsProvider: LogsProvider,
+    private val workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
 
     fun shouldLogHttpRequests(value: Boolean) = logsProvider.shouldLogHttpRequests(value)
@@ -42,4 +44,8 @@ class SettingsLogsViewModel(
     }
 
     fun isLoggingEnabled() = preferencesProvider.getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
+
+    fun enqueueOldLogsCollectorWorker() {
+        workManagerProvider.enqueueOldLogsCollectorWorker()
+    }
 }

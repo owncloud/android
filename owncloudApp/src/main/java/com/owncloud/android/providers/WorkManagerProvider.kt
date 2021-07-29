@@ -24,6 +24,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.owncloud.android.workers.CameraUploadsWorker
+import com.owncloud.android.workers.OldLogsCollectorWorker
 
 class WorkManagerProvider(
     val context: Context
@@ -37,5 +38,16 @@ class WorkManagerProvider(
 
         WorkManager.getInstance(context)
             .enqueueUniquePeriodicWork(CameraUploadsWorker.CAMERA_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.KEEP, cameraUploadsWorker)
+    }
+
+    fun enqueueOldLogsCollectorWorker() {
+        val oldLogsCollectorWorker = PeriodicWorkRequestBuilder<OldLogsCollectorWorker>(
+            repeatInterval = OldLogsCollectorWorker.repeatInterval,
+            repeatIntervalTimeUnit = OldLogsCollectorWorker.repeatIntervalTimeUnit
+        ).addTag(OldLogsCollectorWorker.OLD_LOGS_COLLECTOR_WORKER)
+            .build()
+
+        WorkManager.getInstance(context)
+            .enqueueUniquePeriodicWork(OldLogsCollectorWorker.OLD_LOGS_COLLECTOR_WORKER, ExistingPeriodicWorkPolicy.REPLACE, oldLogsCollectorWorker)
     }
 }
