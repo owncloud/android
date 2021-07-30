@@ -20,7 +20,9 @@
 package com.owncloud.android.providers
 
 import android.content.Context
+import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.owncloud.android.workers.CameraUploadsWorker
@@ -41,10 +43,14 @@ class WorkManagerProvider(
     }
 
     fun enqueueOldLogsCollectorWorker() {
+        val constraintsRequired = Constraints.Builder().setRequiredNetworkType(NetworkType.NOT_REQUIRED).build()
+
         val oldLogsCollectorWorker = PeriodicWorkRequestBuilder<OldLogsCollectorWorker>(
             repeatInterval = OldLogsCollectorWorker.repeatInterval,
             repeatIntervalTimeUnit = OldLogsCollectorWorker.repeatIntervalTimeUnit
-        ).addTag(OldLogsCollectorWorker.OLD_LOGS_COLLECTOR_WORKER)
+        )
+            .addTag(OldLogsCollectorWorker.OLD_LOGS_COLLECTOR_WORKER)
+            .setConstraints(constraintsRequired)
             .build()
 
         WorkManager.getInstance(context)

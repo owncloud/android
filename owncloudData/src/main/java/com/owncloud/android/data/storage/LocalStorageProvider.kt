@@ -71,7 +71,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         accountName: String?
     ): String = getRootFolderPath() + "/tmp/" + getEncodedAccountName(accountName)
 
-    fun getLogsPath(): String = getRootFolderPath() + "/logs/"
+    fun getLogsPath(): String = getRootFolderPath() + LOGS_FOLDER_NAME
 
     fun getDefaultCameraSourcePath(): String {
         return DocumentFile.fromFile(
@@ -128,5 +128,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
 
     companion object {
         private const val CAMERA_FOLDER = "/Camera"
+        private const val LOGS_FOLDER_NAME = "/logs/"
     }
 }
