@@ -26,6 +26,7 @@ import com.owncloud.android.data.storage.LocalStorageProvider
 import org.koin.core.KoinComponent
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -38,15 +39,17 @@ class OldLogsCollectorWorker(
 ), KoinComponent {
 
     override suspend fun doWork(): Result {
-        /**
-         * 1. Get logs folder
-         * 2. Check if there are old logs >10 days
-         * 3. Remove old logs
-         */
         val logsDirectory = getLogsDirectory()
         val logsFiles = getLogsFiles(logsDirectory)
-        removeOldLogs(logsFiles)
-        return Result.success()
+
+        return try {
+            removeOldLogs(logsFiles)
+            Result.success()
+        } catch (ioException: IOException) {
+            Result.failure()
+        } catch (securityException: SecurityException) {
+            Result.failure()
+        }
     }
 
     private fun getLogsDirectory(): File {
