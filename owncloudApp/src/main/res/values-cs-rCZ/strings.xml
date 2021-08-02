@@ -30,8 +30,10 @@
   <string name="drawer_feedback">Odezva</string>
   <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
+  <string name="prefs_subsection_logging">Logování</string>
   <string name="prefs_subsection_more">Více</string>
   <string name="prefs_subsection_security">Zabezpečení</string>
+  <string name="prefs_subsection_more_summary">Informace, zpětná vazba a další</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
@@ -42,6 +44,8 @@
   <string name="confirmation_touches_with_other_windows_title">Jste si jisti, že chcete povolit tuto funkci?</string>
   <string name="confirmation_touches_with_other_windows_message">Použití na vlastní zodpovědnost. Překrývající aplikace se může pokusit ukrást vaše údaje.</string>
   <string name="prefs_open_logs_view">Otevřít log</string>
+  <string name="prefs_subsection_picture_uploads">Automatické nahrávání obrázků</string>
+  <string name="prefs_subsection_video_uploads">Automatické nahrávání videí</string>
   <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
   <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
   <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
@@ -66,6 +70,8 @@
   <string name="prefs_pattern">Zámek gestem</string>
   <string name="prefs_enable_logging">Povolit logování</string>
   <string name="prefs_send_feedback">Odeslat názor</string>
+  <string name="prefs_app_version">Verze aplikace</string>
+  <string name="prefs_app_version_summary">%1$s%2$s verze %3$s (%4$s)</string>
   <string name="pattern_enter_pattern">Prosím, zadejte gesto</string>
   <string name="pattern_configure_pattern">Zadejte gesto</string>
   <string name="pattern_remove_pattern">Odstranit gesto</string>
@@ -168,6 +174,11 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">Název souboru nesmí být delší než %d znaků</string>
   <string name="uploader_upload_text_filename_hint">Jméno souboru</string>
   <string name="uploader_upload_camera_upload_files">Nahrávám soubory z fotoparátu</string>
+  <string name="uploader_upload_picture_upload_files">%d nových obrázků bude odesláno</string>
+  <string name="uploader_upload_video_upload_files">%d nových videí bude odesláno</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Odesílání selhalo</string>
+  <string name="uploader_upload_picture_upload_error">Cesta k nahrávání obrázků již není platná</string>
+  <string name="uploader_upload_video_upload_error">Cesta k nahrávání videí již není platná</string>
   <string name="uploader_upload_available_offline_files">Nahrávání dostupných offline souborů</string>
   <string name="uploader_upload_requested_from_wifi_files">Vyžádáno nahrávání souborů</string>
   <string name="ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
@@ -431,10 +442,13 @@ správce systému.</string>
   <string name="file_list__footer__files">%1$d soubory(ů)</string>
   <string name="file_list__footer__files_and_folder">%1$d soubory(ů), 1 adresář</string>
   <string name="file_list__footer__files_and_folders">%1$d soubory(ů), %2$d adresáře(ů)</string>
+  <string name="prefs_picture_upload_account">Účet pro nahrávání obrázků</string>
+  <string name="prefs_video_upload_account">Účet pro nahrávání videí</string>
   <string name="prefs_camera_upload_source_path_title">Adresář fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vyžadován</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Původní soubor bude</string>
   <string name="prefs_camera_upload_behaviour_title">Původní soubor bude</string>
+  <string name="prefs_camera_upload_last_sync_title">Poslední synchronizace</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
   <string name="upload_move_files">Přesunout soubor</string>
   <string name="pref_behaviour_entries_keep_file">ponechán ve výchozím adresáři</string>
