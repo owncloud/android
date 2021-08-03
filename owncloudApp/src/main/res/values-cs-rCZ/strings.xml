@@ -33,6 +33,8 @@
   <string name="prefs_subsection_logging">Logování</string>
   <string name="prefs_subsection_more">Více</string>
   <string name="prefs_subsection_security">Zabezpečení</string>
+  <string name="prefs_subsection_security_summary">Nastavení zámků aplikace a povolení doteku s jinými aplikacemi</string>
+  <string name="prefs_subsection_logging_summary">Detailní nastavení možností logování aplikace</string>
   <string name="prefs_subsection_more_summary">Informace, zpětná vazba a další</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
@@ -45,7 +47,9 @@
   <string name="confirmation_touches_with_other_windows_message">Použití na vlastní zodpovědnost. Překrývající aplikace se může pokusit ukrást vaše údaje.</string>
   <string name="prefs_open_logs_view">Otevřít log</string>
   <string name="prefs_subsection_picture_uploads">Automatické nahrávání obrázků</string>
+  <string name="prefs_subsection_picture_uploads_summary">Spravovat umístění a způsob nahrávání obrázků automaticky</string>
   <string name="prefs_subsection_video_uploads">Automatické nahrávání videí</string>
+  <string name="prefs_subsection_video_uploads_summary">Spravovat umístění a způsob nahrávání videí automaticky</string>
   <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
   <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
   <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
@@ -69,6 +73,7 @@
   <string name="prefs_remember_last_upload_location_summary">Zapamatovat poslední umístění pro nahrání sdílených souborů</string>
   <string name="prefs_pattern">Zámek gestem</string>
   <string name="prefs_enable_logging">Povolit logování</string>
+  <string name="prefs_enable_logging_summary">Při aktivaci může být ovlivněn výkon a logy mohou obsahovat citlivé údaje. Logy se ovšem neposílají automaticky na servery ownCloud. Sdílení logů je jen na vaší osobní zodpovědnosti.</string>
   <string name="prefs_send_feedback">Odeslat názor</string>
   <string name="prefs_app_version">Verze aplikace</string>
   <string name="prefs_app_version_summary">%1$s%2$s verze %3$s (%4$s)</string>
@@ -78,6 +83,8 @@
   <string name="pattern_incorrect_pattern">Nesprávné gesto</string>
   <string name="pattern_reenter_pattern">Prosím, zadejte gesto znovu</string>
   <string name="pattern_not_same_pattern">Gesta nejsou shodná</string>
+  <string name="pattern_error_set">Nastala chyba při nastavování zámku gestem</string>
+  <string name="pattern_error_remove">Nastala chyba při odstraňování zámku gestem</string>
   <string name="pattern_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte gesto</string>
   <string name="passcode_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte bezpečnostní kód</string>
   <string name="pattern_no_longer_required">Gesto již nebude vyžadováno</string>
@@ -240,6 +247,8 @@
   <string name="pass_code_remove_your_pass_code">Odstraňte svůj bezpečnostní kód</string>
   <string name="pass_code_mismatch">Bezpečnostní kód se liší</string>
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
+  <string name="pass_code_error_set">Nastala chyba při nastavování bezpečnostního kódu</string>
+  <string name="pass_code_error_remove">Nastala chyba při odstraňování bezpečnostního kódu</string>
   <string name="biometric_not_enrolled">Povolte alespoň jeden biometrický způsob ověření k používání této specialitky</string>
   <string name="biometric_prompt_title">Biometrické přihlášení</string>
   <string name="biometric_prompt_subtitle">Přihlásit se s použitím biometrických přihlašovacích údajů</string>
@@ -299,6 +308,7 @@
   <string name="confirmation_remove_folder_alert">Opravdu chcete odstranit %1$s a jeho obsah?</string>
   <string name="confirmation_remove_local">Pouze místní</string>
   <string name="confirmation_remove_account_alert">Opravdu chcete odstranit účet %1$s ?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">K tomuto účtu je nastavena automatická záloha snímků a videí z fotoaparátu. Odstraněním účtu bude tato synchronizace zrušena. Opravdu chcete odstranit účet %1$s?</string>
   <string name="confirmation_remove_public_share_title">Odstranění odkazu</string>
   <string name="confirmation_remove_private_share_title">Odstranit soukromé sdílení</string>
   <string name="confirmation_remove_share_message">Opravdu chcete zrušit %1$s sdílení?</string>
