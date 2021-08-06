@@ -41,6 +41,9 @@ import timber.log.Timber;
 
 import java.io.File;
 
+import static com.owncloud.android.ui.activity.PassCodeActivity.PREFERENCE_PASSCODE;
+import static com.owncloud.android.ui.activity.PassCodeActivity.numberOfPassInputs;
+
 public class ManageSpaceActivity extends AppCompatActivity {
 
     private static final String LIB_FOLDER = "lib";
@@ -92,7 +95,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            boolean result = true;
+            boolean result;
 
             // Save passcode from Share preferences
             SharedPreferences appPrefs = PreferenceManager
@@ -102,13 +105,14 @@ public class ManageSpaceActivity extends AppCompatActivity {
             boolean patternEnabled = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
             boolean biometricEnabled = appPrefs.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false);
 
-            String[] passCodeDigits = new String[4];
-            if (passCodeEnable) {
-                passCodeDigits[0] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D1, null);
-                passCodeDigits[1] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D2, null);
-                passCodeDigits[2] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D3, null);
-                passCodeDigits[3] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D4, null);
+
+            final String passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, null);
+            final String[] passCodeDigits = new String[PassCodeActivity.numberOfPassInputs];
+
+            for(int i = 0; i < numberOfPassInputs && passCodeEnable; i++) {
+                passCodeDigits[1] = Character.toString(passcodeString.charAt(i));
             }
+
             String patternValue = "";
             if (patternEnabled) {
                 patternValue = appPrefs.getString(PatternLockActivity.KEY_PATTERN, null);
@@ -123,13 +127,11 @@ public class ManageSpaceActivity extends AppCompatActivity {
             appPrefsEditor.clear();
             result = result && appPrefsEditor.commit();
 
-            // Recover passcode
-            if (passCodeEnable) {
-                appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D1, passCodeDigits[0]);
-                appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D2, passCodeDigits[1]);
-                appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D3, passCodeDigits[2]);
-                appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D4, passCodeDigits[3]);
+            final StringBuilder newPassCodeString = new StringBuilder();
+            for(int i = 0; i < numberOfPassInputs && passCodeEnable; i++) {
+                newPassCodeString.append(passCodeDigits[i]);
             }
+            appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE, passCodeDigits[0]);
 
             // Recover pattern
             if (patternEnabled) {

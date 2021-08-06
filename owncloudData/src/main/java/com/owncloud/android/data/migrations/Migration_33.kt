@@ -68,5 +68,4 @@ val MIGRATION_32_33 = object : Migration(32, 33) {
             Timber.e(e, "Failed to migrate database version 32 to version 33")
         }
     }
-
 }

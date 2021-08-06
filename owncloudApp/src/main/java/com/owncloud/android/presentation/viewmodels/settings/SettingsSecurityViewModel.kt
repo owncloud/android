@@ -36,13 +36,10 @@ class SettingsSecurityViewModel(
 
     fun handleEnablePasscode(data: Intent?): UIResult<Unit> {
         val passcode =
-            data?.getStringExtra(PassCodeActivity.KEY_PASSCODE).takeIf { it?.length == 4 } ?: return UIResult.Error()
-        for (i in 1..4) {
-            preferencesProvider.putString(
-                PassCodeActivity.PREFERENCE_PASSCODE_D + i,
-                passcode.substring(i - 1, i)
-            )
-        }
+            data?.getStringExtra(PassCodeActivity.KEY_PASSCODE).takeIf { it?.length == PassCodeActivity.numberOfPassInputs }
+                ?: return UIResult.Error()
+
+        preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         return UIResult.Success()
     }
