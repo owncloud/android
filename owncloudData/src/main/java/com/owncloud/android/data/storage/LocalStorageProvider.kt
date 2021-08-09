@@ -93,19 +93,21 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     private fun getDanglingAccountDirs(remainingAccounts: Array<Account>): List<File> {
         val rootFolder = File(getRootFolderPath())
         val danglingDirs = mutableListOf<File>()
-        for (dir in rootFolder.listFiles()) {
-            var dirIsOk = false
-            if (dir.name.equals("tmp"))  {
-                dirIsOk = true
-            } else {
-                for (a in remainingAccounts) {
-                    if (dir.name.equals(getEncodedAccountName(a.name))) {
-                        dirIsOk = true
+        if (rootFolder.listFiles() != null) {
+            for (dir in rootFolder.listFiles()) {
+                var dirIsOk = false
+                if (dir.name.equals("tmp")) {
+                    dirIsOk = true
+                } else {
+                    for (a in remainingAccounts) {
+                        if (dir.name.equals(getEncodedAccountName(a.name))) {
+                            dirIsOk = true
+                        }
                     }
                 }
-            }
-            if (!dirIsOk) {
-               danglingDirs.add(dir)
+                if (!dirIsOk) {
+                    danglingDirs.add(dir)
+                }
             }
         }
         return danglingDirs
