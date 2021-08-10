@@ -1,3 +1,27 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v2.18.1...master
+
+Summary
+-------
+
+* Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
+
+Details
+-------
+
+* Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
+
+   Previously, when users deleted an account the synchronized files of this account stayed on the
+   SD-Card. So if the user didn't want them anymore he had to delete them manually. Now, the app
+   automatically removes the files associated with an account.
+
+   https://github.com/owncloud/android/issues/125
+   https://github.com/owncloud/android/pull/3336
+
 Changelog for ownCloud Android Client [2.18.1] (2021-07-20)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.18.1 relevant to
