@@ -45,7 +45,6 @@ import org.junit.Test
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import nthChildOf
-import org.junit.Assert.fail
 import withChildViewCount
 
 class OCSettingsPasscodeTest {
@@ -172,7 +171,7 @@ class OCSettingsPasscodeTest {
         typePasscode(defaultPassCode)
 
         //Type incorrect passcode
-        for(i in 0..1) {
+        for (i in 0..1) {
             onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
         }
 
