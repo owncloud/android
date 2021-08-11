@@ -16,7 +16,7 @@ dependencies {
     implementation "androidx.annotation:annotation:1.2.0"
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.jakewharton:disklrucache:2.0.2'
-    implementation 'com.google.android.exoplayer:exoplayer:2.14.2'
+    implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
     implementation "androidx.appcompat:appcompat:$appCompat"
     implementation 'com.getbase:floatingactionbutton:1.10.1'
