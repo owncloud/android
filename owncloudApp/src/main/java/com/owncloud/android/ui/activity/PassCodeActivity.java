@@ -146,7 +146,7 @@ public class PassCodeActivity extends BaseActivity {
     private void inflatePasscodeTxtLine(LinearLayout passcodeLockLayout) {
         final LinearLayout passcodeTxtLayout = findViewById(R.id.passCodeTxtLayout);
         for(int i = 0; i < numberOfPassInputs; i++) {
-            EditText txt = (EditText) getLayoutInflater().inflate(R.layout.passcode_edit_text, passcodeLockLayout, false);
+            EditText txt = (EditText) getLayoutInflater().inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false);
             passcodeTxtLayout.addView(txt);
             mPassCodeEditTexts[i] = txt;
         }

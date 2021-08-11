@@ -22,15 +22,13 @@ package com.owncloud.android.settings.security
 import android.app.Activity
 import android.content.Intent
 import android.preference.PreferenceManager
+import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode
 import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
@@ -42,10 +40,37 @@ import com.owncloud.android.utils.matchers.withText
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Rule
 import org.junit.Test
+import android.view.ViewGroup
+import androidx.test.espresso.assertion.ViewAssertions.matches
+
+import androidx.test.espresso.matcher.BoundedMatcher
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withParent
+import org.hamcrest.Matcher
 
 class OCSettingsPasscodeTest {
+
+    fun withChildViewCount(count: Int, childMatcher: Matcher<View>): Matcher<View> {
+        return object : BoundedMatcher<View, ViewGroup>(ViewGroup::class.java) {
+            override fun matchesSafely(viewGroup: ViewGroup): Boolean {
+                var matchCount = 0
+                for (i in 0 until viewGroup.childCount) {
+                    if (childMatcher.matches(viewGroup.getChildAt(i))) {
+                        matchCount++
+                    }
+                }
+                return matchCount == count
+            }
+
+            override fun describeTo(description: org.hamcrest.Description?) {
+                description?.appendText("ViewGroup with child-count=$count and")
+                childMatcher.describeTo(description)
+            }
+        }
+    }
 
     @Rule
     @JvmField
@@ -79,10 +104,12 @@ class OCSettingsPasscodeTest {
             isDisplayed(true)
             withText(R.string.pass_code_configure_your_pass_code_explanation)
         }
-        onView(withId(R.id.txt0)).check(matches(isDisplayed()))
-        onView(withId(R.id.txt1)).check(matches(isDisplayed()))
-        onView(withId(R.id.txt2)).check(matches(isDisplayed()))
-        onView(withId(R.id.txt3)).check(matches(isDisplayed()))
+
+        // Check if required amout of input fields are actually displayed
+        onView(withId(R.id.passCodeTxtLayout)).check(matches(isDisplayed()))
+        onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(4, withId(R.id.passCodeEditText))))
+
+
         with(R.id.cancel) {
             isDisplayed(true)
             withText(android.R.string.cancel)
@@ -113,7 +140,7 @@ class OCSettingsPasscodeTest {
         typePasscode(defaultPassCode)
         //Second typing
         typePasscode(defaultPassCode)
-
+//
         //Checking that the setResult returns the typed passcode
         assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
         assertThat(activityRule.activityResult, hasResultData(hasExtra(keyPassCode, passCodeToSave)))
@@ -150,9 +177,10 @@ class OCSettingsPasscodeTest {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        onView(withId(R.id.txt0)).perform(replaceText("1"))
-        onView(withId(R.id.txt1)).perform(replaceText("1"))
-        onView(withId(R.id.txt2)).perform(replaceText("1"))
+        //onView(withId(R.id.txt0)).perform(replaceText("1"))
+        //onView(withId(R.id.txt1)).perform(replaceText("1"))
+        //onView(withId(R.id.txt2)).perform(replaceText("1"))
+        fail()
 
         onView(withId(R.id.cancel)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
@@ -166,8 +194,9 @@ class OCSettingsPasscodeTest {
         //First typing
         typePasscode(defaultPassCode)
 
-        onView(withId(R.id.txt0)).perform(replaceText("1"))
-        onView(withId(R.id.txt1)).perform(replaceText("1"))
+        //onView(withId(R.id.txt0)).perform(replaceText("1"))
+        //onView(withId(R.id.txt1)).perform(replaceText("1"))
+        fail()
 
         onView(withId(R.id.cancel)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
@@ -228,20 +257,28 @@ class OCSettingsPasscodeTest {
     }
 
     private fun typePasscode(digits: Array<Char>) {
+        /*
         onView(withId(R.id.txt0)).perform(replaceText(digits[0].toString()))
         onView(withId(R.id.txt1)).perform(replaceText(digits[1].toString()))
         onView(withId(R.id.txt2)).perform(replaceText(digits[2].toString()))
         onView(withId(R.id.txt3)).perform(replaceText(digits[3].toString()))
+
+         */
+        fail()
     }
 
     private fun storePasscode(passcode: String = passCodeToSave) {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
+        /*
         for (i in 1..4) {
             appPrefs.putString(
                 PassCodeActivity.PREFERENCE_PASSCODE_D + i,
                 passcode.substring(i - 1, i)
             )
         }
+
+         */
+        fail()
         appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         appPrefs.apply()
     }
