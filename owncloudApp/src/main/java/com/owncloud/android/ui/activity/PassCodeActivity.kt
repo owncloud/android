@@ -1,0 +1,425 @@
+/*
+ * ownCloud Android client application
+ *
+ * @author Bartek Przybylski
+ * @author masensio
+ * @author David A. Velasco
+ * @author Christian Schabesberger
+ * @author David González Verdugo
+ * @author Abel García de Prada
+ * Copyright (C) 2011 Bartek Przybylski
+ * Copyright (C) 2021 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.owncloud.android.ui.activity
+
+import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
+import android.widget.TextView
+import android.widget.EditText
+import android.os.Bundle
+import android.view.WindowManager
+import com.owncloud.android.R
+import android.widget.LinearLayout
+import android.view.View.OnFocusChangeListener
+import android.content.Intent
+import android.preference.PreferenceManager
+import android.text.TextWatcher
+import android.text.Editable
+import android.view.KeyEvent
+import android.view.View
+import android.widget.Button
+import com.owncloud.android.BuildConfig
+import com.owncloud.android.utils.PreferenceUtils
+import timber.log.Timber
+import java.lang.IllegalArgumentException
+import java.lang.StringBuilder
+import java.util.Arrays
+
+class PassCodeActivity : BaseActivity() {
+    private lateinit var mBCancel: Button
+    private lateinit var mPassCodeHdr: TextView
+    private lateinit var mPassCodeHdrExplanation: TextView
+    private lateinit var mPassCodeError: TextView
+    private val mPassCodeEditTexts = arrayOfNulls<EditText>(numberOfPassInputs)
+    private var mPassCodeDigits: Array<String?> = arrayOfNulls(numberOfPassInputs)
+    private var mConfirmingPassCode = false
+    private var mBChange = true // to control that only one blocks jump
+
+    /**
+     * Initializes the activity.
+     *
+     * @param savedInstanceState    Previously saved state - irrelevant in this case
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        /// protection against screen recording
+        if (!BuildConfig.DEBUG) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        } // else, let it go, or taking screenshots & testing will not be possible
+        setContentView(R.layout.passcodelock)
+        val passcodeLockLayout = findViewById<LinearLayout>(R.id.passcodeLockLayout)
+        mBCancel = findViewById(R.id.cancel)
+        mPassCodeHdr = findViewById(R.id.header)
+        mPassCodeHdrExplanation = findViewById(R.id.explanation)
+        mPassCodeError = findViewById(R.id.error)
+
+        // Allow or disallow touches with other visible windows
+        passcodeLockLayout.filterTouchesWhenObscured =
+            PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        mPassCodeHdrExplanation.setFilterTouchesWhenObscured(
+            PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        )
+
+
+        inflatePasscodeTxtLine(passcodeLockLayout)
+        if (ACTION_CHECK == intent.action) {
+            /// this is a pass code request; the user has to input the right value
+            mPassCodeHdr.setText(R.string.pass_code_enter_pass_code)
+            mPassCodeHdrExplanation.setVisibility(View.INVISIBLE)
+            setCancelButtonEnabled(false) // no option to cancel
+        } else if (ACTION_REQUEST_WITH_RESULT == intent.action) {
+            if (savedInstanceState != null) {
+                mConfirmingPassCode = savedInstanceState.getBoolean(KEY_CONFIRMING_PASSCODE)
+                mPassCodeDigits = savedInstanceState.getStringArray(KEY_PASSCODE_DIGITS)!!
+            }
+            if (mConfirmingPassCode) {
+                //the app was in the passcodeconfirmation
+                requestPassCodeConfirmation()
+            } else {
+                /// pass code preference has just been activated in Preferences;
+                // will receive and confirm pass code value
+                mPassCodeHdr.setText(R.string.pass_code_configure_your_pass_code)
+                //mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
+                // TODO choose a header, check iOS
+                mPassCodeHdrExplanation.setVisibility(View.VISIBLE)
+                setCancelButtonEnabled(true)
+            }
+        } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
+            /// pass code preference has just been disabled in Preferences;
+            // will confirm user knows pass code, then remove it
+            mPassCodeHdr.setText(R.string.pass_code_remove_your_pass_code)
+            mPassCodeHdrExplanation.setVisibility(View.INVISIBLE)
+            setCancelButtonEnabled(true)
+        } else {
+            throw IllegalArgumentException(R.string.illegal_argument_exception_message.toString() + " ")
+        }
+        setTextListeners()
+    }
+
+    private fun inflatePasscodeTxtLine(passcodeLockLayout: LinearLayout) {
+        val passcodeTxtLayout = findViewById<LinearLayout>(R.id.passCodeTxtLayout)
+        for (i in 0 until numberOfPassInputs) {
+            val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
+            passcodeTxtLayout.addView(txt)
+            mPassCodeEditTexts[i] = txt
+        }
+        mPassCodeEditTexts[0]!!.requestFocus()
+        window.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+        )
+    }
+
+    /**
+     * Enables or disables the cancel button to allow the user interrupt the ACTION
+     * requested to the activity.
+     *
+     * @param enabled       'True' makes the cancel button available, 'false' hides it.
+     */
+    protected fun setCancelButtonEnabled(enabled: Boolean) {
+        if (enabled) {
+            mBCancel.visibility = View.VISIBLE
+            mBCancel.setOnClickListener { finish() }
+        } else {
+            mBCancel.visibility = View.GONE
+            mBCancel.visibility = View.INVISIBLE
+            mBCancel.setOnClickListener(null)
+        }
+    }
+
+    /**
+     * Binds the appropiate listeners to the input boxes receiving each digit of the pass code.
+     */
+    protected fun setTextListeners() {
+        for (i in 0 until numberOfPassInputs) {
+            mPassCodeEditTexts[i]!!.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPassInputs - 1))
+            if (i > 0) {
+                mPassCodeEditTexts[i]!!.setOnKeyListener { v: View, keyCode: Int, _: KeyEvent? ->
+                    if (keyCode == KeyEvent.KEYCODE_DEL && mBChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
+                        mPassCodeEditTexts[i - 1]!!.setText("")
+                        mPassCodeEditTexts[i - 1]!!.requestFocus()
+                        if (!mConfirmingPassCode) {
+                            mPassCodeDigits[-1] = ""
+                        }
+                        mBChange = false
+                    } else if (!mBChange) {
+                        mBChange = true
+                    }
+                    false
+                }
+            }
+            mPassCodeEditTexts[i]!!.onFocusChangeListener = OnFocusChangeListener { v: View, _: Boolean ->
+                /// TODO WIP: should take advantage of hasFocus to reduce processing
+                for (j in 0 until i) {
+                    if (mPassCodeEditTexts[j]!!.text.toString() == "") {  // TODO WIP validation
+                        // could be done in a global way, with a single OnFocusChangeListener for all the
+                        // input fields
+                        mPassCodeEditTexts[j]!!.requestFocus()
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Processes the pass code entered by the user just after the last digit was in.
+     *
+     * Takes into account the action requested to the activity, the currently saved pass code and
+     * the previously typed pass code, if any.
+     */
+    private fun processFullPassCode() {
+        if (ACTION_CHECK == intent.action) {
+            if (checkPassCodeIsValid()) {
+                /// pass code accepted in request, user is allowed to access the app
+                mPassCodeError.visibility = View.INVISIBLE
+                hideSoftKeyboard()
+                finish()
+            } else {
+                showErrorAndRestart(
+                    R.string.pass_code_wrong, R.string.pass_code_enter_pass_code,
+                    View.INVISIBLE
+                )
+            }
+        } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
+            if (checkPassCodeIsValid()) {
+                val resultIntent = Intent()
+                resultIntent.putExtra(KEY_CHECK_RESULT, true)
+                setResult(RESULT_OK, resultIntent)
+                mPassCodeError.visibility = View.INVISIBLE
+                hideSoftKeyboard()
+                notifyDocumentProviderRoots(applicationContext)
+                finish()
+            } else {
+                showErrorAndRestart(
+                    R.string.pass_code_wrong, R.string.pass_code_enter_pass_code,
+                    View.INVISIBLE
+                )
+            }
+        } else if (ACTION_REQUEST_WITH_RESULT == intent.action) {
+            /// enabling pass code
+            if (!mConfirmingPassCode) {
+                mPassCodeError.visibility = View.INVISIBLE
+                requestPassCodeConfirmation()
+            } else if (confirmPassCode()) {
+                /// confirmed: user typed the same pass code twice
+                savePassCodeAndExit()
+            } else {
+                showErrorAndRestart(
+                    R.string.pass_code_mismatch, R.string.pass_code_configure_your_pass_code, View.VISIBLE
+                )
+            }
+        }
+    }
+
+    private fun showErrorAndRestart(
+        errorMessage: Int, headerMessage: Int,
+        explanationVisibility: Int
+    ) {
+        Arrays.fill(mPassCodeDigits, null)
+        mPassCodeError.setText(errorMessage)
+        mPassCodeError.visibility = View.VISIBLE
+        mPassCodeHdr.setText(headerMessage) // TODO check if really needed
+        mPassCodeHdrExplanation.visibility = explanationVisibility // TODO check if really needed
+        clearBoxes()
+    }
+
+    /**
+     * Ask to the user for retyping the pass code just entered before saving it as the current pass
+     * code.
+     */
+    protected fun requestPassCodeConfirmation() {
+        clearBoxes()
+        mPassCodeHdr.setText(R.string.pass_code_reenter_your_pass_code)
+        mPassCodeHdrExplanation.visibility = View.INVISIBLE
+        mConfirmingPassCode = true
+    }
+
+    /**
+     * Compares pass code entered by the user with the value currently saved in the app.
+     *
+     * @return     'True' if entered pass code equals to the saved one.
+     */
+    protected fun checkPassCodeIsValid(): Boolean {
+        val appPrefs = PreferenceManager
+            .getDefaultSharedPreferences(applicationContext)
+        val passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+        var isValid = true
+        var i = 0
+        while (i < mPassCodeDigits.size && isValid) {
+            val originalDigit = Character.toString(passcodeString!![i])
+            isValid = mPassCodeDigits[i] != null && mPassCodeDigits[i] == originalDigit
+            i++
+        }
+        return isValid
+    }
+
+    /**
+     * Compares pass code retyped by the user in the input fields with the value entered just
+     * before.
+     *
+     * @return     'True' if retyped pass code equals to the entered before.
+     */
+    protected fun confirmPassCode(): Boolean {
+        mConfirmingPassCode = false
+        var isValid = true
+        var i = 0
+        while (i < mPassCodeEditTexts.size && isValid) {
+            isValid = mPassCodeEditTexts[i]!!.text.toString() == mPassCodeDigits[i]
+            i++
+        }
+        return isValid
+    }
+
+    /**
+     * Sets the input fields to empty strings and puts the focus on the first one.
+     */
+    protected fun clearBoxes() {
+        for (passCodeEditText in mPassCodeEditTexts) {
+            passCodeEditText!!.setText("")
+        }
+        mPassCodeEditTexts[0]!!.requestFocus()
+    }
+
+    /**
+     * Overrides click on the BACK arrow to correctly cancel ACTION_ENABLE or ACTION_DISABLE, while
+     * preventing than ACTION_CHECK may be worked around.
+     *
+     * @param keyCode       Key code of the key that triggered the down event.
+     * @param event         Event triggered.
+     * @return              'True' when the key event was processed by this method.
+     */
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
+            if (ACTION_REQUEST_WITH_RESULT == intent.action || ACTION_CHECK_WITH_RESULT == intent.action) {
+                finish()
+            } // else, do nothing, but report that the key was consumed to stay alive
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    /**
+     * Saves the pass code input by the user as the current pass code.
+     */
+    protected fun savePassCodeAndExit() {
+        val resultIntent = Intent()
+        val passCodeString = StringBuilder()
+        for (i in 0 until numberOfPassInputs) {
+            passCodeString.append(mPassCodeDigits[i])
+        }
+        resultIntent.putExtra(KEY_PASSCODE, passCodeString.toString())
+        setResult(RESULT_OK, resultIntent)
+        notifyDocumentProviderRoots(applicationContext)
+        finish()
+    }
+
+    private fun loadPinFromOldFormatIfPossible(): String {
+        val appPrefs = PreferenceManager
+            .getDefaultSharedPreferences(applicationContext)
+
+        var pinString = ""
+        for (i in 1..4)
+            pinString += appPrefs.getString(PREFERENCE_PASSCODE_D + i, null)
+
+        return pinString
+    }
+
+    public override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_CONFIRMING_PASSCODE, mConfirmingPassCode)
+        outState.putStringArray(KEY_PASSCODE_DIGITS, mPassCodeDigits)
+    }
+
+    private inner class PassCodeDigitTextWatcher(private val mIndex: Int, private val mLastOne: Boolean) : TextWatcher {
+        private operator fun next(): Int {
+            return if (mLastOne) 0 else mIndex + 1
+        }
+
+        /**
+         * Performs several actions when the user types a digit in an input field:
+         * - saves the input digit to the state of the activity; this will allow retyping the
+         * pass code to confirm it.
+         * - moves the focus automatically to the next field
+         * - for the last field, triggers the processing of the full pass code
+         *
+         * @param s     Changed text
+         */
+        override fun afterTextChanged(s: Editable) {
+            if (s.length > 0) {
+                if (!mConfirmingPassCode) {
+                    mPassCodeDigits[mIndex] = mPassCodeEditTexts[mIndex]!!.text.toString()
+                }
+                mPassCodeEditTexts[next()]!!.requestFocus()
+                if (mLastOne) {
+                    processFullPassCode()
+                }
+            } else {
+                Timber.d("Text box $mIndex was cleaned")
+            }
+        }
+
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            // nothing to do
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            // nothing to do
+        }
+
+        /**
+         * Constructor
+         *
+         * @param index         Position in the pass code of the input field that will be bound to
+         * this watcher.
+         * @param lastOne       'True' means that watcher corresponds to the last position of the
+         * pass code.
+         */
+        init {
+            require(mIndex >= 0) {
+                "Invalid index in " + PassCodeDigitTextWatcher::class.java.simpleName +
+                        " constructor"
+            }
+        }
+    }
+
+    companion object {
+        const val ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT"
+        const val ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT"
+        const val ACTION_CHECK = "ACTION_CHECK"
+        const val KEY_PASSCODE = "KEY_PASSCODE"
+        const val KEY_CHECK_RESULT = "KEY_CHECK_RESULT"
+
+        // NOTE: PREFERENCE_SET_PASSCODE must have the same value as settings_security.xml-->android:key for passcode preference
+        const val PREFERENCE_SET_PASSCODE = "set_pincode"
+        const val PREFERENCE_PASSCODE = "PrefPinCode"
+
+        // NOTE: This is required to read the legacy pin code format
+        const val PREFERENCE_PASSCODE_D = "PrefPinCode"
+
+        const val numberOfPassInputs = 4
+        private const val KEY_PASSCODE_DIGITS = "PASSCODE_DIGITS"
+        private const val KEY_CONFIRMING_PASSCODE = "CONFIRMING_PASSCODE"
+    }
+}
