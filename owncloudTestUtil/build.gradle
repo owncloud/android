@@ -23,4 +23,5 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleLiveData"
+    implementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

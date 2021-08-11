@@ -22,9 +22,9 @@ package com.owncloud.android.settings.security
 import android.app.Activity
 import android.content.Intent
 import android.preference.PreferenceManager
-import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode
 import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData
@@ -40,37 +40,15 @@ import com.owncloud.android.utils.matchers.withText
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
 import org.junit.Rule
 import org.junit.Test
-import android.view.ViewGroup
 import androidx.test.espresso.assertion.ViewAssertions.matches
-
-import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withParent
-import org.hamcrest.Matcher
+import nthChildOf
+import org.junit.Assert.fail
+import withChildViewCount
 
 class OCSettingsPasscodeTest {
-
-    fun withChildViewCount(count: Int, childMatcher: Matcher<View>): Matcher<View> {
-        return object : BoundedMatcher<View, ViewGroup>(ViewGroup::class.java) {
-            override fun matchesSafely(viewGroup: ViewGroup): Boolean {
-                var matchCount = 0
-                for (i in 0 until viewGroup.childCount) {
-                    if (childMatcher.matches(viewGroup.getChildAt(i))) {
-                        matchCount++
-                    }
-                }
-                return matchCount == count
-            }
-
-            override fun describeTo(description: org.hamcrest.Description?) {
-                description?.appendText("ViewGroup with child-count=$count and")
-                childMatcher.describeTo(description)
-            }
-        }
-    }
 
     @Rule
     @JvmField
@@ -81,9 +59,9 @@ class OCSettingsPasscodeTest {
     private val keyPassCode = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private val defaultPassCode = arrayOf('1', '1', '1', '1')
-    private val wrongPassCode = arrayOf('1', '1', '1', '2')
-    private val passCodeToSave = "1111"
+    private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
+    private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
+    private val passCodeToSave = "111111"
 
     @After
     fun tearDown() {
@@ -107,8 +85,7 @@ class OCSettingsPasscodeTest {
 
         // Check if required amout of input fields are actually displayed
         onView(withId(R.id.passCodeTxtLayout)).check(matches(isDisplayed()))
-        onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(4, withId(R.id.passCodeEditText))))
-
+        onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(PassCodeActivity.numberOfPassInputs, withId(R.id.passCodeEditText))))
 
         with(R.id.cancel) {
             isDisplayed(true)
@@ -140,10 +117,10 @@ class OCSettingsPasscodeTest {
         typePasscode(defaultPassCode)
         //Second typing
         typePasscode(defaultPassCode)
-//
+
         //Checking that the setResult returns the typed passcode
         assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
-        assertThat(activityRule.activityResult, hasResultData(hasExtra(keyPassCode, passCodeToSave)))
+        assertThat(activityRule.activityResult, hasResultData(hasExtra(keyPassCode, passCodeToSave.substring(0, PassCodeActivity.numberOfPassInputs))))
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -153,7 +130,8 @@ class OCSettingsPasscodeTest {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typing
+        //First typin
+        //Type incorrect passcodeg
         typePasscode(defaultPassCode)
         //Second typing
         typePasscode(wrongPassCode)
@@ -177,10 +155,9 @@ class OCSettingsPasscodeTest {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //onView(withId(R.id.txt0)).perform(replaceText("1"))
-        //onView(withId(R.id.txt1)).perform(replaceText("1"))
-        //onView(withId(R.id.txt2)).perform(replaceText("1"))
-        fail()
+        for (i in 0..2) {
+            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
+        }
 
         onView(withId(R.id.cancel)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
@@ -194,9 +171,10 @@ class OCSettingsPasscodeTest {
         //First typing
         typePasscode(defaultPassCode)
 
-        //onView(withId(R.id.txt0)).perform(replaceText("1"))
-        //onView(withId(R.id.txt1)).perform(replaceText("1"))
-        fail()
+        //Type incorrect passcode
+        for(i in 0..1) {
+            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
+        }
 
         onView(withId(R.id.cancel)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
@@ -251,36 +229,26 @@ class OCSettingsPasscodeTest {
         }
     }
 
+    @Test
+    fun convertOldPinCodeFormatToNewFormat() {
+        fail("FIXME")
+    }
+
     private fun openPasscodeActivity(mode: String) {
         intent.action = mode
         activityRule.launchActivity(intent)
     }
 
     private fun typePasscode(digits: Array<Char>) {
-        /*
-        onView(withId(R.id.txt0)).perform(replaceText(digits[0].toString()))
-        onView(withId(R.id.txt1)).perform(replaceText(digits[1].toString()))
-        onView(withId(R.id.txt2)).perform(replaceText(digits[2].toString()))
-        onView(withId(R.id.txt3)).perform(replaceText(digits[3].toString()))
-
-         */
-        fail()
+        for (i in 0 until PassCodeActivity.numberOfPassInputs)
+            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText(digits[i].toString()))
     }
 
     private fun storePasscode(passcode: String = passCodeToSave) {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
-        /*
-        for (i in 1..4) {
-            appPrefs.putString(
-                PassCodeActivity.PREFERENCE_PASSCODE_D + i,
-                passcode.substring(i - 1, i)
-            )
-        }
 
-         */
-        fail()
+        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, PassCodeActivity.numberOfPassInputs))
         appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         appPrefs.apply()
     }
-
 }
