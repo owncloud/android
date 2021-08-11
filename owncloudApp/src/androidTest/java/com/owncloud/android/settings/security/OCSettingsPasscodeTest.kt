@@ -229,11 +229,6 @@ class OCSettingsPasscodeTest {
         }
     }
 
-    @Test
-    fun convertOldPinCodeFormatToNewFormat() {
-        fail("FIXME")
-    }
-
     private fun openPasscodeActivity(mode: String) {
         intent.action = mode
         activityRule.launchActivity(intent)

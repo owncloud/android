@@ -59,6 +59,11 @@ public class PassCodeActivity extends BaseActivity {
     public final static String PREFERENCE_SET_PASSCODE = "set_pincode";
 
     public final static String PREFERENCE_PASSCODE = "PrefPinCode";
+    public final static String PREFERENCE_PASSCODE_D = "PrefPinCode";
+    public final static String PREFERENCE_PASSCODE_D1 = "PrefPinCode1";
+    public final static String PREFERENCE_PASSCODE_D2 = "PrefPinCode2";
+    public final static String PREFERENCE_PASSCODE_D3 = "PrefPinCode3";
+    public final static String PREFERENCE_PASSCODE_D4 = "PrefPinCode4";
 
     private Button mBCancel;
     private TextView mPassCodeHdr;
@@ -292,7 +297,7 @@ public class PassCodeActivity extends BaseActivity {
         final SharedPreferences appPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
 
-        final String passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, null);
+        final String passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible());
 
         boolean isValid = true;
         for (int i = 0; i < mPassCodeDigits.length && isValid; i++) {
@@ -364,6 +369,18 @@ public class PassCodeActivity extends BaseActivity {
         setResult(RESULT_OK, resultIntent);
         DocumentProviderUtils.Companion.notifyDocumentProviderRoots(getApplicationContext());
         finish();
+    }
+
+    private String loadPinFromOldFormatIfPossible() {
+        SharedPreferences appPrefs = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+
+        StringBuilder pinString = new StringBuilder();
+        pinString.append(appPrefs.getString(PREFERENCE_PASSCODE_D1, null));
+        pinString.append(appPrefs.getString(PREFERENCE_PASSCODE_D2, null));
+        pinString.append(appPrefs.getString(PREFERENCE_PASSCODE_D3, null));
+        pinString.append(appPrefs.getString(PREFERENCE_PASSCODE_D4, null));
+        return pinString.toString();
     }
 
     @Override
