@@ -159,6 +159,8 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     }
 
                 } else {
+                    Timber.e("Content-Length not equal to transferred bytes.");
+                    Timber.d("totalToTransfer = %d, transferred = %d", totalToTransfer, transferred);
                     client.exhaustResponse(mGet.getResponseBodyAsStream());
                     // TODO some kind of error control!
                 }
