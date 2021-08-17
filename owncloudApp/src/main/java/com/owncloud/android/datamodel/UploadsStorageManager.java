@@ -36,6 +36,10 @@ import timber.log.Timber;
 import java.util.Calendar;
 import java.util.Observable;
 
+import static com.owncloud.android.extensions.CursorExtKt.getIntFromColumnOrThrow;
+import static com.owncloud.android.extensions.CursorExtKt.getLongFromColumnOrThrow;
+import static com.owncloud.android.extensions.CursorExtKt.getStringFromColumnOrThrow;
+
 /**
  * Database helper for storing list of files to be uploaded, including status
  * information for each file.
@@ -169,7 +173,7 @@ public class UploadsStorageManager extends Observable {
             // read upload object and update
             OCUpload upload = createOCUploadFromCursor(c);
 
-            String path = c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_LOCAL_PATH));
+            String path = getStringFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_LOCAL_PATH);
             Timber.v("Updating " + path + " with status:" + status + " and result:" + (result == null ? "null" :
                     result.toString()) + " (old:" + upload.toFormattedString() + ")");
 
@@ -331,26 +335,21 @@ public class UploadsStorageManager extends Observable {
     private OCUpload createOCUploadFromCursor(Cursor c) {
         OCUpload upload = null;
         if (c != null) {
-            String localPath = c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_LOCAL_PATH));
-            String remotePath = c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_REMOTE_PATH));
-            String accountName = c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_ACCOUNT_NAME));
+            String localPath = getStringFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_LOCAL_PATH);
+            String remotePath = getStringFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_REMOTE_PATH);
+            String accountName = getStringFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_ACCOUNT_NAME);
             upload = new OCUpload(localPath, remotePath, accountName);
 
-            upload.setFileSize(c.getLong(c.getColumnIndex(ProviderTableMeta.UPLOADS_FILE_SIZE)));
-            upload.setUploadId(c.getLong(c.getColumnIndex(ProviderTableMeta._ID)));
-            upload.setUploadStatus(
-                    UploadStatus.fromValue(c.getInt(c.getColumnIndex(ProviderTableMeta.UPLOADS_STATUS)))
-            );
-            upload.setLocalAction(c.getInt(c.getColumnIndex((ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR))));
-            upload.setForceOverwrite(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.UPLOADS_FORCE_OVERWRITE)) == 1);
-            upload.setCreateRemoteFolder(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER)) == 1);
-            upload.setUploadEndTimestamp(c.getLong(c.getColumnIndex(ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP)));
-            upload.setLastResult(UploadResult.fromValue(
-                    c.getInt(c.getColumnIndex(ProviderTableMeta.UPLOADS_LAST_RESULT))));
-            upload.setCreatedBy(c.getInt(c.getColumnIndex(ProviderTableMeta.UPLOADS_CREATED_BY)));
-            upload.setTransferId(c.getString(c.getColumnIndex(ProviderTableMeta.UPLOADS_TRANSFER_ID)));
+            upload.setFileSize(getLongFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_FILE_SIZE));
+            upload.setUploadId(getLongFromColumnOrThrow(c, ProviderTableMeta._ID));
+            upload.setUploadStatus(UploadStatus.fromValue(getIntFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_STATUS)));
+            upload.setLocalAction(getIntFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR));
+            upload.setForceOverwrite(getIntFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_FORCE_OVERWRITE) == 1);
+            upload.setCreateRemoteFolder(getIntFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER) == 1);
+            upload.setUploadEndTimestamp(getLongFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP));
+            upload.setLastResult(UploadResult.fromValue(getIntFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_LAST_RESULT)));
+            upload.setCreatedBy(getIntFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_CREATED_BY));
+            upload.setTransferId(getStringFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_TRANSFER_ID));
         }
         return upload;
     }
