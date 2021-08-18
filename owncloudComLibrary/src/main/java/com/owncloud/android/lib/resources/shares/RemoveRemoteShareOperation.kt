@@ -107,7 +107,7 @@ class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOper
 
         val requestUri = buildRequestUri(client.baseUri)
 
-        val deleteMethod = DeleteMethod(client, URL(requestUri.toString())).apply {
+        val deleteMethod = DeleteMethod(URL(requestUri.toString())).apply {
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }
 

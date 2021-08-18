@@ -23,7 +23,7 @@
  */
 package com.owncloud.android.lib.common.http.methods.nonwebdav
 
-import com.owncloud.android.lib.common.http.HttpClient
+import okhttp3.OkHttpClient
 import java.io.IOException
 import java.net.URL
 
@@ -32,12 +32,12 @@ import java.net.URL
  *
  * @author David González Verdugo
  */
-class GetMethod(httpClient: HttpClient, url: URL) : HttpMethod(httpClient, url) {
+class GetMethod(url: URL) : HttpMethod(url) {
     @Throws(IOException::class)
-    override fun onExecute(): Int {
+    override fun onExecute(okHttpClient: OkHttpClient): Int {
         request = request.newBuilder()
             .get()
             .build()
-        return super.onExecute()
+        return super.onExecute(okHttpClient)
     }
 }

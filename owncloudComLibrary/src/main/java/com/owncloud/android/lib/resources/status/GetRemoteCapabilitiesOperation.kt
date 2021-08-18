@@ -60,7 +60,7 @@ class GetRemoteCapabilitiesOperation : RemoteOperation<RemoteCapability>() {
                 appendEncodedPath(OCS_ROUTE)    // avoid starting "/" in this method
                 appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
             }
-            val getMethod = GetMethod(client, URL(uriBuilder.build().toString())).apply {
+            val getMethod = GetMethod(URL(uriBuilder.build().toString())).apply {
                 addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
             }
             val status = client.executeHttpMethod(getMethod)

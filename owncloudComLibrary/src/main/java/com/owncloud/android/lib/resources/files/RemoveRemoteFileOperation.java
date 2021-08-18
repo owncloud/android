@@ -72,7 +72,6 @@ public class RemoveRemoteFileOperation extends RemoteOperation {
             Uri srcWebDavUri = removeChunksFolder ? client.getUploadsWebDavUri() : client.getUserFilesWebDavUri();
 
             DeleteMethod deleteMethod = new DeleteMethod(
-                    client,
                     new URL(srcWebDavUri + WebdavUtils.encodePath(mRemotePath)));
 
             int status = client.executeHttpMethod(deleteMethod);

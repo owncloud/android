@@ -135,10 +135,10 @@ public class OwnCloudClient extends HttpClient {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
 
-            status = method.execute();
+            status = method.execute(this);
 
             if (shouldConnectionValidatorBeCalled(method, status)) {
-                retry = mConnectionValidator.validate(this, mSingleSessionManager); // retry on success fail on no success
+                retry = mConnectionValidator.validate(this, mSingleSessionManager, getContext()); // retry on success fail on no success
             } else if(method.getFollowPermanentRedirects() && status == HTTP_MOVED_PERMANENTLY) {
                 retry = true;
                 method.setFollowRedirects(true);

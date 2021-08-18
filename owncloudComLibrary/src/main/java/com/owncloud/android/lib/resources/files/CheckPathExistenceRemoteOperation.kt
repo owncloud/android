@@ -57,11 +57,15 @@ class CheckPathExistenceRemoteOperation(
                 if (isUserLoggedIn) client.baseFilesWebDavUri.toString()
                 else client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)
 
-            val propFindMethod = PropfindMethod(client, URL(stringUrl), 0, allPropset).apply {
+            val propFindMethod = PropfindMethod(URL(stringUrl), 0, allPropset).apply {
                 setReadTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
                 setConnectionTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
             }
 
+<<<<<<< HEAD
+=======
+            propFindMethod.followRedirects = false
+>>>>>>> 27ecf79c (remove redundant intercept of httpclient with httpmethod)
             var status = client.executeHttpMethod(propFindMethod)
             /* PROPFIND method
              * 404 NOT FOUND: path doesn't exist,

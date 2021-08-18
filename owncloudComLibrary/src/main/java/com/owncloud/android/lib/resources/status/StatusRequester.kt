@@ -65,7 +65,7 @@ internal class StatusRequester {
     }
 
     private fun getGetMethod(client: HttpClient, url: String): GetMethod {
-        return GetMethod(client, URL(url)).apply {
+        return GetMethod(URL(url)).apply {
             setReadTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             setConnectionTimeout(TRY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
         }

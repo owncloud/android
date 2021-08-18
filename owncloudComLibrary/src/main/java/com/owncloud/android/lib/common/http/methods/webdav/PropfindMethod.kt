@@ -23,11 +23,11 @@
  */
 package com.owncloud.android.lib.common.http.methods.webdav
 
+import at.bitfire.dav4jvm.DavOCResource
 import at.bitfire.dav4jvm.Property
 import at.bitfire.dav4jvm.Response
 import at.bitfire.dav4jvm.Response.HrefRelation
 import at.bitfire.dav4jvm.exception.DavException
-import com.owncloud.android.lib.common.http.HttpClient
 import java.io.IOException
 import java.net.URL
 
@@ -37,11 +37,10 @@ import java.net.URL
  * @author David González Verdugo
  */
 class PropfindMethod(
-    httpClient: HttpClient,
     url: URL,
     private val depth: Int,
     private val propertiesToRequest: Array<Property.Name>
-) : DavMethod(httpClient, url) {
+) : DavMethod(url) {
 
     // response
     val members: MutableList<Response>
@@ -49,7 +48,7 @@ class PropfindMethod(
         private set
 
     @Throws(IOException::class, DavException::class)
-    public override fun onExecute(): Int {
+    public override fun onDavExecute(davResource: DavOCResource): Int {
         davResource.propfind(
             depth = depth,
             reqProp = propertiesToRequest,

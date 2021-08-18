@@ -52,7 +52,7 @@ class GetRemoteUserAvatarOperation(private val avatarDimension: Int) : RemoteOpe
                 client.baseUri.toString() + NON_OFFICIAL_AVATAR_PATH + client.credentials.username + File.separator + avatarDimension
             Timber.d("avatar URI: %s", endPoint)
 
-            val getMethod = GetMethod(client, URL(endPoint))
+            val getMethod = GetMethod(URL(endPoint))
 
             val status = client.executeHttpMethod(getMethod)
 

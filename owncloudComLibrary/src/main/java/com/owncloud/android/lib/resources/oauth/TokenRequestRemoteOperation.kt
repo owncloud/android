@@ -52,7 +52,7 @@ class TokenRequestRemoteOperation(
         try {
             val requestBody = tokenRequestParams.toRequestBody()
 
-            val postMethod = PostMethod(client, URL(tokenRequestParams.tokenEndpoint), requestBody)
+            val postMethod = PostMethod(URL(tokenRequestParams.tokenEndpoint), requestBody)
 
             postMethod.addRequestHeader(AUTHORIZATION_HEADER, tokenRequestParams.clientAuth)
 

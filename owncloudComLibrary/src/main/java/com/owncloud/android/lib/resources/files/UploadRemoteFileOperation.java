@@ -121,7 +121,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             mFileRequestBody.addDatatransferProgressListeners(mDataTransferListeners);
         }
 
-        mPutMethod = new PutMethod(client,
+        mPutMethod = new PutMethod(
                 new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)), mFileRequestBody);
 
         mPutMethod.setRetryOnConnectionFailure(false);

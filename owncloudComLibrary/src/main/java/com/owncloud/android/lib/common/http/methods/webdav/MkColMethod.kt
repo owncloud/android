@@ -23,7 +23,7 @@
  */
 package com.owncloud.android.lib.common.http.methods.webdav
 
-import com.owncloud.android.lib.common.http.HttpClient
+import at.bitfire.dav4jvm.DavOCResource
 import okhttp3.Response
 import java.net.URL
 
@@ -33,9 +33,9 @@ import java.net.URL
  * @author Christian Schabesberger
  * @author David González Verdugo
  */
-class MkColMethod(httpClient: HttpClient, url: URL) : DavMethod(httpClient, url) {
+class MkColMethod(url: URL) : DavMethod(url) {
     @Throws(Exception::class)
-    public override fun onExecute(): Int {
+    public override fun onDavExecute(davResource: DavOCResource): Int {
         davResource.mkCol(
             xmlBody = null,
             listOfHeaders = super.getRequestHeadersAsHashMap()

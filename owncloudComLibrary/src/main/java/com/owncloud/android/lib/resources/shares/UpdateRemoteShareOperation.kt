@@ -195,16 +195,16 @@ class UpdateRemoteShareOperation
         return formBodyBuilder
     }
 
+
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
         val requestUri = buildRequestUri(client.baseUri)
 
         val formBodyBuilder = createFormBodyBuilder()
 
-        val putMethod = PutMethod(client, URL(requestUri.toString()), formBodyBuilder.build()).apply {
+        val putMethod = PutMethod(URL(requestUri.toString()), formBodyBuilder.build()).apply {
             setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8)
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }
-
 
         return try {
             val status = client.executeHttpMethod(putMethod)

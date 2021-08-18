@@ -171,7 +171,7 @@ class CreateRemoteShareOperation(
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
         val requestUri = buildRequestUri(client.baseUri)
 
-        val postMethod = PostMethod(client, URL(requestUri.toString()), createFormBody()).apply {
+        val postMethod = PostMethod(URL(requestUri.toString()), createFormBody()).apply {
             setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8)
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }
