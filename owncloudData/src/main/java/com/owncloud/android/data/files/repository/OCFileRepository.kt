@@ -20,9 +20,9 @@
 
 package com.owncloud.android.data.files.repository
 
-import com.owncloud.android.data.LocalStorageProvider
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileAlreadyExistsException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
