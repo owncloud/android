@@ -91,7 +91,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         } finally {
             db.endTransaction()
         }
-        context?.contentResolver?.notifyChangge(
+        context?.contentResolver?.notifyChange(
             uri,
             null
         )
