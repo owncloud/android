@@ -70,7 +70,17 @@ def get_list_of_last_commits_in_month():
         time_pos += time_step
     return list_of_last_commits
 
-for i in get_list_of_last_commits_in_month():
-    print(i)
+def get_stats_from_commit_list(commit_list):
+    for commit in commit_list:
+        shell_run(f"""
+            git checkout {commit[1]} 2> /dev/null && \
+            git submodule update 2> /dev/null
+        """)
+        print(f"========== {commit[0]} ==========")
+        print_lines_stats()
+        print_mvvm_stats()
+        print("")
 
-#print(shell_run("git log | grep 'commit [0-9a-f]'").decode("utf-8"))
+
+get_stats_from_commit_list(get_list_of_last_commits_in_month())
+
