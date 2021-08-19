@@ -23,7 +23,7 @@ import android.database.Cursor
 
 fun Cursor.getStringFromColumnOrThrow(
     columnName: String
-): String = getString(getColumnIndexOrThrow(columnName))
+): String? = getString(getColumnIndexOrThrow(columnName))
 
 fun Cursor.getStringFromColumnOrEmpty(
     columnName: String

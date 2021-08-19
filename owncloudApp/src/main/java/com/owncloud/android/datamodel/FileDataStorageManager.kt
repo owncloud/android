@@ -173,7 +173,7 @@ class FileDataStorageManager {
                 do {
                     file = createFileInstance(cursorOnKeptInSync)
                     accountName =
-                        cursorOnKeptInSync.getStringFromColumnOrThrow(FILE_ACCOUNT_OWNER)
+                        cursorOnKeptInSync.getStringFromColumnOrEmpty(FILE_ACCOUNT_OWNER)
                     if (!file!!.isFolder && AccountUtils.exists(accountName, mContext)) {
                         result.add(Pair(file, accountName))
                     }
