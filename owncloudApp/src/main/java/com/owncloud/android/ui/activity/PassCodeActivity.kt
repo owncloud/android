@@ -47,14 +47,14 @@ import java.lang.StringBuilder
 import java.util.Arrays
 
 class PassCodeActivity : BaseActivity() {
-    private lateinit var mBCancel: Button
-    private lateinit var mPassCodeHdr: TextView
-    private lateinit var mPassCodeHdrExplanation: TextView
-    private lateinit var mPassCodeError: TextView
-    private val mPassCodeEditTexts = arrayOfNulls<EditText>(numberOfPassInputs)
-    private var mPassCodeDigits: Array<String?> = arrayOfNulls(numberOfPassInputs)
-    private var mConfirmingPassCode = false
-    private var mBChange = true // to control that only one blocks jump
+    private lateinit var bCancel: Button
+    private lateinit var passCodeHdr: TextView
+    private lateinit var passCodeHdrExplanation: TextView
+    private lateinit var passCodeError: TextView
+    private val passCodeEditTexts = arrayOfNulls<EditText>(numberOfPassInputs)
+    private var passCodeDigits: Array<String?> = arrayOfNulls(numberOfPassInputs)
+    private var confirmingPassCode = false
+    private var bChange = true // to control that only one blocks jump
 
     /**
      * Initializes the activity.
@@ -70,47 +70,45 @@ class PassCodeActivity : BaseActivity() {
         } // else, let it go, or taking screenshots & testing will not be possible
         setContentView(R.layout.passcodelock)
         val passcodeLockLayout = findViewById<LinearLayout>(R.id.passcodeLockLayout)
-        mBCancel = findViewById(R.id.cancel)
-        mPassCodeHdr = findViewById(R.id.header)
-        mPassCodeHdrExplanation = findViewById(R.id.explanation)
-        mPassCodeError = findViewById(R.id.error)
+        bCancel = findViewById(R.id.cancel)
+        passCodeHdr = findViewById(R.id.header)
+        passCodeHdrExplanation = findViewById(R.id.explanation)
+        passCodeError = findViewById(R.id.error)
 
         // Allow or disallow touches with other visible windows
         passcodeLockLayout.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
-        mPassCodeHdrExplanation.setFilterTouchesWhenObscured(
+        passCodeHdrExplanation.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
-        )
 
-
-        inflatePasscodeTxtLine(passcodeLockLayout)
+        inflatePasscodeTxtLine()
         if (ACTION_CHECK == intent.action) {
             /// this is a pass code request; the user has to input the right value
-            mPassCodeHdr.setText(R.string.pass_code_enter_pass_code)
-            mPassCodeHdrExplanation.setVisibility(View.INVISIBLE)
+            passCodeHdr.setText(R.string.pass_code_enter_pass_code)
+            passCodeHdrExplanation.setVisibility(View.INVISIBLE)
             setCancelButtonEnabled(false) // no option to cancel
         } else if (ACTION_REQUEST_WITH_RESULT == intent.action) {
             if (savedInstanceState != null) {
-                mConfirmingPassCode = savedInstanceState.getBoolean(KEY_CONFIRMING_PASSCODE)
-                mPassCodeDigits = savedInstanceState.getStringArray(KEY_PASSCODE_DIGITS)!!
+                confirmingPassCode = savedInstanceState.getBoolean(KEY_CONFIRMING_PASSCODE)
+                passCodeDigits = savedInstanceState.getStringArray(KEY_PASSCODE_DIGITS)!!
             }
-            if (mConfirmingPassCode) {
+            if (confirmingPassCode) {
                 //the app was in the passcodeconfirmation
                 requestPassCodeConfirmation()
             } else {
                 /// pass code preference has just been activated in Preferences;
                 // will receive and confirm pass code value
-                mPassCodeHdr.setText(R.string.pass_code_configure_your_pass_code)
+                passCodeHdr.setText(R.string.pass_code_configure_your_pass_code)
                 //mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
                 // TODO choose a header, check iOS
-                mPassCodeHdrExplanation.setVisibility(View.VISIBLE)
+                passCodeHdrExplanation.setVisibility(View.VISIBLE)
                 setCancelButtonEnabled(true)
             }
         } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
             /// pass code preference has just been disabled in Preferences;
             // will confirm user knows pass code, then remove it
-            mPassCodeHdr.setText(R.string.pass_code_remove_your_pass_code)
-            mPassCodeHdrExplanation.setVisibility(View.INVISIBLE)
+            passCodeHdr.setText(R.string.pass_code_remove_your_pass_code)
+            passCodeHdrExplanation.setVisibility(View.INVISIBLE)
             setCancelButtonEnabled(true)
         } else {
             throw IllegalArgumentException(R.string.illegal_argument_exception_message.toString() + " ")
@@ -118,14 +116,14 @@ class PassCodeActivity : BaseActivity() {
         setTextListeners()
     }
 
-    private fun inflatePasscodeTxtLine(passcodeLockLayout: LinearLayout) {
+    private fun inflatePasscodeTxtLine() {
         val passcodeTxtLayout = findViewById<LinearLayout>(R.id.passCodeTxtLayout)
         for (i in 0 until numberOfPassInputs) {
             val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
             passcodeTxtLayout.addView(txt)
-            mPassCodeEditTexts[i] = txt
+            passCodeEditTexts[i] = txt
         }
-        mPassCodeEditTexts[0]!!.requestFocus()
+        passCodeEditTexts[0]?.requestFocus()
         window.setSoftInputMode(
             WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
         )
@@ -139,12 +137,11 @@ class PassCodeActivity : BaseActivity() {
      */
     protected fun setCancelButtonEnabled(enabled: Boolean) {
         if (enabled) {
-            mBCancel.visibility = View.VISIBLE
-            mBCancel.setOnClickListener { finish() }
+            bCancel.visibility = View.VISIBLE
+            bCancel.setOnClickListener { finish() }
         } else {
-            mBCancel.visibility = View.GONE
-            mBCancel.visibility = View.INVISIBLE
-            mBCancel.setOnClickListener(null)
+            bCancel.visibility = View.INVISIBLE
+            bCancel.setOnClickListener(null)
         }
     }
 
@@ -153,29 +150,29 @@ class PassCodeActivity : BaseActivity() {
      */
     protected fun setTextListeners() {
         for (i in 0 until numberOfPassInputs) {
-            mPassCodeEditTexts[i]!!.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPassInputs - 1))
+            passCodeEditTexts[i]?.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPassInputs - 1))
             if (i > 0) {
-                mPassCodeEditTexts[i]!!.setOnKeyListener { v: View, keyCode: Int, _: KeyEvent? ->
-                    if (keyCode == KeyEvent.KEYCODE_DEL && mBChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
-                        mPassCodeEditTexts[i - 1]!!.setText("")
-                        mPassCodeEditTexts[i - 1]!!.requestFocus()
-                        if (!mConfirmingPassCode) {
-                            mPassCodeDigits[-1] = ""
+                passCodeEditTexts[i]?.setOnKeyListener { v: View, keyCode: Int, _: KeyEvent? ->
+                    if (keyCode == KeyEvent.KEYCODE_DEL && bChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
+                        passCodeEditTexts[i - 1]?.setText("")
+                        passCodeEditTexts[i - 1]?.requestFocus()
+                        if (!confirmingPassCode) {
+                            passCodeDigits[-1] = ""
                         }
-                        mBChange = false
-                    } else if (!mBChange) {
-                        mBChange = true
+                        bChange = false
+                    } else if (!bChange) {
+                        bChange = true
                     }
                     false
                 }
             }
-            mPassCodeEditTexts[i]!!.onFocusChangeListener = OnFocusChangeListener { v: View, _: Boolean ->
+            passCodeEditTexts[i]?.onFocusChangeListener = OnFocusChangeListener { v: View, _: Boolean ->
                 /// TODO WIP: should take advantage of hasFocus to reduce processing
                 for (j in 0 until i) {
-                    if (mPassCodeEditTexts[j]!!.text.toString() == "") {  // TODO WIP validation
+                    if (passCodeEditTexts[j]?.text.toString() == "") {  // TODO WIP validation
                         // could be done in a global way, with a single OnFocusChangeListener for all the
                         // input fields
-                        mPassCodeEditTexts[j]!!.requestFocus()
+                        passCodeEditTexts[j]?.requestFocus()
                         break
                     }
                 }
@@ -193,7 +190,7 @@ class PassCodeActivity : BaseActivity() {
         if (ACTION_CHECK == intent.action) {
             if (checkPassCodeIsValid()) {
                 /// pass code accepted in request, user is allowed to access the app
-                mPassCodeError.visibility = View.INVISIBLE
+                passCodeError.visibility = View.INVISIBLE
                 hideSoftKeyboard()
                 finish()
             } else {
@@ -207,7 +204,7 @@ class PassCodeActivity : BaseActivity() {
                 val resultIntent = Intent()
                 resultIntent.putExtra(KEY_CHECK_RESULT, true)
                 setResult(RESULT_OK, resultIntent)
-                mPassCodeError.visibility = View.INVISIBLE
+                passCodeError.visibility = View.INVISIBLE
                 hideSoftKeyboard()
                 notifyDocumentProviderRoots(applicationContext)
                 finish()
@@ -219,8 +216,8 @@ class PassCodeActivity : BaseActivity() {
             }
         } else if (ACTION_REQUEST_WITH_RESULT == intent.action) {
             /// enabling pass code
-            if (!mConfirmingPassCode) {
-                mPassCodeError.visibility = View.INVISIBLE
+            if (!confirmingPassCode) {
+                passCodeError.visibility = View.INVISIBLE
                 requestPassCodeConfirmation()
             } else if (confirmPassCode()) {
                 /// confirmed: user typed the same pass code twice
@@ -237,11 +234,11 @@ class PassCodeActivity : BaseActivity() {
         errorMessage: Int, headerMessage: Int,
         explanationVisibility: Int
     ) {
-        Arrays.fill(mPassCodeDigits, null)
-        mPassCodeError.setText(errorMessage)
-        mPassCodeError.visibility = View.VISIBLE
-        mPassCodeHdr.setText(headerMessage) // TODO check if really needed
-        mPassCodeHdrExplanation.visibility = explanationVisibility // TODO check if really needed
+        Arrays.fill(passCodeDigits, null)
+        passCodeError.setText(errorMessage)
+        passCodeError.visibility = View.VISIBLE
+        passCodeHdr.setText(headerMessage) // TODO check if really needed
+        passCodeHdrExplanation.visibility = explanationVisibility // TODO check if really needed
         clearBoxes()
     }
 
@@ -251,9 +248,9 @@ class PassCodeActivity : BaseActivity() {
      */
     protected fun requestPassCodeConfirmation() {
         clearBoxes()
-        mPassCodeHdr.setText(R.string.pass_code_reenter_your_pass_code)
-        mPassCodeHdrExplanation.visibility = View.INVISIBLE
-        mConfirmingPassCode = true
+        passCodeHdr.setText(R.string.pass_code_reenter_your_pass_code)
+        passCodeHdrExplanation.visibility = View.INVISIBLE
+        confirmingPassCode = true
     }
 
     /**
@@ -267,9 +264,9 @@ class PassCodeActivity : BaseActivity() {
         val passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
         var isValid = true
         var i = 0
-        while (i < mPassCodeDigits.size && isValid) {
+        while (i < passCodeDigits.size && isValid) {
             val originalDigit = Character.toString(passcodeString!![i])
-            isValid = mPassCodeDigits[i] != null && mPassCodeDigits[i] == originalDigit
+            isValid = passCodeDigits[i] != null && passCodeDigits[i] == originalDigit
             i++
         }
         return isValid
@@ -282,11 +279,11 @@ class PassCodeActivity : BaseActivity() {
      * @return     'True' if retyped pass code equals to the entered before.
      */
     protected fun confirmPassCode(): Boolean {
-        mConfirmingPassCode = false
+        confirmingPassCode = false
         var isValid = true
         var i = 0
-        while (i < mPassCodeEditTexts.size && isValid) {
-            isValid = mPassCodeEditTexts[i]!!.text.toString() == mPassCodeDigits[i]
+        while (i < passCodeEditTexts.size && isValid) {
+            isValid = passCodeEditTexts[i]?.text.toString() == passCodeDigits[i]
             i++
         }
         return isValid
@@ -296,10 +293,10 @@ class PassCodeActivity : BaseActivity() {
      * Sets the input fields to empty strings and puts the focus on the first one.
      */
     protected fun clearBoxes() {
-        for (passCodeEditText in mPassCodeEditTexts) {
-            passCodeEditText!!.setText("")
+        for (passCodeEditText in passCodeEditTexts) {
+            passCodeEditText?.setText("")
         }
-        mPassCodeEditTexts[0]!!.requestFocus()
+        passCodeEditTexts[0]?.requestFocus()
     }
 
     /**
@@ -327,7 +324,7 @@ class PassCodeActivity : BaseActivity() {
         val resultIntent = Intent()
         val passCodeString = StringBuilder()
         for (i in 0 until numberOfPassInputs) {
-            passCodeString.append(mPassCodeDigits[i])
+            passCodeString.append(passCodeDigits[i])
         }
         resultIntent.putExtra(KEY_PASSCODE, passCodeString.toString())
         setResult(RESULT_OK, resultIntent)
@@ -348,8 +345,8 @@ class PassCodeActivity : BaseActivity() {
 
     public override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(KEY_CONFIRMING_PASSCODE, mConfirmingPassCode)
-        outState.putStringArray(KEY_PASSCODE_DIGITS, mPassCodeDigits)
+        outState.putBoolean(KEY_CONFIRMING_PASSCODE, confirmingPassCode)
+        outState.putStringArray(KEY_PASSCODE_DIGITS, passCodeDigits)
     }
 
     private inner class PassCodeDigitTextWatcher(private val mIndex: Int, private val mLastOne: Boolean) : TextWatcher {
@@ -366,12 +363,12 @@ class PassCodeActivity : BaseActivity() {
          *
          * @param s     Changed text
          */
-        override fun afterTextChanged(s: Editable) {
-            if (s.length > 0) {
-                if (!mConfirmingPassCode) {
-                    mPassCodeDigits[mIndex] = mPassCodeEditTexts[mIndex]!!.text.toString()
+        override fun afterTextChanged(changedText: Editable) {
+            if (changedText.isNotEmpty()) {
+                if (!confirmingPassCode) {
+                    passCodeDigits[mIndex] = passCodeEditTexts[mIndex]?.text.toString()
                 }
-                mPassCodeEditTexts[next()]!!.requestFocus()
+                passCodeEditTexts[next()]?.requestFocus()
                 if (mLastOne) {
                     processFullPassCode()
                 }

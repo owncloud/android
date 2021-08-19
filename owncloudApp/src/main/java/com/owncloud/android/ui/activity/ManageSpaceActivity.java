@@ -109,8 +109,10 @@ public class ManageSpaceActivity extends AppCompatActivity {
             final String passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, null);
             final String[] passCodeDigits = new String[PassCodeActivity.numberOfPassInputs];
 
-            for(int i = 0; i < numberOfPassInputs && passCodeEnable; i++) {
-                passCodeDigits[1] = Character.toString(passcodeString.charAt(i));
+            if (passCodeEnable) {
+                for (int i = 0; i < numberOfPassInputs && passCodeEnable; i++) {
+                    passCodeDigits[i] = Character.toString(passcodeString.charAt(i));
+                }
             }
 
             String patternValue = "";

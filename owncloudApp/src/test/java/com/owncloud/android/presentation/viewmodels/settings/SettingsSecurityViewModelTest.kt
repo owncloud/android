@@ -92,12 +92,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         verify(exactly = 1) {
             data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
             passcode.length
-            for (i in 1..4) {
-                preferencesProvider.putString(
-                    PassCodeActivity.PREFERENCE_PASSCODE_D + i,
-                    passcode.substring(i - 1, i)
-                )
-            }
+            preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
             preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         }
     }
