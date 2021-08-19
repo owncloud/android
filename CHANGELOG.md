@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
+* Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 
 Details
 -------
@@ -21,6 +22,14 @@ Details
 
    https://github.com/owncloud/android/issues/125
    https://github.com/owncloud/android/pull/3336
+
+* Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
+
+   Previously, logs were stored but never deleted. It used a lot of storage when logs were enabled
+   for some time. Now, the logs are removed periodically every week.
+
+   https://github.com/owncloud/android/issues/3328
+   https://github.com/owncloud/android/pull/3337
 
 Changelog for ownCloud Android Client [2.18.1] (2021-07-20)
 =======================================

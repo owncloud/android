@@ -1,0 +1,6 @@
+Enhancement: Delete old logs every week
+
+Previously, logs were stored but never deleted. It used a lot of storage when logs were enabled for some time. Now, the
+logs are removed periodically every week.
+
+https://github.com/owncloud/android/issues/3328 https://github.com/owncloud/android/pull/3337

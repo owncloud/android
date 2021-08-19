@@ -86,6 +86,11 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
         }
     }
 
+    override fun onDestroy() {
+        logsViewModel.enqueueOldLogsCollectorWorker()
+        super.onDestroy()
+    }
+
     companion object {
         const val PREFERENCE_ENABLE_LOGGING = "enable_logging"
         const val PREFERENCE_LOG_HTTP = "set_httpLogs"
