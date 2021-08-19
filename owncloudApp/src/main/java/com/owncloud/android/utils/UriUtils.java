@@ -27,6 +27,8 @@ import android.webkit.MimeTypeMap;
 
 import timber.log.Timber;
 
+import static com.owncloud.android.extensions.CursorExtKt.getStringFromColumnOrThrow;
+
 /**
  * A helper class for some Uri operations.
  */
@@ -105,7 +107,7 @@ public class UriUtils {
                 );
                 if (cursor != null) {
                     cursor.moveToFirst();
-                    displayName = cursor.getString(cursor.getColumnIndex(displayNameColumn));
+                    displayName = getStringFromColumnOrThrow(cursor, displayNameColumn);
                 }
 
             } catch (Exception e) {
