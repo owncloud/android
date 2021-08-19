@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-
 import subprocess
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 def shell_run(command):
     return subprocess.check_output(['bash', '-c', command])
@@ -49,5 +50,27 @@ def print_mvvm_stats():
     print(f"Total fragments: {n_fragments}, MVVM fragments: {viewmodel_fragments}")
     print(f"Total converted: {round((total_mvvm/total_ui)*100)}%")
 
-print_lines_stats()
-print_mvvm_stats()
+# print_lines_stats()
+# print_mvvm_stats()
+
+def get_list_of_last_commits_in_month():
+    time_step = relativedelta(months=1)
+    start_time = date.fromisocalendar(2019, 0o01, 0o01)
+    time_pos = start_time
+    list_of_last_commits = []
+    for i in range(0, 2*12 + 8):
+        time_after = str(time_pos).replace("-", ".")
+        time_before = str(time_pos + time_step).replace("-", ".") 
+        last_commit = shell_run(f"""
+            git log --after {time_after} --before {time_before} \
+                    | grep 'commit [0-9a-f]*$' \
+                    | head -n 1
+            """).decode("utf-8").strip().replace("commit ", "")
+        list_of_last_commits.append((time_after, last_commit))
+        time_pos += time_step
+    return list_of_last_commits
+
+for i in get_list_of_last_commits_in_month():
+    print(i)
+
+#print(shell_run("git log | grep 'commit [0-9a-f]'").decode("utf-8"))
