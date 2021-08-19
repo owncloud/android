@@ -3,12 +3,12 @@
 import subprocess
 
 def shell_run(command):
-    return subprocess.check_output(['sh', '-c', command])
+    return subprocess.check_output(['bash', '-c', command])
 
 
 def lines_of_filetype_in_folders(filetype, foldername):
     lines_list = shell_run(f"""
-        for dir in `find . -name "{foldername}"`; do
+        for dir in $(find . -name "{foldername}"); do
             find $dir -name "{filetype}" | xargs cat | wc -l;
         done
         """).decode("utf-8")
@@ -19,7 +19,7 @@ def lines_of_filetype_in_folders(filetype, foldername):
 
 def count_files_containing_string(in_name, in_file):
     output = shell_run(f"""
-        for dir in `find . -name "main" -execdir pwd \;`; do
+        for dir in $(find . -name "main" -execdir pwd \;); do
             dir=$dir/main
             cd $dir
             grep -ril "{in_file}" | grep "{in_name}"
