@@ -30,13 +30,13 @@ import timber.log.Timber
 import java.io.File
 
 class LogsProvider(
-    context: Context
+    private val context: Context
 ) {
     private val sharedPreferencesProvider = SharedPreferencesProviderImpl(context)
 
     fun startLogging() {
         val dataFolder = MainApp.dataFolder
-        val localStorageProvider = LocalStorageProvider.LegacyStorageProvider(dataFolder)
+        val localStorageProvider = LocalStorageProvider.ScopedStorageProvider(dataFolder, context)
 
         // Set folder for store logs
         LoggingHelper.startLogging(
