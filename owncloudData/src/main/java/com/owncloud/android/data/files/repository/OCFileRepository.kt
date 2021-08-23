@@ -116,6 +116,9 @@ class OCFileRepository(
     override fun getFolderImages(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderImages(folderId)
 
+    override fun getFilesSharedByLink(owner: String): List<OCFile> =
+        localFileDataSource.getFilesSharedByLink(owner)
+
     override fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile) {
         listOfFilesToMove.forEach { ocFile ->
 
