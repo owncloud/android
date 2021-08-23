@@ -83,6 +83,7 @@ import com.owncloud.android.domain.files.model.MIME_PREFIX_VIDEO
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
+import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
@@ -218,50 +219,14 @@ class FileDataStorageManager : KoinComponent {
 //            return result.apply { sort() }
         }
 
-    val sharedByLinkFilesFromCurrentAccount: Vector<OCFile>
-        get() {
-            return Vector()
-            // FIXME: 13/10/2020 : New_arch: Shared By Link
-//            val allSharedFiles = Vector<OCFile>()
-//            val result = Vector<OCFile>()
-//            var cursorOnShared: Cursor? = null
-//            try {
-//                cursorOnShared = contentResolver?.query(
-//                    CONTENT_URI,
-//                    null,
-//                    "$FILE_SHARED_VIA_LINK = ? AND $FILE_ACCOUNT_OWNER = ? ",
-//                    arrayOf(1.toString(), account.name),
-//                    null
-//                )
-//                if (cursorOnShared != null && cursorOnShared.moveToFirst()) {
-//                    var file: OCFile?
-//                    do {
-//                        file = createFileInstance(cursorOnShared)
-//                        allSharedFiles.add(file)
-//                    } while (cursorOnShared.moveToNext())
-//                }
-//            } catch (exception: Exception) {
-//                Timber.e(exception, "Exception retrieving all the shared by link files")
-//            } finally {
-//                cursorOnShared?.close()
-//            }
-//
-//            if (allSharedFiles.isNotEmpty()) {
-//                val allSharedDirs = Vector<Long>()
-//                for (file in allSharedFiles) {
-//                    if (file.isFolder) {
-//                        allSharedDirs.add(file.fileId)
-//                    }
-//                }
-//                for (file in allSharedFiles) {
-//                    if (file.isFolder || (!file.isFolder && !allSharedDirs.contains(file.parentId))) {
-//                        result.add(file)
-//                    }
-//                }
-//            }
-//            result.sort()
-//            return result
-        }
+    fun sharedByLinkFilesFromCurrentAccount(): List<OCFile>? = runBlocking(CoroutinesDispatcherProvider().io) {
+        val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getFilesSharedByLinkUseCase.execute(GetFilesSharedByLinkUseCase.Params(account.name))
+        }.getDataOrNull()
+        result
+    }
 
     // TODO: New_arch: Remove this and call usecase inside FilesViewModel
     fun getFileByPath(path: String): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
