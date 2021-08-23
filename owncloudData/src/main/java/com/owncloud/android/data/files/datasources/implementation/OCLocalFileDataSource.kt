@@ -72,6 +72,10 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
+    override fun getFilesSharedByLink(owner: String): List<OCFile> = fileDao.getFilesSharedByLink(accountOwner = owner).map {
+        it.toModel()
+    }
+
     override fun moveFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String) =
         fileDao.moveFile(
             sourceFile = sourceFile.toEntity(),

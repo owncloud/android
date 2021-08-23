@@ -403,7 +403,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             if (mOnlyAvailableOffline && (isRootFolder)){ // || !folder.isAvailableOffline())) {
                 mImmutableFilesList = updatedStorageManager.getAvailableOfflineFilesFromCurrentAccount();
             } else if (mSharedByLinkFiles && isRootFolder) {
-                mImmutableFilesList = updatedStorageManager.getSharedByLinkFilesFromCurrentAccount();
+                mImmutableFilesList = updatedStorageManager.sharedByLinkFilesFromCurrentAccount();
             } else {
                 mImmutableFilesList = mStorageManager.getFolderContent(folder);
             }
