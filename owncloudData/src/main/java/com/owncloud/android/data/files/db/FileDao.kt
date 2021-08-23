@@ -51,6 +51,11 @@ abstract class FileDao {
         mimeType: String
     ): List<OCFileEntity>
 
+    @Query(SELECT_FILES_SHARED_BY_LINK)
+    abstract fun getFilesSharedByLink(
+        accountOwner: String
+    ): List<OCFileEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocFileEntity: OCFileEntity): Long
 
@@ -229,5 +234,11 @@ abstract class FileDao {
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE parentId = :folderId " +
                     "AND mimeType LIKE :mimeType || '%' "
+
+        private const val SELECT_FILES_SHARED_BY_LINK =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE owner = :accountOwner " +
+                    "AND sharedWithSharee NOT LIKE '%0%'"
     }
 }
