@@ -49,3 +49,6 @@ val OC_FILE = OCFile(
     mimeType = "image/jpeg",
     length = 3000000
 )
+
+val OC_FILES = listOf(OC_FILE, OC_FILE, OC_FILE)
+val OC_EMPTY_FILES = emptyList<OCFile>()
