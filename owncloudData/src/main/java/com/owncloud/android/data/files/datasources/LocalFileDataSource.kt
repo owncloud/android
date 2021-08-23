@@ -28,6 +28,7 @@ interface LocalFileDataSource {
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getFolderContent(folderId: Long): List<OCFile>
     fun getFolderImages(folderId: Long): List<OCFile>
+    fun getFilesSharedByLink(owner: String): List<OCFile>
     fun moveFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String)
     fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
     fun saveFile(file: OCFile)
