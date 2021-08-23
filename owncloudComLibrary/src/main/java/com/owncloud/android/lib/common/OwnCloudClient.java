@@ -67,6 +67,7 @@ public class OwnCloudClient extends HttpClient {
     private Uri mBaseUri;
     private OwnCloudVersion mVersion = null;
     private OwnCloudAccount mAccount;
+    private ConnectionValidator mConnectionValidator;
 
     private SingleSessionManager mSingleSessionManager = null;
 
@@ -83,6 +84,7 @@ public class OwnCloudClient extends HttpClient {
 
         clearCredentials();
         clearCookies();
+        mConnectionValidator = new ConnectionValidator(this);
     }
 
     public void clearCredentials() {
