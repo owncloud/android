@@ -239,6 +239,7 @@ abstract class FileDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE owner = :accountOwner " +
-                    "AND sharedWithSharee NOT LIKE '%0%'"
+                    "AND sharedByLink NOT LIKE '%0%' " +
+                    "OR sharedWithSharee NOT LIKE '%0%'"
     }
 }
