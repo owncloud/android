@@ -221,7 +221,7 @@ class FileDataStorageManager : KoinComponent {
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
             getFilesSharedByLinkUseCase.execute(GetFilesSharedByLinkUseCase.Params(account.name))
-        }.getDataOrNull()
+        }.getDataOrNull() ?: emptyList()
         result
     }
 
