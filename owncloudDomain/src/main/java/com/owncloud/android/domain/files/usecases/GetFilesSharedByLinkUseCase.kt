@@ -1,7 +1,7 @@
 /*
  * ownCloud Android client application
  *
- * Created by Fernando Sanz on 2021/8/23
+ * @author Fernando Sanz Velasco
  * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
