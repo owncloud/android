@@ -28,6 +28,7 @@ package com.owncloud.android.lib.common;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.net.Uri;
+import android.util.Log;
 
 import at.bitfire.dav4jvm.exception.HttpException;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -42,6 +43,7 @@ import com.owncloud.android.lib.common.utils.RandomUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import okhttp3.Cookie;
 import okhttp3.HttpUrl;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -68,6 +70,8 @@ public class OwnCloudClient extends HttpClient {
     private OwnCloudVersion mVersion = null;
     private OwnCloudAccount mAccount;
     private ConnectionValidator mConnectionValidator;
+
+    private static Boolean mHoldRequests = false;
 
     private SingleSessionManager mSingleSessionManager = null;
 
@@ -109,7 +113,41 @@ public class OwnCloudClient extends HttpClient {
             if (mCredentials.getHeaderAuth() != null && method.getRequestHeader(AUTHORIZATION_HEADER) == null) {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
-            status = method.execute();
+            synchronized (mHoldRequests) {
+                while (mHoldRequests) {
+                    while (true) {
+                        try {
+                            ((String) null).toString();
+                        } catch (Exception e) {
+                            Log.d("+++++++",
+                                    "HATL BEFORE" +
+                                    "\nThread: " + Thread.currentThread().getName() +
+                                            "\nobject: " + this.toString() +
+                                            "\nMethod: " + method.getHttpUrl() +
+                                            "\ntrace: " + ExceptionUtils.getStackTrace(e));
+                        }
+                        Thread.sleep(40000);
+                    }
+                }
+                status = method.execute();
+                if (status == 302) {
+                    mHoldRequests = true;
+                    while (mHoldRequests) {
+                        try {
+                            ((String) null).toString();
+                        } catch (Exception e) {
+                            Log.d("+++++++",
+                                    "HALT AFTER" +
+                                    "\nresponsecode: " + Integer.toString(status) +
+                                            "\nThread: " + Thread.currentThread().getName() +
+                                            "\nobject: " + this.toString() +
+                                            "\nMethod: " + method.getHttpUrl() +
+                                            "\ntrace: " + ExceptionUtils.getStackTrace(e));
+                        }
+                        Thread.sleep(40000);
+                    }
+                }
+            }
 
             if (mFollowRedirects) {
                 status = followRedirection(method).getLastStatus();
@@ -171,7 +209,7 @@ public class OwnCloudClient extends HttpClient {
 
                 redirectionPath.addLocation(location);
 
-                // Release the connection to avoid reach the max number of connections per host
+                // Release the connection to avoid reach the max number of connections per hostClientManager
                 // due to it will be set a different url
                 exhaustResponse(method.getResponseBodyAsStream());
 
