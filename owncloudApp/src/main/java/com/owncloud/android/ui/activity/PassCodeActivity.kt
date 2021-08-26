@@ -84,8 +84,8 @@ class PassCodeActivity : BaseActivity() {
         inflatePasscodeTxtLine()
         if (ACTION_CHECK == intent.action) {
             /// this is a pass code request; the user has to input the right value
-            passCodeHdr.setText(R.string.pass_code_enter_pass_code)
-            passCodeHdrExplanation.setVisibility(View.INVISIBLE)
+            passCodeHdr.text = getString(R.string.pass_code_enter_pass_code)
+            passCodeHdrExplanation.visibility = View.INVISIBLE
             setCancelButtonEnabled(false) // no option to cancel
         } else if (ACTION_REQUEST_WITH_RESULT == intent.action) {
             if (savedInstanceState != null) {
@@ -98,21 +98,22 @@ class PassCodeActivity : BaseActivity() {
             } else {
                 /// pass code preference has just been activated in Preferences;
                 // will receive and confirm pass code value
-                passCodeHdr.setText(R.string.pass_code_configure_your_pass_code)
+                passCodeHdr.text = getString(R.string.pass_code_configure_your_pass_code)
                 //mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
                 // TODO choose a header, check iOS
-                passCodeHdrExplanation.setVisibility(View.VISIBLE)
+                passCodeHdrExplanation.visibility = View.VISIBLE
                 setCancelButtonEnabled(true)
             }
         } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
             /// pass code preference has just been disabled in Preferences;
             // will confirm user knows pass code, then remove it
-            passCodeHdr.setText(R.string.pass_code_remove_your_pass_code)
-            passCodeHdrExplanation.setVisibility(View.INVISIBLE)
+            passCodeHdr.text = getString(R.string.pass_code_remove_your_pass_code)
+            passCodeHdrExplanation.visibility = View.INVISIBLE
             setCancelButtonEnabled(true)
         } else {
             throw IllegalArgumentException(R.string.illegal_argument_exception_message.toString() + " ")
         }
+
         setTextListeners()
     }
 
@@ -157,7 +158,7 @@ class PassCodeActivity : BaseActivity() {
                         passCodeEditTexts[i - 1]?.setText("")
                         passCodeEditTexts[i - 1]?.requestFocus()
                         if (!confirmingPassCode) {
-                            passCodeDigits[-1] = ""
+                            passCodeDigits[i - 1] = ""
                         }
                         bChange = false
                     } else if (!bChange) {
