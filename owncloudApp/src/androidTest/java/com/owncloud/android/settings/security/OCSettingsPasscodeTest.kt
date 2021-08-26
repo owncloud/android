@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author Jesus Recio (@jesmrec)
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Christian Schabesberger (@theScrabi)
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,11 +27,9 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode
 import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
@@ -44,6 +43,10 @@ import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import nthChildOf
+import withChildViewCount
 
 class OCSettingsPasscodeTest {
 
@@ -56,9 +59,9 @@ class OCSettingsPasscodeTest {
     private val keyPassCode = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private val defaultPassCode = arrayOf('1', '1', '1', '1')
-    private val wrongPassCode = arrayOf('1', '1', '1', '2')
-    private val passCodeToSave = "1111"
+    private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
+    private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
+    private val passCodeToSave = "111111"
 
     @After
     fun tearDown() {
@@ -79,10 +82,11 @@ class OCSettingsPasscodeTest {
             isDisplayed(true)
             withText(R.string.pass_code_configure_your_pass_code_explanation)
         }
-        onView(withId(R.id.txt0)).check(matches(isDisplayed()))
-        onView(withId(R.id.txt1)).check(matches(isDisplayed()))
-        onView(withId(R.id.txt2)).check(matches(isDisplayed()))
-        onView(withId(R.id.txt3)).check(matches(isDisplayed()))
+
+        // Check if required amout of input fields are actually displayed
+        onView(withId(R.id.passCodeTxtLayout)).check(matches(isDisplayed()))
+        onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(PassCodeActivity.numberOfPassInputs, withId(R.id.passCodeEditText))))
+
         with(R.id.cancel) {
             isDisplayed(true)
             withText(android.R.string.cancel)
@@ -116,7 +120,7 @@ class OCSettingsPasscodeTest {
 
         //Checking that the setResult returns the typed passcode
         assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
-        assertThat(activityRule.activityResult, hasResultData(hasExtra(keyPassCode, passCodeToSave)))
+        assertThat(activityRule.activityResult, hasResultData(hasExtra(keyPassCode, passCodeToSave.substring(0, PassCodeActivity.numberOfPassInputs))))
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -126,7 +130,8 @@ class OCSettingsPasscodeTest {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typing
+        //First typin
+        //Type incorrect passcodeg
         typePasscode(defaultPassCode)
         //Second typing
         typePasscode(wrongPassCode)
@@ -150,9 +155,9 @@ class OCSettingsPasscodeTest {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        onView(withId(R.id.txt0)).perform(replaceText("1"))
-        onView(withId(R.id.txt1)).perform(replaceText("1"))
-        onView(withId(R.id.txt2)).perform(replaceText("1"))
+        for (i in 0..2) {
+            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
+        }
 
         onView(withId(R.id.cancel)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
@@ -166,8 +171,10 @@ class OCSettingsPasscodeTest {
         //First typing
         typePasscode(defaultPassCode)
 
-        onView(withId(R.id.txt0)).perform(replaceText("1"))
-        onView(withId(R.id.txt1)).perform(replaceText("1"))
+        //Type incorrect passcode
+        for (i in 0..1) {
+            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
+        }
 
         onView(withId(R.id.cancel)).perform(click())
         assertTrue(errorMessage, activityRule.activity.isFinishing)
@@ -228,22 +235,15 @@ class OCSettingsPasscodeTest {
     }
 
     private fun typePasscode(digits: Array<Char>) {
-        onView(withId(R.id.txt0)).perform(replaceText(digits[0].toString()))
-        onView(withId(R.id.txt1)).perform(replaceText(digits[1].toString()))
-        onView(withId(R.id.txt2)).perform(replaceText(digits[2].toString()))
-        onView(withId(R.id.txt3)).perform(replaceText(digits[3].toString()))
+        for (i in 0 until PassCodeActivity.numberOfPassInputs)
+            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText(digits[i].toString()))
     }
 
     private fun storePasscode(passcode: String = passCodeToSave) {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
-        for (i in 1..4) {
-            appPrefs.putString(
-                PassCodeActivity.PREFERENCE_PASSCODE_D + i,
-                passcode.substring(i - 1, i)
-            )
-        }
+
+        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, PassCodeActivity.numberOfPassInputs))
         appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         appPrefs.apply()
     }
-
 }

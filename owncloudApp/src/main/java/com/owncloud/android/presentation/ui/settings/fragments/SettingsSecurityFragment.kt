@@ -66,6 +66,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 showMessageInSnackbar(getString(R.string.pass_code_error_set))
             }
         }
+
     private val disablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
@@ -79,6 +80,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 showMessageInSnackbar(getString(R.string.pass_code_error_remove))
             }
         }
+
     private val enablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
@@ -92,6 +94,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 showMessageInSnackbar(getString(R.string.pattern_error_set))
             }
         }
+
     private val disablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
