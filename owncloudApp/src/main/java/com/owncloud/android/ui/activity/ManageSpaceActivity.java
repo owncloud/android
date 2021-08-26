@@ -133,7 +133,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
             for(int i = 0; i < numberOfPassInputs && passCodeEnable; i++) {
                 newPassCodeString.append(passCodeDigits[i]);
             }
-            appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE, passCodeDigits[0]);
+            appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE, newPassCodeString.toString());
 
             // Recover pattern
             if (patternEnabled) {
