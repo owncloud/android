@@ -47,6 +47,7 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.features.FeatureList;
 import com.owncloud.android.features.FeatureList.FeatureItem;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
+import com.owncloud.android.presentation.ui.settings.PassCodeActivity;
 import com.owncloud.android.ui.whatsnew.ProgressIndicator;
 
 /**
