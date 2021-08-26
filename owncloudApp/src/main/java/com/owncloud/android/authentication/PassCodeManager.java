@@ -29,7 +29,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.ui.activity.PassCodeActivity;
+import com.owncloud.android.presentation.ui.settings.PassCodeActivity;
 
 import java.util.HashSet;
 import java.util.Set;

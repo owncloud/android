@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.ui.activity
+package com.owncloud.android.presentation.ui.settings
 
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import android.widget.TextView
@@ -40,6 +40,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import com.owncloud.android.BuildConfig
+import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.PreferenceUtils
 import timber.log.Timber
 import java.lang.IllegalArgumentException
