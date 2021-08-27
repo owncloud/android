@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
-import android.preference.PreferenceManager
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
