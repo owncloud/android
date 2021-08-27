@@ -20,12 +20,22 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
+import android.preference.PreferenceManager
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 
 class PassCodeViewModel(
     private val preferencesProvider: SharedPreferencesProvider
 ) : ViewModel() {
 
+    fun getPassCode() = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
 
+    private fun loadPinFromOldFormatIfPossible(): String {
+        var pinString = ""
+        for (i in 1..4)
+            pinString += preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, null)
+
+        return pinString
+    }
 }

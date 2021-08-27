@@ -35,7 +35,6 @@ import com.owncloud.android.R
 import android.widget.LinearLayout
 import android.view.View.OnFocusChangeListener
 import android.content.Intent
-import android.preference.PreferenceManager
 import android.text.TextWatcher
 import android.text.Editable
 import android.view.KeyEvent
@@ -271,9 +270,7 @@ class PassCodeActivity : BaseActivity() {
      * @return     'True' if entered pass code equals to the saved one.
      */
     protected fun checkPassCodeIsValid(): Boolean {
-        val appPrefs = PreferenceManager
-            .getDefaultSharedPreferences(applicationContext)
-        val passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+        val passcodeString = passcodeViewModel.getPassCode()
         var isValid = true
         var i = 0
         while (i < passCodeDigits.size && isValid) {
@@ -342,17 +339,6 @@ class PassCodeActivity : BaseActivity() {
         setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
         finish()
-    }
-
-    private fun loadPinFromOldFormatIfPossible(): String {
-        val appPrefs = PreferenceManager
-            .getDefaultSharedPreferences(applicationContext)
-
-        var pinString = ""
-        for (i in 1..4)
-            pinString += appPrefs.getString(PREFERENCE_PASSCODE_D + i, null)
-
-        return pinString
     }
 
     public override fun onSaveInstanceState(outState: Bundle) {
