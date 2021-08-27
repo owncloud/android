@@ -56,28 +56,22 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val passcodeEnableResult = securityViewModel.handleEnablePasscode(result.data)
-            if (passcodeEnableResult.isSuccess) {
+            else {
                 prefPasscode?.isChecked = true
 
                 // Allow to use biometric lock since Passcode lock has been enabled
                 enableBiometric()
-            } else {
-                showMessageInSnackbar(getString(R.string.pass_code_error_set))
             }
         }
 
     private val disablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val passcodeDisableResult = securityViewModel.handleDisablePasscode(result.data)
-            if (passcodeDisableResult.isSuccess) {
+            else {
                 prefPasscode?.isChecked = false
 
                 // Do not allow to use biometric lock since Passcode lock has been disabled
                 disableBiometric()
-            } else {
-                showMessageInSnackbar(getString(R.string.pass_code_error_remove))
             }
         }
 
