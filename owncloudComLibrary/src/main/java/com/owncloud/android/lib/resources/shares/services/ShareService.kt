@@ -22,7 +22,7 @@ package com.owncloud.android.lib.resources.shares.services
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.Service
-import com.owncloud.android.lib.resources.shares.ShareParserResult
+import com.owncloud.android.lib.resources.shares.ShareResponse
 import com.owncloud.android.lib.resources.shares.ShareType
 
 interface ShareService : Service {
@@ -30,7 +30,7 @@ interface ShareService : Service {
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean
-    ): RemoteOperationResult<ShareParserResult>
+    ): RemoteOperationResult<ShareResponse>
 
     fun insertShare(
         remoteFilePath: String,
@@ -41,7 +41,7 @@ interface ShareService : Service {
         password: String,
         expirationDate: Long,
         publicUpload: Boolean
-    ): RemoteOperationResult<ShareParserResult>
+    ): RemoteOperationResult<ShareResponse>
 
     fun updateShare(
         remoteId: String,
@@ -50,7 +50,7 @@ interface ShareService : Service {
         expirationDate: Long,
         permissions: Int,
         publicUpload: Boolean
-    ): RemoteOperationResult<ShareParserResult>
+    ): RemoteOperationResult<ShareResponse>
 
-    fun deleteShare(remoteId: String): RemoteOperationResult<ShareParserResult>
+    fun deleteShare(remoteId: String): RemoteOperationResult<ShareResponse>
 }

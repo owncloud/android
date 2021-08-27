@@ -70,7 +70,7 @@ class CreateRemoteShareOperation(
     private val shareType: ShareType,
     private val shareWith: String,
     private val permissions: Int
-) : RemoteOperation<ShareParserResult>() {
+) : RemoteOperation<ShareResponse>() {
     var name = "" // Name to set for the public link
 
     var password: String = "" // Password to set for the public link
@@ -81,8 +81,8 @@ class CreateRemoteShareOperation(
 
     var retrieveShareDetails = false // To retrieve more info about the just created share
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
-        var result: RemoteOperationResult<ShareParserResult>
+    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
+        var result: RemoteOperationResult<ShareResponse>
 
         try {
             val formBodyBuilder = FormBody.Builder()
@@ -142,7 +142,7 @@ class CreateRemoteShareOperation(
                     val remoteOperationResult = getShares.execute(client)
 
                     result = RemoteOperationResult(remoteOperationResult)
-                    result.data = ShareParserResult(remoteOperationResult.data.toRemoteShare())
+                    result.data = remoteOperationResult.data
                 }
 
             } else {

@@ -30,7 +30,7 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.CommonOcsResponse
-import com.owncloud.android.lib.resources.shares.responses.ShareResponse
+import com.owncloud.android.lib.resources.shares.responses.ShareItem
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -49,9 +49,14 @@ class GetRemoteShareOperation(private val remoteId: String) : RemoteOperation<Sh
 
     private fun parseResponse(response: String): ShareResponse? {
         val moshi = Moshi.Builder().build()
-        val type: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareResponse::class.java)
-        val adapter: JsonAdapter<CommonOcsResponse<ShareResponse>> = moshi.adapter(type)
-        return adapter.fromJson(response)!!.ocs.data
+        val listOfShareItemType: Type = Types.newParameterizedType(List::class.java, ShareItem::class.java)
+        val commonOcsType: Type = Types.newParameterizedType(CommonOcsResponse::class.java, listOfShareItemType)
+        val adapter: JsonAdapter<CommonOcsResponse<List<ShareItem>>> = moshi.adapter(commonOcsType)
+        return adapter.fromJson(response)?.ocs?.data?.let { listOfShareItems ->
+            ShareResponse(listOfShareItems.map { shareItem ->
+                shareItem.toRemoteShare()
+            })
+        }
     }
 
     private fun onResultUnsuccessful(

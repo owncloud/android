@@ -31,30 +31,6 @@ import com.owncloud.android.lib.resources.shares.ShareType
 import com.squareup.moshi.JsonClass
 import java.io.File
 
-
-@JsonClass(generateAdapter = true)
-data class ShareResponse(
-    val shares: List<ShareItem>
-) {
-    fun toRemoteShare() = this.shares.map { shareItem ->
-        RemoteShare(
-            id = shareItem.id ?: "0",
-            shareWith = shareItem.shareWith.orEmpty(),
-            path = shareItem.path.orEmpty(),
-            token = shareItem.token.orEmpty(),
-            sharedWithDisplayName = shareItem.sharedWithDisplayName.orEmpty(),
-            sharedWithAdditionalInfo = shareItem.sharedWithAdditionalInfo.orEmpty(),
-            name = shareItem.name.orEmpty(),
-            shareLink = shareItem.shareLink.orEmpty(),
-            shareType = ShareType.values().firstOrNull { it.value == shareItem.shareType } ?: ShareType.UNKNOWN,
-            permissions = shareItem.permissions ?: DEFAULT_PERMISSION,
-            sharedDate = shareItem.sharedDate ?: INIT_SHARED_DATE,
-            expirationDate = shareItem.expirationDate ?: INIT_EXPIRATION_DATE_IN_MILLIS,
-            isFolder = shareItem.path?.endsWith(File.separator) ?: false
-        )
-    }
-}
-
 @JsonClass(generateAdapter = true)
 data class ShareItem(
     val id: String? = null,
@@ -69,4 +45,20 @@ data class ShareItem(
     val permissions: Int? = null,
     val sharedDate: Long? = null,
     val expirationDate: Long? = null,
-)
+) {
+    fun toRemoteShare() = RemoteShare(
+        id = id ?: "0",
+        shareWith = shareWith.orEmpty(),
+        path = path.orEmpty(),
+        token = token.orEmpty(),
+        sharedWithDisplayName = sharedWithDisplayName.orEmpty(),
+        sharedWithAdditionalInfo = sharedWithAdditionalInfo.orEmpty(),
+        name = name.orEmpty(),
+        shareLink = shareLink.orEmpty(),
+        shareType = ShareType.values().firstOrNull { it.value == shareType } ?: ShareType.UNKNOWN,
+        permissions = permissions ?: DEFAULT_PERMISSION,
+        sharedDate = sharedDate ?: INIT_SHARED_DATE,
+        expirationDate = expirationDate ?: INIT_EXPIRATION_DATE_IN_MILLIS,
+        isFolder = path?.endsWith(File.separator) ?: false
+    )
+}

@@ -25,4 +25,4 @@
 
 package com.owncloud.android.lib.resources.shares
 
-class ShareParserResult(val shares: List<RemoteShare>)
+data class ShareResponse(val shares: List<RemoteShare>)

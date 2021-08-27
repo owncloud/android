@@ -48,10 +48,10 @@ import java.net.URL
  *
  * @param remoteShareId Share ID
  */
-class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOperation<ShareParserResult>() {
+class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOperation<ShareResponse>() {
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
-        var result: RemoteOperationResult<ShareParserResult>
+    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
+        var result: RemoteOperationResult<ShareResponse>
 
         try {
             val requestUri = client.baseUri

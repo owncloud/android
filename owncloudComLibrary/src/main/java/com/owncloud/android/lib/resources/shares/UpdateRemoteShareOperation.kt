@@ -57,7 +57,7 @@ class UpdateRemoteShareOperation
      */
     private val remoteId: String
 
-) : RemoteOperation<ShareParserResult>() {
+) : RemoteOperation<ShareResponse>() {
     /**
      * Name to update in Share resource. Ignored by servers previous to version 10.0.0
      *
@@ -99,8 +99,8 @@ class UpdateRemoteShareOperation
 
     var retrieveShareDetails = false // To retrieve more info about the just updated share
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
-        var result: RemoteOperationResult<ShareParserResult>
+    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
+        var result: RemoteOperationResult<ShareResponse>
 
         try {
             val formBodyBuilder = FormBody.Builder()
@@ -169,10 +169,7 @@ class UpdateRemoteShareOperation
                 val getShares = GetRemoteShareOperation(
                     emptyShare.id
                 )
-                val remoteOperationResult = getShares.execute(client)
-
-                result = RemoteOperationResult(remoteOperationResult)
-                result.data = ShareParserResult(remoteOperationResult.data.toRemoteShare())
+                result = getShares.execute(client)
             }
 
         } catch (e: Exception) {

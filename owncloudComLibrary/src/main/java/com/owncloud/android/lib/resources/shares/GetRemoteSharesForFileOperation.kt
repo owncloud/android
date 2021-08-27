@@ -59,10 +59,10 @@ class GetRemoteSharesForFileOperation(
     private val remoteFilePath: String,
     private val reshares: Boolean,
     private val subfiles: Boolean
-) : RemoteOperation<ShareParserResult>() {
+) : RemoteOperation<ShareResponse>() {
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
-        var result: RemoteOperationResult<ShareParserResult>
+    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
+        var result: RemoteOperationResult<ShareResponse>
 
         try {
 

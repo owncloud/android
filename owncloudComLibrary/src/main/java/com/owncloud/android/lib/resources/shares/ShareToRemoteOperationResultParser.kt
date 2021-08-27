@@ -41,12 +41,12 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
     var ownCloudVersion: OwnCloudVersion? = null
     var serverBaseUri: Uri? = null
 
-    fun parse(serverResponse: String?): RemoteOperationResult<ShareParserResult> {
+    fun parse(serverResponse: String?): RemoteOperationResult<ShareResponse> {
         if (serverResponse.isNullOrEmpty()) {
             return RemoteOperationResult(RemoteOperationResult.ResultCode.WRONG_SERVER_RESPONSE)
         }
 
-        var result: RemoteOperationResult<ShareParserResult>
+        var result: RemoteOperationResult<ShareResponse>
         val resultData: List<RemoteShare>?
 
         try {
@@ -82,7 +82,7 @@ class ShareToRemoteOperationResultParser(private var shareXmlParser: ShareXMLPar
                         }
 
                         if (resultData != null) {
-                            result.setData(ShareParserResult(ArrayList(resultData.toMutableList())))
+                            result.setData(ShareResponse(ArrayList(resultData.toMutableList())))
                         }
 
                     } else {
