@@ -189,7 +189,7 @@
         <service android:name=".media.MediaService" />
 
         <activity
-            android:name=".presentation.ui.settings.PassCodeActivity"
+            android:name=".presentation.ui.security.PassCodeActivity"
             android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".ui.activity.ConflictsResolveActivity"

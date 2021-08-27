@@ -24,7 +24,7 @@ import android.content.Intent
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
-import com.owncloud.android.presentation.ui.settings.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import io.mockk.every
 import io.mockk.mockk
