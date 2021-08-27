@@ -30,6 +30,15 @@ class PassCodeViewModel(
 
     fun getPassCode() = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
 
+    fun setPassCode(passcode: String) {
+        preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
+        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
+    }
+
+    fun removePassCode() {
+        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+    }
+
     private fun loadPinFromOldFormatIfPossible(): String {
         var pinString = ""
         for (i in 1..4)

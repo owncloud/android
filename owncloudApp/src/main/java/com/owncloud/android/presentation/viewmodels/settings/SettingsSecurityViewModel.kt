@@ -34,22 +34,6 @@ class SettingsSecurityViewModel(
 
     fun isPatternSet() = preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
 
-    fun handleEnablePasscode(data: Intent?): UIResult<Unit> {
-        val passcode =
-            data?.getStringExtra(PassCodeActivity.KEY_PASSCODE).takeIf { it?.length == PassCodeActivity.numberOfPassInputs }
-                ?: return UIResult.Error()
-
-        preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
-        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
-        return UIResult.Success()
-    }
-
-    fun handleDisablePasscode(data: Intent?): UIResult<Unit> {
-        data?.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false).takeIf { it == true } ?: return UIResult.Error()
-        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-        return UIResult.Success()
-    }
-
     fun isPasscodeSet() = preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
     fun handleEnablePattern(data: Intent?): UIResult<Unit> {

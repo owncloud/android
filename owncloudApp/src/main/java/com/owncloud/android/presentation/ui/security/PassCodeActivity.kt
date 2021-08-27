@@ -53,7 +53,7 @@ import java.util.Arrays
 class PassCodeActivity : BaseActivity() {
 
     // ViewModel
-    private val passcodeViewModel by viewModel<PassCodeViewModel>()
+    private val passCodeViewModel by viewModel<PassCodeViewModel>()
 
     private lateinit var bCancel: Button
     private lateinit var passCodeHdr: TextView
@@ -212,8 +212,8 @@ class PassCodeActivity : BaseActivity() {
             }
         } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
             if (checkPassCodeIsValid()) {
+                passCodeViewModel.removePassCode()
                 val resultIntent = Intent()
-                resultIntent.putExtra(KEY_CHECK_RESULT, true)
                 setResult(RESULT_OK, resultIntent)
                 passCodeError.visibility = View.INVISIBLE
                 hideSoftKeyboard()
@@ -270,7 +270,7 @@ class PassCodeActivity : BaseActivity() {
      * @return     'True' if entered pass code equals to the saved one.
      */
     protected fun checkPassCodeIsValid(): Boolean {
-        val passcodeString = passcodeViewModel.getPassCode()
+        val passcodeString = passCodeViewModel.getPassCode()
         var isValid = true
         var i = 0
         while (i < passCodeDigits.size && isValid) {
@@ -335,7 +335,7 @@ class PassCodeActivity : BaseActivity() {
         for (i in 0 until numberOfPassInputs) {
             passCodeString.append(passCodeDigits[i])
         }
-        resultIntent.putExtra(KEY_PASSCODE, passCodeString.toString())
+        passCodeViewModel.setPassCode(passCodeString.toString())
         setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
         finish()
@@ -403,8 +403,6 @@ class PassCodeActivity : BaseActivity() {
         const val ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT"
         const val ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT"
         const val ACTION_CHECK = "ACTION_CHECK"
-        const val KEY_PASSCODE = "KEY_PASSCODE"
-        const val KEY_CHECK_RESULT = "KEY_CHECK_RESULT"
 
         // NOTE: PREFERENCE_SET_PASSCODE must have the same value as settings_security.xml-->android:key for passcode preference
         const val PREFERENCE_SET_PASSCODE = "set_pincode"
