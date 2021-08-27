@@ -138,6 +138,7 @@ android {
     }
 
     lint {
+        disable 'UsingOnClickInXml'
         abortOnError true
         htmlOutput file('../lint-app-report.html')
         ignoreWarnings false
