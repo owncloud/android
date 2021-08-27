@@ -166,10 +166,13 @@ class UpdateRemoteShareOperation
             if (result.isSuccess && retrieveShareDetails) {
                 // retrieve more info - PUT only returns the index of the new share
                 val emptyShare = result.data.shares.first()
-                val getInfo = GetRemoteShareOperation(
+                val getShares = GetRemoteShareOperation(
                     emptyShare.id
                 )
-                result = getInfo.execute(client)
+                val remoteOperationResult = getShares.execute(client)
+
+                result = RemoteOperationResult(remoteOperationResult)
+                result.data = ShareParserResult(remoteOperationResult.data.toRemoteShare())
             }
 
         } catch (e: Exception) {
