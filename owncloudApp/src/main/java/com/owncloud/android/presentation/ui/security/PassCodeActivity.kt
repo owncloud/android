@@ -347,9 +347,17 @@ class PassCodeActivity : BaseActivity() {
         outState.putStringArray(KEY_PASSCODE_DIGITS, passCodeDigits)
     }
 
-    private inner class PassCodeDigitTextWatcher(private val mIndex: Int, private val mLastOne: Boolean) : TextWatcher {
+    /**
+     * Constructor
+     *
+     * @param index         Position in the pass code of the input field that will be bound to
+     * this watcher.
+     * @param lastOne       'True' means that watcher corresponds to the last position of the
+     * pass code.
+     */
+    private inner class PassCodeDigitTextWatcher(private val index: Int, private val lastOne: Boolean) : TextWatcher {
         private operator fun next(): Int {
-            return if (mLastOne) 0 else mIndex + 1
+            return if (lastOne) 0 else index + 1
         }
 
         /**
@@ -359,19 +367,19 @@ class PassCodeActivity : BaseActivity() {
          * - moves the focus automatically to the next field
          * - for the last field, triggers the processing of the full pass code
          *
-         * @param s     Changed text
+         * @param changedText     Changed text
          */
         override fun afterTextChanged(changedText: Editable) {
             if (changedText.isNotEmpty()) {
                 if (!confirmingPassCode) {
-                    passCodeDigits[mIndex] = passCodeEditTexts[mIndex]?.text.toString()
+                    passCodeDigits[index] = passCodeEditTexts[index]?.text.toString()
                 }
                 passCodeEditTexts[next()]?.requestFocus()
-                if (mLastOne) {
+                if (lastOne) {
                     processFullPassCode()
                 }
             } else {
-                Timber.d("Text box $mIndex was cleaned")
+                Timber.d("Text box $index was cleaned")
             }
         }
 
@@ -383,16 +391,8 @@ class PassCodeActivity : BaseActivity() {
             // nothing to do
         }
 
-        /**
-         * Constructor
-         *
-         * @param index         Position in the pass code of the input field that will be bound to
-         * this watcher.
-         * @param lastOne       'True' means that watcher corresponds to the last position of the
-         * pass code.
-         */
         init {
-            require(mIndex >= 0) {
+            require(index >= 0) {
                 "Invalid index in " + PassCodeDigitTextWatcher::class.java.simpleName +
                         " constructor"
             }
