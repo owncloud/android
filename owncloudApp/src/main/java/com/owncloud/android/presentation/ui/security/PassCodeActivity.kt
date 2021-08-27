@@ -42,7 +42,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import com.owncloud.android.BuildConfig
-import com.owncloud.android.presentation.viewmodels.settings.PassCodeViewModel
+import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
