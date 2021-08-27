@@ -25,7 +25,7 @@ import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticat
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
-import com.owncloud.android.presentation.viewmodels.settings.PassCodeViewModel
+import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
