@@ -7,6 +7,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  * Copyright (C) 2011 Bartek Przybylski
  * Copyright (C) 2021 ownCloud GmbH.
  * <p>
@@ -22,7 +23,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.presentation.ui.settings
+
+package com.owncloud.android.presentation.ui.security
 
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import android.widget.TextView
@@ -40,14 +42,20 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import com.owncloud.android.BuildConfig
+import com.owncloud.android.presentation.viewmodels.settings.PassCodeViewModel
 import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.PreferenceUtils
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.util.Arrays
 
 class PassCodeActivity : BaseActivity() {
+
+    // ViewModel
+    private val passcodeViewModel by viewModel<PassCodeViewModel>()
+
     private lateinit var bCancel: Button
     private lateinit var passCodeHdr: TextView
     private lateinit var passCodeHdrExplanation: TextView
@@ -69,6 +77,7 @@ class PassCodeActivity : BaseActivity() {
         if (!BuildConfig.DEBUG) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } // else, let it go, or taking screenshots & testing will not be possible
+
         setContentView(R.layout.passcodelock)
         val passcodeLockLayout = findViewById<LinearLayout>(R.id.passcodeLockLayout)
         bCancel = findViewById(R.id.cancel)
@@ -83,6 +92,7 @@ class PassCodeActivity : BaseActivity() {
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
         inflatePasscodeTxtLine()
+
         if (ACTION_CHECK == intent.action) {
             /// this is a pass code request; the user has to input the right value
             passCodeHdr.text = getString(R.string.pass_code_enter_pass_code)

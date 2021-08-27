@@ -51,7 +51,7 @@ import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.BiometricActivity
-import com.owncloud.android.presentation.ui.settings.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
