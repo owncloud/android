@@ -182,6 +182,9 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">ชื่อไฟล์ต้องมีอักขระไม่เกิน %d ตัว</string>
   <string name="uploader_upload_text_filename_hint">ชื่อไฟล์</string>
   <string name="uploader_upload_camera_upload_files">กำลังอัปโหลดไฟล์รูปภาพ</string>
+  <string name="uploader_upload_picture_upload_files">%d รูปภาพใหม่ถูกอัปโหลดแล้ว</string>
+  <string name="uploader_upload_video_upload_files">%d วิดีโอใหม่จะถูกอัปโหลด</string>
+  <string name="uploader_upload_picture_upload_error">พาธสำหรับอัปโหลดรูปภาพไม่ถูกต้อง</string>
   <string name="uploader_upload_available_offline_files">กำลังอัปโหลดไฟล์ออฟไลน์ที่มีอยู่</string>
   <string name="uploader_upload_requested_from_wifi_files">กำลังร้องขอการอัปโหลดไฟล์จาก wifi</string>
   <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
@@ -453,6 +456,7 @@
   <string name="prefs_camera_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="prefs_camera_upload_behaviour_title">ไฟล์ต้นฉบับจะเป็น</string>
+  <string name="prefs_camera_upload_last_sync_title">การประสานข้อมูลครั้งล่าสุด</string>
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>
   <string name="pref_behaviour_entries_keep_file">เก็บไว้ในโฟลเดอร์ต้นฉบับ</string>

@@ -30,8 +30,10 @@
   <string name="drawer_feedback">Visszajelzés</string>
   <string name="drawer_help">Súgó</string>
   <string name="prefs_category_general">Általános</string>
+  <string name="prefs_subsection_logging">Logolás</string>
   <string name="prefs_subsection_more">Több</string>
   <string name="prefs_subsection_security">Biztonság</string>
+  <string name="prefs_subsection_more_summary">Applikáció információk, visszajelzés, egyéb</string>
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
@@ -40,6 +42,9 @@
   <string name="prefs_touches_with_other_visible_windows">Érintkezik más látható ablakkal</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Engedélyezze az érintéseket, amikor a kép takarásban van egy másik ablak által.</string>
   <string name="confirmation_touches_with_other_windows_title">Biztos, hogy engedélyezi ezt a funkciót?</string>
+  <string name="prefs_open_logs_view">Log nézet megnyitása</string>
+  <string name="prefs_subsection_picture_uploads">Képek automatikus feltöltése</string>
+  <string name="prefs_subsection_video_uploads">Videók automatikus feltöltése</string>
   <string name="prefs_camera_picture_upload">Képfeltöltések</string>
   <string name="prefs_camera_picture_upload_summary">A fényképezőgép által készített képek automatikus feltöltése</string>
   <string name="prefs_camera_picture_upload_path_title">Képfeltöltési útvonal</string>
@@ -63,12 +68,17 @@
   <string name="prefs_remember_last_upload_location_summary">Az utolsó megosztás feltöltési helyének megjegyzése</string>
   <string name="prefs_pattern">Mintazár</string>
   <string name="prefs_enable_logging">Naplózás engedélyezése</string>
+  <string name="prefs_send_feedback">Visszajelzés küldése</string>
+  <string name="prefs_app_version">Applikáció verziója</string>
+  <string name="prefs_app_version_summary">%1$s%2$sverzió%3$s(%4$s)</string>
   <string name="pattern_enter_pattern">Adja meg a mintáját</string>
   <string name="pattern_configure_pattern">Minta megadása</string>
   <string name="pattern_remove_pattern">Minta eltávolítása</string>
   <string name="pattern_incorrect_pattern">Hibás minta</string>
   <string name="pattern_reenter_pattern">Adja meg újra a mintát</string>
   <string name="pattern_not_same_pattern">A minták nem egyeznek</string>
+  <string name="pattern_error_set">Hiba történt a mintazárolás beállítása során</string>
+  <string name="pattern_error_remove">Hiba történt a mintazárolás visszavonása során</string>
   <string name="pattern_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a mintát</string>
   <string name="passcode_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a jelszót</string>
   <string name="pattern_no_longer_required">A minta többé nem lesz bekérve</string>
@@ -79,9 +89,11 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fájlkezelő</string>
   <string name="bottom_nav_uploads">Feltöltések</string>
+  <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Hivatkozások</string>
   <string name="recommend_subject">Próbálja ki a(z) %1$s appot az okostelefonján!</string>
   <string name="recommend_text">Szeretnélek meghívni, hogy használd a(z) %1$s alkalmazást az okostelefonodon!\nTöltsd le innen: %2$s</string>
+  <string name="error_reason">mivel</string>
   <string name="auth_failure_snackbar">Sikertelen bejelentkezés</string>
   <string name="server_not_supported">Önnek a 10-es verziónál régebbi szerver verziója van, ami nem támogatott. Kérjük frissítse a szervert, egy újabb verzióra.</string>
   <string name="auth_failure_snackbar_action">Fiók módosítása</string>
@@ -164,6 +176,11 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">A fájlnév legfeljebb %d karakter hosszú lehet</string>
   <string name="uploader_upload_text_filename_hint">Fájlnév</string>
   <string name="uploader_upload_camera_upload_files">Fényképezőgép feltöltési fájlok feltöltése</string>
+  <string name="uploader_upload_picture_upload_files">%dúj kép kerül feltöltésre</string>
+  <string name="uploader_upload_video_upload_files">%dúj videó kerül feltöltésre</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Kamera anyagok feltöltése sikertelen</string>
+  <string name="uploader_upload_picture_upload_error">A képfeltöltések elérési útvonala már nem érvényes</string>
+  <string name="uploader_upload_video_upload_error">A videófeltöltések elérési útvonala már nem érvényes</string>
   <string name="uploader_upload_available_offline_files">Elérhető offline fájlok feltöltése</string>
   <string name="uploader_upload_requested_from_wifi_files">Wifiről kért fájlok feltöltése</string>
   <string name="ssl_certificate_not_trusted">A kiszolgáló tanúsítványa nem megbízható</string>
@@ -225,6 +242,11 @@
   <string name="pass_code_remove_your_pass_code">Jelszó eltávolítása</string>
   <string name="pass_code_mismatch">A jelszavak nem egyeznek</string>
   <string name="pass_code_wrong">Hibás jelszó</string>
+  <string name="pass_code_error_set">Hiba történt a jelkódos zárolás beállítása során</string>
+  <string name="pass_code_error_remove">Hiba történt a jelkódos zárolás visszavonása során</string>
+  <string name="biometric_not_enrolled">Regisztráljon legalább egy biometrikus azonosítót, hogy ezt a módot használja.</string>
+  <string name="biometric_prompt_title">Biometrikus bejelentkezés</string>
+  <string name="biometric_prompt_subtitle">Jelentkezzen be biometrikus azonosítással</string>
   <string name="media_notif_ticker">%1$s zenelejátszó</string>
   <string name="media_state_playing">%1$s (lejátszás)</string>
   <string name="media_state_loading">%1$s (betöltés)</string>
@@ -283,6 +305,8 @@
   <string name="confirmation_remove_local">Csak a helyi példányt</string>
   <string name="confirmation_remove_account_alert">Biztos eltávolítja a fiókot: %1$s ?</string>
   <string name="confirmation_remove_public_share_title">Hivatkozás eltávolítása</string>
+  <string name="confirmation_remove_private_share_title">Magánjellegű megosztás visszavonása</string>
+  <string name="confirmation_remove_share_message">Valóban vissza szeretné vonni az alábbi megosztást: %1$s?</string>
   <string name="remove_success_msg">Eltávolítás sikeres</string>
   <string name="remove_fail_msg">Az eltávolítás meghiúsult</string>
   <string name="rename_dialog_title">Adjon meg egy új nevet</string>
@@ -350,8 +374,14 @@
   <string name="preview_image_description">Előnézeti kép</string>
   <string name="preview_image_error_unknown_format">Ez a kép nem jeleníthető meg</string>
   <string name="error__upload__local_file_not_copied">%1$s nem másolható át a(z) %2$s helyi mappába</string>
+  <string name="get_shares_error">Nem sikerült elérni a szerveren található megosztásokat</string>
+  <string name="get_sharees_error">Nem sikerült a felhasználókat és csoportokat elérni a szerveren</string>
+  <string name="get_capabilities_error">Nem sikerült elérni a szerver tulajdonságokat</string>
   <string name="share_link_no_support_share_api">Sajnáljuk, a megosztás nem engedélyezett ezen a kiszolgálón. Vegye fel a kapcsolatot a
 		rendszergazdával.</string>
+  <string name="share_link_file_error">Nem sikerült megosztani ezt a fájlt vagy könyvtárat</string>
+  <string name="unshare_link_file_error">Nem sikerült megszüntetni a fájl vagy könyvtár megosztását</string>
+  <string name="update_link_file_error">Nem sikerült frissíteni ezt a fájlt vagy könyvtárat</string>
   <string name="share_link_password_title">Adjon meg egy jelszót</string>
   <string name="share_link_empty_password">Adjon meg egy jelszót</string>
   <string name="activity_chooser_send_file_title">Küldés</string>
@@ -417,10 +447,13 @@
   <string name="file_list__footer__files">%1$d fájl</string>
   <string name="file_list__footer__files_and_folder">%1$d fájl, 1 könyvtár</string>
   <string name="file_list__footer__files_and_folders">%1$d fájl, %2$d könyvtár</string>
+  <string name="prefs_picture_upload_account">Fiók képek feltöltéséhez</string>
+  <string name="prefs_video_upload_account">Fiók videók feltöltéséhez</string>
   <string name="prefs_camera_upload_source_path_title">Kamera mappa (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">kötelező</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Eredeti fájl lesz ...</string>
   <string name="prefs_camera_upload_behaviour_title">Eredeti fájl lesz ...</string>
+  <string name="prefs_camera_upload_last_sync_title">Legutóbbi szinkronizáció</string>
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>
   <string name="pref_behaviour_entries_keep_file">eredeti mappában tárolva</string>
@@ -526,4 +559,10 @@
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Videók lejátszása letöltésük nélkül</string>
   <string name="no_borwser_installed_alert">Nincs böngésző telepítve. Telepítsen böngészőt a biztonságos bejelentkezés lehetővé tételéhez</string>
+  <string name="common_not_found">nem található</string>
+  <string name="supports_oauth2_error">nem ismert, hogy az OAuth2 támogatott-e</string>
+  <string name="get_base_url_error">a szerver url címe nem ismert</string>
+  <string name="prefs_http_logs">HTTP kérelmek és válaszok logolása</string>
+  <string name="prefs_logs_summary">A logok érzékeny információkat tartalmazhatnak. A logok adatainak megosztása a felhasználó felelőssége.</string>
+  <string name="synchronizing_account">Fiók szinkronizálása</string>
 </resources>
