@@ -183,6 +183,11 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">Имя файла должно быть не длиннее %d символов</string>
   <string name="uploader_upload_text_filename_hint">Имя файла</string>
   <string name="uploader_upload_camera_upload_files">Загрузка файлов, загруженных из камеры</string>
+  <string name="uploader_upload_picture_upload_files">Будет загружено %d новых изображений</string>
+  <string name="uploader_upload_video_upload_files">Будет загружено %d новых видео</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Загрузка из камеры не удалась</string>
+  <string name="uploader_upload_picture_upload_error">Исходный путь для загрузки изображений больше не является допустимым</string>
+  <string name="uploader_upload_video_upload_error">Исходный путь для загрузки видео больше не является допустимым</string>
   <string name="uploader_upload_available_offline_files">Загрузка файлов, доступных автономно</string>
   <string name="uploader_upload_requested_from_wifi_files">Загрузка файлов, запрошенных через WiFi</string>
   <string name="ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
@@ -456,6 +461,7 @@
   <string name="prefs_camera_upload_source_path_title_required">обязательно</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Исходный файл будет</string>
   <string name="prefs_camera_upload_behaviour_title">Исходный файл будет</string>
+  <string name="prefs_camera_upload_last_sync_title">Последняя синхронизация</string>
   <string name="upload_copy_files">Копировать файл</string>
   <string name="upload_move_files">Переместить файл</string>
   <string name="pref_behaviour_entries_keep_file">остался в исходной папке</string>
