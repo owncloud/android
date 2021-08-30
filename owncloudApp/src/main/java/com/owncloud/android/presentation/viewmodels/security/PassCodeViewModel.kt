@@ -28,8 +28,6 @@ class PassCodeViewModel(
     private val preferencesProvider: SharedPreferencesProvider
 ) : ViewModel() {
 
-    fun getPassCode() = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
-
     fun setPassCode(passcode: String) {
         preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
@@ -37,6 +35,18 @@ class PassCodeViewModel(
 
     fun removePassCode() {
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+    }
+
+    fun checkPassCodeIsValid(passCodeDigits: Array<String?>): Boolean {
+        val passcodeString = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+        var isValid = true
+        var i = 0
+        while (i < passCodeDigits.size && isValid) {
+            val originalDigit = passcodeString!![i].toString()
+            isValid = passCodeDigits[i] != null && passCodeDigits[i] == originalDigit
+            i++
+        }
+        return isValid
     }
 
     private fun loadPinFromOldFormatIfPossible(): String {

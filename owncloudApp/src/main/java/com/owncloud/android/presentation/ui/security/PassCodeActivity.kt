@@ -199,7 +199,7 @@ class PassCodeActivity : BaseActivity() {
      */
     private fun processFullPassCode() {
         if (ACTION_CHECK == intent.action) {
-            if (checkPassCodeIsValid()) {
+            if (passCodeViewModel.checkPassCodeIsValid(passCodeDigits)) {
                 /// pass code accepted in request, user is allowed to access the app
                 passCodeError.visibility = View.INVISIBLE
                 hideSoftKeyboard()
@@ -211,7 +211,7 @@ class PassCodeActivity : BaseActivity() {
                 )
             }
         } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
-            if (checkPassCodeIsValid()) {
+            if (passCodeViewModel.checkPassCodeIsValid(passCodeDigits)) {
                 passCodeViewModel.removePassCode()
                 val resultIntent = Intent()
                 setResult(RESULT_OK, resultIntent)
@@ -262,23 +262,6 @@ class PassCodeActivity : BaseActivity() {
         passCodeHdr.setText(R.string.pass_code_reenter_your_pass_code)
         passCodeHdrExplanation.visibility = View.INVISIBLE
         confirmingPassCode = true
-    }
-
-    /**
-     * Compares pass code entered by the user with the value currently saved in the app.
-     *
-     * @return     'True' if entered pass code equals to the saved one.
-     */
-    protected fun checkPassCodeIsValid(): Boolean {
-        val passcodeString = passCodeViewModel.getPassCode()
-        var isValid = true
-        var i = 0
-        while (i < passCodeDigits.size && isValid) {
-            val originalDigit = Character.toString(passcodeString!![i])
-            isValid = passCodeDigits[i] != null && passCodeDigits[i] == originalDigit
-            i++
-        }
-        return isValid
     }
 
     /**
