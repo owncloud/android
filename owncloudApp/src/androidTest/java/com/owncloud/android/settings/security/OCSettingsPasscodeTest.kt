@@ -3,6 +3,8 @@
  *
  * @author Jesus Recio (@jesmrec)
  * @author Christian Schabesberger (@theScrabi)
+ * @author Juan Carlos Garrote Gascón (@JuancaG05)
+ *
  * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,8 +30,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode
-import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
@@ -56,7 +56,6 @@ class OCSettingsPasscodeTest {
 
     private val intent = Intent()
     private val errorMessage = "PassCode Activity error"
-    private val keyPassCode = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
@@ -83,7 +82,7 @@ class OCSettingsPasscodeTest {
             withText(R.string.pass_code_configure_your_pass_code_explanation)
         }
 
-        // Check if required amout of input fields are actually displayed
+        // Check if required amount of input fields are actually displayed
         onView(withId(R.id.passCodeTxtLayout)).check(matches(isDisplayed()))
         onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(PassCodeActivity.numberOfPassInputs, withId(R.id.passCodeEditText))))
 
@@ -118,9 +117,8 @@ class OCSettingsPasscodeTest {
         //Second typing
         typePasscode(defaultPassCode)
 
-        //Checking that the setResult returns the typed passcode
+        //Checking that the result returned is OK
         assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
-        assertThat(activityRule.activityResult, hasResultData(hasExtra(keyPassCode, passCodeToSave.substring(0, PassCodeActivity.numberOfPassInputs))))
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
