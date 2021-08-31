@@ -39,8 +39,8 @@ class PassCodeViewModel(
     }
 
     fun checkPassCodeIsValid(passCodeDigits: Array<String?>): Boolean {
-        val passCodeString = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible()) ?: return false
-        if (passCodeString == "") return false
+        val passCodeString = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+        if (passCodeString.isNullOrEmpty()) return false
         var isValid = true
         var i = 0
         while (i < passCodeDigits.size && isValid) {
