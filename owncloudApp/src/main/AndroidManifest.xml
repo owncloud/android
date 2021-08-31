@@ -70,6 +70,7 @@
         tools:targetApi="n">
         <activity android:name=".presentation.ui.settings.PrivacyPolicyActivity"></activity>
         <activity android:name=".presentation.ui.settings.SettingsActivity"></activity>
+        <activity android:name=".presentation.ui.migration.StorageMigrationActivity" />
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/Theme.ownCloud.Splash">
