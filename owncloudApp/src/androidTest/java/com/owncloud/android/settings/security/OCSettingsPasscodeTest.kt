@@ -222,7 +222,7 @@ class OCSettingsPasscodeTest {
 
     @Test
     fun deletePasscodeCorrect() {
-        every {passCodeViewModel.checkPassCodeIsValid(any())} returns true
+        every { passCodeViewModel.checkPassCodeIsValid(any()) } returns true
 
         //Save a passcode in Preferences
         storePasscode(passCodeToSave)
@@ -238,7 +238,7 @@ class OCSettingsPasscodeTest {
 
     @Test
     fun deletePasscodeIncorrect() {
-        every {passCodeViewModel.checkPassCodeIsValid(any())} returns false
+        every { passCodeViewModel.checkPassCodeIsValid(any()) } returns false
 
         //Save a passcode in Preferences
         storePasscode(passCodeToSave)
