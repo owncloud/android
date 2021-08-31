@@ -21,6 +21,7 @@
 package com.owncloud.android.presentation.ui.settings
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -45,6 +46,8 @@ class LogHistoryActivity : AppCompatActivity() {
         findViewById<ConstraintLayout>(R.id.root_toolbar).isVisible = false
 
         setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Check that the activity is using the layout version with the fragment_container FrameLayout
         if (findViewById<View>(R.id.fragment_container) != null) {
@@ -81,6 +84,15 @@ class LogHistoryActivity : AppCompatActivity() {
                     .add(R.id.fragment_container, it).commit()
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var retval = true
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            else -> retval = super.onOptionsItemSelected(item)
+        }
+        return retval
     }
 
     companion object {
