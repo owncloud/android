@@ -34,15 +34,17 @@ class PassCodeViewModel(
     }
 
     fun removePassCode() {
+        preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     }
 
     fun checkPassCodeIsValid(passCodeDigits: Array<String?>): Boolean {
-        val passcodeString = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+        val passCodeString = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible()) ?: return false
+        if (passCodeString == "") return false
         var isValid = true
         var i = 0
         while (i < passCodeDigits.size && isValid) {
-            val originalDigit = passcodeString!![i].toString()
+            val originalDigit = passCodeString[i].toString()
             isValid = passCodeDigits[i] != null && passCodeDigits[i] == originalDigit
             i++
         }

@@ -44,11 +44,6 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel = PassCodeViewModel(preferencesProvider)
     }
 
-    @After
-    override fun tearDown() {
-        super.tearDown()
-    }
-
     @Test
     fun `set passcode - ok`() {
         val passCode = "1111"
@@ -66,6 +61,7 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel.removePassCode()
 
         verify(exactly = 1) {
+            preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
             preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
         }
     }
@@ -81,6 +77,36 @@ class PassCodeViewModelTest : ViewModelTest() {
         val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
 
         assertTrue(passCodeCheckResult)
+
+        verify(exactly = 1) {
+            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+        }
+    }
+
+    @Test
+    fun `check passcode is valid - ko - saved passcode is null`() {
+        every { preferencesProvider.getString(any(), any()) } returns null
+
+        val passCodeDigits: Array<String?> = arrayOf("1", "1", "1", "1")
+
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+
+        assertFalse(passCodeCheckResult)
+
+        verify(exactly = 1) {
+            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+        }
+    }
+
+    @Test
+    fun `check passcode is valid - ko - saved passcode is empty`() {
+        every { preferencesProvider.getString(any(), any()) } returns ""
+
+        val passCodeDigits: Array<String?> = arrayOf("1", "1", "1", "1")
+
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+
+        assertFalse(passCodeCheckResult)
 
         verify(exactly = 1) {
             preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
