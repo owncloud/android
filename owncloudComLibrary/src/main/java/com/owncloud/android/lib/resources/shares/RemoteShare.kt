@@ -24,7 +24,7 @@
 
 package com.owncloud.android.lib.resources.shares
 
-import java.io.File
+import com.owncloud.android.lib.resources.shares.responses.ItemType
 
 /**
  * Contains the data of a Share from the Share API
@@ -38,6 +38,7 @@ data class RemoteShare(
     var shareWith: String = "",
     var path: String = "",
     var token: String = "",
+    var itemType: String = "",
     var sharedWithDisplayName: String = "",
     var sharedWithAdditionalInfo: String = "",
     var name: String = "",
@@ -46,7 +47,7 @@ data class RemoteShare(
     var permissions: Int = DEFAULT_PERMISSION,
     var sharedDate: Long = INIT_SHARED_DATE,
     var expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
-    var isFolder: Boolean = path.endsWith(File.separator)
+    var isFolder: Boolean = (itemType == ItemType.FOLDER.fileValue)
 ) {
 
     companion object {

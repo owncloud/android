@@ -23,34 +23,57 @@
 
 package com.owncloud.android.lib.resources.shares.responses
 
+import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.DEFAULT_PERMISSION
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_EXPIRATION_DATE_IN_MILLIS
 import com.owncloud.android.lib.resources.shares.RemoteShare.Companion.INIT_SHARED_DATE
 import com.owncloud.android.lib.resources.shares.ShareType
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.io.File
 
 @JsonClass(generateAdapter = true)
 data class ShareItem(
     val id: String? = null,
+
+    @Json(name = "share_with")
     val shareWith: String? = null,
+
     val path: String? = null,
     val token: String? = null,
+
+    @Json(name = "item_type")
+    val itemType: String? = null,
+
+    @Json(name = "share_with_displayname")
     val sharedWithDisplayName: String? = null,
+
+    @Json(name = "share_with_additional_info")
     val sharedWithAdditionalInfo: String? = null,
+
     val name: String? = null,
+
+    @Json(name = "url")
     val shareLink: String? = null,
+
+    @Json(name = "share_type")
     val shareType: Int? = null,
+
     val permissions: Int? = null,
+
+    @Json(name = "stime")
     val sharedDate: Long? = null,
-    val expirationDate: Long? = null,
+
+    @Json(name = "expiration")
+    val expirationDate: String? = null,
 ) {
     fun toRemoteShare() = RemoteShare(
         id = id ?: "0",
         shareWith = shareWith.orEmpty(),
-        path = path.orEmpty(),
+        path = if (itemType == ItemType.FOLDER.fileValue) path.plus(File.separator) else path.orEmpty(),
         token = token.orEmpty(),
+        itemType = itemType.orEmpty(),
         sharedWithDisplayName = sharedWithDisplayName.orEmpty(),
         sharedWithAdditionalInfo = sharedWithAdditionalInfo.orEmpty(),
         name = name.orEmpty(),
@@ -58,7 +81,11 @@ data class ShareItem(
         shareType = ShareType.values().firstOrNull { it.value == shareType } ?: ShareType.UNKNOWN,
         permissions = permissions ?: DEFAULT_PERMISSION,
         sharedDate = sharedDate ?: INIT_SHARED_DATE,
-        expirationDate = expirationDate ?: INIT_EXPIRATION_DATE_IN_MILLIS,
-        isFolder = path?.endsWith(File.separator) ?: false
+        expirationDate = expirationDate?.let {
+            WebdavUtils.parseResponseDate(it)?.time
+        } ?: INIT_EXPIRATION_DATE_IN_MILLIS,
+        isFolder = itemType?.equals(ItemType.FOLDER.fileValue) ?: false
     )
 }
+
+enum class ItemType(val fileValue: String) { FILE("file"), FOLDER("folder") }
