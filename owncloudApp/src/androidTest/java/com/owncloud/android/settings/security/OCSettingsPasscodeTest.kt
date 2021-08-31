@@ -45,7 +45,15 @@ import org.junit.Rule
 import org.junit.Test
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
+import io.mockk.every
+import io.mockk.mockk
 import nthChildOf
+import org.junit.Before
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import withChildViewCount
 
 class OCSettingsPasscodeTest {
@@ -61,6 +69,26 @@ class OCSettingsPasscodeTest {
     private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
     private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
     private val passCodeToSave = "111111"
+
+    private lateinit var passCodeViewModel: PassCodeViewModel
+
+    @Before
+    fun setUp() {
+        passCodeViewModel = mockk(relaxUnitFun = true)
+
+        stopKoin()
+
+        startKoin {
+            context
+            modules(
+                module(override = true) {
+                    viewModel {
+                        passCodeViewModel
+                    }
+                }
+            )
+        }
+    }
 
     @After
     fun tearDown() {
@@ -128,8 +156,8 @@ class OCSettingsPasscodeTest {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typin
-        //Type incorrect passcodeg
+        //First typing
+        //Type incorrect passcode
         typePasscode(defaultPassCode)
         //Second typing
         typePasscode(wrongPassCode)
@@ -194,6 +222,8 @@ class OCSettingsPasscodeTest {
 
     @Test
     fun deletePasscodeCorrect() {
+        every {passCodeViewModel.checkPassCodeIsValid(any())} returns true
+
         //Save a passcode in Preferences
         storePasscode(passCodeToSave)
 
@@ -208,6 +238,8 @@ class OCSettingsPasscodeTest {
 
     @Test
     fun deletePasscodeIncorrect() {
+        every {passCodeViewModel.checkPassCodeIsValid(any())} returns false
+
         //Save a passcode in Preferences
         storePasscode(passCodeToSave)
 
