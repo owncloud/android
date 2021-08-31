@@ -8,11 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Passcode input misbehaving: [#3342](https://github.com/owncloud/android/issues/3342)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 
 Details
 -------
+
+* Bugfix - Passcode input misbehaving: [#3342](https://github.com/owncloud/android/issues/3342)
+
+   Passcode text fields have been made not selectable once a number is written on them, so that we
+   avoid bugs with the digits of the passcode and the way of entering them.
+
+   https://github.com/owncloud/android/issues/3342
+   https://github.com/owncloud/android/pull/3365
 
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 
