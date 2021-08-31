@@ -28,9 +28,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import org.apache.commons.io.FileUtils
+import timber.log.Timber
 import java.io.File
+import java.util.concurrent.TimeUnit
+import kotlin.system.measureTimeMillis
 
-sealed class LocalStorageProvider(private val rootFolderName: String) {
+sealed class LocalStorageProvider(val rootFolderName: String) {
 
     abstract fun getPrimaryStorageDirectory(): File
 
@@ -47,13 +51,49 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     ) : LocalStorageProvider(rootFolderName) {
 
         override fun getPrimaryStorageDirectory(): File = context.filesDir
+
+        fun migrateLegacyToScopedStorage() {
+            val legacyStorageProvider = LegacyStorageProvider(rootFolderName)
+            val rootLegacyStorage = File(legacyStorageProvider.getRootFolderPath())
+
+            val rootScopedStorage = File(getRootFolderPath())
+
+            val scopedStorageUsableSpace = rootScopedStorage.usableSpace
+            val legacyStorageUsedBytes = FileUtils.sizeOfDirectory(rootLegacyStorage)
+            Timber.d(
+                "Root ${rootLegacyStorage.absolutePath} has ${rootLegacyStorage.listFiles()?.size} files and its size is ${
+                    FileUtils.byteCountToDisplaySize(legacyStorageUsedBytes)
+                } Bytes"
+            )
+            Timber.d(
+                "Current allocatable bytes in scoped storage: ${
+                    FileUtils.byteCountToDisplaySize(scopedStorageUsableSpace)
+                } Bytes"
+            )
+
+            if (scopedStorageUsableSpace < legacyStorageUsedBytes) {
+                Timber.d("There is no space to do an optional migration.")
+            } else {
+                Timber.d("Let's migrate the files to scoped storage inside ${rootScopedStorage.absolutePath}")
+            }
+            val timeInMillis = measureTimeMillis {
+                migrateFileOrFolderToScopedStorage(rootLegacyStorage)
+            }
+            Timber.d("MIGRATED FILES IN ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
+
+        }
+
+        private fun migrateFileOrFolderToScopedStorage(file: File) {
+            Timber.d("Let's migrate ${file.absolutePath} to scoped storage")
+            file.copyRecursively(File(getRootFolderPath(), file.name), overwrite = true)
+        }
     }
 
     /**
      * Return the root path of primary shared/external storage directory for this application.
      * For example: /storage/emulated/0/owncloud
      */
-    private fun getRootFolderPath(): String = getPrimaryStorageDirectory().absolutePath + File.separator + rootFolderName
+    fun getRootFolderPath(): String = getPrimaryStorageDirectory().absolutePath + File.separator + rootFolderName
 
     /**
      * Get local storage path for accountName.

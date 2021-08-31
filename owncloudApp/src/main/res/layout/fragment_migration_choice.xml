@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/owncloud_blue"
+    tools:context=".presentation.ui.migration.MigrationIntroFragment">
+
+    <TextView
+        android:id="@+id/migration_info_title"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_margin"
+        android:textColor="@color/color_accent"
+        app:layout_constraintBottom_toTopOf="@id/migration_info_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        tools:text="Data Migration" />
+
+    <ImageView
+        android:id="@+id/migration_info_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toTopOf="@id/migration_info_subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/migration_info_title" />
+
+    <TextView
+        android:id="@+id/migration_info_subtitle"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
+        android:gravity="center"
+        android:textColor="@color/color_accent"
+        app:layout_constraintBottom_toTopOf="@id/linear_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/migration_info_logo"
+        tools:text="We found 2,6 Gb of data in the external storage. We need to migrate them to the scoped storage to increase security. We can clean the external storage after the migration to avoid duplicity and vulnerabilities." />
+
+    <LinearLayout
+        android:id="@+id/linear_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/migration_info_subtitle">
+
+        <Button
+            android:id="@+id/migration_complete_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_accent"
+            tools:text="Migrate and clean (recommended)" />
+
+        <Button
+            android:id="@+id/migration_partial_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/standard_margin"
+            android:background="@color/owncloud_blue"
+            android:textColor="@color/secondary_button_color"
+            tools:text="Migrate but keep old storage" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
