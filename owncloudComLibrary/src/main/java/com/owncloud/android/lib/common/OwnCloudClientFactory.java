@@ -42,17 +42,9 @@ public class OwnCloudClientFactory {
      */
     public static OwnCloudClient createOwnCloudClient(Uri uri, Context context, boolean followRedirects) {
         OwnCloudClient client = new OwnCloudClient(uri);
-
         client.setFollowRedirects(followRedirects);
-
         HttpClient.setContext(context);
-        retrieveCookiesFromMiddleware(client);
 
         return client;
-    }
-
-    private static void retrieveCookiesFromMiddleware(OwnCloudClient client) {
-        final GetRemoteStatusOperation statusOperation = new GetRemoteStatusOperation();
-        statusOperation.run(client);
     }
 }

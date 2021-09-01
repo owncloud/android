@@ -38,6 +38,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.HttpMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.RandomUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -113,14 +114,17 @@ public class OwnCloudClient extends HttpClient {
             if (mCredentials.getHeaderAuth() != null && method.getRequestHeader(AUTHORIZATION_HEADER) == null) {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
+
+            status = method.execute();
+            stacklog(status, method);
+            /*
             synchronized (mHoldRequests) {
                 while (mHoldRequests) {
                     while (true) {
                         try {
-                            ((String) null).toString();
+                            throw new Exception("Stack log");
                         } catch (Exception e) {
-                            Log.d("+++++++",
-                                    "HATL BEFORE" +
+                            Timber.d( "HATL BEFORE" +
                                     "\nThread: " + Thread.currentThread().getName() +
                                             "\nobject: " + this.toString() +
                                             "\nMethod: " + method.getHttpUrl() +
@@ -134,10 +138,9 @@ public class OwnCloudClient extends HttpClient {
                     mHoldRequests = true;
                     while (mHoldRequests) {
                         try {
-                            ((String) null).toString();
+                            throw new Exception("Stack log");
                         } catch (Exception e) {
-                            Log.d("+++++++",
-                                    "HALT AFTER" +
+                            Timber.d( "HALT AFTER" +
                                     "\nresponsecode: " + Integer.toString(status) +
                                             "\nThread: " + Thread.currentThread().getName() +
                                             "\nobject: " + this.toString() +
@@ -147,7 +150,9 @@ public class OwnCloudClient extends HttpClient {
                         Thread.sleep(40000);
                     }
                 }
+
             }
+            */
 
             if (mFollowRedirects) {
                 status = followRedirection(method).getLastStatus();
@@ -160,6 +165,21 @@ public class OwnCloudClient extends HttpClient {
         } while (repeatWithFreshCredentials);
 
         return status;
+    }
+
+    private void stacklog(int status, HttpBaseMethod method) {
+        try {
+            throw new Exception("Stack log");
+        } catch(Exception e) {
+            Timber.d("\n---------------------------" +
+                    "\nresponsecode: " + status +
+                    "\nThread: " + Thread.currentThread().getName() +
+                    "\nobject: " + this.toString() +
+                    "\nMethod: " + method.toString() +
+                    "\nUrl: " + method.getHttpUrl() +
+                    "\ntrace: " + ExceptionUtils.getStackTrace(e) +
+                    "---------------------------");
+        }
     }
 
     private int executeRedirectedHttpMethod(HttpBaseMethod method) throws Exception {
