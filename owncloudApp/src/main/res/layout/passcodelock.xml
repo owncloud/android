@@ -51,10 +51,31 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:id="@+id/passCodeTxtLayout">
+        android:orientation="vertical">
 
-        <!-- Edit text items will be added here procedurally based on ownBrander settings. -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:id="@+id/passCodeTxtLayout">
+
+            <!-- Edit text items will be added here procedurally based on ownBrander settings. -->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:id="@+id/passCodeTxtLayoutSecondRow">
+
+            <!-- Second row is required for 6 pincode digets or more -->
+
+            <!-- Edit text items will be added here procedurally based on ownBrander settings. -->
+
+        </LinearLayout>
 
     </LinearLayout>
 

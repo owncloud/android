@@ -119,10 +119,24 @@ class PassCodeActivity : BaseActivity() {
 
     private fun inflatePasscodeTxtLine() {
         val passcodeTxtLayout = findViewById<LinearLayout>(R.id.passCodeTxtLayout)
-        for (i in 0 until numberOfPassInputs) {
-            val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
-            passcodeTxtLayout.addView(txt)
-            passCodeEditTexts[i] = txt
+        val passcodeTxtLayoutSecondRow = findViewById<LinearLayout>(R.id.passCodeTxtLayoutSecondRow)
+        if (numberOfPassInputs <= 4) {
+            for (i in 0 until numberOfPassInputs) {
+                val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
+                passcodeTxtLayout.addView(txt)
+                passCodeEditTexts[i] = txt
+            }
+        } else {
+            for (i in 0 until numberOfPassInputs/2) {
+                val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
+                passcodeTxtLayout.addView(txt)
+                passCodeEditTexts[i] = txt
+            }
+            for (i in numberOfPassInputs/2 until numberOfPassInputs) {
+                val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayoutSecondRow, false) as EditText
+                passcodeTxtLayoutSecondRow.addView(txt)
+                passCodeEditTexts[i] = txt
+            }
         }
         passCodeEditTexts[0]?.requestFocus()
         window.setSoftInputMode(
