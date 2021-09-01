@@ -21,11 +21,14 @@
 package com.owncloud.android.presentation.viewmodels.security
 
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.providers.ContextProvider
 
 class PassCodeViewModel(
-    private val preferencesProvider: SharedPreferencesProvider
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val contextProvider: ContextProvider
 ) : ViewModel() {
 
     fun setPassCode(passcode: String) {
@@ -50,6 +53,8 @@ class PassCodeViewModel(
         }
         return isValid
     }
+
+    fun getNumberOfPasscodeDigits() = contextProvider.getInt(R.integer.passcode_digits)
 
     private fun loadPinFromOldFormatIfPossible(): String {
         var pinString = ""

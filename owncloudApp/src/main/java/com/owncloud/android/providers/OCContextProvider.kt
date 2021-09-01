@@ -30,6 +30,8 @@ class OCContextProvider(private val context: Context) : ContextProvider {
 
     override fun getString(id: Int): String = context.resources.getString(id)
 
+    override fun getInt(id: Int): Int = context.resources.getInteger(id)
+
     override fun getContext(): Context = context
 
     override fun isConnected(): Boolean {

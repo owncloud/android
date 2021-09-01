@@ -43,7 +43,6 @@ import timber.log.Timber;
 import java.io.File;
 
 import static com.owncloud.android.presentation.ui.security.PassCodeActivity.PREFERENCE_PASSCODE;
-import static com.owncloud.android.presentation.ui.security.PassCodeActivity.numberOfPassInputs;
 
 public class ManageSpaceActivity extends AppCompatActivity {
 
@@ -108,10 +107,10 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
 
             final String passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, null);
-            final String[] passCodeDigits = new String[PassCodeActivity.numberOfPassInputs];
+            final String[] passCodeDigits = new String[getBaseContext().getResources().getInteger(R.integer.passcode_digits)];
 
             if (passCodeEnable) {
-                for (int i = 0; i < numberOfPassInputs && passCodeEnable; i++) {
+                for (int i = 0; i < getBaseContext().getResources().getInteger(R.integer.passcode_digits) && passCodeEnable; i++) {
                     passCodeDigits[i] = Character.toString(passcodeString.charAt(i));
                 }
             }
@@ -131,7 +130,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
             result = result && appPrefsEditor.commit();
 
             final StringBuilder newPassCodeString = new StringBuilder();
-            for(int i = 0; i < numberOfPassInputs && passCodeEnable; i++) {
+            for(int i = 0; i < getBaseContext().getResources().getInteger(R.integer.passcode_digits) && passCodeEnable; i++) {
                 newPassCodeString.append(passCodeDigits[i]);
             }
             appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE, newPassCodeString.toString());

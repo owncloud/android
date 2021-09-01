@@ -88,6 +88,8 @@ class OCSettingsPasscodeTest {
                 }
             )
         }
+
+        every { passCodeViewModel.getNumberOfPasscodeDigits() } returns 4
     }
 
     @After
@@ -112,7 +114,7 @@ class OCSettingsPasscodeTest {
 
         // Check if required amount of input fields are actually displayed
         onView(withId(R.id.passCodeTxtLayout)).check(matches(isDisplayed()))
-        onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(PassCodeActivity.numberOfPassInputs, withId(R.id.passCodeEditText))))
+        onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(passCodeViewModel.getNumberOfPasscodeDigits(), withId(R.id.passCodeEditText))))
 
         with(R.id.cancel) {
             isDisplayed(true)
@@ -265,14 +267,14 @@ class OCSettingsPasscodeTest {
     }
 
     private fun typePasscode(digits: Array<Char>) {
-        for (i in 0 until PassCodeActivity.numberOfPassInputs)
+        for (i in 0 until passCodeViewModel.getNumberOfPasscodeDigits())
             onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText(digits[i].toString()))
     }
 
     private fun storePasscode(passcode: String = passCodeToSave) {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
 
-        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, PassCodeActivity.numberOfPassInputs))
+        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, passCodeViewModel.getNumberOfPasscodeDigits()))
         appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         appPrefs.apply()
     }

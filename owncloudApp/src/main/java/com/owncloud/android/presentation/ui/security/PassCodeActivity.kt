@@ -61,8 +61,8 @@ class PassCodeActivity : BaseActivity() {
     private lateinit var passCodeHdr: TextView
     private lateinit var passCodeHdrExplanation: TextView
     private lateinit var passCodeError: TextView
-    private val passCodeEditTexts = arrayOfNulls<EditText>(numberOfPassInputs)
-    private var passCodeDigits: Array<String?> = arrayOfNulls(numberOfPassInputs)
+    private lateinit var passCodeEditTexts: Array<EditText?>
+    private lateinit var passCodeDigits: Array<String?>
     private var confirmingPassCode = false
     private var bChange = true // to control that only one blocks jump
 
@@ -85,6 +85,9 @@ class PassCodeActivity : BaseActivity() {
         passCodeHdr = findViewById(R.id.header)
         passCodeHdrExplanation = findViewById(R.id.explanation)
         passCodeError = findViewById(R.id.error)
+
+        passCodeEditTexts = arrayOfNulls(passCodeViewModel.getNumberOfPasscodeDigits())
+        passCodeDigits = arrayOfNulls(passCodeViewModel.getNumberOfPasscodeDigits())
 
         // Allow or disallow touches with other visible windows
         passcodeLockLayout.filterTouchesWhenObscured =
@@ -131,7 +134,7 @@ class PassCodeActivity : BaseActivity() {
 
     private fun inflatePasscodeTxtLine() {
         val passcodeTxtLayout = findViewById<LinearLayout>(R.id.passCodeTxtLayout)
-        for (i in 0 until numberOfPassInputs) {
+        for (i in 0 until passCodeViewModel.getNumberOfPasscodeDigits()) {
             val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
             passcodeTxtLayout.addView(txt)
             passCodeEditTexts[i] = txt
@@ -162,8 +165,9 @@ class PassCodeActivity : BaseActivity() {
      * Binds the appropiate listeners to the input boxes receiving each digit of the pass code.
      */
     protected fun setTextListeners() {
-        for (i in 0 until numberOfPassInputs) {
-            passCodeEditTexts[i]?.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPassInputs - 1))
+        val numberOfPasscodeDigits = passCodeViewModel.getNumberOfPasscodeDigits()
+        for (i in 0 until numberOfPasscodeDigits) {
+            passCodeEditTexts[i]?.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPasscodeDigits - 1))
             if (i > 0) {
                 passCodeEditTexts[i]?.setOnKeyListener { v: View, keyCode: Int, _: KeyEvent? ->
                     if (keyCode == KeyEvent.KEYCODE_DEL && bChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
@@ -321,7 +325,7 @@ class PassCodeActivity : BaseActivity() {
     protected fun savePassCodeAndExit() {
         val resultIntent = Intent()
         val passCodeString = StringBuilder()
-        for (i in 0 until numberOfPassInputs) {
+        for (i in 0 until passCodeViewModel.getNumberOfPasscodeDigits()) {
             passCodeString.append(passCodeDigits[i])
         }
         passCodeViewModel.setPassCode(passCodeString.toString())
@@ -401,7 +405,6 @@ class PassCodeActivity : BaseActivity() {
         // NOTE: This is required to read the legacy pin code format
         const val PREFERENCE_PASSCODE_D = "PrefPinCode"
 
-        const val numberOfPassInputs = 4
         private const val KEY_PASSCODE_DIGITS = "PASSCODE_DIGITS"
         private const val KEY_CONFIRMING_PASSCODE = "CONFIRMING_PASSCODE"
     }
