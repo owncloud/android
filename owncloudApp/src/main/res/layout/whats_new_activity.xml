@@ -50,8 +50,8 @@
             <ImageButton
                 android:id="@+id/forward"
                 style="@style/Button.Borderless"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:padding="@dimen/standard_padding"
                 android:src="@drawable/ic_arrow_forward" />

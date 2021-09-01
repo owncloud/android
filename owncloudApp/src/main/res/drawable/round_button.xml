@@ -3,5 +3,5 @@
     android:shape="oval">
 
     <solid android:color="@color/owncloud_blue_accent" />
-    <size android:width="64dp" android:height="64dp" />
+    <size android:width="48dp" android:height="48dp" />
 </shape>
