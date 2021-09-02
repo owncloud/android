@@ -31,6 +31,8 @@ package com.owncloud.android.lib.resources.shares
 import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.HttpConstants.PARAM_FORMAT
+import com.owncloud.android.lib.common.http.HttpConstants.VALUE_FORMAT
 import com.owncloud.android.lib.common.http.methods.nonwebdav.PostMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -127,7 +129,7 @@ class CreateRemoteShareOperation(
         return result
     }
 
-    private fun createFormBodyBuilder(): FormBody.Builder {
+    private fun createFormBodyBuilder(): FormBody {
 
         val formBodyBuilder = FormBody.Builder()
             .add(PARAM_PATH, remoteFilePath)
@@ -156,15 +158,13 @@ class CreateRemoteShareOperation(
             formBodyBuilder.add(PARAM_PERMISSIONS, permissions.toString())
         }
 
-        return formBodyBuilder
+        return formBodyBuilder.build()
     }
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
         val requestUri = buildRequestUri(client.baseUri)
 
-        val formBodyBuilder = createFormBodyBuilder()
-
-        val postMethod = PostMethod(URL(requestUri.toString()), formBodyBuilder.build()).apply {
+        val postMethod = PostMethod(URL(requestUri.toString()), createFormBodyBuilder()).apply {
             setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8)
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }
@@ -173,10 +173,10 @@ class CreateRemoteShareOperation(
             val status = client.executeHttpMethod(postMethod)
             val response = postMethod.getResponseBodyAsString()
 
-            if (!isSuccess(status)) {
-                onResultUnsuccessful(postMethod, response, status)
-            } else {
+            if (isSuccess(status)) {
                 onRequestSuccessful(response)
+            } else {
+                onResultUnsuccessful(postMethod, response, status)
             }
 
         } catch (e: Exception) {
@@ -193,7 +193,7 @@ class CreateRemoteShareOperation(
         private const val OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/shares"
 
         //Arguments - names
-        private const val PARAM_FORMAT = "format"
+
         private const val PARAM_NAME = "name"
         private const val PARAM_EXPIRATION_DATE = "expireDate"
         private const val PARAM_PATH = "path"
@@ -204,7 +204,6 @@ class CreateRemoteShareOperation(
         private const val PARAM_PERMISSIONS = "permissions"
 
         //Arguments - constant values
-        private const val VALUE_FORMAT = "json"
         private const val FORMAT_EXPIRATION_DATE = "yyyy-MM-dd"
     }
 }

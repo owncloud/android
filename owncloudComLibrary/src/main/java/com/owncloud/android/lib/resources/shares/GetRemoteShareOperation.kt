@@ -28,6 +28,8 @@ package com.owncloud.android.lib.resources.shares
 import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.HttpConstants.PARAM_FORMAT
+import com.owncloud.android.lib.common.http.HttpConstants.VALUE_FORMAT
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -108,15 +110,7 @@ class GetRemoteShareOperation(private val remoteId: String) : RemoteOperation<Sh
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK
 
     companion object {
-
         //OCS Route
         private const val OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/shares"
-
-        //Arguments - names
-        private const val PARAM_FORMAT = "format"
-
-        //Arguments - constant values
-        private const val VALUE_FORMAT = "json"
-
     }
 }
