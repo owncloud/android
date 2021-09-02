@@ -20,13 +20,16 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.providers.ContextProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -36,11 +39,28 @@ import org.junit.Test
 class PassCodeViewModelTest : ViewModelTest() {
     private lateinit var passCodeViewModel: PassCodeViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
+    private lateinit var contextProvider: ContextProvider
 
     @Before
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
-        passCodeViewModel = PassCodeViewModel(preferencesProvider)
+        contextProvider = mockk(relaxUnitFun = true)
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider)
+    }
+
+    @Test
+    fun `get passcode - ok`() {
+        val passCode = "1111"
+
+        every { preferencesProvider.getString(any(), any()) } returns passCode
+
+        val getPassCode = passCodeViewModel.getPassCode()
+
+        assertEquals(passCode, getPassCode)
+
+        verify(exactly = 1) {
+            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+        }
     }
 
     @Test
@@ -143,6 +163,21 @@ class PassCodeViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+        }
+    }
+
+    @Test
+    fun `get number of passcode digits - ok`() {
+        val numberDigits = 4
+
+        every { contextProvider.getInt(any()) } returns numberDigits
+
+        val getNumberDigits = passCodeViewModel.getNumberOfPasscodeDigits()
+
+        assertEquals(numberDigits, getNumberDigits)
+
+        verify(exactly = 1) {
+            contextProvider.getInt(R.integer.passcode_digits)
         }
     }
 
