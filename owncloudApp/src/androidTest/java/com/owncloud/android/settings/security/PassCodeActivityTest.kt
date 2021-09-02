@@ -56,7 +56,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import withChildViewCount
 
-class OCSettingsPasscodeTest {
+class PassCodeActivityTest {
 
     @Rule
     @JvmField
