@@ -68,6 +68,14 @@ public class SingleSessionManager {
         sUserAgent = userAgent;
     }
 
+    private static OwnCloudClient createOwnCloudClient(Uri uri, Context context, boolean followRedirects) {
+        OwnCloudClient client = new OwnCloudClient(uri);
+        client.setFollowRedirects(followRedirects);
+        HttpClient.setContext(context);
+
+        return client;
+    }
+
     public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) throws OperationCanceledException,
             AuthenticatorException, IOException {
 
@@ -104,7 +112,7 @@ public class SingleSessionManager {
 
         if (client == null) {
             // no client to reuse - create a new one
-            client = OwnCloudClientFactory.createOwnCloudClient(
+            client = createOwnCloudClient(
                     account.getBaseUri(),
                     context.getApplicationContext(),
                     true);    // TODO remove dependency on OwnCloudClientFactory
