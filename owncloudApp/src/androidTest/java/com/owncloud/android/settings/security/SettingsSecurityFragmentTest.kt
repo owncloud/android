@@ -42,6 +42,7 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityF
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
@@ -73,6 +74,7 @@ class SettingsSecurityFragmentTest {
     private lateinit var biometricManager: BiometricManager
 
     private lateinit var securityViewModel: SettingsSecurityViewModel
+    private lateinit var passCodeViewModel: PassCodeViewModel
     private lateinit var context: Context
 
     private val patternValue = "1234"
@@ -81,6 +83,7 @@ class SettingsSecurityFragmentTest {
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         securityViewModel = mockk(relaxUnitFun = true)
+        passCodeViewModel = mockk(relaxUnitFun = true)
         mockkStatic(BiometricManager::class)
         biometricManager = mockk(relaxUnitFun = true)
 
@@ -95,9 +98,15 @@ class SettingsSecurityFragmentTest {
                     viewModel {
                         securityViewModel
                     }
+                    viewModel {
+                        passCodeViewModel
+                    }
                 }
             )
         }
+
+        every { passCodeViewModel.getPassCode() } returns "1111"
+        every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
 
         Intents.init()
     }
