@@ -56,7 +56,7 @@ class PassCodeViewModel(
         return isValid
     }
 
-    fun getNumberOfPasscodeDigits() = contextProvider.getInt(R.integer.passcode_digits)
+    fun getNumberOfPassCodeDigits() = contextProvider.getInt(R.integer.passcode_digits)
 
     private fun loadPinFromOldFormatIfPossible(): String? {
         var pinString = ""

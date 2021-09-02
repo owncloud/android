@@ -172,7 +172,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
         every { contextProvider.getInt(any()) } returns numberDigits
 
-        val getNumberDigits = passCodeViewModel.getNumberOfPasscodeDigits()
+        val getNumberDigits = passCodeViewModel.getNumberOfPassCodeDigits()
 
         assertEquals(numberDigits, getNumberDigits)
 

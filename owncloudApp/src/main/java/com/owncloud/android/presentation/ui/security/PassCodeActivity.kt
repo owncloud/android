@@ -86,8 +86,8 @@ class PassCodeActivity : BaseActivity() {
         passCodeHdrExplanation = findViewById(R.id.explanation)
         passCodeError = findViewById(R.id.error)
 
-        passCodeEditTexts = arrayOfNulls(passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPasscodeDigits())
-        passCodeDigits = arrayOfNulls((passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPasscodeDigits()))
+        passCodeEditTexts = arrayOfNulls(passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
+        passCodeDigits = arrayOfNulls((passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits()))
 
         // Allow or disallow touches with other visible windows
         passcodeLockLayout.filterTouchesWhenObscured =
@@ -139,8 +139,8 @@ class PassCodeActivity : BaseActivity() {
     private fun inflatePasscodeTxtLine() {
         val passcodeTxtLayout = findViewById<LinearLayout>(R.id.passCodeTxtLayout)
         println("PACOOOOO1 " + passCodeViewModel.getPassCode()?.length)
-        println("PACOOOOO2 " + passCodeViewModel.getNumberOfPasscodeDigits())
-        for (i in 0 until (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPasscodeDigits())) {
+        println("PACOOOOO2 " + passCodeViewModel.getNumberOfPassCodeDigits())
+        for (i in 0 until (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())) {
             val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
             passcodeTxtLayout.addView(txt)
             passCodeEditTexts[i] = txt
@@ -171,7 +171,7 @@ class PassCodeActivity : BaseActivity() {
      * Binds the appropiate listeners to the input boxes receiving each digit of the pass code.
      */
     protected fun setTextListeners() {
-        val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPasscodeDigits())
+        val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
             passCodeEditTexts[i]?.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPasscodeDigits - 1))
             if (i > 0) {
@@ -216,7 +216,7 @@ class PassCodeActivity : BaseActivity() {
                 /// pass code accepted in request, user is allowed to access the app
                 passCodeError.visibility = View.INVISIBLE
                 hideSoftKeyboard()
-                if (passCodeViewModel.getPassCode()!!.length < passCodeViewModel.getNumberOfPasscodeDigits()) {
+                if (passCodeViewModel.getPassCode()!!.length < passCodeViewModel.getNumberOfPassCodeDigits()) {
                     passCodeViewModel.removePassCode()
                     val intent = Intent(baseContext, PassCodeActivity::class.java)
                     intent.action = ACTION_REQUEST_WITH_RESULT
@@ -340,7 +340,7 @@ class PassCodeActivity : BaseActivity() {
     protected fun savePassCodeAndExit() {
         val resultIntent = Intent()
         val passCodeString = StringBuilder()
-        for (i in 0 until passCodeViewModel.getNumberOfPasscodeDigits()) {
+        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
             passCodeString.append(passCodeDigits[i])
         }
         passCodeViewModel.setPassCode(passCodeString.toString())
