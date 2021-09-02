@@ -86,8 +86,8 @@ class PassCodeActivity : BaseActivity() {
         passCodeHdrExplanation = findViewById(R.id.explanation)
         passCodeError = findViewById(R.id.error)
 
-        passCodeEditTexts = arrayOfNulls(passCodeViewModel.getNumberOfPasscodeDigits())
-        passCodeDigits = arrayOfNulls(passCodeViewModel.getNumberOfPasscodeDigits())
+        passCodeEditTexts = arrayOfNulls(passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPasscodeDigits())
+        passCodeDigits = arrayOfNulls((passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPasscodeDigits()))
 
         // Allow or disallow touches with other visible windows
         passcodeLockLayout.filterTouchesWhenObscured =
@@ -111,9 +111,13 @@ class PassCodeActivity : BaseActivity() {
                 //the app was in the passcodeconfirmation
                 requestPassCodeConfirmation()
             } else {
-                /// pass code preference has just been activated in Preferences;
-                // will receive and confirm pass code value
-                passCodeHdr.text = getString(R.string.pass_code_configure_your_pass_code)
+                if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) {
+                    passCodeHdr.text = getString(R.string.pass_code_configure_your_pass_code_migration)
+                } else {
+                    /// pass code preference has just been activated in Preferences;
+                    // will receive and confirm pass code value
+                    passCodeHdr.text = getString(R.string.pass_code_configure_your_pass_code)
+                }
                 //mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
                 // TODO choose a header, check iOS
                 passCodeHdrExplanation.visibility = View.VISIBLE
@@ -134,7 +138,9 @@ class PassCodeActivity : BaseActivity() {
 
     private fun inflatePasscodeTxtLine() {
         val passcodeTxtLayout = findViewById<LinearLayout>(R.id.passCodeTxtLayout)
-        for (i in 0 until passCodeViewModel.getNumberOfPasscodeDigits()) {
+        println("PACOOOOO1 " + passCodeViewModel.getPassCode()?.length)
+        println("PACOOOOO2 " + passCodeViewModel.getNumberOfPasscodeDigits())
+        for (i in 0 until (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPasscodeDigits())) {
             val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
             passcodeTxtLayout.addView(txt)
             passCodeEditTexts[i] = txt
@@ -165,7 +171,7 @@ class PassCodeActivity : BaseActivity() {
      * Binds the appropiate listeners to the input boxes receiving each digit of the pass code.
      */
     protected fun setTextListeners() {
-        val numberOfPasscodeDigits = passCodeViewModel.getNumberOfPasscodeDigits()
+        val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPasscodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
             passCodeEditTexts[i]?.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPasscodeDigits - 1))
             if (i > 0) {
@@ -210,6 +216,13 @@ class PassCodeActivity : BaseActivity() {
                 /// pass code accepted in request, user is allowed to access the app
                 passCodeError.visibility = View.INVISIBLE
                 hideSoftKeyboard()
+                if (passCodeViewModel.getPassCode()!!.length < passCodeViewModel.getNumberOfPasscodeDigits()) {
+                    passCodeViewModel.removePassCode()
+                    val intent = Intent(baseContext, PassCodeActivity::class.java)
+                    intent.action = ACTION_REQUEST_WITH_RESULT
+                    intent.putExtra(EXTRAS_MIGRATION, true)
+                    startActivity(intent)
+                }
                 finish()
             } else {
                 showErrorAndRestart(
@@ -241,8 +254,10 @@ class PassCodeActivity : BaseActivity() {
                 /// confirmed: user typed the same pass code twice
                 savePassCodeAndExit()
             } else {
+                val headerMessage = if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) R.string.pass_code_configure_your_pass_code_migration
+                else R.string.pass_code_configure_your_pass_code
                 showErrorAndRestart(
-                    R.string.pass_code_mismatch, R.string.pass_code_configure_your_pass_code, View.VISIBLE
+                    R.string.pass_code_mismatch, headerMessage, View.VISIBLE
                 )
             }
         }
@@ -407,5 +422,7 @@ class PassCodeActivity : BaseActivity() {
 
         private const val KEY_PASSCODE_DIGITS = "PASSCODE_DIGITS"
         private const val KEY_CONFIRMING_PASSCODE = "CONFIRMING_PASSCODE"
+
+        private const val EXTRAS_MIGRATION = "MIGRATION"
     }
 }

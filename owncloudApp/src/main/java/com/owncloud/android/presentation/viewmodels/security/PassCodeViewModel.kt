@@ -31,6 +31,8 @@ class PassCodeViewModel(
     private val contextProvider: ContextProvider
 ) : ViewModel() {
 
+    fun getPassCode() = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+
     fun setPassCode(passcode: String) {
         preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
@@ -42,7 +44,7 @@ class PassCodeViewModel(
     }
 
     fun checkPassCodeIsValid(passCodeDigits: Array<String?>): Boolean {
-        val passCodeString = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+        val passCodeString = getPassCode()
         if (passCodeString.isNullOrEmpty()) return false
         var isValid = true
         var i = 0
@@ -56,11 +58,12 @@ class PassCodeViewModel(
 
     fun getNumberOfPasscodeDigits() = contextProvider.getInt(R.integer.passcode_digits)
 
-    private fun loadPinFromOldFormatIfPossible(): String {
+    private fun loadPinFromOldFormatIfPossible(): String? {
         var pinString = ""
-        for (i in 1..4)
-            pinString += preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, null)
-
-        return pinString
+        for (i in 1..4) {
+            val pinChar = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, null)
+            pinChar?.let { pinString += pinChar }
+        }
+        return if (pinString == "") null else pinString
     }
 }
