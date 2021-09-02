@@ -161,11 +161,11 @@ class UpdateRemoteShareOperation
 
         // Parameters to update
         if (name != null) {
-            formBodyBuilder.add(PARAM_NAME, name!!)
+            formBodyBuilder.add(PARAM_NAME, name.orEmpty())
         }
 
         if (password != null) {
-            formBodyBuilder.add(PARAM_PASSWORD, password!!)
+            formBodyBuilder.add(PARAM_PASSWORD, password.orEmpty())
         }
 
         if (expirationDateInMillis < INITIAL_EXPIRATION_DATE_IN_MILLIS) {

@@ -126,10 +126,18 @@ class CreateRemoteShareOperation(
         Timber.d("Successful response: $response")
         result.data = parseResponse(response!!)
         Timber.d("*** Creating new remote share operation completed ")
-        return result
+
+        val emptyShare = result.data.shares.first()
+
+        return if (retrieveShareDetails) {
+            // retrieve more info - PUT only returns the index of the new share
+            GetRemoteShareOperation(emptyShare.id).execute(client)
+        } else {
+            result
+        }
     }
 
-    private fun createFormBodyBuilder(): FormBody {
+    private fun createFormBody(): FormBody {
 
         val formBodyBuilder = FormBody.Builder()
             .add(PARAM_PATH, remoteFilePath)
@@ -164,7 +172,7 @@ class CreateRemoteShareOperation(
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
         val requestUri = buildRequestUri(client.baseUri)
 
-        val postMethod = PostMethod(URL(requestUri.toString()), createFormBodyBuilder()).apply {
+        val postMethod = PostMethod(URL(requestUri.toString()), createFormBody()).apply {
             setRequestHeader(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.CONTENT_TYPE_URLENCODED_UTF8)
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }
