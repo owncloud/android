@@ -33,7 +33,7 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.PassCodeManager;
+import com.owncloud.android.presentation.ui.security.PassCodeManager;
 import com.owncloud.android.authentication.PatternManager;
 import timber.log.Timber;
 
