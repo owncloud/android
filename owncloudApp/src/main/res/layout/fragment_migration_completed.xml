@@ -8,31 +8,31 @@
     tools:context=".presentation.ui.migration.MigrationCompletedFragment">
 
     <TextView
-        android:id="@+id/migration_info_title"
+        android:id="@+id/migration_completed_title"
         style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_margin"
         android:text="@string/scoped_storage_wizard_title"
         android:textColor="@color/color_accent"
-        app:layout_constraintBottom_toTopOf="@id/migration_info_logo"
+        app:layout_constraintBottom_toTopOf="@id/migration_completed_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <ImageView
-        android:id="@+id/migration_info_logo"
+        android:id="@+id/migration_completed_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/logo"
-        app:layout_constraintBottom_toTopOf="@id/migration_info_subtitle"
+        app:layout_constraintBottom_toTopOf="@id/migration_completed_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_info_title" />
+        app:layout_constraintTop_toBottomOf="@id/migration_completed_title" />
 
     <TextView
-        android:id="@+id/migration_info_subtitle"
+        android:id="@+id/migration_completed_subtitle"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -40,13 +40,13 @@
         android:gravity="center"
         android:text="@string/scoped_storage_wizard_migration_completed"
         android:textColor="@color/color_accent"
-        app:layout_constraintBottom_toTopOf="@id/migration_info_button"
+        app:layout_constraintBottom_toTopOf="@id/migration_completed_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_info_logo" />
+        app:layout_constraintTop_toBottomOf="@id/migration_completed_logo" />
 
     <Button
-        android:id="@+id/migration_info_button"
+        android:id="@+id/migration_completed_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
@@ -55,5 +55,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_info_subtitle" />
+        app:layout_constraintTop_toBottomOf="@id/migration_completed_subtitle" />
 </androidx.constraintlayout.widget.ConstraintLayout>

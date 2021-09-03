@@ -24,16 +24,14 @@ import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
-import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MigrationCompletedFragment : Fragment(R.layout.fragment_migration_completed) {
-
-    private val migrationViewModel: MigrationViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.findViewById<Button>(R.id.migration_completed_button)?.setOnClickListener {
+            activity?.finish()
+        }
     }
-
 }

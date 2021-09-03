@@ -52,24 +52,24 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/standard_margin"
         android:progressTint="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/migration_partial_button"
+        app:layout_constraintBottom_toTopOf="@id/migration_progress_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/migration_info_subtitle"
         tools:progress="25" />
 
     <Button
-        android:id="@+id/migration_partial_button"
+        android:id="@+id/migration_progress_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
         android:layout_marginTop="@dimen/standard_margin"
         android:background="@color/color_accent"
-        android:enabled="false"
+        android:enabled="true"
+        android:text="@string/scoped_storage_wizard_migration_in_progress_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_progress"
-        tools:text="Everything done!" />
+        app:layout_constraintTop_toBottomOf="@id/migration_progress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
