@@ -165,6 +165,7 @@ class PassCodeActivity : BaseActivity() {
             if (i > 0) {
                 passCodeEditTexts[i]?.setOnKeyListener { v: View, keyCode: Int, _: KeyEvent? ->
                     if (keyCode == KeyEvent.KEYCODE_DEL && bChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
+                        passCodeEditTexts[i - 1]?.isEnabled = true
                         passCodeEditTexts[i - 1]?.setText("")
                         passCodeEditTexts[i - 1]?.requestFocus()
                         if (!confirmingPassCode) {
@@ -286,6 +287,7 @@ class PassCodeActivity : BaseActivity() {
      */
     protected fun clearBoxes() {
         for (passCodeEditText in passCodeEditTexts) {
+            passCodeEditText?.isEnabled = true
             passCodeEditText?.setText("")
         }
         passCodeEditTexts[0]?.requestFocus()
@@ -358,6 +360,7 @@ class PassCodeActivity : BaseActivity() {
                     passCodeDigits[index] = passCodeEditTexts[index]?.text.toString()
                 }
                 passCodeEditTexts[next()]?.requestFocus()
+                passCodeEditTexts[index]?.isEnabled = false
                 if (lastOne) {
                     processFullPassCode()
                 }
