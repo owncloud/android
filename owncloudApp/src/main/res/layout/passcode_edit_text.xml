@@ -4,4 +4,5 @@
     android:id="@+id/passCodeEditText"
     style="@style/PassCodeStyle"
     android:cursorVisible="true"
+    android:layout_width="32dp"
     android:imeOptions="flagNoExtractUi"/>
