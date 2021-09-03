@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 34,
-    "identityHash": "8f6b585f5d4ba3df513d9d9f4cc9053f",
+    "identityHash": "23b7b67de0e6641230799a550a78bde9",
     "entities": [
       {
         "tableName": "ocshares",
@@ -335,7 +335,7 @@
       },
       {
         "tableName": "folder_backup",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`accountName` TEXT NOT NULL, `behavior` TEXT NOT NULL, `sourcePath` TEXT NOT NULL, `uploadPath` TEXT NOT NULL, `wifiOnly` INTEGER NOT NULL, `name` TEXT NOT NULL, `lastSyncTimestamp` INTEGER NOT NULL, `syncInterval` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`accountName` TEXT NOT NULL, `behavior` TEXT NOT NULL, `sourcePath` TEXT NOT NULL, `uploadPath` TEXT NOT NULL, `wifiOnly` INTEGER NOT NULL, `name` TEXT NOT NULL, `lastSyncTimestamp` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "accountName",
@@ -380,12 +380,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "syncInterval",
-            "columnName": "syncInterval",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -405,7 +399,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8f6b585f5d4ba3df513d9d9f4cc9053f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '23b7b67de0e6641230799a550a78bde9')"
     ]
   }
 }
