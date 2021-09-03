@@ -160,7 +160,8 @@ class SettingsVideoUploadsViewModel(
         wifiOnly: Boolean? = _videoUploads.value?.wifiOnly,
         sourcePath: String? = _videoUploads.value?.sourcePath,
         behavior: FolderBackUpConfiguration.Behavior? = _videoUploads.value?.behavior,
-        timestamp: Long? = _videoUploads.value?.lastSyncTimestamp
+        timestamp: Long? = _videoUploads.value?.lastSyncTimestamp,
+        syncInterval: FolderBackUpConfiguration.SyncIntervals? = _videoUploads.value?.syncInterval
     ): FolderBackUpConfiguration =
         FolderBackUpConfiguration(
             accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
@@ -169,6 +170,7 @@ class SettingsVideoUploadsViewModel(
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
             lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
-            name = _videoUploads.value?.name ?: videoUploadsName
+            name = _videoUploads.value?.name ?: videoUploadsName,
+            syncInterval = syncInterval ?: FolderBackUpConfiguration.SyncIntervals.FIFTEEN_MINUTES
         )
 }

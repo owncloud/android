@@ -132,6 +132,16 @@ class SettingsPictureUploadsViewModel(
         }
     }
 
+    fun handleSelectSyncInterval(intervalString: String) {
+        val interval = FolderBackUpConfiguration.SyncIntervals.fromString(intervalString)
+
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            savePictureUploadsConfigurationUseCase.execute(
+                SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(syncInterval = interval))
+            )
+        }
+    }
+
     fun handleSelectPictureUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
         var previousSourcePath = _pictureUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
@@ -160,6 +170,7 @@ class SettingsPictureUploadsViewModel(
         wifiOnly: Boolean? = _pictureUploads.value?.wifiOnly,
         sourcePath: String? = _pictureUploads.value?.sourcePath,
         behavior: FolderBackUpConfiguration.Behavior? = _pictureUploads.value?.behavior,
+        syncInterval: FolderBackUpConfiguration.SyncIntervals? = _pictureUploads.value?.syncInterval,
         timestamp: Long? = _pictureUploads.value?.lastSyncTimestamp
     ): FolderBackUpConfiguration =
         FolderBackUpConfiguration(
@@ -169,6 +180,7 @@ class SettingsPictureUploadsViewModel(
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
             lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
-            name = _pictureUploads.value?.name ?: pictureUploadsName
+            name = _pictureUploads.value?.name ?: pictureUploadsName,
+            syncInterval = syncInterval ?: FolderBackUpConfiguration.SyncIntervals.FIFTEEN_MINUTES
         )
 }

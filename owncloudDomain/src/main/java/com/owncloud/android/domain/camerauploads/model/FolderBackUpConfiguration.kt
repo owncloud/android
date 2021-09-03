@@ -18,6 +18,8 @@
  */
 package com.owncloud.android.domain.camerauploads.model
 
+import android.content.SyncContext
+
 data class FolderBackUpConfiguration(
     val accountName: String,
     val behavior: Behavior,
@@ -25,6 +27,7 @@ data class FolderBackUpConfiguration(
     val uploadPath: String,
     val wifiOnly: Boolean,
     val lastSyncTimestamp: Long,
+    val syncInterval: SyncIntervals,
     val name: String,
 ) {
 
@@ -45,6 +48,23 @@ data class FolderBackUpConfiguration(
                     MOVE
                 } else {
                     COPY
+                }
+            }
+        }
+    }
+
+    enum class SyncIntervals {
+        FIFTEEN_MINUTES, ONE_HOUR, FOUR_HOURS, TWELVE_HOURS;
+
+        companion object {
+
+            fun fromString(string: String): SyncIntervals {
+                return when (string) {
+                    "FIFTEEN_MINUTES" -> FIFTEEN_MINUTES
+                    "ONE_HOUR" -> ONE_HOUR
+                    "FOUR_HOURS" -> FOUR_HOURS
+                    "TWELVE_HOURS" -> TWELVE_HOURS
+                    else -> FIFTEEN_MINUTES
                 }
             }
         }

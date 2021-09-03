@@ -66,7 +66,8 @@ class FolderBackupLocalDataSourceImpl(
             uploadPath = uploadPath,
             wifiOnly = wifiOnly,
             lastSyncTimestamp = lastSyncTimestamp,
-            name = name
+            name = name,
+            syncInterval = FolderBackUpConfiguration.SyncIntervals.fromString(syncInterval)
         )
 
     private fun FolderBackUpConfiguration.toEntity(): FolderBackUpEntity =
@@ -77,6 +78,7 @@ class FolderBackupLocalDataSourceImpl(
             uploadPath = uploadPath,
             wifiOnly = wifiOnly,
             name = name,
-            lastSyncTimestamp = lastSyncTimestamp
+            lastSyncTimestamp = lastSyncTimestamp,
+            syncInterval = syncInterval.toString()
         )
 }

@@ -41,6 +41,7 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_EN
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_LAST_SYNC
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SYNC_INTERVAL
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.extensions.showAlertDialog
@@ -61,6 +62,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     private var prefPictureUploadsSourcePath: Preference? = null
     private var prefPictureUploadsBehaviour: ListPreference? = null
     private var prefPictureUploadsAccount: ListPreference? = null
+    private var prefPictureUploadsSyncInterval: ListPreference? = null
     private var prefPictureUploadsLastSync: Preference? = null
 
     private val selectPictureUploadsPathLauncher =
@@ -96,6 +98,21 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             entries = picturesViewModel.getLoggedAccountNames()
             entryValues = picturesViewModel.getLoggedAccountNames()
         }
+        prefPictureUploadsSyncInterval = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_SYNC_INTERVAL)?.apply {
+            entries =
+                listOf(
+                    getString(R.string.prefs_camera_upload_sync_interval_fifteen_minutes_value),
+                    getString(R.string.prefs_camera_upload_sync_interval_one_hour_value),
+                    getString(R.string.prefs_camera_upload_sync_interval_four_hours_value),
+                    getString(R.string.prefs_camera_upload_sync_interval_twelve_hours_value)
+                ).toTypedArray()
+            entryValues = listOf(
+                FolderBackUpConfiguration.SyncIntervals.FIFTEEN_MINUTES.name,
+                FolderBackUpConfiguration.SyncIntervals.ONE_HOUR.name,
+                FolderBackUpConfiguration.SyncIntervals.FOUR_HOURS.name,
+                FolderBackUpConfiguration.SyncIntervals.TWELVE_HOURS.name,
+            ).toTypedArray()
+        }
 
         val comment = getString(R.string.prefs_camera_upload_source_path_title_required)
         prefPictureUploadsSourcePath?.title = String.format(prefPictureUploadsSourcePath?.title.toString(), comment)
@@ -119,6 +136,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                 prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
                 prefPictureUploadsBehaviour?.value = it.behavior.name
                 prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
+                prefPictureUploadsSyncInterval?.value = it.syncInterval.name
             } ?: resetFields()
         })
     }
@@ -199,6 +217,12 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             picturesViewModel.handleSelectBehaviour(newValue)
             true
         }
+
+        prefPictureUploadsSyncInterval?.setOnPreferenceChangeListener { _, newValue ->
+            newValue as String
+            picturesViewModel.handleSelectSyncInterval(newValue)
+            true
+        }
     }
 
     override fun onDestroy() {
@@ -214,6 +238,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsBehaviour?.isEnabled = value
         prefPictureUploadsAccount?.isEnabled = value
         prefPictureUploadsLastSync?.isEnabled = value
+        prefPictureUploadsSyncInterval?.isEnabled = value
     }
 
     private fun resetFields() {
@@ -223,5 +248,6 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsOnWifi?.isChecked = false
         prefPictureUploadsBehaviour?.value = FolderBackUpConfiguration.Behavior.COPY.name
         prefPictureUploadsLastSync?.summary = null
+        prefPictureUploadsSyncInterval?.value = FolderBackUpConfiguration.SyncIntervals.FIFTEEN_MINUTES.name
     }
 }

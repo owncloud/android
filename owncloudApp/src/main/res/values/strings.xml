@@ -498,6 +498,11 @@
     <string name="prefs_camera_upload_last_sync_title">Last synchronization</string>
     <string name="upload_copy_files">Copy file</string>
     <string name="upload_move_files">Move file</string>
+    <string name="prefs_camera_upload_sync_interval_title">Sync Interval</string>
+    <string name="prefs_camera_upload_sync_interval_fifteen_minutes_value">15 Minutes</string>
+    <string name="prefs_camera_upload_sync_interval_one_hour_value">1 Hour</string>
+    <string name="prefs_camera_upload_sync_interval_four_hours_value">4 Hours</string>
+    <string name="prefs_camera_upload_sync_interval_twelve_hours_value">12 Hours</string>
 
     <string name="pref_behaviour_entries_keep_file">kept in original folder</string>
     <string name="pref_behaviour_entries_move">moved to app folder</string>

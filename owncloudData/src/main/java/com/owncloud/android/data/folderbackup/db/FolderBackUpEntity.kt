@@ -32,6 +32,7 @@ data class FolderBackUpEntity(
     val wifiOnly: Boolean,
     @ColumnInfo(name = folderBackUpEntityNameField) val name: String,
     val lastSyncTimestamp: Long,
+    val syncInterval:String
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
