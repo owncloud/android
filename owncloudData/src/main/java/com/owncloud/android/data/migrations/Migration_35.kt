@@ -31,11 +31,11 @@ val MIGRATION_34_35 = object : Migration(34, 35) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.run {
             execSQL(
-                "CREATE TABLE IF NOT EXISTS `${FOLDER_BACKUP_TABLE_NAME}2` (`accountName` TEXT NOT NULL, `behavior` TEXT NOT NULL, `sourcePath` TEXT NOT NULL, `uploadPath` TEXT NOT NULL, `wifiOnly` INTEGER NOT NULL, `name` TEXT NOT NULL, `lastSyncTimestamp` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)"
+                "CREATE TABLE IF NOT EXISTS `${FOLDER_BACKUP_TABLE_NAME}2` (`accountName` TEXT NOT NULL, `behavior` TEXT NOT NULL, `sourcePath` TEXT NOT NULL, `uploadPath` TEXT NOT NULL, `wifiOnly` INTEGER NOT NULL, `name` TEXT NOT NULL, `lastSyncTimestamp` INTEGER NOT NULL, `syncInterval` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)"
             )
             execSQL("ALTER TABLE $FOLDER_BACKUP_TABLE_NAME ADD COLUMN syncInterval TEXT NOT NULL DEFAULT 'FIFTEEN_MINUTES'")
             execSQL(
-                "INSERT INTO `${FOLDER_BACKUP_TABLE_NAME}2` SELECT accountName, behavior, sourcePath, uploadPath, wifiOnly, name, lastSyncTimeStamp, id  FROM $FOLDER_BACKUP_TABLE_NAME"
+                "INSERT INTO `${FOLDER_BACKUP_TABLE_NAME}2` SELECT accountName, behavior, sourcePath, uploadPath, wifiOnly, name, lastSyncTimeStamp, IFNULL(syncInterval, 'FIFTEEN_MINUTES'), id  FROM $FOLDER_BACKUP_TABLE_NAME"
             )
             execSQL("DROP TABLE $FOLDER_BACKUP_TABLE_NAME")
             execSQL("ALTER TABLE ${FOLDER_BACKUP_TABLE_NAME}2 RENAME TO $FOLDER_BACKUP_TABLE_NAME")
