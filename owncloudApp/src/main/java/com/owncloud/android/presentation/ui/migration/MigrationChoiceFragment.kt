@@ -24,15 +24,22 @@ import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
-
+import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MigrationChoiceFragment : Fragment(R.layout.fragment_migration_choice) {
+
+    private val migrationViewModel: MigrationViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val letsGetStartedButton = view.findViewById<Button>(R.id.migration_info_button)?.let {
+        view.findViewById<Button>(R.id.migration_complete_button)?.setOnClickListener {
+            migrationViewModel.moveToNextState()
+        }
 
+        view.findViewById<Button>(R.id.migration_partial_button)?.setOnClickListener {
+            migrationViewModel.moveToNextState()
         }
     }
 }

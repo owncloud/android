@@ -27,16 +27,13 @@ import com.owncloud.android.R
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class MigrationIntroFragment : Fragment(R.layout.fragment_migration_intro) {
+class MigrationCompletedFragment : Fragment(R.layout.fragment_migration_completed) {
 
     private val migrationViewModel: MigrationViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<Button>(R.id.migration_info_button)?.setOnClickListener {
-            migrationViewModel.moveToNextState()
-        }
     }
 
 }

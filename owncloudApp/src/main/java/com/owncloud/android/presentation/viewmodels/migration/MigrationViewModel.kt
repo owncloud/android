@@ -25,18 +25,16 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import org.apache.commons.io.FileUtils
-import java.io.File
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
  */
 class MigrationViewModel(
-        private val rootFolder: String,
-        private val scopedStorageProvider: LocalStorageProvider.ScopedStorageProvider,
-        private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
+    private val rootFolder: String,
+    private val scopedStorageProvider: LocalStorageProvider.ScopedStorageProvider,
+    private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
     private val _migrationState = MediatorLiveData<Event<MigrationState>>()
@@ -45,6 +43,7 @@ class MigrationViewModel(
     init {
         _migrationState.postValue(Event(MigrationState.MigrationIntroState))
     }
+
     fun getLegacyStorageSizeInBytes(): Long {
         val legacyStorageDirectory = LocalStorageProvider.LegacyStorageProvider(rootFolder).getPrimaryStorageDirectory()
         return FileUtils.sizeOfDirectory(legacyStorageDirectory)
@@ -52,5 +51,9 @@ class MigrationViewModel(
 
     fun migrateLegacyStorageToScopedStorage() {
         scopedStorageProvider.migrateLegacyToScopedStorage()
+    }
+
+    fun moveToNextState() {
+        _migrationState.postValue(Event(_migrationState.value?.peekContent()?.nextState() ?: MigrationState.MigrationIntroState))
     }
 }

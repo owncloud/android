@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/owncloud_blue"
-    tools:context=".presentation.ui.migration.MigrationIntroFragment">
+    tools:context=".presentation.ui.migration.MigrationCompletedFragment">
 
     <TextView
         android:id="@+id/migration_info_title"
@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_margin"
-        android:textColor="@color/color_accent"
         android:text="@string/scoped_storage_wizard_title"
+        android:textColor="@color/color_accent"
         app:layout_constraintBottom_toTopOf="@id/migration_info_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,12 +38,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
         android:gravity="center"
+        android:text="@string/scoped_storage_wizard_migration_completed"
         android:textColor="@color/color_accent"
-        android:text="@string/scoped_storage_wizard_intro"
         app:layout_constraintBottom_toTopOf="@id/migration_info_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_info_logo"/>
+        app:layout_constraintTop_toBottomOf="@id/migration_info_logo" />
 
     <Button
         android:id="@+id/migration_info_button"
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
         android:background="@color/color_accent"
-        android:text="@string/scoped_storage_wizard_intro_button"
+        android:text="@string/drawer_close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
