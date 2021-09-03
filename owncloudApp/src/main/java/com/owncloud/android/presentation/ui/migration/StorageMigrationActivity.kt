@@ -34,8 +34,9 @@ class StorageMigrationActivity : AppCompatActivity() {
     private val migrationViewModel: MigrationViewModel by viewModel()
 
     private val fragmentMigrationIntro = MigrationIntroFragment()
-    private val fragmentMigrationInfo = MigrationChoiceFragment()
+    private val fragmentMigrationChoice = MigrationChoiceFragment()
     private val fragmentMigrationProgress = MigrationProgressFragment()
+    private val fragmentMigrationCompleted = MigrationCompletedFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +49,13 @@ class StorageMigrationActivity : AppCompatActivity() {
 
     private fun navigateToNextMigrationScreen(migrationState: MigrationState) {
 
+        if (migrationState is MigrationState.MigrationCompletedState) finish()
+
         val targetFragment: Fragment = when (migrationState) {
             is MigrationState.MigrationIntroState -> fragmentMigrationIntro
-            is MigrationState.MigrationChoiceState -> fragmentMigrationInfo
+            is MigrationState.MigrationChoiceState -> fragmentMigrationChoice
             is MigrationState.MigrationProgressState -> fragmentMigrationProgress
+            MigrationState.MigrationCompletedState, MigrationState.MigrationDone -> fragmentMigrationCompleted
         }
 
         supportFragmentManager

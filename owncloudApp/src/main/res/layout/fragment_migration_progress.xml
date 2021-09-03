@@ -38,12 +38,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
         android:gravity="center"
+        android:text="@string/scoped_storage_wizard_migration_in_progress"
         android:textColor="@color/color_accent"
         app:layout_constraintBottom_toTopOf="@id/migration_progress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_info_logo"
-        tools:text="Migrating files from legacy to scoped storage... It could last some minutes..." />
+        app:layout_constraintTop_toBottomOf="@id/migration_info_logo" />
 
     <ProgressBar
         android:id="@+id/migration_progress"
