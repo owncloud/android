@@ -31,6 +31,7 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.RequiresApi;
 import com.owncloud.android.MainApp;
+import com.owncloud.android.presentation.ui.security.PassCodeManager;
 import com.owncloud.android.ui.activity.BiometricActivity;
 
 import java.util.HashSet;
@@ -123,7 +124,7 @@ import java.util.Set;
         return false;
     }
 
-    protected boolean isBiometricEnabled() {
+    public boolean isBiometricEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.Companion.getAppContext());
         return (appPrefs.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false));
     }

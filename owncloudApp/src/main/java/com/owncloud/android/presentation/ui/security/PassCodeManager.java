@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.authentication;
+package com.owncloud.android.presentation.ui.security;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,7 +29,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.presentation.ui.security.PassCodeActivity;
+import com.owncloud.android.authentication.BiometricManager;
 
 import java.util.HashSet;
 import java.util.Set;

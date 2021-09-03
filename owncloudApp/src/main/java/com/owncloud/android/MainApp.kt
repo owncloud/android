@@ -35,7 +35,7 @@ import android.os.Handler
 import android.view.WindowManager
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.authentication.PassCodeManager
+import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
