@@ -35,14 +35,11 @@ sealed class MigrationState {
 
     object MigrationCompletedState : MigrationState()
 
-    object MigrationDone : MigrationState()
-
     fun nextState(): MigrationState {
         return when (this) {
             is MigrationIntroState -> MigrationChoiceState(legacyStorageSpaceInBytes = 0, availableBytesInScopedStorage = 0)
             is MigrationChoiceState -> MigrationProgressState(progress = 0, migrationType = MigrationType.MIGRATE_AND_KEEP)
-            is MigrationProgressState -> MigrationCompletedState
-            is MigrationCompletedState, MigrationDone -> MigrationDone
+            is MigrationProgressState, MigrationCompletedState -> MigrationCompletedState
         }
     }
 

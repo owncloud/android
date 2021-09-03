@@ -49,13 +49,11 @@ class StorageMigrationActivity : AppCompatActivity() {
 
     private fun navigateToNextMigrationScreen(migrationState: MigrationState) {
 
-        if (migrationState is MigrationState.MigrationCompletedState) finish()
-
         val targetFragment: Fragment = when (migrationState) {
             is MigrationState.MigrationIntroState -> fragmentMigrationIntro
             is MigrationState.MigrationChoiceState -> fragmentMigrationChoice
             is MigrationState.MigrationProgressState -> fragmentMigrationProgress
-            MigrationState.MigrationCompletedState, MigrationState.MigrationDone -> fragmentMigrationCompleted
+            is MigrationState.MigrationCompletedState -> fragmentMigrationCompleted
         }
 
         supportFragmentManager
