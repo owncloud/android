@@ -70,6 +70,7 @@
   <string name="prefs_enable_logging">Protokollierung aktivieren</string>
   <string name="prefs_enable_logging_summary">Wenn aktiviert, können Protokolle die Leistung beeinträchtigen und sensible Informationen enthalten. Die Protokolle unterliegen jedoch nicht der automatischen Übertragung an ownCloud Server. Die Weitergabe von Protokollen an andere liegt in der alleinigen Verantwortung des Benutzers.</string>
   <string name="prefs_send_feedback">Feedback senden</string>
+  <string name="prefs_app_version">App Version</string>
   <string name="pattern_enter_pattern">Bitte gib dein Muster ein</string>
   <string name="pattern_configure_pattern">Gib dein Muster ein</string>
   <string name="pattern_remove_pattern">Entferne dein Muster</string>
@@ -173,6 +174,9 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">Der Dateiname darf nicht mehr als %d Zeichen haben</string>
   <string name="uploader_upload_text_filename_hint">Dateiname</string>
   <string name="uploader_upload_camera_upload_files">Hochladen von Hochladedateien der Kamera</string>
+  <string name="uploader_upload_picture_upload_files">%d neue Bilder werden hochgeladen</string>
+  <string name="uploader_upload_video_upload_files">%d neue Videos werden hochgeladen</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Kamera-Upload fehlgeschlagen</string>
   <string name="uploader_upload_available_offline_files">Hochladen von verfügbaren Offline-Dateien</string>
   <string name="uploader_upload_requested_from_wifi_files">Hochladen von angeforderten WLAN-Dateien</string>
   <string name="ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
@@ -441,6 +445,7 @@
   <string name="prefs_camera_upload_source_path_title_required">Benötigt</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Originale Datei wird</string>
   <string name="prefs_camera_upload_behaviour_title">Originale Datei wird</string>
+  <string name="prefs_camera_upload_last_sync_title">Letzte Synchronisierung</string>
   <string name="upload_copy_files">kopiere Datei</string>
   <string name="upload_move_files">verschiebe Datei</string>
   <string name="pref_behaviour_entries_keep_file">im Originalordner behalten</string>
