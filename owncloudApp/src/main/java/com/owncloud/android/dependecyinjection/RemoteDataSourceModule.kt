@@ -42,6 +42,7 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRem
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
+import com.owncloud.android.lib.common.ConnectionValidator
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.resources.files.services.FileService
@@ -62,9 +63,10 @@ import org.koin.dsl.module
 val remoteDataSourceModule = module {
     single { AccountUtils.getCurrentOwnCloudAccount(androidContext()) }
     single { OwnCloudAccount(get(), androidContext()) }
-    single { SingleSessionManager.getDefaultSingleton().getClientFor(get(), androidContext()) }
+    single { SingleSessionManager.getDefaultSingleton().getClientFor(get(), androidContext(), get()) }
 
-    single { ClientManager(get(), get(), get(), MainApp.accountType) }
+    single { ConnectionValidator(androidContext(), true) }
+    single { ClientManager(get(), get(), get(), MainApp.accountType, get()) }
 
     single<CapabilityService> { OCCapabilityService(get()) }
     single<FileService> { OCFileService(get()) }

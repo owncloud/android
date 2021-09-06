@@ -60,7 +60,7 @@ import java.io.File
 
 class UploadFileFromContentUriWorker(
     private val appContext: Context,
-    private val workerParameters: WorkerParameters
+    private val workerParameters: WorkerParameters,
 ) : CoroutineWorker(
     appContext,
     workerParameters
@@ -231,7 +231,7 @@ class UploadFileFromContentUriWorker(
     }
 
     private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
-        .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
+        .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext, SingleSessionManager.getConnectionValidator())
 
     companion object {
         const val TRANSFER_TAG_CAMERA_UPLOAD = "TRANSFER_TAG_CAMERA_UPLOAD"

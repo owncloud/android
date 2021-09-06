@@ -24,6 +24,7 @@ import android.content.Context
 import android.net.Uri
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.lib.common.ConnectionValidator
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
@@ -37,9 +38,14 @@ class ClientManager(
     private val preferencesProvider: SharedPreferencesProvider,
     val context: Context,
     val accountType: String,
+    private val connectionValidator: ConnectionValidator
 ) {
     // This client will maintain cookies across the whole login process.
     private var ownCloudClient: OwnCloudClient? = null
+
+    init {
+        SingleSessionManager.setConnectionValidator(connectionValidator)
+    }
 
     /**
      * Returns a client for the login process.
@@ -54,7 +60,7 @@ class ClientManager(
         val safeClient = ownCloudClient
 
         return if (requiresNewClient || safeClient == null) {
-            OwnCloudClient(Uri.parse(path)).apply {
+            OwnCloudClient(Uri.parse(path), connectionValidator, true).apply {
                 credentials = ownCloudCredentials
             }.also {
                 ownCloudClient = it
@@ -73,7 +79,7 @@ class ClientManager(
             accountManager.getAccountsByType(accountType).firstOrNull { it.name == accountName }
         }
         val ownCloudAccount = OwnCloudAccount(account, context)
-        return SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, context)
+        return SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, context, connectionValidator)
     }
 
     private fun getCurrentAccount(): Account? {
