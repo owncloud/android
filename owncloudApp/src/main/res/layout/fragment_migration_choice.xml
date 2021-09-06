@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_margin"
         android:text="@string/scoped_storage_wizard_title"
-        android:textColor="@color/color_accent"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@id/migration_info_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
         android:gravity="center"
-        android:textColor="@color/color_accent"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@id/linear_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/color_accent"
-            android:text="@string/scoped_storage_wizard_migrate_and_clean_button" />
+            android:text="@string/scoped_storage_wizard_migrate_and_clean_button"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/migration_partial_button"
