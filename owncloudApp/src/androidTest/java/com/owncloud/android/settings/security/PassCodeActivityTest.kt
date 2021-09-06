@@ -46,6 +46,8 @@ import org.junit.Test
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
+import com.owncloud.android.testutil.security.EXAMPLE_PASSCODE_4_DIGITS
+import com.owncloud.android.testutil.security.EXAMPLE_PASSCODE_6_DIGITS
 import io.mockk.every
 import io.mockk.mockk
 import nthChildOf
@@ -68,7 +70,6 @@ class PassCodeActivityTest {
 
     private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
     private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
-    private val passCodeToSave = "111111"
 
     private lateinit var passCodeViewModel: PassCodeViewModel
 
@@ -89,7 +90,7 @@ class PassCodeActivityTest {
             )
         }
 
-        every { passCodeViewModel.getPassCode() } returns "1111"
+        every { passCodeViewModel.getPassCode() } returns EXAMPLE_PASSCODE_4_DIGITS
         every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
     }
 
@@ -228,7 +229,7 @@ class PassCodeActivityTest {
         every { passCodeViewModel.checkPassCodeIsValid(any()) } returns true
 
         //Save a passcode in Preferences
-        storePasscode(passCodeToSave)
+        storePasscode(EXAMPLE_PASSCODE_6_DIGITS)
 
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
@@ -244,7 +245,7 @@ class PassCodeActivityTest {
         every { passCodeViewModel.checkPassCodeIsValid(any()) } returns false
 
         //Save a passcode in Preferences
-        storePasscode(passCodeToSave)
+        storePasscode(EXAMPLE_PASSCODE_6_DIGITS)
 
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
@@ -272,7 +273,7 @@ class PassCodeActivityTest {
             onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText(digits[i].toString()))
     }
 
-    private fun storePasscode(passcode: String = passCodeToSave) {
+    private fun storePasscode(passcode: String = EXAMPLE_PASSCODE_6_DIGITS) {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
 
         appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, passCodeViewModel.getNumberOfPassCodeDigits()))

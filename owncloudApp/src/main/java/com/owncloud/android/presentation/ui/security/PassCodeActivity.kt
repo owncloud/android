@@ -138,8 +138,6 @@ class PassCodeActivity : BaseActivity() {
 
     private fun inflatePasscodeTxtLine() {
         val passcodeTxtLayout = findViewById<LinearLayout>(R.id.passCodeTxtLayout)
-        println("PACOOOOO1 " + passCodeViewModel.getPassCode()?.length)
-        println("PACOOOOO2 " + passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())) {
             val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
             passcodeTxtLayout.addView(txt)
@@ -216,11 +214,14 @@ class PassCodeActivity : BaseActivity() {
                 /// pass code accepted in request, user is allowed to access the app
                 passCodeError.visibility = View.INVISIBLE
                 hideSoftKeyboard()
-                if (passCodeViewModel.getPassCode()!!.length < passCodeViewModel.getNumberOfPassCodeDigits()) {
+                val passCode = passCodeViewModel.getPassCode()
+                if (passCode != null && passCode.length < passCodeViewModel.getNumberOfPassCodeDigits()) {
                     passCodeViewModel.removePassCode()
                     val intent = Intent(baseContext, PassCodeActivity::class.java)
-                    intent.action = ACTION_REQUEST_WITH_RESULT
-                    intent.putExtra(EXTRAS_MIGRATION, true)
+                    intent.apply {
+                        action = ACTION_REQUEST_WITH_RESULT
+                        putExtra(EXTRAS_MIGRATION, true)
+                    }
                     startActivity(intent)
                 }
                 finish()
