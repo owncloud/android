@@ -51,7 +51,7 @@ class PassCodeManager {
     }
 
     fun onActivityStopped(activity: Activity) {
-        if (visibleActivitiesCounter > 0) visibleActivitiesCounter--;
+        if (visibleActivitiesCounter > 0) visibleActivitiesCounter--
 
         setUnlockTimestamp()
         val powerMgr = activity.getSystemService(Context.POWER_SERVICE) as PowerManager
