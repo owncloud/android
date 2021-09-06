@@ -28,7 +28,6 @@ package com.owncloud.android.lib.common;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.net.Uri;
-import android.util.Log;
 
 import at.bitfire.dav4jvm.exception.HttpException;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -38,7 +37,6 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
-import com.owncloud.android.lib.common.http.methods.nonwebdav.HttpMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.RandomUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -70,26 +68,32 @@ public class OwnCloudClient extends HttpClient {
     private Uri mBaseUri;
     private OwnCloudVersion mVersion = null;
     private OwnCloudAccount mAccount;
-    private ConnectionValidator mConnectionValidator;
+    private final ConnectionValidator mConnectionValidator;
+    private Object mRequestMutex = new Object();
 
-    private static Boolean mHoldRequests = false;
+    // If set to true a mutex will be used to prevent parallel execution of the execute() method
+    // if false the execute() method can be called even though the mutex is already aquired.
+    // This is used for the ConnectionValidator, which has to be able to execute OperationsWhile all "normal" operations net
+    // to be set on hold.
+    private final Boolean mSynchronizeRequests;
 
     private SingleSessionManager mSingleSessionManager = null;
 
     private boolean mFollowRedirects;
 
-    public OwnCloudClient(Uri baseUri) {
+    public OwnCloudClient(Uri baseUri, ConnectionValidator connectionValidator, boolean synchronizeRequests) {
         if (baseUri == null) {
             throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
         }
         mBaseUri = baseUri;
+        mSynchronizeRequests = synchronizeRequests;
 
         mInstanceNumber = sIntanceCounter++;
         Timber.d("#" + mInstanceNumber + "Creating OwnCloudClient");
 
         clearCredentials();
         clearCookies();
-        mConnectionValidator = new ConnectionValidator(this);
+        mConnectionValidator = connectionValidator;
     }
 
     public void clearCredentials() {
@@ -99,10 +103,21 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public int executeHttpMethod(HttpBaseMethod method) throws Exception {
+        if(mSynchronizeRequests) {
+            synchronized (mRequestMutex) {
+                return saveExecuteHttpMethod(method);
+            }
+        } else {
+            return saveExecuteHttpMethod(method);
+        }
+    }
+
+    private int saveExecuteHttpMethod(HttpBaseMethod method) throws Exception {
         boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
         int status;
 
+        boolean retry = false;
         do {
             String requestId = RandomUtils.generateRandomUUID();
 
@@ -117,44 +132,14 @@ public class OwnCloudClient extends HttpClient {
 
             status = method.execute();
             stacklog(status, method);
-            /*
-            synchronized (mHoldRequests) {
-                while (mHoldRequests) {
-                    while (true) {
-                        try {
-                            throw new Exception("Stack log");
-                        } catch (Exception e) {
-                            Timber.d( "HATL BEFORE" +
-                                    "\nThread: " + Thread.currentThread().getName() +
-                                            "\nobject: " + this.toString() +
-                                            "\nMethod: " + method.getHttpUrl() +
-                                            "\ntrace: " + ExceptionUtils.getStackTrace(e));
-                        }
-                        Thread.sleep(40000);
-                    }
-                }
-                status = method.execute();
-                if (status == 302) {
-                    mHoldRequests = true;
-                    while (mHoldRequests) {
-                        try {
-                            throw new Exception("Stack log");
-                        } catch (Exception e) {
-                            Timber.d( "HALT AFTER" +
-                                    "\nresponsecode: " + Integer.toString(status) +
-                                            "\nThread: " + Thread.currentThread().getName() +
-                                            "\nobject: " + this.toString() +
-                                            "\nMethod: " + method.getHttpUrl() +
-                                            "\ntrace: " + ExceptionUtils.getStackTrace(e));
-                        }
-                        Thread.sleep(40000);
-                    }
-                }
 
+            if (status == HttpConstants.HTTP_MOVED_TEMPORARILY) {
+                mConnectionValidator.validate(method, this);
+                retry = true;
             }
-            */
 
             if (mFollowRedirects) {
+
                 status = followRedirection(method).getLastStatus();
             }
 
@@ -163,6 +148,7 @@ public class OwnCloudClient extends HttpClient {
                 repeatCounter++;
             }
         } while (repeatWithFreshCredentials);
+//        } while (retry);
 
         return status;
     }
@@ -384,22 +370,20 @@ public class OwnCloudClient extends HttpClient {
         boolean credentialsWereRefreshed = false;
 
         if (shouldInvalidateAccountCredentials(status)) {
-            boolean invalidated = invalidateAccountCredentials();
+            invalidateAccountCredentials();
 
-            if (invalidated) {
-                if (getCredentials().authTokenCanBeRefreshed() &&
-                        repeatCounter < MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS) {
-                    try {
-                        mAccount.loadCredentials(getContext());
-                        // if mAccount.getCredentials().length() == 0 --> refresh failed
-                        setCredentials(mAccount.getCredentials());
-                        credentialsWereRefreshed = true;
+            if (getCredentials().authTokenCanBeRefreshed() &&
+                    repeatCounter < MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS) {
+                try {
+                    mAccount.loadCredentials(getContext());
+                    // if mAccount.getCredentials().length() == 0 --> refresh failed
+                    setCredentials(mAccount.getCredentials());
+                    credentialsWereRefreshed = true;
 
-                    } catch (AccountsException | IOException e) {
-                        Timber.e(e, "Error while trying to refresh auth token for %s",
-                                mAccount.getSavedAccount().name
-                        );
-                    }
+                } catch (AccountsException | IOException e) {
+                    Timber.e(e, "Error while trying to refresh auth token for %s",
+                            mAccount.getSavedAccount().name
+                    );
                 }
 
                 if (!credentialsWereRefreshed && mSingleSessionManager != null) {
@@ -441,16 +425,14 @@ public class OwnCloudClient extends HttpClient {
      * <p>
      * {@link #shouldInvalidateAccountCredentials(int)} should be called first.
      *
-     * @return 'True' if invalidation was successful, 'false' otherwise.
      */
-    private boolean invalidateAccountCredentials() {
+    private void invalidateAccountCredentials() {
         AccountManager am = AccountManager.get(getContext());
         am.invalidateAuthToken(
                 mAccount.getSavedAccount().type,
                 mCredentials.getAuthToken()
         );
         am.clearPassword(mAccount.getSavedAccount()); // being strict, only needed for Basic Auth credentials
-        return true;
     }
 
     public boolean followRedirects() {

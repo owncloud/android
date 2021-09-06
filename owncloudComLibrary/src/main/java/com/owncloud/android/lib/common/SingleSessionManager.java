@@ -49,6 +49,7 @@ public class SingleSessionManager {
 
     private static SingleSessionManager sDefaultSingleton;
     private static String sUserAgent;
+    private static ConnectionValidator sConnectionValidator;
 
     private ConcurrentMap<String, OwnCloudClient> mClientsWithKnownUsername = new ConcurrentHashMap<>();
     private ConcurrentMap<String, OwnCloudClient> mClientsWithUnknownUsername = new ConcurrentHashMap<>();
@@ -60,6 +61,14 @@ public class SingleSessionManager {
         return sDefaultSingleton;
     }
 
+    public static void setConnectionValidator(ConnectionValidator connectionValidator) {
+        sConnectionValidator = connectionValidator;
+    }
+
+    public static ConnectionValidator getConnectionValidator() {
+        return sConnectionValidator;
+    }
+
     public static String getUserAgent() {
         return sUserAgent;
     }
@@ -68,15 +77,23 @@ public class SingleSessionManager {
         sUserAgent = userAgent;
     }
 
-    private static OwnCloudClient createOwnCloudClient(Uri uri, Context context, boolean followRedirects) {
-        OwnCloudClient client = new OwnCloudClient(uri);
+    private static OwnCloudClient createOwnCloudClient(Uri uri, Context context, boolean followRedirects, ConnectionValidator connectionValidator) {
+        OwnCloudClient client = new OwnCloudClient(uri, connectionValidator, true);
         client.setFollowRedirects(followRedirects);
         HttpClient.setContext(context);
 
         return client;
     }
 
-    public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) throws OperationCanceledException,
+    public OwnCloudClient getClientFor(OwnCloudAccount account,
+                                       Context context) throws OperationCanceledException,
+            AuthenticatorException, IOException {
+        return getClientFor(account, context, getConnectionValidator());
+    }
+
+    public OwnCloudClient getClientFor(OwnCloudAccount account,
+                                       Context context,
+                                       ConnectionValidator connectionValidator) throws OperationCanceledException,
             AuthenticatorException, IOException {
 
         Timber.d("getClientFor starting ");
@@ -115,7 +132,8 @@ public class SingleSessionManager {
             client = createOwnCloudClient(
                     account.getBaseUri(),
                     context.getApplicationContext(),
-                    true);    // TODO remove dependency on OwnCloudClientFactory
+                    true,
+                    connectionValidator);    // TODO remove dependency on OwnCloudClientFactory
 
             //the next two lines are a hack because okHttpclient is used as a singleton instead of being an
             //injected instance that can be deleted when required
