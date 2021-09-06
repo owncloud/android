@@ -132,6 +132,16 @@ class SettingsVideoUploadsViewModel(
         }
     }
 
+    fun handleSelectSyncInterval(intervalString: String) {
+        val interval = FolderBackUpConfiguration.SyncIntervals.fromString(intervalString)
+
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            saveVideoUploadsConfigurationUseCase.execute(
+                SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(syncInterval = interval))
+            )
+        }
+    }
+
     fun handleSelectVideoUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
         var previousSourcePath = _videoUploads.value?.sourcePath ?: getDefaultCameraSourcePath()

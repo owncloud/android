@@ -41,6 +41,7 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_BEHA
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SYNC_INTERVAL
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.extensions.showAlertDialog
@@ -61,6 +62,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     private var prefVideoUploadsSourcePath: Preference? = null
     private var prefVideoUploadsBehaviour: ListPreference? = null
     private var prefVideoUploadsAccount: ListPreference? = null
+    private var prefVideoUploadsSyncInterval: ListPreference? = null
     private var prefVideoUploadsLastSync: Preference? = null
 
     private val selectVideoUploadsPathLauncher =
@@ -96,6 +98,22 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
             entries = videosViewModel.getLoggedAccountNames()
             entryValues = videosViewModel.getLoggedAccountNames()
         }
+        prefVideoUploadsSyncInterval = findPreference<ListPreference>(PREF__CAMERA_VIDEO_UPLOADS_SYNC_INTERVAL)?.apply {
+            entries =
+                listOf(
+                    getString(R.string.prefs_camera_upload_sync_interval_fifteen_minutes_value),
+                    getString(R.string.prefs_camera_upload_sync_interval_one_hour_value),
+                    getString(R.string.prefs_camera_upload_sync_interval_four_hours_value),
+                    getString(R.string.prefs_camera_upload_sync_interval_twelve_hours_value)
+                ).toTypedArray()
+            entryValues =
+                listOf(
+                    FolderBackUpConfiguration.SyncIntervals.FIFTEEN_MINUTES.name,
+                    FolderBackUpConfiguration.SyncIntervals.ONE_HOUR.name,
+                    FolderBackUpConfiguration.SyncIntervals.FOUR_HOURS.name,
+                    FolderBackUpConfiguration.SyncIntervals.TWELVE_HOURS.name,
+                ).toTypedArray()
+        }
 
         val comment = getString(R.string.prefs_camera_upload_source_path_title_required)
         prefVideoUploadsSourcePath?.title = String.format(prefVideoUploadsSourcePath?.title.toString(), comment)
@@ -118,6 +136,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                 prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                 prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
                 prefVideoUploadsBehaviour?.value = it.behavior.name
+                prefVideoUploadsSyncInterval?.value = it.syncInterval.name
                 prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
             } ?: resetFields()
         })
@@ -199,6 +218,12 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
             videosViewModel.handleSelectBehaviour(newValue)
             true
         }
+
+        prefVideoUploadsSyncInterval?.setOnPreferenceChangeListener { _, newValue ->
+            newValue as String
+            videosViewModel.handleSelectSyncInterval(newValue)
+            true
+        }
     }
 
     override fun onDestroy() {
@@ -214,6 +239,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsBehaviour?.isEnabled = value
         prefVideoUploadsAccount?.isEnabled = value
         prefVideoUploadsLastSync?.isEnabled = value
+        prefVideoUploadsSyncInterval?.isEnabled = value
     }
 
     private fun resetFields() {
@@ -223,5 +249,6 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsOnWifi?.isChecked = false
         prefVideoUploadsBehaviour?.value = FolderBackUpConfiguration.Behavior.COPY.name
         prefVideoUploadsLastSync?.summary = null
+        prefVideoUploadsSyncInterval?.value = FolderBackUpConfiguration.SyncIntervals.FIFTEEN_MINUTES.name
     }
 }
