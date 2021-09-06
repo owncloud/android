@@ -33,8 +33,8 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 
 import com.owncloud.android.R;
-import com.owncloud.android.presentation.ui.security.PassCodeManager;
 import com.owncloud.android.authentication.PatternManager;
+import com.owncloud.android.presentation.ui.security.PassCodeManager;
 import timber.log.Timber;
 
 import javax.crypto.Cipher;
@@ -140,8 +140,8 @@ public class BiometricActivity extends AppCompatActivity {
     }
 
     private void authError() {
-        if (PassCodeManager.getPassCodeManager().isPassCodeEnabled()) {
-            PassCodeManager.getPassCodeManager().onBiometricCancelled(mActivity);
+        if (PassCodeManager.Companion.getPassCodeManager().isPassCodeEnabled()) {
+            PassCodeManager.Companion.getPassCodeManager().onBiometricCancelled(mActivity);
         } else if (PatternManager.getPatternManager().isPatternEnabled()) {
             PatternManager.getPatternManager().onBiometricCancelled(mActivity);
         }
