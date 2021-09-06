@@ -44,7 +44,7 @@ class MigrationViewModel(
         _migrationState.postValue(Event(MigrationState.MigrationIntroState))
     }
 
-    fun getLegacyStorageSizeInBytes(): Long {
+    private fun getLegacyStorageSizeInBytes(): Long {
         val legacyStorageDirectory = LocalStorageProvider.LegacyStorageProvider(rootFolder).getPrimaryStorageDirectory()
         return FileUtils.sizeOfDirectory(legacyStorageDirectory)
     }
@@ -53,7 +53,19 @@ class MigrationViewModel(
         scopedStorageProvider.migrateLegacyToScopedStorage()
     }
 
-    fun moveToNextState() {
-        _migrationState.postValue(Event(_migrationState.value?.peekContent()?.nextState() ?: MigrationState.MigrationIntroState))
+    fun moveToNextState(migrationType: MigrationState.MigrationType = MigrationState.MigrationType.MIGRATE_AND_KEEP) {
+
+        val nextState: MigrationState = when (_migrationState.value?.peekContent()) {
+            is MigrationState.MigrationIntroState -> MigrationState.MigrationChoiceState(
+                legacyStorageSpaceInBytes = getLegacyStorageSizeInBytes(),
+                availableBytesInScopedStorage = scopedStorageProvider.getUsableSpace()
+            )
+            is MigrationState.MigrationChoiceState -> MigrationState.MigrationProgressState(migrationType, 0)
+            is MigrationState.MigrationProgressState -> MigrationState.MigrationCompletedState
+            is MigrationState.MigrationCompletedState -> MigrationState.MigrationCompletedState
+            null -> MigrationState.MigrationIntroState
+        }
+
+        _migrationState.postValue(Event(nextState))
     }
 }
