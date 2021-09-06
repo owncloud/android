@@ -13,13 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_margin"
+        android:text="@string/scoped_storage_wizard_title"
         android:textColor="@color/color_accent"
         app:layout_constraintBottom_toTopOf="@id/migration_info_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="spread_inside"
-        tools:text="Data Migration" />
+        app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <ImageView
         android:id="@+id/migration_info_logo"
@@ -51,6 +51,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/standard_margin"
+        android:indeterminate="true"
         android:progressTint="@color/white"
         app:layout_constraintBottom_toTopOf="@id/migration_progress_button"
         app:layout_constraintEnd_toEndOf="parent"
