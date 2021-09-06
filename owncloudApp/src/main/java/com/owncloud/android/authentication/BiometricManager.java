@@ -84,9 +84,9 @@ import java.util.Set;
                     // Use biometric lock
                     Intent i = new Intent(MainApp.Companion.getAppContext(), BiometricActivity.class);
                     activity.startActivity(i);
-                } else if (PassCodeManager.getPassCodeManager().isPassCodeEnabled()) {
+                } else if (PassCodeManager.Companion.getPassCodeManager().isPassCodeEnabled()) {
                     // Cancel biometric lock and use passcode unlock method
-                    PassCodeManager.getPassCodeManager().onBiometricCancelled(activity);
+                    PassCodeManager.Companion.getPassCodeManager().onBiometricCancelled(activity);
                     mVisibleActivitiesCounter++;
                 } else if (PatternManager.getPatternManager().isPatternEnabled()) {
                     // Cancel biometric lock and use pattern unlock method
