@@ -32,14 +32,13 @@ import com.owncloud.android.authentication.BiometricManager
 
 object PassCodeManager {
 
-    var exemptOfPasscodeActivites: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
-        private set
+    private val exemptOfPasscodeActivites: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
 
     private var timestamp = 0L
     private var visibleActivitiesCounter = 0
 
     // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
-    private val PASS_CODE_TIMEOUT = 1000
+    private const val PASS_CODE_TIMEOUT = 1_000
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPasscodeActivites.contains(activity.javaClass) && passCodeShouldBeRequested()) {
@@ -66,11 +65,6 @@ object PassCodeManager {
         }
     }
 
-    // other activities may be exempted, if needed
-    fun addExemptOfPasscodeActivity(activity: Class<*>) {
-        exemptOfPasscodeActivites.add(activity)
-    }
-
     private fun passCodeShouldBeRequested(): Boolean {
         return if (SystemClock.elapsedRealtime() - timestamp > PASS_CODE_TIMEOUT && visibleActivitiesCounter <= 0) isPassCodeEnabled()
         else false
@@ -82,9 +76,10 @@ object PassCodeManager {
     }
 
     private fun checkPasscode(activity: Activity) {
-        val i = Intent(appContext, PassCodeActivity::class.java)
-        i.action = PassCodeActivity.ACTION_CHECK
-        i.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        val i = Intent(appContext, PassCodeActivity::class.java).apply {
+            action = PassCodeActivity.ACTION_CHECK
+            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
         activity.startActivity(i)
     }
 
