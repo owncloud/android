@@ -133,7 +133,8 @@ public class OwnCloudClient extends HttpClient {
             status = method.execute();
             stacklog(status, method);
 
-            if (status == HttpConstants.HTTP_MOVED_TEMPORARILY) {
+            if (mConnectionValidator != null &&
+                    status == HttpConstants.HTTP_MOVED_TEMPORARILY) {
                 mConnectionValidator.validate(method, this);
                 retry = true;
             }
