@@ -58,7 +58,7 @@ public class OwnCloudClient extends HttpClient {
     public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
     public static final String STATUS_PATH = "/status.php";
     private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
-    private static final int MAX_REDIRECTIONS_COUNT = 3;
+    private static final int MAX_REDIRECTIONS_COUNT = 5;
     private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
 
     private static byte[] sExhaustBuffer = new byte[1024];
