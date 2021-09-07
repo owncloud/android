@@ -30,10 +30,16 @@ import android.preference.PreferenceManager
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.authentication.BiometricManager
 
-class PassCodeManager {
+object PassCodeManager {
+
+    var exemptOfPasscodeActivites: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
+        private set
 
     private var timestamp = 0L
     private var visibleActivitiesCounter = 0
+
+    // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
+    private val PASS_CODE_TIMEOUT = 1000
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPasscodeActivites.contains(activity.javaClass) && passCodeShouldBeRequested()) {
@@ -58,6 +64,11 @@ class PassCodeManager {
         if (isPassCodeEnabled() && !powerMgr.isScreenOn) {
             activity.moveTaskToBack(true)
         }
+    }
+
+    // other activities may be exempted, if needed
+    fun addExemptOfPasscodeActivity(activity: Class<*>) {
+        exemptOfPasscodeActivites.add(activity)
     }
 
     private fun passCodeShouldBeRequested(): Boolean {
@@ -95,25 +106,6 @@ class PassCodeManager {
      */
     fun bayPassUnlockOnce() {
         setUnlockTimestamp()
-    }
-
-    companion object {
-        private var exemptOfPasscodeActivites: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
-
-        // other activities may be exempted, if needed
-        fun addExemptOfPasscodeActivity(activity: Class<*>) {
-            exemptOfPasscodeActivites.add(activity)
-        }
-
-        // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
-        private val PASS_CODE_TIMEOUT = 1000
-
-        private var passCodeManagerInstance: PassCodeManager? = null
-
-        fun getPassCodeManager(): PassCodeManager? {
-            if (passCodeManagerInstance == null) passCodeManagerInstance = PassCodeManager()
-            return passCodeManagerInstance
-        }
     }
 
 }
