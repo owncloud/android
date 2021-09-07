@@ -519,7 +519,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             BiometricManager.getBiometricManager(this).bayPassUnlockOnce()
         }
-        PassCodeManager.getPassCodeManager()?.bayPassUnlockOnce()
+        PassCodeManager.bayPassUnlockOnce()
         PatternManager.getPatternManager().bayPassUnlockOnce()
 
         // Hanndle calls form internal activities.
