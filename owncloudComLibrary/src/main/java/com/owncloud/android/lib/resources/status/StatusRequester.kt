@@ -47,7 +47,7 @@ internal class StatusRequester {
         redirectedUrl: String
     ) = redirectedToNonSecureLocationBefore ||
             (baseUrl.startsWith(HTTPS_SCHEME) &&
-            !redirectedUrl.startsWith(HTTPS_SCHEME))
+                    !redirectedUrl.startsWith(HTTPS_SCHEME))
 
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
         /** Redirection with different endpoint.
@@ -77,32 +77,14 @@ internal class StatusRequester {
         val lastLocation: String
     )
 
-    fun requestAndFollowRedirects(baseLocation: String, client: OwnCloudClient): RequestResult {
+    fun request(baseLocation: String, client: OwnCloudClient): RequestResult {
         var currentLocation = baseLocation + OwnCloudClient.STATUS_PATH
         var redirectedToUnsecureLocation = false
         var status: Int
 
-        while (true) {
-            val getMethod = getGetMethod(currentLocation)
-
-            status = client.executeHttpMethod(getMethod)
-            val result =
-                if (status.isSuccess()) RemoteOperationResult<OwnCloudVersion>(RemoteOperationResult.ResultCode.OK)
-                else RemoteOperationResult(getMethod)
-
-            if (result.redirectedLocation.isNullOrEmpty() || result.isSuccess) {
-                return RequestResult(getMethod, status, redirectedToUnsecureLocation, currentLocation)
-            } else {
-                val nextLocation = updateLocationWithRedirectPath(currentLocation, result.redirectedLocation)
-                redirectedToUnsecureLocation =
-                    isRedirectedToNonSecureConnection(
-                        redirectedToUnsecureLocation,
-                        currentLocation,
-                        nextLocation
-                    )
-                currentLocation = nextLocation
-            }
-        }
+        val getMethod = getGetMethod(currentLocation)
+        status = client.executeHttpMethod(getMethod)
+        return RequestResult(getMethod, status, redirectedToUnsecureLocation, currentLocation)
     }
 
     private fun Int.isSuccess() = this == HttpConstants.HTTP_OK

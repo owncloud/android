@@ -45,27 +45,28 @@ import timber.log.Timber
 class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
 
     public override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
-        client.baseUri = buildFullHttpsUrl(client.baseUri)
+        if(!usesHttpOrHttps(client.baseUri)) {
+            client.baseUri = buildFullHttpsUrl(client.baseUri)
+        }
 
         var result = tryToConnect(client)
+        /*
         if (!(result.code == ResultCode.OK || result.code == ResultCode.OK_SSL) && !result.isSslRecoverableException) {
             Timber.d("Establishing secure connection failed, trying non secure connection")
             client.baseUri = client.baseUri.buildUpon().scheme(HTTP_SCHEME).build()
             result = tryToConnect(client)
         }
+         */
 
         return result
     }
 
     private fun tryToConnect(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
         val baseUrl = client.baseUri.toString()
-        client.setFollowRedirects(false)
         return try {
             val requester = StatusRequester()
-            val requestResult = requester.requestAndFollowRedirects(baseUrl, client)
-            requester.handleRequestResult(requestResult, baseUrl).also {
-                client.baseUri = Uri.parse(it.data.baseUrl)
-            }
+            val requestResult = requester.request(baseUrl, client)
+            requester.handleRequestResult(requestResult, baseUrl)
         } catch (e: JSONException) {
             RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
         } catch (e: Exception) {

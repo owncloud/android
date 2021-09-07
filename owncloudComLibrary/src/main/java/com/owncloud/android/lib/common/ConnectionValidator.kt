@@ -11,12 +11,21 @@ import org.apache.commons.lang3.exception.ExceptionUtils
 import timber.log.Timber
 import java.lang.Exception
 
-class ConnectionValidator {
+class ConnectionValidator (
+    val clearCookiesOnValidation: Boolean
+        ){
 
     fun validate(method: HttpBaseMethod, baseClient: OwnCloudClient): Boolean {
         try {
             var validationRetryCount = 0
             val client = OwnCloudClient(baseClient.baseUri, null, false)
+            if (clearCookiesOnValidation) {
+                client.cookiesForBaseUri = emptyList()
+            } else {
+                client.cookiesForBaseUri = baseClient.cookiesForBaseUri
+            }
+            //TODO: Also handle cookies
+
             client.credentials = baseClient.credentials
             client.setFollowRedirects(true)
             while (validationRetryCount < 5) {

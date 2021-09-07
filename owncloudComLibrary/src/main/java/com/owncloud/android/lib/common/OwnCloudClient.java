@@ -47,6 +47,7 @@ import timber.log.Timber;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER;
@@ -131,24 +132,25 @@ public class OwnCloudClient extends HttpClient {
             }
 
             status = method.execute();
+            Timber.d("-------------------------------------");
             stacklog(status, method);
 
             if (mConnectionValidator != null &&
                     status == HttpConstants.HTTP_MOVED_TEMPORARILY) {
                 mConnectionValidator.validate(method, this);
                 retry = true;
-            }
-
-            if (mFollowRedirects) {
-
+            } else if (mFollowRedirects) {
                 status = followRedirection(method).getLastStatus();
             }
 
+            /*
             repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
             if (repeatWithFreshCredentials) {
                 repeatCounter++;
             }
-        } while (repeatWithFreshCredentials);
+
+             */
+        } while (retry);
 //        } while (retry);
 
         return status;
@@ -164,6 +166,7 @@ public class OwnCloudClient extends HttpClient {
                     "\nobject: " + this.toString() +
                     "\nMethod: " + method.toString() +
                     "\nUrl: " + method.getHttpUrl() +
+                    "\nCookeis: " + getCookiesString() +
                     "\ntrace: " + ExceptionUtils.getStackTrace(e) +
                     "---------------------------");
         }
@@ -220,7 +223,8 @@ public class OwnCloudClient extends HttpClient {
                 // due to it will be set a different url
                 exhaustResponse(method.getResponseBodyAsStream());
 
-                method.setUrl(HttpUrl.parse(location));
+                Timber.d("+++++++++++++++++++++++++++++++++++++++ %s", getFullUrl(location));
+                method.setUrl(getFullUrl(location));
                 final String destination = method.getRequestHeader("Destination") != null
                         ? method.getRequestHeader("Destination")
                         : method.getRequestHeader("destination");
@@ -250,6 +254,14 @@ public class OwnCloudClient extends HttpClient {
             }
         }
         return redirectionPath;
+    }
+
+    private HttpUrl getFullUrl(String redirection) {
+        if(redirection.startsWith("/")) {
+            return HttpUrl.parse(mBaseUri.toString() + redirection);
+        } else {
+            return HttpUrl.parse(redirection);
+        }
     }
 
     /**
@@ -322,7 +334,7 @@ public class OwnCloudClient extends HttpClient {
 
     public String getCookiesString() {
         StringBuilder cookiesString = new StringBuilder();
-        List<Cookie> cookieList = getCookiesFromUrl(HttpUrl.parse(mBaseUri.toString()));
+        List<Cookie> cookieList = getCookiesForBaseUri();
 
         if (cookieList != null) {
             for (Cookie cookie : cookieList) {
@@ -333,11 +345,16 @@ public class OwnCloudClient extends HttpClient {
         return cookiesString.toString();
     }
 
-    public void setCookiesForCurrentAccount(List<Cookie> cookies) {
+    public void setCookiesForBaseUri(List<Cookie> cookies) {
         getOkHttpClient().cookieJar().saveFromResponse(
-                HttpUrl.parse(getAccount().getBaseUri().toString()),
+                HttpUrl.parse(mBaseUri.toString()),
                 cookies
         );
+    }
+
+    public List<Cookie> getCookiesForBaseUri() {
+            return getOkHttpClient().cookieJar().loadForRequest(
+                    HttpUrl.parse(mBaseUri.toString()));
     }
 
     public OwnCloudVersion getOwnCloudVersion() {

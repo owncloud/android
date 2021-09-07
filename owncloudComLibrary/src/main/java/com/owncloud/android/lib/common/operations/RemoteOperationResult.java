@@ -34,6 +34,7 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import okhttp3.Headers;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.json.JSONException;
 import timber.log.Timber;
 
@@ -112,6 +113,14 @@ public class RemoteOperationResult<T>
      */
     public RemoteOperationResult(Exception e) {
         mException = e;
+        //TODO: Do propper exception handling and remove this
+        Timber.e("---------------------------------" +
+                        "\nCreate RemoteOperationResult from exception." +
+                        "\n Message: %s" +
+                        "\n Stacktrace: %s" +
+                        "\n---------------------------------",
+                ExceptionUtils.getMessage(e),
+                ExceptionUtils.getStackTrace(e));
 
         if (e instanceof OperationCancelledException) {
             mCode = ResultCode.CANCELLED;
@@ -321,7 +330,7 @@ public class RemoteOperationResult<T>
                     mHttpPhrase = errorMessage;
                 }
             } catch (Exception e) {
-                Timber.w("Error reading exception from server: %s", e.getMessage());
+                Timber.w("Error reading exception from server: %s\nTrace: %s", e.getMessage(), ExceptionUtils.getStackTrace(e));
                 // mCode stays as set in this(success, httpCode, headers)
             }
         }
