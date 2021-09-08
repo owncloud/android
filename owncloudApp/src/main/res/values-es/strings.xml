@@ -182,6 +182,11 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">El nombre del archivo no debe tener mas de %d caracteres.</string>
   <string name="uploader_upload_text_filename_hint">Nombre</string>
   <string name="uploader_upload_camera_upload_files">Subiendo archivos de la cámara</string>
+  <string name="uploader_upload_picture_upload_files">Se cargarán %dfotografías nuevas</string>
+  <string name="uploader_upload_video_upload_files">Se cargarán %d vídeos nuevos</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Cargas de la cámara incorrectas</string>
+  <string name="uploader_upload_picture_upload_error">La ruta de cargas de fotografías ya no es válida</string>
+  <string name="uploader_upload_video_upload_error">La ruta de cargas de vídeos ya no es válida</string>
   <string name="uploader_upload_available_offline_files">Subiendo archivos disponible sin conexión</string>
   <string name="uploader_upload_requested_from_wifi_files">Subiendo archivos solicitados desde el wifi</string>
   <string name="ssl_certificate_not_trusted">El certificado del servidor no es de confianza</string>
@@ -455,6 +460,7 @@
   <string name="prefs_camera_upload_source_path_title_required">requerido</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Archivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Archivo original será</string>
+  <string name="prefs_camera_upload_last_sync_title">Última sincronización</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">dejado en la carpeta original</string>
