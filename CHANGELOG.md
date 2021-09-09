@@ -8,11 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Lack of back button in Logs view: [#3357](https://github.com/owncloud/android/issues/3357)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 
 Details
 -------
+
+* Bugfix - Lack of back button in Logs view: [#3357](https://github.com/owncloud/android/issues/3357)
+
+   A new back arrow button has been added in the toolbar in Logs screen, so that now it's possible to
+   return to the settings screen without the use of physical buttons of the device.
+
+   https://github.com/owncloud/android/issues/3357
+   https://github.com/owncloud/android/pull/3363
 
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 

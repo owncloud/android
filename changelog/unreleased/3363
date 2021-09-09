@@ -1,0 +1,8 @@
+Bugfix: Lack of back button in Logs view
+
+A new back arrow button has been added in the toolbar in Logs
+screen, so that now it's possible to return to the settings screen without
+the use of physical buttons of the device.
+
+https://github.com/owncloud/android/issues/3357
+https://github.com/owncloud/android/pull/3363
