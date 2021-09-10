@@ -25,12 +25,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
-import android.os.SystemClock
 import android.preference.PreferenceManager
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import timber.log.Timber
 
 object PassCodeManager {
 
@@ -42,9 +40,6 @@ object PassCodeManager {
     private var visibleActivitiesCounter = 0
 
     private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
-    // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
-    private var timeout =  20000  //preferencesProvider.getInt(PASS_CODE_TIMEOUT, 1_000)
-    private var lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
 
     fun onActivityStarted(activity: Activity) {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(appContext)
@@ -72,8 +67,7 @@ object PassCodeManager {
     fun onActivityStopped(activity: Activity) {
         if (visibleActivitiesCounter > 0) visibleActivitiesCounter--
 
-        // if timeout for passcode is reached, give 1 second to avoid asking for passcode when an activity stops
-        if (SystemClock.elapsedRealtime() - lastUnlockTimestamp > timeout) bayPassUnlockOnce()
+        bayPassUnlockOnce()
         val powerMgr = activity.getSystemService(Context.POWER_SERVICE) as PowerManager
         if (isPassCodeEnabled() && !powerMgr.isScreenOn) {
             activity.moveTaskToBack(true)
@@ -81,8 +75,9 @@ object PassCodeManager {
     }
 
     private fun passCodeShouldBeRequested(): Boolean {
-        Timber.i("CONSULTADO %s", lastUnlockTimestamp)
-        return if (SystemClock.elapsedRealtime() - lastUnlockTimestamp > timeout && visibleActivitiesCounter <= 0) isPassCodeEnabled()
+        val lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
+        val timeout = 15000  //preferencesProvider.getInt(PASS_CODE_TIMEOUT, 1_000)
+        return if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && visibleActivitiesCounter <= 0) isPassCodeEnabled()
         else false
     }
 
@@ -110,8 +105,12 @@ object PassCodeManager {
      * USE WITH CARE
      */
     fun bayPassUnlockOnce() {
-        lastUnlockTimestamp = SystemClock.elapsedRealtime() - timeout + 1_000
-        preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, lastUnlockTimestamp)
+        val timeout = 15000  //preferencesProvider.getInt(PASS_CODE_TIMEOUT, 1_000)
+        val lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
+        if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
+            val newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1_000
+            preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, newLastUnlockTimestamp)
+        }
     }
 
 }
