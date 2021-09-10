@@ -24,6 +24,7 @@ import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
+import com.owncloud.android.presentation.viewmodels.migration.MigrationState
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -36,6 +37,13 @@ class MigrationProgressFragment : Fragment(R.layout.fragment_migration_progress)
 
         view.findViewById<Button>(R.id.migration_progress_button)?.setOnClickListener {
             migrationViewModel.moveToNextState()
+        }
+
+        val progressState = migrationViewModel.migrationState.value?.peekContent() as MigrationState.MigrationProgressState
+
+        when (progressState.migrationType) {
+            MigrationState.MigrationType.MIGRATE_AND_KEEP -> migrationViewModel.copyLegacyStorageToScopedStorage()
+            MigrationState.MigrationType.MIGRATE_AND_CLEAN -> migrationViewModel.moveLegacyStorageToScopedStorage()
         }
     }
 }

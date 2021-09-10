@@ -22,10 +22,12 @@ package com.owncloud.android.presentation.ui.migration
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.presentation.viewmodels.migration.MigrationState
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
+import com.owncloud.android.utils.DisplayUtils.bytesToHumanReadable
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MigrationChoiceFragment : Fragment(R.layout.fragment_migration_choice) {
@@ -35,11 +37,20 @@ class MigrationChoiceFragment : Fragment(R.layout.fragment_migration_choice) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<Button>(R.id.migration_complete_button)?.setOnClickListener {
+        val migrationChoiceState = migrationViewModel.migrationState.value?.peekContent() as MigrationState.MigrationChoiceState
+
+        view.findViewById<TextView>(R.id.migration_choice_subtitle)?.apply {
+            text = getString(
+                R.string.scoped_storage_wizard_explanation,
+                bytesToHumanReadable(migrationChoiceState.legacyStorageSpaceInBytes, context)
+            )
+        }
+
+        view.findViewById<Button>(R.id.migration_choice_complete_button)?.setOnClickListener {
             migrationViewModel.moveToNextState(MigrationState.MigrationType.MIGRATE_AND_CLEAN)
         }
 
-        view.findViewById<Button>(R.id.migration_partial_button)?.setOnClickListener {
+        view.findViewById<Button>(R.id.migration_choice_partial_button)?.setOnClickListener {
             migrationViewModel.moveToNextState(MigrationState.MigrationType.MIGRATE_AND_KEEP)
         }
     }
