@@ -120,6 +120,7 @@ public class OwnCloudClient extends HttpClient {
 
         boolean retry = false;
         do {
+            retry = false;
             String requestId = RandomUtils.generateRandomUUID();
 
             // Header to allow tracing requests in apache and ownCloud logs
@@ -151,7 +152,6 @@ public class OwnCloudClient extends HttpClient {
 
              */
         } while (retry);
-//        } while (retry);
 
         return status;
     }
