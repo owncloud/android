@@ -49,8 +49,12 @@ class MigrationViewModel(
         return FileUtils.sizeOfDirectory(legacyStorageDirectory)
     }
 
-    fun migrateLegacyStorageToScopedStorage() {
-        scopedStorageProvider.migrateLegacyToScopedStorage()
+    fun moveLegacyStorageToScopedStorage() {
+        scopedStorageProvider.moveLegacyToScopedStorage()
+    }
+
+    fun copyLegacyStorageToScopedStorage() {
+        scopedStorageProvider.copyLegacyToScopedStorage()
     }
 
     fun moveToNextState(migrationType: MigrationState.MigrationType = MigrationState.MigrationType.MIGRATE_AND_KEEP) {

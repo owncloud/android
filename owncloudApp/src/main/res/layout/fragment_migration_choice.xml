@@ -8,31 +8,31 @@
     tools:context=".presentation.ui.migration.MigrationIntroFragment">
 
     <TextView
-        android:id="@+id/migration_info_title"
+        android:id="@+id/migration_choice_title"
         style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_margin"
         android:text="@string/scoped_storage_wizard_title"
         android:textColor="@color/login_text_color"
-        app:layout_constraintBottom_toTopOf="@id/migration_info_logo"
+        app:layout_constraintBottom_toTopOf="@id/migration_choice_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <ImageView
-        android:id="@+id/migration_info_logo"
+        android:id="@+id/migration_choice_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/logo"
-        app:layout_constraintBottom_toTopOf="@id/migration_info_subtitle"
+        app:layout_constraintBottom_toTopOf="@id/migration_choice_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_info_title" />
+        app:layout_constraintTop_toBottomOf="@id/migration_choice_title" />
 
     <TextView
-        android:id="@+id/migration_info_subtitle"
+        android:id="@+id/migration_choice_subtitle"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -42,8 +42,7 @@
         app:layout_constraintBottom_toTopOf="@id/linear_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_info_logo"
-        tools:text="We found 2,6 Gb of data in the external storage. We need to migrate them to the scoped storage to increase security. We can clean the external storage after the migration to avoid duplicity and vulnerabilities." />
+        app:layout_constraintTop_toBottomOf="@id/migration_choice_logo" />
 
     <LinearLayout
         android:id="@+id/linear_buttons"
@@ -54,10 +53,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_info_subtitle">
+        app:layout_constraintTop_toBottomOf="@id/migration_choice_subtitle">
 
         <Button
-            android:id="@+id/migration_complete_button"
+            android:id="@+id/migration_choice_complete_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/action_mode_background"
@@ -65,7 +64,7 @@
             android:textColor="@color/login_text_color" />
 
         <Button
-            android:id="@+id/migration_partial_button"
+            android:id="@+id/migration_choice_partial_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/standard_margin"
