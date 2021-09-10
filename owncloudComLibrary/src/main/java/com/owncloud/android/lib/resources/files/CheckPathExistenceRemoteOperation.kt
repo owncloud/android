@@ -98,11 +98,6 @@ class CheckPathExistenceRemoteOperation(
         }
     }
 
-    /**
-     * @return 'True' if the operation was executed and at least one redirection was followed.
-     */
-    fun wasRedirected() = redirectionPath?.redirectionsCount ?: 0 > 0
-
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS
 
     companion object {

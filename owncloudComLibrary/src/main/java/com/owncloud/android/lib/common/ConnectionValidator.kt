@@ -5,6 +5,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation
 import com.owncloud.android.lib.resources.status.RemoteServerInfo
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -15,7 +16,7 @@ class ConnectionValidator (
     val clearCookiesOnValidation: Boolean
         ){
 
-    fun validate(method: HttpBaseMethod, baseClient: OwnCloudClient): Boolean {
+    fun validate(baseClient: OwnCloudClient): Boolean {
         try {
             var validationRetryCount = 0
             val client = OwnCloudClient(baseClient.baseUri, null, false)
@@ -26,27 +27,28 @@ class ConnectionValidator (
             }
 
             client.credentials = baseClient.credentials
-            client.setFollowRedirects(true)
             while (validationRetryCount < 5) {
                 var successCounter = 0
                 var failCounter = 0
 
+                client.setFollowRedirects(true)
                 if (isOnwCloudStatusOk(client)) {
                     successCounter++
                 } else {
                     failCounter++
                 }
 
-                val contentReply = accessRootFolder()
-                if (contentReply == HttpConstants.HTTP_OK) {
-                    if (isRootFolderOk(contentReply)) {
+                client.setFollowRedirects(false)
+                val contentReply = canAccessRootFolder(client)
+                if (contentReply.httpCode == HttpConstants.HTTP_OK) {
+                    if (contentReply.data == true) { //if data is true it means that the content reply was ok
                         successCounter++
                     } else {
                         failCounter++
                     }
                 } else {
                     failCounter++
-                    if (contentReply == HttpConstants.HTTP_UNAUTHORIZED) {
+                    if (contentReply.hashCode() == HttpConstants.HTTP_UNAUTHORIZED) {
                         triggerAuthRefresh()
                     }
                 }
@@ -64,25 +66,15 @@ class ConnectionValidator (
     }
 
     private fun isOnwCloudStatusOk(client: OwnCloudClient): Boolean {
-        //TODO: Implement me
         val reply = getOwnCloudStatus(client)
-        return if (reply.httpCode == HttpConstants.HTTP_OK) {
-            isOCStatusReplyValid(reply.data)
-        } else {
-            false
-        }
+        return reply.httpCode == HttpConstants.HTTP_OK &&
+               !reply.isException &&
+                reply.data != null
     }
 
     private fun getOwnCloudStatus(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
         val remoteStatusOperation = GetRemoteStatusOperation()
-        //TODO: follow redirects only 5 times
         return remoteStatusOperation.execute(client)
-    }
-
-    private fun isOCStatusReplyValid(info: RemoteServerInfo): Boolean {
-        //TODO: Implement me
-        Timber.d("owncloud version %s", info.ownCloudVersion.version)
-        return true
     }
 
     private fun triggerAuthRefresh(): OwnCloudCredentials {
@@ -90,13 +82,8 @@ class ConnectionValidator (
         return OwnCloudCredentialsFactory.getAnonymousCredentials()
     }
 
-    private fun accessRootFolder(): Int {
-        //TODO: Implement me
-        return 55
-    }
-
-    private fun isRootFolderOk(content: Int): Boolean {
-        //TODO: Implement me
-        return true
+    private fun canAccessRootFolder(client: OwnCloudClient): RemoteOperationResult<Boolean> {
+        val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation("/", true)
+        return checkPathExistenceRemoteOperation.execute(client)
     }
 }

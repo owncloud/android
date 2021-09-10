@@ -56,7 +56,6 @@ import static com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID
 public class OwnCloudClient extends HttpClient {
 
     public static final String WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
-    public static final String WEBDAV_PATH_4_0_AND_LATER = "/remote.php/dav";
     public static final String STATUS_PATH = "/status.php";
     private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     private static final int MAX_REDIRECTIONS_COUNT = 5;
@@ -137,8 +136,7 @@ public class OwnCloudClient extends HttpClient {
 
             if (mConnectionValidator != null &&
                     status == HttpConstants.HTTP_MOVED_TEMPORARILY) {
-                mConnectionValidator.validate(method, this);
-                retry = true;
+                retry = mConnectionValidator.validate(this); // retry on success fail on no success
             } else if (mFollowRedirects) {
                 status = followRedirection(method).getLastStatus();
             }
