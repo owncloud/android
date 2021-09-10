@@ -131,7 +131,6 @@ public class OwnCloudClient extends HttpClient {
             }
 
             status = method.execute();
-            Timber.d("-------------------------------------");
             stacklog(status, method);
 
             if (mConnectionValidator != null &&
@@ -163,7 +162,7 @@ public class OwnCloudClient extends HttpClient {
                     "\nobject: " + this.toString() +
                     "\nMethod: " + method.toString() +
                     "\nUrl: " + method.getHttpUrl() +
-                    "\nCookeis: " + getCookiesString() +
+                    "\nCookeis: " + getCookiesForBaseUri().toString() +
                     "\ntrace: " + ExceptionUtils.getStackTrace(e) +
                     "---------------------------");
         }
@@ -327,19 +326,6 @@ public class OwnCloudClient extends HttpClient {
         } else {
             clearCredentials();
         }
-    }
-
-    public String getCookiesString() {
-        StringBuilder cookiesString = new StringBuilder();
-        List<Cookie> cookieList = getCookiesForBaseUri();
-
-        if (cookieList != null) {
-            for (Cookie cookie : cookieList) {
-                cookiesString.append(cookie.toString()).append(";");
-            }
-        }
-
-        return cookiesString.toString();
     }
 
     public void setCookiesForBaseUri(List<Cookie> cookies) {

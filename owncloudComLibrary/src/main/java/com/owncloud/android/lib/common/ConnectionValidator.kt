@@ -14,7 +14,7 @@ import java.lang.Exception
 
 class ConnectionValidator (
     val clearCookiesOnValidation: Boolean
-        ){
+){
 
     fun validate(baseClient: OwnCloudClient): Boolean {
         try {
@@ -28,6 +28,7 @@ class ConnectionValidator (
 
             client.credentials = baseClient.credentials
             while (validationRetryCount < 5) {
+                Timber.d("+++++++++++++++++++++++++++++++++++++ validationRetryCout %d", validationRetryCount)
                 var successCounter = 0
                 var failCounter = 0
 
@@ -38,21 +39,24 @@ class ConnectionValidator (
                     failCounter++
                 }
 
-                client.setFollowRedirects(false)
-                val contentReply = canAccessRootFolder(client)
-                if (contentReply.httpCode == HttpConstants.HTTP_OK) {
-                    if (contentReply.data == true) { //if data is true it means that the content reply was ok
-                        successCounter++
+                // Skip the part where we try to check if we can access the parts where we have to be logged in... if we are not logged in
+                if(baseClient.credentials !is OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials) {
+                    client.setFollowRedirects(false)
+                    val contentReply = canAccessRootFolder(client)
+                    if (contentReply.httpCode == HttpConstants.HTTP_OK) {
+                        if (contentReply.data == true) { //if data is true it means that the content reply was ok
+                            successCounter++
+                        } else {
+                            failCounter++
+                        }
                     } else {
                         failCounter++
-                    }
-                } else {
-                    failCounter++
-                    if (contentReply.hashCode() == HttpConstants.HTTP_UNAUTHORIZED) {
-                        triggerAuthRefresh()
+                        if (contentReply.hashCode() == HttpConstants.HTTP_UNAUTHORIZED) {
+                            triggerAuthRefresh()
+                        }
                     }
                 }
-                if(successCounter >= failCounter) {
+                if (successCounter >= failCounter) {
                     //update credentials in client
                     return true
                 }
@@ -67,8 +71,10 @@ class ConnectionValidator (
 
     private fun isOnwCloudStatusOk(client: OwnCloudClient): Boolean {
         val reply = getOwnCloudStatus(client)
-        return reply.httpCode == HttpConstants.HTTP_OK &&
-               !reply.isException &&
+        // dont check status code. It currently relais on the broken redirect code of the owncloud client
+        // TODO: Use okhttp redirect and add this check again
+        // return reply.httpCode == HttpConstants.HTTP_OK &&
+        return !reply.isException &&
                 reply.data != null
     }
 
