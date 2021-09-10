@@ -57,7 +57,6 @@ import java.util.concurrent.TimeUnit;
 public class HttpClient {
     private static OkHttpClient sOkHttpClient;
     private static Context sContext;
-    private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
     private static LogInterceptor sLogInterceptor;
     private static Interceptor sDebugInterceptor;
 
@@ -68,11 +67,10 @@ public class HttpClient {
                         NetworkUtils.getKnownServersStore(sContext));
                 final SSLSocketFactory sslSocketFactory = getNewSslSocketFactory(trustManager);
                 // Automatic cookie handling, NOT PERSISTENT
-                final CookieJar cookieJar = new CookieJarImpl(sCookieStore);
 
                 // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
                 //.hostnameVerifier(new BrowserCompatHostnameVerifier());
-                sOkHttpClient = buildNewOkHttpClient(sslSocketFactory, trustManager, cookieJar);
+                sOkHttpClient = buildNewOkHttpClient(sslSocketFactory, trustManager);
 
             } catch (Exception e) {
                 Timber.e(e, "Could not setup SSL system.");
@@ -109,8 +107,7 @@ public class HttpClient {
         return sslContext.getSocketFactory();
     }
 
-    private static OkHttpClient buildNewOkHttpClient(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager,
-                                                     CookieJar cookieJar) {
+    private static OkHttpClient buildNewOkHttpClient(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager){
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(getLogInterceptor())
                 .addNetworkInterceptor(DebugInterceptorFactory.INSTANCE.getInterceptor())
@@ -121,7 +118,6 @@ public class HttpClient {
                 .followRedirects(false)
                 .sslSocketFactory(sslSocketFactory, trustManager)
                 .hostnameVerifier((asdf, usdf) -> true)
-                .cookieJar(cookieJar)
                 .build();
     }
 
@@ -132,19 +128,11 @@ public class HttpClient {
         return sLogInterceptor;
     }
 
-    public static List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
-        return sCookieStore.get(httpUrl.host());
-    }
-
     public Context getContext() {
         return sContext;
     }
 
     public static void setContext(Context context) {
         sContext = context;
-    }
-
-    public void clearCookies() {
-        sCookieStore.clear();
     }
 }

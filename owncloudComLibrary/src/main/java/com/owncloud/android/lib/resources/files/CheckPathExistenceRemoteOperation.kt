@@ -60,7 +60,7 @@ class CheckPathExistenceRemoteOperation(
         private set
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Boolean> {
-        val previousFollowRedirects = client.followRedirects()
+        val previousFollowRedirects = client.getFollowRedirects()
         return try {
             val stringUrl =
                 if (isUserLogged) client.baseFilesWebDavUri.toString()
@@ -71,7 +71,6 @@ class CheckPathExistenceRemoteOperation(
                 setConnectionTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
             }
 
-            client.setFollowRedirects(false)
             var status = client.executeHttpMethod(propFindMethod)
             if (previousFollowRedirects) {
                 redirectionPath = client.followRedirection(propFindMethod)

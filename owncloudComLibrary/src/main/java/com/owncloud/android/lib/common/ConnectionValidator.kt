@@ -20,11 +20,10 @@ class ConnectionValidator (
             var validationRetryCount = 0
             val client = OwnCloudClient(baseClient.baseUri, null, false)
             if (clearCookiesOnValidation) {
-                client.cookiesForBaseUri = emptyList()
+                client.clearCookies()
             } else {
                 client.cookiesForBaseUri = baseClient.cookiesForBaseUri
             }
-            //TODO: Also handle cookies
 
             client.credentials = baseClient.credentials
             client.setFollowRedirects(true)

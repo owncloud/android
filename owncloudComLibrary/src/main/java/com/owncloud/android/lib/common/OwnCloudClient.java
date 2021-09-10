@@ -62,7 +62,6 @@ public class OwnCloudClient extends HttpClient {
     private static final int MAX_REDIRECTIONS_COUNT = 5;
     private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
 
-    private static byte[] sExhaustBuffer = new byte[1024];
     private static int sIntanceCounter = 0;
     private OwnCloudCredentials mCredentials = null;
     private int mInstanceNumber;
@@ -80,7 +79,7 @@ public class OwnCloudClient extends HttpClient {
 
     private SingleSessionManager mSingleSessionManager = null;
 
-    private boolean mFollowRedirects;
+    private boolean mFollowRedirects = false;
 
     public OwnCloudClient(Uri baseUri, ConnectionValidator connectionValidator, boolean synchronizeRequests) {
         if (baseUri == null) {
@@ -357,6 +356,10 @@ public class OwnCloudClient extends HttpClient {
                     HttpUrl.parse(mBaseUri.toString()));
     }
 
+    public void clearCookies() {
+        setCookiesForBaseUri(new ArrayList<>());
+    }
+
     public OwnCloudVersion getOwnCloudVersion() {
         return mVersion;
     }
@@ -453,7 +456,7 @@ public class OwnCloudClient extends HttpClient {
         am.clearPassword(mAccount.getSavedAccount()); // being strict, only needed for Basic Auth credentials
     }
 
-    public boolean followRedirects() {
+    public boolean getFollowRedirects() {
         return mFollowRedirects;
     }
 
