@@ -43,7 +43,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityVie
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
-import com.owncloud.android.testutil.security.EXAMPLE_PASSCODE_4_DIGITS
+import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.EXAMPLE_PATTERN
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.utils.matchers.verifyPreference
@@ -105,7 +105,7 @@ class SettingsSecurityFragmentTest {
             )
         }
 
-        every { passCodeViewModel.getPassCode() } returns EXAMPLE_PASSCODE_4_DIGITS
+        every { passCodeViewModel.getPassCode() } returns OC_PASSCODE_4_DIGITS
         every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
 
         Intents.init()

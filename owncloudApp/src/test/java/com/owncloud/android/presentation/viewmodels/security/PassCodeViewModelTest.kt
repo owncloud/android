@@ -25,7 +25,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.testutil.security.EXAMPLE_PASSCODE_4_DIGITS
+import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -51,11 +51,11 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `get passcode - ok`() {
-        every { preferencesProvider.getString(any(), any()) } returns EXAMPLE_PASSCODE_4_DIGITS
+        every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
 
         val getPassCode = passCodeViewModel.getPassCode()
 
-        assertEquals(EXAMPLE_PASSCODE_4_DIGITS, getPassCode)
+        assertEquals(OC_PASSCODE_4_DIGITS, getPassCode)
 
         verify(exactly = 1) {
             preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
@@ -64,10 +64,10 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `set passcode - ok`() {
-        passCodeViewModel.setPassCode(EXAMPLE_PASSCODE_4_DIGITS)
+        passCodeViewModel.setPassCode(OC_PASSCODE_4_DIGITS)
 
         verify(exactly = 1) {
-            preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, EXAMPLE_PASSCODE_4_DIGITS)
+            preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, OC_PASSCODE_4_DIGITS)
             preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         }
     }
@@ -84,7 +84,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `check passcode is valid - ok`() {
-        every { preferencesProvider.getString(any(), any()) } returns EXAMPLE_PASSCODE_4_DIGITS
+        every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
 
         val passCodeDigits: Array<String?> = arrayOf("1", "1", "1", "1")
 
@@ -129,7 +129,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `check passcode is valid - ko - different digit`() {
-        every { preferencesProvider.getString(any(), any()) } returns EXAMPLE_PASSCODE_4_DIGITS
+        every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
 
         val passCodeDigits: Array<String?> = arrayOf("1", "2", "1", "1")
 
@@ -144,7 +144,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `check passcode is valid - ko - null digit`() {
-        every { preferencesProvider.getString(any(), any()) } returns EXAMPLE_PASSCODE_4_DIGITS
+        every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
 
         val passCodeDigits: Array<String?> = arrayOf("1", null, "1", "1")
 

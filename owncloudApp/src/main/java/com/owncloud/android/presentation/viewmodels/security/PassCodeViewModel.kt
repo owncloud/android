@@ -64,6 +64,6 @@ class PassCodeViewModel(
             val pinChar = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, null)
             pinChar?.let { pinString += pinChar }
         }
-        return if (pinString == "") null else pinString
+        return if (pinString.isEmpty()) null else pinString
     }
 }

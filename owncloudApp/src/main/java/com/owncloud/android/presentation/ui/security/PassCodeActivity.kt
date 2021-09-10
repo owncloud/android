@@ -138,7 +138,8 @@ class PassCodeActivity : BaseActivity() {
 
     private fun inflatePasscodeTxtLine() {
         val passcodeTxtLayout = findViewById<LinearLayout>(R.id.passCodeTxtLayout)
-        for (i in 0 until (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())) {
+        val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
+        for (i in 0 until numberOfPasscodeDigits) {
             val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
             passcodeTxtLayout.addView(txt)
             passCodeEditTexts[i] = txt

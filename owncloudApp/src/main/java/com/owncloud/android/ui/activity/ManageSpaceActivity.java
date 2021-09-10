@@ -105,12 +105,12 @@ public class ManageSpaceActivity extends AppCompatActivity {
             boolean patternEnabled = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
             boolean biometricEnabled = appPrefs.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false);
 
-
             final String passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, null);
-            final String[] passCodeDigits = new String[getBaseContext().getResources().getInteger(R.integer.passcode_digits)];
+            int numberOfPasscodeDigits = getBaseContext().getResources().getInteger(R.integer.passcode_digits);
+            final String[] passCodeDigits = new String[numberOfPasscodeDigits];
 
             if (passCodeEnable) {
-                for (int i = 0; i < getBaseContext().getResources().getInteger(R.integer.passcode_digits) && passCodeEnable; i++) {
+                for (int i = 0; i < numberOfPasscodeDigits && passCodeEnable; i++) {
                     passCodeDigits[i] = Character.toString(passcodeString.charAt(i));
                 }
             }
@@ -130,7 +130,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
             result = result && appPrefsEditor.commit();
 
             final StringBuilder newPassCodeString = new StringBuilder();
-            for(int i = 0; i < getBaseContext().getResources().getInteger(R.integer.passcode_digits) && passCodeEnable; i++) {
+            for(int i = 0; i < numberOfPasscodeDigits && passCodeEnable; i++) {
                 newPassCodeString.append(passCodeDigits[i]);
             }
             appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE, newPassCodeString.toString());
