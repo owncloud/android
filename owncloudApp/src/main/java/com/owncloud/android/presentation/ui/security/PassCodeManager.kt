@@ -26,22 +26,27 @@ import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
 import android.os.SystemClock
-import android.preference.PreferenceManager
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.authentication.BiometricManager
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import timber.log.Timber
 
 object PassCodeManager {
 
-    private val exemptOfPasscodeActivites: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
+    private const val PASS_CODE_TIMEOUT = "PASS_CODE_TIMEOUT"
+    const val LAST_UNLOCK_TIMESTAMP = "LAST_UNLOCK_TIMESTAMP"
 
-    private var timestamp = 0L
+    private val exemptOfPasscodeActivities: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
+
     private var visibleActivitiesCounter = 0
 
+    private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
     // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
-    private const val PASS_CODE_TIMEOUT = 1_000
+    private var timeout =  20000  //preferencesProvider.getInt(PASS_CODE_TIMEOUT, 1_000)
+    private var lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
 
     fun onActivityStarted(activity: Activity) {
-        if (!exemptOfPasscodeActivites.contains(activity.javaClass) && passCodeShouldBeRequested()) {
+        if (!exemptOfPasscodeActivities.contains(activity.javaClass) && passCodeShouldBeRequested()) {
 
             // Do not ask for passcode if biometric is enabled
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.getBiometricManager(activity).isBiometricEnabled) {
@@ -58,7 +63,8 @@ object PassCodeManager {
     fun onActivityStopped(activity: Activity) {
         if (visibleActivitiesCounter > 0) visibleActivitiesCounter--
 
-        setUnlockTimestamp()
+        // if timeout for passcode is reached, give 1 second to avoid asking for passcode when an activity stops
+        if (SystemClock.elapsedRealtime() - lastUnlockTimestamp > timeout) bayPassUnlockOnce()
         val powerMgr = activity.getSystemService(Context.POWER_SERVICE) as PowerManager
         if (isPassCodeEnabled() && !powerMgr.isScreenOn) {
             activity.moveTaskToBack(true)
@@ -66,13 +72,13 @@ object PassCodeManager {
     }
 
     private fun passCodeShouldBeRequested(): Boolean {
-        return if (SystemClock.elapsedRealtime() - timestamp > PASS_CODE_TIMEOUT && visibleActivitiesCounter <= 0) isPassCodeEnabled()
+        Timber.i("CONSULTADO %s", lastUnlockTimestamp)
+        return if (SystemClock.elapsedRealtime() - lastUnlockTimestamp > timeout && visibleActivitiesCounter <= 0) isPassCodeEnabled()
         else false
     }
 
     fun isPassCodeEnabled(): Boolean {
-        val appPrefs = PreferenceManager.getDefaultSharedPreferences(appContext)
-        return appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+        return preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     }
 
     private fun checkPasscode(activity: Activity) {
@@ -81,10 +87,6 @@ object PassCodeManager {
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         activity.startActivity(i)
-    }
-
-    private fun setUnlockTimestamp() {
-        timestamp = SystemClock.elapsedRealtime()
     }
 
     fun onBiometricCancelled(activity: Activity) {
@@ -96,11 +98,11 @@ object PassCodeManager {
      * This can be used for example for onActivityResult, where you don't want to re authenticate
      * again.
      *
-     *
      * USE WITH CARE
      */
     fun bayPassUnlockOnce() {
-        setUnlockTimestamp()
+        lastUnlockTimestamp = SystemClock.elapsedRealtime() - timeout + 1_000
+        preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, lastUnlockTimestamp)
     }
 
 }

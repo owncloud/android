@@ -36,6 +36,7 @@ import com.owncloud.android.R
 import android.widget.LinearLayout
 import android.view.View.OnFocusChangeListener
 import android.content.Intent
+import android.os.SystemClock
 import android.text.TextWatcher
 import android.text.Editable
 import android.view.KeyEvent
@@ -43,6 +44,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import com.owncloud.android.BuildConfig
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.presentation.ui.security.PassCodeManager.LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.PreferenceUtils
@@ -205,6 +208,10 @@ class PassCodeActivity : BaseActivity() {
             if (passCodeViewModel.checkPassCodeIsValid(passCodeDigits)) {
                 /// pass code accepted in request, user is allowed to access the app
                 passCodeError.visibility = View.INVISIBLE
+                val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
+                val lol = SystemClock.elapsedRealtime()
+                preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, lol)
+                Timber.i("GUARDADO %s", lol)
                 hideSoftKeyboard()
                 finish()
             } else {
