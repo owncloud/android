@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/owncloud_blue"
+    android:background="@color/login_background_color"
     tools:context=".presentation.ui.migration.MigrationCompletedFragment">
 
     <TextView
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_margin"
         android:text="@string/scoped_storage_wizard_title"
-        android:textColor="@color/white"
+        android:textColor="@color/login_text_color"
         app:layout_constraintBottom_toTopOf="@id/migration_completed_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
         android:layout_margin="@dimen/standard_margin"
         android:gravity="center"
         android:text="@string/scoped_storage_wizard_migration_completed"
-        android:textColor="@color/white"
+        android:textColor="@color/login_text_color"
         app:layout_constraintBottom_toTopOf="@id/migration_completed_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,9 +50,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
-        android:background="@color/color_accent"
-        android:textColor="@color/white"
+        android:background="@color/action_mode_background"
         android:text="@string/drawer_close"
+        android:textColor="@color/login_text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
