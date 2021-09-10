@@ -41,8 +41,9 @@ import com.owncloud.android.usecases.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+
 import timber.log.Timber
 import java.io.File
 import java.util.Date
