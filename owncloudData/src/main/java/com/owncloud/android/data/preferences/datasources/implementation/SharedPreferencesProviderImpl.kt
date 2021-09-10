@@ -38,6 +38,9 @@ class SharedPreferencesProviderImpl(
     override fun putInt(key: String, value: Int) = editor.putInt(key, value).apply()
     override fun getInt(key: String, defaultValue: Int) = sharedPreferences.getInt(key, defaultValue)
 
+    override fun putLong(key: String, value: Long) = editor.putLong(key, value).apply()
+    override fun getLong(key: String, defaultValue: Long) = sharedPreferences.getLong(key, defaultValue)
+
     override fun putBoolean(key: String, value: Boolean) = editor.putBoolean(key, value).apply()
     override fun getBoolean(key: String, defaultValue: Boolean) = sharedPreferences.getBoolean(key, defaultValue)
 
