@@ -26,6 +26,7 @@ package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
@@ -138,5 +139,9 @@ public class HttpClient {
 
     public static void setContext(Context context) {
         sContext = context;
+    }
+
+    public void clearCookies() {
+        sCookieStore.clear();
     }
 }

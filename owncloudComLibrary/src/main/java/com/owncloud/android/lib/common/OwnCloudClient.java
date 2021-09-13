@@ -340,10 +340,6 @@ public class OwnCloudClient extends HttpClient {
                     HttpUrl.parse(mBaseUri.toString()));
     }
 
-    public void clearCookies() {
-        setCookiesForBaseUri(new ArrayList<>());
-    }
-
     public OwnCloudVersion getOwnCloudVersion() {
         return mVersion;
     }

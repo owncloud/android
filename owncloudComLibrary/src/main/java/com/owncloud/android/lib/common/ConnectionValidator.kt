@@ -21,7 +21,7 @@ class ConnectionValidator (
             var validationRetryCount = 0
             val client = OwnCloudClient(baseClient.baseUri, null, false)
             if (clearCookiesOnValidation) {
-                client.clearCookies()
+                client.clearCookies();
             } else {
                 client.cookiesForBaseUri = baseClient.cookiesForBaseUri
             }
@@ -84,7 +84,7 @@ class ConnectionValidator (
     }
 
     private fun triggerAuthRefresh(): OwnCloudCredentials {
-        //TODO: Implement me
+        Timber.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!! need to reauthenticate !!!!!!!!!!!!!!!!!!!!!!!!!!")
         return OwnCloudCredentialsFactory.getAnonymousCredentials()
     }
 

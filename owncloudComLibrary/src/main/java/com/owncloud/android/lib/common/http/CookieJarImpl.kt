@@ -28,7 +28,7 @@ import okhttp3.CookieJar
 import okhttp3.HttpUrl
 
 class CookieJarImpl(
-    private val sCookieStore: HashMap<String, List<Cookie>>
+    private val cookieStore: HashMap<String, List<Cookie>>
 ) : CookieJar {
 
     fun containsCookieWithName(cookies: List<Cookie>, name: String): Boolean {
@@ -52,12 +52,11 @@ class CookieJarImpl(
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         // Avoid duplicated cookies but update
-        val currentCookies: List<Cookie> = sCookieStore[url.host] ?: ArrayList()
+        val currentCookies: List<Cookie> = cookieStore[url.host] ?: ArrayList()
         val updatedCookies: List<Cookie> = getUpdatedCookies(currentCookies, cookies)
-        sCookieStore[url.host] = updatedCookies
+        cookieStore[url.host] = updatedCookies
     }
 
     override fun loadForRequest(url: HttpUrl) =
-        sCookieStore[url.host] ?: ArrayList()
-
+        cookieStore[url.host] ?: ArrayList()
 }
