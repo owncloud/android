@@ -57,6 +57,7 @@ import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
 
 import static com.owncloud.android.presentation.ui.security.PassCodeActivity.PASSCODE_MIN_LENGTH;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
 
 public class BiometricActivity extends AppCompatActivity {
 
@@ -144,6 +145,7 @@ public class BiometricActivity extends AppCompatActivity {
                     intent.putExtra(PassCodeActivity.EXTRAS_MIGRATION, true);
                     startActivity(intent);
                 }
+                preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis());
                 mActivity.finish();
             }
 
