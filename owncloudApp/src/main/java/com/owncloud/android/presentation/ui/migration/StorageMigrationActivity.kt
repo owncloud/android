@@ -24,10 +24,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.presentation.viewmodels.migration.MigrationState
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 
 class StorageMigrationActivity : AppCompatActivity() {
 
@@ -67,13 +70,15 @@ class StorageMigrationActivity : AppCompatActivity() {
     companion object {
 
         private fun hasDataInLegacyStorage(): Boolean {
-            // Check if there is data in legacy storage
-            return true
+            val legacyStorageProvider = LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder)
+            val legacyStorageFolder = File(legacyStorageProvider.getRootFolderPath())
+            return legacyStorageFolder.exists() && !legacyStorageFolder.listFiles().isNullOrEmpty()
         }
 
         private fun hasAccessToLegacyStorage(): Boolean {
-            // Check if we have access to legacy storage
-            return true
+            val legacyStorageProvider = LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder)
+            val legacyStorageFolder = File(legacyStorageProvider.getRootFolderPath())
+            return legacyStorageFolder.canRead() && legacyStorageFolder.canWrite()
         }
 
         fun runIfNeeded(context: Context) {
@@ -86,7 +91,7 @@ class StorageMigrationActivity : AppCompatActivity() {
         }
 
         private fun shouldShow(): Boolean {
-            return (hasDataInLegacyStorage() && hasAccessToLegacyStorage())
+            return hasDataInLegacyStorage() && hasAccessToLegacyStorage()
         }
     }
 }
