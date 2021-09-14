@@ -28,12 +28,15 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.CheckBoxPreference
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.presentation.ui.security.LOCK_TIMEOUT
+import com.owncloud.android.presentation.ui.security.LockTimeout
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
@@ -49,6 +52,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private var prefPasscode: CheckBoxPreference? = null
     private var prefPattern: CheckBoxPreference? = null
     private var prefBiometric: CheckBoxPreference? = null
+    private var prefLockApplication: ListPreference? = null
     private var prefTouchesWithOtherVisibleWindows: CheckBoxPreference? = null
 
     private var biometricManager: BiometricManager? = null
@@ -59,8 +63,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             else {
                 prefPasscode?.isChecked = true
 
-                // Allow to use biometric lock since Passcode lock has been enabled
-                enableBiometric()
+                // Allow to use biometric lock and lock delay since Passcode lock has been enabled
+                enableBiometricAndLockApplication()
             }
         }
 
@@ -70,8 +74,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             else {
                 prefPasscode?.isChecked = false
 
-                // Do not allow to use biometric lock since Passcode lock has been disabled
-                disableBiometric()
+                // Do not allow to use biometric lock nor lock delay since Passcode lock has been disabled
+                disableBiometricAndLockApplication()
             }
         }
 
@@ -82,8 +86,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             if (patternEnableResult.isSuccess) {
                 prefPattern?.isChecked = true
 
-                // Allow to use biometric lock since Pattern lock has been enabled
-                enableBiometric()
+                // Allow to use biometric lock and lock delay since Pattern lock has been enabled
+                enableBiometricAndLockApplication()
             } else {
                 showMessageInSnackbar(getString(R.string.pattern_error_set))
             }
@@ -96,8 +100,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             if (patternDisableResult.isSuccess) {
                 prefPattern?.isChecked = false
 
-                // Do not allow to use biometric lock since Pattern lock has been disabled
-                disableBiometric()
+                // Do not allow to use biometric lock nor lock delay since Pattern lock has been disabled
+                disableBiometricAndLockApplication()
             } else {
                 showMessageInSnackbar(getString(R.string.pattern_error_remove))
             }
@@ -110,6 +114,20 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         prefPasscode = findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)
         prefPattern = findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)
         prefBiometric = findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
+        prefLockApplication = findPreference<ListPreference>(LOCK_TIMEOUT)?.apply {
+            entries = listOf(
+                getString(R.string.prefs_lock_application_entries_immediately),
+                getString(R.string.prefs_lock_application_entries_1minute),
+                getString(R.string.prefs_lock_application_entries_5minutes),
+                getString(R.string.prefs_lock_application_entries_30minutes)
+            ).toTypedArray()
+            entryValues = listOf(
+                LockTimeout.IMMEDIATELY.name,
+                LockTimeout.ONE_MINUTE.name,
+                LockTimeout.FIVE_MINUTES.name,
+                LockTimeout.THIRTY_MINUTES.name
+            ).toTypedArray()
+        }
         prefTouchesWithOtherVisibleWindows = findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)
 
         // Passcode lock
@@ -156,7 +174,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 screenSecurity?.removePreference(prefBiometric)
             } else {
                 if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { // Disable biometric lock if Passcode or Pattern locks are disabled
-                    disableBiometric()
+                    disableBiometricAndLockApplication()
                 }
 
                 prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
@@ -194,15 +212,17 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun enableBiometric() {
+    private fun enableBiometricAndLockApplication() {
         prefBiometric?.isEnabled = true
         prefBiometric?.summary = null
+        prefLockApplication?.isEnabled = true
     }
 
-    private fun disableBiometric() {
+    private fun disableBiometricAndLockApplication() {
         prefBiometric?.isChecked = false
         prefBiometric?.isEnabled = false
         prefBiometric?.summary = getString(R.string.prefs_biometric_summary)
+        prefLockApplication?.isEnabled = false
     }
 
     companion object {

@@ -20,5 +20,20 @@
 
 package com.owncloud.android.presentation.ui.security
 
-const val LOCK_TIMEOUT = "LOCK_TIMEOUT"
-const val LAST_UNLOCK_TIMESTAMP = "LAST_UNLOCK_TIMESTAMP"
+const val LOCK_TIMEOUT = "lock_timeout"
+const val LAST_UNLOCK_TIMESTAMP = "last_unlock_timestamp"
+
+enum class LockTimeout {
+    IMMEDIATELY, ONE_MINUTE, FIVE_MINUTES, THIRTY_MINUTES;
+
+    companion object {
+        fun fromStringToMilliseconds(string: String?): Int {
+            return when {
+                string.equals("IMMEDIATELY", ignoreCase = true) -> 0
+                string.equals("ONE_MINUTE", ignoreCase = true) -> 60000
+                string.equals("FIVE_MINUTES", ignoreCase = true) -> 300000
+                else -> 1800000
+            }
+        }
+    }
+}

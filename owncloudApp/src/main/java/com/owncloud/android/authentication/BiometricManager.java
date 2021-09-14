@@ -33,6 +33,7 @@ import androidx.annotation.RequiresApi;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
+import com.owncloud.android.presentation.ui.security.LockTimeout;
 import com.owncloud.android.presentation.ui.security.PassCodeManager;
 import com.owncloud.android.ui.activity.BiometricActivity;
 
@@ -40,6 +41,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LOCK_TIMEOUT;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 /**
@@ -107,7 +109,7 @@ public class BiometricManager {
 
     private boolean biometricShouldBeRequested() {
         long lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0);
-        int timeout = 15000; //preferencesProvider.getInt(LOCK_TIMEOUT, 1_000)
+        int timeout = LockTimeout.Companion.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name()));
         if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && mVisibleActivitiesCounter <= 0) {
             return isBiometricEnabled();
         }
@@ -134,7 +136,7 @@ public class BiometricManager {
      * USE WITH CARE
      */
     public void bayPassUnlockOnce() {
-        int timeout = 15000; //preferencesProvider.getInt(LOCK_TIMEOUT, 1_000)
+        int timeout = LockTimeout.Companion.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name()));
         long lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0);
         if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
             long newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1000;

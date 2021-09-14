@@ -30,6 +30,13 @@
         app:iconSpaceReserved="false"
         app:key="set_biometric"
         app:title="@string/prefs_biometric" />
+    <ListPreference
+        app:dialogTitle="@string/prefs_lock_application"
+        app:iconSpaceReserved="false"
+        app:key="lock_timeout"
+        app:negativeButtonText=""
+        app:title="@string/prefs_lock_application"
+        app:useSimpleSummaryProvider="true" />
     <CheckBoxPreference
         app:iconSpaceReserved="false"
         app:key="touches_with_other_visible_windows"
