@@ -25,8 +25,6 @@
 
 package com.owncloud.android.lib.common;
 
-import android.accounts.AccountManager;
-import android.accounts.AccountsException;
 import android.net.Uri;
 
 import at.bitfire.dav4jvm.exception.HttpException;
@@ -47,7 +45,6 @@ import timber.log.Timber;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER;
@@ -143,13 +140,6 @@ public class OwnCloudClient extends HttpClient {
                 status = followRedirection(method).getLastStatus();
             }
 
-            /*
-            repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
-            if (repeatWithFreshCredentials) {
-                repeatCounter++;
-            }
-             */
-
         } while (retry && repeatCounter < MAX_RETRY_COUNT);
 
         return status;
@@ -178,29 +168,18 @@ public class OwnCloudClient extends HttpClient {
     }
 
     private int executeRedirectedHttpMethod(HttpBaseMethod method) throws Exception {
-        boolean repeatWithFreshCredentials;
-        int repeatCounter = 0;
         int status;
+        String requestId = RandomUtils.generateRandomUUID();
 
-        do {
-            String requestId = RandomUtils.generateRandomUUID();
-
-            // Header to allow tracing requests in apache and ownCloud logs
-            Timber.d("Executing in request with id %s", requestId);
-            method.setRequestHeader(OC_X_REQUEST_ID, requestId);
-            method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
-            method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
-            if (mCredentials.getHeaderAuth() != null) {
-                method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
-            }
-            status = method.execute();
-
-            repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
-            if (repeatWithFreshCredentials) {
-                repeatCounter++;
-            }
-        } while (repeatWithFreshCredentials);
-
+        // Header to allow tracing requests in apache and ownCloud logs
+        Timber.d("Executing in request with id %s", requestId);
+        method.setRequestHeader(OC_X_REQUEST_ID, requestId);
+        method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
+        method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
+        if (mCredentials.getHeaderAuth() != null) {
+            method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
+        }
+        status = method.execute();
         return status;
     }
 
@@ -363,86 +342,6 @@ public class OwnCloudClient extends HttpClient {
 
     public void setAccount(OwnCloudAccount account) {
         this.mAccount = account;
-    }
-
-    /**
-     * Checks the status code of an execution and decides if should be repeated with fresh credentials.
-     * <p>
-     * Invalidates current credentials if the request failed as anauthorized.
-     * <p>
-     * Refresh current credentials if possible, and marks a retry.
-     *
-     * @param status
-     * @param repeatCounter
-     * @return
-     */
-    private boolean checkUnauthorizedAccess(int status, int repeatCounter) {
-        boolean credentialsWereRefreshed = false;
-
-        if (shouldInvalidateAccountCredentials(status)) {
-            invalidateAccountCredentials();
-
-            if (getCredentials().authTokenCanBeRefreshed() &&
-                    repeatCounter < 1) {
-                try {
-                    mAccount.loadCredentials(getContext());
-                    // if mAccount.getCredentials().length() == 0 --> refresh failed
-                    setCredentials(mAccount.getCredentials());
-                    credentialsWereRefreshed = true;
-
-                } catch (AccountsException | IOException e) {
-                    Timber.e(e, "Error while trying to refresh auth token for %s",
-                            mAccount.getSavedAccount().name
-                    );
-                }
-
-                if (!credentialsWereRefreshed && mSingleSessionManager != null) {
-                    // if credentials are not refreshed, client must be removed
-                    // from the OwnCloudClientManager to prevent it is reused once and again
-                    mSingleSessionManager.removeClientFor(mAccount);
-                }
-            }
-            // else: onExecute will finish with status 401
-        }
-
-        return credentialsWereRefreshed;
-    }
-
-    /**
-     * Determines if credentials should be invalidated according the to the HTTPS status
-     * of a network request just performed.
-     *
-     * @param httpStatusCode Result of the last request ran with the 'credentials' belows.
-     * @return 'True' if credentials should and might be invalidated, 'false' if shouldn't or
-     * cannot be invalidated with the given arguments.
-     */
-    private boolean shouldInvalidateAccountCredentials(int httpStatusCode) {
-        boolean shouldInvalidateAccountCredentials =
-                (httpStatusCode == HttpConstants.HTTP_UNAUTHORIZED);
-
-        shouldInvalidateAccountCredentials &= (mCredentials != null &&         // real credentials
-                !(mCredentials instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
-
-        // test if have all the needed to effectively invalidate ...
-        shouldInvalidateAccountCredentials &= (mAccount != null && mAccount.getSavedAccount() != null && getContext() != null);
-
-        return shouldInvalidateAccountCredentials;
-    }
-
-    /**
-     * Invalidates credentials stored for the given account in the system  {@link AccountManager} and in
-     * current {@link SingleSessionManager#getDefaultSingleton()} instance.
-     * <p>
-     * {@link #shouldInvalidateAccountCredentials(int)} should be called first.
-     *
-     */
-    private void invalidateAccountCredentials() {
-        AccountManager am = AccountManager.get(getContext());
-        am.invalidateAuthToken(
-                mAccount.getSavedAccount().type,
-                mCredentials.getAuthToken()
-        );
-        am.clearPassword(mAccount.getSavedAccount()); // being strict, only needed for Basic Auth credentials
     }
 
     public boolean getFollowRedirects() {
