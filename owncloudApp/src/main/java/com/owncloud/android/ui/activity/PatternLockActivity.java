@@ -39,11 +39,15 @@ import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
 import com.owncloud.android.utils.DocumentProviderUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
 
 import java.util.List;
+
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
 
 public class PatternLockActivity extends AppCompatActivity {
 
@@ -193,6 +197,8 @@ public class PatternLockActivity extends AppCompatActivity {
              */
             if (checkPattern()) {
                 mPatternError.setVisibility(View.INVISIBLE);
+                SharedPreferencesProvider preferencesProvider = new SharedPreferencesProviderImpl(getApplicationContext());
+                preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis());
                 finish();
             } else {
                 showErrorAndRestart(R.string.pattern_incorrect_pattern,
