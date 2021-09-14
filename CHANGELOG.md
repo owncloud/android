@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Lack of back button in Logs view: [#3357](https://github.com/owncloud/android/issues/3357)
 * Bugfix - ANR after removing account with too many downloaded files: [#3362](https://github.com/owncloud/android/issues/3362)
+* Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 
@@ -32,6 +33,15 @@ Details
 
    https://github.com/owncloud/android/issues/3362
    https://github.com/owncloud/android/pull/3380
+
+* Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
+
+   When an account was deleted from the phone settings, in the accounts section, it was not deleted
+   from the Navigation Drawer, now when deleting an account from there, the Navigation Drawer
+   refreshes and it is deleted correctly.
+
+   https://github.com/owncloud/android/issues/3340
+   https://github.com/owncloud/android/pull/3381
 
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 
