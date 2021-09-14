@@ -44,7 +44,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import com.owncloud.android.presentation.ui.security.PassCodeManager.LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.PreferenceUtils

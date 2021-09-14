@@ -32,13 +32,8 @@ import com.owncloud.android.data.preferences.datasources.implementation.SharedPr
 
 object PassCodeManager {
 
-    private const val PASS_CODE_TIMEOUT = "PASS_CODE_TIMEOUT"
-    const val LAST_UNLOCK_TIMESTAMP = "LAST_UNLOCK_TIMESTAMP"
-
     private val exemptOfPasscodeActivities: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
-
     private var visibleActivitiesCounter = 0
-
     private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
 
     fun onActivityStarted(activity: Activity) {
@@ -76,7 +71,7 @@ object PassCodeManager {
 
     private fun passCodeShouldBeRequested(): Boolean {
         val lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
-        val timeout = 15000  //preferencesProvider.getInt(PASS_CODE_TIMEOUT, 1_000)
+        val timeout = 15000 //preferencesProvider.getInt(LOCK_TIMEOUT, 1_000)
         return if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && visibleActivitiesCounter <= 0) isPassCodeEnabled()
         else false
     }
@@ -105,7 +100,7 @@ object PassCodeManager {
      * USE WITH CARE
      */
     fun bayPassUnlockOnce() {
-        val timeout = 15000  //preferencesProvider.getInt(PASS_CODE_TIMEOUT, 1_000)
+        val timeout = 15000 //preferencesProvider.getInt(LOCK_TIMEOUT, 1_000)
         val lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
         if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
             val newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1_000
