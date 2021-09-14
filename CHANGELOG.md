@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Lack of back button in Logs view: [#3357](https://github.com/owncloud/android/issues/3357)
+* Bugfix - ANR after removing account with too many downloaded files: [#3362](https://github.com/owncloud/android/issues/3362)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 
@@ -22,6 +23,15 @@ Details
 
    https://github.com/owncloud/android/issues/3357
    https://github.com/owncloud/android/pull/3363
+
+* Bugfix - ANR after removing account with too many downloaded files: [#3362](https://github.com/owncloud/android/issues/3362)
+
+   Previously, when a user account was deleted, the application would freeze when trying to
+   delete a large number of files. Now, after changing a method, we have managed to prevent the
+   application from freezing and working correctly.
+
+   https://github.com/owncloud/android/issues/3362
+   https://github.com/owncloud/android/pull/3380
 
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 
