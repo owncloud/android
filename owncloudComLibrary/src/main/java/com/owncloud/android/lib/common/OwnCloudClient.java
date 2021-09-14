@@ -59,7 +59,6 @@ public class OwnCloudClient extends HttpClient {
     public static final String STATUS_PATH = "/status.php";
     private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     private static final int MAX_REDIRECTIONS_COUNT = 5;
-    private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
 
     private static int sIntanceCounter = 0;
     private OwnCloudCredentials mCredentials = null;
@@ -80,12 +79,13 @@ public class OwnCloudClient extends HttpClient {
 
     private boolean mFollowRedirects = false;
 
-    public OwnCloudClient(Uri baseUri, ConnectionValidator connectionValidator, boolean synchronizeRequests) {
+    public OwnCloudClient(Uri baseUri, ConnectionValidator connectionValidator, boolean synchronizeRequests, SingleSessionManager singleSessionManager) {
         if (baseUri == null) {
             throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
         }
         mBaseUri = baseUri;
         mSynchronizeRequests = synchronizeRequests;
+        mSingleSessionManager = singleSessionManager;
 
         mInstanceNumber = sIntanceCounter++;
         Timber.d("#" + mInstanceNumber + "Creating OwnCloudClient");
@@ -134,8 +134,10 @@ public class OwnCloudClient extends HttpClient {
             stacklog(status, method);
 
             if (mConnectionValidator != null &&
-                    status == HttpConstants.HTTP_MOVED_TEMPORARILY) {
-                retry = mConnectionValidator.validate(this); // retry on success fail on no success
+                    (status == HttpConstants.HTTP_MOVED_TEMPORARILY ||
+                            (!(mCredentials instanceof OwnCloudAnonymousCredentials) &&
+                                    status == HttpConstants.HTTP_UNAUTHORIZED))) {
+                retry = mConnectionValidator.validate(this, mSingleSessionManager); // retry on success fail on no success
             } else if (mFollowRedirects) {
                 status = followRedirection(method).getLastStatus();
             }
@@ -145,8 +147,8 @@ public class OwnCloudClient extends HttpClient {
             if (repeatWithFreshCredentials) {
                 repeatCounter++;
             }
-
              */
+
         } while (retry);
 
         return status;
@@ -163,6 +165,7 @@ public class OwnCloudClient extends HttpClient {
                     "\nMethod: " + method.toString() +
                     "\nUrl: " + method.getHttpUrl() +
                     "\nCookeis: " + getCookiesForBaseUri().toString() +
+                    "\nCredentials type: " + mCredentials.getClass().toString() +
                     "\ntrace: " + ExceptionUtils.getStackTrace(e) +
                     "---------------------------");
         }
@@ -336,8 +339,8 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public List<Cookie> getCookiesForBaseUri() {
-            return getOkHttpClient().cookieJar().loadForRequest(
-                    HttpUrl.parse(mBaseUri.toString()));
+        return getOkHttpClient().cookieJar().loadForRequest(
+                HttpUrl.parse(mBaseUri.toString()));
     }
 
     public OwnCloudVersion getOwnCloudVersion() {
@@ -374,7 +377,7 @@ public class OwnCloudClient extends HttpClient {
             invalidateAccountCredentials();
 
             if (getCredentials().authTokenCanBeRefreshed() &&
-                    repeatCounter < MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS) {
+                    repeatCounter < 1) {
                 try {
                     mAccount.loadCredentials(getContext());
                     // if mAccount.getCredentials().length() == 0 --> refresh failed

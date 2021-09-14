@@ -77,9 +77,8 @@ public class SingleSessionManager {
         sUserAgent = userAgent;
     }
 
-    private static OwnCloudClient createOwnCloudClient(Uri uri, Context context, boolean followRedirects, ConnectionValidator connectionValidator) {
-        OwnCloudClient client = new OwnCloudClient(uri, connectionValidator, true);
-        client.setFollowRedirects(followRedirects);
+    private static OwnCloudClient createOwnCloudClient(Uri uri, Context context, ConnectionValidator connectionValidator, SingleSessionManager singleSessionManager) {
+        OwnCloudClient client = new OwnCloudClient(uri, connectionValidator, true, singleSessionManager);
         HttpClient.setContext(context);
 
         return client;
@@ -132,8 +131,8 @@ public class SingleSessionManager {
             client = createOwnCloudClient(
                     account.getBaseUri(),
                     context.getApplicationContext(),
-                    true,
-                    connectionValidator);    // TODO remove dependency on OwnCloudClientFactory
+                    connectionValidator,
+                    this);
 
             //the next two lines are a hack because okHttpclient is used as a singleton instead of being an
             //injected instance that can be deleted when required
