@@ -31,7 +31,6 @@ import android.os.Environment
 import org.apache.commons.io.FileUtils
 import timber.log.Timber
 import java.io.File
-import java.nio.file.CopyOption
 import java.nio.file.StandardCopyOption
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
@@ -99,9 +98,7 @@ sealed class LocalStorageProvider(val rootFolderName: String) {
                 } Bytes"
             )
             Timber.d(
-                "Current allocatable bytes in scoped storage: ${
-                    FileUtils.byteCountToDisplaySize(scopedStorageUsableSpace)
-                } Bytes"
+                "Current allocatable bytes in scoped storage: ${FileUtils.byteCountToDisplaySize(scopedStorageUsableSpace)} Bytes"
             )
 
             if (scopedStorageUsableSpace < legacyStorageUsedBytes) {
@@ -112,18 +109,23 @@ sealed class LocalStorageProvider(val rootFolderName: String) {
             val timeInMillis = measureTimeMillis {
                 copyFileOrFolderToScopedStorage(rootLegacyStorage)
             }
-            Timber.d("MIGRATED FILES IN ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
+            Timber.d("Migrated files in ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
 
         }
 
         private fun copyFileOrFolderToScopedStorage(file: File) {
             Timber.d("Let's migrate ${file.absolutePath} to scoped storage")
-            file.copyRecursively(File(getRootFolderPath(), file.name), overwrite = true)
+            FileUtils.copyDirectoryToDirectory(file, getPrimaryStorageDirectory())
         }
 
         private fun moveFileOrFolderToScopedStorage(file: File) {
             Timber.d("Let's migrate ${file.absolutePath} to scoped storage")
-            FileUtils.moveFile(file, File(getRootFolderPath()), StandardCopyOption.REPLACE_EXISTING)
+            try {
+                copyFileOrFolderToScopedStorage(file)
+                FileUtils.deleteDirectory(file)
+            } catch (exception: Exception) {
+                Timber.e(exception)
+            }
         }
     }
 
