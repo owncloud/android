@@ -1,4 +1,4 @@
-Bugfix: Account removed is not removed from the drawer.
+Bugfix: Account removed is not removed from the drawer
 
 When an account was deleted from the phone settings, in the accounts section, it was not deleted from the Navigation Drawer,
 now when deleting an account from there, the Navigation Drawer refreshes and it is deleted correctly.
