@@ -34,6 +34,8 @@ import androidx.biometric.BiometricPrompt;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.PatternManager;
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
 import com.owncloud.android.presentation.ui.security.PassCodeManager;
 import timber.log.Timber;
 
@@ -51,6 +53,8 @@ import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
+
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
 
 public class BiometricActivity extends AppCompatActivity {
 
@@ -125,6 +129,8 @@ public class BiometricActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
+                SharedPreferencesProvider preferencesProvider = new SharedPreferencesProviderImpl(getApplicationContext());
+                preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis());
                 mActivity.finish();
             }
 
