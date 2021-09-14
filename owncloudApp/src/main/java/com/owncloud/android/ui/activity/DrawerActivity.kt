@@ -24,12 +24,15 @@
 package com.owncloud.android.ui.activity
 
 import android.accounts.Account
+import android.accounts.AccountManager
 import android.accounts.AccountManagerFuture
+import android.accounts.OnAccountsUpdateListener
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -492,6 +495,14 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
     }
 
+    private fun cleanupUnusedAccountDirectories() {
+        val accountManager = AccountManager.get(this)
+        accountManager.addOnAccountsUpdatedListener(OnAccountsUpdateListener {
+            val accounts = AccountUtils.getAccounts(this)
+            drawerViewModel.deleteUnusedUserDirs(accounts)
+        }, Handler(), false)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
@@ -536,6 +547,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
         updateAccountList()
         updateQuota()
+        cleanupUnusedAccountDirectories()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

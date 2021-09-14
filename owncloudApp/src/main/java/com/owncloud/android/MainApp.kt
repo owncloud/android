@@ -89,8 +89,6 @@ class MainApp : Application() {
         // initialise thumbnails cache on background thread
         ThumbnailsCacheManager.InitDiskCacheTask().execute()
 
-        cleanupUnusedAccountDirectories()
-
         // register global protection with pass code, pattern lock and biometric lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
@@ -212,14 +210,6 @@ class MainApp : Application() {
             description = getString(R.string.file_sync_notification_channel_description),
             importance = IMPORTANCE_LOW
         )
-    }
-
-    private fun cleanupUnusedAccountDirectories() {
-        val accountManager = AccountManager.get(this)
-        accountManager.addOnAccountsUpdatedListener(OnAccountsUpdateListener {
-            val accounts = AccountUtils.getAccounts(this)
-            FileStorageUtils.deleteUnusedUserDirs(accounts)
-        }, Handler(), false)
     }
 
     companion object {
