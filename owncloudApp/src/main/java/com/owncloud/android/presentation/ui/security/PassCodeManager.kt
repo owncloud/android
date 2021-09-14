@@ -28,7 +28,6 @@ import android.os.PowerManager
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import timber.log.Timber
 
 object PassCodeManager {
 
