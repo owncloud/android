@@ -23,9 +23,11 @@ package com.owncloud.android.presentation.viewmodels.migration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import kotlinx.coroutines.launch
 import org.apache.commons.io.FileUtils
 
 /**
@@ -50,11 +52,17 @@ class MigrationViewModel(
     }
 
     fun moveLegacyStorageToScopedStorage() {
-        scopedStorageProvider.moveLegacyToScopedStorage()
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            scopedStorageProvider.moveLegacyToScopedStorage()
+            moveToNextState()
+        }
     }
 
     fun copyLegacyStorageToScopedStorage() {
-        scopedStorageProvider.copyLegacyToScopedStorage()
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            scopedStorageProvider.copyLegacyToScopedStorage()
+            moveToNextState()
+        }
     }
 
     fun moveToNextState(migrationType: MigrationState.MigrationType = MigrationState.MigrationType.MIGRATE_AND_KEEP) {
