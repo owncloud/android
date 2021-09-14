@@ -4,7 +4,6 @@ import android.accounts.AccountManager
 import android.accounts.AccountsException
 import android.content.Context
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -63,7 +62,8 @@ class ConnectionValidator (
                     }
                 }
                 if (successCounter >= failCounter) {
-                    //update credentials in client
+                    baseClient.credentials = client.credentials
+                    baseClient.cookiesForBaseUri = client.cookiesForBaseUri
                     return true
                 }
                 validationRetryCount++
@@ -87,11 +87,6 @@ class ConnectionValidator (
     private fun getOwnCloudStatus(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
         val remoteStatusOperation = GetRemoteStatusOperation()
         return remoteStatusOperation.execute(client)
-    }
-
-    private fun triggerAuthRefresh(): OwnCloudCredentials {
-        Timber.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!! need to reauthenticate !!!!!!!!!!!!!!!!!!!!!!!!!!")
-        return OwnCloudCredentialsFactory.getAnonymousCredentials()
     }
 
     private fun canAccessRootFolder(client: OwnCloudClient): RemoteOperationResult<Boolean> {
@@ -154,8 +149,10 @@ class ConnectionValidator (
         val credentials = account.credentials
         if (shouldInvalidateAccountCredentials(credentials, account, status)) {
             invalidateAccountCredentials(account, credentials)
+
             if (credentials.authTokenCanBeRefreshed()) {
                 try {
+                    // This command does the actual refresh
                     account.loadCredentials(context)
                     // if mAccount.getCredentials().length() == 0 --> refresh failed
                     client.credentials = account.credentials

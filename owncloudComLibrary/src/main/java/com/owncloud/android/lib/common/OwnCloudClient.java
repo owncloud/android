@@ -59,6 +59,7 @@ public class OwnCloudClient extends HttpClient {
     public static final String STATUS_PATH = "/status.php";
     private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
     private static final int MAX_REDIRECTIONS_COUNT = 5;
+    private static final int MAX_RETRY_COUNT = 2;
 
     private static int sIntanceCounter = 0;
     private OwnCloudCredentials mCredentials = null;
@@ -112,12 +113,12 @@ public class OwnCloudClient extends HttpClient {
     }
 
     private int saveExecuteHttpMethod(HttpBaseMethod method) throws Exception {
-        boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
         int status;
 
-        boolean retry = false;
+        boolean retry;
         do {
+            repeatCounter++;
             retry = false;
             String requestId = RandomUtils.generateRandomUUID();
 
@@ -126,7 +127,7 @@ public class OwnCloudClient extends HttpClient {
             method.setRequestHeader(HttpConstants.OC_X_REQUEST_ID, requestId);
             method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
             method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
-            if (mCredentials.getHeaderAuth() != null && method.getRequestHeader(AUTHORIZATION_HEADER) == null) {
+            if (mCredentials.getHeaderAuth() != null && !mCredentials.getHeaderAuth().isEmpty()) {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
 
@@ -149,7 +150,7 @@ public class OwnCloudClient extends HttpClient {
             }
              */
 
-        } while (retry);
+        } while (retry && repeatCounter < MAX_RETRY_COUNT);
 
         return status;
     }
@@ -166,6 +167,11 @@ public class OwnCloudClient extends HttpClient {
                     "\nUrl: " + method.getHttpUrl() +
                     "\nCookeis: " + getCookiesForBaseUri().toString() +
                     "\nCredentials type: " + mCredentials.getClass().toString() +
+                    "\ntoken: " + mCredentials.getAuthToken() +
+
+                    "\nHeaders: ++++" +
+                    "\n" + method.getRequest().headers().toString() +
+                    "+++++++++++++" +
                     "\ntrace: " + ExceptionUtils.getStackTrace(e) +
                     "---------------------------");
         }
