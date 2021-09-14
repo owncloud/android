@@ -31,7 +31,6 @@ import android.os.Environment
 import org.apache.commons.io.FileUtils
 import timber.log.Timber
 import java.io.File
-import java.nio.file.StandardCopyOption
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
@@ -54,37 +53,22 @@ sealed class LocalStorageProvider(val rootFolderName: String) {
         override fun getPrimaryStorageDirectory(): File = context.filesDir
 
         fun moveLegacyToScopedStorage() {
-            val legacyStorageProvider = LegacyStorageProvider(rootFolderName)
-            val rootLegacyStorage = File(legacyStorageProvider.getRootFolderPath())
-
-            val rootScopedStorage = File(getRootFolderPath())
-
-            val scopedStorageUsableSpace = rootScopedStorage.usableSpace
-            val legacyStorageUsedBytes = FileUtils.sizeOfDirectory(rootLegacyStorage)
-            Timber.d(
-                "Root ${rootLegacyStorage.absolutePath} has ${rootLegacyStorage.listFiles()?.size} files and its size is ${
-                    FileUtils.byteCountToDisplaySize(legacyStorageUsedBytes)
-                } Bytes"
-            )
-            Timber.d(
-                "Current allocatable bytes in scoped storage: ${
-                    FileUtils.byteCountToDisplaySize(scopedStorageUsableSpace)
-                } Bytes"
-            )
-
-            if (scopedStorageUsableSpace < legacyStorageUsedBytes) {
-                Timber.d("There is no space to do an optional migration.")
-            } else {
-                Timber.d("Let's migrate the files to scoped storage inside ${rootScopedStorage.absolutePath}")
-            }
             val timeInMillis = measureTimeMillis {
-                moveFileOrFolderToScopedStorage(rootLegacyStorage)
+                moveFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
             }
             Timber.d("MIGRATED FILES IN ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
 
         }
 
         fun copyLegacyToScopedStorage() {
+            val timeInMillis = measureTimeMillis {
+                copyFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
+            }
+            Timber.d("Migrated files in ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
+
+        }
+
+        private fun retrieveRootLegacyStorage(): File {
             val legacyStorageProvider = LegacyStorageProvider(rootFolderName)
             val rootLegacyStorage = File(legacyStorageProvider.getRootFolderPath())
 
@@ -106,11 +90,7 @@ sealed class LocalStorageProvider(val rootFolderName: String) {
             } else {
                 Timber.d("Let's migrate the files to scoped storage inside ${rootScopedStorage.absolutePath}")
             }
-            val timeInMillis = measureTimeMillis {
-                copyFileOrFolderToScopedStorage(rootLegacyStorage)
-            }
-            Timber.d("Migrated files in ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
-
+            return rootLegacyStorage
         }
 
         private fun copyFileOrFolderToScopedStorage(file: File) {
@@ -119,13 +99,8 @@ sealed class LocalStorageProvider(val rootFolderName: String) {
         }
 
         private fun moveFileOrFolderToScopedStorage(file: File) {
-            Timber.d("Let's migrate ${file.absolutePath} to scoped storage")
-            try {
-                copyFileOrFolderToScopedStorage(file)
-                FileUtils.deleteDirectory(file)
-            } catch (exception: Exception) {
-                Timber.e(exception)
-            }
+            copyFileOrFolderToScopedStorage(file)
+            FileUtils.deleteDirectory(file)
         }
     }
 
