@@ -128,16 +128,16 @@ public class OwnCloudClient extends HttpClient {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
 
+            method.setFollowRedirects(mFollowRedirects);
             status = method.execute();
             stacklog(status, method);
 
-            if (mConnectionValidator != null &&
+            if (!mFollowRedirects &&
+                    mConnectionValidator != null &&
                     (status == HttpConstants.HTTP_MOVED_TEMPORARILY ||
                             (!(mCredentials instanceof OwnCloudAnonymousCredentials) &&
                                     status == HttpConstants.HTTP_UNAUTHORIZED))) {
                 retry = mConnectionValidator.validate(this, mSingleSessionManager); // retry on success fail on no success
-            } else if (mFollowRedirects) {
-                status = followRedirection(method).getLastStatus();
             }
 
         } while (retry && repeatCounter < MAX_RETRY_COUNT);
@@ -164,87 +164,6 @@ public class OwnCloudClient extends HttpClient {
                     "+++++++++++++" +
                     "\ntrace: " + ExceptionUtils.getStackTrace(e) +
                     "---------------------------");
-        }
-    }
-
-    private int executeRedirectedHttpMethod(HttpBaseMethod method) throws Exception {
-        int status;
-        String requestId = RandomUtils.generateRandomUUID();
-
-        // Header to allow tracing requests in apache and ownCloud logs
-        Timber.d("Executing in request with id %s", requestId);
-        method.setRequestHeader(OC_X_REQUEST_ID, requestId);
-        method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
-        method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
-        if (mCredentials.getHeaderAuth() != null) {
-            method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
-        }
-        status = method.execute();
-        return status;
-    }
-
-    public RedirectionPath followRedirection(HttpBaseMethod method) throws Exception {
-        int redirectionsCount = 0;
-        int status = method.getStatusCode();
-        RedirectionPath redirectionPath = new RedirectionPath(status, MAX_REDIRECTIONS_COUNT);
-
-        while (redirectionsCount < MAX_REDIRECTIONS_COUNT &&
-                (status == HttpConstants.HTTP_MOVED_PERMANENTLY ||
-                        status == HttpConstants.HTTP_MOVED_TEMPORARILY ||
-                        status == HttpConstants.HTTP_TEMPORARY_REDIRECT)
-        ) {
-
-            final String location = method.getResponseHeader(HttpConstants.LOCATION_HEADER) != null
-                    ? method.getResponseHeader(HttpConstants.LOCATION_HEADER)
-                    : method.getResponseHeader(HttpConstants.LOCATION_HEADER_LOWER);
-
-            if (location != null) {
-                Timber.d("#" + mInstanceNumber + "Location to redirect: " + location);
-
-                redirectionPath.addLocation(location);
-
-                // Release the connection to avoid reach the max number of connections per hostClientManager
-                // due to it will be set a different url
-                exhaustResponse(method.getResponseBodyAsStream());
-
-                Timber.d("+++++++++++++++++++++++++++++++++++++++ %s", getFullUrl(location));
-                method.setUrl(getFullUrl(location));
-                final String destination = method.getRequestHeader("Destination") != null
-                        ? method.getRequestHeader("Destination")
-                        : method.getRequestHeader("destination");
-
-                if (destination != null) {
-                    final int suffixIndex = location.lastIndexOf(getUserFilesWebDavUri().toString());
-                    final String redirectionBase = location.substring(0, suffixIndex);
-                    final String destinationPath = destination.substring(mBaseUri.toString().length());
-
-                    method.setRequestHeader("destination", redirectionBase + destinationPath);
-                }
-                try {
-                    status = executeRedirectedHttpMethod(method);
-                } catch (HttpException e) {
-                    if (e.getMessage().contains(Integer.toString(HttpConstants.HTTP_MOVED_TEMPORARILY))) {
-                        status = HttpConstants.HTTP_MOVED_TEMPORARILY;
-                    } else {
-                        throw e;
-                    }
-                }
-                redirectionPath.addStatus(status);
-                redirectionsCount++;
-
-            } else {
-                Timber.d(" #" + mInstanceNumber + "No location to redirect!");
-                status = HttpConstants.HTTP_NOT_FOUND;
-            }
-        }
-        return redirectionPath;
-    }
-
-    private HttpUrl getFullUrl(String redirection) {
-        if(redirection.startsWith("/")) {
-            return HttpUrl.parse(mBaseUri.toString() + redirection);
-        } else {
-            return HttpUrl.parse(redirection);
         }
     }
 

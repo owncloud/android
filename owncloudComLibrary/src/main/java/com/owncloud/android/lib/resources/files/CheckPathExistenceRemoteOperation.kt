@@ -51,16 +51,8 @@ class CheckPathExistenceRemoteOperation(
     val remotePath: String? = "",
     val isUserLogged: Boolean
 ) : RemoteOperation<Boolean>() {
-    /**
-     * Gets the sequence of redirections followed during the execution of the operation.
-     *
-     * @return Sequence of redirections followed, if any, or NULL if the operation was not executed.
-     */
-    var redirectionPath: RedirectionPath? = null
-        private set
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Boolean> {
-        val previousFollowRedirects = client.getFollowRedirects()
         return try {
             val stringUrl =
                 if (isUserLogged) client.baseFilesWebDavUri.toString()
@@ -72,10 +64,6 @@ class CheckPathExistenceRemoteOperation(
             }
 
             var status = client.executeHttpMethod(propFindMethod)
-            if (previousFollowRedirects) {
-                redirectionPath = client.followRedirection(propFindMethod)
-                status = redirectionPath?.lastStatus!!
-            }
             /* PROPFIND method
              * 404 NOT FOUND: path doesn't exist,
              * 207 MULTI_STATUS: path exists.
@@ -93,8 +81,6 @@ class CheckPathExistenceRemoteOperation(
                 "Existence check for ${client.userFilesWebDavUri}${WebdavUtils.encodePath(remotePath)} : ${result.logMessage}"
             )
             result
-        } finally {
-            client.setFollowRedirects(previousFollowRedirects)
         }
     }
 

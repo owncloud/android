@@ -66,7 +66,7 @@ public class RemoteOperationResult<T>
     private String mHttpPhrase = null;
     private Exception mException = null;
     private ResultCode mCode = ResultCode.UNKNOWN_ERROR;
-    private String mRedirectedLocation;
+    private String mRedirectedLocation = "";
     private List<String> mAuthenticate = new ArrayList<>();
     private String mLastPermanentLocation = null;
     private T mData = null;
@@ -257,11 +257,11 @@ public class RemoteOperationResult<T>
         this(httpCode, httpPhrase);
         if (headers != null) {
             for (Map.Entry<String, List<String>> header : headers.toMultimap().entrySet()) {
-                if ("location".equals(header.getKey().toLowerCase())) {
+                if ("location".equalsIgnoreCase(header.getKey())) {
                     mRedirectedLocation = header.getValue().get(0);
                     continue;
                 }
-                if ("www-authenticate".equals(header.getKey().toLowerCase())) {
+                if ("www-authenticate".equalsIgnoreCase(header.getKey())) {
                     for (String value: header.getValue()) {
                         mAuthenticate.add(value.toLowerCase());
                     }
