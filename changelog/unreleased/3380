@@ -1,4 +1,4 @@
-Bugfix: App leads to ANR after removing account if there were too many downloaded files
+Bugfix: ANR after removing account with too many downloaded files
 
 Previously, when a user account was deleted, the application would freeze when trying to delete a large number of files.
 Now, after changing a method, we have managed to prevent the application from freezing and working correctly.
