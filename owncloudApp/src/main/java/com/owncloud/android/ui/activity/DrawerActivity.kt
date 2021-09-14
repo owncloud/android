@@ -500,6 +500,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         accountManager.addOnAccountsUpdatedListener(OnAccountsUpdateListener {
             val accounts = AccountUtils.getAccounts(this)
             drawerViewModel.deleteUnusedUserDirs(accounts)
+            updateAccountList()
         }, Handler(), false)
     }
 
