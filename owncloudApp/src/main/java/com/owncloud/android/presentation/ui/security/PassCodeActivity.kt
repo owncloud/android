@@ -36,7 +36,6 @@ import com.owncloud.android.R
 import android.widget.LinearLayout
 import android.view.View.OnFocusChangeListener
 import android.content.Intent
-import android.os.SystemClock
 import android.text.TextWatcher
 import android.text.Editable
 import android.view.KeyEvent
