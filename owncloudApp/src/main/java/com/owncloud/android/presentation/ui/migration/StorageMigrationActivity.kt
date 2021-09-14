@@ -47,6 +47,8 @@ class StorageMigrationActivity : AppCompatActivity() {
         })
     }
 
+    override fun onBackPressed() {}
+
     private fun navigateToNextMigrationScreen(migrationState: MigrationState) {
 
         val targetFragment: Fragment = when (migrationState) {
