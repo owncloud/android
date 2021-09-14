@@ -4,7 +4,9 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Roberto Bermejo
- * Copyright (C) 2019 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -18,35 +20,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.authentication;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
-import android.os.SystemClock;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.RequiresApi;
 import com.owncloud.android.MainApp;
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
 import com.owncloud.android.presentation.ui.security.PassCodeManager;
 import com.owncloud.android.ui.activity.BiometricActivity;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
+
 @RequiresApi(api = Build.VERSION_CODES.M)
 /**
  * Handle biometric requests. Besides, is a facade to access some
  * {@link androidx.biometric.BiometricMananager} methods
  */
-    public class BiometricManager {
+public class BiometricManager {
 
     private static final Set<Class> sExemptOfBiometricActivites;
-
+    private int mVisibleActivitiesCounter = 0;
     private androidx.biometric.BiometricManager mBiometricManager;
+    private final SharedPreferencesProvider preferencesProvider = new SharedPreferencesProviderImpl(MainApp.Companion.getAppContext());
 
     static {
         sExemptOfBiometricActivites = new HashSet<>();
@@ -54,13 +59,9 @@ import java.util.Set;
         // other activities may be exempted, if needed
     }
 
-    private static int BIOMETRIC_TIMEOUT = 1000;
-    // keeping a "low" positive value is the easiest way to prevent the biometric is requested on rotations
-
     private static BiometricManager mBiometricManagerInstance = null;
 
     public static BiometricManager getBiometricManager(Context context) {
-
         if (mBiometricManagerInstance == null) {
             mBiometricManagerInstance = new BiometricManager();
             mBiometricManagerInstance.mBiometricManager = androidx.biometric.BiometricManager.from(context);
@@ -68,17 +69,11 @@ import java.util.Set;
         return mBiometricManagerInstance;
     }
 
-    private Long mTimestamp = 0l;
-    private int mVisibleActivitiesCounter = 0;
-
     private BiometricManager() {
     }
 
     public void onActivityStarted(Activity activity) {
-
-        if (!sExemptOfBiometricActivites.contains(activity.getClass())) {
-
-            if (biometricShouldBeRequested()) {
+        if (!sExemptOfBiometricActivites.contains(activity.getClass()) && biometricShouldBeRequested()) {
 
                 if (isHardwareDetected() && hasEnrolledBiometric()) {
                     // Use biometric lock
@@ -94,7 +89,6 @@ import java.util.Set;
                     mVisibleActivitiesCounter++;
                 }
 
-            }
         }
 
         mVisibleActivitiesCounter++;    // keep it AFTER biometricShouldBeRequested was checked
@@ -104,29 +98,24 @@ import java.util.Set;
         if (mVisibleActivitiesCounter > 0) {
             mVisibleActivitiesCounter--;
         }
-        setUnlockTimestamp();
+        bayPassUnlockOnce();
         PowerManager powerMgr = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
         if (isBiometricEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
             activity.moveTaskToBack(true);
         }
     }
 
-    private void setUnlockTimestamp() {
-        mTimestamp = SystemClock.elapsedRealtime();
-    }
-
     private boolean biometricShouldBeRequested() {
-
-        if ((SystemClock.elapsedRealtime() - mTimestamp) > BIOMETRIC_TIMEOUT && mVisibleActivitiesCounter <= 0) {
+        long lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0);
+        int timeout = 15000; //preferencesProvider.getInt(LOCK_TIMEOUT, 1_000)
+        if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && mVisibleActivitiesCounter <= 0) {
             return isBiometricEnabled();
         }
-
         return false;
     }
 
     public boolean isBiometricEnabled() {
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.Companion.getAppContext());
-        return (appPrefs.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false));
+        return (preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false));
     }
 
     public boolean isHardwareDetected() {
@@ -145,6 +134,11 @@ import java.util.Set;
      * USE WITH CARE
      */
     public void bayPassUnlockOnce() {
-        setUnlockTimestamp();
+        int timeout = 15000; //preferencesProvider.getInt(LOCK_TIMEOUT, 1_000)
+        long lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0);
+        if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
+            long newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1000;
+            preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, newLastUnlockTimestamp);
+        }
     }
 }
