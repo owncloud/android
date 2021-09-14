@@ -21,8 +21,6 @@
  */
 package com.owncloud.android
 
-import android.accounts.AccountManager
-import android.accounts.OnAccountsUpdateListener
 import android.app.Activity
 import android.app.Application
 import android.app.NotificationManager.IMPORTANCE_LOW
@@ -31,9 +29,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.view.WindowManager
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.authentication.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
@@ -57,7 +53,6 @@ import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_NOTIFICATION_CHANNEL_ID
-import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import org.koin.android.ext.koin.androidContext
