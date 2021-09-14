@@ -62,7 +62,7 @@ object PassCodeManager {
 
     private fun passCodeShouldBeRequested(): Boolean {
         val lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
-        val timeout = 15000 //preferencesProvider.getInt(LOCK_TIMEOUT, 1_000)
+        val timeout = LockTimeout.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name))
         return if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && visibleActivitiesCounter <= 0) isPassCodeEnabled()
         else false
     }
@@ -91,7 +91,7 @@ object PassCodeManager {
      * USE WITH CARE
      */
     fun bayPassUnlockOnce() {
-        val timeout = 15000 //preferencesProvider.getInt(LOCK_TIMEOUT, 1_000)
+        val timeout = LockTimeout.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name))
         val lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
         if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
             val newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1_000
