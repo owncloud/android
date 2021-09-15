@@ -1457,7 +1457,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * synchronized too.
      *
      * @param folder     Folder to refresh.
-     * @param ignoreETag If 'true', the data from the server will be fetched and sync'ed even if the eTag
+     * @param ignoreETag If 'true', the data from the server will be fetched and synced even if the eTag
      * didn't change.
      */
     fun startSyncFolderOperation(folder: OCFile?, ignoreETag: Boolean) {

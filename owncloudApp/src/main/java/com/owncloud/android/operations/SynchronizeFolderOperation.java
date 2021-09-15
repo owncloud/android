@@ -237,7 +237,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * Get list of files in folder from remote server.
      *
      * @param client {@link OwnCloudClient} instance used to access the server.
-     * @return Result of the fetch, including list of remote files in the sync'ed folder.
+     * @return Result of the fetch, including list of remote files in the synced folder.
      * @throws OperationCancelledException
      */
     @NonNull
@@ -395,7 +395,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * <p>
      * Stores the operations in mFoldersToSyncContents and mFilesToSyncContents.
      *
-     * @param localFile  Local information about the file which contents might be sync'ed.
+     * @param localFile  Local information about the file which contents might be synced.
      * @param remoteFile Server information of the file.
      * @return 'True' when the received file was not changed in the server side from the
      * last synchronization.
@@ -538,7 +538,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * user action or not.
      *
      * @param file ownCloud file to check.
-     * @return 'True' if the received file should not be automatically sync'ed due to a previous
+     * @return 'True' if the received file should not be automatically synced due to a previous
      * upload error that requires an user action.
      */
     private boolean isBlockedForAutomatedSync(OCFile file) {
