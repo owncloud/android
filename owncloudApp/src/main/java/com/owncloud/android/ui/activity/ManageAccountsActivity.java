@@ -167,7 +167,7 @@ public class ManageAccountsActivity extends FileActivity
     /**
      * checks the set of actual accounts against the set of original accounts when the activity has been started.
      *
-     * @return <code>true</code> if aacount list has changed, <code>false</code> if not
+     * @return <code>true</code> if account list has changed, <code>false</code> if not
      */
     private boolean hasAccountListChanged() {
         Account[] accountList = AccountManager.get(this).getAccountsByType(MainApp.Companion.getAccountType());
@@ -178,7 +178,7 @@ public class ManageAccountsActivity extends FileActivity
     /**
      * checks actual current account against current accounts when the activity has been started.
      *
-     * @return <code>true</code> if aacount list has changed, <code>false</code> if not
+     * @return <code>true</code> if account list has changed, <code>false</code> if not
      */
     private boolean hasCurrentAccountChanged() {
         Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(this);
