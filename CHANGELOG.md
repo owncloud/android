@@ -36,9 +36,9 @@ Details
 
 * Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
 
-   When an account was deleted from the phone settings, in the accounts section, it was not deleted
-   from the Navigation Drawer, now when deleting an account from there, the Navigation Drawer
-   refreshes and it is deleted correctly.
+   When an account was deleted from the device settings, in the accounts section, it was not
+   removed from the Navigation Drawer. Now, when deleting an account from there, the Navigation
+   Drawer is refreshed and the removed account is no more shown.
 
    https://github.com/owncloud/android/issues/3340
    https://github.com/owncloud/android/pull/3381
