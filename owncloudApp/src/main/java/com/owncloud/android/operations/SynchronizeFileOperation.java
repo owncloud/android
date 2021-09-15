@@ -215,7 +215,7 @@ public class SynchronizeFileOperation extends SyncOperation {
                     result = new RemoteOperationResult<>(ResultCode.OK);
                 }
 
-                // safe blanket: sync'ing a not in-conflict file will clean wrong conflict markers in ancestors
+                // safe blanket: syncing a not in-conflict file will clean wrong conflict markers in ancestors
                 if (result.getCode() != ResultCode.SYNC_CONFLICT) {
                     getStorageManager().saveConflict(mLocalFile, null);
                 }
