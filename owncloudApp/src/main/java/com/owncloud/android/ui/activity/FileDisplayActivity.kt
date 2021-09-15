@@ -520,7 +520,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         bayPassUnlockOnce()
 
-        // Hanndle calls form internal activities.
+        // Handle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS && (resultCode == Activity.RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {
 
             requestUploadOfContentFromApps(data, resultCode)
