@@ -328,7 +328,7 @@ public class OperationsService extends Service {
      */
     private static class ServiceHandler extends Handler {
         // don't make it a final class, and don't remove the static ; lint will warn about a p
-        // ossible memory leak
+        // possible memory leak
 
         OperationsService mService;
 
