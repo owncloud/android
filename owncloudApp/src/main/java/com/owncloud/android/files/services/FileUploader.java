@@ -532,7 +532,7 @@ public class FileUploader extends Service
 
     @Override
     public void onAccountsUpdated(Account[] accounts) {
-        // Review current upload, and cancel it if its account doen't exist
+        // Review current upload, and cancel it if its account doesn't exist
         if (mCurrentUpload != null &&
                 !AccountUtils.exists(mCurrentUpload.getAccount().name, getApplicationContext())) {
             mCurrentUpload.cancel();
