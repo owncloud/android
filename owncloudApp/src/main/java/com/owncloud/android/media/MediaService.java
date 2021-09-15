@@ -733,7 +733,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         return mState;
     }
 
-    protected void setMediaContoller(MediaControlView mediaController) {
+    protected void setMediaController(MediaControlView mediaController) {
         mMediaController = mediaController;
     }
 
