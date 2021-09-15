@@ -303,7 +303,7 @@
   <string name="sync_file_nothing_to_do_msg">Dosya içerikleri zaten eşitlenmiş</string>
   <string name="create_dir_fail_msg">Klasör oluşturulamadı</string>
   <string name="filename_forbidden_characters">Yasaklı karakterler: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Dosya adı en az bir geçersiz karakter içeriyor</string>
+  <string name="filename_forbidden_characters_from_server">Dosya adı en az bir geçersiz karakter içeriyor</string>
   <string name="filename_empty">Dosya adı boş olamaz</string>
   <string name="wait_a_moment">Bir süre bekleyin</string>
   <string name="wait_checking_credentials">Kayıtlı kimlik bilgileri kontrol ediliyor</string>

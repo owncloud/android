@@ -330,7 +330,7 @@
   <string name="sync_file_nothing_to_do_msg">Lëndë kartele tashmë e njëkohësuar</string>
   <string name="create_dir_fail_msg">S\’u krijua dot dosja</string>
   <string name="filename_forbidden_characters">Shenja të ndaluara: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Emri i kartelës përmban të paktën një shenjë të pavlefshme</string>
+  <string name="filename_forbidden_characters_from_server">Emri i kartelës përmban të paktën një shenjë të pavlefshme</string>
   <string name="filename_empty">Emri i kartelës s\’mund të jetë i zbrazët</string>
   <string name="wait_a_moment">Pritni një çast</string>
   <string name="wait_checking_credentials">Po kontrollohen kredenciale të depozituara</string>

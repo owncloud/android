@@ -63,7 +63,7 @@
   <string name="common_rename">Hernoem</string>
   <string name="common_remove">Verwyder</string>
   <string name="confirmation_remove_public_share_title">Verwyder skakel</string>
-  <string name="filename_forbidden_charaters_from_server">Lêernaam bevat ten minste een ongeldige karakter</string>
+  <string name="filename_forbidden_characters_from_server">Lêernaam bevat ten minste een ongeldige karakter</string>
   <string name="ssl_validator_btn_details_see">Details</string>
   <string name="ssl_validator_label_C">Land:</string>
   <string name="ssl_validator_label_L">Ligging:</string>

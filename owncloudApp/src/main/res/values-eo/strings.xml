@@ -138,7 +138,7 @@
   <string name="sync_file_nothing_to_do_msg">Dosierenhavoj jam sinkroniĝis</string>
   <string name="create_dir_fail_msg">Dosiero ne povis kreiĝi</string>
   <string name="filename_forbidden_characters">Malpermesataj signoj: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Dosiernomo enhavas almenaŭ unu nevalidan signon</string>
+  <string name="filename_forbidden_characters_from_server">Dosiernomo enhavas almenaŭ unu nevalidan signon</string>
   <string name="filename_empty">Dosieronomo ne povas malpleni</string>
   <string name="wait_a_moment">Atendu momenton</string>
   <string name="filedisplay_unexpected_bad_get_content">Neatendita problemo; bonvolu provi alian aplikaĵon por elekti la dosieron</string>

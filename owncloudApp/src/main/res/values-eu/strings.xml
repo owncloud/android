@@ -237,7 +237,7 @@ Mesedez, baimendu berriz</string>
   <string name="sync_file_nothing_to_do_msg">Fitxategi edukiak dagoeneko sinkronizaturik</string>
   <string name="create_dir_fail_msg">Ezin izan da karpeta sortu</string>
   <string name="filename_forbidden_characters">Debekatutako karaktereak: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Fitxategi izenak behintzat baliogabeko karaktere bat du</string>
+  <string name="filename_forbidden_characters_from_server">Fitxategi izenak behintzat baliogabeko karaktere bat du</string>
   <string name="filename_empty">Fitxategi izena ezin da hutsa izan</string>
   <string name="wait_a_moment">Itxaron momentu bat</string>
   <string name="wait_checking_credentials">Egiaztatzen gordetako kredentzialak</string>

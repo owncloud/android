@@ -110,7 +110,7 @@
   <string name="rename_server_fail_msg">Վերանվանումը չի կարող ավարտվել</string>
   <string name="create_dir_fail_msg">Պանակ չի կարող ստեղծվել</string>
   <string name="filename_forbidden_characters">Արգելված նիշեր. / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Ֆայլի անունը առնվազն մի անվավեր նիշ է պարունակում</string>
+  <string name="filename_forbidden_characters_from_server">Ֆայլի անունը առնվազն մի անվավեր նիշ է պարունակում</string>
   <string name="filename_empty">Ֆայլի անունը դատարկ լինել չի կարող</string>
   <string name="wait_a_moment">Մի պահ սպասիր</string>
   <string name="filedisplay_no_file_selected">Ֆայլ չի նշվել</string>

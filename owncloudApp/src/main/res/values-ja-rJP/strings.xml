@@ -259,7 +259,7 @@
   <string name="sync_file_nothing_to_do_msg">ファイルコンテンツはすでに同期されています</string>
   <string name="create_dir_fail_msg">フォルダーを作成できませんでした</string>
   <string name="filename_forbidden_characters">使用できない文字: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">ファイル名に1文字以上の無効な文字が含まれています</string>
+  <string name="filename_forbidden_characters_from_server">ファイル名に1文字以上の無効な文字が含まれています</string>
   <string name="filename_empty">ファイル名を空にすることはできません。</string>
   <string name="wait_a_moment">しばらくお待ちください</string>
   <string name="wait_checking_credentials">保存された資格情報をチェック</string>

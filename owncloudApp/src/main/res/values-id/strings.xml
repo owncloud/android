@@ -290,7 +290,7 @@
   <string name="sync_file_nothing_to_do_msg">Isi berkas sudah diselaraskan</string>
   <string name="create_dir_fail_msg">Folder tidak dapat dibuat</string>
   <string name="filename_forbidden_characters">Karakter yang dilarang: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Nama berkas berisi setidaknya satu karakter yang tidak sah</string>
+  <string name="filename_forbidden_characters_from_server">Nama berkas berisi setidaknya satu karakter yang tidak sah</string>
   <string name="filename_empty">Nama berkas tidak boleh kosong</string>
   <string name="wait_a_moment">Tunggu sebentar</string>
   <string name="wait_checking_credentials">Mengecek kredensial yang disimpan</string>

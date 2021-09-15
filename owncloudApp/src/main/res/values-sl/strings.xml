@@ -273,7 +273,7 @@
   <string name="sync_file_nothing_to_do_msg">Vsebina datoteke je že usklajena</string>
   <string name="create_dir_fail_msg">Mape ni mogoče ustvariti</string>
   <string name="filename_forbidden_characters">Nedovoljeni znaki: characters: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Ime datoteke vsebuje vsaj en neveljaven znak.</string>
+  <string name="filename_forbidden_characters_from_server">Ime datoteke vsebuje vsaj en neveljaven znak.</string>
   <string name="filename_empty">Ime datoteke ne sme biti prazno</string>
   <string name="wait_a_moment">Počakajte trenutek ...</string>
   <string name="wait_checking_credentials">Poteka preverjanje shranjenih poveril</string>

@@ -210,7 +210,7 @@
   <string name="sync_file_nothing_to_do_msg">El conteníu del ficheru yá ta sincronizáu</string>
   <string name="create_dir_fail_msg">Nun se puede crear la carpeta</string>
   <string name="filename_forbidden_characters">Caráuteres prohibíos: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">El nome del ficheru contién polo menos un carácter non válidu</string>
+  <string name="filename_forbidden_characters_from_server">El nome del ficheru contién polo menos un carácter non válidu</string>
   <string name="filename_empty">El nome de ficheru nun pue tar baleru</string>
   <string name="wait_a_moment">Espera un momentu</string>
   <string name="wait_checking_credentials">Comprobación de credenciales almacenaes</string>

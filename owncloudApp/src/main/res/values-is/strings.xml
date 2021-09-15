@@ -269,7 +269,7 @@
   <string name="sync_file_nothing_to_do_msg">Efni skrár er þegar samstillt</string>
   <string name="create_dir_fail_msg">Tókst ekki að búa til möppu</string>
   <string name="filename_forbidden_characters">Óleyfilegir stafir: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Skráarheitið inniheldur að minnsta kosti einn ógildan staf</string>
+  <string name="filename_forbidden_characters_from_server">Skráarheitið inniheldur að minnsta kosti einn ógildan staf</string>
   <string name="filename_empty">Skráarheiti má ekki vera tómt</string>
   <string name="wait_a_moment">Bíddu aðeins</string>
   <string name="wait_checking_credentials">Athuga vistuð auðkenni</string>

@@ -251,7 +251,7 @@
   <string name="sync_file_nothing_to_do_msg">محتوای فایل قبلا همگام شده</string>
   <string name="create_dir_fail_msg">پوشه نتوانست ایجاد شود</string>
   <string name="filename_forbidden_characters">کاراکترهای ممنوع: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">نام فایل دارای حداقل یک کاراکتر نامعتبر است</string>
+  <string name="filename_forbidden_characters_from_server">نام فایل دارای حداقل یک کاراکتر نامعتبر است</string>
   <string name="filename_empty">نام فایل نمی تواند خالی باشد</string>
   <string name="wait_a_moment">لحظه‌ای صبر کنید</string>
   <string name="wait_checking_credentials">بررسی گواهی‌نامه‌های ذخیره شده</string>
