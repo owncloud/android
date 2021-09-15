@@ -75,7 +75,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 prefPasscode?.isChecked = false
 
                 // Do not allow to use biometric lock nor lock delay since Passcode lock has been disabled
-                disableBiometricAndLockApplication()
+                disableBiometric()
+                prefLockApplication?.isEnabled = false
             }
         }
 
@@ -101,7 +102,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 prefPattern?.isChecked = false
 
                 // Do not allow to use biometric lock nor lock delay since Pattern lock has been disabled
-                disableBiometricAndLockApplication()
+                disableBiometric()
+                prefLockApplication?.isEnabled = false
             } else {
                 showMessageInSnackbar(getString(R.string.pattern_error_remove))
             }
@@ -174,7 +176,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 screenSecurity?.removePreference(prefBiometric)
             } else {
                 if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { // Disable biometric lock if Passcode or Pattern locks are disabled
-                    disableBiometricAndLockApplication()
+                    disableBiometric()
                 }
 
                 prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
@@ -188,6 +190,11 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                     true
                 }
             }
+        }
+
+        // Lock application
+        if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
+            prefLockApplication?.isEnabled = false
         }
 
         // Touches with other visible windows
@@ -218,11 +225,10 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         prefLockApplication?.isEnabled = true
     }
 
-    private fun disableBiometricAndLockApplication() {
+    private fun disableBiometric() {
         prefBiometric?.isChecked = false
         prefBiometric?.isEnabled = false
         prefBiometric?.summary = getString(R.string.prefs_biometric_summary)
-        prefLockApplication?.isEnabled = false
     }
 
     companion object {
