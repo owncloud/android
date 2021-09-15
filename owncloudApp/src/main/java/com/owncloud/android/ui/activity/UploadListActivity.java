@@ -198,7 +198,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
         if (operation instanceof CheckCurrentCredentialsOperation) {
-            // Do not call super in this case; more refactoring needed around onRemoteOeprationFinish :'(
+            // Do not call super in this case; more refactoring needed around onRemoteOperationFinish :'(
             getFileOperationsHelper().setOpIdWaitingFor(Long.MAX_VALUE);
             dismissLoadingDialog();
             Account account = ((RemoteOperationResult<Account>) result).getData();
