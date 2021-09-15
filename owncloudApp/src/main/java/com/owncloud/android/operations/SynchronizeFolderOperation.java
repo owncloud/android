@@ -550,7 +550,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 case FOLDER_ERROR:
                 case FILE_NOT_FOUND:
                 case FILE_ERROR:
-                case PRIVILEDGES_ERROR:
+                case PRIVILEGES_ERROR:
                 case CONFLICT_ERROR:
                     return true;
             }

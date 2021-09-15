@@ -560,7 +560,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                                 R.string.uploads_view_upload_status_failed_file_error
                         );
                         break;
-                    case PRIVILEDGES_ERROR:
+                    case PRIVILEGES_ERROR:
                         status = mParentActivity.getString(
                                 R.string.uploads_view_upload_status_failed_permission_error
                         );
