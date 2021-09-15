@@ -85,8 +85,24 @@ class SettingsPictureUploadsViewModel(
     fun useWifiOnly(wifiOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             savePictureUploadsConfigurationUseCase.execute(
+                if (!wifiOnly) {
+                    SavePictureUploadsConfigurationUseCase.Params(
+                        composePictureUploadsConfiguration(wifiOnly = wifiOnly, chargingOnly = false)
+                    )
+                } else {
+                    SavePictureUploadsConfigurationUseCase.Params(
+                        composePictureUploadsConfiguration(wifiOnly = wifiOnly)
+                    )
+                }
+            )
+        }
+    }
+
+    fun useChargingOnly(chargingOnly: Boolean) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            savePictureUploadsConfigurationUseCase.execute(
                 SavePictureUploadsConfigurationUseCase.Params(
-                    composePictureUploadsConfiguration(wifiOnly = wifiOnly)
+                    composePictureUploadsConfiguration(chargingOnly = chargingOnly)
                 )
             )
         }
@@ -153,6 +169,7 @@ class SettingsPictureUploadsViewModel(
         accountName: String? = _pictureUploads.value?.accountName,
         uploadPath: String? = _pictureUploads.value?.uploadPath,
         wifiOnly: Boolean? = _pictureUploads.value?.wifiOnly,
+        chargingOnly: Boolean? = _pictureUploads.value?.chargingOnly,
         sourcePath: String? = _pictureUploads.value?.sourcePath,
         behavior: FolderBackUpConfiguration.Behavior? = _pictureUploads.value?.behavior,
         timestamp: Long? = _pictureUploads.value?.lastSyncTimestamp
@@ -163,6 +180,7 @@ class SettingsPictureUploadsViewModel(
             sourcePath = sourcePath.orEmpty(),
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
+            chargingOnly = chargingOnly ?: false,
             lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
             name = _pictureUploads.value?.name ?: pictureUploadsName
         )

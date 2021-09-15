@@ -85,8 +85,25 @@ class SettingsVideoUploadsViewModel(
     fun useWifiOnly(wifiOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             saveVideoUploadsConfigurationUseCase.execute(
+                if (!wifiOnly) {
+                    SaveVideoUploadsConfigurationUseCase.Params(
+                        composeVideoUploadsConfiguration(wifiOnly = wifiOnly, chargingOnly = false)
+                    )
+
+                } else {
+                    SaveVideoUploadsConfigurationUseCase.Params(
+                        composeVideoUploadsConfiguration(wifiOnly = wifiOnly)
+                    )
+                }
+            )
+        }
+    }
+
+    fun useChargingOnly(chargingOnly: Boolean) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            saveVideoUploadsConfigurationUseCase.execute(
                 SaveVideoUploadsConfigurationUseCase.Params(
-                    composeVideoUploadsConfiguration(wifiOnly = wifiOnly)
+                    composeVideoUploadsConfiguration(chargingOnly = chargingOnly)
                 )
             )
         }
@@ -153,6 +170,7 @@ class SettingsVideoUploadsViewModel(
         accountName: String? = _videoUploads.value?.accountName,
         uploadPath: String? = _videoUploads.value?.uploadPath,
         wifiOnly: Boolean? = _videoUploads.value?.wifiOnly,
+        chargingOnly: Boolean? = _videoUploads.value?.chargingOnly,
         sourcePath: String? = _videoUploads.value?.sourcePath,
         behavior: FolderBackUpConfiguration.Behavior? = _videoUploads.value?.behavior,
         timestamp: Long? = _videoUploads.value?.lastSyncTimestamp
@@ -163,6 +181,7 @@ class SettingsVideoUploadsViewModel(
             sourcePath = sourcePath.orEmpty(),
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
+            chargingOnly = chargingOnly ?: false,
             lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
             name = _videoUploads.value?.name ?: videoUploadsName
         )

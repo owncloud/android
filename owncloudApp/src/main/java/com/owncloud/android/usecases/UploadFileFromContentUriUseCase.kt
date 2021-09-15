@@ -45,6 +45,7 @@ class UploadFileFromContentUriUseCase(
         val networkRequired = if (params.wifiOnly) NetworkType.UNMETERED else NetworkType.CONNECTED
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(networkRequired)
+            .setRequiresCharging(params.chargingOnly)
             .build()
 
         val uploadFileFromContentUriWorker = OneTimeWorkRequestBuilder<UploadFileFromContentUriWorker>()
@@ -66,6 +67,7 @@ class UploadFileFromContentUriUseCase(
         val behavior: String,
         val uploadPath: String,
         val uploadIdInStorageManager: Long,
-        val wifiOnly: Boolean
+        val wifiOnly: Boolean,
+        val chargingOnly: Boolean
     )
 }

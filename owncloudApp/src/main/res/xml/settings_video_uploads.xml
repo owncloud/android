@@ -15,7 +15,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <SwitchPreferenceCompat
         app:iconSpaceReserved="false"
@@ -37,6 +38,12 @@
         app:iconSpaceReserved="false"
         app:key="video_uploads_on_wifi"
         app:title="@string/prefs_camera_video_upload_on_wifi" />
+    <CheckBoxPreference
+        app:iconSpaceReserved="false"
+        app:isPreferenceVisible="false"
+        app:key="video_uploads_on_charging"
+        app:title="@string/prefs_camera_video_upload_on_charging"
+        tools:isPreferenceVisible="true" />
     <Preference
         app:iconSpaceReserved="false"
         app:key="video_uploads_source_path"
@@ -45,7 +52,6 @@
         app:defaultValue="NOTHING"
         app:dialogTitle="@string/prefs_camera_upload_behaviour_dialog_title"
         app:iconSpaceReserved="false"
-        app:negativeButtonText=""
         app:key="video_uploads_behaviour"
         app:title="@string/prefs_camera_upload_behaviour_title"
         app:useSimpleSummaryProvider="true" />
