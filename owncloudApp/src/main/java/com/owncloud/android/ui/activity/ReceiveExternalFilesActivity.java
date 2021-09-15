@@ -128,7 +128,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private UploadBroadcastReceiver mUploadBroadcastReceiver;
-    // this is inited laizly, when an account is selected. If no account is selected but an instance of this would
+    // this is inited lazily, when an account is selected. If no account is selected but an instance of this would
     // be crated it would result in an null pointer exception.
     private ReceiveExternalFilesAdapter mAdapter = null;
     private ListView mListView;
