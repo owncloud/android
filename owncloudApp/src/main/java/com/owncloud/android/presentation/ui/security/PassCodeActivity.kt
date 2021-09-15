@@ -179,7 +179,7 @@ class PassCodeActivity : AppCompatActivity() {
     }
 
     /**
-     * Binds the appropiate listeners to the input boxes receiving each digit of the pass code.
+     * Binds the appropriate listeners to the input boxes receiving each digit of the pass code.
      */
     private fun setTextListeners() {
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
