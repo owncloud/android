@@ -598,7 +598,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
      *
      * The system will avoid finishing the service as much as possible when resources as low.
      *
-     * A notification must be created to keep the user aware of the existance of the service.
+     * A notification must be created to keep the user aware of the existence of the service.
      */
     private void setUpAsForeground(String content) {
         String ticker = String.format(getString(R.string.media_notif_ticker), getString(R.string.app_name));
