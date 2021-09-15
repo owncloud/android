@@ -41,6 +41,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityVie
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsSecurityFragment : PreferenceFragmentCompat() {
@@ -86,15 +87,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             else {
                 prefPattern?.isChecked = true
 
-<<<<<<< HEAD
-                // Allow to use biometric lock and lock delay since Pattern lock has been enabled
-                enableBiometricAndLockApplication()
-=======
                 // Allow to use biometric lock, lock delay and access from document provider since Pattern lock has been enabled
                 enableBiometricAndLockApplicationAndAccessFromDocumentProvider()
-            } else {
-                showMessageInSnackbar(getString(R.string.pattern_error_set))
->>>>>>> a8125c40a (Added logic for the new preference)
             }
         }
 
@@ -107,12 +101,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 // Do not allow to use biometric lock, lock delay nor access from document provider since Pattern lock has been disabled
                 disableBiometric()
                 prefLockApplication?.isEnabled = false
-<<<<<<< HEAD
-=======
                 disableAccessFromDocumentProvider()
-            } else {
-                showMessageInSnackbar(getString(R.string.pattern_error_remove))
->>>>>>> a8125c40a (Added logic for the new preference)
             }
         }
 
@@ -217,11 +206,13 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                         ) { dialog: DialogInterface?, which: Int ->
                             securityViewModel.setPrefAccessDocumentProvider(true)
                             prefAccessDocumentProvider?.isChecked = true
+                            notifyDocumentProviderRoots(requireContext())
                         }
                         .show()
                 }
                 return@setOnPreferenceChangeListener false
             }
+            notifyDocumentProviderRoots(requireContext())
             true
         }
 
