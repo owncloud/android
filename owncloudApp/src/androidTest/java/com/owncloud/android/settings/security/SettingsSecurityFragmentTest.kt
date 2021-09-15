@@ -24,6 +24,7 @@ import android.content.Context
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.CheckBoxPreference
+import androidx.preference.ListPreference
 import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -38,6 +39,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.security.LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
@@ -68,6 +70,7 @@ class SettingsSecurityFragmentTest {
     private lateinit var prefPasscode: CheckBoxPreference
     private lateinit var prefPattern: CheckBoxPreference
     private var prefBiometric: CheckBoxPreference? = null
+    private lateinit var prefLockApplication: ListPreference
     private lateinit var prefTouchesWithOtherVisibleWindows: CheckBoxPreference
 
     private lateinit var biometricManager: BiometricManager
@@ -116,6 +119,7 @@ class SettingsSecurityFragmentTest {
             prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
             prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
+            prefLockApplication = fragment.findPreference(LOCK_TIMEOUT)!!
             prefTouchesWithOtherVisibleWindows =
                 fragment.findPreference(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)!!
         }
@@ -137,6 +141,13 @@ class SettingsSecurityFragmentTest {
             enabled = true
         )
         assertFalse(prefPattern.isChecked)
+
+        prefLockApplication.verifyPreference(
+            keyPref = LOCK_TIMEOUT,
+            titlePref = context.getString(R.string.prefs_lock_application),
+            visible = true,
+            enabled = false
+        )
 
         prefTouchesWithOtherVisibleWindows.verifyPreference(
             keyPref = SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
@@ -241,23 +252,25 @@ class SettingsSecurityFragmentTest {
     }
 
     @Test
-    fun enablePasscodeEnablesBiometricLock() {
+    fun enablePasscodeEnablesBiometricLockAndLockApplication() {
         launchTest()
 
         firstEnablePasscode()
         onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
         assertTrue(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
+        assertTrue(prefLockApplication.isEnabled)
     }
 
     @Test
-    fun enablePatternEnablesBiometricLock() {
+    fun enablePatternEnablesBiometricLockAndLockApplication() {
         launchTest()
 
         firstEnablePattern()
         onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
         assertTrue(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
+        assertTrue(prefLockApplication.isEnabled)
     }
 
     @Test
@@ -295,6 +308,7 @@ class SettingsSecurityFragmentTest {
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
         assertFalse(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
+        assertFalse(prefLockApplication.isEnabled)
     }
 
     @Test
@@ -313,6 +327,7 @@ class SettingsSecurityFragmentTest {
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
         assertFalse(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
+        assertFalse(prefLockApplication.isEnabled)
     }
 
     @Test
