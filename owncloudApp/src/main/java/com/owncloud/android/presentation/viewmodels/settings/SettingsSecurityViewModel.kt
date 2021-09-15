@@ -34,6 +34,9 @@ class SettingsSecurityViewModel(
 
     fun isPasscodeSet() = preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
+    fun setPrefAccessDocumentProvider(value: Boolean) =
+        preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER, value)
+
     fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =
         preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
 }

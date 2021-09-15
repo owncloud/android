@@ -20,10 +20,7 @@
 
 package com.owncloud.android.presentation.ui.security
 
-<<<<<<< HEAD
 import android.os.SystemClock
-=======
->>>>>>> dfec4711a (Changes requested in CR)
 import com.owncloud.android.MainApp
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 
