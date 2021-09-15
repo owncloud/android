@@ -364,7 +364,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      *
      * @param file used to decide which fragment should be chosen
      * @return a new second fragment instance if it has not been chosen before, or the fragment
-     * previously chosen otherwhise
+     * previously chosen otherwise
      */
     private fun chooseInitialSecondFragment(file: OCFile?): Fragment? {
 
