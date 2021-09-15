@@ -240,14 +240,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     R.string.permission_storage_access,
                     Snackbar.LENGTH_INDEFINITE
                 )
-                    .setAction(android.R.string.ok) { PermissionUtil.requestWriteExternalStoreagePermission(this@FileDisplayActivity) }
+                    .setAction(android.R.string.ok) { PermissionUtil.requestWriteExternalStoragePermission(this@FileDisplayActivity) }
 
                 DisplayUtils.colorSnackbar(this, snackbar)
 
                 snackbar.show()
             } else {
                 // No explanation needed, request the permission.
-                PermissionUtil.requestWriteExternalStoreagePermission(this)
+                PermissionUtil.requestWriteExternalStoragePermission(this)
             }
         }
 
