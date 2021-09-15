@@ -107,7 +107,7 @@ abstract class DrawerActivity : ToolbarActivity() {
             getDrawerLogo()?.setImageResource(R.drawable.drawer_logo)
         }
 
-        getDrawerAccountChooserToogle()?.setImageResource(R.drawable.ic_down)
+        getDrawerAccountChooserToggle()?.setImageResource(R.drawable.ic_down)
         isAccountChooserActive = false
 
         //Notch support
@@ -482,7 +482,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         val navigationView = getNavView() ?: return
 
         val accountCount = drawerViewModel.getAccounts(this).size
-        getDrawerAccountChooserToogle()?.setImageResource(if (isAccountChooserActive) R.drawable.ic_up else R.drawable.ic_down)
+        getDrawerAccountChooserToggle()?.setImageResource(if (isAccountChooserActive) R.drawable.ic_up else R.drawable.ic_down)
         navigationView.menu.setGroupVisible(R.id.drawer_menu_accounts, isAccountChooserActive)
         navigationView.menu.setGroupVisible(R.id.drawer_menu_settings_etc, !isAccountChooserActive)
         getDrawerLogo()?.isVisible = !isAccountChooserActive || accountCount < USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD
@@ -631,7 +631,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun getBottomNavigationView(): BottomNavigationView? = findViewById(R.id.bottom_nav_view)
     private fun getAccountQuotaText(): TextView? = findViewById(R.id.account_quota_text)
     private fun getAccountQuotaBar(): ProgressBar? = findViewById(R.id.account_quota_bar)
-    private fun getDrawerAccountChooserToogle() = findNavigationViewChildById(R.id.drawer_account_chooser_toogle) as ImageView?
+    private fun getDrawerAccountChooserToggle() = findNavigationViewChildById(R.id.drawer_account_chooser_toggle) as ImageView?
     private fun getDrawerAccountEnd() = findNavigationViewChildById(R.id.drawer_account_end) as ImageView?
     private fun getDrawerAccountMiddle() = findNavigationViewChildById(R.id.drawer_account_middle) as ImageView?
     private fun getDrawerActiveUser() = findNavigationViewChildById(R.id.drawer_active_user) as ConstraintLayout?
