@@ -152,7 +152,7 @@ public class PreviewImageActivity extends FileActivity implements
         if (position == 0) {
             mViewPager.post(new Runnable() {
                 // this is necessary because mViewPager.setCurrentItem(0) does not trigger
-                // a call to onPageSelected in the first layout request aftet mViewPager.setAdapter(...) ;
+                // a call to onPageSelected in the first layout request after mViewPager.setAdapter(...) ;
                 // see, for example:
                 // https://android.googlesource.com/platform/frameworks/support.git/+/android-6.0
                 // .1_r55/v4/java/android/support/v4/view/ViewPager.java#541
