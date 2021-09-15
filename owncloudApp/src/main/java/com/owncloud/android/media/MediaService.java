@@ -141,7 +141,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     /** Flag signaling if the audio should be played immediately when the file is prepared */
     protected boolean mPlayOnPrepared;
 
-    /** Position, in miliseconds, where the audio should be started */
+    /** Position, in milliseconds, where the audio should be started */
     private int mStartPosition;
 
     /** Interface to access the service through binding */
