@@ -252,6 +252,7 @@ public class TransferRequester {
                         "COPY",
                         upload.getRemotePath(),
                         upload.getUploadId(),
+                        false,
                         false
                 )
         );
