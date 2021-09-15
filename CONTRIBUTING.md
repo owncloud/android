@@ -4,7 +4,7 @@ If you have questions about how to use ownCloud, please direct these to the [mai
 
 ### Guidelines
 * [Report the issue](https://github.com/owncloud/android/issues/new) using our [template][template], it includes all the informations we need to track down the issue.
-* This repository is *only* for issues within the ownCloud Android app code. Issues in other components should be reported in their own repositores: 
+* This repository is *only* for issues within the ownCloud Android app code. Issues in other components should be reported in their own repositories: 
   - [ownCloud core](https://github.com/owncloud/core/issues)
   - [iOS client](https://github.com/owncloud/ios-issues/issues)
   - [Desktop client](https://github.com/owncloud/mirall/issues)
