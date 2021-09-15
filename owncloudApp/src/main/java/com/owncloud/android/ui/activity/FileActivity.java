@@ -78,7 +78,7 @@ public class FileActivity extends DrawerActivity
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     private static final String KEY_ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
 
-    // go to a high number, since the low numbers are usded by android
+    // go to a high number, since the low numbers are used by android
     public static final int REQUEST_CODE__UPDATE_CREDENTIALS = 0;
     public static final int REQUEST_CODE__LAST_SHARED = REQUEST_CODE__UPDATE_CREDENTIALS;
 
