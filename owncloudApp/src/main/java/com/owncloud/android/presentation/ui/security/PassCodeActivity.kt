@@ -26,6 +26,7 @@
 
 package com.owncloud.android.presentation.ui.security
 
+import android.content.Context
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import android.widget.TextView
 import android.widget.EditText
@@ -39,6 +40,7 @@ import android.text.TextWatcher
 import android.text.Editable
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
@@ -291,6 +293,8 @@ class PassCodeActivity : BaseActivity() {
             passCodeEditText?.setText("")
         }
         passCodeEditTexts[0]?.requestFocus()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(passCodeEditTexts[0], InputMethodManager.SHOW_IMPLICIT)
     }
 
     /**
