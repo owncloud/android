@@ -48,6 +48,8 @@
     <string name="prefs_lock_application_entries_1minute">After 1 minute</string>
     <string name="prefs_lock_application_entries_5minutes">After 5 minutes</string>
     <string name="prefs_lock_application_entries_30minutes">After 30 minutes</string>
+    <string name="prefs_access_from_document_provider">Access from document provider</string>
+    <string name="prefs_access_from_document_provider_summary">Allow access to the files of ownCloud accounts in the app via the Android native file explorer when there is a lock set</string>
     <string name="prefs_touches_with_other_visible_windows">Touches with other visible windows</string>
     <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
     <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
