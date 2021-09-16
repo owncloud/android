@@ -239,21 +239,27 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     }
 
     private fun enableBiometricAndLockApplicationAndAccessFromDocumentProvider() {
-        prefBiometric?.isEnabled = true
-        prefBiometric?.summary = null
+        prefBiometric?.apply {
+            isEnabled = true
+            summary = null
+        }
         prefLockApplication?.isEnabled = true
         prefAccessDocumentProvider?.isEnabled = true
     }
 
     private fun disableBiometric() {
-        prefBiometric?.isChecked = false
-        prefBiometric?.isEnabled = false
-        prefBiometric?.summary = getString(R.string.prefs_biometric_summary)
+        prefBiometric?.apply {
+            isChecked = false
+            isEnabled = false
+            summary = getString(R.string.prefs_biometric_summary)
+        }
     }
 
     private fun disableAccessFromDocumentProvider() {
-        prefAccessDocumentProvider?.isChecked = false
-        prefAccessDocumentProvider?.isEnabled = false
+        prefAccessDocumentProvider?.apply {
+            isChecked = false
+            isEnabled = false
+        }
     }
 
     companion object {
