@@ -33,6 +33,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -50,10 +51,14 @@ import timber.log.Timber;
 public class PreviewVideoActivity extends FileActivity implements ExoPlayer.EventListener,
         PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
 
-    /** Key to receive a flag signaling if the video should be started immediately */
+    /**
+     * Key to receive a flag signaling if the video should be started immediately
+     */
     public static final String EXTRA_AUTOPLAY = "AUTOPLAY";
 
-    /** Key to receive the position of the playback where the video should be put at start */
+    /**
+     * Key to receive the position of the playback where the video should be put at start
+     */
     public static final String EXTRA_START_POSITION = "START_POSITION";
 
     private Handler mainHandler;
@@ -162,6 +167,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
     /**
      * Called after preparing the player asynchronously
+     *
      * @param mediaSource media to be played
      */
     @Override
@@ -193,11 +199,11 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     // Video player eventListener implementation
 
     @Override
-    public void onPlayerError(ExoPlaybackException error) {
+    public void onPlayerError(PlaybackException error) {
 
         Timber.e(error, "Error in video player");
 
-        showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError(error, this));
+        showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError((ExoPlaybackException) error, this));
     }
 
     /**
