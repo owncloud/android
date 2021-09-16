@@ -28,7 +28,6 @@ import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
-import org.apache.commons.io.FileUtils
 
 /**
  * View Model to keep a reference to the capability repository and an up-to-date capability
@@ -48,7 +47,7 @@ class MigrationViewModel(
 
     private fun getLegacyStorageSizeInBytes(): Long {
         val legacyStorageDirectory = LocalStorageProvider.LegacyStorageProvider(rootFolder).getPrimaryStorageDirectory()
-        return FileUtils.sizeOfDirectory(legacyStorageDirectory)
+        return scopedStorageProvider.sizeOfDirectory(legacyStorageDirectory)
     }
 
     fun moveLegacyStorageToScopedStorage() {
@@ -70,7 +69,7 @@ class MigrationViewModel(
         val nextState: MigrationState = when (_migrationState.value?.peekContent()) {
             is MigrationState.MigrationIntroState -> MigrationState.MigrationChoiceState(
                 legacyStorageSpaceInBytes = getLegacyStorageSizeInBytes(),
-                availableBytesInScopedStorage = scopedStorageProvider.getUsableSpace()
+                availableBytesInScopedStorage = 3//scopedStorageProvider.getUsableSpace()
             )
             is MigrationState.MigrationChoiceState -> MigrationState.MigrationProgressState(migrationType, 0)
             is MigrationState.MigrationProgressState -> MigrationState.MigrationCompletedState

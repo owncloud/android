@@ -28,7 +28,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
-import org.apache.commons.io.FileUtils
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -72,36 +71,42 @@ sealed class LocalStorageProvider(val rootFolderName: String) {
             val legacyStorageProvider = LegacyStorageProvider(rootFolderName)
             val rootLegacyStorage = File(legacyStorageProvider.getRootFolderPath())
 
-            val rootScopedStorage = File(getRootFolderPath())
-
-            val scopedStorageUsableSpace = rootScopedStorage.usableSpace
-            val legacyStorageUsedBytes = FileUtils.sizeOfDirectory(rootLegacyStorage)
+            val legacyStorageUsedBytes = sizeOfDirectory(rootLegacyStorage)
             Timber.d(
-                "Root ${rootLegacyStorage.absolutePath} has ${rootLegacyStorage.listFiles()?.size} files and its size is ${
-                    FileUtils.byteCountToDisplaySize(legacyStorageUsedBytes)
-                } Bytes"
-            )
-            Timber.d(
-                "Current allocatable bytes in scoped storage: ${FileUtils.byteCountToDisplaySize(scopedStorageUsableSpace)} Bytes"
+                "Root ${rootLegacyStorage.absolutePath} has ${rootLegacyStorage.listFiles()?.size} files and its size is $legacyStorageUsedBytes Bytes"
             )
 
-            if (scopedStorageUsableSpace < legacyStorageUsedBytes) {
-                Timber.d("There is no space to do an optional migration.")
-            } else {
-                Timber.d("Let's migrate the files to scoped storage inside ${rootScopedStorage.absolutePath}")
-            }
             return rootLegacyStorage
         }
 
         private fun copyFileOrFolderToScopedStorage(file: File) {
-            Timber.d("Let's migrate ${file.absolutePath} to scoped storage")
-            FileUtils.copyDirectoryToDirectory(file, getPrimaryStorageDirectory())
+            Timber.d("Let's copy ${file.absolutePath} to scoped storage")
+            file.copyRecursively(File(getRootFolderPath()), overwrite = true)
         }
 
         private fun moveFileOrFolderToScopedStorage(file: File) {
             copyFileOrFolderToScopedStorage(file)
-            FileUtils.deleteDirectory(file)
+            Timber.d("Let's delete legacy storage ${file.absolutePath}")
+            file.deleteRecursively()
         }
+    }
+
+    fun sizeOfDirectory(dir: File): Long {
+        if (dir.exists()) {
+            var result: Long = 0
+            val fileList = dir.listFiles() ?: arrayOf()
+            fileList.forEach { file ->
+                // Recursive call if it's a directory
+                result += if (file.isDirectory) {
+                    sizeOfDirectory(file)
+                } else {
+                    // Sum the file size in bytes
+                    file.length()
+                }
+            }
+            return result // return the file size
+        }
+        return 0
     }
 
     /**

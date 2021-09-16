@@ -56,9 +56,6 @@ dependencies {
 
     implementation "androidx.legacy:legacy-support-v4:$androidX"
 
-    // File Utils
-    implementation 'commons-io:commons-io:2.11.0'
-
     // Room
     implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
