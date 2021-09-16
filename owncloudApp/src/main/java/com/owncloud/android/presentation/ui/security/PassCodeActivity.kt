@@ -168,9 +168,11 @@ class PassCodeActivity : BaseActivity() {
             if (i > 0) {
                 passCodeEditTexts[i]?.setOnKeyListener { v: View, keyCode: Int, _: KeyEvent? ->
                     if (keyCode == KeyEvent.KEYCODE_DEL && bChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
-                        passCodeEditTexts[i - 1]?.isEnabled = true
-                        passCodeEditTexts[i - 1]?.setText("")
-                        passCodeEditTexts[i - 1]?.requestFocus()
+                        passCodeEditTexts[i - 1]?.apply {
+                            isEnabled = true
+                            setText("")
+                            requestFocus()
+                        }
                         if (!confirmingPassCode) {
                             passCodeDigits[i - 1] = ""
                         }
@@ -292,8 +294,10 @@ class PassCodeActivity : BaseActivity() {
      */
     protected fun clearBoxes() {
         for (passCodeEditText in passCodeEditTexts) {
-            passCodeEditText?.isEnabled = true
-            passCodeEditText?.setText("")
+            passCodeEditText?.apply {
+                isEnabled = true
+                setText("")
+            }
         }
         passCodeEditTexts[0]?.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -349,7 +353,7 @@ class PassCodeActivity : BaseActivity() {
      */
     private inner class PassCodeDigitTextWatcher(private val index: Int, private val lastOne: Boolean) : TextWatcher {
         private operator fun next(): Int {
-            return if (lastOne) 0 else index + 1
+            return if (lastOne) 0 else index.plus(1)
         }
 
         /**
