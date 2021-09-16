@@ -36,7 +36,7 @@ import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
-import com.owncloud.android.ui.activity.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -56,28 +56,22 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val passcodeEnableResult = securityViewModel.handleEnablePasscode(result.data)
-            if (passcodeEnableResult.isSuccess) {
+            else {
                 prefPasscode?.isChecked = true
 
                 // Allow to use biometric lock since Passcode lock has been enabled
                 enableBiometric()
-            } else {
-                showMessageInSnackbar(getString(R.string.pass_code_error_set))
             }
         }
 
     private val disablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val passcodeDisableResult = securityViewModel.handleDisablePasscode(result.data)
-            if (passcodeDisableResult.isSuccess) {
+            else {
                 prefPasscode?.isChecked = false
 
                 // Do not allow to use biometric lock since Passcode lock has been disabled
                 disableBiometric()
-            } else {
-                showMessageInSnackbar(getString(R.string.pass_code_error_remove))
             }
         }
 

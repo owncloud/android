@@ -56,7 +56,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.authentication.PassCodeManager
+import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
@@ -519,7 +519,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             BiometricManager.getBiometricManager(this).bayPassUnlockOnce()
         }
-        PassCodeManager.getPassCodeManager().bayPassUnlockOnce()
+        PassCodeManager.bayPassUnlockOnce()
         PatternManager.getPatternManager().bayPassUnlockOnce()
 
         // Hanndle calls form internal activities.

@@ -41,7 +41,7 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
-import com.owncloud.android.ui.activity.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
@@ -75,7 +75,6 @@ class SettingsSecurityFragmentTest {
     private lateinit var securityViewModel: SettingsSecurityViewModel
     private lateinit var context: Context
 
-    private val passCodeValue = "1111"
     private val patternValue = "1234"
 
     @Before
@@ -200,32 +199,14 @@ class SettingsSecurityFragmentTest {
     @Test
     fun passcodeLockEnabledOk() {
         every { securityViewModel.isPatternSet() } returns false
-        every { securityViewModel.handleEnablePasscode(any()) } returns UIResult.Success()
 
         launchTest()
 
         mockIntent(
-            extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
             action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertTrue(prefPasscode.isChecked)
-    }
-
-    @Test
-    fun passcodeLockEnabledError() {
-        every { securityViewModel.isPatternSet() } returns false
-        every { securityViewModel.handleEnablePasscode(any()) } returns UIResult.Error()
-
-        launchTest()
-
-        mockIntent(
-            extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
-            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
-        )
-        onView(withText(R.string.prefs_passcode)).perform(click())
-        assertFalse(prefPasscode.isChecked)
-        onView(withText(R.string.pass_code_error_set)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -303,13 +284,10 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun disablePasscodeOk() {
-        every { securityViewModel.handleDisablePasscode(any()) } returns UIResult.Success()
-
         launchTest()
 
         firstEnablePasscode()
         mockIntent(
-            extras = Pair(PassCodeActivity.KEY_CHECK_RESULT, true),
             action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
         )
         onView(withText(R.string.prefs_passcode)).perform(click())
@@ -317,24 +295,6 @@ class SettingsSecurityFragmentTest {
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
         assertFalse(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
-    }
-
-    @Test
-    fun disablePasscodeError() {
-        every { securityViewModel.handleDisablePasscode(any()) } returns UIResult.Error()
-
-        launchTest()
-
-        firstEnablePasscode()
-        mockIntent(
-            extras = Pair(PassCodeActivity.KEY_CHECK_RESULT, true),
-            action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
-        )
-        onView(withText(R.string.prefs_passcode)).perform(click())
-        assertTrue(prefPasscode.isChecked)
-        onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
-        assertTrue(prefBiometric!!.isEnabled)
-        onView(withText(R.string.pass_code_error_remove)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -458,10 +418,8 @@ class SettingsSecurityFragmentTest {
 
     private fun firstEnablePasscode() {
         every { securityViewModel.isPatternSet() } returns false
-        every { securityViewModel.handleEnablePasscode(any()) } returns UIResult.Success()
 
         mockIntent(
-            extras = Pair(PassCodeActivity.KEY_PASSCODE, passCodeValue),
             action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_passcode)).perform(click())

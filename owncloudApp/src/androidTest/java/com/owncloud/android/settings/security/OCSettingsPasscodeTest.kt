@@ -3,6 +3,8 @@
  *
  * @author Jesus Recio (@jesmrec)
  * @author Christian Schabesberger (@theScrabi)
+ * @author Juan Carlos Garrote Gascón (@JuancaG05)
+ *
  * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,14 +30,12 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode
-import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.ui.activity.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText
 import org.junit.After
@@ -45,7 +45,15 @@ import org.junit.Rule
 import org.junit.Test
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
+import io.mockk.every
+import io.mockk.mockk
 import nthChildOf
+import org.junit.Before
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import withChildViewCount
 
 class OCSettingsPasscodeTest {
@@ -56,12 +64,31 @@ class OCSettingsPasscodeTest {
 
     private val intent = Intent()
     private val errorMessage = "PassCode Activity error"
-    private val keyPassCode = "KEY_PASSCODE"
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
     private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
     private val passCodeToSave = "111111"
+
+    private lateinit var passCodeViewModel: PassCodeViewModel
+
+    @Before
+    fun setUp() {
+        passCodeViewModel = mockk(relaxUnitFun = true)
+
+        stopKoin()
+
+        startKoin {
+            context
+            modules(
+                module(override = true) {
+                    viewModel {
+                        passCodeViewModel
+                    }
+                }
+            )
+        }
+    }
 
     @After
     fun tearDown() {
@@ -83,7 +110,7 @@ class OCSettingsPasscodeTest {
             withText(R.string.pass_code_configure_your_pass_code_explanation)
         }
 
-        // Check if required amout of input fields are actually displayed
+        // Check if required amount of input fields are actually displayed
         onView(withId(R.id.passCodeTxtLayout)).check(matches(isDisplayed()))
         onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(PassCodeActivity.numberOfPassInputs, withId(R.id.passCodeEditText))))
 
@@ -118,9 +145,8 @@ class OCSettingsPasscodeTest {
         //Second typing
         typePasscode(defaultPassCode)
 
-        //Checking that the setResult returns the typed passcode
+        //Checking that the result returned is OK
         assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
-        assertThat(activityRule.activityResult, hasResultData(hasExtra(keyPassCode, passCodeToSave.substring(0, PassCodeActivity.numberOfPassInputs))))
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -130,8 +156,8 @@ class OCSettingsPasscodeTest {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typin
-        //Type incorrect passcodeg
+        //First typing
+        //Type incorrect passcode
         typePasscode(defaultPassCode)
         //Second typing
         typePasscode(wrongPassCode)
@@ -196,6 +222,8 @@ class OCSettingsPasscodeTest {
 
     @Test
     fun deletePasscodeCorrect() {
+        every { passCodeViewModel.checkPassCodeIsValid(any()) } returns true
+
         //Save a passcode in Preferences
         storePasscode(passCodeToSave)
 
@@ -210,6 +238,8 @@ class OCSettingsPasscodeTest {
 
     @Test
     fun deletePasscodeIncorrect() {
+        every { passCodeViewModel.checkPassCodeIsValid(any()) } returns false
+
         //Save a passcode in Preferences
         storePasscode(passCodeToSave)
 

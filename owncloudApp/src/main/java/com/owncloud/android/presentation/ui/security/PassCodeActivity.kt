@@ -1,4 +1,4 @@
-/*
+/**
  * ownCloud Android client application
  *
  * @author Bartek Przybylski
@@ -7,6 +7,7 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  * Copyright (C) 2011 Bartek Przybylski
  * Copyright (C) 2021 ownCloud GmbH.
  * <p>
@@ -22,8 +23,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.ui.activity
 
+package com.owncloud.android.presentation.ui.security
+
+import android.content.Context
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import android.widget.TextView
 import android.widget.EditText
@@ -33,20 +36,27 @@ import com.owncloud.android.R
 import android.widget.LinearLayout
 import android.view.View.OnFocusChangeListener
 import android.content.Intent
-import android.preference.PreferenceManager
 import android.text.TextWatcher
 import android.text.Editable
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import com.owncloud.android.BuildConfig
+import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
+import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.PreferenceUtils
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.util.Arrays
 
 class PassCodeActivity : BaseActivity() {
+
+    // ViewModel
+    private val passCodeViewModel by viewModel<PassCodeViewModel>()
+
     private lateinit var bCancel: Button
     private lateinit var passCodeHdr: TextView
     private lateinit var passCodeHdrExplanation: TextView
@@ -68,6 +78,7 @@ class PassCodeActivity : BaseActivity() {
         if (!BuildConfig.DEBUG) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } // else, let it go, or taking screenshots & testing will not be possible
+
         setContentView(R.layout.passcodelock)
         val passcodeLockLayout = findViewById<LinearLayout>(R.id.passcodeLockLayout)
         bCancel = findViewById(R.id.cancel)
@@ -82,6 +93,7 @@ class PassCodeActivity : BaseActivity() {
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
         inflatePasscodeTxtLine()
+
         if (ACTION_CHECK == intent.action) {
             /// this is a pass code request; the user has to input the right value
             passCodeHdr.text = getString(R.string.pass_code_enter_pass_code)
@@ -155,6 +167,7 @@ class PassCodeActivity : BaseActivity() {
             if (i > 0) {
                 passCodeEditTexts[i]?.setOnKeyListener { v: View, keyCode: Int, _: KeyEvent? ->
                     if (keyCode == KeyEvent.KEYCODE_DEL && bChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
+                        passCodeEditTexts[i - 1]?.isEnabled = true
                         passCodeEditTexts[i - 1]?.setText("")
                         passCodeEditTexts[i - 1]?.requestFocus()
                         if (!confirmingPassCode) {
@@ -189,7 +202,7 @@ class PassCodeActivity : BaseActivity() {
      */
     private fun processFullPassCode() {
         if (ACTION_CHECK == intent.action) {
-            if (checkPassCodeIsValid()) {
+            if (passCodeViewModel.checkPassCodeIsValid(passCodeDigits)) {
                 /// pass code accepted in request, user is allowed to access the app
                 passCodeError.visibility = View.INVISIBLE
                 hideSoftKeyboard()
@@ -201,9 +214,9 @@ class PassCodeActivity : BaseActivity() {
                 )
             }
         } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
-            if (checkPassCodeIsValid()) {
+            if (passCodeViewModel.checkPassCodeIsValid(passCodeDigits)) {
+                passCodeViewModel.removePassCode()
                 val resultIntent = Intent()
-                resultIntent.putExtra(KEY_CHECK_RESULT, true)
                 setResult(RESULT_OK, resultIntent)
                 passCodeError.visibility = View.INVISIBLE
                 hideSoftKeyboard()
@@ -255,25 +268,6 @@ class PassCodeActivity : BaseActivity() {
     }
 
     /**
-     * Compares pass code entered by the user with the value currently saved in the app.
-     *
-     * @return     'True' if entered pass code equals to the saved one.
-     */
-    protected fun checkPassCodeIsValid(): Boolean {
-        val appPrefs = PreferenceManager
-            .getDefaultSharedPreferences(applicationContext)
-        val passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
-        var isValid = true
-        var i = 0
-        while (i < passCodeDigits.size && isValid) {
-            val originalDigit = Character.toString(passcodeString!![i])
-            isValid = passCodeDigits[i] != null && passCodeDigits[i] == originalDigit
-            i++
-        }
-        return isValid
-    }
-
-    /**
      * Compares pass code retyped by the user in the input fields with the value entered just
      * before.
      *
@@ -295,9 +289,12 @@ class PassCodeActivity : BaseActivity() {
      */
     protected fun clearBoxes() {
         for (passCodeEditText in passCodeEditTexts) {
+            passCodeEditText?.isEnabled = true
             passCodeEditText?.setText("")
         }
         passCodeEditTexts[0]?.requestFocus()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(passCodeEditTexts[0], InputMethodManager.SHOW_IMPLICIT)
     }
 
     /**
@@ -327,21 +324,10 @@ class PassCodeActivity : BaseActivity() {
         for (i in 0 until numberOfPassInputs) {
             passCodeString.append(passCodeDigits[i])
         }
-        resultIntent.putExtra(KEY_PASSCODE, passCodeString.toString())
+        passCodeViewModel.setPassCode(passCodeString.toString())
         setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
         finish()
-    }
-
-    private fun loadPinFromOldFormatIfPossible(): String {
-        val appPrefs = PreferenceManager
-            .getDefaultSharedPreferences(applicationContext)
-
-        var pinString = ""
-        for (i in 1..4)
-            pinString += appPrefs.getString(PREFERENCE_PASSCODE_D + i, null)
-
-        return pinString
     }
 
     public override fun onSaveInstanceState(outState: Bundle) {
@@ -350,9 +336,17 @@ class PassCodeActivity : BaseActivity() {
         outState.putStringArray(KEY_PASSCODE_DIGITS, passCodeDigits)
     }
 
-    private inner class PassCodeDigitTextWatcher(private val mIndex: Int, private val mLastOne: Boolean) : TextWatcher {
+    /**
+     * Constructor
+     *
+     * @param index         Position in the pass code of the input field that will be bound to
+     * this watcher.
+     * @param lastOne       'True' means that watcher corresponds to the last position of the
+     * pass code.
+     */
+    private inner class PassCodeDigitTextWatcher(private val index: Int, private val lastOne: Boolean) : TextWatcher {
         private operator fun next(): Int {
-            return if (mLastOne) 0 else mIndex + 1
+            return if (lastOne) 0 else index + 1
         }
 
         /**
@@ -362,19 +356,20 @@ class PassCodeActivity : BaseActivity() {
          * - moves the focus automatically to the next field
          * - for the last field, triggers the processing of the full pass code
          *
-         * @param s     Changed text
+         * @param changedText     Changed text
          */
         override fun afterTextChanged(changedText: Editable) {
             if (changedText.isNotEmpty()) {
                 if (!confirmingPassCode) {
-                    passCodeDigits[mIndex] = passCodeEditTexts[mIndex]?.text.toString()
+                    passCodeDigits[index] = passCodeEditTexts[index]?.text.toString()
                 }
                 passCodeEditTexts[next()]?.requestFocus()
-                if (mLastOne) {
+                passCodeEditTexts[index]?.isEnabled = false
+                if (lastOne) {
                     processFullPassCode()
                 }
             } else {
-                Timber.d("Text box $mIndex was cleaned")
+                Timber.d("Text box $index was cleaned")
             }
         }
 
@@ -386,16 +381,8 @@ class PassCodeActivity : BaseActivity() {
             // nothing to do
         }
 
-        /**
-         * Constructor
-         *
-         * @param index         Position in the pass code of the input field that will be bound to
-         * this watcher.
-         * @param lastOne       'True' means that watcher corresponds to the last position of the
-         * pass code.
-         */
         init {
-            require(mIndex >= 0) {
+            require(index >= 0) {
                 "Invalid index in " + PassCodeDigitTextWatcher::class.java.simpleName +
                         " constructor"
             }
@@ -406,8 +393,6 @@ class PassCodeActivity : BaseActivity() {
         const val ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT"
         const val ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT"
         const val ACTION_CHECK = "ACTION_CHECK"
-        const val KEY_PASSCODE = "KEY_PASSCODE"
-        const val KEY_CHECK_RESULT = "KEY_CHECK_RESULT"
 
         // NOTE: PREFERENCE_SET_PASSCODE must have the same value as settings_security.xml-->android:key for passcode preference
         const val PREFERENCE_SET_PASSCODE = "set_pincode"

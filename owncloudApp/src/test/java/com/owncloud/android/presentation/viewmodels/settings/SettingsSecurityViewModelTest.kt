@@ -24,7 +24,7 @@ import android.content.Intent
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
-import com.owncloud.android.ui.activity.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import io.mockk.every
 import io.mockk.mockk
@@ -75,119 +75,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
-        }
-    }
-
-    @Test
-    fun `handle enable passcode - ok`() {
-        val data: Intent = mockk()
-        val passcode = "1111"
-
-        every { data.getStringExtra(any()) } returns passcode
-
-        val passcodeEnableResult = securityViewModel.handleEnablePasscode(data)
-
-        assertTrue(passcodeEnableResult.isSuccess)
-
-        verify(exactly = 1) {
-            data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
-            passcode.length
-            preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
-            preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
-        }
-    }
-
-    @Test
-    fun `handle enable passcode - ko - data intent is null`() {
-        val passcodeEnableResult = securityViewModel.handleEnablePasscode(null)
-
-        assertTrue(passcodeEnableResult.isError)
-    }
-
-    @Test
-    fun `handle enable passcode - ko - passcode is null`() {
-        val data: Intent = mockk()
-
-        every { data.getStringExtra(any()) } returns null
-
-        val passcodeEnableResult = securityViewModel.handleEnablePasscode(data)
-
-        assertTrue(passcodeEnableResult.isError)
-
-        verify(exactly = 1) {
-            data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
-        }
-    }
-
-    @Test
-    fun `handle enable passcode - ko - passcode has length 3`() {
-        val data: Intent = mockk()
-        val passcode = "111"
-
-        every { data.getStringExtra(any()) } returns passcode
-
-        val passcodeEnableResult = securityViewModel.handleEnablePasscode(data)
-
-        assertTrue(passcodeEnableResult.isError)
-
-        verify(exactly = 1) {
-            data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
-            passcode.length
-        }
-    }
-
-    @Test
-    fun `handle enable passcode - ko - passcode has length 5`() {
-        val data: Intent = mockk()
-        val passcode = "11111"
-
-        every { data.getStringExtra(any()) } returns passcode
-
-        val passcodeEnableResult = securityViewModel.handleEnablePasscode(data)
-
-        assertTrue(passcodeEnableResult.isError)
-
-        verify(exactly = 1) {
-            data.getStringExtra(PassCodeActivity.KEY_PASSCODE)
-            passcode.length
-        }
-    }
-
-    @Test
-    fun `handle disable passcode - ok`() {
-        val data: Intent = mockk()
-
-        every { data.getBooleanExtra(any(), any()) } returns true
-
-        val passcodeDisableResult = securityViewModel.handleDisablePasscode(data)
-
-        assertTrue(passcodeDisableResult.isSuccess)
-
-        verify(exactly = 1) {
-            data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)
-            preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-        }
-    }
-
-    @Test
-    fun `handle disable passcode - ko - data intent is null`() {
-        val passcodeDisableResult = securityViewModel.handleDisablePasscode(null)
-
-        assertTrue(passcodeDisableResult.isError)
-    }
-
-    @Test
-    fun `handle disable passcode - ko - key check result is false`() {
-        val data: Intent = mockk()
-
-        every { data.getBooleanExtra(any(), any()) } returns false
-
-        val passcodeDisableResult = securityViewModel.handleDisablePasscode(data)
-
-        assertTrue(passcodeDisableResult.isError)
-
-        verify(exactly = 1) {
-            data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)
         }
     }
 
