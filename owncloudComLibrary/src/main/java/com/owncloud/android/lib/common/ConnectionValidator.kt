@@ -32,7 +32,7 @@ class ConnectionValidator (
 
             client.account = baseClient.account
             client.credentials = baseClient.credentials
-            while (validationRetryCount < 5) {
+            while (validationRetryCount < VALIDATION_RETRY_COUNT) {
                 Timber.d("+++++++++++++++++++++++++++++++++++++ validationRetryCout %d", validationRetryCount)
                 var successCounter = 0
                 var failCounter = 0
@@ -179,5 +179,9 @@ class ConnectionValidator (
             // else: onExecute will finish with status 401
         }
         return credentialsWereRefreshed
+    }
+
+    companion object {
+        val VALIDATION_RETRY_COUNT = 3
     }
 }

@@ -48,17 +48,11 @@ class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
         if(!usesHttpOrHttps(client.baseUri)) {
             client.baseUri = buildFullHttpsUrl(client.baseUri)
         }
+        return tryToConnect(client)
+    }
 
-        var result = tryToConnect(client)
-        /*
-        if (!(result.code == ResultCode.OK || result.code == ResultCode.OK_SSL) && !result.isSslRecoverableException) {
-            Timber.d("Establishing secure connection failed, trying non secure connection")
-            client.baseUri = client.baseUri.buildUpon().scheme(HTTP_SCHEME).build()
-            result = tryToConnect(client)
-        }
-         */
-
-        return result
+    private fun updateClientBaseUrl(client:OwnCloudClient, newBaseUrl:String) {
+        client.baseUri = Uri.parse(newBaseUrl)
     }
 
     private fun tryToConnect(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
@@ -66,7 +60,9 @@ class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
         return try {
             val requester = StatusRequester()
             val requestResult = requester.request(baseUrl, client)
-            requester.handleRequestResult(requestResult, baseUrl)
+            val result = requester.handleRequestResult(requestResult, baseUrl)
+            updateClientBaseUrl(client, result.data.baseUrl)
+            return result
         } catch (e: JSONException) {
             RemoteOperationResult(ResultCode.INSTANCE_NOT_CONFIGURED)
         } catch (e: Exception) {

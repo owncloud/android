@@ -48,6 +48,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import static com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER;
+import static com.owncloud.android.lib.common.http.HttpConstants.HTTP_MOVED_PERMANENTLY;
 import static com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID;
 
 public class OwnCloudClient extends HttpClient {
@@ -77,7 +78,10 @@ public class OwnCloudClient extends HttpClient {
 
     private boolean mFollowRedirects = false;
 
-    public OwnCloudClient(Uri baseUri, ConnectionValidator connectionValidator, boolean synchronizeRequests, SingleSessionManager singleSessionManager) {
+    public OwnCloudClient(Uri baseUri,
+                          ConnectionValidator connectionValidator,
+                          boolean synchronizeRequests,
+                          SingleSessionManager singleSessionManager) {
         if (baseUri == null) {
             throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
         }
@@ -113,6 +117,10 @@ public class OwnCloudClient extends HttpClient {
         int repeatCounter = 0;
         int status;
 
+        if(mFollowRedirects) {
+            method.setFollowRedirects(true);
+        }
+
         boolean retry;
         do {
             repeatCounter++;
@@ -128,16 +136,19 @@ public class OwnCloudClient extends HttpClient {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
 
-            method.setFollowRedirects(mFollowRedirects);
             status = method.execute();
             stacklog(status, method);
 
             if (!mFollowRedirects &&
+                    !method.getFollowRedirects() &&
                     mConnectionValidator != null &&
                     (status == HttpConstants.HTTP_MOVED_TEMPORARILY ||
                             (!(mCredentials instanceof OwnCloudAnonymousCredentials) &&
                                     status == HttpConstants.HTTP_UNAUTHORIZED))) {
                 retry = mConnectionValidator.validate(this, mSingleSessionManager); // retry on success fail on no success
+            } else if(method.getFollowPermanentRedirects() && status == HTTP_MOVED_PERMANENTLY) {
+                retry = true;
+                method.setFollowRedirects(true);
             }
 
         } while (retry && repeatCounter < MAX_RETRY_COUNT);
