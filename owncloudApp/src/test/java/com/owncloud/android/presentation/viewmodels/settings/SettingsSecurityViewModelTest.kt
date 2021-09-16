@@ -98,6 +98,24 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
+    fun `set pref access from document provider - ok - true`() {
+        securityViewModel.setPrefAccessDocumentProvider(true)
+
+        verify(exactly = 1) {
+            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER, true)
+        }
+    }
+
+    @Test
+    fun `set pref access from document provider - ok - false`() {
+        securityViewModel.setPrefAccessDocumentProvider(false)
+
+        verify(exactly = 1) {
+            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER, false)
+        }
+    }
+
+    @Test
     fun `set pref touches with other visible windows - ok - true`() {
         securityViewModel.setPrefTouchesWithOtherVisibleWindows(true)
 
