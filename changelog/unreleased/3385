@@ -1,0 +1,9 @@
+Feature: Instant upload only when charging
+
+A new option has been added in the auto upload pictures/videos
+screen, so that now it's possible to upload pictures or videos
+only when charging.
+
+https://github.com/owncloud/android/issues/465
+https://github.com/owncloud/android/issues/3315
+https://github.com/owncloud/android/pull/3385
