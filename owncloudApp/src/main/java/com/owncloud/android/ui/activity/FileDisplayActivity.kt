@@ -41,7 +41,6 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.content.res.Resources.NotFoundException
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.Menu
@@ -55,9 +54,6 @@ import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.presentation.ui.security.PassCodeManager
-import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
@@ -80,6 +76,7 @@ import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
+import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
@@ -516,11 +513,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            BiometricManager.getBiometricManager(this).bayPassUnlockOnce()
-        }
-        PassCodeManager.bayPassUnlockOnce()
-        PatternManager.getPatternManager().bayPassUnlockOnce()
+        bayPassUnlockOnce()
 
         // Hanndle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS && (resultCode == Activity.RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {

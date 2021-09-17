@@ -37,8 +37,9 @@ import com.owncloud.android.ui.activity.PatternLockActivity;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
-import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LOCK_TIMEOUT;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.PREFERENCE_LAST_UNLOCK_TIMESTAMP;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.PREFERENCE_LOCK_TIMEOUT;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.bayPassUnlockOnce;
 
 public class PatternManager {
 
@@ -72,7 +73,7 @@ public class PatternManager {
                 return;
             }
 
-            checkPattern(activity);
+            askUserForPattern(activity);
         }
 
         mVisibleActivitiesCounter++;
@@ -90,8 +91,8 @@ public class PatternManager {
     }
 
     private boolean patternShouldBeRequested() {
-        long lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0);
-        int timeout = LockTimeout.Companion.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name()));
+        long lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0);
+        int timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name())).toMilliseconds();
         if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && mVisibleActivitiesCounter <= 0) {
             return isPatternEnabled();
         }
@@ -102,7 +103,7 @@ public class PatternManager {
         return preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
     }
 
-    private void checkPattern(Activity activity) {
+    private void askUserForPattern(Activity activity) {
         Intent i = new Intent(MainApp.Companion.getAppContext(), PatternLockActivity.class);
         i.setAction(PatternLockActivity.ACTION_CHECK);
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -110,22 +111,6 @@ public class PatternManager {
     }
 
     public void onBiometricCancelled(Activity activity) {
-        // Ask user for pattern
-        checkPattern(activity);
-    }
-
-    /**
-     * This can be used for example for onActivityResult, where you don't want to re authenticate
-     * again.
-     *
-     * USE WITH CARE
-     */
-    public void bayPassUnlockOnce() {
-        int timeout = LockTimeout.Companion.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name()));
-        long lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0);
-        if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
-            long newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1000;
-            preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, newLastUnlockTimestamp);
-        }
+        askUserForPattern(activity);
     }
 }

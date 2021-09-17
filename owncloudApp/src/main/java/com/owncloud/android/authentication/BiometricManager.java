@@ -40,8 +40,9 @@ import com.owncloud.android.ui.activity.BiometricActivity;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
-import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LOCK_TIMEOUT;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.PREFERENCE_LAST_UNLOCK_TIMESTAMP;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.PREFERENCE_LOCK_TIMEOUT;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.bayPassUnlockOnce;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 /**
@@ -108,8 +109,8 @@ public class BiometricManager {
     }
 
     private boolean biometricShouldBeRequested() {
-        long lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0);
-        int timeout = LockTimeout.Companion.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name()));
+        long lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0);
+        int timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name())).toMilliseconds();
         if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && mVisibleActivitiesCounter <= 0) {
             return isBiometricEnabled();
         }
@@ -127,20 +128,5 @@ public class BiometricManager {
 
     public boolean hasEnrolledBiometric() {
         return mBiometricManager.canAuthenticate() != androidx.biometric.BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED;
-    }
-
-    /**
-     * This can be used for example for onActivityResult, where you don't want to re authenticate
-     * again.
-     *
-     * USE WITH CARE
-     */
-    public void bayPassUnlockOnce() {
-        int timeout = LockTimeout.Companion.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name()));
-        long lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0);
-        if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
-            long newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1000;
-            preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, newLastUnlockTimestamp);
-        }
     }
 }
