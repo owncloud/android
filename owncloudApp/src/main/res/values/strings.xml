@@ -57,6 +57,8 @@
     <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
     <string name="prefs_camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
     <string name="prefs_camera_picture_upload_on_charging">Upload pictures only when charging</string>
+    <string name="prefs_camera_upload_on_charging_summary">Enable wifi only uploads to activate this option</string>
+    <string name="prefs_camera_upload_on_charging_summary_disable">Disable wifi only uploads to deactivate this option</string>
     <string name="prefs_camera_video_upload">Video uploads</string>
     <string name="prefs_camera_video_upload_summary">Automatically upload videos recorded by camera</string>
     <string name="prefs_camera_video_upload_path_title">Video upload path</string>
