@@ -20,20 +20,37 @@
 
 package com.owncloud.android.presentation.ui.security
 
-const val LOCK_TIMEOUT = "lock_timeout"
-const val LAST_UNLOCK_TIMESTAMP = "last_unlock_timestamp"
+import com.owncloud.android.MainApp
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+
+const val PREFERENCE_LOCK_TIMEOUT = "lock_timeout"
+const val PREFERENCE_LAST_UNLOCK_TIMESTAMP = "last_unlock_timestamp"
 
 enum class LockTimeout {
     IMMEDIATELY, ONE_MINUTE, FIVE_MINUTES, THIRTY_MINUTES;
 
-    companion object {
-        fun fromStringToMilliseconds(string: String?): Int {
-            return when {
-                string.equals("IMMEDIATELY", ignoreCase = true) -> 0
-                string.equals("ONE_MINUTE", ignoreCase = true) -> 60000
-                string.equals("FIVE_MINUTES", ignoreCase = true) -> 300000
-                else -> 1800000
-            }
+    fun toMilliseconds(): Int {
+        return when (this) {
+            ONE_MINUTE -> 60_000
+            FIVE_MINUTES -> 300_000
+            THIRTY_MINUTES -> 1_800_000
+            else -> 0
         }
+    }
+}
+
+/**
+ * This can be used for example for onActivityResult, where you don't want to re authenticate
+ * again.
+ *
+ * USE WITH CARE
+ */
+fun bayPassUnlockOnce() {
+    val preferencesProvider = SharedPreferencesProviderImpl(MainApp.appContext)
+    val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
+    val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
+    if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
+        val newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1_000
+        preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, newLastUnlockTimestamp)
     }
 }

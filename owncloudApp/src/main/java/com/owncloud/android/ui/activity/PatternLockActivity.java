@@ -47,7 +47,7 @@ import timber.log.Timber;
 
 import java.util.List;
 
-import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.PREFERENCE_LAST_UNLOCK_TIMESTAMP;
 
 public class PatternLockActivity extends AppCompatActivity {
 
@@ -198,7 +198,7 @@ public class PatternLockActivity extends AppCompatActivity {
             if (checkPattern()) {
                 mPatternError.setVisibility(View.INVISIBLE);
                 SharedPreferencesProvider preferencesProvider = new SharedPreferencesProviderImpl(getApplicationContext());
-                preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis());
+                preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis());
                 finish();
             } else {
                 showErrorAndRestart(R.string.pattern_incorrect_pattern,

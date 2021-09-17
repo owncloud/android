@@ -35,7 +35,7 @@ import androidx.preference.PreferenceScreen
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.ui.security.LOCK_TIMEOUT
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.LockTimeout
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
@@ -116,7 +116,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         prefPasscode = findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)
         prefPattern = findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)
         prefBiometric = findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
-        prefLockApplication = findPreference<ListPreference>(LOCK_TIMEOUT)?.apply {
+        prefLockApplication = findPreference<ListPreference>(PREFERENCE_LOCK_TIMEOUT)?.apply {
             entries = listOf(
                 getString(R.string.prefs_lock_application_entries_immediately),
                 getString(R.string.prefs_lock_application_entries_1minute),

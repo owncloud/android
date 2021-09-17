@@ -219,7 +219,7 @@ class PassCodeActivity : BaseActivity() {
                 /// pass code accepted in request, user is allowed to access the app
                 passCodeError.visibility = View.INVISIBLE
                 val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
-                preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
+                preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
                 hideSoftKeyboard()
                 val passCode = passCodeViewModel.getPassCode()
                 if (passCode != null && passCode.length < passCodeViewModel.getNumberOfPassCodeDigits()) {
