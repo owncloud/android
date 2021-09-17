@@ -122,8 +122,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                 prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
                 prefVideoUploadsOnCharging?.apply {
                     isEnabled = it.wifiOnly
-                    summary =
-                        if (!it.wifiOnly) getString(R.string.prefs_camera_upload_on_charging_summary) else getString(R.string.prefs_camera_upload_on_charging_summary_disable)
+                    summary = if (!it.wifiOnly) getString(R.string.prefs_camera_upload_on_charging_summary) else ""
                     isChecked = it.chargingOnly && it.wifiOnly
                 }
                 prefVideoUploadsBehaviour?.value = it.behavior.name
