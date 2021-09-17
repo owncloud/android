@@ -39,7 +39,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.security.LOCK_TIMEOUT
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
@@ -119,7 +119,7 @@ class SettingsSecurityFragmentTest {
             prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
             prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
-            prefLockApplication = fragment.findPreference(LOCK_TIMEOUT)!!
+            prefLockApplication = fragment.findPreference(PREFERENCE_LOCK_TIMEOUT)!!
             prefTouchesWithOtherVisibleWindows =
                 fragment.findPreference(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)!!
         }
@@ -143,7 +143,7 @@ class SettingsSecurityFragmentTest {
         assertFalse(prefPattern.isChecked)
 
         prefLockApplication.verifyPreference(
-            keyPref = LOCK_TIMEOUT,
+            keyPref = PREFERENCE_LOCK_TIMEOUT,
             titlePref = context.getString(R.string.prefs_lock_application),
             visible = true,
             enabled = false

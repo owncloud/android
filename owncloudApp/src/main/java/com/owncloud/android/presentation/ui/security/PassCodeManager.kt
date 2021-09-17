@@ -44,7 +44,7 @@ object PassCodeManager {
                 return
             }
 
-            checkPasscode(activity)
+            askUserForPasscode(activity)
         }
 
         visibleActivitiesCounter++ // keep it AFTER passCodeShouldBeRequested was checked
@@ -61,8 +61,8 @@ object PassCodeManager {
     }
 
     private fun passCodeShouldBeRequested(): Boolean {
-        val lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
-        val timeout = LockTimeout.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name))
+        val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
+        val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
         return if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && visibleActivitiesCounter <= 0) isPassCodeEnabled()
         else false
     }
@@ -71,7 +71,7 @@ object PassCodeManager {
         return preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     }
 
-    private fun checkPasscode(activity: Activity) {
+    private fun askUserForPasscode(activity: Activity) {
         val i = Intent(appContext, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -80,23 +80,6 @@ object PassCodeManager {
     }
 
     fun onBiometricCancelled(activity: Activity) {
-        // Ask user for passcode
-        checkPasscode(activity)
+        askUserForPasscode(activity)
     }
-
-    /**
-     * This can be used for example for onActivityResult, where you don't want to re authenticate
-     * again.
-     *
-     * USE WITH CARE
-     */
-    fun bayPassUnlockOnce() {
-        val timeout = LockTimeout.fromStringToMilliseconds(preferencesProvider.getString(LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name))
-        val lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0)
-        if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
-            val newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1_000
-            preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, newLastUnlockTimestamp)
-        }
-    }
-
 }
