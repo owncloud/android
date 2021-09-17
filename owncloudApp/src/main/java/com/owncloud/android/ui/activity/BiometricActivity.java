@@ -54,7 +54,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
 
-import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.PREFERENCE_LAST_UNLOCK_TIMESTAMP;
 
 public class BiometricActivity extends AppCompatActivity {
 
@@ -130,7 +130,7 @@ public class BiometricActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 SharedPreferencesProvider preferencesProvider = new SharedPreferencesProviderImpl(getApplicationContext());
-                preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis());
+                preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis());
                 mActivity.finish();
             }
 

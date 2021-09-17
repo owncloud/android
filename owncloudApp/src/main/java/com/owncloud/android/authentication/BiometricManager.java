@@ -39,7 +39,13 @@ import com.owncloud.android.ui.activity.BiometricActivity;
 import java.util.HashSet;
 import java.util.Set;
 
+<<<<<<< HEAD
 import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.LAST_UNLOCK_TIMESTAMP;
+=======
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.PREFERENCE_LAST_UNLOCK_TIMESTAMP;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.PREFERENCE_LOCK_TIMEOUT;
+import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.bayPassUnlockOnce;
+>>>>>>> dfec4711a (Changes requested in CR)
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 /**
@@ -106,8 +112,13 @@ public class BiometricManager {
     }
 
     private boolean biometricShouldBeRequested() {
+<<<<<<< HEAD
         long lastUnlockTimestamp = preferencesProvider.getLong(LAST_UNLOCK_TIMESTAMP, 0);
         int timeout = 15000; //preferencesProvider.getInt(LOCK_TIMEOUT, 1_000)
+=======
+        long lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0);
+        int timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name())).toMilliseconds();
+>>>>>>> dfec4711a (Changes requested in CR)
         if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && mVisibleActivitiesCounter <= 0) {
             return isBiometricEnabled();
         }
@@ -126,6 +137,7 @@ public class BiometricManager {
     public boolean hasEnrolledBiometric() {
         return mBiometricManager.canAuthenticate() != androidx.biometric.BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED;
     }
+<<<<<<< HEAD
 
     /**
      * This can be used for example for onActivityResult, where you don't want to re authenticate
@@ -141,4 +153,6 @@ public class BiometricManager {
             preferencesProvider.putLong(LAST_UNLOCK_TIMESTAMP, newLastUnlockTimestamp);
         }
     }
+=======
+>>>>>>> dfec4711a (Changes requested in CR)
 }
