@@ -25,7 +25,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -61,7 +61,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         assertTrue(patternSet)
 
         verify(exactly = 1) {
-            preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+            preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
         }
     }
 
@@ -74,7 +74,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         assertFalse(patternSet)
 
         verify(exactly = 1) {
-            preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+            preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
         }
     }
 
@@ -116,9 +116,9 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         assertTrue(patternEnableResult.isSuccess)
 
         verify(exactly = 1) {
-            data.getStringExtra(PatternLockActivity.KEY_PATTERN)
-            preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, pattern)
-            preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
+            data.getStringExtra(PatternActivity.KEY_PATTERN)
+            preferencesProvider.putString(PatternActivity.KEY_PATTERN, pattern)
+            preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
         }
     }
 
@@ -140,7 +140,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         assertTrue(patternEnableResult.isError)
 
         verify(exactly = 1) {
-            data.getStringExtra(PatternLockActivity.KEY_PATTERN)
+            data.getStringExtra(PatternActivity.KEY_PATTERN)
         }
     }
 
@@ -155,8 +155,8 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         assertTrue(patternDisableResult.isSuccess)
 
         verify(exactly = 1) {
-            data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)
-            preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+            data.getBooleanExtra(PatternActivity.KEY_CHECK_RESULT, false)
+            preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
         }
     }
 
@@ -178,7 +178,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         assertTrue(patternDisableResult.isError)
 
         verify(exactly = 1) {
-            data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)
+            data.getBooleanExtra(PatternActivity.KEY_CHECK_RESULT, false)
         }
     }
 

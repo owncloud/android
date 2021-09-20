@@ -26,27 +26,27 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
 
 class SettingsSecurityViewModel(
     private val preferencesProvider: SharedPreferencesProvider
 ) : ViewModel() {
 
-    fun isPatternSet() = preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+    fun isPatternSet() = preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
     fun isPasscodeSet() = preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
     fun handleEnablePattern(data: Intent?): UIResult<Unit> {
-        val pattern = data?.getStringExtra(PatternLockActivity.KEY_PATTERN) ?: return UIResult.Error()
-        preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, pattern)
-        preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
+        val pattern = data?.getStringExtra(PatternActivity.KEY_PATTERN) ?: return UIResult.Error()
+        preferencesProvider.putString(PatternActivity.KEY_PATTERN, pattern)
+        preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
         return UIResult.Success()
     }
 
     fun handleDisablePattern(data: Intent?): UIResult<Unit> {
-        data?.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false).takeIf { it == true }
+        data?.getBooleanExtra(PatternActivity.KEY_CHECK_RESULT, false).takeIf { it == true }
             ?: return UIResult.Error()
-        preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+        preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
         return UIResult.Success()
     }
 

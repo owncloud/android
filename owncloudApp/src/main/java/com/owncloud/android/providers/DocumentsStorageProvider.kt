@@ -57,7 +57,7 @@ import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NotificationUtils
 import timber.log.Timber
@@ -231,7 +231,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         // If OwnCloud is protected with passcode or pattern, return empty cursor.
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val passCodeState = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-        val patternState = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+        val patternState = preferences.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
         if (passCodeState || patternState) {
             return result.apply { addProtectedRoot(contextApp, passCodeState) }
         }

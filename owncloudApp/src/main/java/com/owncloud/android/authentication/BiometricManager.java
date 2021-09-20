@@ -35,6 +35,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
 import com.owncloud.android.presentation.ui.security.LockTimeout;
 import com.owncloud.android.presentation.ui.security.PassCodeManager;
+import com.owncloud.android.presentation.ui.security.PatternManager;
 import com.owncloud.android.ui.activity.BiometricActivity;
 
 import java.util.HashSet;

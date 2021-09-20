@@ -29,7 +29,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
@@ -38,7 +38,7 @@ class OCSettingsPatternLockTest {
 
     @Rule
     @JvmField
-    val activityRule = ActivityTestRule(PatternLockActivity::class.java, true, false)
+    val activityRule = ActivityTestRule(PatternActivity::class.java, true, false)
     private val intent = Intent()
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -53,7 +53,7 @@ class OCSettingsPatternLockTest {
     @Test
     fun patternLockView() {
         //Open Activity in pattern creation mode
-        openPatternActivity(PatternLockActivity.ACTION_REQUEST_WITH_RESULT)
+        openPatternActivity(PatternActivity.ACTION_REQUEST_WITH_RESULT)
 
         onView(withText(R.string.pattern_configure_pattern)).check(matches(isDisplayed()))
         onView(withText(R.string.pattern_configure_your_pattern_explanation)).check(matches(isDisplayed()))
@@ -67,7 +67,7 @@ class OCSettingsPatternLockTest {
         storePattern()
 
         //Open Activity in pattern deletion mode
-        openPatternActivity(PatternLockActivity.ACTION_CHECK_WITH_RESULT)
+        openPatternActivity(PatternActivity.ACTION_CHECK_WITH_RESULT)
 
         onView(withText(R.string.pattern_remove_pattern)).check(matches(isDisplayed()))
         onView(withText(R.string.pattern_no_longer_required)).check(matches(isDisplayed()))
@@ -75,8 +75,8 @@ class OCSettingsPatternLockTest {
 
     private fun storePattern() {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
-        appPrefs.putString(PatternLockActivity.KEY_PATTERN, patternToSave)
-        appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
+        appPrefs.putString(PatternActivity.KEY_PATTERN, patternToSave)
+        appPrefs.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
         appPrefs.apply()
     }
 

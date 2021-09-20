@@ -237,7 +237,7 @@
             android:name=".ui.preview.PreviewVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.ownCloud.Fullscreen" />
-        <activity android:name=".ui.activity.PatternLockActivity" />
+        <activity android:name=".presentation.ui.security.PatternActivity" />
         <activity android:name=".ui.activity.BiometricActivity" />
         <activity
             android:name=".presentation.ui.authentication.LoginActivity"

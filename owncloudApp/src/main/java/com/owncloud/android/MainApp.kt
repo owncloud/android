@@ -32,7 +32,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.presentation.ui.security.PassCodeManager
-import com.owncloud.android.authentication.PatternManager
+import com.owncloud.android.presentation.ui.security.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
@@ -48,7 +48,7 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragm
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
@@ -90,7 +90,7 @@ class MainApp : Application() {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
                 val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-                val patternCodeEnabled = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+                val patternCodeEnabled = preferences.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
                 if (!enabledLogging) {
                     // To enable biometric you need to enable passCode or pattern, so no need to add check to if
                     if (passCodeEnabled || patternCodeEnabled) {
@@ -103,7 +103,7 @@ class MainApp : Application() {
                 // If there's any lock protection, don't show wizard at this point, show it when lock activities
                 // have finished
                 if (activity !is PassCodeActivity &&
-                    activity !is PatternLockActivity &&
+                    activity !is PatternActivity &&
                     activity !is BiometricActivity
                 ) {
                     WhatsNewActivity.runIfNeeded(activity)
@@ -138,7 +138,7 @@ class MainApp : Application() {
                     BiometricManager.getBiometricManager(activity).onActivityStopped(activity)
                 }
                 if (activity is PassCodeActivity ||
-                    activity is PatternLockActivity ||
+                    activity is PatternActivity ||
                     activity is BiometricActivity
                 ) {
                     WhatsNewActivity.runIfNeeded(activity)
