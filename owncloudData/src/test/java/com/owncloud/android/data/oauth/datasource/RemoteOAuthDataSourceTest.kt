@@ -97,10 +97,10 @@ class RemoteOAuthDataSourceTest {
             oidcService.performTokenRequest(ocClientMocked, any())
         } returns tokenResponseResult
 
-        val tokenResponsed = remoteOAuthDataSource.performTokenRequest(OC_TOKEN_REQUEST_ACCESS)
+        val tokenResponse = remoteOAuthDataSource.performTokenRequest(OC_TOKEN_REQUEST_ACCESS)
 
-        assertNotNull(tokenResponsed)
-        assertEquals(OC_TOKEN_RESPONSE, tokenResponsed)
+        assertNotNull(tokenResponse)
+        assertEquals(OC_TOKEN_RESPONSE, tokenResponse)
     }
 
     @Test(expected = Exception::class)
