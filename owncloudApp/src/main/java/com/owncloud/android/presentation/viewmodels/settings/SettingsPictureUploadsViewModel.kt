@@ -85,15 +85,7 @@ class SettingsPictureUploadsViewModel(
     fun useWifiOnly(wifiOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             savePictureUploadsConfigurationUseCase.execute(
-                if (!wifiOnly) {
-                    SavePictureUploadsConfigurationUseCase.Params(
-                        composePictureUploadsConfiguration(wifiOnly = wifiOnly, chargingOnly = false)
-                    )
-                } else {
-                    SavePictureUploadsConfigurationUseCase.Params(
-                        composePictureUploadsConfiguration(wifiOnly = wifiOnly)
-                    )
-                }
+                SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(wifiOnly = wifiOnly, chargingOnly = false))
             )
         }
     }

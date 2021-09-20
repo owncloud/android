@@ -68,6 +68,6 @@ class UploadFileFromContentUriUseCase(
         val uploadPath: String,
         val uploadIdInStorageManager: Long,
         val wifiOnly: Boolean,
-        val chargingOnly: Boolean
+        val chargingOnly: Boolean,
     )
 }

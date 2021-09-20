@@ -85,16 +85,7 @@ class SettingsVideoUploadsViewModel(
     fun useWifiOnly(wifiOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             saveVideoUploadsConfigurationUseCase.execute(
-                if (!wifiOnly) {
-                    SaveVideoUploadsConfigurationUseCase.Params(
-                        composeVideoUploadsConfiguration(wifiOnly = wifiOnly, chargingOnly = false)
-                    )
-
-                } else {
-                    SaveVideoUploadsConfigurationUseCase.Params(
-                        composeVideoUploadsConfiguration(wifiOnly = wifiOnly)
-                    )
-                }
+                SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(wifiOnly = wifiOnly, chargingOnly = false))
             )
         }
     }
