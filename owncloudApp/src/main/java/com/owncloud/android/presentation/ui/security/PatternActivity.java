@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.ui.activity;
+package com.owncloud.android.presentation.ui.security;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,7 +49,7 @@ import java.util.List;
 
 import static com.owncloud.android.presentation.ui.security.SecurityUtilsKt.PREFERENCE_LAST_UNLOCK_TIMESTAMP;
 
-public class PatternLockActivity extends AppCompatActivity {
+public class PatternActivity extends AppCompatActivity {
 
     public final static String PREFERENCE_SET_PATTERN = "set_pattern";
     public final static String ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT";

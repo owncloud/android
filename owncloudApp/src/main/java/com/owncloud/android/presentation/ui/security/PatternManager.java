@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.authentication;
+package com.owncloud.android.presentation.ui.security;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,10 +29,9 @@ import android.os.Build;
 import android.os.PowerManager;
 
 import com.owncloud.android.MainApp;
+import com.owncloud.android.authentication.BiometricManager;
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
-import com.owncloud.android.presentation.ui.security.LockTimeout;
-import com.owncloud.android.ui.activity.PatternLockActivity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,7 +48,7 @@ public class PatternManager {
 
     static {
         sExemptOfPatternActivites = new HashSet<>();
-        sExemptOfPatternActivites.add(PatternLockActivity.class);
+        sExemptOfPatternActivites.add(PatternActivity.class);
     }
 
     private static PatternManager mPatternManagerInstance = null;
@@ -100,12 +99,12 @@ public class PatternManager {
     }
 
     public boolean isPatternEnabled() {
-        return preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
+        return preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false);
     }
 
     private void askUserForPattern(Activity activity) {
-        Intent i = new Intent(MainApp.Companion.getAppContext(), PatternLockActivity.class);
-        i.setAction(PatternLockActivity.ACTION_CHECK);
+        Intent i = new Intent(MainApp.Companion.getAppContext(), PatternActivity.class);
+        i.setAction(PatternActivity.ACTION_CHECK);
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         activity.startActivity(i);
     }

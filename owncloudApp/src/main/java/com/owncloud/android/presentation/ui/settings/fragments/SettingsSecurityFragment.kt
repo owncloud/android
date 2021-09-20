@@ -40,7 +40,7 @@ import com.owncloud.android.presentation.ui.security.LockTimeout
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsSecurityFragment : PreferenceFragmentCompat() {
@@ -114,7 +114,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
         screenSecurity = findPreference(SCREEN_SECURITY)
         prefPasscode = findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)
-        prefPattern = findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)
+        prefPattern = findPreference(PatternActivity.PREFERENCE_SET_PATTERN)
         prefBiometric = findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
         prefLockApplication = findPreference<ListPreference>(PREFERENCE_LOCK_TIMEOUT)?.apply {
             entries = listOf(
@@ -154,12 +154,12 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             if (securityViewModel.isPasscodeSet()) {
                 showMessageInSnackbar(getString(R.string.passcode_already_set))
             } else {
-                val intent = Intent(activity, PatternLockActivity::class.java)
+                val intent = Intent(activity, PatternActivity::class.java)
                 if (newValue as Boolean) {
-                    intent.action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
+                    intent.action = PatternActivity.ACTION_REQUEST_WITH_RESULT
                     enablePatternLauncher.launch(intent)
                 } else {
-                    intent.action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
+                    intent.action = PatternActivity.ACTION_CHECK_WITH_RESULT
                     disablePatternLauncher.launch(intent)
                 }
             }
