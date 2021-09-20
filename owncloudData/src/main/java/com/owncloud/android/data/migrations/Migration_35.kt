@@ -27,15 +27,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TA
 val MIGRATION_34_35 = object : Migration(34, 35) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.run {
-            execSQL(
-                "CREATE TABLE IF NOT EXISTS `${FOLDER_BACKUP_TABLE_NAME}2` (`accountName` TEXT NOT NULL, `behavior` TEXT NOT NULL, `sourcePath` TEXT NOT NULL, `uploadPath` TEXT NOT NULL, `wifiOnly` INTEGER NOT NULL, `chargingOnly` INTEGER NOT NULL, `name` TEXT NOT NULL, `lastSyncTimestamp` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)"
-            )
             execSQL("ALTER TABLE $FOLDER_BACKUP_TABLE_NAME ADD COLUMN chargingOnly INTEGER NOT NULL DEFAULT '0'")
-            execSQL(
-                "INSERT INTO `${FOLDER_BACKUP_TABLE_NAME}2` SELECT accountName, behavior, sourcePath, uploadPath, wifiOnly, IFNULL(chargingOnly, '0'), name, lastSyncTimeStamp, id  FROM $FOLDER_BACKUP_TABLE_NAME"
-            )
-            execSQL("DROP TABLE $FOLDER_BACKUP_TABLE_NAME")
-            execSQL("ALTER TABLE ${FOLDER_BACKUP_TABLE_NAME}2 RENAME TO $FOLDER_BACKUP_TABLE_NAME")
         }
     }
 }
