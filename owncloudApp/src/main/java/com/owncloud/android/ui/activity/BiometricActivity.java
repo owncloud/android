@@ -33,7 +33,7 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.PatternManager;
+import com.owncloud.android.presentation.ui.security.PatternManager;
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
 import com.owncloud.android.presentation.ui.security.PassCodeManager;

@@ -36,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.presentation.ui.security.PassCodeActivity;
+import com.owncloud.android.presentation.ui.security.PatternActivity;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
@@ -103,7 +104,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
                     .getDefaultSharedPreferences(getApplicationContext());
 
             boolean passCodeEnable = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
-            boolean patternEnabled = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
+            boolean patternEnabled = appPrefs.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false);
             boolean biometricEnabled = appPrefs.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false);
 
 
@@ -118,7 +119,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
             String patternValue = "";
             if (patternEnabled) {
-                patternValue = appPrefs.getString(PatternLockActivity.KEY_PATTERN, null);
+                patternValue = appPrefs.getString(PatternActivity.KEY_PATTERN, null);
             }
 
             // Clear data
@@ -138,14 +139,14 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
             // Recover pattern
             if (patternEnabled) {
-                appPrefsEditor.putString(PatternLockActivity.KEY_PATTERN, patternValue);
+                appPrefsEditor.putString(PatternActivity.KEY_PATTERN, patternValue);
             }
 
             // Reenable biometric
             appPrefsEditor.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, biometricEnabled);
 
             appPrefsEditor.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, passCodeEnable);
-            appPrefsEditor.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, patternEnabled);
+            appPrefsEditor.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, patternEnabled);
             result = result && appPrefsEditor.commit();
 
             return result;

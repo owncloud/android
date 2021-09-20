@@ -44,7 +44,7 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityF
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
@@ -117,7 +117,7 @@ class SettingsSecurityFragmentTest {
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
             prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
-            prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
+            prefPattern = fragment.findPreference(PatternActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
             prefLockApplication = fragment.findPreference(PREFERENCE_LOCK_TIMEOUT)!!
             prefTouchesWithOtherVisibleWindows =
@@ -135,7 +135,7 @@ class SettingsSecurityFragmentTest {
         assertFalse(prefPasscode.isChecked)
 
         prefPattern.verifyPreference(
-            keyPref = PatternLockActivity.PREFERENCE_SET_PATTERN,
+            keyPref = PatternActivity.PREFERENCE_SET_PATTERN,
             titlePref = context.getString(R.string.prefs_pattern),
             visible = true,
             enabled = true
@@ -204,7 +204,7 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         onView(withText(R.string.prefs_pattern)).perform(click())
-        intended(hasComponent(PatternLockActivity::class.java.name))
+        intended(hasComponent(PatternActivity::class.java.name))
     }
 
     @Test
@@ -228,8 +228,8 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
-            action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
+            extras = Pair(PatternActivity.KEY_PATTERN, patternValue),
+            action = PatternActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertTrue(prefPattern.isChecked)
@@ -243,8 +243,8 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
-            action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
+            extras = Pair(PatternActivity.KEY_PATTERN, patternValue),
+            action = PatternActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertFalse(prefPattern.isChecked)
@@ -319,8 +319,8 @@ class SettingsSecurityFragmentTest {
 
         firstEnablePattern()
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_CHECK_RESULT, true),
-            action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
+            extras = Pair(PatternActivity.KEY_CHECK_RESULT, true),
+            action = PatternActivity.ACTION_CHECK_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertFalse(prefPattern.isChecked)
@@ -338,8 +338,8 @@ class SettingsSecurityFragmentTest {
 
         firstEnablePattern()
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_CHECK_RESULT, true),
-            action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
+            extras = Pair(PatternActivity.KEY_CHECK_RESULT, true),
+            action = PatternActivity.ACTION_CHECK_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertTrue(prefPattern.isChecked)
@@ -445,8 +445,8 @@ class SettingsSecurityFragmentTest {
         every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Success()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
-            action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
+            extras = Pair(PatternActivity.KEY_PATTERN, patternValue),
+            action = PatternActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
     }
