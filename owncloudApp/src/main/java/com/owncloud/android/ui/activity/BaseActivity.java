@@ -272,17 +272,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void hideSoftKeyboard() {
-        View focusedView = getCurrentFocus();
-        if (focusedView != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(
-                    focusedView.getWindowToken(),
-                    0
-            );
-        }
-    }
-
     /**
      * Show loading dialog
      */

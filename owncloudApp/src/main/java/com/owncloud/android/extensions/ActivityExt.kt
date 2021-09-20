@@ -20,8 +20,10 @@
 package com.owncloud.android.extensions
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
@@ -77,4 +79,15 @@ fun Activity.sendEmail(
         if (text != null) putExtra(Intent.EXTRA_TEXT, text)
     }
     startActivity(intent)
+}
+
+fun Activity.hideSoftKeyboard() {
+    val focusedView = currentFocus
+    focusedView?.let {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(
+            focusedView.windowToken,
+            0
+        )
+    }
 }
