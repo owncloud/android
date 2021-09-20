@@ -42,10 +42,11 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
-import com.owncloud.android.ui.activity.BaseActivity
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -53,7 +54,7 @@ import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.util.Arrays
 
-class PassCodeActivity : BaseActivity() {
+class PassCodeActivity : AppCompatActivity() {
 
     // ViewModel
     private val passCodeViewModel by viewModel<PassCodeViewModel>()
