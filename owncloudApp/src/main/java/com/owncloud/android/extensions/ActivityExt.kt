@@ -29,6 +29,7 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import android.webkit.MimeTypeMap
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -224,4 +225,15 @@ private fun makeIntent(file: File?, context: Context): Intent {
     }
     sendIntent.putExtra(Intent.ACTION_SEND, true) // Send Action
     return sendIntent
+}
+
+fun Activity.hideSoftKeyboard() {
+    val focusedView = currentFocus
+    focusedView?.let {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(
+            focusedView.windowToken,
+            0
+        )
+    }
 }
