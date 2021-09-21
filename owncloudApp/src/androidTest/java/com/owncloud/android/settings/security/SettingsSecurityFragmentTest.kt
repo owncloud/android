@@ -38,7 +38,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
@@ -232,32 +231,15 @@ class SettingsSecurityFragmentTest {
     @Test
     fun patternLockEnabledOk() {
         every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Success()
 
         launchTest()
 
         mockIntent(
-            extras = Pair(PatternActivity.KEY_PATTERN, OC_PATTERN),
+            extras = Pair(PatternActivity.PREFERENCE_PATTERN, OC_PATTERN),
             action = PatternActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertTrue(prefPattern.isChecked)
-    }
-
-    @Test
-    fun patternLockEnabledError() {
-        every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Error()
-
-        launchTest()
-
-        mockIntent(
-            extras = Pair(PatternActivity.KEY_PATTERN, OC_PATTERN),
-            action = PatternActivity.ACTION_REQUEST_WITH_RESULT
-        )
-        onView(withText(R.string.prefs_pattern)).perform(click())
-        assertFalse(prefPattern.isChecked)
-        onView(withText(R.string.pattern_error_set)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -322,13 +304,10 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun disablePatternOk() {
-        every { securityViewModel.handleDisablePattern(any()) } returns UIResult.Success()
-
         launchTest()
 
         firstEnablePattern()
         mockIntent(
-            extras = Pair(PatternActivity.KEY_CHECK_RESULT, true),
             action = PatternActivity.ACTION_CHECK_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
@@ -337,24 +316,6 @@ class SettingsSecurityFragmentTest {
         assertFalse(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
         assertFalse(prefLockApplication.isEnabled)
-    }
-
-    @Test
-    fun disablePatternError() {
-        every { securityViewModel.handleDisablePattern(any()) } returns UIResult.Error()
-
-        launchTest()
-
-        firstEnablePattern()
-        mockIntent(
-            extras = Pair(PatternActivity.KEY_CHECK_RESULT, true),
-            action = PatternActivity.ACTION_CHECK_WITH_RESULT
-        )
-        onView(withText(R.string.prefs_pattern)).perform(click())
-        assertTrue(prefPattern.isChecked)
-        onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
-        assertTrue(prefBiometric!!.isEnabled)
-        onView(withText(R.string.pattern_error_remove)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -451,10 +412,8 @@ class SettingsSecurityFragmentTest {
 
     private fun firstEnablePattern() {
         every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Success()
 
         mockIntent(
-            extras = Pair(PatternActivity.KEY_PATTERN, OC_PATTERN),
             action = PatternActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())

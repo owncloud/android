@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.content.Intent
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
@@ -45,11 +44,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
         securityViewModel = SettingsSecurityViewModel(preferencesProvider)
-    }
-
-    @After
-    override fun tearDown() {
-        super.tearDown()
     }
 
     @Test
@@ -101,84 +95,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-        }
-    }
-
-    @Test
-    fun `handle enable pattern - ok`() {
-        val data: Intent = mockk()
-        val pattern = "pattern"
-
-        every { data.getStringExtra(any()) } returns pattern
-
-        val patternEnableResult = securityViewModel.handleEnablePattern(data)
-
-        assertTrue(patternEnableResult.isSuccess)
-
-        verify(exactly = 1) {
-            data.getStringExtra(PatternActivity.KEY_PATTERN)
-            preferencesProvider.putString(PatternActivity.KEY_PATTERN, pattern)
-            preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
-        }
-    }
-
-    @Test
-    fun `handle enable pattern - ko - data intent is null`() {
-        val patternEnableResult = securityViewModel.handleEnablePattern(null)
-
-        assertTrue(patternEnableResult.isError)
-    }
-
-    @Test
-    fun `handle enable pattern - ko - pattern is null`() {
-        val data: Intent = mockk()
-
-        every { data.getStringExtra(any()) } returns null
-
-        val patternEnableResult = securityViewModel.handleEnablePattern(data)
-
-        assertTrue(patternEnableResult.isError)
-
-        verify(exactly = 1) {
-            data.getStringExtra(PatternActivity.KEY_PATTERN)
-        }
-    }
-
-    @Test
-    fun `handle disable pattern - ok`() {
-        val data: Intent = mockk()
-
-        every { data.getBooleanExtra(any(), any()) } returns true
-
-        val patternDisableResult = securityViewModel.handleDisablePattern(data)
-
-        assertTrue(patternDisableResult.isSuccess)
-
-        verify(exactly = 1) {
-            data.getBooleanExtra(PatternActivity.KEY_CHECK_RESULT, false)
-            preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
-        }
-    }
-
-    @Test
-    fun `handle disable pattern - ko - data intent is null`() {
-        val patternDisableResult = securityViewModel.handleDisablePattern(null)
-
-        assertTrue(patternDisableResult.isError)
-    }
-
-    @Test
-    fun `handle disable pattern - ko - key check result is false`() {
-        val data: Intent = mockk()
-
-        every { data.getBooleanExtra(any(), any()) } returns false
-
-        val patternDisableResult = securityViewModel.handleDisablePattern(data)
-
-        assertTrue(patternDisableResult.isError)
-
-        verify(exactly = 1) {
-            data.getBooleanExtra(PatternActivity.KEY_CHECK_RESULT, false)
         }
     }
 
