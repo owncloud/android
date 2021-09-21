@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Jesus Recio (@jesmrec)
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón (@JuancaG05)
+ *
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,19 +32,47 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
+import io.mockk.mockk
 import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
-class OCSettingsPatternLockTest {
+class PatternActivityTest {
 
     @Rule
     @JvmField
     val activityRule = ActivityTestRule(PatternActivity::class.java, true, false)
+
     private val intent = Intent()
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val patternToSave = "1234"
+
+    private lateinit var patternViewModel: PatternViewModel
+
+    @Before
+    fun setUp() {
+        patternViewModel = mockk(relaxUnitFun = true)
+
+        stopKoin()
+
+        startKoin {
+            context
+            modules(
+                module(override = true) {
+                    viewModel {
+                        patternViewModel
+                    }
+                }
+            )
+        }
+    }
 
     @After
     fun tearDown() {
@@ -75,9 +105,11 @@ class OCSettingsPatternLockTest {
 
     private fun storePattern() {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
-        appPrefs.putString(PatternActivity.KEY_PATTERN, patternToSave)
-        appPrefs.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
-        appPrefs.apply()
+        appPrefs.apply {
+            putString(PatternActivity.PREFERENCE_PATTERN, patternToSave)
+            putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
+            apply()
+        }
     }
 
     private fun openPatternActivity(mode: String) {
