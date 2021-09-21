@@ -67,7 +67,7 @@
         android:layout_marginTop="@dimen/standard_margin"
         android:background="@color/action_mode_background"
         android:textColor="@color/login_text_color"
-        android:enabled="true"
+        android:enabled="false"
         android:text="@string/scoped_storage_wizard_migration_in_progress_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
