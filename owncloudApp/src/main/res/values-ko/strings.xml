@@ -401,6 +401,7 @@
   <string name="share_via_link_expiration_date_label">만료</string>
   <string name="share_via_link_password_label">암호</string>
   <string name="share_via_link_password_title">보호됨</string>
+  <string name="share_via_link_edit_permission_read_only_label">다운로드 / 보기</string>
   <string name="share_get_public_link_button">링크 얻기</string>
   <string name="share_with_title">다음으로 공유</string>
   <string name="share_with_edit_title">%1$s 님과 공유</string>
