@@ -10,6 +10,8 @@ Summary
 
 * Bugfix - Lack of back button in Logs view: [#3357](https://github.com/owncloud/android/issues/3357)
 * Bugfix - Passcode input misbehaving: [#3342](https://github.com/owncloud/android/issues/3342)
+* Bugfix - ANR after removing account with too many downloaded files: [#3362](https://github.com/owncloud/android/issues/3362)
+* Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
 * Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
@@ -32,6 +34,24 @@ Details
 
    https://github.com/owncloud/android/issues/3342
    https://github.com/owncloud/android/pull/3365
+
+* Bugfix - ANR after removing account with too many downloaded files: [#3362](https://github.com/owncloud/android/issues/3362)
+
+   Previously, when a user account was deleted, the application could freeze when trying to
+   delete a large number of files. Now, the application has been fixed so that it doesn't freeze
+   anymore by doing this.
+
+   https://github.com/owncloud/android/issues/3362
+   https://github.com/owncloud/android/pull/3380
+
+* Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
+
+   When an account was deleted from the device settings, in the accounts section, it was not
+   removed from the Navigation Drawer. Now, when deleting an account from there, the Navigation
+   Drawer is refreshed and the removed account is no more shown.
+
+   https://github.com/owncloud/android/issues/3340
+   https://github.com/owncloud/android/pull/3381
 
 * Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
 
