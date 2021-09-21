@@ -40,6 +40,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -458,11 +459,11 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     // Video player eventListener implementation
 
     @Override
-    public void onPlayerError(ExoPlaybackException error) {
+    public void onPlayerError(PlaybackException error) {
 
         Timber.e(error, "Error in video player");
 
-        showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError(error, getContext()));
+        showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError((ExoPlaybackException) error, getContext()));
     }
 
     /**
