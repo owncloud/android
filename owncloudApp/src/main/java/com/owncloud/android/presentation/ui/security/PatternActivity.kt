@@ -25,7 +25,6 @@ package com.owncloud.android.presentation.ui.security
 
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
