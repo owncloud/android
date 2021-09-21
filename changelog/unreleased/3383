@@ -1,0 +1,7 @@
+Bugfix: Crash in FileDataStorageManager
+
+A possible null value with the account
+that caused certain crashes on Android 10 devices has been controlled.
+
+https://github.com/owncloud/android/issues/2896
+https://github.com/owncloud/android/pull/3383

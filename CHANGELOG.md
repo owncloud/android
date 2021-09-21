@@ -9,6 +9,8 @@ Summary
 -------
 
 * Bugfix - Lack of back button in Logs view: [#3357](https://github.com/owncloud/android/issues/3357)
+* Bugfix - Passcode input misbehaving: [#3342](https://github.com/owncloud/android/issues/3342)
+* Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 
@@ -22,6 +24,22 @@ Details
 
    https://github.com/owncloud/android/issues/3357
    https://github.com/owncloud/android/pull/3363
+
+* Bugfix - Passcode input misbehaving: [#3342](https://github.com/owncloud/android/issues/3342)
+
+   Passcode text fields have been made not selectable once a number is written on them, so that we
+   avoid bugs with the digits of the passcode and the way of entering them.
+
+   https://github.com/owncloud/android/issues/3342
+   https://github.com/owncloud/android/pull/3365
+
+* Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
+
+   A possible null value with the account that caused certain crashes on Android 10 devices has
+   been controlled.
+
+   https://github.com/owncloud/android/issues/2896
+   https://github.com/owncloud/android/pull/3383
 
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 

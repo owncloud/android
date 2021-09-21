@@ -69,8 +69,19 @@ public class AvailableOfflineSyncJobService extends JobService {
         @Override
         protected JobParameters doInBackground(JobParameters... jobParams) {
 
-            Account account =
-                    AccountUtils.getCurrentOwnCloudAccount(mAvailableOfflineJobService.getApplicationContext());
+            Account account;
+
+            if (mAvailableOfflineJobService != null) {
+                account = AccountUtils.getCurrentOwnCloudAccount(mAvailableOfflineJobService.getApplicationContext());
+            } else {
+                Timber.w("AvailableOfflineJobService is null");
+                return jobParams[0];
+            }
+
+            if (account == null) {
+                Timber.w("Account is null, do not sync av. offline files.");
+                return jobParams[0];
+            }
 
             if (mAvailableOfflineJobService.getContentResolver() == null) {
                 Timber.w("Content resolver is null, do not sync av. offline files.");
