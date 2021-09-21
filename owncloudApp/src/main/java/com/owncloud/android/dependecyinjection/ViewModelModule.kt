@@ -29,6 +29,7 @@ import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
+import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
@@ -64,4 +65,5 @@ val viewModelModule = module {
     viewModel { PassCodeViewModel(get(), get()) }
     viewModel { LogListViewModel(get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get()) }
+    viewModel { PatternViewModel(get()) }
 }
