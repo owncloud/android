@@ -20,10 +20,8 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.content.Intent
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
