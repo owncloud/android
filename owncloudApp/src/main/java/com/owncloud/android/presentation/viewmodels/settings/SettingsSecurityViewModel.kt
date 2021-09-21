@@ -36,20 +36,6 @@ class SettingsSecurityViewModel(
 
     fun isPasscodeSet() = preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
-    fun handleEnablePattern(data: Intent?): UIResult<Unit> {
-        val pattern = data?.getStringExtra(PatternActivity.KEY_PATTERN) ?: return UIResult.Error()
-        preferencesProvider.putString(PatternActivity.KEY_PATTERN, pattern)
-        preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
-        return UIResult.Success()
-    }
-
-    fun handleDisablePattern(data: Intent?): UIResult<Unit> {
-        data?.getBooleanExtra(PatternActivity.KEY_CHECK_RESULT, false).takeIf { it == true }
-            ?: return UIResult.Error()
-        preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
-        return UIResult.Success()
-    }
-
     fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =
         preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
 }

@@ -114,7 +114,6 @@ class PatternActivity : AppCompatActivity() {
                 if (!patternExpShouldVisible) {
                     patternExplanation.visibility = View.INVISIBLE
                 }
-                checkPattern()
             } else {
                 patternHeader.text = getString(R.string.pattern_configure_pattern)
                 patternExplanation.visibility = View.VISIBLE
@@ -149,12 +148,6 @@ class PatternActivity : AppCompatActivity() {
             bCancel.visibility = View.INVISIBLE
             bCancel.setOnClickListener(null)
         }
-    }
-
-    protected fun checkPattern(): Boolean {
-        val appPrefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val savedPattern = appPrefs.getString(KEY_PATTERN, null)
-        return savedPattern != null && savedPattern == patternValue
     }
 
     /**
@@ -205,7 +198,7 @@ class PatternActivity : AppCompatActivity() {
              * This block is executed when the user opens the app after setting the pattern lock
              * this block takes the pattern input by the user and checks it with the pattern initially set by the user.
              */
-            if (checkPattern()) {
+            if (patternViewModel.checkPatternIsValid(patternValue)) {
                 patternError.visibility = View.INVISIBLE
                 val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
                 preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
@@ -218,9 +211,9 @@ class PatternActivity : AppCompatActivity() {
             }
         } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
             //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
-            if (checkPattern()) {
+            if (patternViewModel.checkPatternIsValid(patternValue)) {
+                patternViewModel.removePattern()
                 val result = Intent()
-                result.putExtra(KEY_CHECK_RESULT, true)
                 setResult(RESULT_OK, result)
                 patternError.visibility = View.INVISIBLE
                 notifyDocumentProviderRoots(applicationContext)
@@ -275,7 +268,7 @@ class PatternActivity : AppCompatActivity() {
 
     private fun savePatternAndExit() {
         val result = Intent()
-        result.putExtra(KEY_PATTERN, patternValue)
+        patternViewModel.setPattern(patternValue!!)
         setResult(RESULT_OK, result)
         notifyDocumentProviderRoots(applicationContext)
         finish()
@@ -314,13 +307,13 @@ class PatternActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val PREFERENCE_SET_PATTERN = "set_pattern"
         const val ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT"
         const val ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT"
         const val ACTION_CHECK = "ACTION_CHECK_PATTERN"
 
-        const val KEY_PATTERN = "KEY_PATTERN"
-        const val KEY_CHECK_RESULT = "KEY_CHECK_PATTERN_RESULT"
+        // NOTE: PREFERENCE_SET_PATTERN must have the same value as settings_security.xml-->android:key for pattern preference
+        const val PREFERENCE_SET_PATTERN = "set_pattern"
+        const val PREFERENCE_PATTERN = "KEY_PATTERN"
 
         private const val KEY_CONFIRMING_PATTERN = "CONFIRMING_PATTERN"
         private const val KEY_PATTERN_STRING = "PATTERN_STRING"

@@ -83,29 +83,23 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private val enablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val patternEnableResult = securityViewModel.handleEnablePattern(result.data)
-            if (patternEnableResult.isSuccess) {
+            else {
                 prefPattern?.isChecked = true
 
                 // Allow to use biometric lock and lock delay since Pattern lock has been enabled
                 enableBiometricAndLockApplication()
-            } else {
-                showMessageInSnackbar(getString(R.string.pattern_error_set))
             }
         }
 
     private val disablePatternLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
-            val patternDisableResult = securityViewModel.handleDisablePattern(result.data)
-            if (patternDisableResult.isSuccess) {
+            else {
                 prefPattern?.isChecked = false
 
                 // Do not allow to use biometric lock nor lock delay since Pattern lock has been disabled
                 disableBiometric()
                 prefLockApplication?.isEnabled = false
-            } else {
-                showMessageInSnackbar(getString(R.string.pattern_error_remove))
             }
         }
 

@@ -119,7 +119,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
             String patternValue = "";
             if (patternEnabled) {
-                patternValue = appPrefs.getString(PatternActivity.KEY_PATTERN, null);
+                patternValue = appPrefs.getString(PatternActivity.PREFERENCE_PATTERN, null);
             }
 
             // Clear data
@@ -139,7 +139,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
             // Recover pattern
             if (patternEnabled) {
-                appPrefsEditor.putString(PatternActivity.KEY_PATTERN, patternValue);
+                appPrefsEditor.putString(PatternActivity.PREFERENCE_PATTERN, patternValue);
             }
 
             // Reenable biometric

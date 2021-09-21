@@ -22,40 +22,24 @@ package com.owncloud.android.presentation.viewmodels.security
 
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
 
 class PatternViewModel(
     private val preferencesProvider: SharedPreferencesProvider
 ) : ViewModel() {
 
-    fun setPassCode(passcode: String) {
-        preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
-        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
+    fun setPattern(pattern: String) {
+        preferencesProvider.putString(PatternActivity.PREFERENCE_PATTERN, pattern)
+        preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
     }
 
-    fun removePassCode() {
-        preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
-        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+    fun removePattern() {
+        preferencesProvider.removePreference(PatternActivity.PREFERENCE_PATTERN)
+        preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
     }
 
-    fun checkPassCodeIsValid(passCodeDigits: Array<String?>): Boolean {
-        val passCodeString = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
-        if (passCodeString.isNullOrEmpty()) return false
-        var isValid = true
-        var i = 0
-        while (i < passCodeDigits.size && isValid) {
-            val originalDigit = passCodeString[i].toString()
-            isValid = passCodeDigits[i] != null && passCodeDigits[i] == originalDigit
-            i++
-        }
-        return isValid
-    }
-
-    private fun loadPinFromOldFormatIfPossible(): String {
-        var pinString = ""
-        for (i in 1..4)
-            pinString += preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, null)
-
-        return pinString
+    fun checkPatternIsValid(patternValue: String?): Boolean {
+        val savedPattern = preferencesProvider.getString(PatternActivity.PREFERENCE_PATTERN, null)
+        return savedPattern != null && savedPattern == patternValue
     }
 }
