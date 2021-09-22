@@ -348,7 +348,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         navigationMenu.removeGroup(R.id.drawer_menu_accounts)
 
         // add all accounts to list except current one
-        accounts?.filter { it.name != account.name }?.forEach {
+        accounts?.filter { it.name != account?.name }?.forEach {
             val accountMenuItem: MenuItem =
                 navigationMenu.add(R.id.drawer_menu_accounts, Menu.NONE, MENU_ORDER_ACCOUNT, it.name)
             AvatarUtils().loadAvatarForAccount(
