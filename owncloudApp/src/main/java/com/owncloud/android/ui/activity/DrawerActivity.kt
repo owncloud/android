@@ -24,12 +24,15 @@
 package com.owncloud.android.ui.activity
 
 import android.accounts.Account
+import android.accounts.AccountManager
 import android.accounts.AccountManagerFuture
+import android.accounts.OnAccountsUpdateListener
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -338,14 +341,14 @@ abstract class DrawerActivity : ToolbarActivity() {
      *
      * @param accounts list of accounts
      */
-    private fun repopulateAccountList(accounts: List<Account>) {
+    private fun repopulateAccountList(accounts: List<Account>?) {
         val navigationView = getNavView() ?: return
         val navigationMenu = navigationView.menu
         // remove all accounts from list
         navigationMenu.removeGroup(R.id.drawer_menu_accounts)
 
         // add all accounts to list except current one
-        accounts.filter { it.name != account.name }.forEach {
+        accounts?.filter { it.name != account?.name }?.forEach {
             val accountMenuItem: MenuItem =
                 navigationMenu.add(R.id.drawer_menu_accounts, Menu.NONE, MENU_ORDER_ACCOUNT, it.name)
             AvatarUtils().loadAvatarForAccount(
@@ -492,6 +495,15 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
     }
 
+    private fun cleanupUnusedAccountDirectories() {
+        val accountManager = AccountManager.get(this)
+        accountManager.addOnAccountsUpdatedListener(OnAccountsUpdateListener {
+            val accounts = AccountUtils.getAccounts(this)
+            drawerViewModel.deleteUnusedUserDirs(accounts)
+            updateAccountList()
+        }, Handler(), false)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
@@ -536,6 +548,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
         updateAccountList()
         updateQuota()
+        cleanupUnusedAccountDirectories()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

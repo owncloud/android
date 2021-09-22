@@ -1,0 +1,8 @@
+Bugfix: ANR after removing account with too many downloaded files
+
+Previously, when a user account was deleted, the application could freeze when trying to delete a large number of files.
+Now, the application has been fixed so that it doesn't freeze anymore by doing this.
+
+https://github.com/owncloud/android/issues/3362
+https://github.com/owncloud/android/pull/3380
+
