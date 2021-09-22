@@ -148,8 +148,8 @@ public class BiometricActivity extends AppCompatActivity {
     private void authError() {
         if (PassCodeManager.INSTANCE.isPassCodeEnabled()) {
             PassCodeManager.INSTANCE.onBiometricCancelled(mActivity);
-        } else if (PatternManager.getPatternManager().isPatternEnabled()) {
-            PatternManager.getPatternManager().onBiometricCancelled(mActivity);
+        } else if (PatternManager.INSTANCE.isPatternEnabled()) {
+            PatternManager.INSTANCE.onBiometricCancelled(mActivity);
         }
 
         mActivity.finish();
