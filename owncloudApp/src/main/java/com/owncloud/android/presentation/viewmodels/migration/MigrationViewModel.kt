@@ -24,8 +24,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity.Companion.PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
 import java.io.File
@@ -36,7 +38,8 @@ import java.io.File
 class MigrationViewModel(
     private val rootFolder: String,
     private val scopedStorageProvider: LocalStorageProvider.ScopedStorageProvider,
-    private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private val _migrationState = MediatorLiveData<Event<MigrationState>>()
@@ -65,6 +68,10 @@ class MigrationViewModel(
         }
     }
 
+    private fun saveAlreadyMigratedPreference() {
+        preferencesProvider.putBoolean(key = PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE, value = true)
+    }
+
     fun moveToNextState(migrationType: MigrationState.MigrationType = MigrationState.MigrationType.MIGRATE_AND_KEEP) {
 
         val nextState: MigrationState = when (_migrationState.value?.peekContent()) {
@@ -75,6 +82,10 @@ class MigrationViewModel(
             is MigrationState.MigrationProgressState -> MigrationState.MigrationCompletedState
             is MigrationState.MigrationCompletedState -> MigrationState.MigrationCompletedState
             null -> MigrationState.MigrationIntroState
+        }
+
+        if (nextState is MigrationState.MigrationCompletedState) {
+            saveAlreadyMigratedPreference()
         }
 
         _migrationState.postValue(Event(nextState))

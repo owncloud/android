@@ -26,10 +26,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.presentation.viewmodels.migration.MigrationState
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import java.io.File
 
 class StorageMigrationActivity : AppCompatActivity() {
@@ -69,6 +71,8 @@ class StorageMigrationActivity : AppCompatActivity() {
 
     companion object {
 
+        const val PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE = "MIGRATED_TO_SCOPED_STORAGE"
+
         private fun hasDataInLegacyStorage(): Boolean {
             val legacyStorageProvider = LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder)
             val legacyStorageFolder = File(legacyStorageProvider.getRootFolderPath())
@@ -81,17 +85,23 @@ class StorageMigrationActivity : AppCompatActivity() {
             return legacyStorageFolder.canRead() && legacyStorageFolder.canWrite()
         }
 
+        private fun hasAlreadyMigratedToScopedStorage(context: Context): Boolean {
+            val preferenceProvider = SharedPreferencesProviderImpl(context = context)
+            return preferenceProvider.getBoolean(key = PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE, defaultValue = false)
+        }
+
         fun runIfNeeded(context: Context) {
             if (context is StorageMigrationActivity) {
                 return
             }
-            if (shouldShow()) {
+            if (shouldShow(context)) {
+                Timber.i("Migration to scoped storage should be done. Showing wizard to migrate...")
                 context.startActivity(Intent(context, StorageMigrationActivity::class.java))
             }
         }
 
-        private fun shouldShow(): Boolean {
-            return hasDataInLegacyStorage() && hasAccessToLegacyStorage()
+        private fun shouldShow(context: Context): Boolean {
+            return !hasAlreadyMigratedToScopedStorage(context) && hasDataInLegacyStorage() && hasAccessToLegacyStorage()
         }
     }
 }

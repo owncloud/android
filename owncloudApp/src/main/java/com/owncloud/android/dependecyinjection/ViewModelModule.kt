@@ -25,11 +25,8 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
-<<<<<<< HEAD
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
-=======
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
->>>>>>> First draft for Migration Wizard
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
@@ -66,5 +63,5 @@ val viewModelModule = module {
     viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
     viewModel { PassCodeViewModel(get(), get()) }
     viewModel { LogListViewModel(get()) }
-    viewModel { MigrationViewModel(MainApp.dataFolder, get(), get()) }
+    viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get()) }
 }
