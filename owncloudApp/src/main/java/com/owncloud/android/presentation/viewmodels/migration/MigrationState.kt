@@ -25,12 +25,10 @@ sealed class MigrationState {
 
     data class MigrationChoiceState(
         val legacyStorageSpaceInBytes: Long,
-        val availableBytesInScopedStorage: Long,
     ) : MigrationState()
 
     data class MigrationProgressState(
         val migrationType: MigrationType,
-        val progress: Int = 0,
     ) : MigrationState()
 
     object MigrationCompletedState : MigrationState()
