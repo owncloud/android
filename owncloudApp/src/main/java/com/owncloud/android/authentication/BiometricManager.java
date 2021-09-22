@@ -87,9 +87,9 @@ public class BiometricManager {
                     // Cancel biometric lock and use passcode unlock method
                     PassCodeManager.INSTANCE.onBiometricCancelled(activity);
                     mVisibleActivitiesCounter++;
-                } else if (PatternManager.getPatternManager().isPatternEnabled()) {
+                } else if (PatternManager.INSTANCE.isPatternEnabled()) {
                     // Cancel biometric lock and use pattern unlock method
-                    PatternManager.getPatternManager().onBiometricCancelled(activity);
+                    PatternManager.INSTANCE.onBiometricCancelled(activity);
                     mVisibleActivitiesCounter++;
                 }
 
