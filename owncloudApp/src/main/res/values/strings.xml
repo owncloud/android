@@ -48,6 +48,7 @@
     <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
     <string name="confirmation_touches_with_other_windows_message">Use this feature under your own responsibility, a malicious application could try to spoof you into performing some actions, unaware, using other views.</string>
     <string name="prefs_open_logs_view">Open logs view</string>
+    <string name="prefs_open_logs_list_view">Log files</string>
     <string name="prefs_subsection_picture_uploads">Auto upload pictures</string>
     <string name="prefs_subsection_picture_uploads_summary">Manage location and behaviour of the pictures uploaded automatically</string>
     <string name="prefs_subsection_video_uploads">Auto upload videos</string>

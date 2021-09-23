@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ ownCloud Android client application
+  ~
+  ~ @author Fernando Sanz Velasco
+  ~ Copyright (C) 2021 ownCloud GmbH.
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License version 2,
+  ~ as published by the Free Software Foundation.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/standard_half_padding">
+
+    <TextView
+        android:id="@+id/textView_title_activity_logs_list"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/standard_half_padding"
+        app:layout_constraintEnd_toStartOf="@id/imageView_share_activity_logs_list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/lorem"
+        android:includeFontPadding="false"/>
+
+    <TextView
+        android:id="@+id/textView_subtitle_activity_logs_list"
+        style="@style/TextAppearance.AppCompat.Caption"
+        android:layout_width="0dp"
+        android:includeFontPadding="false"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/standard_half_padding"
+        app:layout_constraintEnd_toStartOf="@id/imageView_share_activity_logs_list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView_title_activity_logs_list"
+        tools:text="@tools:sample/lorem" />
+
+    <ImageView
+        android:id="@+id/imageView_share_activity_logs_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/shared_via_users"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_subtitle_activity_logs_list"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

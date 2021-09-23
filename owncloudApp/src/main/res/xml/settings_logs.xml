@@ -20,15 +20,18 @@
     <SwitchPreferenceCompat
         app:iconSpaceReserved="false"
         app:key="enable_logging"
-        app:title="@string/prefs_enable_logging"
-        app:summary="@string/prefs_enable_logging_summary" />
+        app:summary="@string/prefs_enable_logging_summary"
+        app:title="@string/prefs_enable_logging" />
     <CheckBoxPreference
         app:iconSpaceReserved="false"
         app:key="set_httpLogs"
-        app:title="@string/prefs_http_logs"/>
+        app:title="@string/prefs_http_logs" />
     <Preference
         app:iconSpaceReserved="false"
         app:key="logger"
-        app:title="@string/prefs_open_logs_view"/>
-
+        app:title="@string/prefs_open_logs_view" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="logs_list"
+        app:title="@string/prefs_open_logs_list_view" />
 </PreferenceScreen>
