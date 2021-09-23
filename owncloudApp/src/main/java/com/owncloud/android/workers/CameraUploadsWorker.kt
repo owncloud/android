@@ -130,7 +130,7 @@ class CameraUploadsWorker(
             syncType = syncType,
             sourcePath = folderBackUpConfiguration.sourcePath,
             lastSyncTimestamp = folderBackUpConfiguration.lastSyncTimestamp,
-            currentTimestamp = currentTimestamp
+            currentTimestamp = currentTimestamp,
         )
 
         showNotification(syncType, localPicturesDocumentFiles.size)
@@ -207,8 +207,9 @@ class CameraUploadsWorker(
     }
 
     private fun updateTimestamp(
-        folderBackUpConfiguration: FolderBackUpConfiguration, syncType: SyncType,
-        currentTimestamp: Long
+        folderBackUpConfiguration: FolderBackUpConfiguration,
+        syncType: SyncType,
+        currentTimestamp: Long,
     ) {
 
         when (syncType) {
@@ -231,7 +232,7 @@ class CameraUploadsWorker(
         syncType: SyncType,
         sourcePath: String,
         lastSyncTimestamp: Long,
-        currentTimestamp: Long
+        currentTimestamp: Long,
     ): List<DocumentFile> {
         val sourceUri: Uri = sourcePath.toUri()
         val documentTree = DocumentFile.fromTreeUri(applicationContext, sourceUri)

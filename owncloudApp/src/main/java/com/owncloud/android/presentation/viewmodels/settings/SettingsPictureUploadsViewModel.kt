@@ -39,6 +39,7 @@ import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 
 class SettingsPictureUploadsViewModel(
@@ -174,5 +175,7 @@ class SettingsPictureUploadsViewModel(
         chargingOnly = chargingOnly ?: false,
         lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
         name = _pictureUploads.value?.name ?: pictureUploadsName
-    )
+    ).also {
+        Timber.d("Picture uploads configuration updated. New configuration: $it")
+    }
 }
