@@ -26,6 +26,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.datamodel.OCUpload
+import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity.Companion.PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -39,6 +41,7 @@ class MigrationViewModel(
     private val rootFolder: String,
     private val scopedStorageProvider: LocalStorageProvider.ScopedStorageProvider,
     private val preferencesProvider: SharedPreferencesProvider,
+    private val uploadsStorageManager: UploadsStorageManager,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
@@ -57,6 +60,7 @@ class MigrationViewModel(
     fun moveLegacyStorageToScopedStorage() {
         viewModelScope.launch(coroutineDispatcherProvider.io) {
             scopedStorageProvider.moveLegacyToScopedStorage()
+            updatePendingUploadsPath()
             moveToNextState()
         }
     }
@@ -70,6 +74,14 @@ class MigrationViewModel(
 
     private fun saveAlreadyMigratedPreference() {
         preferencesProvider.putBoolean(key = PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE, value = true)
+    }
+
+    private fun updatePendingUploadsPath() {
+        uploadsStorageManager.clearSuccessfulUploads()
+        val storedUploads: Array<OCUpload> = uploadsStorageManager.allStoredUploads
+        val uploadsWithUpdatedPath =
+            storedUploads.map { it.apply { localPath = scopedStorageProvider.getTemporalPath(it.accountName) + it.remotePath } }
+        uploadsWithUpdatedPath.forEach { uploadsStorageManager.updateUpload(it) }
     }
 
     fun moveToNextState(migrationType: MigrationState.MigrationType = MigrationState.MigrationType.MIGRATE_AND_KEEP) {
