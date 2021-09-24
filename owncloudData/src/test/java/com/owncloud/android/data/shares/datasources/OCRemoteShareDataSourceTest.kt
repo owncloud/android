@@ -27,7 +27,7 @@ import com.owncloud.android.domain.exceptions.ShareForbiddenException
 import com.owncloud.android.domain.exceptions.ShareNotFoundException
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.shares.ShareParserResult
+import com.owncloud.android.lib.resources.shares.ShareResponse
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -56,7 +56,7 @@ class OCRemoteShareDataSourceTest {
     @Test
     fun insertPrivateShare() {
         val createRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareParserResult(
+            ShareResponse(
                 listOf(
                     remoteShareMapper.toRemote(
                         OC_SHARE.copy(
@@ -97,7 +97,7 @@ class OCRemoteShareDataSourceTest {
     @Test
     fun updatePrivateShare() {
         val updateRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareParserResult(
+            ShareResponse(
                 listOf(
                     remoteShareMapper.toRemote(
                         OC_SHARE.copy(
@@ -141,7 +141,7 @@ class OCRemoteShareDataSourceTest {
     @Test
     fun insertPublicShare() {
         val createRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareParserResult(
+            ShareResponse(
                 listOf(
                     remoteShareMapper.toRemote(
                         OC_SHARE.copy(
@@ -182,7 +182,7 @@ class OCRemoteShareDataSourceTest {
     @Test
     fun updatePublicShare() {
         val updateRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareParserResult(
+            ShareResponse(
                 listOf(
                     remoteShareMapper.toRemote(
                         OC_SHARE.copy(
@@ -262,7 +262,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         val getRemoteSharesOperationResult = createRemoteOperationResultMock(
-            ShareParserResult(remoteShares),
+            ShareResponse(remoteShares),
             true
         )
 
@@ -321,7 +321,7 @@ class OCRemoteShareDataSourceTest {
 
     private fun createShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
         val createRemoteSharesOperationResult = createRemoteOperationResultMock(
-            ShareParserResult(arrayListOf()),
+            ShareResponse(arrayListOf()),
             false,
             null,
             resultCode
@@ -352,7 +352,7 @@ class OCRemoteShareDataSourceTest {
 
     private fun updateShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
         val updateRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareParserResult(arrayListOf()),
+            ShareResponse(arrayListOf()),
             false,
             null,
             resultCode
@@ -372,7 +372,7 @@ class OCRemoteShareDataSourceTest {
     @Test
     fun deleteShare() {
         val removeRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareParserResult(arrayListOf()),
+            ShareResponse(arrayListOf()),
             isSuccess = true
         )
 
@@ -397,7 +397,7 @@ class OCRemoteShareDataSourceTest {
 
     private fun deleteShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
         val removeRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareParserResult(arrayListOf()),
+            ShareResponse(arrayListOf()),
             false,
             null,
             resultCode

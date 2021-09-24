@@ -4,7 +4,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * Copyright (C) 2020 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
@@ -33,7 +33,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation;
 import com.owncloud.android.lib.resources.shares.RemoteShare;
-import com.owncloud.android.lib.resources.shares.ShareParserResult;
+import com.owncloud.android.lib.resources.shares.ShareResponse;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -183,7 +183,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
     }
 
     private void updateShareIconsInFiles(OwnCloudClient client) {
-        RemoteOperationResult<ShareParserResult> result;
+        RemoteOperationResult<ShareResponse> result;
 
         // remote request
         GetRemoteSharesForFileOperation operation =
