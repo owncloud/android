@@ -1,7 +1,4 @@
 /* ownCloud Android Library is available under MIT license
- *   @author masensio
- *   @author David A. Velasco
- *   @author David González Verdugo
  *   @author Fernando Sanz Velasco
  *   Copyright (C) 2021 ownCloud GmbH
  *
@@ -33,7 +30,7 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.HttpConstants.PARAM_FORMAT
 import com.owncloud.android.lib.common.http.HttpConstants.VALUE_FORMAT
-import com.owncloud.android.lib.common.http.methods.nonwebdav.DeleteMethod
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.CommonOcsResponse
@@ -45,26 +42,12 @@ import timber.log.Timber
 import java.lang.reflect.Type
 import java.net.URL
 
-/**
- * Remove a share
- *
- * @author masensio
- * @author David A. Velasco
- * @author David González Verdugo
- * @author Fernando Sanz Velasco
- */
-
-/**
- * Constructor
- *
- * @param remoteShareId Share ID
- */
-class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOperation<ShareResponse>() {
+class GetRemoteShareOperation(private val remoteId: String) : RemoteOperation<ShareResponse>() {
 
     private fun buildRequestUri(baseUri: Uri) =
         baseUri.buildUpon()
             .appendEncodedPath(OCS_ROUTE)
-            .appendEncodedPath(remoteShareId)
+            .appendEncodedPath(remoteId)
             .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
             .build()
 
@@ -81,11 +64,11 @@ class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOper
     }
 
     private fun onResultUnsuccessful(
-        method: DeleteMethod,
+        method: GetMethod,
         response: String?,
         status: Int
     ): RemoteOperationResult<ShareResponse> {
-        Timber.e("Failed response while unshare link ")
+        Timber.e("Failed response while while getting remote shares ")
         if (response != null) {
             Timber.e("*** status code: $status; response message: $response")
         } else {
@@ -98,34 +81,33 @@ class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOper
         val result = RemoteOperationResult<ShareResponse>(RemoteOperationResult.ResultCode.OK)
         Timber.d("Successful response: $response")
         result.data = parseResponse(response!!)
-        Timber.d("*** Unshare link completed ")
+        Timber.d("*** Get Users or groups completed ")
         return result
     }
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
-
         val requestUri = buildRequestUri(client.baseUri)
 
-        val deleteMethod = DeleteMethod(URL(requestUri.toString())).apply {
+        val getMethod = GetMethod(URL(requestUri.toString())).apply {
             addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }
 
         return try {
-            val status = client.executeHttpMethod(deleteMethod)
-            val response = deleteMethod.getResponseBodyAsString()
+            val status = client.executeHttpMethod(getMethod)
+            val response = getMethod.getResponseBodyAsString()
 
-            if (isSuccess(status)) {
-                onRequestSuccessful(response)
+            if (!isSuccess(status)) {
+                onResultUnsuccessful(getMethod, response, status)
             } else {
-                onResultUnsuccessful(deleteMethod, response, status)
+                onRequestSuccessful(response)
             }
         } catch (e: Exception) {
-            Timber.e(e, "Exception while unshare link")
+            Timber.e(e, "Exception while getting remote shares")
             RemoteOperationResult(e)
         }
     }
 
-    private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
+    private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK
 
     companion object {
         //OCS Route

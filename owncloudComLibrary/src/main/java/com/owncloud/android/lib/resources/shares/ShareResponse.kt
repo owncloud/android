@@ -1,4 +1,5 @@
 /* ownCloud Android Library is available under MIT license
+ *   @author Christian Schabesberger
  *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,20 +23,6 @@
  *
  */
 
-package com.owncloud.android.lib.resources.shares;
+package com.owncloud.android.lib.resources.shares
 
-/**
- * Contains Constants for Share Operation
- *
- * @author masensio
- * @author David González Verdugo
- */
-
-public class ShareUtils {
-
-    // OCS Route
-    public static final String SHARING_API_PATH = "ocs/v2.php/apps/files_sharing/api/v1/shares";
-
-    // String to build the link with the token of a share:
-    public static final String SHARING_LINK_PATH = "/index.php/s/";
-}
+data class ShareResponse(val shares: List<RemoteShare>)

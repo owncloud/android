@@ -2,7 +2,8 @@
  *   @author masensio
  *   @author David A. Velasco
  *   @author David González Verdugo
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   @author Fernando Sanz Velasco
+ *   Copyright (C) 2021 ownCloud GmbH
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -27,12 +28,21 @@
 
 package com.owncloud.android.lib.resources.shares
 
+import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.HttpConstants.PARAM_FORMAT
+import com.owncloud.android.lib.common.http.HttpConstants.VALUE_FORMAT
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.CommonOcsResponse
+import com.owncloud.android.lib.resources.shares.responses.ShareItem
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import timber.log.Timber
+import java.lang.reflect.Type
 import java.net.URL
 
 /**
@@ -43,6 +53,7 @@ import java.net.URL
  * @author masensio
  * @author David A. Velasco
  * @author David González Verdugo
+ * @author Fernando Sanz Velasco
  */
 
 /**
@@ -59,52 +70,82 @@ class GetRemoteSharesForFileOperation(
     private val remoteFilePath: String,
     private val reshares: Boolean,
     private val subfiles: Boolean
-) : RemoteOperation<ShareParserResult>() {
+) : RemoteOperation<ShareResponse>() {
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareParserResult> {
-        var result: RemoteOperationResult<ShareParserResult>
+    private fun buildRequestUri(baseUri: Uri) =
+        baseUri.buildUpon()
+            .appendEncodedPath(OCS_ROUTE)
+            .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
+            .appendQueryParameter(PARAM_PATH, remoteFilePath)
+            .appendQueryParameter(PARAM_RESHARES, reshares.toString())
+            .appendQueryParameter(PARAM_SUBFILES, subfiles.toString())
+            .build()
 
-        try {
+    private fun parseResponse(response: String): ShareResponse? {
+        val moshi = Moshi.Builder().build()
+        val listOfShareItemType: Type = Types.newParameterizedType(List::class.java, ShareItem::class.java)
+        val commonOcsType: Type = Types.newParameterizedType(CommonOcsResponse::class.java, listOfShareItemType)
+        val adapter: JsonAdapter<CommonOcsResponse<List<ShareItem>>> = moshi.adapter(commonOcsType)
+        return adapter.fromJson(response)?.ocs?.data?.let { listOfShareItems ->
+            ShareResponse(listOfShareItems.map { shareItem ->
+                shareItem.toRemoteShare()
+            })
+        }
+    }
 
-            val requestUri = client.baseUri
-            val uriBuilder = requestUri.buildUpon()
-            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH)
-            uriBuilder.appendQueryParameter(PARAM_PATH, remoteFilePath)
-            uriBuilder.appendQueryParameter(PARAM_RESHARES, reshares.toString())
-            uriBuilder.appendQueryParameter(PARAM_SUBFILES, subfiles.toString())
+    private fun onResultUnsuccessful(
+        method: GetMethod,
+        response: String?,
+        status: Int
+    ): RemoteOperationResult<ShareResponse> {
+        Timber.e("Failed response while while getting remote shares for file operation ")
+        if (response != null) {
+            Timber.e("*** status code: $status; response message: $response")
+        } else {
+            Timber.e("*** status code: $status")
+        }
+        return RemoteOperationResult(method)
+    }
 
-            val getMethod = GetMethod(URL(uriBuilder.build().toString()))
+    private fun onRequestSuccessful(response: String?): RemoteOperationResult<ShareResponse> {
+        val result = RemoteOperationResult<ShareResponse>(RemoteOperationResult.ResultCode.OK)
+        Timber.d("Successful response: $response")
+        result.data = parseResponse(response!!)
+        Timber.d("*** Getting remote shares for file completed ")
+        Timber.d("Got ${result.data.shares.size} shares")
+        return result
+    }
 
-            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
+    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
+        val requestUri = buildRequestUri(client.baseUri)
 
-            val status = client.executeHttpMethod(getMethod)
-
-            if (isSuccess(status)) {
-                // Parse xml response and obtain the list of shares
-                val parser = ShareToRemoteOperationResultParser(
-                    ShareXMLParser()
-                )
-                parser.ownCloudVersion = client.ownCloudVersion
-                parser.serverBaseUri = client.baseUri
-                result = parser.parse(getMethod.getResponseBodyAsString())
-
-                if (result.isSuccess) {
-                    Timber.d("Got ${result.data.shares.size} shares")
-                }
-            } else {
-                result = RemoteOperationResult(getMethod)
-            }
-        } catch (e: Exception) {
-            result = RemoteOperationResult(e)
-            Timber.e(e, "Exception while getting shares")
+        val getMethod = GetMethod(URL(requestUri.toString())).apply {
+            addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
         }
 
-        return result
+        return try {
+            val status = client.executeHttpMethod(getMethod)
+            val response = getMethod.getResponseBodyAsString()
+
+            if (isSuccess(status)) {
+                onRequestSuccessful(response)
+            } else {
+                onResultUnsuccessful(getMethod, response, status)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Exception while getting remote shares for file operation")
+            RemoteOperationResult(e)
+        }
     }
 
     private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
+
+        //OCS Route
+        private const val OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/shares"
+
+        //Arguments - names
         private const val PARAM_PATH = "path"
         private const val PARAM_RESHARES = "reshares"
         private const val PARAM_SUBFILES = "subfiles"

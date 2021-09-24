@@ -25,7 +25,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation
-import com.owncloud.android.lib.resources.shares.ShareParserResult
+import com.owncloud.android.lib.resources.shares.ShareResponse
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation
 import com.owncloud.android.lib.resources.shares.services.ShareService
@@ -36,7 +36,7 @@ class OCShareService(override val client: OwnCloudClient) :
         remoteFilePath: String,
         reshares: Boolean,
         subfiles: Boolean
-    ): RemoteOperationResult<ShareParserResult> = GetRemoteSharesForFileOperation(
+    ): RemoteOperationResult<ShareResponse> = GetRemoteSharesForFileOperation(
         remoteFilePath,
         reshares,
         subfiles
@@ -51,7 +51,7 @@ class OCShareService(override val client: OwnCloudClient) :
         password: String,
         expirationDate: Long,
         publicUpload: Boolean
-    ): RemoteOperationResult<ShareParserResult> =
+    ): RemoteOperationResult<ShareResponse> =
         CreateRemoteShareOperation(
             remoteFilePath,
             shareType,
@@ -72,7 +72,7 @@ class OCShareService(override val client: OwnCloudClient) :
         expirationDate: Long,
         permissions: Int,
         publicUpload: Boolean
-    ): RemoteOperationResult<ShareParserResult> =
+    ): RemoteOperationResult<ShareResponse> =
         UpdateRemoteShareOperation(
             remoteId
         ).apply {
@@ -84,7 +84,7 @@ class OCShareService(override val client: OwnCloudClient) :
             this.retrieveShareDetails = true
         }.execute(client)
 
-    override fun deleteShare(remoteId: String): RemoteOperationResult<ShareParserResult> =
+    override fun deleteShare(remoteId: String): RemoteOperationResult<ShareResponse> =
         RemoveRemoteShareOperation(
             remoteId
         ).execute(client)

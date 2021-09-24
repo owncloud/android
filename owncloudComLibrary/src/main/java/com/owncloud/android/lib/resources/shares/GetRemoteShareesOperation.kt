@@ -32,6 +32,8 @@ package com.owncloud.android.lib.resources.shares
 import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.HttpConstants.PARAM_FORMAT
+import com.owncloud.android.lib.common.http.HttpConstants.VALUE_FORMAT
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -136,10 +138,10 @@ class GetRemoteShareesOperation
             val status = client.executeHttpMethod(getMethod)
             val response = getMethod.getResponseBodyAsString()
 
-            if (!isSuccess(status)) {
-                onResultUnsuccessful(getMethod, response, status)
-            } else {
+            if (isSuccess(status)) {
                 onRequestSuccessful(response)
+            } else {
+                onResultUnsuccessful(getMethod, response, status)
             }
         } catch (e: Exception) {
             Timber.e(e, "Exception while getting users/groups")
@@ -155,14 +157,12 @@ class GetRemoteShareesOperation
         private const val OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/sharees"    // from OC 8.2
 
         // Arguments - names
-        private const val PARAM_FORMAT = "format"
         private const val PARAM_ITEM_TYPE = "itemType"
         private const val PARAM_SEARCH = "search"
         private const val PARAM_PAGE = "page"                //  default = 1
         private const val PARAM_PER_PAGE = "perPage"         //  default = 200
 
         // Arguments - constant values
-        private const val VALUE_FORMAT = "json"
         private const val VALUE_ITEM_TYPE = "file"         //  to get the server search for users / groups
     }
 }
