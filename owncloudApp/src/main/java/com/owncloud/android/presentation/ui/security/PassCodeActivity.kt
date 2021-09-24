@@ -425,6 +425,6 @@ class PassCodeActivity : BaseActivity() {
         private const val KEY_PASSCODE_DIGITS = "PASSCODE_DIGITS"
         private const val KEY_CONFIRMING_PASSCODE = "CONFIRMING_PASSCODE"
 
-        private const val EXTRAS_MIGRATION = "MIGRATION"
+        const val EXTRAS_MIGRATION = "MIGRATION"
     }
 }

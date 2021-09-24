@@ -19,6 +19,7 @@
 
 package com.owncloud.android.ui.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +35,9 @@ import androidx.biometric.BiometricPrompt;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.PatternManager;
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
+import com.owncloud.android.presentation.ui.security.PassCodeActivity;
 import com.owncloud.android.presentation.ui.security.PassCodeManager;
 import timber.log.Timber;
 
@@ -125,6 +129,19 @@ public class BiometricActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
+                SharedPreferencesProvider preferencesProvider = new SharedPreferencesProviderImpl(getApplicationContext());
+                // In this line, null is only provisional until the rearchitecture of BiometricActivity
+                String passCode = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, null);
+                int passCodeDigits = getApplicationContext().getResources().getInteger(R.integer.passcode_digits);
+                if (passCodeDigits < 4) passCodeDigits = 4;
+                if (passCode != null && passCode.length() < passCodeDigits) {
+                    preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE);
+                    preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+                    Intent intent = new Intent(getBaseContext(), PassCodeActivity.class);
+                    intent.setAction(PassCodeActivity.ACTION_REQUEST_WITH_RESULT);
+                    intent.putExtra(PassCodeActivity.EXTRAS_MIGRATION, true);
+                    startActivity(intent);
+                }
                 mActivity.finish();
             }
 
