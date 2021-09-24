@@ -32,6 +32,7 @@ import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -158,7 +159,7 @@ class PassCodeViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `get number of passcode digits - ok`() {
+    fun `get number of passcode digits - ok - digits is equal or greater than 4`() {
         val numberDigits = 4
 
         every { contextProvider.getInt(any()) } returns numberDigits
@@ -166,6 +167,22 @@ class PassCodeViewModelTest : ViewModelTest() {
         val getNumberDigits = passCodeViewModel.getNumberOfPassCodeDigits()
 
         assertEquals(numberDigits, getNumberDigits)
+
+        verify(exactly = 1) {
+            contextProvider.getInt(R.integer.passcode_digits)
+        }
+    }
+
+    @Test
+    fun `get number of passcode digits - ok - digits is less than 4`() {
+        val numberDigits = 3
+
+        every { contextProvider.getInt(any()) } returns numberDigits
+
+        val getNumberDigits = passCodeViewModel.getNumberOfPassCodeDigits()
+
+        assertNotEquals(numberDigits, getNumberDigits)
+        assertEquals(4, getNumberDigits)
 
         verify(exactly = 1) {
             contextProvider.getInt(R.integer.passcode_digits)
