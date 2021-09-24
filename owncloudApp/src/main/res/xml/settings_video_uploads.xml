@@ -15,7 +15,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreferenceCompat
         app:iconSpaceReserved="false"
@@ -33,15 +34,6 @@
         app:iconSpaceReserved="false"
         app:key="video_uploads_path"
         app:title="@string/prefs_camera_video_upload_path_title" />
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        app:key="video_uploads_on_wifi"
-        app:title="@string/prefs_camera_video_upload_on_wifi" />
-    <CheckBoxPreference
-        app:enabled="false"
-        app:iconSpaceReserved="false"
-        app:key="video_uploads_on_charging"
-        app:title="@string/prefs_camera_video_upload_on_charging" />
     <Preference
         app:iconSpaceReserved="false"
         app:key="video_uploads_source_path"
@@ -55,8 +47,21 @@
         app:title="@string/prefs_camera_upload_behaviour_title"
         app:useSimpleSummaryProvider="true" />
     <Preference
-        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="video_uploads_last_sync"
         app:title="@string/prefs_camera_upload_last_sync_title" />
+    <com.owncloud.android.ui.utils.LargePreferenceCategory
+        android:title="@string/prefs_camera_picture_upload_conditions_title"
+        app:iconSpaceReserved="false"
+        app:summary="@string/prefs_camera_picture_upload_conditions_summary">
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            app:key="video_uploads_on_wifi"
+            app:title="@string/prefs_camera_video_upload_on_wifi" />
+        <CheckBoxPreference
+            app:enabled="false"
+            app:iconSpaceReserved="false"
+            app:key="video_uploads_on_charging"
+            app:title="@string/prefs_camera_video_upload_on_charging" />
+    </com.owncloud.android.ui.utils.LargePreferenceCategory>
 </PreferenceScreen>

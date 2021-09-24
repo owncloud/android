@@ -55,6 +55,8 @@
     <string name="prefs_camera_picture_upload">Picture uploads</string>
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
     <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
+    <string name="prefs_camera_picture_upload_conditions_title">Conditions to execute uploads</string>
+    <string name="prefs_camera_picture_upload_conditions_summary">Uploads will be triggered when all selected options are fulfilled</string>
     <string name="prefs_camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
     <string name="prefs_camera_picture_upload_on_charging">Upload pictures only when charging</string>
     <string name="prefs_camera_upload_on_charging_summary">Enable wifi only uploads to activate this option</string>
