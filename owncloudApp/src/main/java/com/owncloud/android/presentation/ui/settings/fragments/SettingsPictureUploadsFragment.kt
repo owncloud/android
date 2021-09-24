@@ -120,11 +120,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                 prefPictureUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
                 prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                 prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
-                prefPictureUploadsOnCharging?.apply {
-                    isEnabled = it.wifiOnly
-                    summary = if (!it.wifiOnly) getString(R.string.prefs_camera_upload_on_charging_summary) else ""
-                    isChecked = it.chargingOnly && it.wifiOnly
-                }
+                prefPictureUploadsOnCharging?.isChecked = it.chargingOnly
                 prefPictureUploadsBehaviour?.value = it.behavior.name
                 prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
             } ?: resetFields()
@@ -234,11 +230,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsPath?.summary = null
         prefPictureUploadsSourcePath?.summary = null
         prefPictureUploadsOnWifi?.isChecked = false
-        prefPictureUploadsOnCharging?.apply {
-            isChecked = false
-            isEnabled = false
-            summary = getString(R.string.prefs_camera_upload_on_charging_summary)
-        }
+        prefPictureUploadsOnCharging?.isChecked = false
         prefPictureUploadsBehaviour?.value = FolderBackUpConfiguration.Behavior.COPY.name
         prefPictureUploadsLastSync?.summary = null
     }

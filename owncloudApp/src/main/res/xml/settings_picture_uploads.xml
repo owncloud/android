@@ -61,7 +61,6 @@
             app:key="picture_uploads_on_wifi"
             app:title="@string/prefs_camera_picture_upload_on_wifi" />
         <CheckBoxPreference
-            app:enabled="false"
             app:iconSpaceReserved="false"
             app:key="picture_uploads_on_charging"
             app:title="@string/prefs_camera_picture_upload_on_charging" />

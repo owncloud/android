@@ -120,11 +120,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                 prefVideoUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
                 prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                 prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
-                prefVideoUploadsOnCharging?.apply {
-                    isEnabled = it.wifiOnly
-                    summary = if (!it.wifiOnly) getString(R.string.prefs_camera_upload_on_charging_summary) else ""
-                    isChecked = it.chargingOnly && it.wifiOnly
-                }
+                prefVideoUploadsOnCharging?.isChecked = it.chargingOnly
                 prefVideoUploadsBehaviour?.value = it.behavior.name
                 prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
             } ?: resetFields()
@@ -234,11 +230,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsPath?.summary = null
         prefVideoUploadsSourcePath?.summary = null
         prefVideoUploadsOnWifi?.isChecked = false
-        prefVideoUploadsOnCharging?.apply {
-            isChecked = false
-            isEnabled = false
-            summary = getString(R.string.prefs_camera_upload_on_charging_summary)
-        }
+        prefVideoUploadsOnCharging?.isChecked = false
         prefVideoUploadsBehaviour?.value = FolderBackUpConfiguration.Behavior.COPY.name
         prefVideoUploadsLastSync?.summary = null
     }

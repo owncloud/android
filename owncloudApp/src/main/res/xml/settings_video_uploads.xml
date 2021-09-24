@@ -59,7 +59,6 @@
             app:key="video_uploads_on_wifi"
             app:title="@string/prefs_camera_video_upload_on_wifi" />
         <CheckBoxPreference
-            app:enabled="false"
             app:iconSpaceReserved="false"
             app:key="video_uploads_on_charging"
             app:title="@string/prefs_camera_video_upload_on_charging" />
