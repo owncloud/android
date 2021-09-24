@@ -112,7 +112,7 @@ class PassCodeActivity : BaseActivity() {
                 requestPassCodeConfirmation()
             } else {
                 if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) {
-                    passCodeHdr.text = getString(R.string.pass_code_configure_your_pass_code_migration)
+                    passCodeHdr.text = getString(R.string.pass_code_configure_your_pass_code_migration, passCodeViewModel.getNumberOfPassCodeDigits())
                 } else {
                     /// pass code preference has just been activated in Preferences;
                     // will receive and confirm pass code value
@@ -228,7 +228,7 @@ class PassCodeActivity : BaseActivity() {
                 finish()
             } else {
                 showErrorAndRestart(
-                    R.string.pass_code_wrong, R.string.pass_code_enter_pass_code,
+                    R.string.pass_code_wrong, getString(R.string.pass_code_enter_pass_code),
                     View.INVISIBLE
                 )
             }
@@ -243,7 +243,7 @@ class PassCodeActivity : BaseActivity() {
                 finish()
             } else {
                 showErrorAndRestart(
-                    R.string.pass_code_wrong, R.string.pass_code_enter_pass_code,
+                    R.string.pass_code_wrong, getString(R.string.pass_code_enter_pass_code),
                     View.INVISIBLE
                 )
             }
@@ -256,8 +256,8 @@ class PassCodeActivity : BaseActivity() {
                 /// confirmed: user typed the same pass code twice
                 savePassCodeAndExit()
             } else {
-                val headerMessage = if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) R.string.pass_code_configure_your_pass_code_migration
-                else R.string.pass_code_configure_your_pass_code
+                val headerMessage = if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) getString(R.string.pass_code_configure_your_pass_code_migration, passCodeViewModel.getNumberOfPassCodeDigits())
+                else getString(R.string.pass_code_configure_your_pass_code)
                 showErrorAndRestart(
                     R.string.pass_code_mismatch, headerMessage, View.VISIBLE
                 )
@@ -266,13 +266,13 @@ class PassCodeActivity : BaseActivity() {
     }
 
     private fun showErrorAndRestart(
-        errorMessage: Int, headerMessage: Int,
+        errorMessage: Int, headerMessage: String,
         explanationVisibility: Int
     ) {
         Arrays.fill(passCodeDigits, null)
         passCodeError.setText(errorMessage)
         passCodeError.visibility = View.VISIBLE
-        passCodeHdr.setText(headerMessage) // TODO check if really needed
+        passCodeHdr.text = headerMessage // TODO check if really needed
         passCodeHdrExplanation.visibility = explanationVisibility // TODO check if really needed
         clearBoxes()
     }
