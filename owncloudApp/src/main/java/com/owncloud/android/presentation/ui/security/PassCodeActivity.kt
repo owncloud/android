@@ -121,7 +121,7 @@ class PassCodeActivity : BaseActivity() {
                 //mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
                 // TODO choose a header, check iOS
                 passCodeHdrExplanation.visibility = View.VISIBLE
-                setCancelButtonEnabled(true)
+                if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) setCancelButtonEnabled(false)
             }
         } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
             /// pass code preference has just been disabled in Preferences;
@@ -328,7 +328,7 @@ class PassCodeActivity : BaseActivity() {
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-            if (ACTION_REQUEST_WITH_RESULT == intent.action || ACTION_CHECK_WITH_RESULT == intent.action) {
+            if ((ACTION_REQUEST_WITH_RESULT == intent.action && intent.extras?.getBoolean(EXTRAS_MIGRATION) == false) || ACTION_CHECK_WITH_RESULT == intent.action) {
                 finish()
             } // else, do nothing, but report that the key was consumed to stay alive
             return true
