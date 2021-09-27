@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.ui.activity
+package com.owncloud.android.presentation.ui.logging
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -26,13 +26,29 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.R
+import com.owncloud.android.databinding.LogsListActivityBinding
+import com.owncloud.android.presentation.adapters.logging.RecyclerViewLogsAdapter
+import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LogsListActivity : AppCompatActivity() {
+
+    private val viewModel by viewModel<LogListViewModel>()
+    private val recyclerViewLogsAdapter = RecyclerViewLogsAdapter()
+
+    private var _binding: LogsListActivityBinding? = null
+    val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.logs_list_activity)
+        _binding = LogsListActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initToolbar()
+        initList()
+        initSwipeToRefresh()
     }
 
     private fun initToolbar() {
@@ -54,5 +70,27 @@ class LogsListActivity : AppCompatActivity() {
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun initList() {
+        binding.recyclerViewActivityLogsList.apply {
+            layoutManager = LinearLayoutManager(context)
+            itemAnimator = DefaultItemAnimator()
+            adapter = recyclerViewLogsAdapter
+        }
+        setData()
+    }
+
+    private fun initSwipeToRefresh() {
+        binding.swipeRefreshActivityLogsList.setOnRefreshListener {
+            setData()
+            binding.swipeRefreshActivityLogsList.isRefreshing = false
+        }
+    }
+
+    private fun setData() {
+        recyclerViewLogsAdapter.apply {
+            setData(viewModel.getData())
+        }
     }
 }

@@ -30,7 +30,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
-import com.owncloud.android.ui.activity.LogsListActivity
+import com.owncloud.android.presentation.ui.logging.LogsListActivity
 import com.owncloud.android.utils.PermissionUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -78,7 +78,7 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
             true
         }
 
-        prefHttpLogs?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+        prefHttpLogs?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
             logsViewModel.shouldLogHttpRequests(newValue as Boolean)
             true
         }

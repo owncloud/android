@@ -51,7 +51,7 @@
         android:theme="@style/Theme.ownCloud.Toolbar"
         tools:targetApi="n">
         <activity
-            android:name=".ui.activity.LogsListActivity"
+            android:name="com.owncloud.android.presentation.ui.logging.LogsListActivity"
             android:exported="true" />
         <activity android:name=".presentation.ui.settings.PrivacyPolicyActivity"></activity>
         <activity android:name=".presentation.ui.settings.SettingsActivity"></activity>
