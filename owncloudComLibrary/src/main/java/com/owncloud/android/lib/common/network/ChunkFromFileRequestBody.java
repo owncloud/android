@@ -86,7 +86,8 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
 
                 readCount = mChannel.read(mBuffer);
 
-                sink.getBuffer().write(mBuffer.array(), 0, readCount);
+                int bytesToWriteInBuffer = (int) Math.min(readCount, mFile.length() - mTransferred);
+                sink.getBuffer().write(mBuffer.array(), 0, bytesToWriteInBuffer);
 
                 sink.flush();
 
@@ -102,10 +103,8 @@ public class ChunkFromFileRequestBody extends FileRequestBody {
                 }
             }
 
-            Timber.v("Chunk with size " + mChunkSize + " written in request body");
-
         } catch (Exception exception) {
-            Timber.e(exception);
+            Timber.e(exception, "Transferred " + mTransferred + " bytes from a total of " + mFile.length());
         }
     }
 
