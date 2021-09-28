@@ -504,7 +504,7 @@ public class PreviewAudioFragment extends FileFragment {
      */
     private void openFile() {
         stopPreview();
-        mContainerActivity.getFileOperationsHelper().openFile(getFile());
+        mContainerActivity.getFileOperationsHelper().openFile(getFile(),null);
         finish();
     }
 

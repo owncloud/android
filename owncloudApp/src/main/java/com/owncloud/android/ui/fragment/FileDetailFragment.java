@@ -278,7 +278,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 return true;
             }
             case R.id.action_open_file_with: {
-                mContainerActivity.getFileOperationsHelper().openFile(getFile());
+                mContainerActivity.getFileOperationsHelper().openFile(getFile(), null);
                 return true;
             }
             case R.id.action_remove_file: {

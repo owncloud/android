@@ -53,6 +53,10 @@ class LogsListActivity : FileActivity() {
             file.delete()
             setData()
         }
+
+        override fun open(file: File) {
+            fileOperationsHelper.openFile(null, file)
+        }
     }, context = this)
 
     override fun onCreate(savedInstanceState: Bundle?) {

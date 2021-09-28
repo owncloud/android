@@ -63,39 +63,76 @@ public class FileOperationsHelper {
         mFileActivity = fileActivity;
     }
 
-    public void openFile(OCFile file) {
-        if (file != null) {
-            String storagePath = file.getStoragePath();
+    private Intent getIntentForSavedMimeType(OCFile ocFile, File file) {
+        Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
 
-            Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
+        if (ocFile != null) {
             intentForSavedMimeType.setDataAndType(
-                    file.getExposedFileUri(mFileActivity),
-                    file.getMimetype()
+                    ocFile.getExposedFileUri(mFileActivity),
+                    ocFile.getMimetype()
+            );
+        } else {
+            intentForSavedMimeType.setDataAndType(
+                    FileExtKt.getExposedFileUri(mFileActivity, file.getPath()),
+                    MimetypeIconUtil.getBestMimeTypeByFilename(file.getName())
+            );
+        }
+
+        intentForSavedMimeType.setFlags(
+                Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        );
+
+        return intentForSavedMimeType;
+    }
+
+    private Intent getIntentForGuessedMimeType(OCFile ocFile, File file) {
+        Intent intentForGuessedMimeType = null;
+        String storagePath;
+
+        if (ocFile != null) {
+            storagePath = ocFile.getStoragePath();
+        } else {
+            storagePath = file.getPath();
+        }
+        if (storagePath.lastIndexOf('.') >= 0) {
+            String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    storagePath.substring(storagePath.lastIndexOf('.') + 1)
             );
 
-            intentForSavedMimeType.setFlags(
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-            );
+            if ((ocFile != null && guessedMimeType != null && !guessedMimeType.equals(ocFile.getMimetype())) ||
+                    (file != null && guessedMimeType != null && !guessedMimeType.equals(MimetypeIconUtil.getBestMimeTypeByFilename(file.getName())))) {
+                intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
 
-            Intent intentForGuessedMimeType = null;
-            if (storagePath.lastIndexOf('.') >= 0) {
-                String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                        storagePath.substring(storagePath.lastIndexOf('.') + 1)
-                );
-                if (guessedMimeType != null && !guessedMimeType.equals(file.getMimetype())) {
-                    intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
+                if (ocFile != null) {
                     intentForGuessedMimeType.setDataAndType(
-                            file.getExposedFileUri(mFileActivity),
+                            ocFile.getExposedFileUri(mFileActivity),
                             guessedMimeType
                     );
-                    intentForGuessedMimeType.setFlags(
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION |
-                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                } else {
+                    intentForGuessedMimeType.setDataAndType(
+                            FileExtKt.getExposedFileUri(mFileActivity, file.getPath()),
+                            guessedMimeType
                     );
                 }
+
+                intentForGuessedMimeType.setFlags(
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                                Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                );
             }
+        }
+        return intentForGuessedMimeType;
+    }
+
+    public void openFile(OCFile ocFile, File file) {
+        if (ocFile != null || file != null) {
+
+            Intent intentForSavedMimeType = getIntentForSavedMimeType(ocFile, file);
+
+            Intent intentForGuessedMimeType = getIntentForGuessedMimeType(ocFile, file);
 
             Intent openFileWithIntent;
+
             if (intentForGuessedMimeType != null) {
                 openFileWithIntent = intentForGuessedMimeType;
             } else {
@@ -105,7 +142,7 @@ public class FileOperationsHelper {
             List<ResolveInfo> launchables = mFileActivity.getPackageManager().
                     queryIntentActivities(openFileWithIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-            if (launchables != null && launchables.size() > 0) {
+            if (launchables.size() > 0) {
                 try {
                     mFileActivity.startActivity(
                             Intent.createChooser(

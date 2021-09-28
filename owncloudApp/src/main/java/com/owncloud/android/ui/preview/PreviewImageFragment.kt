@@ -283,7 +283,7 @@ class PreviewImageFragment : FileFragment() {
      * Opens the previewed image with an external application.
      */
     private fun openFile() {
-        mContainerActivity.fileOperationsHelper.openFile(file)
+        mContainerActivity.fileOperationsHelper.openFile(file, null)
         finish()
     }
 

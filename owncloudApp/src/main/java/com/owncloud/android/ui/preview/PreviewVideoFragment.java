@@ -568,7 +568,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
      */
     private void openFile() {
         releasePlayer();
-        mContainerActivity.getFileOperationsHelper().openFile(getFile());
+        mContainerActivity.getFileOperationsHelper().openFile(getFile(),null);
         finish();
     }
 

@@ -446,7 +446,7 @@ public class PreviewTextFragment extends FileFragment {
      * Opens the previewed file with an external application.
      */
     private void openFile() {
-        mContainerActivity.getFileOperationsHelper().openFile(getFile());
+        mContainerActivity.getFileOperationsHelper().openFile(getFile(), null);
         finish();
     }
 
