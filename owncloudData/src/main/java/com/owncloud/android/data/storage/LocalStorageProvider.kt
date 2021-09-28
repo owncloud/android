@@ -25,81 +25,15 @@ package com.owncloud.android.data.storage
 
 import android.accounts.Account
 import android.annotation.SuppressLint
-import android.content.Context
 import android.net.Uri
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
-sealed class LocalStorageProvider(val rootFolderName: String) {
+sealed class LocalStorageProvider(private val rootFolderName: String) {
 
     abstract fun getPrimaryStorageDirectory(): File
-
-    class ScopedStorageProvider(
-        rootFolderName: String,
-        private val context: Context
-    ) : LocalStorageProvider(rootFolderName) {
-
-        override fun getPrimaryStorageDirectory(): File = context.filesDir
-
-        fun moveLegacyToScopedStorage() {
-            val timeInMillis = measureTimeMillis {
-                moveFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
-            }
-            Timber.d("MIGRATED FILES IN ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
-
-        }
-
-        fun copyLegacyToScopedStorage() {
-            val timeInMillis = measureTimeMillis {
-                copyFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
-            }
-            Timber.d("Migrated files in ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
-
-        }
-
-        private fun retrieveRootLegacyStorage(): File {
-            val legacyStorageProvider = LegacyStorageProvider(rootFolderName)
-            val rootLegacyStorage = File(legacyStorageProvider.getRootFolderPath())
-
-            val legacyStorageUsedBytes = sizeOfDirectory(rootLegacyStorage)
-            Timber.d(
-                "Root ${rootLegacyStorage.absolutePath} has ${rootLegacyStorage.listFiles()?.size} files and its size is $legacyStorageUsedBytes Bytes"
-            )
-
-            return rootLegacyStorage
-        }
-
-        private fun copyFileOrFolderToScopedStorage(file: File) {
-            Timber.d("Let's copy ${file.absolutePath} to scoped storage")
-            file.copyRecursively(File(getRootFolderPath()), overwrite = true)
-        }
-
-        private fun moveFileOrFolderToScopedStorage(file: File) {
-            copyFileOrFolderToScopedStorage(file)
-            Timber.d("Let's delete legacy storage ${file.absolutePath}")
-            file.deleteRecursively()
-        }
-    }
-
-    fun sizeOfDirectory(dir: File): Long {
-        if (dir.exists()) {
-            var result: Long = 0
-            val fileList = dir.listFiles() ?: arrayOf()
-            fileList.forEach { file ->
-                // Recursive call if it's a directory
-                result += if (file.isDirectory) {
-                    sizeOfDirectory(file)
-                } else {
-                    // Sum the file size in bytes
-                    file.length()
-                }
-            }
-            return result // return the file size
-        }
-        return 0
-    }
 
     /**
      * Return the root path of primary shared/external storage directory for this application.
@@ -179,6 +113,63 @@ sealed class LocalStorageProvider(val rootFolderName: String) {
      * that can be in the accountName since 0.1.190B
      */
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
+
+    fun moveLegacyToScopedStorage() {
+        val timeInMillis = measureTimeMillis {
+            moveFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
+        }
+        Timber.d("MIGRATED FILES IN ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
+
+    }
+
+    fun copyLegacyToScopedStorage() {
+        val timeInMillis = measureTimeMillis {
+            copyFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
+        }
+        Timber.d("Migrated files in ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
+
+    }
+
+    private fun retrieveRootLegacyStorage(): File {
+        val legacyStorageProvider = LegacyStorageProvider(rootFolderName)
+        val rootLegacyStorage = File(legacyStorageProvider.getRootFolderPath())
+
+        val legacyStorageUsedBytes = sizeOfDirectory(rootLegacyStorage)
+        Timber.d(
+            "Root ${rootLegacyStorage.absolutePath} has ${rootLegacyStorage.listFiles()?.size} files and its size is $legacyStorageUsedBytes Bytes"
+        )
+
+        return rootLegacyStorage
+    }
+
+    private fun copyFileOrFolderToScopedStorage(file: File) {
+        Timber.d("Let's copy ${file.absolutePath} to scoped storage")
+        file.copyRecursively(File(getRootFolderPath()), overwrite = true)
+    }
+
+    private fun moveFileOrFolderToScopedStorage(file: File) {
+        copyFileOrFolderToScopedStorage(file)
+        Timber.d("Let's delete legacy storage ${file.absolutePath}")
+        file.deleteRecursively()
+    }
+
+    fun sizeOfDirectory(dir: File): Long {
+        if (dir.exists()) {
+            var result: Long = 0
+            val fileList = dir.listFiles() ?: arrayOf()
+            fileList.forEach { file ->
+                // Recursive call if it's a directory
+                result += if (file.isDirectory) {
+                    sizeOfDirectory(file)
+                } else {
+                    // Sum the file size in bytes
+                    file.length()
+                }
+            }
+            return result // return the file size
+        }
+        return 0
+    }
 
     companion object {
         private const val LOGS_FOLDER_NAME = "/logs/"
