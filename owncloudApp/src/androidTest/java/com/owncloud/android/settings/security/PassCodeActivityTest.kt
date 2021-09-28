@@ -51,6 +51,7 @@ import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
 import io.mockk.every
 import io.mockk.mockk
 import nthChildOf
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -122,6 +123,16 @@ class PassCodeActivityTest {
             isDisplayed(true)
             withText(android.R.string.cancel)
         }
+    }
+
+    @Test
+    fun passcodeViewCancelButton() {
+        //Open Activity in passcode creation mode
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+
+        onView(withId(R.id.cancel)).perform(click())
+
+        assertEquals(activityRule.activityResult.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test
@@ -222,6 +233,16 @@ class PassCodeActivityTest {
             isDisplayed(true)
             withText(R.string.pass_code_remove_your_pass_code)
         }
+    }
+
+    @Test
+    fun deletePasscodeViewCancelButton() {
+        //Open Activity in passcode deletion mode
+        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
+
+        onView(withId(R.id.cancel)).perform(click())
+
+        assertEquals(activityRule.activityResult.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test

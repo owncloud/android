@@ -189,4 +189,15 @@ class PassCodeViewModelTest : ViewModelTest() {
         }
     }
 
+    @Test
+    fun `set migration required - ok`() {
+        val required = true
+
+        passCodeViewModel.setMigrationRequired(required)
+
+        verify(exactly = 1) {
+            preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, required)
+        }
+    }
+
 }

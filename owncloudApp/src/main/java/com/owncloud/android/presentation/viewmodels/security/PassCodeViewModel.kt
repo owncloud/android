@@ -61,6 +61,9 @@ class PassCodeViewModel(
         return if (numberOfPassCodeDigits >= 4) numberOfPassCodeDigits else 4
     }
 
+    fun setMigrationRequired(required: Boolean) =
+        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, required)
+
     private fun loadPinFromOldFormatIfPossible(): String? {
         var pinString = ""
         for (i in 1..4) {

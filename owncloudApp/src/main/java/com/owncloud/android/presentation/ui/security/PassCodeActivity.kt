@@ -218,10 +218,12 @@ class PassCodeActivity : BaseActivity() {
                 hideSoftKeyboard()
                 val passCode = passCodeViewModel.getPassCode()
                 if (passCode != null && passCode.length < passCodeViewModel.getNumberOfPassCodeDigits()) {
+                    passCodeViewModel.setMigrationRequired(true)
                     passCodeViewModel.removePassCode()
                     val intent = Intent(baseContext, PassCodeActivity::class.java)
                     intent.apply {
                         action = ACTION_REQUEST_WITH_RESULT
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
                         putExtra(EXTRAS_MIGRATION, true)
                     }
                     startActivity(intent)
@@ -249,12 +251,13 @@ class PassCodeActivity : BaseActivity() {
                 )
             }
         } else if (ACTION_REQUEST_WITH_RESULT == intent.action) {
-            /// enabling pass code
+            // enabling pass code
             if (!confirmingPassCode) {
                 passCodeError.visibility = View.INVISIBLE
                 requestPassCodeConfirmation()
             } else if (confirmPassCode()) {
-                /// confirmed: user typed the same pass code twice
+                // confirmed: user typed the same pass code twice
+                if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) passCodeViewModel.setMigrationRequired(false)
                 savePassCodeAndExit()
             } else {
                 val headerMessage = if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) getString(R.string.pass_code_configure_your_pass_code_migration, passCodeViewModel.getNumberOfPassCodeDigits())
@@ -419,6 +422,7 @@ class PassCodeActivity : BaseActivity() {
         // NOTE: PREFERENCE_SET_PASSCODE must have the same value as settings_security.xml-->android:key for passcode preference
         const val PREFERENCE_SET_PASSCODE = "set_pincode"
         const val PREFERENCE_PASSCODE = "PrefPinCode"
+        const val PREFERENCE_MIGRATION_REQUIRED = "PrefMigrationRequired"
 
         // NOTE: This is required to read the legacy pin code format
         const val PREFERENCE_PASSCODE_D = "PrefPinCode"
