@@ -27,7 +27,6 @@ import android.accounts.Account
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Environment
-import androidx.documentfile.provider.DocumentFile
 import java.io.File
 
 sealed class LocalStorageProvider(private val rootFolderName: String) {
@@ -72,12 +71,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     ): String = getRootFolderPath() + "/tmp/" + getEncodedAccountName(accountName)
 
     fun getLogsPath(): String = getRootFolderPath() + LOGS_FOLDER_NAME
-
-    fun getDefaultCameraSourcePath(): String {
-        return DocumentFile.fromFile(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-        ).createDirectory(CAMERA_FOLDER)?.uri.toString()
-    }
 
     /**
      * Optimistic number of bytes available on sd-card.
@@ -127,7 +120,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
 
     companion object {
-        private const val CAMERA_FOLDER = "/Camera"
         private const val LOGS_FOLDER_NAME = "/logs/"
     }
 }

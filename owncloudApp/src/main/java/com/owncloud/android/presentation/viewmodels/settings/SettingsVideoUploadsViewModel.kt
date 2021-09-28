@@ -37,7 +37,6 @@ import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
-import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.File
@@ -101,8 +100,6 @@ class SettingsVideoUploadsViewModel(
 
     fun getVideoUploadsSourcePath(): String? = _videoUploads.value?.sourcePath
 
-    fun getDefaultCameraSourcePath(): String = FileStorageUtils.getDefaultCameraSourcePath()
-
     fun handleSelectVideoUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
@@ -134,9 +131,7 @@ class SettingsVideoUploadsViewModel(
 
     fun handleSelectVideoUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
-        var previousSourcePath = _videoUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
-
-        previousSourcePath = previousSourcePath.trimEnd(File.separatorChar)
+        val previousSourcePath = _videoUploads.value?.sourcePath?.trimEnd(File.separatorChar)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             saveVideoUploadsConfigurationUseCase.execute(
