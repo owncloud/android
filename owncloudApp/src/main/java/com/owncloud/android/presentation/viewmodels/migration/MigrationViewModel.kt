@@ -77,10 +77,14 @@ class MigrationViewModel(
     }
 
     private fun updatePendingUploadsPath() {
+        val legacyStorageProvider = LocalStorageProvider.LegacyStorageProvider(rootFolder)
+        val legacyStorageDir = legacyStorageProvider.getRootFolderPath()
         uploadsStorageManager.clearSuccessfulUploads()
         val storedUploads: Array<OCUpload> = uploadsStorageManager.allStoredUploads
         val uploadsWithUpdatedPath =
-            storedUploads.map { it.apply { localPath = scopedStorageProvider.getTemporalPath(it.accountName) + it.remotePath } }
+            storedUploads.map {
+                it.apply { localPath = localPath.replace(legacyStorageDir, scopedStorageProvider.getRootFolderPath()) }
+            }
         uploadsWithUpdatedPath.forEach { uploadsStorageManager.updateUpload(it) }
     }
 
