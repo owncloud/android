@@ -65,6 +65,7 @@ class FolderBackupLocalDataSourceImpl(
             sourcePath = sourcePath,
             uploadPath = uploadPath,
             wifiOnly = wifiOnly,
+            chargingOnly = chargingOnly,
             lastSyncTimestamp = lastSyncTimestamp,
             name = name
         )
@@ -76,6 +77,7 @@ class FolderBackupLocalDataSourceImpl(
             sourcePath = sourcePath,
             uploadPath = uploadPath,
             wifiOnly = wifiOnly,
+            chargingOnly = chargingOnly,
             name = name,
             lastSyncTimestamp = lastSyncTimestamp
         )

@@ -15,6 +15,7 @@ Summary
 * Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
+* Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
 
 Details
 -------
@@ -77,6 +78,15 @@ Details
 
    https://github.com/owncloud/android/issues/3328
    https://github.com/owncloud/android/pull/3337
+
+* Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
+
+   A new option has been added in the auto upload pictures/videos screen, so that now it's possible
+   to upload pictures or videos only when charging.
+
+   https://github.com/owncloud/android/issues/465
+   https://github.com/owncloud/android/issues/3315
+   https://github.com/owncloud/android/pull/3385
 
 Changelog for ownCloud Android Client [2.18.1] (2021-07-20)
 =======================================

@@ -150,7 +150,8 @@ class CameraUploadsWorker(
                 behavior = folderBackUpConfiguration.behavior.toString(),
                 accountName = folderBackUpConfiguration.accountName,
                 uploadId = uploadId,
-                wifiOnly = folderBackUpConfiguration.wifiOnly
+                wifiOnly = folderBackUpConfiguration.wifiOnly,
+                chargingOnly = folderBackUpConfiguration.chargingOnly
             )
         }
         updateTimestamp(folderBackUpConfiguration, syncType)
@@ -249,7 +250,8 @@ class CameraUploadsWorker(
         behavior: String,
         accountName: String,
         uploadId: Long,
-        wifiOnly: Boolean
+        wifiOnly: Boolean,
+        chargingOnly: Boolean
     ) {
         val lastModifiedInSeconds = (lastModified / 1000L).toString()
 
@@ -261,7 +263,8 @@ class CameraUploadsWorker(
                 behavior = behavior,
                 uploadPath = uploadPath,
                 uploadIdInStorageManager = uploadId,
-                wifiOnly = wifiOnly
+                wifiOnly = wifiOnly,
+                chargingOnly = chargingOnly
             )
         )
     }

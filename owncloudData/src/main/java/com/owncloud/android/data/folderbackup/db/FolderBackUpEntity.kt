@@ -30,6 +30,7 @@ data class FolderBackUpEntity(
     val sourcePath: String,
     val uploadPath: String,
     val wifiOnly: Boolean,
+    val chargingOnly: Boolean,
     @ColumnInfo(name = folderBackUpEntityNameField) val name: String,
     val lastSyncTimestamp: Long,
 ) {

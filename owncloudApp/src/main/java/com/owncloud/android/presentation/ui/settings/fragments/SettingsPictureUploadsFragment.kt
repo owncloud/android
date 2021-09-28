@@ -37,6 +37,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_CHARGING_ONLY
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_ENABLED
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_LAST_SYNC
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
@@ -58,6 +59,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     private var prefEnablePictureUploads: SwitchPreferenceCompat? = null
     private var prefPictureUploadsPath: Preference? = null
     private var prefPictureUploadsOnWifi: CheckBoxPreference? = null
+    private var prefPictureUploadsOnCharging: CheckBoxPreference? = null
     private var prefPictureUploadsSourcePath: Preference? = null
     private var prefPictureUploadsBehaviour: ListPreference? = null
     private var prefPictureUploadsAccount: ListPreference? = null
@@ -86,6 +88,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefEnablePictureUploads = findPreference(PREF__CAMERA_PICTURE_UPLOADS_ENABLED)
         prefPictureUploadsPath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_PATH)
         prefPictureUploadsOnWifi = findPreference(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY)
+        prefPictureUploadsOnCharging = findPreference(PREF__CAMERA_PICTURE_UPLOADS_CHARGING_ONLY)
         prefPictureUploadsSourcePath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE)
         prefPictureUploadsLastSync = findPreference(PREF__CAMERA_PICTURE_UPLOADS_LAST_SYNC)
         prefPictureUploadsBehaviour = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)?.apply {
@@ -117,6 +120,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                 prefPictureUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
                 prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                 prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
+                prefPictureUploadsOnCharging?.isChecked = it.chargingOnly
                 prefPictureUploadsBehaviour?.value = it.behavior.name
                 prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
             } ?: resetFields()
@@ -186,6 +190,12 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             newValue
         }
 
+        prefPictureUploadsOnCharging?.setOnPreferenceChangeListener { _, newValue ->
+            newValue as Boolean
+            picturesViewModel.useChargingOnly(newValue)
+            newValue
+        }
+
         prefPictureUploadsAccount?.setOnPreferenceChangeListener { _, newValue ->
             newValue as String
             picturesViewModel.handleSelectAccount(newValue)
@@ -208,6 +218,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefEnablePictureUploads?.isChecked = value
         prefPictureUploadsPath?.isEnabled = value
         prefPictureUploadsOnWifi?.isEnabled = value
+        prefPictureUploadsOnCharging?.isEnabled = value
         prefPictureUploadsSourcePath?.isEnabled = value
         prefPictureUploadsBehaviour?.isEnabled = value
         prefPictureUploadsAccount?.isEnabled = value
@@ -219,6 +230,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsPath?.summary = null
         prefPictureUploadsSourcePath?.summary = null
         prefPictureUploadsOnWifi?.isChecked = false
+        prefPictureUploadsOnCharging?.isChecked = false
         prefPictureUploadsBehaviour?.value = FolderBackUpConfiguration.Behavior.COPY.name
         prefPictureUploadsLastSync?.summary = null
     }
