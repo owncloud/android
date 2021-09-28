@@ -35,6 +35,7 @@ import com.owncloud.android.data.preferences.datasources.implementation.SharedPr
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.storage.ScopedStorageProvider
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource
 import org.koin.android.ext.koin.androidContext
@@ -49,7 +50,7 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
 
     single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
-    single<LocalStorageProvider> { LocalStorageProvider.ScopedStorageProvider(dataFolder, androidContext()) }
+    single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }

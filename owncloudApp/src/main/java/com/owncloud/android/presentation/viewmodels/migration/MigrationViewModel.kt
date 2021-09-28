@@ -40,7 +40,7 @@ import java.io.File
  */
 class MigrationViewModel(
     private val rootFolder: String,
-    private val scopedStorageProvider: LocalStorageProvider.ScopedStorageProvider,
+    private val localStorageProvider: LocalStorageProvider,
     private val preferencesProvider: SharedPreferencesProvider,
     private val uploadsStorageManager: UploadsStorageManager,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
@@ -55,12 +55,12 @@ class MigrationViewModel(
 
     private fun getLegacyStorageSizeInBytes(): Long {
         val legacyStorageDirectory = File(LegacyStorageProvider(rootFolder).getRootFolderPath())
-        return scopedStorageProvider.sizeOfDirectory(legacyStorageDirectory)
+        return localStorageProvider.sizeOfDirectory(legacyStorageDirectory)
     }
 
     fun moveLegacyStorageToScopedStorage() {
         viewModelScope.launch(coroutineDispatcherProvider.io) {
-            scopedStorageProvider.moveLegacyToScopedStorage()
+            localStorageProvider.moveLegacyToScopedStorage()
             updatePendingUploadsPath()
             moveToNextState()
         }
@@ -68,7 +68,7 @@ class MigrationViewModel(
 
     fun copyLegacyStorageToScopedStorage() {
         viewModelScope.launch(coroutineDispatcherProvider.io) {
-            scopedStorageProvider.copyLegacyToScopedStorage()
+            localStorageProvider.copyLegacyToScopedStorage()
             moveToNextState()
         }
     }
@@ -84,7 +84,7 @@ class MigrationViewModel(
         val storedUploads: Array<OCUpload> = uploadsStorageManager.allStoredUploads
         val uploadsWithUpdatedPath =
             storedUploads.map {
-                it.apply { localPath = localPath.replace(legacyStorageDir, scopedStorageProvider.getRootFolderPath()) }
+                it.apply { localPath = localPath.replace(legacyStorageDir, localStorageProvider.getRootFolderPath()) }
             }
         uploadsWithUpdatedPath.forEach { uploadsStorageManager.updateUpload(it) }
     }

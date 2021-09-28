@@ -29,6 +29,7 @@ import android.annotation.SuppressLint;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.data.storage.LocalStorageProvider;
+import com.owncloud.android.data.storage.ScopedStorageProvider;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import kotlin.Lazy;
@@ -56,7 +57,7 @@ public class FileStorageUtils {
     // Let's use the LocalStorageProvider from now on.
     // It is in the data module, and it will be beneficial for new architecture.
     private static LocalStorageProvider getLocalStorageProvider() {
-        @NotNull Lazy<LocalStorageProvider.ScopedStorageProvider> localStorageProvider = inject(LocalStorageProvider.ScopedStorageProvider.class);
+        @NotNull Lazy<ScopedStorageProvider> localStorageProvider = inject(ScopedStorageProvider.class);
         return localStorageProvider.getValue();
     }
 
