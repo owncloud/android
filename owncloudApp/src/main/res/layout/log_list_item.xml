@@ -22,8 +22,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/standard_half_padding">
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/standard_margin"
+    android:paddingTop="@dimen/standard_half_padding"
+    android:paddingEnd="@dimen/standard_half_padding"
+    android:paddingBottom="@dimen/standard_half_padding">
 
     <TextView
         android:id="@+id/textView_title_activity_logs_list"
@@ -31,19 +34,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/standard_half_padding"
+        android:includeFontPadding="false"
         app:layout_constraintEnd_toStartOf="@id/imageView_share_activity_logs_list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem"
-        android:includeFontPadding="false"/>
+        tools:text="@tools:sample/lorem" />
 
     <TextView
         android:id="@+id/textView_subtitle_activity_logs_list"
         style="@style/TextAppearance.AppCompat.Caption"
         android:layout_width="0dp"
-        android:includeFontPadding="false"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/standard_half_padding"
+        android:includeFontPadding="false"
         app:layout_constraintEnd_toStartOf="@id/imageView_share_activity_logs_list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView_title_activity_logs_list"
@@ -53,7 +56,18 @@
         android:id="@+id/imageView_share_activity_logs_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/shared_via_users"
+        android:layout_marginEnd="@dimen/standard_margin"
+        android:src="@drawable/ic_share_grey"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_subtitle_activity_logs_list"
+        app:layout_constraintRight_toLeftOf="@id/imageView_delete_activity_logs_list"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/imageView_delete_activity_logs_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_delete_grey"
         app:layout_constraintBottom_toBottomOf="@+id/textView_subtitle_activity_logs_list"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

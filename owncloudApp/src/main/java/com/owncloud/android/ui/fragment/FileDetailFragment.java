@@ -306,7 +306,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                     Timber.d("%s : File must be downloaded", getFile().getRemotePath());
                     ((FileDisplayActivity) mContainerActivity).startDownloadForSending(getFile());
                 } else {
-                    mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
+                    mContainerActivity.getFileOperationsHelper().sendFile(getFile(),null);
                 }
                 return true;
             }

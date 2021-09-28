@@ -1505,7 +1505,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun sendDownloadedFile() {
-        fileOperationsHelper.sendDownloadedFile(waitingToSend)
+        fileOperationsHelper.sendFile(waitingToSend,null)
         waitingToSend = null
     }
 

@@ -376,7 +376,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             }
             case R.id.action_send_file: {
                 releasePlayer();
-                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
+                mContainerActivity.getFileOperationsHelper().sendFile(getFile(),null);
                 return true;
             }
             case R.id.action_sync_file: {

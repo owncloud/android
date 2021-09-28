@@ -22,25 +22,38 @@ package com.owncloud.android.presentation.ui.logging
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.R
 import com.owncloud.android.databinding.LogsListActivityBinding
 import com.owncloud.android.presentation.adapters.logging.RecyclerViewLogsAdapter
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
+import com.owncloud.android.ui.activity.FileActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 
-class LogsListActivity : AppCompatActivity() {
+class LogsListActivity : FileActivity() {
 
     private val viewModel by viewModel<LogListViewModel>()
-    private val recyclerViewLogsAdapter = RecyclerViewLogsAdapter()
 
     private var _binding: LogsListActivityBinding? = null
     val binding get() = _binding!!
+
+    private val recyclerViewLogsAdapter = RecyclerViewLogsAdapter(object : RecyclerViewLogsAdapter.Listener {
+        override fun share(file: File) {
+            fileOperationsHelper.sendFile(null, file)
+        }
+
+        override fun delete(file: File) {
+            file.delete()
+            setData()
+        }
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +90,7 @@ class LogsListActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
             adapter = recyclerViewLogsAdapter
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
         setData()
     }
@@ -89,8 +103,13 @@ class LogsListActivity : AppCompatActivity() {
     }
 
     private fun setData() {
+        val items = viewModel.getData()
+
+        binding.recyclerViewActivityLogsList.visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
+        binding.textViewNoLogs.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+
         recyclerViewLogsAdapter.apply {
-            setData(viewModel.getData())
+            setData(items)
         }
     }
 }

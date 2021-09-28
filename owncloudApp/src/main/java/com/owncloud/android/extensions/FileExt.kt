@@ -20,7 +20,17 @@
 
 package com.owncloud.android.extensions
 
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
+import android.os.Build
+import androidx.core.content.FileProvider
+import com.owncloud.android.R
+import com.owncloud.android.lib.common.network.WebdavUtils
+import timber.log.Timber
 import java.io.File
+
+
 
 fun File.sizeInBytes(): Int = if (!exists()) 0 else length().toInt()
 fun File.sizeInKb() = sizeInBytes() / 1024
@@ -30,9 +40,38 @@ fun File.getSize(): String {
     return if (sizeInBytes() < 1024) {
         "${sizeInBytes()} bytes"
     } else if (sizeInBytes() > 1024 && sizeInKb() < 1024) {
-        "${sizeInKb()} Kb"
+        "${sizeInKb()} KB"
     } else {
-        "${sizeInMb()} Mb"
+        "${sizeInMb()} MB"
     }
+}
+
+fun File.getExposedFileUri(context: Context, localPath: String): Uri? {
+    var exposedFileUri: Uri? = null
+
+    if (localPath.isEmpty()) {
+        return null
+    }
+
+    if (exposedFileUri == null) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            // TODO - use FileProvider with any Android version, with deeper testing -> 2.2.0
+            exposedFileUri = Uri.parse(
+                ContentResolver.SCHEME_FILE + "://" + WebdavUtils.encodePath(localPath)
+            )
+        } else {
+            // Use the FileProvider to get a content URI
+            try {
+                exposedFileUri = FileProvider.getUriForFile(
+                    context,
+                    context.getString(R.string.file_provider_authority),
+                    File(localPath)
+                )
+            } catch (e: IllegalArgumentException) {
+                Timber.e(e, "File can't be exported")
+            }
+        }
+    }
+    return exposedFileUri
 }
 

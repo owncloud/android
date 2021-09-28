@@ -35,6 +35,7 @@ import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
+import com.owncloud.android.extensions.FileExtKt;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
@@ -42,8 +43,10 @@ import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import com.owncloud.android.utils.MimetypeIconUtil;
 import timber.log.Timber;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
@@ -180,17 +183,32 @@ public class FileOperationsHelper {
 
     }
 
-    public void sendDownloadedFile(OCFile file) {
-        if (file != null) {
-            Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+    private Intent makeIntent(OCFile oCfile, File file) {
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+
+        if (oCfile != null && file == null) {
             // set MimeType
-            sendIntent.setType(file.getMimetype());
+            sendIntent.setType(oCfile.getMimetype());
             sendIntent.putExtra(
                     Intent.EXTRA_STREAM,
-                    file.getExposedFileUri(mFileActivity)
+                    oCfile.getExposedFileUri(mFileActivity)
             );
-            sendIntent.putExtra(Intent.ACTION_SEND, true);      // Send Action
+        } else {
+            // set MimeType
+            sendIntent.setType(MimetypeIconUtil.getBestMimeTypeByFilename(file.getName()));
+            sendIntent.putExtra(
+                    Intent.EXTRA_STREAM,
+                    FileExtKt.getExposedFileUri(file, mFileActivity, file.getPath())
 
+            );
+        }
+        sendIntent.putExtra(Intent.ACTION_SEND, true);      // Send Action
+        return sendIntent;
+    }
+
+    public void sendFile(OCFile ocFile, File file) {
+        if (ocFile != null || file != null) {
+            Intent sendIntent = makeIntent(ocFile, file);
             // Show dialog, without the own app
             String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
 
@@ -208,7 +226,7 @@ public class FileOperationsHelper {
                 chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
             }
         } else {
-            Timber.e("Trying to send a NULL OCFile");
+            Timber.e("Trying to send a NULL file");
         }
     }
 

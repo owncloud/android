@@ -31,7 +31,9 @@ import com.owncloud.android.extensions.getSize
 import com.owncloud.android.utils.LoggingDiffUtil
 import java.io.File
 
-class RecyclerViewLogsAdapter : RecyclerView.Adapter<RecyclerViewLogsAdapter.ViewHolder>() {
+class RecyclerViewLogsAdapter(
+    private val listener: Listener
+) : RecyclerView.Adapter<RecyclerViewLogsAdapter.ViewHolder>() {
 
     private val logsList = ArrayList<File>()
 
@@ -46,6 +48,12 @@ class RecyclerViewLogsAdapter : RecyclerView.Adapter<RecyclerViewLogsAdapter.Vie
         holder.binding.apply {
             textViewTitleActivityLogsList.text = log.name
             textViewSubtitleActivityLogsList.text = log.getSize()
+            imageViewShareActivityLogsList.setOnClickListener {
+                listener.share(log)
+            }
+            imageViewDeleteActivityLogsList.setOnClickListener {
+                listener.delete(log)
+            }
         }
     }
 
@@ -61,5 +69,10 @@ class RecyclerViewLogsAdapter : RecyclerView.Adapter<RecyclerViewLogsAdapter.Vie
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = LogListItemBinding.bind(itemView)
+    }
+
+    interface Listener {
+        fun share(file: File)
+        fun delete(file: File)
     }
 }
