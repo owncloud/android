@@ -27,7 +27,7 @@ import androidx.fragment.app.Fragment
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.storage.LegacyStorageProvider
 import com.owncloud.android.presentation.viewmodels.migration.MigrationState
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -74,13 +74,13 @@ class StorageMigrationActivity : AppCompatActivity() {
         const val PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE = "MIGRATED_TO_SCOPED_STORAGE"
 
         private fun hasDataInLegacyStorage(): Boolean {
-            val legacyStorageProvider = LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder)
+            val legacyStorageProvider = LegacyStorageProvider(MainApp.dataFolder)
             val legacyStorageFolder = File(legacyStorageProvider.getRootFolderPath())
             return legacyStorageFolder.exists() && !legacyStorageFolder.listFiles().isNullOrEmpty()
         }
 
         private fun hasAccessToLegacyStorage(): Boolean {
-            val legacyStorageProvider = LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder)
+            val legacyStorageProvider = LegacyStorageProvider(MainApp.dataFolder)
             val legacyStorageFolder = File(legacyStorageProvider.getRootFolderPath())
             return legacyStorageFolder.canRead() && legacyStorageFolder.canWrite()
         }

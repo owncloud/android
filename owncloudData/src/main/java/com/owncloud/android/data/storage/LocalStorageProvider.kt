@@ -27,7 +27,6 @@ import android.accounts.Account
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import android.os.Environment
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -36,13 +35,6 @@ import kotlin.system.measureTimeMillis
 sealed class LocalStorageProvider(val rootFolderName: String) {
 
     abstract fun getPrimaryStorageDirectory(): File
-
-    class LegacyStorageProvider(
-        rootFolderName: String
-    ) : LocalStorageProvider(rootFolderName) {
-
-        override fun getPrimaryStorageDirectory(): File = Environment.getExternalStorageDirectory()
-    }
 
     class ScopedStorageProvider(
         rootFolderName: String,

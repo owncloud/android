@@ -25,6 +25,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.storage.LegacyStorageProvider
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
@@ -53,7 +54,7 @@ class MigrationViewModel(
     }
 
     private fun getLegacyStorageSizeInBytes(): Long {
-        val legacyStorageDirectory = File(LocalStorageProvider.LegacyStorageProvider(rootFolder).getRootFolderPath())
+        val legacyStorageDirectory = File(LegacyStorageProvider(rootFolder).getRootFolderPath())
         return scopedStorageProvider.sizeOfDirectory(legacyStorageDirectory)
     }
 
@@ -77,7 +78,7 @@ class MigrationViewModel(
     }
 
     private fun updatePendingUploadsPath() {
-        val legacyStorageProvider = LocalStorageProvider.LegacyStorageProvider(rootFolder)
+        val legacyStorageProvider = LegacyStorageProvider(rootFolder)
         val legacyStorageDir = legacyStorageProvider.getRootFolderPath()
         uploadsStorageManager.clearSuccessfulUploads()
         val storedUploads: Array<OCUpload> = uploadsStorageManager.allStoredUploads
