@@ -430,6 +430,7 @@ class PassCodeActivity : BaseActivity() {
         private const val KEY_PASSCODE_DIGITS = "PASSCODE_DIGITS"
         private const val KEY_CONFIRMING_PASSCODE = "CONFIRMING_PASSCODE"
 
-        const val EXTRAS_MIGRATION = "MIGRATION"
+        const val EXTRAS_MIGRATION = "PASSCODE_MIGRATION"
+        const val PASSCODE_MIN_LENGTH = 4
     }
 }

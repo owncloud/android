@@ -161,7 +161,7 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
 
         //Checking that the result returned is OK
-        assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
+        assertEquals(activityRule.activityResult.resultCode, Activity.RESULT_OK)
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }

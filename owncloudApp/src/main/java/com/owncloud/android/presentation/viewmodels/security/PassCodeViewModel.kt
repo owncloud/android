@@ -58,7 +58,7 @@ class PassCodeViewModel(
 
     fun getNumberOfPassCodeDigits(): Int {
         val numberOfPassCodeDigits = contextProvider.getInt(R.integer.passcode_digits)
-        return if (numberOfPassCodeDigits >= 4) numberOfPassCodeDigits else 4
+        return if (numberOfPassCodeDigits >= PassCodeActivity.PASSCODE_MIN_LENGTH) numberOfPassCodeDigits else PassCodeActivity.PASSCODE_MIN_LENGTH
     }
 
     fun setMigrationRequired(required: Boolean) =
