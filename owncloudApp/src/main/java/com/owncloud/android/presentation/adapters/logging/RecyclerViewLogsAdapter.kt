@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.adapters.logging
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,8 @@ import com.owncloud.android.utils.LoggingDiffUtil
 import java.io.File
 
 class RecyclerViewLogsAdapter(
-    private val listener: Listener
+    private val listener: Listener,
+    private val context: Context,
 ) : RecyclerView.Adapter<RecyclerViewLogsAdapter.ViewHolder>() {
 
     private val logsList = ArrayList<File>()
@@ -47,7 +49,7 @@ class RecyclerViewLogsAdapter(
         val log = logsList[position]
         holder.binding.apply {
             textViewTitleActivityLogsList.text = log.name
-            textViewSubtitleActivityLogsList.text = log.getSize()
+            textViewSubtitleActivityLogsList.text = log.getSize(context)
             imageViewShareActivityLogsList.setOnClickListener {
                 listener.share(log)
             }

@@ -27,26 +27,17 @@ import android.os.Build
 import androidx.core.content.FileProvider
 import com.owncloud.android.R
 import com.owncloud.android.lib.common.network.WebdavUtils
+import com.owncloud.android.utils.DisplayUtils
 import timber.log.Timber
 import java.io.File
 
+private fun File.sizeInBytes(): Long = if (!exists()) 0L else length()
 
-
-fun File.sizeInBytes(): Int = if (!exists()) 0 else length().toInt()
-fun File.sizeInKb() = sizeInBytes() / 1024
-fun File.sizeInMb() = sizeInKb() / 1024
-
-fun File.getSize(): String {
-    return if (sizeInBytes() < 1024) {
-        "${sizeInBytes()} bytes"
-    } else if (sizeInBytes() > 1024 && sizeInKb() < 1024) {
-        "${sizeInKb()} KB"
-    } else {
-        "${sizeInMb()} MB"
-    }
+fun File.getSize(context: Context): String {
+    return DisplayUtils.bytesToHumanReadable(sizeInBytes(), context)
 }
 
-fun File.getExposedFileUri(context: Context, localPath: String): Uri? {
+fun getExposedFileUri(context: Context, localPath: String): Uri? {
     var exposedFileUri: Uri? = null
 
     if (localPath.isEmpty()) {

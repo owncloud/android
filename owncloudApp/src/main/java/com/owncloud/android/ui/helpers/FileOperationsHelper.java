@@ -198,7 +198,7 @@ public class FileOperationsHelper {
             sendIntent.setType(MimetypeIconUtil.getBestMimeTypeByFilename(file.getName()));
             sendIntent.putExtra(
                     Intent.EXTRA_STREAM,
-                    FileExtKt.getExposedFileUri(file, mFileActivity, file.getPath())
+                    FileExtKt.getExposedFileUri(mFileActivity, file.getPath())
 
             );
         }

@@ -53,7 +53,7 @@ class LogsListActivity : FileActivity() {
             file.delete()
             setData()
         }
-    })
+    }, context = this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
