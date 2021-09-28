@@ -243,8 +243,4 @@ public class FileStorageUtils {
     public static void deleteUnusedUserDirs(Account[] remainingAccounts) {
         getLocalStorageProvider().deleteUnusedUserDirs(remainingAccounts);
     }
-
-    public static String getDefaultCameraSourcePath() {
-        return getLocalStorageProvider().getDefaultCameraSourcePath();
-    }
 }

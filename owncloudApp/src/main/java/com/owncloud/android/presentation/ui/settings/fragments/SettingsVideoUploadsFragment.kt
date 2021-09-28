@@ -162,10 +162,8 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         }
 
         prefVideoUploadsSourcePath?.setOnPreferenceClickListener {
-            var sourcePath = videosViewModel.getVideoUploadsSourcePath()
-                .takeUnless { it.isNullOrBlank() } ?: videosViewModel.getDefaultCameraSourcePath()
-            if (!sourcePath.endsWith(File.separator)) {
-                sourcePath += File.separator
+            val sourcePath = videosViewModel.getVideoUploadsSourcePath()?.let { currentSourcePath ->
+                currentSourcePath.takeUnless { it.endsWith(File.separator) } ?: currentSourcePath.plus(File.separator)
             }
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
