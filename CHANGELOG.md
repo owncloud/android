@@ -15,6 +15,7 @@ Summary
 * Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
+* Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
 
 Details
@@ -78,6 +79,15 @@ Details
 
    https://github.com/owncloud/android/issues/3328
    https://github.com/owncloud/android/pull/3337
+
+* Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
+
+   A new preference has been added to choose the interval in which the app will be unlocked after
+   having unlocked it once, making it more comfortable for those who access the app frequently and
+   have a security lock set.
+
+   https://github.com/owncloud/android/issues/3344
+   https://github.com/owncloud/android/pull/3375
 
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
 
