@@ -31,7 +31,7 @@ assignees: ''
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
  - [ ] [GIT] Merge master branch into stable, in owncloud/android-library
  - [ ] [GIT] Merge master branch into stable, in owncloud/android
- - [ ] [DOC] Update owncloud.org/download version numbers (notify rocketchat #marketing)
+ - [ ] [DOC] Update documentation with new stuff (notify rocketchat #documentation-internal in advance!)
 
 
 _____
