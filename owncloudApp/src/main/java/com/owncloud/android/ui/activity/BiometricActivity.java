@@ -56,6 +56,8 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
 
+import static com.owncloud.android.presentation.ui.security.PassCodeActivity.PASSCODE_MIN_LENGTH;
+
 public class BiometricActivity extends AppCompatActivity {
 
     private static final String ANDROID_KEY_STORE = "AndroidKeyStore";
@@ -133,7 +135,7 @@ public class BiometricActivity extends AppCompatActivity {
                 // In this line, null is only provisional until the rearchitecture of BiometricActivity
                 String passCode = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, null);
                 int passCodeDigits = getApplicationContext().getResources().getInteger(R.integer.passcode_digits);
-                if (passCodeDigits < 4) passCodeDigits = 4;
+                if (passCodeDigits < PASSCODE_MIN_LENGTH) passCodeDigits = PASSCODE_MIN_LENGTH;
                 if (passCode != null && passCode.length() < passCodeDigits) {
                     preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE);
                     preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);

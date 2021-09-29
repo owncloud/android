@@ -44,7 +44,7 @@ import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
-import com.owncloud.android.testutil.security.OC_EXAMPLE_PATTERN
+import com.owncloud.android.testutil.security.OC_PATTERN
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
@@ -226,7 +226,7 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_EXAMPLE_PATTERN),
+            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_PATTERN),
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
@@ -241,7 +241,7 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_EXAMPLE_PATTERN),
+            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_PATTERN),
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
@@ -439,7 +439,7 @@ class SettingsSecurityFragmentTest {
         every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Success()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_EXAMPLE_PATTERN),
+            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_PATTERN),
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
