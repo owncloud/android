@@ -35,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.extensions.ActivityExtKt;
+import com.owncloud.android.presentation.ui.security.BiometricActivity;
 import com.owncloud.android.presentation.ui.security.PassCodeActivity;
 import com.owncloud.android.presentation.ui.security.PatternActivity;
 import com.owncloud.android.utils.FileStorageUtils;

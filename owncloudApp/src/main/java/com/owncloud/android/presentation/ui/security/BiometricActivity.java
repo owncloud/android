@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.ui.activity;
+package com.owncloud.android.presentation.ui.security;
 
 import android.content.Intent;
 import android.os.Build;
@@ -34,11 +34,8 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 
 import com.owncloud.android.R;
-import com.owncloud.android.presentation.ui.security.PatternManager;
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
-import com.owncloud.android.presentation.ui.security.PassCodeActivity;
-import com.owncloud.android.presentation.ui.security.PassCodeManager;
 import timber.log.Timber;
 
 import javax.crypto.Cipher;

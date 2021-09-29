@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.authentication;
+package com.owncloud.android.presentation.ui.security;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,10 +33,6 @@ import androidx.annotation.RequiresApi;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
-import com.owncloud.android.presentation.ui.security.LockTimeout;
-import com.owncloud.android.presentation.ui.security.PassCodeManager;
-import com.owncloud.android.presentation.ui.security.PatternManager;
-import com.owncloud.android.ui.activity.BiometricActivity;
 
 import java.util.HashSet;
 import java.util.Set;

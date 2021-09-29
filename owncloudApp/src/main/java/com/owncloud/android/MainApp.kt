@@ -30,7 +30,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
-import com.owncloud.android.authentication.BiometricManager
+import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.presentation.ui.security.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
@@ -47,7 +47,7 @@ import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.providers.LogsProvider
-import com.owncloud.android.ui.activity.BiometricActivity
+import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
