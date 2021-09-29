@@ -63,7 +63,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
      */
     fun getTemporalPath(
         accountName: String?
-    ): String = getRootFolderPath() + "/tmp/" + getEncodedAccountName(accountName)
+    ): String = getRootFolderPath() + File.separator + TEMPORAL_FOLDER_NAME + File.separator + getEncodedAccountName(accountName)
 
     fun getLogsPath(): String = getRootFolderPath() + LOGS_FOLDER_NAME
 
@@ -81,21 +81,19 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     private fun getDanglingAccountDirs(remainingAccounts: Array<Account>): List<File> {
         val rootFolder = File(getRootFolderPath())
         val danglingDirs = mutableListOf<File>()
-        if (rootFolder.listFiles() != null) {
-            for (dir in rootFolder.listFiles()) {
-                var dirIsOk = false
-                if (dir.name.equals("tmp")) {
-                    dirIsOk = true
-                } else {
-                    for (a in remainingAccounts) {
-                        if (dir.name.equals(getEncodedAccountName(a.name))) {
-                            dirIsOk = true
-                        }
+        rootFolder.listFiles()?.forEach { dir ->
+            var dirIsOk = false
+            if (dir.name.equals(TEMPORAL_FOLDER_NAME)) {
+                dirIsOk = true
+            } else {
+                remainingAccounts.forEach { account ->
+                    if (dir.name.equals(getEncodedAccountName(account.name))) {
+                        dirIsOk = true
                     }
                 }
-                if (!dirIsOk) {
-                    danglingDirs.add(dir)
-                }
+            }
+            if (!dirIsOk) {
+                danglingDirs.add(dir)
             }
         }
         return danglingDirs
@@ -103,7 +101,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
 
     open fun deleteUnusedUserDirs(remainingAccounts: Array<Account>) {
         val danglingDirs = getDanglingAccountDirs(remainingAccounts)
-        for (dd in danglingDirs) {
+        danglingDirs.forEach { dd ->
             dd.deleteRecursively()
         }
     }
@@ -119,7 +117,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
             moveFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
         }
         Timber.d("MIGRATED FILES IN ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
-
     }
 
     fun copyLegacyToScopedStorage() {
@@ -127,7 +124,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
             copyFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
         }
         Timber.d("Migrated files in ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
-
     }
 
     private fun retrieveRootLegacyStorage(): File {
@@ -173,5 +169,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
 
     companion object {
         private const val LOGS_FOLDER_NAME = "/logs/"
+        private const val TEMPORAL_FOLDER_NAME = "tmp"
     }
 }
