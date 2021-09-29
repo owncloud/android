@@ -11,7 +11,7 @@ buildscript {
         appCompat = "1.2.0"
         sqliteVersion = "2.1.0"
         lifecycleLiveData = "2.3.1"
-        biometricVersion="1.0.1"
+        biometricVersion="1.1.0"
 
         // Kotlin
         kotlinVersion = "1.5.21"
