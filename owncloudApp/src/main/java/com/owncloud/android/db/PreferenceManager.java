@@ -26,7 +26,7 @@ package com.owncloud.android.db;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.owncloud.android.ui.activity.BiometricActivity;
+import com.owncloud.android.presentation.ui.security.BiometricActivity;
 import com.owncloud.android.utils.FileStorageUtils;
 
 /**
