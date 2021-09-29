@@ -19,10 +19,7 @@
 package com.owncloud.android.data.storage
 
 import android.content.Context
-import timber.log.Timber
 import java.io.File
-import java.util.concurrent.TimeUnit
-import kotlin.system.measureTimeMillis
 
 class ScopedStorageProvider(
     rootFolderName: String,
