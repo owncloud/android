@@ -42,6 +42,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Επιτρέψτε το άγγιγμα όταν η προβολή καλύπτεται από άλλο ορατό παράθυρο. Ενεργοποιήστε τη χρήση εφαρμογών φιλτραρίσματος φωτός.</string>
   <string name="confirmation_touches_with_other_windows_title">Είστε βέβαιοι ότι θέλετε να ενεργοποιήσετε αυτήν τη λειτουργία;</string>
   <string name="confirmation_touches_with_other_windows_message">Χρησιμοποιήστε αυτήν τη λειτουργία με δική σας ευθύνη, μια κακόβουλη εφαρμογή θα μπορούσε να προσπαθήσει ώστε να εκτελέσετε κάποιες ενέργειες, χωρίς να γνωρίζετε, χρησιμοποιώντας άλλες προβολές.</string>
+  <string name="prefs_subsection_video_uploads">Αυτόματη μεταφόρτωση βίντεο</string>
   <string name="prefs_camera_picture_upload">Μεταφορτώσεις φωτογραφιών</string>
   <string name="prefs_camera_picture_upload_summary">Αυτόματη μεταφόρτωση φωτογραφιών που ελήφθησαν από την κάμερα</string>
   <string name="prefs_camera_picture_upload_path_title">Διαδρομή μεταφόρτωσης εικόνων</string>
@@ -66,6 +67,8 @@
   <string name="prefs_pattern">Κλείδωμα με μοτίβο</string>
   <string name="prefs_enable_logging">Ενεργοποίηση καταγραφής</string>
   <string name="prefs_send_feedback">Αποστολή ανάδρασης</string>
+  <string name="prefs_app_version">Έκδοση εφαρμογής</string>
+  <string name="prefs_app_version_summary">%1$s %2$s έκδοση %3$s (%4$s)</string>
   <string name="pattern_enter_pattern">Παρακαλούμε εισάγετε το μοτίβο σας</string>
   <string name="pattern_configure_pattern">Εισαγωγή μοτίβου</string>
   <string name="pattern_remove_pattern">Αφαίρεση μοτίβου</string>
@@ -167,6 +170,8 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">Το όνομα αρχείου δεν θα πρέπει να έχει περισσότερους από %d χαρακτήρες</string>
   <string name="uploader_upload_text_filename_hint">Όνομα αρχείου</string>
   <string name="uploader_upload_camera_upload_files">Γίνεται μεταφόρτωση αρχείων από την κάμερα</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Αποτυχία μεταφορτώσεων κάμερας</string>
+  <string name="uploader_upload_picture_upload_error">Η διαδρομή πηγής μεταφόρτωσης εικόνας δεν είναι πλέον έγκυρη</string>
   <string name="uploader_upload_available_offline_files">Γίνεται μεταφόρτωση αρχείων για να είναι διαθέσιμα εκτός σύνδεσης</string>
   <string name="uploader_upload_requested_from_wifi_files">Γίνεται μεταφόρτωση των αιτούμενων αρχείων από το wifi</string>
   <string name="ssl_certificate_not_trusted">Το πιστοποιητικό του διακομιστή δεν είναι έμπιστο</string>
@@ -426,10 +431,13 @@
   <string name="file_list__footer__files">%1$d αρχεία</string>
   <string name="file_list__footer__files_and_folder">%1$d αρχεία, 1 φάκελος</string>
   <string name="file_list__footer__files_and_folders">%1$d αρχεία, %2$d φάκελοι</string>
+  <string name="prefs_picture_upload_account">Λογαριασμός για μεταφόρτωση φωτογραφιών</string>
+  <string name="prefs_video_upload_account">Λογαριασμός για μεταφόρτωση βίντεο</string>
   <string name="prefs_camera_upload_source_path_title">Φάκελος κάμερας (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">απαιτείται</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Το αρχικό αρχείο θα είναι</string>
   <string name="prefs_camera_upload_behaviour_title">Το αρχικό αρχείο θα είναι</string>
+  <string name="prefs_camera_upload_last_sync_title">Τελευταίος συγχρονισμός</string>
   <string name="upload_copy_files">Αντιγραφή αρχείου</string>
   <string name="upload_move_files">Μετακίνηση αρχείου</string>
   <string name="pref_behaviour_entries_keep_file">διατηρήθηκε στον αρχικό φάκελο</string>
@@ -536,4 +544,5 @@
   <string name="welcome_feature_5_text">Αναπαράγετε τα βίντεό σας χωρίς να κάνετε λήψη</string>
   <string name="no_borwser_installed_alert">Δεν είναι εγκατεστημένος περιηγητής. Παρακαλούμε εγκαταστήστε ένα περιηγητή έτσι ώστε να επιτρέπεται η ασφαλής σύνδεση.</string>
   <string name="common_not_found">δεν βρέθηκε</string>
+  <string name="synchronizing_account">Λογαριασμός συγχρονισμού</string>
 </resources>
