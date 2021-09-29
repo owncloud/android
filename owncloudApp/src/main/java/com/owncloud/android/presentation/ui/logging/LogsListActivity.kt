@@ -55,7 +55,7 @@ class LogsListActivity : FileActivity() {
         }
 
         override fun open(file: File) {
-            fileOperationsHelper.openFile(null, file)
+            fileOperationsHelper.openFile(file)
         }
     }, context = this)
 

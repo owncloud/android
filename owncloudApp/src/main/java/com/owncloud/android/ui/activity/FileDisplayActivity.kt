@@ -1076,7 +1076,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                                         fragmentReplaced = true
                                         startTextPreview(fileWaitingToPreview)
                                     }
-                                    else -> fileOperationsHelper.openFile(fileWaitingToPreview, null)
+                                    else -> fileOperationsHelper.openFile(fileWaitingToPreview)
                                 }
                             }
                             fileWaitingToPreview = null
@@ -1398,7 +1398,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
         val waitedForPreview = fileWaitingToPreview?.let { it == operation.localFile && it.isDown } ?: false
         if (!operation.transferWasRequested() and waitedForPreview) {
-            fileOperationsHelper.openFile(fileWaitingToPreview, null)
+            fileOperationsHelper.openFile(fileWaitingToPreview)
             fileWaitingToPreview = null
         }
 

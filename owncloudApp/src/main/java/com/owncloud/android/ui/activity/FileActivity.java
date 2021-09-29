@@ -118,7 +118,7 @@ public class FileActivity extends DrawerActivity
     /**
      * Loads the ownCloud {@link Account} and main {@link OCFile} to be handled by the instance of
      * the {@link FileActivity}.
-     *
+     * <p>
      * Grants that a valid ownCloud {@link Account} is associated to the instance, or that the user
      * is requested to create a new one.
      */
@@ -344,7 +344,7 @@ public class FileActivity extends DrawerActivity
     /**
      * Invalidates the credentials stored for the current OC account and requests new credentials to the user,
      * navigating to {@link LoginActivity}
-     *
+     * <p>
      * Equivalent to call requestCredentialsUpdate(null);
      */
     protected void requestCredentialsUpdate() {
