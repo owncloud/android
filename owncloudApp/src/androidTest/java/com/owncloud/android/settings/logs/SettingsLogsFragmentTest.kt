@@ -59,6 +59,7 @@ class SettingsLogsFragmentTest {
     private lateinit var prefEnableLogging: SwitchPreferenceCompat
     private lateinit var prefHttpLogs: CheckBoxPreference
     private lateinit var prefLogsView: Preference
+    private lateinit var prefLogsListActivity: Preference
 
     private lateinit var logsViewModel: SettingsLogsViewModel
     private lateinit var context: Context
@@ -99,6 +100,7 @@ class SettingsLogsFragmentTest {
             prefEnableLogging = fragment.findPreference(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING)!!
             prefHttpLogs = fragment.findPreference(SettingsLogsFragment.PREFERENCE_LOG_HTTP)!!
             prefLogsView = fragment.findPreference(SettingsLogsFragment.PREFERENCE_LOGGER)!!
+            prefLogsListActivity = fragment.findPreference(SettingsLogsFragment.PREFERENCE_LOGS_LIST)!!
         }
     }
 
@@ -125,6 +127,14 @@ class SettingsLogsFragmentTest {
             visible = true,
             enabled = false
         )
+
+        prefLogsListActivity.verifyPreference(
+            keyPref = SettingsLogsFragment.PREFERENCE_LOGS_LIST,
+            titlePref = context.getString(R.string.prefs_open_logs_list_view),
+            visible = true,
+            enabled = false,
+        )
+
     }
 
     @Test
@@ -149,6 +159,13 @@ class SettingsLogsFragmentTest {
             titlePref = context.getString(R.string.prefs_open_logs_view),
             visible = true,
             enabled = true
+        )
+
+        prefLogsListActivity.verifyPreference(
+            keyPref = SettingsLogsFragment.PREFERENCE_LOGS_LIST,
+            titlePref = context.getString(R.string.prefs_open_logs_list_view),
+            visible = true,
+            enabled = true,
         )
     }
 
