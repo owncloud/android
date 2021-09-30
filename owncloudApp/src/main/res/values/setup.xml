@@ -105,4 +105,7 @@
     <!-- Header images -->
     <bool name="use_drawer_background_header">true</bool>
     <bool name="use_drawer_logo">true</bool>
+
+    <!-- Number of passcode digits -->
+    <integer name="passcode_digits">4</integer>
 </resources>

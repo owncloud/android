@@ -42,6 +42,9 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityF
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.ui.activity.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
+import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
+import com.owncloud.android.testutil.security.OC_PATTERN
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
@@ -73,14 +76,14 @@ class SettingsSecurityFragmentTest {
     private lateinit var biometricManager: BiometricManager
 
     private lateinit var securityViewModel: SettingsSecurityViewModel
+    private lateinit var passCodeViewModel: PassCodeViewModel
     private lateinit var context: Context
-
-    private val patternValue = "1234"
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         securityViewModel = mockk(relaxUnitFun = true)
+        passCodeViewModel = mockk(relaxUnitFun = true)
         mockkStatic(BiometricManager::class)
         biometricManager = mockk(relaxUnitFun = true)
 
@@ -95,9 +98,15 @@ class SettingsSecurityFragmentTest {
                     viewModel {
                         securityViewModel
                     }
+                    viewModel {
+                        passCodeViewModel
+                    }
                 }
             )
         }
+
+        every { passCodeViewModel.getPassCode() } returns OC_PASSCODE_4_DIGITS
+        every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
 
         Intents.init()
     }
@@ -217,7 +226,7 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
+            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_PATTERN),
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
@@ -232,7 +241,7 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
+            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_PATTERN),
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
@@ -430,7 +439,7 @@ class SettingsSecurityFragmentTest {
         every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Success()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
+            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_PATTERN),
             action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())

@@ -41,6 +41,8 @@ object PassCodeManager {
     private const val PASS_CODE_TIMEOUT = 1_000
 
     fun onActivityStarted(activity: Activity) {
+        val appPrefs = PreferenceManager.getDefaultSharedPreferences(appContext)
+
         if (!exemptOfPasscodeActivites.contains(activity.javaClass) && passCodeShouldBeRequested()) {
 
             // Do not ask for passcode if biometric is enabled
@@ -50,6 +52,13 @@ object PassCodeManager {
             }
 
             checkPasscode(activity)
+        } else if (appPrefs.getBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, false)) {
+            val intent = Intent(appContext, PassCodeActivity::class.java).apply {
+                action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+                flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)
+            }
+            activity.startActivity(intent)
         }
 
         visibleActivitiesCounter++ // keep it AFTER passCodeShouldBeRequested was checked

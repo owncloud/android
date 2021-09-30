@@ -58,5 +58,5 @@ val viewModelModule = module {
     viewModel { SettingsPictureUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsVideoUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
-    viewModel { PassCodeViewModel(get()) }
+    viewModel { PassCodeViewModel(get(), get()) }
 }

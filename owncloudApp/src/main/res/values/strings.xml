@@ -254,6 +254,7 @@
 
     <string name="pass_code_enter_pass_code">Please insert your passcode</string>
     <string name="pass_code_configure_your_pass_code">Enter your passcode</string>
+    <string name="pass_code_configure_your_pass_code_migration">Enter a new %1$d-digit passcode</string>
     <string name="pass_code_configure_your_pass_code_explanation">The passcode will be requested every time the app is started</string>
     <string name="pass_code_reenter_your_pass_code">Please reenter your passcode</string>
     <string name="pass_code_remove_your_pass_code">Remove your passcode</string>

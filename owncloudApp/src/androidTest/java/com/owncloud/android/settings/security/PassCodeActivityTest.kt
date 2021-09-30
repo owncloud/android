@@ -29,7 +29,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
@@ -39,16 +38,18 @@ import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
+import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
+import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
 import io.mockk.every
 import io.mockk.mockk
 import nthChildOf
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -56,7 +57,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import withChildViewCount
 
-class OCSettingsPasscodeTest {
+class PassCodeActivityTest {
 
     @Rule
     @JvmField
@@ -68,7 +69,6 @@ class OCSettingsPasscodeTest {
 
     private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
     private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
-    private val passCodeToSave = "111111"
 
     private lateinit var passCodeViewModel: PassCodeViewModel
 
@@ -88,6 +88,9 @@ class OCSettingsPasscodeTest {
                 }
             )
         }
+
+        every { passCodeViewModel.getPassCode() } returns OC_PASSCODE_4_DIGITS
+        every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
     }
 
     @After
@@ -112,12 +115,22 @@ class OCSettingsPasscodeTest {
 
         // Check if required amount of input fields are actually displayed
         onView(withId(R.id.passCodeTxtLayout)).check(matches(isDisplayed()))
-        onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(PassCodeActivity.numberOfPassInputs, withId(R.id.passCodeEditText))))
+        onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(passCodeViewModel.getNumberOfPassCodeDigits(), withId(R.id.passCodeEditText))))
 
         with(R.id.cancel) {
             isDisplayed(true)
             withText(android.R.string.cancel)
         }
+    }
+
+    @Test
+    fun passcodeViewCancelButton() {
+        //Open Activity in passcode creation mode
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+
+        onView(withId(R.id.cancel)).perform(click())
+
+        assertEquals(activityRule.activityResult.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test
@@ -146,7 +159,7 @@ class OCSettingsPasscodeTest {
         typePasscode(defaultPassCode)
 
         //Checking that the result returned is OK
-        assertThat(activityRule.activityResult, hasResultCode(Activity.RESULT_OK))
+        assertEquals(activityRule.activityResult.resultCode, Activity.RESULT_OK)
 
         assertTrue(errorMessage, activityRule.activity.isFinishing)
     }
@@ -221,11 +234,21 @@ class OCSettingsPasscodeTest {
     }
 
     @Test
+    fun deletePasscodeViewCancelButton() {
+        //Open Activity in passcode deletion mode
+        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
+
+        onView(withId(R.id.cancel)).perform(click())
+
+        assertEquals(activityRule.activityResult.resultCode, Activity.RESULT_CANCELED)
+    }
+
+    @Test
     fun deletePasscodeCorrect() {
         every { passCodeViewModel.checkPassCodeIsValid(any()) } returns true
 
         //Save a passcode in Preferences
-        storePasscode(passCodeToSave)
+        storePasscode(OC_PASSCODE_6_DIGITS)
 
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
@@ -241,7 +264,7 @@ class OCSettingsPasscodeTest {
         every { passCodeViewModel.checkPassCodeIsValid(any()) } returns false
 
         //Save a passcode in Preferences
-        storePasscode(passCodeToSave)
+        storePasscode(OC_PASSCODE_6_DIGITS)
 
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
@@ -265,14 +288,14 @@ class OCSettingsPasscodeTest {
     }
 
     private fun typePasscode(digits: Array<Char>) {
-        for (i in 0 until PassCodeActivity.numberOfPassInputs)
+        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits())
             onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText(digits[i].toString()))
     }
 
-    private fun storePasscode(passcode: String = passCodeToSave) {
+    private fun storePasscode(passcode: String = OC_PASSCODE_6_DIGITS) {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
 
-        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, PassCodeActivity.numberOfPassInputs))
+        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, passCodeViewModel.getNumberOfPassCodeDigits()))
         appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         appPrefs.apply()
     }

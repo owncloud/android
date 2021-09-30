@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2021 ownCloud GmbH.
@@ -16,18 +15,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.providers
+package com.owncloud.android.testutil.security
 
-import android.content.Context
-
-interface ContextProvider {
-
-    fun getBoolean(id: Int): Boolean
-    fun getString(id: Int): String
-    fun getInt(id: Int): Int
-    fun getContext(): Context
-    fun isConnected(): Boolean
-}
+const val OC_PASSCODE_4_DIGITS = "1111"
+const val OC_PASSCODE_6_DIGITS = "111111"

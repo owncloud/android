@@ -21,12 +21,17 @@
 package com.owncloud.android.presentation.viewmodels.security
 
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.providers.ContextProvider
 
 class PassCodeViewModel(
-    private val preferencesProvider: SharedPreferencesProvider
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val contextProvider: ContextProvider
 ) : ViewModel() {
+
+    fun getPassCode() = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
 
     fun setPassCode(passcode: String) {
         preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
@@ -39,7 +44,7 @@ class PassCodeViewModel(
     }
 
     fun checkPassCodeIsValid(passCodeDigits: Array<String?>): Boolean {
-        val passCodeString = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+        val passCodeString = getPassCode()
         if (passCodeString.isNullOrEmpty()) return false
         var isValid = true
         var i = 0
@@ -51,11 +56,20 @@ class PassCodeViewModel(
         return isValid
     }
 
-    private fun loadPinFromOldFormatIfPossible(): String {
-        var pinString = ""
-        for (i in 1..4)
-            pinString += preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, null)
+    fun getNumberOfPassCodeDigits(): Int {
+        val numberOfPassCodeDigits = contextProvider.getInt(R.integer.passcode_digits)
+        return maxOf(numberOfPassCodeDigits, PassCodeActivity.PASSCODE_MIN_LENGTH)
+    }
 
-        return pinString
+    fun setMigrationRequired(required: Boolean) =
+        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, required)
+
+    private fun loadPinFromOldFormatIfPossible(): String? {
+        var pinString = ""
+        for (i in 1..4) {
+            val pinChar = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, null)
+            pinChar?.let { pinString += pinChar }
+        }
+        return if (pinString.isEmpty()) null else pinString
     }
 }
