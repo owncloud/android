@@ -53,11 +53,16 @@
   <string name="prefs_camera_picture_upload">Ngarkime fotosh</string>
   <string name="prefs_camera_picture_upload_summary">Fotot e bëra nga kamera ngarkoji vetvetiu</string>
   <string name="prefs_camera_picture_upload_path_title">Shteg ngarkimesh fotosh</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Kushte për kryerjen e ngarkimeve</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">Do të vihen në punë ngarkime, kur plotësohen krejt mundësitë e përzgjedhura</string>
   <string name="prefs_camera_picture_upload_on_wifi">Fotot ngarkoji vetëm përmes wifi-it</string>
+  <string name="prefs_camera_picture_upload_on_charging">Ngarko foto vetëm kur ngarkohet bateria</string>
+  <string name="prefs_camera_upload_on_charging_summary">Aktivizoni vetëm ngarkime përmes wifi-i, që të aktivizohet kjo mundësi</string>
   <string name="prefs_camera_video_upload">Ngarkime videosh</string>
   <string name="prefs_camera_video_upload_summary">Videot e bëra nga kamera ngarkoji vetvetiu</string>
   <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="prefs_camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
+  <string name="prefs_camera_video_upload_on_charging">Ngarko video vetëm kur ngarkohet bateria</string>
   <string name="prefs_log_title">Aktivizo regjistrimet</string>
   <string name="prefs_log_summary">Kjo përdoret për të regjistruar probleme</string>
   <string name="prefs_log_title_history">Historik regjistrimesh</string>
