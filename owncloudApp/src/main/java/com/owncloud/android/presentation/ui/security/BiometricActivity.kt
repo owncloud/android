@@ -138,18 +138,18 @@ class BiometricActivity : AppCompatActivity() {
             Timber.e(e, "Error while generating and saving the encryption key")
         }
 
-        try {
+        return try {
             keyStore.load(null)
             // Initialize the cipher with the key stored in the Keystore container
             val key = keyStore.getKey(KEY_NAME, null) as SecretKey
             cipher.init(Cipher.ENCRYPT_MODE, key)
-            return true
+            true
         } catch (e: KeyPermanentlyInvalidatedException) {
             Timber.e(e, "Key permanently invalidated while initializing the cipher")
-            return false
+            false
         } catch (e: Exception) {
             Timber.e(e, "Failed while initializing the cipher")
-            return false
+            false
         }
     }
 
