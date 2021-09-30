@@ -71,19 +71,15 @@ class StorageMigrationActivity : AppCompatActivity() {
 
     companion object {
 
+        private val legacyStorageFolder = File(LegacyStorageProvider(MainApp.dataFolder).getRootFolderPath())
+
         const val PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE = "MIGRATED_TO_SCOPED_STORAGE"
 
-        private fun hasDataInLegacyStorage(): Boolean {
-            val legacyStorageProvider = LegacyStorageProvider(MainApp.dataFolder)
-            val legacyStorageFolder = File(legacyStorageProvider.getRootFolderPath())
-            return legacyStorageFolder.exists() && !legacyStorageFolder.listFiles().isNullOrEmpty()
-        }
+        private fun hasDataInLegacyStorage(): Boolean =
+            legacyStorageFolder.exists() && !legacyStorageFolder.listFiles().isNullOrEmpty()
 
-        private fun hasAccessToLegacyStorage(): Boolean {
-            val legacyStorageProvider = LegacyStorageProvider(MainApp.dataFolder)
-            val legacyStorageFolder = File(legacyStorageProvider.getRootFolderPath())
-            return legacyStorageFolder.canRead() && legacyStorageFolder.canWrite()
-        }
+        private fun hasAccessToLegacyStorage(): Boolean =
+            legacyStorageFolder.canRead() && legacyStorageFolder.canWrite()
 
         private fun hasAlreadyMigratedToScopedStorage(context: Context): Boolean {
             val preferenceProvider = SharedPreferencesProviderImpl(context = context)
