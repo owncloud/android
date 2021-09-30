@@ -39,7 +39,7 @@ import java.io.File
  * View Model to keep a reference to the capability repository and an up-to-date capability
  */
 class MigrationViewModel(
-    private val rootFolder: String,
+    rootFolder: String,
     private val localStorageProvider: LocalStorageProvider,
     private val preferencesProvider: SharedPreferencesProvider,
     private val uploadsStorageManager: UploadsStorageManager,
@@ -49,12 +49,14 @@ class MigrationViewModel(
     private val _migrationState = MediatorLiveData<Event<MigrationState>>()
     val migrationState: LiveData<Event<MigrationState>> = _migrationState
 
+    private val legacyStorageDirectoryPath = LegacyStorageProvider(rootFolder).getRootFolderPath()
+
     init {
         _migrationState.postValue(Event(MigrationState.MigrationIntroState))
     }
 
     private fun getLegacyStorageSizeInBytes(): Long {
-        val legacyStorageDirectory = File(LegacyStorageProvider(rootFolder).getRootFolderPath())
+        val legacyStorageDirectory = File(legacyStorageDirectoryPath)
         return localStorageProvider.sizeOfDirectory(legacyStorageDirectory)
     }
 
@@ -78,13 +80,11 @@ class MigrationViewModel(
     }
 
     private fun updatePendingUploadsPath() {
-        val legacyStorageProvider = LegacyStorageProvider(rootFolder)
-        val legacyStorageDir = legacyStorageProvider.getRootFolderPath()
         uploadsStorageManager.clearSuccessfulUploads()
         val storedUploads: Array<OCUpload> = uploadsStorageManager.allStoredUploads
         val uploadsWithUpdatedPath =
             storedUploads.map {
-                it.apply { localPath = localPath.replace(legacyStorageDir, localStorageProvider.getRootFolderPath()) }
+                it.apply { localPath = localPath.replace(legacyStorageDirectoryPath, localStorageProvider.getRootFolderPath()) }
             }
         uploadsWithUpdatedPath.forEach { uploadsStorageManager.updateUpload(it) }
     }
