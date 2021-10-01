@@ -25,7 +25,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
-import android.preference.PreferenceManager
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.authentication.BiometricManager
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
@@ -37,7 +36,6 @@ object PassCodeManager {
     private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
 
     fun onActivityStarted(activity: Activity) {
-        val appPrefs = PreferenceManager.getDefaultSharedPreferences(appContext)
         if (!exemptOfPasscodeActivities.contains(activity.javaClass) && passCodeShouldBeRequested()) {
 
             // Do not ask for passcode if biometric is enabled
@@ -47,7 +45,7 @@ object PassCodeManager {
             }
 
             askUserForPasscode(activity)
-        } else if (appPrefs.getBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, false)) {
+        } else if (preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, false)) {
             val intent = Intent(appContext, PassCodeActivity::class.java).apply {
                 action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
                 flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
