@@ -248,6 +248,7 @@
   <string name="upload_query_move_foreign_files">S\’ka hapësirë të mjaftueshme për kopjim të kartelave të përzgjedhura te dosja %1$s. Do të donit t\’i lëviznit më mirë? </string>
   <string name="pass_code_enter_pass_code">Ju lutemi, futni kodkalimin tuaj</string>
   <string name="pass_code_configure_your_pass_code">Jepni kodkalimin tuaj</string>
+  <string name="pass_code_configure_your_pass_code_migration">Jepni një kodkalim të ri me %1$d shifra</string>
   <string name="pass_code_configure_your_pass_code_explanation">Kodkalimi do të kërkohet sa herë që niset aplikacioni</string>
   <string name="pass_code_reenter_your_pass_code">Ju lutemi, rifutni kodkalimin tuaj</string>
   <string name="pass_code_remove_your_pass_code">Hiqeni kodkalimin tuaj</string>
