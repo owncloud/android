@@ -16,6 +16,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.7.3'
+    debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 }
 
 android {
