@@ -24,9 +24,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyPermanentlyInvalidatedException
-import android.security.keystore.KeyProperties
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
@@ -36,21 +33,16 @@ import androidx.biometric.BiometricPrompt.PromptInfo
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import com.owncloud.android.presentation.ui.security.PassCodeManager.isPassCodeEnabled
-import com.owncloud.android.presentation.ui.security.PatternManager.isPatternEnabled
+import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.security.KeyStore
-import java.security.KeyStoreException
 import java.util.concurrent.Executor
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
 
 class BiometricActivity : AppCompatActivity() {
 
-    private lateinit var keyStore: KeyStore
-    private lateinit var keyGenerator: KeyGenerator
-    private lateinit var cipher: Cipher
+    // ViewModel
+    private val biometricViewModel by viewModel<BiometricViewModel>()
+
     private lateinit var cryptoObject: BiometricPrompt.CryptoObject
     private lateinit var activity: BiometricActivity
     private val handler = Handler()
@@ -70,10 +62,8 @@ class BiometricActivity : AppCompatActivity() {
 
         activity = this
 
-        generateAndStoreKey()
-
-        if (initCipher()) {
-            cryptoObject = BiometricPrompt.CryptoObject(cipher)
+        biometricViewModel.initCipher()?.let {
+            cryptoObject = BiometricPrompt.CryptoObject(it)
         }
 
         val biometricManager = BiometricManager.from(this)
@@ -81,75 +71,6 @@ class BiometricActivity : AppCompatActivity() {
             showBiometricPrompt()
         } else {
             authError()
-        }
-    }
-
-    /**
-     * Generate encryption key involved in biometric authentication process and store it securely on the device using
-     * the Android Keystore system
-     */
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private fun generateAndStoreKey() {
-        try {
-            // Access Android Keystore container, used to safely store cryptographic keys on Android devices
-            keyStore = KeyStore.getInstance(ANDROID_KEY_STORE)
-        } catch (e: KeyStoreException) {
-            Timber.e(e, "Failed while getting KeyStore instance")
-        }
-        try {
-            // Access Android KeyGenerator to create the encryption key involved in biometric authentication process
-            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
-        } catch (e: Exception) {
-            Timber.e(e, "Failed while getting KeyGenerator instance")
-        }
-        try {
-            // Generate and save the encryption key
-            keyStore.load(null)
-            keyGenerator.init(
-                KeyGenParameterSpec.Builder(KEY_NAME,
-                    KeyProperties.PURPOSE_ENCRYPT or
-                            KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(true)
-                    .setEncryptionPaddings(
-                        KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                    .build()
-            )
-            keyGenerator.generateKey()
-        } catch (e: Exception) {
-            Timber.e(e, "Failed while generating and saving the encryption key")
-        }
-    }
-
-    /**
-     * Init cipher that will be used to create the encrypted [BiometricPrompt.CryptoObject] instance. This
-     * CryptoObject will be used during the biometric authentication process
-     *
-     * @return true if cipher is properly initialized, false otherwise
-     */
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private fun initCipher(): Boolean {
-        try {
-            cipher = Cipher.getInstance(
-                KeyProperties.KEY_ALGORITHM_AES + "/"
-                        + KeyProperties.BLOCK_MODE_CBC + "/"
-                        + KeyProperties.ENCRYPTION_PADDING_PKCS7)
-        } catch (e: Exception) {
-            Timber.e(e, "Error while generating and saving the encryption key")
-        }
-
-        return try {
-            keyStore.load(null)
-            // Initialize the cipher with the key stored in the Keystore container
-            val key = keyStore.getKey(KEY_NAME, null) as SecretKey
-            cipher.init(Cipher.ENCRYPT_MODE, key)
-            true
-        } catch (e: KeyPermanentlyInvalidatedException) {
-            Timber.e(e, "Key permanently invalidated while initializing the cipher")
-            false
-        } catch (e: Exception) {
-            Timber.e(e, "Failed while initializing the cipher")
-            false
         }
     }
 
@@ -183,7 +104,7 @@ class BiometricActivity : AppCompatActivity() {
                         intent.putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)
                         startActivity(intent)
                     }
-                    preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
+                    biometricViewModel.setLastUnlockTimestamp()
                     activity.finish()
                 }
 
@@ -198,9 +119,9 @@ class BiometricActivity : AppCompatActivity() {
     }
 
     private fun authError() {
-        if (isPassCodeEnabled()) {
+        if (PassCodeManager.isPassCodeEnabled()) {
             PassCodeManager.onBiometricCancelled(activity)
-        } else if (isPatternEnabled()) {
+        } else if (PatternManager.isPatternEnabled()) {
             PatternManager.onBiometricCancelled(activity)
         }
 
@@ -210,7 +131,6 @@ class BiometricActivity : AppCompatActivity() {
     companion object {
         const val PREFERENCE_SET_BIOMETRIC = "set_biometric"
 
-        private const val ANDROID_KEY_STORE = "AndroidKeyStore"
-        private const val KEY_NAME = "default_key"
+        const val KEY_NAME = "default_key"
     }
 }
