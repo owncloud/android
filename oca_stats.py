@@ -55,7 +55,7 @@ def get_list_of_last_commits_in_month():
     start_time = date.fromisocalendar(2019, 0o01, 0o02)
     time_pos = start_time
     list_of_last_commits = []
-    for i in range(0, 2*12 + 8):
+    for i in range(0, 2*12 + 10):
         time_after = str(time_pos - time_step).replace("-", ".")
         time_before = str(time_pos).replace("-", ".") 
         last_commit = shell_run(f"""
@@ -70,13 +70,13 @@ def get_list_of_last_commits_in_month():
 def get_stats_from_commit_list(commit_list):
     stats = {
                 "date": [],
-                "commit": [],
                 "jlines": [],
                 "klines": [],
                 "n_fragments": [],
                 "n_activities": [],
                 "vm_fragments": [],
                 "vm_activities": []
+                "commit": [],
             }
     for commit in commit_list:
         print(f"Process: {commit[0]} ")
@@ -92,13 +92,13 @@ def get_stats_from_commit_list(commit_list):
             stats[val].append(cstats[val])
 
         stats["date"].append(str(commit[0]))
-        stats["commit"].append(commit[1])
         add_to_stats("jlines")
         add_to_stats("klines")
         add_to_stats("n_fragments")
         add_to_stats("n_activities")
         add_to_stats("vm_fragments")
         add_to_stats("vm_activities")
+        stats["commit"].append(commit[1])
     return stats
 
 
