@@ -53,11 +53,16 @@
   <string name="prefs_camera_picture_upload">Enviar fotos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotos tiradas pela câmera</string>
   <string name="prefs_camera_picture_upload_path_title">Caminho para fotos enviadas</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Condições para executar envios</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">Os envios serão acionados quando todas as opções selecionadas forem atendidas </string>
   <string name="prefs_camera_picture_upload_on_wifi">Envio de fotos apenas por wifi</string>
+  <string name="prefs_camera_picture_upload_on_charging">Faça envio de fotos apenas durante o carregamento </string>
+  <string name="prefs_camera_upload_on_charging_summary">Habilite envios apenas por wi-fi para ativar esta opção </string>
   <string name="prefs_camera_video_upload">Enviar vídeos</string>
   <string name="prefs_camera_video_upload_summary">Carregar automaticamente vídeos gravados pela câmera</string>
   <string name="prefs_camera_video_upload_path_title">Caminho para vídeos enviados</string>
   <string name="prefs_camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
+  <string name="prefs_camera_video_upload_on_charging">Envie vídeos apenas durante o carregamento</string>
   <string name="prefs_log_title">Habilitar login</string>
   <string name="prefs_log_summary">Isto é usado para registrar(log) os problemas</string>
   <string name="prefs_log_title_history">História de logins</string>
@@ -243,6 +248,7 @@
   <string name="upload_query_move_foreign_files">Não há espaço suficiente para copiar os arquivos selecionados para a pasta %1$s. Você gostaria de movê-los em vez disso?</string>
   <string name="pass_code_enter_pass_code">Por favor insira sua senha</string>
   <string name="pass_code_configure_your_pass_code">Digite o código de acesso</string>
+  <string name="pass_code_configure_your_pass_code_migration">Entre uma nova %1$d-senha de dígitos</string>
   <string name="pass_code_configure_your_pass_code_explanation">O código de acesso será solicitado toda vez que o aplicativo for iniciado</string>
   <string name="pass_code_reenter_your_pass_code">Por favor reentre sua senha</string>
   <string name="pass_code_remove_your_pass_code">Remover o seu código de acesso</string>
