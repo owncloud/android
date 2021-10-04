@@ -1,0 +1,127 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2021 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.owncloud.android.presentation.viewmodels.security
+
+import android.os.Build
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.security.keystore.KeyProperties
+import androidx.annotation.RequiresApi
+import androidx.biometric.BiometricPrompt
+import androidx.lifecycle.ViewModel
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.presentation.ui.security.BiometricActivity
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
+import timber.log.Timber
+import java.security.KeyStore
+import java.security.KeyStoreException
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+
+class BiometricViewModel(
+    private val preferencesProvider: SharedPreferencesProvider
+) : ViewModel() {
+
+    private lateinit var keyStore: KeyStore
+    private lateinit var keyGenerator: KeyGenerator
+    private lateinit var cipher: Cipher
+
+    /**
+     * Init cipher that will be used to create the encrypted [BiometricPrompt.CryptoObject] instance. This
+     * CryptoObject will be used during the biometric authentication process
+     *
+     * @return the cipher if it is properly initialized, null otherwise
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    fun initCipher(): Cipher? {
+        generateAndStoreKey()
+
+        try {
+            cipher = Cipher.getInstance(
+                KeyProperties.KEY_ALGORITHM_AES + "/"
+                        + KeyProperties.BLOCK_MODE_CBC + "/"
+                        + KeyProperties.ENCRYPTION_PADDING_PKCS7)
+        } catch (e: Exception) {
+            Timber.e(e, "Error while generating and saving the encryption key")
+        }
+
+        return try {
+            keyStore.load(null)
+            // Initialize the cipher with the key stored in the Keystore container
+            val key = keyStore.getKey(BiometricActivity.KEY_NAME, null) as SecretKey
+            cipher.init(Cipher.ENCRYPT_MODE, key)
+            cipher
+        } catch (e: KeyPermanentlyInvalidatedException) {
+            Timber.e(e, "Key permanently invalidated while initializing the cipher")
+            null
+        } catch (e: Exception) {
+            Timber.e(e, "Failed while initializing the cipher")
+            null
+        }
+    }
+
+    fun setLastUnlockTimestamp() {
+        preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
+    }
+
+    /**
+     * Generate encryption key involved in biometric authentication process and store it securely on the device using
+     * the Android Keystore system
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private fun generateAndStoreKey() {
+        try {
+            // Access Android Keystore container, used to safely store cryptographic keys on Android devices
+            keyStore = KeyStore.getInstance(ANDROID_KEY_STORE)
+        } catch (e: KeyStoreException) {
+            Timber.e(e, "Failed while getting KeyStore instance")
+        }
+        try {
+            // Access Android KeyGenerator to create the encryption key involved in biometric authentication process
+            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed while getting KeyGenerator instance")
+        }
+        try {
+            // Generate and save the encryption key
+            keyStore.load(null)
+            keyGenerator.init(
+                KeyGenParameterSpec.Builder(
+                    BiometricActivity.KEY_NAME,
+                    KeyProperties.PURPOSE_ENCRYPT or
+                            KeyProperties.PURPOSE_DECRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                    .setUserAuthenticationRequired(true)
+                    .setEncryptionPaddings(
+                        KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                    .build()
+            )
+            keyGenerator.generateKey()
+        } catch (e: Exception) {
+            Timber.e(e, "Failed while generating and saving the encryption key")
+        }
+    }
+
+    companion object {
+        private const val ANDROID_KEY_STORE = "AndroidKeyStore"
+    }
+}
