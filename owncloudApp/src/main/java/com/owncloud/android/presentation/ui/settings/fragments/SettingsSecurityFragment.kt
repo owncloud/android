@@ -55,8 +55,6 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private var prefLockApplication: ListPreference? = null
     private var prefTouchesWithOtherVisibleWindows: CheckBoxPreference? = null
 
-    private var biometricManager: BiometricManager? = null
-
     private val enablePasscodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
@@ -164,9 +162,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             screenSecurity?.removePreference(prefBiometric)
         } else if (prefBiometric != null) {
-            biometricManager = BiometricManager.getBiometricManager(activity)
-
-            if (biometricManager?.isHardwareDetected == false) { // Biometric not supported
+            if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
                 screenSecurity?.removePreference(prefBiometric)
             } else {
                 if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { // Disable biometric lock if Passcode or Pattern locks are disabled
@@ -177,7 +173,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                     val incomingValue = newValue as Boolean
 
                     // No biometric enrolled yet
-                    if (incomingValue && biometricManager?.hasEnrolledBiometric() == false) {
+                    if (incomingValue && !BiometricManager.hasEnrolledBiometric()) {
                         showMessageInSnackbar(getString(R.string.biometric_not_enrolled))
                         return@setOnPreferenceChangeListener false
                     }

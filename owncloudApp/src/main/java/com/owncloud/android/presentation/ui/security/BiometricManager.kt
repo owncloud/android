@@ -26,7 +26,6 @@ import android.content.Intent
 import android.os.PowerManager
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
-import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.presentation.ui.security.PassCodeManager.isPassCodeEnabled
