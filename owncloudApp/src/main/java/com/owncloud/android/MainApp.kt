@@ -120,7 +120,7 @@ class MainApp : Application() {
                 PassCodeManager.onActivityStarted(activity)
                 PatternManager.onActivityStarted(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    BiometricManager.getBiometricManager(activity).onActivityStarted(activity)
+                    BiometricManager.onActivityStarted(activity)
                 }
             }
 
@@ -137,7 +137,7 @@ class MainApp : Application() {
                 PassCodeManager.onActivityStopped(activity)
                 PatternManager.onActivityStopped(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    BiometricManager.getBiometricManager(activity).onActivityStopped(activity)
+                    BiometricManager.onActivityStopped(activity)
                 }
                 if (activity is PassCodeActivity ||
                     activity is PatternActivity ||

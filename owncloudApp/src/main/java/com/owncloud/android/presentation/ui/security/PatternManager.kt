@@ -38,7 +38,7 @@ object PatternManager {
         if (!exemptOfPatternActivities.contains(activity.javaClass) && patternShouldBeRequested()) {
 
             // Do not ask for pattern if biometric is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.getBiometricManager(activity).isBiometricEnabled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.isBiometricEnabled()) {
                 visibleActivitiesCounter++
                 return
             }
