@@ -72,8 +72,6 @@ class SettingsSecurityFragmentTest {
     private lateinit var prefLockApplication: ListPreference
     private lateinit var prefTouchesWithOtherVisibleWindows: CheckBoxPreference
 
-    private lateinit var biometricManager: BiometricManager
-
     private lateinit var securityViewModel: SettingsSecurityViewModel
     private lateinit var context: Context
 
@@ -84,9 +82,6 @@ class SettingsSecurityFragmentTest {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         securityViewModel = mockk(relaxUnitFun = true)
         mockkStatic(BiometricManager::class)
-        biometricManager = mockk(relaxUnitFun = true)
-
-        every { BiometricManager.getBiometricManager(any()) } returns biometricManager
 
         stopKoin()
 
@@ -111,7 +106,7 @@ class SettingsSecurityFragmentTest {
     }
 
     private fun launchTest(withBiometrics: Boolean = true) {
-        every { biometricManager.isHardwareDetected } returns withBiometrics
+        every { BiometricManager.isHardwareDetected() } returns withBiometrics
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
@@ -311,7 +306,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun enableBiometricLockWithPasscodeEnabled() {
-        every { biometricManager.hasEnrolledBiometric() } returns true
+        every { BiometricManager.hasEnrolledBiometric() } returns true
 
         launchTest()
 
@@ -322,7 +317,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun enableBiometricLockWithPatternEnabled() {
-        every { biometricManager.hasEnrolledBiometric() } returns true
+        every { BiometricManager.hasEnrolledBiometric() } returns true
 
         launchTest()
 
@@ -333,7 +328,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun enableBiometricLockNoEnrolledBiometric() {
-        every { biometricManager.hasEnrolledBiometric() } returns false
+        every { BiometricManager.hasEnrolledBiometric() } returns false
 
         launchTest()
 
@@ -345,7 +340,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun disableBiometricLock() {
-        every { biometricManager.hasEnrolledBiometric() } returns true
+        every { BiometricManager.hasEnrolledBiometric() } returns true
 
         launchTest()
 
