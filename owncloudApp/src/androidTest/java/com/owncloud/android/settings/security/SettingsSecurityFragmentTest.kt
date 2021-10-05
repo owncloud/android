@@ -51,7 +51,7 @@ import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.mockkObject
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -83,8 +83,7 @@ class SettingsSecurityFragmentTest {
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         securityViewModel = mockk(relaxUnitFun = true)
-        passCodeViewModel = mockk(relaxUnitFun = true)
-        mockkStatic(BiometricManager::class)
+        mockkObject(BiometricManager)
 
         stopKoin()
 
