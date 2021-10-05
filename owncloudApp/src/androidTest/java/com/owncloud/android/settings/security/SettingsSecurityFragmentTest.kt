@@ -83,6 +83,7 @@ class SettingsSecurityFragmentTest {
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         securityViewModel = mockk(relaxUnitFun = true)
+        passCodeViewModel = mockk(relaxUnitFun = true)
         mockkObject(BiometricManager)
 
         stopKoin()
