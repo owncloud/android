@@ -91,14 +91,8 @@ class BiometricActivity : AppCompatActivity() {
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    val preferencesProvider: SharedPreferencesProvider = SharedPreferencesProviderImpl(applicationContext)
-                    // In this line, null is only provisional until the rearchitecture of BiometricActivity
-                    val passCode = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, null)
-                    var passCodeDigits = applicationContext.resources.getInteger(R.integer.passcode_digits)
-                    if (passCodeDigits < PassCodeActivity.PASSCODE_MIN_LENGTH) passCodeDigits = PassCodeActivity.PASSCODE_MIN_LENGTH
-                    if (passCode != null && passCode.length < passCodeDigits) {
-                        preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
-                        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+                    if (biometricViewModel.shouldAskForNewPassCode()) {
+                        biometricViewModel.removePassCode()
                         val intent = Intent(baseContext, PassCodeActivity::class.java)
                         intent.action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
                         intent.putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)

@@ -27,9 +27,12 @@ import android.security.keystore.KeyProperties
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.providers.ContextProvider
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.KeyStoreException
@@ -38,7 +41,8 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
 class BiometricViewModel(
-    private val preferencesProvider: SharedPreferencesProvider
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val contextProvider: ContextProvider
 ) : ViewModel() {
 
     private lateinit var keyStore: KeyStore
@@ -83,6 +87,17 @@ class BiometricViewModel(
         preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
     }
 
+    fun shouldAskForNewPassCode(): Boolean {
+        val passCode = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+        val passCodeDigits = maxOf(contextProvider.getInt(R.integer.passcode_digits), PassCodeActivity.PASSCODE_MIN_LENGTH)
+        return (passCode != null && passCode.length < passCodeDigits)
+    }
+
+    fun removePassCode() {
+        preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
+        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+    }
+
     /**
      * Generate encryption key involved in biometric authentication process and store it securely on the device using
      * the Android Keystore system
@@ -119,6 +134,15 @@ class BiometricViewModel(
         } catch (e: Exception) {
             Timber.e(e, "Failed while generating and saving the encryption key")
         }
+    }
+
+    private fun loadPinFromOldFormatIfPossible(): String? {
+        var pinString = ""
+        for (i in 1..4) {
+            val pinChar = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, null)
+            pinChar?.let { pinString += pinChar }
+        }
+        return if (pinString.isEmpty()) null else pinString
     }
 
     companion object {

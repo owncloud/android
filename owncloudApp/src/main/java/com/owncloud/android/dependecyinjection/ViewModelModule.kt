@@ -62,5 +62,5 @@ val viewModelModule = module {
     viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
     viewModel { PassCodeViewModel(get(), get()) }
     viewModel { PatternViewModel(get()) }
-    viewModel { BiometricViewModel(get()) }
+    viewModel { BiometricViewModel(get(), get()) }
 }
