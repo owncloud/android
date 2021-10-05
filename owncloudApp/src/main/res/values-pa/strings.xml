@@ -100,12 +100,7 @@
   <string name="downloader_not_downloaded_yet">ਹਾਲੇ ਡਾਊਨਲੋਡ ਨਹੀਂ</string>
   <string name="common_choose_account">ਅਕਾਊਂਟ ਚੁਣੋ</string>
   <string name="sync_fail_content_unauthorized">%1$s ਲਈ ਗਲਤ ਪਾਸਵਰਡ</string>
-  <string name="foreign_files_move">ਸਭ ਭੇਜੋ</string>
-  <string name="foreign_files_success">ਸਭ ਫਾਇਲਾਂ ਨੂੰ ਭੇਜਿਆ ਗਿਆ</string>
-  <string name="foreign_files_fail">ਕੁਝ ਫਾਇਲਾਂ ਨੂੰ ਭੇਜਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ</string>
-  <string name="foreign_files_local_text">ਲੋਕਲ: %1$s</string>
-  <string name="foreign_files_remote_text">ਰਿਮੋਟ: %1$s</string>
-  <string name="media_notif_ticker">%1$s ਸੰਗੀਤ ਪਲੇਅਰ</string>
+    <string name="media_notif_ticker">%1$s ਸੰਗੀਤ ਪਲੇਅਰ</string>
   <string name="media_state_playing">%1$s (ਚੱਲਦਾ ਹੈ)</string>
   <string name="media_state_loading">%1$s (ਲੋਡ ਹੁੰਦਾ ਹੈ)</string>
   <string name="media_event_done">%1$s ਚੱਲਣਾ ਬੰਦ</string>

@@ -68,13 +68,8 @@
   <string name="sync_conflicts_in_favourites_ticker">Konflikte entdeckt</string>
   <string name="sync_conflicts_in_favourites_content">%1$d synchronisierte Dateien konnten nicht synchronisiert werden </string>
   <string name="sync_fail_in_favourites_content">Inhalte von %1$d Dateien konnten nicht synchronisiert werden (%2$d Konflikte)</string>
-  <string name="sync_foreign_files_forgotten_explanation">Ab Version 1.3.16 werden alle Dateien, die von diesem Gerät hochgeladen werden, in den lokalen Ordner %1$s kopiert um zu vermeiden, dass Datenverlust entsteht, wenn eine einzelne Datei mit mehreren Konten synchronisiert wird.\n\nWegen dieser Änderung wurden alle Dateien, die mit einer früheren Version der App hochgeladen wurden, in den Ordner %2$s kopiert. Jedoch verhinderte ein Fehler, dass die Operation, während der synchronisation des Kontos, erfolgreich beendet wurde. Du kannst die Datei(en) entweder so lassen, wie sie sind und den Link zu %3$s löschen oder die Datei(en) in den Ordner %1$s verschieben und den Link zu %4$s behalten.\n\nUnten aufgelistet findest du die lokalen und die dazugehörigen hochgeladenen Dateien in %5$s.</string>
-  <string name="sync_current_folder_was_removed">Ordner %1$s existiert nicht mehr</string>
-  <string name="foreign_files_move">Alle verschieben</string>
-  <string name="foreign_files_success">Alle Dateien wurden verschoben</string>
-  <string name="foreign_files_fail">Ein paar Dateien konnten nicht verschoben werden</string>
-  <string name="foreign_files_local_text">Lokal: %1$s</string>
-  <string name="common_rename">Umbenennen</string>
+    <string name="sync_current_folder_was_removed">Ordner %1$s existiert nicht mehr</string>
+    <string name="common_rename">Umbenennen</string>
   <string name="ssl_validator_btn_details_see">Details</string>
   <string name="activity_chooser_send_file_title">Senden</string>
   <string name="prefs_category_accounts">Konten</string>
