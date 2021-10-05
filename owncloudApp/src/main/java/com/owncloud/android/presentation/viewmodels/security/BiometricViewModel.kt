@@ -57,9 +57,9 @@ class BiometricViewModel(
 
         try {
             cipher = Cipher.getInstance(
-                KeyProperties.KEY_ALGORITHM_AES + "/"
-                        + KeyProperties.BLOCK_MODE_CBC + "/"
-                        + KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                KeyProperties.KEY_ALGORITHM_AES + "/" +
+                        KeyProperties.BLOCK_MODE_CBC + "/" +
+                        KeyProperties.ENCRYPTION_PADDING_PKCS7)
         } catch (e: Exception) {
             Timber.e(e, "Error while generating and saving the encryption key")
         }
