@@ -67,7 +67,7 @@
     <bool name="feedback_enabled">true</bool>
     <bool name="privacy_policy_enabled">true</bool>
     <bool name="wizard_enabled">true</bool>
-    <string name="url_privacy_policy" formatted="false">https://owncloud.com/privacy-legal/</string>
+    <string name="url_privacy_policy" formatted="false">https://owncloud.com/privacy-statement/</string>
     <string name="url_help" formatted="false">https://doc.owncloud.com/android</string>
     <string name="url_imprint" formatted="false"></string>
     <string name="mail_recommend" formatted="false">"mailto:"</string>
