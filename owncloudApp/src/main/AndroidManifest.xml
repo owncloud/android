@@ -194,7 +194,6 @@
         <activity
             android:name=".ui.activity.ConflictsResolveActivity"
             android:theme="@style/Theme.ownCloud" />
-        <activity android:name=".ui.activity.GenericExplanationActivity" />
         <activity
             android:name=".presentation.ui.settings.LogHistoryActivity"
             android:configChanges="orientation|screenSize" />
