@@ -627,7 +627,7 @@
     <string name="scoped_storage_wizard_intro_button">Let\'s get started</string>
     <string name="scoped_storage_wizard_migrate_and_clean_button">Migrate and clean (Recommended)</string>
     <string name="scoped_storage_wizard_migrate_and_keep_button">Migrate but keep old files</string>
-    <string name="scoped_storage_wizard_migration_completed">Migration completed successfully. Your files are now saver than ever before.</string>
+    <string name="scoped_storage_wizard_migration_completed">Migration completed successfully. Your files are now safer than ever before.</string>
     <string name="scoped_storage_wizard_migration_in_progress">Migrating your files. Please don’t turn your device off.</string>
     <string name="scoped_storage_wizard_migration_in_progress_button">Working… Please wait</string>
     <string name="scoped_storage_wizard_title">More security for your files</string>
