@@ -138,15 +138,19 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         return rootLegacyStorage
     }
 
-    private fun copyFileOrFolderToScopedStorage(file: File) {
-        Timber.d("Let's copy ${file.absolutePath} to scoped storage")
-        file.copyRecursively(File(getRootFolderPath()), overwrite = true)
+    private fun copyFileOrFolderToScopedStorage(rootLegacyDirectory: File) {
+        Timber.d("Let's copy ${rootLegacyDirectory.absolutePath} to scoped storage")
+        rootLegacyDirectory.listFiles()?.forEach { file ->
+            if (file.isDirectory) {
+                file.copyRecursively(File(getRootFolderPath()), overwrite = true)
+            }
+        }
     }
 
-    private fun moveFileOrFolderToScopedStorage(file: File) {
-        copyFileOrFolderToScopedStorage(file)
-        Timber.d("Let's delete legacy storage ${file.absolutePath}")
-        file.deleteRecursively()
+    private fun moveFileOrFolderToScopedStorage(rootLegacyDirectory: File) {
+        copyFileOrFolderToScopedStorage(rootLegacyDirectory)
+        Timber.d("Let's delete legacy storage ${rootLegacyDirectory.absolutePath}")
+        rootLegacyDirectory.deleteRecursively()
     }
 
     fun sizeOfDirectory(dir: File): Long {
