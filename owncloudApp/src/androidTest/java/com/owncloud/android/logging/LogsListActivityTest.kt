@@ -23,11 +23,21 @@ package com.owncloud.android.logging
 import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.hasChildCount
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
+import com.owncloud.android.presentation.adapters.logging.RecyclerViewLogsAdapter
 import com.owncloud.android.presentation.ui.logging.LogsListActivity
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.utils.matchers.isDisplayed
+import com.owncloud.android.utils.matchers.withRecyclerView
 import com.owncloud.android.utils.matchers.withText
 import io.mockk.every
 import io.mockk.mockk
@@ -48,6 +58,7 @@ class LogsListActivityTest {
     private lateinit var logListViewModel: LogListViewModel
     private lateinit var drawerViewModel: DrawerViewModel
     private lateinit var context: Context
+    private lateinit var contextProvider: ContextProvider
 
     private fun launchTest(logs: List<File>) {
         every { logListViewModel.getData() } returns logs
@@ -60,6 +71,7 @@ class LogsListActivityTest {
         logListViewModel = mockk(relaxed = true)
         drawerViewModel = mockk(relaxed = true)
         context = ApplicationProvider.getApplicationContext()
+        contextProvider = mockk(relaxed = true)
 
         stopKoin()
 
@@ -73,6 +85,7 @@ class LogsListActivityTest {
                     viewModel {
                         drawerViewModel
                     }
+                    contextProvider
                 }
             )
 
@@ -105,5 +118,30 @@ class LogsListActivityTest {
         launchTest(logs = listOf(File("path")))
         R.id.textView_no_logs.isDisplayed(false)
         R.id.recyclerView_activity_logs_list.isDisplayed(true)
+    }
+
+    @Test
+    fun test_checkNameAndSize() {
+        val FILE_NAME = "LOG_ONE"
+        val FILE_SIZE = "0 KB"
+        val FILE_POSIION = 0
+        launchTest(logs = listOf(File(FILE_NAME)))
+        with(R.id.recyclerView_activity_logs_list.withRecyclerView()) {
+            atPositionOnView(FILE_POSIION, R.id.textView_title_activity_logs_list).matches(withText(FILE_NAME))
+            atPositionOnView(FILE_POSIION, R.id.textView_subtitle_activity_logs_list).matches(withText(FILE_SIZE))
+        }
+    }
+
+    @Test
+    fun test_deleteItem() {
+        val FILE_NAME = "LOG_ONE"
+        launchTest(logs = listOf(File(FILE_NAME)))
+        onView(withId(R.id.recyclerView_activity_logs_list)).perform(
+            RecyclerViewActions.actionOnItem<RecyclerViewLogsAdapter.ViewHolder>(
+                withId(R.id.imageView_delete_activity_logs_list),
+                click()
+            )
+        )
+        onView(withId(R.id.recyclerView_activity_logs_list)).check(matches(hasChildCount(0)))
     }
 }
