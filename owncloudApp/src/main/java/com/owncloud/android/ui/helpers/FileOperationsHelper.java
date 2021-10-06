@@ -100,21 +100,6 @@ public class FileOperationsHelper {
         }
     }
 
-    public void openFile(File file) {
-        if (file != null) {
-            Intent intentForSavedMimeType = getIntentForSavedMimeType(FileExtKt.getExposedFileUri(mFileActivity, file.getPath()),
-                    MimetypeIconUtil.getBestMimeTypeByFilename(file.getName()));
-
-            Intent intentForGuessedMimeType = getIntentForGuessedMimeType(file.getPath(),
-                    MimetypeIconUtil.getBestMimeTypeByFilename(file.getName()), FileExtKt.getExposedFileUri(mFileActivity, file.getPath()));
-
-            openFileWithIntent(intentForSavedMimeType, intentForGuessedMimeType);
-
-        } else {
-            Timber.e("Trying to open a NULL file");
-        }
-    }
-
     private void openFileWithIntent(Intent intentForSavedMimeType, Intent intentForGuessedMimeType) {
         Intent openFileWithIntent;
 

@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.ui.logging
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -31,13 +32,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.R
 import com.owncloud.android.databinding.LogsListActivityBinding
+import com.owncloud.android.extensions.openFile
+import com.owncloud.android.extensions.sendFile
 import com.owncloud.android.presentation.adapters.logging.RecyclerViewLogsAdapter
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
-import com.owncloud.android.ui.activity.FileActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
-class LogsListActivity : FileActivity() {
+class LogsListActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<LogListViewModel>()
 
@@ -46,7 +48,7 @@ class LogsListActivity : FileActivity() {
 
     private val recyclerViewLogsAdapter = RecyclerViewLogsAdapter(object : RecyclerViewLogsAdapter.Listener {
         override fun share(file: File) {
-            fileOperationsHelper.sendFile(null, file)
+            sendFile(null, file)
         }
 
         override fun delete(file: File) {
@@ -55,7 +57,7 @@ class LogsListActivity : FileActivity() {
         }
 
         override fun open(file: File) {
-            fileOperationsHelper.openFile(file)
+            openFile(file)
         }
     }, context = this)
 
