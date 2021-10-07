@@ -23,23 +23,23 @@
 package com.owncloud.android.settings.security
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText
 import org.junit.After
 import org.junit.Assert.assertTrue
-import org.junit.Rule
 import org.junit.Test
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -59,13 +59,10 @@ import withChildViewCount
 
 class PassCodeActivityTest {
 
-    @Rule
-    @JvmField
-    val activityRule = ActivityTestRule(PassCodeActivity::class.java, true, false)
+    private lateinit var activityScenario: ActivityScenario<PassCodeActivity>
 
-    private val intent = Intent()
-    private val errorMessage = "PassCode Activity error"
-    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+    private lateinit var intent: Intent
+    private lateinit var context: Context
 
     private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
     private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
@@ -74,6 +71,7 @@ class PassCodeActivityTest {
 
     @Before
     fun setUp() {
+        context = ApplicationProvider.getApplicationContext()
         passCodeViewModel = mockk(relaxUnitFun = true)
 
         stopKoin()
@@ -130,7 +128,7 @@ class PassCodeActivityTest {
 
         onView(withId(R.id.cancel)).perform(click())
 
-        assertEquals(activityRule.activityResult.resultCode, Activity.RESULT_CANCELED)
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test
@@ -159,9 +157,11 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
 
         //Checking that the result returned is OK
-        assertEquals(activityRule.activityResult.resultCode, Activity.RESULT_OK)
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
 
-        assertTrue(errorMessage, activityRule.activity.isFinishing)
+        activityScenario.onActivity {
+            assertTrue(it.isFinishing)
+        }
     }
 
     @Test
@@ -199,7 +199,7 @@ class PassCodeActivityTest {
         }
 
         onView(withId(R.id.cancel)).perform(click())
-        assertTrue(errorMessage, activityRule.activity.isFinishing)
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test
@@ -216,7 +216,7 @@ class PassCodeActivityTest {
         }
 
         onView(withId(R.id.cancel)).perform(click())
-        assertTrue(errorMessage, activityRule.activity.isFinishing)
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test
@@ -240,7 +240,7 @@ class PassCodeActivityTest {
 
         onView(withId(R.id.cancel)).perform(click())
 
-        assertEquals(activityRule.activityResult.resultCode, Activity.RESULT_CANCELED)
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test
@@ -256,7 +256,9 @@ class PassCodeActivityTest {
         //Type correct passcode
         typePasscode(defaultPassCode)
 
-        assertTrue(errorMessage, activityRule.activity.isFinishing)
+        activityScenario.onActivity {
+            assertTrue(it.isFinishing)
+        }
     }
 
     @Test
@@ -283,8 +285,10 @@ class PassCodeActivityTest {
     }
 
     private fun openPasscodeActivity(mode: String) {
-        intent.action = mode
-        activityRule.launchActivity(intent)
+        intent = Intent(context, PassCodeActivity::class.java).apply {
+            action = mode
+        }
+        activityScenario = ActivityScenario.launch(intent)
     }
 
     private fun typePasscode(digits: Array<Char>) {
