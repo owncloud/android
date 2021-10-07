@@ -46,7 +46,7 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
                         Timber.e("Resource not found")
                     }
                 }
-                description?.appendText("with id: $idDescription");
+                description?.appendText("with id: $idDescription")
             }
 
             override fun matchesSafely(item: View?): Boolean {
