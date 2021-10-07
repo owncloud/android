@@ -26,6 +26,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasChildCount
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.CoreMatchers
+import withChildViewCount
 
 fun Int.isDisplayed(displayed: Boolean) {
     val displayMatcher = if (displayed) ViewMatchers.isDisplayed() else CoreMatchers.not(ViewMatchers.isDisplayed())
@@ -61,6 +62,11 @@ fun Int.withText(resourceId: Int) {
 fun Int.withTextColor(resourceId: Int) {
     onView(withId(this))
         .check(matches(ViewMatchers.hasTextColor(resourceId)))
+}
+
+fun Int.withChildCountAndId(count: Int, resourceId: Int) {
+    onView(withId(this))
+        .check(matches(withChildViewCount(count, withId(resourceId))))
 }
 
 fun Int.assertVisibility(visibility: ViewMatchers.Visibility) {

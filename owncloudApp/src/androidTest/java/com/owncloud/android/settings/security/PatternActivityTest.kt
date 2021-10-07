@@ -26,15 +26,12 @@ import android.content.Intent
 import android.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
 import com.owncloud.android.testutil.security.OC_PATTERN
+import com.owncloud.android.utils.matchers.isDisplayed
+import com.owncloud.android.utils.matchers.withText
 import io.mockk.mockk
 import org.junit.After
 import org.junit.Before
@@ -48,7 +45,6 @@ class PatternActivityTest {
 
     private lateinit var activityScenario: ActivityScenario<PatternActivity>
 
-    private lateinit var intent: Intent
     private lateinit var context: Context
 
     private lateinit var patternViewModel: PatternViewModel
@@ -83,10 +79,16 @@ class PatternActivityTest {
         //Open Activity in pattern creation mode
         openPatternActivity(PatternActivity.ACTION_REQUEST_WITH_RESULT)
 
-        onView(withText(R.string.pattern_configure_pattern)).check(matches(isDisplayed()))
-        onView(withText(R.string.pattern_configure_your_pattern_explanation)).check(matches(isDisplayed()))
-        onView(withId(R.id.pattern_lock_view)).check(matches(isDisplayed()))
-        onView(withId(R.id.cancel_pattern)).check(matches(isDisplayed()))
+        with(R.id.header_pattern) {
+            isDisplayed(true)
+            withText(R.string.pattern_configure_pattern)
+        }
+        with(R.id.explanation_pattern) {
+            isDisplayed(true)
+            withText(R.string.pattern_configure_your_pattern_explanation)
+        }
+        R.id.pattern_lock_view.isDisplayed(true)
+        R.id.cancel_pattern.isDisplayed(true)
     }
 
     @Test
@@ -97,8 +99,14 @@ class PatternActivityTest {
         //Open Activity in pattern deletion mode
         openPatternActivity(PatternActivity.ACTION_CHECK_WITH_RESULT)
 
-        onView(withText(R.string.pattern_remove_pattern)).check(matches(isDisplayed()))
-        onView(withText(R.string.pattern_no_longer_required)).check(matches(isDisplayed()))
+        with(R.id.header_pattern) {
+            isDisplayed(true)
+            withText(R.string.pattern_remove_pattern)
+        }
+        with(R.id.explanation_pattern) {
+            isDisplayed(true)
+            withText(R.string.pattern_no_longer_required)
+        }
     }
 
     private fun storePattern() {
@@ -111,7 +119,7 @@ class PatternActivityTest {
     }
 
     private fun openPatternActivity(mode: String) {
-        intent = Intent(context, PatternActivity::class.java).apply {
+        val intent = Intent(context, PatternActivity::class.java).apply {
             action = mode
         }
         activityScenario = ActivityScenario.launch(intent)
