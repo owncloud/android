@@ -20,9 +20,7 @@
 package com.owncloud.android.extensions
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 
