@@ -21,22 +21,23 @@
 
 package com.owncloud.android.settings.security
 
+import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
+import com.owncloud.android.testutil.security.OC_PATTERN
 import io.mockk.mockk
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -45,19 +46,16 @@ import org.koin.dsl.module
 
 class PatternActivityTest {
 
-    @Rule
-    @JvmField
-    val activityRule = ActivityTestRule(PatternActivity::class.java, true, false)
+    private lateinit var activityScenario: ActivityScenario<PatternActivity>
 
-    private val intent = Intent()
-    private val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-    private val patternToSave = "1234"
+    private lateinit var intent: Intent
+    private lateinit var context: Context
 
     private lateinit var patternViewModel: PatternViewModel
 
     @Before
     fun setUp() {
+        context = ApplicationProvider.getApplicationContext()
         patternViewModel = mockk(relaxUnitFun = true)
 
         stopKoin()
@@ -106,14 +104,16 @@ class PatternActivityTest {
     private fun storePattern() {
         val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
         appPrefs.apply {
-            putString(PatternActivity.PREFERENCE_PATTERN, patternToSave)
+            putString(PatternActivity.PREFERENCE_PATTERN, OC_PATTERN)
             putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
             apply()
         }
     }
 
     private fun openPatternActivity(mode: String) {
-        intent.action = mode
-        activityRule.launchActivity(intent)
+        intent = Intent(context, PatternActivity::class.java).apply {
+            action = mode
+        }
+        activityScenario = ActivityScenario.launch(intent)
     }
 }

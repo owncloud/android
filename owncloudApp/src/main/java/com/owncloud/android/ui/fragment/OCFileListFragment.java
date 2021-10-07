@@ -61,7 +61,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.extensions.FragmentExtKt;
+import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView;
@@ -693,7 +693,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
     }
 
     private void clearLocalSearchView() {
-        FragmentExtKt.hideSoftKeyboard(this);
+        ActivityExtKt.hideSoftKeyboard(requireActivity());
         mFileListAdapter.clearFilterBySearch();
         if (mSearchView != null) {
             mSearchView.onActionViewCollapsed();

@@ -55,14 +55,3 @@ fun Fragment.showAlertDialog(
         .setNegativeButton(negativeButtonText, negativeButtonListener)
         .show()
 }
-
-fun Fragment.hideSoftKeyboard() {
-    val focusedView = requireActivity().currentFocus
-    focusedView?.let {
-        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(
-            focusedView.windowToken,
-            0
-        )
-    }
-}

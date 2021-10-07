@@ -42,7 +42,6 @@ class BiometricActivity : AppCompatActivity() {
     private val biometricViewModel by viewModel<BiometricViewModel>()
 
     private lateinit var cryptoObject: BiometricPrompt.CryptoObject
-    private lateinit var activity: BiometricActivity
     private val handler = Handler()
     private val executor = Executor { command -> handler.post(command) }
 
@@ -57,8 +56,6 @@ class BiometricActivity : AppCompatActivity() {
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        activity = this
 
         biometricViewModel.initCipher()?.let {
             cryptoObject = BiometricPrompt.CryptoObject(it)
@@ -97,7 +94,7 @@ class BiometricActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                     biometricViewModel.setLastUnlockTimestamp()
-                    activity.finish()
+                    finish()
                 }
 
                 override fun onAuthenticationFailed() {
@@ -112,12 +109,12 @@ class BiometricActivity : AppCompatActivity() {
 
     private fun authError() {
         if (PassCodeManager.isPassCodeEnabled()) {
-            PassCodeManager.onBiometricCancelled(activity)
+            PassCodeManager.onBiometricCancelled(this)
         } else if (PatternManager.isPatternEnabled()) {
-            PatternManager.onBiometricCancelled(activity)
+            PatternManager.onBiometricCancelled(this)
         }
 
-        activity.finish()
+        finish()
     }
 
     companion object {

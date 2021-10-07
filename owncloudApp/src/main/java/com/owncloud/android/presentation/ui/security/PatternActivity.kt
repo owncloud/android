@@ -32,6 +32,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.PatternLockView.Dot
 import com.andrognito.patternlockview.listener.PatternLockViewListener
@@ -89,45 +90,50 @@ class PatternActivity : AppCompatActivity() {
          */
         var patternExpShouldVisible = false
 
-        if (ACTION_CHECK == intent.action) {
-            /**
-             * This block is executed when the user opens the app after setting the pattern lock
-             * this block takes the pattern input by the user and checks it with the pattern initially set by the user.
-             */
-            patternHeader.text = getString(R.string.pattern_enter_pattern)
-            patternExplanation.visibility = View.INVISIBLE
-            setCancelButtonEnabled(false)
-        } else if (ACTION_REQUEST_WITH_RESULT == intent.action) {
-            /**
-             * This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
-             */
-            var patternHeaderViewText = ""
-            if (savedInstanceState != null) {
-                confirmingPattern = savedInstanceState.getBoolean(KEY_CONFIRMING_PATTERN)
-                patternValue = savedInstanceState.getString(KEY_PATTERN_STRING)
-                patternHeaderViewText = savedInstanceState.getString(PATTERN_HEADER_VIEW_TEXT)!!
-                patternExpShouldVisible = savedInstanceState.getBoolean(PATTERN_EXP_VIEW_STATE)
+        when (intent.action) {
+            ACTION_CHECK -> {
+                /**
+                 * This block is executed when the user opens the app after setting the pattern lock
+                 * this block takes the pattern input by the user and checks it with the pattern initially set by the user.
+                 */
+                patternHeader.text = getString(R.string.pattern_enter_pattern)
+                patternExplanation.visibility = View.INVISIBLE
+                setCancelButtonEnabled(false)
             }
-            if (confirmingPattern) {
-                patternHeader.text = patternHeaderViewText
-                if (!patternExpShouldVisible) {
-                    patternExplanation.visibility = View.INVISIBLE
+            ACTION_REQUEST_WITH_RESULT -> {
+                /**
+                 * This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
+                 */
+                var patternHeaderViewText = ""
+                if (savedInstanceState != null) {
+                    confirmingPattern = savedInstanceState.getBoolean(KEY_CONFIRMING_PATTERN)
+                    patternValue = savedInstanceState.getString(KEY_PATTERN_STRING)
+                    patternHeaderViewText = savedInstanceState.getString(PATTERN_HEADER_VIEW_TEXT)!!
+                    patternExpShouldVisible = savedInstanceState.getBoolean(PATTERN_EXP_VIEW_STATE)
                 }
-            } else {
-                patternHeader.text = getString(R.string.pattern_configure_pattern)
+                if (confirmingPattern) {
+                    patternHeader.text = patternHeaderViewText
+                    if (!patternExpShouldVisible) {
+                        patternExplanation.visibility = View.INVISIBLE
+                    }
+                } else {
+                    patternHeader.text = getString(R.string.pattern_configure_pattern)
+                    patternExplanation.visibility = View.VISIBLE
+                    setCancelButtonEnabled(true)
+                }
+            }
+            ACTION_CHECK_WITH_RESULT -> {
+                /**
+                 * This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
+                 */
+                patternHeader.text = getString(R.string.pattern_remove_pattern)
+                patternExplanation.text = getString(R.string.pattern_no_longer_required)
                 patternExplanation.visibility = View.VISIBLE
                 setCancelButtonEnabled(true)
             }
-        } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
-            /**
-             * This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
-             */
-            patternHeader.text = getString(R.string.pattern_remove_pattern)
-            patternExplanation.text = getString(R.string.pattern_no_longer_required)
-            patternExplanation.visibility = View.VISIBLE
-            setCancelButtonEnabled(true)
-        } else {
-            throw IllegalArgumentException(R.string.illegal_argument_exception_message.toString() + " ")
+            else -> {
+                throw IllegalArgumentException(R.string.illegal_argument_exception_message.toString() + " ")
+            }
         }
 
         setPatternListener()
@@ -139,7 +145,7 @@ class PatternActivity : AppCompatActivity() {
      *
      * @param enabled 'True' makes the cancel button available, 'false' hides it.
      */
-    protected fun setCancelButtonEnabled(enabled: Boolean) {
+    private fun setCancelButtonEnabled(enabled: Boolean) {
         if (enabled) {
             bCancel.visibility = View.VISIBLE
             bCancel.setOnClickListener { finish() }
@@ -152,7 +158,7 @@ class PatternActivity : AppCompatActivity() {
     /**
      * Binds the appropriate listener to the pattern view.
      */
-    protected fun setPatternListener() {
+    private fun setPatternListener() {
         patternLockView.addPatternLockListener(object : PatternLockViewListener {
             override fun onStarted() {
                 Timber.d("Pattern Drawing Started")
@@ -192,50 +198,66 @@ class PatternActivity : AppCompatActivity() {
     }
 
     private fun processPattern() {
-        if (ACTION_CHECK == intent.action) {
-            /**
-             * This block is executed when the user opens the app after setting the pattern lock
-             * this block takes the pattern input by the user and checks it with the pattern initially set by the user.
-             */
-            if (patternViewModel.checkPatternIsValid(patternValue)) {
-                patternError.visibility = View.INVISIBLE
-                val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
-                preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
-                finish()
-            } else {
-                showErrorAndRestart(
-                    R.string.pattern_incorrect_pattern,
-                    R.string.pattern_enter_pattern, View.INVISIBLE
-                )
+        when (intent.action) {
+            ACTION_CHECK -> {
+                /**
+                 * This block is executed when the user opens the app after setting the pattern lock
+                 * this block takes the pattern input by the user and checks it with the pattern initially set by the user.
+                 */
+                handleActionCheck()
             }
-        } else if (ACTION_CHECK_WITH_RESULT == intent.action) {
-            //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
-            if (patternViewModel.checkPatternIsValid(patternValue)) {
-                patternViewModel.removePattern()
-                val result = Intent()
-                setResult(RESULT_OK, result)
-                patternError.visibility = View.INVISIBLE
-                notifyDocumentProviderRoots(applicationContext)
-                finish()
-            } else {
-                showErrorAndRestart(
-                    R.string.pattern_incorrect_pattern,
-                    R.string.pattern_enter_pattern, View.INVISIBLE
-                )
+            ACTION_CHECK_WITH_RESULT -> {
+                //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
+                handleActionCheckWithResult()
             }
-        } else if (ACTION_REQUEST_WITH_RESULT == intent.action) {
-            //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
-            if (!confirmingPattern) {
-                patternError.visibility = View.INVISIBLE
-                requestPatternConfirmation()
-            } else if (confirmPattern()) {
-                savePatternAndExit()
-            } else {
-                showErrorAndRestart(
-                    R.string.pattern_not_same_pattern,
-                    R.string.pattern_enter_pattern, View.VISIBLE
-                )
+            ACTION_REQUEST_WITH_RESULT -> {
+                //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
+                handleActionRequestWithResult()
             }
+        }
+    }
+
+    private fun handleActionCheck() {
+        if (patternViewModel.checkPatternIsValid(patternValue)) {
+            patternError.visibility = View.INVISIBLE
+            val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
+            preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
+            finish()
+        } else {
+            showErrorAndRestart(
+                errorMessage = R.string.pattern_incorrect_pattern,
+                headerMessage = R.string.pattern_enter_pattern, explanationVisibility = View.INVISIBLE
+            )
+        }
+    }
+
+    private fun handleActionCheckWithResult() {
+        if (patternViewModel.checkPatternIsValid(patternValue)) {
+            patternViewModel.removePattern()
+            val result = Intent()
+            setResult(RESULT_OK, result)
+            patternError.visibility = View.INVISIBLE
+            notifyDocumentProviderRoots(applicationContext)
+            finish()
+        } else {
+            showErrorAndRestart(
+                errorMessage = R.string.pattern_incorrect_pattern,
+                headerMessage = R.string.pattern_enter_pattern, explanationVisibility = View.INVISIBLE
+            )
+        }
+    }
+
+    private fun handleActionRequestWithResult() {
+        if (!confirmingPattern) {
+            patternError.visibility = View.INVISIBLE
+            requestPatternConfirmation()
+        } else if (confirmPattern()) {
+            savePatternAndExit()
+        } else {
+            showErrorAndRestart(
+                errorMessage = R.string.pattern_not_same_pattern,
+                headerMessage = R.string.pattern_enter_pattern, explanationVisibility = View.VISIBLE
+            )
         }
     }
 
@@ -253,14 +275,14 @@ class PatternActivity : AppCompatActivity() {
     /**
      * Ask to the user to re-enter the pattern just entered before saving it as the current pattern.
      */
-    protected fun requestPatternConfirmation() {
+    private fun requestPatternConfirmation() {
         patternLockView.clearPattern()
         patternHeader.setText(R.string.pattern_reenter_pattern)
         patternExplanation.visibility = View.INVISIBLE
         confirmingPattern = true
     }
 
-    protected fun confirmPattern(): Boolean {
+    private fun confirmPattern(): Boolean {
         confirmingPattern = false
         return newPatternValue != null && newPatternValue == patternValue
     }
@@ -279,11 +301,7 @@ class PatternActivity : AppCompatActivity() {
             putBoolean(KEY_CONFIRMING_PATTERN, confirmingPattern)
             putString(KEY_PATTERN_STRING, patternValue)
             putString(PATTERN_HEADER_VIEW_TEXT, patternHeader.text.toString())
-            if (patternExplanation.visibility == View.VISIBLE) {
-                putBoolean(PATTERN_EXP_VIEW_STATE, true)
-            } else {
-                putBoolean(PATTERN_EXP_VIEW_STATE, false)
-            }
+                putBoolean(PATTERN_EXP_VIEW_STATE, patternExplanation.isVisible)
         }
     }
 
