@@ -29,7 +29,6 @@ import android.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -41,11 +40,11 @@ import com.owncloud.android.utils.matchers.withText
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
+import com.owncloud.android.utils.click
+import com.owncloud.android.utils.matchers.withChildCountAndId
 import io.mockk.every
 import io.mockk.mockk
 import nthChildOf
@@ -55,13 +54,11 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import withChildViewCount
 
 class PassCodeActivityTest {
 
     private lateinit var activityScenario: ActivityScenario<PassCodeActivity>
 
-    private lateinit var intent: Intent
     private lateinit var context: Context
 
     private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
@@ -112,8 +109,10 @@ class PassCodeActivityTest {
         }
 
         // Check if required amount of input fields are actually displayed
-        onView(withId(R.id.passCodeTxtLayout)).check(matches(isDisplayed()))
-        onView(withId(R.id.passCodeTxtLayout)).check(matches(withChildViewCount(passCodeViewModel.getNumberOfPassCodeDigits(), withId(R.id.passCodeEditText))))
+        with(R.id.passCodeTxtLayout) {
+            isDisplayed(true)
+            withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
+        }
 
         with(R.id.cancel) {
             isDisplayed(true)
@@ -126,7 +125,7 @@ class PassCodeActivityTest {
         //Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        onView(withId(R.id.cancel)).perform(click())
+        R.id.cancel.click()
 
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
@@ -198,7 +197,7 @@ class PassCodeActivityTest {
             onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
         }
 
-        onView(withId(R.id.cancel)).perform(click())
+        R.id.cancel.click()
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
@@ -210,12 +209,12 @@ class PassCodeActivityTest {
         //First typing
         typePasscode(defaultPassCode)
 
-        //Type incorrect passcode
+        //Type incomplete passcode
         for (i in 0..1) {
             onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
         }
 
-        onView(withId(R.id.cancel)).perform(click())
+        R.id.cancel.click()
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
@@ -238,8 +237,7 @@ class PassCodeActivityTest {
         //Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
-        onView(withId(R.id.cancel)).perform(click())
-
+        R.id.cancel.click()
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
@@ -285,7 +283,7 @@ class PassCodeActivityTest {
     }
 
     private fun openPasscodeActivity(mode: String) {
-        intent = Intent(context, PassCodeActivity::class.java).apply {
+        val intent = Intent(context, PassCodeActivity::class.java).apply {
             action = mode
         }
         activityScenario = ActivityScenario.launch(intent)
