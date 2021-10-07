@@ -142,7 +142,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         Timber.d("Let's copy ${rootLegacyDirectory.absolutePath} to scoped storage")
         rootLegacyDirectory.listFiles()?.forEach { file ->
             if (file.isDirectory) {
-                file.copyRecursively(File(getRootFolderPath()), overwrite = true)
+                file.copyRecursively(File(getRootFolderPath(), file.name), overwrite = true)
             }
         }
     }
