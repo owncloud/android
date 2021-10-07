@@ -36,7 +36,6 @@ import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
-import com.owncloud.android.extensions.FileExtKt;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
@@ -44,10 +43,8 @@ import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
-import com.owncloud.android.utils.MimetypeIconUtil;
 import timber.log.Timber;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
@@ -186,32 +183,24 @@ public class FileOperationsHelper {
 
     }
 
-    private Intent makeIntent(OCFile oCfile, File file) {
+    private Intent makeIntent(OCFile oCfile) {
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
 
-        if (oCfile != null && file == null) {
+        if (oCfile != null) {
             // set MimeType
             sendIntent.setType(oCfile.getMimetype());
             sendIntent.putExtra(
                     Intent.EXTRA_STREAM,
                     oCfile.getExposedFileUri(mFileActivity)
             );
-        } else {
-            // set MimeType
-            sendIntent.setType(MimetypeIconUtil.getBestMimeTypeByFilename(file.getName()));
-            sendIntent.putExtra(
-                    Intent.EXTRA_STREAM,
-                    FileExtKt.getExposedFileUri(mFileActivity, file.getPath())
-
-            );
         }
-        sendIntent.putExtra(Intent.ACTION_SEND, true);      // Send Action
+        sendIntent.putExtra(Intent.ACTION_SEND, true);// Send Action
         return sendIntent;
     }
 
-    public void sendFile(OCFile ocFile, File file) {
-        if (ocFile != null || file != null) {
-            Intent sendIntent = makeIntent(ocFile, file);
+    public void sendFile(OCFile ocFile) {
+        if (ocFile != null) {
+            Intent sendIntent = makeIntent(ocFile);
             // Show dialog, without the own app
             String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
 

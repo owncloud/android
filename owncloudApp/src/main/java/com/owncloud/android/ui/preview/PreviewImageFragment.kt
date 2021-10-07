@@ -248,7 +248,7 @@ class PreviewImageFragment : FileFragment() {
                 true
             }
             R.id.action_send_file -> {
-                mContainerActivity.fileOperationsHelper.sendFile(file,null)
+                mContainerActivity.fileOperationsHelper.sendFile(file)
                 true
             }
             R.id.action_sync_file -> {

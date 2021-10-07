@@ -48,7 +48,7 @@ class LogsListActivity : AppCompatActivity() {
 
     private val recyclerViewLogsAdapter = RecyclerViewLogsAdapter(object : RecyclerViewLogsAdapter.Listener {
         override fun share(file: File) {
-            sendFile(null, file)
+            sendFile(file)
         }
 
         override fun delete(file: File) {

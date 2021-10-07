@@ -946,7 +946,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                         ((FileDisplayActivity) mContainerActivity).startDownloadForSending(singleFile);
 
                     } else {
-                        mContainerActivity.getFileOperationsHelper().sendFile(singleFile, null);
+                        mContainerActivity.getFileOperationsHelper().sendFile(singleFile);
                     }
                     return true;
                 }

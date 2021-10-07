@@ -123,7 +123,6 @@ class LogsListActivityTest {
 
     @Test
     fun test_childCount() {
-        val fileName = "LOG"
         launchTest(logs = listOf(File("owncloud.2021-01.01.log"), File("owncloud.2021-01-02.log")))
         R.id.recyclerView_activity_logs_list.assertChildCount(2)
     }

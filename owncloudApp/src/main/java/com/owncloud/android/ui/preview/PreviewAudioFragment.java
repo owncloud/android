@@ -376,7 +376,7 @@ public class PreviewAudioFragment extends FileFragment {
                 return true;
             }
             case R.id.action_send_file: {
-                mContainerActivity.getFileOperationsHelper().sendFile(getFile(),null);
+                mContainerActivity.getFileOperationsHelper().sendFile(getFile());
                 return true;
             }
             case R.id.action_sync_file: {

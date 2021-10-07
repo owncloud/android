@@ -33,7 +33,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.ui.helpers.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -160,9 +159,9 @@ fun Activity.openFileWithIntent(intentForSavedMimeType: Intent, intentForGuessed
     }
 }
 
-fun AppCompatActivity.sendFile(ocFile: OCFile?, file: File?) {
-    if (ocFile != null || file != null) {
-        val sendIntent: Intent = makeIntent(ocFile, file, this)
+fun AppCompatActivity.sendFile(file: File?) {
+    if (file != null) {
+        val sendIntent: Intent = makeIntent(file, this)
         // Show dialog, without the own app
         val packagesToExclude = arrayOf<String>(this.packageName)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -182,18 +181,11 @@ fun AppCompatActivity.sendFile(ocFile: OCFile?, file: File?) {
     }
 }
 
-private fun makeIntent(oCfile: OCFile?, file: File?, context: Context): Intent {
+private fun makeIntent(file: File?, context: Context): Intent {
     val sendIntent = Intent(Intent.ACTION_SEND)
-    if (oCfile != null && file == null) {
+    if (file != null) {
         // set MimeType
-        sendIntent.type = oCfile.mimetype
-        sendIntent.putExtra(
-            Intent.EXTRA_STREAM,
-            oCfile.getExposedFileUri(context)
-        )
-    } else {
-        // set MimeType
-        sendIntent.type = MimetypeIconUtil.getBestMimeTypeByFilename(file!!.name)
+        sendIntent.type = MimetypeIconUtil.getBestMimeTypeByFilename(file.name)
         sendIntent.putExtra(
             Intent.EXTRA_STREAM,
             getExposedFileUri(context, file.path)
