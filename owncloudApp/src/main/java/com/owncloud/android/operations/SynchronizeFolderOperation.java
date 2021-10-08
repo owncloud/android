@@ -97,12 +97,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      */
     private int mFailsInFileSyncsFound;
 
-    /**
-     * Map of remote and local paths to files that where locally stored in a location
-     * out of the ownCloud folder and couldn't be copied automatically into it
-     **/
-    private Map<String, String> mForgottenLocalFiles;
-
     private List<SynchronizeFileOperation> mFilesToSyncContents;
 
     private List<Intent> mFoldersToSyncContents;
@@ -161,7 +155,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         mContext = context;
         mFilesToSyncContents = new Vector<>();
         mFoldersToSyncContents = new Vector<>();
-        mForgottenLocalFiles = new HashMap<>();
         mCancellationRequested = new AtomicBoolean(false);
         mPushOnly = pushOnly;
         mSyncFullAccount = syncFullAccount;
@@ -174,10 +167,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     public int getFailsInFileSyncsFound() {
         return mFailsInFileSyncsFound;
-    }
-
-    public Map<String, String> getForgottenLocalFiles() {
-        return mForgottenLocalFiles;
     }
 
     /**
@@ -202,7 +191,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
-        mForgottenLocalFiles.clear();
 
         try {
             // get locally cached information about folder

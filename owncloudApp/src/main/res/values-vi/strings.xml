@@ -137,14 +137,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d file trong hàng đợi đồng bộ không thể được đồng bộ</string>
   <string name="sync_fail_in_favourites_ticker">Các file trong hàng đợi đồng bộ không thành công</string>
   <string name="sync_fail_in_favourites_content">Nội dung tập tin %1$d không thể đồng bộ (%2$d xung đột)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Một số tập tin cục bộ bị quên</string>
-  <string name="sync_current_folder_was_removed">Thư mục %1$s không còn tồn tại</string>
-  <string name="foreign_files_move">Di chuyển tất cả</string>
-  <string name="foreign_files_success">Tất cả tập tin đã được chuyển đi</string>
-  <string name="foreign_files_fail">Một vài tập tin không thể chuyển đi</string>
-  <string name="foreign_files_local_text">Cục bộ: %1$s</string>
-  <string name="foreign_files_remote_text">Từ xa: %1$s</string>
-  <string name="media_notif_ticker">%1$s trình phát nhạc</string>
+    <string name="sync_current_folder_was_removed">Thư mục %1$s không còn tồn tại</string>
+    <string name="media_notif_ticker">%1$s trình phát nhạc</string>
   <string name="media_state_playing">%1$s (đang phát)</string>
   <string name="media_state_loading">%1$s (đang tải)</string>
   <string name="media_event_done">%1$s đã hoàn tất chế độ phát lại</string>

@@ -58,8 +58,7 @@
   <string name="downloader_download_succeeded_ticker">ការទាញយក​បានជោគជ័យ</string>
   <string name="downloader_download_failed_ticker">ការទាញយក​បានបរាជ័យ</string>
   <string name="common_choose_account">ជ្រើស​គណនី</string>
-  <string name="foreign_files_move">ផ្លាស់ទីទាំងអស់</string>
-  <string name="auth_no_net_conn_title">គ្មានបណ្តាញ​តភ្ជាប់ទេ</string>
+    <string name="auth_no_net_conn_title">គ្មានបណ្តាញ​តភ្ជាប់ទេ</string>
   <string name="auth_unknown_error_title">មិនស្គាល់កំហុសបានកើតឡើង!</string>
   <string name="common_rename">ប្ដូរ​ឈ្មោះ</string>
   <string name="common_remove">ដកចេញ</string>

@@ -138,20 +138,8 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="sync_conflicts_in_favourites_content">%1$d fichièrs de gardar sincronizats an pas pogut èsser sincronizats</string>
   <string name="sync_fail_in_favourites_ticker">La sincronizacion dels fichièrs a fracassat</string>
   <string name="sync_fail_in_favourites_content">Lo contengut de %1$d fichièrs a pas pogut èsser sincronizat (%2$d conflictes)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Certans fichièrs locals son estats doblidats</string>
-  <string name="sync_foreign_files_forgotten_content">%1$d fichièrs del dorsièr %2$s an pas pogut èsser copiats dins</string>
-  <string name="sync_foreign_files_forgotten_explanation">Dempuèi la version 1.3.16, los fichièrs mandats dempuèi aqueste aparelh son copiats dins lo dorsièr local %1$s per evitar una pèrda de donadas quand un meteis fichièr es sincronizat amb mantun compte.
-
-En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions anterioras d\'aquesta aplicacion son estats copiats dins lo dorsièr %2$s. Pasmens, una error a empachat l\'acabament d\'aquesta operacion pendent la sincronizacion del compte. Podètz siá daissar los fichièrs tals coma son e suprimir lo ligam cap a %3$s, siá desplaçar los fichièrs dins lo dorsièr %1$s e gardar lo ligam cap a %4$s.
-
-Çaijós la lista dels fichièrs locals, e los fichièrs distants dins %5$s als quals èran ligats.</string>
-  <string name="sync_current_folder_was_removed">Lo dorsièr %1$s existís pas mai</string>
-  <string name="foreign_files_move">Desplaçar tot</string>
-  <string name="foreign_files_success">Totes los fichièrs son estats desplaçats</string>
-  <string name="foreign_files_fail">Certans fichièrs an pas pogut èsser desplaçats</string>
-  <string name="foreign_files_local_text">Local : %1$s</string>
-  <string name="foreign_files_remote_text">Distant : %1$s</string>
-  <string name="pass_code_configure_your_pass_code">Sasissètz vòstre còdi de seguretat</string>
+    <string name="sync_current_folder_was_removed">Lo dorsièr %1$s existís pas mai</string>
+    <string name="pass_code_configure_your_pass_code">Sasissètz vòstre còdi de seguretat</string>
   <string name="pass_code_configure_your_pass_code_explanation">Lo còdi de seguretat serà demandat a cada dobertura de l\'aplicacion</string>
   <string name="pass_code_remove_your_pass_code">Suprimir vòstre còdi de seguretat</string>
   <string name="pass_code_mismatch">Los còdis de seguretat son pas identics</string>

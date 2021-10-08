@@ -52,14 +52,7 @@
   <string name="downloader_not_downloaded_yet">Aun no se ha descargado</string>
   <string name="common_choose_account">Elija una cuenta</string>
   <string name="sync_conflicts_in_favourites_ticker">conflictos encontrados</string>
-  <string name="sync_foreign_files_forgotten_ticker">Algunos archivos fueron olvidados</string>
-  <string name="sync_foreign_files_forgotten_content">%1$d archivos fuera de la carpeta %2$s no pudieron ser copiados dentro</string>
-  <string name="foreign_files_move">mover todo</string>
-  <string name="foreign_files_success">todos los archivos fueron transferidos</string>
-  <string name="foreign_files_fail">algunos archivos no pueden ser transferidos</string>
-  <string name="foreign_files_local_text">Local: %1$s</string>
-  <string name="foreign_files_remote_text">Remoto: %1$s</string>
-  <string name="media_notif_ticker">Reproductor de música %1$s</string>
+    <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">(sonando) %1$s</string>
   <string name="media_state_loading">(cargando) %1$s</string>
   <string name="media_event_done">La reproducción de %1$s ha terminado</string>

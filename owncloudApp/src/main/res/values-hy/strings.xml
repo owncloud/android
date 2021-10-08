@@ -93,11 +93,7 @@
   <string name="sync_fail_content_unauthorized">Անվավեր գաղտնաբառ %1$sի համար</string>
   <string name="sync_conflicts_in_favourites_ticker">Հակասություն գտնվեց</string>
   <string name="sync_current_folder_was_removed">%1$s պանակը այլևս գոյություն չունի</string>
-  <string name="foreign_files_move">Տեղափոխել բոլորը</string>
-  <string name="foreign_files_success">Բոլոր ֆայլերը տեղափոխվեցին</string>
-  <string name="foreign_files_fail">Որոշ ֆայլեր չեն կարող տեղափոխվել</string>
-  <string name="foreign_files_remote_text">Հեռակա. %1$s</string>
-  <string name="pass_code_enter_pass_code">Ներմուծիր քո անցաբառը</string>
+    <string name="pass_code_enter_pass_code">Ներմուծիր քո անցաբառը</string>
   <string name="pass_code_configure_your_pass_code">Ներմուծիր քո անցաբառը</string>
   <string name="pass_code_reenter_your_pass_code">Կրկին ներմուծիր քո անցաբառը</string>
   <string name="pass_code_remove_your_pass_code">Ջնջել քո անցաբառը</string>

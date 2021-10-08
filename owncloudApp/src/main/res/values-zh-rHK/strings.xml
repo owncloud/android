@@ -54,8 +54,7 @@
   <string name="downloader_download_succeeded_ticker">下載成功</string>
   <string name="downloader_download_failed_ticker">下載失敗</string>
   <string name="common_choose_account">選擇帳號</string>
-  <string name="foreign_files_move">移動所有</string>
-  <string name="auth_no_net_conn_title">無網絡連線</string>
+    <string name="auth_no_net_conn_title">無網絡連線</string>
   <string name="common_rename">重新命名</string>
   <string name="common_remove">刪除</string>
   <string name="ssl_validator_btn_details_see">詳述</string>
