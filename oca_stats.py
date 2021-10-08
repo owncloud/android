@@ -4,6 +4,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 import sys
+import os
 
 def shell_run(command):
     return subprocess.check_output(['bash', '-c', command])
@@ -31,6 +32,13 @@ def count_files_containing_string(in_name, in_file):
         """).decode("utf-8")
     return int(output)
 
+def count_files_containing_string_in_dir(directory, in_name, in_file):
+    curr_dir = os.getcwd()
+    os.chdir(directory)
+    count = count_files_containing_string(in_name, in_file)
+    os.chdir(curr_dir)
+    return count
+
 def get_lines_stats():
     kotlin_lines = lines_of_filetype_in_folders("*.kt", "main")
     java_lines = lines_of_filetype_in_folders("*.java", "main")
@@ -49,6 +57,9 @@ def get_mvvm_stats():
             "vm_fragments": viewmodel_fragments,
             "vm_activities": viewmodel_activities}
 
+
+def get_remote_operations_in_presentation():
+    return count_files_containing_string_in_dir("owncloudApp", "", "RemoteOperation")
 
 def get_list_of_last_commits_in_month():
     time_step = relativedelta(months=1)
@@ -75,8 +86,9 @@ def get_stats_from_commit_list(commit_list):
                 "n_fragments": [],
                 "n_activities": [],
                 "vm_fragments": [],
-                "vm_activities": []
-                "commit": [],
+                "vm_activities": [],
+                "operations_in_press": [],
+                "commit": []
             }
     for commit in commit_list:
         print(f"Process: {commit[0]} ")
@@ -87,6 +99,8 @@ def get_stats_from_commit_list(commit_list):
         """)
         cstats = get_lines_stats()
         cstats.update(get_mvvm_stats())
+        cstats.update(
+                {"operations_in_press":get_remote_operations_in_presentation()})
         
         def add_to_stats(val):
             stats[val].append(cstats[val])
@@ -98,6 +112,7 @@ def get_stats_from_commit_list(commit_list):
         add_to_stats("n_activities")
         add_to_stats("vm_fragments")
         add_to_stats("vm_activities")
+        add_to_stats("operations_in_press")
         stats["commit"].append(commit[1])
     return stats
 

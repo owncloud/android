@@ -31,3 +31,5 @@ lint-*ml
 .idea/*
 !.idea/codeStyles/
 
+# ignore python statistic files
+__pycache__
