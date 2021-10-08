@@ -49,19 +49,16 @@ class LogsListActivityTest {
     private lateinit var activityScenario: ActivityScenario<LogsListActivity>
 
     private lateinit var logListViewModel: LogListViewModel
-    private lateinit var drawerViewModel: DrawerViewModel
     private lateinit var context: Context
 
     private fun launchTest(logs: List<File>) {
         every { logListViewModel.getData() } returns logs
-        every { drawerViewModel.getCurrentAccount(any()) } returns null
         activityScenario = ActivityScenario.launch(LogsListActivity::class.java)
     }
 
     @Before
     fun setUp() {
         logListViewModel = mockk(relaxed = true)
-        drawerViewModel = mockk(relaxed = true)
         context = ApplicationProvider.getApplicationContext()
 
         stopKoin()
@@ -72,9 +69,6 @@ class LogsListActivityTest {
                 module(override = true) {
                     viewModel {
                         logListViewModel
-                    }
-                    viewModel {
-                        drawerViewModel
                     }
                 }
             )
