@@ -31,6 +31,7 @@ import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.TlsVersion;
@@ -58,7 +59,7 @@ public class HttpClient {
     private static Context sContext;
     private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
     private static LogInterceptor sLogInterceptor;
-    private static DebugInterceptor sDebugInterceptor;
+    private static Interceptor sDebugInterceptor;
 
     public static OkHttpClient getOkHttpClient() {
         if (sOkHttpClient == null) {
@@ -129,13 +130,6 @@ public class HttpClient {
             sLogInterceptor = new LogInterceptor();
         }
         return sLogInterceptor;
-    }
-
-    public static DebugInterceptor getDebugInterceptor() {
-        if (sDebugInterceptor == null) {
-            sDebugInterceptor = new DebugInterceptor();
-        }
-        return sDebugInterceptor;
     }
 
     public static List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
