@@ -42,7 +42,6 @@
   <string name="prefs_touches_with_other_visible_windows">Érintkezik más látható ablakkal</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Engedélyezze az érintéseket, amikor a kép takarásban van egy másik ablak által.</string>
   <string name="confirmation_touches_with_other_windows_title">Biztos, hogy engedélyezi ezt a funkciót?</string>
-  <string name="prefs_open_logs_view">Log nézet megnyitása</string>
   <string name="prefs_subsection_picture_uploads">Képek automatikus feltöltése</string>
   <string name="prefs_subsection_video_uploads">Videók automatikus feltöltése</string>
   <string name="prefs_camera_picture_upload">Képfeltöltések</string>

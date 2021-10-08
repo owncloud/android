@@ -45,7 +45,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอปกรองแสง</string>
   <string name="confirmation_touches_with_other_windows_title">คุณแน่ใจหรือว่าต้องการเปิดใช้งานคุณลักษณะนี้?</string>
   <string name="confirmation_touches_with_other_windows_message">ใช้คุณสมบัตินี้ภายใต้ความรับผิดชอบของคุณ แอปพลิเคชันที่เป็นอันตรายอาจพยายามหลอกให้คุณทำการกระทำบางอย่างแบบไม่รู้ตัวโดยใช้มุมมองอื่น</string>
-  <string name="prefs_open_logs_view">เปิดมุมมองบันทึก</string>
   <string name="prefs_subsection_picture_uploads">อัปโหลดรูปภาพอัตโนมัติ</string>
   <string name="prefs_subsection_picture_uploads_summary">จัดการตำแหน่งและพฤติกรรมของรูปภาพที่อัปโหลดโดยอัตโนมัติ</string>
   <string name="prefs_subsection_video_uploads">อัปโหลดวิดีโออัตโนมัติ</string>

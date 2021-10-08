@@ -42,7 +42,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen zulassen, wenn die Ansicht von einem anderen sichtbaren Fenster verdeckt wird. Aktivieren Sie es, um Lichtfilter-Apps zu verwenden.</string>
   <string name="confirmation_touches_with_other_windows_title">Wollen Sie diese Funktion wirklich einschalten?</string>
   <string name="confirmation_touches_with_other_windows_message">Verwenden Sie diese Funktion unter Ihrer eigenen Verantwortung. Eine bösartige Anwendung könnte versuchen, Sie zu täuschen und Sie Aktionen ausführen lassen, die Sie nicht kennen, indem diese andere Ansichten verwenden.</string>
-  <string name="prefs_open_logs_view">Log-Ansicht öffnen</string>
   <string name="prefs_subsection_picture_uploads">Bilder automatisch hochladen</string>
   <string name="prefs_subsection_video_uploads">Videos automatisch hochladen</string>
   <string name="prefs_camera_picture_upload">Bild-Upload</string>

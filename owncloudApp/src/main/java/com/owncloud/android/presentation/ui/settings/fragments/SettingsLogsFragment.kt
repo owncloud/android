@@ -28,9 +28,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
-import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.presentation.ui.logging.LogsListActivity
+import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.utils.PermissionUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -41,7 +40,6 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
 
     private var prefEnableLogging: SwitchPreferenceCompat? = null
     private var prefHttpLogs: CheckBoxPreference? = null
-    private var prefLogsView: Preference? = null
     private var prefLogsListActivity: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -49,7 +47,6 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
 
         prefEnableLogging = findPreference(PREFERENCE_ENABLE_LOGGING)
         prefHttpLogs = findPreference(PREFERENCE_LOG_HTTP)
-        prefLogsView = findPreference(PREFERENCE_LOGGER)
         prefLogsListActivity = findPreference(PREFERENCE_LOGS_LIST)
 
         if (PermissionUtil.isPermissionNotGranted(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -58,7 +55,6 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
 
         with(logsViewModel.isLoggingEnabled()) {
             prefHttpLogs?.isEnabled = this
-            prefLogsView?.isEnabled = this
             prefLogsListActivity?.isEnabled = this
         }
 
@@ -67,7 +63,6 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
             logsViewModel.setEnableLogging(value)
 
             prefHttpLogs?.isEnabled = value
-            prefLogsView?.isEnabled = value
             prefLogsListActivity?.isEnabled = value
 
             if (!value) {
@@ -81,14 +76,6 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
         prefHttpLogs?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
             logsViewModel.shouldLogHttpRequests(newValue as Boolean)
             true
-        }
-
-        prefLogsView?.let {
-            it.setOnPreferenceClickListener {
-                val intent = Intent(context, LogHistoryActivity::class.java)
-                startActivity(intent)
-                true
-            }
         }
 
         prefLogsListActivity?.let {
@@ -108,8 +95,6 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
     companion object {
         const val PREFERENCE_ENABLE_LOGGING = "enable_logging"
         const val PREFERENCE_LOG_HTTP = "set_httpLogs"
-        const val PREFERENCE_LOGGER = "logger"
         const val PREFERENCE_LOGS_LIST = "logs_list"
     }
-
 }
