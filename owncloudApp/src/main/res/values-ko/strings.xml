@@ -178,8 +178,8 @@
   <string name="sync_conflicts_in_favourites_content">동기화된 파일 중 %1$d개를 동기화할 수 없습니다</string>
   <string name="sync_fail_in_favourites_ticker">파일을 동기화할 수 없었습니다</string>
   <string name="sync_fail_in_favourites_content">파일 %1$d개의 내용을 동기화할 수 없음(충돌 %2$d개)</string>
-    <string name="sync_current_folder_was_removed">폴더 %1$s이(가) 더 이상 존재하지 않음</string>
-    <string name="pass_code_enter_pass_code">암호를 입력하십시오</string>
+  <string name="sync_current_folder_was_removed">폴더 %1$s이(가) 더 이상 존재하지 않음</string>
+  <string name="pass_code_enter_pass_code">암호를 입력하십시오</string>
   <string name="pass_code_configure_your_pass_code">암호를 입력하십시오</string>
   <string name="pass_code_configure_your_pass_code_explanation">앱을 시작할 때마다 암호를 물어봅니다</string>
   <string name="pass_code_reenter_your_pass_code">암호를 다시 입력하십시오</string>

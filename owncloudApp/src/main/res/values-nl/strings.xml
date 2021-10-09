@@ -214,8 +214,8 @@ Download hier: %2$s</string>
   <string name="sync_conflicts_in_favourites_content">%1$d in-synch-houden bestanden konden niet worden gesync\'d</string>
   <string name="sync_fail_in_favourites_ticker">In-sync-houden bestanden mislukt</string>
   <string name="sync_fail_in_favourites_content">Inhoud van %1$d bestanden kon niet worden gesynchroniseerd (%2$d conflicten)</string>
-    <string name="sync_current_folder_was_removed">Map %1$s bestaat niet meer</string>
-    <string name="pass_code_enter_pass_code">Voer uw pincode in</string>
+  <string name="sync_current_folder_was_removed">Map %1$s bestaat niet meer</string>
+  <string name="pass_code_enter_pass_code">Voer uw pincode in</string>
   <string name="pass_code_configure_your_pass_code">Invoeren pincode</string>
   <string name="pass_code_configure_your_pass_code_explanation">De pincode wordt elke keer gevraagd bij opstarten van de app</string>
   <string name="pass_code_reenter_your_pass_code">Voer nogmaals uw pincode in</string>

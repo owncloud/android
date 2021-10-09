@@ -212,8 +212,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d mantinguts els arxius que no podien ser sincronitzats</string>
   <string name="sync_fail_in_favourites_ticker">Es mantenent els arxius a sincronitzar erronis</string>
   <string name="sync_fail_in_favourites_content">El contingut de %1$d arxius no es va poder sincronitzar (%2$d conflictes)</string>
-    <string name="sync_current_folder_was_removed">La carpeta %1$s ja no existeix</string>
-    <string name="pass_code_enter_pass_code">Sisplau introdueix el teu codi d\'accés</string>
+  <string name="sync_current_folder_was_removed">La carpeta %1$s ja no existeix</string>
+  <string name="pass_code_enter_pass_code">Sisplau introdueix el teu codi d\'accés</string>
   <string name="pass_code_configure_your_pass_code">Escriviu codi d\'accés</string>
   <string name="pass_code_configure_your_pass_code_explanation">Es requerirà el codi d\'accés cada vegada que s\'iniciï l\'aplicació</string>
   <string name="pass_code_reenter_your_pass_code">Torneu a escriure el codi d\'accés</string>

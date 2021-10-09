@@ -208,8 +208,8 @@ Téléchargez-le ici : %2$s</string>
   <string name="sync_conflicts_in_favourites_content">%1$d fichiers à synchroniser n\'ont pu être synchronisés</string>
   <string name="sync_fail_in_favourites_ticker">La synchronisation des fichiers a échoué</string>
   <string name="sync_fail_in_favourites_content">Le contenu de %1$d fichiers n\'a pu être synchronisé (%2$d conflits)</string>
-    <string name="sync_current_folder_was_removed">Le dossier %1$s n\'existe plus</string>
-    <string name="pass_code_enter_pass_code">Veuillez saisir votre code de sécurité</string>
+  <string name="sync_current_folder_was_removed">Le dossier %1$s n\'existe plus</string>
+  <string name="pass_code_enter_pass_code">Veuillez saisir votre code de sécurité</string>
   <string name="pass_code_configure_your_pass_code">Saisissez votre code de sécurité</string>
   <string name="pass_code_configure_your_pass_code_explanation">Le code de sécurité sera demandé à chaque ouverture de l\'application</string>
   <string name="pass_code_reenter_your_pass_code">Veuillez saisir de nouveau votre code de sécurité</string>

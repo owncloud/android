@@ -216,8 +216,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d eşit tut dosyası, eşitlenemedi</string>
   <string name="sync_fail_in_favourites_ticker">Dosyaları eşit tut işlemi başarısız</string>
   <string name="sync_fail_in_favourites_content">%1$d dosya eşitlenemedi (%2$d çakışma)</string>
-    <string name="sync_current_folder_was_removed">%1$s klasörü artık mevcut değil.</string>
-    <string name="pass_code_enter_pass_code">Lütfen parola kodunuzu girin</string>
+  <string name="sync_current_folder_was_removed">%1$s klasörü artık mevcut değil.</string>
+  <string name="pass_code_enter_pass_code">Lütfen parola kodunuzu girin</string>
   <string name="pass_code_configure_your_pass_code">Parola kodunuzu girin</string>
   <string name="pass_code_configure_your_pass_code_explanation">Parola kodu uygulama her başlatıldığında sorulacaktır</string>
   <string name="pass_code_reenter_your_pass_code">Lütfen parola kodunu yeniden girin</string>

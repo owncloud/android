@@ -211,8 +211,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d berkas kept-in-sync tidak dapat disinkronkan</string>
   <string name="sync_fail_in_favourites_ticker">Berkas kept-in-sync gagal</string>
   <string name="sync_fail_in_favourites_content">Konten berkas %1$d tidak dapat disinkronasikan (%2$d konflik)</string>
-    <string name="sync_current_folder_was_removed">Folder %1$s tidak ada lagi</string>
-    <string name="pass_code_enter_pass_code">Masukkan passcode anda</string>
+  <string name="sync_current_folder_was_removed">Folder %1$s tidak ada lagi</string>
+  <string name="pass_code_enter_pass_code">Masukkan passcode anda</string>
   <string name="pass_code_configure_your_pass_code">Masukkan kode sandi Anda</string>
   <string name="pass_code_configure_your_pass_code_explanation">Kode sandi akan diminta setiap kali apl dijalankan.</string>
   <string name="pass_code_reenter_your_pass_code">Masukkan lagi passcode anda</string>

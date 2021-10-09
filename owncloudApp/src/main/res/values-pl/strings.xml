@@ -207,8 +207,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d synchronizowanych plików nie może zostać zsynchronizowanych</string>
   <string name="sync_fail_in_favourites_ticker">Synchronizacja plików nie powiodła się</string>
   <string name="sync_fail_in_favourites_content">Zawartość %1$d plików nie może zostać synchronizowana (%2$d konfliktów)</string>
-    <string name="sync_current_folder_was_removed">Folder  %1$s nie istnieje.</string>
-    <string name="pass_code_enter_pass_code">Wymyśl kod PIN.</string>
+  <string name="sync_current_folder_was_removed">Folder  %1$s nie istnieje.</string>
+  <string name="pass_code_enter_pass_code">Wymyśl kod PIN.</string>
   <string name="pass_code_configure_your_pass_code">Wpisz kod PIN.</string>
   <string name="pass_code_configure_your_pass_code_explanation">Kod PIN będzie wymagany przy każdym uruchomieniu aplikacji</string>
   <string name="pass_code_reenter_your_pass_code">Wpisz kod PIN ponownie</string>

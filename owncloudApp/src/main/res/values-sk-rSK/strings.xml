@@ -153,8 +153,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d súborov z automatickej synchronizácie nemožno synchronizovať</string>
   <string name="sync_fail_in_favourites_ticker">Automatická synchronizácia súborov zlyhala</string>
   <string name="sync_fail_in_favourites_content">Obsah %1$d súborov nemohol byť synchronizovaný (%2$d konfliktov)</string>
-    <string name="sync_current_folder_was_removed">Priečinok %1$s už existuje</string>
-    <string name="pass_code_configure_your_pass_code">Vložte svoje heslo</string>
+  <string name="sync_current_folder_was_removed">Priečinok %1$s už existuje</string>
+  <string name="pass_code_configure_your_pass_code">Vložte svoje heslo</string>
   <string name="pass_code_configure_your_pass_code_explanation">Heslo bude nutné zadať vždy po štarte aplikácie</string>
   <string name="pass_code_remove_your_pass_code">Zmazať svoje heslo</string>
   <string name="pass_code_mismatch">Heslá sa nezhodujú</string>

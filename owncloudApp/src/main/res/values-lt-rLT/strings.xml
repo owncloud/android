@@ -187,8 +187,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d sinchronizuojami failai nebuvo susinchronizuoti</string>
   <string name="sync_fail_in_favourites_ticker">Sinchronizuojamų failų klaida</string>
   <string name="sync_fail_in_favourites_content">Nepavyko sinchronizuoti %1$d failų turinio (%2$d konfliktų)</string>
-    <string name="sync_current_folder_was_removed">Aplankas %1$s nebeegzistuoja</string>
-    <string name="pass_code_enter_pass_code">Įveskite savo užrakto kodą</string>
+  <string name="sync_current_folder_was_removed">Aplankas %1$s nebeegzistuoja</string>
+  <string name="pass_code_enter_pass_code">Įveskite savo užrakto kodą</string>
   <string name="pass_code_configure_your_pass_code">Įveskite užraktą</string>
   <string name="pass_code_configure_your_pass_code_explanation">Kiekvieną kartą paleidus programėle bus reikalaujamas užraktas</string>
   <string name="pass_code_reenter_your_pass_code">Įveskite užraktą dar kartą</string>

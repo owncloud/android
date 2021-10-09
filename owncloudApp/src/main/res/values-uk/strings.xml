@@ -196,8 +196,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d заплановані для синхронізації файли не можуть бути синхронізовані</string>
   <string name="sync_fail_in_favourites_ticker">Синхронізувати файли не вдалося</string>
   <string name="sync_fail_in_favourites_content">Зміст %1$d файлів не може бути синхронізований (%2$d конфліктів)</string>
-    <string name="sync_current_folder_was_removed">Тека %1$s більше не існує</string>
-    <string name="pass_code_enter_pass_code">Будь ласка, введіть Ваш пароль</string>
+  <string name="sync_current_folder_was_removed">Тека %1$s більше не існує</string>
+  <string name="pass_code_enter_pass_code">Будь ласка, введіть Ваш пароль</string>
   <string name="pass_code_configure_your_pass_code">Введіть Ваш пароль</string>
   <string name="pass_code_configure_your_pass_code_explanation">Пароль буде запрошуватися кожного разу при завантажені додатку</string>
   <string name="pass_code_reenter_your_pass_code">Будь ласка, введіть ще раз Ваш пароль</string>

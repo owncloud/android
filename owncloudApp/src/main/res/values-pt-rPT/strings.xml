@@ -167,8 +167,8 @@
   <string name="sync_conflicts_in_favourites_content">Não foi possível sincronizar %1$d ficheiros definidos para serem mantidos sincronizados</string>
   <string name="sync_fail_in_favourites_ticker">Falhou a operação de manter os ficheiros sincronizados</string>
   <string name="sync_fail_in_favourites_content">Não foi possível sincronizar o conteúdo de %1$d ficheiros  (%2$d conflitos)</string>
-    <string name="sync_current_folder_was_removed">A pasta %1$s já não existe</string>
-    <string name="pass_code_enter_pass_code">Por favor, insira o seu código</string>
+  <string name="sync_current_folder_was_removed">A pasta %1$s já não existe</string>
+  <string name="pass_code_enter_pass_code">Por favor, insira o seu código</string>
   <string name="pass_code_configure_your_pass_code">Insira o seu código</string>
   <string name="pass_code_configure_your_pass_code_explanation">O código será solicitado sempre que a aplicação for iniciada</string>
   <string name="pass_code_reenter_your_pass_code">Por favor, reinsira o seu código</string>

@@ -214,8 +214,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d تعذرت مزامنة الملفات المحفوظة قيد المزامنة</string>
   <string name="sync_fail_in_favourites_ticker">فشل في الملفات المحفوظة قيد المزامنة</string>
   <string name="sync_fail_in_favourites_content">تعذّرت مزامنة محتويات ملفات %1$d (%2$dتعارضات)</string>
-    <string name="sync_current_folder_was_removed">لم يعد مجلد %1$s موجودًا</string>
-    <string name="pass_code_enter_pass_code">يُرجى إدخال رمز مرورك</string>
+  <string name="sync_current_folder_was_removed">لم يعد مجلد %1$s موجودًا</string>
+  <string name="pass_code_enter_pass_code">يُرجى إدخال رمز مرورك</string>
   <string name="pass_code_configure_your_pass_code">أدخل رمز مرورك</string>
   <string name="pass_code_configure_your_pass_code_explanation">سيُطلب رمز المرور في كل مرة يُشغل فيها التطبيق</string>
   <string name="pass_code_reenter_your_pass_code">يُرجى إعادة إدخال رمز مرورك</string>

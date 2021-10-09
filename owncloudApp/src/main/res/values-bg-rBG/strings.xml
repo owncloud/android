@@ -211,8 +211,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d kept-in-sync файла не могат да бъдат сихронизирани</string>
   <string name="sync_fail_in_favourites_ticker">Неуспешни Kept-in-sync файлове</string>
   <string name="sync_fail_in_favourites_content">Неуспешно синхронизиране на съдържанието на %1$d файла (%2$d конфликта).</string>
-    <string name="sync_current_folder_was_removed">Папка %1$s вече не същестува</string>
-    <string name="pass_code_enter_pass_code">Моля въведете своята парола</string>
+  <string name="sync_current_folder_was_removed">Папка %1$s вече не същестува</string>
+  <string name="pass_code_enter_pass_code">Моля въведете своята парола</string>
   <string name="pass_code_configure_your_pass_code">Въведете своята парола</string>
   <string name="pass_code_configure_your_pass_code_explanation">Паролата ще се изисква при всяко стартиране на приложението</string>
   <string name="pass_code_reenter_your_pass_code">Моля въведете отново паролата</string>

@@ -180,8 +180,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d \"pidä synkronoituna\" tiedostoja ei voitu synkronoida</string>
   <string name="sync_fail_in_favourites_ticker">\"Pidä synkronoituna\" epäonnistui</string>
   <string name="sync_fail_in_favourites_content">Hakemiston %1$d tiedostoja ei voitu synkronoida (%2$d konfliktia)</string>
-    <string name="sync_current_folder_was_removed">Kansiota %1$s ei ole enää olemassa</string>
-    <string name="pass_code_enter_pass_code">Anna suojakoodisi</string>
+  <string name="sync_current_folder_was_removed">Kansiota %1$s ei ole enää olemassa</string>
+  <string name="pass_code_enter_pass_code">Anna suojakoodisi</string>
   <string name="pass_code_configure_your_pass_code">Anna suojakoodisi</string>
   <string name="pass_code_configure_your_pass_code_explanation">Suojakoodi kysytään joka kerta, kun sovellus käynnistetään</string>
   <string name="pass_code_reenter_your_pass_code">Anna suojakoodisi uudelleen</string>

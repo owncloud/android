@@ -212,8 +212,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d file non possono essere sincronizzati</string>
   <string name="sync_fail_in_favourites_ticker">Sincronizzazione dei file non riuscita</string>
   <string name="sync_fail_in_favourites_content">I contenuti di %1$d file non possono essere sincronizzati (%2$d conflitti)</string>
-    <string name="sync_current_folder_was_removed">La cartella %1$s non esiste più</string>
-    <string name="pass_code_enter_pass_code">Digita il tuo codice segreto</string>
+  <string name="sync_current_folder_was_removed">La cartella %1$s non esiste più</string>
+  <string name="pass_code_enter_pass_code">Digita il tuo codice segreto</string>
   <string name="pass_code_configure_your_pass_code">Digita il tuo codice segreto</string>
   <string name="pass_code_configure_your_pass_code_explanation">Il codice segreto sarà richiesto ogni volta che l\'applicazione è avviata</string>
   <string name="pass_code_reenter_your_pass_code">Digita nuovamente il codice segreto</string>

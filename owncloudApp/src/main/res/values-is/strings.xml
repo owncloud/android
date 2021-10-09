@@ -189,8 +189,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d skrár merktar fyrir samstillingu var ekki hægt að samstilla</string>
   <string name="sync_fail_in_favourites_ticker">Skrár merktar fyrir samstillingu mistókust</string>
   <string name="sync_fail_in_favourites_content">Efni %1$d skráa var ekki hægt að samstilla (%2$d árekstrar)</string>
-    <string name="sync_current_folder_was_removed">Mappan %1$s er ekki lengur til staðar</string>
-    <string name="pass_code_enter_pass_code">Settu inn lykilkóðann þinn</string>
+  <string name="sync_current_folder_was_removed">Mappan %1$s er ekki lengur til staðar</string>
+  <string name="pass_code_enter_pass_code">Settu inn lykilkóðann þinn</string>
   <string name="pass_code_configure_your_pass_code">Settu inn lykilkóða</string>
   <string name="pass_code_configure_your_pass_code_explanation">Lykilkóðans verður krafist í hvert skipti sem forritið er ræst</string>
   <string name="pass_code_reenter_your_pass_code">Settu aftur inn lykilkóðann þinn</string>

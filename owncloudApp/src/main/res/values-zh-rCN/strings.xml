@@ -203,8 +203,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d 文件无法同步</string>
   <string name="sync_fail_in_favourites_ticker">文件同步失败</string>
   <string name="sync_fail_in_favourites_content">无法同步 %1$d 文件内容(%2$d 冲突)</string>
-    <string name="sync_current_folder_was_removed">文件夹%1$s 已经不存在</string>
-    <string name="pass_code_enter_pass_code">请输入你的密码</string>
+  <string name="sync_current_folder_was_removed">文件夹%1$s 已经不存在</string>
+  <string name="pass_code_enter_pass_code">请输入你的密码</string>
   <string name="pass_code_configure_your_pass_code">输入您的密码</string>
   <string name="pass_code_configure_your_pass_code_explanation">每次应用启动将会请求密码</string>
   <string name="pass_code_reenter_your_pass_code">请再次输入你的密码</string>

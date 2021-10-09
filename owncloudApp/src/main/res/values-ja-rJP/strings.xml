@@ -183,8 +183,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d 同期ファイルを同期できませんでした</string>
   <string name="sync_fail_in_favourites_ticker">ファイルの同期に失敗しました</string>
   <string name="sync_fail_in_favourites_content">%1$d ファイルのコンテンツを同期できませんでした（%2$d の競合）</string>
-    <string name="sync_current_folder_was_removed">フォルダー %1$s はもう存在しません</string>
-    <string name="pass_code_enter_pass_code">パスコードを入力してください</string>
+  <string name="sync_current_folder_was_removed">フォルダー %1$s はもう存在しません</string>
+  <string name="pass_code_enter_pass_code">パスコードを入力してください</string>
   <string name="pass_code_configure_your_pass_code">パスコードを入力</string>
   <string name="pass_code_configure_your_pass_code_explanation">アプリ開始時には毎回パスコードが要求されます</string>
   <string name="pass_code_reenter_your_pass_code">パスコードを再入力してください</string>

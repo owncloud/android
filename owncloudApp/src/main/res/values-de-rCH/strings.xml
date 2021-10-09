@@ -213,8 +213,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d synchron zu haltende Dateien konnte nicht synchronisiert werden.</string>
   <string name="sync_fail_in_favourites_ticker">Synchron halten schlug fehl.</string>
   <string name="sync_fail_in_favourites_content">Inhalte von %1$d konnte nicht synchronisiert werden (%2$d Konflikte)</string>
-    <string name="sync_current_folder_was_removed">Das Verzeichnis %1$s existiert nicht mehr</string>
-    <string name="pass_code_enter_pass_code">Bitte gib deine PIN ein</string>
+  <string name="sync_current_folder_was_removed">Das Verzeichnis %1$s existiert nicht mehr</string>
+  <string name="pass_code_enter_pass_code">Bitte gib deine PIN ein</string>
   <string name="pass_code_configure_your_pass_code">Bitte PIN eingeben</string>
   <string name="pass_code_configure_your_pass_code_explanation">Die PIN wird jedes mal beim Start der App abgefragt</string>
   <string name="pass_code_reenter_your_pass_code">Bitte den PIN nochmals eingeben</string>

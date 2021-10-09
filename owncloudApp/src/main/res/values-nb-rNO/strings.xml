@@ -207,8 +207,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d hold-i-synk filer kunne ikke synkroniseres</string>
   <string name="sync_fail_in_favourites_ticker">Hold i synk filer mislyktes</string>
   <string name="sync_fail_in_favourites_content">Innholdet av %1$d filer kunne ikke synkroniseres (%2$d konflikter)</string>
-    <string name="sync_current_folder_was_removed">Mappen %1$s finnes ikke lengere</string>
-    <string name="pass_code_enter_pass_code">Sett inn passordet ditt</string>
+  <string name="sync_current_folder_was_removed">Mappen %1$s finnes ikke lengere</string>
+  <string name="pass_code_enter_pass_code">Sett inn passordet ditt</string>
   <string name="pass_code_configure_your_pass_code">Skriv inn passordet ditt</string>
   <string name="pass_code_configure_your_pass_code_explanation">Passordet vil bli krevd hver gang appen startes</string>
   <string name="pass_code_reenter_your_pass_code">Skriv inn passordet på nytt</string>

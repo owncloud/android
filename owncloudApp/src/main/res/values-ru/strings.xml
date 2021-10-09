@@ -232,8 +232,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d файлов не может быть синхронизировано</string>
   <string name="sync_fail_in_favourites_ticker">Не удалось синхронизировать файлы</string>
   <string name="sync_fail_in_favourites_content">Содержимое %1$d файлов не может быть синхронизировано (конфликтов: %2$d)</string>
-    <string name="sync_current_folder_was_removed">Каталог %1$s больше не существует</string>
-    <string name="pass_code_enter_pass_code">Пожалуйста, укажите ваш код</string>
+  <string name="sync_current_folder_was_removed">Каталог %1$s больше не существует</string>
+  <string name="pass_code_enter_pass_code">Пожалуйста, укажите ваш код</string>
   <string name="pass_code_configure_your_pass_code">Укажите ваш код</string>
   <string name="pass_code_configure_your_pass_code_explanation">Код будет запрашиваться каждый раз при запуске приложения</string>
   <string name="pass_code_reenter_your_pass_code">Пожалуйста, укажите ваш код еще раз</string>

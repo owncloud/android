@@ -229,8 +229,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d ไฟล์ kept-in-sync ไม่สามารถประสานข้อมูลได้</string>
   <string name="sync_fail_in_favourites_ticker">ไฟล์ Kept-in-sync ล้มเหลว</string>
   <string name="sync_fail_in_favourites_content">เนื้อหาของไฟล์ %1$d ไม่สามารถประสานข้อมูลได้ (มี %2$d ปัญหา)</string>
-    <string name="sync_current_folder_was_removed">โฟลเดอร์ %1$s หายไปแล้ว</string>
-    <string name="pass_code_enter_pass_code">กรุณากรอกรหัสปลดล็อคของคุณ</string>
+  <string name="sync_current_folder_was_removed">โฟลเดอร์ %1$s หายไปแล้ว</string>
+  <string name="pass_code_enter_pass_code">กรุณากรอกรหัสปลดล็อคของคุณ</string>
   <string name="pass_code_configure_your_pass_code">กรอกรหัสปลดล็อคของคุณ</string>
   <string name="pass_code_configure_your_pass_code_explanation">จะมีการร้องขอรหัสปลดล็อคทุกครั้งเมื่อเริ่มต้นใช้แอปฯ</string>
   <string name="pass_code_reenter_your_pass_code">กรุณากรอกรหัสปลดล็อคของคุณใหม่อีกครั้ง</string>

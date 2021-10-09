@@ -230,8 +230,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d souborů z automatické synchronizace nelze synchronizovat</string>
   <string name="sync_fail_in_favourites_ticker">Automatická synchronizace souborů selhala</string>
   <string name="sync_fail_in_favourites_content">Obsah %1$d souborů nemohl být synchronizován (počet konfliktů: %2$d)</string>
-    <string name="sync_current_folder_was_removed">Adresář %1$s již neexistuje</string>
-    <string name="pass_code_enter_pass_code">Zadejte prosím svůj bezpečnostní kód</string>
+  <string name="sync_current_folder_was_removed">Adresář %1$s již neexistuje</string>
+  <string name="pass_code_enter_pass_code">Zadejte prosím svůj bezpečnostní kód</string>
   <string name="pass_code_configure_your_pass_code">Zadejte svůj bezpečnostní kód</string>
   <string name="pass_code_configure_your_pass_code_explanation">Bezpečnostní kód bude vyžadován při každém spuštění aplikace</string>
   <string name="pass_code_reenter_your_pass_code">Zopakujte prosím svůj bezpečnostní kód</string>

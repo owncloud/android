@@ -216,8 +216,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="sync_conflicts_in_favourites_content">%1$d ficheiros «manter sincronizados» non foi posíbel sincronizalos</string>
   <string name="sync_fail_in_favourites_ticker">Produciuse unha falla no mantemento sincronizado de ficheiros</string>
   <string name="sync_fail_in_favourites_content">Non foi posíbel sincronizar o contido de %1$d ficheiros (%2$d conflitos)</string>
-    <string name="sync_current_folder_was_removed">O cartafol %1$s xa non existe</string>
-    <string name="pass_code_enter_pass_code">Introduza o seu código de seguridade</string>
+  <string name="sync_current_folder_was_removed">O cartafol %1$s xa non existe</string>
+  <string name="pass_code_enter_pass_code">Introduza o seu código de seguridade</string>
   <string name="pass_code_configure_your_pass_code">Escriba o seu código de seguridade</string>
   <string name="pass_code_configure_your_pass_code_explanation">Solicitaráselle o código de seguridade cada vez que inicie a aplicación</string>
   <string name="pass_code_reenter_your_pass_code">Volva escribir o seu código de seguridade</string>

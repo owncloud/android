@@ -199,8 +199,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d hold-synkroniseret filer kunne ikke synkroniseres</string>
   <string name="sync_fail_in_favourites_ticker">Hold-synkroniseret filer mislykkedes</string>
   <string name="sync_fail_in_favourites_content">Indholdet af %1$d filer ikke kunne synkroniseres (%2$d konflikter)</string>
-    <string name="sync_current_folder_was_removed">Mappen %1$s eksistere ikke længere</string>
-    <string name="pass_code_enter_pass_code">Indtast venligst din adgangskode</string>
+  <string name="sync_current_folder_was_removed">Mappen %1$s eksistere ikke længere</string>
+  <string name="pass_code_enter_pass_code">Indtast venligst din adgangskode</string>
   <string name="pass_code_configure_your_pass_code">Angiv din passcode</string>
   <string name="pass_code_configure_your_pass_code_explanation">Denne passcode vil blive forespurgt hver gang app\'en startes</string>
   <string name="pass_code_reenter_your_pass_code">Gentag venligst din adgangskode</string>

@@ -231,8 +231,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d 持續同步未被同步的檔案</string>
   <string name="sync_fail_in_favourites_ticker">同步檔案失敗</string>
   <string name="sync_fail_in_favourites_content">%1$d 未被同步 (%2$d 衝突)</string>
-    <string name="sync_current_folder_was_removed">資料夾 %1$s 不存在</string>
-    <string name="pass_code_enter_pass_code">請加入您的密碼</string>
+  <string name="sync_current_folder_was_removed">資料夾 %1$s 不存在</string>
+  <string name="pass_code_enter_pass_code">請加入您的密碼</string>
   <string name="pass_code_configure_your_pass_code">輸入您的密碼鎖密碼</string>
   <string name="pass_code_configure_your_pass_code_explanation">這個密碼在你每次啟動這程式時都會被要求輸入</string>
   <string name="pass_code_reenter_your_pass_code">再次輸入密碼鎖</string>

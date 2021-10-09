@@ -236,8 +236,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d kartela “kept-in-sync” s\’u njëkohësuan dot</string>
   <string name="sync_fail_in_favourites_ticker">Kartelat “kept-in-sync” dështuan</string>
   <string name="sync_fail_in_favourites_content">Lënda e %1$d kartelave s\’u njëkohësua dot (%2$d përplasje)</string>
-    <string name="sync_current_folder_was_removed">Dosja %1$s s\’ekziston më</string>
-    <string name="pass_code_enter_pass_code">Ju lutemi, futni kodkalimin tuaj</string>
+  <string name="sync_current_folder_was_removed">Dosja %1$s s\’ekziston më</string>
+  <string name="pass_code_enter_pass_code">Ju lutemi, futni kodkalimin tuaj</string>
   <string name="pass_code_configure_your_pass_code">Jepni kodkalimin tuaj</string>
   <string name="pass_code_configure_your_pass_code_migration">Jepni një kodkalim të ri me %1$d shifra</string>
   <string name="pass_code_configure_your_pass_code_explanation">Kodkalimi do të kërkohet sa herë që niset aplikacioni</string>

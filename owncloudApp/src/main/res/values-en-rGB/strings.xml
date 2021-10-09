@@ -214,8 +214,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d kept-in-sync files could not be synced</string>
   <string name="sync_fail_in_favourites_ticker">Kept-in-sync files failed</string>
   <string name="sync_fail_in_favourites_content">Contents of %1$d files could not be synced (%2$d conflicts)</string>
-    <string name="sync_current_folder_was_removed">Folder %1$s does not exist anymore</string>
-    <string name="pass_code_enter_pass_code">Please insert your passcode</string>
+  <string name="sync_current_folder_was_removed">Folder %1$s does not exist anymore</string>
+  <string name="pass_code_enter_pass_code">Please insert your passcode</string>
   <string name="pass_code_configure_your_pass_code">Enter your passcode</string>
   <string name="pass_code_configure_your_pass_code_explanation">The passcode will be requested every time the app is started</string>
   <string name="pass_code_reenter_your_pass_code">Please reenter your passcode</string>

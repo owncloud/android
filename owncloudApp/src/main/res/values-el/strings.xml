@@ -216,8 +216,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d αρχεία σε αναμονή συγχρονισμού δεν μπόρεσαν να συγχρονιστούν</string>
   <string name="sync_fail_in_favourites_ticker">Τα αρχεία σε αναμονή συγχρονισμού απέτυχαν</string>
   <string name="sync_fail_in_favourites_content">Τα περιεχόμενα των %1$d αρχείων δεν μπόρεσαν να συγχρονιστούν (%2$d διενέξεις)</string>
-    <string name="sync_current_folder_was_removed">Ο φάκελος %1$s δεν υπάρχει πια</string>
-    <string name="pass_code_enter_pass_code">Παρακαλούμε εισάγετε τον κωδικό σας</string>
+  <string name="sync_current_folder_was_removed">Ο φάκελος %1$s δεν υπάρχει πια</string>
+  <string name="pass_code_enter_pass_code">Παρακαλούμε εισάγετε τον κωδικό σας</string>
   <string name="pass_code_configure_your_pass_code">Εισαγωγή του κωδικού σας</string>
   <string name="pass_code_configure_your_pass_code_explanation">Ο κωδικός θα ζητείται κάθε φορά που ξεκινά η εφαρμογή</string>
   <string name="pass_code_reenter_your_pass_code">Παρακαλούμε εισάγετε ξανά τον κωδικό σας</string>

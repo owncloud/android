@@ -196,8 +196,8 @@
   <string name="sync_conflicts_in_favourites_content">%1$d stalno usklajenih datotek ni bilo mogoče uskladiti</string>
   <string name="sync_fail_in_favourites_ticker">Posodobitev stalno usklajenih datotek je spodletelo</string>
   <string name="sync_fail_in_favourites_content">Vsebine %1$d datotek ni bilo mogoče uskladiti (zaznanih je %2$d sporov)</string>
-    <string name="sync_current_folder_was_removed">Mapa %1$s ne obstaja več</string>
-    <string name="pass_code_enter_pass_code">Vnesite kodo PIN</string>
+  <string name="sync_current_folder_was_removed">Mapa %1$s ne obstaja več</string>
+  <string name="pass_code_enter_pass_code">Vnesite kodo PIN</string>
   <string name="pass_code_configure_your_pass_code">Vnesite kodo PIN programa</string>
   <string name="pass_code_configure_your_pass_code_explanation">Koda bo zahtevana vsakič pred zagonom programa.</string>
   <string name="pass_code_reenter_your_pass_code">Ponovno vnesite kodo PIN</string>
