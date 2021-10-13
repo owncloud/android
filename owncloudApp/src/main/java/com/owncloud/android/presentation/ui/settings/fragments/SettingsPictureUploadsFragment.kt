@@ -166,8 +166,10 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         }
 
         prefPictureUploadsSourcePath?.setOnPreferenceClickListener {
-            val sourcePath = picturesViewModel.getPictureUploadsSourcePath()?.let { currentSourcePath ->
-                currentSourcePath.takeUnless { it.endsWith(File.separator) } ?: currentSourcePath.plus(File.separator)
+            var sourcePath = picturesViewModel.getPictureUploadsSourcePath()
+                .takeUnless { it.isNullOrBlank() } ?: picturesViewModel.getDefaultSourcePath()
+            if (!sourcePath.endsWith(File.separator)) {
+                sourcePath += File.separator
             }
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
