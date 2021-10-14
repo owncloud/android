@@ -37,6 +37,7 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -44,6 +45,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import java.io.File
 
+@Ignore("Ignored due to emulator errors, check in the future")
 class LogsListActivityTest {
 
     private lateinit var activityScenario: ActivityScenario<LogsListActivity>
