@@ -26,7 +26,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.logging.LogsListActivity
-import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.utils.matchers.assertChildCount
 import com.owncloud.android.utils.matchers.isDisplayed

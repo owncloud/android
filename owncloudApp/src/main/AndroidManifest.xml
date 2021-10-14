@@ -67,9 +67,6 @@
         android:supportsPictureInPicture="false"
         android:theme="@style/Theme.ownCloud.Toolbar"
         tools:targetApi="n">
-        <activity
-            android:name="com.owncloud.android.presentation.ui.logging.LogsListActivity"
-            android:exported="true" />
         <activity android:name=".presentation.ui.settings.PrivacyPolicyActivity"></activity>
         <activity android:name=".presentation.ui.settings.SettingsActivity"></activity>
         <activity
@@ -77,7 +74,6 @@
             android:theme="@style/Theme.ownCloud.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -187,6 +183,9 @@
         <activity
             android:name=".ui.activity.ConflictsResolveActivity"
             android:theme="@style/Theme.ownCloud" />
+        <activity
+            android:name=".presentation.ui.logging.LogsListActivity"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
         <activity
             android:name=".ui.activity.UploadListActivity"
@@ -241,5 +240,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

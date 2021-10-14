@@ -30,10 +30,14 @@ import androidx.preference.SwitchPreferenceCompat
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
+import com.owncloud.android.presentation.ui.logging.LogsListActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
+import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
@@ -58,12 +62,14 @@ class SettingsLogsFragmentTest {
     private lateinit var prefLogsListActivity: Preference
 
     private lateinit var logsViewModel: SettingsLogsViewModel
+    private lateinit var logListViewModel: LogListViewModel
     private lateinit var context: Context
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         logsViewModel = mockk(relaxUnitFun = true)
+        logListViewModel = mockk(relaxed = true)
 
         stopKoin()
 
@@ -73,6 +79,9 @@ class SettingsLogsFragmentTest {
                 module(override = true) {
                     viewModel {
                         logsViewModel
+                    }
+                    viewModel {
+                        logListViewModel
                     }
                 }
             )
@@ -184,5 +193,13 @@ class SettingsLogsFragmentTest {
         onView(withText(R.string.prefs_http_logs)).perform(click())
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         assertFalse(prefHttpLogs.isChecked)
+    }
+
+    @Test
+    fun loggerOpen(){
+        launchTest(enabledLogging = true)
+
+        onView(withText(R.string.prefs_open_logs_list_view)).perform(click())
+        intended(hasComponent(LogsListActivity::class.java.name))
     }
 }
