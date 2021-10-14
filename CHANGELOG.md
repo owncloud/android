@@ -91,8 +91,8 @@ Details
 
 * Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
 
-   A new option has been added in the logging screen, so that now it's possible to share/delete log
-   files or open it.
+   A new option has been added to the logging screen, so that now it's possible to share/delete log
+   files or open them.
 
    https://github.com/owncloud/android/issues/3333
    https://github.com/owncloud/android/pull/3408
