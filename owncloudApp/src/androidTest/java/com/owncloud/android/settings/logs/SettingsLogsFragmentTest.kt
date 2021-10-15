@@ -196,7 +196,7 @@ class SettingsLogsFragmentTest {
     }
 
     @Test
-    fun loggerOpen(){
+    fun loggerOpen() {
         launchTest(enabledLogging = true)
 
         onView(withText(R.string.prefs_open_logs_list_view)).perform(click())

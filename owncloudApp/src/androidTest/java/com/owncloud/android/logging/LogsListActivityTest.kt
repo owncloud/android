@@ -20,9 +20,7 @@
 
 package com.owncloud.android.logging
 
-import android.content.Context
 import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.logging.LogsListActivity
@@ -50,7 +48,6 @@ class LogsListActivityTest {
     private lateinit var activityScenario: ActivityScenario<LogsListActivity>
 
     private lateinit var logListViewModel: LogListViewModel
-    private lateinit var context: Context
 
     private fun launchTest(logs: List<File>) {
         every { logListViewModel.getData() } returns logs
@@ -60,12 +57,10 @@ class LogsListActivityTest {
     @Before
     fun setUp() {
         logListViewModel = mockk(relaxed = true)
-        context = ApplicationProvider.getApplicationContext()
 
         stopKoin()
 
         startKoin {
-            context
             modules(
                 module(override = true) {
                     viewModel {
