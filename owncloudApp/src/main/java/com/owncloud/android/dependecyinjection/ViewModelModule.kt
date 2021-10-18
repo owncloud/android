@@ -21,6 +21,8 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.MainApp
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
@@ -60,5 +62,5 @@ val viewModelModule = module {
     viewModel { SettingsVideoUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
     viewModel { PassCodeViewModel(get(), get()) }
-    viewModel { LogListViewModel() }
+    viewModel { LogListViewModel(LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder)) }
 }

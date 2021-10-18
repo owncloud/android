@@ -25,10 +25,11 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.data.storage.LocalStorageProvider
 import java.io.File
 
-class LogListViewModel : ViewModel() {
+class LogListViewModel(
+    private val localStorageProvider: LocalStorageProvider
+) : ViewModel() {
 
     private fun getLogsDirectory(): File {
-        val localStorageProvider = LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder)
         val logsPath = localStorageProvider.getLogsPath()
         return File(logsPath)
     }
