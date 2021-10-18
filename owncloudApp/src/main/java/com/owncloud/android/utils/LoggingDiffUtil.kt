@@ -34,7 +34,4 @@ class LoggingDiffUtil(private val oldList: List<File>, private val newList: List
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
         oldList[oldItemPosition].name === newList[newItemPosition].name
 
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        return super.getChangePayload(oldItemPosition, newItemPosition)
-    }
 }

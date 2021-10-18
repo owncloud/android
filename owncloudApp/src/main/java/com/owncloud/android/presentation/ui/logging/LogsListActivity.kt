@@ -22,7 +22,6 @@ package com.owncloud.android.presentation.ui.logging
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -67,19 +66,16 @@ class LogsListActivity : AppCompatActivity() {
         setContentView(binding.root)
         initToolbar()
         initList()
-        initSwipeToRefresh()
     }
 
     private fun initToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.standard_toolbar).apply {
-            isVisible = true
-        }
-        findViewById<ConstraintLayout>(R.id.root_toolbar).apply {
-            isVisible = false
-        }
+        val toolbar = findViewById<Toolbar>(R.id.standard_toolbar)
+        toolbar.isVisible = true
+
+        findViewById<ConstraintLayout>(R.id.root_toolbar).isVisible = false
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
-            setTitle(R.string.prefs_open_logs_list_view)
+            setTitle(R.string.prefs_log_open_logs_list_view)
             setDisplayHomeAsUpEnabled(true)
         }
     }
@@ -101,21 +97,12 @@ class LogsListActivity : AppCompatActivity() {
         setData()
     }
 
-    private fun initSwipeToRefresh() {
-        binding.swipeRefreshActivityLogsList.setOnRefreshListener {
-            setData()
-            binding.swipeRefreshActivityLogsList.isRefreshing = false
-        }
-    }
-
     private fun setData() {
-        val items = viewModel.getData()
+        val items = viewModel.getLogsFiles()
 
-        binding.recyclerViewActivityLogsList.visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
-        binding.textViewNoLogs.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+        binding.recyclerViewActivityLogsList.isVisible = items.isNotEmpty()
+        binding.textViewNoLogs.isVisible = items.isEmpty()
 
-        recyclerViewLogsAdapter.apply {
-            setData(items)
-        }
+        recyclerViewLogsAdapter.setData(items)
     }
 }

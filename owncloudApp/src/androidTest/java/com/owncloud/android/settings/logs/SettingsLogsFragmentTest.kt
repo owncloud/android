@@ -128,7 +128,7 @@ class SettingsLogsFragmentTest {
 
         prefLogsListActivity.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOGS_LIST,
-            titlePref = context.getString(R.string.prefs_open_logs_list_view),
+            titlePref = context.getString(R.string.prefs_log_open_logs_list_view),
             visible = true,
             enabled = false,
         )
@@ -155,7 +155,7 @@ class SettingsLogsFragmentTest {
 
         prefLogsListActivity.verifyPreference(
             keyPref = SettingsLogsFragment.PREFERENCE_LOGS_LIST,
-            titlePref = context.getString(R.string.prefs_open_logs_list_view),
+            titlePref = context.getString(R.string.prefs_log_open_logs_list_view),
             visible = true,
             enabled = true,
         )
@@ -176,6 +176,7 @@ class SettingsLogsFragmentTest {
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         assertFalse(prefHttpLogs.isEnabled)
+        assertFalse(prefLogsListActivity.isEnabled)
     }
 
     @Test
@@ -199,7 +200,7 @@ class SettingsLogsFragmentTest {
     fun loggerOpen() {
         launchTest(enabledLogging = true)
 
-        onView(withText(R.string.prefs_open_logs_list_view)).perform(click())
+        onView(withText(R.string.prefs_log_open_logs_list_view)).perform(click())
         intended(hasComponent(LogsListActivity::class.java.name))
     }
 }

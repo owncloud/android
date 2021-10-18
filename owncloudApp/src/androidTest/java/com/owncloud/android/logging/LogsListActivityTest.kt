@@ -21,13 +21,11 @@
 package com.owncloud.android.logging
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.logging.LogsListActivity
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.utils.matchers.assertChildCount
 import com.owncloud.android.utils.matchers.isDisplayed
-import com.owncloud.android.utils.matchers.withRecyclerView
 import com.owncloud.android.utils.matchers.withText
 import io.mockk.every
 import io.mockk.mockk
@@ -50,7 +48,7 @@ class LogsListActivityTest {
     private lateinit var logListViewModel: LogListViewModel
 
     private fun launchTest(logs: List<File>) {
-        every { logListViewModel.getData() } returns logs
+        every { logListViewModel.getLogsFiles() } returns logs
         activityScenario = ActivityScenario.launch(LogsListActivity::class.java)
     }
 
@@ -88,7 +86,7 @@ class LogsListActivityTest {
         launchTest(logs = emptyList())
         with(R.id.textView_no_logs) {
             isDisplayed(true)
-            withText(R.string.no_logs_list_view)
+            withText(R.string.prefs_log_no_logs_list_view)
         }
         R.id.recyclerView_activity_logs_list.isDisplayed(false)
     }
@@ -98,17 +96,6 @@ class LogsListActivityTest {
         launchTest(logs = listOf(File("path")))
         R.id.textView_no_logs.isDisplayed(false)
         R.id.recyclerView_activity_logs_list.isDisplayed(true)
-    }
-
-    @Test
-    fun test_checkNameAndSize() {
-        val fileName = "owncloud.2021-01.01.log"
-        val filePosition = 0
-        launchTest(logs = listOf(File(fileName)))
-        with(R.id.recyclerView_activity_logs_list.withRecyclerView()) {
-            atPositionOnView(filePosition, R.id.textView_title_activity_logs_list).matches(withText(fileName))
-            atPositionOnView(filePosition, R.id.textView_subtitle_activity_logs_list).matches(withText("0 KB"))
-        }
     }
 
     @Test

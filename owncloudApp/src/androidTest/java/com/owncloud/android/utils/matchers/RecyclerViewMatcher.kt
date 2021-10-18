@@ -30,7 +30,7 @@ import timber.log.Timber
 
 class RecyclerViewMatcher(private val recyclerViewId: Int) {
 
-     fun atPositionOnView(position: Int, targetViewId: Int): Matcher<View> {
+    fun atPositionOnView(position: Int, targetViewId: Int): Matcher<View> {
 
         return object : TypeSafeMatcher<View>() {
 
@@ -41,7 +41,9 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
                 var idDescription = recyclerViewId.toString()
                 if (resources != null) {
                     try {
-                        idDescription = resources!!.getResourceName(recyclerViewId)
+                        idDescription = resources.let {
+                            it?.getResourceName(recyclerViewId)
+                        }.toString()
                     } catch (e: Resources.NotFoundException) {
                         Timber.e("Resource not found")
                     }

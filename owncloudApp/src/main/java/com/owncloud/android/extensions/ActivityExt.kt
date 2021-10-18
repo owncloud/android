@@ -21,6 +21,7 @@ package com.owncloud.android.extensions
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -30,9 +31,11 @@ import android.os.Build
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
+import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.ui.helpers.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -130,6 +133,34 @@ fun Activity.openFile(file: File?) {
     } else {
         Timber.e("Trying to open a NULL file")
     }
+}
+
+private fun getExposedFileUri(context: Context, localPath: String): Uri? {
+    var exposedFileUri: Uri? = null
+
+    if (localPath.isEmpty()) {
+        return null
+    }
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        // TODO - use FileProvider with any Android version, with deeper testing -> 2.2.0
+        exposedFileUri = Uri.parse(
+            ContentResolver.SCHEME_FILE + "://" + WebdavUtils.encodePath(localPath)
+        )
+    } else {
+        // Use the FileProvider to get a content URI
+        try {
+            exposedFileUri = FileProvider.getUriForFile(
+                context,
+                context.getString(R.string.file_provider_authority),
+                File(localPath)
+            )
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "File can't be exported")
+        }
+    }
+
+    return exposedFileUri
 }
 
 fun Activity.openFileWithIntent(intentForSavedMimeType: Intent, intentForGuessedMimeType: Intent?) {

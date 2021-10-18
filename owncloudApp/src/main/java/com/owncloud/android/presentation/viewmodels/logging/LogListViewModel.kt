@@ -33,10 +33,7 @@ class LogListViewModel : ViewModel() {
         return File(logsPath)
     }
 
-    private fun getLogsFiles(logsFolder: File): List<File> {
-        return logsFolder.listFiles()?.toList() ?: listOf()
+    fun getLogsFiles(): List<File> {
+        return getLogsDirectory().listFiles()?.toList() ?: listOf()
     }
-
-    fun getData(): List<File> = getLogsFiles(getLogsDirectory())
-
 }

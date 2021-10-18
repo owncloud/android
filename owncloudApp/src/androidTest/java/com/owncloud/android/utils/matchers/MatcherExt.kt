@@ -68,7 +68,7 @@ fun Int.assertVisibility(visibility: ViewMatchers.Visibility) {
         .check(matches(ViewMatchers.withEffectiveVisibility(visibility)))
 }
 
-fun Int.withRecyclerView() = RecyclerViewMatcher(this)
-
-fun Int.assertChildCount(childs: Int) = onView(withId(this))
-    .check(matches(hasChildCount(childs)))
+fun Int.assertChildCount(childs: Int) {
+    onView(withId(this))
+        .check(matches(hasChildCount(childs)))
+}

@@ -32,22 +32,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh_activity_logs_list"
-        android:layout_width="match_parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_activity_logs_list"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_activity_logs_list">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_activity_logs_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/log_list_item" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        app:layout_constraintTop_toBottomOf="@id/toolbar_activity_logs_list"
+        tools:listitem="@layout/log_list_item" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_no_logs"
@@ -57,11 +50,10 @@
         android:layout_marginStart="@dimen/standard_margin"
         android:layout_marginEnd="@dimen/standard_margin"
         android:gravity="center"
-        android:text="@string/no_logs_list_view"
+        android:text="@string/prefs_log_no_logs_list_view"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_activity_logs_list" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

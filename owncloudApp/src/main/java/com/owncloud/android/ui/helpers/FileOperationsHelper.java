@@ -198,7 +198,7 @@ public class FileOperationsHelper {
         return sendIntent;
     }
 
-    public void sendFile(OCFile ocFile) {
+    public void sendDownloadedFile(OCFile ocFile) {
         if (ocFile != null) {
             Intent sendIntent = makeIntent(ocFile);
             // Show dialog, without the own app
@@ -218,7 +218,7 @@ public class FileOperationsHelper {
                 chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
             }
         } else {
-            Timber.e("Trying to send a NULL file");
+            Timber.e("Trying to send a NULL OCFile");
         }
     }
 
