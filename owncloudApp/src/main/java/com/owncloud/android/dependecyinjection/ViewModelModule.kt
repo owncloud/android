@@ -63,5 +63,5 @@ val viewModelModule = module {
     viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
     viewModel { PassCodeViewModel(get(), get()) }
     viewModel { LogListViewModel(get()) }
-    viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get()) }
+    viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get()) }
 }

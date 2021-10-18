@@ -56,6 +56,7 @@ public class SynchronizeFileOperation extends SyncOperation {
 
     private boolean mTransferWasRequested = false;
     private boolean mRequestedFromAvOfflineJobService;
+    private boolean mShouldCheckForLocalChanges;
 
     /**
      * Constructor for "full synchronization mode".
@@ -82,6 +83,7 @@ public class SynchronizeFileOperation extends SyncOperation {
         mPushOnly = false;
         mContext = context;
         mRequestedFromAvOfflineJobService = false;
+        mShouldCheckForLocalChanges = false;
     }
 
     /**
@@ -111,7 +113,8 @@ public class SynchronizeFileOperation extends SyncOperation {
             Account account,
             boolean pushOnly,
             Context context,
-            boolean requestedFromAvOfflineJobService
+            boolean requestedFromAvOfflineJobService,
+            boolean shouldCheckForLocalChanges
     ) {
 
         mLocalFile = localFile;
@@ -131,6 +134,7 @@ public class SynchronizeFileOperation extends SyncOperation {
         mPushOnly = pushOnly;
         mContext = context;
         mRequestedFromAvOfflineJobService = requestedFromAvOfflineJobService;
+        mShouldCheckForLocalChanges = shouldCheckForLocalChanges;
     }
 
     @Override
@@ -187,7 +191,7 @@ public class SynchronizeFileOperation extends SyncOperation {
                     result = new RemoteOperationResult<>(ResultCode.SYNC_CONFLICT);
                     getStorageManager().saveConflict(mLocalFile, mServerFile.getEtag());
 
-                } else if (localChanged) {
+                } else if (localChanged && mShouldCheckForLocalChanges) {
                     if (mPushOnly) {
                         // prevent accidental override of unnoticed change in server;
                         // dirty trick, more refactoring is needed, but not today;
