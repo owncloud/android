@@ -584,6 +584,51 @@ class FileDataStorageManager {
         }
     }
 
+    fun migrateLegacyToScopedPath(
+        legacyStorageDirectoryPath: String,
+        rootStorageDirectoryPath: String,
+    ) {
+        val filesToUpdatePath: MutableList<OCFile> = mutableListOf()
+
+        val cursor: Cursor? =
+            try {
+                performQuery(
+                    uri = CONTENT_URI,
+                    projection = null,
+                    sortOrder = "$FILE_PATH ASC ",
+                    selection = null,
+                    selectionArgs = null,
+                )
+            } catch (e: RemoteException) {
+                Timber.e(e)
+                null
+            }
+
+        cursor?.let { allFilesCursor ->
+            if (allFilesCursor.moveToFirst()) {
+                do {
+                    val ocFile = createFileInstance(allFilesCursor)
+                    ocFile?.let {
+                        if (it.storagePath != null) {
+                            filesToUpdatePath.add(it)
+                        }
+                    }
+                } while (allFilesCursor.moveToNext())
+            }
+            cursor.close()
+        }
+
+        val filesWithPathUpdated = filesToUpdatePath.map {
+            it.apply { storagePath = storagePath.replace(legacyStorageDirectoryPath, rootStorageDirectoryPath) }
+        }
+
+        filesWithPathUpdated.forEach {
+            saveFile(it)
+        }
+
+        Timber.d("Updated path for ${filesWithPathUpdated.size} downloaded files")
+    }
+
     /**
      * Updates available-offline status of OCFile received as a parameter, with its current value.
      *
