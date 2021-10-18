@@ -124,10 +124,13 @@ class CameraUploadsWorker(
             else -> SyncType.PICTURE_UPLOADS
         }
 
+        val currentTimestamp = System.currentTimeMillis()
+
         val localPicturesDocumentFiles: List<DocumentFile> = getFilesReadyToUpload(
             syncType = syncType,
             sourcePath = folderBackUpConfiguration.sourcePath,
-            lastSyncTimestamp = folderBackUpConfiguration.lastSyncTimestamp
+            lastSyncTimestamp = folderBackUpConfiguration.lastSyncTimestamp,
+            currentTimestamp = currentTimestamp,
         )
 
         showNotification(syncType, localPicturesDocumentFiles.size)
@@ -154,7 +157,7 @@ class CameraUploadsWorker(
                 chargingOnly = folderBackUpConfiguration.chargingOnly
             )
         }
-        updateTimestamp(folderBackUpConfiguration, syncType)
+        updateTimestamp(folderBackUpConfiguration, syncType, currentTimestamp)
     }
 
     private fun showNotification(
@@ -203,8 +206,11 @@ class CameraUploadsWorker(
         )
     }
 
-    private fun updateTimestamp(folderBackUpConfiguration: FolderBackUpConfiguration, syncType: SyncType) {
-        val currentTimestamp = System.currentTimeMillis()
+    private fun updateTimestamp(
+        folderBackUpConfiguration: FolderBackUpConfiguration,
+        syncType: SyncType,
+        currentTimestamp: Long,
+    ) {
 
         when (syncType) {
             SyncType.PICTURE_UPLOADS -> {
@@ -226,6 +232,7 @@ class CameraUploadsWorker(
         syncType: SyncType,
         sourcePath: String,
         lastSyncTimestamp: Long,
+        currentTimestamp: Long,
     ): List<DocumentFile> {
         val sourceUri: Uri = sourcePath.toUri()
         val documentTree = DocumentFile.fromTreeUri(applicationContext, sourceUri)
@@ -233,10 +240,12 @@ class CameraUploadsWorker(
 
         val filteredList: List<DocumentFile> = arrayOfLocalFiles
             .sortedBy { it.lastModified() }
-            .filter { it.lastModified() > lastSyncTimestamp }
+            .filter { it.lastModified() >= lastSyncTimestamp }
+            .filter { it.lastModified() < currentTimestamp }
             .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType) }
 
         Timber.i("Last sync ${syncType.name}: ${Date(lastSyncTimestamp)}")
+        Timber.i("CurrentTimestamp ${Date(currentTimestamp)}")
         Timber.i("${arrayOfLocalFiles.size} files found in folder: ${sourceUri.path}")
         Timber.i("${filteredList.size} files are ${syncType.name} and were taken after last sync")
 
