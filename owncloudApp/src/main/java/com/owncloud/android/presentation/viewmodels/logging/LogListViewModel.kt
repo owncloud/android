@@ -21,7 +21,6 @@
 package com.owncloud.android.presentation.viewmodels.logging
 
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.MainApp
 import com.owncloud.android.data.storage.LocalStorageProvider
 import java.io.File
 
