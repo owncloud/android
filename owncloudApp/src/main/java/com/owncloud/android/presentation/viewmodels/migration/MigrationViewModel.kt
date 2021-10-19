@@ -20,6 +20,8 @@
 
 package com.owncloud.android.presentation.viewmodels.migration
 
+import android.os.Environment
+import android.os.StatFs
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -120,5 +122,11 @@ class MigrationViewModel(
         }
 
         _migrationState.postValue(Event(nextState))
+    }
+
+    fun isThereEnoughSpaceInDevice(): Boolean {
+        val stat = StatFs(Environment.getDataDirectory().path)
+        val availableBytes = stat.availableBlocksLong * stat.blockSizeLong
+        return availableBytes > getLegacyStorageSizeInBytes()
     }
 }
