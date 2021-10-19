@@ -183,7 +183,7 @@ public class FileOperationsHelper {
 
     }
 
-    private Intent makeIntent(OCFile oCfile) {
+    private Intent makeActionSendIntent(OCFile oCfile) {
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
 
         if (oCfile != null) {
@@ -200,7 +200,7 @@ public class FileOperationsHelper {
 
     public void sendDownloadedFile(OCFile ocFile) {
         if (ocFile != null) {
-            Intent sendIntent = makeIntent(ocFile);
+            Intent sendIntent = makeActionSendIntent(ocFile);
             // Show dialog, without the own app
             String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
 

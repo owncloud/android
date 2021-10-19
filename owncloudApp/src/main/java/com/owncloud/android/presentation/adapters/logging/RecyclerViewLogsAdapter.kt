@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.LogListItemBinding
 import com.owncloud.android.extensions.toLegibleStringSize
-import com.owncloud.android.utils.LoggingDiffUtil
+import com.owncloud.android.presentation.ui.logging.LoggingDiffUtil
 import java.io.File
 
 class RecyclerViewLogsAdapter(

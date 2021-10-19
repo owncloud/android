@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.utils
+package com.owncloud.android.presentation.ui.logging
 
 import androidx.recyclerview.widget.DiffUtil
 import java.io.File
