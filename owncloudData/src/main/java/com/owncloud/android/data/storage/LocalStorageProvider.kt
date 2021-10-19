@@ -26,6 +26,7 @@ package com.owncloud.android.data.storage
 import android.accounts.Account
 import android.annotation.SuppressLint
 import android.net.Uri
+import com.owncloud.android.data.extension.moveRecursively
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -142,7 +143,8 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         Timber.d("Let's copy ${rootLegacyDirectory.absolutePath} to scoped storage")
         rootLegacyDirectory.listFiles()?.forEach { file ->
             if (file.isDirectory) {
-                file.copyRecursively(File(getRootFolderPath(), file.name), overwrite = true)
+                //file.copyRecursively(File(getRootFolderPath(), file.name), overwrite = true)
+                file.moveRecursively(File(getRootFolderPath(), file.name), overwrite = true)
             }
         }
     }
@@ -150,7 +152,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     private fun moveFileOrFolderToScopedStorage(rootLegacyDirectory: File) {
         copyFileOrFolderToScopedStorage(rootLegacyDirectory)
         Timber.d("Let's delete legacy storage ${rootLegacyDirectory.absolutePath}")
-        rootLegacyDirectory.deleteRecursively()
+        //rootLegacyDirectory.deleteRecursively()
     }
 
     fun sizeOfDirectory(dir: File): Long {
