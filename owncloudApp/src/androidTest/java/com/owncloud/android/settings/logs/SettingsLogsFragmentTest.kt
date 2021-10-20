@@ -130,7 +130,7 @@ class SettingsLogsFragmentTest {
             keyPref = SettingsLogsFragment.PREFERENCE_LOGS_LIST,
             titlePref = context.getString(R.string.prefs_log_open_logs_list_view),
             visible = true,
-            enabled = false,
+            enabled = true,
         )
 
     }
@@ -176,7 +176,7 @@ class SettingsLogsFragmentTest {
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         assertFalse(prefHttpLogs.isEnabled)
-        assertFalse(prefLogsListActivity.isEnabled)
+        assertTrue(prefLogsListActivity.isEnabled)
     }
 
     @Test
