@@ -34,6 +34,6 @@ class LogListViewModel(
     }
 
     fun getLogsFiles(): List<File> {
-        return getLogsDirectory().listFiles()?.toList() ?: listOf()
+        return getLogsDirectory().listFiles()?.toList()?.sortedBy { it.name } ?: listOf()
     }
 }
