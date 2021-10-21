@@ -45,7 +45,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permite los toques  cuando la vista está oculta por otra ventana visible. Habilítelo para utilizar aplicaciones de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilice esta función bajo su propia responsabilidad, una aplicación malintencionada podría intentar engañarlo para que realice algunas acciones, sin darse cuenta, usando otras pantallas.</string>
-  <string name="prefs_open_logs_view">Abrir vista de registros</string>
   <string name="prefs_subsection_picture_uploads">Carga automática de imágenes</string>
   <string name="prefs_subsection_picture_uploads_summary">Gestionar la ubicación y el comportamiento de las imágenes subidas automáticamente</string>
   <string name="prefs_subsection_video_uploads">Carga automática de videos</string>

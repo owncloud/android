@@ -45,7 +45,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Lejo prekje, kur pamja është zënë nga një tjetër dritare e dukshme. Aktivizojeni, që të përdorni aplikacione filtrimi drite.</string>
   <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori?</string>
   <string name="confirmation_touches_with_other_windows_message">Përgjegjësinë e kësaj veçorie e mbani ju vetë, një aplikacion dashakeq mund të përpiqej t\’ua hidhte duke ju bërë të kryeni, pa e kuptuar, disa veprime, ndërkohë që përdorni pamje të tjera.</string>
-  <string name="prefs_open_logs_view">Hap pamjen regjistra</string>
   <string name="prefs_subsection_picture_uploads">Vetëngarko foto</string>
   <string name="prefs_subsection_picture_uploads_summary">Administroni vendndodhje dhe sjellje të fotove të ngarkuara automatikisht</string>
   <string name="prefs_subsection_video_uploads">Vetëngarko video</string>

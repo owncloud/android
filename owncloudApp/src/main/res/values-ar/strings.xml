@@ -42,7 +42,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">يتيح اللمس باستخدام نافذة أخرى مرئية عندما تكون نافذة العرض مخفية. فعِّله لاستخدام تطبيقات تصفية الإضاءة.</string>
   <string name="confirmation_touches_with_other_windows_title">هل أنت متأكد أنك ترغب في تفعيل هذه الميزة؟</string>
   <string name="confirmation_touches_with_other_windows_message">استخدم هذه الميزة على مسؤوليتك فقد يحاول تطبيق ضار انتحال شخصيتك للقيام ببعض الإجراءات دون علمك باستخدام نوافذ عرض أخرى.</string>
-  <string name="prefs_open_logs_view">افتح عرض السجلات</string>
   <string name="prefs_camera_picture_upload">تحميلات الصور</string>
   <string name="prefs_camera_picture_upload_summary">حمِّل الصور الملتقطة بالكاميرا تلقائيًا</string>
   <string name="prefs_camera_picture_upload_path_title">مسار تحميل الصور</string>

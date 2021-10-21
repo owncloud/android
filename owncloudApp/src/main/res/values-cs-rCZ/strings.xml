@@ -45,7 +45,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Povolit dotek s aplikacemi, které mohou překrýt toto okno. Nutné pro povolení při použití filtrů světla.</string>
   <string name="confirmation_touches_with_other_windows_title">Jste si jisti, že chcete povolit tuto funkci?</string>
   <string name="confirmation_touches_with_other_windows_message">Použití na vlastní zodpovědnost. Překrývající aplikace se může pokusit ukrást vaše údaje.</string>
-  <string name="prefs_open_logs_view">Otevřít log</string>
   <string name="prefs_subsection_picture_uploads">Automatické nahrávání obrázků</string>
   <string name="prefs_subsection_picture_uploads_summary">Spravovat umístění a způsob nahrávání obrázků automaticky</string>
   <string name="prefs_subsection_video_uploads">Automatické nahrávání videí</string>

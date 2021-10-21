@@ -45,7 +45,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">當視圖被另一個可見窗口遮擋時，允許觸摸。 啟用它以使用濾光應用程序。</string>
   <string name="confirmation_touches_with_other_windows_title">您確定要啟用這個功能？</string>
   <string name="confirmation_touches_with_other_windows_message">使用此功能由您自己負責，惡意應用程式可能試圖欺騙您執行某些未覺察到的使用其他視圖的操作。</string>
-  <string name="prefs_open_logs_view">開啟記錄視圖</string>
   <string name="prefs_subsection_picture_uploads">自動上傳圖片</string>
   <string name="prefs_subsection_picture_uploads_summary">管理自動地上傳圖片的位置和行為</string>
   <string name="prefs_subsection_video_uploads">自動上傳影片</string>

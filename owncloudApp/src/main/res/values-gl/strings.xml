@@ -42,7 +42,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques cando a vista estea escurecida por outra xanela visíbel. Activar o emprego de aplis de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Confirma que quere activar esta característica?</string>
   <string name="confirmation_touches_with_other_windows_message">Empregue esta característica baixo a súa responsabilidade, unha aplicación maliciosa podería tentar enganalo para que realice algunhas accións, sen decatarse, empregando outras vistas.</string>
-  <string name="prefs_open_logs_view">Abrir o visor de rexistros</string>
   <string name="prefs_camera_picture_upload">Envío de imaxe</string>
   <string name="prefs_camera_picture_upload_summary">Enviar instantaneamente as fotos tiradas coa cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de envío de imaxes</string>

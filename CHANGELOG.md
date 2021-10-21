@@ -16,6 +16,7 @@ Summary
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
+* Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
 
 Details
 -------
@@ -87,6 +88,14 @@ Details
    https://github.com/owncloud/android/issues/465
    https://github.com/owncloud/android/issues/3315
    https://github.com/owncloud/android/pull/3385
+
+* Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
+
+   A new option has been added to the logging screen, so that now it's possible to share/delete log
+   files or open them.
+
+   https://github.com/owncloud/android/issues/3333
+   https://github.com/owncloud/android/pull/3408
 
 Changelog for ownCloud Android Client [2.18.1] (2021-07-20)
 =======================================
