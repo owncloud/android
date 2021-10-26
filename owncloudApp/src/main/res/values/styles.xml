@@ -48,7 +48,7 @@
     </style>
 
     <!-- Splash Screen -->
-    <style name="Theme.ownCloud.Splash">
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 

@@ -61,6 +61,9 @@ dependencies {
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.1.1'
 
+    //SplashScreen
+    implementation 'androidx.core:core-splashscreen:1.0.0-alpha02'
+
     // Tests
     testImplementation project(':owncloudTestUtil')
     testImplementation "junit:junit:$junitVersion"

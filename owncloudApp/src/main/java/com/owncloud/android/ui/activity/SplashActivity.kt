@@ -23,11 +23,13 @@ package com.owncloud.android.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         startActivity(Intent(this, FileDisplayActivity::class.java))
         finish()
     }
