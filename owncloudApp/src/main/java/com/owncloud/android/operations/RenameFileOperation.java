@@ -131,10 +131,6 @@ public class RenameFileOperation extends SyncOperation {
                 String newPath = parentStoragePath + mNewName;
                 mFile.setStoragePath(newPath);
 
-                // notify MediaScanner about removed file
-                getStorageManager().deleteFileInMediaScan(oldPath);
-                // notify to scan about new file
-                getStorageManager().triggerMediaScan(newPath);
             }
             // else - NOTHING: the link to the local file is kept although the local name
             // can't be updated

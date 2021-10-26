@@ -26,7 +26,6 @@ import android.net.Uri;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
-import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.domain.files.MimeTypeConstantsKt;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -41,7 +40,6 @@ import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.RemoteFileUtils;
@@ -457,9 +455,7 @@ public class UploadFileOperation extends SyncOperation {
                 move(temporalFile, expectedFile);
             } else {                            // FileUploader.LOCAL_BEHAVIOUR_MOVE
                 move(originalFile, expectedFile);
-                getStorageManager().deleteFileInMediaScan(originalFile.getAbsolutePath());
             }
-            getStorageManager().triggerMediaScan(expectedFile.getAbsolutePath());
         }
     }
 
@@ -741,8 +737,6 @@ public class UploadFileOperation extends SyncOperation {
         file.setNeedsUpdateThumbnail(true);
         getStorageManager().saveFile(file);
         getStorageManager().saveConflict(file, null);
-
-        getStorageManager().triggerMediaScan(file.getStoragePath());
     }
 
     private void updateOCFile(OCFile file, RemoteFile remoteFile) {
