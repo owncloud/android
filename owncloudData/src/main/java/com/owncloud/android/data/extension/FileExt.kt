@@ -94,4 +94,4 @@ fun File.moveRecursively(
 }
 
 //Private exception class, used to terminate recursive copying.
-private class TerminateException(file: File) : FileSystemException(file) {}
+private class TerminateException(file: File) : FileSystemException(file)
