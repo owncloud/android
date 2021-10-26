@@ -936,7 +936,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
             if (sameAccount && sameFile) {
                 if (success) {
-                    file = storageManager.getFileByPath(uploadedRemotePath)
+                    file = uploadedRemotePath?.let { storageManager.getFileByPath(it) }
                 }
                 refreshSecondFragment(
                     intent.action,
@@ -1007,11 +1007,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
                     refreshListOfFilesFragment(true)
                 }
-                refreshSecondFragment(
-                    intent.action,
-                    downloadedRemotePath,
-                    intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
-                )
+                downloadedRemotePath?.let {
+                    refreshSecondFragment(
+                        intent.action,
+                        it,
+                        intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
+                    )
+                }
                 invalidateOptionsMenu()
             }
 

@@ -123,7 +123,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         if (!isWrite) return ParcelFileDescriptor.open(fileToOpen, accessMode)
 
-        val handler = Handler(context?.mainLooper)
+        val handler = context?.mainLooper?.let { Handler(it) }
         // Attach a close listener if the document is opened in write mode.
         try {
             return ParcelFileDescriptor.open(fileToOpen, accessMode, handler) {
