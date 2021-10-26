@@ -20,12 +20,6 @@
 
 package com.owncloud.android.dependecyinjection
 
-<<<<<<< HEAD
-=======
-import com.owncloud.android.MainApp
-import com.owncloud.android.data.storage.LocalStorageProvider
-import com.owncloud.android.data.storage.ScopedStorageProvider
->>>>>>> Update local path after migration. Do not upload the file after this migration
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.presentation.manager.AvatarManager
 import com.owncloud.android.providers.AccountProvider
