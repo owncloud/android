@@ -20,8 +20,6 @@
 
 package com.owncloud.android.dependecyinjection
 
-import com.owncloud.android.MainApp
-import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.presentation.manager.AvatarManager
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.ContextProvider
@@ -40,6 +38,4 @@ val commonModule = module {
     single { LogsProvider(get()) }
     single { WorkManagerProvider(androidContext()) }
     single { AccountProvider(androidContext()) }
-    single<LocalStorageProvider> { LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder) }
-
 }
