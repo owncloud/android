@@ -13,6 +13,7 @@ Summary
 * Bugfix - ANR after removing account with too many downloaded files: [#3362](https://github.com/owncloud/android/issues/3362)
 * Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
 * Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
+* Bugfix - Camera Upload manual retry: [#3418](https://github.com/owncloud/android/pull/3418)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
@@ -62,6 +63,14 @@ Details
 
    https://github.com/owncloud/android/issues/2896
    https://github.com/owncloud/android/pull/3383
+
+* Bugfix - Camera Upload manual retry: [#3418](https://github.com/owncloud/android/pull/3418)
+
+   Previously, when users selected to retry a single camera upload, an error message appeared.
+   Now, the retry of a single upload is enqueued again as expected.
+
+   https://github.com/owncloud/android/issues/3417
+   https://github.com/owncloud/android/pull/3418
 
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 
