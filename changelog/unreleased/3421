@@ -1,0 +1,7 @@
+Enhancement: New Splash Screen
+
+A new splash screen has been developed to devices
+with Android 12 (S) version.
+
+https://github.com/owncloud/android/issues/3391
+https://github.com/owncloud/android/pull/3421
