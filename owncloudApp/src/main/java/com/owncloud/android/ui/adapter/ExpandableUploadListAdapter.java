@@ -42,6 +42,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.work.WorkManager;
 import com.google.android.material.snackbar.Snackbar;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
@@ -58,6 +59,7 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.fragment.OptionsInUploadListClickListener;
 import com.owncloud.android.ui.fragment.UploadListFragment;
 import com.owncloud.android.usecases.CancelUploadWithIdUseCase;
+import com.owncloud.android.usecases.RetryUploadFromContentUriUseCase;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -396,6 +398,13 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                                 TransferRequester requester = new TransferRequester();
                                 requester.retry(mParentActivity, upload, false);
                                 refreshView();
+                            } else if (DocumentFile.isDocumentUri(v.getContext(), Uri.parse(upload.getLocalPath()))) {
+                                WorkManager workManager = WorkManager.getInstance(MainApp.Companion.getAppContext());
+                                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(workManager);
+                                RetryUploadFromContentUriUseCase.Params useCaseParams = new RetryUploadFromContentUriUseCase.Params(
+                                        upload.getAccountName(), upload.getUploadId()
+                                );
+                                retryUploadFromContentUriUseCase.execute(useCaseParams);
                             } else {
                                 Snackbar snackbar = Snackbar.make(
                                         v.getRootView().findViewById(android.R.id.content),
