@@ -59,6 +59,7 @@
         <Preference
             app:allowDividerAbove="true"
             app:iconSpaceReserved="false"
+            app:icon="@drawable/ic_privacy_policy"
             app:key="privacyPolicy"
             app:title="@string/prefs_privacy_policy" />
 

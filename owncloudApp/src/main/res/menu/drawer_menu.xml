@@ -71,6 +71,11 @@
             android:id="@+id/drawer_menu_help"
             android:icon="@drawable/ic_help_circle_grey"
             android:title="@string/drawer_help" />
+        <item
+            android:orderInCategory="3"
+            android:id="@+id/drawer_menu_privacy_policy"
+            android:icon="@drawable/ic_privacy_policy"
+            android:title="@string/prefs_privacy_policy" />
 
         <item
             android:id="@+id/footer_spacer_1"
