@@ -622,12 +622,10 @@
     <string name="synchronizing_account">Synchronizing account</string>
 
     <!-- Scoped storage migration wizard -->
-    <string name="scoped_storage_wizard_explanation">Found %1$s of data on your external storage. They will be moved to the safe storage on your device. Remaining files should be cleaned from your external storage after the migration to avoid duplicates and vulnerability.</string>
-    <string name="scoped_storage_wizard_intro">Your app has been updated. This app update migrates your files to a more secure location on your device. This one-time data migration is needed and will take a few minutes.</string>
+    <string name="scoped_storage_wizard_explanation">Found %1$s of data on your external storage. It will be moved to the safe storage on your device. Remaining files will be cleaned from your external storage after the migration to avoid duplicates and vulnerability.</string>
+    <string name="scoped_storage_wizard_intro">Your app has been updated. This app update migrates your files to a more secure location on your device. This one-time data migration is required and can take up to a minute or more.</string>
     <string name="scoped_storage_wizard_intro_button">Let\'s get started</string>
-    <string name="scoped_storage_wizard_migrate_and_clean_button">Migrate and clean (Recommended)</string>
-    <string name="scoped_storage_wizard_migrate_and_clean_button_without_recommended">Migrate and clean</string>
-    <string name="scoped_storage_wizard_migrate_and_keep_button">Migrate but keep old files</string>
+    <string name="scoped_storage_wizard_migrate_and_clean_button">Migrate now</string>
     <string name="scoped_storage_wizard_migration_completed">Migration completed successfully. Your files are now safer than ever before.</string>
     <string name="scoped_storage_wizard_migration_in_progress">Migrating your files. Please don’t turn your device off.</string>
     <string name="scoped_storage_wizard_migration_in_progress_button">Working… Please wait</string>

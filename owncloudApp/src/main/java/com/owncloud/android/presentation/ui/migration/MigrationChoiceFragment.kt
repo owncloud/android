@@ -46,20 +46,8 @@ class MigrationChoiceFragment : Fragment(R.layout.fragment_migration_choice) {
             )
         }
 
-        view.findViewById<Button>(R.id.migration_choice_complete_button)?.setOnClickListener {
-            migrationViewModel.moveToNextState(MigrationState.MigrationType.MIGRATE_AND_CLEAN)
-        }
-
-        view.findViewById<Button>(R.id.migration_choice_partial_button)?.apply {
-            if (migrationViewModel.isThereEnoughSpaceInDevice()) {
-                setOnClickListener {
-                    migrationViewModel.moveToNextState(MigrationState.MigrationType.MIGRATE_AND_KEEP)
-                }
-            } else {
-                visibility = View.GONE
-                view.findViewById<TextView>(R.id.migration_choice_complete_button)?.text =
-                    getString(R.string.scoped_storage_wizard_migrate_and_clean_button_without_recommended)
-            }
+        view.findViewById<Button>(R.id.migration_choice_migrate_now_button)?.setOnClickListener {
+            migrationViewModel.moveToNextState()
         }
     }
 }

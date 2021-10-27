@@ -120,13 +120,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         Timber.d("MIGRATED FILES IN ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
     }
 
-    fun copyLegacyToScopedStorage() {
-        val timeInMillis = measureTimeMillis {
-            copyFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
-        }
-        Timber.d("Migrated files in ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
-    }
-
     private fun retrieveRootLegacyStorage(): File {
         val legacyStorageProvider = LegacyStorageProvider(rootFolderName)
         val rootLegacyStorage = File(legacyStorageProvider.getRootFolderPath())
@@ -137,15 +130,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         )
 
         return rootLegacyStorage
-    }
-
-    private fun copyFileOrFolderToScopedStorage(rootLegacyDirectory: File) {
-        Timber.d("Let's copy ${rootLegacyDirectory.absolutePath} to scoped storage")
-        rootLegacyDirectory.listFiles()?.forEach { file ->
-            if (file.isDirectory) {
-                file.copyRecursively(File(getRootFolderPath(), file.name), overwrite = true)
-            }
-        }
     }
 
     private fun moveFileOrFolderToScopedStorage(rootLegacyDirectory: File) {

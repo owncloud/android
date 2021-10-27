@@ -39,11 +39,6 @@ class MigrationProgressFragment : Fragment(R.layout.fragment_migration_progress)
             migrationViewModel.moveToNextState()
         }
 
-        val progressState = migrationViewModel.migrationState.value?.peekContent() as MigrationState.MigrationProgressState
-
-        when (progressState.migrationType) {
-            MigrationState.MigrationType.MIGRATE_AND_KEEP -> migrationViewModel.copyLegacyStorageToScopedStorage()
-            MigrationState.MigrationType.MIGRATE_AND_CLEAN -> migrationViewModel.moveLegacyStorageToScopedStorage()
-        }
+        migrationViewModel.moveLegacyStorageToScopedStorage()
     }
 }
