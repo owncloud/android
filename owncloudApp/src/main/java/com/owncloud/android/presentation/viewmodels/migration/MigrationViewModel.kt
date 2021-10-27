@@ -20,8 +20,6 @@
 
 package com.owncloud.android.presentation.viewmodels.migration
 
-import android.os.Environment
-import android.os.StatFs
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -76,14 +74,6 @@ class MigrationViewModel(
         }
     }
 
-    fun copyLegacyStorageToScopedStorage() {
-        viewModelScope.launch(coroutineDispatcherProvider.io) {
-            localStorageProvider.copyLegacyToScopedStorage()
-            updateAlreadyDownloadedFilesPath()
-            moveToNextState()
-        }
-    }
-
     private fun saveAlreadyMigratedPreference() {
         preferencesProvider.putBoolean(key = PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE, value = true)
     }
@@ -105,13 +95,13 @@ class MigrationViewModel(
         fileStorageManager.migrateLegacyToScopedPath(legacyStorageDirectoryPath, localStorageProvider.getRootFolderPath())
     }
 
-    fun moveToNextState(migrationType: MigrationState.MigrationType = MigrationState.MigrationType.MIGRATE_AND_KEEP) {
+    fun moveToNextState() {
 
         val nextState: MigrationState = when (_migrationState.value?.peekContent()) {
             is MigrationState.MigrationIntroState -> MigrationState.MigrationChoiceState(
                 legacyStorageSpaceInBytes = getLegacyStorageSizeInBytes()
             )
-            is MigrationState.MigrationChoiceState -> MigrationState.MigrationProgressState(migrationType)
+            is MigrationState.MigrationChoiceState -> MigrationState.MigrationProgressState
             is MigrationState.MigrationProgressState -> MigrationState.MigrationCompletedState
             is MigrationState.MigrationCompletedState -> MigrationState.MigrationCompletedState
             null -> MigrationState.MigrationIntroState
@@ -122,11 +112,5 @@ class MigrationViewModel(
         }
 
         _migrationState.postValue(Event(nextState))
-    }
-
-    fun isThereEnoughSpaceInDevice(): Boolean {
-        val stat = StatFs(Environment.getDataDirectory().path)
-        val availableBytes = stat.availableBlocksLong * stat.blockSizeLong
-        return availableBytes > getLegacyStorageSizeInBytes()
     }
 }

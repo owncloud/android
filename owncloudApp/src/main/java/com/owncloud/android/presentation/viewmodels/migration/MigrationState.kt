@@ -27,11 +27,7 @@ sealed class MigrationState {
         val legacyStorageSpaceInBytes: Long,
     ) : MigrationState()
 
-    data class MigrationProgressState(
-        val migrationType: MigrationType,
-    ) : MigrationState()
+    object MigrationProgressState : MigrationState()
 
     object MigrationCompletedState : MigrationState()
-
-    enum class MigrationType { MIGRATE_AND_KEEP, MIGRATE_AND_CLEAN }
 }

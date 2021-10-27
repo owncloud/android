@@ -39,38 +39,22 @@
         android:layout_margin="@dimen/standard_margin"
         android:gravity="center"
         android:textColor="@color/login_text_color"
-        app:layout_constraintBottom_toTopOf="@id/linear_buttons"
+        app:layout_constraintBottom_toTopOf="@id/migration_choice_migrate_now_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/migration_choice_logo" />
 
-    <LinearLayout
-        android:id="@+id/linear_buttons"
+    <Button
+        android:id="@+id/migration_choice_migrate_now_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
-        android:orientation="vertical"
+        android:background="@color/action_mode_background"
+        android:text="@string/scoped_storage_wizard_migrate_and_clean_button"
+        android:textColor="@color/login_text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/migration_choice_subtitle">
-
-        <Button
-            android:id="@+id/migration_choice_complete_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/action_mode_background"
-            android:text="@string/scoped_storage_wizard_migrate_and_clean_button"
-            android:textColor="@color/login_text_color" />
-
-        <Button
-            android:id="@+id/migration_choice_partial_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/standard_margin"
-            android:background="@color/transparent"
-            android:text="@string/scoped_storage_wizard_migrate_and_keep_button"
-            android:textColor="@color/login_text_color" />
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@id/migration_choice_subtitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
