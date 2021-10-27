@@ -1,0 +1,8 @@
+Enhancement: Privacy policy button more accessible
+
+The privacy policy button has been removed from "More" settings section,
+and it has been added to general settings screen as well as to the drawer menu, so
+that it is easier and more accessible for users.
+
+https://github.com/owncloud/android/pull/3423
+https://github.com/owncloud/android/issues/3422
