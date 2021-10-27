@@ -34,6 +34,7 @@ import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
+import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE
 import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
@@ -291,7 +292,10 @@ class CameraUploadsWorker(
             fileSize = documentFile.length()
             isForceOverwrite = false
             createdBy = createdByWorker
-            localAction = behavior.ordinal
+            localAction = if (behavior == FolderBackUpConfiguration.Behavior.MOVE)
+                FileUploader.LOCAL_BEHAVIOUR_MOVE
+            else
+                FileUploader.LOCAL_BEHAVIOUR_COPY
             uploadStatus = UploadStatus.UPLOAD_IN_PROGRESS
         }
         return uploadStorageManager.storeUpload(ocUpload)
