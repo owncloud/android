@@ -43,7 +43,6 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
     private var prefSync: Preference? = null
     private var prefRecommend: Preference? = null
     private var prefFeedback: Preference? = null
-    private var prefPrivacyPolicy: Preference? = null
     private var prefImprint: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -54,7 +53,6 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         prefSync = findPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)
         prefRecommend = findPreference(PREFERENCE_RECOMMEND)
         prefFeedback = findPreference(PREFERENCE_FEEDBACK)
-        prefPrivacyPolicy = findPreference(PREFERENCE_PRIVACY_POLICY)
         prefImprint = findPreference(PREFERENCE_IMPRINT)
 
         // Help
@@ -109,17 +107,6 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
             moreScreen?.removePreference(prefFeedback)
         }
 
-        // Privacy policy
-        if (moreViewModel.isPrivacyPolicyEnabled()) {
-            prefPrivacyPolicy?.setOnPreferenceClickListener {
-                val intent = Intent(context, PrivacyPolicyActivity::class.java)
-                startActivity(intent)
-                true
-            }
-        } else {
-            moreScreen?.removePreference(prefPrivacyPolicy)
-        }
-
         // Imprint
         if (moreViewModel.isImprintEnabled()) {
             prefImprint?.setOnPreferenceClickListener {
@@ -138,7 +125,6 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
         private const val PREFERENCE_RECOMMEND = "recommend"
         private const val PREFERENCE_FEEDBACK = "feedback"
-        private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
         private const val PREFERENCE_IMPRINT = "imprint"
     }
 

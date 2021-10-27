@@ -37,10 +37,6 @@
         app:title="@string/prefs_recommend" />
     <Preference
         app:iconSpaceReserved="false"
-        app:key="privacyPolicy"
-        app:title="@string/prefs_privacy_policy" />
-    <Preference
-        app:iconSpaceReserved="false"
         app:key="imprint"
         app:title="@string/prefs_imprint" />
 

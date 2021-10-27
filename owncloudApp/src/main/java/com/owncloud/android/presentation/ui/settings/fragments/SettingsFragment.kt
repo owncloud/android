@@ -23,12 +23,15 @@ package com.owncloud.android.presentation.ui.settings.fragments
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceScreen
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -39,22 +42,36 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val settingsViewModel by viewModel<SettingsViewModel>()
     private val moreViewModel by viewModel<SettingsMoreViewModel>()
 
+    private var settingsScreen: PreferenceScreen? = null
     private var subsectionPictureUploads: Preference? = null
     private var subsectionVideoUploads: Preference? = null
     private var subsectionMore: Preference? = null
+    private var prefPrivacyPolicy: Preference? = null
     private var prefAboutApp: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
+        settingsScreen = findPreference(SCREEN_SETTINGS)
         subsectionPictureUploads = findPreference(SUBSECTION_PICTURE_UPLOADS)
         subsectionVideoUploads = findPreference(SUBSECTION_VIDEO_UPLOADS)
         subsectionMore = findPreference(SUBSECTION_MORE)
+        prefPrivacyPolicy = findPreference(PREFERENCE_PRIVACY_POLICY)
         prefAboutApp = findPreference(PREFERENCE_ABOUT_APP)
 
         subsectionPictureUploads?.isVisible = settingsViewModel.isThereAttachedAccount()
         subsectionVideoUploads?.isVisible = settingsViewModel.isThereAttachedAccount()
         subsectionMore?.isVisible = moreViewModel.shouldMoreSectionBeVisible()
+
+        if (moreViewModel.isPrivacyPolicyEnabled()) {
+            prefPrivacyPolicy?.setOnPreferenceClickListener {
+                val intent = Intent(context, PrivacyPolicyActivity::class.java)
+                startActivity(intent)
+                true
+            }
+        } else {
+            settingsScreen?.removePreference(prefPrivacyPolicy)
+        }
 
         prefAboutApp?.apply {
             summary = String.format(
@@ -75,6 +92,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     companion object {
+        private const val SCREEN_SETTINGS = "settings_screen"
+        private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
         private const val PREFERENCE_ABOUT_APP = "about_app"
         private const val SUBSECTION_PICTURE_UPLOADS = "picture_uploads_subsection"
         private const val SUBSECTION_VIDEO_UPLOADS = "video_uploads_subsection"
