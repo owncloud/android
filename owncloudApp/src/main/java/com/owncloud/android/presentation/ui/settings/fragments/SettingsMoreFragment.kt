@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.ui.settings.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -29,7 +28,6 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.sendEmail
-import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
