@@ -33,7 +33,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasFlag
@@ -41,7 +40,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
@@ -68,7 +66,6 @@ class SettingsMoreFragmentTest {
     private var prefSync: Preference? = null
     private var prefRecommend: Preference? = null
     private var prefFeedback: Preference? = null
-    private var prefPrivacyPolicy: Preference? = null
     private var prefImprint: Preference? = null
 
     private lateinit var moreViewModel: SettingsMoreViewModel
@@ -114,14 +111,12 @@ class SettingsMoreFragmentTest {
         syncEnabled: Boolean = true,
         recommendEnabled: Boolean = true,
         feedbackEnabled: Boolean = true,
-        privacyPolicyEnabled: Boolean = true,
         imprintEnabled: Boolean = true
     ) {
         every { moreViewModel.isHelpEnabled() } returns helpEnabled
         every { moreViewModel.isSyncEnabled() } returns syncEnabled
         every { moreViewModel.isRecommendEnabled() } returns recommendEnabled
         every { moreViewModel.isFeedbackEnabled() } returns feedbackEnabled
-        every { moreViewModel.isPrivacyPolicyEnabled() } returns privacyPolicyEnabled
         every { moreViewModel.isImprintEnabled() } returns imprintEnabled
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
@@ -168,15 +163,6 @@ class SettingsMoreFragmentTest {
             enabled = true
         )
 
-        prefPrivacyPolicy = getPreference(PREFERENCE_PRIVACY_POLICY)
-        assertNotNull(prefPrivacyPolicy)
-        prefPrivacyPolicy?.verifyPreference(
-            keyPref = PREFERENCE_PRIVACY_POLICY,
-            titlePref = context.getString(R.string.prefs_privacy_policy),
-            visible = true,
-            enabled = true
-        )
-
         prefImprint = getPreference(PREFERENCE_IMPRINT)
         assertNotNull(prefImprint)
         prefImprint?.verifyPreference(
@@ -217,14 +203,6 @@ class SettingsMoreFragmentTest {
         prefFeedback = getPreference(PREFERENCE_FEEDBACK)
 
         assertNull(prefFeedback)
-    }
-
-    @Test
-    fun privacyPolicyNotEnabledView() {
-        launchTest(privacyPolicyEnabled = false)
-        prefPrivacyPolicy = getPreference(PREFERENCE_PRIVACY_POLICY)
-
-        assertNull(prefPrivacyPolicy)
     }
 
     @Test
@@ -310,14 +288,6 @@ class SettingsMoreFragmentTest {
     }
 
     @Test
-    fun privacyPolicyOpensPrivacyPolicyActivity() {
-        launchTest()
-
-        onView(withText(R.string.prefs_privacy_policy)).perform(click())
-        intended(hasComponent(PrivacyPolicyActivity::class.java.name))
-    }
-
-    @Test
     fun imprintOpensUrl() {
         every { moreViewModel.getImprintUrl() } returns "https://owncloud.com/mobile"
 
@@ -333,7 +303,6 @@ class SettingsMoreFragmentTest {
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
         private const val PREFERENCE_RECOMMEND = "recommend"
         private const val PREFERENCE_FEEDBACK = "feedback"
-        private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
         private const val PREFERENCE_IMPRINT = "imprint"
     }
 

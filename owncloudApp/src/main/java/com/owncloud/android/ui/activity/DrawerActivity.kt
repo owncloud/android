@@ -6,7 +6,8 @@
  * @author David González Verdugo
  * @author Shashvat Kedia
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -56,6 +57,7 @@ import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.utils.AvatarUtils
@@ -177,6 +179,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 }
                 R.id.drawer_menu_feedback -> openFeedback()
                 R.id.drawer_menu_help -> openHelp()
+                R.id.drawer_menu_privacy_policy -> openPrivacyPolicy()
                 Menu.NONE -> {
                     accountClicked(menuItem.title.toString())
                 }
@@ -230,6 +233,11 @@ abstract class DrawerActivity : ToolbarActivity() {
         val feedbackMail = getString(R.string.mail_feedback)
         val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.drawer_feedback)
         sendEmail(email = feedbackMail, subject = feedback)
+    }
+
+    private fun openPrivacyPolicy() {
+        val intent = Intent(this, PrivacyPolicyActivity::class.java)
+        startActivity(intent)
     }
 
     /**

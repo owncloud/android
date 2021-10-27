@@ -3,7 +3,7 @@ Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud Android Client unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v2.18.1...master
+[unreleased]: https://github.com/owncloud/android/compare/v2.18.3...master
 
 Summary
 -------
@@ -96,6 +96,30 @@ Details
 
    https://github.com/owncloud/android/issues/3333
    https://github.com/owncloud/android/pull/3408
+
+Changelog for ownCloud Android Client [2.18.3] (2021-10-27)
+=======================================
+The following sections list the changes in ownCloud Android Client 2.18.3 relevant to
+ownCloud admins and users.
+
+[2.18.3]: https://github.com/owncloud/android/compare/v2.18.1...v2.18.3
+
+Summary
+-------
+
+* Enhancement - Privacy policy button more accessible: [#3423](https://github.com/owncloud/android/pull/3423)
+
+Details
+-------
+
+* Enhancement - Privacy policy button more accessible: [#3423](https://github.com/owncloud/android/pull/3423)
+
+   The privacy policy button has been removed from "More" settings section, and it has been added
+   to general settings screen as well as to the drawer menu, so that it is easier and more accessible
+   for users.
+
+   https://github.com/owncloud/android/issues/3422
+   https://github.com/owncloud/android/pull/3423
 
 Changelog for ownCloud Android Client [2.18.1] (2021-07-20)
 =======================================

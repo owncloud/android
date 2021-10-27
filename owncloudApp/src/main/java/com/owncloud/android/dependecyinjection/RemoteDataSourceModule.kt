@@ -19,6 +19,7 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.ClientManager
@@ -63,7 +64,7 @@ val remoteDataSourceModule = module {
     single { OwnCloudAccount(get(), androidContext()) }
     single { SingleSessionManager.getDefaultSingleton().getClientFor(get(), androidContext()) }
 
-    single { ClientManager(get(), get(), get()) }
+    single { ClientManager(get(), get(), get(), MainApp.accountType) }
 
     single<CapabilityService> { OCCapabilityService(get()) }
     single<FileService> { OCFileService(get()) }
