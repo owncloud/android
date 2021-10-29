@@ -5,7 +5,8 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,7 +25,11 @@ package com.owncloud.android
 import android.app.Activity
 import android.app.Application
 import android.app.NotificationManager.IMPORTANCE_LOW
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.RestrictionsManager
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
@@ -114,7 +119,30 @@ class MainApp : Application() {
             }
 
             override fun onActivityResumed(activity: Activity) {
+                var managedString: String? = "Not managed"
                 Timber.v("${activity.javaClass.simpleName} onResume() starting")
+                if (BuildConfig.FLAVOR == "mdm") {
+                    val restrictionsManager = activity.getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager
+                    val restrictions = restrictionsManager.applicationRestrictions
+                    if (restrictions.containsKey("test_managed_configuration")) {
+                        managedString = restrictions.getString("test_managed_configuration")
+                    }
+
+                    val restrictionsFilter = IntentFilter(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED)
+
+                    val restrictionsReceiver = object : BroadcastReceiver() {
+                        override fun onReceive(context: Context, intent: Intent) {
+                            val changedRestrictions = restrictionsManager.applicationRestrictions
+                            if (changedRestrictions.containsKey("test_managed_configuration")) {
+                                managedString = changedRestrictions.getString("test_managed_configuration")
+                                println("MANAGED STRING VALUE: $managedString")
+                            }
+                        }
+                    }
+
+                    registerReceiver(restrictionsReceiver, restrictionsFilter)
+                }
+                println("MANAGED STRING VALUE: $managedString")
             }
 
             override fun onActivityPaused(activity: Activity) {
