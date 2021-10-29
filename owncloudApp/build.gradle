@@ -157,6 +157,17 @@ android {
         }
     }
 
+    flavorDimensions "management"
+    productFlavors {
+        original {
+            dimension "management"
+        }
+        mdm {
+            dimension "management"
+            applicationIdSuffix ".mdm"
+        }
+    }
+
     applicationVariants.all { variant ->
         def appName = System.env.OC_APP_NAME
         setOutputFileName(variant, appName, project)
