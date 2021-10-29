@@ -7,5 +7,11 @@
         android:title="@string/test_managed_configuration_title"
         android:description="@string/test_managed_configuration_description"
         android:defaultValue="www.mymanageddomain.com" />
+    <restriction
+        android:key="test_managed_configuration2"
+        android:restrictionType="bool"
+        android:title="@string/test_managed_configuration2_title"
+        android:description="@string/test_managed_configuration2_description"
+        android:defaultValue="true" />
 
 </restrictions>

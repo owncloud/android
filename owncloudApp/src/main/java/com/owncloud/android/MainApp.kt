@@ -270,6 +270,10 @@ class MainApp : Application() {
             val managedString = restrictions.getString("test_managed_configuration")
             managedString?.let { preferencesProvider.putString("TEST_MANAGED_CONFIGURATION", it) }
         }
+        if (restrictions.containsKey("test_managed_configuration2")) {
+            val managedBool = restrictions.getBoolean("test_managed_configuration2")
+            preferencesProvider.putBoolean("TEST_MANAGED_CONFIGURATION2", managedBool)
+        }
     }
 
     companion object {
