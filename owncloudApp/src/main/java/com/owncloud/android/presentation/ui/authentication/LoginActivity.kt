@@ -46,6 +46,7 @@ import com.owncloud.android.R
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.databinding.AccountSetupBinding
 import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
@@ -149,7 +150,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.root.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
 
-        initBrandableOptionsUI()
+        //initBrandableOptionsUI()
 
         binding.thumbnail.setOnClickListener { checkOcServer() }
 
@@ -176,6 +177,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         accountAuthenticatorResponse?.onRequestContinued()
 
         initLiveDataObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initBrandableOptionsUI()
     }
 
     private fun initLiveDataObservers() {
@@ -648,6 +654,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun initBrandableOptionsUI() {
+        val preferencesProvider = SharedPreferencesProviderImpl(this)
         if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
             binding.hostUrlFrame.isVisible = false
             binding.centeredRefreshButton.run {
@@ -657,7 +664,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         if (contextProvider.getString(R.string.server_url).isNotEmpty()) {
-            binding.hostUrlInput.setText(contextProvider.getString(R.string.server_url))
+            binding.hostUrlInput.setText(preferencesProvider.getString("TEST_MANAGED_CONFIGURATION", null) ?: contextProvider.getString(R.string.server_url))
             checkOcServer()
         }
 

@@ -38,6 +38,7 @@ import android.view.WindowManager
 import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.presentation.ui.security.PatternManager
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
@@ -118,6 +119,10 @@ class MainApp : Application() {
 
                 PreferenceManager.migrateFingerprintToBiometricKey(applicationContext)
                 PreferenceManager.deleteOldSettingsPreferences(applicationContext)
+
+                if (BuildConfig.FLAVOR == "mdm") {
+                    handleRestrictions(activity)
+                }
             }
 
             override fun onActivityStarted(activity: Activity) {
@@ -130,30 +135,7 @@ class MainApp : Application() {
             }
 
             override fun onActivityResumed(activity: Activity) {
-                var managedString: String? = "Not managed"
                 Timber.v("${activity.javaClass.simpleName} onResume() starting")
-                if (BuildConfig.FLAVOR == "mdm") {
-                    val restrictionsManager = activity.getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager
-                    val restrictions = restrictionsManager.applicationRestrictions
-                    if (restrictions.containsKey("test_managed_configuration")) {
-                        managedString = restrictions.getString("test_managed_configuration")
-                    }
-
-                    val restrictionsFilter = IntentFilter(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED)
-
-                    val restrictionsReceiver = object : BroadcastReceiver() {
-                        override fun onReceive(context: Context, intent: Intent) {
-                            val changedRestrictions = restrictionsManager.applicationRestrictions
-                            if (changedRestrictions.containsKey("test_managed_configuration")) {
-                                managedString = changedRestrictions.getString("test_managed_configuration")
-                                println("MANAGED STRING VALUE: $managedString")
-                            }
-                        }
-                    }
-
-                    registerReceiver(restrictionsReceiver, restrictionsFilter)
-                }
-                println("MANAGED STRING VALUE: $managedString")
             }
 
             override fun onActivityPaused(activity: Activity) {
@@ -235,6 +217,31 @@ class MainApp : Application() {
             description = getString(R.string.file_sync_notification_channel_description),
             importance = IMPORTANCE_LOW
         )
+    }
+
+    private fun handleRestrictions(activity: Activity) {
+        val restrictionsManager = activity.getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager
+        val restrictions = restrictionsManager.applicationRestrictions
+        cacheRestrictions(activity, restrictions)
+
+        val restrictionsFilter = IntentFilter(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED)
+
+        val restrictionsReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val changedRestrictions = restrictionsManager.applicationRestrictions
+                cacheRestrictions(activity, changedRestrictions)
+            }
+        }
+
+        registerReceiver(restrictionsReceiver, restrictionsFilter)
+    }
+
+    private fun cacheRestrictions(activity: Activity, restrictions: Bundle) {
+        val preferencesProvider = SharedPreferencesProviderImpl(activity)
+        if (restrictions.containsKey("test_managed_configuration")) {
+            val managedString = restrictions.getString("test_managed_configuration")
+            managedString?.let { preferencesProvider.putString("TEST_MANAGED_CONFIGURATION", it) }
+        }
     }
 
     companion object {
