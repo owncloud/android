@@ -23,7 +23,10 @@ package com.owncloud.android.data.extension
 import java.io.File
 import java.io.IOException
 
-//Copies and delete this file with all its children to the specified destination target path.
+/**
+ * It's basically a copy of copyRecursively() but deleting the source file after copying it
+ * to the target location
+ */
 fun File.moveRecursively(
     target: File,
     overwrite: Boolean = false,
@@ -77,17 +80,14 @@ fun File.moveRecursively(
                             ) == OnErrorAction.TERMINATE
                         )
                             return false
+                    } else {
+                        src.delete()
                     }
                 }
             }
         }
 
-        /*
-         * Delete this file with all its children. Note that if this operation fails then partial deletion may have taken place.
-         * Returns:true if the file or directory is successfully deleted, false otherwise.
-         */
-        return walkBottomUp().fold(true, { res, it -> (it.delete() || !it.exists()) && res })
-
+        return true
     } catch (e: TerminateException) {
         return false
     }
