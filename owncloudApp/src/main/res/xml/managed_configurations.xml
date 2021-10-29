@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- android:title and android:description values should be in strings resource file -->
+    <restriction
+        android:key="test_managed_configuration"
+        android:restrictionType="string"
+        android:title="Test managed configuration"
+        android:description="This configuration is used with testing purposes. It provides a string with default value to 'Hello' but it can be changed!"
+        android:defaultValue="Hello" />
+
+</restrictions>

@@ -68,6 +68,8 @@
         android:preserveLegacyExternalStorage="true"
         android:theme="@style/Theme.ownCloud.Toolbar"
         tools:targetApi="n">
+        <meta-data android:name="android.content.APP_RESTRICTIONS"
+            android:resource="@xml/managed_configurations" />
         <activity android:name=".presentation.ui.settings.PrivacyPolicyActivity"></activity>
         <activity android:name=".presentation.ui.settings.SettingsActivity"></activity>
         <activity android:name=".presentation.ui.migration.StorageMigrationActivity" />
