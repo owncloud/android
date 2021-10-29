@@ -670,4 +670,7 @@
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
+
+    <string name="test_managed_configuration_title">Test managed configuration</string>
+    <string name="test_managed_configuration_description">This configuration is used with testing purposes. It provides a string with default value to \'Hello\' but it can be changed!</string>
 </resources>
