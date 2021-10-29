@@ -6,6 +6,6 @@
         android:restrictionType="string"
         android:title="@string/test_managed_configuration_title"
         android:description="@string/test_managed_configuration_description"
-        android:defaultValue="Hello" />
+        android:defaultValue="www.mymanageddomain.com" />
 
 </restrictions>
