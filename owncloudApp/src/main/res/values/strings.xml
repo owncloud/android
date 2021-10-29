@@ -672,5 +672,5 @@
     <string name="release_notes_icon">Release note icon</string>
 
     <string name="test_managed_configuration_title">Test managed configuration</string>
-    <string name="test_managed_configuration_description">This configuration is used with testing purposes. It provides a string with default value to \'Hello\' but it can be changed!</string>
+    <string name="test_managed_configuration_description">This configuration is used with testing purposes. It provides a string with default value to \'www.mymanageddomain.com\' but it can be changed!</string>
 </resources>
