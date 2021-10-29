@@ -17,7 +17,7 @@
     <string name="user_agent">Mozilla/5.0 (Android) ownCloud-android/%1$s</string>
 
     <!-- URLs and flags related -->
-    <string name="server_url" formatted="false">www.example.com</string>
+    <string name="server_url" formatted="false"></string>
     <bool name="show_server_url_input">true</bool>
     <bool name="show_welcome_link">true</bool>
     <string name="welcome_link_url" formatted="false">"https://owncloud.com/docs-guides"</string>
