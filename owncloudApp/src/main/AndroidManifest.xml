@@ -68,6 +68,10 @@
         android:supportsPictureInPicture="false"
         android:theme="@style/Theme.ownCloud.Toolbar"
         tools:targetApi="n">
+
+        <meta-data android:name="android.content.APP_RESTRICTIONS"
+            android:resource="@xml/managed_configurations" />
+
         <activity
             android:name=".presentation.ui.releasenotes.ReleaseNotesActivity"
             android:exported="false" />
