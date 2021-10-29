@@ -649,4 +649,6 @@
     <string name="security_enforced_first_option">Passcode lock</string>
     <string name="security_enforced_second_option">Pattern lock</string>
 
+    <string name="test_managed_configuration_title">Test managed configuration</string>
+    <string name="test_managed_configuration_description">This configuration is used with testing purposes. It provides a string with default value to \'Hello\' but it can be changed!</string>
 </resources>
