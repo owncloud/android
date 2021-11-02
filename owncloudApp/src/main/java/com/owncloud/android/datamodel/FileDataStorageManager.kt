@@ -589,8 +589,8 @@ class FileDataStorageManager {
                     uri = CONTENT_URI,
                     projection = null,
                     sortOrder = "$FILE_PATH ASC ",
-                    selection = null,
-                    selectionArgs = null,
+                    selection = "$FILE_ACCOUNT_OWNER = ? ",
+                    selectionArgs = arrayOf(account.name),
                 )
             } catch (e: RemoteException) {
                 Timber.e(e)
