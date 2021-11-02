@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
 import com.owncloud.android.presentation.viewmodels.migration.MigrationState
@@ -49,5 +50,7 @@ class MigrationChoiceFragment : Fragment(R.layout.fragment_migration_choice) {
         view.findViewById<Button>(R.id.migration_choice_migrate_now_button)?.setOnClickListener {
             migrationViewModel.moveToNextState()
         }
+
+        view.findViewById<TextView>(R.id.migration_choice_not_enough_space_warning)?.isVisible = migrationViewModel.isThereEnoughSpaceInDevice()
     }
 }
