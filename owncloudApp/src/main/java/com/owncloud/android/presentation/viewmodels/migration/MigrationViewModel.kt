@@ -91,10 +91,15 @@ class MigrationViewModel(
     }
 
     private fun updateAlreadyDownloadedFilesPath() {
-        val account = accountProvider.getCurrentOwnCloudAccount() ?: return
-        val fileStorageManager = FileDataStorageManager(contextProvider.getContext(), account, contextProvider.getContext().contentResolver)
+        val listOfAccounts = accountProvider.getLoggedAccounts()
 
-        fileStorageManager.migrateLegacyToScopedPath(legacyStorageDirectoryPath, localStorageProvider.getRootFolderPath())
+        if (listOfAccounts.isEmpty()) return
+
+        listOfAccounts.forEach { account ->
+            val fileStorageManager = FileDataStorageManager(contextProvider.getContext(), account, contextProvider.getContext().contentResolver)
+
+            fileStorageManager.migrateLegacyToScopedPath(legacyStorageDirectoryPath, localStorageProvider.getRootFolderPath())
+        }
     }
 
     fun moveToNextState() {
