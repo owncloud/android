@@ -17,6 +17,7 @@ Summary
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
 * Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
+* Enhancement - New Splash Screen: [#3391](https://github.com/owncloud/android/issues/3391)
 
 Details
 -------
@@ -96,6 +97,13 @@ Details
 
    https://github.com/owncloud/android/issues/3333
    https://github.com/owncloud/android/pull/3408
+
+* Enhancement - New Splash Screen: [#3391](https://github.com/owncloud/android/issues/3391)
+
+   A new splash screen has been developed for devices with Android 12 (S) version.
+
+   https://github.com/owncloud/android/issues/3391
+   https://github.com/owncloud/android/pull/3421
 
 Changelog for ownCloud Android Client [2.18.3] (2021-10-27)
 =======================================
