@@ -24,7 +24,6 @@ import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.owncloud.android.R
-import com.owncloud.android.presentation.viewmodels.migration.MigrationState
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
