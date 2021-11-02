@@ -139,7 +139,7 @@ public abstract class PreferenceManager {
      * @param context Caller {@link Context}, used to access to shared preferences manager.
      */
     public static void setLastUploadPath(String path, Context context) {
-        saveStringPreference(AUTO_PREF__LAST_UPLOAD_PATH, path, context);
+        saveStringPreference(path, context);
     }
 
     /**
@@ -208,9 +208,9 @@ public abstract class PreferenceManager {
         appPreferences.apply();
     }
 
-    private static void saveStringPreference(String key, String value, Context context) {
+    private static void saveStringPreference(String value, Context context) {
         SharedPreferences.Editor appPreferences = getDefaultSharedPreferences(context.getApplicationContext()).edit();
-        appPreferences.putString(key, value);
+        appPreferences.putString(PreferenceManager.AUTO_PREF__LAST_UPLOAD_PATH, value);
         appPreferences.apply();
     }
 
