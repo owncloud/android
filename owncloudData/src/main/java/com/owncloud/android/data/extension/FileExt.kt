@@ -73,24 +73,29 @@ fun File.moveRecursively(
                 if (src.isDirectory) {
                     dstFile.mkdirs()
                 } else {
-                    if (src.copyTo(dstFile, overwrite).length() != src.length()) {
-                        if (onError(
-                                src,
-                                IOException("Source file wasn't copied completely, length of destination file differs.")
-                            ) == OnErrorAction.TERMINATE
-                        )
-                            return false
-                    } else {
+                    try {
+                        if (src.copyTo(dstFile, overwrite).length() != src.length()) {
+                            if (onError(
+                                    src,
+                                    IOException("Source file wasn't copied completely, length of destination file differs.")
+                                ) == OnErrorAction.TERMINATE
+                            )
+                                return false
+                        } else {
+                            src.delete()
+                        }
+                    } catch (e: IOException) {
                         src.delete()
+                        dstFile.delete()
+                        return false
                     }
                 }
             }
         }
 
         return true
+
     } catch (e: TerminateException) {
-        return false
-    } catch (e: IOException) {
         return false
     }
 }
