@@ -139,7 +139,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
                 file.moveRecursively(File(getRootFolderPath(), file.name), overwrite = true)
             }
         }
-        rootLegacyDirectory.delete()
+        rootLegacyDirectory.deleteRecursively()
     }
 
     fun sizeOfDirectory(dir: File): Long {
