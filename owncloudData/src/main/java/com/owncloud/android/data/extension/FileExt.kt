@@ -90,6 +90,8 @@ fun File.moveRecursively(
         return true
     } catch (e: TerminateException) {
         return false
+    } catch (e: IOException) {
+        return false
     }
 }
 
