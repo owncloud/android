@@ -51,6 +51,6 @@ class MigrationChoiceFragment : Fragment(R.layout.fragment_migration_choice) {
             migrationViewModel.moveToNextState()
         }
 
-        view.findViewById<TextView>(R.id.migration_choice_not_enough_space_warning)?.isVisible = migrationViewModel.isThereEnoughSpaceInDevice()
+        view.findViewById<TextView>(R.id.migration_choice_not_enough_space_warning)?.isVisible = !migrationViewModel.isThereEnoughSpaceInDevice()
     }
 }
