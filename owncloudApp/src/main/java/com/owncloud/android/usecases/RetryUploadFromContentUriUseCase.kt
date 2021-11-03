@@ -44,7 +44,7 @@ class RetryUploadFromContentUriUseCase(
             UploadFileFromContentUriUseCase.Params(
                 accountName = uploadToRetry.accountName,
                 contentUri = uploadToRetry.localPath.toUri(),
-                lastModifiedInSeconds = (System.currentTimeMillis() / 1000).toString(),
+                lastModifiedInSeconds = (uploadToRetry.uploadEndTimestamp / 1000).toString(),
                 behavior = if (uploadToRetry.localAction == LOCAL_BEHAVIOUR_MOVE) MOVE.name else COPY.name,
                 uploadPath = uploadToRetry.remotePath,
                 uploadIdInStorageManager = uploadToRetry.uploadId,
