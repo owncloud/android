@@ -56,7 +56,6 @@ class RetryUploadFromContentUriUseCase(
     }
 
     data class Params(
-        val accountName: String,
         val uploadIdInStorageManager: Long,
     )
 }

@@ -246,7 +246,6 @@ public class TransferRequester {
     private void enqueueRetryFromContentUri(OCUpload upload, Context context) {
         new RetryUploadFromContentUriUseCase(WorkManager.getInstance(context)).execute(
                 new RetryUploadFromContentUriUseCase.Params(
-                        upload.getAccountName(),
                         upload.getUploadId()
                 )
         );

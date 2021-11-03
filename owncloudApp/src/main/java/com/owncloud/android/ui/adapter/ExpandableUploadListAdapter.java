@@ -402,7 +402,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                                 WorkManager workManager = WorkManager.getInstance(MainApp.Companion.getAppContext());
                                 RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(workManager);
                                 RetryUploadFromContentUriUseCase.Params useCaseParams = new RetryUploadFromContentUriUseCase.Params(
-                                        upload.getAccountName(), upload.getUploadId()
+                                        upload.getUploadId()
                                 );
                                 retryUploadFromContentUriUseCase.execute(useCaseParams);
                             } else {
