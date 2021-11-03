@@ -32,18 +32,12 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.content.OperationApplicationException
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
-import android.os.FileUriExposedException
 import android.os.RemoteException
-import android.provider.MediaStore
-import androidx.core.content.FileProvider
 import androidx.core.util.Pair
 import com.owncloud.android.MainApp
-import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
@@ -497,7 +491,6 @@ class FileDataStorageManager {
                     if (file.isDown) {
                         val path = file.storagePath
                         File(path).delete()
-                        triggerMediaScan(path) // notify MediaScanner about removed file
                     }
                 }
             }
@@ -582,6 +575,51 @@ class FileDataStorageManager {
         } else {
             cv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
         }
+    }
+
+    fun migrateLegacyToScopedPath(
+        legacyStorageDirectoryPath: String,
+        rootStorageDirectoryPath: String,
+    ) {
+        val filesToUpdatePath: MutableList<OCFile> = mutableListOf()
+
+        val cursor: Cursor? =
+            try {
+                performQuery(
+                    uri = CONTENT_URI,
+                    projection = null,
+                    sortOrder = "$FILE_PATH ASC ",
+                    selection = "$FILE_ACCOUNT_OWNER = ? ",
+                    selectionArgs = arrayOf(account.name),
+                )
+            } catch (e: RemoteException) {
+                Timber.e(e)
+                null
+            }
+
+        cursor?.let { allFilesCursor ->
+            if (allFilesCursor.moveToFirst()) {
+                do {
+                    val ocFile = createFileInstance(allFilesCursor)
+                    ocFile?.let {
+                        if (it.storagePath != null) {
+                            filesToUpdatePath.add(it)
+                        }
+                    }
+                } while (allFilesCursor.moveToNext())
+            }
+            cursor.close()
+        }
+
+        val filesWithPathUpdated = filesToUpdatePath.map {
+            it.apply { storagePath = storagePath.replace(legacyStorageDirectoryPath, rootStorageDirectoryPath) }
+        }
+
+        filesWithPathUpdated.forEach {
+            saveFile(it)
+        }
+
+        Timber.d("Updated path for ${filesWithPathUpdated.size} downloaded files")
     }
 
     /**
@@ -669,7 +707,6 @@ class FileDataStorageManager {
                 if (removeLocalCopy && file.isDown && localPath != null && success) {
                     success = File(localPath).delete()
                     if (success) {
-                        deleteFileInMediaScan(localPath)
                         if (!removeDBData) {
                             // maybe unnecessary, but should be checked TODO remove if unnecessary
                             file.storagePath = null
@@ -726,8 +763,6 @@ class FileDataStorageManager {
                         val localFile = File(file.storagePath)
                         success = success and localFile.delete()
                         if (success) {
-                            // notify MediaScanner about removed file
-                            deleteFileInMediaScan(file.storagePath)
                             file.storagePath = null
                             saveFile(file)
                         }
@@ -788,8 +823,6 @@ class FileDataStorageManager {
                     null
                 }
 
-            val originalPathsToTriggerMediaScan = ArrayList<String>()
-            val newPathsToTriggerMediaScan = ArrayList<String>()
             val defaultSavePath = FileStorageUtils.getSavePath(account.name)
 
             /// 2. prepare a batch of update operations to change all the descendants
@@ -808,9 +841,6 @@ class FileDataStorageManager {
                                     child.storagePath.substring(lengthOfOldStoragePath)
 
                             cv.put(FILE_STORAGE_PATH, targetLocalPath)
-
-                            originalPathsToTriggerMediaScan.add(child.storagePath)
-                            newPathsToTriggerMediaScan.add(targetLocalPath)
 
                         }
                         if (targetParent.availableOfflineStatus != NOT_AVAILABLE_OFFLINE) {
@@ -857,27 +887,13 @@ class FileDataStorageManager {
             val originalLocalPath = FileStorageUtils.getDefaultSavePathFor(account.name, file)
             val targetLocalPath = defaultSavePath + targetPath
             val localFile = File(originalLocalPath)
-            var renamed = false
             if (localFile.exists()) {
                 val targetFile = File(targetLocalPath)
                 val targetFolder = targetFile.parentFile
                 if (targetFolder != null && !targetFolder.exists()) {
                     targetFolder.mkdirs()
                 }
-                renamed = localFile.renameTo(targetFile)
-            }
-
-            if (renamed) {
-                var it = originalPathsToTriggerMediaScan.iterator()
-                while (it.hasNext()) {
-                    // Notify MediaScanner about removed file
-                    deleteFileInMediaScan(it.next())
-                }
-                it = newPathsToTriggerMediaScan.iterator()
-                while (it.hasNext()) {
-                    // Notify MediaScanner about new file/folder
-                    triggerMediaScan(it.next())
-                }
+                localFile.renameTo(targetFile)
             }
         }
     }
@@ -1090,63 +1106,6 @@ class FileDataStorageManager {
             isDownloading = it.getIntFromColumnOrThrow(FILE_IS_DOWNLOADING) == 1
             etagInConflict = it.getStringFromColumnOrThrow(FILE_ETAG_IN_CONFLICT)
             privateLink = it.getStringFromColumnOrThrow(FILE_PRIVATE_LINK)
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    fun triggerMediaScan(path: String?) {
-        if (path != null) {
-            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            intent.data = Uri.fromFile(File(path))
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    MainApp.appContext.sendBroadcast(intent)
-                } catch (fileUriExposedException: FileUriExposedException) {
-                    val newIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-                    newIntent.data = FileProvider.getUriForFile(
-                        mContext!!.applicationContext,
-                        mContext!!.resources.getString(R.string.file_provider_authority),
-                        File(path)
-                    )
-                    MainApp.appContext.sendBroadcast(newIntent)
-                }
-
-            } else {
-                MainApp.appContext.sendBroadcast(intent)
-            }
-
-            MainApp.appContext.sendBroadcast(intent)
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    fun deleteFileInMediaScan(path: String) {
-
-        val mimeTypeString = FileStorageUtils.getMimeTypeFromName(path)
-        try {
-            when {
-                mimeTypeString.startsWith(pathImage) -> // Images
-                    performDelete(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        "${MediaStore.Images.Media.DATA}=?",
-                        arrayOf(path)
-                    )
-                mimeTypeString.startsWith(pathAudio) -> // Audio
-                    performDelete(
-                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        "${MediaStore.Audio.Media.DATA}=?",
-                        arrayOf(path)
-                    )
-                mimeTypeString.startsWith(pathVideo) -> // Video
-                    performDelete(
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        "${MediaStore.Video.Media.DATA}=?",
-                        arrayOf(path)
-                    )
-            }
-        } catch (e: RemoteException) {
-            Timber.e(e, "Exception deleting media file in MediaStore ${e.message}")
         }
     }
 

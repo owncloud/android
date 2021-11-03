@@ -21,8 +21,9 @@ package com.owncloud.android.workers
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.owncloud.android.MainApp
 import com.owncloud.android.data.storage.LocalStorageProvider
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -35,7 +36,7 @@ class OldLogsCollectorWorker(
 ) : CoroutineWorker(
     appContext,
     workerParameters
-) {
+), KoinComponent {
 
     override suspend fun doWork(): Result {
         val logsDirectory = getLogsDirectory()
@@ -52,7 +53,7 @@ class OldLogsCollectorWorker(
     }
 
     private fun getLogsDirectory(): File {
-        val localStorageProvider = LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder)
+        val localStorageProvider: LocalStorageProvider by inject()
         val logsPath = localStorageProvider.getLogsPath()
         return File(logsPath)
     }

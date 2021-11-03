@@ -935,7 +935,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
 
             if (sameAccount && sameFile) {
-                if (success) {
+                if (success && uploadedRemotePath != null) {
                     file = storageManager.getFileByPath(uploadedRemotePath)
                 }
                 refreshSecondFragment(
@@ -1042,7 +1042,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         private fun refreshSecondFragment(
-            downloadEvent: String?, downloadedRemotePath: String,
+            downloadEvent: String?, downloadedRemotePath: String?,
             success: Boolean
         ) {
             val secondFragment = secondFragment

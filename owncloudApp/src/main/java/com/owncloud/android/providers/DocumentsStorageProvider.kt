@@ -123,7 +123,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         if (!isWrite) return ParcelFileDescriptor.open(fileToOpen, accessMode)
 
-        val handler = Handler(context?.mainLooper)
+        val handler = Handler(MainApp.appContext.mainLooper)
         // Attach a close listener if the document is opened in write mode.
         try {
             return ParcelFileDescriptor.open(fileToOpen, accessMode, handler) {
@@ -152,7 +152,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             getAccountFromFileId(ocFile.fileId),
                             false,
                             context,
-                            false
+                            false,
+                            true
                         ).apply {
                             val result = execute(currentStorageManager, context)
                             if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {

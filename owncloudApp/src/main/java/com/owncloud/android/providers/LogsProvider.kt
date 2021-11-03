@@ -23,20 +23,20 @@ import android.content.Context
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.storage.ScopedStorageProvider
 import com.owncloud.android.lib.common.http.LogInterceptor
 import com.owncloud.android.lib.common.utils.LoggingHelper
 import timber.log.Timber
 import java.io.File
 
 class LogsProvider(
-    context: Context
+    private val context: Context
 ) {
     private val sharedPreferencesProvider = SharedPreferencesProviderImpl(context)
 
     fun startLogging() {
         val dataFolder = MainApp.dataFolder
-        val localStorageProvider = LocalStorageProvider.LegacyStorageProvider(dataFolder)
+        val localStorageProvider = ScopedStorageProvider(dataFolder, context)
 
         // Set folder for store logs
         LoggingHelper.startLogging(

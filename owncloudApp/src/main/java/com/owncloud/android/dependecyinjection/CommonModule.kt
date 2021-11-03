@@ -20,8 +20,7 @@
 
 package com.owncloud.android.dependecyinjection
 
-import com.owncloud.android.MainApp
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.presentation.manager.AvatarManager
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.ContextProvider
@@ -29,6 +28,7 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.OCContextProvider
 import com.owncloud.android.providers.WorkManagerProvider
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -40,6 +40,5 @@ val commonModule = module {
     single { LogsProvider(get()) }
     single { WorkManagerProvider(androidContext()) }
     single { AccountProvider(androidContext()) }
-    single<LocalStorageProvider> { LocalStorageProvider.LegacyStorageProvider(MainApp.dataFolder) }
-
+    single { UploadsStorageManager(androidApplication().contentResolver) }
 }

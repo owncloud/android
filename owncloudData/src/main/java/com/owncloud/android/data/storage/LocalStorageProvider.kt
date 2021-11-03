@@ -26,25 +26,21 @@ package com.owncloud.android.data.storage
 import android.accounts.Account
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.os.Environment
+import com.owncloud.android.data.extension.moveRecursively
+import timber.log.Timber
 import java.io.File
+import java.util.concurrent.TimeUnit
+import kotlin.system.measureTimeMillis
 
 sealed class LocalStorageProvider(private val rootFolderName: String) {
 
     abstract fun getPrimaryStorageDirectory(): File
 
-    class LegacyStorageProvider(
-        rootFolderName: String
-    ) : LocalStorageProvider(rootFolderName) {
-
-        override fun getPrimaryStorageDirectory(): File = Environment.getExternalStorageDirectory()
-    }
-
     /**
      * Return the root path of primary shared/external storage directory for this application.
      * For example: /storage/emulated/0/owncloud
      */
-    private fun getRootFolderPath(): String = getPrimaryStorageDirectory().absolutePath + File.separator + rootFolderName
+    fun getRootFolderPath(): String = getPrimaryStorageDirectory().absolutePath + File.separator + rootFolderName
 
     /**
      * Get local storage path for accountName.
@@ -68,7 +64,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
      */
     fun getTemporalPath(
         accountName: String?
-    ): String = getRootFolderPath() + "/tmp/" + getEncodedAccountName(accountName)
+    ): String = getRootFolderPath() + File.separator + TEMPORAL_FOLDER_NAME + File.separator + getEncodedAccountName(accountName)
 
     fun getLogsPath(): String = getRootFolderPath() + LOGS_FOLDER_NAME
 
@@ -86,21 +82,19 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     private fun getDanglingAccountDirs(remainingAccounts: Array<Account>): List<File> {
         val rootFolder = File(getRootFolderPath())
         val danglingDirs = mutableListOf<File>()
-        if (rootFolder.listFiles() != null) {
-            for (dir in rootFolder.listFiles()) {
-                var dirIsOk = false
-                if (dir.name.equals("tmp")) {
-                    dirIsOk = true
-                } else {
-                    for (a in remainingAccounts) {
-                        if (dir.name.equals(getEncodedAccountName(a.name))) {
-                            dirIsOk = true
-                        }
+        rootFolder.listFiles()?.forEach { dir ->
+            var dirIsOk = false
+            if (dir.name.equals(TEMPORAL_FOLDER_NAME)) {
+                dirIsOk = true
+            } else {
+                remainingAccounts.forEach { account ->
+                    if (dir.name.equals(getEncodedAccountName(account.name))) {
+                        dirIsOk = true
                     }
                 }
-                if (!dirIsOk) {
-                    danglingDirs.add(dir)
-                }
+            }
+            if (!dirIsOk) {
+                danglingDirs.add(dir)
             }
         }
         return danglingDirs
@@ -108,7 +102,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
 
     open fun deleteUnusedUserDirs(remainingAccounts: Array<Account>) {
         val danglingDirs = getDanglingAccountDirs(remainingAccounts)
-        for (dd in danglingDirs) {
+        danglingDirs.forEach { dd ->
             dd.deleteRecursively()
         }
     }
@@ -119,7 +113,55 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
      */
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
 
+    fun moveLegacyToScopedStorage() {
+        val timeInMillis = measureTimeMillis {
+            moveFileOrFolderToScopedStorage(retrieveRootLegacyStorage())
+        }
+        Timber.d("MIGRATED FILES IN ${TimeUnit.SECONDS.convert(timeInMillis, TimeUnit.MILLISECONDS)} seconds")
+    }
+
+    private fun retrieveRootLegacyStorage(): File {
+        val legacyStorageProvider = LegacyStorageProvider(rootFolderName)
+        val rootLegacyStorage = File(legacyStorageProvider.getRootFolderPath())
+
+        val legacyStorageUsedBytes = sizeOfDirectory(rootLegacyStorage)
+        Timber.d(
+            "Root ${rootLegacyStorage.absolutePath} has ${rootLegacyStorage.listFiles()?.size} files and its size is $legacyStorageUsedBytes Bytes"
+        )
+
+        return rootLegacyStorage
+    }
+
+    private fun moveFileOrFolderToScopedStorage(rootLegacyDirectory: File) {
+        Timber.d("Let's move ${rootLegacyDirectory.absolutePath} to scoped storage")
+        rootLegacyDirectory.listFiles()?.forEach { file ->
+            if (file.isDirectory) {
+                file.moveRecursively(File(getRootFolderPath(), file.name), overwrite = true)
+            }
+        }
+        rootLegacyDirectory.deleteRecursively()
+    }
+
+    fun sizeOfDirectory(dir: File): Long {
+        if (dir.exists()) {
+            var result: Long = 0
+            val fileList = dir.listFiles() ?: arrayOf()
+            fileList.forEach { file ->
+                // Recursive call if it's a directory
+                result += if (file.isDirectory) {
+                    sizeOfDirectory(file)
+                } else {
+                    // Sum the file size in bytes
+                    file.length()
+                }
+            }
+            return result // return the file size
+        }
+        return 0
+    }
+
     companion object {
         private const val LOGS_FOLDER_NAME = "/logs/"
+        private const val TEMPORAL_FOLDER_NAME = "tmp"
     }
 }

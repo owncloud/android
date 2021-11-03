@@ -620,4 +620,15 @@
     <string name="prefs_logs_summary">Logs may contain sensitive information. Sharing logs with others is sole user responsibility</string>
 
     <string name="synchronizing_account">Synchronizing account</string>
+
+    <!-- Scoped storage migration wizard -->
+    <string name="scoped_storage_wizard_explanation">Found %1$s of data on your external storage. It will be moved to the safe storage on your device. Remaining files will be cleaned from your external storage after the migration to avoid duplicates and vulnerability.</string>
+    <string name="scoped_storage_wizard_intro">Your app has been updated. This app update migrates your files to a more secure location on your device. This one-time data migration is required and can take up to a minute or more.</string>
+    <string name="scoped_storage_wizard_intro_button">Let\'s get started</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">&#9888;️ Your free space is currently limited on your device. Some files may not be migrated, please check that all downloaded files keep downloaded after the process has been completed.</string>
+    <string name="scoped_storage_wizard_migrate_and_clean_button">Migrate now</string>
+    <string name="scoped_storage_wizard_migration_completed">Migration completed successfully. Your files are now safer than ever before.</string>
+    <string name="scoped_storage_wizard_migration_in_progress">Migrating your files. Please don’t turn your device off.</string>
+    <string name="scoped_storage_wizard_migration_in_progress_button">Working… Please wait</string>
+    <string name="scoped_storage_wizard_title">More security for your files</string>
 </resources>
