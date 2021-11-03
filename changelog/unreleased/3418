@@ -1,0 +1,7 @@
+Bugfix: Camera Upload manual retry
+
+Previously, when users selected to retry a single camera upload, an error message appeared.
+Now, the retry of a single upload is enqueued again as expected.
+
+https://github.com/owncloud/android/pull/3418
+https://github.com/owncloud/android/issues/3417
