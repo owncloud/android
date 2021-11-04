@@ -1,0 +1,15 @@
+Enhancement: Scoped Storage
+
+The way to store files in the device has changed completely.
+Previously, the files were stored in the shared storage. That means that apps that had
+access to the shared storage, could read, write or do whatever they wanted with the ownCloud files.
+
+Now, ownCloud files are stored in the Scoped Storage, so they are safer.
+Other apps can access ownCloud files using the Documents Provider, which is the native way
+to do it, and that means that the ownCloud app has full control of its files.
+
+Furthermore, if the app is removed, the files downloaded to ownCloud are removed too.
+So, files are not lost or forgotten in the device after uninstalling the app.
+
+https://github.com/owncloud/android/issues/2877
+https://github.com/owncloud/android/pull/3269
