@@ -480,4 +480,5 @@
   <string name="welcome_feature_4_title">Завантаження з камери</string>
   <string name="welcome_feature_5_title">Потокове відео</string>
   <string name="welcome_feature_5_text">Переглядайте відео не завантажуючи його</string>
+  <!--Scoped storage migration wizard-->
 </resources>

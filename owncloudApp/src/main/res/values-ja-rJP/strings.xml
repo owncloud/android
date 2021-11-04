@@ -464,4 +464,5 @@
   <string name="welcome_feature_3_title">複数アカウント</string>
   <string name="welcome_feature_4_title">カメラアップロード</string>
   <string name="no_borwser_installed_alert">ブラウザーがインストールされていません。安全なログインを許可するためにブラウザーをインストールしてください。</string>
+  <!--Scoped storage migration wizard-->
 </resources>

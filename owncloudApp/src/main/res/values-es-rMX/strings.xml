@@ -496,4 +496,5 @@
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
   <string name="common_not_found">no se encontró</string>
+  <!--Scoped storage migration wizard-->
 </resources>

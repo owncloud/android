@@ -539,4 +539,5 @@
   <string name="get_base_url_error">لا يمكن معرفة عنوان URL قاعدة الخادم</string>
   <string name="prefs_http_logs"> تسجيل طلبات واستجابات بروتوكول HTTP </string>
   <string name="prefs_logs_summary">قد تحتوي السجلات على معلومات حساسة. تعتبر مشاركة السجلات مع الآخرين مسؤولية المستخدم وحده</string>
+  <!--Scoped storage migration wizard-->
 </resources>

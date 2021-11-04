@@ -561,4 +561,5 @@
   <string name="prefs_http_logs">Registrar peticiones y respuestas HTTP</string>
   <string name="prefs_logs_summary">Los registros pueden contener información sensible. Compartirlos o no es responsabilidad del usuario.</string>
   <string name="synchronizing_account">Sincronizando cuenta</string>
+  <!--Scoped storage migration wizard-->
 </resources>

@@ -561,4 +561,5 @@
   <string name="prefs_http_logs">記錄HTTP請求和響應</string>
   <string name="prefs_logs_summary">記錄可能包含敏感信息。 與他人共享記錄與唯一的使用者責任</string>
   <string name="synchronizing_account">同步帳號</string>
+  <!--Scoped storage migration wizard-->
 </resources>

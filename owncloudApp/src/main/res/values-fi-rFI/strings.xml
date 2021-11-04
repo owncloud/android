@@ -462,4 +462,5 @@
   <string name="welcome_feature_5_title">Videoiden striimaus</string>
   <string name="welcome_feature_5_text">Toista videosi lataamatta niitä</string>
   <string name="no_borwser_installed_alert">Selainta ei asennettu. Ole hyvä ja asenna selain jotta turvallinen kirjautuminen on mahdollista.</string>
+  <!--Scoped storage migration wizard-->
 </resources>

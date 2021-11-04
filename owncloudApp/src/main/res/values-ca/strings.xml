@@ -533,4 +533,5 @@
   <string name="get_base_url_error">No ha sigut possible conèixer l\'URL del servidor</string>
   <string name="prefs_http_logs">Registre de sol·licituds i respostes HTTP</string>
   <string name="prefs_logs_summary">Els registres poden contenir informació sensible. Compartir els registres amb altres és responsabilitat exclusiva de l’usuari</string>
+  <!--Scoped storage migration wizard-->
 </resources>

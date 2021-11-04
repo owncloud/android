@@ -536,4 +536,5 @@
   <string name="no_borwser_installed_alert">Δεν είναι εγκατεστημένος περιηγητής. Παρακαλούμε εγκαταστήστε ένα περιηγητή έτσι ώστε να επιτρέπεται η ασφαλής σύνδεση.</string>
   <string name="common_not_found">δεν βρέθηκε</string>
   <string name="synchronizing_account">Λογαριασμός συγχρονισμού</string>
+  <!--Scoped storage migration wizard-->
 </resources>

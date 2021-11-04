@@ -432,4 +432,5 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Hoppa över</string>
+  <!--Scoped storage migration wizard-->
 </resources>

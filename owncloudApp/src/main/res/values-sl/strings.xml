@@ -488,4 +488,5 @@
   <string name="welcome_feature_2_title">Deli datoteke in mape</string>
   <string name="welcome_feature_4_title">Pošiljanje posnetkov s kamero</string>
   <string name="common_not_found">Ni bilo najdeno</string>
+  <!--Scoped storage migration wizard-->
 </resources>

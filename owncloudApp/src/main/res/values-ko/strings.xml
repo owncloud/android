@@ -464,4 +464,5 @@
   <string name="welcome_feature_skip_button">건너뛰기</string>
   <string name="welcome_feature_4_title">카메라 업로드</string>
   <string name="welcome_feature_5_title">비디오 스트리밍</string>
+  <!--Scoped storage migration wizard-->
 </resources>

@@ -570,4 +570,5 @@
   <string name="prefs_http_logs">Registrar solicitações e respostas HTTP</string>
   <string name="prefs_logs_summary">Os logs podem conter informações confidenciais. O compartilhamento de registros com outras pessoas é de responsabilidade exclusiva do usuário</string>
   <string name="synchronizing_account">Sincronizando conta</string>
+  <!--Scoped storage migration wizard-->
 </resources>

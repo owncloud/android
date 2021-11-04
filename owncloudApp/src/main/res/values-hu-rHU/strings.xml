@@ -555,4 +555,5 @@
   <string name="prefs_http_logs">HTTP kérelmek és válaszok logolása</string>
   <string name="prefs_logs_summary">A logok érzékeny információkat tartalmazhatnak. A logok adatainak megosztása a felhasználó felelőssége.</string>
   <string name="synchronizing_account">Fiók szinkronizálása</string>
+  <!--Scoped storage migration wizard-->
 </resources>

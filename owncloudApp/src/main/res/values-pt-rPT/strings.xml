@@ -441,4 +441,5 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Ignorar</string>
+  <!--Scoped storage migration wizard-->
 </resources>

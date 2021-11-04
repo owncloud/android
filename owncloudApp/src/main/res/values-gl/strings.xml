@@ -541,4 +541,5 @@ Descárgueo de aquí: %2$s</string>
   <string name="prefs_http_logs">Rexistro de solicitudes e respostas HTTP</string>
   <string name="prefs_logs_summary">Os rexistros poden conter información confidencial. Compartir rexistros con outras persoas é responsabilidade exclusiva do usuario</string>
   <string name="synchronizing_account">Sincronizando a conta</string>
+  <!--Scoped storage migration wizard-->
 </resources>

@@ -557,4 +557,5 @@
   <string name="prefs_http_logs">บันทึกคำขอและการตอบกลับ HTTP</string>
   <string name="prefs_logs_summary">บันทึกอาจมีข้อมูลที่ละเอียดอ่อน การแบ่งปันบันทึกกับผู้อื่นถือเป็นความรับผิดชอบของผู้ใช้แต่เพียงผู้เดียว</string>
   <string name="synchronizing_account">ประสานข้อมูลบัญชี</string>
+  <!--Scoped storage migration wizard-->
 </resources>

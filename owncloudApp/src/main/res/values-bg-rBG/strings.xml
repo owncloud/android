@@ -534,4 +534,5 @@
   <string name="common_not_found">не беше намерен</string>
   <string name="supports_oauth2_error">Не беше възможно да се разбере дали OAuth2 се поддържа</string>
   <string name="get_base_url_error">Не беше възможно да се открие базовият URL адрес на сървъра</string>
+  <!--Scoped storage migration wizard-->
 </resources>

@@ -541,4 +541,5 @@
   <string name="get_base_url_error">לא ניתן היה לדעת את נתיב הבסיס של השרת</string>
   <string name="prefs_http_logs">תיעוד בקשות ותגובות HTTP</string>
   <string name="prefs_logs_summary">לוגים עלולים להכיל מידע רגיש. שיתוף לוגים עם אחרים הנו באחריות הבלעדית של המשתמש</string>
+  <!--Scoped storage migration wizard-->
 </resources>
