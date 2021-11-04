@@ -1,0 +1,8 @@
+Enhancement: Security enforced
+
+When a new branding/MDM option is true,
+a dialog appears and the user must select an option
+to lock the app.
+
+https://github.com/owncloud/android/pull/3434
+https://github.com/owncloud/android/issues/3400
