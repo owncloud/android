@@ -271,7 +271,7 @@ fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
     }
 }
 
-fun Activity.manageOptionLockSelected(type:LockType){
+fun Activity.manageOptionLockSelected(type: LockType) {
     when (type) {
         LockType.PASSCODE -> startActivity(Intent(this, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
