@@ -108,4 +108,8 @@
 
     <!-- Number of passcode digits -->
     <integer name="passcode_digits">4</integer>
+
+    <!--Security enforced -->
+    <bool name="passcode_enforced">true</bool>
+
 </resources>

@@ -20,11 +20,13 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 
 class SettingsSecurityViewModel(
     private val preferencesProvider: SharedPreferencesProvider
@@ -39,4 +41,6 @@ class SettingsSecurityViewModel(
 
     fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =
         preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
+
+    fun isSecurityEnforcedEnabled(context: Context) = context.resources.getBoolean(R.bool.passcode_enforced)
 }
