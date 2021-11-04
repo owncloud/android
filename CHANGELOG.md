@@ -65,6 +65,7 @@ Summary
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
 * Enhancement - Scoped Storage: [#2877](https://github.com/owncloud/android/issues/2877)
 * Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
+* Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 
 Details
 -------
@@ -186,6 +187,14 @@ Details
 
    https://github.com/owncloud/android/issues/3333
    https://github.com/owncloud/android/pull/3408
+
+* Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
+
+   When a new branding/MDM option is true, a dialog appears and the user must select an option to
+   lock the app.
+
+   https://github.com/owncloud/android/issues/3400
+   https://github.com/owncloud/android/pull/3434
 
 Changelog for ownCloud Android Client [2.18.3] (2021-10-27)
 =======================================
