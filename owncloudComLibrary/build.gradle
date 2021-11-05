@@ -19,14 +19,14 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
 
-        versionCode = 10001201
-        versionName = "1.0.13-beta.1"
+        versionCode = 10001300
+        versionName = "1.0.13"
     }
 
     lintOptions {
