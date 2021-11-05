@@ -17,6 +17,7 @@ Summary
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
+* Enhancement - Scoped Storage: [#2877](https://github.com/owncloud/android/issues/2877)
 * Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
 
 Details
@@ -97,6 +98,22 @@ Details
    https://github.com/owncloud/android/issues/465
    https://github.com/owncloud/android/issues/3315
    https://github.com/owncloud/android/pull/3385
+
+* Enhancement - Scoped Storage: [#2877](https://github.com/owncloud/android/issues/2877)
+
+   The way to store files in the device has changed completely. Previously, the files were stored
+   in the shared storage. That means that apps that had access to the shared storage, could read,
+   write or do whatever they wanted with the ownCloud files.
+
+   Now, ownCloud files are stored in the Scoped Storage, so they are safer. Other apps can access
+   ownCloud files using the Documents Provider, which is the native way to do it, and that means
+   that the ownCloud app has full control of its files.
+
+   Furthermore, if the app is removed, the files downloaded to ownCloud are removed too. So, files
+   are not lost or forgotten in the device after uninstalling the app.
+
+   https://github.com/owncloud/android/issues/2877
+   https://github.com/owncloud/android/pull/3269
 
 * Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
 
