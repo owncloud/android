@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
         android:background="@color/action_mode_background"
-        android:text="@string/drawer_close"
+        android:text="@string/scoped_storage_wizard_migration_completed_access_files_button"
         android:textColor="@color/login_text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
