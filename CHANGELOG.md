@@ -14,6 +14,7 @@ Summary
 * Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
 * Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
 * Bugfix - Camera Upload manual retry: [#3418](https://github.com/owncloud/android/pull/3418)
+* Bugfix - Device rotation moves to root in folder picker: [#3431](https://github.com/owncloud/android/pull/3431)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
@@ -72,6 +73,15 @@ Details
 
    https://github.com/owncloud/android/issues/3417
    https://github.com/owncloud/android/pull/3418
+
+* Bugfix - Device rotation moves to root in folder picker: [#3431](https://github.com/owncloud/android/pull/3431)
+
+   Previously, when users rotate the device trying to share photos with oC selecting a non-root
+   folder, folder picker shows the root folder Now, folder picker shows the folder that the user
+   browsed.
+
+   https://github.com/owncloud/android/issues/3163
+   https://github.com/owncloud/android/pull/3431
 
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 
