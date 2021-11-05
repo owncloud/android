@@ -571,4 +571,13 @@
   <string name="prefs_logs_summary">Os logs podem conter informações confidenciais. O compartilhamento de registros com outras pessoas é de responsabilidade exclusiva do usuário</string>
   <string name="synchronizing_account">Sincronizando conta</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_explanation">Encontrados %1$s de dados em seu armazenamento externo. Isto será movido para o armazenamento seguro em seu dispositivo. Arquivos remanescentes podem ser removidos de seu armazenamento externo depois da migração para evitar duplicatas e vulnerabilidades.</string>
+  <string name="scoped_storage_wizard_intro">Seu aplicativo foi atualizado. Esta atualização do aplicativo migra seu arquivos para um local mais seguro em seu dispositivo. Esta aplicação de dados única é necessária e pode levar um minuto ou mais.</string>
+  <string name="scoped_storage_wizard_intro_button">Vamos começar</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Seu espaço livre está atualmente limitado em seu dispositivo. Alguns arquivos podem não ser migrados. Por favor, mantenha todos os arquivos que fez download seguros até o processo ser completado.</string>
+  <string name="scoped_storage_wizard_migrate_and_clean_button">Migrar agora</string>
+  <string name="scoped_storage_wizard_migration_completed">Migração realizada com sucesso. Seus arquivos agora estão mais seguros que nunca.</string>
+  <string name="scoped_storage_wizard_migration_in_progress">Migrando seus arquivos. Por favor não desligue seu dispositivo.</string>
+  <string name="scoped_storage_wizard_migration_in_progress_button">Trabalhando... Por favor, aguarde</string>
+  <string name="scoped_storage_wizard_title">Mais segurança para seus arquivos</string>
 </resources>
