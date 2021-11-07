@@ -575,6 +575,7 @@
   <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Hapësira juaj e lirë aktualisht kufizohet në pajisjen tuaj. Disa kartela mund të mos jenë migruar, ju lutemi, kontrolloni se krejt kartelat e shkarkuara vazhdojnë të shkarkohen, pasi procesi të jetë plotësuar.</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">Migroje tani</string>
   <string name="scoped_storage_wizard_migration_completed">Migrimi u plotësua me sukses. Kartelat tuaja tani janë më të sigurta se kurrë më parë.</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">Përdorni kartelat tuaja</string>
   <string name="scoped_storage_wizard_migration_in_progress">Po migrohen kartelat tuaja. Ju lutemi, mos e fikni pajisjen.</string>
   <string name="scoped_storage_wizard_migration_in_progress_button">Po punohet… Ju lutemi, pritni</string>
   <string name="scoped_storage_wizard_title">Më shumë siguri për kartelat tuaja</string>
