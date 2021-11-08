@@ -190,8 +190,8 @@ Details
 
 * Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 
-   When a new branding/MDM option is true, a dialog appears and the user must select an option to
-   lock the app.
+   A new branding/MDM option has been added to make app lock via passcode or pattern compulsory,
+   whichever the user chooses.
 
    https://github.com/owncloud/android/issues/3400
    https://github.com/owncloud/android/pull/3434
