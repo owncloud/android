@@ -20,11 +20,13 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
-import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
+import com.owncloud.android.presentation.viewmodels.ViewModelTest
+import com.owncloud.android.providers.ContextProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -38,11 +40,13 @@ import org.junit.Test
 class SettingsSecurityViewModelTest : ViewModelTest() {
     private lateinit var securityViewModel: SettingsSecurityViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
+    private lateinit var contextProvider: ContextProvider
 
     @Before
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
-        securityViewModel = SettingsSecurityViewModel(preferencesProvider)
+        contextProvider = mockk()
+        securityViewModel = SettingsSecurityViewModel(preferencesProvider, contextProvider)
     }
 
     @Test
@@ -131,6 +135,20 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         verify(exactly = 1) {
             preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false)
         }
+    }
+
+    @Test
+    fun `set pref is security enforced enabled - ok - true`() {
+        every { securityViewModel.isSecurityEnforcedEnabled() } returns true
+
+        assertTrue(contextProvider.getBoolean(R.bool.passcode_enforced))
+    }
+
+    @Test
+    fun `set pref is security enforced enabled - ok - false`() {
+        every { securityViewModel.isSecurityEnforcedEnabled() } returns false
+
+        assertFalse(contextProvider.getBoolean(R.bool.passcode_enforced))
     }
 
 }

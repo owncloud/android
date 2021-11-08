@@ -129,8 +129,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         prefAccessDocumentProvider = findPreference(PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER)
         prefTouchesWithOtherVisibleWindows = findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)
 
-        prefPasscode?.isVisible = !securityViewModel.isSecurityEnforcedEnabled(requireContext())
-        prefPattern?.isVisible = !securityViewModel.isSecurityEnforcedEnabled(requireContext())
+        prefPasscode?.isVisible = !securityViewModel.isSecurityEnforcedEnabled()
+        prefPattern?.isVisible = !securityViewModel.isSecurityEnforcedEnabled()
 
         // Passcode lock
         prefPasscode?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->

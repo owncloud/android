@@ -106,6 +106,7 @@ class SettingsSecurityFragmentTest {
 
         every { passCodeViewModel.getPassCode() } returns OC_PASSCODE_4_DIGITS
         every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
+        every { securityViewModel.isSecurityEnforcedEnabled() } returns false
 
         Intents.init()
     }
