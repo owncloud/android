@@ -10,7 +10,7 @@
         android:id="@+id/contentPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="89">
+        android:layout_weight="85">
     </androidx.viewpager.widget.ViewPager>
 
     <LinearLayout
@@ -19,7 +19,7 @@
         android:layout_marginLeft="@dimen/standard_margin"
         android:layout_marginRight="@dimen/standard_margin"
         android:layout_marginBottom="@dimen/standard_margin"
-        android:layout_weight="11"
+        android:layout_weight="15"
         android:orientation="horizontal"
         android:weightSum="3">
 
