@@ -1,0 +1,8 @@
+Bugfix: Logging does not stop when the user deactivates it
+
+Previously, when users disabled the logging option in the settings,
+the application would not stop logging and the size of the log files would increase.
+Now, the option to disable it works perfectly and no logs are collected if disabled.
+
+https://github.com/owncloud/android/pull/3436
+https://github.com/owncloud/android/issues/3325
