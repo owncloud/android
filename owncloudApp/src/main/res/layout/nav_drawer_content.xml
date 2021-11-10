@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2020 ownCloud GmbH.
@@ -20,19 +19,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_drawer_header"
-        app:menu="@menu/drawer_menu">
+        android:fitsSystemWindows="true">
 
-       <include layout="@layout/nav_drawer_footer"
-           android:layout_gravity="bottom"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"/>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
 
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:fitsSystemWindows="true"
+                app:headerLayout="@layout/nav_drawer_header"
+                app:menu="@menu/drawer_menu">
+
+                <include
+                    layout="@layout/nav_drawer_footer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom" />
+
+            </com.google.android.material.navigation.NavigationView>
+        </androidx.core.widget.NestedScrollView>
     </com.google.android.material.navigation.NavigationView>
-
 </merge>
