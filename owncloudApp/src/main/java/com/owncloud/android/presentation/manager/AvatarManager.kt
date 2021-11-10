@@ -27,6 +27,7 @@ import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
@@ -62,8 +63,14 @@ class AvatarManager : KoinComponent {
             return BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, it)
         }
 
+        val capabilities: GetStoredCapabilitiesUseCase by inject()
+        val result = capabilities.execute(GetStoredCapabilitiesUseCase.Params(accountName = account.name))
+        val capabilityIsNotUnknown = result?.filesSharingUserProfilePicture?.isUnknown ?: false
+        val capabilityIsNotFalse = result?.filesSharingUserProfilePicture?.isFalse ?: false
+
         // Avatar not found in disk caché, fetch from server.
-        if (fetchIfNotCached) {
+
+        if (fetchIfNotCached && (!capabilityIsNotUnknown || !capabilityIsNotFalse)) {
             Timber.i("Avatar with imageKey $imageKey is not available in cache. Fetching from server...")
             val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
             val useCaseResult =
