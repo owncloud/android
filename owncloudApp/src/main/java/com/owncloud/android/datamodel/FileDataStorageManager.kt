@@ -1365,6 +1365,7 @@ class FileDataStorageManager {
             filesSharingResharing = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_RESHARING)),
             filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_FEDERATION_OUTGOING)),
             filesSharingFederationIncoming = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_FEDERATION_INCOMING)),
+            filesSharingUserProfilePicture = CapabilityBooleanType.UNKNOWN,
             filesBigFileChunking = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_BIGFILECHUNKING)),
             filesUndelete = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_UNDELETE)),
             filesVersioning = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_VERSIONING))

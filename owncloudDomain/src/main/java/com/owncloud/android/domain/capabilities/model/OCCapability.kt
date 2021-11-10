@@ -44,6 +44,7 @@ data class OCCapability(
     val filesSharingResharing: CapabilityBooleanType,
     val filesSharingFederationOutgoing: CapabilityBooleanType,
     val filesSharingFederationIncoming: CapabilityBooleanType,
+    val filesSharingUserProfilePicture: CapabilityBooleanType,
     val filesBigFileChunking: CapabilityBooleanType,
     val filesUndelete: CapabilityBooleanType,
     val filesVersioning: CapabilityBooleanType

@@ -74,6 +74,7 @@ class OCLocalCapabilitiesDataSource(
                 filesSharingResharing = CapabilityBooleanType.fromValue(filesSharingResharing),
                 filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(filesSharingFederationOutgoing),
                 filesSharingFederationIncoming = CapabilityBooleanType.fromValue(filesSharingFederationIncoming),
+                filesSharingUserProfilePicture = CapabilityBooleanType.fromValue(filesSharingUserProfilePicture),
                 filesBigFileChunking = CapabilityBooleanType.fromValue(filesBigFileChunking),
                 filesUndelete = CapabilityBooleanType.fromValue(filesUndelete),
                 filesVersioning = CapabilityBooleanType.fromValue(filesVersioning)
@@ -105,6 +106,7 @@ class OCLocalCapabilitiesDataSource(
                 filesSharingResharing = filesSharingResharing.value,
                 filesSharingFederationOutgoing = filesSharingFederationOutgoing.value,
                 filesSharingFederationIncoming = filesSharingFederationIncoming.value,
+                filesSharingUserProfilePicture = filesSharingUserProfilePicture.value,
                 filesBigFileChunking = filesBigFileChunking.value,
                 filesUndelete = filesUndelete.value,
                 filesVersioning = filesVersioning.value
