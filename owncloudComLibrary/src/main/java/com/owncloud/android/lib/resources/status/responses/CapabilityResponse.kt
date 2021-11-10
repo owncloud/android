@@ -69,7 +69,8 @@ data class CapabilityResponse(
         filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.undelete),
         filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.versioning),
         filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.incoming),
-        filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing)
+        filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing),
+        filesSharingUserProfilePicture = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingUser?.profilePicture),
     )
 }
 
@@ -99,7 +100,9 @@ data class FileSharingCapabilities(
     @Json(name = "resharing")
     val fileSharingReSharing: Boolean?,
     @Json(name = "federation")
-    val fileSharingFederation: FileSharingFederation?
+    val fileSharingFederation: FileSharingFederation?,
+    @Json(name = "user")
+    val fileSharingUser: FileSharingUser?,
 )
 
 @JsonClass(generateAdapter = true)
@@ -145,6 +148,12 @@ data class FileSharingPublicExpireDate(
 data class FileSharingFederation(
     val incoming: Boolean?,
     val outgoing: Boolean?
+)
+
+@JsonClass(generateAdapter = true)
+data class FileSharingUser(
+    @Json(name = "profile_picture")
+    val profilePicture: Boolean?,
 )
 
 @JsonClass(generateAdapter = true)
