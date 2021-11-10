@@ -23,7 +23,6 @@ package com.owncloud.android.data.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME
 
 val MIGRATION_35_36 = object : Migration(35, 36) {
     override fun migrate(database: SupportSQLiteDatabase) {
