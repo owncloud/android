@@ -105,9 +105,9 @@ data class OCCapabilityEntity(
     val filesSharingFederationOutgoing: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_FEDERATION_INCOMING, defaultValue = capabilityBooleanTypeUnknownString)
     val filesSharingFederationIncoming: Int,
-    @ColumnInfo(name = CAPABILITIES_FILES_BIGFILECHUNKING, defaultValue = capabilityBooleanTypeUnknownString)
-    val filesSharingUserProfilePicture: Int,
     @ColumnInfo(name = CAPABILITIES_SHARING_USER_PROFILE_PICTURE, defaultValue = capabilityBooleanTypeUnknownString)
+    val filesSharingUserProfilePicture: Int,
+    @ColumnInfo(name = CAPABILITIES_FILES_BIGFILECHUNKING, defaultValue = capabilityBooleanTypeUnknownString)
     val filesBigFileChunking: Int,
     @ColumnInfo(name = CAPABILITIES_FILES_UNDELETE, defaultValue = capabilityBooleanTypeUnknownString)
     val filesUndelete: Int,
