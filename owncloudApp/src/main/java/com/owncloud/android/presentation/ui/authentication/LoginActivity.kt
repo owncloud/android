@@ -662,8 +662,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
 
-        if (contextProvider.getString(R.string.server_url).isNotEmpty()) {
-            val url = if (BuildConfig.FLAVOR == "mdm") preferencesProvider.getString("TEST_MANAGED_CONFIGURATION", null) else contextProvider.getString(R.string.server_url)
+        val url = if (BuildConfig.FLAVOR == "mdm") preferencesProvider.getString("TEST_MANAGED_CONFIGURATION", null) else contextProvider.getString(R.string.server_url)
+        if (!url.isNullOrEmpty()) {
             binding.hostUrlInput.setText(url)
             checkOcServer()
         }
