@@ -87,7 +87,6 @@ fun File.moveRecursively(
                     } catch (e: IOException) {
                         src.delete()
                         dstFile.delete()
-                        return false
                     }
                 }
             }
