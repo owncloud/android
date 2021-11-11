@@ -28,6 +28,7 @@ val OC_CAPABILITY =
         filesSharingResharing = CapabilityBooleanType.FALSE,
         filesSharingFederationOutgoing = CapabilityBooleanType.FALSE,
         filesSharingFederationIncoming = CapabilityBooleanType.FALSE,
+        filesSharingUserProfilePicture = CapabilityBooleanType.FALSE,
         filesBigFileChunking = CapabilityBooleanType.FALSE,
         filesUndelete = CapabilityBooleanType.FALSE,
         filesVersioning = CapabilityBooleanType.FALSE
