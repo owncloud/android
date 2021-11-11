@@ -50,6 +50,7 @@ class OCCapabilityEntityTest {
             filesSharingResharing = 0,
             filesSharingFederationOutgoing = 0,
             filesSharingFederationIncoming = 0,
+            filesSharingUserProfilePicture = 0,
             filesBigFileChunking = 0,
             filesUndelete = 0,
             filesVersioning = 0
@@ -81,7 +82,8 @@ class OCCapabilityEntityTest {
             0,
             0,
             0,
-            0
+            0,
+            0,
         )
 
         // Autogenerate Id should differ but it is not generated at this moment
@@ -116,6 +118,7 @@ class OCCapabilityEntityTest {
             filesSharingResharing = 0,
             filesSharingFederationOutgoing = 0,
             filesSharingFederationIncoming = 0,
+            filesSharingUserProfilePicture = 0,
             filesBigFileChunking = 0,
             filesUndelete = 0,
             filesVersioning = 0
@@ -147,7 +150,8 @@ class OCCapabilityEntityTest {
             0,
             0,
             0,
-            0
+            0,
+            0,
         )
 
         // Autogenerate Id should differ but it is not generated at this moment
@@ -182,6 +186,7 @@ class OCCapabilityEntityTest {
             filesSharingResharing = 0,
             filesSharingFederationOutgoing = 0,
             filesSharingFederationIncoming = 0,
+            filesSharingUserProfilePicture = 0,
             filesBigFileChunking = 0,
             filesUndelete = 0,
             filesVersioning = 0
@@ -213,7 +218,8 @@ class OCCapabilityEntityTest {
             0,
             0,
             0,
-            0
+            0,
+            0,
         )
 
         assertFalse(item1 == item2)
