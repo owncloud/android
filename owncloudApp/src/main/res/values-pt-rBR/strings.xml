@@ -577,6 +577,7 @@
   <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Seu espaço livre está atualmente limitado em seu dispositivo. Alguns arquivos podem não ser migrados. Por favor, mantenha todos os arquivos que fez download seguros até o processo ser completado.</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">Migrar agora</string>
   <string name="scoped_storage_wizard_migration_completed">Migração realizada com sucesso. Seus arquivos agora estão mais seguros que nunca.</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">Acesse seus arquivos</string>
   <string name="scoped_storage_wizard_migration_in_progress">Migrando seus arquivos. Por favor não desligue seu dispositivo.</string>
   <string name="scoped_storage_wizard_migration_in_progress_button">Trabalhando... Por favor, aguarde</string>
   <string name="scoped_storage_wizard_title">Mais segurança para seus arquivos</string>
