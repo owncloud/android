@@ -1,9 +1,9 @@
-Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 2.19.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v2.18.3...master
+[2.19.0]: https://github.com/owncloud/android/compare/v2.18.3...v2.19.0
 
 Summary
 -------
@@ -15,6 +15,7 @@ Summary
 * Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
 * Bugfix - Camera Upload manual retry: [#3418](https://github.com/owncloud/android/pull/3418)
 * Bugfix - Device rotation moves to root in folder picker: [#3431](https://github.com/owncloud/android/pull/3431)
+* Bugfix - Logging does not stop when the user deactivates it: [#3436](https://github.com/owncloud/android/pull/3436)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 * Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
@@ -82,6 +83,15 @@ Details
 
    https://github.com/owncloud/android/issues/3163
    https://github.com/owncloud/android/pull/3431
+
+* Bugfix - Logging does not stop when the user deactivates it: [#3436](https://github.com/owncloud/android/pull/3436)
+
+   Previously, when users disabled the logging option in the settings, the application would not
+   stop logging and the size of the log files would increase. Now, the option to disable it works
+   perfectly and no logs are collected if disabled.
+
+   https://github.com/owncloud/android/issues/3325
+   https://github.com/owncloud/android/pull/3436
 
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 

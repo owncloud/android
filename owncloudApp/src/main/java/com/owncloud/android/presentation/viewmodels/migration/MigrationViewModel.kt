@@ -38,6 +38,7 @@ import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 
 /**
@@ -88,6 +89,36 @@ class MigrationViewModel(
                 it.apply { localPath = localPath.replace(legacyStorageDirectoryPath, localStorageProvider.getRootFolderPath()) }
             }
         uploadsWithUpdatedPath.forEach { uploadsStorageManager.updateUpload(it) }
+        clearUnrelatedTemporalFiles(uploadsWithUpdatedPath)
+    }
+
+    private fun clearUnrelatedTemporalFiles(pendingUploads: List<OCUpload>) {
+        val listOfAccounts = accountProvider.getLoggedAccounts()
+
+        listOfAccounts.forEach { account ->
+            val temporalFolderForAccount = File(localStorageProvider.getTemporalPath(account.name))
+
+            cleanTemporalRecursively(temporalFolderForAccount) { temporalFile ->
+                if (!pendingUploads.map { it.localPath }.contains(temporalFile.absolutePath)) {
+                    Timber.d("Found a temporary file that is not needed: $temporalFile, so let's delete it")
+                    temporalFile.delete()
+                }
+            }
+        }
+    }
+
+    private fun cleanTemporalRecursively(
+        temporalFolder: File,
+        deleteFileInCaseItIsNotNeeded: (file: File) -> Unit
+    ) {
+        temporalFolder.listFiles()?.forEach { temporalFile ->
+            if (temporalFile.isDirectory) {
+                cleanTemporalRecursively(temporalFile, deleteFileInCaseItIsNotNeeded)
+            } else {
+                deleteFileInCaseItIsNotNeeded(temporalFile)
+            }
+
+        }
     }
 
     private fun updateAlreadyDownloadedFilesPath() {
