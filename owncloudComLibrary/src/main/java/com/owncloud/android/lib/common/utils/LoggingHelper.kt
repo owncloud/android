@@ -9,7 +9,7 @@ object LoggingHelper {
 
     fun startLogging(directory: File, storagePath: String) {
         fileLoggingTree()?.let {
-            Timber.forest().drop(Timber.forest().indexOf(it))
+            Timber.uproot(it)
         }
         if (!directory.exists())
             directory.mkdirs()
@@ -18,7 +18,7 @@ object LoggingHelper {
 
     fun stopLogging() {
         fileLoggingTree()?.let {
-            Timber.forest().drop(Timber.forest().indexOf(it))
+            Timber.uproot(it)
         }
     }
 }
