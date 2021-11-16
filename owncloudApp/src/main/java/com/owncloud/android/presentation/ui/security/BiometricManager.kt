@@ -24,12 +24,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
+import android.os.SystemClock
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.presentation.ui.security.PassCodeManager.isPassCodeEnabled
 import com.owncloud.android.presentation.ui.security.PatternManager.isPatternEnabled
+import kotlin.math.abs
 
 object BiometricManager {
 
@@ -74,7 +76,7 @@ object BiometricManager {
     private fun biometricShouldBeRequested(): Boolean {
         val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
         val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
-        return if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && visibleActivitiesCounter <= 0) isBiometricEnabled()
+        return if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivitiesCounter <= 0) isBiometricEnabled()
         else false
     }
 

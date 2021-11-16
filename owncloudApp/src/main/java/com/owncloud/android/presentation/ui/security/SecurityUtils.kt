@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.ui.security
 
+import android.os.SystemClock
 import com.owncloud.android.MainApp
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 
@@ -49,8 +50,8 @@ fun bayPassUnlockOnce() {
     val preferencesProvider = SharedPreferencesProviderImpl(MainApp.appContext)
     val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
     val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
-    if (System.currentTimeMillis() - lastUnlockTimestamp > timeout) {
-        val newLastUnlockTimestamp = System.currentTimeMillis() - timeout + 1_000
+    if (SystemClock.elapsedRealtime() - lastUnlockTimestamp > timeout) {
+        val newLastUnlockTimestamp = SystemClock.elapsedRealtime() - timeout + 1_000
         preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, newLastUnlockTimestamp)
     }
 }

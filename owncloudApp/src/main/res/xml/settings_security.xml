@@ -31,6 +31,7 @@
         app:key="set_biometric"
         app:title="@string/prefs_biometric" />
     <ListPreference
+        app:defaultValue="IMMEDIATELY"
         app:dialogTitle="@string/prefs_lock_application"
         app:iconSpaceReserved="false"
         app:key="lock_timeout"

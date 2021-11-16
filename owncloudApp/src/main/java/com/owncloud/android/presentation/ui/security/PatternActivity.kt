@@ -25,6 +25,7 @@ package com.owncloud.android.presentation.ui.security
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -221,7 +222,7 @@ class PatternActivity : AppCompatActivity() {
         if (patternViewModel.checkPatternIsValid(patternValue)) {
             patternError.visibility = View.INVISIBLE
             val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
-            preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
+            preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, SystemClock.elapsedRealtime())
             finish()
         } else {
             showErrorAndRestart(

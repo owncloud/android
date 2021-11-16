@@ -21,6 +21,7 @@
 package com.owncloud.android.presentation.viewmodels.security
 
 import android.os.Build
+import android.os.SystemClock
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
@@ -84,7 +85,7 @@ class BiometricViewModel(
     }
 
     fun setLastUnlockTimestamp() {
-        preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
+        preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, SystemClock.elapsedRealtime())
     }
 
     fun shouldAskForNewPassCode(): Boolean {

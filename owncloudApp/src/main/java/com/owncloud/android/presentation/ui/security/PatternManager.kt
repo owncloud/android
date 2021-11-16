@@ -25,8 +25,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
+import android.os.SystemClock
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import kotlin.math.abs
 
 object PatternManager {
 
@@ -62,7 +64,7 @@ object PatternManager {
     private fun patternShouldBeRequested(): Boolean {
         val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
         val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
-        return if (System.currentTimeMillis() - lastUnlockTimestamp > timeout && visibleActivitiesCounter <= 0) isPatternEnabled()
+        return if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivitiesCounter <= 0) isPatternEnabled()
         else false
     }
 

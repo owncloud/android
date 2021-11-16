@@ -36,6 +36,7 @@ import com.owncloud.android.R
 import android.widget.LinearLayout
 import android.view.View.OnFocusChangeListener
 import android.content.Intent
+import android.os.SystemClock
 import android.text.TextWatcher
 import android.text.Editable
 import android.view.KeyEvent
@@ -239,7 +240,7 @@ class PassCodeActivity : AppCompatActivity() {
             /// pass code accepted in request, user is allowed to access the app
             passCodeError.visibility = View.INVISIBLE
             val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
-            preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, System.currentTimeMillis())
+            preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, SystemClock.elapsedRealtime())
             hideSoftKeyboard()
             val passCode = passCodeViewModel.getPassCode()
             if (passCode != null && passCode.length < passCodeViewModel.getNumberOfPassCodeDigits()) {
