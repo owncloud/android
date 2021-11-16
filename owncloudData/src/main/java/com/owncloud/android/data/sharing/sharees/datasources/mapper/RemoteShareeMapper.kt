@@ -35,7 +35,7 @@ class RemoteShareeMapper : RemoteMapper<List<OCSharee>, ShareeOcsResponse> {
             isExactMatch = isExactMatch
         )
 
-    override fun toModel(remote: ShareeOcsResponse?): List<OCSharee>? {
+    override fun toModel(remote: ShareeOcsResponse?): List<OCSharee> {
         val exactMatches = remote?.exact?.getFlatRepresentation()?.map {
             mapShareeItemToOCSharee(it, isExactMatch = true)
         }

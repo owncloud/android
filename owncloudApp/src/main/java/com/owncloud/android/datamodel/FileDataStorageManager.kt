@@ -32,18 +32,12 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.content.OperationApplicationException
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
-import android.os.FileUriExposedException
 import android.os.RemoteException
-import android.provider.MediaStore
-import androidx.core.content.FileProvider
 import androidx.core.util.Pair
 import com.owncloud.android.MainApp
-import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
@@ -107,6 +101,10 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta._ID
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.MIME_DIR
+import com.owncloud.android.extensions.getIntFromColumnOrThrow
+import com.owncloud.android.extensions.getLongFromColumnOrThrow
+import com.owncloud.android.extensions.getStringFromColumnOrEmpty
+import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.utils.FileStorageUtils
 import timber.log.Timber
@@ -169,7 +167,7 @@ class FileDataStorageManager {
                 do {
                     file = createFileInstance(cursorOnKeptInSync)
                     accountName =
-                        cursorOnKeptInSync.getString(cursorOnKeptInSync.getColumnIndex(FILE_ACCOUNT_OWNER))
+                        cursorOnKeptInSync.getStringFromColumnOrEmpty(FILE_ACCOUNT_OWNER)
                     if (!file!!.isFolder && AccountUtils.exists(accountName, mContext)) {
                         result.add(Pair(file, accountName))
                     }
@@ -493,7 +491,6 @@ class FileDataStorageManager {
                     if (file.isDown) {
                         val path = file.storagePath
                         File(path).delete()
-                        triggerMediaScan(path) // notify MediaScanner about removed file
                     }
                 }
             }
@@ -578,6 +575,51 @@ class FileDataStorageManager {
         } else {
             cv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
         }
+    }
+
+    fun migrateLegacyToScopedPath(
+        legacyStorageDirectoryPath: String,
+        rootStorageDirectoryPath: String,
+    ) {
+        val filesToUpdatePath: MutableList<OCFile> = mutableListOf()
+
+        val cursor: Cursor? =
+            try {
+                performQuery(
+                    uri = CONTENT_URI,
+                    projection = null,
+                    sortOrder = "$FILE_PATH ASC ",
+                    selection = "$FILE_ACCOUNT_OWNER = ? ",
+                    selectionArgs = arrayOf(account.name),
+                )
+            } catch (e: RemoteException) {
+                Timber.e(e)
+                null
+            }
+
+        cursor?.let { allFilesCursor ->
+            if (allFilesCursor.moveToFirst()) {
+                do {
+                    val ocFile = createFileInstance(allFilesCursor)
+                    ocFile?.let {
+                        if (it.storagePath != null) {
+                            filesToUpdatePath.add(it)
+                        }
+                    }
+                } while (allFilesCursor.moveToNext())
+            }
+            cursor.close()
+        }
+
+        val filesWithPathUpdated = filesToUpdatePath.map {
+            it.apply { storagePath = storagePath.replace(legacyStorageDirectoryPath, rootStorageDirectoryPath) }
+        }
+
+        filesWithPathUpdated.forEach {
+            saveFile(it)
+        }
+
+        Timber.d("Updated path for ${filesWithPathUpdated.size} downloaded files")
     }
 
     /**
@@ -665,7 +707,6 @@ class FileDataStorageManager {
                 if (removeLocalCopy && file.isDown && localPath != null && success) {
                     success = File(localPath).delete()
                     if (success) {
-                        deleteFileInMediaScan(localPath)
                         if (!removeDBData) {
                             // maybe unnecessary, but should be checked TODO remove if unnecessary
                             file.storagePath = null
@@ -722,8 +763,6 @@ class FileDataStorageManager {
                         val localFile = File(file.storagePath)
                         success = success and localFile.delete()
                         if (success) {
-                            // notify MediaScanner about removed file
-                            deleteFileInMediaScan(file.storagePath)
                             file.storagePath = null
                             saveFile(file)
                         }
@@ -784,8 +823,6 @@ class FileDataStorageManager {
                     null
                 }
 
-            val originalPathsToTriggerMediaScan = ArrayList<String>()
-            val newPathsToTriggerMediaScan = ArrayList<String>()
             val defaultSavePath = FileStorageUtils.getSavePath(account.name)
 
             /// 2. prepare a batch of update operations to change all the descendants
@@ -804,9 +841,6 @@ class FileDataStorageManager {
                                     child.storagePath.substring(lengthOfOldStoragePath)
 
                             cv.put(FILE_STORAGE_PATH, targetLocalPath)
-
-                            originalPathsToTriggerMediaScan.add(child.storagePath)
-                            newPathsToTriggerMediaScan.add(targetLocalPath)
 
                         }
                         if (targetParent.availableOfflineStatus != NOT_AVAILABLE_OFFLINE) {
@@ -853,27 +887,13 @@ class FileDataStorageManager {
             val originalLocalPath = FileStorageUtils.getDefaultSavePathFor(account.name, file)
             val targetLocalPath = defaultSavePath + targetPath
             val localFile = File(originalLocalPath)
-            var renamed = false
             if (localFile.exists()) {
                 val targetFile = File(targetLocalPath)
                 val targetFolder = targetFile.parentFile
                 if (targetFolder != null && !targetFolder.exists()) {
                     targetFolder.mkdirs()
                 }
-                renamed = localFile.renameTo(targetFile)
-            }
-
-            if (renamed) {
-                var it = originalPathsToTriggerMediaScan.iterator()
-                while (it.hasNext()) {
-                    // Notify MediaScanner about removed file
-                    deleteFileInMediaScan(it.next())
-                }
-                it = newPathsToTriggerMediaScan.iterator()
-                while (it.hasNext()) {
-                    // Notify MediaScanner about new file/folder
-                    triggerMediaScan(it.next())
-                }
+                localFile.renameTo(targetFile)
             }
         }
     }
@@ -1052,12 +1072,12 @@ class FileDataStorageManager {
         }
 
     private fun createFileInstance(c: Cursor?): OCFile? = c?.let {
-        OCFile(it.getString(it.getColumnIndex(FILE_PATH))).apply {
-            fileId = it.getLong(it.getColumnIndex(_ID))
-            parentId = it.getLong(it.getColumnIndex(FILE_PARENT))
-            mimetype = it.getString(it.getColumnIndex(FILE_CONTENT_TYPE))
+        OCFile(it.getStringFromColumnOrThrow(FILE_PATH)).apply {
+            fileId = it.getLongFromColumnOrThrow(_ID)
+            parentId = it.getLongFromColumnOrThrow(FILE_PARENT)
+            mimetype = it.getStringFromColumnOrThrow(FILE_CONTENT_TYPE)
             if (!isFolder) {
-                storagePath = it.getString(it.getColumnIndex(FILE_STORAGE_PATH))
+                storagePath = it.getStringFromColumnOrThrow(FILE_STORAGE_PATH)
                 if (storagePath == null) {
                     // try to find existing file and bind it with current account;
                     // with the current update of SynchronizeFolderOperation, this won't be
@@ -1069,80 +1089,23 @@ class FileDataStorageManager {
                     }
                 }
             }
-            fileLength = it.getLong(it.getColumnIndex(FILE_CONTENT_LENGTH))
-            creationTimestamp = it.getLong(it.getColumnIndex(FILE_CREATION))
-            modificationTimestamp = it.getLong(it.getColumnIndex(FILE_MODIFIED))
-            modificationTimestampAtLastSyncForData = it.getLong(it.getColumnIndex(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA))
-            lastSyncDateForProperties = it.getLong(it.getColumnIndex(FILE_LAST_SYNC_DATE))
-            lastSyncDateForData = it.getLong(it.getColumnIndex(FILE_LAST_SYNC_DATE_FOR_DATA))
-            availableOfflineStatus = fromValue(it.getInt(it.getColumnIndex(FILE_KEEP_IN_SYNC)))
-            etag = it.getString(it.getColumnIndex(FILE_ETAG))
-            treeEtag = it.getString(it.getColumnIndex(FILE_TREE_ETAG))
-            isSharedViaLink = it.getInt(it.getColumnIndex(FILE_SHARED_VIA_LINK)) == 1
-            isSharedWithSharee = it.getInt(it.getColumnIndex(FILE_SHARED_WITH_SHAREE)) == 1
-            permissions = it.getString(it.getColumnIndex(FILE_PERMISSIONS))
-            remoteId = it.getString(it.getColumnIndex(FILE_REMOTE_ID))
-            setNeedsUpdateThumbnail(it.getInt(it.getColumnIndex(FILE_UPDATE_THUMBNAIL)) == 1)
-            isDownloading = it.getInt(it.getColumnIndex(FILE_IS_DOWNLOADING)) == 1
-            etagInConflict = it.getString(it.getColumnIndex(FILE_ETAG_IN_CONFLICT))
-            privateLink = it.getString(it.getColumnIndex(FILE_PRIVATE_LINK))
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    fun triggerMediaScan(path: String?) {
-        if (path != null) {
-            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            intent.data = Uri.fromFile(File(path))
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    MainApp.appContext.sendBroadcast(intent)
-                } catch (fileUriExposedException: FileUriExposedException) {
-                    val newIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-                    newIntent.data = FileProvider.getUriForFile(
-                        mContext!!.applicationContext,
-                        mContext!!.resources.getString(R.string.file_provider_authority),
-                        File(path)
-                    )
-                    MainApp.appContext.sendBroadcast(newIntent)
-                }
-
-            } else {
-                MainApp.appContext.sendBroadcast(intent)
-            }
-
-            MainApp.appContext.sendBroadcast(intent)
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    fun deleteFileInMediaScan(path: String) {
-
-        val mimeTypeString = FileStorageUtils.getMimeTypeFromName(path)
-        try {
-            when {
-                mimeTypeString.startsWith(pathImage) -> // Images
-                    performDelete(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        "${MediaStore.Images.Media.DATA}=?",
-                        arrayOf(path)
-                    )
-                mimeTypeString.startsWith(pathAudio) -> // Audio
-                    performDelete(
-                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        "${MediaStore.Audio.Media.DATA}=?",
-                        arrayOf(path)
-                    )
-                mimeTypeString.startsWith(pathVideo) -> // Video
-                    performDelete(
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        "${MediaStore.Video.Media.DATA}=?",
-                        arrayOf(path)
-                    )
-            }
-        } catch (e: RemoteException) {
-            Timber.e(e, "Exception deleting media file in MediaStore ${e.message}")
+            fileLength = it.getLongFromColumnOrThrow(FILE_CONTENT_LENGTH)
+            creationTimestamp = it.getLongFromColumnOrThrow(FILE_CREATION)
+            modificationTimestamp = it.getLongFromColumnOrThrow(FILE_MODIFIED)
+            modificationTimestampAtLastSyncForData = it.getLongFromColumnOrThrow(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA)
+            lastSyncDateForProperties = it.getLongFromColumnOrThrow(FILE_LAST_SYNC_DATE)
+            lastSyncDateForData = it.getLongFromColumnOrThrow(FILE_LAST_SYNC_DATE_FOR_DATA)
+            availableOfflineStatus = fromValue(it.getIntFromColumnOrThrow(FILE_KEEP_IN_SYNC))
+            etag = it.getStringFromColumnOrThrow(FILE_ETAG)
+            treeEtag = it.getStringFromColumnOrThrow(FILE_TREE_ETAG)
+            isSharedViaLink = it.getIntFromColumnOrThrow(FILE_SHARED_VIA_LINK) == 1
+            isSharedWithSharee = it.getIntFromColumnOrThrow(FILE_SHARED_WITH_SHAREE) == 1
+            permissions = it.getStringFromColumnOrThrow(FILE_PERMISSIONS)
+            remoteId = it.getStringFromColumnOrThrow(FILE_REMOTE_ID)
+            setNeedsUpdateThumbnail(it.getIntFromColumnOrThrow(FILE_UPDATE_THUMBNAIL) == 1)
+            isDownloading = it.getIntFromColumnOrThrow(FILE_IS_DOWNLOADING) == 1
+            etagInConflict = it.getStringFromColumnOrThrow(FILE_ETAG_IN_CONFLICT)
+            privateLink = it.getStringFromColumnOrThrow(FILE_PRIVATE_LINK)
         }
     }
 
@@ -1355,148 +1318,57 @@ class FileDataStorageManager {
         val cursor = getCapabilityCursorForAccount(accountName)
 
         // default value with all UNKNOWN
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                capability = createCapabilityInstance(cursor)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                capability = createCapabilityInstance(it)
             }
-            cursor.close()
         }
         return capability
     }
 
-    private fun createCapabilityInstance(c: Cursor?): OCCapability? {
-        var capability: OCCapability? = null
-        if (c != null) {
-            capability = OCCapability(
-                accountName = c.getString(c.getColumnIndex(CAPABILITIES_ACCOUNT_NAME)),
-                versionMayor = c.getInt(c.getColumnIndex(CAPABILITIES_VERSION_MAYOR)),
-                versionMinor = c.getInt(c.getColumnIndex(CAPABILITIES_VERSION_MINOR)),
-                versionMicro = c.getInt(c.getColumnIndex(CAPABILITIES_VERSION_MICRO)),
-                versionString = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_STRING)),
-                versionEdition = c.getString(c.getColumnIndex(CAPABILITIES_VERSION_EDITION)),
-                corePollInterval = c.getInt(c.getColumnIndex(CAPABILITIES_CORE_POLLINTERVAL)),
-                davChunkingVersion = c.getString(c.getColumnIndex(CAPABILITIES_DAV_CHUNKING_VERSION)) ?: "",
-                filesSharingApiEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_API_ENABLED
-                        )
-                    )
-                ),
-                filesSharingPublicEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_ENABLED
-                        )
-                    )
-                ),
-                filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED
-                        )
-                    )
-                ),
-                filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY
-                        )
-                    )
-                ),
-                filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE
-                        )
-                    )
-                ),
-                filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY
-                        )
-                    )
-                ),
-                filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED
-                        )
-                    )
-                ),
-                filesSharingPublicExpireDateDays = c.getInt(
-                    c.getColumnIndex(
-                        CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
-                    )
-                ),
-                filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED
-                        )
-                    )
-                ),
-                filesSharingPublicUpload = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_UPLOAD
-                        )
-                    )
-                ),
-                filesSharingPublicMultiple = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_MULTIPLE
-                        )
-                    )
-                ),
-                filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY
-                        )
-                    )
-                ),
-                filesSharingResharing = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_RESHARING
-                        )
-                    )
-                ),
-                filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_FEDERATION_OUTGOING
-                        )
-                    )
-                ),
-                filesSharingFederationIncoming = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_SHARING_FEDERATION_INCOMING
-                        )
-                    )
-                ),
-                filesBigFileChunking = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_FILES_BIGFILECHUNKING
-                        )
-                    )
-                ),
-                filesUndelete = CapabilityBooleanType.fromValue(c.getInt(c.getColumnIndex(CAPABILITIES_FILES_UNDELETE))),
-                filesVersioning = CapabilityBooleanType.fromValue(
-                    c.getInt(
-                        c.getColumnIndex(
-                            CAPABILITIES_FILES_VERSIONING
-                        )
-                    )
-                )
-            )
-        }
-        return capability
+    private fun createCapabilityInstance(c: Cursor): OCCapability {
+        return OCCapability(
+            accountName = c.getStringFromColumnOrThrow(CAPABILITIES_ACCOUNT_NAME),
+            versionMayor = c.getIntFromColumnOrThrow(CAPABILITIES_VERSION_MAYOR),
+            versionMinor = c.getIntFromColumnOrThrow(CAPABILITIES_VERSION_MINOR),
+            versionMicro = c.getIntFromColumnOrThrow(CAPABILITIES_VERSION_MICRO),
+            versionString = c.getStringFromColumnOrThrow(CAPABILITIES_VERSION_STRING),
+            versionEdition = c.getStringFromColumnOrThrow(CAPABILITIES_VERSION_EDITION),
+            corePollInterval = c.getIntFromColumnOrThrow(CAPABILITIES_CORE_POLLINTERVAL),
+            davChunkingVersion = c.getStringFromColumnOrEmpty(CAPABILITIES_DAV_CHUNKING_VERSION),
+            filesSharingApiEnabled = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_API_ENABLED)),
+            filesSharingPublicEnabled = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_ENABLED)),
+            filesSharingPublicPasswordEnforced = CapabilityBooleanType.fromValue(
+                c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)
+            ),
+            filesSharingPublicPasswordEnforcedReadOnly = CapabilityBooleanType.fromValue(
+                c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_ONLY)
+            ),
+            filesSharingPublicPasswordEnforcedReadWrite = CapabilityBooleanType.fromValue(
+                c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_READ_WRITE)
+            ),
+            filesSharingPublicPasswordEnforcedUploadOnly = CapabilityBooleanType.fromValue(
+                c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED_UPLOAD_ONLY)
+            ),
+            filesSharingPublicExpireDateEnabled = CapabilityBooleanType.fromValue(
+                c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED)
+            ),
+            filesSharingPublicExpireDateDays = c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS),
+            filesSharingPublicExpireDateEnforced = CapabilityBooleanType.fromValue(
+                c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED)
+            ),
+            filesSharingPublicUpload = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_UPLOAD)),
+            filesSharingPublicMultiple = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_MULTIPLE)),
+            filesSharingPublicSupportsUploadOnly = CapabilityBooleanType.fromValue(
+                c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY)
+            ),
+            filesSharingResharing = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_RESHARING)),
+            filesSharingFederationOutgoing = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_FEDERATION_OUTGOING)),
+            filesSharingFederationIncoming = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_SHARING_FEDERATION_INCOMING)),
+            filesBigFileChunking = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_BIGFILECHUNKING)),
+            filesUndelete = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_UNDELETE)),
+            filesVersioning = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_VERSIONING))
+        )
     }
 
     private fun selectionForAllDescendantsOf(file: OCFile): Pair<String, Array<String>> {

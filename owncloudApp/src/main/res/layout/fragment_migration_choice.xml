@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_background_color"
+    tools:context=".presentation.ui.migration.MigrationIntroFragment">
+
+    <TextView
+        android:id="@+id/migration_choice_title"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_margin"
+        android:text="@string/scoped_storage_wizard_title"
+        android:textColor="@color/login_text_color"
+        app:layout_constraintBottom_toTopOf="@id/migration_choice_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <ImageView
+        android:id="@+id/migration_choice_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toTopOf="@id/migration_choice_subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/migration_choice_title" />
+
+    <TextView
+        android:id="@+id/migration_choice_subtitle"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
+        android:gravity="center"
+        android:textColor="@color/login_text_color"
+        app:layout_constraintBottom_toTopOf="@id/migration_choice_not_enough_space_warning"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/migration_choice_logo" />
+
+    <TextView
+        android:id="@+id/migration_choice_not_enough_space_warning"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
+        android:gravity="center"
+        android:text="@string/scoped_storage_wizard_not_enough_space_warning"
+        android:textColor="@color/login_text_color"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/migration_choice_migrate_now_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/migration_choice_subtitle"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/migration_choice_migrate_now_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
+        android:background="@color/action_mode_background"
+        android:text="@string/scoped_storage_wizard_migrate_and_clean_button"
+        android:textColor="@color/login_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/migration_choice_not_enough_space_warning" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

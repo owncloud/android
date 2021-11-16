@@ -132,8 +132,8 @@ class PreviewImageFragment : FileFragment() {
         savedInstanceState?.let {
             if (!ignoreFirstSavedState) {
                 val file: OCFile? = it.getParcelable(ARG_FILE)
-                file?.let {
-                    setFile(it)
+                file?.let { ocFile ->
+                    setFile(ocFile)
                 }
             } else {
                 ignoreFirstSavedState = false

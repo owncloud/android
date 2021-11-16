@@ -51,6 +51,5 @@ class SettingsMoreViewModel(
                 isSyncEnabled() ||
                 isRecommendEnabled() ||
                 isFeedbackEnabled() ||
-                isImprintEnabled() ||
-                isPrivacyPolicyEnabled()
+                isImprintEnabled()
 }

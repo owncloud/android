@@ -45,7 +45,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Lejo prekje, kur pamja është zënë nga një tjetër dritare e dukshme. Aktivizojeni, që të përdorni aplikacione filtrimi drite.</string>
   <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori?</string>
   <string name="confirmation_touches_with_other_windows_message">Përgjegjësinë e kësaj veçorie e mbani ju vetë, një aplikacion dashakeq mund të përpiqej t\’ua hidhte duke ju bërë të kryeni, pa e kuptuar, disa veprime, ndërkohë që përdorni pamje të tjera.</string>
-  <string name="prefs_open_logs_view">Hap pamjen regjistra</string>
   <string name="prefs_subsection_picture_uploads">Vetëngarko foto</string>
   <string name="prefs_subsection_picture_uploads_summary">Administroni vendndodhje dhe sjellje të fotove të ngarkuara automatikisht</string>
   <string name="prefs_subsection_video_uploads">Vetëngarko video</string>
@@ -53,11 +52,18 @@
   <string name="prefs_camera_picture_upload">Ngarkime fotosh</string>
   <string name="prefs_camera_picture_upload_summary">Fotot e bëra nga kamera ngarkoji vetvetiu</string>
   <string name="prefs_camera_picture_upload_path_title">Shteg ngarkimesh fotosh</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Kushte për kryerjen e ngarkimeve</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">Do të vihen në punë ngarkime, kur plotësohen krejt mundësitë e përzgjedhura</string>
   <string name="prefs_camera_picture_upload_on_wifi">Fotot ngarkoji vetëm përmes wifi-it</string>
+  <string name="prefs_camera_picture_upload_on_charging">Ngarko foto vetëm kur ngarkohet bateria</string>
+  <string name="prefs_camera_upload_on_charging_summary">Aktivizoni vetëm ngarkime përmes wifi-i, që të aktivizohet kjo mundësi</string>
   <string name="prefs_camera_video_upload">Ngarkime videosh</string>
   <string name="prefs_camera_video_upload_summary">Videot e bëra nga kamera ngarkoji vetvetiu</string>
   <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="prefs_camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
+  <string name="prefs_camera_video_upload_on_charging">Ngarko video vetëm kur ngarkohet bateria</string>
+  <string name="prefs_log_open_logs_list_view">Kartela regjistër</string>
+  <string name="prefs_log_no_logs_list_view">Zbraz dosje regjistrash!</string>
   <string name="prefs_log_title">Aktivizo regjistrimet</string>
   <string name="prefs_log_summary">Kjo përdoret për të regjistruar probleme</string>
   <string name="prefs_log_title_history">Historik regjistrimesh</string>
@@ -231,18 +237,10 @@
   <string name="sync_conflicts_in_favourites_content">%1$d kartela “kept-in-sync” s\’u njëkohësuan dot</string>
   <string name="sync_fail_in_favourites_ticker">Kartelat “kept-in-sync” dështuan</string>
   <string name="sync_fail_in_favourites_content">Lënda e %1$d kartelave s\’u njëkohësua dot (%2$d përplasje)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Disa kartela vendore u harruan</string>
-  <string name="sync_foreign_files_forgotten_content">%1$d kartela nga dosja %2$s s\’u kopjuan dot</string>
-  <string name="sync_foreign_files_forgotten_explanation">Nga versioni 1.3.16 e tutje, kartelat e ngarkuara nga kjo pajisje kopjohen te dosja vendore %1$s, për të parandaluar humbje të dhënash, kur një kartelë e vetme njëkohësohet me disa llogari.\n\nPër shkak të këtij ndryshimi, krejt kartelat e ngarkuara nën versione të mëparshëm të këtij aplikacioni u kopjuan në dosjen %2$s. Por plotësimin e këtij veprimi e pengoi një gabim gjatë njëkohësimit të llogarisë. Ose mund t\’i lini kartelat siç janë, dhe të hiqni lidhjen për te %3$s, ose të kaloni kartelat te dosja %1$s dhe të mbani lidhjen për te %4$s.\n\nMë poshtë radhiten kartelat vendore, dhe kartelat e largëta te %5$s me të cilat lidhen.</string>
   <string name="sync_current_folder_was_removed">Dosja %1$s s\’ekziston më</string>
-  <string name="foreign_files_move">Zhvendosi krejt</string>
-  <string name="foreign_files_success">U zhvendosën krejt kartelat</string>
-  <string name="foreign_files_fail">Disa kartela s\’u zhvendosën dot</string>
-  <string name="foreign_files_local_text">Vendore: %1$s</string>
-  <string name="foreign_files_remote_text">E largët: %1$s</string>
-  <string name="upload_query_move_foreign_files">S\’ka hapësirë të mjaftueshme për kopjim të kartelave të përzgjedhura te dosja %1$s. Do të donit t\’i lëviznit më mirë? </string>
   <string name="pass_code_enter_pass_code">Ju lutemi, futni kodkalimin tuaj</string>
   <string name="pass_code_configure_your_pass_code">Jepni kodkalimin tuaj</string>
+  <string name="pass_code_configure_your_pass_code_migration">Jepni një kodkalim të ri me %1$d shifra</string>
   <string name="pass_code_configure_your_pass_code_explanation">Kodkalimi do të kërkohet sa herë që niset aplikacioni</string>
   <string name="pass_code_reenter_your_pass_code">Ju lutemi, rifutni kodkalimin tuaj</string>
   <string name="pass_code_remove_your_pass_code">Hiqeni kodkalimin tuaj</string>
@@ -563,10 +561,6 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
-  <string name="welcome_feature_6_title">Zgjedhës i brendshëm dosjeje kamere</string>
-  <string name="welcome_feature_6_text">Përzgjidheni dosjen e kamerës duke përdorur një zgjedhës intuitiv</string>
-  <string name="welcome_feature_7_title">U shtua fushë vulash kohore për ngarkime nga kamera</string>
-  <string name="welcome_feature_7_text">Tani mund të shihni kur qe shkaktuar skanimi i fundit.</string>
   <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
   <string name="common_not_found">s\’u gjet</string>
   <string name="supports_oauth2_error">S\’qe e mundur të dihej nëse mbulohet OAuth2</string>
@@ -574,4 +568,15 @@
   <string name="prefs_http_logs">Regjistro kërkesa dhe përgjigje HTTP</string>
   <string name="prefs_logs_summary">Regjistra mund të përmbajnë të dhëna rezervat. Për ndarje me të tjerët të regjistrave përgjegjësi mban thjesht përdoruesi</string>
   <string name="synchronizing_account">Po njëkohësohet llogari</string>
+  <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_explanation">U gjetën %1$s të dhëna në depozitën tuaj të jashtme. Do të kalohen te depozita e parrezik në pajisjen tuaj. Pas migrimit, kartelat e mbetura do të spastrohen prej depozitës tuaj të jashtme, për të shmangur përsëdytje dhe cenueshmëri.</string>
+  <string name="scoped_storage_wizard_intro">Aplikacioni juaj është përditësuar. Ky përditësim aplikacioni migron kartelat tuaja te një vendndodhje më e sigurt në pajisjen tuaj. Ky migrim një herë i të dhënave është i domosdoshëm dhe mund të duhet deri në një minutë, ose më tepër.</string>
+  <string name="scoped_storage_wizard_intro_button">Le t’ia fillojmë</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Hapësira juaj e lirë aktualisht kufizohet në pajisjen tuaj. Disa kartela mund të mos jenë migruar, ju lutemi, kontrolloni se krejt kartelat e shkarkuara vazhdojnë të shkarkohen, pasi procesi të jetë plotësuar.</string>
+  <string name="scoped_storage_wizard_migrate_and_clean_button">Migroje tani</string>
+  <string name="scoped_storage_wizard_migration_completed">Migrimi u plotësua me sukses. Kartelat tuaja tani janë më të sigurta se kurrë më parë.</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">Përdorni kartelat tuaja</string>
+  <string name="scoped_storage_wizard_migration_in_progress">Po migrohen kartelat tuaja. Ju lutemi, mos e fikni pajisjen.</string>
+  <string name="scoped_storage_wizard_migration_in_progress_button">Po punohet… Ju lutemi, pritni</string>
+  <string name="scoped_storage_wizard_title">Më shumë siguri për kartelat tuaja</string>
 </resources>

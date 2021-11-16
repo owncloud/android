@@ -47,7 +47,6 @@
     <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
     <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
     <string name="confirmation_touches_with_other_windows_message">Use this feature under your own responsibility, a malicious application could try to spoof you into performing some actions, unaware, using other views.</string>
-    <string name="prefs_open_logs_view">Open logs view</string>
     <string name="prefs_subsection_picture_uploads">Auto upload pictures</string>
     <string name="prefs_subsection_picture_uploads_summary">Manage location and behaviour of the pictures uploaded automatically</string>
     <string name="prefs_subsection_video_uploads">Auto upload videos</string>
@@ -55,11 +54,18 @@
     <string name="prefs_camera_picture_upload">Picture uploads</string>
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
     <string name="prefs_camera_picture_upload_path_title">Picture upload path</string>
+    <string name="prefs_camera_picture_upload_conditions_title">Conditions to execute uploads</string>
+    <string name="prefs_camera_picture_upload_conditions_summary">Uploads will be triggered when all selected options are fulfilled</string>
     <string name="prefs_camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
+    <string name="prefs_camera_picture_upload_on_charging">Upload pictures only when charging</string>
+    <string name="prefs_camera_upload_on_charging_summary">Enable wifi only uploads to activate this option</string>
     <string name="prefs_camera_video_upload">Video uploads</string>
     <string name="prefs_camera_video_upload_summary">Automatically upload videos recorded by camera</string>
     <string name="prefs_camera_video_upload_path_title">Video upload path</string>
     <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
+    <string name="prefs_camera_video_upload_on_charging">Upload videos only when charging</string>
+    <string name="prefs_log_open_logs_list_view">Log files</string>
+    <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
     <string name="prefs_log_title">Enable logging</string>
     <string name="prefs_log_summary">This is used to log problems</string>
     <string name="prefs_log_title_history">Logging history</string>
@@ -236,19 +242,11 @@
     <string name="sync_conflicts_in_favourites_content">%1$d kept-in-sync files could not be sync\'ed</string>
     <string name="sync_fail_in_favourites_ticker">Kept-in-sync files failed</string>
     <string name="sync_fail_in_favourites_content">Contents of %1$d files could not be sync\'ed (%2$d conflicts)</string>
-    <string name="sync_foreign_files_forgotten_ticker">Some local files were forgotten</string>
-    <string name="sync_foreign_files_forgotten_content">%1$d files out of the %2$s folder could not be copied into</string>
-    <string name="sync_foreign_files_forgotten_explanation">As of version 1.3.16, files uploaded from this device are copied into the local %1$s folder to prevent data loss when a single file is synced with multiple accounts.\n\nDue to this change, all files uploaded in previous versions of this app were copied into the %2$s folder. However, an error prevented the completion of this operation during account synchronization. You may either leave the file(s) as is and remove the link to %3$s, or move the file(s) into the %1$s folder and retain the link to %4$s.\n\nListed below are the local file(s), and the remote file(s) in %5$s they were linked to.</string>
     <string name="sync_current_folder_was_removed">Folder %1$s does not exist anymore</string>
-    <string name="foreign_files_move">Move all</string>
-    <string name="foreign_files_success">All files were moved</string>
-    <string name="foreign_files_fail">Some files could not be moved</string>
-    <string name="foreign_files_local_text">Local: %1$s</string>
-    <string name="foreign_files_remote_text">Remote: %1$s</string>
-    <string name="upload_query_move_foreign_files">There is not enough space to copy the selected files into the %1$s folder. Would you like to move them instead? </string>
 
     <string name="pass_code_enter_pass_code">Please insert your passcode</string>
     <string name="pass_code_configure_your_pass_code">Enter your passcode</string>
+    <string name="pass_code_configure_your_pass_code_migration">Enter a new %1$d-digit passcode</string>
     <string name="pass_code_configure_your_pass_code_explanation">The passcode will be requested every time the app is started</string>
     <string name="pass_code_reenter_your_pass_code">Please reenter your passcode</string>
     <string name="pass_code_remove_your_pass_code">Remove your passcode</string>
@@ -613,10 +611,6 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="welcome_feature_6_title">Native camera folder picker</string>
-    <string name="welcome_feature_6_text">Select the camera folder using a more intuitive picker</string>
-    <string name="welcome_feature_7_title">Added timestamp field for camera uploads</string>
-    <string name="welcome_feature_7_text">You can see now when the last scan was triggered.</string>
     <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
 
@@ -626,4 +620,16 @@
     <string name="prefs_logs_summary">Logs may contain sensitive information. Sharing logs with others is sole user responsibility</string>
 
     <string name="synchronizing_account">Synchronizing account</string>
+
+    <!-- Scoped storage migration wizard -->
+    <string name="scoped_storage_wizard_explanation">Found %1$s of data on your external storage. It will be moved to the safe storage on your device. Remaining files will be cleaned from your external storage after the migration to avoid duplicates and vulnerability.</string>
+    <string name="scoped_storage_wizard_intro">Your app has been updated. This app update migrates your files to a more secure location on your device. This one-time data migration is required and can take up to a minute or more.</string>
+    <string name="scoped_storage_wizard_intro_button">Let\'s get started</string>
+    <string name="scoped_storage_wizard_not_enough_space_warning">&#9888;️ Your free space is currently limited on your device. Some files may not be migrated, please check that all downloaded files keep downloaded after the process has been completed.</string>
+    <string name="scoped_storage_wizard_migrate_and_clean_button">Migrate now</string>
+    <string name="scoped_storage_wizard_migration_completed">Migration completed successfully. Your files are now safer than ever before.</string>
+    <string name="scoped_storage_wizard_migration_completed_access_files_button">Access your files</string>
+    <string name="scoped_storage_wizard_migration_in_progress">Migrating your files. Please don’t turn your device off.</string>
+    <string name="scoped_storage_wizard_migration_in_progress_button">Working… Please wait</string>
+    <string name="scoped_storage_wizard_title">More security for your files</string>
 </resources>

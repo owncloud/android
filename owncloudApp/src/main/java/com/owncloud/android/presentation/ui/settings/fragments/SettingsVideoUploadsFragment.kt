@@ -38,6 +38,7 @@ import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR
+import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_CHARGING_ONLY
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENABLED
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE
@@ -58,6 +59,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     private var prefEnableVideoUploads: SwitchPreferenceCompat? = null
     private var prefVideoUploadsPath: Preference? = null
     private var prefVideoUploadsOnWifi: CheckBoxPreference? = null
+    private var prefVideoUploadsOnCharging: CheckBoxPreference? = null
     private var prefVideoUploadsSourcePath: Preference? = null
     private var prefVideoUploadsBehaviour: ListPreference? = null
     private var prefVideoUploadsAccount: ListPreference? = null
@@ -86,6 +88,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefEnableVideoUploads = findPreference(PREF__CAMERA_VIDEO_UPLOADS_ENABLED)
         prefVideoUploadsPath = findPreference(PREF__CAMERA_VIDEO_UPLOADS_PATH)
         prefVideoUploadsOnWifi = findPreference(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY)
+        prefVideoUploadsOnCharging = findPreference(PREF__CAMERA_VIDEO_UPLOADS_CHARGING_ONLY)
         prefVideoUploadsSourcePath = findPreference(PREF__CAMERA_VIDEO_UPLOADS_SOURCE)
         prefVideoUploadsLastSync = findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_LAST_SYNC)
         prefVideoUploadsBehaviour = findPreference<ListPreference>(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)?.apply {
@@ -117,6 +120,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                 prefVideoUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
                 prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                 prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
+                prefVideoUploadsOnCharging?.isChecked = it.chargingOnly
                 prefVideoUploadsBehaviour?.value = it.behavior.name
                 prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
             } ?: resetFields()
@@ -162,10 +166,8 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         }
 
         prefVideoUploadsSourcePath?.setOnPreferenceClickListener {
-            var sourcePath = videosViewModel.getVideoUploadsSourcePath()
-                .takeUnless { it.isNullOrBlank() } ?: videosViewModel.getDefaultCameraSourcePath()
-            if (!sourcePath.endsWith(File.separator)) {
-                sourcePath += File.separator
+            val sourcePath = videosViewModel.getVideoUploadsSourcePath()?.let { currentSourcePath ->
+                currentSourcePath.takeUnless { it.endsWith(File.separator) } ?: currentSourcePath.plus(File.separator)
             }
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -185,6 +187,12 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsOnWifi?.setOnPreferenceChangeListener { _, newValue ->
             newValue as Boolean
             videosViewModel.useWifiOnly(newValue)
+            newValue
+        }
+
+        prefVideoUploadsOnCharging?.setOnPreferenceChangeListener { _, newValue ->
+            newValue as Boolean
+            videosViewModel.useChargingOnly(newValue)
             newValue
         }
 
@@ -210,6 +218,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefEnableVideoUploads?.isChecked = value
         prefVideoUploadsPath?.isEnabled = value
         prefVideoUploadsOnWifi?.isEnabled = value
+        prefVideoUploadsOnCharging?.isEnabled = value
         prefVideoUploadsSourcePath?.isEnabled = value
         prefVideoUploadsBehaviour?.isEnabled = value
         prefVideoUploadsAccount?.isEnabled = value
@@ -221,6 +230,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsPath?.summary = null
         prefVideoUploadsSourcePath?.summary = null
         prefVideoUploadsOnWifi?.isChecked = false
+        prefVideoUploadsOnCharging?.isChecked = false
         prefVideoUploadsBehaviour?.value = FolderBackUpConfiguration.Behavior.COPY.name
         prefVideoUploadsLastSync?.summary = null
     }

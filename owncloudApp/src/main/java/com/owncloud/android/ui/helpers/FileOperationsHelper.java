@@ -26,8 +26,7 @@ package com.owncloud.android.ui.helpers;
 import android.accounts.Account;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.webkit.MimeTypeMap;
 
@@ -45,7 +44,6 @@ import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import timber.log.Timber;
 
 import java.util.Collection;
-import java.util.List;
 
 public class FileOperationsHelper {
 
@@ -60,70 +58,56 @@ public class FileOperationsHelper {
         mFileActivity = fileActivity;
     }
 
-    public void openFile(OCFile file) {
-        if (file != null) {
-            String storagePath = file.getStoragePath();
+    private Intent getIntentForSavedMimeType(Uri data, String type) {
+        Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
+        intentForSavedMimeType.setDataAndType(data, type);
+        intentForSavedMimeType.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        return intentForSavedMimeType;
+    }
 
-            Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
-            intentForSavedMimeType.setDataAndType(
-                    file.getExposedFileUri(mFileActivity),
-                    file.getMimetype()
-            );
+    private Intent getIntentForGuessedMimeType(String storagePath, String type, Uri data) {
+        Intent intentForGuessedMimeType = null;
 
-            intentForSavedMimeType.setFlags(
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-            );
+        if (storagePath.lastIndexOf('.') >= 0) {
+            String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(storagePath.substring(storagePath.lastIndexOf('.') + 1));
 
-            Intent intentForGuessedMimeType = null;
-            if (storagePath.lastIndexOf('.') >= 0) {
-                String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                        storagePath.substring(storagePath.lastIndexOf('.') + 1)
-                );
-                if (guessedMimeType != null && !guessedMimeType.equals(file.getMimetype())) {
-                    intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
-                    intentForGuessedMimeType.setDataAndType(
-                            file.getExposedFileUri(mFileActivity),
-                            guessedMimeType
-                    );
-                    intentForGuessedMimeType.setFlags(
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION |
-                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                    );
-                }
+            if (guessedMimeType != null && !guessedMimeType.equals(type)) {
+                intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
+                intentForGuessedMimeType.setDataAndType(data, guessedMimeType);
+                intentForGuessedMimeType.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
+        }
+        return intentForGuessedMimeType;
+    }
 
-            Intent openFileWithIntent;
-            if (intentForGuessedMimeType != null) {
-                openFileWithIntent = intentForGuessedMimeType;
-            } else {
-                openFileWithIntent = intentForSavedMimeType;
-            }
+    public void openFile(OCFile ocFile) {
+        if (ocFile != null) {
+            Intent intentForSavedMimeType = getIntentForSavedMimeType(ocFile.getExposedFileUri(mFileActivity), ocFile.getMimetype());
 
-            List<ResolveInfo> launchables = mFileActivity.getPackageManager().
-                    queryIntentActivities(openFileWithIntent, PackageManager.MATCH_DEFAULT_ONLY);
+            Intent intentForGuessedMimeType = getIntentForGuessedMimeType(ocFile.getStoragePath(), ocFile.getMimetype(),
+                    ocFile.getExposedFileUri(mFileActivity));
 
-            if (launchables != null && launchables.size() > 0) {
-                try {
-                    mFileActivity.startActivity(
-                            Intent.createChooser(
-                                    openFileWithIntent, mFileActivity.getString(R.string.actionbar_open_with)
-                            )
-                    );
-                } catch (ActivityNotFoundException anfe) {
-                    mFileActivity.showSnackMessage(
-                            mFileActivity.getString(
-                                    R.string.file_list_no_app_for_file_type
-                            )
-                    );
-                }
-            } else {
-                mFileActivity.showSnackMessage(
-                        mFileActivity.getString(R.string.file_list_no_app_for_file_type)
-                );
-            }
+            openFileWithIntent(intentForSavedMimeType, intentForGuessedMimeType);
 
         } else {
             Timber.e("Trying to open a NULL OCFile");
+        }
+    }
+
+    private void openFileWithIntent(Intent intentForSavedMimeType, Intent intentForGuessedMimeType) {
+        Intent openFileWithIntent;
+
+        if (intentForGuessedMimeType != null) {
+            openFileWithIntent = intentForGuessedMimeType;
+        } else {
+            openFileWithIntent = intentForSavedMimeType;
+        }
+        try {
+            mFileActivity.startActivity(Intent.createChooser(openFileWithIntent, mFileActivity.getString(R.string.actionbar_open_with)));
+        } catch (ActivityNotFoundException anfe) {
+            mFileActivity.showSnackMessage(mFileActivity.getString(
+                    R.string.file_list_no_app_for_file_type
+            ));
         }
     }
 
@@ -180,17 +164,24 @@ public class FileOperationsHelper {
 
     }
 
-    public void sendDownloadedFile(OCFile file) {
-        if (file != null) {
-            Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+    private Intent makeActionSendIntent(OCFile oCfile) {
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+
+        if (oCfile != null) {
             // set MimeType
-            sendIntent.setType(file.getMimetype());
+            sendIntent.setType(oCfile.getMimetype());
             sendIntent.putExtra(
                     Intent.EXTRA_STREAM,
-                    file.getExposedFileUri(mFileActivity)
+                    oCfile.getExposedFileUri(mFileActivity)
             );
-            sendIntent.putExtra(Intent.ACTION_SEND, true);      // Send Action
+        }
+        sendIntent.putExtra(Intent.ACTION_SEND, true);// Send Action
+        return sendIntent;
+    }
 
+    public void sendDownloadedFile(OCFile ocFile) {
+        if (ocFile != null) {
+            Intent sendIntent = makeActionSendIntent(ocFile);
             // Show dialog, without the own app
             String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
 

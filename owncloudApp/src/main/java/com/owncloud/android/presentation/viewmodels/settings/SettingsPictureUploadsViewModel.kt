@@ -37,9 +37,9 @@ import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
-import com.owncloud.android.utils.FileStorageUtils.getDefaultCameraSourcePath
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 
 class SettingsPictureUploadsViewModel(
@@ -86,8 +86,16 @@ class SettingsPictureUploadsViewModel(
     fun useWifiOnly(wifiOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             savePictureUploadsConfigurationUseCase.execute(
+                SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(wifiOnly = wifiOnly))
+            )
+        }
+    }
+
+    fun useChargingOnly(chargingOnly: Boolean) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            savePictureUploadsConfigurationUseCase.execute(
                 SavePictureUploadsConfigurationUseCase.Params(
-                    composePictureUploadsConfiguration(wifiOnly = wifiOnly)
+                    composePictureUploadsConfiguration(chargingOnly = chargingOnly)
                 )
             )
         }
@@ -100,8 +108,6 @@ class SettingsPictureUploadsViewModel(
     fun getPictureUploadsPath() = _pictureUploads.value?.uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH
 
     fun getPictureUploadsSourcePath(): String? = _pictureUploads.value?.sourcePath
-
-    fun getDefaultSourcePath(): String = getDefaultCameraSourcePath()
 
     fun handleSelectPictureUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
@@ -134,9 +140,7 @@ class SettingsPictureUploadsViewModel(
 
     fun handleSelectPictureUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
-        var previousSourcePath = _pictureUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
-
-        previousSourcePath = previousSourcePath.trimEnd(File.separatorChar)
+        val previousSourcePath = _pictureUploads.value?.sourcePath?.trimEnd(File.separatorChar)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             savePictureUploadsConfigurationUseCase.execute(
@@ -158,17 +162,20 @@ class SettingsPictureUploadsViewModel(
         accountName: String? = _pictureUploads.value?.accountName,
         uploadPath: String? = _pictureUploads.value?.uploadPath,
         wifiOnly: Boolean? = _pictureUploads.value?.wifiOnly,
+        chargingOnly: Boolean? = _pictureUploads.value?.chargingOnly,
         sourcePath: String? = _pictureUploads.value?.sourcePath,
         behavior: FolderBackUpConfiguration.Behavior? = _pictureUploads.value?.behavior,
         timestamp: Long? = _pictureUploads.value?.lastSyncTimestamp
-    ): FolderBackUpConfiguration =
-        FolderBackUpConfiguration(
-            accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
-            behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
-            sourcePath = sourcePath.orEmpty(),
-            uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
-            wifiOnly = wifiOnly ?: false,
-            lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
-            name = _pictureUploads.value?.name ?: pictureUploadsName
-        )
+    ): FolderBackUpConfiguration = FolderBackUpConfiguration(
+        accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
+        behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
+        sourcePath = sourcePath.orEmpty(),
+        uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
+        wifiOnly = wifiOnly ?: false,
+        chargingOnly = chargingOnly ?: false,
+        lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
+        name = _pictureUploads.value?.name ?: pictureUploadsName
+    ).also {
+        Timber.d("Picture uploads configuration updated. New configuration: $it")
+    }
 }

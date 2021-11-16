@@ -189,16 +189,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d skrár merktar fyrir samstillingu var ekki hægt að samstilla</string>
   <string name="sync_fail_in_favourites_ticker">Skrár merktar fyrir samstillingu mistókust</string>
   <string name="sync_fail_in_favourites_content">Efni %1$d skráa var ekki hægt að samstilla (%2$d árekstrar)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Sumar staðværar skrár gleymdust</string>
-  <string name="sync_foreign_files_forgotten_content">%1$d skrár úr %2$s möppunni var ekki hægt að afrita í</string>
-  <string name="sync_foreign_files_forgotten_explanation">Frá og með útgáfu 1.3.16, munu skrár sem sendar eru frá þessu tæki verða afritaðar inn í staðværu %1$s möppuna, í þeim tilgangi að koma í veg fyrir gagnatap þegar stök skrá er samstillt við marga notendaaðganga.\n\nVegna þessarar breytingar hafa allar skrár sem sendar hafa verið inn í eldri útgáfum kerfisins verið afritaðar í %2$s möppuna. Hins vegar, núna kom villa í veg fyrir að þessari aðgerð lyki um leið og aðgangar voru samstilltir. Þú getur annað hvort látið skrárnar vera eins og þær eru og fjarlægt tengilinn í %3$s, eða fært skrárnar inn í %1$s möppuna og halda tenglinum í %4$s.\n\nStaðværar skrár eru taldar upp hér fyrir neðan, ásamt þeim fjartengdu skrám í %5$s sem þær voru tengdar við.</string>
   <string name="sync_current_folder_was_removed">Mappan %1$s er ekki lengur til staðar</string>
-  <string name="foreign_files_move">Færa allt</string>
-  <string name="foreign_files_success">Allar skrár voru færðar</string>
-  <string name="foreign_files_fail">Ekki tókst að færa allar skrár</string>
-  <string name="foreign_files_local_text">Staðvært: %1$s</string>
-  <string name="foreign_files_remote_text">Fjartengt: %1$s</string>
-  <string name="upload_query_move_foreign_files">Það er ekki nægilegt pláss til að afrita völdu skrárnar í %1$s möppuna. Vilt þú kannski færa þær í staðinn? </string>
   <string name="pass_code_enter_pass_code">Settu inn lykilkóðann þinn</string>
   <string name="pass_code_configure_your_pass_code">Settu inn lykilkóða</string>
   <string name="pass_code_configure_your_pass_code_explanation">Lykilkóðans verður krafist í hvert skipti sem forritið er ræst</string>
@@ -491,4 +482,5 @@
   <string name="welcome_feature_3_text">Tengst við öll ownCloud tölvuskýin þín</string>
   <string name="welcome_feature_4_title">Innsendingar úr myndavél</string>
   <string name="welcome_feature_5_title">Streyming myndskeiða</string>
+  <!--Scoped storage migration wizard-->
 </resources>

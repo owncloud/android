@@ -19,7 +19,6 @@
 
 package com.owncloud.android.sharing.shares.ui
 
-import android.content.Context
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import androidx.lifecycle.MutableLiveData
@@ -77,7 +76,7 @@ class PublicShareCreationDialogFragmentTest {
         stopKoin()
 
         startKoin {
-            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            androidContext(ApplicationProvider.getApplicationContext())
             modules(
                 module(override = true) {
                     viewModel {
@@ -475,10 +474,8 @@ class PublicShareCreationDialogFragmentTest {
             it.startFragment(publicShareDialogFragment)
         }
 
-        capabilitiesLiveData.postValue(Event(
-            UIResult.Success(
-                capabilities
-            ))
+        capabilitiesLiveData.postValue(
+            Event(UIResult.Success(capabilities))
         )
     }
 }

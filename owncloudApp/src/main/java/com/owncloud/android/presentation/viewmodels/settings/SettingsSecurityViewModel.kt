@@ -25,7 +25,7 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
-import com.owncloud.android.ui.activity.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 
 class SettingsSecurityViewModel(
@@ -33,25 +33,6 @@ class SettingsSecurityViewModel(
 ) : ViewModel() {
 
     fun isPatternSet() = preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
-
-    fun handleEnablePasscode(data: Intent?): UIResult<Unit> {
-        val passcode =
-            data?.getStringExtra(PassCodeActivity.KEY_PASSCODE).takeIf { it?.length == 4 } ?: return UIResult.Error()
-        for (i in 1..4) {
-            preferencesProvider.putString(
-                PassCodeActivity.PREFERENCE_PASSCODE_D + i,
-                passcode.substring(i - 1, i)
-            )
-        }
-        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
-        return UIResult.Success()
-    }
-
-    fun handleDisablePasscode(data: Intent?): UIResult<Unit> {
-        data?.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false).takeIf { it == true } ?: return UIResult.Error()
-        preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-        return UIResult.Success()
-    }
 
     fun isPasscodeSet() = preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 

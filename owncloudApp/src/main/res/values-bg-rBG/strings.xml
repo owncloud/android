@@ -211,16 +211,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d kept-in-sync файла не могат да бъдат сихронизирани</string>
   <string name="sync_fail_in_favourites_ticker">Неуспешни Kept-in-sync файлове</string>
   <string name="sync_fail_in_favourites_content">Неуспешно синхронизиране на съдържанието на %1$d файла (%2$d конфликта).</string>
-  <string name="sync_foreign_files_forgotten_ticker">Някои локални файлове бяха забравени.</string>
-  <string name="sync_foreign_files_forgotten_content">Неуспешно копиране на %1$d файла в папка %2$s.</string>
-  <string name="sync_foreign_files_forgotten_explanation">От версия 1.3.16 нататък, файлове качени от това устройство ще бъдат копирани в локалната %1$s папка, за да се предотврати загуба на данни, когато един файл е синхронизиран с много профили.\n\nПоради тази промяна, всички файлове качени с предишни версии на тази програма бяха копирани в папка %2$s. За жалост, грешка по време на синхрноизцаията попречи на тази операция да бъде завършена. Можете или да оставите файла(овете), както са и да премахнете връзката до %3$s, или да преместите файла(овете) в папка %1$s и да запазите връзката до %4$s.\n\nИзброени по-долу са локалните файл(ове), и отделечените файл(ове), до които са били свързани в %5$s.</string>
   <string name="sync_current_folder_was_removed">Папка %1$s вече не същестува</string>
-  <string name="foreign_files_move">Преместване на всички</string>
-  <string name="foreign_files_success">Всички файлове са преместени</string>
-  <string name="foreign_files_fail">Някои файлове не можаха да бъдат преместени</string>
-  <string name="foreign_files_local_text">Локален: %1$s</string>
-  <string name="foreign_files_remote_text">Отдалечен: %1$s</string>
-  <string name="upload_query_move_foreign_files">Няма достатъчно място за копиране на избраните файлове в папка %1$s. Искате ли въпреки това да ги преместите?</string>
   <string name="pass_code_enter_pass_code">Моля въведете своята парола</string>
   <string name="pass_code_configure_your_pass_code">Въведете своята парола</string>
   <string name="pass_code_configure_your_pass_code_explanation">Паролата ще се изисква при всяко стартиране на приложението</string>
@@ -543,4 +534,5 @@
   <string name="common_not_found">не беше намерен</string>
   <string name="supports_oauth2_error">Не беше възможно да се разбере дали OAuth2 се поддържа</string>
   <string name="get_base_url_error">Не беше възможно да се открие базовият URL адрес на сървъра</string>
+  <!--Scoped storage migration wizard-->
 </resources>

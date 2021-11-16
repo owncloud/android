@@ -1,0 +1,8 @@
+Bugfix: Device rotation moves to root in folder picker
+
+Previously, when users rotate the device trying to share photos with oC selecting a non-root folder,
+folder picker shows the root folder
+Now, folder picker shows the folder that the user browsed.
+
+https://github.com/owncloud/android/pull/3431
+https://github.com/owncloud/android/issues/3163

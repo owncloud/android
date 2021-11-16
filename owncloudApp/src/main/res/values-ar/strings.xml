@@ -42,7 +42,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">يتيح اللمس باستخدام نافذة أخرى مرئية عندما تكون نافذة العرض مخفية. فعِّله لاستخدام تطبيقات تصفية الإضاءة.</string>
   <string name="confirmation_touches_with_other_windows_title">هل أنت متأكد أنك ترغب في تفعيل هذه الميزة؟</string>
   <string name="confirmation_touches_with_other_windows_message">استخدم هذه الميزة على مسؤوليتك فقد يحاول تطبيق ضار انتحال شخصيتك للقيام ببعض الإجراءات دون علمك باستخدام نوافذ عرض أخرى.</string>
-  <string name="prefs_open_logs_view">افتح عرض السجلات</string>
   <string name="prefs_camera_picture_upload">تحميلات الصور</string>
   <string name="prefs_camera_picture_upload_summary">حمِّل الصور الملتقطة بالكاميرا تلقائيًا</string>
   <string name="prefs_camera_picture_upload_path_title">مسار تحميل الصور</string>
@@ -214,16 +213,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d تعذرت مزامنة الملفات المحفوظة قيد المزامنة</string>
   <string name="sync_fail_in_favourites_ticker">فشل في الملفات المحفوظة قيد المزامنة</string>
   <string name="sync_fail_in_favourites_content">تعذّرت مزامنة محتويات ملفات %1$d (%2$dتعارضات)</string>
-  <string name="sync_foreign_files_forgotten_ticker">نُسيت بعض الملفات المحلية</string>
-  <string name="sync_foreign_files_forgotten_content">تعذّر نسخ ملفات %1$d الموجودة خارج مجلد %2$s إلى</string>
-  <string name="sync_foreign_files_forgotten_explanation">بدءًا من الإصدار رقم 1.3.16، تُنسخ الملفات المحملة من هذا الجهاز إلى مجلد %1$s المحلي لمنع فقدان البيانات عند مزامنة ملف واحد مع عدة حسابات.\n\nنظرًا لهذا التغيير، نُسخت جميع الملفات المحملة في الإصدارات السابقة من هذا التطبيق إلى مجلد %2$s. ومع ذلك حدث خطأ منع استكمال هذه العملية في أثناء مزامنة الحساب. يمكنك إمّا ترك الملف (الملفات) كما هي وإزالة الرابط إلى %3$s، وإمّا نقل الملف (الملفات) إلى مجلد %1$s والاحتفاظ بالرابط إلى %4$s.\n\nفيما يلي الملف (الملفات) المحلية والملف (الملفات) البعيدة الموجودة في %5$s المربوطة بها.</string>
   <string name="sync_current_folder_was_removed">لم يعد مجلد %1$s موجودًا</string>
-  <string name="foreign_files_move">نقل الكل</string>
-  <string name="foreign_files_success">تم نقل جميع الملفات</string>
-  <string name="foreign_files_fail">تعذّر نقل بعض الملفات</string>
-  <string name="foreign_files_local_text">محلي: %1$s</string>
-  <string name="foreign_files_remote_text">بعيد: %1$s</string>
-  <string name="upload_query_move_foreign_files">لا توجد مساحة كافية لنسخ الملفات المحددة إلى مجلد %1$s. هل تود نقلها بدلًا من ذلك؟</string>
   <string name="pass_code_enter_pass_code">يُرجى إدخال رمز مرورك</string>
   <string name="pass_code_configure_your_pass_code">أدخل رمز مرورك</string>
   <string name="pass_code_configure_your_pass_code_explanation">سيُطلب رمز المرور في كل مرة يُشغل فيها التطبيق</string>
@@ -549,4 +539,5 @@
   <string name="get_base_url_error">لا يمكن معرفة عنوان URL قاعدة الخادم</string>
   <string name="prefs_http_logs"> تسجيل طلبات واستجابات بروتوكول HTTP </string>
   <string name="prefs_logs_summary">قد تحتوي السجلات على معلومات حساسة. تعتبر مشاركة السجلات مع الآخرين مسؤولية المستخدم وحده</string>
+  <!--Scoped storage migration wizard-->
 </resources>

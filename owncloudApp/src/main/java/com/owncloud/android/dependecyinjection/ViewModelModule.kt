@@ -4,7 +4,7 @@
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,10 +21,14 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.MainApp
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
+import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
+import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
+import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
@@ -52,9 +56,12 @@ val viewModelModule = module {
     viewModel { OAuthViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { SettingsSecurityViewModel(get()) }
-    viewModel { SettingsLogsViewModel(get(), get()) }
+    viewModel { SettingsLogsViewModel(get(), get(), get()) }
     viewModel { SettingsMoreViewModel(get()) }
     viewModel { SettingsPictureUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsVideoUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
+    viewModel { PassCodeViewModel(get(), get()) }
+    viewModel { LogListViewModel(get()) }
+    viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get()) }
 }

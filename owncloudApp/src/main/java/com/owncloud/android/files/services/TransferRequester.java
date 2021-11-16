@@ -38,7 +38,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.UploadResult;
-import com.owncloud.android.usecases.UploadFileFromContentUriUseCase;
+import com.owncloud.android.usecases.RetryUploadFromContentUriUseCase;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PowerUtils;
@@ -213,7 +213,7 @@ public class TransferRequester {
         }
 
         if (isContentUri(context, upload)) {
-            enqueueRetry(upload, context);
+            enqueueRetryFromContentUri(upload, context);
         } else {
             Intent intent = new Intent(context, FileUploader.class);
             intent.putExtra(FileUploader.KEY_RETRY, true);
@@ -243,16 +243,10 @@ public class TransferRequester {
         return DocumentFile.isDocumentUri(context, Uri.parse(upload.getLocalPath()));
     }
 
-    private void enqueueRetry(OCUpload upload, Context context) {
-        new UploadFileFromContentUriUseCase(WorkManager.getInstance(context)).execute(
-                new UploadFileFromContentUriUseCase.Params(
-                        upload.getAccountName(),
-                        Uri.parse(upload.getLocalPath()),
-                        upload.getUploadEndTimestamp() / 1000 + "",
-                        "COPY",
-                        upload.getRemotePath(),
-                        upload.getUploadId(),
-                        false
+    private void enqueueRetryFromContentUri(OCUpload upload, Context context) {
+        new RetryUploadFromContentUriUseCase(WorkManager.getInstance(context)).execute(
+                new RetryUploadFromContentUriUseCase.Params(
+                        upload.getUploadId()
                 )
         );
     }

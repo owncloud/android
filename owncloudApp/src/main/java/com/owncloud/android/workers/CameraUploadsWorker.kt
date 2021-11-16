@@ -34,6 +34,7 @@ import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
+import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE
 import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
@@ -43,6 +44,7 @@ import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+
 import timber.log.Timber
 import java.io.File
 import java.util.Date
@@ -123,10 +125,13 @@ class CameraUploadsWorker(
             else -> SyncType.PICTURE_UPLOADS
         }
 
+        val currentTimestamp = System.currentTimeMillis()
+
         val localPicturesDocumentFiles: List<DocumentFile> = getFilesReadyToUpload(
             syncType = syncType,
             sourcePath = folderBackUpConfiguration.sourcePath,
-            lastSyncTimestamp = folderBackUpConfiguration.lastSyncTimestamp
+            lastSyncTimestamp = folderBackUpConfiguration.lastSyncTimestamp,
+            currentTimestamp = currentTimestamp,
         )
 
         showNotification(syncType, localPicturesDocumentFiles.size)
@@ -149,10 +154,11 @@ class CameraUploadsWorker(
                 behavior = folderBackUpConfiguration.behavior.toString(),
                 accountName = folderBackUpConfiguration.accountName,
                 uploadId = uploadId,
-                wifiOnly = folderBackUpConfiguration.wifiOnly
+                wifiOnly = folderBackUpConfiguration.wifiOnly,
+                chargingOnly = folderBackUpConfiguration.chargingOnly
             )
         }
-        updateTimestamp(folderBackUpConfiguration, syncType)
+        updateTimestamp(folderBackUpConfiguration, syncType, currentTimestamp)
     }
 
     private fun showNotification(
@@ -201,8 +207,11 @@ class CameraUploadsWorker(
         )
     }
 
-    private fun updateTimestamp(folderBackUpConfiguration: FolderBackUpConfiguration, syncType: SyncType) {
-        val currentTimestamp = System.currentTimeMillis()
+    private fun updateTimestamp(
+        folderBackUpConfiguration: FolderBackUpConfiguration,
+        syncType: SyncType,
+        currentTimestamp: Long,
+    ) {
 
         when (syncType) {
             SyncType.PICTURE_UPLOADS -> {
@@ -224,6 +233,7 @@ class CameraUploadsWorker(
         syncType: SyncType,
         sourcePath: String,
         lastSyncTimestamp: Long,
+        currentTimestamp: Long,
     ): List<DocumentFile> {
         val sourceUri: Uri = sourcePath.toUri()
         val documentTree = DocumentFile.fromTreeUri(applicationContext, sourceUri)
@@ -231,10 +241,12 @@ class CameraUploadsWorker(
 
         val filteredList: List<DocumentFile> = arrayOfLocalFiles
             .sortedBy { it.lastModified() }
-            .filter { it.lastModified() > lastSyncTimestamp }
+            .filter { it.lastModified() >= lastSyncTimestamp }
+            .filter { it.lastModified() < currentTimestamp }
             .filter { MimetypeIconUtil.getBestMimeTypeByFilename(it.name).startsWith(syncType.prefixForType) }
 
         Timber.i("Last sync ${syncType.name}: ${Date(lastSyncTimestamp)}")
+        Timber.i("CurrentTimestamp ${Date(currentTimestamp)}")
         Timber.i("${arrayOfLocalFiles.size} files found in folder: ${sourceUri.path}")
         Timber.i("${filteredList.size} files are ${syncType.name} and were taken after last sync")
 
@@ -248,7 +260,8 @@ class CameraUploadsWorker(
         behavior: String,
         accountName: String,
         uploadId: Long,
-        wifiOnly: Boolean
+        wifiOnly: Boolean,
+        chargingOnly: Boolean
     ) {
         val lastModifiedInSeconds = (lastModified / 1000L).toString()
 
@@ -260,7 +273,8 @@ class CameraUploadsWorker(
                 behavior = behavior,
                 uploadPath = uploadPath,
                 uploadIdInStorageManager = uploadId,
-                wifiOnly = wifiOnly
+                wifiOnly = wifiOnly,
+                chargingOnly = chargingOnly
             )
         )
     }
@@ -278,7 +292,10 @@ class CameraUploadsWorker(
             fileSize = documentFile.length()
             isForceOverwrite = false
             createdBy = createdByWorker
-            localAction = behavior.ordinal
+            localAction = if (behavior == FolderBackUpConfiguration.Behavior.MOVE)
+                FileUploader.LOCAL_BEHAVIOUR_MOVE
+            else
+                FileUploader.LOCAL_BEHAVIOUR_COPY
             uploadStatus = UploadStatus.UPLOAD_IN_PROGRESS
         }
         return uploadStorageManager.storeUpload(ocUpload)

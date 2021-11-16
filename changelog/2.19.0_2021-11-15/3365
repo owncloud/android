@@ -1,0 +1,8 @@
+Bugfix: Passcode input misbehaving
+
+Passcode text fields have been made not selectable once a number is written on
+them, so that we avoid bugs with the digits of the passcode and the way of
+entering them.
+
+https://github.com/owncloud/android/issues/3342
+https://github.com/owncloud/android/pull/3365

@@ -180,13 +180,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d \"pidä synkronoituna\" tiedostoja ei voitu synkronoida</string>
   <string name="sync_fail_in_favourites_ticker">\"Pidä synkronoituna\" epäonnistui</string>
   <string name="sync_fail_in_favourites_content">Hakemiston %1$d tiedostoja ei voitu synkronoida (%2$d konfliktia)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Osa paikallisista tiedostoista oli unohtunut</string>
   <string name="sync_current_folder_was_removed">Kansiota %1$s ei ole enää olemassa</string>
-  <string name="foreign_files_move">Siirrä kaikki</string>
-  <string name="foreign_files_success">Kaikki tiedostot siirrettiin</string>
-  <string name="foreign_files_fail">Joidenkin tiedostojen siirtäminen epäonnistui</string>
-  <string name="foreign_files_local_text">Paikallinen: %1$s</string>
-  <string name="foreign_files_remote_text">Etä: %1$s</string>
   <string name="pass_code_enter_pass_code">Anna suojakoodisi</string>
   <string name="pass_code_configure_your_pass_code">Anna suojakoodisi</string>
   <string name="pass_code_configure_your_pass_code_explanation">Suojakoodi kysytään joka kerta, kun sovellus käynnistetään</string>
@@ -468,4 +462,5 @@
   <string name="welcome_feature_5_title">Videoiden striimaus</string>
   <string name="welcome_feature_5_text">Toista videosi lataamatta niitä</string>
   <string name="no_borwser_installed_alert">Selainta ei asennettu. Ole hyvä ja asenna selain jotta turvallinen kirjautuminen on mahdollista.</string>
+  <!--Scoped storage migration wizard-->
 </resources>

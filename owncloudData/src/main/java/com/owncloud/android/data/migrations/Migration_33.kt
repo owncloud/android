@@ -38,21 +38,21 @@ val MIGRATION_32_33 = object : Migration(32, 33) {
             cursor.use {
                 while (it.moveToNext()) {
                     val cv = ContentValues()
-                    cv.put("id", it.getInt(it.getColumnIndex("id")))
-                    cv.put("share_type", it.getInt(it.getColumnIndex("share_type")))
-                    cv.put("share_with", it.getString(it.getColumnIndex("shate_with")))
-                    cv.put("path", it.getString(it.getColumnIndex("path")))
-                    cv.put("permissions", it.getInt(it.getColumnIndex("permissions")))
-                    cv.put("shared_date", it.getInt(it.getColumnIndex("shared_date")))
-                    cv.put("expiration_date", it.getInt(it.getColumnIndex("expiration_date")))
-                    cv.put("token", it.getString(it.getColumnIndex("token")))
-                    cv.put("shared_with_display_name", it.getString(it.getColumnIndex("shared_with_display_name")))
-                    cv.put("share_with_additional_info", it.getString(it.getColumnIndex("share_with_additional_info")))
-                    cv.put("is_directory", it.getInt(it.getColumnIndex("is_directory")))
-                    cv.put("id_remote_shared", it.getString(it.getColumnIndex("id_remote_shared")))
-                    cv.put("owner_share", it.getString(it.getColumnIndex("owner_share")))
-                    cv.put("name", it.getString(it.getColumnIndex("name")))
-                    cv.put("url", it.getString(it.getColumnIndex("url")))
+                    cv.put("id", it.getInt(it.getColumnIndexOrThrow("id")))
+                    cv.put("share_type", it.getInt(it.getColumnIndexOrThrow("share_type")))
+                    cv.put("share_with", it.getString(it.getColumnIndexOrThrow("shate_with")))
+                    cv.put("path", it.getString(it.getColumnIndexOrThrow("path")))
+                    cv.put("permissions", it.getInt(it.getColumnIndexOrThrow("permissions")))
+                    cv.put("shared_date", it.getInt(it.getColumnIndexOrThrow("shared_date")))
+                    cv.put("expiration_date", it.getInt(it.getColumnIndexOrThrow("expiration_date")))
+                    cv.put("token", it.getString(it.getColumnIndexOrThrow("token")))
+                    cv.put("shared_with_display_name", it.getString(it.getColumnIndexOrThrow("shared_with_display_name")))
+                    cv.put("share_with_additional_info", it.getString(it.getColumnIndexOrThrow("share_with_additional_info")))
+                    cv.put("is_directory", it.getInt(it.getColumnIndexOrThrow("is_directory")))
+                    cv.put("id_remote_shared", it.getString(it.getColumnIndexOrThrow("id_remote_shared")))
+                    cv.put("owner_share", it.getString(it.getColumnIndexOrThrow("owner_share")))
+                    cv.put("name", it.getString(it.getColumnIndexOrThrow("name")))
+                    cv.put("url", it.getString(it.getColumnIndexOrThrow("url")))
 
                     database.insert("${OCSHARES_TABLE_NAME}2", 0, cv)
                 }
@@ -68,5 +68,4 @@ val MIGRATION_32_33 = object : Migration(32, 33) {
             Timber.e(e, "Failed to migrate database version 32 to version 33")
         }
     }
-
 }

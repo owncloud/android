@@ -56,7 +56,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.authentication.PassCodeManager
+import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
@@ -519,7 +519,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             BiometricManager.getBiometricManager(this).bayPassUnlockOnce()
         }
-        PassCodeManager.getPassCodeManager().bayPassUnlockOnce()
+        PassCodeManager.bayPassUnlockOnce()
         PatternManager.getPatternManager().bayPassUnlockOnce()
 
         // Hanndle calls form internal activities.
@@ -935,7 +935,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
 
             if (sameAccount && sameFile) {
-                if (success) {
+                if (success && uploadedRemotePath != null) {
                     file = storageManager.getFileByPath(uploadedRemotePath)
                 }
                 refreshSecondFragment(
@@ -1042,7 +1042,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         private fun refreshSecondFragment(
-            downloadEvent: String?, downloadedRemotePath: String,
+            downloadEvent: String?, downloadedRemotePath: String?,
             success: Boolean
         ) {
             val secondFragment = secondFragment
@@ -1139,7 +1139,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             setupRootToolbar(title, isSearchEnabled = true)
             listOfFilesFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else {
-            updateStandardToolbar(chosenFile.fileName, true, true)
+            updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         }
     }
 

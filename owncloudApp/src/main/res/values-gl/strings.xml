@@ -42,7 +42,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques cando a vista estea escurecida por outra xanela visíbel. Activar o emprego de aplis de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Confirma que quere activar esta característica?</string>
   <string name="confirmation_touches_with_other_windows_message">Empregue esta característica baixo a súa responsabilidade, unha aplicación maliciosa podería tentar enganalo para que realice algunhas accións, sen decatarse, empregando outras vistas.</string>
-  <string name="prefs_open_logs_view">Abrir o visor de rexistros</string>
   <string name="prefs_camera_picture_upload">Envío de imaxe</string>
   <string name="prefs_camera_picture_upload_summary">Enviar instantaneamente as fotos tiradas coa cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de envío de imaxes</string>
@@ -216,16 +215,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="sync_conflicts_in_favourites_content">%1$d ficheiros «manter sincronizados» non foi posíbel sincronizalos</string>
   <string name="sync_fail_in_favourites_ticker">Produciuse unha falla no mantemento sincronizado de ficheiros</string>
   <string name="sync_fail_in_favourites_content">Non foi posíbel sincronizar o contido de %1$d ficheiros (%2$d conflitos)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Algúns ficheiros locais foron esquecidos</string>
-  <string name="sync_foreign_files_forgotten_content">Non é posíbel copiar %1$d ficheiros do cartafol %2$s en</string>
-  <string name="sync_foreign_files_forgotten_explanation">Dende a versión 1.3.16, os ficheiros enviados dende este dispositivo cópianse no cartafol local %1$s para evitar a perda de datos cando se sincroniza un ficheiro con varias contas.\n\nPor mor deste cambio, todos os ficheiros enviados coas versións anteriores desta aplicación cópianse no cartafol %2$s. Porén, un erro impediu a finalización desta operación durante a sincronización da conta. É posíbel deixar o(s) ficheiro(s) como está(n) e retirar a ligazón a %3$s, ou mover o(s) ficheiro(s) ao directorio %1$s e manter a ligazón a %4$s.\n\nA seguir enuméranse o(s) ficheiro(s) local(is), e o(s) ficheiro(s) remoto(s) en %5$s co(s) que estaba(n) ligado(s).</string>
   <string name="sync_current_folder_was_removed">O cartafol %1$s xa non existe</string>
-  <string name="foreign_files_move">Mover todo</string>
-  <string name="foreign_files_success">Foron movidos todos os ficheiros</string>
-  <string name="foreign_files_fail">Algúns ficheiros non puideron seren movidos</string>
-  <string name="foreign_files_local_text">Local: %1$s</string>
-  <string name="foreign_files_remote_text">Remoto: %1$s</string>
-  <string name="upload_query_move_foreign_files">Non hai espazo abondo para copiar os ficheiros seleccionados no cartafol %1$s. Quere movelos no canto de copialos?</string>
   <string name="pass_code_enter_pass_code">Introduza o seu código de seguridade</string>
   <string name="pass_code_configure_your_pass_code">Escriba o seu código de seguridade</string>
   <string name="pass_code_configure_your_pass_code_explanation">Solicitaráselle o código de seguridade cada vez que inicie a aplicación</string>
@@ -551,4 +541,5 @@ Descárgueo de aquí: %2$s</string>
   <string name="prefs_http_logs">Rexistro de solicitudes e respostas HTTP</string>
   <string name="prefs_logs_summary">Os rexistros poden conter información confidencial. Compartir rexistros con outras persoas é responsabilidade exclusiva do usuario</string>
   <string name="synchronizing_account">Sincronizando a conta</string>
+  <!--Scoped storage migration wizard-->
 </resources>

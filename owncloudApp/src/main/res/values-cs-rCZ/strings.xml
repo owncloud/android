@@ -30,8 +30,12 @@
   <string name="drawer_feedback">Odezva</string>
   <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
+  <string name="prefs_subsection_logging">Logování</string>
   <string name="prefs_subsection_more">Více</string>
   <string name="prefs_subsection_security">Zabezpečení</string>
+  <string name="prefs_subsection_security_summary">Nastavení zámků aplikace a povolení doteku s jinými aplikacemi</string>
+  <string name="prefs_subsection_logging_summary">Detailní nastavení možností logování aplikace</string>
+  <string name="prefs_subsection_more_summary">Informace, zpětná vazba a další</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
@@ -41,7 +45,10 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Povolit dotek s aplikacemi, které mohou překrýt toto okno. Nutné pro povolení při použití filtrů světla.</string>
   <string name="confirmation_touches_with_other_windows_title">Jste si jisti, že chcete povolit tuto funkci?</string>
   <string name="confirmation_touches_with_other_windows_message">Použití na vlastní zodpovědnost. Překrývající aplikace se může pokusit ukrást vaše údaje.</string>
-  <string name="prefs_open_logs_view">Otevřít log</string>
+  <string name="prefs_subsection_picture_uploads">Automatické nahrávání obrázků</string>
+  <string name="prefs_subsection_picture_uploads_summary">Spravovat umístění a způsob nahrávání obrázků automaticky</string>
+  <string name="prefs_subsection_video_uploads">Automatické nahrávání videí</string>
+  <string name="prefs_subsection_video_uploads_summary">Spravovat umístění a způsob nahrávání videí automaticky</string>
   <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
   <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
   <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
@@ -65,13 +72,18 @@
   <string name="prefs_remember_last_upload_location_summary">Zapamatovat poslední umístění pro nahrání sdílených souborů</string>
   <string name="prefs_pattern">Zámek gestem</string>
   <string name="prefs_enable_logging">Povolit logování</string>
+  <string name="prefs_enable_logging_summary">Při aktivaci může být ovlivněn výkon a logy mohou obsahovat citlivé údaje. Logy se ovšem neposílají automaticky na servery ownCloud. Sdílení logů je jen na vaší osobní zodpovědnosti.</string>
   <string name="prefs_send_feedback">Odeslat názor</string>
+  <string name="prefs_app_version">Verze aplikace</string>
+  <string name="prefs_app_version_summary">%1$s%2$s verze %3$s (%4$s)</string>
   <string name="pattern_enter_pattern">Prosím, zadejte gesto</string>
   <string name="pattern_configure_pattern">Zadejte gesto</string>
   <string name="pattern_remove_pattern">Odstranit gesto</string>
   <string name="pattern_incorrect_pattern">Nesprávné gesto</string>
   <string name="pattern_reenter_pattern">Prosím, zadejte gesto znovu</string>
   <string name="pattern_not_same_pattern">Gesta nejsou shodná</string>
+  <string name="pattern_error_set">Nastala chyba při nastavování zámku gestem</string>
+  <string name="pattern_error_remove">Nastala chyba při odstraňování zámku gestem</string>
   <string name="pattern_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte gesto</string>
   <string name="passcode_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte bezpečnostní kód</string>
   <string name="pattern_no_longer_required">Gesto již nebude vyžadováno</string>
@@ -168,6 +180,11 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">Název souboru nesmí být delší než %d znaků</string>
   <string name="uploader_upload_text_filename_hint">Jméno souboru</string>
   <string name="uploader_upload_camera_upload_files">Nahrávám soubory z fotoparátu</string>
+  <string name="uploader_upload_picture_upload_files">%d nových obrázků bude odesláno</string>
+  <string name="uploader_upload_video_upload_files">%d nových videí bude odesláno</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Odesílání selhalo</string>
+  <string name="uploader_upload_picture_upload_error">Cesta k nahrávání obrázků již není platná</string>
+  <string name="uploader_upload_video_upload_error">Cesta k nahrávání videí již není platná</string>
   <string name="uploader_upload_available_offline_files">Nahrávání dostupných offline souborů</string>
   <string name="uploader_upload_requested_from_wifi_files">Vyžádáno nahrávání souborů</string>
   <string name="ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
@@ -212,16 +229,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d souborů z automatické synchronizace nelze synchronizovat</string>
   <string name="sync_fail_in_favourites_ticker">Automatická synchronizace souborů selhala</string>
   <string name="sync_fail_in_favourites_content">Obsah %1$d souborů nemohl být synchronizován (počet konfliktů: %2$d)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Některé místní soubory byly zapomenuty</string>
-  <string name="sync_foreign_files_forgotten_content">%1$d souborů z %2$s adresáře se nepodařilo zkopírovat do</string>
-  <string name="sync_foreign_files_forgotten_explanation">Od verze 1.3.16 jsou soubory nahrané z tohoto zařízení kopírovány do místního adresáře %1$s, aby se zabránilo ztrátě dat při synchronizaci jednoho souboru s více účty.\n\nVšechny soubory nahrané předchozími verzemi aplikace byly z tohoto důvodu překopírovány do adresáře %2$s. Bohužel se objevila chyba zabraňující dokončení této operace v průběhu synchronizace účtu. Buď můžete soubor(y) ponechat jak jsou a odebrat odkaz do adresáře %3$s, nebo přesunout soubor(y) do adresáře %1$s a zachovat odkaz na %4$s.\n\nNíže je seznam místních i vzdálených souborů v adresáři %5$s, do kterého byly odkázány.</string>
   <string name="sync_current_folder_was_removed">Adresář %1$s již neexistuje</string>
-  <string name="foreign_files_move">Přesunout vše</string>
-  <string name="foreign_files_success">Všechny soubory byly přesunuty</string>
-  <string name="foreign_files_fail">Některé soubory nebylo možno přesunout</string>
-  <string name="foreign_files_local_text">Místní: %1$s</string>
-  <string name="foreign_files_remote_text">Vzdálené: %1$s</string>
-  <string name="upload_query_move_foreign_files">Pro zkopírování vybraných souborů do %1$s adresáře není dostatek volného místa. Chcete je místo toho přesunout?</string>
   <string name="pass_code_enter_pass_code">Zadejte prosím svůj bezpečnostní kód</string>
   <string name="pass_code_configure_your_pass_code">Zadejte svůj bezpečnostní kód</string>
   <string name="pass_code_configure_your_pass_code_explanation">Bezpečnostní kód bude vyžadován při každém spuštění aplikace</string>
@@ -229,6 +237,8 @@
   <string name="pass_code_remove_your_pass_code">Odstraňte svůj bezpečnostní kód</string>
   <string name="pass_code_mismatch">Bezpečnostní kód se liší</string>
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
+  <string name="pass_code_error_set">Nastala chyba při nastavování bezpečnostního kódu</string>
+  <string name="pass_code_error_remove">Nastala chyba při odstraňování bezpečnostního kódu</string>
   <string name="biometric_not_enrolled">Povolte alespoň jeden biometrický způsob ověření k používání této specialitky</string>
   <string name="biometric_prompt_title">Biometrické přihlášení</string>
   <string name="biometric_prompt_subtitle">Přihlásit se s použitím biometrických přihlašovacích údajů</string>
@@ -288,6 +298,7 @@
   <string name="confirmation_remove_folder_alert">Opravdu chcete odstranit %1$s a jeho obsah?</string>
   <string name="confirmation_remove_local">Pouze místní</string>
   <string name="confirmation_remove_account_alert">Opravdu chcete odstranit účet %1$s ?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">K tomuto účtu je nastavena automatická záloha snímků a videí z fotoaparátu. Odstraněním účtu bude tato synchronizace zrušena. Opravdu chcete odstranit účet %1$s?</string>
   <string name="confirmation_remove_public_share_title">Odstranění odkazu</string>
   <string name="confirmation_remove_private_share_title">Odstranit soukromé sdílení</string>
   <string name="confirmation_remove_share_message">Opravdu chcete zrušit %1$s sdílení?</string>
@@ -431,10 +442,13 @@ správce systému.</string>
   <string name="file_list__footer__files">%1$d soubory(ů)</string>
   <string name="file_list__footer__files_and_folder">%1$d soubory(ů), 1 adresář</string>
   <string name="file_list__footer__files_and_folders">%1$d soubory(ů), %2$d adresáře(ů)</string>
+  <string name="prefs_picture_upload_account">Účet pro nahrávání obrázků</string>
+  <string name="prefs_video_upload_account">Účet pro nahrávání videí</string>
   <string name="prefs_camera_upload_source_path_title">Adresář fotoaparátu (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">vyžadován</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Původní soubor bude</string>
   <string name="prefs_camera_upload_behaviour_title">Původní soubor bude</string>
+  <string name="prefs_camera_upload_last_sync_title">Poslední synchronizace</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
   <string name="upload_move_files">Přesunout soubor</string>
   <string name="pref_behaviour_entries_keep_file">ponechán ve výchozím adresáři</string>
@@ -548,4 +562,5 @@ správce systému.</string>
   <string name="prefs_http_logs">Logovat HTTP požadavky a odpovědi</string>
   <string name="prefs_logs_summary">Log může obsahovat citlivé informace. Sdílení je pouze na vaší zodpovědnosti.</string>
   <string name="synchronizing_account">Synchronizuji účet</string>
+  <!--Scoped storage migration wizard-->
 </resources>

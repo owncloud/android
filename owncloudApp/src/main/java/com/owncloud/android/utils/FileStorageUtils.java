@@ -24,19 +24,22 @@
 
 package com.owncloud.android.utils;
 
+import android.accounts.Account;
 import android.annotation.SuppressLint;
-import android.os.Environment;
 import android.webkit.MimeTypeMap;
 
-import com.owncloud.android.MainApp;
-import com.owncloud.android.data.LocalStorageProvider;
+import com.owncloud.android.data.storage.LocalStorageProvider;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.Vector;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Static methods to help in access to local file system.
@@ -53,14 +56,15 @@ public class FileStorageUtils {
     // Let's use the LocalStorageProvider from now on.
     // It is in the data module, and it will be beneficial for new architecture.
     private static LocalStorageProvider getLocalStorageProvider() {
-        return new LocalStorageProvider(MainApp.Companion.getDataFolder());
+        @NotNull Lazy<LocalStorageProvider> localStorageProvider = inject(LocalStorageProvider.class);
+        return localStorageProvider.getValue();
     }
 
     /**
      * Get local owncloud storage path for accountName.
      */
     public static String getSavePath(String accountName) {
-        return getLocalStorageProvider().getSavePath(accountName);
+        return getLocalStorageProvider().getAccountDirectoryPath(accountName);
     }
 
     /**
@@ -237,7 +241,10 @@ public class FileStorageUtils {
         return dir.delete();
     }
 
-    public static String getDefaultCameraSourcePath() {
-        return getLocalStorageProvider().getDefaultCameraSourcePath();
+    /**
+     * Cleans up unused files, such as deprecated user directories
+     */
+    public static void deleteUnusedUserDirs(Account[] remainingAccounts) {
+        getLocalStorageProvider().deleteUnusedUserDirs(remainingAccounts);
     }
 }

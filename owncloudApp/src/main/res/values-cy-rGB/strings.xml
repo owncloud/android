@@ -50,13 +50,7 @@
   <string name="sync_conflicts_in_favourites_content">Methwyd cydamseru\'r ffeil cadw-yn-gydamserol %1$d</string>
   <string name="sync_fail_in_favourites_ticker">Methodd ffeiliau cadw-yn-gydamserol</string>
   <string name="sync_fail_in_favourites_content">Methwyd cydamseru cynnwys ffeiliau %1$d (gwrthdaro %2$d )</string>
-  <string name="sync_foreign_files_forgotten_ticker">Anghofiwyd am rai ffeiliau lleol</string>
-  <string name="foreign_files_move">Symud y cyfan</string>
-  <string name="foreign_files_success">Symudwyd pob ffeil</string>
-  <string name="foreign_files_fail">Methwyd symud rhai ffeiliau</string>
-  <string name="foreign_files_local_text">Lleol: %1$s</string>
-  <string name="foreign_files_remote_text">Pell: %1$s</string>
-  <string name="auth_no_net_conn_title">Dim cysylltiad rhwydwaith</string>
+    <string name="auth_no_net_conn_title">Dim cysylltiad rhwydwaith</string>
   <string name="auth_nossl_plain_ok_title">Nid oes cysylltiad diogel ar gael.</string>
   <string name="auth_connection_established">Sefydlwyd y cysylltiad</string>
   <string name="auth_not_configured_title">Cyfluniad gweinydd wedi\'i gamffurfio</string>

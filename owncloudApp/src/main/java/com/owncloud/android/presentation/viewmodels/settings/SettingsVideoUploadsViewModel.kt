@@ -37,7 +37,6 @@ import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
-import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.File
@@ -86,8 +85,16 @@ class SettingsVideoUploadsViewModel(
     fun useWifiOnly(wifiOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             saveVideoUploadsConfigurationUseCase.execute(
+                SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(wifiOnly = wifiOnly))
+            )
+        }
+    }
+
+    fun useChargingOnly(chargingOnly: Boolean) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            saveVideoUploadsConfigurationUseCase.execute(
                 SaveVideoUploadsConfigurationUseCase.Params(
-                    composeVideoUploadsConfiguration(wifiOnly = wifiOnly)
+                    composeVideoUploadsConfiguration(chargingOnly = chargingOnly)
                 )
             )
         }
@@ -100,8 +107,6 @@ class SettingsVideoUploadsViewModel(
     fun getVideoUploadsPath() = _videoUploads.value?.uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH
 
     fun getVideoUploadsSourcePath(): String? = _videoUploads.value?.sourcePath
-
-    fun getDefaultCameraSourcePath(): String = FileStorageUtils.getDefaultCameraSourcePath()
 
     fun handleSelectVideoUploadsPath(data: Intent?) {
         val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
@@ -134,9 +139,7 @@ class SettingsVideoUploadsViewModel(
 
     fun handleSelectVideoUploadsSourcePath(contentUriForTree: Uri) {
         // If the source path has changed, update camera uploads last sync
-        var previousSourcePath = _videoUploads.value?.sourcePath ?: getDefaultCameraSourcePath()
-
-        previousSourcePath = previousSourcePath.trimEnd(File.separatorChar)
+        val previousSourcePath = _videoUploads.value?.sourcePath?.trimEnd(File.separatorChar)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             saveVideoUploadsConfigurationUseCase.execute(
@@ -158,6 +161,7 @@ class SettingsVideoUploadsViewModel(
         accountName: String? = _videoUploads.value?.accountName,
         uploadPath: String? = _videoUploads.value?.uploadPath,
         wifiOnly: Boolean? = _videoUploads.value?.wifiOnly,
+        chargingOnly: Boolean? = _videoUploads.value?.chargingOnly,
         sourcePath: String? = _videoUploads.value?.sourcePath,
         behavior: FolderBackUpConfiguration.Behavior? = _videoUploads.value?.behavior,
         timestamp: Long? = _videoUploads.value?.lastSyncTimestamp
@@ -168,6 +172,7 @@ class SettingsVideoUploadsViewModel(
             sourcePath = sourcePath.orEmpty(),
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
+            chargingOnly = chargingOnly ?: false,
             lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
             name = _videoUploads.value?.name ?: videoUploadsName
         )

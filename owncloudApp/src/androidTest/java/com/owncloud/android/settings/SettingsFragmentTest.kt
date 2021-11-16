@@ -28,17 +28,22 @@ import androidx.preference.Preference
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
+import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.unmockkAll
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -56,6 +61,7 @@ class SettingsFragmentTest {
     private lateinit var subsectionPictureUploads: Preference
     private lateinit var subsectionVideoUploads: Preference
     private lateinit var subsectionMore: Preference
+    private var prefPrivacyPolicy: Preference? = null
     private lateinit var prefAboutApp: Preference
 
     private lateinit var settingsViewModel: SettingsViewModel
@@ -93,11 +99,20 @@ class SettingsFragmentTest {
             BuildConfig.VERSION_NAME,
             BuildConfig.COMMIT_SHA1
         )
+
+        Intents.init()
     }
 
-    private fun launchTest(attachedAccount: Boolean, moreSectionVisible: Boolean = true) {
+    @After
+    fun tearDown() {
+        Intents.release()
+        unmockkAll()
+    }
+
+    private fun launchTest(attachedAccount: Boolean, moreSectionVisible: Boolean = true, privacyPolicyEnabled: Boolean = true) {
         every { settingsViewModel.isThereAttachedAccount() } returns attachedAccount
         every { moreViewModel.shouldMoreSectionBeVisible() } returns moreSectionVisible
+        every { moreViewModel.isPrivacyPolicyEnabled() } returns privacyPolicyEnabled
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
@@ -106,6 +121,7 @@ class SettingsFragmentTest {
             subsectionPictureUploads = fragment.findPreference(SUBSECTION_PICTURE_UPLOADS)!!
             subsectionVideoUploads = fragment.findPreference(SUBSECTION_VIDEO_UPLOADS)!!
             subsectionMore = fragment.findPreference(SUBSECTION_MORE)!!
+            prefPrivacyPolicy = fragment.findPreference(PREFERENCE_PRIVACY_POLICY)
             prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
         }
     }
@@ -200,6 +216,14 @@ class SettingsFragmentTest {
     }
 
     @Test
+    fun privacyPolicyOpensPrivacyPolicyActivity() {
+        launchTest(attachedAccount = false)
+
+        onView(withText(R.string.prefs_privacy_policy)).perform(click())
+        Intents.intended(IntentMatchers.hasComponent(PrivacyPolicyActivity::class.java.name))
+    }
+
+    @Test
     fun clickOnAppVersion() {
         launchTest(attachedAccount = false)
 
@@ -216,6 +240,7 @@ class SettingsFragmentTest {
         private const val SUBSECTION_PICTURE_UPLOADS = "picture_uploads_subsection"
         private const val SUBSECTION_VIDEO_UPLOADS = "video_uploads_subsection"
         private const val SUBSECTION_MORE = "more_subsection"
+        private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
         private const val PREFERENCE_ABOUT_APP = "about_app"
     }
 }

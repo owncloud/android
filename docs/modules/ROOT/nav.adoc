@@ -1,4 +1,0 @@
-* xref:index.adoc[Using the Android App]
-* xref:faq.adoc[Frequently Asked Questions (FAQ)]
-* xref:troubleshooting.adoc[Troubleshooting]
-* xref:release_notes.adoc[Release Notes]

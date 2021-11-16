@@ -31,7 +31,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.authentication.PassCodeManager
+import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -44,10 +44,11 @@ import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.BiometricActivity
-import com.owncloud.android.ui.activity.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
@@ -106,6 +107,7 @@ class MainApp : Application() {
                     activity !is PatternLockActivity &&
                     activity !is BiometricActivity
                 ) {
+                    StorageMigrationActivity.runIfNeeded(activity)
                     WhatsNewActivity.runIfNeeded(activity)
                 }
 
@@ -115,7 +117,7 @@ class MainApp : Application() {
 
             override fun onActivityStarted(activity: Activity) {
                 Timber.v("${activity.javaClass.simpleName} onStart() starting")
-                PassCodeManager.getPassCodeManager().onActivityStarted(activity)
+                PassCodeManager.onActivityStarted(activity)
                 PatternManager.getPatternManager().onActivityStarted(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     BiometricManager.getBiometricManager(activity).onActivityStarted(activity)
@@ -132,7 +134,7 @@ class MainApp : Application() {
 
             override fun onActivityStopped(activity: Activity) {
                 Timber.v("${activity.javaClass.simpleName} onStop() ending")
-                PassCodeManager.getPassCodeManager().onActivityStopped(activity)
+                PassCodeManager.onActivityStopped(activity)
                 PatternManager.getPatternManager().onActivityStopped(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     BiometricManager.getBiometricManager(activity).onActivityStopped(activity)
@@ -159,7 +161,7 @@ class MainApp : Application() {
 
     fun startLogsIfEnabled() {
         enabledLogging = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                .getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
+            .getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
 
         if (enabledLogging) {
             LogsProvider(applicationContext).startLogging()

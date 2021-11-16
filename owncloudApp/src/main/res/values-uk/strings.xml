@@ -196,16 +196,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d заплановані для синхронізації файли не можуть бути синхронізовані</string>
   <string name="sync_fail_in_favourites_ticker">Синхронізувати файли не вдалося</string>
   <string name="sync_fail_in_favourites_content">Зміст %1$d файлів не може бути синхронізований (%2$d конфліктів)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Деякі локальні файли були забуті</string>
-  <string name="sync_foreign_files_forgotten_content">Неможливо скопіювати %1$d файлів з теки %2$s</string>
-  <string name="sync_foreign_files_forgotten_explanation">\"Починаючи з версії 1.3.16, файли, завантажені з цього пристрою копіюються в локальну теку %1$s для запобігання втрати даних під час синхронізації одного файлу з кількома обліковими записами.\n\nТому всі файли, завантажені в попередніх версіях цього додатку були скопійовані в теку %2$s. Однак, під час синхронізації сталася помилка. Ви можете залишити файл(и) як є та видалити посилання на %3$s, або перемістити файл(и) в директорію %1$s і зберегти посилання на %4$s.\n\nНижче наведені локальні та віддалені файли у %5$s з якою вони були пов\'язані.</string>
   <string name="sync_current_folder_was_removed">Тека %1$s більше не існує</string>
-  <string name="foreign_files_move">Перемістити все</string>
-  <string name="foreign_files_success">Всі файли були переміщені</string>
-  <string name="foreign_files_fail">Деякі файли не можуть бути переміщені</string>
-  <string name="foreign_files_local_text">Локально: %1$s</string>
-  <string name="foreign_files_remote_text">Віддалено: %1$s</string>
-  <string name="upload_query_move_foreign_files">Недостатньо місця для копіювання вибраних файлів в теку %1$s. Можливо Ви бажаєте замість цього їх перемістити?</string>
   <string name="pass_code_enter_pass_code">Будь ласка, введіть Ваш пароль</string>
   <string name="pass_code_configure_your_pass_code">Введіть Ваш пароль</string>
   <string name="pass_code_configure_your_pass_code_explanation">Пароль буде запрошуватися кожного разу при завантажені додатку</string>
@@ -489,4 +480,5 @@
   <string name="welcome_feature_4_title">Завантаження з камери</string>
   <string name="welcome_feature_5_title">Потокове відео</string>
   <string name="welcome_feature_5_text">Переглядайте відео не завантажуючи його</string>
+  <!--Scoped storage migration wizard-->
 </resources>

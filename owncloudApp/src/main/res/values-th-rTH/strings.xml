@@ -45,7 +45,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอปกรองแสง</string>
   <string name="confirmation_touches_with_other_windows_title">คุณแน่ใจหรือว่าต้องการเปิดใช้งานคุณลักษณะนี้?</string>
   <string name="confirmation_touches_with_other_windows_message">ใช้คุณสมบัตินี้ภายใต้ความรับผิดชอบของคุณ แอปพลิเคชันที่เป็นอันตรายอาจพยายามหลอกให้คุณทำการกระทำบางอย่างแบบไม่รู้ตัวโดยใช้มุมมองอื่น</string>
-  <string name="prefs_open_logs_view">เปิดมุมมองบันทึก</string>
   <string name="prefs_subsection_picture_uploads">อัปโหลดรูปภาพอัตโนมัติ</string>
   <string name="prefs_subsection_picture_uploads_summary">จัดการตำแหน่งและพฤติกรรมของรูปภาพที่อัปโหลดโดยอัตโนมัติ</string>
   <string name="prefs_subsection_video_uploads">อัปโหลดวิดีโออัตโนมัติ</string>
@@ -182,6 +181,9 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">ชื่อไฟล์ต้องมีอักขระไม่เกิน %d ตัว</string>
   <string name="uploader_upload_text_filename_hint">ชื่อไฟล์</string>
   <string name="uploader_upload_camera_upload_files">กำลังอัปโหลดไฟล์รูปภาพ</string>
+  <string name="uploader_upload_picture_upload_files">%d รูปภาพใหม่ถูกอัปโหลดแล้ว</string>
+  <string name="uploader_upload_video_upload_files">%d วิดีโอใหม่จะถูกอัปโหลด</string>
+  <string name="uploader_upload_picture_upload_error">พาธสำหรับอัปโหลดรูปภาพไม่ถูกต้อง</string>
   <string name="uploader_upload_available_offline_files">กำลังอัปโหลดไฟล์ออฟไลน์ที่มีอยู่</string>
   <string name="uploader_upload_requested_from_wifi_files">กำลังร้องขอการอัปโหลดไฟล์จาก wifi</string>
   <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
@@ -226,16 +228,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d ไฟล์ kept-in-sync ไม่สามารถประสานข้อมูลได้</string>
   <string name="sync_fail_in_favourites_ticker">ไฟล์ Kept-in-sync ล้มเหลว</string>
   <string name="sync_fail_in_favourites_content">เนื้อหาของไฟล์ %1$d ไม่สามารถประสานข้อมูลได้ (มี %2$d ปัญหา)</string>
-  <string name="sync_foreign_files_forgotten_ticker">มีแฟ้มข้อมูลในเครื่องบางแฟ้มถูกลืม</string>
-  <string name="sync_foreign_files_forgotten_content">ไม่สามารถคัดลอกไฟล์ %1$d ไปยังโฟลเดอร์ %2$s</string>
-  <string name="sync_foreign_files_forgotten_explanation">สำหรับเวอร์ชัน 1.3.16 ไฟล์ที่อัปโหลดจากเครื่องของคุณจะถูกคัดลอกไปสำรองไว้ที่ในเครื่อง %1$s เพื่อป้องกันข้อมูลสูญหายเมื่อไฟล์เดียวถูกประสานข้อมูลกับบัญชีหลายบัญชี \n\n การเปลี่ยนแปลงนี้ไฟล์ทั้งหมดที่อัปโหลดในเวอร์ชันก่อนหน้า ของ app นี้ถูกคัดลอกลงในโฟลเดอร์ %2$s แต่ก็อาจมีข้อผิดพลาดในการดำเนินการนี้ช่วงระหว่างการประสานบัญชี เช่นเดียวกับการลบ หรือย้ายไฟล์และเชื่อมโยงไปยัง %3$s ส่วนโฟลเดอร์ %1$s จะถูกเชื่อมโยงไปยัง %4$s \n\n รายชื่อด้านล่าง เป็นแฟ้มต้นทาง และแฟ้มปลายทาง ใน %5$s มันจะถูกนำมาเชื่อมโยงกัน</string>
   <string name="sync_current_folder_was_removed">โฟลเดอร์ %1$s หายไปแล้ว</string>
-  <string name="foreign_files_move">ย้ายทั้งหมด</string>
-  <string name="foreign_files_success">ทุกแฟ้มข้อมูลถูกย้ายเรียบร้อยแล้ว</string>
-  <string name="foreign_files_fail">มีบางแฟ้มข้อมูลไม่สามารถย้ายได้</string>
-  <string name="foreign_files_local_text">ในเครื่อง: %1$s</string>
-  <string name="foreign_files_remote_text">รีโมท: %1$s</string>
-  <string name="upload_query_move_foreign_files">มีพื้นที่เหลือไม่เพียงพอสำหรับคัดลอกไฟล์ที่คุณเลือกไปไว้ในโฟลเดอร์ %1$s คุณต้องการย้ายไฟล์ดังกล่าวแทน?</string>
   <string name="pass_code_enter_pass_code">กรุณากรอกรหัสปลดล็อคของคุณ</string>
   <string name="pass_code_configure_your_pass_code">กรอกรหัสปลดล็อคของคุณ</string>
   <string name="pass_code_configure_your_pass_code_explanation">จะมีการร้องขอรหัสปลดล็อคทุกครั้งเมื่อเริ่มต้นใช้แอปฯ</string>
@@ -453,6 +446,7 @@
   <string name="prefs_camera_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">ไฟล์ต้นฉบับจะเป็น</string>
   <string name="prefs_camera_upload_behaviour_title">ไฟล์ต้นฉบับจะเป็น</string>
+  <string name="prefs_camera_upload_last_sync_title">การประสานข้อมูลครั้งล่าสุด</string>
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>
   <string name="pref_behaviour_entries_keep_file">เก็บไว้ในโฟลเดอร์ต้นฉบับ</string>
@@ -563,4 +557,5 @@
   <string name="prefs_http_logs">บันทึกคำขอและการตอบกลับ HTTP</string>
   <string name="prefs_logs_summary">บันทึกอาจมีข้อมูลที่ละเอียดอ่อน การแบ่งปันบันทึกกับผู้อื่นถือเป็นความรับผิดชอบของผู้ใช้แต่เพียงผู้เดียว</string>
   <string name="synchronizing_account">ประสานข้อมูลบัญชี</string>
+  <!--Scoped storage migration wizard-->
 </resources>

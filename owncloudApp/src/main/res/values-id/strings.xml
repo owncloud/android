@@ -211,16 +211,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d berkas kept-in-sync tidak dapat disinkronkan</string>
   <string name="sync_fail_in_favourites_ticker">Berkas kept-in-sync gagal</string>
   <string name="sync_fail_in_favourites_content">Konten berkas %1$d tidak dapat disinkronasikan (%2$d konflik)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Beberapa berkas lokal terlupakan</string>
-  <string name="sync_foreign_files_forgotten_content">%1$d berkas diluar folder %2$s tidak dapat disalin kedalamnya</string>
-  <string name="sync_foreign_files_forgotten_explanation">Sejak versi  1.3.16, berkas-berkas yang diunggah dari perangkat ini akan disalin kedalam folder %1$s lokal untuk mencagah kehilangan data saat berkas tunggal disinkronkan dengan akun lebih dari satu.\n\nAkibat perubahan ini, semua berkas yang diunggah di versi aplikasi sebelumnya disalin kedalam folder %2$s. Namun, sebuah kesalahan mencegah penyelesaian operasi ini saat sinkronisasi akun. Anda boleh meninggalkan berkas seperti ini dan menghapus tautan ke %3$s atau memindahkan berkas kedalam folder %1$s dan membiarkan tautan ke %4$s.\n\nYang tampak dibawah adalah berkas lokal, dan berkas remote didalam %5$s yang dihubungkan dengannya.</string>
   <string name="sync_current_folder_was_removed">Folder %1$s tidak ada lagi</string>
-  <string name="foreign_files_move">Pindahkan semua</string>
-  <string name="foreign_files_success">Semua berkas sudah dipindahkan</string>
-  <string name="foreign_files_fail">Beberapa berkas tidak dapat dipindahkan</string>
-  <string name="foreign_files_local_text">Lokal: %1$s</string>
-  <string name="foreign_files_remote_text">Remote: %1$s</string>
-  <string name="upload_query_move_foreign_files">Tidak cukup ruang untuk menyalin berkas terpilih ke dalam folder %1$s. Apakah anda mau memindahkannya saja?</string>
   <string name="pass_code_enter_pass_code">Masukkan passcode anda</string>
   <string name="pass_code_configure_your_pass_code">Masukkan kode sandi Anda</string>
   <string name="pass_code_configure_your_pass_code_explanation">Kode sandi akan diminta setiap kali apl dijalankan.</string>
@@ -529,4 +520,5 @@
   <string name="welcome_feature_5_title">Streaming video</string>
   <string name="welcome_feature_5_text">Putar video Anda tanpa mengunduhnya</string>
   <string name="no_borwser_installed_alert">Tidak ada browser yang diinstal. Silakan instal Browser untuk memperbolehkan login yang aman.</string>
+  <!--Scoped storage migration wizard-->
 </resources>

@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -157,7 +156,7 @@ public class FilesUploadHelper implements Parcelable {
 
     private File createImageFile() {
         try {
-            File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            File storageDir = activity.getExternalCacheDir();
             image = File.createTempFile(getCapturedImageName(), ".jpg", storageDir);
             capturedPhotoPath = image.getAbsolutePath();
         } catch (IOException exception) {
@@ -177,9 +176,7 @@ public class FilesUploadHelper implements Parcelable {
                     activity.getResources().getString(R.string.file_provider_authority), photoFile);
             pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         }
-        if (pictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-            activity.startActivityForResult(pictureIntent, requestCode);
-        }
+        activity.startActivityForResult(pictureIntent, requestCode);
     }
 
     public void onActivityResult(final OnCheckAvailableSpaceListener callback) {

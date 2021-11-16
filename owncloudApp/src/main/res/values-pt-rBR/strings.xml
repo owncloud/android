@@ -45,7 +45,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques quando a visualização é obscurecida por outra janela visível. Ativá-lo para usar aplicativos de filtragem de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Tem certeza de que deseja ativar esse recurso?</string>
   <string name="confirmation_touches_with_other_windows_message">Use este recurso sob sua própria responsabilidade, um aplicativo malicioso pode tentar imitá-lo a executar algumas ações, sem saber, usando outras visualizações.</string>
-  <string name="prefs_open_logs_view">Abrir visualização de registros</string>
   <string name="prefs_subsection_picture_uploads">Fotos de envio automático</string>
   <string name="prefs_subsection_picture_uploads_summary">Gerenciar a localização e o comportamento das imagens carregadas automaticamente</string>
   <string name="prefs_subsection_video_uploads">Envio automático de vídeos</string>
@@ -53,11 +52,18 @@
   <string name="prefs_camera_picture_upload">Enviar fotos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotos tiradas pela câmera</string>
   <string name="prefs_camera_picture_upload_path_title">Caminho para fotos enviadas</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Condições para executar envios</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">Os envios serão acionados quando todas as opções selecionadas forem atendidas </string>
   <string name="prefs_camera_picture_upload_on_wifi">Envio de fotos apenas por wifi</string>
+  <string name="prefs_camera_picture_upload_on_charging">Faça envio de fotos apenas durante o carregamento </string>
+  <string name="prefs_camera_upload_on_charging_summary">Habilite envios apenas por wi-fi para ativar esta opção </string>
   <string name="prefs_camera_video_upload">Enviar vídeos</string>
   <string name="prefs_camera_video_upload_summary">Carregar automaticamente vídeos gravados pela câmera</string>
   <string name="prefs_camera_video_upload_path_title">Caminho para vídeos enviados</string>
   <string name="prefs_camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
+  <string name="prefs_camera_video_upload_on_charging">Envie vídeos apenas durante o carregamento</string>
+  <string name="prefs_log_open_logs_list_view">Arquivos log</string>
+  <string name="prefs_log_no_logs_list_view">Pasta de log vazia! </string>
   <string name="prefs_log_title">Habilitar login</string>
   <string name="prefs_log_summary">Isto é usado para registrar(log) os problemas</string>
   <string name="prefs_log_title_history">História de logins</string>
@@ -182,6 +188,11 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">O nome de arquivo deve ter mais de %d caracteres</string>
   <string name="uploader_upload_text_filename_hint">Nome do Arquivo</string>
   <string name="uploader_upload_camera_upload_files">Enviando arquivos de envio da camera</string>
+  <string name="uploader_upload_picture_upload_files">%d novas fotos serão carregadas </string>
+  <string name="uploader_upload_video_upload_files">%d novos vídeos serão enviados </string>
+  <string name="uploader_upload_camera_upload_source_path_error">Falha no upload da câmera </string>
+  <string name="uploader_upload_picture_upload_error">O caminho de origem dos uploads de imagens não é mais válido</string>
+  <string name="uploader_upload_video_upload_error">O caminho de origem dos uploads de vídeo não é mais válido</string>
   <string name="uploader_upload_available_offline_files">Fazendo envio de arquivos off-line disponíveis</string>
   <string name="uploader_upload_requested_from_wifi_files">Enviando arquivos solicitados usando wifi</string>
   <string name="ssl_certificate_not_trusted">O certificado de servidor não é confiável</string>
@@ -226,18 +237,10 @@
   <string name="sync_conflicts_in_favourites_content">%1$d arquivos \"manter sincronizados\" não puderam ser sincronizados</string>
   <string name="sync_fail_in_favourites_ticker">Falha ao manter arquivos sincronizados</string>
   <string name="sync_fail_in_favourites_content">O conteúdo de %1$d arquivos não puderam ser sincronizados (%2$d conflitos)</string>
-  <string name="sync_foreign_files_forgotten_ticker">Alguns arquivos locais foram esquecidos</string>
-  <string name="sync_foreign_files_forgotten_content">%1$d arquivos de %2$s não puderam ser copiados para a pasta</string>
-  <string name="sync_foreign_files_forgotten_explanation">A partir da versão 1.3.16, os arquivos enviados a partir deste dispositivo são copiados para a pasta local %1$s para evitar a perda de dados quando um único arquivo é sincronizado com várias contas. \n\nDevido a esta mudança, todos os arquivos enviados em versões anteriores deste aplicativo foram copiados para a pasta %2$s . No entanto, um erro impediu a conclusão desta operação durante a sincronização de conta. Você pode tanto deixar os arquivos como são e remover o link para %3$s, ou mover os arquivo(s) para a pasta %1$s e manter o link para %4$s. \n\nListadas abaixo são os arquivo(s) locais, e os arquivo(s) remoto(s) em %5$s que estavam vinculados.</string>
   <string name="sync_current_folder_was_removed">Pasta %1s não existe mais</string>
-  <string name="foreign_files_move">Mover todos</string>
-  <string name="foreign_files_success">Todos os arquivos foram movidos</string>
-  <string name="foreign_files_fail">Alguns arquivos não puderam ser movidos</string>
-  <string name="foreign_files_local_text">Local: %1$s</string>
-  <string name="foreign_files_remote_text">Remoto: %1$s</string>
-  <string name="upload_query_move_foreign_files">Não há espaço suficiente para copiar os arquivos selecionados para a pasta %1$s. Você gostaria de movê-los em vez disso?</string>
   <string name="pass_code_enter_pass_code">Por favor insira sua senha</string>
   <string name="pass_code_configure_your_pass_code">Digite o código de acesso</string>
+  <string name="pass_code_configure_your_pass_code_migration">Entre uma nova %1$d-senha de dígitos</string>
   <string name="pass_code_configure_your_pass_code_explanation">O código de acesso será solicitado toda vez que o aplicativo for iniciado</string>
   <string name="pass_code_reenter_your_pass_code">Por favor reentre sua senha</string>
   <string name="pass_code_remove_your_pass_code">Remover o seu código de acesso</string>
@@ -455,6 +458,7 @@
   <string name="prefs_camera_upload_source_path_title_required">exigido</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Arquivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Arquivo original será</string>
+  <string name="prefs_camera_upload_last_sync_title">Última sincronização </string>
   <string name="upload_copy_files">Copiar o arquivo</string>
   <string name="upload_move_files">Mover o arquivo</string>
   <string name="pref_behaviour_entries_keep_file">mantido na pasta original</string>
@@ -566,4 +570,15 @@
   <string name="prefs_http_logs">Registrar solicitações e respostas HTTP</string>
   <string name="prefs_logs_summary">Os logs podem conter informações confidenciais. O compartilhamento de registros com outras pessoas é de responsabilidade exclusiva do usuário</string>
   <string name="synchronizing_account">Sincronizando conta</string>
+  <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_explanation">Encontrados %1$s de dados em seu armazenamento externo. Isto será movido para o armazenamento seguro em seu dispositivo. Arquivos remanescentes podem ser removidos de seu armazenamento externo depois da migração para evitar duplicatas e vulnerabilidades.</string>
+  <string name="scoped_storage_wizard_intro">Seu aplicativo foi atualizado. Esta atualização do aplicativo migra seu arquivos para um local mais seguro em seu dispositivo. Esta aplicação de dados única é necessária e pode levar um minuto ou mais.</string>
+  <string name="scoped_storage_wizard_intro_button">Vamos começar</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Seu espaço livre está atualmente limitado em seu dispositivo. Alguns arquivos podem não ser migrados. Por favor, mantenha todos os arquivos que fez download seguros até o processo ser completado.</string>
+  <string name="scoped_storage_wizard_migrate_and_clean_button">Migrar agora</string>
+  <string name="scoped_storage_wizard_migration_completed">Migração realizada com sucesso. Seus arquivos agora estão mais seguros que nunca.</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">Acesse seus arquivos</string>
+  <string name="scoped_storage_wizard_migration_in_progress">Migrando seus arquivos. Por favor não desligue seu dispositivo.</string>
+  <string name="scoped_storage_wizard_migration_in_progress_button">Trabalhando... Por favor, aguarde</string>
+  <string name="scoped_storage_wizard_title">Mais segurança para seus arquivos</string>
 </resources>

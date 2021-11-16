@@ -25,6 +25,8 @@ import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
+import com.owncloud.android.extensions.getIntFromColumnOrThrow
+import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Assert.assertThat
@@ -84,32 +86,24 @@ class SharesContentProviderTest {
         // First entry
         assertThat(cursor.moveToFirst(), Matchers.`is`(true))
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_NAME)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME),
             Matchers.`is`("IMG_1213 link")
         )
 
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
             Matchers.`is`("http://server:port/s/10")
         )
 
         // Last entry
         assertThat(cursor.moveToLast(), Matchers.`is`(true))
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH),
             Matchers.`is`("company")
         )
 
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME),
             Matchers.`is`("My company")
         )
 
@@ -144,14 +138,12 @@ class SharesContentProviderTest {
         // "Name" column requested within projection
         assertThat(cursor.moveToFirst(), Matchers.`is`(true))
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_NAME)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME),
             Matchers.`is`("Video link")
         )
 
         // "Share link" column not requested within projection
-        cursor.getString(cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL))
+        cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL)
     }
 
     @Test
@@ -182,16 +174,12 @@ class SharesContentProviderTest {
 
         assertThat(cursor.moveToFirst(), Matchers.`is`(true))
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH),
             Matchers.`is`("username1")
         )
 
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME),
             Matchers.`is`("Carol")
         )
     }
@@ -225,17 +213,13 @@ class SharesContentProviderTest {
 
         assertThat(cursor.moveToFirst(), Matchers.`is`(true))
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
             Matchers.`is`("http://server:port/s/2000")
         )
 
         assertThat(cursor.moveToNext(), Matchers.`is`(true))
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
             Matchers.`is`("http://server:port/s/3000")
         )
     }
@@ -324,39 +308,29 @@ class SharesContentProviderTest {
         // First entry
         assertThat(cursor.moveToFirst(), Matchers.`is`(true))
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_NAME)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME),
             Matchers.`is`("IMG_1213 link")
         )
 
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
             Matchers.`is`("http://server:port/s/1")
         )
 
         // Updated entry
         assertThat(cursor.moveToLast(), Matchers.`is`(true))
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_NAME)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME),
             Matchers.`is`("IMG_1213 link 3 updated")
         )
 
         assertThat(
-            cursor.getString(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_URL)
-            ),
+            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
             Matchers.`is`("http://server:port/s/3")
         )
 
         assertThat(
-            cursor.getInt(
-                cursor.getColumnIndexOrThrow(ProviderTableMeta.OCSHARES_EXPIRATION_DATE)
-            ),
+            cursor.getIntFromColumnOrThrow(ProviderTableMeta.OCSHARES_EXPIRATION_DATE),
             Matchers.`is`(2000)
         )
 

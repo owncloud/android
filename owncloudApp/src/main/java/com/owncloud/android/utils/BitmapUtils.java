@@ -36,6 +36,7 @@ import timber.log.Timber;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
@@ -251,7 +252,7 @@ public class BitmapUtils {
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // using adapted algorithm from /core/js/placeholder.js:50
         final String username = AccountUtils.getUsernameOfAccount(accountName);
-        final byte[] seed = username.getBytes("UTF-8");
+        final byte[] seed = username.getBytes(StandardCharsets.UTF_8);
         final MessageDigest md = MessageDigest.getInstance("MD5");
         // Integer seedMd5Int = Math.abs(new String(Hex.encodeHex(seedMd5)).hashCode());
         final Integer seedMd5Int = String.format(Locale.ROOT, "%032x",

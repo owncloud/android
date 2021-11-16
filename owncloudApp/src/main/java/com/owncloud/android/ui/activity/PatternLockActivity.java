@@ -37,7 +37,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
-import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DocumentProviderUtils;

@@ -25,6 +25,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
@@ -32,6 +33,8 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.utils.FileStorageUtils
+import kotlinx.coroutines.launch
 
 class DrawerViewModel(
     private val getStoredQuotaUseCase: GetStoredQuotaUseCase,
@@ -61,5 +64,11 @@ class DrawerViewModel(
 
     fun setCurrentAccount(context: Context, accountName: String): Boolean {
         return AccountUtils.setCurrentOwnCloudAccount(context, accountName)
+    }
+
+    fun deleteUnusedUserDirs(accounts: Array<Account>) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            FileStorageUtils.deleteUnusedUserDirs(accounts)
+        }
     }
 }

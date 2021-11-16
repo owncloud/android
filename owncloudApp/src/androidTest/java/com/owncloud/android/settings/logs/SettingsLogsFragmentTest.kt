@@ -35,8 +35,9 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.settings.LogHistoryActivity
+import com.owncloud.android.presentation.ui.logging.LogsListActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
+import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
@@ -58,15 +59,17 @@ class SettingsLogsFragmentTest {
 
     private lateinit var prefEnableLogging: SwitchPreferenceCompat
     private lateinit var prefHttpLogs: CheckBoxPreference
-    private lateinit var prefLogsView: Preference
+    private lateinit var prefLogsListActivity: Preference
 
     private lateinit var logsViewModel: SettingsLogsViewModel
+    private lateinit var logListViewModel: LogListViewModel
     private lateinit var context: Context
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         logsViewModel = mockk(relaxUnitFun = true)
+        logListViewModel = mockk(relaxed = true)
 
         stopKoin()
 
@@ -76,6 +79,9 @@ class SettingsLogsFragmentTest {
                 module(override = true) {
                     viewModel {
                         logsViewModel
+                    }
+                    viewModel {
+                        logListViewModel
                     }
                 }
             )
@@ -98,7 +104,7 @@ class SettingsLogsFragmentTest {
         fragmentScenario.onFragment { fragment ->
             prefEnableLogging = fragment.findPreference(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING)!!
             prefHttpLogs = fragment.findPreference(SettingsLogsFragment.PREFERENCE_LOG_HTTP)!!
-            prefLogsView = fragment.findPreference(SettingsLogsFragment.PREFERENCE_LOGGER)!!
+            prefLogsListActivity = fragment.findPreference(SettingsLogsFragment.PREFERENCE_LOGS_LIST)!!
         }
     }
 
@@ -119,12 +125,14 @@ class SettingsLogsFragmentTest {
             visible = true,
             enabled = false
         )
-        prefLogsView.verifyPreference(
-            keyPref = SettingsLogsFragment.PREFERENCE_LOGGER,
-            titlePref = context.getString(R.string.prefs_open_logs_view),
+
+        prefLogsListActivity.verifyPreference(
+            keyPref = SettingsLogsFragment.PREFERENCE_LOGS_LIST,
+            titlePref = context.getString(R.string.prefs_log_open_logs_list_view),
             visible = true,
-            enabled = false
+            enabled = true,
         )
+
     }
 
     @Test
@@ -144,11 +152,12 @@ class SettingsLogsFragmentTest {
             visible = true,
             enabled = true
         )
-        prefLogsView.verifyPreference(
-            keyPref = SettingsLogsFragment.PREFERENCE_LOGGER,
-            titlePref = context.getString(R.string.prefs_open_logs_view),
+
+        prefLogsListActivity.verifyPreference(
+            keyPref = SettingsLogsFragment.PREFERENCE_LOGS_LIST,
+            titlePref = context.getString(R.string.prefs_log_open_logs_list_view),
             visible = true,
-            enabled = true
+            enabled = true,
         )
     }
 
@@ -158,7 +167,6 @@ class SettingsLogsFragmentTest {
 
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         assertTrue(prefHttpLogs.isEnabled)
-        assertTrue(prefLogsView.isEnabled)
     }
 
     @Test
@@ -168,13 +176,12 @@ class SettingsLogsFragmentTest {
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         onView(withText(R.string.prefs_enable_logging)).perform(click())
         assertFalse(prefHttpLogs.isEnabled)
-        assertFalse(prefLogsView.isEnabled)
+        assertTrue(prefLogsListActivity.isEnabled)
     }
 
     @Test
     fun checkHttpLogs() {
         launchTest(enabledLogging = true)
-
         onView(withText(R.string.prefs_http_logs)).perform(click())
         assertTrue(prefHttpLogs.isChecked)
     }
@@ -193,8 +200,7 @@ class SettingsLogsFragmentTest {
     fun loggerOpen() {
         launchTest(enabledLogging = true)
 
-        onView(withText(R.string.prefs_open_logs_view)).perform(click())
-        intended(hasComponent(LogHistoryActivity::class.java.name))
+        onView(withText(R.string.prefs_log_open_logs_list_view)).perform(click())
+        intended(hasComponent(LogsListActivity::class.java.name))
     }
-
 }

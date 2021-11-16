@@ -1,3 +1,172 @@
+Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
+=======================================
+The following sections list the changes in ownCloud Android Client 2.19.0 relevant to
+ownCloud admins and users.
+
+[2.19.0]: https://github.com/owncloud/android/compare/v2.18.3...v2.19.0
+
+Summary
+-------
+
+* Bugfix - Lack of back button in Logs view: [#3357](https://github.com/owncloud/android/issues/3357)
+* Bugfix - Passcode input misbehaving: [#3342](https://github.com/owncloud/android/issues/3342)
+* Bugfix - ANR after removing account with too many downloaded files: [#3362](https://github.com/owncloud/android/issues/3362)
+* Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
+* Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
+* Bugfix - Camera Upload manual retry: [#3418](https://github.com/owncloud/android/pull/3418)
+* Bugfix - Device rotation moves to root in folder picker: [#3431](https://github.com/owncloud/android/pull/3431)
+* Bugfix - Logging does not stop when the user deactivates it: [#3436](https://github.com/owncloud/android/pull/3436)
+* Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
+* Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
+* Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
+* Enhancement - Scoped Storage: [#2877](https://github.com/owncloud/android/issues/2877)
+* Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
+
+Details
+-------
+
+* Bugfix - Lack of back button in Logs view: [#3357](https://github.com/owncloud/android/issues/3357)
+
+   A new back arrow button has been added in the toolbar in Logs screen, so that now it's possible to
+   return to the settings screen without the use of physical buttons of the device.
+
+   https://github.com/owncloud/android/issues/3357
+   https://github.com/owncloud/android/pull/3363
+
+* Bugfix - Passcode input misbehaving: [#3342](https://github.com/owncloud/android/issues/3342)
+
+   Passcode text fields have been made not selectable once a number is written on them, so that we
+   avoid bugs with the digits of the passcode and the way of entering them.
+
+   https://github.com/owncloud/android/issues/3342
+   https://github.com/owncloud/android/pull/3365
+
+* Bugfix - ANR after removing account with too many downloaded files: [#3362](https://github.com/owncloud/android/issues/3362)
+
+   Previously, when a user account was deleted, the application could freeze when trying to
+   delete a large number of files. Now, the application has been fixed so that it doesn't freeze
+   anymore by doing this.
+
+   https://github.com/owncloud/android/issues/3362
+   https://github.com/owncloud/android/pull/3380
+
+* Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
+
+   When an account was deleted from the device settings, in the accounts section, it was not
+   removed from the Navigation Drawer. Now, when deleting an account from there, the Navigation
+   Drawer is refreshed and the removed account is no more shown.
+
+   https://github.com/owncloud/android/issues/3340
+   https://github.com/owncloud/android/pull/3381
+
+* Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
+
+   A possible null value with the account that caused certain crashes on Android 10 devices has
+   been controlled.
+
+   https://github.com/owncloud/android/issues/2896
+   https://github.com/owncloud/android/pull/3383
+
+* Bugfix - Camera Upload manual retry: [#3418](https://github.com/owncloud/android/pull/3418)
+
+   Previously, when users selected to retry a single camera upload, an error message appeared.
+   Now, the retry of a single upload is enqueued again as expected.
+
+   https://github.com/owncloud/android/issues/3417
+   https://github.com/owncloud/android/pull/3418
+
+* Bugfix - Device rotation moves to root in folder picker: [#3431](https://github.com/owncloud/android/pull/3431)
+
+   Previously, when users rotate the device trying to share photos with oC selecting a non-root
+   folder, folder picker shows the root folder Now, folder picker shows the folder that the user
+   browsed.
+
+   https://github.com/owncloud/android/issues/3163
+   https://github.com/owncloud/android/pull/3431
+
+* Bugfix - Logging does not stop when the user deactivates it: [#3436](https://github.com/owncloud/android/pull/3436)
+
+   Previously, when users disabled the logging option in the settings, the application would not
+   stop logging and the size of the log files would increase. Now, the option to disable it works
+   perfectly and no logs are collected if disabled.
+
+   https://github.com/owncloud/android/issues/3325
+   https://github.com/owncloud/android/pull/3436
+
+* Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
+
+   Previously, when users deleted an account the synchronized files of this account stayed on the
+   SD-Card. So if the user didn't want them anymore he had to delete them manually. Now, the app
+   automatically removes the files associated with an account.
+
+   https://github.com/owncloud/android/issues/125
+   https://github.com/owncloud/android/pull/3336
+
+* Enhancement - Delete old logs every week: [#3328](https://github.com/owncloud/android/issues/3328)
+
+   Previously, logs were stored but never deleted. It used a lot of storage when logs were enabled
+   for some time. Now, the logs are removed periodically every week.
+
+   https://github.com/owncloud/android/issues/3328
+   https://github.com/owncloud/android/pull/3337
+
+* Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
+
+   A new option has been added in the auto upload pictures/videos screen, so that now it's possible
+   to upload pictures or videos only when charging.
+
+   https://github.com/owncloud/android/issues/465
+   https://github.com/owncloud/android/issues/3315
+   https://github.com/owncloud/android/pull/3385
+
+* Enhancement - Scoped Storage: [#2877](https://github.com/owncloud/android/issues/2877)
+
+   The way to store files in the device has changed completely. Previously, the files were stored
+   in the shared storage. That means that apps that had access to the shared storage, could read,
+   write or do whatever they wanted with the ownCloud files.
+
+   Now, ownCloud files are stored in the Scoped Storage, so they are safer. Other apps can access
+   ownCloud files using the Documents Provider, which is the native way to do it, and that means
+   that the ownCloud app has full control of its files.
+
+   Furthermore, if the app is removed, the files downloaded to ownCloud are removed too. So, files
+   are not lost or forgotten in the device after uninstalling the app.
+
+   https://github.com/owncloud/android/issues/2877
+   https://github.com/owncloud/android/pull/3269
+
+* Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
+
+   A new option has been added to the logging screen, so that now it's possible to share/delete log
+   files or open them.
+
+   https://github.com/owncloud/android/issues/3333
+   https://github.com/owncloud/android/pull/3408
+
+Changelog for ownCloud Android Client [2.18.3] (2021-10-27)
+=======================================
+The following sections list the changes in ownCloud Android Client 2.18.3 relevant to
+ownCloud admins and users.
+
+[2.18.3]: https://github.com/owncloud/android/compare/v2.18.1...v2.18.3
+
+Summary
+-------
+
+* Enhancement - Privacy policy button more accessible: [#3423](https://github.com/owncloud/android/pull/3423)
+
+Details
+-------
+
+* Enhancement - Privacy policy button more accessible: [#3423](https://github.com/owncloud/android/pull/3423)
+
+   The privacy policy button has been removed from "More" settings section, and it has been added
+   to general settings screen as well as to the drawer menu, so that it is easier and more accessible
+   for users.
+
+   https://github.com/owncloud/android/issues/3422
+   https://github.com/owncloud/android/pull/3423
+
 Changelog for ownCloud Android Client [2.18.1] (2021-07-20)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.18.1 relevant to

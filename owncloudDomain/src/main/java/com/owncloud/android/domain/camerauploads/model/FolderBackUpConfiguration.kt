@@ -24,6 +24,7 @@ data class FolderBackUpConfiguration(
     val sourcePath: String,
     val uploadPath: String,
     val wifiOnly: Boolean,
+    val chargingOnly: Boolean,
     val lastSyncTimestamp: Long,
     val name: String,
 ) {

@@ -24,6 +24,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.LogsProvider
+import com.owncloud.android.providers.WorkManagerProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -39,15 +40,18 @@ class SettingsLogsViewModelTest : ViewModelTest() {
     private lateinit var logsViewModel: SettingsLogsViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
     private lateinit var logsProvider: LogsProvider
+    private lateinit var workManagerProvider: WorkManagerProvider
 
     @Before
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
         logsProvider = mockk(relaxUnitFun = true)
+        workManagerProvider = mockk(relaxUnitFun = true)
 
         logsViewModel = SettingsLogsViewModel(
             preferencesProvider,
-            logsProvider
+            logsProvider,
+            workManagerProvider
         )
     }
 

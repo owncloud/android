@@ -35,7 +35,8 @@ import com.owncloud.android.lib.resources.users.services.implementation.OCUserSe
 class ClientManager(
     private val accountManager: AccountManager,
     private val preferencesProvider: SharedPreferencesProvider,
-    val context: Context
+    val context: Context,
+    val accountType: String,
 ) {
     // This client will maintain cookies across the whole login process.
     private var ownCloudClient: OwnCloudClient? = null
@@ -69,14 +70,14 @@ class ClientManager(
         val account: Account? = if (accountName.isNullOrBlank()) {
             getCurrentAccount()
         } else {
-            accountManager.accounts.firstOrNull { it.name == accountName }
+            accountManager.getAccountsByType(accountType).firstOrNull { it.name == accountName }
         }
         val ownCloudAccount = OwnCloudAccount(account, context)
         return SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, context)
     }
 
     private fun getCurrentAccount(): Account? {
-        val ocAccounts = accountManager.accounts
+        val ocAccounts = accountManager.getAccountsByType(accountType)
 
         val accountName = preferencesProvider.getString(SELECTED_ACCOUNT, null)
 

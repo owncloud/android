@@ -64,7 +64,7 @@ class MigrationToDB29Test : MigrationTest() {
             previousVersion = DB_VERSION_29,
             currentVersion = DB_VERSION_29,
             insertData = { database -> insertDataToTest(database) },
-            validateMigration = { Unit },
+            validateMigration = { },
             listOfMigrations = arrayOf()
         )
     }

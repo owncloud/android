@@ -49,6 +49,7 @@ class CameraUploadsMigrationToRoom(val sharedPreferencesProvider: SharedPreferen
             behavior = getBehaviorForPreference(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR),
             lastSyncTimestamp = timestamp,
             name = pictureUploadsName,
+            chargingOnly = false
         )
     }
 
@@ -63,6 +64,7 @@ class CameraUploadsMigrationToRoom(val sharedPreferencesProvider: SharedPreferen
             behavior = getBehaviorForPreference(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR),
             lastSyncTimestamp = timestamp,
             name = videoUploadsName,
+            chargingOnly = false
         )
     }
 

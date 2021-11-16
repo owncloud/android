@@ -62,6 +62,8 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.domain.files.LIST_MIME_DIR
+import com.owncloud.android.extensions.getLongFromColumnOrThrow
+import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.android.ext.android.inject
@@ -107,7 +109,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 val c = query(uri, null, where, whereArgs, null)
                 var remoteId: String? = ""
                 if (c.moveToFirst()) {
-                    remoteId = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID))
+                    remoteId = c.getStringFromColumnOrThrow(ProviderTableMeta.FILE_REMOTE_ID)
                     c.close()
                 }
                 Timber.d("Removing FILE $remoteId")
@@ -118,7 +120,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                             "=" +
                             uri.pathSegments[1] +
                             if (!TextUtils.isEmpty(where))
-                                " AND (" + where + ")"
+                                " AND ($where)"
                             else
                                 "", whereArgs
                 )
@@ -130,10 +132,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     var childId: Long
                     var isDir: Boolean
                     while (!children.isAfterLast) {
-                        childId = children.getLong(children.getColumnIndex(ProviderTableMeta._ID))
-                        isDir = children.getString(
-                            children.getColumnIndex(ProviderTableMeta.FILE_CONTENT_TYPE)
-                        ) in LIST_MIME_DIR
+                        childId = children.getLongFromColumnOrThrow(ProviderTableMeta._ID)
+                        isDir = children.getStringFromColumnOrThrow(ProviderTableMeta.FILE_CONTENT_TYPE) in LIST_MIME_DIR
                         count += if (isDir) {
                             delete(
                                 db,
@@ -154,7 +154,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     ProviderTableMeta._ID + "=" +
                             uri.pathSegments[1] +
                             if (!TextUtils.isEmpty(where))
-                                " AND (" + where + ")"
+                                " AND ($where)"
                             else
                                 "", whereArgs
                 )
@@ -221,7 +221,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     // file is already inserted; race condition, let's avoid a duplicated entry
                     val insertedFileUri = ContentUris.withAppendedId(
                         ProviderTableMeta.CONTENT_URI_FILE,
-                        doubleCheck.getLong(doubleCheck.getColumnIndex(ProviderTableMeta._ID))
+                        doubleCheck.getLongFromColumnOrThrow(ProviderTableMeta._ID)
                     )
                     doubleCheck.close()
                     insertedFileUri
@@ -320,7 +320,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         sqlQuery.tables = ProviderTableMeta.FILE_TABLE_NAME
 
         when (uriMatcher.match(uri)) {
-            ROOT_DIRECTORY -> sqlQuery.setProjectionMap(fileProjectionMap)
+            ROOT_DIRECTORY -> sqlQuery.projectionMap = fileProjectionMap
             DIRECTORY -> {
                 val folderId = uri.pathSegments[1]
                 sqlQuery.appendWhere(
@@ -1008,8 +1008,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     val cursor = db.query(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, null, null, null, null, null, null)
 
                     if (cursor.moveToFirst()) {
-                        pictureUploadsTimestamp = cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP))
-                        videoUploadsTimestamp = cursor.getLong(cursor.getColumnIndex(ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP))
+                        pictureUploadsTimestamp = cursor.getLongFromColumnOrThrow(ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP)
+                        videoUploadsTimestamp = cursor.getLongFromColumnOrThrow(ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP)
                     }
 
                     val sharedPreferencesProvider: SharedPreferencesProvider by inject()
@@ -1290,12 +1290,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 // update database
                 do {
                     // Update database
-                    val oldPath = it.getString(
-                        it.getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH)
-                    )
-                    val file = OCFile(
-                        it.getString(it.getColumnIndex(ProviderTableMeta.FILE_PATH))
-                    )
+                    val oldPath = it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_STORAGE_PATH)
+                    val file = OCFile(it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_PATH))
                     val newPath = FileStorageUtils.getDefaultSavePathFor(newAccountName, file)
 
                     val cv = ContentValues()

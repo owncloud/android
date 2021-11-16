@@ -178,16 +178,7 @@
   <string name="sync_conflicts_in_favourites_content">동기화된 파일 중 %1$d개를 동기화할 수 없습니다</string>
   <string name="sync_fail_in_favourites_ticker">파일을 동기화할 수 없었습니다</string>
   <string name="sync_fail_in_favourites_content">파일 %1$d개의 내용을 동기화할 수 없음(충돌 %2$d개)</string>
-  <string name="sync_foreign_files_forgotten_ticker">일부 로컬 파일이 사라짐</string>
-  <string name="sync_foreign_files_forgotten_content">폴더 %2$s의 파일 중 %1$d개를 복사할 수 없음</string>
-  <string name="sync_foreign_files_forgotten_explanation">버전 1.3.16부터 단일 파일을 여러 계정과 동기화 시 자료 손실을 방지하기 위하여 이 장치에서 업로드된 파일은 로컬 %1$s 폴더에 일단 복사됩니다.\n\n이 변경 사항으로 인하여 이전 버전 앱에서 업로드한 모든 파일을 %2$s 폴더로 복사했습니다. 하지만 계정 동기화 중 오류가 발생하여 이 작업이 중단되었습니다. 파일을 그대로 두고 %3$s 연결을 삭제하거나, 파일을 %1$s 폴더로 이동하고 %4$s 연결을 그대로 유지할 수 있습니다.\n\n아래의 목록은 로컬 파일과 연결된 %5$s에 있는 원격 파일 목록입니다.</string>
   <string name="sync_current_folder_was_removed">폴더 %1$s이(가) 더 이상 존재하지 않음</string>
-  <string name="foreign_files_move">모두 이동</string>
-  <string name="foreign_files_success">모든 파일 이동됨</string>
-  <string name="foreign_files_fail">일부 파일을 이동할 수 없음</string>
-  <string name="foreign_files_local_text">로컬: %1$s</string>
-  <string name="foreign_files_remote_text">원격: %1$s</string>
-  <string name="upload_query_move_foreign_files">공간이 부족해서 선택한 파일을 %1$s 폴더로 복사할 수 없습니다. 대신 이동하시겠습니까?</string>
   <string name="pass_code_enter_pass_code">암호를 입력하십시오</string>
   <string name="pass_code_configure_your_pass_code">암호를 입력하십시오</string>
   <string name="pass_code_configure_your_pass_code_explanation">앱을 시작할 때마다 암호를 물어봅니다</string>
@@ -401,6 +392,7 @@
   <string name="share_via_link_expiration_date_label">만료</string>
   <string name="share_via_link_password_label">암호</string>
   <string name="share_via_link_password_title">보호됨</string>
+  <string name="share_via_link_edit_permission_read_only_label">다운로드 / 보기</string>
   <string name="share_get_public_link_button">링크 얻기</string>
   <string name="share_with_title">다음으로 공유</string>
   <string name="share_with_edit_title">%1$s 님과 공유</string>
@@ -472,4 +464,5 @@
   <string name="welcome_feature_skip_button">건너뛰기</string>
   <string name="welcome_feature_4_title">카메라 업로드</string>
   <string name="welcome_feature_5_title">비디오 스트리밍</string>
+  <!--Scoped storage migration wizard-->
 </resources>

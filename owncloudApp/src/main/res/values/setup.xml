@@ -67,7 +67,7 @@
     <bool name="feedback_enabled">true</bool>
     <bool name="privacy_policy_enabled">true</bool>
     <bool name="wizard_enabled">true</bool>
-    <string name="url_privacy_policy" formatted="false">https://owncloud.com/privacy-legal/</string>
+    <string name="url_privacy_policy" formatted="false">https://owncloud.com/android-app-privacy-policy/</string>
     <string name="url_help" formatted="false">https://doc.owncloud.com/android</string>
     <string name="url_imprint" formatted="false"></string>
     <string name="mail_recommend" formatted="false">"mailto:"</string>
@@ -105,4 +105,7 @@
     <!-- Header images -->
     <bool name="use_drawer_background_header">true</bool>
     <bool name="use_drawer_logo">true</bool>
+
+    <!-- Number of passcode digits -->
+    <integer name="passcode_digits">4</integer>
 </resources>

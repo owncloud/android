@@ -76,15 +76,8 @@
   <string name="sync_conflicts_in_favourites_content">সমন্বয় করার জন্য রাখা %1$d ফাইলগুলো সমন্বয় করা যায়নি</string>
   <string name="sync_fail_in_favourites_ticker">সমন্বয় করার জন্য ফাইল রাখা ব্যার্থ হয়েছে</string>
   <string name="sync_fail_in_favourites_content">%1$d ফাইলসমূহের কনটেন্ট সিনক্রোনাইজ করা যায়নি (%2$d সংঘর্ষ)</string>
-  <string name="sync_foreign_files_forgotten_ticker">কিছু লোকাল ফাইল নেয়া হয়নি</string>
-  <string name="sync_foreign_files_forgotten_content">%2$s ফোল্ডারের %1$d ফাইলগুলি কপি করা যায়নি</string>
-  <string name="sync_current_folder_was_removed">%1$s নামে কোন ফোল্ডার আর নেই</string>
-  <string name="foreign_files_move">সব সরান</string>
-  <string name="foreign_files_success">সব ফাইল সরানো হয়েছে</string>
-  <string name="foreign_files_fail">কয়েকটি ফাইল সরানো যায়নি</string>
-  <string name="foreign_files_local_text">স্থানীয়: %1$s</string>
-  <string name="foreign_files_remote_text">দুরবর্তী: %1$s</string>
-  <string name="media_notif_ticker">%1$s মিউজিক প্লেয়ার</string>
+    <string name="sync_current_folder_was_removed">%1$s নামে কোন ফোল্ডার আর নেই</string>
+    <string name="media_notif_ticker">%1$s মিউজিক প্লেয়ার</string>
   <string name="media_state_playing">%1$s (বাজানো হচ্ছে)</string>
   <string name="media_state_loading">%1$s (লোড করা হচ্ছে)</string>
   <string name="media_event_done">%1$s প্লেব্যাক শেষ</string>
