@@ -14,7 +14,7 @@ buildscript {
         biometricVersion="1.0.1"
 
         // Kotlin
-        kotlinVersion = "1.5.21"
+        kotlinVersion = "1.5.31"
         coroutinesVersion = "1.5.1"
 
         // Koin
@@ -46,9 +46,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:7.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "org.jlleitschuh.gradle:ktlint-gradle:10.1.0"
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:10.2.0"
     }
 }
 
