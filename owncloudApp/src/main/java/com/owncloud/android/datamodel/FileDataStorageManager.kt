@@ -63,6 +63,7 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSI
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_STRING
+import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_CAPABILITIES
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_KEEP_IN_SYNC
@@ -560,7 +561,7 @@ class FileDataStorageManager : KoinComponent {
         }
 
         val filesWithPathUpdated = filesToUpdatePath.map {
-            it.apply { storagePath = storagePath.replace(legacyStorageDirectoryPath, rootStorageDirectoryPath) }
+            it.apply { storagePath = storagePath?.replace(legacyStorageDirectoryPath, rootStorageDirectoryPath) }
         }
 
         filesWithPathUpdated.forEach {
