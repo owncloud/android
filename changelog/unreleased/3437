@@ -1,0 +1,8 @@
+Bugfix: Small glitch when side menu is full of accounts
+
+Previously, when users set up a large number of accounts,
+the side menu overlapped the available space quota.
+Now, everything is contained within a scroll to avoid this.
+
+https://github.com/owncloud/android/pull/3437
+https://github.com/owncloud/android/issues/3060
