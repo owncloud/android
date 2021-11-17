@@ -51,7 +51,7 @@
     <string name="prefs_access_from_document_provider">Access from document provider</string>
     <string name="prefs_access_from_document_provider_summary">Allow access to the files of the accounts in the app via the Android native file explorer when there is a lock set.</string>
     <string name="confirmation_access_from_document_provider_title">Are you sure you want to enable this feature?</string>
-    <string name="confirmation_access_from_document_provider_message">Use this feature with responsibility. Enabling this feature means that your files will be open for those apps that use the Android native file explorer, regardless the locking methods you set.</string>
+    <string name="confirmation_access_from_document_provider_message">Use this feature with responsibility. Enabling this feature means that your files could be open for those apps that use the Android native file explorer, regardless the locking methods you set.</string>
     <string name="prefs_touches_with_other_visible_windows">Touches with other visible windows</string>
     <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
     <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
