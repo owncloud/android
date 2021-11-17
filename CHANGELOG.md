@@ -1,3 +1,26 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v2.19.0...master
+
+Summary
+-------
+
+* Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
+
+Details
+-------
+
+* Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
+
+   Previously, when users set up a large number of accounts, the side menu overlapped the
+   available space quota. Now, everything is contained within a scroll to avoid this.
+
+   https://github.com/owncloud/android/issues/3060
+   https://github.com/owncloud/android/pull/3437
+
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.19.0 relevant to
