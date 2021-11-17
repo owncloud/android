@@ -15,7 +15,7 @@ buildscript {
 
         // Kotlin
         kotlinVersion = "1.5.31"
-        coroutinesVersion = "1.5.1"
+        coroutinesVersion = "1.5.2"
 
         // Koin
         koinVersion = '2.1.6'
