@@ -886,7 +886,7 @@ public class FileUploader extends Service
                                     mCurrentUpload.getRemotePath(),
                                     mCurrentAccount.name
                             );
-                            Timber.v(stringToLog);
+                            Timber.v("%s", stringToLog);
                         }
                     } else if (uploadResult.getCode() == ResultCode.DELAYED_FOR_WIFI) {
                         // if failed due to the upload is delayed for wifi, schedule automatic retry as well
@@ -903,7 +903,7 @@ public class FileUploader extends Service
                             mCurrentUpload.getRemotePath(),
                             mCurrentAccount.name
                     );
-                    Timber.v(stringToLog);
+                    Timber.v("%s", stringToLog);
                 }
 
                 if (uploadResult != null) {
