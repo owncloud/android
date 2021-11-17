@@ -589,8 +589,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * @param data Intent received
      */
     private fun requestMoveOperation(data: Intent) {
-        val folderToMoveAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
-        val files = data.getParcelableArrayListExtra<OCFile>(FolderPickerActivity.EXTRA_FILES)
+        val folderToMoveAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER) ?: return
+        val files = data.getParcelableArrayListExtra<OCFile>(FolderPickerActivity.EXTRA_FILES) ?: return
         val moveOperation = FileOperation.MoveOperation(listOfFilesToMove = files.toList(), targetFolder = folderToMoveAt)
         fileOperationViewModel.performOperation(moveOperation)
     }
@@ -601,8 +601,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * @param data Intent received
      */
     private fun requestCopyOperation(data: Intent) {
-        val folderToCopyAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
-        val files = data.getParcelableArrayListExtra<OCFile>(FolderPickerActivity.EXTRA_FILES)
+        val folderToCopyAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER) ?: return
+        val files = data.getParcelableArrayListExtra<OCFile>(FolderPickerActivity.EXTRA_FILES) ?: return
         val copyOperation = FileOperation.CopyOperation(listOfFilesToCopy = files.toList(), targetFolder = folderToCopyAt)
         fileOperationViewModel.performOperation(copyOperation)
     }
