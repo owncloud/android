@@ -5,11 +5,11 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         // This is pretty ugly but manifest placeholders don't seem to work very well when using different modules
         // See https://github.com/openid/AppAuth-Android/issues/325
