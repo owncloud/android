@@ -32,7 +32,7 @@ import org.junit.Test
 class MigrationToDB36Test : MigrationTest() {
 
     @Test
-    fun migrationFrom34to35_containsCorrectData() {
+    fun migrationFrom35to36_containsCorrectData() {
         performMigrationTest(
             previousVersion = DB_VERSION_35,
             currentVersion = DB_VERSION_36,
@@ -106,8 +106,8 @@ class MigrationToDB36Test : MigrationTest() {
     }
 
     private fun validateMigrationTo36(database: SupportSQLiteDatabase) {
-        val backUp = getCount(database, CAPABILITIES_TABLE_NAME)
-        Assert.assertEquals(1, backUp)
+        val capabilityCount = getCount(database, CAPABILITIES_TABLE_NAME)
+        Assert.assertEquals(1, capabilityCount)
         database.close()
     }
 }

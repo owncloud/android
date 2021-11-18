@@ -65,10 +65,10 @@ class AvatarManager : KoinComponent {
 
         val capabilities: GetStoredCapabilitiesUseCase by inject()
         val result = capabilities.execute(GetStoredCapabilitiesUseCase.Params(accountName = account.name))
-        val capabilityIsNotFalse = result?.filesSharingUserProfilePicture?.isFalse ?: false
+        val capabilityIsFalse = result?.filesSharingUserProfilePicture?.isFalse ?: false
 
         // Avatar not found in disk cache, fetch from server.
-        if (fetchIfNotCached && !capabilityIsNotFalse) {
+        if (fetchIfNotCached && !capabilityIsFalse) {
             Timber.i("Avatar with imageKey $imageKey is not available in cache. Fetching from server...")
             val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
             val useCaseResult =
