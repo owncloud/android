@@ -43,15 +43,11 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityF
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-<<<<<<< HEAD
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PATTERN
 import com.owncloud.android.presentation.ui.security.PatternActivity
-=======
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER
-import com.owncloud.android.ui.activity.PatternLockActivity
->>>>>>> dc35e258e (Updated UI tests)
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
@@ -254,27 +250,7 @@ class SettingsSecurityFragmentTest {
     }
 
     @Test
-<<<<<<< HEAD
-    fun enablePasscodeEnablesBiometricLockAndLockApplication() {
-=======
-    fun patternLockEnabledError() {
-        every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Error()
-
-        launchTest()
-
-        mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, patternValue),
-            action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
-        )
-        onView(withText(R.string.prefs_pattern)).perform(click())
-        assertFalse(prefPattern.isChecked)
-        onView(withText(R.string.pattern_error_set)).check(matches(isDisplayed()))
-    }
-
-    @Test
     fun enablePasscodeEnablesBiometricLockAndLockApplicationAndAccessFromDocumentProvider() {
->>>>>>> dc35e258e (Updated UI tests)
         launchTest()
 
         firstEnablePasscode()
