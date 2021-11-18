@@ -20,33 +20,28 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.owncloud.android.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.owncloud.android.databinding.MainFileListFragmentBinding
 
 class MainFileListFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFileListFragment()
-    }
+    private val viewModel by viewModels<MainFileListViewModel>()
 
-    private lateinit var viewModel: MainFileListViewModel
+    private var _binding: MainFileListFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.main_file_list_fragment, container, false)
-    }
+    ): View {
+        _binding = MainFileListFragmentBinding.inflate(inflater, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainFileListViewModel::class.java)
-        // TODO: Use the ViewModel
+        return binding.root
     }
 
 }
