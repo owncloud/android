@@ -29,12 +29,10 @@ import android.content.ContentProviderClient
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
-import android.content.OperationApplicationException
 import android.database.Cursor
 import android.net.Uri
 import android.os.RemoteException
 import androidx.core.util.Pair
-import com.owncloud.android.MainApp
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
@@ -71,13 +69,8 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PATH
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.extensions.getIntFromColumnOrThrow
-import com.owncloud.android.extensions.getLongFromColumnOrThrow
 import com.owncloud.android.extensions.getStringFromColumnOrEmpty
 import com.owncloud.android.extensions.getStringFromColumnOrThrow
-import com.owncloud.android.domain.files.model.MIME_DIR
-import com.owncloud.android.domain.files.model.MIME_PREFIX_AUDIO
-import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
-import com.owncloud.android.domain.files.model.MIME_PREFIX_VIDEO
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
@@ -85,19 +78,14 @@ import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
-import com.owncloud.android.extensions.getIntFromColumnOrThrow
-import com.owncloud.android.extensions.getStringFromColumnOrEmpty
-import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
-import java.io.File
 import java.util.Vector
 
 class FileDataStorageManager : KoinComponent {
