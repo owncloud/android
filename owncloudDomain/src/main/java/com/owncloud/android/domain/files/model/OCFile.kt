@@ -23,7 +23,7 @@ package com.owncloud.android.domain.files.model
 import android.os.Parcelable
 import android.webkit.MimeTypeMap
 import com.owncloud.android.domain.ext.isOneOf
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.util.Locale
 
