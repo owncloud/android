@@ -63,7 +63,7 @@ import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASIC_PASSWORD
 import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_SERVER_INFO
-import com.owncloud.android.utils.click
+import com.owncloud.android.utils.scrollAndClick
 import com.owncloud.android.utils.matchers.assertVisibility
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.isEnabled
@@ -189,7 +189,7 @@ class LoginActivityTest {
 
         verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
 
-        R.id.centeredRefreshButton.click()
+        R.id.centeredRefreshButton.scrollAndClick()
 
         verify(exactly = 2) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
@@ -232,7 +232,7 @@ class LoginActivityTest {
 
         R.id.hostUrlInput.typeText(OC_SERVER_INFO.baseUrl)
 
-        R.id.embeddedCheckServerButton.click()
+        R.id.embeddedCheckServerButton.scrollAndClick()
 
         verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
@@ -242,7 +242,7 @@ class LoginActivityTest {
         launchTest()
         R.id.hostUrlInput.typeText(OC_SERVER_INFO.baseUrl)
 
-        R.id.thumbnail.click()
+        R.id.thumbnail.scrollAndClick()
 
         verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
@@ -365,7 +365,7 @@ class LoginActivityTest {
 
         R.id.hostUrlInput.typeText("")
 
-        R.id.embeddedCheckServerButton.click()
+        R.id.embeddedCheckServerButton.scrollAndClick()
 
         with(R.id.server_status_text) {
             isDisplayed(true)
@@ -427,7 +427,7 @@ class LoginActivityTest {
 
         with(R.id.loginButton) {
             isDisplayed(true)
-            click()
+            scrollAndClick()
         }
 
         verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }
@@ -445,7 +445,7 @@ class LoginActivityTest {
 
         with(R.id.loginButton) {
             isDisplayed(true)
-            click()
+            scrollAndClick()
         }
 
         verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }

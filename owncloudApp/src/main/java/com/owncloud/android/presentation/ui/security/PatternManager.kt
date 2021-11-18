@@ -30,32 +30,25 @@ import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import kotlin.math.abs
 
-object PassCodeManager {
+object PatternManager {
 
-    private val exemptOfPasscodeActivities: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
+    private val exemptOfPatternActivities: MutableSet<Class<*>> = mutableSetOf(PatternActivity::class.java)
     private var visibleActivitiesCounter = 0
     private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
 
     fun onActivityStarted(activity: Activity) {
-        if (!exemptOfPasscodeActivities.contains(activity.javaClass) && passCodeShouldBeRequested()) {
+        if (!exemptOfPatternActivities.contains(activity.javaClass) && patternShouldBeRequested()) {
 
-            // Do not ask for passcode if biometric is enabled
+            // Do not ask for pattern if biometric is enabled
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.isBiometricEnabled()) {
                 visibleActivitiesCounter++
                 return
             }
 
-            askUserForPasscode(activity)
-        } else if (preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, false)) {
-            val intent = Intent(appContext, PassCodeActivity::class.java).apply {
-                action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
-                flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)
-            }
-            activity.startActivity(intent)
+            askUserForPattern(activity)
         }
 
-        visibleActivitiesCounter++ // keep it AFTER passCodeShouldBeRequested was checked
+        visibleActivitiesCounter++
     }
 
     fun onActivityStopped(activity: Activity) {
@@ -63,31 +56,31 @@ object PassCodeManager {
 
         bayPassUnlockOnce()
         val powerMgr = activity.getSystemService(Context.POWER_SERVICE) as PowerManager
-        if (isPassCodeEnabled() && !powerMgr.isScreenOn) {
+        if (isPatternEnabled() && !powerMgr.isScreenOn) {
             activity.moveTaskToBack(true)
         }
     }
 
-    private fun passCodeShouldBeRequested(): Boolean {
+    private fun patternShouldBeRequested(): Boolean {
         val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
         val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
-        return if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivitiesCounter <= 0) isPassCodeEnabled()
+        return if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivitiesCounter <= 0) isPatternEnabled()
         else false
     }
 
-    fun isPassCodeEnabled(): Boolean {
-        return preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+    fun isPatternEnabled(): Boolean {
+        return preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
     }
 
-    private fun askUserForPasscode(activity: Activity) {
-        val i = Intent(appContext, PassCodeActivity::class.java).apply {
-            action = PassCodeActivity.ACTION_CHECK
+    private fun askUserForPattern(activity: Activity) {
+        val i = Intent(appContext, PatternActivity::class.java).apply {
+            action = PatternActivity.ACTION_CHECK
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         activity.startActivity(i)
     }
 
     fun onBiometricCancelled(activity: Activity) {
-        askUserForPasscode(activity)
+        askUserForPattern(activity)
     }
 }

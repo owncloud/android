@@ -18,22 +18,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.viewmodels.settings
+package com.owncloud.android.presentation.viewmodels.security
 
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 
-class SettingsSecurityViewModel(
+class PatternViewModel(
     private val preferencesProvider: SharedPreferencesProvider
 ) : ViewModel() {
 
-    fun isPatternSet() = preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
+    fun setPattern(pattern: String) {
+        preferencesProvider.putString(PatternActivity.PREFERENCE_PATTERN, pattern)
+        preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, true)
+    }
 
-    fun isPasscodeSet() = preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+    fun removePattern() {
+        preferencesProvider.removePreference(PatternActivity.PREFERENCE_PATTERN)
+        preferencesProvider.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
+    }
 
-    fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =
-        preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
+    fun checkPatternIsValid(patternValue: String?): Boolean {
+        val savedPattern = preferencesProvider.getString(PatternActivity.PREFERENCE_PATTERN, null)
+        return savedPattern != null && savedPattern == patternValue
+    }
 }

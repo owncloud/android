@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
+* Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
 
 Details
 -------
@@ -20,6 +21,15 @@ Details
 
    https://github.com/owncloud/android/issues/3060
    https://github.com/owncloud/android/pull/3437
+
+* Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
+
+   A new preference has been added to choose the interval in which the app will be unlocked after
+   having unlocked it once, making it more comfortable for those who access the app frequently and
+   have a security lock set.
+
+   https://github.com/owncloud/android/issues/3344
+   https://github.com/owncloud/android/pull/3375
 
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================
