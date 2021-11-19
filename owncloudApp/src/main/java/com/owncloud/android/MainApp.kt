@@ -26,10 +26,7 @@ package com.owncloud.android
 import android.app.Activity
 import android.app.Application
 import android.app.NotificationManager.IMPORTANCE_LOW
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.RestrictionsManager
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -251,32 +248,23 @@ class MainApp : Application() {
         val restrictionsManager = activity.getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager
         val restrictions = restrictionsManager.applicationRestrictions
         cacheRestrictions(activity, restrictions)
-
-        val restrictionsFilter = IntentFilter(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED)
-
-        val restrictionsReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                val changedRestrictions = restrictionsManager.applicationRestrictions
-                cacheRestrictions(activity, changedRestrictions)
-            }
-        }
-
-        registerReceiver(restrictionsReceiver, restrictionsFilter)
     }
 
     private fun cacheRestrictions(activity: Activity, restrictions: Bundle) {
         val preferencesProvider = SharedPreferencesProviderImpl(activity)
-        if (restrictions.containsKey("test_managed_configuration")) {
-            val managedString = restrictions.getString("test_managed_configuration")
-            managedString?.let { preferencesProvider.putString("TEST_MANAGED_CONFIGURATION", it) }
+        if (restrictions.containsKey(CONFIGURATION_SERVER_URL)) {
+            val managedString = restrictions.getString(CONFIGURATION_SERVER_URL)
+            managedString?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
         }
-        if (restrictions.containsKey("test_managed_configuration2")) {
-            val managedBool = restrictions.getBoolean("test_managed_configuration2")
-            preferencesProvider.putBoolean("TEST_MANAGED_CONFIGURATION2", managedBool)
+        if (restrictions.containsKey(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)) {
+            val managedBool = restrictions.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
+            preferencesProvider.putBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, managedBool)
         }
     }
 
     companion object {
+        const val CONFIGURATION_SERVER_URL = "server_url_configuration"
+        const val CONFIGURATION_SERVER_URL_INPUT_VISIBILITY = "server_url_input_visibility_configuration"
         lateinit var appContext: Context
             private set
         var enabledLogging: Boolean = false
