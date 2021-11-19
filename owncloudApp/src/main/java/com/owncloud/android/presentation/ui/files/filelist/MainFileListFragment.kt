@@ -25,23 +25,72 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.databinding.MainFileListFragmentBinding
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFileListFragment : Fragment() {
 
-    private val viewModel by viewModels<MainFileListViewModel>()
+    private val mainFileListViewModel by viewModel<MainFileListViewModel>()
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var fileListAdapter: FileListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = MainFileListFragmentBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+        subscribeToViewModels()
+    }
+
+    private fun initViews() {
+        //Set RecyclerView and its adapter.
+        fileListAdapter = FileListAdapter(context = requireContext())
+        binding.recyclerViewMainFileList.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = fileListAdapter
+
+        }
+    }
+
+    private fun subscribeToViewModels() {
+        //Observe the action of retrieving the list of files.
+        mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver { result ->
+            when (result) {
+                is UIResult.Error -> {} //TODO Manage Error
+                is UIResult.Loading -> {} //TODO Manage Loading
+                is UIResult.Success -> fileListAdapter.updateFileList(filesToAdd = result.data ?: emptyList())
+            }
+        })
+    }
+
+    fun listDirectory(directory: OCFile) {
+        mainFileListViewModel.listDirectory(directory = directory)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    companion object {
+        fun newInstance(): MainFileListFragment {
+            val args = Bundle()
+            return MainFileListFragment().apply { arguments = args }
+        }
+    }
 }
+
