@@ -20,7 +20,7 @@ dependencies {
     implementation 'com.github.aritraroy.PatternLockView:patternlockview:a90b0d4bf0'
     implementation "androidx.appcompat:appcompat:$appCompat"
     implementation 'com.getbase:floatingactionbutton:1.10.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation "androidx.sqlite:sqlite-ktx:$sqliteVersion"
     implementation "androidx.biometric:biometric:$biometricVersion"
 
@@ -41,7 +41,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
     kapt "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
 
-    kapt "org.xerial:sqlite-jdbc:3.34.0" // fix kapt for Apple Silicon https://stackoverflow.com/a/68285501/1079990
+    kapt "org.xerial:sqlite-jdbc:3.36.0.3" // fix kapt for Apple Silicon https://stackoverflow.com/a/68285501/1079990
     implementation "androidx.room:room-runtime:$roomVersion"
 
     // Koin dependency injector
