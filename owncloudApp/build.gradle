@@ -49,7 +49,7 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-viewmodel:$koinVersion"
 
     // WorkManager
-    implementation "androidx.work:work-runtime-ktx:2.5.0"
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
 
     // KTX extensions, see https://developer.android.com/kotlin/ktx.html
     implementation "androidx.core:core-ktx:$ktxCoreVersion"
