@@ -38,6 +38,11 @@
   <string name="prefs_passcode">Bloqueo con clave</string>
   <string name="prefs_biometric">Bloqueo biométrico</string>
   <string name="prefs_biometric_summary">Habilitar la contraseña o patrón de bloqueo para utilizar esta opción</string>
+  <string name="prefs_lock_application">Bloquear aplicación</string>
+  <string name="prefs_lock_application_entries_immediately">Inmediatamente</string>
+  <string name="prefs_lock_application_entries_1minute">Después de 1 minuto</string>
+  <string name="prefs_lock_application_entries_5minutes">Después de 5 minutos</string>
+  <string name="prefs_lock_application_entries_30minutes">Después de 30 minutos</string>
   <string name="prefs_touches_with_other_visible_windows">En contacto con otras ventanas visibles</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir clicks mientras que la vista está oscurecida por otra ventana visible. Habilítalo para utilizar aplicaciones de filtro de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Estás seguro que quieres habilitar esta funcionalidad?</string>

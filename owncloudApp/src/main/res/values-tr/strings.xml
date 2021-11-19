@@ -38,6 +38,11 @@
   <string name="prefs_passcode">Parola kod kilidi</string>
   <string name="prefs_biometric">Biyometrik kilit</string>
   <string name="prefs_biometric_summary">Bu özelliği etkinleştirmek için parola veya desen ile kilitlemeyi etkinleşir</string>
+  <string name="prefs_lock_application">Uygulamayı kitle</string>
+  <string name="prefs_lock_application_entries_immediately">Hemen</string>
+  <string name="prefs_lock_application_entries_1minute">1 dakika sonra</string>
+  <string name="prefs_lock_application_entries_5minutes">5 dakika sonra</string>
+  <string name="prefs_lock_application_entries_30minutes">30 dakika sonra</string>
   <string name="prefs_touches_with_other_visible_windows">Diğer görünür pencerelerle birlikte dokunma</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Başka bir görünür pencere tarafından gizlendiğinde dokunmalara izin ver. Uygulamaları hafif filtrelemek için etkinleştir.</string>
   <string name="confirmation_touches_with_other_windows_title">Bu özelliği etkinleştirmek istediğinizden emin misiniz?</string>

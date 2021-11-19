@@ -41,6 +41,11 @@
   <string name="prefs_passcode">Kyçje me kodkalim</string>
   <string name="prefs_biometric">Kyçje biometrike</string>
   <string name="prefs_biometric_summary">Që të aktivizohet kjo mundësi, aktivizoni kyçje përmes kodkalimesh ose përmes rregullsish</string>
+  <string name="prefs_lock_application">Kyçe aplikacionin</string>
+  <string name="prefs_lock_application_entries_immediately">Menjëherë</string>
+  <string name="prefs_lock_application_entries_1minute">Pas 1 minute</string>
+  <string name="prefs_lock_application_entries_5minutes">Pas 5 minutash</string>
+  <string name="prefs_lock_application_entries_30minutes">Pas 30 minutash</string>
   <string name="prefs_touches_with_other_visible_windows">Prekje me dritare të tjera të dukshme</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Lejo prekje, kur pamja është zënë nga një tjetër dritare e dukshme. Aktivizojeni, që të përdorni aplikacione filtrimi drite.</string>
   <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori?</string>

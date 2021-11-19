@@ -41,6 +41,11 @@
   <string name="prefs_passcode">ล็อครหัสปลดล็อค</string>
   <string name="prefs_biometric">ล็อคด้วยไบโอเมตริกซ์</string>
   <string name="prefs_biometric_summary">เปิดใช้งานรหัสปลดล็อคหรือรูปแบบล็อคเพื่อเปิดใช้งานตัวเลือกนี้</string>
+  <string name="prefs_lock_application">ล็อกแอปพลิเคชัน</string>
+  <string name="prefs_lock_application_entries_immediately">ทันที</string>
+  <string name="prefs_lock_application_entries_1minute">หลังจากผ่านไป 1 นาที</string>
+  <string name="prefs_lock_application_entries_5minutes">หลังจากผ่านไป 5 นาที</string>
+  <string name="prefs_lock_application_entries_30minutes">หลังจากผ่านไป 30 นาที</string>
   <string name="prefs_touches_with_other_visible_windows">แตะกับหน้าต่างอื่นที่มองเห็น</string>
   <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอปกรองแสง</string>
   <string name="confirmation_touches_with_other_windows_title">คุณแน่ใจหรือว่าต้องการเปิดใช้งานคุณลักษณะนี้?</string>

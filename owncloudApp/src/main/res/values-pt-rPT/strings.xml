@@ -32,6 +32,10 @@
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerir contas</string>
   <string name="prefs_passcode">Proteção por código</string>
+  <string name="prefs_lock_application">Bloquear aplicação</string>
+  <string name="prefs_lock_application_entries_1minute">Depois de 1 minuto</string>
+  <string name="prefs_lock_application_entries_5minutes">Depois de 5 minutos</string>
+  <string name="prefs_lock_application_entries_30minutes">Depois de 30 minutos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotografias tiradas pela camera</string>
   <string name="prefs_camera_picture_upload_on_wifi">Enviar as imagens apenas via wi-fi</string>
   <string name="prefs_camera_video_upload_path_title">Caminho do envio de vídeo</string>
