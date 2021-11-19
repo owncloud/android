@@ -41,6 +41,8 @@ import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.owncloud.android.BuildConfig
+import com.owncloud.android.MainApp.Companion.CONFIGURATION_SERVER_URL
+import com.owncloud.android.MainApp.Companion.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.authentication.oauth.OAuthUtils
@@ -150,7 +152,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.root.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this@LoginActivity)
 
-        //initBrandableOptionsUI()
+        initBrandableOptionsUI()
 
         binding.thumbnail.setOnClickListener { checkOcServer() }
 
@@ -177,11 +179,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         accountAuthenticatorResponse?.onRequestContinued()
 
         initLiveDataObservers()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        initBrandableOptionsUI()
     }
 
     private fun initLiveDataObservers() {
@@ -656,14 +653,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun initBrandableOptionsUI() {
         val preferencesProvider = SharedPreferencesProviderImpl(this)
-        val showInput = if (BuildConfig.FLAVOR == "mdm") preferencesProvider.getBoolean("TEST_MANAGED_CONFIGURATION2", true) else contextProvider.getBoolean(R.bool.show_server_url_input)
+        val showInput = if (BuildConfig.FLAVOR == "mdm") preferencesProvider.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, true) else contextProvider.getBoolean(R.bool.show_server_url_input)
         binding.hostUrlFrame.isVisible = showInput
         binding.centeredRefreshButton.isVisible = !showInput
         if (!showInput) {
             binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
 
-        val url = if (BuildConfig.FLAVOR == "mdm") preferencesProvider.getString("TEST_MANAGED_CONFIGURATION", null) else contextProvider.getString(R.string.server_url)
+        val url = if (BuildConfig.FLAVOR == "mdm") preferencesProvider.getString(CONFIGURATION_SERVER_URL, null) else contextProvider.getString(R.string.server_url)
         if (!url.isNullOrEmpty()) {
             binding.hostUrlInput.setText(url)
             checkOcServer()

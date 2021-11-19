@@ -2,16 +2,16 @@
 <restrictions xmlns:android="http://schemas.android.com/apk/res/android">
 
     <restriction
-        android:key="test_managed_configuration"
+        android:key="server_url_configuration"
         android:restrictionType="string"
-        android:title="@string/test_managed_configuration_title"
-        android:description="@string/test_managed_configuration_description"
-        android:defaultValue="www.mymanageddomain.com" />
+        android:title="@string/server_url_configuration_title"
+        android:description="@string/server_url_configuration_description"
+        android:defaultValue="demo.owncloud.com" />
     <restriction
-        android:key="test_managed_configuration2"
+        android:key="server_url_input_visibility_configuration"
         android:restrictionType="bool"
-        android:title="@string/test_managed_configuration2_title"
-        android:description="@string/test_managed_configuration2_description"
+        android:title="@string/server_url_input_visibility_configuration_title"
+        android:description="@string/server_url_input_visibility_configuration_description"
         android:defaultValue="true" />
 
 </restrictions>
