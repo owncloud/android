@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
 * Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
+* Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
 
 Details
 -------
@@ -30,6 +31,16 @@ Details
 
    https://github.com/owncloud/android/issues/3344
    https://github.com/owncloud/android/pull/3375
+
+* Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
+
+   Previously, files of ownCloud accounts couldn't be accessed from document provider or
+   Android native file explorer when there was a lock set in the app. Now, a new preference has been
+   added to allow the access when the app is locked, disabled by default so that it's safer for those
+   who don't want this feature.
+
+   https://github.com/owncloud/android/issues/3379
+   https://github.com/owncloud/android/pull/3384
 
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================

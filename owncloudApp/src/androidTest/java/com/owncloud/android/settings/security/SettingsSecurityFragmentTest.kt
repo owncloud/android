@@ -47,6 +47,7 @@ import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PATTERN
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
@@ -73,6 +74,7 @@ class SettingsSecurityFragmentTest {
     private lateinit var prefPattern: CheckBoxPreference
     private var prefBiometric: CheckBoxPreference? = null
     private lateinit var prefLockApplication: ListPreference
+    private lateinit var prefAccessDocumentProvider: CheckBoxPreference
     private lateinit var prefTouchesWithOtherVisibleWindows: CheckBoxPreference
 
     private lateinit var securityViewModel: SettingsSecurityViewModel
@@ -123,6 +125,7 @@ class SettingsSecurityFragmentTest {
             prefPattern = fragment.findPreference(PatternActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
             prefLockApplication = fragment.findPreference(PREFERENCE_LOCK_TIMEOUT)!!
+            prefAccessDocumentProvider = fragment.findPreference(PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER)!!
             prefTouchesWithOtherVisibleWindows =
                 fragment.findPreference(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)!!
         }
@@ -151,6 +154,15 @@ class SettingsSecurityFragmentTest {
             visible = true,
             enabled = false
         )
+
+        prefAccessDocumentProvider.verifyPreference(
+            keyPref = PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER,
+            titlePref = context.getString(R.string.prefs_access_from_document_provider),
+            summaryPref = context.getString(R.string.prefs_access_from_document_provider_summary),
+            visible = true,
+            enabled = false
+        )
+        assertFalse(prefAccessDocumentProvider.isChecked)
 
         prefTouchesWithOtherVisibleWindows.verifyPreference(
             keyPref = SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
@@ -238,7 +250,7 @@ class SettingsSecurityFragmentTest {
     }
 
     @Test
-    fun enablePasscodeEnablesBiometricLockAndLockApplication() {
+    fun enablePasscodeEnablesBiometricLockAndLockApplicationAndAccessFromDocumentProvider() {
         launchTest()
 
         firstEnablePasscode()
@@ -246,10 +258,12 @@ class SettingsSecurityFragmentTest {
         assertTrue(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
         assertTrue(prefLockApplication.isEnabled)
+        assertTrue(prefAccessDocumentProvider.isEnabled)
+        assertFalse(prefAccessDocumentProvider.isChecked)
     }
 
     @Test
-    fun enablePatternEnablesBiometricLockAndLockApplication() {
+    fun enablePatternEnablesBiometricLockAndLockApplicationAndAccessFromDocumentProvider() {
         launchTest()
 
         firstEnablePattern()
@@ -257,6 +271,8 @@ class SettingsSecurityFragmentTest {
         assertTrue(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
         assertTrue(prefLockApplication.isEnabled)
+        assertTrue(prefAccessDocumentProvider.isEnabled)
+        assertFalse(prefAccessDocumentProvider.isChecked)
     }
 
     @Test
@@ -295,6 +311,8 @@ class SettingsSecurityFragmentTest {
         assertFalse(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
         assertFalse(prefLockApplication.isEnabled)
+        assertFalse(prefAccessDocumentProvider.isEnabled)
+        assertFalse(prefAccessDocumentProvider.isChecked)
     }
 
     @Test
@@ -311,6 +329,8 @@ class SettingsSecurityFragmentTest {
         assertFalse(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
         assertFalse(prefLockApplication.isEnabled)
+        assertFalse(prefAccessDocumentProvider.isEnabled)
+        assertFalse(prefAccessDocumentProvider.isChecked)
     }
 
     @Test
@@ -357,6 +377,47 @@ class SettingsSecurityFragmentTest {
         onView(withText(R.string.prefs_biometric)).perform(click())
         onView(withText(R.string.prefs_biometric)).perform(click())
         assertFalse(prefBiometric!!.isChecked)
+    }
+
+    @Test
+    fun accessFromDocumentProviderDialog() {
+        launchTest()
+
+        firstEnablePasscode()
+        onView(withText(R.string.prefs_access_from_document_provider)).perform(click())
+        onView(withText(R.string.confirmation_access_from_document_provider_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.confirmation_access_from_document_provider_message)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun accessFromDocumentProviderEnable() {
+        launchTest()
+
+        firstEnablePasscode()
+        onView(withText(R.string.prefs_access_from_document_provider)).perform(click())
+        onView(withText(R.string.common_yes)).perform(click())
+        assertTrue(prefAccessDocumentProvider.isChecked)
+    }
+
+    @Test
+    fun accessFromDocumentProviderRefuse() {
+        launchTest()
+
+        firstEnablePasscode()
+        onView(withText(R.string.prefs_access_from_document_provider)).perform(click())
+        onView(withText(R.string.common_no)).perform(click())
+        assertFalse(prefAccessDocumentProvider.isChecked)
+    }
+
+    @Test
+    fun accessFromDocumentProviderDisable() {
+        launchTest()
+
+        firstEnablePasscode()
+        onView(withText(R.string.prefs_access_from_document_provider)).perform(click())
+        onView(withText(R.string.common_yes)).perform(click())
+        onView(withText(R.string.prefs_access_from_document_provider)).perform(click())
+        assertFalse(prefAccessDocumentProvider.isChecked)
     }
 
     @Test

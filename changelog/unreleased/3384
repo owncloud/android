@@ -1,0 +1,10 @@
+Enhancement: Allow access from document provider preference
+
+Previously, files of ownCloud accounts couldn't be accessed from document
+provider or Android native file explorer when there was a lock set in the
+app. Now, a new preference has been added to allow the access when the app
+is locked, disabled by default so that it's safer for those who don't want
+this feature.
+
+https://github.com/owncloud/android/issues/3379
+https://github.com/owncloud/android/pull/3384
