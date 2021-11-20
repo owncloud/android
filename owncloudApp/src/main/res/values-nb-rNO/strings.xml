@@ -37,6 +37,10 @@
   <string name="prefs_passcode">Passordlås</string>
   <string name="prefs_biometric">Biometrisk lås</string>
   <string name="prefs_biometric_summary">Aktiver passord eller mønsterlås for å aktivere dette alternativet</string>
+  <string name="prefs_lock_application_entries_1minute">Etter 1 minutt</string>
+  <string name="prefs_lock_application_entries_5minutes">Etter 5 minutter</string>
+  <string name="prefs_lock_application_entries_30minutes">Etter 30 minutter</string>
+  <string name="confirmation_access_from_document_provider_title">Er du sikker på at du vil aktivere dette?</string>
   <string name="confirmation_touches_with_other_windows_title">Er du sikker på at du vil aktivere dette?</string>
   <string name="prefs_camera_picture_upload">Bilde-opplastninger</string>
   <string name="prefs_camera_picture_upload_summary">Last opp bilder tatt med kamera automatisk</string>

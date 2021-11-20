@@ -35,6 +35,10 @@
   <string name="prefs_accounts">Notandaaðgangar</string>
   <string name="prefs_manage_accounts">Sýsla með notandaaðganga</string>
   <string name="prefs_passcode">Læsing með lykilkóða</string>
+  <string name="prefs_lock_application">Lock application</string>
+  <string name="prefs_lock_application_entries_1minute">After 1 minute</string>
+  <string name="prefs_lock_application_entries_5minutes">After 5 minutes</string>
+  <string name="prefs_lock_application_entries_30minutes">After 30 minutes</string>
   <string name="prefs_camera_picture_upload">Innsendar myndir</string>
   <string name="prefs_camera_picture_upload_summary">Hlaða sjálfvirkt inn myndum teknum á myndavél</string>
   <string name="prefs_camera_picture_upload_path_title">Innsendingarslóð fyrir myndir</string>

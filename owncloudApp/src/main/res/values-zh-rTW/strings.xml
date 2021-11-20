@@ -46,6 +46,7 @@
   <string name="prefs_lock_application_entries_1minute">1分鐘後</string>
   <string name="prefs_lock_application_entries_5minutes">5分鐘後</string>
   <string name="prefs_lock_application_entries_30minutes">30分鐘後</string>
+  <string name="confirmation_access_from_document_provider_title">您確定要啟用這個功能？</string>
   <string name="prefs_touches_with_other_visible_windows">與其他可見窗口接觸</string>
   <string name="prefs_touches_with_other_visible_windows_summary">當視圖被另一個可見窗口遮擋時，允許觸摸。 啟用它以使用濾光應用程序。</string>
   <string name="confirmation_touches_with_other_windows_title">您確定要啟用這個功能？</string>

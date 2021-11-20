@@ -43,6 +43,7 @@
   <string name="prefs_lock_application_entries_1minute">Après 1 minute</string>
   <string name="prefs_lock_application_entries_5minutes">Après 5 minutes</string>
   <string name="prefs_lock_application_entries_30minutes">Après 30 minutes</string>
+  <string name="confirmation_access_from_document_provider_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Vous utilisez cette fonctionnalité sous votre propre responsabilité. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l’application.</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>

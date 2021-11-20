@@ -38,6 +38,11 @@
   <string name="prefs_passcode">Κλείδωμα με κωδικό</string>
   <string name="prefs_biometric">Βιομετρικό κλείδωμα</string>
   <string name="prefs_biometric_summary">Ενεργοποιήστε τον κωδικό ή το μοτίβο κλειδώματος για να ενεργοποιήσετε αυτήν την επιλογή</string>
+  <string name="prefs_lock_application">Κλείδωμα εφαρμογής</string>
+  <string name="prefs_lock_application_entries_immediately">Αμέσως</string>
+  <string name="prefs_lock_application_entries_1minute">Μετά από 1 λεπτό</string>
+  <string name="prefs_lock_application_entries_5minutes">Μετά από 5 λεπτά</string>
+  <string name="prefs_lock_application_entries_30minutes">Μετά από 30 λεπτά</string>
   <string name="prefs_touches_with_other_visible_windows">Άγγιγμα με άλλα ορατά παράθυρα</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Επιτρέψτε το άγγιγμα όταν η προβολή καλύπτεται από άλλο ορατό παράθυρο. Ενεργοποιήστε τη χρήση εφαρμογών φιλτραρίσματος φωτός.</string>
   <string name="confirmation_touches_with_other_windows_title">Είστε βέβαιοι ότι θέλετε να ενεργοποιήσετε αυτήν τη λειτουργία;</string>

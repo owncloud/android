@@ -32,6 +32,7 @@
   <string name="prefs_manage_accounts">계정 관리</string>
   <string name="prefs_passcode">암호 잠금</string>
   <string name="prefs_biometric_summary">이 옵션을 활성화하려면 비밀번호나 패턴 잠금을 활성화하십시오</string>
+  <string name="prefs_lock_application">애플리케이션 잠그기</string>
   <string name="prefs_camera_picture_upload">사진 업로드</string>
   <string name="prefs_camera_picture_upload_summary">카메라로 찍은 사진 자동으로 업로드</string>
   <string name="prefs_camera_picture_upload_path_title">사진 업로드 경로</string>

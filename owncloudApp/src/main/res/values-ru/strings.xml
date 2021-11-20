@@ -41,6 +41,12 @@
   <string name="prefs_passcode">Блокировка кодом</string>
   <string name="prefs_biometric">Биометрическая блокировка</string>
   <string name="prefs_biometric_summary">Чтобы использовать эту настройку, включите блокировку по коду или графическому ключу</string>
+  <string name="prefs_lock_application">Блокировка приложения</string>
+  <string name="prefs_lock_application_entries_immediately">Немедленно</string>
+  <string name="prefs_lock_application_entries_1minute">Через 1 минуту</string>
+  <string name="prefs_lock_application_entries_5minutes">Через 5 минут</string>
+  <string name="prefs_lock_application_entries_30minutes">Через 30 минут</string>
+  <string name="confirmation_access_from_document_provider_title">Вы уверены, что хотите включить эту функцию?</string>
   <string name="prefs_touches_with_other_visible_windows">Разрешить работу под прозрачными окнами других приложений</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешает взаимодействие, когда есть перекрытие другим видимым или прозрачным окном. Это нужно, если вы используете приложения для фильтрации света от экрана. Перекрывающее приложение сможет получать информацию о взаимодействии.</string>
   <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>

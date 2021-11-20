@@ -35,6 +35,7 @@
   <string name="prefs_manage_accounts">Upravljanje z računi</string>
   <string name="prefs_passcode">Zakleni dostop s kodo PIN</string>
   <string name="prefs_biometric_summary">Nastavite geslo ali odklepanje z vzorcem za možnost nastavitve te opcije</string>
+  <string name="confirmation_access_from_document_provider_title">Ali ste prepričani, da želite vklopiti to funkcijo?</string>
   <string name="confirmation_touches_with_other_windows_title">Ali ste prepričani, da želite vklopiti to funkcijo?</string>
   <string name="prefs_camera_picture_upload">Hipno pošiljanje slik</string>
   <string name="prefs_camera_picture_upload_summary">Hipno pošiljanje slik, zajetih s kamero, na strežnik</string>
