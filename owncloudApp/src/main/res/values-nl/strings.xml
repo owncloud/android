@@ -43,6 +43,7 @@
   <string name="prefs_lock_application_entries_1minute">Na 1 minuut</string>
   <string name="prefs_lock_application_entries_5minutes">Na 5 minuten</string>
   <string name="prefs_lock_application_entries_30minutes">Na 30 minuten</string>
+  <string name="confirmation_access_from_document_provider_title">Weet je zeker dat je deze functionaliteit wilt aanzetten?</string>
   <string name="prefs_touches_with_other_visible_windows">Aanraken bij andere zichtbare vensters</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Sta acties toe als het scherm wordt beinvloed door een andere app. Zet dit aan als je licht-filter apps gebruikt.</string>
   <string name="confirmation_touches_with_other_windows_title">Weet je zeker dat je deze functionaliteit wilt aanzetten?</string>

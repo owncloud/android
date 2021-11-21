@@ -37,6 +37,7 @@
   <string name="prefs_passcode">Contrasenya</string>
   <string name="prefs_biometric">Bloqueig biomètric  </string>
   <string name="prefs_biometric_summary">Activa la contrasenya o el patró de desbloqueig per activar aquesta opció</string>
+  <string name="confirmation_access_from_document_provider_title">Segur que voleu habilitar aquesta funció?</string>
   <string name="confirmation_touches_with_other_windows_title">Segur que voleu habilitar aquesta funció?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilitzeu aquesta característica sota la vostra responsabilitat, aplicacions malicioses podrien executar accions sense que us adonesiu fent servir altres vistes.</string>
   <string name="prefs_camera_picture_upload">Imatges pujades</string>

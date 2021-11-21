@@ -46,6 +46,7 @@
   <string name="prefs_lock_application_entries_1minute">Después de 1 minuto</string>
   <string name="prefs_lock_application_entries_5minutes">Después de 5 minutos</string>
   <string name="prefs_lock_application_entries_30minutes">Después de 30 minutos</string>
+  <string name="confirmation_access_from_document_provider_title">¿Está seguro que desea habilitar esta función?</string>
   <string name="prefs_touches_with_other_visible_windows">Toques con otras ventanas visibles.</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permite los toques  cuando la vista está oculta por otra ventana visible. Habilítelo para utilizar aplicaciones de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>

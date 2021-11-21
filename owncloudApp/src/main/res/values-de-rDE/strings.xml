@@ -43,6 +43,7 @@
   <string name="prefs_lock_application_entries_1minute">nach 1 Minute</string>
   <string name="prefs_lock_application_entries_5minutes">nach 5 Minuten</string>
   <string name="prefs_lock_application_entries_30minutes">nach 30 Minuten</string>
+  <string name="confirmation_access_from_document_provider_title">Wollen Sie diese Funktion wirklich einschalten?</string>
   <string name="prefs_touches_with_other_visible_windows">Berührungen mit anderen sichtbaren Fenstern</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen zulassen, wenn die Ansicht von einem anderen sichtbaren Fenster verdeckt wird. Aktivieren Sie es, um Lichtfilter-Apps zu verwenden.</string>
   <string name="confirmation_touches_with_other_windows_title">Wollen Sie diese Funktion wirklich einschalten?</string>

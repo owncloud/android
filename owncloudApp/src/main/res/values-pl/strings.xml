@@ -37,6 +37,7 @@
   <string name="prefs_passcode">Blokada hasłem</string>
   <string name="prefs_biometric">blokada biometryczna</string>
   <string name="prefs_biometric_summary">Wprowadź kod PIN lub wzór odblokowania aby odblokować tę opcję</string>
+  <string name="confirmation_access_from_document_provider_title">Czy jesteś pewny, że chcesz włączyć tą funkcję?</string>
   <string name="confirmation_touches_with_other_windows_title">Czy jesteś pewny, że chcesz włączyć tą funkcję?</string>
   <string name="prefs_camera_picture_upload">Wrzucanie obrazków</string>
   <string name="prefs_camera_picture_upload_summary">Automatycznie wrzuć obrazki zrobione przez kamerę</string>

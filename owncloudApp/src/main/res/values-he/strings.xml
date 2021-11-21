@@ -43,6 +43,7 @@
   <string name="prefs_lock_application_entries_1minute">אחרי דקה אחת</string>
   <string name="prefs_lock_application_entries_5minutes">אחרי 5 דקות</string>
   <string name="prefs_lock_application_entries_30minutes">אחרי 30 דקות</string>
+  <string name="confirmation_access_from_document_provider_title">האם באמת לאפשר תכונה זו?</string>
   <string name="prefs_touches_with_other_visible_windows">נוגע בחלונות גלויים אחרים</string>
   <string name="prefs_touches_with_other_visible_windows_summary">מאפשר מגע כאשר התצוגה מוסתרת על ידי חלון גלוי אחר. יש לאפשר זאת לשימוש ביישומי סינון קלים.</string>
   <string name="confirmation_touches_with_other_windows_title">האם באמת לאפשר תכונה זו?</string>

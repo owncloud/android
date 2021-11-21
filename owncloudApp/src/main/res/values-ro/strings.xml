@@ -36,6 +36,7 @@
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>
   <string name="prefs_biometric">Blocare biometrică</string>
+  <string name="confirmation_access_from_document_provider_title">Ești sigur că dorești activarea acestei funcții?</string>
   <string name="confirmation_touches_with_other_windows_title">Ești sigur că dorești activarea acestei funcții?</string>
   <string name="prefs_camera_picture_upload">Încărcări fotografii</string>
   <string name="prefs_camera_picture_upload_summary">Încarcă automat fotografiile create cu camera</string>

@@ -37,6 +37,7 @@
   <string name="prefs_passcode">Заключваща парола</string>
   <string name="prefs_biometric">Биометрично заключване</string>
   <string name="prefs_biometric_summary">Активирайте парола или схема за заключване за да активирате тази опция</string>
+  <string name="confirmation_access_from_document_provider_title">Сигурни ли сте, че искате да активирате тази функция?</string>
   <string name="prefs_touches_with_other_visible_windows">Докосване с други видими прозорци</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешаване на докосвания, когато изгледът е затъмнен от друг видим прозорец. Разрешете да използва приложения за филтриране на светлината.</string>
   <string name="confirmation_touches_with_other_windows_title">Сигурни ли сте, че искате да активирате тази функция?</string>

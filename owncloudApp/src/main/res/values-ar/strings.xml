@@ -43,6 +43,7 @@
   <string name="prefs_lock_application_entries_1minute">بعد دقيقة واحدة (1)</string>
   <string name="prefs_lock_application_entries_5minutes">بعد 5 دقائق</string>
   <string name="prefs_lock_application_entries_30minutes">بعد 30 دقيقة</string>
+  <string name="confirmation_access_from_document_provider_title">هل أنت متأكد أنك ترغب في تفعيل هذه الميزة؟</string>
   <string name="prefs_touches_with_other_visible_windows">اللمس باستخدام نوافذ أخرى مرئية</string>
   <string name="prefs_touches_with_other_visible_windows_summary">يتيح اللمس باستخدام نافذة أخرى مرئية عندما تكون نافذة العرض مخفية. فعِّله لاستخدام تطبيقات تصفية الإضاءة.</string>
   <string name="confirmation_touches_with_other_windows_title">هل أنت متأكد أنك ترغب في تفعيل هذه الميزة؟</string>

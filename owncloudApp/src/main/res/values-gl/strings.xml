@@ -43,6 +43,7 @@
   <string name="prefs_lock_application_entries_1minute">Após 1 minuto</string>
   <string name="prefs_lock_application_entries_5minutes">Após 5 minutos</string>
   <string name="prefs_lock_application_entries_30minutes">Após 30 minutos</string>
+  <string name="confirmation_access_from_document_provider_title">Confirma que quere activar esta característica?</string>
   <string name="prefs_touches_with_other_visible_windows">Toques con outras xanelas visíbeis</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques cando a vista estea escurecida por outra xanela visíbel. Activar o emprego de aplis de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Confirma que quere activar esta característica?</string>
