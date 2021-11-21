@@ -33,7 +33,7 @@ class ConnectionValidator (
             client.account = baseClient.account
             client.credentials = baseClient.credentials
             while (validationRetryCount < VALIDATION_RETRY_COUNT) {
-                Timber.d("+++++++++++++++++++++++++++++++++++++ validationRetryCout %d", validationRetryCount)
+                Timber.d("validationRetryCout %d", validationRetryCount)
                 var successCounter = 0
                 var failCounter = 0
 

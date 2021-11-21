@@ -56,7 +56,6 @@ public class OwnCloudClient extends HttpClient {
     public static final String WEBDAV_FILES_PATH_4_0 = "/remote.php/dav/files/";
     public static final String STATUS_PATH = "/status.php";
     private static final String WEBDAV_UPLOADS_PATH_4_0 = "/remote.php/dav/uploads/";
-    private static final int MAX_REDIRECTIONS_COUNT = 5;
     private static final int MAX_RETRY_COUNT = 2;
 
     private static int sIntanceCounter = 0;
@@ -137,7 +136,6 @@ public class OwnCloudClient extends HttpClient {
             }
 
             status = method.execute();
-            stacklog(status, method);
 
             if (!mFollowRedirects &&
                     !method.getFollowRedirects() &&
@@ -154,28 +152,6 @@ public class OwnCloudClient extends HttpClient {
         } while (retry && repeatCounter < MAX_RETRY_COUNT);
 
         return status;
-    }
-
-    private void stacklog(int status, HttpBaseMethod method) {
-        try {
-            throw new Exception("Stack log");
-        } catch(Exception e) {
-            Timber.d("\n---------------------------" +
-                    "\nresponsecode: " + status +
-                    "\nThread: " + Thread.currentThread().getName() +
-                    "\nobject: " + this.toString() +
-                    "\nMethod: " + method.toString() +
-                    "\nUrl: " + method.getHttpUrl() +
-                    "\nCookeis: " + getCookiesForBaseUri().toString() +
-                    "\nCredentials type: " + mCredentials.getClass().toString() +
-                    "\ntoken: " + mCredentials.getAuthToken() +
-
-                    "\nHeaders: ++++" +
-                    "\n" + method.getRequest().headers().toString() +
-                    "+++++++++++++" +
-                    "\ntrace: " + ExceptionUtils.getStackTrace(e) +
-                    "---------------------------");
-        }
     }
 
     /**
