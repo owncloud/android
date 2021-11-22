@@ -26,10 +26,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.onError
 import com.owncloud.android.presentation.onLoading
@@ -80,6 +80,52 @@ class MainFileListFragment : Fragment() {
 
     fun listDirectory(directory: OCFile) {
         mainFileListViewModel.listDirectory(directory = directory)
+    }
+
+    private fun generateFooterText(filesCount: Int, foldersCount: Int): String {
+        return when {
+            filesCount <= 0 -> {
+                when {
+                    foldersCount <= 0 -> {
+                        ""
+                    }
+                    foldersCount == 1 -> {
+                        resources.getString(R.string.file_list__footer__folder)
+                    }
+                    else -> { // foldersCount > 1
+                        resources.getString(R.string.file_list__footer__folders, foldersCount)
+                    }
+                }
+            }
+            filesCount == 1 -> {
+                when {
+                    foldersCount <= 0 -> {
+                        resources.getString(R.string.file_list__footer__file)
+                    }
+                    foldersCount == 1 -> {
+                        resources.getString(R.string.file_list__footer__file_and_folder)
+                    }
+                    else -> { // foldersCount > 1
+                        resources.getString(R.string.file_list__footer__file_and_folders, foldersCount)
+                    }
+                }
+            }
+            else -> {    // filesCount > 1
+                when {
+                    foldersCount <= 0 -> {
+                        resources.getString(R.string.file_list__footer__files, filesCount)
+                    }
+                    foldersCount == 1 -> {
+                        resources.getString(R.string.file_list__footer__files_and_folder, filesCount)
+                    }
+                    else -> { // foldersCount > 1
+                        resources.getString(
+                            R.string.file_list__footer__files_and_folders, filesCount, foldersCount
+                        )
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
