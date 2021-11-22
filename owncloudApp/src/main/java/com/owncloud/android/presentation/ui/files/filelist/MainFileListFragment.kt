@@ -31,6 +31,9 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
+import com.owncloud.android.presentation.onError
+import com.owncloud.android.presentation.onLoading
+import com.owncloud.android.presentation.onSuccess
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFileListFragment : Fragment() {
@@ -68,12 +71,10 @@ class MainFileListFragment : Fragment() {
 
     private fun subscribeToViewModels() {
         //Observe the action of retrieving the list of files.
-        mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver { result ->
-            when (result) {
-                is UIResult.Error -> {} //TODO Manage Error
-                is UIResult.Loading -> {} //TODO Manage Loading
-                is UIResult.Success -> fileListAdapter.updateFileList(filesToAdd = result.data ?: emptyList())
-            }
+        mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onLoading { /*TODO Manage Loading*/ }
+            it.onSuccess { data -> fileListAdapter.updateFileList(filesToAdd = data ?: emptyList()) }
+            it.onError { /*TODO Manage Error*/ }
         })
     }
 
