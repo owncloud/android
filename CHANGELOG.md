@@ -11,6 +11,7 @@ Summary
 * Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
 * Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
 * Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
+* Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 
 Details
 -------
@@ -42,6 +43,14 @@ Details
    https://github.com/owncloud/android/issues/3379
    https://github.com/owncloud/android/pull/3384
 
+* Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
+
+   A new branding/MDM option has been added to make app lock via passcode or pattern compulsory,
+   whichever the user chooses.
+
+   https://github.com/owncloud/android/issues/3400
+   https://github.com/owncloud/android/pull/3434
+
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.19.0 relevant to
@@ -65,7 +74,6 @@ Summary
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
 * Enhancement - Scoped Storage: [#2877](https://github.com/owncloud/android/issues/2877)
 * Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
-* Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 
 Details
 -------
@@ -187,14 +195,6 @@ Details
 
    https://github.com/owncloud/android/issues/3333
    https://github.com/owncloud/android/pull/3408
-
-* Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
-
-   A new branding/MDM option has been added to make app lock via passcode or pattern compulsory,
-   whichever the user chooses.
-
-   https://github.com/owncloud/android/issues/3400
-   https://github.com/owncloud/android/pull/3434
 
 Changelog for ownCloud Android Client [2.18.3] (2021-10-27)
 =======================================
