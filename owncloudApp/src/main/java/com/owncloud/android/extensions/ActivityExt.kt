@@ -42,6 +42,7 @@ import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity.Companion.EXTRAS_PASSCODE_ENFORCED
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.ui.helpers.ShareSheetHelper
@@ -275,9 +276,11 @@ fun Activity.manageOptionLockSelected(type: LockType) {
     when (type) {
         LockType.PASSCODE -> startActivity(Intent(this, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+            putExtra(EXTRAS_PASSCODE_ENFORCED, true)
         })
         LockType.PATTERN -> startActivity(Intent(this, PatternActivity::class.java).apply {
             action = PatternActivity.ACTION_REQUEST_WITH_RESULT
+            putExtra(EXTRAS_PASSCODE_ENFORCED, true)
         })
     }
 }

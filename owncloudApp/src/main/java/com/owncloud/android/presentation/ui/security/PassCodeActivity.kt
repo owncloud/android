@@ -27,32 +27,30 @@
 package com.owncloud.android.presentation.ui.security
 
 import android.content.Context
-import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
-import android.widget.TextView
-import android.widget.EditText
-import android.os.Bundle
-import android.view.WindowManager
-import com.owncloud.android.R
-import android.widget.LinearLayout
-import android.view.View.OnFocusChangeListener
 import android.content.Intent
+import android.os.Bundle
 import android.os.SystemClock
-import android.text.TextWatcher
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
+import android.view.View.OnFocusChangeListener
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.owncloud.android.BuildConfig
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
+import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.lang.IllegalArgumentException
-import java.lang.StringBuilder
 import java.util.Arrays
 
 class PassCodeActivity : AppCompatActivity() {
@@ -127,8 +125,11 @@ class PassCodeActivity : AppCompatActivity() {
                     //mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
                     // TODO choose a header, check iOS
                     passCodeHdrExplanation.visibility = View.VISIBLE
-                    if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) setCancelButtonEnabled(false)
-                    else setCancelButtonEnabled(true)
+                    if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) {
+                        setCancelButtonEnabled(false)
+                    } else if (intent.extras?.getBoolean(EXTRAS_PASSCODE_ENFORCED) == true) {
+                        setCancelButtonEnabled(false)
+                    } else setCancelButtonEnabled(true)
                 }
             }
             ACTION_CHECK_WITH_RESULT -> {
@@ -366,7 +367,10 @@ class PassCodeActivity : AppCompatActivity() {
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-            if ((ACTION_REQUEST_WITH_RESULT == intent.action && intent.extras == null) || ACTION_CHECK_WITH_RESULT == intent.action) {
+            if ((ACTION_REQUEST_WITH_RESULT == intent.action
+                        && intent.extras?.getBoolean(EXTRAS_PASSCODE_ENFORCED) != true)
+                || ACTION_CHECK_WITH_RESULT == intent.action
+            ) {
                 finish()
             } // else, do nothing, but report that the key was consumed to stay alive
             return true
@@ -466,5 +470,6 @@ class PassCodeActivity : AppCompatActivity() {
 
         const val EXTRAS_MIGRATION = "PASSCODE_MIGRATION"
         const val PASSCODE_MIN_LENGTH = 4
+        const val EXTRAS_PASSCODE_ENFORCED = "EXTRAS_PASSCODE_ENFORCED"
     }
 }

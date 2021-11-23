@@ -41,12 +41,12 @@ import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.presentation.ui.security.PassCodeActivity.Companion.EXTRAS_PASSCODE_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.lang.IllegalArgumentException
 
 class PatternActivity : AppCompatActivity() {
 
@@ -120,7 +120,11 @@ class PatternActivity : AppCompatActivity() {
                 } else {
                     patternHeader.text = getString(R.string.pattern_configure_pattern)
                     patternExplanation.visibility = View.VISIBLE
-                    setCancelButtonEnabled(true)
+                    if (intent.extras?.getBoolean(PassCodeActivity.EXTRAS_PASSCODE_ENFORCED) == true) {
+                        setCancelButtonEnabled(false)
+                    } else {
+                        setCancelButtonEnabled(true)
+                    }
                 }
             }
             ACTION_CHECK_WITH_RESULT -> {
@@ -302,7 +306,7 @@ class PatternActivity : AppCompatActivity() {
             putBoolean(KEY_CONFIRMING_PATTERN, confirmingPattern)
             putString(KEY_PATTERN_STRING, patternValue)
             putString(PATTERN_HEADER_VIEW_TEXT, patternHeader.text.toString())
-                putBoolean(PATTERN_EXP_VIEW_STATE, patternExplanation.isVisible)
+            putBoolean(PATTERN_EXP_VIEW_STATE, patternExplanation.isVisible)
         }
     }
 
@@ -316,7 +320,10 @@ class PatternActivity : AppCompatActivity() {
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-            if (ACTION_REQUEST_WITH_RESULT == intent.action || ACTION_CHECK_WITH_RESULT == intent.action) {
+            if (ACTION_REQUEST_WITH_RESULT == intent.action
+                && intent.extras?.getBoolean(EXTRAS_PASSCODE_ENFORCED) != true
+                || ACTION_CHECK_WITH_RESULT == intent.action
+            ) {
                 finish()
             } // else, do nothing, but report that the key was consumed to stay alive
             return true
