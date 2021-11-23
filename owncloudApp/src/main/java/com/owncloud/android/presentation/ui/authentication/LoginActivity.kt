@@ -653,14 +653,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun initBrandableOptionsUI() {
         val preferencesProvider = SharedPreferencesProviderImpl(this)
-        val showInput = if (BuildConfig.FLAVOR == MDM_FLAVOR) preferencesProvider.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, true) else contextProvider.getBoolean(R.bool.show_server_url_input)
+        val showInput = if (BuildConfig.FLAVOR == MDM_FLAVOR) preferencesProvider.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, contextProvider.getBoolean(R.bool.show_server_url_input)) else contextProvider.getBoolean(R.bool.show_server_url_input)
         binding.hostUrlFrame.isVisible = showInput
         binding.centeredRefreshButton.isVisible = !showInput
         if (!showInput) {
             binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
 
-        val url = if (BuildConfig.FLAVOR == MDM_FLAVOR) preferencesProvider.getString(CONFIGURATION_SERVER_URL, null) else contextProvider.getString(R.string.server_url)
+        val url = if (BuildConfig.FLAVOR == MDM_FLAVOR) preferencesProvider.getString(CONFIGURATION_SERVER_URL, contextProvider.getString(R.string.server_url)) else contextProvider.getString(R.string.server_url)
         if (!url.isNullOrEmpty()) {
             binding.hostUrlInput.setText(url)
             checkOcServer()
