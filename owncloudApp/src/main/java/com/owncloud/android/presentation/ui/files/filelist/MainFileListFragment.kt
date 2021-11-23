@@ -80,6 +80,30 @@ class MainFileListFragment : Fragment() {
 
     fun listDirectory(directory: OCFile) {
         mainFileListViewModel.listDirectory(directory = directory)
+
+        updateLayout()
+    }
+
+    private fun updateLayout() {
+        if (!isShowingJustFolders()) {
+            var filesCount = 0
+            var foldersCount = 0
+            val count: Int = fileListAdapter.itemCount
+            var file: OCFile
+            for (i in 0 until count) {
+                file = fileListAdapter.getItem(i) as OCFile
+                if (file.isFolder) {
+                    foldersCount++
+                } else {
+                    if (!file.isHidden) {
+                        filesCount++
+                    }
+                }
+            }
+
+            // set footer text
+            setFooterText(generateFooterText(filesCount, foldersCount))
+        }
     }
 
     private fun generateFooterText(filesCount: Int, foldersCount: Int): String {
@@ -128,12 +152,29 @@ class MainFileListFragment : Fragment() {
         }
     }
 
+    private fun setFooterText(text: String?) {
+        if (text?.isNotEmpty() == true) {
+            binding.footerMainFileList.footerText.text = text
+            // TODO Manage footer enable/disable options
+            //setFooterEnabled(true)
+        } else {
+            //setFooterEnabled(false)
+        }
+    }
+
+    private fun isShowingJustFolders(): Boolean {
+        val args = arguments
+        return args != null && args.getBoolean(ARG_JUST_FOLDERS, false)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
     companion object {
+        val ARG_JUST_FOLDERS = MainFileListFragment::class.java.canonicalName + ".JUST_FOLDERS"
+
         fun newInstance(): MainFileListFragment {
             val args = Bundle()
             return MainFileListFragment().apply { arguments = args }
