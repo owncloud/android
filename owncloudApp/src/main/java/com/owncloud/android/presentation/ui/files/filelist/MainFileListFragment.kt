@@ -29,8 +29,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
+import com.owncloud.android.presentation.onError
+import com.owncloud.android.presentation.onLoading
+import com.owncloud.android.presentation.onSuccess
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFileListFragment : Fragment() {
@@ -68,11 +70,27 @@ class MainFileListFragment : Fragment() {
 
     private fun subscribeToViewModels() {
         //Observe the action of retrieving the list of files.
-        mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver { result ->
-            when (result) {
-                is UIResult.Error -> {} //TODO Manage Error
-                is UIResult.Loading -> {} //TODO Manage Loading
-                is UIResult.Success -> fileListAdapter.updateFileList(filesToAdd = result.data ?: emptyList())
+        mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onLoading { /*TODO Manage Loading*/ }
+            it.onSuccess { data ->
+                val files = data ?: emptyList()
+                fileListAdapter.updateFileList(filesToAdd = files)
+                mainFileListViewModel.manageListOfFiles(files)
+            }
+            it.onError { /*TODO Manage Error*/ }
+        })
+
+        mainFileListViewModel.numberOfFilesPerType.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                if (!isShowingJustFolders()) {
+                    mainFileListViewModel.generateFooterText(data!!.first, data.second)
+                }
+            }
+        })
+
+        mainFileListViewModel.footerText.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                setFooterText(data)
             }
         })
     }
@@ -81,12 +99,29 @@ class MainFileListFragment : Fragment() {
         mainFileListViewModel.listDirectory(directory = directory)
     }
 
+    private fun setFooterText(text: String?) {
+        if (text?.isNotEmpty() == true) {
+            binding.footerMainFileList.footerText.text = text
+            // TODO Manage footer enable/disable options
+            //setFooterEnabled(true)
+        } else {
+            //setFooterEnabled(false)
+        }
+    }
+
+    private fun isShowingJustFolders(): Boolean {
+        val args = arguments
+        return args != null && args.getBoolean(ARG_JUST_FOLDERS, false)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
     companion object {
+        val ARG_JUST_FOLDERS = MainFileListFragment::class.java.canonicalName + ".JUST_FOLDERS"
+
         fun newInstance(): MainFileListFragment {
             val args = Bundle()
             return MainFileListFragment().apply { arguments = args }

@@ -61,6 +61,12 @@ class FileListAdapter(
 
     override fun getItemId(position: Int): Long = position.toLong()
 
+    fun getItem(position: Int): Any? {
+        return if (files.size <= position) {
+            null
+        } else files[position]
+    }
+
     override fun getItemViewType(position: Int): Int = position
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

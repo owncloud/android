@@ -28,6 +28,7 @@ sealed class UIResult<out T> {
     val isSuccess get() = this is Success
     val isError get() = this is Error
 
+    @Deprecated(message = "Start to use new extensions")
     fun getStoredData(): T? =
         when (this) {
             is Loading -> data
@@ -40,4 +41,31 @@ sealed class UIResult<out T> {
             is Error -> error
             else -> null
         }
+}
+
+fun <T> UIResult<T>.onLoading(action: (data: T?) -> Unit): UIResult<T> {
+    if (this is UIResult.Loading) action(data)
+    return this
+}
+
+fun <T> UIResult<T>.onSuccess(action: (data: T?) -> Unit): UIResult<T> {
+    if (this is UIResult.Success) action(data)
+    return this
+}
+
+fun <T> UIResult<T>.onError(action: (error: Throwable?) -> Unit): UIResult<T> {
+    if (this is UIResult.Error) action(error)
+    return this
+}
+
+fun <T> UIResult<T>.fold(
+    onLoading: (data: T?) -> Unit,
+    onSuccess: (data: T?) -> Unit,
+    onFailure: (error: Throwable?) -> Unit
+) {
+    when (this) {
+        is UIResult.Loading -> onLoading(data)
+        is UIResult.Success -> onSuccess(data)
+        is UIResult.Error -> onFailure(error)
+    }
 }
