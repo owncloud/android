@@ -73,15 +73,17 @@ class MainFileListFragment : Fragment() {
         //Observe the action of retrieving the list of files.
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onLoading { /*TODO Manage Loading*/ }
-            it.onSuccess { data -> fileListAdapter.updateFileList(filesToAdd = data ?: emptyList()) }
+            it.onSuccess { data ->
+                fileListAdapter.updateFileList(filesToAdd = data ?: emptyList())
+
+                updateLayout()
+            }
             it.onError { /*TODO Manage Error*/ }
         })
     }
 
     fun listDirectory(directory: OCFile) {
         mainFileListViewModel.listDirectory(directory = directory)
-
-        updateLayout()
     }
 
     private fun updateLayout() {
