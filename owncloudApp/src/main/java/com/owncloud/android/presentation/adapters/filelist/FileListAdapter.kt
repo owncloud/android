@@ -59,6 +59,8 @@ class FileListAdapter(
 
     override fun getItemCount(): Int = files.size
 
+    override fun getItemId(position: Int): Long = position.toLong()
+
     fun getItem(position: Int): Any? {
         return if (files.size <= position) {
             null
