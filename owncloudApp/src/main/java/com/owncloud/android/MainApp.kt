@@ -105,7 +105,7 @@ class MainApp : Application() {
                 PreferenceManager.migrateFingerprintToBiometricKey(applicationContext)
                 PreferenceManager.deleteOldSettingsPreferences(applicationContext)
 
-                if (BuildConfig.FLAVOR == "mdm") {
+                if (BuildConfig.FLAVOR == MDM_FLAVOR) {
                     handleRestrictions(activity)
                 }
             }
@@ -222,19 +222,18 @@ class MainApp : Application() {
     private fun cacheRestrictions(activity: Activity, restrictions: Bundle) {
         val preferencesProvider = SharedPreferencesProviderImpl(activity)
         if (restrictions.containsKey(CONFIGURATION_SERVER_URL)) {
-            val managedString = restrictions.getString(CONFIGURATION_SERVER_URL)
-            managedString?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
+            val confServerUrl = restrictions.getString(CONFIGURATION_SERVER_URL)
+            confServerUrl?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
         }
         if (restrictions.containsKey(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)) {
-            val managedBool = restrictions.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
-            preferencesProvider.putBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, managedBool)
+            val confServerUrlInputVisibility = restrictions.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
+            preferencesProvider.putBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, confServerUrlInputVisibility)
         }
     }
 
     companion object {
         private const val BETA_VERSION = "beta"
-        const val CONFIGURATION_SERVER_URL = "server_url_configuration"
-        const val CONFIGURATION_SERVER_URL_INPUT_VISIBILITY = "server_url_input_visibility_configuration"
+        const val MDM_FLAVOR = "mdm"
 
         lateinit var appContext: Context
             private set

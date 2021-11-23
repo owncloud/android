@@ -41,8 +41,7 @@ import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.owncloud.android.BuildConfig
-import com.owncloud.android.MainApp.Companion.CONFIGURATION_SERVER_URL
-import com.owncloud.android.MainApp.Companion.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
+import com.owncloud.android.MainApp.Companion.MDM_FLAVOR
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.authentication.oauth.OAuthUtils
@@ -75,6 +74,8 @@ import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticat
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
+import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
+import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
@@ -653,14 +654,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun initBrandableOptionsUI() {
         val preferencesProvider = SharedPreferencesProviderImpl(this)
-        val showInput = if (BuildConfig.FLAVOR == "mdm") preferencesProvider.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, true) else contextProvider.getBoolean(R.bool.show_server_url_input)
+        val showInput = if (BuildConfig.FLAVOR == MDM_FLAVOR) preferencesProvider.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, true) else contextProvider.getBoolean(R.bool.show_server_url_input)
         binding.hostUrlFrame.isVisible = showInput
         binding.centeredRefreshButton.isVisible = !showInput
         if (!showInput) {
             binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
 
-        val url = if (BuildConfig.FLAVOR == "mdm") preferencesProvider.getString(CONFIGURATION_SERVER_URL, null) else contextProvider.getString(R.string.server_url)
+        val url = if (BuildConfig.FLAVOR == MDM_FLAVOR) preferencesProvider.getString(CONFIGURATION_SERVER_URL, null) else contextProvider.getString(R.string.server_url)
         if (!url.isNullOrEmpty()) {
             binding.hostUrlInput.setText(url)
             checkOcServer()
