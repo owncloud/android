@@ -320,9 +320,9 @@ class PatternActivity : AppCompatActivity() {
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-            if (ACTION_REQUEST_WITH_RESULT == intent.action
-                && intent.extras?.getBoolean(EXTRAS_PASSCODE_ENFORCED) != true
-                || ACTION_CHECK_WITH_RESULT == intent.action
+            if (ACTION_REQUEST_WITH_RESULT == intent.action &&
+                intent.extras?.getBoolean(EXTRAS_PASSCODE_ENFORCED) != true ||
+                ACTION_CHECK_WITH_RESULT == intent.action
             ) {
                 finish()
             } // else, do nothing, but report that the key was consumed to stay alive
