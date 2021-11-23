@@ -26,7 +26,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
@@ -74,84 +73,30 @@ class MainFileListFragment : Fragment() {
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onLoading { /*TODO Manage Loading*/ }
             it.onSuccess { data ->
-                fileListAdapter.updateFileList(filesToAdd = data ?: emptyList())
-
-                updateLayout()
+                val files = data ?: emptyList()
+                fileListAdapter.updateFileList(filesToAdd = files)
+                mainFileListViewModel.manageListOfFiles(files)
             }
             it.onError { /*TODO Manage Error*/ }
+        })
+
+        mainFileListViewModel.numberOfFilesPerType.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                if (!isShowingJustFolders()) {
+                    mainFileListViewModel.generateFooterText(data!!.first, data.second)
+                }
+            }
+        })
+
+        mainFileListViewModel.footerText.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                setFooterText(data)
+            }
         })
     }
 
     fun listDirectory(directory: OCFile) {
         mainFileListViewModel.listDirectory(directory = directory)
-    }
-
-    private fun updateLayout() {
-        if (!isShowingJustFolders()) {
-            var filesCount = 0
-            var foldersCount = 0
-            val count: Int = fileListAdapter.itemCount
-            var file: OCFile
-            for (i in 0 until count) {
-                file = fileListAdapter.getItem(i) as OCFile
-                if (file.isFolder) {
-                    foldersCount++
-                } else {
-                    if (!file.isHidden) {
-                        filesCount++
-                    }
-                }
-            }
-
-            // set footer text
-            setFooterText(generateFooterText(filesCount, foldersCount))
-        }
-    }
-
-    private fun generateFooterText(filesCount: Int, foldersCount: Int): String {
-        return when {
-            filesCount <= 0 -> {
-                when {
-                    foldersCount <= 0 -> {
-                        ""
-                    }
-                    foldersCount == 1 -> {
-                        resources.getString(R.string.file_list__footer__folder)
-                    }
-                    else -> { // foldersCount > 1
-                        resources.getString(R.string.file_list__footer__folders, foldersCount)
-                    }
-                }
-            }
-            filesCount == 1 -> {
-                when {
-                    foldersCount <= 0 -> {
-                        resources.getString(R.string.file_list__footer__file)
-                    }
-                    foldersCount == 1 -> {
-                        resources.getString(R.string.file_list__footer__file_and_folder)
-                    }
-                    else -> { // foldersCount > 1
-                        resources.getString(R.string.file_list__footer__file_and_folders, foldersCount)
-                    }
-                }
-            }
-            else -> {    // filesCount > 1
-                when {
-                    foldersCount <= 0 -> {
-                        resources.getString(R.string.file_list__footer__files, filesCount)
-                    }
-                    foldersCount == 1 -> {
-                        resources.getString(R.string.file_list__footer__files_and_folder, filesCount)
-                    }
-                    else -> { // foldersCount > 1
-                        resources.getString(
-                            R.string.file_list__footer__files_and_folders, filesCount, foldersCount
-                        )
-                    }
-                }
-            }
-        }
     }
 
     private fun setFooterText(text: String?) {
