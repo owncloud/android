@@ -37,6 +37,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.RestrictionsManager
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.content.res.Resources.NotFoundException
@@ -54,6 +55,7 @@ import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
@@ -95,6 +97,8 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
+import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
+import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PermissionUtil
@@ -154,6 +158,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         Timber.v("onCreate() start")
 
         super.onCreate(savedInstanceState) // this calls onAccountChanged() when ownCloud Account is valid
+
+        if (BuildConfig.FLAVOR == MainApp.MDM_FLAVOR) {
+            handleRestrictions()
+        }
 
         checkPasscodeEnforced(this)
 
@@ -221,6 +229,24 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         if (resources.getBoolean(R.bool.enable_rate_me_feature) && !BuildConfig.DEBUG) {
             AppRater.appLaunched(this, packageName)
+        }
+    }
+
+    private fun handleRestrictions() {
+        val restrictionsManager = getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager
+        val restrictions = restrictionsManager.applicationRestrictions
+        cacheRestrictions(restrictions)
+    }
+
+    private fun cacheRestrictions(restrictions: Bundle) {
+        val preferencesProvider = SharedPreferencesProviderImpl(this)
+        if (restrictions.containsKey(CONFIGURATION_SERVER_URL)) {
+            val confServerUrl = restrictions.getString(CONFIGURATION_SERVER_URL)
+            confServerUrl?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
+        }
+        if (restrictions.containsKey(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)) {
+            val confServerUrlInputVisibility = restrictions.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
+            preferencesProvider.putBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, confServerUrlInputVisibility)
         }
     }
 
