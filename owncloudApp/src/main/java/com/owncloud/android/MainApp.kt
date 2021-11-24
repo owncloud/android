@@ -26,7 +26,6 @@ import android.app.Activity
 import android.app.Application
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
-import android.content.RestrictionsManager
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
@@ -104,10 +103,6 @@ class MainApp : Application() {
 
                 PreferenceManager.migrateFingerprintToBiometricKey(applicationContext)
                 PreferenceManager.deleteOldSettingsPreferences(applicationContext)
-
-                if (BuildConfig.FLAVOR == MDM_FLAVOR) {
-                    handleRestrictions(activity)
-                }
             }
 
             override fun onActivityStarted(activity: Activity) {
@@ -211,24 +206,6 @@ class MainApp : Application() {
             description = getString(R.string.file_sync_notification_channel_description),
             importance = IMPORTANCE_LOW
         )
-    }
-
-    private fun handleRestrictions(activity: Activity) {
-        val restrictionsManager = activity.getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager
-        val restrictions = restrictionsManager.applicationRestrictions
-        cacheRestrictions(activity, restrictions)
-    }
-
-    private fun cacheRestrictions(activity: Activity, restrictions: Bundle) {
-        val preferencesProvider = SharedPreferencesProviderImpl(activity)
-        if (restrictions.containsKey(CONFIGURATION_SERVER_URL)) {
-            val confServerUrl = restrictions.getString(CONFIGURATION_SERVER_URL)
-            confServerUrl?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
-        }
-        if (restrictions.containsKey(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)) {
-            val confServerUrlInputVisibility = restrictions.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
-            preferencesProvider.putBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, confServerUrlInputVisibility)
-        }
     }
 
     companion object {
