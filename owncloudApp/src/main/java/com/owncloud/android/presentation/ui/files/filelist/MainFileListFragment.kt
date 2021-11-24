@@ -75,6 +75,9 @@ class MainFileListFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = fileListAdapter
         }
+
+        //Set Swipe to refresh and its listener
+        binding.swipeRefreshMainFileList.setOnRefreshListener { mainFileListViewModel.refreshDirectory() }
     }
 
     private fun subscribeToViewModels() {
