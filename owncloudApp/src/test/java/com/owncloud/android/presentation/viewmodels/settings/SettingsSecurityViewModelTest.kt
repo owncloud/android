@@ -45,7 +45,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     @Before
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
-        contextProvider = mockk()
+        contextProvider = mockk(relaxUnitFun = true)
         securityViewModel = SettingsSecurityViewModel(preferencesProvider, contextProvider)
     }
 
@@ -146,7 +146,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         }
 
         verify(exactly = 1) {
-            contextProvider.getBoolean(R.bool.passcode_enforced)
+            contextProvider.getBoolean(R.bool.lock_enforced)
         }
     }
 
@@ -159,7 +159,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         }
 
         verify(exactly = 1) {
-            contextProvider.getBoolean(R.bool.passcode_enforced)
+            contextProvider.getBoolean(R.bool.lock_enforced)
         }
     }
 

@@ -269,6 +269,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         private const val SCREEN_SECURITY = "security_screen"
         const val PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER = "access_from_document_provider"
         const val PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows"
+        const val EXTRAS_LOCK_ENFORCED = "EXTRAS_LOCK_ENFORCED"
     }
 
 }

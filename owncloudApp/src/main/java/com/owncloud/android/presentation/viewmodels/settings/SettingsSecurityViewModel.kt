@@ -43,5 +43,5 @@ class SettingsSecurityViewModel(
     fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =
         preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
 
-    fun isSecurityEnforcedEnabled() = contextProvider.getBoolean(R.bool.passcode_enforced)
+    fun isSecurityEnforcedEnabled() = contextProvider.getBoolean(R.bool.lock_enforced)
 }

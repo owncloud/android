@@ -42,8 +42,8 @@ import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.presentation.ui.security.PassCodeActivity.Companion.EXTRAS_PASSCODE_ENFORCED
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.ui.helpers.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -248,11 +248,11 @@ fun Activity.hideSoftKeyboard() {
 fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
     val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
 
-    val passcodeEnforced = this.resources.getBoolean(R.bool.passcode_enforced)
+    val lockEnforced = this.resources.getBoolean(R.bool.lock_enforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-    if (passcodeEnforced && !passcodeConfigured && !patternConfigured) {
+    if (lockEnforced && !passcodeConfigured && !patternConfigured) {
 
         val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
         var optionSelected = 0
@@ -276,11 +276,11 @@ fun Activity.manageOptionLockSelected(type: LockType) {
     when (type) {
         LockType.PASSCODE -> startActivity(Intent(this, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
-            putExtra(EXTRAS_PASSCODE_ENFORCED, true)
+            putExtra(EXTRAS_LOCK_ENFORCED, true)
         })
         LockType.PATTERN -> startActivity(Intent(this, PatternActivity::class.java).apply {
             action = PatternActivity.ACTION_REQUEST_WITH_RESULT
-            putExtra(EXTRAS_PASSCODE_ENFORCED, true)
+            putExtra(EXTRAS_LOCK_ENFORCED, true)
         })
     }
 }

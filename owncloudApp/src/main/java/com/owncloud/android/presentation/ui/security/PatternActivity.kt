@@ -41,7 +41,7 @@ import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import com.owncloud.android.presentation.ui.security.PassCodeActivity.Companion.EXTRAS_PASSCODE_ENFORCED
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
@@ -120,7 +120,7 @@ class PatternActivity : AppCompatActivity() {
                 } else {
                     patternHeader.text = getString(R.string.pattern_configure_pattern)
                     patternExplanation.visibility = View.VISIBLE
-                    if (intent.extras?.getBoolean(PassCodeActivity.EXTRAS_PASSCODE_ENFORCED) == true) {
+                    if (intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) == true) {
                         setCancelButtonEnabled(false)
                     } else {
                         setCancelButtonEnabled(true)
@@ -321,7 +321,7 @@ class PatternActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
             if (ACTION_REQUEST_WITH_RESULT == intent.action &&
-                intent.extras?.getBoolean(EXTRAS_PASSCODE_ENFORCED) != true ||
+                intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) != true ||
                 ACTION_CHECK_WITH_RESULT == intent.action
             ) {
                 finish()

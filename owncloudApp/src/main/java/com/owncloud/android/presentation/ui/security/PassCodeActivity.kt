@@ -46,6 +46,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.extensions.hideSoftKeyboard
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
@@ -127,7 +128,7 @@ class PassCodeActivity : AppCompatActivity() {
                     passCodeHdrExplanation.visibility = View.VISIBLE
                     if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) {
                         setCancelButtonEnabled(false)
-                    } else if (intent.extras?.getBoolean(EXTRAS_PASSCODE_ENFORCED) == true) {
+                    } else if (intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) == true) {
                         setCancelButtonEnabled(false)
                     } else setCancelButtonEnabled(true)
                 }
@@ -368,7 +369,7 @@ class PassCodeActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
             if ((ACTION_REQUEST_WITH_RESULT == intent.action &&
-                        intent.extras?.getBoolean(EXTRAS_PASSCODE_ENFORCED) != true) ||
+                        intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) != true) ||
                 ACTION_CHECK_WITH_RESULT == intent.action
             ) {
                 finish()
@@ -470,6 +471,6 @@ class PassCodeActivity : AppCompatActivity() {
 
         const val EXTRAS_MIGRATION = "PASSCODE_MIGRATION"
         const val PASSCODE_MIN_LENGTH = 4
-        const val EXTRAS_PASSCODE_ENFORCED = "EXTRAS_PASSCODE_ENFORCED"
+
     }
 }
