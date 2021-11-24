@@ -647,4 +647,5 @@
     <string name="security_enforced_first_option">Passcode lock</string>
     <string name="security_enforced_second_option">Pattern lock</string>
 
+    <string name="folder_upload_some_content_or_sync_devices">Upload some content or sync with your devices!</string>
 </resources>
