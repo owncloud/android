@@ -30,6 +30,7 @@ import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
+import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onError
 import com.owncloud.android.presentation.onLoading
 import com.owncloud.android.presentation.onSuccess
@@ -66,6 +67,9 @@ class MainFileListFragment : Fragment() {
             adapter = fileListAdapter
 
         }
+
+        val emptyDataObserver = EmptyDataObserver(binding.recyclerViewMainFileList, binding.emptyDataParent.root)
+        fileListAdapter.registerAdapterDataObserver(emptyDataObserver)
     }
 
     private fun subscribeToViewModels() {
