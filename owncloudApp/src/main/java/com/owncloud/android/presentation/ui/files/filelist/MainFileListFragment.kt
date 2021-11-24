@@ -34,7 +34,15 @@ import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onError
 import com.owncloud.android.presentation.onLoading
 import com.owncloud.android.presentation.onSuccess
+import com.owncloud.android.ui.activity.FileDisplayActivity
+import com.owncloud.android.ui.preview.PreviewAudioFragment
+import com.owncloud.android.ui.preview.PreviewAudioFragment.Companion.canBePreviewed
+import com.owncloud.android.ui.preview.PreviewImageFragment
+import com.owncloud.android.ui.preview.PreviewImageFragment.Companion.canBePreviewed
+import com.owncloud.android.ui.preview.PreviewTextFragment
+import com.owncloud.android.ui.preview.PreviewVideoFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class MainFileListFragment : Fragment() {
 
@@ -62,14 +70,18 @@ class MainFileListFragment : Fragment() {
     private fun initViews() {
         //Set RecyclerView and its adapter.
         fileListAdapter = FileListAdapter(context = requireContext())
+        fileListAdapter.onItemClick = { file ->
+            if (file.isFolder) {
+                mainFileListViewModel.listDirectory(file)
+                // TODO Manage animation listDirectoryWithAnimationDown
+            } else { /// Click on a file
+                // TODO Click on a file
+            }
+        }
         binding.recyclerViewMainFileList.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = fileListAdapter
-
         }
-
-        val emptyDataObserver = EmptyDataObserver(binding.recyclerViewMainFileList, binding.emptyDataParent.root)
-        fileListAdapter.registerAdapterDataObserver(emptyDataObserver)
     }
 
     private fun subscribeToViewModels() {
@@ -79,6 +91,7 @@ class MainFileListFragment : Fragment() {
             it.onSuccess { data ->
                 val files = data ?: emptyList()
                 fileListAdapter.updateFileList(filesToAdd = files)
+                registerListAdapterDataObserver()
                 mainFileListViewModel.manageListOfFiles(files)
             }
             it.onError { /*TODO Manage Error*/ }
@@ -116,6 +129,11 @@ class MainFileListFragment : Fragment() {
     private fun isShowingJustFolders(): Boolean {
         val args = arguments
         return args != null && args.getBoolean(ARG_JUST_FOLDERS, false)
+    }
+
+    private fun registerListAdapterDataObserver(){
+        val emptyDataObserver = EmptyDataObserver(binding.recyclerViewMainFileList, binding.emptyDataParent.root)
+        fileListAdapter.registerAdapterDataObserver(emptyDataObserver)
     }
 
     override fun onDestroy() {
