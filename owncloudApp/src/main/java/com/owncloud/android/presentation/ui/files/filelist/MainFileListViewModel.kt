@@ -24,19 +24,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
+import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainFileListViewModel(
     private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
+    private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
-    private var file: OCFile? = null
+    private lateinit var file: OCFile
 
     private val _getFilesListStatusLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
     val getFilesListStatusLiveData: LiveData<Event<UIResult<List<OCFile>>>>
@@ -56,6 +61,13 @@ class MainFileListViewModel(
 
         _getFilesListStatusLiveData.addSource(filesListLiveData) {
             _getFilesListStatusLiveData.postValue(Event(UIResult.Success(it)))
+        }
+    }
+
+    private fun refreshFilesList(remotePath: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _getFilesListStatusLiveData.postValue(Event(UIResult.Loading()))
+            refreshFolderFromServerAsyncUseCase.execute(RefreshFolderFromServerAsyncUseCase.Params(remotePath = remotePath))
         }
     }
 
@@ -131,7 +143,12 @@ class MainFileListViewModel(
     }
 
     fun listDirectory(directory: OCFile) {
+        file = directory
         getFilesList(directory.id!!)
+    }
+
+    fun refreshDirectory() {
+        refreshFilesList(file.remotePath)
     }
 }
 
