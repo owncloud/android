@@ -634,4 +634,6 @@
     <string name="scoped_storage_wizard_migration_in_progress">Migrating your files. Please don’t turn your device off.</string>
     <string name="scoped_storage_wizard_migration_in_progress_button">Working… Please wait</string>
     <string name="scoped_storage_wizard_title">More security for your files</string>
+
+    <string name="folder_upload_some_content_or_sync_devices">Upload some content or sync with your devices!</string>
 </resources>
