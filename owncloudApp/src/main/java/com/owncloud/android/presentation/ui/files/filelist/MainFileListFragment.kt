@@ -34,15 +34,7 @@ import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onError
 import com.owncloud.android.presentation.onLoading
 import com.owncloud.android.presentation.onSuccess
-import com.owncloud.android.ui.activity.FileDisplayActivity
-import com.owncloud.android.ui.preview.PreviewAudioFragment
-import com.owncloud.android.ui.preview.PreviewAudioFragment.Companion.canBePreviewed
-import com.owncloud.android.ui.preview.PreviewImageFragment
-import com.owncloud.android.ui.preview.PreviewImageFragment.Companion.canBePreviewed
-import com.owncloud.android.ui.preview.PreviewTextFragment
-import com.owncloud.android.ui.preview.PreviewVideoFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class MainFileListFragment : Fragment() {
 
@@ -131,7 +123,7 @@ class MainFileListFragment : Fragment() {
         return args != null && args.getBoolean(ARG_JUST_FOLDERS, false)
     }
 
-    private fun registerListAdapterDataObserver(){
+    private fun registerListAdapterDataObserver() {
         val emptyDataObserver = EmptyDataObserver(binding.recyclerViewMainFileList, binding.emptyDataParent.root)
         fileListAdapter.registerAdapterDataObserver(emptyDataObserver)
     }
