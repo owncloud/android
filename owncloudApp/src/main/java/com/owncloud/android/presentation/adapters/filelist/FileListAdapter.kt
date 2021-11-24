@@ -41,6 +41,7 @@ class FileListAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<FileListAdapter.ViewHolder>() {
 
+    var onItemClick: ((OCFile) -> Unit)? = null
     private val files = mutableListOf<OCFile>()
 
     fun updateFileList(filesToAdd: List<OCFile>) {
@@ -115,5 +116,11 @@ class FileListAdapter(
         }
     }
 
-    inner class ViewHolder(val binding: ItemFileListBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemFileListBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(files[adapterPosition])
+            }
+        }
+    }
 }
