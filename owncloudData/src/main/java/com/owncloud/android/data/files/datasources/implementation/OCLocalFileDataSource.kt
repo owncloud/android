@@ -19,6 +19,8 @@
 package com.owncloud.android.data.files.datasources.implementation
 
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
@@ -65,6 +67,13 @@ class OCLocalFileDataSource(
     override fun getFolderContent(folderId: Long): List<OCFile> =
         fileDao.getFolderContent(folderId = folderId).map {
             it.toModel()
+        }
+
+    override fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>> =
+        Transformations.map(fileDao.getFolderContentAsLiveData(folderId = folderId)) { list ->
+            list.map {
+                it.toModel()
+            }
         }
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
