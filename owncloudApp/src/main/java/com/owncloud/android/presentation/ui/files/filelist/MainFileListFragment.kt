@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.cancel
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onSuccess
@@ -76,18 +77,19 @@ class MainFileListFragment : Fragment() {
             adapter = fileListAdapter
         }
 
-        //Set Swipe to refresh and its listener
+        // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener { mainFileListViewModel.refreshDirectory() }
     }
 
     private fun subscribeToViewModels() {
-        //Observe the action of retrieving the list of files from BBDD.
+        // Observe the action of retrieving the list of files from DB.
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 val files = data ?: emptyList()
                 fileListAdapter.updateFileList(filesToAdd = files)
                 registerListAdapterDataObserver()
                 mainFileListViewModel.manageListOfFiles(files)
+                binding.swipeRefreshMainFileList.cancel()
             }
         })
 
