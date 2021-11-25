@@ -19,8 +19,6 @@
 
 package com.owncloud.android.presentation
 
-import com.owncloud.android.domain.UseCaseResult
-
 sealed class UIResult<out T> {
     data class Loading<out T>(val data: T? = null) : UIResult<T>()
     data class Success<out T>(val data: T? = null) : UIResult<T>()
@@ -43,15 +41,6 @@ sealed class UIResult<out T> {
             is Error -> error
             else -> null
         }
-
-    companion object {
-        fun <T> fromResult(result: UseCaseResult<T>): UIResult<T> =
-            if (result.isSuccess) {
-                Success(result.getDataOrNull())
-            } else {
-                Error(result.getThrowableOrNull())
-            }
-    }
 }
 
 fun <T> UIResult<T>.onLoading(action: (data: T?) -> Unit): UIResult<T> {
@@ -80,5 +69,3 @@ fun <T> UIResult<T>.fold(
         is UIResult.Error -> onFailure(error)
     }
 }
-
-fun <T> UseCaseResult<T>.toUIResult() = UIResult.fromResult(this)
