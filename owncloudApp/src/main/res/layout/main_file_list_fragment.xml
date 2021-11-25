@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView_main_file_list"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView_main_file_list"
         android:layout_height="match_parent"
         android:layout_gravity="center" />
 
