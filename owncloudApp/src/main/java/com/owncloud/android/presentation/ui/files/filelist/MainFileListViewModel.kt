@@ -21,27 +21,24 @@
 package com.owncloud.android.presentation.ui.files.filelist
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
-import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainFileListViewModel(
-    private val getFolderContentUseCase: GetFolderContentUseCase,
+    private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
     private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
     private var file: OCFile? = null
 
-    private val _getFilesListStatusLiveData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
+    private val _getFilesListStatusLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
     val getFilesListStatusLiveData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesListStatusLiveData
 
@@ -54,14 +51,11 @@ class MainFileListViewModel(
         get() = _footerText
 
     private fun getFilesList(folderId: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _getFilesListStatusLiveData.postValue(Event(UIResult.Loading()))
-            getFolderContentUseCase.execute(GetFolderContentUseCase.Params(folderId = folderId)).let {
-                when (it) {
-                    is UseCaseResult.Error -> _getFilesListStatusLiveData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                    is UseCaseResult.Success -> _getFilesListStatusLiveData.postValue(Event(UIResult.Success(it.getDataOrNull())))
-                }
-            }
+        val filesListLiveData: LiveData<List<OCFile>> =
+            getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folderId))
+
+        _getFilesListStatusLiveData.addSource(filesListLiveData) {
+            _getFilesListStatusLiveData.postValue(Event(UIResult.Success(it)))
         }
     }
 
@@ -140,3 +134,5 @@ class MainFileListViewModel(
         getFilesList(directory.id!!)
     }
 }
+
+

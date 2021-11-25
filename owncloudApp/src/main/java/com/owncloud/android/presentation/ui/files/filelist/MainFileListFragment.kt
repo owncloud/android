@@ -30,8 +30,6 @@ import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
-import com.owncloud.android.presentation.onError
-import com.owncloud.android.presentation.onLoading
 import com.owncloud.android.presentation.onSuccess
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -69,15 +67,13 @@ class MainFileListFragment : Fragment() {
     }
 
     private fun subscribeToViewModels() {
-        //Observe the action of retrieving the list of files.
+        //Observe the action of retrieving the list of files from BBDD.
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onLoading { /*TODO Manage Loading*/ }
             it.onSuccess { data ->
                 val files = data ?: emptyList()
                 fileListAdapter.updateFileList(filesToAdd = files)
                 mainFileListViewModel.manageListOfFiles(files)
             }
-            it.onError { /*TODO Manage Error*/ }
         })
 
         mainFileListViewModel.numberOfFilesPerType.observe(viewLifecycleOwner, Event.EventObserver {
