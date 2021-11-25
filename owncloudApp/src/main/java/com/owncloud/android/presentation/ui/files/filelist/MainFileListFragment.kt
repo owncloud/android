@@ -61,15 +61,18 @@ class MainFileListFragment : Fragment() {
 
     private fun initViews() {
         //Set RecyclerView and its adapter.
-        fileListAdapter = FileListAdapter(context = requireContext())
-        fileListAdapter.onItemClick = { file ->
-            if (file.isFolder) {
-                mainFileListViewModel.listDirectory(file)
-                // TODO Manage animation listDirectoryWithAnimationDown
-            } else { /// Click on a file
-                // TODO Click on a file
+        fileListAdapter = FileListAdapter(context = requireContext(), listener = object :
+            FileListAdapter.FileListAdapterListener {
+            override fun clickItem(ocFile: OCFile) {
+                if (ocFile.isFolder) {
+                    mainFileListViewModel.listDirectory(ocFile)
+                    // TODO Manage animation listDirectoryWithAnimationDown
+                } else { /// Click on a file
+                    // TODO Click on a file
+                }
             }
-        }
+
+        } )
         binding.recyclerViewMainFileList.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = fileListAdapter
