@@ -36,6 +36,16 @@
         tools:listitem="@layout/item_file_list" />
 
     <include
+        android:id="@+id/empty_data_parent"
+        layout="@layout/item_empty_dataset"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView_main_file_list"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <include
         android:id="@+id/footer_main_file_list"
         layout="@layout/list_footer"
         android:layout_width="match_parent"
