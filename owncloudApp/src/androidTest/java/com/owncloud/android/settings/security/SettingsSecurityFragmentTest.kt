@@ -37,17 +37,17 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
+import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
-import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
-import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PATTERN
-import com.owncloud.android.presentation.ui.security.PatternActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
@@ -106,6 +106,7 @@ class SettingsSecurityFragmentTest {
 
         every { passCodeViewModel.getPassCode() } returns OC_PASSCODE_4_DIGITS
         every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
+        every { securityViewModel.isSecurityEnforcedEnabled() } returns false
 
         Intents.init()
     }
@@ -455,6 +456,32 @@ class SettingsSecurityFragmentTest {
         onView(withText(R.string.common_yes)).perform(click())
         onView(withText(R.string.prefs_touches_with_other_visible_windows)).perform(click())
         assertFalse(prefTouchesWithOtherVisibleWindows.isChecked)
+    }
+
+    @Test
+    fun passcodeLockNotVisible() {
+        every { securityViewModel.isSecurityEnforcedEnabled() } returns true
+        launchTest()
+        assertFalse(prefPasscode.isVisible)
+    }
+
+    @Test
+    fun patternLockNotVisible() {
+        every { securityViewModel.isSecurityEnforcedEnabled() } returns true
+        launchTest()
+        assertFalse(prefPattern.isVisible)
+    }
+
+    @Test
+    fun passcodeLockVisible() {
+        launchTest()
+        assertTrue(prefPasscode.isVisible)
+    }
+
+    @Test
+    fun patternLockVisible() {
+        launchTest()
+        assertTrue(prefPattern.isVisible)
     }
 
     private fun firstEnablePasscode() {

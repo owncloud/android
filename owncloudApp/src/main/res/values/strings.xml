@@ -641,4 +641,10 @@
     <string name="scoped_storage_wizard_migration_in_progress">Migrating your files. Please don’t turn your device off.</string>
     <string name="scoped_storage_wizard_migration_in_progress_button">Working… Please wait</string>
     <string name="scoped_storage_wizard_title">More security for your files</string>
+
+    <!-- Security Enforced -->
+    <string name="security_enforced_title">Please, select an option to lock the app:</string>
+    <string name="security_enforced_first_option">Passcode lock</string>
+    <string name="security_enforced_second_option">Pattern lock</string>
+
 </resources>

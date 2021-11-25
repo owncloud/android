@@ -20,6 +20,7 @@
 package com.owncloud.android.extensions
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
@@ -28,15 +29,21 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
-import android.webkit.MimeTypeMap
 import android.view.inputmethod.InputMethodManager
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.interfaces.ISecurityEnforced
+import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.ui.helpers.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -237,3 +244,44 @@ fun Activity.hideSoftKeyboard() {
         )
     }
 }
+
+fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
+    val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
+
+    val lockEnforced = this.resources.getBoolean(R.bool.lock_enforced)
+    val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+    val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
+
+    if (lockEnforced && !passcodeConfigured && !patternConfigured) {
+
+        val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
+        var optionSelected = 0
+
+        AlertDialog.Builder(this).apply {
+            setCancelable(false)
+            setTitle(getString(R.string.security_enforced_title))
+            setSingleChoiceItems(options, optionSelected) { _, which -> optionSelected = which }
+            setPositiveButton(android.R.string.ok) { dialog, _ ->
+                when (optionSelected) {
+                    0 -> securityEnforced.optionLockSelected(LockType.PASSCODE)
+                    1 -> securityEnforced.optionLockSelected(LockType.PATTERN)
+                }
+                dialog.dismiss()
+            }
+        }.show()
+    }
+}
+
+fun Activity.manageOptionLockSelected(type: LockType) {
+    when (type) {
+        LockType.PASSCODE -> startActivity(Intent(this, PassCodeActivity::class.java).apply {
+            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+            putExtra(EXTRAS_LOCK_ENFORCED, true)
+        })
+        LockType.PATTERN -> startActivity(Intent(this, PatternActivity::class.java).apply {
+            action = PatternActivity.ACTION_REQUEST_WITH_RESULT
+            putExtra(EXTRAS_LOCK_ENFORCED, true)
+        })
+    }
+}
+
