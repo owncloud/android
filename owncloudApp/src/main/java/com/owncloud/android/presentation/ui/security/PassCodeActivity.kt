@@ -258,12 +258,14 @@ class PassCodeActivity : AppCompatActivity() {
                 }
                 startActivity(intent)
             }
+            passCodeViewModel.resetNumberOfAttempts()
             finish()
         } else {
             showErrorAndRestart(
                 errorMessage = R.string.pass_code_wrong, headerMessage = getString(R.string.pass_code_enter_pass_code),
                 explanationVisibility = View.INVISIBLE
             )
+            passCodeViewModel.increaseNumberOfAttempts()
         }
     }
 

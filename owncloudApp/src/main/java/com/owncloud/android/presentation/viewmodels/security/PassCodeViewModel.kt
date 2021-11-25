@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
 
 class PassCodeViewModel(
@@ -63,6 +64,14 @@ class PassCodeViewModel(
 
     fun setMigrationRequired(required: Boolean) =
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, required)
+
+    fun getNumberOfAttempts() = preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, 0)
+
+    fun increaseNumberOfAttempts() =
+        preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, getNumberOfAttempts().plus(1))
+
+    fun resetNumberOfAttempts() =
+        preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
 
     private fun loadPinFromOldFormatIfPossible(): String? {
         var pinString = ""
