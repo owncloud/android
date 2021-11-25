@@ -25,18 +25,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
-import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.toUIResult
 import com.owncloud.android.providers.ContextProvider
-import kotlinx.coroutines.Dispatchers
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
 
 class MainFileListViewModel(
-    private val getFolderContentUseCase: GetFolderContentUseCase,
+    private val getFolderContentAsFlowUseCase: GetFolderContentUseCase,
     private val contextProvider: ContextProvider,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private var file: OCFile? = null
@@ -54,13 +55,9 @@ class MainFileListViewModel(
         get() = _footerText
 
     private fun getFilesList(folderId: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _getFilesListStatusLiveData.postValue(Event(UIResult.Loading()))
-            getFolderContentUseCase.execute(GetFolderContentUseCase.Params(folderId = folderId)).let {
-                when (it) {
-                    is UseCaseResult.Error -> _getFilesListStatusLiveData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                    is UseCaseResult.Success -> _getFilesListStatusLiveData.postValue(Event(UIResult.Success(it.getDataOrNull())))
-                }
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            with(getFolderContentAsFlowUseCase.execute(GetFolderContentUseCase.Params(folderId = folderId)).toUIResult()) {
+                _getFilesListStatusLiveData.postValue(Event(this))
             }
         }
     }

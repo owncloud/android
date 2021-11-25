@@ -20,6 +20,7 @@
 
 package com.owncloud.android.data.files.datasources
 
+import androidx.lifecycle.LiveData
 import com.owncloud.android.domain.files.model.OCFile
 
 interface LocalFileDataSource {
@@ -27,6 +28,7 @@ interface LocalFileDataSource {
     fun getFileById(fileId: Long): OCFile?
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getFolderContent(folderId: Long): List<OCFile>
+    fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>>
     fun getFolderImages(folderId: Long): List<OCFile>
     fun getFilesSharedByLink(owner: String): List<OCFile>
     fun moveFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String)
