@@ -20,6 +20,7 @@
 
 package com.owncloud.android.data.files.repository
 
+import androidx.lifecycle.LiveData
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
@@ -112,6 +113,9 @@ class OCFileRepository(
 
     override fun getFolderContent(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderContent(folderId)
+
+    override fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>> =
+        localFileDataSource.getFolderContentAsLiveData(folderId)
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderImages(folderId)
