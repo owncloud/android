@@ -38,10 +38,10 @@ import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 
 class FileListAdapter(
-    private val context: Context
+    private val context: Context,
+    private val listener: FileListAdapterListener
 ) : RecyclerView.Adapter<FileListAdapter.ViewHolder>() {
 
-    var onItemClick: ((OCFile) -> Unit)? = null
     private val files = mutableListOf<OCFile>()
 
     fun updateFileList(filesToAdd: List<OCFile>) {
@@ -84,6 +84,9 @@ class FileListAdapter(
                 }
                 //TODO Check this with FileListListAdapter.java and its viewType (LIST or GRID)
                 getSharedIcon(imageView = binding.sharedIcon, file = this)
+                binding.root.setOnClickListener {
+                    listener.clickItem(this)
+                }
             }
         }
     }
@@ -116,11 +119,9 @@ class FileListAdapter(
         }
     }
 
-    inner class ViewHolder(val binding: ItemFileListBinding) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            itemView.setOnClickListener {
-                onItemClick?.invoke(files[adapterPosition])
-            }
-        }
+    interface FileListAdapterListener {
+        fun clickItem(ocFile: OCFile)
     }
+
+    inner class ViewHolder(val binding: ItemFileListBinding) : RecyclerView.ViewHolder(binding.root)
 }
