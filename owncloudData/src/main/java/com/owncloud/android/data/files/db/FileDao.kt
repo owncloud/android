@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.data.files.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -44,6 +45,11 @@ abstract class FileDao {
     abstract fun getFolderContent(
         folderId: Long
     ): List<OCFileEntity>
+
+    @Query(SELECT_FOLDER_CONTENT)
+    abstract fun getFolderContentAsLiveData(
+        folderId: Long
+    ): LiveData<List<OCFileEntity>>
 
     @Query(SELECT_FOLDER_BY_MIMETYPE)
     abstract fun getFolderByMimeType(
