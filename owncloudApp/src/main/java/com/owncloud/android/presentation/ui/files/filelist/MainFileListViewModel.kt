@@ -34,7 +34,7 @@ import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUs
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
-import kotlinx.coroutines.Dispatchers
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
 
 class MainFileListViewModel(
@@ -42,6 +42,7 @@ class MainFileListViewModel(
     private val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase,
     private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val contextProvider: ContextProvider,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private lateinit var file: OCFile
@@ -81,7 +82,7 @@ class MainFileListViewModel(
     }
 
     private fun refreshFilesList(remotePath: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
             _getFilesListStatusLiveData.postValue(Event(UIResult.Loading()))
             refreshFolderFromServerAsyncUseCase.execute(RefreshFolderFromServerAsyncUseCase.Params(remotePath = remotePath))
         }
