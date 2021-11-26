@@ -465,4 +465,6 @@
   <string name="welcome_feature_4_title">カメラアップロード</string>
   <string name="no_borwser_installed_alert">ブラウザーがインストールされていません。安全なログインを許可するためにブラウザーをインストールしてください。</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">パスコードロック</string>
 </resources>

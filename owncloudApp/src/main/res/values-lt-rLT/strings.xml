@@ -472,4 +472,6 @@
   <string name="welcome_feature_skip_button">Praleisti</string>
   <string name="welcome_feature_4_title">Nuotraukų įkėlimai</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Užrakto kodas</string>
 </resources>

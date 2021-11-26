@@ -547,4 +547,6 @@
   <string name="no_borwser_installed_alert">Yüklü tarayıcı yok. Lütfen güvenli bağlantıyı sağlamak için bir tarayıcı yükleyin.</string>
   <string name="common_not_found">bulunamadı</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Parola kod kilidi</string>
 </resources>

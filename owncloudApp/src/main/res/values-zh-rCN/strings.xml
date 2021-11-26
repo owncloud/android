@@ -518,4 +518,6 @@
   <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
   <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">密码锁</string>
 </resources>

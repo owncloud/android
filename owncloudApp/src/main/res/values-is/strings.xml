@@ -487,4 +487,5 @@
   <string name="welcome_feature_4_title">Innsendingar úr myndavél</string>
   <string name="welcome_feature_5_title">Streyming myndskeiða</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

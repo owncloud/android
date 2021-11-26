@@ -534,4 +534,5 @@ Téléchargez-le ici : %2$s</string>
   <string name="common_not_found">ça n\'a pas été trouvé</string>
   <string name="get_base_url_error">Il est impossible de trouver l\'adresse du serveur</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

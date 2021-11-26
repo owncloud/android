@@ -465,4 +465,5 @@
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Spring over</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

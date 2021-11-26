@@ -522,4 +522,5 @@
   <string name="welcome_feature_5_text">Putar video Anda tanpa mengunduhnya</string>
   <string name="no_borwser_installed_alert">Tidak ada browser yang diinstal. Silakan instal Browser untuk memperbolehkan login yang aman.</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

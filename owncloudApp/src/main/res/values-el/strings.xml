@@ -543,4 +543,5 @@
   <string name="common_not_found">δεν βρέθηκε</string>
   <string name="synchronizing_account">Λογαριασμός συγχρονισμού</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

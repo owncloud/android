@@ -540,4 +540,5 @@ Il Download del file inizierà automaticamente</string>
   <string name="supports_oauth2_error">Non è stato possibile sapere se OAuth2 è supportato</string>
   <string name="get_base_url_error">Non è stato possibile conoscere l\'URL di base del server</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

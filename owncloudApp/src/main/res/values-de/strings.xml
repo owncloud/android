@@ -554,4 +554,6 @@
   <string name="prefs_logs_summary">Protokolle können sensible Informationen enthalten. Die gemeinsame Nutzung von Protokollen mit anderen liegt in der alleinigen Verantwortung des Benutzers</string>
   <string name="synchronizing_account">Konto wird synchronisiert</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">PIN gesperrt</string>
 </resources>

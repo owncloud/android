@@ -488,4 +488,5 @@ Te rog ia legătura cu administratorul</string>
   <string name="welcome_feature_5_text">Rulează videoclipurile tale fără a le descărca</string>
   <string name="common_not_found">nu a fost găsit</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

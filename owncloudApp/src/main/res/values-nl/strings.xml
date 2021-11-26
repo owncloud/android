@@ -544,4 +544,5 @@ Neem contact op met uw beheerder</string>
   <string name="supports_oauth2_error">Het was niet mogelijk om te weten of OAuth2 wordt ondersteund</string>
   <string name="get_base_url_error">Het was niet mogelijk om de basis-URL van de server te kennen</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

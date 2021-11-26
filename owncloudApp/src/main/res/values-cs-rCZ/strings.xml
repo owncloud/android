@@ -568,4 +568,5 @@ správce systému.</string>
   <string name="prefs_logs_summary">Log může obsahovat citlivé informace. Sdílení je pouze na vaší zodpovědnosti.</string>
   <string name="synchronizing_account">Synchronizuji účet</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

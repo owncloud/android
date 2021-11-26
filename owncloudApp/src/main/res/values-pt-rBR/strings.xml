@@ -587,4 +587,5 @@
   <string name="scoped_storage_wizard_migration_in_progress">Migrando seus arquivos. Por favor não desligue seu dispositivo.</string>
   <string name="scoped_storage_wizard_migration_in_progress_button">Trabalhando... Por favor, aguarde</string>
   <string name="scoped_storage_wizard_title">Mais segurança para seus arquivos</string>
+  <!--Security Enforced-->
 </resources>

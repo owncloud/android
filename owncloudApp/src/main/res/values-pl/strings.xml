@@ -530,4 +530,5 @@
   <string name="supports_oauth2_error">Nie było możliwe stwierdzenie czy OAuth2 jest wspierane</string>
   <string name="get_base_url_error">Nie było możliwe znalezienie adresu URL serwera</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>

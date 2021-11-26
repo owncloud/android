@@ -459,4 +459,5 @@
   <string name="welcome_feature_3_text">Pripoj sa k všetkým svojim ownCloud Serverom</string>
   <string name="welcome_feature_4_title">Náhrávky z kamery</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
 </resources>
