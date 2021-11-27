@@ -535,4 +535,5 @@ Téléchargez-le ici : %2$s</string>
   <string name="get_base_url_error">Il est impossible de trouver l\'adresse du serveur</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Code de sécurité</string>
 </resources>

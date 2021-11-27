@@ -460,4 +460,5 @@
   <string name="welcome_feature_4_title">Náhrávky z kamery</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Heslo</string>
 </resources>

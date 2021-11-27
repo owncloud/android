@@ -464,4 +464,5 @@
   <string name="no_borwser_installed_alert">Selainta ei asennettu. Ole hyvä ja asenna selain jotta turvallinen kirjautuminen on mahdollista.</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Suojakoodilukitus</string>
 </resources>

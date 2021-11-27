@@ -544,4 +544,5 @@
   <string name="synchronizing_account">Λογαριασμός συγχρονισμού</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Κλείδωμα με κωδικό</string>
 </resources>

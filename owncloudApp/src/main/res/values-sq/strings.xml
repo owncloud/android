@@ -589,4 +589,7 @@
   <string name="scoped_storage_wizard_migration_in_progress_button">Po punohet… Ju lutemi, pritni</string>
   <string name="scoped_storage_wizard_title">Më shumë siguri për kartelat tuaja</string>
   <!--Security Enforced-->
+  <string name="security_enforced_title">Ju lutemi, përzgjidhni një mundësi për kyçje aplikacioni:</string>
+  <string name="security_enforced_first_option">Kyçje me kodkalim</string>
+  <string name="security_enforced_second_option">Kyçje me rregullsi</string>
 </resources>

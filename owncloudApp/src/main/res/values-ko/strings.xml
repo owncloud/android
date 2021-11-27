@@ -467,4 +467,5 @@
   <string name="welcome_feature_5_title">비디오 스트리밍</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">암호 잠금</string>
 </resources>

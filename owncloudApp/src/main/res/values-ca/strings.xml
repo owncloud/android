@@ -536,4 +536,5 @@
   <string name="prefs_logs_summary">Els registres poden contenir informació sensible. Compartir els registres amb altres és responsabilitat exclusiva de l’usuari</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Contrasenya</string>
 </resources>

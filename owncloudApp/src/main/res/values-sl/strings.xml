@@ -491,4 +491,5 @@
   <string name="common_not_found">Ni bilo najdeno</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Zakleni dostop s kodo PIN</string>
 </resources>

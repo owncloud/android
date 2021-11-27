@@ -488,4 +488,5 @@
   <string name="welcome_feature_5_title">Streyming myndskeiða</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Læsing með lykilkóða</string>
 </resources>

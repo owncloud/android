@@ -549,4 +549,5 @@
   <string name="prefs_logs_summary">לוגים עלולים להכיל מידע רגיש. שיתוף לוגים עם אחרים הנו באחריות הבלעדית של המשתמש</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">נעילת סיסמא</string>
 </resources>

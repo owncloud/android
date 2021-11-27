@@ -541,4 +541,5 @@ Il Download del file inizierà automaticamente</string>
   <string name="get_base_url_error">Non è stato possibile conoscere l\'URL di base del server</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Blocco con codice di sicurezza</string>
 </resources>

@@ -549,4 +549,5 @@ Descárgueo de aquí: %2$s</string>
   <string name="synchronizing_account">Sincronizando a conta</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Código de bloqueo</string>
 </resources>

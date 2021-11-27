@@ -499,4 +499,5 @@
   <string name="common_not_found">no se encontró</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Contraseña</string>
 </resources>

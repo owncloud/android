@@ -569,4 +569,5 @@
   <string name="synchronizing_account">同步帳號</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">密碼鎖</string>
 </resources>

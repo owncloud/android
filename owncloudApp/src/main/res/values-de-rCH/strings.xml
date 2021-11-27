@@ -544,4 +544,5 @@
   <string name="get_base_url_error">Es war nicht möglich, die Server-Basis-URL herauszufinden</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">PIN gesperrt</string>
 </resources>

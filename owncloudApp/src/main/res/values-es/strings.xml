@@ -569,4 +569,5 @@
   <string name="synchronizing_account">Sincronizando cuenta</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Código de bloqueo</string>
 </resources>

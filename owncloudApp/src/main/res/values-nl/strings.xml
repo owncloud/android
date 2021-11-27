@@ -545,4 +545,5 @@ Neem contact op met uw beheerder</string>
   <string name="get_base_url_error">Het was niet mogelijk om de basis-URL van de server te kennen</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Pincode slot</string>
 </resources>

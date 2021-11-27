@@ -558,4 +558,5 @@
   <string name="synchronizing_account">Fiók szinkronizálása</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">Jelszavas zár</string>
 </resources>

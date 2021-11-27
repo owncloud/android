@@ -565,4 +565,5 @@
   <string name="synchronizing_account">ประสานข้อมูลบัญชี</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
+  <string name="security_enforced_first_option">ล็อครหัสปลดล็อค</string>
 </resources>
