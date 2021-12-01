@@ -37,11 +37,16 @@
   <string name="prefs_passcode">Заключваща парола</string>
   <string name="prefs_biometric">Биометрично заключване</string>
   <string name="prefs_biometric_summary">Активирайте парола или схема за заключване за да активирате тази опция</string>
+  <string name="prefs_lock_application_entries_1minute">След 1 минута</string>
+  <string name="prefs_lock_application_entries_5minutes">След 5 минути</string>
+  <string name="prefs_lock_application_entries_30minutes">След 30 минути</string>
   <string name="confirmation_access_from_document_provider_title">Сигурни ли сте, че искате да активирате тази функция?</string>
   <string name="prefs_touches_with_other_visible_windows">Докосване с други видими прозорци</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешаване на докосвания, когато изгледът е затъмнен от друг видим прозорец. Разрешете да използва приложения за филтриране на светлината.</string>
   <string name="confirmation_touches_with_other_windows_title">Сигурни ли сте, че искате да активирате тази функция?</string>
   <string name="confirmation_touches_with_other_windows_message">Използвайте тази функция на ваша отговорност, злонамерено приложение може да се опита да ви подведе при извършването на някои действия, незабележимо, като използва други изгледи.</string>
+  <string name="prefs_subsection_picture_uploads">Автоматично качване на снимки</string>
+  <string name="prefs_subsection_video_uploads">Автоматично качване на видеа</string>
   <string name="prefs_camera_picture_upload">Качване на снимки</string>
   <string name="prefs_camera_picture_upload_summary">Автоматично качване на снимки направени от камерата</string>
   <string name="prefs_camera_picture_upload_path_title">Път за качване на снимка</string>
@@ -50,6 +55,7 @@
   <string name="prefs_camera_video_upload_summary">Автоматично качване на видео напавено от камерата</string>
   <string name="prefs_camera_video_upload_path_title">Път за качване на видео</string>
   <string name="prefs_camera_video_upload_on_wifi">Качване на видео само през WiFi</string>
+  <string name="prefs_camera_video_upload_on_charging">Качване на видеа, само докато се зарежда</string>
   <string name="prefs_log_title">Разреши влизане</string>
   <string name="prefs_log_summary">Използва се за докладване на проблеми</string>
   <string name="prefs_log_title_history">История на влизанията</string>
@@ -65,6 +71,7 @@
   <string name="prefs_remember_last_upload_location_summary">Запомни мястото на последната споделена папка</string>
   <string name="prefs_pattern">Схема за заключване</string>
   <string name="prefs_enable_logging">Разреши влизане</string>
+  <string name="prefs_app_version">Версия</string>
   <string name="pattern_enter_pattern">Моля въведете вашата схема</string>
   <string name="pattern_configure_pattern">Въведете схема</string>
   <string name="pattern_remove_pattern">Премахване на вашата схема</string>
@@ -425,6 +432,7 @@
   <string name="prefs_camera_upload_source_path_title_required">задължителен</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Оригиналният файл ще бъде</string>
   <string name="prefs_camera_upload_behaviour_title">Оригиналният файл ще бъде</string>
+  <string name="prefs_camera_upload_last_sync_title">Последна синхронизация</string>
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>
   <string name="pref_behaviour_entries_keep_file">запази в оригиналната папка</string>
@@ -536,6 +544,8 @@
   <string name="supports_oauth2_error">Не беше възможно да се разбере дали OAuth2 се поддържа</string>
   <string name="get_base_url_error">Не беше възможно да се открие базовият URL адрес на сървъра</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_intro_button">Нека започнем</string>
   <!--Security Enforced-->
+  <string name="security_enforced_title">Моля, изберете начин за заключване на приложението</string>
   <string name="security_enforced_first_option">Заключваща парола</string>
 </resources>
