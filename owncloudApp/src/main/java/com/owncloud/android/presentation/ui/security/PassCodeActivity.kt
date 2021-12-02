@@ -266,6 +266,9 @@ class PassCodeActivity : AppCompatActivity() {
                 explanationVisibility = View.INVISIBLE
             )
             passCodeViewModel.increaseNumberOfAttempts()
+            if (passCodeViewModel.getNumberOfAttempts() >= 3) {
+                lockScreen()
+            }
         }
     }
 
@@ -284,6 +287,10 @@ class PassCodeActivity : AppCompatActivity() {
                 explanationVisibility = View.INVISIBLE
             )
         }
+    }
+
+    private fun lockScreen() {
+
     }
 
     private fun handleActionRequestWithResult() {
@@ -314,8 +321,8 @@ class PassCodeActivity : AppCompatActivity() {
         Arrays.fill(passCodeDigits, null)
         binding.error.setText(errorMessage)
         binding.error.visibility = View.VISIBLE
-        binding.header.text = headerMessage // TODO check if really needed
-        binding.explanation.visibility = explanationVisibility // TODO check if really needed
+        binding.header.text = headerMessage
+        binding.explanation.visibility = explanationVisibility
         clearBoxes()
     }
 

@@ -74,4 +74,14 @@
         android:layout_height="wrap_content"
         android:text="@android:string/cancel" />
 
+    <TextView
+        android:id="@+id/lock_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textColor="@android:color/black"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"
+        />
+
 </LinearLayout>
