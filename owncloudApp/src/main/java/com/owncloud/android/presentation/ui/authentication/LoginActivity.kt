@@ -52,6 +52,7 @@ import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
+import com.owncloud.android.domain.exceptions.StateMismatchException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
@@ -77,6 +78,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 
 class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener, ISecurityEnforced {
 
@@ -90,6 +92,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private lateinit var serverBaseUrl: String
 
     private var oidcSupported = false
+    private var oidcState: String = ""
 
     private lateinit var binding: AccountSetupBinding
 
@@ -445,13 +448,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
         val customTabsIntent: CustomTabsIntent = customTabsBuilder.build()
 
+        this.oidcState = UUID.randomUUID().toString().substring(0,15)
         val authorizationEndpointUri = OAuthUtils.buildAuthorizationRequest(
             authorizationEndpoint = authorizationEndpoint,
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
             clientId = clientId,
             responseType = ResponseType.CODE.string,
             scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else "",
-            codeChallenge = oauthViewModel.codeChallenge
+            codeChallenge = oauthViewModel.codeChallenge,
+            state = this.oidcState
         )
 
         customTabsIntent.launchUrl(
@@ -469,18 +474,24 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun handleGetAuthorizationCodeResponse(intent: Intent) {
         val authorizationCode = intent.data?.getQueryParameter("code")
+        val state = intent.data?.getQueryParameter("state")
 
-        if (authorizationCode != null) {
-            Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
-            exchangeAuthorizationCodeForTokens(authorizationCode)
+        if (state != this.oidcState){
+            Timber.e("OAuth request to get authorization code failed. State mismatching, maybe somebody is trying a CSRF attack.")
+            updateOAuthStatusIconAndText(StateMismatchException())
         } else {
-            val authorizationError = intent.data?.getQueryParameter("error")
-            val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
+            if (authorizationCode != null) {
+                Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
+                exchangeAuthorizationCodeForTokens(authorizationCode)
+            } else {
+                val authorizationError = intent.data?.getQueryParameter("error")
+                val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
 
-            Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]. Error description: [$authorizationErrorDescription]")
-            val authorizationException =
-                if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
-            updateOAuthStatusIconAndText(authorizationException)
+                Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]. Error description: [$authorizationErrorDescription]")
+                val authorizationException =
+                    if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
+                updateOAuthStatusIconAndText(authorizationException)
+            }
         }
     }
 
