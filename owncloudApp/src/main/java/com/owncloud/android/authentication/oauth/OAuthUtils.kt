@@ -38,6 +38,14 @@ import java.security.SecureRandom
 
 class OAuthUtils {
 
+    fun generateRandomState(): String {
+        val secureRandom = SecureRandom()
+        val randomBytes = ByteArray(DEFAULT_STATE_ENTROPY)
+        secureRandom.nextBytes(randomBytes)
+        val encoding = Base64.NO_WRAP or Base64.NO_PADDING or Base64.URL_SAFE
+        return Base64.encodeToString(randomBytes, encoding)
+    }
+
     fun generateRandomCodeVerifier(): String {
         val secureRandom = SecureRandom()
         val randomBytes = ByteArray(DEFAULT_CODE_VERIFIER_ENTROPY)
@@ -59,6 +67,7 @@ class OAuthUtils {
         private const val ALGORITHM_SHA_256 = "SHA-256"
         private const val CODE_CHALLENGE_METHOD = "S256"
         private const val DEFAULT_CODE_VERIFIER_ENTROPY = 64
+        private const val DEFAULT_STATE_ENTROPY = 15
 
         fun buildClientRegistrationRequest(
             registrationEndpoint: String,

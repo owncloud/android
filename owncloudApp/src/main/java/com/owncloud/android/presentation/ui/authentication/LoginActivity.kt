@@ -78,7 +78,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
-import java.util.UUID
 
 class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener, ISecurityEnforced {
 
@@ -448,7 +447,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
         val customTabsIntent: CustomTabsIntent = customTabsBuilder.build()
 
-        this.oidcState = UUID.randomUUID().toString().substring(0,15)
+        this.oidcState = OAuthUtils().generateRandomState()
         val authorizationEndpointUri = OAuthUtils.buildAuthorizationRequest(
             authorizationEndpoint = authorizationEndpoint,
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
