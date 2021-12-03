@@ -25,7 +25,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
+import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
@@ -33,6 +35,7 @@ import com.owncloud.android.providers.ContextProvider
 
 class MainFileListViewModel(
     private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
+    private val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase,
     private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
@@ -41,6 +44,10 @@ class MainFileListViewModel(
     private val _getFilesListStatusLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
     val getFilesListStatusLiveData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesListStatusLiveData
+
+    private val _getFilesSharedByLinkData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
+    val getFilesSharedByLinkData: LiveData<Event<UIResult<List<OCFile>>>>
+        get() = _getFilesSharedByLinkData
 
     private val _numberOfFilesPerType = MutableLiveData<Event<UIResult<Pair<Int, Int>>>>()
     val numberOfFilesPerType: LiveData<Event<UIResult<Pair<Int, Int>>>>
@@ -56,6 +63,15 @@ class MainFileListViewModel(
 
         _getFilesListStatusLiveData.addSource(filesListLiveData) {
             _getFilesListStatusLiveData.postValue(Event(UIResult.Success(it)))
+        }
+    }
+
+    fun getSharedByLinkFilesList(owner: String) {
+        getFilesSharedByLinkUseCase.execute(GetFilesSharedByLinkUseCase.Params(owner = owner)).let {
+            when (it) {
+                is UseCaseResult.Error -> _getFilesSharedByLinkData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
+                is UseCaseResult.Success -> _getFilesSharedByLinkData.postValue(Event(UIResult.Success(it.getDataOrNull())))
+            }
         }
     }
 
@@ -134,5 +150,4 @@ class MainFileListViewModel(
         getFilesList(directory.id!!)
     }
 }
-
 
