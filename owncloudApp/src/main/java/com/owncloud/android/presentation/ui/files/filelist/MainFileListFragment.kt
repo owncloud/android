@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
@@ -32,7 +33,6 @@ import com.owncloud.android.extensions.cancel
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onSuccess
-import com.owncloud.android.ui.utils.WrapContentLinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFileListFragment : Fragment() {
@@ -73,7 +73,7 @@ class MainFileListFragment : Fragment() {
 
         })
         binding.recyclerViewMainFileList.apply {
-            layoutManager = WrapContentLinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = fileListAdapter
         }
 
