@@ -22,20 +22,37 @@ package com.owncloud.android.presentation.diffutils
 
 import androidx.recyclerview.widget.DiffUtil
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFooterFile
 
-class FileListDiffCallback(private val oldList: List<OCFile>, private val newList: List<OCFile>) : DiffUtil.Callback() {
+class FileListDiffCallback(private val oldList: List<Any>, private val newList: List<Any>) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldList.size
 
     override fun getNewListSize(): Int = newList.size
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].id === newList[newItemPosition].id
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+
+        if (oldItem is Unit && newItem is Unit) {
+            return true
+        }
+
+        if (oldItem is Boolean && newItem is Boolean) {
+            return true
+        }
+
+        if (oldItem is OCFile && newItem is OCFile) {
+            return oldItem.id == newItem.id
+        }
+
+        if (oldItem is OCFooterFile && newItem is OCFooterFile) {
+            return oldItem.text == newItem.text
+        }
+
+        return false
     }
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val (_, value, name) = oldList[oldItemPosition]
-        val (_, value1, name1) = newList[newItemPosition]
-        return name == name1 && value == value1
-    }
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+        oldList[oldItemPosition] == newList[newItemPosition]
 }
