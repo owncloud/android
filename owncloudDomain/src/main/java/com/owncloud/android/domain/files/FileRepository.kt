@@ -34,6 +34,7 @@ interface FileRepository {
     fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>>
     fun getFolderImages(folderId: Long): List<OCFile>
     fun getFilesSharedByLink(owner: String): List<OCFile>
+    fun getFilesAvailableOffline(owner: String): List<OCFile>
     fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
     fun refreshFolder(remotePath: String)
     fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean)
