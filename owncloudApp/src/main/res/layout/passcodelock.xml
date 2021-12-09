@@ -82,6 +82,7 @@
         android:textColor="@android:color/black"
         android:gravity="center_horizontal"
         android:textSize="16sp"
+        android:visibility="invisible"
         />
 
 </LinearLayout>

@@ -29,6 +29,7 @@ package com.owncloud.android.presentation.ui.security
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
@@ -40,6 +41,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
@@ -52,6 +54,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Arrays
+import kotlin.math.pow
 
 class PassCodeActivity : AppCompatActivity() {
 
@@ -92,6 +95,10 @@ class PassCodeActivity : AppCompatActivity() {
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
         inflatePasscodeTxtLine()
+
+        if (passCodeViewModel.getNumberOfAttempts() >= 3) {
+            lockScreen()
+        }
 
         when (intent.action) {
             ACTION_CHECK -> {
@@ -290,7 +297,29 @@ class PassCodeActivity : AppCompatActivity() {
     }
 
     private fun lockScreen() {
+        binding.lockTime.isVisible = true
+        val timeToUnlock = 1.5.pow(passCodeViewModel.getNumberOfAttempts()).toLong() * 1000
+        for (editText:EditText? in passCodeEditTexts) {
+            editText?.isEnabled = false
+        }
+        object : CountDownTimer(timeToUnlock, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val minutes = ((millisUntilFinished+1000)/1000) / 60
+                val seconds = ((millisUntilFinished+1000)/1000) % 60
+                val timeString = String.format("%02d:%02d", minutes, seconds)
+                binding.lockTime.text = getString(R.string.lock_time_try_again, timeString)
+            }
 
+            override fun onFinish() {
+                binding.lockTime.isVisible = false
+                for (editText:EditText? in passCodeEditTexts) {
+                    editText?.isEnabled = true
+                }
+                passCodeEditTexts[0]?.requestFocus()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(passCodeEditTexts[0], InputMethodManager.SHOW_IMPLICIT)
+            }
+        }.start()
     }
 
     private fun handleActionRequestWithResult() {
