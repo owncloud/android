@@ -26,6 +26,7 @@ import com.owncloud.android.data.preferences.datasources.implementation.SharedPr
 
 const val PREFERENCE_LOCK_TIMEOUT = "lock_timeout"
 const val PREFERENCE_LAST_UNLOCK_TIMESTAMP = "last_unlock_timestamp"
+const val PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP = "last_unlock_attempt_timestamp"
 
 enum class LockTimeout {
     IMMEDIATELY, ONE_MINUTE, FIVE_MINUTES, THIRTY_MINUTES;

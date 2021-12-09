@@ -30,7 +30,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -44,7 +43,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
@@ -54,7 +52,6 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Arrays
-import kotlin.math.pow
 
 class PassCodeActivity : AppCompatActivity() {
 
@@ -124,8 +121,6 @@ class PassCodeActivity : AppCompatActivity() {
                         // will receive and confirm pass code value
                         binding.header.text = getString(R.string.pass_code_configure_your_pass_code)
                     }
-                    //mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
-                    // TODO choose a header, check iOS
                     binding.explanation.visibility = View.VISIBLE
                     when {
                         intent.extras?.getBoolean(EXTRAS_MIGRATION) == true -> {
@@ -250,8 +245,7 @@ class PassCodeActivity : AppCompatActivity() {
         if (passCodeViewModel.checkPassCodeIsValid(passCodeDigits)) {
             /// pass code accepted in request, user is allowed to access the app
             binding.error.visibility = View.INVISIBLE
-            val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
-            preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, SystemClock.elapsedRealtime())
+            passCodeViewModel.setLastUnlockTimestamp()
             hideSoftKeyboard()
             val passCode = passCodeViewModel.getPassCode()
             if (passCode != null && passCode.length < passCodeViewModel.getNumberOfPassCodeDigits()) {
@@ -297,29 +291,31 @@ class PassCodeActivity : AppCompatActivity() {
     }
 
     private fun lockScreen() {
-        binding.lockTime.isVisible = true
-        val timeToUnlock = 1.5.pow(passCodeViewModel.getNumberOfAttempts()).toLong() * 1000
-        for (editText:EditText? in passCodeEditTexts) {
-            editText?.isEnabled = false
-        }
-        object : CountDownTimer(timeToUnlock, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val minutes = ((millisUntilFinished+1000)/1000) / 60
-                val seconds = ((millisUntilFinished+1000)/1000) % 60
-                val timeString = String.format("%02d:%02d", minutes, seconds)
-                binding.lockTime.text = getString(R.string.lock_time_try_again, timeString)
+        val timeToUnlock = passCodeViewModel.getTimeToUnlockLeft()
+        if (timeToUnlock > 0) {
+            binding.lockTime.isVisible = true
+            for (editText: EditText? in passCodeEditTexts) {
+                editText?.isEnabled = false
             }
-
-            override fun onFinish() {
-                binding.lockTime.isVisible = false
-                for (editText:EditText? in passCodeEditTexts) {
-                    editText?.isEnabled = true
+            object : CountDownTimer(timeToUnlock, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val minutes = ((millisUntilFinished + 1000) / 1000) / 60
+                    val seconds = ((millisUntilFinished + 1000) / 1000) % 60
+                    val timeString = String.format("%02d:%02d", minutes, seconds)
+                    binding.lockTime.text = getString(R.string.lock_time_try_again, timeString)
                 }
-                passCodeEditTexts[0]?.requestFocus()
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(passCodeEditTexts[0], InputMethodManager.SHOW_IMPLICIT)
-            }
-        }.start()
+
+                override fun onFinish() {
+                    binding.lockTime.isVisible = false
+                    for (editText: EditText? in passCodeEditTexts) {
+                        editText?.isEnabled = true
+                    }
+                    passCodeEditTexts[0]?.requestFocus()
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.showSoftInput(passCodeEditTexts[0], InputMethodManager.SHOW_IMPLICIT)
+                }
+            }.start()
+        }
     }
 
     private fun handleActionRequestWithResult() {

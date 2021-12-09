@@ -20,12 +20,17 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
+import android.os.SystemClock
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
+import kotlin.math.max
+import kotlin.math.pow
 
 class PassCodeViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
@@ -65,13 +70,24 @@ class PassCodeViewModel(
     fun setMigrationRequired(required: Boolean) =
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, required)
 
+    fun setLastUnlockTimestamp() =
+        preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, SystemClock.elapsedRealtime())
+
     fun getNumberOfAttempts() = preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, 0)
 
-    fun increaseNumberOfAttempts() =
+    fun increaseNumberOfAttempts() {
         preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, getNumberOfAttempts().plus(1))
+        preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, SystemClock.elapsedRealtime())
+    }
 
     fun resetNumberOfAttempts() =
         preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
+
+    fun getTimeToUnlockLeft(): Long {
+        val timeLocked = 1.5.pow(getNumberOfAttempts()).toLong() * 1000
+        val lastUnlockAttempt = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, 0)
+        return max(0, (lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime())
+    }
 
     private fun loadPinFromOldFormatIfPossible(): String? {
         var pinString = ""
