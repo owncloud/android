@@ -63,12 +63,12 @@ class AvatarManager : KoinComponent {
             return BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, it)
         }
 
-        val capabilities: GetStoredCapabilitiesUseCase by inject()
-        val result = capabilities.execute(GetStoredCapabilitiesUseCase.Params(accountName = account.name))
-        val isCapabilityAvailable = result?.filesSharingUserProfilePicture?.isFalse ?: false
+        val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+        val storedCapabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(account.name))
+        val shouldFetchAvatar = storedCapabilities?.isFetchingAvatarAllowed() ?: true
 
         // Avatar not found in disk cache, fetch from server.
-        if (fetchIfNotCached && isCapabilityAvailable) {
+        if (fetchIfNotCached && shouldFetchAvatar) {
             Timber.i("Avatar with imageKey $imageKey is not available in cache. Fetching from server...")
             val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
             val useCaseResult =

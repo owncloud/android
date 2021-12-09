@@ -53,6 +53,10 @@ data class OCCapability(
         val doubleChunkingVersion = davChunkingVersion.toDoubleOrNull()
         return (filesBigFileChunking.isTrue && doubleChunkingVersion != null && doubleChunkingVersion >= 1.0)
     }
+
+    fun isFetchingAvatarAllowed(): Boolean {
+        return filesSharingUserProfilePicture.isTrue || filesSharingUserProfilePicture.isUnknown
+    }
 }
 
 /**

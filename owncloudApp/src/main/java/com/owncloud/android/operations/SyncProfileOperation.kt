@@ -22,6 +22,7 @@ package com.owncloud.android.operations
 import android.accounts.Account
 import android.accounts.AccountManager
 import com.owncloud.android.MainApp.Companion.appContext
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
@@ -69,13 +70,20 @@ class SyncProfileOperation(
                     userQuotaResult.getDataOrNull()?.let {
                         Timber.d("User quota synchronized for account ${account.name}")
 
-                        val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
-                        val userAvatarResult =
-                            getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(account.name))
-                        AvatarManager().handleAvatarUseCaseResult(account, userAvatarResult)
+                        val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
 
-                        if (userAvatarResult.isSuccess) {
-                            Timber.d("Profile synchronized successfully for account ${account.name}")
+                        val storedCapabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(account.name))
+                        val shouldFetchAvatar = storedCapabilities?.isFetchingAvatarAllowed() ?: true
+
+                        if (shouldFetchAvatar) {
+                            val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
+                            val userAvatarResult = getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(account.name))
+                            AvatarManager().handleAvatarUseCaseResult(account, userAvatarResult)
+                            if (userAvatarResult.isSuccess) {
+                                Timber.d("Avatar synchronized for account ${account.name}")
+                            }
+                        } else {
+                            Timber.d("Avatar for this account: ${account.name} won't be synced due to capabilities ")
                         }
                     }
                 } ?: Timber.d("User profile was not synchronized")
