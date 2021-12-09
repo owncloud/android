@@ -25,7 +25,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
@@ -33,6 +32,7 @@ import com.owncloud.android.extensions.cancel
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onSuccess
+import com.owncloud.android.ui.utils.WrapContentLinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFileListFragment : Fragment() {
@@ -60,7 +60,7 @@ class MainFileListFragment : Fragment() {
 
     private fun initViews() {
         //Set RecyclerView and its adapter.
-        fileListAdapter = FileListAdapter(context = requireContext(), listener = object :
+        fileListAdapter = FileListAdapter(context = requireContext(), isShowingJustFolders = isShowingJustFolders(), listener = object :
             FileListAdapter.FileListAdapterListener {
             override fun clickItem(ocFile: OCFile) {
                 if (ocFile.isFolder) {
@@ -71,9 +71,9 @@ class MainFileListFragment : Fragment() {
                 }
             }
 
-        } )
+        })
         binding.recyclerViewMainFileList.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = WrapContentLinearLayoutManager(requireContext())
             adapter = fileListAdapter
         }
 
@@ -88,38 +88,13 @@ class MainFileListFragment : Fragment() {
                 val files = data ?: emptyList()
                 fileListAdapter.updateFileList(filesToAdd = files)
                 registerListAdapterDataObserver()
-                mainFileListViewModel.manageListOfFiles(files)
                 binding.swipeRefreshMainFileList.cancel()
-            }
-        })
-
-        mainFileListViewModel.numberOfFilesPerType.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                if (!isShowingJustFolders()) {
-                    mainFileListViewModel.generateFooterText(data!!.first, data.second)
-                }
-            }
-        })
-
-        mainFileListViewModel.footerText.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                setFooterText(data)
             }
         })
     }
 
     fun listDirectory(directory: OCFile) {
         mainFileListViewModel.listDirectory(directory = directory)
-    }
-
-    private fun setFooterText(text: String?) {
-        if (text?.isNotEmpty() == true) {
-            binding.footerMainFileList.footerText.text = text
-            // TODO Manage footer enable/disable options
-            //setFooterEnabled(true)
-        } else {
-            //setFooterEnabled(false)
-        }
     }
 
     private fun isShowingJustFolders(): Boolean {
