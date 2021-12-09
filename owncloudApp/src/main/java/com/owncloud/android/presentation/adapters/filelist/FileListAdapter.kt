@@ -33,6 +33,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.extensions.setPicture
 import com.owncloud.android.presentation.diffutils.FileListDiffCallback
 import com.owncloud.android.utils.DisplayUtils
@@ -44,7 +45,7 @@ class FileListAdapter(
     private val listener: FileListAdapterListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val files = mutableListOf<OCFile>()
+    private val files = mutableListOf<Any>()
     private lateinit var viewHolder: RecyclerView.ViewHolder
 
     private val TYPE_ITEMS = 0
@@ -55,6 +56,9 @@ class FileListAdapter(
         val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
         files.clear()
         files.addAll(filesToAdd)
+        if (filesToAdd.isNotEmpty()) {
+            files.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
+        }
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -72,24 +76,12 @@ class FileListAdapter(
         return viewHolder
     }
 
-    override fun getItemCount(): Int {
-        return if (files.isNotEmpty()) {
-            files.size.plus(1)
-        } else {
-            files.size
-        }
-    }
+    override fun getItemCount(): Int = files.size
 
     override fun getItemId(position: Int): Long = position.toLong()
 
-    fun getItem(position: Int): Any? {
-        return if (files.isNotEmpty() && files.size <= position) {
-            null
-        } else files[position]
-    }
-
     override fun getItemViewType(position: Int): Int {
-        return if (!files.isNullOrEmpty() && position == files.size) {
+        return if (position == files.size.minus(1)) {
             TYPE_FOOTER
         } else {
             TYPE_ITEMS
@@ -100,7 +92,7 @@ class FileListAdapter(
         when (holder.itemViewType) {
             TYPE_ITEMS -> {
                 with(holder as ViewHolder) {
-                    with(files[position]) {
+                    with(files[position] as OCFile) {
                         binding.Filename.text = this.fileName
                         binding.fileListSize.text = DisplayUtils.bytesToHumanReadable(this.length, context)
                         binding.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, this.modificationTimestamp)
@@ -121,7 +113,9 @@ class FileListAdapter(
             TYPE_FOOTER -> {
                 if (!isShowingJustFolders) {
                     with(holder as FooterViewHolder) {
-                        binding.footerText.text = manageListOfFilesAndGenerateText(files)
+                        with(files[position] as OCFooterFile) {
+                            binding.footerText.text = this.text
+                        }
                     }
                 }
             }
