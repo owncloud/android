@@ -80,7 +80,6 @@ import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
-import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.syncadapter.FileSyncAdapter
@@ -148,9 +147,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private val listOfFilesFragment: OCFileListFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as OCFileListFragment?
-
-    private val listMainFileFragment: MainFileListFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES_BIS) as MainFileListFragment?
 
     private val secondFragment: FileFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
@@ -341,16 +337,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
     }
 
-    // TODO Change to start using new MainListFragment
     private fun createMinFragments() {
-       /* val listOfFiles = OCFileListFragment.newInstance(false, fileListOption, false, false, true)
-        listOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))*/
-
-        val list = MainFileListFragment.newInstance()
-
-
+        val listOfFiles = OCFileListFragment.newInstance(false, fileListOption, false, false, true)
+        listOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.left_fragment_container, list, TAG_LIST_OF_FILES_BIS)
+        transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
     }
 
@@ -477,10 +468,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     fun refreshListOfFilesFragment(reloadData: Boolean) {
-        /*val fileListFragment = listOfFilesFragment
-        fileListFragment?.listDirectory(reloadData)*/
-        val fileListFragment = listMainFileFragment
-        fileListFragment?.listDirectory(file)
+        val fileListFragment = listOfFilesFragment
+        fileListFragment?.listDirectory(reloadData)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1656,7 +1645,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     companion object {
-        private const val TAG_LIST_OF_FILES_BIS = "TAG_LIST_OF_FILES_BIS"
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
