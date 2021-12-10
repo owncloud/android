@@ -87,12 +87,70 @@ class PassCodeActivityTest {
 
         every { passCodeViewModel.getPassCode() } returns OC_PASSCODE_4_DIGITS
         every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
+        every { passCodeViewModel.getNumberOfAttempts() } returns 0
     }
 
     @After
     fun tearDown() {
         // Clean preferences
         PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit()
+    }
+
+    @Test
+    fun passcodeCheckNotLockedView() {
+        //Open Activity in passcode check mode
+        openPasscodeActivity(PassCodeActivity.ACTION_CHECK)
+
+        with(R.id.header) {
+            isDisplayed(true)
+            withText(R.string.pass_code_enter_pass_code)
+        }
+        with(R.id.explanation) {
+            isDisplayed(false)
+        }
+        // Check if required amount of input fields are actually displayed
+        with(R.id.passCodeTxtLayout) {
+            isDisplayed(true)
+            withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
+        }
+
+        with(R.id.cancel) {
+            isDisplayed(false)
+        }
+
+        with(R.id.lock_time) {
+            isDisplayed(false)
+        }
+    }
+
+    @Test
+    fun passcodeCheckLockedView() {
+        every { passCodeViewModel.getNumberOfAttempts() } returns 3
+        every { passCodeViewModel.getTimeToUnlockLeft() } returns 3000
+
+        //Open Activity in passcode check mode
+        openPasscodeActivity(PassCodeActivity.ACTION_CHECK)
+
+        with(R.id.header) {
+            isDisplayed(true)
+            withText(R.string.pass_code_enter_pass_code)
+        }
+        with(R.id.explanation) {
+            isDisplayed(false)
+        }
+        // Check if required amount of input fields are actually displayed
+        with(R.id.passCodeTxtLayout) {
+            isDisplayed(true)
+            withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
+        }
+
+        with(R.id.cancel) {
+            isDisplayed(false)
+        }
+
+        with(R.id.lock_time) {
+            isDisplayed(true)
+        }
     }
 
     @Test
@@ -118,6 +176,10 @@ class PassCodeActivityTest {
         with(R.id.cancel) {
             isDisplayed(true)
             withText(android.R.string.cancel)
+        }
+
+        with(R.id.lock_time) {
+            isDisplayed(false)
         }
     }
 
