@@ -59,10 +59,6 @@ class MainFileListViewModel(
     val getFilesAvailableOfflineData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesAvailableOfflineData
 
-    private val _footerText = MutableLiveData<Event<UIResult<String>>>()
-    val footerText: LiveData<Event<UIResult<String>>>
-        get() = _footerText
-
     private fun getFilesList(folderId: Long) {
         val filesListLiveData: LiveData<List<OCFile>> =
             getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folderId))
