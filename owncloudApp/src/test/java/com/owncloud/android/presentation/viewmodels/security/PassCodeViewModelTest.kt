@@ -20,10 +20,14 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
+import android.os.SystemClock
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import io.mockk.every
@@ -36,6 +40,8 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import kotlin.math.max
+import kotlin.math.pow
 
 @ExperimentalCoroutinesApi
 class PassCodeViewModelTest : ViewModelTest() {
@@ -200,4 +206,62 @@ class PassCodeViewModelTest : ViewModelTest() {
         }
     }
 
+    @Test
+    fun `set last unlock timestamp - ok`() {
+        passCodeViewModel.setLastUnlockTimestamp()
+
+        verify(exactly = 1) {
+            preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, SystemClock.elapsedRealtime())
+        }
+    }
+
+    @Test
+    fun `get number of attempts - ok`() {
+        every { preferencesProvider.getInt(any(), any()) } returns 3
+
+        val numberOfAttempts = passCodeViewModel.getNumberOfAttempts()
+
+        assertEquals(3, numberOfAttempts)
+
+        verify(exactly = 1) {
+            preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, 0)
+        }
+    }
+
+    @Test
+    fun `increase number of attempts - ok`() {
+        every { preferencesProvider.getInt(any(), any()) } returns 3
+
+        passCodeViewModel.increaseNumberOfAttempts()
+
+        verify(exactly = 1) {
+            preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, any())
+            preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, SystemClock.elapsedRealtime())
+        }
+    }
+
+    @Test
+    fun `reset number of attempts - ok`() {
+        passCodeViewModel.resetNumberOfAttempts()
+
+        verify(exactly = 1) {
+            preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
+        }
+    }
+
+    @Test
+    fun `get time to unlock left - ok`() {
+        every { preferencesProvider.getInt(any(), any()) } returns 3
+        every { preferencesProvider.getLong(any(), any()) } returns 0
+
+        val timeToUnlockLeft = passCodeViewModel.getTimeToUnlockLeft()
+
+        assertEquals(3000, timeToUnlockLeft)
+
+        verify(exactly = 1) {
+            val timeLocked = 1.5.pow(3).toLong() * 1000
+            val lastUnlockAttempt = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, 0)
+            max(0, (lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime())
+        }
+    }
 }
