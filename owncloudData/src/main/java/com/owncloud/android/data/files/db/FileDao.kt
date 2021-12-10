@@ -257,6 +257,6 @@ abstract class FileDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE owner = :accountOwner " +
-                    "AND keepInSync NOT LIKE '%0%'"
+                    "AND keepInSync = '1'"
     }
 }
