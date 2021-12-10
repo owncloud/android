@@ -59,10 +59,6 @@ class MainFileListViewModel(
     val getFilesAvailableOfflineData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesAvailableOfflineData
 
-    private val _numberOfFilesPerType = MutableLiveData<Event<UIResult<Pair<Int, Int>>>>()
-    val numberOfFilesPerType: LiveData<Event<UIResult<Pair<Int, Int>>>>
-        get() = _numberOfFilesPerType
-
     private val _footerText = MutableLiveData<Event<UIResult<String>>>()
     val footerText: LiveData<Event<UIResult<String>>>
         get() = _footerText
