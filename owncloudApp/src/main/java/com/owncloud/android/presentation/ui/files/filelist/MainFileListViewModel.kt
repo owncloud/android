@@ -28,6 +28,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFilesAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
@@ -39,6 +40,7 @@ import kotlinx.coroutines.launch
 class MainFileListViewModel(
     private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
     private val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase,
+    private val getFilesAvailableOfflineUseCase: GetFilesAvailableOfflineUseCase,
     private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -52,6 +54,10 @@ class MainFileListViewModel(
     private val _getFilesSharedByLinkData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
     val getFilesSharedByLinkData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesSharedByLinkData
+
+    private val _getFilesAvailableOfflineData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
+    val getFilesAvailableOfflineData: LiveData<Event<UIResult<List<OCFile>>>>
+        get() = _getFilesAvailableOfflineData
 
     private val _numberOfFilesPerType = MutableLiveData<Event<UIResult<Pair<Int, Int>>>>()
     val numberOfFilesPerType: LiveData<Event<UIResult<Pair<Int, Int>>>>
@@ -75,6 +81,15 @@ class MainFileListViewModel(
             when (it) {
                 is UseCaseResult.Error -> _getFilesSharedByLinkData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
                 is UseCaseResult.Success -> _getFilesSharedByLinkData.postValue(Event(UIResult.Success(it.getDataOrNull())))
+            }
+        }
+    }
+
+    fun getAvailableOfflineFilesList(owner: String) {
+        getFilesAvailableOfflineUseCase.execute(GetFilesAvailableOfflineUseCase.Params(owner = owner)).let {
+            when (it) {
+                is UseCaseResult.Error -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
+                is UseCaseResult.Success -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Success(it.getDataOrNull())))
             }
         }
     }
