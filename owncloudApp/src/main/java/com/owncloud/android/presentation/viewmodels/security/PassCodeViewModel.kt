@@ -20,10 +20,15 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
+import android.os.CountDownTimer
 import android.os.SystemClock
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
@@ -36,6 +41,14 @@ class PassCodeViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
     private val contextProvider: ContextProvider
 ) : ViewModel() {
+
+    private val _getTimeToUnlockLiveData = MutableLiveData<Event<UIResult<String>>>()
+    val getTimeToUnlockLiveData: LiveData<Event<UIResult<String>>>
+        get() = _getTimeToUnlockLiveData
+
+    private val _getFinishedTimeToUnlockLiveData = MutableLiveData<Event<UIResult<Boolean>>>()
+    val getFinishedTimeToUnlockLiveData: LiveData<Event<UIResult<Boolean>>>
+        get() = _getFinishedTimeToUnlockLiveData
 
     fun getPassCode() = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
 
@@ -84,9 +97,24 @@ class PassCodeViewModel(
         preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
 
     fun getTimeToUnlockLeft(): Long {
-        val timeLocked = 1.5.pow(getNumberOfAttempts()).toLong() * 1000
+        val timeLocked = 1.5.pow(getNumberOfAttempts()).toLong().times(1000)
         val lastUnlockAttempt = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, 0)
         return max(0, (lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime())
+    }
+
+    fun initUnlockTimer() {
+        object : CountDownTimer(getTimeToUnlockLeft(), 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val minutes = millisUntilFinished.plus(1000).div(1000).div(60)
+                val seconds = millisUntilFinished.plus(1000).div(1000).rem(60)
+                val timeString = String.format("%02d:%02d", minutes, seconds)
+                _getTimeToUnlockLiveData.postValue(Event(UIResult.Success(timeString)))
+            }
+
+            override fun onFinish() {
+                _getFinishedTimeToUnlockLiveData.postValue(Event(UIResult.Success(true)))
+            }
+        }.start()
     }
 
     private fun loadPinFromOldFormatIfPossible(): String? {

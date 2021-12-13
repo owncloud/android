@@ -29,7 +29,6 @@ package com.owncloud.android.presentation.ui.security
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -44,7 +43,9 @@ import androidx.core.view.isVisible
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.hideSoftKeyboard
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
@@ -73,6 +74,9 @@ class PassCodeActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        subscribeToViewModel()
+
         _binding = PasscodelockBinding.inflate(layoutInflater)
 
         /// protection against screen recording
@@ -93,7 +97,7 @@ class PassCodeActivity : AppCompatActivity() {
 
         inflatePasscodeTxtLine()
 
-        if (passCodeViewModel.getNumberOfAttempts() >= 3) {
+        if (passCodeViewModel.getNumberOfAttempts() >= NUM_ATTEMPTS_WITHOUT_TIMER) {
             lockScreen()
         }
 
@@ -156,7 +160,7 @@ class PassCodeActivity : AppCompatActivity() {
             passcodeTxtLayout.addView(txt)
             passCodeEditTexts[i] = txt
         }
-        passCodeEditTexts[0]?.requestFocus()
+        passCodeEditTexts.first()?.requestFocus()
         window.setSoftInputMode(
             WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
         )
@@ -267,7 +271,7 @@ class PassCodeActivity : AppCompatActivity() {
                 explanationVisibility = View.INVISIBLE
             )
             passCodeViewModel.increaseNumberOfAttempts()
-            if (passCodeViewModel.getNumberOfAttempts() >= 3) {
+            if (passCodeViewModel.getNumberOfAttempts() >= NUM_ATTEMPTS_WITHOUT_TIMER) {
                 lockScreen()
             }
         }
@@ -290,6 +294,29 @@ class PassCodeActivity : AppCompatActivity() {
         }
     }
 
+    private fun subscribeToViewModel() {
+        passCodeViewModel.getTimeToUnlockLiveData.observe(this, Event.EventObserver {
+            when (it) {
+                is UIResult.Success -> {
+                    binding.lockTime.text = getString(R.string.lock_time_try_again, it.data)
+                }
+            }
+        })
+        passCodeViewModel.getFinishedTimeToUnlockLiveData.observe(this, Event.EventObserver {
+            when (it) {
+                is UIResult.Success -> {
+                    binding.lockTime.isVisible = false
+                    for (editText: EditText? in passCodeEditTexts) {
+                        editText?.isEnabled = true
+                    }
+                    passCodeEditTexts.first()?.requestFocus()
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.showSoftInput(passCodeEditTexts.first(), InputMethodManager.SHOW_IMPLICIT)
+                }
+            }
+        })
+    }
+
     private fun lockScreen() {
         val timeToUnlock = passCodeViewModel.getTimeToUnlockLeft()
         if (timeToUnlock > 0) {
@@ -297,24 +324,7 @@ class PassCodeActivity : AppCompatActivity() {
             for (editText: EditText? in passCodeEditTexts) {
                 editText?.isEnabled = false
             }
-            object : CountDownTimer(timeToUnlock, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    val minutes = ((millisUntilFinished + 1000) / 1000) / 60
-                    val seconds = ((millisUntilFinished + 1000) / 1000) % 60
-                    val timeString = String.format("%02d:%02d", minutes, seconds)
-                    binding.lockTime.text = getString(R.string.lock_time_try_again, timeString)
-                }
-
-                override fun onFinish() {
-                    binding.lockTime.isVisible = false
-                    for (editText: EditText? in passCodeEditTexts) {
-                        editText?.isEnabled = true
-                    }
-                    passCodeEditTexts[0]?.requestFocus()
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(passCodeEditTexts[0], InputMethodManager.SHOW_IMPLICIT)
-                }
-            }.start()
+            passCodeViewModel.initUnlockTimer()
         }
     }
 
@@ -389,9 +399,9 @@ class PassCodeActivity : AppCompatActivity() {
                 setText("")
             }
         }
-        passCodeEditTexts[0]?.requestFocus()
+        passCodeEditTexts.first()?.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(passCodeEditTexts[0], InputMethodManager.SHOW_IMPLICIT)
+        imm.showSoftInput(passCodeEditTexts.first(), InputMethodManager.SHOW_IMPLICIT)
     }
 
     /**
@@ -507,6 +517,8 @@ class PassCodeActivity : AppCompatActivity() {
 
         const val EXTRAS_MIGRATION = "PASSCODE_MIGRATION"
         const val PASSCODE_MIN_LENGTH = 4
+
+        private const val NUM_ATTEMPTS_WITHOUT_TIMER = 3
 
     }
 }
