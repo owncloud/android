@@ -61,6 +61,7 @@ data class RemoteCapability(
     var filesSharingResharing: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingFederationOutgoing: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesSharingFederationIncoming: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    var filesSharingUserProfilePicture: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
 
     // Files
     var filesBigFileChunking: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
