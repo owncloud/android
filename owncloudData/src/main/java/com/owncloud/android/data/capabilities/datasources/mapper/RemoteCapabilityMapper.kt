@@ -61,6 +61,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 CapabilityBooleanType.fromValue(remote.filesSharingFederationOutgoing.value),
                 filesSharingFederationIncoming =
                 CapabilityBooleanType.fromValue(remote.filesSharingFederationIncoming.value),
+                filesSharingUserProfilePicture = CapabilityBooleanType.fromValue(remote.filesSharingUserProfilePicture.value),
                 filesBigFileChunking = CapabilityBooleanType.fromValue(remote.filesBigFileChunking.value),
                 filesUndelete = CapabilityBooleanType.fromValue(remote.filesUndelete.value),
                 filesVersioning = CapabilityBooleanType.fromValue(remote.filesVersioning.value)
@@ -102,6 +103,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 RemoteCapabilityBooleanType.fromValue(model.filesSharingFederationOutgoing.value)!!,
                 filesSharingFederationIncoming =
                 RemoteCapabilityBooleanType.fromValue(model.filesSharingFederationIncoming.value)!!,
+                filesSharingUserProfilePicture = RemoteCapabilityBooleanType.fromValue(model.filesSharingUserProfilePicture.value)!!,
                 filesBigFileChunking = RemoteCapabilityBooleanType.fromValue(model.filesBigFileChunking.value)!!,
                 filesUndelete = RemoteCapabilityBooleanType.fromValue(model.filesUndelete.value)!!,
                 filesVersioning = RemoteCapabilityBooleanType.fromValue(model.filesVersioning.value)!!

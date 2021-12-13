@@ -60,7 +60,8 @@ class OCCapabilityTest {
             FALSE,
             FALSE,
             FALSE,
-            FALSE
+            FALSE,
+            FALSE,
         )
 
         assertEquals(123, item.id)
@@ -119,6 +120,7 @@ class OCCapabilityTest {
             filesSharingResharing = FALSE,
             filesSharingFederationOutgoing = FALSE,
             filesSharingFederationIncoming = FALSE,
+            filesSharingUserProfilePicture = FALSE,
             filesBigFileChunking = FALSE,
             filesUndelete = FALSE,
             filesVersioning = FALSE
@@ -151,7 +153,8 @@ class OCCapabilityTest {
             FALSE,
             FALSE,
             FALSE,
-            FALSE
+            FALSE,
+            FALSE,
         )
 
         assertTrue(item1 == item2)
@@ -185,6 +188,7 @@ class OCCapabilityTest {
             filesSharingResharing = FALSE,
             filesSharingFederationOutgoing = FALSE,
             filesSharingFederationIncoming = FALSE,
+            filesSharingUserProfilePicture = FALSE,
             filesBigFileChunking = FALSE,
             filesUndelete = FALSE,
             filesVersioning = FALSE
@@ -217,7 +221,8 @@ class OCCapabilityTest {
             FALSE,
             FALSE,
             FALSE,
-            FALSE
+            FALSE,
+            FALSE,
         )
 
         assertFalse(item1 == item2)
