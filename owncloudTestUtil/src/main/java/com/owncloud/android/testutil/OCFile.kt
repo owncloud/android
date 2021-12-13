@@ -50,5 +50,22 @@ val OC_FILE = OCFile(
     length = 3000000
 )
 
+val OC_AVAILABLE_OFFLINE_FILE = OCFile(
+    id = 125,
+    parentId = 122,
+    remotePath = "/Photos/image.jpt",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2how",
+    privateLink = "http://server.url/f/4",
+    creationTimestamp = 0,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688f",
+    mimeType = "image/jpeg",
+    keepInSync = 1,
+    length = 3000000
+)
+
 val OC_FILES = listOf(OC_FILE, OC_FILE, OC_FILE)
+val OC_AVAILABLE_OFFLINE_FILES = listOf(OC_AVAILABLE_OFFLINE_FILE, OC_AVAILABLE_OFFLINE_FILE, OC_AVAILABLE_OFFLINE_FILE)
 val OC_EMPTY_FILES = emptyList<OCFile>()
