@@ -25,6 +25,7 @@ package com.owncloud.android.settings.security
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -34,6 +35,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText
@@ -62,6 +64,9 @@ class PassCodeActivityTest {
 
     private lateinit var context: Context
 
+    private lateinit var timeToUnlockLiveData: MutableLiveData<Event<String>>
+    private lateinit var finishTimeToUnlockLiveData: MutableLiveData<Event<Boolean>>
+
     private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
     private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
 
@@ -71,6 +76,9 @@ class PassCodeActivityTest {
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         passCodeViewModel = mockk(relaxUnitFun = true)
+
+        timeToUnlockLiveData = MutableLiveData()
+        finishTimeToUnlockLiveData = MutableLiveData()
 
         stopKoin()
 
@@ -88,6 +96,8 @@ class PassCodeActivityTest {
         every { passCodeViewModel.getPassCode() } returns OC_PASSCODE_4_DIGITS
         every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
         every { passCodeViewModel.getNumberOfAttempts() } returns 0
+        every { passCodeViewModel.getTimeToUnlockLiveData } returns timeToUnlockLiveData
+        every { passCodeViewModel.getFinishedTimeToUnlockLiveData } returns finishTimeToUnlockLiveData
     }
 
     @After
@@ -98,29 +108,25 @@ class PassCodeActivityTest {
 
     @Test
     fun passcodeCheckNotLockedView() {
-        //Open Activity in passcode check mode
+        // Open Activity in passcode check mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK)
 
         with(R.id.header) {
             isDisplayed(true)
             withText(R.string.pass_code_enter_pass_code)
         }
-        with(R.id.explanation) {
-            isDisplayed(false)
-        }
+
+        R.id.explanation.isDisplayed(false)
+
         // Check if required amount of input fields are actually displayed
         with(R.id.passCodeTxtLayout) {
             isDisplayed(true)
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        with(R.id.cancel) {
-            isDisplayed(false)
-        }
+        R.id.cancel.isDisplayed(false)
 
-        with(R.id.lock_time) {
-            isDisplayed(false)
-        }
+        R.id.lock_time.isDisplayed(false)
     }
 
     @Test
@@ -128,29 +134,27 @@ class PassCodeActivityTest {
         every { passCodeViewModel.getNumberOfAttempts() } returns 3
         every { passCodeViewModel.getTimeToUnlockLeft() } returns 3000
 
-        //Open Activity in passcode check mode
+        timeToUnlockLiveData.postValue(Event("00:03"))
+
+        // Open Activity in passcode check mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK)
 
         with(R.id.header) {
             isDisplayed(true)
             withText(R.string.pass_code_enter_pass_code)
         }
-        with(R.id.explanation) {
-            isDisplayed(false)
-        }
+
+        R.id.explanation.isDisplayed(false)
+
         // Check if required amount of input fields are actually displayed
         with(R.id.passCodeTxtLayout) {
             isDisplayed(true)
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        with(R.id.cancel) {
-            isDisplayed(false)
-        }
+        R.id.cancel.isDisplayed(false)
 
-        with(R.id.lock_time) {
-            isDisplayed(true)
-        }
+        R.id.lock_time.isDisplayed(true)
     }
 
     @Test
@@ -178,9 +182,7 @@ class PassCodeActivityTest {
             withText(android.R.string.cancel)
         }
 
-        with(R.id.lock_time) {
-            isDisplayed(false)
-        }
+        R.id.lock_time.isDisplayed(false)
     }
 
     @Ignore("Flaky test, it fails many times")

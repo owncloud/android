@@ -28,12 +28,12 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
+import java.util.concurrent.TimeUnit
 import kotlin.math.max
 import kotlin.math.pow
 
@@ -42,12 +42,12 @@ class PassCodeViewModel(
     private val contextProvider: ContextProvider
 ) : ViewModel() {
 
-    private val _getTimeToUnlockLiveData = MutableLiveData<Event<UIResult<String>>>()
-    val getTimeToUnlockLiveData: LiveData<Event<UIResult<String>>>
+    private val _getTimeToUnlockLiveData = MutableLiveData<Event<String>>()
+    val getTimeToUnlockLiveData: LiveData<Event<String>>
         get() = _getTimeToUnlockLiveData
 
-    private val _getFinishedTimeToUnlockLiveData = MutableLiveData<Event<UIResult<Boolean>>>()
-    val getFinishedTimeToUnlockLiveData: LiveData<Event<UIResult<Boolean>>>
+    private val _getFinishedTimeToUnlockLiveData = MutableLiveData<Event<Boolean>>()
+    val getFinishedTimeToUnlockLiveData: LiveData<Event<Boolean>>
         get() = _getFinishedTimeToUnlockLiveData
 
     fun getPassCode() = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
@@ -105,14 +105,14 @@ class PassCodeViewModel(
     fun initUnlockTimer() {
         object : CountDownTimer(getTimeToUnlockLeft(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val minutes = millisUntilFinished.plus(1000).div(1000).div(60)
-                val seconds = millisUntilFinished.plus(1000).div(1000).rem(60)
+                val minutes = TimeUnit.MINUTES.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS)
+                val seconds = TimeUnit.SECONDS.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS).rem(60)
                 val timeString = String.format("%02d:%02d", minutes, seconds)
-                _getTimeToUnlockLiveData.postValue(Event(UIResult.Success(timeString)))
+                _getTimeToUnlockLiveData.postValue(Event(timeString))
             }
 
             override fun onFinish() {
-                _getFinishedTimeToUnlockLiveData.postValue(Event(UIResult.Success(true)))
+                _getFinishedTimeToUnlockLiveData.postValue(Event(true))
             }
         }.start()
     }

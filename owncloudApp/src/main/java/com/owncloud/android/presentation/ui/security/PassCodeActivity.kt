@@ -45,7 +45,6 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.hideSoftKeyboard
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
@@ -296,24 +295,16 @@ class PassCodeActivity : AppCompatActivity() {
 
     private fun subscribeToViewModel() {
         passCodeViewModel.getTimeToUnlockLiveData.observe(this, Event.EventObserver {
-            when (it) {
-                is UIResult.Success -> {
-                    binding.lockTime.text = getString(R.string.lock_time_try_again, it.data)
-                }
-            }
+            binding.lockTime.text = getString(R.string.lock_time_try_again, it)
         })
         passCodeViewModel.getFinishedTimeToUnlockLiveData.observe(this, Event.EventObserver {
-            when (it) {
-                is UIResult.Success -> {
-                    binding.lockTime.isVisible = false
-                    for (editText: EditText? in passCodeEditTexts) {
-                        editText?.isEnabled = true
-                    }
-                    passCodeEditTexts.first()?.requestFocus()
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(passCodeEditTexts.first(), InputMethodManager.SHOW_IMPLICIT)
-                }
+            binding.lockTime.isVisible = false
+            for (editText: EditText? in passCodeEditTexts) {
+                editText?.isEnabled = true
             }
+            passCodeEditTexts.first()?.requestFocus()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(passCodeEditTexts.first(), InputMethodManager.SHOW_IMPLICIT)
         })
     }
 
