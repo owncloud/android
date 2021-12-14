@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
+ * @author Juan Carlos Garrote Gascón
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,9 +28,9 @@ import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.extensions.getIntFromColumnOrThrow
 import com.owncloud.android.extensions.getStringFromColumnOrThrow
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.notNullValue
-import org.junit.Assert.assertThat
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -54,8 +55,8 @@ class SharesContentProviderTest {
             ProviderTableMeta.CONTENT_URI_SHARE,
             null, null, null, null
         )
-        assertThat(cursor, notNullValue())
-        assertThat(cursor!!.count, Matchers.`is`(0))
+        assertNotNull(cursor)
+        assertEquals(0, cursor!!.count)
         cursor.close()
     }
 
@@ -69,7 +70,7 @@ class SharesContentProviderTest {
                 createDefaultPrivateShare("company", "My company")
             )
         )
-        assertThat(itemUri, notNullValue())
+        assertNotNull(itemUri)
 
         val cursor = mContentResolver!!.query(
             ProviderTableMeta.CONTENT_URI_SHARE,
@@ -80,32 +81,20 @@ class SharesContentProviderTest {
         )
 
         // Check all items were properly inserted
-        assertThat(cursor, notNullValue())
-        assertThat(cursor!!.count, Matchers.`is`(3))
+        assertNotNull(cursor)
+        assertEquals(3, cursor!!.count)
 
         // First entry
-        assertThat(cursor.moveToFirst(), Matchers.`is`(true))
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME),
-            Matchers.`is`("IMG_1213 link")
-        )
+        assertTrue(cursor.moveToFirst())
+        assertEquals("IMG_1213 link", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME))
 
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
-            Matchers.`is`("http://server:port/s/10")
-        )
+        assertEquals("http://server:port/s/10", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL))
 
         // Last entry
-        assertThat(cursor.moveToLast(), Matchers.`is`(true))
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH),
-            Matchers.`is`("company")
-        )
+        assertTrue(cursor.moveToLast())
+        assertEquals("company", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH))
 
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME),
-            Matchers.`is`("My company")
-        )
+        assertEquals("My company", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME))
 
         cursor.close()
     }
@@ -120,7 +109,7 @@ class SharesContentProviderTest {
                 createDefaultPrivateShare("userName", "Jesus")
             )
         )
-        assertThat(itemUri, notNullValue())
+        assertNotNull(itemUri)
 
         // Get name of all shares
         val cursor = mContentResolver!!.query(
@@ -132,15 +121,12 @@ class SharesContentProviderTest {
         )
 
         // Check all items were properly inserted
-        assertThat(cursor, notNullValue())
-        assertThat(cursor!!.count, Matchers.`is`(3))
+        assertNotNull(cursor)
+        assertEquals(3, cursor!!.count)
 
         // "Name" column requested within projection
-        assertThat(cursor.moveToFirst(), Matchers.`is`(true))
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME),
-            Matchers.`is`("Video link")
-        )
+        assertTrue(cursor.moveToFirst())
+        assertEquals("Video link", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME))
 
         // "Share link" column not requested within projection
         cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL)
@@ -157,7 +143,7 @@ class SharesContentProviderTest {
                 createDefaultPrivateShare("username2", "Leticia")
             )
         )
-        assertThat(itemUri, notNullValue())
+        assertNotNull(itemUri)
 
         // Get shareWith with content "username1"
         val cursor = mContentResolver!!.query(
@@ -169,19 +155,13 @@ class SharesContentProviderTest {
         )
 
         // Check all items were properly inserted
-        assertThat(cursor, notNullValue())
-        assertThat(cursor!!.count, Matchers.`is`(1))
+        assertNotNull(cursor)
+        assertEquals(1, cursor!!.count)
 
-        assertThat(cursor.moveToFirst(), Matchers.`is`(true))
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH),
-            Matchers.`is`("username1")
-        )
+        assertTrue(cursor.moveToFirst())
+        assertEquals("username1", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH))
 
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME),
-            Matchers.`is`("Carol")
-        )
+        assertEquals("Carol", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME))
     }
 
     @Test
@@ -196,7 +176,7 @@ class SharesContentProviderTest {
                 createDefaultPrivateShare("username4", "Homer")
             )
         )
-        assertThat(itemUri, notNullValue())
+        assertNotNull(itemUri)
 
         // Get links of shares with "friends" in name
         val cursor = mContentResolver!!.query(
@@ -208,20 +188,14 @@ class SharesContentProviderTest {
         )
 
         // Check all items were properly inserted
-        assertThat(cursor, notNullValue())
-        assertThat(cursor!!.count, Matchers.`is`(2))
+        assertNotNull(cursor)
+        assertEquals(2, cursor!!.count)
 
-        assertThat(cursor.moveToFirst(), Matchers.`is`(true))
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
-            Matchers.`is`("http://server:port/s/2000")
-        )
+        assertTrue(cursor.moveToFirst())
+        assertEquals("http://server:port/s/2000", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL))
 
-        assertThat(cursor.moveToNext(), Matchers.`is`(true))
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
-            Matchers.`is`("http://server:port/s/3000")
-        )
+        assertTrue(cursor.moveToNext())
+        assertEquals("http://server:port/s/3000", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL))
     }
 
     /******************************************************************************************************
@@ -264,7 +238,7 @@ class SharesContentProviderTest {
                 createDefaultPublicShare("Picture link 3", "http://server:port/s/3")
             )
         )
-        assertThat(itemUri, notNullValue())
+        assertNotNull(itemUri)
     }
 
     @Test
@@ -278,7 +252,7 @@ class SharesContentProviderTest {
                 createDefaultPublicShare("IMG_1213 link 3", "http://server:port/s/3", remoteId = 3)
             )
         )
-        assertThat(itemUri, notNullValue())
+        assertNotNull(itemUri)
 
         // Update one of them
         mContentResolver!!.update(
@@ -302,37 +276,22 @@ class SharesContentProviderTest {
         )
 
         // Check we have the same amount of shares after updating one of them
-        assertThat(cursor, notNullValue())
-        assertThat(cursor!!.count, Matchers.`is`(3))
+        assertNotNull(cursor)
+        assertEquals(3, cursor!!.count)
 
         // First entry
-        assertThat(cursor.moveToFirst(), Matchers.`is`(true))
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME),
-            Matchers.`is`("IMG_1213 link")
-        )
+        assertTrue(cursor.moveToFirst())
+        assertEquals("IMG_1213 link", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME))
 
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
-            Matchers.`is`("http://server:port/s/1")
-        )
+        assertEquals("http://server:port/s/1", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL))
 
         // Updated entry
-        assertThat(cursor.moveToLast(), Matchers.`is`(true))
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME),
-            Matchers.`is`("IMG_1213 link 3 updated")
-        )
+        assertTrue(cursor.moveToLast())
+        assertEquals("IMG_1213 link 3 updated", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_NAME))
 
-        assertThat(
-            cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL),
-            Matchers.`is`("http://server:port/s/3")
-        )
+        assertEquals("http://server:port/s/3", cursor.getStringFromColumnOrThrow(ProviderTableMeta.OCSHARES_URL))
 
-        assertThat(
-            cursor.getIntFromColumnOrThrow(ProviderTableMeta.OCSHARES_EXPIRATION_DATE),
-            Matchers.`is`(2000)
-        )
+        assertEquals(2000, cursor.getIntFromColumnOrThrow(ProviderTableMeta.OCSHARES_EXPIRATION_DATE))
 
         cursor.close()
     }
