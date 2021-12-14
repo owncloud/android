@@ -13,6 +13,7 @@ Summary
 * Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
 * Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 * Enhancement - Respect capability for Avatar support: [#3438](https://github.com/owncloud/android/pull/3438)
+* Enhancement - Brute force protection: [#3320](https://github.com/owncloud/android/issues/3320)
 
 Details
 -------
@@ -59,6 +60,15 @@ Details
 
    https://github.com/owncloud/android/issues/3285
    https://github.com/owncloud/android/pull/3438
+
+* Enhancement - Brute force protection: [#3320](https://github.com/owncloud/android/issues/3320)
+
+   Previously, when setting passcode lock, an unlimited number of attempts to unlock the app
+   could be done in a row. Now, from the third incorrect attempt, there will be an exponential
+   growing waiting time until next unlock attempt.
+
+   https://github.com/owncloud/android/issues/3320
+   https://github.com/owncloud/android/pull/3463
 
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================
