@@ -51,7 +51,7 @@ class SortBottomSheetFragmentTest {
             putParcelable(SortBottomSheetFragment.ARG_SORT_TYPE, SortType.SORT_TYPE_BY_NAME)
             putParcelable(SortBottomSheetFragment.ARG_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING)
         }
-        fragmentScenario = launchFragment<SortBottomSheetFragment>(fragmentArgs)
+        fragmentScenario = launchFragment(fragmentArgs)
         every { fragmentListener.onSortSelected(any()) } returns Unit
         fragmentScenario.onFragment { it.sortDialogListener = fragmentListener }
     }

@@ -19,7 +19,6 @@
 
 package com.owncloud.android.sharing.shares.ui
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -70,7 +69,7 @@ class EditPrivateShareFragmentTest {
         stopKoin()
 
         startKoin {
-            androidContext(ApplicationProvider.getApplicationContext<Context>())
+            androidContext(ApplicationProvider.getApplicationContext())
             modules(
                 module(override = true) {
                     viewModel {

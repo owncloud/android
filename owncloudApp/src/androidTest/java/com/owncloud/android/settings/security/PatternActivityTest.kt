@@ -23,10 +23,10 @@ package com.owncloud.android.settings.security
 
 import android.content.Context
 import android.content.Intent
-import android.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.owncloud.android.R
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
 import com.owncloud.android.testutil.security.OC_PATTERN
@@ -70,13 +70,13 @@ class PatternActivityTest {
 
     @After
     fun tearDown() {
-        //Clean preferences
+        // Clean preferences
         PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit()
     }
 
     @Test
     fun patternLockView() {
-        //Open Activity in pattern creation mode
+        // Open Activity in pattern creation mode
         openPatternActivity(PatternActivity.ACTION_REQUEST_WITH_RESULT)
 
         with(R.id.header_pattern) {
@@ -93,10 +93,10 @@ class PatternActivityTest {
 
     @Test
     fun removePatternLock() {
-        //Save a pattern in Preferences
+        // Save a pattern in Preferences
         storePattern()
 
-        //Open Activity in pattern deletion mode
+        // Open Activity in pattern deletion mode
         openPatternActivity(PatternActivity.ACTION_CHECK_WITH_RESULT)
 
         with(R.id.header_pattern) {

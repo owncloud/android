@@ -37,18 +37,6 @@ fun mockIntent(
     intending(hasAction(action)).respondWith(intentResult)
 }
 
-@JvmName("mockIntentBoolean")
-fun mockIntent(
-    extras: Pair<String, Boolean>,
-    resultCode: Int = Activity.RESULT_OK,
-    action: String
-) {
-    val result = Intent()
-    result.putExtra(extras.first, extras.second)
-    val intentResult = Instrumentation.ActivityResult(resultCode, result)
-    intending(hasAction(action)).respondWith(intentResult)
-}
-
 @JvmName("mockIntentNoExtras")
 fun mockIntent(
     resultCode: Int = Activity.RESULT_OK,

@@ -21,7 +21,7 @@
 package com.owncloud.android.sharing.shares.ui
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commit
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
@@ -30,7 +30,7 @@ import com.owncloud.android.testing.SingleFragmentActivity
 
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
     fun startFragment(fragment: Fragment) {
-        supportFragmentManager.transaction(allowStateLoss = true) {
+        supportFragmentManager.commit(allowStateLoss = true) {
             add(R.id.container, fragment, TEST_FRAGMENT_TAG)
         }
     }
