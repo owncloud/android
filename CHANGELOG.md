@@ -11,6 +11,7 @@ Summary
 * Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
 * Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
 * Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
+* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 * Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 * Enhancement - Respect capability for Avatar support: [#3438](https://github.com/owncloud/android/pull/3438)
 * Enhancement - Brute force protection: [#3320](https://github.com/owncloud/android/issues/3320)
@@ -45,6 +46,15 @@ Details
 
    https://github.com/owncloud/android/issues/3379
    https://github.com/owncloud/android/pull/3384
+
+* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
+
+   Two parameters (server url and server url input visibility) can be now managed via MDM. These
+   were the first parameters used to test integration with Android Enterprise and Android
+   Management API.
+
+   https://github.com/owncloud/android/issues/3415
+   https://github.com/owncloud/android/pull/3419
 
 * Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 
@@ -104,7 +114,6 @@ Summary
 * Enhancement - Instant upload only when charging: [#465](https://github.com/owncloud/android/issues/465)
 * Enhancement - Scoped Storage: [#2877](https://github.com/owncloud/android/issues/2877)
 * Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
-* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 
 Details
 -------
@@ -226,15 +235,6 @@ Details
 
    https://github.com/owncloud/android/issues/3333
    https://github.com/owncloud/android/pull/3408
-
-* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
-
-   Two parameters (server url and server url input visibility) can be now managed via MDM. These
-   were the first parameters used to test integration with Android Enterprise and Android
-   Management API.
-
-   https://github.com/owncloud/android/issues/3415
-   https://github.com/owncloud/android/pull/3419
 
 Changelog for ownCloud Android Client [2.18.3] (2021-10-27)
 =======================================
