@@ -219,8 +219,9 @@ class SettingsMoreFragmentTest {
 
         launchTest()
 
-        onView(withText(R.string.prefs_help)).perform(click())
         mockIntent(action = Intent.ACTION_VIEW)
+        onView(withText(R.string.prefs_help)).perform(click())
+
         intended(hasData(context.getString(R.string.url_help)))
     }
 
@@ -230,8 +231,9 @@ class SettingsMoreFragmentTest {
 
         launchTest()
 
-        onView(withText(R.string.prefs_sync_calendar_contacts)).perform(click())
         mockIntent(action = Intent.ACTION_VIEW)
+        onView(withText(R.string.prefs_sync_calendar_contacts)).perform(click())
+
         intended(hasData(context.getString(R.string.url_sync_calendar_contacts)))
     }
 
@@ -239,11 +241,12 @@ class SettingsMoreFragmentTest {
     fun recommendOpensSender() {
         launchTest()
 
+        mockIntent(action = Intent.ACTION_SENDTO)
+
         onView(withText(R.string.prefs_recommend)).perform(click())
         // Delay needed since depending on the performance of the device where tests are executed,
         // sender can interfere with the subsequent tests
         Thread.sleep(1000)
-        mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
                 hasAction(Intent.ACTION_SENDTO), hasExtra(
@@ -269,11 +272,12 @@ class SettingsMoreFragmentTest {
     fun feedbackOpensSender() {
         launchTest()
 
+        mockIntent(action = Intent.ACTION_SENDTO)
+
         onView(withText(R.string.prefs_send_feedback)).perform(click())
         // Delay needed since depending on the performance of the device where tests are executed,
         // sender can interfere with the subsequent tests
         Thread.sleep(1000)
-        mockIntent(action = Intent.ACTION_SENDTO)
         intended(
             allOf(
                 hasAction(Intent.ACTION_SENDTO),
@@ -293,8 +297,9 @@ class SettingsMoreFragmentTest {
 
         launchTest()
 
-        onView(withText(R.string.prefs_imprint)).perform(click())
         mockIntent(action = Intent.ACTION_VIEW)
+
+        onView(withText(R.string.prefs_imprint)).perform(click())
         intended(hasData("https://owncloud.com/mobile"))
     }
 
