@@ -33,10 +33,18 @@ import com.owncloud.android.extensions.cancel
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onSuccess
+import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
+import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.Companion.newInstance
+import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.SortDialogListener
+import com.owncloud.android.presentation.ui.files.SortOptionsView
+import com.owncloud.android.presentation.ui.files.SortOrder
+import com.owncloud.android.presentation.ui.files.SortType
+import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.ui.activity.FileListOption
+import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFileListFragment : Fragment() {
+class MainFileListFragment : Fragment(), SortOptionsView.SortOptionsListener, SortDialogListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
 
@@ -80,6 +88,9 @@ class MainFileListFragment : Fragment() {
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener { mainFileListViewModel.refreshDirectory() }
+
+        //Set SortOptions and its listener
+        binding.optionsLayout.onSortOptionsListener = this
     }
 
     private fun subscribeToViewModels() {
@@ -119,6 +130,32 @@ class MainFileListFragment : Fragment() {
         fileListAdapter.registerAdapterDataObserver(emptyDataObserver)
     }
 
+    override fun onSortTypeListener(sortType: SortType, sortOrder: SortOrder) {
+        val sortBottomSheetFragment = newInstance(sortType, sortOrder)
+        sortBottomSheetFragment.sortDialogListener = this
+        sortBottomSheetFragment.show(childFragmentManager, SortBottomSheetFragment.TAG)
+    }
+
+    override fun onViewTypeListener(viewType: ViewType) {
+        //TODO("Not yet implemented")
+    }
+
+    override fun onSortSelected(sortType: SortType) {
+        binding.optionsLayout.sortTypeSelected = sortType
+
+        val isAscending = binding.optionsLayout.sortOrderSelected == SortOrder.SORT_ORDER_ASCENDING
+
+        when (sortType) {
+            SortType.SORT_TYPE_BY_NAME -> sortAdapterBy(FileStorageUtils.SORT_NAME, isAscending)
+            SortType.SORT_TYPE_BY_DATE -> sortAdapterBy(FileStorageUtils.SORT_DATE, isAscending)
+            SortType.SORT_TYPE_BY_SIZE -> sortAdapterBy(FileStorageUtils.SORT_SIZE, isAscending)
+        }
+    }
+
+    private fun sortAdapterBy(sortType: Int, isDescending: Boolean) {
+        fileListAdapter.setSortOrder(order = sortType, ascending = isDescending)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -131,10 +168,10 @@ class MainFileListFragment : Fragment() {
     }
 
     fun updateFileListOption(newFileListOption: FileListOption) {
-        when(newFileListOption) {
-            FileListOption.ALL_FILES ->  mainFileListViewModel.listCurrentDirectory()
-            FileListOption.AV_OFFLINE ->  mainFileListViewModel.getAvailableOfflineFilesList()
-            FileListOption.SHARED_BY_LINK ->  mainFileListViewModel.getSharedByLinkFilesList()
+        when (newFileListOption) {
+            FileListOption.ALL_FILES -> mainFileListViewModel.listCurrentDirectory()
+            FileListOption.AV_OFFLINE -> mainFileListViewModel.getAvailableOfflineFilesList()
+            FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
         }
 
         // TODO Manage FAB button
