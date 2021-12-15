@@ -155,6 +155,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private val secondFragment: FileFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
 
+    private val testFragment: MainFileListFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_TEST_FRAGMENT) as MainFileListFragment?
+
     private val isFabOpen: Boolean
         get() = listOfFilesFragment?.fabMain?.isExpanded ?: false
 
@@ -348,9 +351,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         val list = MainFileListFragment.newInstance(justFolders = false)
 
-
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.left_fragment_container, list, TAG_LIST_OF_FILES_BIS)
+
+        val listOfFiles = OCFileListFragment.newInstance(false, fileListOption, false, false, true)
+        listOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))
+
         transaction.commit()
     }
 
@@ -477,9 +483,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     fun refreshListOfFilesFragment(reloadData: Boolean) {
+
         /*val fileListFragment = listOfFilesFragment
         fileListFragment?.listDirectory(reloadData)*/
         val fileListFragment = listMainFileFragment
+
         fileListFragment?.listDirectory(file)
     }
 
@@ -1659,6 +1667,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         private const val TAG_LIST_OF_FILES_BIS = "TAG_LIST_OF_FILES_BIS"
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
+        private const val TAG_TEST_FRAGMENT = "TAG_TEST_FRAGMENT"
 
         private const val KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW"
         private const val KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS"
