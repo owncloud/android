@@ -91,7 +91,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private lateinit var serverBaseUrl: String
 
     private var oidcSupported = false
-    private var oidcState: String = ""
 
     private lateinit var binding: AccountSetupBinding
 
@@ -447,7 +446,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
         val customTabsIntent: CustomTabsIntent = customTabsBuilder.build()
 
-        this.oidcState = OAuthUtils().generateRandomState()
         val authorizationEndpointUri = OAuthUtils.buildAuthorizationRequest(
             authorizationEndpoint = authorizationEndpoint,
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
@@ -455,7 +453,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             responseType = ResponseType.CODE.string,
             scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else "",
             codeChallenge = oauthViewModel.codeChallenge,
-            state = this.oidcState
+            state = oauthViewModel.oidcState
         )
 
         customTabsIntent.launchUrl(
@@ -475,7 +473,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val authorizationCode = intent.data?.getQueryParameter("code")
         val state = intent.data?.getQueryParameter("state")
 
-        if (state != this.oidcState){
+        if (state != oauthViewModel.oidcState){
             Timber.e("OAuth request to get authorization code failed. State mismatching, maybe somebody is trying a CSRF attack.")
             updateOAuthStatusIconAndText(StateMismatchException())
         } else {
