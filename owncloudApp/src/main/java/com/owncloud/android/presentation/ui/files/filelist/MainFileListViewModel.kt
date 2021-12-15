@@ -68,20 +68,24 @@ class MainFileListViewModel(
         }
     }
 
-    fun getSharedByLinkFilesList(owner: String) {
-        getFilesSharedByLinkUseCase.execute(GetFilesSharedByLinkUseCase.Params(owner = owner)).let {
-            when (it) {
-                is UseCaseResult.Error -> _getFilesSharedByLinkData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                is UseCaseResult.Success -> _getFilesSharedByLinkData.postValue(Event(UIResult.Success(it.getDataOrNull())))
+    fun getSharedByLinkFilesList() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            getFilesSharedByLinkUseCase.execute(GetFilesSharedByLinkUseCase.Params(owner = file.owner)).let {
+                when (it) {
+                    is UseCaseResult.Error -> _getFilesSharedByLinkData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
+                    is UseCaseResult.Success -> _getFilesSharedByLinkData.postValue(Event(UIResult.Success(it.getDataOrNull())))
+                }
             }
         }
     }
 
-    fun getAvailableOfflineFilesList(owner: String) {
-        getFilesAvailableOfflineUseCase.execute(GetFilesAvailableOfflineUseCase.Params(owner = owner)).let {
-            when (it) {
-                is UseCaseResult.Error -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                is UseCaseResult.Success -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Success(it.getDataOrNull())))
+    fun getAvailableOfflineFilesList() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            getFilesAvailableOfflineUseCase.execute(GetFilesAvailableOfflineUseCase.Params(owner = file.owner)).let {
+                when (it) {
+                    is UseCaseResult.Error -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
+                    is UseCaseResult.Success -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Success(it.getDataOrNull())))
+                }
             }
         }
     }
@@ -91,6 +95,10 @@ class MainFileListViewModel(
             _getFilesListStatusLiveData.postValue(Event(UIResult.Loading()))
             refreshFolderFromServerAsyncUseCase.execute(RefreshFolderFromServerAsyncUseCase.Params(remotePath = remotePath))
         }
+    }
+
+    fun listCurrentDirectory() {
+        getFilesList(file.id!!)
     }
 
     fun listDirectory(directory: OCFile) {
