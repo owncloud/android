@@ -44,7 +44,7 @@ import com.owncloud.android.ui.activity.FileListOption
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFileListFragment : Fragment(), SortOptionsView.SortOptionsListener, SortDialogListener {
+class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
 
@@ -89,8 +89,14 @@ class MainFileListFragment : Fragment(), SortOptionsView.SortOptionsListener, So
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener { mainFileListViewModel.refreshDirectory() }
 
-        //Set SortOptions and its listener
-        binding.optionsLayout.onSortOptionsListener = this
+        //Set SortOptions and its listeners
+        binding.optionsLayout.let {
+            it.onSortOptionsListener = this
+            if (isPickingAFolder()) {
+                it.onCreateFolderListener = this
+                it.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER)
+            }
+        }
     }
 
     private fun subscribeToViewModels() {
@@ -156,6 +162,11 @@ class MainFileListFragment : Fragment(), SortOptionsView.SortOptionsListener, So
         fileListAdapter.setSortOrder(order = sortType, ascending = isDescending)
     }
 
+    fun isPickingAFolder(): Boolean {
+        val args = arguments
+        return args != null && args.getBoolean(ARG_PICKING_A_FOLDER, false)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -178,15 +189,22 @@ class MainFileListFragment : Fragment(), SortOptionsView.SortOptionsListener, So
     }
 
     companion object {
-        val ARG_JUST_FOLDERS = MainFileListFragment::class.java.canonicalName + ".JUST_FOLDERS"
+        val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
+        val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
 
         fun newInstance(
-            justFolders: Boolean
+            justFolders: Boolean,
+            pickingAFolder: Boolean = false
         ): MainFileListFragment {
             val args = Bundle()
             args.putBoolean(ARG_JUST_FOLDERS, justFolders)
+            args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
             return MainFileListFragment().apply { arguments = args }
         }
+    }
+
+    override fun onCreateFolderListener() {
+        //TODO("Not yet implemented")
     }
 }
 
