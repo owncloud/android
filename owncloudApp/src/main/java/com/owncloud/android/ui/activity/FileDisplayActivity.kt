@@ -307,7 +307,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         /* val listOfFiles = OCFileListFragment.newInstance(false, fileListOption, false, false, true)
          listOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))*/
 
-        val list = MainFileListFragment.newInstance()
+        val list = MainFileListFragment.newInstance(justFolders = false)
 
 
         val transaction = supportFragmentManager.beginTransaction()

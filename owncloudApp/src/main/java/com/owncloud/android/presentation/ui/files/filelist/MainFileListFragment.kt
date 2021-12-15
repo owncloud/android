@@ -143,8 +143,11 @@ class MainFileListFragment : Fragment() {
     companion object {
         val ARG_JUST_FOLDERS = MainFileListFragment::class.java.canonicalName + ".JUST_FOLDERS"
 
-        fun newInstance(): MainFileListFragment {
+        fun newInstance(
+            justFolders: Boolean
+        ): MainFileListFragment {
             val args = Bundle()
+            args.putBoolean(ARG_JUST_FOLDERS, justFolders)
             return MainFileListFragment().apply { arguments = args }
         }
     }
