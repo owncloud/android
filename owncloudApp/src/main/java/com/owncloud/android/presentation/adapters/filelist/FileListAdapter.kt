@@ -54,7 +54,7 @@ class FileListAdapter(
     private val TYPE_ITEMS = 0
     private val TYPE_FOOTER = 1
 
-    fun updateFileList(filesToAdd: List<OCFile>, sortTypeSelected: Int? = null) {
+    fun updateFileList(filesToAdd: List<OCFile>) {
         val diffUtilCallback = FileListDiffCallback(oldList = files, newList = filesToAdd)
         val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
         filesToSort = filesToAdd
