@@ -97,7 +97,7 @@ class PassCodeViewModel(
         preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
 
     fun getTimeToUnlockLeft(): Long {
-        val timeLocked = 16.0.pow(getNumberOfAttempts()).toLong().times(1000)
+        val timeLocked = 1.5.pow(getNumberOfAttempts()).toLong().times(1000)
         val lastUnlockAttempt = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, 0)
         return max(0, (lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime())
     }
