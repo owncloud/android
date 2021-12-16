@@ -48,6 +48,7 @@ import com.owncloud.android.utils.matchers.withChildCountAndId
 import io.mockk.every
 import io.mockk.mockk
 import com.owncloud.android.utils.matchers.nthChildOf
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Ignore
@@ -91,13 +92,13 @@ class PassCodeActivityTest {
 
     @After
     fun tearDown() {
-        //Clean preferences
+        // Clean preferences
         PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit()
     }
 
     @Test
     fun passcodeView() {
-        //Open Activity in passcode creation mode
+        // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         with(R.id.header) {
@@ -124,7 +125,7 @@ class PassCodeActivityTest {
     @Ignore("Flaky test, it fails many times")
     @Test
     fun passcodeViewCancelButton() {
-        //Open Activity in passcode creation mode
+        // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         R.id.cancel.click()
@@ -134,10 +135,10 @@ class PassCodeActivityTest {
 
     @Test
     fun firstTry() {
-        //Open Activity in passcode creation mode
+        // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typing
+        // First typing
         typePasscode(defaultPassCode)
 
         with(R.id.header) {
@@ -149,31 +150,27 @@ class PassCodeActivityTest {
 
     @Test
     fun secondTryCorrect() {
-        //Open Activity in passcode creation mode
+        // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typing
+        // First typing
         typePasscode(defaultPassCode)
-        //Second typing
+        // Second typing
         typePasscode(defaultPassCode)
 
-        //Checking that the result returned is OK
+        // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
-
-        activityScenario.onActivity {
-            assertTrue(it.isFinishing)
-        }
     }
 
     @Test
     fun secondTryIncorrect() {
-        //Open Activity in passcode creation mode
+        // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typing
-        //Type incorrect passcode
+        // First typing
+        // Type incorrect passcode
         typePasscode(defaultPassCode)
-        //Second typing
+        // Second typing
         typePasscode(wrongPassCode)
 
         with(R.id.header) {
@@ -192,7 +189,7 @@ class PassCodeActivityTest {
 
     @Test
     fun cancelFirstTry() {
-        //Open Activity in passcode creation mode
+        // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         for (i in 0..2) {
@@ -205,13 +202,13 @@ class PassCodeActivityTest {
 
     @Test
     fun cancelSecondTry() {
-        //Open Activity in passcode creation mode
+        // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        //First typing
+        // First typing
         typePasscode(defaultPassCode)
 
-        //Type incomplete passcode
+        // Type incomplete passcode
         for (i in 0..1) {
             onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
         }
@@ -222,10 +219,10 @@ class PassCodeActivityTest {
 
     @Test
     fun deletePasscodeView() {
-        //Save a passcode in Preferences
+        // Save a passcode in Preferences
         storePasscode()
 
-        //Open Activity in passcode deletion mode
+        // Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
         with(R.id.header) {
@@ -237,7 +234,7 @@ class PassCodeActivityTest {
     @Ignore("Flaky test, it fails many times")
     @Test
     fun deletePasscodeViewCancelButton() {
-        //Open Activity in passcode deletion mode
+        // Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
         R.id.cancel.click()
@@ -248,31 +245,29 @@ class PassCodeActivityTest {
     fun deletePasscodeCorrect() {
         every { passCodeViewModel.checkPassCodeIsValid(any()) } returns true
 
-        //Save a passcode in Preferences
+        // Save a passcode in Preferences
         storePasscode(OC_PASSCODE_6_DIGITS)
 
-        //Open Activity in passcode deletion mode
+        // Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
-        //Type correct passcode
+        // Type correct passcode
         typePasscode(defaultPassCode)
 
-        activityScenario.onActivity {
-            assertTrue(it.isFinishing)
-        }
+        verify { passCodeViewModel.removePassCode() }
     }
 
     @Test
     fun deletePasscodeIncorrect() {
         every { passCodeViewModel.checkPassCodeIsValid(any()) } returns false
 
-        //Save a passcode in Preferences
+        // Save a passcode in Preferences
         storePasscode(OC_PASSCODE_6_DIGITS)
 
-        //Open Activity in passcode deletion mode
+        // Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
-        //Type incorrect passcode
+        // Type incorrect passcode
         typePasscode(wrongPassCode)
 
         with(R.id.header) {
