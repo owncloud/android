@@ -27,6 +27,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.databinding.MainFileListFragmentBinding
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.cancel
@@ -52,6 +53,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private val binding get() = _binding!!
 
     private lateinit var fileListAdapter: FileListAdapter
+    private lateinit var files: List<OCFile>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,6 +106,11 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(files = data ?: emptyList())
+                files = data ?: emptyList()
+                val sortedFiles = mainFileListViewModel.sortList(files)
+                fileListAdapter.updateFileList(filesToAdd = sortedFiles)
+                registerListAdapterDataObserver()
+                binding.swipeRefreshMainFileList.cancel()
             }
         })
 
@@ -159,7 +166,11 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     private fun sortAdapterBy(sortType: Int, isDescending: Boolean) {
-        fileListAdapter.setSortOrder(order = sortType, ascending = isDescending)
+        PreferenceManager.setSortOrder(sortType, requireContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+        PreferenceManager.setSortAscending(isDescending, requireContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+
+        val sortedFiles = mainFileListViewModel.sortList(files)
+        fileListAdapter.updateFileList(filesToAdd = sortedFiles)
     }
 
     private fun isPickingAFolder(): Boolean {
