@@ -33,6 +33,7 @@ import com.owncloud.android.extensions.cancel
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onSuccess
+import com.owncloud.android.ui.activity.FileListOption
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFileListFragment : Fragment() {
@@ -85,10 +86,21 @@ class MainFileListFragment : Fragment() {
         // Observe the action of retrieving the list of files from DB.
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
-                val files = data ?: emptyList()
-                fileListAdapter.updateFileList(filesToAdd = files)
-                registerListAdapterDataObserver()
-                binding.swipeRefreshMainFileList.cancel()
+                updateFileListData(files = data ?: emptyList())
+            }
+        })
+
+        // Observe the action of retrieving the list of shared by link files from DB.
+        mainFileListViewModel.getFilesSharedByLinkData.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                updateFileListData(files = data ?: emptyList())
+            }
+        })
+
+        // Observe the action of retrieving the list of available offline files from DB.
+        mainFileListViewModel.getFilesAvailableOfflineData.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                updateFileListData(files = data ?: emptyList())
             }
         })
     }
@@ -112,11 +124,30 @@ class MainFileListFragment : Fragment() {
         _binding = null
     }
 
+    private fun updateFileListData(files: List<OCFile>) {
+        fileListAdapter.updateFileList(filesToAdd = files)
+        registerListAdapterDataObserver()
+        binding.swipeRefreshMainFileList.cancel()
+    }
+
+    fun updateFileListOption(newFileListOption: FileListOption) {
+        when(newFileListOption) {
+            FileListOption.ALL_FILES ->  mainFileListViewModel.listCurrentDirectory()
+            FileListOption.AV_OFFLINE ->  mainFileListViewModel.getAvailableOfflineFilesList()
+            FileListOption.SHARED_BY_LINK ->  mainFileListViewModel.getSharedByLinkFilesList()
+        }
+
+        // TODO Manage FAB button
+    }
+
     companion object {
         val ARG_JUST_FOLDERS = MainFileListFragment::class.java.canonicalName + ".JUST_FOLDERS"
 
-        fun newInstance(): MainFileListFragment {
+        fun newInstance(
+            justFolders: Boolean
+        ): MainFileListFragment {
             val args = Bundle()
+            args.putBoolean(ARG_JUST_FOLDERS, justFolders)
             return MainFileListFragment().apply { arguments = args }
         }
     }
