@@ -40,8 +40,6 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import kotlin.math.max
-import kotlin.math.pow
 
 @ExperimentalCoroutinesApi
 class PassCodeViewModelTest : ViewModelTest() {
