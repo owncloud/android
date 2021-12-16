@@ -38,7 +38,6 @@ import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText
 import org.junit.After
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
