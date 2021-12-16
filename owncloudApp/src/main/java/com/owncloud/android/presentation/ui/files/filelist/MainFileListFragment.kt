@@ -27,16 +27,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.databinding.MainFileListFragmentBinding
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.cancel
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onSuccess
+import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
+import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.Companion.newInstance
+import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.SortDialogListener
+import com.owncloud.android.presentation.ui.files.SortOptionsView
+import com.owncloud.android.presentation.ui.files.SortOrder
+import com.owncloud.android.presentation.ui.files.SortType
+import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.ui.activity.FileListOption
+import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFileListFragment : Fragment() {
+class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
 
@@ -44,6 +53,7 @@ class MainFileListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var fileListAdapter: FileListAdapter
+    private lateinit var files: List<OCFile>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,6 +90,15 @@ class MainFileListFragment : Fragment() {
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener { mainFileListViewModel.refreshDirectory() }
+
+        //Set SortOptions and its listeners
+        binding.optionsLayout.let {
+            it.onSortOptionsListener = this
+            if (isPickingAFolder()) {
+                it.onCreateFolderListener = this
+                it.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER)
+            }
+        }
     }
 
     private fun subscribeToViewModels() {
@@ -87,6 +106,11 @@ class MainFileListFragment : Fragment() {
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(files = data ?: emptyList())
+                files = data ?: emptyList()
+                val sortedFiles = mainFileListViewModel.sortList(files)
+                fileListAdapter.updateFileList(filesToAdd = sortedFiles)
+                registerListAdapterDataObserver()
+                binding.swipeRefreshMainFileList.cancel()
             }
         })
 
@@ -119,6 +143,41 @@ class MainFileListFragment : Fragment() {
         fileListAdapter.registerAdapterDataObserver(emptyDataObserver)
     }
 
+    override fun onSortTypeListener(sortType: SortType, sortOrder: SortOrder) {
+        val sortBottomSheetFragment = newInstance(sortType, sortOrder)
+        sortBottomSheetFragment.sortDialogListener = this
+        sortBottomSheetFragment.show(childFragmentManager, SortBottomSheetFragment.TAG)
+    }
+
+    override fun onViewTypeListener(viewType: ViewType) {
+        //TODO("Not yet implemented")
+    }
+
+    override fun onSortSelected(sortType: SortType) {
+        binding.optionsLayout.sortTypeSelected = sortType
+
+        val isAscending = binding.optionsLayout.sortOrderSelected == SortOrder.SORT_ORDER_ASCENDING
+
+        when (sortType) {
+            SortType.SORT_TYPE_BY_NAME -> sortAdapterBy(FileStorageUtils.SORT_NAME, isAscending)
+            SortType.SORT_TYPE_BY_DATE -> sortAdapterBy(FileStorageUtils.SORT_DATE, isAscending)
+            SortType.SORT_TYPE_BY_SIZE -> sortAdapterBy(FileStorageUtils.SORT_SIZE, isAscending)
+        }
+    }
+
+    private fun sortAdapterBy(sortType: Int, isDescending: Boolean) {
+        PreferenceManager.setSortOrder(sortType, requireContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+        PreferenceManager.setSortAscending(isDescending, requireContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+
+        val sortedFiles = mainFileListViewModel.sortList(files)
+        fileListAdapter.updateFileList(filesToAdd = sortedFiles)
+    }
+
+    private fun isPickingAFolder(): Boolean {
+        val args = arguments
+        return args != null && args.getBoolean(ARG_PICKING_A_FOLDER, false)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -131,25 +190,32 @@ class MainFileListFragment : Fragment() {
     }
 
     fun updateFileListOption(newFileListOption: FileListOption) {
-        when(newFileListOption) {
-            FileListOption.ALL_FILES ->  mainFileListViewModel.listCurrentDirectory()
-            FileListOption.AV_OFFLINE ->  mainFileListViewModel.getAvailableOfflineFilesList()
-            FileListOption.SHARED_BY_LINK ->  mainFileListViewModel.getSharedByLinkFilesList()
+        when (newFileListOption) {
+            FileListOption.ALL_FILES -> mainFileListViewModel.listCurrentDirectory()
+            FileListOption.AV_OFFLINE -> mainFileListViewModel.getAvailableOfflineFilesList()
+            FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
         }
 
         // TODO Manage FAB button
     }
 
     companion object {
-        val ARG_JUST_FOLDERS = MainFileListFragment::class.java.canonicalName + ".JUST_FOLDERS"
+        val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
+        val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
 
         fun newInstance(
-            justFolders: Boolean
+            justFolders: Boolean,
+            pickingAFolder: Boolean = false
         ): MainFileListFragment {
             val args = Bundle()
             args.putBoolean(ARG_JUST_FOLDERS, justFolders)
+            args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
             return MainFileListFragment().apply { arguments = args }
         }
+    }
+
+    override fun onCreateFolderListener() {
+        //TODO("Not yet implemented")
     }
 }
 

@@ -32,11 +32,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.extensions.setPicture
 import com.owncloud.android.presentation.diffutils.FileListDiffCallback
 import com.owncloud.android.utils.DisplayUtils
+import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 
 class FileListAdapter(
@@ -45,7 +47,8 @@ class FileListAdapter(
     private val listener: FileListAdapterListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val files = mutableListOf<Any>()
+
+    private var files = mutableListOf<Any>()
     private lateinit var viewHolder: RecyclerView.ViewHolder
 
     private val TYPE_ITEMS = 0
@@ -56,9 +59,11 @@ class FileListAdapter(
         val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
         files.clear()
         files.addAll(filesToAdd)
+
         if (filesToAdd.isNotEmpty()) {
             files.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
         }
+
         diffResult.dispatchUpdatesTo(this)
     }
 
