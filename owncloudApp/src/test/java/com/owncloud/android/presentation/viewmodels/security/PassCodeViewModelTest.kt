@@ -257,11 +257,5 @@ class PassCodeViewModelTest : ViewModelTest() {
         val timeToUnlockLeft = passCodeViewModel.getTimeToUnlockLeft()
 
         assertEquals(3000, timeToUnlockLeft)
-
-        verify(exactly = 1) {
-            val timeLocked = 1.5.pow(3).toLong().times(1000)
-            val lastUnlockAttempt = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, 0)
-            max(0, (lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime())
-        }
     }
 }

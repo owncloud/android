@@ -97,7 +97,7 @@ class PassCodeViewModel(
         preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
 
     fun getTimeToUnlockLeft(): Long {
-        val timeLocked = 1.5.pow(getNumberOfAttempts()).toLong().times(1000)
+        val timeLocked = 16.0.pow(getNumberOfAttempts()).toLong().times(1000)
         val lastUnlockAttempt = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, 0)
         return max(0, (lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime())
     }
@@ -105,9 +105,12 @@ class PassCodeViewModel(
     fun initUnlockTimer() {
         object : CountDownTimer(getTimeToUnlockLeft(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val minutes = TimeUnit.MINUTES.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS)
+                val hours = TimeUnit.HOURS.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS)
+                val minutes =
+                    if (hours > 0) TimeUnit.MINUTES.convert(TimeUnit.SECONDS.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS) - hours.times(3600), TimeUnit.SECONDS)
+                    else TimeUnit.MINUTES.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS)
                 val seconds = TimeUnit.SECONDS.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS).rem(60)
-                val timeString = String.format("%02d:%02d", minutes, seconds)
+                val timeString = if (hours > 0) String.format("%02d:%02d:%02d", hours, minutes, seconds) else String.format("%02d:%02d", minutes, seconds)
                 _getTimeToUnlockLiveData.postValue(Event(timeString))
             }
 
