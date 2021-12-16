@@ -47,6 +47,18 @@ class FileListAdapter(
     private val listener: FileListAdapterListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    init {
+        // Read sorting order, default to sort by name ascending
+        FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(
+            context,
+            FileStorageUtils.FILE_DISPLAY_SORT
+        )
+        FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(
+            context,
+            FileStorageUtils.FILE_DISPLAY_SORT
+        )
+    }
+
     private var files = mutableListOf<Any>()
     private var filesToSort = listOf<OCFile>()
     private lateinit var viewHolder: RecyclerView.ViewHolder
