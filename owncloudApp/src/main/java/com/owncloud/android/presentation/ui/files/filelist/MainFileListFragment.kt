@@ -162,7 +162,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         fileListAdapter.setSortOrder(order = sortType, ascending = isDescending)
     }
 
-    fun isPickingAFolder(): Boolean {
+    private fun isPickingAFolder(): Boolean {
         val args = arguments
         return args != null && args.getBoolean(ARG_PICKING_A_FOLDER, false)
     }
