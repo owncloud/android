@@ -26,6 +26,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFilesAvailableOfflineUseCase
@@ -34,7 +35,9 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseC
 import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
 
 class MainFileListViewModel(
@@ -43,6 +46,7 @@ class MainFileListViewModel(
     private val getFilesAvailableOfflineUseCase: GetFilesAvailableOfflineUseCase,
     private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
     private lateinit var file: OCFile
@@ -108,6 +112,16 @@ class MainFileListViewModel(
 
     fun refreshDirectory() {
         refreshFilesList(file.remotePath)
+    }
+
+    fun sortList(files: List<OCFile>): List<OCFile> {
+        val sortOrderSaved = PreferenceManager.getSortOrder(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+        val ascendingModeSaved = PreferenceManager.getSortAscending(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+
+        return FileStorageUtils.sortFolder(
+            files, sortOrderSaved,
+            ascendingModeSaved
+        )
     }
 }
 
