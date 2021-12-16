@@ -47,20 +47,8 @@ class FileListAdapter(
     private val listener: FileListAdapterListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    init {
-        // Read sorting order, default to sort by name ascending
-        FileStorageUtils.mSortOrderFileDisp = PreferenceManager.getSortOrder(
-            context,
-            FileStorageUtils.FILE_DISPLAY_SORT
-        )
-        FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(
-            context,
-            FileStorageUtils.FILE_DISPLAY_SORT
-        )
-    }
 
     private var files = mutableListOf<Any>()
-    private var filesToSort = listOf<OCFile>()
     private lateinit var viewHolder: RecyclerView.ViewHolder
 
     private val TYPE_ITEMS = 0
@@ -69,7 +57,6 @@ class FileListAdapter(
     fun updateFileList(filesToAdd: List<OCFile>) {
         val diffUtilCallback = FileListDiffCallback(oldList = files, newList = filesToAdd)
         val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
-        filesToSort = filesToAdd
         files.clear()
         files.addAll(filesToAdd)
 
@@ -77,23 +64,7 @@ class FileListAdapter(
             files.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
         }
 
-
         diffResult.dispatchUpdatesTo(this)
-    }
-
-    fun setSortOrder(order: Int, ascending: Boolean) {
-        PreferenceManager.setSortOrder(order, context, FileStorageUtils.FILE_DISPLAY_SORT)
-        PreferenceManager.setSortAscending(ascending, context, FileStorageUtils.FILE_DISPLAY_SORT)
-
-        FileStorageUtils.mSortOrderFileDisp = order
-        FileStorageUtils.mSortAscendingFileDisp = ascending
-
-        val sortedFiles = FileStorageUtils.sortFolder(
-            filesToSort, FileStorageUtils.mSortOrderFileDisp,
-            FileStorageUtils.mSortAscendingFileDisp
-        )
-
-        updateFileList(sortedFiles)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
