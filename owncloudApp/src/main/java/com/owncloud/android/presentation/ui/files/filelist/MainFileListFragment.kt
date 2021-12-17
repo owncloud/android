@@ -21,6 +21,7 @@
 package com.owncloud.android.presentation.ui.files.filelist
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,9 +47,13 @@ import com.owncloud.android.ui.activity.FileListOption
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
+
+    val ARG_LIST_FILE_OPTION = MainFileListFragment::class.java.canonicalName +
+            ".LIST_FILE_OPTION"
 
     private val KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED"
 
@@ -72,6 +77,17 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeToViewModels()
+
+        var fileListOption: FileListOption? =
+            if (requireArguments().getParcelable<Parcelable?>(ARG_LIST_FILE_OPTION) != null)
+                requireArguments().getParcelable(ARG_LIST_FILE_OPTION)
+            else
+                null
+
+        if (fileListOption == null) {
+            fileListOption = FileListOption.ALL_FILES
+        }
+        updateFab(fileListOption)
     }
 
     private fun initViews() {
@@ -201,6 +217,10 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
         }
 
+        updateFab(newFileListOption)
+    }
+
+    private fun updateFab(newFileListOption: FileListOption) {
         if (!newFileListOption.isAllFiles() || isPickingAFolder()) {
             setFabEnabled(false)
         } else {
@@ -208,7 +228,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             //registerFabListeners()
 
             // detect if a mini FAB has ever been clicked
-            val prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(activity)
+            val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
             if (prefs.getLong(KEY_FAB_EVER_CLICKED, 0) > 0) {
                 miniFabClicked = true
             }
