@@ -24,8 +24,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.OCFile
@@ -49,11 +51,16 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
 
+    private val KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED"
+
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var files: List<OCFile>
+
+    private var hideFab = true
+    private var miniFabClicked = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -196,7 +203,60 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
         }
 
-        // TODO Manage FAB button
+        hideFab = !newFileListOption.isAllFiles() || isPickingAFolder()
+        if (hideFab) {
+            setFabEnabled(false)
+        } else {
+            setFabEnabled(true)
+            //registerFabListeners()
+
+            // detect if a mini FAB has ever been clicked
+            val prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(activity)
+            if (prefs.getLong(KEY_FAB_EVER_CLICKED, 0) > 0) {
+                miniFabClicked = true
+            }
+
+            // add labels to the min FABs when none of them has ever been clicked on
+            if (!miniFabClicked) {
+                setFabLabels()
+            } else {
+                removeFabLabels()
+            }
+        }
+    }
+
+    /**
+     * Sets the 'visibility' state of the FAB contained in the fragment.
+     *
+     *
+     * When 'false' is set, FAB visibility is set to View.GONE programatically,
+     *
+     * @param enabled Desired visibility for the FAB.
+     */
+    private fun setFabEnabled(enabled: Boolean) {
+        if (enabled) {
+            binding.fabMain.setVisibility(View.VISIBLE)
+        } else {
+            binding.fabMain.setVisibility(View.GONE)
+        }
+    }
+
+    /**
+     * Adds labels to all mini FABs.
+     */
+    private fun setFabLabels() {
+        binding.fabUpload.title = resources.getString(R.string.actionbar_upload)
+        binding.fabMkdir.title = resources.getString(R.string.actionbar_mkdir)
+    }
+
+    /**
+     * Removes the labels on all known min FABs.
+     */
+    private fun removeFabLabels() {
+        binding.fabUpload.title = null
+        binding.fabMkdir.title = null
+        (binding.fabUpload.getTag(com.getbase.floatingactionbutton.R.id.fab_label) as TextView).visibility = View.GONE
+        (binding.fabMkdir.getTag(com.getbase.floatingactionbutton.R.id.fab_label) as TextView).visibility = View.GONE
     }
 
     companion object {
