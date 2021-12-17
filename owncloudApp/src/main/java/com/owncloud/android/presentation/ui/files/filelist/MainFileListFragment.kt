@@ -24,7 +24,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.R
@@ -59,7 +58,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var files: List<OCFile>
 
-    private var hideFab = true
     private var miniFabClicked = false
 
     override fun onCreateView(
@@ -203,8 +201,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
         }
 
-        hideFab = !newFileListOption.isAllFiles() || isPickingAFolder()
-        if (hideFab) {
+        if (!newFileListOption.isAllFiles() || isPickingAFolder()) {
             setFabEnabled(false)
         } else {
             setFabEnabled(true)
@@ -255,8 +252,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private fun removeFabLabels() {
         binding.fabUpload.title = null
         binding.fabMkdir.title = null
-        (binding.fabUpload.getTag(com.getbase.floatingactionbutton.R.id.fab_label) as TextView).visibility = View.GONE
-        (binding.fabMkdir.getTag(com.getbase.floatingactionbutton.R.id.fab_label) as TextView).visibility = View.GONE
+        binding.fabUpload.visibility = View.GONE
+        binding.fabMkdir.visibility = View.GONE
     }
 
     companion object {
