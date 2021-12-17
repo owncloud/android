@@ -45,6 +45,7 @@ class OAuthViewModel(
 
     val codeVerifier: String = OAuthUtils().generateRandomCodeVerifier()
     val codeChallenge: String = OAuthUtils().generateCodeChallenge(codeVerifier)
+    val oidcState: String = OAuthUtils().generateRandomState()
 
     private val _oidcDiscovery = MediatorLiveData<Event<UIResult<OIDCServerConfiguration>>>()
     val oidcDiscovery: LiveData<Event<UIResult<OIDCServerConfiguration>>> = _oidcDiscovery

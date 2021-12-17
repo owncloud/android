@@ -52,6 +52,7 @@ import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
+import com.owncloud.android.domain.exceptions.StateMismatchException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
@@ -451,7 +452,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             clientId = clientId,
             responseType = ResponseType.CODE.string,
             scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else "",
-            codeChallenge = oauthViewModel.codeChallenge
+            codeChallenge = oauthViewModel.codeChallenge,
+            state = oauthViewModel.oidcState
         )
 
         customTabsIntent.launchUrl(
@@ -469,18 +471,24 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun handleGetAuthorizationCodeResponse(intent: Intent) {
         val authorizationCode = intent.data?.getQueryParameter("code")
+        val state = intent.data?.getQueryParameter("state")
 
-        if (authorizationCode != null) {
-            Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
-            exchangeAuthorizationCodeForTokens(authorizationCode)
+        if (state != oauthViewModel.oidcState){
+            Timber.e("OAuth request to get authorization code failed. State mismatching, maybe somebody is trying a CSRF attack.")
+            updateOAuthStatusIconAndText(StateMismatchException())
         } else {
-            val authorizationError = intent.data?.getQueryParameter("error")
-            val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
+            if (authorizationCode != null) {
+                Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
+                exchangeAuthorizationCodeForTokens(authorizationCode)
+            } else {
+                val authorizationError = intent.data?.getQueryParameter("error")
+                val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
 
-            Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]. Error description: [$authorizationErrorDescription]")
-            val authorizationException =
-                if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
-            updateOAuthStatusIconAndText(authorizationException)
+                Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]. Error description: [$authorizationErrorDescription]")
+                val authorizationException =
+                    if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
+                updateOAuthStatusIconAndText(authorizationException)
+            }
         }
     }
 
