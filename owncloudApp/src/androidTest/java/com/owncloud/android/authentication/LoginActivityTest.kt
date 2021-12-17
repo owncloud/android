@@ -23,6 +23,7 @@ package com.owncloud.android.authentication
 import android.accounts.AccountManager.KEY_ACCOUNT_NAME
 import android.accounts.AccountManager.KEY_ACCOUNT_TYPE
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.MutableLiveData
@@ -69,6 +70,7 @@ import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.isEnabled
 import com.owncloud.android.utils.matchers.isFocusable
 import com.owncloud.android.utils.matchers.withText
+import com.owncloud.android.utils.mockIntentToComponent
 import com.owncloud.android.utils.replaceText
 import com.owncloud.android.utils.typeText
 import io.mockk.every
@@ -79,7 +81,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -657,18 +658,18 @@ class LoginActivityTest {
         verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
 
-    @Ignore("Makes subsequent tests crash")
     @Test
     fun settingsLink() {
         Intents.init()
         launchTest()
 
         closeSoftKeyboard()
+
+        mockIntentToComponent(RESULT_OK, SettingsActivity::class.java.name)
         onView(withId(R.id.settings_link)).perform(click())
         intended(hasComponent(SettingsActivity::class.java.name))
 
         Intents.release()
-        activityScenario.close()
     }
 
     private fun checkBasicFieldsVisibility(

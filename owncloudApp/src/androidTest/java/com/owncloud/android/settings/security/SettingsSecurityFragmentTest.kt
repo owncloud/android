@@ -20,6 +20,7 @@
 
 package com.owncloud.android.settings.security
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -44,9 +45,7 @@ import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER
-import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
-import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PATTERN
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
@@ -78,14 +77,12 @@ class SettingsSecurityFragmentTest {
     private lateinit var prefTouchesWithOtherVisibleWindows: CheckBoxPreference
 
     private lateinit var securityViewModel: SettingsSecurityViewModel
-    private lateinit var passCodeViewModel: PassCodeViewModel
     private lateinit var context: Context
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         securityViewModel = mockk(relaxUnitFun = true)
-        passCodeViewModel = mockk(relaxUnitFun = true)
         mockkObject(BiometricManager)
 
         stopKoin()
@@ -97,15 +94,9 @@ class SettingsSecurityFragmentTest {
                     viewModel {
                         securityViewModel
                     }
-                    viewModel {
-                        passCodeViewModel
-                    }
                 }
             )
         }
-
-        every { passCodeViewModel.getPassCode() } returns OC_PASSCODE_4_DIGITS
-        every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
         every { securityViewModel.isSecurityEnforcedEnabled() } returns false
 
         Intents.init()
@@ -209,6 +200,7 @@ class SettingsSecurityFragmentTest {
 
         launchTest()
 
+        mockIntent(RESULT_OK, PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
         onView(withText(R.string.prefs_passcode)).perform(click())
         intended(hasComponent(PassCodeActivity::class.java.name))
     }

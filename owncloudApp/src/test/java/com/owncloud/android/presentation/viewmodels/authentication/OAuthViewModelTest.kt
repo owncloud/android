@@ -80,6 +80,7 @@ class OAuthViewModelTest : ViewModelTest() {
         mockkConstructor(OAuthUtils::class)
         every { anyConstructed<OAuthUtils>().generateRandomCodeVerifier() } returns "CODE VERIFIER"
         every { anyConstructed<OAuthUtils>().generateCodeChallenge(any()) } returns "CODE CHALLENGE"
+        every { anyConstructed<OAuthUtils>().generateRandomState() } returns "STATE"
 
         getOIDCDiscoveryUseCase = mockk()
         requestTokenUseCase = mockk()

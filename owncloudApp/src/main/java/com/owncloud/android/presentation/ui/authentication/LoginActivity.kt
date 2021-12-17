@@ -473,7 +473,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val authorizationCode = intent.data?.getQueryParameter("code")
         val state = intent.data?.getQueryParameter("state")
 
-        if (state != oauthViewModel.oidcState){
+        if (state != oauthViewModel.oidcState) {
             Timber.e("OAuth request to get authorization code failed. State mismatching, maybe somebody is trying a CSRF attack.")
             updateOAuthStatusIconAndText(StateMismatchException())
         } else {

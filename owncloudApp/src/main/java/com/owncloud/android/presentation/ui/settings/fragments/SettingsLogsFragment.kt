@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.ui.settings.fragments
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import androidx.preference.CheckBoxPreference
@@ -30,7 +29,6 @@ import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.logging.LogsListActivity
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
-import com.owncloud.android.utils.PermissionUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsLogsFragment : PreferenceFragmentCompat() {
@@ -48,10 +46,6 @@ class SettingsLogsFragment : PreferenceFragmentCompat() {
         prefEnableLogging = findPreference(PREFERENCE_ENABLE_LOGGING)
         prefHttpLogs = findPreference(PREFERENCE_LOG_HTTP)
         prefLogsListActivity = findPreference(PREFERENCE_LOGS_LIST)
-
-        if (PermissionUtil.isPermissionNotGranted(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            PermissionUtil.requestWriteExternalStoreagePermission(requireActivity())
-        }
 
         with(logsViewModel.isLoggingEnabled()) {
             prefHttpLogs?.isEnabled = this
