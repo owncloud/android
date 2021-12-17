@@ -204,7 +204,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
 
         fun newInstance(
-            justFolders: Boolean,
+            justFolders: Boolean = false,
             pickingAFolder: Boolean = false
         ): MainFileListFragment {
             val args = Bundle()
