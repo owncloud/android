@@ -252,7 +252,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             }
 
             // For all Views
-            setIconPinAcordingToFilesLocalState(localStateView, file);
+            setIconPinAccordingToFilesLocalState(localStateView, file);
 
             final ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
             checkBoxV.setVisibility(View.GONE);
@@ -323,7 +323,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         return view;
     }
 
-    private void setIconPinAcordingToFilesLocalState(ImageView localStateView, OCFile file) {
+    private void setIconPinAccordingToFilesLocalState(ImageView localStateView, OCFile file) {
         // local state
         localStateView.bringToFront();
         final FileDownloaderBinder downloaderBinder =

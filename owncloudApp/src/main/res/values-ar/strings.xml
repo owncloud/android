@@ -299,7 +299,7 @@
   <string name="sync_file_nothing_to_do_msg">تمت مزامنة محتويات الملف بالفعل</string>
   <string name="create_dir_fail_msg">تعذّر إنشاء المجلد</string>
   <string name="filename_forbidden_characters">الرموز الممنوع استخدامها: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">يحتوي اسم الملف على حرف واحد غير صالح على الأقل</string>
+  <string name="filename_forbidden_characters_from_server">يحتوي اسم الملف على حرف واحد غير صالح على الأقل</string>
   <string name="filename_empty">لا يمكن أن يكون اسم الملف فارغًا</string>
   <string name="wait_a_moment">انتظر للحظة</string>
   <string name="wait_checking_credentials">فحص بيانات الاعتماد المخزنة</string>

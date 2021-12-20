@@ -128,7 +128,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private UploadBroadcastReceiver mUploadBroadcastReceiver;
-    // this is inited laizly, when an acocunt is selected. If no account is selected but an instance of this would
+    // this is inited lazily, when an account is selected. If no account is selected but an instance of this would
     // be crated it would result in an null pointer exception.
     private ReceiveExternalFilesAdapter mAdapter = null;
     private ListView mListView;
@@ -352,7 +352,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         Timber.d("on item click");
         // get current representation of files:
         // This does not necessarily mean this is the content of the current folder.
-        // If the user searches for a folder mAdapter.getFiles() returnes only the folders/files
+        // If the user searches for a folder mAdapter.getFiles() returns only the folders/files
         // that match the currently entered search query.
         Vector<OCFile> tmpfiles = mAdapter.getFiles();
         tmpfiles = sortFileList(tmpfiles);

@@ -299,7 +299,7 @@
   <string name="sync_file_nothing_to_do_msg">Съдържанието на файла е вече синхронизирано</string>
   <string name="create_dir_fail_msg">Папката не може да бъде създадена</string>
   <string name="filename_forbidden_characters">Забранени символи: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Името на файла съдържа поне един невалиден символ</string>
+  <string name="filename_forbidden_characters_from_server">Името на файла съдържа поне един невалиден символ</string>
   <string name="filename_empty">Името на файла не може да бъде празно</string>
   <string name="wait_a_moment">Изчакайте малко</string>
   <string name="wait_checking_credentials">Проверка на запаметените идентификационни данни</string>

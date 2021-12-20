@@ -451,7 +451,7 @@ public class UploadsStorageManager extends Observable {
     public void updateDatabaseUploadResult(RemoteOperationResult uploadResult,
                                            UploadFileOperation uploadFileOperation) {
         // result: success or fail notification
-        Timber.d("updateDataseUploadResult uploadResult: " + uploadResult + " upload: " + uploadFileOperation);
+        Timber.d("updateDatabaseUploadResult uploadResult: " + uploadResult + " upload: " + uploadFileOperation);
 
         if (uploadResult.isCancelled()) {
             removeUpload(

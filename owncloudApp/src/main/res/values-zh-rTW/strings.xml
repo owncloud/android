@@ -320,7 +320,7 @@
   <string name="sync_file_nothing_to_do_msg">檔案與同步</string>
   <string name="create_dir_fail_msg">資料夾無法建立</string>
   <string name="filename_forbidden_characters">禁止使用字符: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">檔案名稱含有不合法的字元</string>
+  <string name="filename_forbidden_characters_from_server">檔案名稱含有不合法的字元</string>
   <string name="filename_empty">檔名不能為空的</string>
   <string name="wait_a_moment">請稍後</string>
   <string name="wait_checking_credentials">檢查儲存的密碼</string>

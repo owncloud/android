@@ -227,7 +227,7 @@
   <string name="sync_file_nothing_to_do_msg">Obsah súboru je zosynchronizovaný</string>
   <string name="create_dir_fail_msg">Priečinok nie je možné vytvoriť</string>
   <string name="filename_forbidden_characters">Zakázané znaky: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Názov súboru obsahuje nevhodný znak</string>
+  <string name="filename_forbidden_characters_from_server">Názov súboru obsahuje nevhodný znak</string>
   <string name="filename_empty">Názov súboru nemôže byť prázdny</string>
   <string name="wait_a_moment">Počkať chvíľu</string>
   <string name="wait_checking_credentials">Kontrolujem uložené údaje</string>

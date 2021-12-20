@@ -129,11 +129,11 @@ class ErrorMessageAdapter {
                     if (operation is CreateFolderOperation) f.forbidden(R.string.forbidden_permissions_create)
                     if (operation is MoveFileOperation) f.forbidden(R.string.forbidden_permissions_move)
                     if (operation is CopyFileOperation) f.forbidden(R.string.forbidden_permissions_copy) else f.format(
-                        R.string.filename_forbidden_charaters_from_server
+                        R.string.filename_forbidden_characters_from_server
                     )
                 }
                 ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER ->
-                    f.format(R.string.filename_forbidden_charaters_from_server)
+                    f.format(R.string.filename_forbidden_characters_from_server)
                 ResultCode.QUOTA_EXCEEDED ->
                     f.format(R.string.failed_upload_quota_exceeded_text)
                 ResultCode.FILE_NOT_FOUND -> {

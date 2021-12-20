@@ -301,7 +301,7 @@
   <string name="sync_file_nothing_to_do_msg">תוכן הקובץ כבר מסונכרן</string>
   <string name="create_dir_fail_msg">לא ניתן ליצור תיקייה</string>
   <string name="filename_forbidden_characters">תווים אסורים: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">שם קובץ כולל לפחות תו אחד לא חוקי</string>
+  <string name="filename_forbidden_characters_from_server">שם קובץ כולל לפחות תו אחד לא חוקי</string>
   <string name="filename_empty">שם קובץ לא יכול להיות ריק</string>
   <string name="wait_a_moment">נא להמתין רגע</string>
   <string name="wait_checking_credentials">בודק אישורים שמורים</string>

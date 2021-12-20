@@ -308,7 +308,7 @@
   <string name="sync_file_nothing_to_do_msg">Az állományok már szinkronizáltak</string>
   <string name="create_dir_fail_msg">A mappát nem lehet létrehozni</string>
   <string name="filename_forbidden_characters">Tiltott karakterek: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">A fájlnév legalább egy érvénytelen karaktert tartalmaz</string>
+  <string name="filename_forbidden_characters_from_server">A fájlnév legalább egy érvénytelen karaktert tartalmaz</string>
   <string name="filename_empty">A fájlnév nem lehet üres</string>
   <string name="wait_a_moment">Egy pillanat…</string>
   <string name="wait_checking_credentials">A tárolt hitelesítő adatok ellenőrzése</string>

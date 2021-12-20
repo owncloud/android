@@ -287,7 +287,7 @@
   <string name="sync_file_nothing_to_do_msg">Zawartość pliku została już synchronizowana</string>
   <string name="create_dir_fail_msg">Folder nie może zostać utworzony</string>
   <string name="filename_forbidden_characters">Znaki zabronione: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Nazwa pliku zawiera co najmniej jeden nieprawidłowy znak</string>
+  <string name="filename_forbidden_characters_from_server">Nazwa pliku zawiera co najmniej jeden nieprawidłowy znak</string>
   <string name="filename_empty">Nazwa pliku nie może być pusta.</string>
   <string name="wait_a_moment">Poczekaj chwilę</string>
   <string name="wait_checking_credentials">Sprawdzanie danych</string>

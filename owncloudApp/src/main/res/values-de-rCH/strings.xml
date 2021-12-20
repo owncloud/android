@@ -300,7 +300,7 @@
   <string name="sync_file_nothing_to_do_msg">Dateiinhalte bereits synchronisiert</string>
   <string name="create_dir_fail_msg">Verzeichnis konnte nicht erstellt werden</string>
   <string name="filename_forbidden_characters">Verbotene Zeichen: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Der Dateiname enthält mindestens ein ungültiges Zeichen</string>
+  <string name="filename_forbidden_characters_from_server">Der Dateiname enthält mindestens ein ungültiges Zeichen</string>
   <string name="filename_empty">Dateiname darf nicht leer sein</string>
   <string name="wait_a_moment">Bitte warte einen Moment.</string>
   <string name="wait_checking_credentials">Überprüfe gespeicherte Anmeldeinformationen</string>

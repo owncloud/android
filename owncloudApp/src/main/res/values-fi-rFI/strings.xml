@@ -251,7 +251,7 @@
   <string name="sync_file_nothing_to_do_msg">Tiedoston sisältö on jo synkronoitu</string>
   <string name="create_dir_fail_msg">Kansion luominen epäonnistui</string>
   <string name="filename_forbidden_characters">Kielletyt merkit: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Tiedoston nimi sisältää ainakin yhden virheellisen merkin</string>
+  <string name="filename_forbidden_characters_from_server">Tiedoston nimi sisältää ainakin yhden virheellisen merkin</string>
   <string name="filename_empty">Tiedoston nimi ei voi olla tyhjä</string>
   <string name="wait_a_moment">Odota hetki</string>
   <string name="wait_checking_credentials">Tarkistetaan tallennettuja tilitietoja</string>

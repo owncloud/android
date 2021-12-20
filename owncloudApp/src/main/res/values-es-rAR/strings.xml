@@ -299,7 +299,7 @@
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
   <string name="create_dir_fail_msg">La carpeta puede no haber sido creada</string>
   <string name="filename_forbidden_characters">Caracteres prohibidos: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">El nombre del archivo contiene algún caracter inválido</string>
+  <string name="filename_forbidden_characters_from_server">El nombre del archivo contiene algún caracter inválido</string>
   <string name="filename_empty">El nombre de archivo no puede estar vacío</string>
   <string name="wait_a_moment">Esperá un momento</string>
   <string name="wait_checking_credentials">Revisando credenciales guardadas</string>

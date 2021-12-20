@@ -186,7 +186,7 @@
   <string name="sync_file_fail_msg">Tập tin từ xa không được kiểm tra</string>
   <string name="sync_file_nothing_to_do_msg">Nội dung tập tin đã đồng bộ</string>
   <string name="filename_forbidden_characters">Những kí tự không được dùng: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Tên tệp tin chứa ít nhất một ký tự không hợp lệ</string>
+  <string name="filename_forbidden_characters_from_server">Tên tệp tin chứa ít nhất một ký tự không hợp lệ</string>
   <string name="wait_a_moment">Chờ một lúc</string>
   <string name="filedisplay_unexpected_bad_get_content">Vấn đề bất ngờ ; hãy thử ứng dụng khác để chọn tập tin</string>
   <string name="filedisplay_no_file_selected">Không có tập tin nào được chọn</string>

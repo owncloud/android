@@ -271,7 +271,7 @@
   <string name="sync_file_nothing_to_do_msg">Continutul fisierului este deja sincronizat</string>
   <string name="create_dir_fail_msg">Nu a putut fi creat directorul</string>
   <string name="filename_forbidden_characters">Caractere interzise: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Numele fișierului conține măcar un caracter invalid</string>
+  <string name="filename_forbidden_characters_from_server">Numele fișierului conține măcar un caracter invalid</string>
   <string name="filename_empty">Numele fișierului nu poate fi gol.</string>
   <string name="wait_a_moment">Așteaptă un moment</string>
   <string name="wait_checking_credentials">Verific datele stocate</string>

@@ -195,7 +195,7 @@
   <string name="sync_file_nothing_to_do_msg">Садржај је већ синхронизован</string>
   <string name="create_dir_fail_msg">Фасцикла се не може направити</string>
   <string name="filename_forbidden_characters">Забрањени знакови: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Назив садржи бар један недозвољен карактер</string>
+  <string name="filename_forbidden_characters_from_server">Назив садржи бар један недозвољен карактер</string>
   <string name="filename_empty">Назив фајла не може бити празан</string>
   <string name="wait_a_moment">Сачекајте тренутак</string>
   <string name="filedisplay_unexpected_bad_get_content">Неочекивани проблем. Изаберите фајл другом апликацијом</string>

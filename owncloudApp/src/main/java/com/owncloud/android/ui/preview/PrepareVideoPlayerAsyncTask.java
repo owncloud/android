@@ -88,7 +88,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
     }
 
     /**
-     * Build the media source neeeded to play the video
+     * Build the media source needed to play the video
      *
      * @param mediaDataSourceFactory
      * @param uri

@@ -29,7 +29,7 @@ public enum UploadResult {
     FOLDER_ERROR(3),
     CONFLICT_ERROR(4),
     FILE_ERROR(5),
-    PRIVILEDGES_ERROR(6),
+    PRIVILEGES_ERROR(6),
     CANCELLED(7),
     FILE_NOT_FOUND(8),
     DELAYED_FOR_WIFI(9),
@@ -68,7 +68,7 @@ public enum UploadResult {
             case 5:
                 return FILE_ERROR;
             case 6:
-                return PRIVILEDGES_ERROR;
+                return PRIVILEGES_ERROR;
             case 7:
                 return CANCELLED;
             case 8:
@@ -117,7 +117,7 @@ public enum UploadResult {
             case LOCAL_STORAGE_NOT_COPIED:
                 return FILE_ERROR;
             case FORBIDDEN:
-                return PRIVILEDGES_ERROR;
+                return PRIVILEGES_ERROR;
             case CANCELLED:
                 return CANCELLED;
             case DELAYED_FOR_WIFI:

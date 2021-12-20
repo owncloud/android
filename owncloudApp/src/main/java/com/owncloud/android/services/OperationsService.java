@@ -328,7 +328,7 @@ public class OperationsService extends Service {
      */
     private static class ServiceHandler extends Handler {
         // don't make it a final class, and don't remove the static ; lint will warn about a p
-        // ossible memory leak
+        // possible memory leak
 
         OperationsService mService;
 
@@ -494,7 +494,7 @@ public class OperationsService extends Service {
                             break;
                         }
                         case ACTION_SYNC_FOLDER: {
-                            // Sync folder (all its descendant files are sync'ed)
+                            // Sync folder (all its descendant files are synced)
                             String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
                             boolean pushOnly = operationIntent.getBooleanExtra(EXTRA_PUSH_ONLY, false);
                             boolean syncContentOfRegularFiles =

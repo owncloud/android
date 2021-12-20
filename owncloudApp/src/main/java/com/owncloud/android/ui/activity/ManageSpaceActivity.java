@@ -70,7 +70,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
         Button clearDataButton = findViewById(R.id.clearDataButton);
         clearDataButton.setOnClickListener(v -> {
-            ClearDataAsynTask clearDataTask = new ClearDataAsynTask();
+            ClearDataAsyncTask clearDataTask = new ClearDataAsyncTask();
             clearDataTask.execute();
         });
     }
@@ -92,7 +92,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
     /**
      * AsyncTask for Clear Data, saving the passcode
      */
-    private class ClearDataAsynTask extends AsyncTask<Void, Void, Boolean> {
+    private class ClearDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... params) {

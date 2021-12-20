@@ -36,7 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Account mCurrentAccount;
 
     /**
-     * Capabilites of the server where {@link #mCurrentAccount} lives.
+     * Capabilities of the server where {@link #mCurrentAccount} lives.
      */
     private OCCapability mCapabilities;
 

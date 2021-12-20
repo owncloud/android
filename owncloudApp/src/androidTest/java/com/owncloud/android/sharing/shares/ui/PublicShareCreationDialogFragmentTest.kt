@@ -422,7 +422,7 @@ class PublicShareCreationDialogFragmentTest {
     }
 
     @Test
-    fun passwordEnforcedClearErrorMessageIfSwitchsToNotEnforced() {
+    fun passwordEnforcedClearErrorMessageIfSwitchesToNotEnforced() {
         val commonError = "Common error"
 
         //One permission with password enforced. Error is cleaned after switching permission

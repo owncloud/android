@@ -334,7 +334,7 @@ class FileDataStorageManager {
         } ?: Vector()
 
     fun saveFile(file: OCFile): Boolean {
-        var overriden = false
+        var overridden = false
         val cv = ContentValues().apply {
             put(FILE_MODIFIED, file.modificationTimestamp)
             put(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA, file.modificationTimestampAtLastSyncForData)
@@ -371,7 +371,7 @@ class FileDataStorageManager {
                 oldFile = getFileById(file.fileId)
             }
 
-            overriden = true
+            overridden = true
             try {
                 performUpdate(
                     uri = CONTENT_URI,
@@ -399,7 +399,7 @@ class FileDataStorageManager {
             }
         }
 
-        return overriden
+        return overridden
     }
 
     /**

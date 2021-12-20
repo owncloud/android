@@ -254,7 +254,7 @@
   <string name="sync_file_nothing_to_do_msg">파일 내용이 이미 동기화됨</string>
   <string name="create_dir_fail_msg">폴더를 만들 수 없음</string>
   <string name="filename_forbidden_characters">사용할 수 없는 문자: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">파일 이름에 하나 이상의 사용할 수 없는 문자가 포함되어 있음</string>
+  <string name="filename_forbidden_characters_from_server">파일 이름에 하나 이상의 사용할 수 없는 문자가 포함되어 있음</string>
   <string name="filename_empty">파일 이름이 비어 있을 수 없음</string>
   <string name="wait_a_moment">잠시 기다려 주십시오</string>
   <string name="wait_checking_credentials">저장된 인증 정보 확인 중</string>

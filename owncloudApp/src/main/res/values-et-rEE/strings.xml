@@ -227,7 +227,7 @@
   <string name="sync_file_nothing_to_do_msg">Faili sisu on juba sünkroniseeritud</string>
   <string name="create_dir_fail_msg">Kataloogi ei saa tekitada</string>
   <string name="filename_forbidden_characters">Keelatud sümbolid:  / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Faili nimesonvähemalt üks keelatud märk</string>
+  <string name="filename_forbidden_characters_from_server">Faili nimesonvähemalt üks keelatud märk</string>
   <string name="filename_empty">Faili nime lahter ei saa olla tühi</string>
   <string name="wait_a_moment">Oota hetk</string>
   <string name="filedisplay_unexpected_bad_get_content">Ootamatu tõrge ; palun kasuta faili valimiseks mõnda teist rakendust</string>

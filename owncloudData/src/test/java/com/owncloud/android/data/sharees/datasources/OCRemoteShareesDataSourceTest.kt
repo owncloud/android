@@ -124,7 +124,7 @@ class OCRemoteShareesDataSourceTest {
     @Test
     fun `OCShares List - ok - handle empty response`() {
         val getRemoteShareesOperationResult = createRemoteOperationResultMock(
-            EMTPY_REMOTE_SHAREES,
+            EMPTY_REMOTE_SHAREES,
             true
         )
 
@@ -161,7 +161,7 @@ class OCRemoteShareesDataSourceTest {
             )
         )
 
-        val EMTPY_REMOTE_SHAREES = ShareeOcsResponse(
+        val EMPTY_REMOTE_SHAREES = ShareeOcsResponse(
             ExactSharees(arrayListOf(), arrayListOf(), arrayListOf()),
             arrayListOf(), arrayListOf(), arrayListOf()
         )

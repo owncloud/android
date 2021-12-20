@@ -199,7 +199,7 @@
   <string name="sync_file_nothing_to_do_msg">Fichiersinhalter scho synchroniséiert</string>
   <string name="create_dir_fail_msg">Dossier konnt net ugeluecht ginn</string>
   <string name="filename_forbidden_characters">Verbueden Zeechen:  / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Den Numm vum Fichier entält min. een ongültegz Zeechen</string>
+  <string name="filename_forbidden_characters_from_server">Den Numm vum Fichier entält min. een ongültegz Zeechen</string>
   <string name="filename_empty">De Fichiersnumm kann net eidel sinn</string>
   <string name="wait_a_moment">Waart ee Moment</string>
   <string name="filedisplay_unexpected_bad_get_content">Onerwaarte Problem ; w.e.g. wiel de Fichier aus enger anerer App eraus</string>

@@ -121,7 +121,7 @@ public class CreateFolderDialogFragment extends DialogFragment implements Dialog
             }
 
             if (!FileUtils.isValidName(newFolderName)) {
-                showSnackMessage(R.string.filename_forbidden_charaters_from_server);
+                showSnackMessage(R.string.filename_forbidden_characters_from_server);
                 return;
             }
 

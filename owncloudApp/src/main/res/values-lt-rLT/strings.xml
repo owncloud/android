@@ -261,7 +261,7 @@
   <string name="sync_file_nothing_to_do_msg">Failo turinys jau sunchronizuotas</string>
   <string name="create_dir_fail_msg">Aplanko sukurti nepavyko</string>
   <string name="filename_forbidden_characters">Neleistini simboliai: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Failo vardas sudarytas iš neleistinų simbolių</string>
+  <string name="filename_forbidden_characters_from_server">Failo vardas sudarytas iš neleistinų simbolių</string>
   <string name="filename_empty">Failo pavadinimas negali būti tuščias</string>
   <string name="wait_a_moment">Truputį palaukite</string>
   <string name="wait_checking_credentials">Tikrina išsaugotus prisijungimus</string>

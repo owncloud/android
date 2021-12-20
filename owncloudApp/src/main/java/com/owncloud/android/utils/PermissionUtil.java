@@ -45,7 +45,7 @@ public class PermissionUtil {
      *
      * @param activity The target activity.
      */
-    public static void requestWriteExternalStoreagePermission(Activity activity) {
+    public static void requestWriteExternalStoragePermission(Activity activity) {
         ActivityCompat.requestPermissions(activity,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 PERMISSIONS_WRITE_EXTERNAL_STORAGE);

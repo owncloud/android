@@ -143,7 +143,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         mAutoplay = true;
     }
 
-    // Fragment and activity lifecicle
+    // Fragment and activity lifecycle
 
     /**
      * {@inheritDoc}
