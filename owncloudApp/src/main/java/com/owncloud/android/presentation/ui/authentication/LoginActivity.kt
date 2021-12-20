@@ -47,7 +47,7 @@ import com.owncloud.android.R
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.databinding.AccountSetupBinding
 import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
@@ -88,6 +88,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private val authenticationViewModel by viewModel<OCAuthenticationViewModel>()
     private val oauthViewModel by viewModel<OAuthViewModel>()
     private val contextProvider by inject<ContextProvider>()
+    private val preferencesProvider by inject<SharedPreferencesProvider>()
 
     private var loginAction: Byte = ACTION_CREATE
     private var authTokenType: String? = null
@@ -652,7 +653,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun initBrandableOptionsUI() {
-        val preferencesProvider = SharedPreferencesProviderImpl(this)
         val showInput = if (BuildConfig.FLAVOR == MDM_FLAVOR) preferencesProvider.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, contextProvider.getBoolean(R.bool.show_server_url_input)) else contextProvider.getBoolean(R.bool.show_server_url_input)
         binding.hostUrlFrame.isVisible = showInput
         binding.centeredRefreshButton.isVisible = !showInput
