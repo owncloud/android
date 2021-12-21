@@ -30,7 +30,7 @@ dependencies {
     // CustomTabs required for OAuth2 and OIDC.
     implementation "androidx.browser:browser:1.4.0"
 
-    //Zooming Android ImageView.
+    // Zooming Android ImageView.
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -58,6 +58,9 @@ dependencies {
 
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.2.0'
+
+    // MDM feedback
+    implementation 'androidx.enterprise:enterprise-feedback:1.1.0'
 
     // Tests
     testImplementation project(':owncloudTestUtil')
