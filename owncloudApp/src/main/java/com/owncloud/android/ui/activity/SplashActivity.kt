@@ -25,8 +25,11 @@ import android.content.Intent
 import android.content.RestrictionsManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.enterprise.feedback.KeyedAppState
+import androidx.enterprise.feedback.KeyedAppStatesReporter
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
@@ -52,9 +55,16 @@ class SplashActivity : AppCompatActivity() {
 
     private fun cacheRestrictions(restrictions: Bundle) {
         val preferencesProvider = SharedPreferencesProviderImpl(this)
+        val reporter = KeyedAppStatesReporter.create(this)
         if (restrictions.containsKey(CONFIGURATION_SERVER_URL)) {
             val confServerUrl = restrictions.getString(CONFIGURATION_SERVER_URL)
             confServerUrl?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
+            val states = hashSetOf(KeyedAppState.builder()
+                .setKey(CONFIGURATION_SERVER_URL)
+                .setSeverity(KeyedAppState.SEVERITY_INFO)
+                .setMessage(getString(R.string.server_url_configuration_feedback_ok))
+                .build())
+            reporter.setStates(states, null)
         }
         if (restrictions.containsKey(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)) {
             val confServerUrlInputVisibility = restrictions.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
