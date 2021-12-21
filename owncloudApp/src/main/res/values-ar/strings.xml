@@ -539,7 +539,7 @@
   <string name="welcome_feature_4_text">تم تحميل صورك/مقاطع الفيديو تلقائيًا</string>
   <string name="welcome_feature_5_title">بث الفيديو</string>
   <string name="welcome_feature_5_text">شغِّل مقاطع الفيديو دون تنزيلها</string>
-  <string name="no_borwser_installed_alert">لم يتم تثبيت متصفح. يُرجى تثبيت متصفح للسماح بعملية تسجيل دخول آمنة.</string>
+  <string name="no_browser_installed_alert">لم يتم تثبيت متصفح. يُرجى تثبيت متصفح للسماح بعملية تسجيل دخول آمنة.</string>
   <string name="common_not_found">لم يتم العثور عليه</string>
   <string name="supports_oauth2_error">لا يمكن معرفة ما إذا كان OAuth2 مدعومًا أم لا</string>
   <string name="get_base_url_error">لا يمكن معرفة عنوان URL قاعدة الخادم</string>

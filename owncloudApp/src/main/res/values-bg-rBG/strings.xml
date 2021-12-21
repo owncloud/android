@@ -539,7 +539,7 @@
   <string name="welcome_feature_4_text">Вашите снимки/видеоклипове се качват автоматично</string>
   <string name="welcome_feature_5_title">Видео поток</string>
   <string name="welcome_feature_5_text">Възпроизвеждайте видеоклиповете си без да ги изтегляте</string>
-  <string name="no_borwser_installed_alert">Не е инсталиран браузър. Моля, инсталирайте браузър за да имате достъп до сигурно влизане.</string>
+  <string name="no_browser_installed_alert">Не е инсталиран браузър. Моля, инсталирайте браузър за да имате достъп до сигурно влизане.</string>
   <string name="common_not_found">не беше намерен</string>
   <string name="supports_oauth2_error">Не беше възможно да се разбере дали OAuth2 се поддържа</string>
   <string name="get_base_url_error">Не беше възможно да се открие базовият URL адрес на сървъра</string>

@@ -463,7 +463,7 @@
   <string name="welcome_feature_skip_button">スキップ</string>
   <string name="welcome_feature_3_title">複数アカウント</string>
   <string name="welcome_feature_4_title">カメラアップロード</string>
-  <string name="no_borwser_installed_alert">ブラウザーがインストールされていません。安全なログインを許可するためにブラウザーをインストールしてください。</string>
+  <string name="no_browser_installed_alert">ブラウザーがインストールされていません。安全なログインを許可するためにブラウザーをインストールしてください。</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">パスコードロック</string>

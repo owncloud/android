@@ -560,7 +560,7 @@
   <string name="welcome_feature_4_text">您的圖片/視頻自動地上傳</string>
   <string name="welcome_feature_5_title">視頻流</string>
   <string name="welcome_feature_5_text">播放視頻而不下載它們</string>
-  <string name="no_borwser_installed_alert">未安裝瀏覽器。 請安裝瀏覽器以允許安全登錄。</string>
+  <string name="no_browser_installed_alert">未安裝瀏覽器。 請安裝瀏覽器以允許安全登錄。</string>
   <string name="common_not_found">找不到</string>
   <string name="supports_oauth2_error">無法知道是否支持OAuth2</string>
   <string name="get_base_url_error">無法知道伺服器基本超連結</string>

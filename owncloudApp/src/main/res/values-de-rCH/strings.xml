@@ -538,7 +538,7 @@
   <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
   <string name="welcome_feature_5_title">Videostreaming</string>
   <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
-  <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installiere zur sicheren Anmeldung einen Browser.</string>
+  <string name="no_browser_installed_alert">Es ist kein Browser installiert. Bitte installiere zur sicheren Anmeldung einen Browser.</string>
   <string name="common_not_found">nichts gefunden</string>
   <string name="supports_oauth2_error">Es war nicht möglich herauszufinden, ob OAuth2 unterstützt wird.</string>
   <string name="get_base_url_error">Es war nicht möglich, die Server-Basis-URL herauszufinden</string>

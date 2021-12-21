@@ -516,7 +516,7 @@
   <string name="welcome_feature_4_text">你的照片/视频将会自动上传</string>
   <string name="welcome_feature_5_title">流媒体视频</string>
   <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
-  <string name="no_borwser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
+  <string name="no_browser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">密码锁</string>

@@ -544,7 +544,7 @@
   <string name="welcome_feature_4_text">Resimleriniz/videolarınız otomatik yüklendi</string>
   <string name="welcome_feature_5_title">Video akışı</string>
   <string name="welcome_feature_5_text">Videolarınızı onları indirmeden oynatın</string>
-  <string name="no_borwser_installed_alert">Yüklü tarayıcı yok. Lütfen güvenli bağlantıyı sağlamak için bir tarayıcı yükleyin.</string>
+  <string name="no_browser_installed_alert">Yüklü tarayıcı yok. Lütfen güvenli bağlantıyı sağlamak için bir tarayıcı yükleyin.</string>
   <string name="common_not_found">bulunamadı</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->

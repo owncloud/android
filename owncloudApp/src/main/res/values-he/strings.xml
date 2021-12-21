@@ -541,7 +541,7 @@
   <string name="welcome_feature_4_text">התמונות/הסרטונים שלך יועלו אוטומטית</string>
   <string name="welcome_feature_5_title">הזרמת סרטונים</string>
   <string name="welcome_feature_5_text">ניגון הסרטונים שלך ללא הורדה שלהם</string>
-  <string name="no_borwser_installed_alert">לא הותקן דפדפן. יש להתקין דפדפן בכדי לאפשר חיבור מאובטח.</string>
+  <string name="no_browser_installed_alert">לא הותקן דפדפן. יש להתקין דפדפן בכדי לאפשר חיבור מאובטח.</string>
   <string name="common_not_found">לא נמצא</string>
   <string name="supports_oauth2_error">לא ניתן היה לדעת אם OAuth2 נתמך</string>
   <string name="get_base_url_error">לא ניתן היה לדעת את נתיב הבסיס של השרת</string>

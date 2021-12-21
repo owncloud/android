@@ -461,7 +461,7 @@
   <string name="welcome_feature_4_text">Kuvasi/videosi lähetetään automaattisesti</string>
   <string name="welcome_feature_5_title">Videoiden striimaus</string>
   <string name="welcome_feature_5_text">Toista videosi lataamatta niitä</string>
-  <string name="no_borwser_installed_alert">Selainta ei asennettu. Ole hyvä ja asenna selain jotta turvallinen kirjautuminen on mahdollista.</string>
+  <string name="no_browser_installed_alert">Selainta ei asennettu. Ole hyvä ja asenna selain jotta turvallinen kirjautuminen on mahdollista.</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Suojakoodilukitus</string>

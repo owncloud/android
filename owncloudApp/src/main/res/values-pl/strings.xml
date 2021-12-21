@@ -525,7 +525,7 @@
   <string name="welcome_feature_4_text">Automatyczne wysyłanie twoich zdjęć oraz wideo </string>
   <string name="welcome_feature_5_title">Wideotransmisja</string>
   <string name="welcome_feature_5_text">Odtwarzaj twoje pliki wideo bez pobierania</string>
-  <string name="no_borwser_installed_alert">Nie wykryto żadnej zainstalowanej przeglądarki. Zainstaluj przeglądarkę by umożliwić bezpieczne logowanie.</string>
+  <string name="no_browser_installed_alert">Nie wykryto żadnej zainstalowanej przeglądarki. Zainstaluj przeglądarkę by umożliwić bezpieczne logowanie.</string>
   <string name="common_not_found">nie znaleziono</string>
   <string name="supports_oauth2_error">Nie było możliwe stwierdzenie czy OAuth2 jest wspierane</string>
   <string name="get_base_url_error">Nie było możliwe znalezienie adresu URL serwera</string>

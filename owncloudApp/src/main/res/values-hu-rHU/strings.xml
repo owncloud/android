@@ -549,7 +549,7 @@
   <string name="welcome_feature_4_text">Fényképek/videok automatikusan feltöltve</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Videók lejátszása letöltésük nélkül</string>
-  <string name="no_borwser_installed_alert">Nincs böngésző telepítve. Telepítsen böngészőt a biztonságos bejelentkezés lehetővé tételéhez</string>
+  <string name="no_browser_installed_alert">Nincs böngésző telepítve. Telepítsen böngészőt a biztonságos bejelentkezés lehetővé tételéhez</string>
   <string name="common_not_found">nem található</string>
   <string name="supports_oauth2_error">nem ismert, hogy az OAuth2 támogatott-e</string>
   <string name="get_base_url_error">a szerver url címe nem ismert</string>

@@ -520,7 +520,7 @@
   <string name="welcome_feature_4_text">Gambar / video Anda diunggah secara otomatis</string>
   <string name="welcome_feature_5_title">Streaming video</string>
   <string name="welcome_feature_5_text">Putar video Anda tanpa mengunduhnya</string>
-  <string name="no_borwser_installed_alert">Tidak ada browser yang diinstal. Silakan instal Browser untuk memperbolehkan login yang aman.</string>
+  <string name="no_browser_installed_alert">Tidak ada browser yang diinstal. Silakan instal Browser untuk memperbolehkan login yang aman.</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Kunci kode sandi</string>

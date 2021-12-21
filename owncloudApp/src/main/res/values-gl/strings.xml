@@ -540,7 +540,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_4_text">As súas imaxes ou vídeos enviaranse automaticamente</string>
   <string name="welcome_feature_5_title">Fluxo de vídeo</string>
   <string name="welcome_feature_5_text">Reproduza os seus vídeos sen descargalos</string>
-  <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
+  <string name="no_browser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
   <string name="common_not_found">non foi atopado</string>
   <string name="supports_oauth2_error">Non foi posible saber se OAuth2 é compatíbel</string>
   <string name="get_base_url_error">Non foi posíbel saber cal é o URL base do servidor</string>

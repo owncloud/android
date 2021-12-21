@@ -563,7 +563,7 @@
   <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
   <string name="welcome_feature_5_title"> Потоковое видео</string>
   <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
-  <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
+  <string name="no_browser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
   <string name="common_not_found">не найдено</string>
   <string name="supports_oauth2_error">Невозможно было узнать, поддерживается ли OAuth2</string>
   <string name="get_base_url_error">Узнать базу сервера, было невозможно</string>

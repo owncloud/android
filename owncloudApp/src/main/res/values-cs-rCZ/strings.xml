@@ -560,7 +560,7 @@ správce systému.</string>
   <string name="welcome_feature_4_text">Obrázky/videa se automaticky nahrály</string>
   <string name="welcome_feature_5_title">Přehrávání videa</string>
   <string name="welcome_feature_5_text">Přehrávejte videa bez nutnosti stažení na disk</string>
-  <string name="no_borwser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
+  <string name="no_browser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
   <string name="common_not_found">nebylo nalezeno</string>
   <string name="supports_oauth2_error">Nebylo možné zjistit, zda-li je OAuth2 podporováno</string>
   <string name="get_base_url_error">Nebylo možné zjistit základní URL adresu serveru</string>

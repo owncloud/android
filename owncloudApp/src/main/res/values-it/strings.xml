@@ -535,7 +535,7 @@ Il Download del file inizierà automaticamente</string>
   <string name="welcome_feature_4_text">Le tue foto e video saranno automaticamente inviati al server</string>
   <string name="welcome_feature_5_title">Flusso video</string>
   <string name="welcome_feature_5_text">Guarda i tuoi filmati senza doverli scaricare</string>
-  <string name="no_borwser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
+  <string name="no_browser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
   <string name="common_not_found">non è stato trovato</string>
   <string name="supports_oauth2_error">Non è stato possibile sapere se OAuth2 è supportato</string>
   <string name="get_base_url_error">Non è stato possibile conoscere l\'URL di base del server</string>

@@ -539,7 +539,7 @@ Neem contact op met uw beheerder</string>
   <string name="welcome_feature_4_text">Uw afbeeldingen/video\'s automatisch uploaden</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
-  <string name="no_borwser_installed_alert">Geen browser geinstalleerd. Installeer een browser om een veilige login mogelijk te maken.</string>
+  <string name="no_browser_installed_alert">Geen browser geinstalleerd. Installeer een browser om een veilige login mogelijk te maken.</string>
   <string name="common_not_found">Niet gevonden</string>
   <string name="supports_oauth2_error">Het was niet mogelijk om te weten of OAuth2 wordt ondersteund</string>
   <string name="get_base_url_error">Het was niet mogelijk om de basis-URL van de server te kennen</string>

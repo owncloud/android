@@ -528,7 +528,7 @@
   <string name="welcome_feature_4_text">Fotos i Vídeos carregats automàticament</string>
   <string name="welcome_feature_5_title">Transmissió de vídeo</string>
   <string name="welcome_feature_5_text">Reprodueix els vídeos sense descarregar-los</string>
-  <string name="no_borwser_installed_alert">Ningun navegador instal·lat. Si us plau, instal·la un navegador per permetre un inici de sessió segur.</string>
+  <string name="no_browser_installed_alert">Ningun navegador instal·lat. Si us plau, instal·la un navegador per permetre un inici de sessió segur.</string>
   <string name="common_not_found">No s\' ha trobat</string>
   <string name="supports_oauth2_error">No s\' ha pogut saber si s\' admet OAuth2 </string>
   <string name="get_base_url_error">No ha sigut possible conèixer l\'URL del servidor</string>
