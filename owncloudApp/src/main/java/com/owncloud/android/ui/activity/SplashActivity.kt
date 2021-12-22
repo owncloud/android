@@ -58,17 +58,45 @@ class SplashActivity : AppCompatActivity() {
         val reporter = KeyedAppStatesReporter.create(this)
         if (restrictions.containsKey(CONFIGURATION_SERVER_URL)) {
             val confServerUrl = restrictions.getString(CONFIGURATION_SERVER_URL)
+            val isConfServerUrlCached = preferencesProvider.contains(CONFIGURATION_SERVER_URL)
+            val oldConfServerUrl = preferencesProvider.getString(CONFIGURATION_SERVER_URL, null)
             confServerUrl?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
-            sendFeedback(reporter = reporter,
-                key = CONFIGURATION_SERVER_URL,
-                message = getString(R.string.server_url_configuration_feedback_ok))
+            if (!isConfServerUrlCached) {
+                sendFeedback(
+                    reporter = reporter,
+                    key = CONFIGURATION_SERVER_URL,
+                    message = getString(R.string.server_url_configuration_feedback_ok)
+                )
+            } else {
+                if (!confServerUrl.equals(oldConfServerUrl)) {
+                    sendFeedback(
+                        reporter = reporter,
+                        key = CONFIGURATION_SERVER_URL,
+                        message = getString(R.string.server_url_configuration_feedback_ok)
+                    )
+                }
+            }
         }
         if (restrictions.containsKey(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)) {
             val confServerUrlInputVisibility = restrictions.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
+            val isConfServerUrlInputVisibilityCached = preferencesProvider.contains(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
+            val oldConfServerUrlInputVisibility = preferencesProvider.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, false)
             preferencesProvider.putBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, confServerUrlInputVisibility)
-            sendFeedback(reporter = reporter,
-                key = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY,
-                message = getString(R.string.server_url_input_visibility_configuration_feedback_ok))
+            if (!isConfServerUrlInputVisibilityCached) {
+                sendFeedback(
+                    reporter = reporter,
+                    key = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY,
+                    message = getString(R.string.server_url_input_visibility_configuration_feedback_ok)
+                )
+            } else {
+                if (confServerUrlInputVisibility != oldConfServerUrlInputVisibility) {
+                    sendFeedback(
+                        reporter = reporter,
+                        key = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY,
+                        message = getString(R.string.server_url_input_visibility_configuration_feedback_ok)
+                    )
+                }
+            }
         }
     }
 
