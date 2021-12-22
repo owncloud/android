@@ -34,4 +34,6 @@ interface SharedPreferencesProvider {
     fun getBoolean(key: String, defaultValue: Boolean): Boolean
 
     fun removePreference(key: String)
+
+    fun contains(key: String): Boolean
 }
