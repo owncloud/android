@@ -671,12 +671,4 @@
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
 
-    <!-- MDM configurations -->
-    <string name="server_url_configuration_title">Server URL</string>
-    <string name="server_url_configuration_description">The server URL that will appear in the login screen by default</string>
-    <string name="server_url_input_visibility_configuration_title">Server URL visibility</string>
-    <string name="server_url_input_visibility_configuration_description">Indicates whether the input field for the server URL in the login screen is visible or not</string>
-
-    <!-- MDM feedback -->
-    <string name="server_url_configuration_feedback_ok">The server URL was set correctly</string>
 </resources>

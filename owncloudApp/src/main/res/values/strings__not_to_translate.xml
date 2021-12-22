@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2020 ownCloud GmbH.
@@ -18,4 +17,14 @@
 -->
 <resources>
     <string name="empty" />
+
+    <!-- MDM configurations -->
+    <string name="server_url_configuration_title">Server URL</string>
+    <string name="server_url_configuration_description">The server URL that will appear in the login screen by default</string>
+    <string name="server_url_input_visibility_configuration_title">Server URL visibility</string>
+    <string name="server_url_input_visibility_configuration_description">Indicates whether the input field for the server URL in the login screen is visible or not</string>
+
+    <!-- MDM feedback -->
+    <string name="server_url_configuration_feedback_ok">The server URL was set correctly</string>
+    <string name="server_url_input_visibility_configuration_feedback_ok">The URL input visibility was set correctly</string>
 </resources>
