@@ -59,16 +59,35 @@ class SplashActivity : AppCompatActivity() {
         if (restrictions.containsKey(CONFIGURATION_SERVER_URL)) {
             val confServerUrl = restrictions.getString(CONFIGURATION_SERVER_URL)
             confServerUrl?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
-            val states = hashSetOf(KeyedAppState.builder()
-                .setKey(CONFIGURATION_SERVER_URL)
-                .setSeverity(KeyedAppState.SEVERITY_INFO)
-                .setMessage(getString(R.string.server_url_configuration_feedback_ok))
-                .build())
-            reporter.setStates(states, null)
+            sendFeedback(reporter = reporter,
+                key = CONFIGURATION_SERVER_URL,
+                message = getString(R.string.server_url_configuration_feedback_ok))
         }
         if (restrictions.containsKey(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)) {
             val confServerUrlInputVisibility = restrictions.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
             preferencesProvider.putBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, confServerUrlInputVisibility)
+            sendFeedback(reporter = reporter,
+                key = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY,
+                message = getString(R.string.server_url_input_visibility_configuration_feedback_ok))
         }
+    }
+
+    private fun sendFeedback(
+        reporter: KeyedAppStatesReporter,
+        key: String,
+        isError: Boolean = false,
+        message: String,
+        data: String? = null
+    ) {
+        val severity = if (isError) KeyedAppState.SEVERITY_ERROR else KeyedAppState.SEVERITY_INFO
+        val states = hashSetOf(
+            KeyedAppState.builder()
+                .setKey(key)
+                .setSeverity(severity)
+                .setMessage(message)
+                .setData(data)
+                .build()
+        )
+        reporter.setStates(states, null)
     }
 }
