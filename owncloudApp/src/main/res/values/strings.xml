@@ -678,5 +678,5 @@
     <string name="server_url_input_visibility_configuration_description">Indicates whether the input field for the server URL in the login screen is visible or not</string>
 
     <!-- MDM feedback -->
-    <string name="server_url_configuration_feedback_ok">The URL server was set correctly</string>
+    <string name="server_url_configuration_feedback_ok">The server URL was set correctly</string>
 </resources>
