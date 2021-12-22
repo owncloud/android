@@ -46,6 +46,7 @@
   <string name="prefs_lock_application_entries_1minute">หลังจากผ่านไป 1 นาที</string>
   <string name="prefs_lock_application_entries_5minutes">หลังจากผ่านไป 5 นาที</string>
   <string name="prefs_lock_application_entries_30minutes">หลังจากผ่านไป 30 นาที</string>
+  <string name="prefs_access_from_document_provider">การเข้าถึงจากผู้ให้บริการเอกสาร</string>
   <string name="confirmation_access_from_document_provider_title">คุณแน่ใจหรือว่าต้องการเปิดใช้งานคุณลักษณะนี้?</string>
   <string name="prefs_touches_with_other_visible_windows">แตะกับหน้าต่างอื่นที่มองเห็น</string>
   <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอปกรองแสง</string>
@@ -157,7 +158,7 @@
   <string name="list_layout">เค้าโครงแบบรายการ</string>
   <string name="action_share">แชร์</string>
   <string name="common_yes">ตกลง</string>
-  <string name="common_no">ไม่ตกลง</string>
+  <string name="common_no">ปฏิเสธ</string>
   <string name="common_remove_upload">เลิกอัปโหลด</string>
   <string name="common_retry_upload">อัปโหลดใหม่อีกครั้ง</string>
   <string name="common_cancel_sync">ยกเลิกการผสานข้อมูล</string>
@@ -244,6 +245,7 @@
   <string name="pass_code_wrong">รหัสปลดล็อคไม่ถูกต้อง</string>
   <string name="pass_code_error_set">เกิดข้อผิดพลาดขณะตั้งค่ารหัสปลดล็อค</string>
   <string name="pass_code_error_remove">เกิดข้อผิดพลาดขณะนำรหัสปลดล็อคออก</string>
+  <string name="lock_time_try_again">โปรดลองอีกครั้งใน %1$s</string>
   <string name="biometric_not_enrolled">จำเป็นต้องเพิ่มอย่างน้อยหนึ่งไบโอเมตริกซ์เพื่อใช้เปิดการใช้งานฟีดเจอร์นี้</string>
   <string name="biometric_prompt_title">เข้าสู่ระบบด้วยไบโอเมตริกซ์</string>
   <string name="biometric_prompt_subtitle">เข้าสู่ระบบโดยใช้ไบโอเมตริกซ์ของคุณ</string>
@@ -564,6 +566,14 @@
   <string name="prefs_logs_summary">บันทึกอาจมีข้อมูลที่ละเอียดอ่อน การแบ่งปันบันทึกกับผู้อื่นถือเป็นความรับผิดชอบของผู้ใช้แต่เพียงผู้เดียว</string>
   <string name="synchronizing_account">ประสานข้อมูลบัญชี</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_migrate_and_clean_button">ย้ายตอนนี้</string>
+  <string name="scoped_storage_wizard_migration_completed">การย้ายข้อมูลเสร็จสมบูรณ์ ไฟล์ของคุณมีความปลอดภัยมากยิ่งขึ้น</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">เข้าถึงไฟล์ของคุณ</string>
+  <string name="scoped_storage_wizard_migration_in_progress">กำลังย้ายไฟล์ของคุณ กรุณาอย่าปิดอุปกรณ์ของคุณ</string>
+  <string name="scoped_storage_wizard_migration_in_progress_button">การทำงาน…โปรดรอสักครู่</string>
+  <string name="scoped_storage_wizard_title">เพิ่มความปลอดภัยให้กับไฟล์ของคุณ</string>
   <!--Security Enforced-->
+  <string name="security_enforced_title">โปรดเลือกตัวเลือกเพื่อล็อคแอป:</string>
   <string name="security_enforced_first_option">ล็อครหัสปลดล็อค</string>
+  <string name="security_enforced_second_option">รูปแบบการล็อค</string>
 </resources>
