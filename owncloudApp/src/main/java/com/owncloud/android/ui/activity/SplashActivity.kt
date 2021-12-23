@@ -61,20 +61,12 @@ class SplashActivity : AppCompatActivity() {
             val isConfServerUrlCached = preferencesProvider.contains(CONFIGURATION_SERVER_URL)
             val oldConfServerUrl = preferencesProvider.getString(CONFIGURATION_SERVER_URL, null)
             confServerUrl?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
-            if (!isConfServerUrlCached) {
+            if (!isConfServerUrlCached || !confServerUrl.equals(oldConfServerUrl)) {
                 sendFeedback(
                     reporter = reporter,
                     key = CONFIGURATION_SERVER_URL,
                     message = getString(R.string.server_url_configuration_feedback_ok)
                 )
-            } else {
-                if (!confServerUrl.equals(oldConfServerUrl)) {
-                    sendFeedback(
-                        reporter = reporter,
-                        key = CONFIGURATION_SERVER_URL,
-                        message = getString(R.string.server_url_configuration_feedback_ok)
-                    )
-                }
             }
         }
         if (restrictions.containsKey(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)) {
@@ -82,20 +74,12 @@ class SplashActivity : AppCompatActivity() {
             val isConfServerUrlInputVisibilityCached = preferencesProvider.contains(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
             val oldConfServerUrlInputVisibility = preferencesProvider.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, false)
             preferencesProvider.putBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, confServerUrlInputVisibility)
-            if (!isConfServerUrlInputVisibilityCached) {
+            if (!isConfServerUrlInputVisibilityCached || (confServerUrlInputVisibility != oldConfServerUrlInputVisibility)) {
                 sendFeedback(
                     reporter = reporter,
                     key = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY,
                     message = getString(R.string.server_url_input_visibility_configuration_feedback_ok)
                 )
-            } else {
-                if (confServerUrlInputVisibility != oldConfServerUrlInputVisibility) {
-                    sendFeedback(
-                        reporter = reporter,
-                        key = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY,
-                        message = getString(R.string.server_url_input_visibility_configuration_feedback_ok)
-                    )
-                }
             }
         }
     }
