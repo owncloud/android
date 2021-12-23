@@ -9,7 +9,7 @@ buildscript {
         archLifecycleVersion = "2.1.0"
         roomVersion = "2.3.0"
         appCompat = "1.2.0"
-        sqliteVersion = "2.1.0"
+        sqliteVersion = "2.2.0"
         lifecycleLiveData = "2.3.1"
         biometricVersion="1.1.0"
 
