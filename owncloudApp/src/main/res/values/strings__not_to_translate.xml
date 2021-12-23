@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2020 ownCloud GmbH.
@@ -17,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-    <string name="empty"/>
+    <string name="empty" />
 
     <!-- MDM configurations -->
     <string name="server_url_configuration_title">Server URL</string>
