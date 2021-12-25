@@ -47,6 +47,7 @@
   <string name="prefs_lock_application_entries_5minutes">หลังจากผ่านไป 5 นาที</string>
   <string name="prefs_lock_application_entries_30minutes">หลังจากผ่านไป 30 นาที</string>
   <string name="prefs_access_from_document_provider">การเข้าถึงจากผู้ให้บริการเอกสาร</string>
+  <string name="prefs_access_from_document_provider_summary">อนุญาตให้เข้าถึงไฟล์ของบัญชีในแอพผ่านตัวสำรวจไฟล์ดั้งเดิมของ Android เมื่อมีชุดล็อค</string>
   <string name="confirmation_access_from_document_provider_title">คุณแน่ใจหรือว่าต้องการเปิดใช้งานคุณลักษณะนี้?</string>
   <string name="prefs_touches_with_other_visible_windows">แตะกับหน้าต่างอื่นที่มองเห็น</string>
   <string name="prefs_touches_with_other_visible_windows_summary">อนุญาตให้แตะเมื่อมุมมองถูกบดบังโดยหน้าต่างอื่นที่มองเห็นได้ เปิดใช้งานเพื่อใช้แอปกรองแสง</string>
@@ -59,11 +60,18 @@
   <string name="prefs_camera_picture_upload">อัปโหลดรูปภาพ</string>
   <string name="prefs_camera_picture_upload_summary">อัปโหลดภาพที่ถ่ายด้วยกล้องโดยอัตโนมัติ</string>
   <string name="prefs_camera_picture_upload_path_title">เส้นทางการอัปโหลดรูปภาพ</string>
-  <string name="prefs_camera_picture_upload_on_wifi">อัปโหลดรูปภาพผ่านทาง wifi เท่านั้น</string>
+  <string name="prefs_camera_picture_upload_conditions_title">เงื่อนไขในการดำเนินการอัปโหลด</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">การอัปโหลดจะถูกทริกเกอร์ก็ต่อเมื่อตัวเลือกทั้งหมดที่ถูกเลือกได้รับการเติมเต็มแล้ว</string>
+  <string name="prefs_camera_picture_upload_on_wifi">อัปโหลดรูปภาพผ่านทาง WiFi เท่านั้น</string>
+  <string name="prefs_camera_picture_upload_on_charging">อัปโหลดรูปภาพเมื่อชาร์จเท่านั้น</string>
+  <string name="prefs_camera_upload_on_charging_summary">เปิดใช้งานการอัปโหลดผ่าน WiFi เท่านั้นเพื่อเปิดใช้งานตัวเลือกนี้</string>
   <string name="prefs_camera_video_upload">อัปโหลดวิดีโอ</string>
   <string name="prefs_camera_video_upload_summary">อัปโหลดวิดีโอที่บันทึกด้วยกล้องโดยอัตโนมัติ</string>
   <string name="prefs_camera_video_upload_path_title">เส้นทางการอัปโหลดวิดีโอ</string>
-  <string name="prefs_camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง wifi เท่านั้น</string>
+  <string name="prefs_camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง WiFi เท่านั้น</string>
+  <string name="prefs_camera_video_upload_on_charging">อัปโหลดวิดีโอเมื่อชาร์จเท่านั้น</string>
+  <string name="prefs_log_open_logs_list_view">ไฟล์ log</string>
+  <string name="prefs_log_no_logs_list_view">โฟลเดอร์ log ว่างเปล่า</string>
   <string name="prefs_log_title">เปิดใช้ระบบบันทึกข้อมูล</string>
   <string name="prefs_log_summary">นี้จะใช้เพื่อบันทึกปัญหาที่เกิดขึ้น</string>
   <string name="prefs_log_title_history">ประวัติย้อนหลังการใช้งาน</string>
@@ -192,7 +200,7 @@
   <string name="uploader_upload_video_upload_files">%d วิดีโอใหม่จะถูกอัปโหลด</string>
   <string name="uploader_upload_picture_upload_error">พาธสำหรับอัปโหลดรูปภาพไม่ถูกต้อง</string>
   <string name="uploader_upload_available_offline_files">กำลังอัปโหลดไฟล์ออฟไลน์ที่มีอยู่</string>
-  <string name="uploader_upload_requested_from_wifi_files">กำลังร้องขอการอัปโหลดไฟล์จาก wifi</string>
+  <string name="uploader_upload_requested_from_wifi_files">กำลังร้องขอการอัปโหลดจากไฟล์ WiFi</string>
   <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="uploads_view_title">อัปโหลดไฟล์</string>
   <string name="uploads_view_group_current_uploads">ปัจจุบัน</string>
@@ -238,6 +246,7 @@
   <string name="sync_current_folder_was_removed">โฟลเดอร์ %1$s หายไปแล้ว</string>
   <string name="pass_code_enter_pass_code">กรุณากรอกรหัสปลดล็อคของคุณ</string>
   <string name="pass_code_configure_your_pass_code">กรอกรหัสปลดล็อคของคุณ</string>
+  <string name="pass_code_configure_your_pass_code_migration">ป้อนรหัสผ่านใหม่ %1$d ตัวอักษร</string>
   <string name="pass_code_configure_your_pass_code_explanation">จะมีการร้องขอรหัสปลดล็อคทุกครั้งเมื่อเริ่มต้นใช้แอปฯ</string>
   <string name="pass_code_reenter_your_pass_code">กรุณากรอกรหัสปลดล็อคของคุณใหม่อีกครั้ง</string>
   <string name="pass_code_remove_your_pass_code">ลบรหัสปลดล็อคของคุณ</string>
@@ -566,6 +575,7 @@
   <string name="prefs_logs_summary">บันทึกอาจมีข้อมูลที่ละเอียดอ่อน การแบ่งปันบันทึกกับผู้อื่นถือเป็นความรับผิดชอบของผู้ใช้แต่เพียงผู้เดียว</string>
   <string name="synchronizing_account">ประสานข้อมูลบัญชี</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_intro_button">มาเริ่มกันเลย</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">ย้ายตอนนี้</string>
   <string name="scoped_storage_wizard_migration_completed">การย้ายข้อมูลเสร็จสมบูรณ์ ไฟล์ของคุณมีความปลอดภัยมากยิ่งขึ้น</string>
   <string name="scoped_storage_wizard_migration_completed_access_files_button">เข้าถึงไฟล์ของคุณ</string>
