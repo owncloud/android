@@ -28,22 +28,23 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
+import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
-import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.extensions.setPicture
 import com.owncloud.android.presentation.diffutils.FileListDiffCallback
 import com.owncloud.android.utils.DisplayUtils
-import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 
 class FileListAdapter(
     private val context: Context,
     private val isShowingJustFolders: Boolean,
+    private val layoutManager: GridLayoutManager? = null,
     private val listener: FileListAdapterListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -60,14 +61,14 @@ class FileListAdapter(
         files.clear()
         files.addAll(filesToAdd)
 
-        if (filesToAdd.isNotEmpty()) {
-            files.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
-        }
+        /* if (filesToAdd.isNotEmpty()) {
+             files.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
+         }*/
 
         diffResult.dispatchUpdatesTo(this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    /*override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
             TYPE_ITEMS -> {
                 val binding = ItemFileListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -79,28 +80,65 @@ class FileListAdapter(
             }
         }
         return viewHolder
+    }*/
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        viewHolder = when (viewType) {
+            ViewType.LIST.ordinal -> {
+                val binding = ItemFileListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ListViewHolder(binding)
+            }
+            else -> {
+                val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                GridViewHolder(binding)
+            }
+        }
+        return viewHolder
     }
 
     override fun getItemCount(): Int = files.size
 
     override fun getItemId(position: Int): Long = position.toLong()
 
-    override fun getItemViewType(position: Int): Int {
+    /*override fun getItemViewType(position: Int): Int {
         return if (position == files.size.minus(1)) {
             TYPE_FOOTER
         } else {
             TYPE_ITEMS
         }
+    }*/
+
+    override fun getItemViewType(position: Int): Int {
+        return if (layoutManager?.spanCount == 1) ViewType.LIST.ordinal
+        else ViewType.GRID.ordinal
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            TYPE_ITEMS -> {
-                with(holder as ViewHolder) {
+            ViewType.LIST.ordinal -> {
+                with(holder as ListViewHolder) {
                     with(files[position] as OCFile) {
                         binding.Filename.text = this.fileName
                         binding.fileListSize.text = DisplayUtils.bytesToHumanReadable(this.length, context)
                         binding.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, this.modificationTimestamp)
+                        binding.localFileIndicator.isVisible = false //TODO Modify in the future, when we start the synchronization task.
+                        binding.customCheckbox.isVisible = false //TODO Modify in the future, when we start the multi selection task.
+                        binding.thumbnail.let {
+                            it.tag = this.id
+                            getThumbnailPicture(imageView = it, file = this)
+                        }
+                        //TODO Check this with FileListListAdapter.java and its viewType (LIST or GRID)
+                        getSharedIcon(imageView = binding.sharedIcon, file = this)
+                        binding.root.setOnClickListener {
+                            listener.clickItem(this)
+                        }
+                    }
+                }
+            }
+            ViewType.GRID.ordinal -> {
+                with(holder as GridViewHolder) {
+                    with(files[position] as OCFile) {
+                        binding.Filename.text = this.fileName
                         binding.localFileIndicator.isVisible = false //TODO Modify in the future, when we start the synchronization task.
                         binding.customCheckbox.isVisible = false //TODO Modify in the future, when we start the multi selection task.
                         binding.thumbnail.let {
@@ -226,4 +264,11 @@ class FileListAdapter(
 
     inner class ViewHolder(val binding: ItemFileListBinding) : RecyclerView.ViewHolder(binding.root)
     inner class FooterViewHolder(val binding: ListFooterBinding) : RecyclerView.ViewHolder(binding.root)
+
+    inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ListViewHolder(val binding: ItemFileListBinding) : RecyclerView.ViewHolder(binding.root)
+
+    enum class ViewType {
+        LIST, GRID
+    }
 }
