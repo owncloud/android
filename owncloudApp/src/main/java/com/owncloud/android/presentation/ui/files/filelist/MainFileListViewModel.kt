@@ -113,6 +113,10 @@ class MainFileListViewModel(
         refreshFilesList(file.remotePath)
     }
 
+    fun getFile(): OCFile{
+        return file
+    }
+
     fun sortList(files: List<OCFile>): List<OCFile> {
         val sortOrderSaved = PreferenceManager.getSortOrder(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
         val ascendingModeSaved = PreferenceManager.getSortAscending(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)

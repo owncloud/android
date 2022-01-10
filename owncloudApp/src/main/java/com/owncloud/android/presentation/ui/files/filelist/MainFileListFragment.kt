@@ -24,15 +24,19 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.cancel
+import com.owncloud.android.extensions.parseError
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onSuccess
@@ -43,12 +47,16 @@ import com.owncloud.android.presentation.ui.files.SortOptionsView
 import com.owncloud.android.presentation.ui.files.SortOrder
 import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
+import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.ui.activity.FileListOption
+import com.owncloud.android.ui.fragment.OCFileListFragment
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.java.KoinJavaComponent.get
 
-
-class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener {
+class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
+    CreateFolderDialogFragment.CreateFolderListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
 
@@ -56,6 +64,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             ".LIST_FILE_OPTION"
 
     private val KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED"
+    private val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -225,7 +234,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             setFabEnabled(false)
         } else {
             setFabEnabled(true)
-            //registerFabListeners()
+            registerFabListeners()
 
             // detect if a mini FAB has ever been clicked
             val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
@@ -274,6 +283,98 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         binding.fabMkdir.title = null
         binding.fabUpload.visibility = View.GONE
         binding.fabMkdir.visibility = View.GONE
+    }
+
+    /**
+     * registers all listeners on all mini FABs.
+     */
+    private fun registerFabListeners() {
+        //registerFabUploadListeners()
+        registerFabMkDirListeners()
+    }
+
+    /**
+     * Registers [android.view.View.OnClickListener] and [android.view.View.OnLongClickListener]
+     * on the 'Create Dir' mini FAB for the linked action and [Snackbar] showing the underlying action.
+     */
+    private fun registerFabMkDirListeners() {
+        binding.fabMkdir.setOnClickListener(View.OnClickListener { v: View? ->
+            val dialog = CreateFolderDialogFragment.newInstance(mainFileListViewModel.getFile(), this)
+            dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_FOLDER)
+            binding.fabMain.collapse()
+            recordMiniFabClick()
+        })
+        binding.fabMkdir.setOnLongClickListener(OnLongClickListener { v: View? ->
+            showSnackMessage(R.string.actionbar_mkdir)
+            true
+        })
+    }
+
+    /**
+     * records a click on a mini FAB and thus:
+     *
+     *  1. persists the click fact
+     *  1. removes the mini FAB labels
+     *
+     */
+    private fun recordMiniFabClick() {
+        // only record if it hasn't been done already at some other time
+        if (!miniFabClicked) {
+            val sp = android.preference.PreferenceManager.getDefaultSharedPreferences(activity)
+            sp.edit().putLong(KEY_FAB_EVER_CLICKED, 1).apply()
+            miniFabClicked = true
+        }
+    }
+
+    /**
+     * Calls [OCFileListFragment.listDirectory] with a null parameter
+     */
+    fun listDirectory(reloadData: Boolean) {
+        /*if (reloadData) {
+            listDirectory(null)
+        } else {
+            getListView().invalidateViews()
+        }*/
+    }
+
+    /**
+     * Show a temporary message in a Snackbar bound to the content view of the parent Activity
+     *
+     * @param messageResource Message to show.
+     */
+    private fun showSnackMessage(messageResource: Int) {
+        val snackbar = Snackbar.make(
+            requireActivity().findViewById(R.id.coordinator_layout),
+            messageResource,
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.show()
+    }
+
+    private fun showSnackMessage(messageResource: String) {
+        val snackbar = Snackbar.make(
+            requireActivity().findViewById(R.id.coordinator_layout),
+            messageResource,
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.show()
+    }
+
+    override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
+        val filesViewModel = get(FilesViewModel::class.java)
+
+        filesViewModel.createFolder(parentFolder, newFolderName)
+        filesViewModel.createFolder.observe(this, { uiResultEvent: Event<UIResult<Unit>> ->
+            val uiResult = uiResultEvent.peekContent()
+            if (uiResult.isSuccess) {
+                listDirectory(true)
+            } else {
+                val throwable = uiResult.getThrowableOrNull()
+                val errorMessage =
+                    throwable!!.parseError(resources.getString(R.string.create_dir_fail_msg), resources, false)
+                showSnackMessage(errorMessage.toString())
+            }
+        })
     }
 
     companion object {
