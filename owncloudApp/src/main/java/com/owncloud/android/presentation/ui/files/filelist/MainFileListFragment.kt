@@ -252,9 +252,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
      */
     private fun setFabEnabled(enabled: Boolean) {
         if (enabled) {
-            binding.fabMain.setVisibility(View.VISIBLE)
+            binding.fabMain.visibility = View.VISIBLE
         } else {
-            binding.fabMain.setVisibility(View.GONE)
+            binding.fabMain.visibility = View.GONE
         }
     }
 
