@@ -26,6 +26,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -50,7 +52,6 @@ import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.ui.activity.FileListOption
-import com.owncloud.android.ui.fragment.OCFileListFragment
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
@@ -281,15 +282,15 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private fun removeFabLabels() {
         binding.fabUpload.title = null
         binding.fabMkdir.title = null
-        binding.fabUpload.visibility = View.GONE
-        binding.fabMkdir.visibility = View.GONE
+        ((binding.fabUpload.getTag(com.getbase.floatingactionbutton.R.id.fab_label)) as TextView).isVisible = false
+        ((binding.fabMkdir.getTag(com.getbase.floatingactionbutton.R.id.fab_label)) as TextView).isVisible = false
     }
 
     /**
      * registers all listeners on all mini FABs.
      */
     private fun registerFabListeners() {
-        //registerFabUploadListeners()
+        // TODO Register upload listener
         registerFabMkDirListeners()
     }
 
@@ -327,17 +328,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     /**
-     * Calls [OCFileListFragment.listDirectory] with a null parameter
-     */
-    fun listDirectory(reloadData: Boolean) {
-        /*if (reloadData) {
-            listDirectory(null)
-        } else {
-            getListView().invalidateViews()
-        }*/
-    }
-
-    /**
      * Show a temporary message in a Snackbar bound to the content view of the parent Activity
      *
      * @param messageResource Message to show.
@@ -366,9 +356,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         filesViewModel.createFolder(parentFolder, newFolderName)
         filesViewModel.createFolder.observe(this, { uiResultEvent: Event<UIResult<Unit>> ->
             val uiResult = uiResultEvent.peekContent()
-            if (uiResult.isSuccess) {
-                listDirectory(true)
-            } else {
+            if (!uiResult.isSuccess) {
                 val throwable = uiResult.getThrowableOrNull()
                 val errorMessage =
                     throwable!!.parseError(resources.getString(R.string.create_dir_fail_msg), resources, false)
