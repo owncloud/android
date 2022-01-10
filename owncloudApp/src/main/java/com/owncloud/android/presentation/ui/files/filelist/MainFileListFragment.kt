@@ -299,16 +299,16 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
      * on the 'Create Dir' mini FAB for the linked action and [Snackbar] showing the underlying action.
      */
     private fun registerFabMkDirListeners() {
-        binding.fabMkdir.setOnClickListener(View.OnClickListener { v: View? ->
+        binding.fabMkdir.setOnClickListener {
             val dialog = CreateFolderDialogFragment.newInstance(mainFileListViewModel.getFile(), this)
             dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_FOLDER)
             binding.fabMain.collapse()
             recordMiniFabClick()
-        })
-        binding.fabMkdir.setOnLongClickListener(OnLongClickListener { v: View? ->
+        }
+        binding.fabMkdir.setOnLongClickListener {
             showSnackMessage(R.string.actionbar_mkdir)
             true
-        })
+        }
     }
 
     /**
