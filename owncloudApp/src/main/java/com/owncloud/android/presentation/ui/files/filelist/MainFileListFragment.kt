@@ -27,9 +27,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
@@ -72,10 +76,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private lateinit var files: List<OCFile>
 
     private var miniFabClicked = false
-    private var layoutManager: GridLayoutManager? = null
+    private lateinit var layoutManager: StaggeredGridLayoutManager
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var viewType: ViewType
-
 
     private var fileListOption: FileListOption? = FileListOption.ALL_FILES
 
@@ -104,14 +107,39 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         updateFab(fileListOption!!)
     }
 
-    private fun initViews() {
-        //Set RecyclerView and its adapter.
+    /**
+     * Operation to calculate the free space to apply to the footer and manage its visibility.
+     */
+    private fun setFooter() {
+        view?.doOnPreDraw {
+            val footerHeight = binding.footerText.height
+            binding.recyclerViewMainFileList.updatePadding(bottom = footerHeight)
+            binding.recyclerViewMainFileList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val range = recyclerView.computeVerticalScrollRange()
+                    val extent = recyclerView.computeVerticalScrollExtent()
+                    val offset = recyclerView.computeVerticalScrollOffset()
+                    val threshHold = range - footerHeight
+                    val currentScroll = extent + offset
+                    val excess = currentScroll - threshHold
+                    binding.footerText.isVisible = !isShowingJustFolders() && excess >= 0
+                }
+            })
+        }
+    }
 
+    private fun initViews() {
+        setFooter()
+
+        //Set RecyclerView and its adapter.
         if (mainFileListViewModel.isGridModeSetAsPreferred()) {
-            layoutManager = GridLayoutManager(requireContext(), ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns())
+            layoutManager = StaggeredGridLayoutManager(
+                ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(),
+                StaggeredGridLayoutManager.VERTICAL
+            )
             viewType = ViewType.VIEW_TYPE_GRID
         } else {
-            layoutManager = GridLayoutManager(requireContext(), 1)
+            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
             viewType = ViewType.VIEW_TYPE_LIST
         }
 
@@ -119,7 +147,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         fileListAdapter = FileListAdapter(
             context = requireContext(),
-            isShowingJustFolders = isShowingJustFolders(),
             layoutManager = layoutManager,
             listener = object :
                 FileListAdapter.FileListAdapterListener {
@@ -131,7 +158,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                         // TODO Click on a file
                     }
                 }
-
             })
         binding.recyclerViewMainFileList.adapter = fileListAdapter
 
@@ -157,6 +183,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 val sortedFiles = mainFileListViewModel.sortList(files)
                 fileListAdapter.updateFileList(filesToAdd = sortedFiles)
                 registerListAdapterDataObserver()
+                binding.footerText.text = mainFileListViewModel.manageListOfFilesAndGenerateText(files)
                 binding.swipeRefreshMainFileList.cancel()
             }
         })
