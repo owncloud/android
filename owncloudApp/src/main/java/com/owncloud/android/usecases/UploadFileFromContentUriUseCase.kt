@@ -33,6 +33,19 @@ class UploadFileFromContentUriUseCase(
 ) : BaseUseCase<Unit, UploadFileFromContentUriUseCase.Params>() {
 
     override fun run(params: Params) {
+        /**
+         * There will be different ways to upload files.
+         *
+         * PLAIN, CHUNKS(not implemented yet), TUS(not implemented yet)
+         *
+         * We will choose the way to upload the file depending on capabilities and file size.
+         * This check should be done in this use case.
+         *
+         */
+        enqueuePlainUpload(params)
+    }
+
+    private fun enqueuePlainUpload(params: Params) {
         val inputData = workDataOf(
             UploadFileFromContentUriWorker.KEY_PARAM_ACCOUNT_NAME to params.accountName,
             UploadFileFromContentUriWorker.KEY_PARAM_BEHAVIOR to params.behavior,
@@ -53,11 +66,11 @@ class UploadFileFromContentUriUseCase(
             .setConstraints(constraints)
             .addTag(params.accountName)
             .addTag(params.uploadIdInStorageManager.toString())
-            .addTag(UploadFileFromContentUriWorker.TRANSFER_TAG_CAMERA_UPLOAD)
+            .addTag(params.transferTag)
             .build()
 
         workManager.enqueue(uploadFileFromContentUriWorker)
-        Timber.i("Upload of ${params.contentUri.path} has been enqueued.")
+        Timber.i("Plain upload of ${params.contentUri.path} has been enqueued.")
     }
 
     data class Params(
@@ -69,5 +82,6 @@ class UploadFileFromContentUriUseCase(
         val uploadIdInStorageManager: Long,
         val wifiOnly: Boolean,
         val chargingOnly: Boolean,
+        val transferTag: String = UploadFileFromContentUriWorker.TRANSFER_TAG_CAMERA_UPLOAD,
     )
 }
