@@ -31,14 +31,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.databinding.GridImageBinding
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
+import com.owncloud.android.databinding.ListFooterBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.presentation.diffutils.FileListDiffCallback
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -46,11 +46,11 @@ import com.owncloud.android.utils.PreferenceUtils
 
 class FileListAdapter(
     private val context: Context,
-    private val layoutManager: StaggeredGridLayoutManager,
+    private val layoutManager: GridLayoutManager,
     private val listener: FileListAdapterListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var files = mutableListOf<OCFile>()
+    private var files = mutableListOf<Any>()
     private lateinit var viewHolder: RecyclerView.ViewHolder
     private lateinit var parent: ViewGroup
 
@@ -61,6 +61,10 @@ class FileListAdapter(
         val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
         files.clear()
         files.addAll(filesToAdd)
+
+        if (filesToAdd.isNotEmpty()) {
+            files.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
+        }
 
         diffResult.dispatchUpdatesTo(this)
     }
@@ -75,14 +79,19 @@ class FileListAdapter(
                 ListViewHolder(binding)
             }
             ViewType.GRID_IMAGE.ordinal -> {
-                val binding = GridImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.tag = ViewType.GRID_IMAGE
                 GridImageViewHolder(binding)
             }
-            else -> {
+            ViewType.GRID_ITEM.ordinal -> {
                 val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.tag = ViewType.GRID_ITEM
                 GridViewHolder(binding)
+            }
+            else -> {
+                val binding = ListFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                binding.root.tag = ViewType.FOOTER
+                FooterViewHolder(binding)
             }
         }
         return viewHolder
@@ -94,140 +103,157 @@ class FileListAdapter(
 
     override fun getItemViewType(position: Int): Int {
 
-        return when {
-            layoutManager.spanCount == 1 -> {
-                ViewType.LIST_ITEM.ordinal
+        return if (position == files.size.minus(1)) {
+            ViewType.FOOTER.ordinal
+        } else {
+            when {
+                layoutManager.spanCount == 1 -> {
+                    ViewType.LIST_ITEM.ordinal
+                }
+                (files[position] as OCFile).isImage -> {
+                    ViewType.GRID_IMAGE.ordinal
+                }
+                else -> {
+                    ViewType.GRID_ITEM.ordinal
+                }
             }
-            files[position].isImage -> {
-                ViewType.GRID_IMAGE.ordinal
-            }
-            else -> ViewType.GRID_ITEM.ordinal
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-        val file = files[position]
         val viewType = getItemViewType(position)
+        if (position != files.size - 1) {
+            val file = files[position] as OCFile
 
-        val localStateView = holder.itemView.findViewById<ImageView>(R.id.localFileIndicator)
-        val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
-            tag = file.id
-        }
-
-        val name = file.fileName
-
-        holder.itemView.findViewById<LinearLayout>(R.id.ListItemLayout)?.apply {
-            contentDescription = "LinearLayout-$name"
-
-            // Allow or disallow touches with other visible windows
-            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-        }
-
-        when (viewType) {
-            ViewType.LIST_ITEM.ordinal -> {
-                val view = holder as ListViewHolder
-                view.binding.let {
-                    it.fileListConstraintLayout.apply {
-                        filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-                    }
-
-                    it.Filename.text = file.fileName
-                    it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
-                    it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
-
-                    //TODO Do when manage available offline
-                    /*if(onlyAvailableOffline || sharedByLinkFiles ){
-                        it.fileListPath.apply {
-                            visibility = View.VISIBLE
-                            text = file.remotePath
-                        }
-                    }*/
-                }
-            }
-            ViewType.GRID_ITEM.ordinal -> {
-                //Filename
-                val view = holder as GridViewHolder
-                view.binding.Filename.text = file.fileName
+            val localStateView = holder.itemView.findViewById<ImageView>(R.id.localFileIndicator)
+            val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
+                tag = file.id
             }
 
-            ViewType.GRID_IMAGE.ordinal -> {
-                //SharedIcon
-                val view = holder as GridImageViewHolder
-                view.binding.let {
-                    if (file.sharedByLink) {
-                        it.sharedIcon.apply {
-                            setImageResource(R.drawable.ic_shared_by_link)
-                            visibility = View.VISIBLE
-                            bringToFront()
+            val name = file.fileName
+
+            holder.itemView.findViewById<LinearLayout>(R.id.ListItemLayout)?.apply {
+                contentDescription = "LinearLayout-$name"
+
+                // Allow or disallow touches with other visible windows
+                filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+            }
+
+            when (viewType) {
+                ViewType.LIST_ITEM.ordinal -> {
+                    val view = holder as ListViewHolder
+                    view.binding.let {
+                        it.fileListConstraintLayout.apply {
+                            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
                         }
-                    } else if (file.sharedWithSharee == true || file.isSharedWithMe) {
-                        it.sharedIcon.apply {
-                            setImageResource(R.drawable.shared_via_users)
-                            visibility = View.VISIBLE
-                            bringToFront()
-                        }
-                    } else {
-                        it.sharedIcon.visibility = View.GONE
+
+                        it.Filename.text = file.fileName
+                        it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
+                        it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
+
+                        //TODO Do when manage available offline
+                        /*if(onlyAvailableOffline || sharedByLinkFiles ){
+                            it.fileListPath.apply {
+                                visibility = View.VISIBLE
+                                text = file.remotePath
+                            }
+                        }*/
                     }
                 }
+                ViewType.GRID_ITEM.ordinal -> {
+                    //Filename
+                    val view = holder as GridViewHolder
+                    view.binding.Filename.text = file.fileName
+                }
+
+                ViewType.GRID_IMAGE.ordinal -> {
+                    //SharedIcon
+                    val view = holder as GridImageViewHolder
+                    view.binding.let {
+                        if (file.sharedByLink) {
+                            it.sharedIcon.apply {
+                                setImageResource(R.drawable.ic_shared_by_link)
+                                visibility = View.VISIBLE
+                                bringToFront()
+                            }
+                        } else if (file.sharedWithSharee == true || file.isSharedWithMe) {
+                            it.sharedIcon.apply {
+                                setImageResource(R.drawable.shared_via_users)
+                                visibility = View.VISIBLE
+                                bringToFront()
+                            }
+                        } else {
+                            it.sharedIcon.visibility = View.GONE
+                        }
+                    }
+                }
+
             }
-        }
 
-        // For all Views
-        //setIconPinAccordingToFilesLocalState(localStateView, file)
+            // For all Views
+            //setIconPinAccordingToFilesLocalState(localStateView, file)
 
-        val checkBoxV = holder.itemView.findViewById<ImageView>(R.id.custom_checkbox).apply {
-            visibility = View.GONE
-        }
-        holder.itemView.setBackgroundColor(Color.WHITE)
+            holder.itemView.setOnClickListener { listener.clickItem(file) }
 
-        //TODO Modify when implements select mode
-        /*val parentList = parent as AbsListView
-        if (parentList.choiceMode != AbsListView.CHOICE_MODE_NONE && parentList.checkedItemCount > 0) {
-            if (parentList.isItemChecked(position)) {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background))
-                checkBoxV.setImageResource(R.drawable.ic_checkbox_marked)
-            } else {
-                holder.itemView.setBackgroundColor(Color.WHITE)
-                checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
+            val checkBoxV = holder.itemView.findViewById<ImageView>(R.id.custom_checkbox).apply {
+                visibility = View.GONE
             }
-            checkBoxV.visibility = View.VISIBLE
-        }*/
+            holder.itemView.setBackgroundColor(Color.WHITE)
 
-        if (file.isFolder) {
-            //Folder
-            fileIcon.setImageResource(
-                MimetypeIconUtil.getFolderTypeIconId(
-                    file.isSharedWithMe || file.sharedWithSharee == true,
-                    file.sharedByLink
+            //TODO Modify when implements select mode
+            /*val parentList = parent as AbsListView
+            if (parentList.choiceMode != AbsListView.CHOICE_MODE_NONE && parentList.checkedItemCount > 0) {
+                if (parentList.isItemChecked(position)) {
+                    holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background))
+                    checkBoxV.setImageResource(R.drawable.ic_checkbox_marked)
+                } else {
+                    holder.itemView.setBackgroundColor(Color.WHITE)
+                    checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
+                }
+                checkBoxV.visibility = View.VISIBLE
+            }*/
+
+            if (file.isFolder) {
+                //Folder
+                fileIcon.setImageResource(
+                    MimetypeIconUtil.getFolderTypeIconId(
+                        file.isSharedWithMe || file.sharedWithSharee == true,
+                        file.sharedByLink
+                    )
                 )
-            )
-        } else {
-            // Set file icon depending on its mimetype. Ask for thumbnail later.
-            fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
-            if (file.remoteId != null) {
-                val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
-                if (thumbnail != null) {
-                    fileIcon.setImageBitmap(thumbnail)
-                }
-                if (file.needsToUpdateThumbnail) {
-                    // generate new Thumbnail
-                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                        /*val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, storageManager, account)
-                        val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
+            } else {
+                // Set file icon depending on its mimetype. Ask for thumbnail later.
+                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
+                if (file.remoteId != null) {
+                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+                    if (thumbnail != null) {
+                        fileIcon.setImageBitmap(thumbnail)
+                    }
+                    if (file.needsToUpdateThumbnail) {
+                        // generate new Thumbnail
+                        if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
+                            /*val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, storageManager, account)
+                            val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
 
-                        // If drawable is not visible, do not update it.
-                        if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                            fileIcon.setImageDrawable(asyncDrawable)
+                            // If drawable is not visible, do not update it.
+                            if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                                fileIcon.setImageDrawable(asyncDrawable)
+                            }
+                            task.execute(file)*/
                         }
-                        task.execute(file)*/
+                    }
+
+                    if (file.mimeType == "image/png") {
+                        fileIcon.setBackgroundColor(ContextCompat.getColor(context, R.color.background_color))
                     }
                 }
+            }
 
-                if (file.mimeType == "image/png") {
-                    fileIcon.setBackgroundColor(ContextCompat.getColor(context, R.color.background_color))
-                }
+        } else {
+            if (viewType == ViewType.FOOTER.ordinal) {
+                val view = holder as FooterViewHolder
+                val file = files[position] as OCFooterFile
+                view.binding.footerText.text = file.text
             }
         }
     }
@@ -281,15 +307,81 @@ class FileListAdapter(
         }
     }*/
 
+    private fun manageListOfFilesAndGenerateText(list: List<OCFile>): String {
+        var filesCount = 0
+        var foldersCount = 0
+        val count: Int = list.size
+        var file: OCFile
+        for (i in 0 until count) {
+            file = list[i]
+            if (file.isFolder) {
+                foldersCount++
+            } else {
+                if (!file.isHidden) {
+                    filesCount++
+                }
+            }
+        }
+
+        return generateFooterText(filesCount, foldersCount)
+    }
+
+    private fun generateFooterText(filesCount: Int, foldersCount: Int): String {
+        when {
+            filesCount <= 0 -> {
+                return when {
+                    foldersCount <= 0 -> {
+                        ""
+                    }
+                    foldersCount == 1 -> {
+                        context.getString(R.string.file_list__footer__folder)
+                    }
+                    else -> { // foldersCount > 1
+                        context.getString(R.string.file_list__footer__folders, foldersCount)
+                    }
+                }
+            }
+            filesCount == 1 -> {
+                return when {
+                    foldersCount <= 0 -> {
+                        context.getString(R.string.file_list__footer__file)
+                    }
+                    foldersCount == 1 -> {
+                        context.getString(R.string.file_list__footer__file_and_folder)
+                    }
+                    else -> { // foldersCount > 1
+                        context.getString(R.string.file_list__footer__file_and_folders, foldersCount)
+                    }
+                }
+            }
+            else -> {    // filesCount > 1
+                return when {
+                    foldersCount <= 0 -> {
+                        context.getString(R.string.file_list__footer__files, filesCount)
+                    }
+                    foldersCount == 1 -> {
+                        context.getString(R.string.file_list__footer__files_and_folder, filesCount)
+                    }
+                    else -> { // foldersCount > 1
+                        context.getString(
+                            R.string.file_list__footer__files_and_folders, filesCount, foldersCount
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     interface FileListAdapterListener {
         fun clickItem(ocFile: OCFile)
     }
 
     inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
-    inner class GridImageViewHolder(val binding: GridImageBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class GridImageViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
     inner class ListViewHolder(val binding: ItemFileListBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class FooterViewHolder(val binding: ListFooterBinding) : RecyclerView.ViewHolder(binding.root)
 
     enum class ViewType {
-        LIST_ITEM, GRID_IMAGE, GRID_ITEM,
+        LIST_ITEM, GRID_IMAGE, GRID_ITEM, FOOTER
     }
 }
