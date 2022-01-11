@@ -26,6 +26,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,7 +58,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
-    CreateFolderDialogFragment.CreateFolderListener {
+    CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
 
@@ -364,6 +365,17 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     override fun onCreateFolderListener() {
         //TODO("Not yet implemented")
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean = false
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        newText?.let { mainFileListViewModel.listFilteredCurrentDirectory(it) }
+        return true
+    }
+
+    fun setSearchListener(searchView: SearchView) {
+        searchView.setOnQueryTextListener(this)
     }
 }
 
