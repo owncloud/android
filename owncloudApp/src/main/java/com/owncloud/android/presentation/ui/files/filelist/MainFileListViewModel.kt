@@ -31,6 +31,7 @@ import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFilesAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
+import com.owncloud.android.domain.files.usecases.GetFilteredFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
@@ -44,6 +45,7 @@ class MainFileListViewModel(
     private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
     private val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase,
     private val getFilesAvailableOfflineUseCase: GetFilesAvailableOfflineUseCase,
+    private val getFilteredFolderContentUseCase: GetFilteredFolderContentUseCase,
     private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val contextProvider: ContextProvider,
@@ -62,6 +64,10 @@ class MainFileListViewModel(
     private val _getFilesAvailableOfflineData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
     val getFilesAvailableOfflineData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesAvailableOfflineData
+
+    private val _getFilteredFilesData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
+    val getFilteredFilesData: LiveData<Event<UIResult<List<OCFile>>>>
+        get() = _getFilteredFilesData
 
     private fun getFilesList(folderId: Long) {
         val filesListLiveData: LiveData<List<OCFile>> =
@@ -94,6 +100,17 @@ class MainFileListViewModel(
         }
     }
 
+    private fun getFilteredFilesList(folderId: Long, searchText: String) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            getFilteredFolderContentUseCase.execute(GetFilteredFolderContentUseCase.Params(folderId = folderId, search = searchText)).let {
+                when (it) {
+                    is UseCaseResult.Error -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
+                    is UseCaseResult.Success -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Success(it.getDataOrNull())))
+                }
+            }
+        }
+    }
+
     private fun refreshFilesList(remotePath: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             _getFilesListStatusLiveData.postValue(Event(UIResult.Loading()))
@@ -108,6 +125,10 @@ class MainFileListViewModel(
     fun listDirectory(directory: OCFile) {
         file = directory
         getFilesList(directory.id!!)
+    }
+
+    fun listFilteredCurrentDirectory(searchText: String) {
+        getFilteredFilesList(file.id!!, searchText)
     }
 
     fun refreshDirectory() {
