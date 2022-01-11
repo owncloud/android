@@ -69,8 +69,8 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getFilteredFolderContent(folderId: Long, search: String): List<OCFile> =
-        fileDao.getFilteredFolderContent(folderId = folderId, search = search).map {
+    override fun getSearchFolderContent(folderId: Long, search: String): List<OCFile> =
+        fileDao.getSearchFolderContent(folderId = folderId, search = search).map {
             it.toModel()
         }
 
