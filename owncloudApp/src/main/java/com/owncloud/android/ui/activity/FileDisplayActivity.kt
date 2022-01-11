@@ -313,6 +313,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES_BIS)
         transaction.commit()
+
+        mainListOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))
     }
 
     private fun initFragmentsWithFile() {
@@ -1102,7 +1104,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                 }
             setupRootToolbar(title, isSearchEnabled = true)
-            listOfFilesFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
+            listMainFileFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         }
