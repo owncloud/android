@@ -33,53 +33,47 @@ import java.io.File
  *
  * It stores the upload in the database and then enqueue a new worker to upload the single file
  */
-class UploadFileUseCase(
+class UploadFileFromSAFUseCase(
     private val workManager: WorkManager,
-) : BaseUseCase<Unit, UploadFileUseCase.Params>() {
+) : BaseUseCase<Unit, UploadFileFromSAFUseCase.Params>() {
 
     override fun run(params: Params) {
-        val documentFile = DocumentFile.fromSingleUri(MainApp.appContext.applicationContext, params.contentUri)
+        params.listOfContentUris.forEach { contentUri ->
+            val documentFile = DocumentFile.fromSingleUri(MainApp.appContext.applicationContext, contentUri)
 
-        if (documentFile == null) {
-            Timber.w("Upload of ${params.contentUri} won't be enqueued. We were not able to find it in the local storage")
-            return
+            if (documentFile == null) {
+                Timber.w("Upload of $contentUri won't be enqueued. We were not able to find it in the local storage")
+                return
+            }
+
+            val uploadId = storeInUploadsDatabase(
+                documentFile = documentFile,
+                uploadPath = params.uploadFolderPath.plus(File.separator).plus(documentFile.name),
+                accountName = params.accountName,
+            )
+
+            enqueueSingleUpload(
+                contentUri = documentFile.uri,
+                uploadPath = params.uploadFolderPath.plus(File.separator).plus(documentFile.name),
+                lastModifiedInSeconds = documentFile.lastModified().div(1_000).toString(),
+                accountName = params.accountName,
+                uploadIdInStorageManager = uploadId,
+            )
         }
-
-        val uploadId = storeInUploadsDatabase(
-            documentFile = documentFile,
-            uploadPath = params.uploadFolderPath.plus(File.separator).plus(documentFile.name),
-            accountName = params.accountName,
-            behavior = params.behavior,
-            enqueuedBy = params.enqueuedBy
-        )
-
-        enqueueSingleUpload(
-            contentUri = documentFile.uri,
-            uploadPath = params.uploadFolderPath.plus(File.separator).plus(documentFile.name),
-            lastModifiedInSeconds = documentFile.lastModified().div(1_000).toString(),
-            behavior = params.behavior,
-            accountName = params.accountName,
-            uploadIdInStorageManager = uploadId,
-            wifiOnly = params.wifiOnly,
-            chargingOnly = params.chargingOnly,
-            enqueuedBy = params.enqueuedBy
-        )
     }
 
     private fun storeInUploadsDatabase(
         documentFile: DocumentFile,
         uploadPath: String,
         accountName: String,
-        behavior: UploadBehavior,
-        enqueuedBy: UploadEnqueuedBy,
     ): Long {
         val uploadStorageManager = UploadsStorageManager(MainApp.appContext.contentResolver)
 
         val ocUpload = OCUpload(documentFile.uri.toString(), uploadPath, accountName).apply {
             fileSize = documentFile.length()
             isForceOverwrite = false
-            createdBy = enqueuedBy.ordinal
-            localAction = behavior.ordinal
+            createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER.ordinal
+            localAction = UploadBehavior.COPY.ordinal
             uploadStatus = UploadsStorageManager.UploadStatus.UPLOAD_IN_PROGRESS
         }
 
@@ -90,38 +84,29 @@ class UploadFileUseCase(
 
     private fun enqueueSingleUpload(
         accountName: String,
-        behavior: UploadBehavior,
-        chargingOnly: Boolean,
         contentUri: Uri,
-        enqueuedBy: UploadEnqueuedBy,
         lastModifiedInSeconds: String,
         uploadIdInStorageManager: Long,
         uploadPath: String,
-        wifiOnly: Boolean,
     ) {
         val uploadFileFromContentUriUseCase = UploadFileFromContentUriUseCase(workManager)
         val uploadFileParams = UploadFileFromContentUriUseCase.Params(
             contentUri = contentUri,
             uploadPath = uploadPath,
             lastModifiedInSeconds = lastModifiedInSeconds,
-            behavior = behavior.toString(),
+            behavior = UploadBehavior.COPY.toString(),
             accountName = accountName,
             uploadIdInStorageManager = uploadIdInStorageManager,
-            wifiOnly = wifiOnly,
-            chargingOnly = chargingOnly,
-            transferTag = enqueuedBy.toTransferTag()
+            wifiOnly = false,
+            chargingOnly = false,
+            transferTag = UploadEnqueuedBy.ENQUEUED_BY_USER.toTransferTag()
         )
         uploadFileFromContentUriUseCase.execute(uploadFileParams)
     }
 
     data class Params(
         val accountName: String,
-        val behavior: UploadBehavior,
-        val chargingOnly: Boolean,
-        val contentUri: Uri,
-        val enqueuedBy: UploadEnqueuedBy,
-        val uploadSourceTag: String,
+        val listOfContentUris: List<Uri>,
         val uploadFolderPath: String,
-        val wifiOnly: Boolean,
     )
 }
