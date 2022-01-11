@@ -112,7 +112,7 @@ class UploadFileUseCase(
     ) {
         val inputData = workDataOf(
             UploadFileFromContentUriWorker.KEY_PARAM_ACCOUNT_NAME to accountName,
-            UploadFileFromContentUriWorker.KEY_PARAM_BEHAVIOR to behavior,
+            UploadFileFromContentUriWorker.KEY_PARAM_BEHAVIOR to behavior.name,
             UploadFileFromContentUriWorker.KEY_PARAM_CONTENT_URI to contentUri.toString(),
             UploadFileFromContentUriWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
             UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
@@ -159,11 +159,13 @@ class UploadFileUseCase(
 enum class UploadBehavior {
     COPY, MOVE;
 
-    fun fromLegacyLocalBehavior(oldLocalBehavior: Int): UploadBehavior {
-        return when (oldLocalBehavior) {
-            FileUploader.LOCAL_BEHAVIOUR_MOVE -> MOVE
-            FileUploader.LOCAL_BEHAVIOUR_COPY -> COPY
-            else -> COPY
+    companion object {
+        fun fromLegacyLocalBehavior(oldLocalBehavior: Int): UploadBehavior {
+            return when (oldLocalBehavior) {
+                FileUploader.LOCAL_BEHAVIOUR_MOVE -> MOVE
+                FileUploader.LOCAL_BEHAVIOUR_COPY -> COPY
+                else -> COPY
+            }
         }
     }
 }

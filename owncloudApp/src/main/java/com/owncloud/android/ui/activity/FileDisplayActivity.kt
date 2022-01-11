@@ -98,9 +98,13 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
+import com.owncloud.android.usecases.UploadBehavior
+import com.owncloud.android.usecases.UploadEnqueuedBy
+import com.owncloud.android.usecases.UploadFileUseCase
 import com.owncloud.android.usecases.transfers.DownloadFileUseCase
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
+import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.TRANSFER_TAG_MANUAL_UPLOAD
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -583,16 +587,31 @@ class FileDisplayActivity : FileActivity(),
         val currentDir = currentDir
         val remotePath = currentDir?.remotePath ?: OCFile.ROOT_PATH
 
-        val uploader = UriUploader(
-            this,
-            streamsToUpload,
-            remotePath,
-            account,
-            behaviour,
-            false, null// Not needed copy temp task listener
-        )// Not show waiting dialog while file is being copied from private storage
+        val uploadFileUseCase by inject<UploadFileUseCase>()
+        streamsToUpload.forEach { uri ->
+            val uploadFileUseCaseParams = UploadFileUseCase.Params(
+                accountName = account.name,
+                behavior = UploadBehavior.fromLegacyLocalBehavior(behaviour),
+                chargingOnly = false,
+                contentUri = uri,
+                enqueuedBy = UploadEnqueuedBy.ENQUEUED_BY_USER,
+                uploadSourceTag = TRANSFER_TAG_MANUAL_UPLOAD,
+                uploadFolderPath = remotePath,
+                wifiOnly = false
+            )
+            uploadFileUseCase.execute(uploadFileUseCaseParams)
+        }
 
-        uploader.uploadUris()
+//        val uploader = UriUploader(
+//            this,
+//            streamsToUpload,
+//            remotePath,
+//            account,
+//            behaviour,
+//            false, null// Not needed copy temp task listener
+//        )// Not show waiting dialog while file is being copied from private storage
+//
+//        uploader.uploadUris()
     }
 
     /**
