@@ -21,16 +21,24 @@
 package com.owncloud.android.presentation.ui.files.filelist
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.cancel
+import com.owncloud.android.extensions.parseError
+import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onSuccess
@@ -41,19 +49,28 @@ import com.owncloud.android.presentation.ui.files.SortOptionsView
 import com.owncloud.android.presentation.ui.files.SortOrder
 import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
+import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
+import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.ui.activity.FileListOption
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.java.KoinJavaComponent.get
 
-class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener {
+class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
+    CreateFolderDialogFragment.CreateFolderListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
+
+    private val KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED"
+    private val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var files: List<OCFile>
+
+    private var miniFabClicked = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +84,17 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeToViewModels()
+
+        var fileListOption: FileListOption? =
+            if (requireArguments().getParcelable<Parcelable?>(ARG_LIST_FILE_OPTION) != null)
+                requireArguments().getParcelable(ARG_LIST_FILE_OPTION)
+            else
+                null
+
+        if (fileListOption == null) {
+            fileListOption = FileListOption.ALL_FILES
+        }
+        updateFab(fileListOption)
     }
 
     private fun initViews() {
@@ -196,12 +224,125 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
         }
 
-        // TODO Manage FAB button
+        updateFab(newFileListOption)
+    }
+
+    private fun updateFab(newFileListOption: FileListOption) {
+        if (!newFileListOption.isAllFiles() || isPickingAFolder()) {
+            setFabEnabled(false)
+        } else {
+            setFabEnabled(true)
+            registerFabListeners()
+
+            // detect if a mini FAB has ever been clicked
+            val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+            if (prefs.getLong(KEY_FAB_EVER_CLICKED, 0) > 0) {
+                miniFabClicked = true
+            }
+
+            // add labels to the min FABs when none of them has ever been clicked on
+            if (!miniFabClicked) {
+                setFabLabels()
+            } else {
+                removeFabLabels()
+            }
+        }
+    }
+
+    /**
+     * Sets the 'visibility' state of the FAB contained in the fragment.
+     *
+     *
+     * When 'false' is set, FAB visibility is set to View.GONE programatically,
+     *
+     * @param enabled Desired visibility for the FAB.
+     */
+    private fun setFabEnabled(enabled: Boolean) {
+        binding.fabMain.isVisible = enabled
+    }
+
+    /**
+     * Adds labels to all mini FABs.
+     */
+    private fun setFabLabels() {
+        binding.fabUpload.title = resources.getString(R.string.actionbar_upload)
+        binding.fabMkdir.title = resources.getString(R.string.actionbar_mkdir)
+    }
+
+    /**
+     * Removes the labels on all known min FABs.
+     */
+    private fun removeFabLabels() {
+        binding.fabUpload.title = null
+        binding.fabMkdir.title = null
+        ((binding.fabUpload.getTag(com.getbase.floatingactionbutton.R.id.fab_label)) as TextView).isVisible = false
+        ((binding.fabMkdir.getTag(com.getbase.floatingactionbutton.R.id.fab_label)) as TextView).isVisible = false
+    }
+
+    /**
+     * registers all listeners on all mini FABs.
+     */
+    private fun registerFabListeners() {
+        // TODO Register upload listener
+        registerFabMkDirListeners()
+    }
+
+    /**
+     * Registers [android.view.View.OnClickListener] and [android.view.View.OnLongClickListener]
+     * on the 'Create Dir' mini FAB for the linked action and [Snackbar] showing the underlying action.
+     */
+    private fun registerFabMkDirListeners() {
+        binding.fabMkdir.setOnClickListener {
+            val dialog = CreateFolderDialogFragment.newInstance(mainFileListViewModel.getFile(), this)
+            dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_FOLDER)
+            binding.fabMain.collapse()
+            recordMiniFabClick()
+        }
+        binding.fabMkdir.setOnLongClickListener {
+            showMessageInSnackbar(
+                message = getString(R.string.actionbar_mkdir)
+            )
+            true
+        }
+    }
+
+    /**
+     * records a click on a mini FAB and thus:
+     *
+     *  1. persists the click fact
+     *  1. removes the mini FAB labels
+     *
+     */
+    private fun recordMiniFabClick() {
+        // only record if it hasn't been done already at some other time
+        if (!miniFabClicked) {
+            val sp = android.preference.PreferenceManager.getDefaultSharedPreferences(activity)
+            sp.edit().putLong(KEY_FAB_EVER_CLICKED, 1).apply()
+            miniFabClicked = true
+        }
+    }
+
+    override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
+        val filesViewModel = get(FilesViewModel::class.java)
+
+        filesViewModel.createFolder(parentFolder, newFolderName)
+        filesViewModel.createFolder.observe(this, { uiResultEvent: Event<UIResult<Unit>> ->
+            val uiResult = uiResultEvent.peekContent()
+            if (!uiResult.isSuccess) {
+                val throwable = uiResult.getThrowableOrNull()
+                val errorMessage =
+                    throwable!!.parseError(resources.getString(R.string.create_dir_fail_msg), resources, false)
+                showMessageInSnackbar(
+                    message = errorMessage.toString()
+                )
+            }
+        })
     }
 
     companion object {
         val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
+        val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
 
         fun newInstance(
             justFolders: Boolean = false,
