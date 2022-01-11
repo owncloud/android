@@ -111,8 +111,8 @@ class OCFileRepository(
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
         localFileDataSource.getFileByRemotePath(remotePath, owner)
 
-    override fun getFilteredFolderContent(folderId: Long, search: String): List<OCFile> =
-        localFileDataSource.getFilteredFolderContent(folderId, search)
+    override fun getSearchFolderContent(folderId: Long, search: String): List<OCFile> =
+        localFileDataSource.getSearchFolderContent(folderId, search)
 
     override fun getFolderContent(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderContent(folderId)

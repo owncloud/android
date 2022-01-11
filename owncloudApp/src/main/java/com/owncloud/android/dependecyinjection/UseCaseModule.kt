@@ -42,7 +42,7 @@ import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFilesAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
-import com.owncloud.android.domain.files.usecases.GetFilteredFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
@@ -104,7 +104,7 @@ val useCaseModule = module {
     factory { SaveFileOrFolderUseCase(get()) }
     factory { GetFilesSharedByLinkUseCase(get()) }
     factory { GetFilesAvailableOfflineUseCase(get()) }
-    factory { GetFilteredFolderContentUseCase(get()) }
+    factory { GetSearchFolderContentUseCase(get()) }
 
     // Sharing
     factory { CreatePrivateShareAsyncUseCase(get()) }
