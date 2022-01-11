@@ -370,7 +370,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     override fun onQueryTextSubmit(query: String?): Boolean = false
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        newText?.let { mainFileListViewModel.listFilteredCurrentDirectory(it) }
+        newText?.let { mainFileListViewModel.listSearchCurrentDirectory(it) }
         return true
     }
 
