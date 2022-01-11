@@ -41,6 +41,12 @@ abstract class FileDao {
         remotePath: String
     ): OCFileEntity?
 
+    @Query(SELECT_FILTERED_FOLDER_CONTENT)
+    abstract fun getFilteredFolderContent(
+        folderId: Long,
+        search: String
+    ): List<OCFileEntity>
+
     @Query(SELECT_FOLDER_CONTENT)
     abstract fun getFolderContent(
         folderId: Long
@@ -239,6 +245,12 @@ abstract class FileDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE parentId = :folderId"
+
+        private const val SELECT_FILTERED_FOLDER_CONTENT =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE parentId = :folderId " +
+                    "AND remotePath LIKE '%' || :search || '%'"
 
         private const val SELECT_FOLDER_BY_MIMETYPE =
             "SELECT * " +
