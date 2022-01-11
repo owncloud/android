@@ -42,7 +42,7 @@ abstract class FileDao {
     ): OCFileEntity?
 
     @Query(SELECT_FILTERED_FOLDER_CONTENT)
-    abstract fun getFilteredFolderContent(
+    abstract fun getSearchFolderContent(
         folderId: Long,
         search: String
     ): List<OCFileEntity>

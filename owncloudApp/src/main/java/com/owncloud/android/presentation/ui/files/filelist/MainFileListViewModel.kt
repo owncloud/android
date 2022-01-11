@@ -30,7 +30,7 @@ import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFilesAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
-import com.owncloud.android.domain.files.usecases.GetFilteredFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
@@ -44,7 +44,7 @@ class MainFileListViewModel(
     private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
     private val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase,
     private val getFilesAvailableOfflineUseCase: GetFilesAvailableOfflineUseCase,
-    private val getFilteredFolderContentUseCase: GetFilteredFolderContentUseCase,
+    private val getSearchFolderContentUseCase: GetSearchFolderContentUseCase,
     private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val contextProvider: ContextProvider,
@@ -99,9 +99,9 @@ class MainFileListViewModel(
         }
     }
 
-    private fun getFilteredFilesList(folderId: Long, searchText: String) {
+    private fun getSearchFilesList(folderId: Long, searchText: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getFilteredFolderContentUseCase.execute(GetFilteredFolderContentUseCase.Params(folderId = folderId, search = searchText)).let {
+            getSearchFolderContentUseCase.execute(GetSearchFolderContentUseCase.Params(folderId = folderId, search = searchText)).let {
                 when (it) {
                     is UseCaseResult.Error -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
                     is UseCaseResult.Success -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Success(it.getDataOrNull())))
@@ -126,8 +126,8 @@ class MainFileListViewModel(
         getFilesList(directory.id!!)
     }
 
-    fun listFilteredCurrentDirectory(searchText: String) {
-        getFilteredFilesList(file.id!!, searchText)
+    fun listSearchCurrentDirectory(searchText: String) {
+        getSearchFilesList(file.id!!, searchText)
     }
 
     fun refreshDirectory() {
