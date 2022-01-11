@@ -29,11 +29,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
@@ -76,7 +73,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private lateinit var files: List<OCFile>
 
     private var miniFabClicked = false
-    private lateinit var layoutManager: StaggeredGridLayoutManager
+    private lateinit var layoutManager: GridLayoutManager
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var viewType: ViewType
 
@@ -107,41 +104,17 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         updateFab(fileListOption!!)
     }
 
-    /**
-     * Operation to calculate the free space to apply to the footer and manage its visibility.
-     */
-    private fun setFooter() {
-        view?.doOnPreDraw {
-            val footerHeight = binding.footerText.height
-            binding.recyclerViewMainFileList.updatePadding(bottom = footerHeight)
-            binding.recyclerViewMainFileList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    val range = recyclerView.computeVerticalScrollRange()
-                    val extent = recyclerView.computeVerticalScrollExtent()
-                    val offset = recyclerView.computeVerticalScrollOffset()
-                    val threshHold = range - footerHeight
-                    val currentScroll = extent + offset
-                    val excess = currentScroll - threshHold
-                    binding.footerText.isVisible = !isShowingJustFolders() && excess >= 0
-                }
-            })
-        }
-    }
-
     private fun initViews() {
-        setFooter()
-
         //Set RecyclerView and its adapter.
         if (mainFileListViewModel.isGridModeSetAsPreferred()) {
-            layoutManager = StaggeredGridLayoutManager(
-                ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(),
-                StaggeredGridLayoutManager.VERTICAL
-            )
+            layoutManager = GridLayoutManager(context, ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns())
             viewType = ViewType.VIEW_TYPE_GRID
         } else {
-            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = GridLayoutManager(context, 1)
             viewType = ViewType.VIEW_TYPE_LIST
         }
+
+        setFooterCorrectly(layoutManager.spanCount == 1)
 
         binding.recyclerViewMainFileList.layoutManager = layoutManager
 
@@ -183,7 +156,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 val sortedFiles = mainFileListViewModel.sortList(files)
                 fileListAdapter.updateFileList(filesToAdd = sortedFiles)
                 registerListAdapterDataObserver()
-                binding.footerText.text = mainFileListViewModel.manageListOfFilesAndGenerateText(files)
                 binding.swipeRefreshMainFileList.cancel()
             }
         })
@@ -235,12 +207,35 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         if (viewType == ViewType.VIEW_TYPE_LIST) {
             mainFileListViewModel.setListModeAsPreferred()
             layoutManager?.spanCount = 1
+            setFooterCorrectly(layoutManager.spanCount == 1)
+
         } else {
             mainFileListViewModel.setGridModeAsPreferred()
             layoutManager?.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
+            setFooterCorrectly(layoutManager.spanCount == 1)
         }
 
         fileListAdapter.notifyItemRangeChanged(0, fileListAdapter.itemCount)
+    }
+
+    private fun setFooterCorrectly(isListMode: Boolean) {
+        if (isListMode) {
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return 1
+                }
+            }
+        } else {
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return if (position != files.size) {
+                        1
+                    } else {
+                        ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
+                    }
+                }
+            }
+        }
     }
 
     override fun onSortSelected(sortType: SortType) {
