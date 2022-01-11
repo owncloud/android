@@ -24,7 +24,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -38,6 +37,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.cancel
 import com.owncloud.android.extensions.parseError
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
@@ -60,9 +60,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     CreateFolderDialogFragment.CreateFolderListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
-
-    val ARG_LIST_FILE_OPTION = MainFileListFragment::class.java.canonicalName +
-            ".LIST_FILE_OPTION"
 
     private val KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED"
     private val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
@@ -261,11 +258,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
      * @param enabled Desired visibility for the FAB.
      */
     private fun setFabEnabled(enabled: Boolean) {
-        if (enabled) {
-            binding.fabMain.visibility = View.VISIBLE
-        } else {
-            binding.fabMain.visibility = View.GONE
-        }
+        binding.fabMain.isVisible = enabled
     }
 
     /**
@@ -306,7 +299,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             recordMiniFabClick()
         }
         binding.fabMkdir.setOnLongClickListener {
-            showSnackMessage(R.string.actionbar_mkdir)
+            showMessageInSnackbar(
+                message = getString(R.string.actionbar_mkdir)
+            )
             true
         }
     }
@@ -327,29 +322,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         }
     }
 
-    /**
-     * Show a temporary message in a Snackbar bound to the content view of the parent Activity
-     *
-     * @param messageResource Message to show.
-     */
-    private fun showSnackMessage(messageResource: Int) {
-        val snackbar = Snackbar.make(
-            requireActivity().findViewById(R.id.coordinator_layout),
-            messageResource,
-            Snackbar.LENGTH_LONG
-        )
-        snackbar.show()
-    }
-
-    private fun showSnackMessage(messageResource: String) {
-        val snackbar = Snackbar.make(
-            requireActivity().findViewById(R.id.coordinator_layout),
-            messageResource,
-            Snackbar.LENGTH_LONG
-        )
-        snackbar.show()
-    }
-
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
         val filesViewModel = get(FilesViewModel::class.java)
 
@@ -360,7 +332,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 val throwable = uiResult.getThrowableOrNull()
                 val errorMessage =
                     throwable!!.parseError(resources.getString(R.string.create_dir_fail_msg), resources, false)
-                showSnackMessage(errorMessage.toString())
+                showMessageInSnackbar(
+                    message = errorMessage.toString()
+                )
             }
         })
     }
@@ -368,6 +342,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     companion object {
         val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
+        val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
 
         fun newInstance(
             justFolders: Boolean = false,
