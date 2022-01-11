@@ -155,6 +155,13 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 updateFileListData(files = data ?: emptyList())
             }
         })
+
+        // Observe the action of retrieving the list of filtered files from DB.
+        mainFileListViewModel.getFilteredFilesData.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                updateFileListData(files = data ?: emptyList())
+            }
+        })
     }
 
     fun listDirectory(directory: OCFile) {
