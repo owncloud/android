@@ -20,22 +20,11 @@ package com.owncloud.android.usecases
 
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.owncloud.android.MainApp
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.files.services.FileUploader
-import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE
-import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO
-import com.owncloud.android.operations.UploadFileOperation.CREATED_BY_USER
-import com.owncloud.android.workers.UploadFileFromContentUriWorker
-import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.TRANSFER_TAG_CAMERA_UPLOAD
-import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.TRANSFER_TAG_MANUAL_UPLOAD
 import timber.log.Timber
 import java.io.File
 
@@ -110,31 +99,19 @@ class UploadFileUseCase(
         uploadPath: String,
         wifiOnly: Boolean,
     ) {
-        val inputData = workDataOf(
-            UploadFileFromContentUriWorker.KEY_PARAM_ACCOUNT_NAME to accountName,
-            UploadFileFromContentUriWorker.KEY_PARAM_BEHAVIOR to behavior.name,
-            UploadFileFromContentUriWorker.KEY_PARAM_CONTENT_URI to contentUri.toString(),
-            UploadFileFromContentUriWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
-            UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
-            UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_ID to uploadIdInStorageManager
+        val uploadFileFromContentUriUseCase = UploadFileFromContentUriUseCase(workManager)
+        val uploadFileParams = UploadFileFromContentUriUseCase.Params(
+            contentUri = contentUri,
+            uploadPath = uploadPath,
+            lastModifiedInSeconds = lastModifiedInSeconds,
+            behavior = behavior.toString(),
+            accountName = accountName,
+            uploadIdInStorageManager = uploadIdInStorageManager,
+            wifiOnly = wifiOnly,
+            chargingOnly = chargingOnly,
+            transferTag = enqueuedBy.toTransferTag()
         )
-
-        val networkRequired = if (wifiOnly) NetworkType.UNMETERED else NetworkType.CONNECTED
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(networkRequired)
-            .setRequiresCharging(chargingOnly)
-            .build()
-
-        val uploadFileFromContentUriWorker = OneTimeWorkRequestBuilder<UploadFileFromContentUriWorker>()
-            .setInputData(inputData)
-            .setConstraints(constraints)
-            .addTag(accountName)
-            .addTag(uploadIdInStorageManager.toString())
-            .addTag(enqueuedBy.toTransferTag())
-            .build()
-
-        workManager.enqueue(uploadFileFromContentUriWorker)
-        Timber.i("Upload of ${contentUri.path} has been enqueued.")
+        uploadFileFromContentUriUseCase.execute(uploadFileParams)
     }
 
     data class Params(
