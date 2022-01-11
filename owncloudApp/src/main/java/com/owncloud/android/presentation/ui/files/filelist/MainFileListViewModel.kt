@@ -20,7 +20,12 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
@@ -138,6 +143,71 @@ class MainFileListViewModel(
             files, sortOrderSaved,
             ascendingModeSaved
         )
+    }
+
+    fun manageListOfFilesAndGenerateText(list: List<OCFile>): String {
+        var filesCount = 0
+        var foldersCount = 0
+        val count: Int = list.size
+        var file: OCFile
+        for (i in 0 until count) {
+            file = list[i]
+            if (file.isFolder) {
+                foldersCount++
+            } else {
+                if (!file.isHidden) {
+                    filesCount++
+                }
+            }
+        }
+
+        return generateFooterText(filesCount, foldersCount)
+    }
+
+    private fun generateFooterText(filesCount: Int, foldersCount: Int): String {
+        when {
+            filesCount <= 0 -> {
+                return when {
+                    foldersCount <= 0 -> {
+                        ""
+                    }
+                    foldersCount == 1 -> {
+                        contextProvider.getContext().getString(R.string.file_list__footer__folder)
+                    }
+                    else -> { // foldersCount > 1
+                        contextProvider.getContext().getString(R.string.file_list__footer__folders, foldersCount)
+                    }
+                }
+            }
+            filesCount == 1 -> {
+                return when {
+                    foldersCount <= 0 -> {
+                        contextProvider.getContext().getString(R.string.file_list__footer__file)
+                    }
+                    foldersCount == 1 -> {
+                        contextProvider.getContext().getString(R.string.file_list__footer__file_and_folder)
+                    }
+                    else -> { // foldersCount > 1
+                        contextProvider.getContext().getString(R.string.file_list__footer__file_and_folders, foldersCount)
+                    }
+                }
+            }
+            else -> {    // filesCount > 1
+                return when {
+                    foldersCount <= 0 -> {
+                        contextProvider.getContext().getString(R.string.file_list__footer__files, filesCount)
+                    }
+                    foldersCount == 1 -> {
+                        contextProvider.getContext().getString(R.string.file_list__footer__files_and_folder, filesCount)
+                    }
+                    else -> { // foldersCount > 1
+                        contextProvider.getContext().getString(
+                            R.string.file_list__footer__files_and_folders, filesCount, foldersCount
+                        )
+                    }
+                }
+            }
+        }
     }
 
     companion object {
