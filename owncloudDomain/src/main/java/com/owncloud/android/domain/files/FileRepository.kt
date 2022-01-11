@@ -30,7 +30,7 @@ interface FileRepository {
     fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile)
     fun getFileById(fileId: Long): OCFile?
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
-    fun getFilteredFolderContent(folderId: Long, search: String): List<OCFile>
+    fun getSearchFolderContent(folderId: Long, search: String): List<OCFile>
     fun getFolderContent(folderId: Long): List<OCFile>
     fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>>
     fun getFolderImages(folderId: Long): List<OCFile>

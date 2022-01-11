@@ -21,11 +21,11 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
-class GetFilteredFolderContentUseCase(
+class GetSearchFolderContentUseCase(
     private val repository: FileRepository
-) : BaseUseCaseWithResult<List<OCFile>, GetFilteredFolderContentUseCase.Params>() {
+) : BaseUseCaseWithResult<List<OCFile>, GetSearchFolderContentUseCase.Params>() {
 
-    override fun run(params: Params) = repository.getFilteredFolderContent(params.folderId, params.search)
+    override fun run(params: Params) = repository.getSearchFolderContent(params.folderId, params.search)
 
     data class Params(
         val folderId: Long,
