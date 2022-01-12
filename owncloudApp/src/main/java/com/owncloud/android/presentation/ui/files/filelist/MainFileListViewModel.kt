@@ -38,6 +38,7 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
 
@@ -65,9 +66,9 @@ class MainFileListViewModel(
     val getFilesAvailableOfflineData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesAvailableOfflineData
 
-    private val _getFilteredFilesData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
-    val getFilteredFilesData: LiveData<Event<UIResult<List<OCFile>>>>
-        get() = _getFilteredFilesData
+    private val _getSearchedFilesData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
+    val getSearchedFilesData: LiveData<Event<UIResult<List<OCFile>>>>
+        get() = _getSearchedFilesData
 
     private fun getFilesList(folderId: Long) {
         val filesListLiveData: LiveData<List<OCFile>> =
@@ -100,12 +101,16 @@ class MainFileListViewModel(
         }
     }
 
-    private fun getSearchFilesList(folderId: Long, searchText: String) {
+    private fun getSearchFilesList(fileListOption: FileListOption, folderId: Long, searchText: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getSearchFolderContentUseCase.execute(GetSearchFolderContentUseCase.Params(folderId = folderId, search = searchText)).let {
+            getSearchFolderContentUseCase.execute(GetSearchFolderContentUseCase.Params(
+                fileListOption = fileListOption,
+                folderId = folderId,
+                search = searchText)
+            ).let {
                 when (it) {
-                    is UseCaseResult.Error -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                    is UseCaseResult.Success -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Success(it.getDataOrNull())))
+                    is UseCaseResult.Error -> _getSearchedFilesData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
+                    is UseCaseResult.Success -> _getSearchedFilesData.postValue(Event(UIResult.Success(it.getDataOrNull())))
                 }
             }
         }
@@ -127,8 +132,8 @@ class MainFileListViewModel(
         getFilesList(directory.id!!)
     }
 
-    fun listSearchCurrentDirectory(searchText: String) {
-        getSearchFilesList(file.id!!, searchText)
+    fun listSearchCurrentDirectory(fileListOption: FileListOption, searchText: String) {
+        getSearchFilesList(fileListOption, file.id!!, searchText)
     }
 
     fun refreshDirectory() {

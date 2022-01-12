@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
-package com.owncloud.android.ui.activity
+package com.owncloud.android.domain.files.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
