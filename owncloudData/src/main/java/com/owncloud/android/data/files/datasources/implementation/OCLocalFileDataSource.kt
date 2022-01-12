@@ -74,6 +74,16 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
+    override fun getSearchAvailableOfflineFolderContent(folderId: Long, search: String): List<OCFile> =
+        fileDao.getSearchAvailableOfflineFolderContent(folderId = folderId, search = search).map {
+            it.toModel()
+        }
+
+    override fun getSearchSharedByLinkFolderContent(folderId: Long, search: String): List<OCFile> =
+        fileDao.getSearchSharedByLinkFolderContent(folderId = folderId, search = search).map {
+            it.toModel()
+        }
+
     override fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>> =
         Transformations.map(fileDao.getFolderContentAsLiveData(folderId = folderId)) { list ->
             list.map {

@@ -54,7 +54,7 @@ import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
-import com.owncloud.android.ui.activity.FileListOption
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PreferenceUtils
