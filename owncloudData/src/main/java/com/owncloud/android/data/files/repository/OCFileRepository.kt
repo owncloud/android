@@ -28,6 +28,7 @@ import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileAlreadyExistsException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
 import timber.log.Timber
@@ -110,6 +111,13 @@ class OCFileRepository(
 
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
         localFileDataSource.getFileByRemotePath(remotePath, owner)
+
+    override fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile> =
+        when (fileListOption) {
+            FileListOption.ALL_FILES -> localFileDataSource.getSearchFolderContent(folderId, search)
+            FileListOption.AV_OFFLINE -> localFileDataSource.getSearchAvailableOfflineFolderContent(folderId, search)
+            FileListOption.SHARED_BY_LINK -> localFileDataSource.getSearchSharedByLinkFolderContent(folderId, search)
+        }
 
     override fun getFolderContent(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderContent(folderId)

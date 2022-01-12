@@ -21,6 +21,7 @@
 package com.owncloud.android.domain.files
 
 import androidx.lifecycle.LiveData
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 
 interface FileRepository {
@@ -28,6 +29,7 @@ interface FileRepository {
     fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile)
     fun getFileById(fileId: Long): OCFile?
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
+    fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile>
     fun getFolderContent(folderId: Long): List<OCFile>
     fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>>
     fun getFolderImages(folderId: Long): List<OCFile>

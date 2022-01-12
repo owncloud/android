@@ -60,6 +60,7 @@ import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
@@ -351,6 +352,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES_BIS)
         transaction.commit()
+
+        mainListOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))
     }
 
     private fun initFragmentsWithFile() {
@@ -1144,7 +1147,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                 }
             setupRootToolbar(title, isSearchEnabled = true)
-            listOfFilesFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
+            listMainFileFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         }

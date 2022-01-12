@@ -41,6 +41,24 @@ abstract class FileDao {
         remotePath: String
     ): OCFileEntity?
 
+    @Query(SELECT_FILTERED_FOLDER_CONTENT)
+    abstract fun getSearchFolderContent(
+        folderId: Long,
+        search: String
+    ): List<OCFileEntity>
+
+    @Query(SELECT_FILTERED_AVAILABLE_OFFLINE_FOLDER_CONTENT)
+    abstract fun getSearchAvailableOfflineFolderContent(
+        folderId: Long,
+        search: String
+    ): List<OCFileEntity>
+
+    @Query(SELECT_FILTERED_SHARED_BY_LINK_FOLDER_CONTENT)
+    abstract fun getSearchSharedByLinkFolderContent(
+        folderId: Long,
+        search: String
+    ): List<OCFileEntity>
+
     @Query(SELECT_FOLDER_CONTENT)
     abstract fun getFolderContent(
         folderId: Long
@@ -239,6 +257,27 @@ abstract class FileDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE parentId = :folderId"
+
+        private const val SELECT_FILTERED_FOLDER_CONTENT =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE parentId = :folderId " +
+                    "AND remotePath LIKE '%' || :search || '%'"
+
+        private const val SELECT_FILTERED_AVAILABLE_OFFLINE_FOLDER_CONTENT =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE parentId = :folderId " +
+                    "AND keepInSync = '1' " +
+                    "AND remotePath LIKE '%' || :search || '%'"
+
+        private const val SELECT_FILTERED_SHARED_BY_LINK_FOLDER_CONTENT =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE parentId = :folderId " +
+                    "AND remotePath LIKE '%' || :search || '%'" +
+                    "AND sharedByLink NOT LIKE '%0%' " +
+                    "OR sharedWithSharee NOT LIKE '%0%' "
 
         private const val SELECT_FOLDER_BY_MIMETYPE =
             "SELECT * " +

@@ -26,6 +26,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -51,14 +52,14 @@ import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
-import com.owncloud.android.ui.activity.FileListOption
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
-    CreateFolderDialogFragment.CreateFolderListener {
+    CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
 
@@ -75,6 +76,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var viewType: ViewType
 
+    private var fileListOption: FileListOption? = FileListOption.ALL_FILES
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -88,16 +91,16 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         initViews()
         subscribeToViewModels()
 
-        var fileListOption: FileListOption? =
+        fileListOption =
             if (requireArguments().getParcelable<Parcelable?>(ARG_LIST_FILE_OPTION) != null)
                 requireArguments().getParcelable(ARG_LIST_FILE_OPTION)
             else
-                null
+                FileListOption.ALL_FILES
 
         if (fileListOption == null) {
             fileListOption = FileListOption.ALL_FILES
         }
-        updateFab(fileListOption)
+        updateFab(fileListOption!!)
     }
 
     private fun initViews() {
@@ -170,6 +173,13 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         // Observe the action of retrieving the list of available offline files from DB.
         mainFileListViewModel.getFilesAvailableOfflineData.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                updateFileListData(files = data ?: emptyList())
+            }
+        })
+
+        // Observe the action of retrieving the list of searched files from DB.
+        mainFileListViewModel.getSearchedFilesData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(files = data ?: emptyList())
             }
@@ -262,6 +272,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     fun updateFileListOption(newFileListOption: FileListOption) {
+        fileListOption = newFileListOption
         when (newFileListOption) {
             FileListOption.ALL_FILES -> mainFileListViewModel.listCurrentDirectory()
             FileListOption.AV_OFFLINE -> mainFileListViewModel.getAvailableOfflineFilesList()
@@ -401,6 +412,17 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     override fun onCreateFolderListener() {
         //TODO("Not yet implemented")
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean = false
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        newText?.let { mainFileListViewModel.listSearchCurrentDirectory(fileListOption!!, it) }
+        return true
+    }
+
+    fun setSearchListener(searchView: SearchView) {
+        searchView.setOnQueryTextListener(this)
     }
 }
 
