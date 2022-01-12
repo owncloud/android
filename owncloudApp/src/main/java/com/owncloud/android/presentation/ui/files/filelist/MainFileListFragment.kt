@@ -105,7 +105,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     private fun initViews() {
-        //Set RecyclerView and its adapter.
+
+        //Set view and footer correctly
         if (mainFileListViewModel.isGridModeSetAsPreferred()) {
             layoutManager = GridLayoutManager(context, ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns())
             viewType = ViewType.VIEW_TYPE_GRID
@@ -114,13 +115,17 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             viewType = ViewType.VIEW_TYPE_LIST
         }
 
+        binding.optionsLayout.viewTypeSelected = viewType
+
         setFooterCorrectly(layoutManager.spanCount == 1)
 
+        //Set RecyclerView and its adapter.
         binding.recyclerViewMainFileList.layoutManager = layoutManager
 
         fileListAdapter = FileListAdapter(
             context = requireContext(),
             layoutManager = layoutManager,
+            isShowingJustFolders = isShowingJustFolders(),
             listener = object :
                 FileListAdapter.FileListAdapterListener {
                 override fun clickItem(ocFile: OCFile) {
@@ -204,35 +209,28 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     override fun onViewTypeListener(viewType: ViewType) {
         binding.optionsLayout.viewTypeSelected = viewType
+
         if (viewType == ViewType.VIEW_TYPE_LIST) {
             mainFileListViewModel.setListModeAsPreferred()
-            layoutManager?.spanCount = 1
-            setFooterCorrectly(layoutManager.spanCount == 1)
+            layoutManager.spanCount = 1
 
         } else {
             mainFileListViewModel.setGridModeAsPreferred()
-            layoutManager?.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
-            setFooterCorrectly(layoutManager.spanCount == 1)
+            layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
         }
+
+        setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
 
         fileListAdapter.notifyItemRangeChanged(0, fileListAdapter.itemCount)
     }
 
     private fun setFooterCorrectly(isListMode: Boolean) {
-        if (isListMode) {
-            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    return 1
-                }
-            }
-        } else {
-            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    return if (position != files.size) {
-                        1
-                    } else {
-                        ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
-                    }
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (isListMode || position != files.size) {
+                    1
+                } else {
+                    ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
                 }
             }
         }
