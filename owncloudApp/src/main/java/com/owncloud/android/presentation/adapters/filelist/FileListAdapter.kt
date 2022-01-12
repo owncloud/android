@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
@@ -46,15 +45,12 @@ import com.owncloud.android.utils.PreferenceUtils
 
 class FileListAdapter(
     private val context: Context,
+    private val isShowingJustFolders: Boolean,
     private val layoutManager: GridLayoutManager,
     private val listener: FileListAdapterListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var files = mutableListOf<Any>()
-    private lateinit var viewHolder: RecyclerView.ViewHolder
-    private lateinit var parent: ViewGroup
-
-    private val account = AccountUtils.getCurrentOwnCloudAccount(context)
 
     fun updateFileList(filesToAdd: List<OCFile>) {
         val diffUtilCallback = FileListDiffCallback(oldList = files, newList = filesToAdd)
@@ -70,12 +66,13 @@ class FileListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        this.parent = parent
-        viewHolder = when (viewType) {
+        return when (viewType) {
             ViewType.LIST_ITEM.ordinal -> {
                 val binding = ItemFileListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                binding.root.tag = ViewType.LIST_ITEM
-                binding.root.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+                binding.root.apply {
+                    tag = ViewType.LIST_ITEM
+                    filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+                }
                 ListViewHolder(binding)
             }
             ViewType.GRID_IMAGE.ordinal -> {
@@ -94,16 +91,17 @@ class FileListAdapter(
                 FooterViewHolder(binding)
             }
         }
-        return viewHolder
     }
 
     override fun getItemCount(): Int = files.size
 
     override fun getItemId(position: Int): Long = position.toLong()
 
+    private fun isFooter(position: Int) = position == files.size.minus(1)
+
     override fun getItemViewType(position: Int): Int {
 
-        return if (position == files.size.minus(1)) {
+        return if (isFooter(position)) {
             ViewType.FOOTER.ordinal
         } else {
             when {
@@ -121,16 +119,17 @@ class FileListAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val viewType = getItemViewType(position)
-        if (position != files.size - 1) {
-            val file = files[position] as OCFile
 
-            val localStateView = holder.itemView.findViewById<ImageView>(R.id.localFileIndicator)
+        val viewType = getItemViewType(position)
+
+
+        if (!isFooter(position)) { // Is Item
+
+            val file = files[position] as OCFile
+            val name = file.fileName
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
                 tag = file.id
             }
-
-            val name = file.fileName
 
             holder.itemView.findViewById<LinearLayout>(R.id.ListItemLayout)?.apply {
                 contentDescription = "LinearLayout-$name"
@@ -151,13 +150,6 @@ class FileListAdapter(
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
 
-                        //TODO Do when manage available offline
-                        /*if(onlyAvailableOffline || sharedByLinkFiles ){
-                            it.fileListPath.apply {
-                                visibility = View.VISIBLE
-                                text = file.remotePath
-                            }
-                        }*/
                     }
                 }
                 ViewType.GRID_ITEM.ordinal -> {
@@ -190,8 +182,14 @@ class FileListAdapter(
 
             }
 
-            // For all Views
-            //setIconPinAccordingToFilesLocalState(localStateView, file)
+            //TODO Delete it when manage state sync.
+            holder.itemView.findViewById<ImageView>(R.id.localFileIndicator).apply {
+                visibility = View.GONE
+            }
+            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).apply {
+                visibility = View.GONE
+            }
+
 
             holder.itemView.setOnClickListener { listener.clickItem(file) }
 
@@ -199,19 +197,6 @@ class FileListAdapter(
                 visibility = View.GONE
             }
             holder.itemView.setBackgroundColor(Color.WHITE)
-
-            //TODO Modify when implements select mode
-            /*val parentList = parent as AbsListView
-            if (parentList.choiceMode != AbsListView.CHOICE_MODE_NONE && parentList.checkedItemCount > 0) {
-                if (parentList.isItemChecked(position)) {
-                    holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background))
-                    checkBoxV.setImageResource(R.drawable.ic_checkbox_marked)
-                } else {
-                    holder.itemView.setBackgroundColor(Color.WHITE)
-                    checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
-                }
-                checkBoxV.visibility = View.VISIBLE
-            }*/
 
             if (file.isFolder) {
                 //Folder
@@ -249,63 +234,14 @@ class FileListAdapter(
                 }
             }
 
-        } else {
-            if (viewType == ViewType.FOOTER.ordinal) {
+        } else { //Is Footer
+            if (viewType == ViewType.FOOTER.ordinal && !isShowingJustFolders) {
                 val view = holder as FooterViewHolder
                 val file = files[position] as OCFooterFile
                 view.binding.footerText.text = file.text
             }
         }
     }
-
-    //TODO Uncomment when manage state sync
-    /*private fun setIconPinAccordingToFilesLocalState(localStateView: ImageView, file: OCFile) {
-        //local state
-        localStateView.bringToFront()
-        val workManager = WorkManager.getInstance(context)
-        val uploaderBinder = transferServiceGetter.getFileUploaderBinder()
-        val opsBinder = transferServiceGetter.getOperationsServiceBinder()
-
-        localStateView.visibility = View.INVISIBLE
-
-        if (opsBinder != null && opsBinder.isSynchronizing(account, file)) {
-            //syncing
-            localStateView.apply {
-                setImageResource(R.drawable.sync_pin)
-                visibility = View.VISIBLE
-            }
-        } else if (workManager.isDownloadPending(account, file)) {
-            // downloading
-            localStateView.apply {
-                setImageResource(R.drawable.sync_pin)
-                visibility = View.VISIBLE
-            }
-        } else if (uploaderBinder != null && uploaderBinder.isUploading(account, file)) {
-            // uploading
-            localStateView.apply {
-                setImageResource(R.drawable.sync_pin)
-                visibility = View.VISIBLE
-            }
-        }else if(file.etagInConflict != null){
-            //conflict
-            localStateView.apply {
-                setImageResource(R.drawable.error_pin)
-                visibility = View.VISIBLE
-            }
-        }else{
-            if(file.isAvailableLocally){
-                localStateView.apply {
-                    setImageResource(R.drawable.downloaded_pin)
-                    visibility = View.VISIBLE
-                }
-            }
-            FIXME: 13/10/2020 : New_arch: Av.Offline
-            if (file.isAvailableOffline()) {
-                localStateView.setVisibility(View.VISIBLE);
-                localStateView.setImageResource(R.drawable.offline_available_pin);
-           }
-        }
-    }*/
 
     private fun manageListOfFilesAndGenerateText(list: List<OCFile>): String {
         var filesCount = 0
