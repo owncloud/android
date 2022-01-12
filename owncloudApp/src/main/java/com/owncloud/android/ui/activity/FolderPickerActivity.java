@@ -42,6 +42,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
+import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;

@@ -29,6 +29,8 @@ interface LocalFileDataSource {
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getFolderContent(folderId: Long): List<OCFile>
     fun getSearchFolderContent(folderId: Long, search: String): List<OCFile>
+    fun getSearchAvailableOfflineFolderContent(folderId: Long, search: String): List<OCFile>
+    fun getSearchSharedByLinkFolderContent(folderId: Long, search: String): List<OCFile>
     fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>>
     fun getFolderImages(folderId: Long): List<OCFile>
     fun getFilesSharedByLink(owner: String): List<OCFile>

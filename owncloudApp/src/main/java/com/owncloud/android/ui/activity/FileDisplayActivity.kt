@@ -61,6 +61,7 @@ import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.db.PreferenceManager.getSortOrder
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
