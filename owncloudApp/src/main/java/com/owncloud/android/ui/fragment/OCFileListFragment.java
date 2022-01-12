@@ -78,7 +78,7 @@ import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialo
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
-import com.owncloud.android.ui.activity.FileListOption;
+import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
