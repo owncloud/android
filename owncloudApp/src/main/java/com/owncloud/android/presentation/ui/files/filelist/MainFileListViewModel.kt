@@ -25,6 +25,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.R
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
@@ -45,6 +47,7 @@ class MainFileListViewModel(
     private val getFilesAvailableOfflineUseCase: GetFilesAvailableOfflineUseCase,
     private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val sharedPreferencesProvider: SharedPreferencesProvider,
     private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
@@ -117,6 +120,21 @@ class MainFileListViewModel(
         return file
     }
 
+    fun setGridModeAsPreferred() {
+        savePreferredLayoutManager(true)
+    }
+
+    fun setListModeAsPreferred() {
+        savePreferredLayoutManager(false)
+    }
+
+    private fun savePreferredLayoutManager(isGridModeSelected: Boolean) {
+        sharedPreferencesProvider.putBoolean(RECYCLER_VIEW_PREFERRED, isGridModeSelected)
+    }
+
+    fun isGridModeSetAsPreferred() = sharedPreferencesProvider.getBoolean(RECYCLER_VIEW_PREFERRED, false)
+
+
     fun sortList(files: List<OCFile>): List<OCFile> {
         val sortOrderSaved = PreferenceManager.getSortOrder(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
         val ascendingModeSaved = PreferenceManager.getSortAscending(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
@@ -125,6 +143,10 @@ class MainFileListViewModel(
             files, sortOrderSaved,
             ascendingModeSaved
         )
+    }
+
+    companion object {
+        private const val RECYCLER_VIEW_PREFERRED = "RECYCLER_VIEW_PREFERRED"
     }
 }
 

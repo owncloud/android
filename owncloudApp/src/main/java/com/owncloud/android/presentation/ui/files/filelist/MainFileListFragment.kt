@@ -28,7 +28,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
@@ -52,6 +52,7 @@ import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.ui.activity.FileListOption
+import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
@@ -67,10 +68,12 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var fileListAdapter: FileListAdapter
     private lateinit var files: List<OCFile>
 
     private var miniFabClicked = false
+    private lateinit var layoutManager: GridLayoutManager
+    private lateinit var fileListAdapter: FileListAdapter
+    private lateinit var viewType: ViewType
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,23 +101,39 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     private fun initViews() {
-        //Set RecyclerView and its adapter.
-        fileListAdapter = FileListAdapter(context = requireContext(), isShowingJustFolders = isShowingJustFolders(), listener = object :
-            FileListAdapter.FileListAdapterListener {
-            override fun clickItem(ocFile: OCFile) {
-                if (ocFile.isFolder) {
-                    mainFileListViewModel.listDirectory(ocFile)
-                    // TODO Manage animation listDirectoryWithAnimationDown
-                } else { /// Click on a file
-                    // TODO Click on a file
-                }
-            }
 
-        })
-        binding.recyclerViewMainFileList.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = fileListAdapter
+        //Set view and footer correctly
+        if (mainFileListViewModel.isGridModeSetAsPreferred()) {
+            layoutManager = GridLayoutManager(context, ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns())
+            viewType = ViewType.VIEW_TYPE_GRID
+        } else {
+            layoutManager = GridLayoutManager(context, 1)
+            viewType = ViewType.VIEW_TYPE_LIST
         }
+
+        binding.optionsLayout.viewTypeSelected = viewType
+
+        setFooterCorrectly(layoutManager.spanCount == 1)
+
+        //Set RecyclerView and its adapter.
+        binding.recyclerViewMainFileList.layoutManager = layoutManager
+
+        fileListAdapter = FileListAdapter(
+            context = requireContext(),
+            layoutManager = layoutManager,
+            isShowingJustFolders = isShowingJustFolders(),
+            listener = object :
+                FileListAdapter.FileListAdapterListener {
+                override fun clickItem(ocFile: OCFile) {
+                    if (ocFile.isFolder) {
+                        mainFileListViewModel.listDirectory(ocFile)
+                        // TODO Manage animation listDirectoryWithAnimationDown
+                    } else { /// Click on a file
+                        // TODO Click on a file
+                    }
+                }
+            })
+        binding.recyclerViewMainFileList.adapter = fileListAdapter
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener { mainFileListViewModel.refreshDirectory() }
@@ -178,7 +197,32 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     override fun onViewTypeListener(viewType: ViewType) {
-        //TODO("Not yet implemented")
+        binding.optionsLayout.viewTypeSelected = viewType
+
+        if (viewType == ViewType.VIEW_TYPE_LIST) {
+            mainFileListViewModel.setListModeAsPreferred()
+            layoutManager.spanCount = 1
+
+        } else {
+            mainFileListViewModel.setGridModeAsPreferred()
+            layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
+        }
+
+        setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
+
+        fileListAdapter.notifyItemRangeChanged(0, fileListAdapter.itemCount)
+    }
+
+    private fun setFooterCorrectly(isListMode: Boolean) {
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (isListMode || position != files.size) {
+                    1
+                } else {
+                    ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
+                }
+            }
+        }
     }
 
     override fun onSortSelected(sortType: SortType) {
