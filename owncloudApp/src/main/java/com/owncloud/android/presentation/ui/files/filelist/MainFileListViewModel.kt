@@ -25,7 +25,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
