@@ -155,8 +155,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         // Observe the action of retrieving the list of files from DB.
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
-                updateFileListData(files = data ?: emptyList())
-                files = data ?: emptyList()
+                updateFileListData(filesList = data ?: emptyList())
                 val sortedFiles = mainFileListViewModel.sortList(files)
                 fileListAdapter.updateFileList(filesToAdd = sortedFiles)
                 registerListAdapterDataObserver()
@@ -167,21 +166,24 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         // Observe the action of retrieving the list of shared by link files from DB.
         mainFileListViewModel.getFilesSharedByLinkData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
-                updateFileListData(files = data ?: emptyList())
+                updateFileListData(filesList = data ?: emptyList())
+                setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
             }
         })
 
         // Observe the action of retrieving the list of available offline files from DB.
         mainFileListViewModel.getFilesAvailableOfflineData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
-                updateFileListData(files = data ?: emptyList())
+                updateFileListData(filesList = data ?: emptyList())
+                setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
             }
         })
 
         // Observe the action of retrieving the list of searched files from DB.
         mainFileListViewModel.getSearchedFilesData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
-                updateFileListData(files = data ?: emptyList())
+                updateFileListData(filesList = data ?: emptyList())
+                setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
             }
         })
     }
@@ -265,7 +267,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         _binding = null
     }
 
-    private fun updateFileListData(files: List<OCFile>) {
+    private fun updateFileListData(filesList: List<OCFile>) {
+        files = filesList
         fileListAdapter.updateFileList(filesToAdd = files)
         registerListAdapterDataObserver()
         binding.swipeRefreshMainFileList.cancel()
