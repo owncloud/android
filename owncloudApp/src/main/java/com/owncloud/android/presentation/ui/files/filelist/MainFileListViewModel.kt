@@ -26,6 +26,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
@@ -141,7 +142,7 @@ class MainFileListViewModel(
         refreshFilesList(file.remotePath)
     }
 
-    fun getFile(): OCFile{
+    fun getFile(): OCFile {
         return file
     }
 
@@ -158,7 +159,6 @@ class MainFileListViewModel(
     }
 
     fun isGridModeSetAsPreferred() = sharedPreferencesProvider.getBoolean(RECYCLER_VIEW_PREFERRED, false)
-
 
     fun sortList(files: List<OCFile>): List<OCFile> {
         val sortOrderSaved = PreferenceManager.getSortOrder(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
