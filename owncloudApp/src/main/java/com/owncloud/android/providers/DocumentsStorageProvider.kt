@@ -153,8 +153,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             getAccountFromFileId(ocFile.fileId),
                             false,
                             context,
-                            false,
-                            true
+                            false
                         ).apply {
                             val result = execute(currentStorageManager, context)
                             if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {

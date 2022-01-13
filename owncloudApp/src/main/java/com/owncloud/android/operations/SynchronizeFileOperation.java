@@ -1,11 +1,13 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David A. Velasco
  * @author masensio
  * @author David González Verdugo
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2012 Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -56,7 +58,6 @@ public class SynchronizeFileOperation extends SyncOperation {
 
     private boolean mTransferWasRequested = false;
     private boolean mRequestedFromAvOfflineJobService;
-    private boolean mShouldCheckForLocalChanges;
 
     /**
      * Constructor for "full synchronization mode".
@@ -83,7 +84,6 @@ public class SynchronizeFileOperation extends SyncOperation {
         mPushOnly = false;
         mContext = context;
         mRequestedFromAvOfflineJobService = false;
-        mShouldCheckForLocalChanges = false;
     }
 
     /**
@@ -113,8 +113,7 @@ public class SynchronizeFileOperation extends SyncOperation {
             Account account,
             boolean pushOnly,
             Context context,
-            boolean requestedFromAvOfflineJobService,
-            boolean shouldCheckForLocalChanges
+            boolean requestedFromAvOfflineJobService
     ) {
 
         mLocalFile = localFile;
@@ -134,7 +133,6 @@ public class SynchronizeFileOperation extends SyncOperation {
         mPushOnly = pushOnly;
         mContext = context;
         mRequestedFromAvOfflineJobService = requestedFromAvOfflineJobService;
-        mShouldCheckForLocalChanges = shouldCheckForLocalChanges;
     }
 
     @Override
@@ -191,7 +189,7 @@ public class SynchronizeFileOperation extends SyncOperation {
                     result = new RemoteOperationResult<>(ResultCode.SYNC_CONFLICT);
                     getStorageManager().saveConflict(mLocalFile, mServerFile.getEtag());
 
-                } else if (localChanged && mShouldCheckForLocalChanges) {
+                } else if (localChanged) {
                     if (mPushOnly) {
                         // prevent accidental override of unnoticed change in server;
                         // dirty trick, more refactoring is needed, but not today;
