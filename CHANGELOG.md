@@ -14,6 +14,7 @@ Summary
 * Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 * Enhancement - Respect capability for Avatar support: [#3438](https://github.com/owncloud/android/pull/3438)
 * Enhancement - Brute force protection: [#3320](https://github.com/owncloud/android/issues/3320)
+* Enhancement - "Open with" action now allows editing: [#3475](https://github.com/owncloud/android/issues/3475)
 
 Details
 -------
@@ -69,6 +70,16 @@ Details
 
    https://github.com/owncloud/android/issues/3320
    https://github.com/owncloud/android/pull/3463
+
+* Enhancement - "Open with" action now allows editing: [#3475](https://github.com/owncloud/android/issues/3475)
+
+   Previously, when a document file was opened and edited with an external app, changes weren't
+   saved because it didn't synchronized with the server. Now, when you edit a document and
+   navigate or refresh in the ownCloud app, it synchronizes automatically, keeping consistence
+   of your files.
+
+   https://github.com/owncloud/android/issues/3475
+   https://github.com/owncloud/android/pull/3499
 
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================
