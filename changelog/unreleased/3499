@@ -1,0 +1,9 @@
+Enhancement: "Open with" action now allows editing
+
+Previously, when a document file was opened and edited with an external
+app, changes weren't saved because it didn't synchronized with the server.
+Now, when you edit a document and navigate or refresh in the ownCloud app,
+it synchronizes automatically, keeping consistence of your files.
+
+https://github.com/owncloud/android/issues/3475
+https://github.com/owncloud/android/pull/3499
