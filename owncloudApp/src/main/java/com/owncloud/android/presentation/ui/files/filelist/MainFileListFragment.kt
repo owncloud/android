@@ -31,10 +31,13 @@ import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.cancel
@@ -53,7 +56,6 @@ import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
-import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -73,7 +75,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private lateinit var files: List<OCFile>
 
     private var miniFabClicked = false
-    private lateinit var layoutManager: GridLayoutManager
+    private lateinit var layoutManager: StaggeredGridLayoutManager
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var viewType: ViewType
 
@@ -108,16 +110,17 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         //Set view and footer correctly
         if (mainFileListViewModel.isGridModeSetAsPreferred()) {
-            layoutManager = GridLayoutManager(context, ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns())
+            layoutManager =
+                StaggeredGridLayoutManager(ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(), RecyclerView.VERTICAL)
             viewType = ViewType.VIEW_TYPE_GRID
         } else {
-            layoutManager = GridLayoutManager(context, 1)
+            layoutManager = StaggeredGridLayoutManager(1, RecyclerView.VERTICAL)
             viewType = ViewType.VIEW_TYPE_LIST
         }
 
         binding.optionsLayout.viewTypeSelected = viewType
 
-        setFooterCorrectly(layoutManager.spanCount == 1)
+        //setFooterCorrectly(layoutManager.spanCount == 1)
 
         //Set RecyclerView and its adapter.
         binding.recyclerViewMainFileList.layoutManager = layoutManager
@@ -168,7 +171,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.getFilesSharedByLinkData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(filesList = data ?: emptyList())
-                setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
+                //setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
             }
         })
 
@@ -176,7 +179,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.getFilesAvailableOfflineData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(filesList = data ?: emptyList())
-                setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
+                //setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
             }
         })
 
@@ -184,7 +187,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.getSearchedFilesData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(filesList = data ?: emptyList())
-                setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
+                //setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
             }
         })
     }
@@ -221,12 +224,12 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
         }
 
-        setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
+        //setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
 
         fileListAdapter.notifyItemRangeChanged(0, fileListAdapter.itemCount)
     }
 
-    private fun setFooterCorrectly(isListMode: Boolean) {
+    /*private fun setFooterCorrectly(isListMode: Boolean) {
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if (isListMode || position != files.size) {
@@ -236,7 +239,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 }
             }
         }
-    }
+    }*/
 
     override fun onSortSelected(sortType: SortType) {
         binding.optionsLayout.sortTypeSelected = sortType

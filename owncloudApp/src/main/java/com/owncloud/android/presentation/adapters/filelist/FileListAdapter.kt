@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.adapters.filelist
 
+import android.accounts.Account
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -29,8 +30,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.GridItemBinding
@@ -48,13 +49,19 @@ import com.owncloud.android.utils.PreferenceUtils
 class FileListAdapter(
     private val context: Context,
     private val isShowingJustFolders: Boolean,
-    private val layoutManager: GridLayoutManager,
+    private val layoutManager: StaggeredGridLayoutManager,
     private val listener: FileListAdapterListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var files = mutableListOf<Any>()
-    private var account = AccountUtils.getCurrentOwnCloudAccount(context)
-    private var storageManager: FileDataStorageManager = FileDataStorageManager(context, account, context.contentResolver)
+    var files = mutableListOf<Any>()
+    private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
+    private lateinit var storageManager: FileDataStorageManager
+
+    init {
+        if (account != null) {
+            storageManager = FileDataStorageManager(context, account!!, context.contentResolver)
+        }
+    }
 
     fun updateFileList(filesToAdd: List<OCFile>) {
         val diffUtilCallback = FileListDiffCallback(oldList = files, newList = filesToAdd)
@@ -242,6 +249,9 @@ class FileListAdapter(
             if (viewType == ViewType.FOOTER.ordinal && !isShowingJustFolders) {
                 val view = holder as FooterViewHolder
                 val file = files[position] as OCFooterFile
+                (view.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams).apply {
+                    isFullSpan = true
+                }
                 view.binding.footerText.text = file.text
             }
         }
