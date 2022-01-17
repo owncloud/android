@@ -119,8 +119,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         binding.optionsLayout.viewTypeSelected = viewType
 
-        //setFooterCorrectly(layoutManager.spanCount == 1)
-
         //Set RecyclerView and its adapter.
         binding.recyclerViewMainFileList.layoutManager = layoutManager
 
@@ -170,7 +168,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.getFilesSharedByLinkData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(filesList = data ?: emptyList())
-                //setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
             }
         })
 
@@ -178,7 +175,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.getFilesAvailableOfflineData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(filesList = data ?: emptyList())
-                //setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
             }
         })
 
@@ -186,7 +182,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.getSearchedFilesData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(filesList = data ?: emptyList())
-                //setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
             }
         })
     }
@@ -223,22 +218,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             layoutManager.spanCount = ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
         }
 
-        //setFooterCorrectly(viewType == ViewType.VIEW_TYPE_LIST)
-
         fileListAdapter.notifyItemRangeChanged(0, fileListAdapter.itemCount)
     }
 
-    /*private fun setFooterCorrectly(isListMode: Boolean) {
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return if (isListMode || position != files.size) {
-                    1
-                } else {
-                    ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns()
-                }
-            }
-        }
-    }*/
 
     override fun onSortSelected(sortType: SortType) {
         binding.optionsLayout.sortTypeSelected = sortType
