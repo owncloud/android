@@ -26,9 +26,9 @@ package com.owncloud.android.lib.resources.files
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.PutMethod
+import com.owncloud.android.lib.common.network.FileRequestBody
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.network.WebdavUtils
-import com.owncloud.android.lib.common.network.FileRequestBody
 import com.owncloud.android.lib.common.operations.OperationCancelledException
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult

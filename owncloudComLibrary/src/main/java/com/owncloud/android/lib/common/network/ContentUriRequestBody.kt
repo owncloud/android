@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.common.network;
+package com.owncloud.android.lib.common.network
 
 import android.content.ContentResolver
 import android.net.Uri
