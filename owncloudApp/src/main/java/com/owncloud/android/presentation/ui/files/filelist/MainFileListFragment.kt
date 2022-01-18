@@ -60,7 +60,6 @@ import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
-import com.owncloud.android.ui.activity.OnEnforceableRefreshListener
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.fragment.OCFileListFragment
 import com.owncloud.android.utils.ColumnQuantity
@@ -138,18 +137,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                         FileFragment.ContainerActivity::class.java.simpleName
             )
         }
-        /*try {
-            setOnRefreshListener(context as OnEnforceableRefreshListener)
-        } catch (e: ClassCastException) {
-            throw ClassCastException(
-                context.toString() + " must implement " +
-                        OnRefreshListener::class.java.simpleName
-            )
-        }*/
     }
 
     override fun onDetach() {
-        //setOnRefreshListener(null)
         mContainerActivity = null
         super.onDetach()
     }
@@ -487,7 +477,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             val storageManager: FileDataStorageManager = mContainerActivity!!.storageManager
             var parentPath: String? = null
             if (mFile?.parentId != FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
-                parentPath = File(mFile!!.remotePath).getParent()
+                parentPath = File(mFile!!.remotePath).parent
                 parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
                 parentDir = storageManager.getFileByPath(parentPath!!)
                 moveCount++
@@ -501,19 +491,10 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 moveCount++
             } // exit is granted because storageManager.getFileByPath("/") never returns null
 
-            // FIXME: 13/10/2020 : New_arch: Av.Offline
-//            if (mFileListOption.isAvailableOffline() && !parentDir.isAvailableOffline()) {
-//                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
-//            }
             if (fileListOption?.isSharedByLink() == true && !parentDir.sharedByLink) {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
             }
             mFile = parentDir
-            //listDirectoryWidthAnimationUp(mFile)
-            //onRefresh(false)
-
-            // restore index and top position
-            //restoreIndexAndTopPosition()
         } // else - should never happen now
         return moveCount
     }
