@@ -79,8 +79,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private val binding get() = _binding!!
 
     private var containerActivity: FileFragment.ContainerActivity? = null
+    private var files: List<OCFile> = emptyList()
 
-    private lateinit var files: List<OCFile>
 
     private var miniFabClicked = false
     private lateinit var layoutManager: StaggeredGridLayoutManager
@@ -177,7 +177,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         binding.recyclerViewMainFileList.adapter = fileListAdapter
 
         // Set Swipe to refresh and its listener
-        binding.swipeRefreshMainFileList.setOnRefreshListener { mainFileListViewModel.refreshDirectory() }
+        binding.swipeRefreshMainFileList.setOnRefreshListener {
+            retrieveData(fileListOption ?: FileListOption.ALL_FILES)
+        }
 
         //Set SortOptions and its listeners
         binding.optionsLayout.let {
@@ -294,13 +296,16 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun updateFileListOption(newFileListOption: FileListOption) {
         fileListOption = newFileListOption
+        retrieveData(newFileListOption)
+        updateFab(newFileListOption)
+    }
+
+    private fun retrieveData(newFileListOption: FileListOption) {
         when (newFileListOption) {
             FileListOption.ALL_FILES -> mainFileListViewModel.listCurrentDirectory()
             FileListOption.AV_OFFLINE -> mainFileListViewModel.getAvailableOfflineFilesList()
             FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
         }
-
-        updateFab(newFileListOption)
     }
 
     private fun updateFab(newFileListOption: FileListOption) {
