@@ -61,7 +61,7 @@ import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation;
 import com.owncloud.android.lib.resources.files.chunks.RemoveRemoteChunksFolderOperation;
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.UploadFileOperation;
@@ -388,7 +388,7 @@ public class FileUploader extends Service
                     ocUpload.setUploadStatus(UploadStatus.UPLOAD_IN_PROGRESS);
 
                     if (new File(ocFile.getStoragePath()).length() >
-                            ChunkedUploadRemoteFileOperation.CHUNK_SIZE && isChunkingAllowed) {
+                            ChunkedUploadFromFileSystemOperation.CHUNK_SIZE && isChunkingAllowed) {
                         ocUpload.setTransferId(
                                 SecurityUtils.stringToMD5Hash(ocFile.getRemotePath()) + System.currentTimeMillis());
                         newUploadFileOperation = new ChunkedUploadFileOperation(
@@ -457,7 +457,7 @@ public class FileUploader extends Service
 
             UploadFileOperation newUploadFileOperation;
 
-            if (upload.getFileSize() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+            if (upload.getFileSize() > ChunkedUploadFromFileSystemOperation.CHUNK_SIZE) {
                 upload.setTransferId(
                         SecurityUtils.stringToMD5Hash(upload.getRemotePath()) + System.currentTimeMillis());
                 newUploadFileOperation = new ChunkedUploadFileOperation(
