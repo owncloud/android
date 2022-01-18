@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,9 +20,6 @@ package com.owncloud.android.workers
 
 import android.accounts.Account
 import android.content.Context
-import android.net.Uri
-import androidx.core.net.toUri
-import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.owncloud.android.R
@@ -31,7 +28,6 @@ import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.UploadResult
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.ForbiddenException
@@ -46,11 +42,11 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.lib.common.network.ContentUriRequestBody
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
-import com.owncloud.android.lib.resources.files.UploadFileFromContentUriOperation
+import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperation
+import com.owncloud.android.usecases.UploadBehavior
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
@@ -58,7 +54,7 @@ import org.koin.core.KoinComponent
 import timber.log.Timber
 import java.io.File
 
-class UploadFileFromContentUriWorker(
+class UploadFileFromFileSystemWorker(
     private val appContext: Context,
     private val workerParameters: WorkerParameters
 ) : CoroutineWorker(
@@ -67,10 +63,11 @@ class UploadFileFromContentUriWorker(
 ), KoinComponent {
 
     private lateinit var account: Account
-    private lateinit var contentUri: Uri
+    private lateinit var fileSystemPath: String
     private lateinit var lastModified: String
-    private lateinit var behavior: FolderBackUpConfiguration.Behavior
+    private lateinit var behavior: UploadBehavior
     private lateinit var uploadPath: String
+    private lateinit var mimetype: String
     private var uploadIdInStorageManager: Long = -1
 
     override suspend fun doWork(): Result {
@@ -78,10 +75,9 @@ class UploadFileFromContentUriWorker(
         if (!areParametersValid()) return Result.failure()
 
         return try {
-            checkDocumentFileExists()
             checkPermissionsToReadDocumentAreGranted()
             checkParentFolderExistence()
-            checkNameCollisionAndGetAnAvailableOneInCase()
+            checkNameCollisionOrGetAnAvailableOneInCase()
             uploadDocument()
             updateUploadsDatabaseWithResult(null)
             Result.success()
@@ -98,13 +94,13 @@ class UploadFileFromContentUriWorker(
         val paramUploadPath = workerParameters.inputData.getString(KEY_PARAM_UPLOAD_PATH)
         val paramLastModified = workerParameters.inputData.getString(KEY_PARAM_LAST_MODIFIED)
         val paramBehavior = workerParameters.inputData.getString(KEY_PARAM_BEHAVIOR)
-        val paramContentUri = workerParameters.inputData.getString(KEY_PARAM_CONTENT_URI)
+        val paramFileSystemUri = workerParameters.inputData.getString(KEY_PARAM_CONTENT_URI)
         val paramUploadId = workerParameters.inputData.getLong(KEY_PARAM_UPLOAD_ID, -1)
 
         account = AccountUtils.getOwnCloudAccountByName(appContext, paramAccountName) ?: return false
-        contentUri = paramContentUri?.toUri() ?: return false
+        fileSystemPath = paramFileSystemUri.takeUnless { it.isNullOrBlank() } ?: return false
         uploadPath = paramUploadPath ?: return false
-        behavior = paramBehavior?.let { FolderBackUpConfiguration.Behavior.fromString(it) } ?: return false
+        behavior = paramBehavior?.let { UploadBehavior.valueOf(it) } ?: return false
         lastModified = paramLastModified ?: return false
         uploadIdInStorageManager = paramUploadId
 
@@ -112,19 +108,12 @@ class UploadFileFromContentUriWorker(
     }
 
     private fun checkPermissionsToReadDocumentAreGranted() {
-        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
-        if (documentFile?.canRead() != true) {
+        val fileInFileSystem = File(fileSystemPath)
+        if (!fileInFileSystem.exists() || !fileInFileSystem.isFile || !fileInFileSystem.canRead()) {
             // Permissions not granted. Throw an exception to ask for them.
-            throw Throwable("Cannot read the file")
-        }
-    }
-
-    private fun checkDocumentFileExists() {
-        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
-        if (documentFile?.exists() != true && documentFile?.isFile != true) {
-            // File does not exists anymore. Throw an exception to tell the user
             throw LocalFileNotFoundException()
         }
+        mimetype = fileInFileSystem.extension
     }
 
     private fun checkParentFolderExistence() {
@@ -139,7 +128,7 @@ class UploadFileFromContentUriWorker(
         }
     }
 
-    private fun checkNameCollisionAndGetAnAvailableOneInCase() {
+    private fun checkNameCollisionOrGetAnAvailableOneInCase() {
         Timber.d("Checking name collision in server")
         val remotePath = getAvailableRemotePath(getClientForThisUpload(), uploadPath)
         if (remotePath != null && remotePath != uploadPath) {
@@ -150,26 +139,31 @@ class UploadFileFromContentUriWorker(
 
     private fun uploadDocument() {
         val client = getClientForThisUpload()
-        val requestBody = ContentUriRequestBody(appContext.contentResolver, contentUri)
 
-        val uploadFileFromContentUriOperation = UploadFileFromContentUriOperation(uploadPath, lastModified, requestBody)
+        val uploadFileFromFileSystemOperation = UploadFileFromFileSystemOperation(
+            localPath = fileSystemPath,
+            remotePath = uploadPath,
+            mimeType = mimetype,
+            lastModifiedTimestamp = lastModified,
+            requiredEtag = ""
+        )
 
-        val result = executeRemoteOperation { uploadFileFromContentUriOperation.execute(client) }
+        val result = executeRemoteOperation { uploadFileFromFileSystemOperation.execute(client) }
 
-        if (result == Unit && behavior == FolderBackUpConfiguration.Behavior.MOVE) {
+        if (result == Unit && behavior == UploadBehavior.MOVE) {
             removeLocalFile()
         }
     }
 
     private fun removeLocalFile() {
-        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
-        documentFile?.delete()
+        val fileDeleted = File(fileSystemPath).delete()
+        Timber.d("File with path: $fileSystemPath has been removed: $fileDeleted after uploading.")
     }
 
     private fun updateUploadsDatabaseWithResult(throwable: Throwable?) {
         val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
 
-        val ocUpload = OCUpload(contentUri.toString(), uploadPath, account.name).apply {
+        val ocUpload = OCUpload(fileSystemPath, uploadPath, account.name).apply {
             uploadStatus = getUploadStatusForThrowable(throwable)
             uploadEndTimestamp = System.currentTimeMillis()
             lastResult = getUploadResultFromThrowable(throwable)
@@ -221,7 +215,7 @@ class UploadFileFromContentUriWorker(
             is UnauthorizedException -> UploadResult.CREDENTIAL_ERROR
             is FileNotFoundException -> UploadResult.FILE_NOT_FOUND
             is ConflictException -> UploadResult.CONFLICT_ERROR
-            is ForbiddenException -> UploadResult.PRIVILEGES_ERROR
+            is ForbiddenException -> UploadResult.PRIVILEDGES_ERROR
             is ServiceUnavailableException -> UploadResult.SERVICE_UNAVAILABLE
             is QuotaExceededException -> UploadResult.QUOTA_EXCEEDED
             is SpecificUnsupportedMediaTypeException -> UploadResult.SPECIFIC_UNSUPPORTED_MEDIA_TYPE
@@ -234,9 +228,6 @@ class UploadFileFromContentUriWorker(
         .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
 
     companion object {
-        const val TRANSFER_TAG_CAMERA_UPLOAD = "TRANSFER_TAG_CAMERA_UPLOAD"
-        const val TRANSFER_TAG_MANUAL_UPLOAD = "TRANSFER_TAG_MANUAL_UPLOAD"
-
         const val KEY_PARAM_ACCOUNT_NAME = "KEY_PARAM_ACCOUNT_NAME"
         const val KEY_PARAM_BEHAVIOR = "KEY_PARAM_BEHAVIOR"
         const val KEY_PARAM_CONTENT_URI = "KEY_PARAM_CONTENT_URI"

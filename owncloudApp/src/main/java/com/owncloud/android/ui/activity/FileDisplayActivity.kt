@@ -101,6 +101,7 @@ import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.UploadFileFromSAFUseCase
+import com.owncloud.android.usecases.UploadFileFromSystemUseCase
 import com.owncloud.android.usecases.transfers.DownloadFileUseCase
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
@@ -545,15 +546,10 @@ class FileDisplayActivity : FileActivity(),
                 remotePaths[j] = remotePathBase + File(filePaths[j]).name
             }
 
-            val requester = TransferRequester()
-            requester.uploadNewFiles(
-                this,
-                account,
-                filePaths,
-                remotePaths, null, // MIME type will be detected from file name
-                behaviour,
-                false, // do not create parent folder if not existent
-                UploadFileOperation.CREATED_BY_USER
+            val uploadFileFromSystemUseCase: UploadFileFromSystemUseCase by inject()
+            uploadFileFromSystemUseCase.execute(
+                UploadFileFromSystemUseCase.Params(
+                    accountName = account.name, listOfLocalPaths = filePaths.toList(), uploadFolderPath = remotePathBase!!)
             )
 
         } else {
