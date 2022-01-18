@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2021 ownCloud GmbH.
+ *   Copyright (C) 2022 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,22 +24,15 @@
 
 package com.owncloud.android.lib.resources.files
 
-import android.content.ContentResolver
-import android.net.Uri
-import android.provider.OpenableColumns
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.PutMethod
+import com.owncloud.android.lib.common.network.ContentUriRequestBody
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
-import okio.BufferedSink
-import okio.source
+import com.owncloud.android.lib.common.utils.isOneOf
 import timber.log.Timber
-import java.io.IOException
 import java.net.URL
 
 class UploadFileFromContentUriOperation(
@@ -70,34 +63,6 @@ class UploadFileFromContentUriOperation(
     }
 
     fun isSuccess(status: Int): Boolean {
-        return status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT
-    }
-}
-
-class ContentUriRequestBody(
-    private val contentResolver: ContentResolver,
-    private val contentUri: Uri
-) : RequestBody() {
-
-    override fun contentType(): MediaType? {
-        val contentType = contentResolver.getType(contentUri) ?: return null
-        return contentType.toMediaTypeOrNull()
-    }
-
-    override fun contentLength(): Long {
-        contentResolver.query(contentUri, null, null, null, null)?.use { cursor ->
-            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-            cursor.moveToFirst()
-            return cursor.getLong(sizeIndex)
-        } ?: return -1
-    }
-
-    override fun writeTo(sink: BufferedSink) {
-        val inputStream = contentResolver.openInputStream(contentUri)
-            ?: throw IOException("Couldn't open content URI for reading: $contentUri")
-
-        inputStream.source().use { source ->
-            sink.writeAll(source)
-        }
+        return status.isOneOf(HttpConstants.HTTP_OK, HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
     }
 }
