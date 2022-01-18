@@ -482,8 +482,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         // TODO Remove commented code
         /*val fileListFragment = listOfFilesFragment
         fileListFragment?.listDirectory(reloadData)*/
-        val fileListFragment = listMainFileFragment
-        fileListFragment?.listDirectory(file)
+        if (file != null) {
+            val fileListFragment = listMainFileFragment
+            fileListFragment?.listDirectory(file)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
