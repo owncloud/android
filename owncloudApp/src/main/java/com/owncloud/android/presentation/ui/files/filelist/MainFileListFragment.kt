@@ -33,9 +33,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.getbase.floatingactionbutton.FloatingActionsMenu
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
+import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -56,10 +58,12 @@ import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
+import com.owncloud.android.ui.fragment.OCFileListFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
+import java.io.File
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
@@ -81,6 +85,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     private var fileListOption: FileListOption? = FileListOption.ALL_FILES
 
+    private var mFile: OCFile? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,6 +99,10 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeToViewModels()
+
+        if (savedInstanceState != null) {
+            mFile = savedInstanceState.getParcelable(KEY_FILE)
+        }
 
         fileListOption =
             if (requireArguments().getParcelable<Parcelable?>(ARG_LIST_FILE_OPTION) != null)
@@ -131,6 +141,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 FileListAdapter.FileListAdapterListener {
                 override fun clickItem(ocFile: OCFile) {
                     if (ocFile.isFolder) {
+                        mFile = ocFile
                         mainFileListViewModel.listDirectory(ocFile)
                         // TODO Manage animation listDirectoryWithAnimationDown
                     } else { /// Click on a file
@@ -384,9 +395,12 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     companion object {
+        val MY_PACKAGE =
+            if (OCFileListFragment::class.java.getPackage() != null) MainFileListFragment::class.java.getPackage().name else "com.owncloud.android.ui.fragment"
         val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
+        val KEY_FILE = MY_PACKAGE + ".extra.FILE"
 
         fun newInstance(
             justFolders: Boolean = false,
@@ -412,6 +426,68 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun setSearchListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(this)
+    }
+
+    fun getFabMain(): FloatingActionsMenu {
+        return binding.fabMain
+    }
+
+    /**
+     * Call this, when the user presses the up button.
+     *
+     *
+     * Tries to move up the current folder one level. If the parent folder was removed from the
+     * database, it continues browsing up until finding an existing folders.
+     *
+     *
+     * return       Count of folder levels browsed up.
+     */
+    fun onBrowseUp(): Int {
+        var parentDir: OCFile
+        var moveCount = 0
+        if (mFile != null) {
+            /*val storageManager: FileDataStorageManager = context.getStorageManager()
+            var parentPath: String? = null
+            if (mFile.parentId != FileDataStorageManager.ROOT_PARENT_ID) {
+                parentPath = File(mFile!!.remotePath).getParent()
+                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
+                parentDir = storageManager.getFileByPath(parentPath)
+                moveCount++
+            } else {
+                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
+            }
+            while (parentDir == null) {
+                parentPath = File(parentPath).parent
+                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
+                parentDir = storageManager.getFileByPath(parentPath!!)
+                moveCount++
+            } // exit is granted because storageManager.getFileByPath("/") never returns null
+
+            // FIXME: 13/10/2020 : New_arch: Av.Offline
+//            if (mFileListOption.isAvailableOffline() && !parentDir.isAvailableOffline()) {
+//                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH);
+//            }
+            if (fileListOption?.isSharedByLink() == true && !parentDir.sharedByLink) {
+                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
+            }
+            mFile = parentDir
+            //listDirectoryWidthAnimationUp(mFile)
+            //onRefresh(false)
+
+            // restore index and top position
+            //restoreIndexAndTopPosition()*/
+        } // else - should never happen now
+        return moveCount
+    }
+
+    /**
+     * Use this to query the [OCFile] that is currently
+     * being displayed by this fragment
+     *
+     * @return The currently viewed OCFile
+     */
+    fun getCurrentFile(): OCFile? {
+        return mFile
     }
 }
 
