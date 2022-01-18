@@ -55,7 +55,7 @@ open class UploadFileFromFileSystemOperation(
     val remotePath: String,
     val mimeType: String,
     val lastModifiedTimestamp: String,
-    val requiredEtag: String,
+    val requiredEtag: String?,
 ) : RemoteOperation<Unit>() {
 
     protected val cancellationRequested = AtomicBoolean(false)
@@ -98,7 +98,7 @@ open class UploadFileFromFileSystemOperation(
 
         putMethod = PutMethod(URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)), fileRequestBody!!).apply {
             setRetryOnConnectionFailure(false)
-            if (requiredEtag.isNotBlank()) {
+            if (!requiredEtag.isNullOrBlank()) {
                 addRequestHeader(HttpConstants.IF_MATCH_HEADER, requiredEtag)
             }
             addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, fileToUpload.length().toString())

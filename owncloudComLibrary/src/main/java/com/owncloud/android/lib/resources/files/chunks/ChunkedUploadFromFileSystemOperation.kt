@@ -54,7 +54,7 @@ class ChunkedUploadFromFileSystemOperation(
     remotePath: String,
     mimeType: String,
     lastModifiedTimestamp: String,
-    requiredEtag: String,
+    requiredEtag: String?,
 ) : UploadFileFromFileSystemOperation(
     localPath = localPath,
     remotePath = remotePath,
