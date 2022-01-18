@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -32,6 +33,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
@@ -57,12 +59,16 @@ import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
+import com.owncloud.android.ui.activity.OnEnforceableRefreshListener
+import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.fragment.OCFileListFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
+import timber.log.Timber
 import java.io.File
+import java.lang.ClassCastException
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
@@ -74,6 +80,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private var mContainerActivity: FileFragment.ContainerActivity? = null
 
     private lateinit var files: List<OCFile>
 
@@ -113,6 +121,36 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             fileListOption = FileListOption.ALL_FILES
         }
         updateFab(fileListOption!!)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Timber.v("onAttach")
+        mContainerActivity = try {
+            context as FileFragment.ContainerActivity
+        } catch (e: ClassCastException) {
+            throw ClassCastException(
+                context.toString() + " must implement " +
+                        FileFragment.ContainerActivity::class.java.simpleName
+            )
+        }
+        /*try {
+            setOnRefreshListener(context as OnEnforceableRefreshListener)
+        } catch (e: ClassCastException) {
+            throw ClassCastException(
+                context.toString() + " must implement " +
+                        OnRefreshListener::class.java.simpleName
+            )
+        }*/
+    }
+
+    override fun onDetach() {
+        //setOnRefreshListener(null)
+        mContainerActivity = null
+        super.onDetach()
     }
 
     private fun initViews() {
@@ -442,15 +480,15 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
      * return       Count of folder levels browsed up.
      */
     fun onBrowseUp(): Int {
-        var parentDir: OCFile
+        var parentDir: OCFile?
         var moveCount = 0
-        if (mFile != null) {
-            /*val storageManager: FileDataStorageManager = context.getStorageManager()
+        if (mFile != null && mContainerActivity != null) {
+            val storageManager: FileDataStorageManager = mContainerActivity!!.storageManager
             var parentPath: String? = null
-            if (mFile.parentId != FileDataStorageManager.ROOT_PARENT_ID) {
+            if (mFile?.parentId != FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
                 parentPath = File(mFile!!.remotePath).getParent()
                 parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
-                parentDir = storageManager.getFileByPath(parentPath)
+                parentDir = storageManager.getFileByPath(parentPath!!)
                 moveCount++
             } else {
                 parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
@@ -474,7 +512,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             //onRefresh(false)
 
             // restore index and top position
-            //restoreIndexAndTopPosition()*/
+            //restoreIndexAndTopPosition()
         } // else - should never happen now
         return moveCount
     }
