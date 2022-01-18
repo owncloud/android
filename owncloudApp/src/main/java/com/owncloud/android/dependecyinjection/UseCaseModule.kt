@@ -68,6 +68,7 @@ import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
 import com.owncloud.android.usecases.UploadFileFromSAFUseCase
+import com.owncloud.android.usecases.UploadFileFromSystemUseCase
 import com.owncloud.android.usecases.transfers.CancelDownloadForFileUseCase
 import com.owncloud.android.usecases.transfers.CancelDownloadsForAccountUseCase
 import com.owncloud.android.usecases.transfers.DownloadFileUseCase
@@ -128,6 +129,7 @@ val useCaseModule = module {
     factory { GetLiveDataForDownloadingFileUseCase(get()) }
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
     factory { UploadFileFromSAFUseCase(get()) }
+    factory { UploadFileFromSystemUseCase(get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }
