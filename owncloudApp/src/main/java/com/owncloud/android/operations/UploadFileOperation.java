@@ -25,7 +25,6 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.owncloud.android.datamodel.OCUpload;
-import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -38,7 +37,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
@@ -94,7 +93,7 @@ public class UploadFileOperation extends SyncOperation {
     protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     private OnRenameListener mRenameUploadListener;
     private Context mContext;
-    protected UploadRemoteFileOperation mUploadOperation;
+    protected UploadFileFromFileSystemOperation mUploadOperation;
 
     public UploadFileOperation(Account account,
                                OCFile file,
@@ -249,7 +248,7 @@ public class UploadFileOperation extends SyncOperation {
             mDataTransferListeners.add(listener);
         }
         if (mUploadOperation != null) {
-            mUploadOperation.addDatatransferProgressListener(listener);
+            mUploadOperation.addDataTransferProgressListener(listener);
         }
     }
 
@@ -258,7 +257,7 @@ public class UploadFileOperation extends SyncOperation {
             mDataTransferListeners.remove(listener);
         }
         if (mUploadOperation != null) {
-            mUploadOperation.removeDatatransferProgressListener(listener);
+            mUploadOperation.removeDataTransferProgressListener(listener);
         }
     }
 
@@ -395,11 +394,11 @@ public class UploadFileOperation extends SyncOperation {
         RemoteOperationResult result;
 
         try {
-            mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(), mFile.getRemotePath(),
-                    mFile.getMimeType(), mFile.getEtagInConflict(), timeStamp);
+            mUploadOperation = new UploadFileFromFileSystemOperation(mFile.getStoragePath(), mFile.getRemotePath(),
+                    mFile.getMimeType(), timeStamp, mFile.getEtagInConflict());
 
             for (OnDatatransferProgressListener dataTransferListener : mDataTransferListeners) {
-                mUploadOperation.addDatatransferProgressListener(dataTransferListener);
+                mUploadOperation.addDataTransferProgressListener(dataTransferListener);
             }
 
             if (mCancellationRequested.get()) {
