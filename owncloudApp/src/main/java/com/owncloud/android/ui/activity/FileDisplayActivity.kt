@@ -644,7 +644,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             // all closed
             val listOfFiles = listMainFileFragment
             if (secondFragment == null) {
-                val currentDir = currentDir
+                val currentDir = listOfFiles?.getCurrentFile()
                 if (currentDir == null || currentDir.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
                     finish()
                     return
