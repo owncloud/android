@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -31,9 +32,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.getbase.floatingactionbutton.FloatingActionsMenu
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
+import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -54,10 +57,15 @@ import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
+import com.owncloud.android.ui.fragment.FileFragment
+import com.owncloud.android.ui.fragment.OCFileListFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
+import timber.log.Timber
+import java.io.File
+import java.lang.ClassCastException
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
@@ -70,6 +78,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
 
+    private var containerActivity: FileFragment.ContainerActivity? = null
+
     private lateinit var files: List<OCFile>
 
     private var miniFabClicked = false
@@ -78,6 +88,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private lateinit var viewType: ViewType
 
     private var fileListOption: FileListOption? = FileListOption.ALL_FILES
+
+    private var file: OCFile? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,6 +104,10 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         initViews()
         subscribeToViewModels()
 
+        if (savedInstanceState != null) {
+            file = savedInstanceState.getParcelable(KEY_FILE)
+        }
+
         fileListOption =
             if (requireArguments().getParcelable<Parcelable?>(ARG_LIST_FILE_OPTION) != null)
                 requireArguments().getParcelable(ARG_LIST_FILE_OPTION)
@@ -102,6 +118,27 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             fileListOption = FileListOption.ALL_FILES
         }
         updateFab(fileListOption!!)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Timber.v("onAttach")
+        containerActivity = try {
+            context as FileFragment.ContainerActivity
+        } catch (e: ClassCastException) {
+            throw ClassCastException(
+                context.toString() + " must implement " +
+                        FileFragment.ContainerActivity::class.java.simpleName
+            )
+        }
+    }
+
+    override fun onDetach() {
+        containerActivity = null
+        super.onDetach()
     }
 
     private fun initViews() {
@@ -129,6 +166,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 FileListAdapter.FileListAdapterListener {
                 override fun clickItem(ocFile: OCFile) {
                     if (ocFile.isFolder) {
+                        file = ocFile
                         mainFileListViewModel.listDirectory(ocFile)
                         // TODO Manage animation listDirectoryWithAnimationDown
                     } else { /// Click on a file
@@ -377,22 +415,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         })
     }
 
-    companion object {
-        val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
-        val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
-        val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
-
-        fun newInstance(
-            justFolders: Boolean = false,
-            pickingAFolder: Boolean = false
-        ): MainFileListFragment {
-            val args = Bundle()
-            args.putBoolean(ARG_JUST_FOLDERS, justFolders)
-            args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
-            return MainFileListFragment().apply { arguments = args }
-        }
-    }
-
     override fun onCreateFolderListener() {
         //TODO("Not yet implemented")
     }
@@ -406,6 +428,77 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun setSearchListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(this)
+    }
+
+    fun getFabMain(): FloatingActionsMenu {
+        return binding.fabMain
+    }
+
+    /**
+     * Call this, when the user presses the up button.
+     *
+     *
+     * Tries to move up the current folder one level. If the parent folder was removed from the
+     * database, it continues browsing up until finding an existing folders.
+     *
+     *
+     * return       Count of folder levels browsed up.
+     */
+    fun onBrowseUp(): Int {
+        var parentDir: OCFile?
+        var moveCount = 0
+        if (file != null && containerActivity != null) {
+            val storageManager: FileDataStorageManager = containerActivity!!.storageManager
+            var parentPath: String? = null
+            if (file?.parentId != FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+                parentPath = File(file!!.remotePath).parent
+                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
+                parentDir = storageManager.getFileByPath(parentPath!!)
+                moveCount++
+            } else {
+                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
+            }
+            while (parentDir == null) {
+                parentPath = File(parentPath).parent
+                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
+                parentDir = storageManager.getFileByPath(parentPath!!)
+                moveCount++
+            } // exit is granted because storageManager.getFileByPath("/") never returns null
+
+            if (fileListOption?.isSharedByLink() == true && !parentDir.sharedByLink) {
+                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
+            }
+            file = parentDir
+        } // else - should never happen now
+        return moveCount
+    }
+
+    /**
+     * Use this to query the [OCFile] that is currently
+     * being displayed by this fragment
+     *
+     * @return The currently viewed OCFile
+     */
+    fun getCurrentFile(): OCFile? {
+        return file
+    }
+
+    companion object {
+        private val MY_PACKAGE = MainFileListFragment::class.java.`package`.name ?: "com.owncloud.android.ui.fragment"
+        val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
+        val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
+        val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
+        val KEY_FILE = "$MY_PACKAGE.extra.FILE"
+
+        fun newInstance(
+            justFolders: Boolean = false,
+            pickingAFolder: Boolean = false
+        ): MainFileListFragment {
+            val args = Bundle()
+            args.putBoolean(ARG_JUST_FOLDERS, justFolders)
+            args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
+            return MainFileListFragment().apply { arguments = args }
+        }
     }
 }
 

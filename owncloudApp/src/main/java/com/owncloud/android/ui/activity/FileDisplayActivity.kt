@@ -157,7 +157,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
 
     private val isFabOpen: Boolean
-        get() = listOfFilesFragment?.fabMain?.isExpanded ?: false
+        get() = listMainFileFragment?.getFabMain()?.isExpanded ?: false
 
     private lateinit var binding: ActivityMainBinding
 
@@ -681,12 +681,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             super.onBackPressed()
         } else if (!isDrawerOpen() && isFabOpen) {
             // close fab
-            listOfFilesFragment?.fabMain?.collapse()
+            listMainFileFragment?.getFabMain()?.collapse()
         } else {
             // all closed
-            val listOfFiles = listOfFilesFragment
+            val listOfFiles = listMainFileFragment
             if (secondFragment == null) {
-                val currentDir = currentDir
+                val currentDir = listOfFiles?.getCurrentFile()
                 if (currentDir == null || currentDir.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
                     finish()
                     return
@@ -694,8 +694,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 listOfFiles?.onBrowseUp()
             }
             if (listOfFiles != null) {  // should never be null, indeed
-                file = listOfFiles.currentFile
-                listOfFiles.listDirectory(false)
+                file = listOfFiles.getCurrentFile()
+                listOfFiles.listDirectory(file)
             }
             cleanSecondFragment()
         }
