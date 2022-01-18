@@ -33,6 +33,7 @@ import com.owncloud.android.lib.common.operations.OperationCancelledException
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
+import com.owncloud.android.lib.common.utils.isOneOf
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import timber.log.Timber
@@ -130,6 +131,6 @@ open class UploadFileFromFileSystemOperation(
     }
 
     fun isSuccess(status: Int): Boolean {
-        return status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_CREATED || status == HttpConstants.HTTP_NO_CONTENT
+        return status.isOneOf(HttpConstants.HTTP_OK, HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
     }
 }
