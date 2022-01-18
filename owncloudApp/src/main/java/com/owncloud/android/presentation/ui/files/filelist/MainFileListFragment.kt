@@ -195,10 +195,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(filesList = data ?: emptyList())
-                val sortedFiles = mainFileListViewModel.sortList(files)
-                fileListAdapter.updateFileList(filesToAdd = sortedFiles)
-                registerListAdapterDataObserver()
-                binding.swipeRefreshMainFileList.cancel()
             }
         })
 
@@ -222,6 +218,14 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 updateFileListData(filesList = data ?: emptyList())
             }
         })
+    }
+
+    private fun updateFileListData(filesList: List<OCFile>) {
+        files = filesList
+        val sortedFiles = mainFileListViewModel.sortList(files)
+        fileListAdapter.updateFileList(filesToAdd = sortedFiles)
+        registerListAdapterDataObserver()
+        binding.swipeRefreshMainFileList.cancel()
     }
 
     fun listDirectory(directory: OCFile) {
@@ -259,7 +263,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         fileListAdapter.notifyItemRangeChanged(0, fileListAdapter.itemCount)
     }
 
-
     override fun onSortSelected(sortType: SortType) {
         binding.optionsLayout.sortTypeSelected = sortType
 
@@ -288,13 +291,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-    }
-
-    private fun updateFileListData(filesList: List<OCFile>) {
-        files = filesList
-        fileListAdapter.updateFileList(filesToAdd = files)
-        registerListAdapterDataObserver()
-        binding.swipeRefreshMainFileList.cancel()
     }
 
     fun updateFileListOption(newFileListOption: FileListOption) {
