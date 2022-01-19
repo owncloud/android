@@ -51,7 +51,7 @@ class FileListAdapter(
     private val isShowingJustFolders: Boolean,
     private val layoutManager: StaggeredGridLayoutManager,
     private val listener: FileListAdapterListener,
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : SelectableAdapter<RecyclerView.ViewHolder>() {
 
     var files = mutableListOf<Any>()
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
@@ -129,6 +129,17 @@ class FileListAdapter(
         }
     }
 
+    fun getCheckedItems(): List<OCFile> {
+        val checkedItems = mutableListOf<OCFile>()
+        val checkedPositions = getSelectedItems()
+
+        for (i in checkedPositions) {
+            checkedItems.add(files[i] as OCFile)
+        }
+
+        return checkedItems
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val viewType = getItemViewType(position)
@@ -202,12 +213,33 @@ class FileListAdapter(
             }
 
 
-            holder.itemView.setOnClickListener { listener.clickItem(file) }
+            holder.itemView.setOnClickListener {
+                listener.clickItem(
+                    ocFile = file,
+                    position = position
+                )
+            }
+
+            holder.itemView.setOnLongClickListener {
+                listener.longClickItem(
+                    ocFile = file,
+                    position = position
+                )
+            }
 
             val checkBoxV = holder.itemView.findViewById<ImageView>(R.id.custom_checkbox).apply {
                 visibility = View.GONE
             }
             holder.itemView.setBackgroundColor(Color.WHITE)
+
+            if (isSelected(position)) {
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background))
+                checkBoxV.setImageResource(R.drawable.ic_checkbox_marked)
+            } else {
+                holder.itemView.setBackgroundColor(Color.WHITE)
+                checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
+            }
+            checkBoxV.visibility = View.VISIBLE
 
             if (file.isFolder) {
                 //Folder
@@ -323,7 +355,8 @@ class FileListAdapter(
     }
 
     interface FileListAdapterListener {
-        fun clickItem(ocFile: OCFile)
+        fun clickItem(ocFile: OCFile, position: Int)
+        fun longClickItem(ocFile: OCFile, position: Int): Boolean = true
     }
 
     inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
