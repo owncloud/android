@@ -24,11 +24,15 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.doOnPreDraw
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +49,7 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.cancel
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.observers.EmptyDataObserver
@@ -58,15 +63,15 @@ import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
+import com.owncloud.android.ui.activity.FileActivity
+import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.fragment.FileFragment
-import com.owncloud.android.ui.fragment.OCFileListFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
 import java.io.File
-import java.lang.ClassCastException
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
@@ -82,7 +87,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private var containerActivity: FileFragment.ContainerActivity? = null
     private var files: List<OCFile> = emptyList()
 
-
     private var miniFabClicked = false
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private lateinit var fileListAdapter: FileListAdapter
@@ -91,6 +95,10 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private var fileListOption: FileListOption? = FileListOption.ALL_FILES
 
     private var file: OCFile? = null
+
+    var actionMode: ActionMode? = null
+    private var statusBarColorActionMode: Int? = null
+    private var statusBarColor: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -143,6 +151,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     private fun initViews() {
+        setHasOptionsMenu(true)
+        statusBarColorActionMode = ContextCompat.getColor(requireContext(), R.color.action_mode_status_bar_background)
 
         //Set view and footer correctly
         if (mainFileListViewModel.isGridModeSetAsPreferred()) {
@@ -165,15 +175,28 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             isShowingJustFolders = isShowingJustFolders(),
             listener = object :
                 FileListAdapter.FileListAdapterListener {
-                override fun clickItem(ocFile: OCFile) {
-                    if (ocFile.isFolder) {
-                        file = ocFile
-                        mainFileListViewModel.listDirectory(ocFile)
-                        // TODO Manage animation listDirectoryWithAnimationDown
-                    } else { /// Click on a file
-                        // TODO Click on a file
+                override fun clickItem(ocFile: OCFile, position: Int) {
+                    if (actionMode != null) {
+                        toggleSelection(position)
+                    } else {
+                        if (ocFile.isFolder) {
+                            file = ocFile
+                            mainFileListViewModel.listDirectory(ocFile)
+                            // TODO Manage animation listDirectoryWithAnimationDown
+                        } else { /// Click on a file
+                            // TODO Click on a file
+                        }
                     }
                 }
+
+                override fun longClickItem(ocFile: OCFile, position: Int): Boolean {
+                    if (actionMode == null) {
+                        actionMode = (activity as AppCompatActivity).startSupportActionMode(actionModeCallback)
+                    }
+                    toggleSelection(position)
+                    return true
+                }
+
             })
         binding.recyclerViewMainFileList.adapter = fileListAdapter
 
@@ -188,6 +211,20 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             if (isPickingAFolder()) {
                 it.onCreateFolderListener = this
                 it.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER)
+            }
+        }
+    }
+
+    private fun toggleSelection(position: Int) {
+        fileListAdapter.toggleSelection(position)
+        fileListAdapter.selectedItemCount.also {
+            if (it == 0) {
+                actionMode?.finish()
+            } else {
+                actionMode?.apply {
+                    title = it.toString()
+                    invalidate()
+                }
             }
         }
     }
@@ -504,6 +541,77 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             args.putBoolean(ARG_JUST_FOLDERS, justFolders)
             args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
             return MainFileListFragment().apply { arguments = args }
+        }
+    }
+
+    private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
+
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            actionMode = mode
+
+            val inflater = requireActivity().menuInflater
+            inflater.inflate(R.menu.file_actions_menu, menu)
+            mode?.invalidate()
+
+            //set gray color
+            val window = activity?.window
+            statusBarColor = window?.statusBarColor ?: -1
+
+            //hide FAB in multi selection mode
+            binding.fabMain.visibility = View.GONE
+            (containerActivity as FileDisplayActivity).showBottomNavBar(false)
+
+            // Hide sort options view in multi-selection mode
+            binding.optionsLayout.visibility = View.GONE
+
+            return true
+        }
+
+        /**
+         * Updates available action in menu depending on current selection.
+         */
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            val checkedFiles = fileListAdapter.getCheckedItems()
+            val checkedCount = checkedFiles.size
+            val title = resources.getQuantityString(
+                R.plurals.items_selected_count,
+                checkedCount,
+                checkedCount
+            )
+            mode?.title = title
+            val fileMenuFilter = FileMenuFilter(checkedFiles, (requireActivity() as FileActivity).account, containerActivity, activity)
+
+            fileMenuFilter.filter(
+                menu,
+                false,
+                true,
+                fileListOption?.isAvailableOffline() ?: false,
+                fileListOption?.isSharedByLink() ?: false
+            )
+
+            return true
+        }
+
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+            return false
+        }
+
+        override fun onDestroyActionMode(mode: ActionMode?) {
+
+            actionMode = null
+
+            // reset to previous color
+            requireActivity().window.statusBarColor = statusBarColor!!
+
+            // show FAB on multi selection mode exit
+            setFabEnabled(true)
+
+            (containerActivity as FileDisplayActivity).showBottomNavBar(true)
+
+            // Show sort options view when multi-selection mode finish
+            binding.optionsLayout.visibility = View.VISIBLE
+
+            fileListAdapter.clearSelection()
         }
     }
 }
