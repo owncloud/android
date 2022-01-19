@@ -137,7 +137,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
                 mAccount,
                 System.currentTimeMillis(),
                 false,
-                false,
                 false
         );
         result = syncOp.execute(client, getStorageManager());

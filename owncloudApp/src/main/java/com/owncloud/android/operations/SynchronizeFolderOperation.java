@@ -1,10 +1,12 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -120,12 +122,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     private boolean mSyncFullAccount;
 
     /**
-     * 'True' means that the contents of all the files in the folder will be synchronized;
-     * otherwise, only contents of available offline files will be synchronized.
-     */
-    private final boolean mSyncContentOfRegularFiles;
-
-    /**
      * Creates a new instance of {@link SynchronizeFolderOperation}.
      *
      * @param context                   Application context.
@@ -136,9 +132,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      *                                  will focus only in push any local change to the server (carefully).
      * @param syncFullAccount           'True' means that this operation is part of a full account
      *                                  synchronization.
-     * @param syncContentOfRegularFiles When 'true', the contents of all the files in the folder will
-     *                                  be synchronized; otherwise, only contents of available offline files
-     *                                  will be synchronized.
      */
     public SynchronizeFolderOperation(
             Context context,
@@ -146,8 +139,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             Account account,
             long currentSyncTime,
             boolean pushOnly,
-            boolean syncFullAccount,
-            boolean syncContentOfRegularFiles
+            boolean syncFullAccount
     ) {
         mRemotePath = remotePath;
         mCurrentSyncTime = currentSyncTime;
@@ -158,7 +150,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         mCancellationRequested = new AtomicBoolean(false);
         mPushOnly = pushOnly;
         mSyncFullAccount = syncFullAccount;
-        mSyncContentOfRegularFiles = syncContentOfRegularFiles;
     }
 
     public int getConflictsFound() {
@@ -402,7 +393,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      */
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
 
-        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableOffline());
+        boolean shouldSyncContents = (localFile.isDown() || localFile.isAvailableOffline());
         boolean serverUnchanged;
 
         if (localFile.isFolder()) {
@@ -423,10 +414,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 intent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
                 intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, localFile.getRemotePath());
                 intent.putExtra(OperationsService.EXTRA_PUSH_ONLY, serverUnchanged);
-                intent.putExtra(
-                        OperationsService.EXTRA_SYNC_REGULAR_FILES,
-                        mSyncContentOfRegularFiles
-                );
                 mFoldersToSyncContents.add(intent);
             }
 
@@ -442,7 +429,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                         mAccount,
                         serverUnchanged,
                         mContext,
-                        false,
                         false
                 );
                 mFilesToSyncContents.add(operation);
