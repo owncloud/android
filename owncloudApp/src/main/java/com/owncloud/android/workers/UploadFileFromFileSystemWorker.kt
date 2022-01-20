@@ -69,6 +69,7 @@ class UploadFileFromFileSystemWorker(
     private lateinit var uploadPath: String
     private lateinit var mimetype: String
     private var uploadIdInStorageManager: Long = -1
+    private lateinit var ocUpload: OCUpload
 
     override suspend fun doWork(): Result {
 
@@ -102,9 +103,26 @@ class UploadFileFromFileSystemWorker(
         uploadPath = paramUploadPath ?: return false
         behavior = paramBehavior?.let { UploadBehavior.valueOf(it) } ?: return false
         lastModified = paramLastModified ?: return false
-        uploadIdInStorageManager = paramUploadId
+        uploadIdInStorageManager = paramUploadId.takeUnless { it == -1L } ?: return false
+        ocUpload = retrieveUploadInfoFromDatabase() ?: return false
 
         return true
+    }
+
+    private fun retrieveUploadInfoFromDatabase(): OCUpload? {
+        val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
+
+        val storedUploads = uploadStorageManager.allStoredUploads
+
+        return storedUploads.find { uploadIdInStorageManager == it.uploadId }.also {
+            if (it != null) {
+                Timber.d("Upload with id ($uploadIdInStorageManager) has been found in database.")
+                Timber.d("Upload info: $it")
+            } else {
+                Timber.w("Upload with id ($uploadIdInStorageManager) has not been found in database.")
+                Timber.w("$uploadPath won't be uploaded")
+            }
+        }
     }
 
     private fun checkPermissionsToReadDocumentAreGranted() {
@@ -129,17 +147,26 @@ class UploadFileFromFileSystemWorker(
     }
 
     private fun checkNameCollisionOrGetAnAvailableOneInCase() {
+        if (ocUpload.isForceOverwrite) {
+            Timber.d("Upload will override current server file")
+            // FIXME: Retrieve somehow the EtagInConflict from the OCFile.
+            //   We need it to override the file in server.
+            return
+        }
+
         Timber.d("Checking name collision in server")
         val remotePath = getAvailableRemotePath(getClientForThisUpload(), uploadPath)
         if (remotePath != null && remotePath != uploadPath) {
             uploadPath = remotePath
-            Timber.d("Name collision detected, let's rename it to %s", remotePath)
+            Timber.d("Name collision detected, let's rename it to $remotePath")
         }
     }
 
     private fun uploadDocument() {
         val client = getClientForThisUpload()
 
+        // FIXME: Retrieve somehow the EtagInConflict from the OCFile.
+        //   We need it to override the file in server.
         val uploadFileFromFileSystemOperation = UploadFileFromFileSystemOperation(
             localPath = fileSystemPath,
             remotePath = uploadPath,
