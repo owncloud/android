@@ -30,24 +30,40 @@
   <string name="drawer_feedback">Segnalazioni</string>
   <string name="drawer_help">Aiuto</string>
   <string name="prefs_category_general">Generale</string>
+  <string name="prefs_subsection_logging">Logging</string>
   <string name="prefs_subsection_more">Altro</string>
   <string name="prefs_subsection_security">Protezione</string>
+  <string name="prefs_subsection_security_summary">Imposta i blocchi per accedere all\'app e consentire tocchi con altre finestre visibili</string>
+  <string name="prefs_subsection_logging_summary">Tieni traccia dei log prodotti dall\'esecuzione dell\'app</string>
+  <string name="prefs_subsection_more_summary">Informazioni sull\'app, feedback e altro</string>
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
   <string name="prefs_biometric">Blocco biometrico</string>
   <string name="prefs_biometric_summary">Abilita il blocco con pasword o la sequenza di blocco per attivare questa opzione.</string>
+  <string name="prefs_lock_application">Blocca applicazione</string>
+  <string name="prefs_lock_application_entries_immediately">Immediatamente</string>
+  <string name="prefs_lock_application_entries_1minute">Dopo 1 minuto</string>
   <string name="prefs_lock_application_entries_5minutes">Dopo 5 minuti</string>
   <string name="prefs_lock_application_entries_30minutes">Dopo 30 minuti</string>
+  <string name="prefs_access_from_document_provider">Accesso dal fornitore del documento</string>
   <string name="confirmation_access_from_document_provider_title">Sei sicuro di voler abilitare queste funzione?</string>
   <string name="prefs_touches_with_other_visible_windows">Tocca con altre finestre visibili</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Consenti tocchi quando la vista è oscurata da un\'altra finestra visibile. Abilitalo per utilizzare app di filtraggio della luce.</string>
   <string name="confirmation_touches_with_other_windows_title">Sei sicuro di voler abilitare queste funzione?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilizzare questa funzione con responsabilità, un\'applicazione dannosa potrebbe tentare di derubare l\'utente nell\'eseguire alcune azioni, inconsapevoli, utilizzando altre visualizzazioni.</string>
+  <string name="prefs_subsection_picture_uploads">Carica automaticamente le immagini</string>
+  <string name="prefs_subsection_picture_uploads_summary">Gestisci la posizione e il comportamento delle immagini caricate automaticamente</string>
+  <string name="prefs_subsection_video_uploads">Caricamento automatico dei video</string>
+  <string name="prefs_subsection_video_uploads_summary">Gestisci posizione e comportamento dei video caricati automaticamente</string>
   <string name="prefs_camera_picture_upload">Caricamento immagini</string>
   <string name="prefs_camera_picture_upload_summary">Carica automaticamente le immagini scattate dalla fotocamera</string>
   <string name="prefs_camera_picture_upload_path_title">Percorso caricamento immagini</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Condizioni per eseguire i caricamenti</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">I caricamenti verranno attivati quando tutte le opzioni selezionate saranno soddisfatte</string>
   <string name="prefs_camera_picture_upload_on_wifi">Carica le immagini solo tramite wifi</string>
+  <string name="prefs_camera_picture_upload_on_charging">Carica le immagini solo durante la ricarica</string>
+  <string name="prefs_camera_upload_on_charging_summary">Abilita solo caricamenti Wi-Fi per attivare questa opzione</string>
   <string name="prefs_camera_video_upload">Caricamento video</string>
   <string name="prefs_camera_video_upload_summary">Carica automaticamente video registrati dalla videocamera</string>
   <string name="prefs_camera_video_upload_path_title">Percorso caricamento video</string>
@@ -540,6 +556,7 @@ Il Download del file inizierà automaticamente</string>
   <string name="supports_oauth2_error">Non è stato possibile sapere se OAuth2 è supportato</string>
   <string name="get_base_url_error">Non è stato possibile conoscere l\'URL di base del server</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_migrate_and_clean_button">Migra adesso</string>
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Blocco con codice di sicurezza</string>
 </resources>
