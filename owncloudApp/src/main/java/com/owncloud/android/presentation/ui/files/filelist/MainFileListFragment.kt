@@ -34,6 +34,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -526,27 +527,14 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         return file
     }
 
-    companion object {
-        private val MY_PACKAGE = MainFileListFragment::class.java.`package`.name ?: "com.owncloud.android.ui.fragment"
-        val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
-        val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
-        val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
-        val KEY_FILE = "$MY_PACKAGE.extra.FILE"
-
-        fun newInstance(
-            justFolders: Boolean = false,
-            pickingAFolder: Boolean = false
-        ): MainFileListFragment {
-            val args = Bundle()
-            args.putBoolean(ARG_JUST_FOLDERS, justFolders)
-            args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
-            return MainFileListFragment().apply { arguments = args }
-        }
+    private fun setDrawerStatus(enabled: Boolean) {
+        (activity as FileActivity).setDrawerLockMode(if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            setDrawerStatus(enabled = false)
             actionMode = mode
 
             val inflater = requireActivity().menuInflater
@@ -597,7 +585,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {
-
+            setDrawerStatus(enabled = true)
             actionMode = null
 
             // reset to previous color
@@ -612,6 +600,24 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             binding.optionsLayout.visibility = View.VISIBLE
 
             fileListAdapter.clearSelection()
+        }
+    }
+
+    companion object {
+        private val MY_PACKAGE = MainFileListFragment::class.java.`package`.name ?: "com.owncloud.android.ui.fragment"
+        val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
+        val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
+        val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
+        val KEY_FILE = "$MY_PACKAGE.extra.FILE"
+
+        fun newInstance(
+            justFolders: Boolean = false,
+            pickingAFolder: Boolean = false
+        ): MainFileListFragment {
+            val args = Bundle()
+            args.putBoolean(ARG_JUST_FOLDERS, justFolders)
+            args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
+            return MainFileListFragment().apply { arguments = args }
         }
     }
 }
