@@ -33,8 +33,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation "androidx.appcompat:appcompat:$appCompat"
 
     // Kotlin
