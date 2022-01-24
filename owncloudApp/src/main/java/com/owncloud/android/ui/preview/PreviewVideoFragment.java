@@ -26,7 +26,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -43,10 +43,8 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.owncloud.android.R;
@@ -88,7 +86,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private ProgressBar mProgressBar;
     private TransferProgressController mProgressController;
 
-    private Handler mainHandler;
     private PlayerView exoPlayerView;
 
     private SimpleExoPlayer player;
@@ -158,10 +155,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
      * {@inheritDoc}
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        Timber.v("onCreateView");
 
         View view = inflater.inflate(R.layout.video_preview, container, false);
 
@@ -183,11 +178,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Timber.v("onActivityCreated");
 
         OCFile file;
         if (savedInstanceState == null) {
-            Bundle args = getArguments();
+            Bundle args = requireArguments();
             file = args.getParcelable(PreviewVideoFragment.EXTRA_FILE);
             setFile(file);
             mAccount = args.getParcelable(PreviewVideoFragment.EXTRA_ACCOUNT);
@@ -239,23 +233,14 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onPause() {
         super.onPause();
-        Timber.v("onPause");
-
         releasePlayer();
-    }
-
-    @Override
-    public void onStop() {
-        Timber.v("onStop");
-
-        super.onStop();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Timber.v("onSaveInstanceState");
 
@@ -321,7 +306,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
      * {@inheritDoc}
      */
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.file_actions_menu, menu);
     }
@@ -330,7 +315,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
      * {@inheritDoc}
      */
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
         FileMenuFilter mf = new FileMenuFilter(
@@ -410,10 +395,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     // Video player internal methods
     private void preparePlayer() {
 
-        // Create a default TrackSelector
-        mainHandler = new Handler();
-        AdaptiveTrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory();
+        AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
         // Video streaming is only supported at Jelly Bean or higher Android versions (>= API 16)
@@ -427,8 +409,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         exoPlayerView.setPlayer(player);
 
         // Prepare video player asynchronously
-        new PrepareVideoPlayerAsyncTask(getActivity(), this,
-                getFile(), mAccount, mainHandler).execute();
+        new PrepareVideoPlayerAsyncTask(getActivity(), this, getFile(), mAccount).execute();
     }
 
     /**
@@ -459,7 +440,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     // Video player eventListener implementation
 
     @Override
-    public void onPlayerError(PlaybackException error) {
+    public void onPlayerError(@NonNull PlaybackException error) {
 
         Timber.e(error, "Error in video player");
 
@@ -473,7 +454,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
      * @param previewVideoError player error with the needed info
      */
     private void showAlertDialog(final PreviewVideoError previewVideoError) {
-        new AlertDialog.Builder(getActivity())
+        new AlertDialog.Builder(requireActivity())
                 .setMessage(previewVideoError.getErrorMessage())
                 .setPositiveButton(android.R.string.VideoView_error_button,
                         (dialog, whichButton) -> {
@@ -488,22 +469,11 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                             if (previewVideoError.isParentFolderSyncNeeded()) {
                                 // Start to sync the parent file folder
                                 OCFile folder = new OCFile(getFile().getParentRemotePath());
-                                ((FileDisplayActivity) getActivity()).
-                                        startSyncFolderOperation(folder, false);
+                                ((FileDisplayActivity) requireActivity()).startSyncFolderOperation(folder, false);
                             }
                         })
                 .setCancelable(false)
                 .show();
-    }
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-        // Do nothing
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-        // Do nothing
     }
 
     @Override
@@ -528,7 +498,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         if (updatedFile != null) {
             setFile(updatedFile);
         }
-        getActivity().invalidateOptionsMenu();
+        requireActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -537,7 +507,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         if (storageManager != null) {
             setFile(storageManager.getFileByPath(getFile().getRemotePath()));
         }
-        getActivity().invalidateOptionsMenu();
+        requireActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -558,7 +528,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Timber.v("onConfigurationChanged %s", this);
     }
@@ -573,7 +543,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
     private void finish() {
-        getActivity().onBackPressed();
+        requireActivity().onBackPressed();
     }
 
     /**
