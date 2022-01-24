@@ -15,12 +15,8 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.owncloud.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <application tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.owncloud.android.sharing.shares.ui.TestShareFileActivity"></activity>
-    </application>
 
 </manifest>

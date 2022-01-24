@@ -17,9 +17,12 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<manifest
-    package="${applicationId}.test"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest package="${applicationId}.test"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk tools:overrideLibrary="android_libs.ub_uiautomator" />
+    <application tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name="com.owncloud.android.sharing.shares.ui.TestShareFileActivity" />
+    </application>
 </manifest>
