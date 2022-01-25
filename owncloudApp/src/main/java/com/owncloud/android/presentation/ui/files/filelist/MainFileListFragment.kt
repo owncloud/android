@@ -20,7 +20,9 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -63,9 +65,14 @@ import com.owncloud.android.presentation.ui.files.SortOrder
 import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
+import com.owncloud.android.ui.activity.FolderPickerActivity
+import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
+import com.owncloud.android.ui.dialog.RenameFileDialogFragment
+import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
@@ -73,6 +80,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
 import java.io.File
+import java.util.ArrayList
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
@@ -98,6 +106,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private var file: OCFile? = null
 
     var actionMode: ActionMode? = null
+
+    var enableSelectAll = true
+
     private var statusBarColorActionMode: Int? = null
     private var statusBarColor: Int? = null
 
@@ -531,6 +542,113 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         (activity as FileActivity).setDrawerLockMode(if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
+    /**
+     * Start the appropriate action(s) on the currently selected files given menu selected by the user.
+     *
+     * @param menuId Identifier of the action menu selected by the user
+     * @return 'true' if the menu selection started any action, 'false' otherwise.
+     */
+    @SuppressLint("UseRequireInsteadOfGet")
+    private fun onFileActionChosen(menuId: Int?): Boolean {
+        val checkedFiles = fileListAdapter.getCheckedItems() as ArrayList<OCFile>
+
+        if (checkedFiles.isEmpty()) {
+            return false
+        } else if (checkedFiles.size == 1) {
+            /// action only possible on a single file
+            val singleFile = checkedFiles.first()
+            when (menuId) {
+                R.id.action_share_file -> {
+                    containerActivity?.fileOperationsHelper?.showShareFile(singleFile)
+                    enableSelectAll = false
+                    return true
+                }
+                R.id.action_open_file_with -> {
+                    containerActivity?.fileOperationsHelper?.openFile(singleFile)
+                    return true
+                }
+                R.id.action_rename_file -> {
+                    val dialog = RenameFileDialogFragment.newInstance(singleFile)
+                    dialog.show(fragmentManager!!, FileDetailFragment.FTAG_RENAME_FILE)
+
+                    return true
+                }
+                R.id.action_see_details -> {
+                    if (actionMode != null) {
+                        actionMode!!.finish()
+                    }
+                    containerActivity?.showDetails(singleFile)
+                    return true
+                }
+                R.id.action_send_file -> {
+                    if (!singleFile.isAvailableLocally) { // Download the file
+                        Timber.d("%s : File must be downloaded", singleFile.remotePath)
+                        (containerActivity as FileDisplayActivity).startDownloadForSending(singleFile)
+                    } else {
+                        containerActivity?.fileOperationsHelper?.sendDownloadedFile(singleFile)
+                    }
+                    return true
+                }
+            }
+        }
+
+        /// actions possible on a batch of files
+        when (menuId) {
+            R.id.file_action_select_all -> {
+                return true
+            }
+            R.id.action_select_inverse -> {
+                for (i in 0..fileListAdapter.itemCount) {
+
+                }
+
+                return true
+            }
+            R.id.action_remove_file -> {
+                val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles)
+                dialog.show(fragmentManager!!, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                return true
+            }
+            R.id.action_download_file,
+            R.id.action_sync_file -> {
+                containerActivity?.fileOperationsHelper?.syncFiles(checkedFiles)
+                return true
+            }
+            R.id.action_cancel_sync -> {
+                (containerActivity as FileDisplayActivity).cancelTransference(checkedFiles)
+                return true
+            }
+            R.id.action_set_available_offline -> {
+                containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, true)
+                //getListView().invalidateViews()
+                return true
+            }
+            R.id.action_unset_available_offline -> {
+                containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, false)
+                //getListView().invalidateViews()
+                //invalidateActionMode()
+                /*if (fileListOption?.isAvailableOffline() == true) {
+                    onRefresh()
+                }*/
+                return true
+            }
+            R.id.action_move -> {
+                val action = Intent(activity, FolderPickerActivity::class.java)
+                action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
+                requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
+                return true
+            }
+            R.id.action_copy -> {
+                val action = Intent(activity, FolderPickerActivity::class.java)
+                action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
+                requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
+                return true
+            }
+        }
+
+        return false
+    }
+
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -567,11 +685,16 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 checkedCount
             )
             mode?.title = title
-            val fileMenuFilter = FileMenuFilter(checkedFiles, (requireActivity() as FileActivity).account, containerActivity, activity)
+            val fileMenuFilter = FileMenuFilter(
+                checkedFiles,
+                (requireActivity() as FileActivity).account,
+                containerActivity,
+                activity
+            )
 
             fileMenuFilter.filter(
                 menu,
-                false,
+                enableSelectAll,
                 true,
                 fileListOption?.isAvailableOffline() ?: false,
                 fileListOption?.isSharedByLink() ?: false
@@ -581,7 +704,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         }
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            return false
+            return onFileActionChosen(item?.itemId)
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {
