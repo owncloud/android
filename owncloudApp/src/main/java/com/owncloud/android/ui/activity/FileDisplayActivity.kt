@@ -28,7 +28,6 @@
 
 package com.owncloud.android.ui.activity
 
-import android.Manifest
 import android.accounts.Account
 import android.accounts.AuthenticatorException
 import android.app.Activity
@@ -38,7 +37,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.content.res.Resources.NotFoundException
 import android.net.Uri
 import android.os.Bundle
@@ -49,7 +47,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
@@ -95,9 +92,7 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
-import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.Extras
-import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -227,53 +222,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        if (PermissionUtil.isPermissionNotGranted(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            // Check if we should show an explanation
-            if (PermissionUtil.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-            ) {
-                // Show explanation to the user and then request permission
-                val snackbar = Snackbar.make(
-                    findViewById(R.id.list_layout),
-                    R.string.permission_storage_access,
-                    Snackbar.LENGTH_INDEFINITE
-                )
-                    .setAction(android.R.string.ok) { PermissionUtil.requestWriteExternalStoragePermission(this@FileDisplayActivity) }
-
-                DisplayUtils.colorSnackbar(this, snackbar)
-
-                snackbar.show()
-            } else {
-                // No explanation needed, request the permission.
-                PermissionUtil.requestWriteExternalStoragePermission(this)
-            }
-        }
+        startSyncFolderOperation(file, false)
 
         if (savedInstanceState == null) {
             createMinFragments()
         }
 
         setBackgroundText()
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            PermissionUtil.PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
-                // If request is cancelled, result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted
-                    startSyncFolderOperation(file, false)
-                }
-                // If permission denied --> do nothing
-                return
-            }
-        }
     }
 
     /**
