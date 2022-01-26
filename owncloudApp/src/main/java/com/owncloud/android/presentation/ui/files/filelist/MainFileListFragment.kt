@@ -581,6 +581,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                     return true
                 }
                 R.id.action_send_file -> {
+                    //Obtain the file
                     if (!singleFile.isAvailableLocally) { // Download the file
                         Timber.d("%s : File must be downloaded", singleFile.remotePath)
                         (containerActivity as FileDisplayActivity).startDownloadForSending(singleFile)

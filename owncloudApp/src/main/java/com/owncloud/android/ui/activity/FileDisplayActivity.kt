@@ -655,7 +655,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
             if (listOfFiles != null) {  // should never be null, indeed
                 file = listOfFiles.getCurrentFile()
-                listOfFiles.listDirectory(file)
+                if (file != null) {
+                    listOfFiles.listDirectory(file)
+                }
             }
             cleanSecondFragment()
         }
