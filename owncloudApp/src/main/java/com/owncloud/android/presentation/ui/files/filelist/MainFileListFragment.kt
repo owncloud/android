@@ -87,7 +87,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var viewType: ViewType
 
-    private var fileListOption: FileListOption? = FileListOption.ALL_FILES
+    private var fileListOption: FileListOption = FileListOption.ALL_FILES
 
     private var file: OCFile? = null
 
@@ -108,16 +108,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             file = savedInstanceState.getParcelable(KEY_FILE)
         }
 
-        fileListOption =
-            if (requireArguments().getParcelable<Parcelable?>(ARG_LIST_FILE_OPTION) != null)
-                requireArguments().getParcelable(ARG_LIST_FILE_OPTION)
-            else
-                FileListOption.ALL_FILES
+        fileListOption = requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES
 
-        if (fileListOption == null) {
-            fileListOption = FileListOption.ALL_FILES
-        }
-        updateFab(fileListOption!!)
+        updateFab(fileListOption)
     }
 
     /**
@@ -178,7 +171,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
-            retrieveData(fileListOption ?: FileListOption.ALL_FILES)
+            retrieveData(fileListOption)
         }
 
         //Set SortOptions and its listeners
@@ -427,7 +420,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     override fun onQueryTextSubmit(query: String?): Boolean = false
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        newText?.let { mainFileListViewModel.listSearchCurrentDirectory(fileListOption!!, it) }
+        newText?.let { mainFileListViewModel.listSearchCurrentDirectory(fileListOption, it) }
         return true
     }
 
