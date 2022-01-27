@@ -120,7 +120,7 @@ import kotlin.coroutines.CoroutineContext
  * Displays, what files the user has available in his ownCloud. This is the main view.
  */
 class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
-    CoroutineScope, ISecurityEnforced {
+    CoroutineScope, MainFileListFragment.BrowseUpListener, ISecurityEnforced {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -656,13 +656,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 }
                 listOfFiles?.onBrowseUp()
             }
-            if (listOfFiles != null) {  // should never be null, indeed
+            /*if (listOfFiles != null) {  // should never be null, indeed
                 file = listOfFiles.getCurrentFile()
                 if (file != null) {
                     listOfFiles.listDirectory(file)
                 }
             }
-            cleanSecondFragment()
+            cleanSecondFragment()*/
         }
     }
 
@@ -1671,5 +1671,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
         const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
         const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
+    }
+
+    override fun onBrowseUpListener() {
+        if (listMainFileFragment != null) {  // should never be null, indeed
+            file = listMainFileFragment?.getCurrentFile()
+            listMainFileFragment?.listDirectory(file)
+        }
+        cleanSecondFragment()
     }
 }
