@@ -458,7 +458,6 @@
 \n\n 已下载的文件将会被保留。\n\n完成此操作需要一些时间。</string>
   <string name="manage_space_clear_data">清除数据</string>
   <string name="manage_space_error">某些文件无法删除。</string>
-  <string name="permission_storage_access">没有权限上传和下载文件。</string>
   <string name="local_file_not_found_toast">本地文件丢失</string>
   <string name="confirmation_remove_files_alert">确认删除选中的项目吗？</string>
   <string name="confirmation_remove_folders_alert">你真的要删除选定的项目及其内容吗？</string>

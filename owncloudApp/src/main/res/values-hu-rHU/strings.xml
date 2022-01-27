@@ -489,7 +489,6 @@
   <string name="manage_space_description">Beállítások, adatbázis és kiszolgáló tanúsítványok %1$s az adatok véglegesen törlődnek. \ n \ n A letöltött fájlok érintetlenül maradnak. \ n \ n Ez a folyamat eltarthat egy ideig.</string>
   <string name="manage_space_clear_data">Adatok törlése</string>
   <string name="manage_space_error">Egyes fájlokat nem lehet törölni.</string>
-  <string name="permission_storage_access">További felhatalmazások szükségesek a feltöltéshez &amp; fájlok letöltése.</string>
   <string name="local_file_not_found_toast">A fájl nem található a helyi fájlrendszerben</string>
   <string name="confirmation_remove_files_alert">Tényleg szeretné eltávolítani a kijelölt elemeket?</string>
   <string name="confirmation_remove_folders_alert">Tényleg szeretné eltávolítani a kijelölt elemeket és azok tartalmát?</string>

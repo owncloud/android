@@ -476,7 +476,6 @@
   <string name="manage_space_description">Los ajustes, certificados de base de datos y servidor de %1$s serán elminados permanentemente. \n\nLos Archivos descargados no serán tocados.\n\nEste proceso puede tardar en completarse.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>
   <string name="manage_space_error">Algunos archivos no pueden ser eliminados.</string>
-  <string name="permission_storage_access">Se requieren permisos adicionales para subir o descargar archivos.</string>
   <string name="local_file_not_found_toast">El archivo no ha sido encontrado en el sistema local de archivos.</string>
   <string name="confirmation_remove_files_alert">¿Realmente quieres eliminar los items seleccionados?</string>
   <string name="confirmation_remove_folders_alert">¿Realmente quieres eliminar los ítems seleccionados y su contenido?</string>

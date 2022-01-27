@@ -435,7 +435,6 @@
   <string name="manage_space_description">Stillingar, gagnagrunnur og skilríki þjóna úr gögnum %1$s verður eytt endanlega. \n\nSóttar skrár verða skildar eftir ósnertar.\n\nÞetta ferli getur tekið drjúgan tíma.</string>
   <string name="manage_space_clear_data">Hreinsa gögn</string>
   <string name="manage_space_error">Ekki tókst að eyða öllum skrám.</string>
-  <string name="permission_storage_access">Aukinna heimilda er krafist til að geta sent inn og sótt skrár.</string>
   <string name="local_file_not_found_toast">Skráin fannst ekki á tölvunni þinni</string>
   <string name="confirmation_remove_files_alert">Ertu viss um að þú viljir fjarlægja valin atriði?</string>
   <string name="confirmation_remove_folders_alert">Ertu viss um að þú viljir fjarlægja valin atriði og innihald þeirra?</string>

@@ -331,7 +331,6 @@
     <string name="manage_space_title">Управљање простором</string>
   <string name="manage_space_clear_data">Очисти податке</string>
   <string name="manage_space_error">Неки фајлови нису могли бити обрисани.</string>
-  <string name="permission_storage_access">Додатне дозволе су потребне за отпремање и преузимање фајлова.</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d изабран</item>
     <item quantity="few">%d изабрана</item>

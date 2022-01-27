@@ -432,7 +432,6 @@
   <string name="manage_space_description">Налаштування, бази даних і сертифікати сервера з даних %1$s\'s будуть вилучені повністю. \n\nЗвантажені файли будуть збережені незайманими.\n\nЦей процес може тривати якийсь час.</string>
   <string name="manage_space_clear_data">Очистити дані</string>
   <string name="manage_space_error">Деякі файли неможливо вилучити.</string>
-  <string name="permission_storage_access">Вимагаються додаткові дозволи для надсилання &amp; звантаження файлів.</string>
   <string name="local_file_not_found_toast">Файл не знайдено в локальній файловій системі</string>
   <string name="confirmation_remove_files_alert">Ви дійсно бажаєте вилучити вибране?</string>
   <string name="confirmation_remove_folders_alert">Ви дійсно бажаєте вилучити вибране і їхній вміст?</string>
