@@ -652,13 +652,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun updateCenteredRefreshButtonVisibility(shouldBeVisible: Boolean) {
         if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
             binding.centeredRefreshButton.isVisible = shouldBeVisible
-            binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
     }
 
     private fun initBrandableOptionsUI() {
         if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
             binding.hostUrlFrame.isVisible = false
+            binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
 
         if (contextProvider.getString(R.string.server_url).isNotEmpty()) {
