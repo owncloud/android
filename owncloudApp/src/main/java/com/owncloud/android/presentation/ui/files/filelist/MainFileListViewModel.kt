@@ -65,14 +65,6 @@ class MainFileListViewModel(
     val getFilesListStatusLiveData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesListStatusLiveData
 
-    private val _getFilesSharedByLinkData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
-    val getFilesSharedByLinkData: LiveData<Event<UIResult<List<OCFile>>>>
-        get() = _getFilesSharedByLinkData
-
-    private val _getFilesAvailableOfflineData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
-    val getFilesAvailableOfflineData: LiveData<Event<UIResult<List<OCFile>>>>
-        get() = _getFilesAvailableOfflineData
-
     private val _getSearchedFilesData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
     val getSearchedFilesData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getSearchedFilesData
@@ -90,34 +82,14 @@ class MainFileListViewModel(
         }
     }
 
-    fun getSharedByLinkFilesList() {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getFilesSharedByLinkUseCase.execute(GetFilesSharedByLinkUseCase.Params(owner = file.owner)).let {
-                when (it) {
-                    is UseCaseResult.Error -> _getFilesSharedByLinkData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                    is UseCaseResult.Success -> _getFilesSharedByLinkData.postValue(Event(UIResult.Success(it.getDataOrNull())))
-                }
-            }
-        }
-    }
-
-    fun getAvailableOfflineFilesList() {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getFilesAvailableOfflineUseCase.execute(GetFilesAvailableOfflineUseCase.Params(owner = file.owner)).let {
-                when (it) {
-                    is UseCaseResult.Error -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                    is UseCaseResult.Success -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Success(it.getDataOrNull())))
-                }
-            }
-        }
-    }
-
     private fun getSearchFilesList(fileListOption: FileListOption, folderId: Long, searchText: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getSearchFolderContentUseCase.execute(GetSearchFolderContentUseCase.Params(
-                fileListOption = fileListOption,
-                folderId = folderId,
-                search = searchText)
+            getSearchFolderContentUseCase.execute(
+                GetSearchFolderContentUseCase.Params(
+                    fileListOption = fileListOption,
+                    folderId = folderId,
+                    search = searchText
+                )
             ).let {
                 when (it) {
                     is UseCaseResult.Error -> _getSearchedFilesData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))

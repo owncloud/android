@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -55,13 +54,10 @@ import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
-import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
-import timber.log.Timber
-import java.lang.ClassCastException
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
@@ -144,7 +140,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
-            retrieveData(fileListOption)
+            retrieveData()
         }
 
         //Set SortOptions and its listeners
@@ -161,21 +157,12 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         // Observe the action of retrieving the list of files from DB.
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
-            }
-        })
-
-        // Observe the action of retrieving the list of shared by link files from DB.
-        mainFileListViewModel.getFilesSharedByLinkData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
-            }
-        })
-
-        // Observe the action of retrieving the list of available offline files from DB.
-        mainFileListViewModel.getFilesAvailableOfflineData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
+                val filesList = when (fileListOption) {
+                    FileListOption.ALL_FILES -> data ?: emptyList()
+                    FileListOption.AV_OFFLINE -> data?.filter { it.keepInSync == 1 } ?: emptyList()
+                    FileListOption.SHARED_BY_LINK -> data?.filter { it.sharedByLink || it.sharedWithSharee == true } ?: emptyList()
+                }
+                updateFileListData(filesList)
             }
         })
 
@@ -272,16 +259,12 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun updateFileListOption(newFileListOption: FileListOption) {
         fileListOption = newFileListOption
-        retrieveData(newFileListOption)
+        retrieveData()
         updateFab(newFileListOption)
     }
 
-    private fun retrieveData(newFileListOption: FileListOption) {
-        when (newFileListOption) {
-            FileListOption.ALL_FILES -> mainFileListViewModel.listCurrentDirectory()
-            FileListOption.AV_OFFLINE -> mainFileListViewModel.getAvailableOfflineFilesList()
-            FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
-        }
+    private fun retrieveData() {
+        mainFileListViewModel.listCurrentDirectory()
     }
 
     private fun updateFab(newFileListOption: FileListOption) {
