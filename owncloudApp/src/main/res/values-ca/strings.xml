@@ -496,7 +496,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Els enllaços públics caducaran abans de %1$d dies de la seva creació</string>
   <string name="share_via_link_default_name_template">enllaç %1$s</string>
   <string name="share_via_link_empty_password">La contrasenya és buida</string>
-  <string name="private_link_info">Enllaç privat, només les persones que tenen accés al fitxer/carpeta el podran utilitzar. </string>
   <string name="file_private_link_error">Enllaç privat no disponible per aquest fitxer</string>
   <string name="download_notification_channel_name">Baixades</string>
   <string name="download_notification_channel_description">Veure el fitxer en descàrrega i progrés</string>

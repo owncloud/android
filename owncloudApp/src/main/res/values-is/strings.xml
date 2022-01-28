@@ -462,7 +462,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Rennur út *</string>
   <string name="share_via_link_expiration_date_explanation_label">Opinberi tengillinn rennur út eigi síðar en %1$d dögum eftir að hann er útbúinn</string>
   <string name="share_via_link_default_name_template">%1$s tengill</string>
-  <string name="private_link_info">Þetta er einkatengilll, aðeins fólk sem hefur aðgang að skránni/möppunni getur notað hann. Notaðu hann sem varanlegan tengil fyrir sjálfan þig eða til að beina öðrum á skrár innan sameigna.</string>
+  <string name="private_link_info">Einkatengilll: Aðeins fólk sem hefur aðgang að skránni/möppunni getur notað hann. Notaðu hann sem varanlegan tengil fyrir sjálfan þig eða til að beina öðrum á skrár innan sameigna</string>
   <string name="download_notification_channel_name">Niðurhöl</string>
   <string name="upload_notification_channel_name">Innsendingar</string>
   <string name="media_service_notification_channel_name">Tónlistarspilari</string>

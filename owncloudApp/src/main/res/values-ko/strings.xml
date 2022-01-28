@@ -443,7 +443,7 @@
   <string name="share_via_link_expiration_date_enforced_label">만료 기한 *</string>
   <string name="share_via_link_expiration_date_explanation_label">이 공개 링크는 %1$d일 후에 만료 됩니다</string>
   <string name="share_via_link_default_name_template">%1$s 링크</string>
-  <string name="private_link_info">이 링크는 비공개 링크입니다. 파일이나 폴더에 접근할 수 있는 사람만 사용할 수 있습니다. 나 자신을 위한 영구 링크나 다른 사람에게 공유된 파일을 알려 줄 때 사용하십시오.</string>
+  <string name="private_link_info">비공개 링크: 파일/폴더에 접근할 수 있는 사람만 사용할 수 있습니다. 나 자신을 위한 영구 링크 또는 다른 사람들과의 공유 지점으로 사용하십시오.</string>
   <string name="file_private_link_error">이 파일의 비공개 링크를 사용할 수 없음</string>
   <string name="download_notification_channel_name">다운로드</string>
   <string name="download_notification_channel_description">다운로드하고 있는 파일 이름과 진행 상황 보기</string>

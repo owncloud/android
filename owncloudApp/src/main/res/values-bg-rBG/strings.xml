@@ -507,7 +507,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Публичната връзка изтича не по-късно от %1$d дни след създаването й</string>
   <string name="share_via_link_default_name_template">%1$s връзка</string>
   <string name="share_via_link_empty_password">Паролата е празна</string>
-  <string name="private_link_info">Това е поверителна връзка и само хората, които имат достъп до файла/папката могат да я използват. Използвайте я за себе си  като постоянна връзка или да насочвате други към файловете в рамката на това споделяне.</string>
   <string name="file_private_link_error">Поверителната връзка не е налична за този файл</string>
   <string name="download_notification_channel_name">Изтегляния</string>
   <string name="download_notification_channel_description">Вижте името на файла и напредъка на изтегляне</string>

@@ -464,7 +464,6 @@
   <string name="share_via_link_expiration_date_enforced_label">Datum preteka *</string>
   <string name="share_via_link_expiration_date_explanation_label">Javna povezava bo potekla %1$d dni po ustvarjanju.</string>
   <string name="share_via_link_default_name_template">Povezava %1$s</string>
-  <string name="private_link_info">Ustvarjena je zasebna povezava, do katere imajo dostop le uporabniki z dovoljenji. Uporabite jo kot trajno povezavo zase ali za souporabo z drugimi uporabniki.</string>
   <string name="file_private_link_error">Za to datoteko zasebna povezava ni na voljo</string>
   <string name="download_notification_channel_name">Prejmi</string>
   <string name="download_notification_channel_description">Pokaži ime datoteke in napredek prenosa s strežnika</string>

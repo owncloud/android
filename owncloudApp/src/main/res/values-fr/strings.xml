@@ -498,7 +498,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="share_via_link_expiration_date_explanation_label">Ce lien public expirera au plus tard %1$d jours après sa création</string>
   <string name="share_via_link_default_name_template">lien %1$s</string>
   <string name="share_via_link_empty_password">Le mot de passe est vide</string>
-  <string name="private_link_info">Ceci est un lien privé ; seules les personnes ayant accès à ce fichier/dossier peuvent l\'utiliser. Utilisez-le comme lien permanent pour vous-même ou pour pointer sur ce fichier/dossier dans le partage avec d\'autres utilisateur.</string>
+  <string name="private_link_info">Lien privé: seules les personnes ayant accès au fichier / dossier peuvent l\'utiliser. Utilisez-le comme un lien permanent pour vous-même ou pour diriger les autres vers des fichiers dans des partages</string>
   <string name="file_private_link_error">Le lien privé n\'est pas disponible pour ce fichier</string>
   <string name="download_notification_channel_name">Téléchargements</string>
   <string name="download_notification_channel_description">Voir le nom du fichier téléchargé et sa progression</string>

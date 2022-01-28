@@ -464,7 +464,6 @@ Te rog ia legătura cu administratorul</string>
   <string name="share_via_link_expiration_date_explanation_label">Legătura publică va expira nu mai târziu de %1$d zile după ce a fost create.</string>
   <string name="share_via_link_default_name_template">%1$s legătură</string>
   <string name="share_via_link_empty_password">Câmpul parola este gol</string>
-  <string name="private_link_info">Aceasta este o legătură private, doar oamenii care au acces la fișier/dosar pot să o folosească. Folosește legătura pentru tine însuți sau pentru a direcționa pe alții spre fișierele din partajare.</string>
   <string name="file_private_link_error">Nu este disponibilă legătură privată pentru acest fișier</string>
   <string name="download_notification_channel_name">Descărcări</string>
   <string name="download_notification_channel_description">Vizualizează fișierul care se descarcă și progresul</string>

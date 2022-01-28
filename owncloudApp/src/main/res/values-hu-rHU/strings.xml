@@ -517,7 +517,6 @@
   <string name="share_via_link_expiration_date_explanation_label">A nyilvános link legrövidebb időn belül lejár %1$d néhány nappal azután, hogy létrejött</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">A jelszó üres</string>
-  <string name="private_link_info">Ez egy privát link, csak azokat használhatják, akik hozzáférnek a fájlhoz / mappához. Használja állandó kapcsolatként saját magának, vagy mutasson másokat a megosztott fájlokba.</string>
   <string name="file_private_link_error">A privát link nem érhető el ehhez a fájlhoz</string>
   <string name="download_notification_channel_name">Letöltések</string>
   <string name="download_notification_channel_description">Lásd a letöltési fájl nevét és az előrehaladást</string>

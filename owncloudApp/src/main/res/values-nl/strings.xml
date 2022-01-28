@@ -507,7 +507,7 @@ Neem contact op met uw beheerder</string>
   <string name="share_via_link_expiration_date_explanation_label">De openbare link vervalt niet eerder dan %1$d dagen na het aanmaken</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">Het wachtwoord-veld is leeg</string>
-  <string name="private_link_info">Dit is een privélink, alleen mensen met toegang tot het bestand/map kunnen hem gebruiken. Gebruik het als een permanente link voor uwzelf of om andere naar bestanden de wijzen in gedeelde mappen.</string>
+  <string name="private_link_info">Privélink: alleen personen die toegang hebben tot het bestand of de map kunnen deze gebruiken. Gebruik het als een permanente link voor uzelf of om anderen te verwijzen naar bestanden binnen shares.</string>
   <string name="file_private_link_error">Privelink naar dit bestand is niet beschikbaar</string>
   <string name="download_notification_channel_name">Downloads</string>
   <string name="download_notification_channel_description">Zie de bestandsnaam en de voortgang van het bestand dat wordt gedownload</string>

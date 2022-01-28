@@ -526,7 +526,6 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_explanation_label">Platnost tohoto veřejného odkazu skončí nejpozději %1$d dní po jeho vytvoření</string>
   <string name="share_via_link_default_name_template">%1$s odkaz</string>
   <string name="share_via_link_empty_password">Heslo není vyplněno</string>
-  <string name="private_link_info">Toto je soukromý odkaz, pouze osoby s přístupem k souboru/složce jej mohou použít. Použijte jej jako trvalý odkaz pro sebe nebo přejděte k souborům v rámci sdílených souborů</string>
   <string name="file_private_link_error">Soukromý odkaz není pro tento soubor k dispozici</string>
   <string name="download_notification_channel_name">Stažení</string>
   <string name="download_notification_channel_description">Ukázat název souboru a průběh stahování</string>

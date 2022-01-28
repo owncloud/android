@@ -457,7 +457,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Udløb</string>
   <string name="share_via_link_expiration_date_explanation_label">Det offentlige link vil senest udløbe %1$d dage efter at det er oprettet</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
-  <string name="private_link_info">Dette er et privat link, som kun folk med adgang til filen/mappen kan bruge. Brug det som et permanent link for dig selv eller til at dirigere folk til filder, der er delt</string>
+  <string name="private_link_info">Privat link: Kun personer, der har adgang til filen/mappen kan bruge det. Brug det som et permanent link for dig selv, eller til at dirigere andre til delte filer</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valgt</item>
     <item quantity="other">%d valgte</item>

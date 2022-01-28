@@ -514,7 +514,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Der öffentliche Link wird spätestens %1$d Tage nach seiner Erstellung ablaufen</string>
   <string name="share_via_link_default_name_template">%1$s - Link</string>
   <string name="share_via_link_empty_password">Das Passwort ist leer</string>
-  <string name="private_link_info">Dies ist ein privater Link, nur Personen die Zugriff auf diese Datei/Ordner haben, können dies nutzen. Nutzen Sie dies als permanenten Link für sich selbst oder um andere auf bestimmte Dateien innerhalb der Freigaben hinzuweisen.</string>
+  <string name="private_link_info">Privater Link: Nur Personen, die Zugriff auf diese Datei/Ordner haben, können dies nutzen. Nutzen Sie dies als permanenten Link für sich selbst oder um andere auf bestimmte Dateien innerhalb der Freigaben hinzuweisen.</string>
   <string name="file_private_link_error">Ein privater Link ist für diese Datei nicht verfügbar</string>
   <string name="download_notification_channel_name">Heruntergeladenes</string>
   <string name="download_notification_channel_description">Name der herunterzuladenden Datei und Fortschritt anzeigen</string>

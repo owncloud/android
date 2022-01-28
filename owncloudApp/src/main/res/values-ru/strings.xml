@@ -529,7 +529,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Общедоступная ссылка устареет не позднее, чем через %1$d дней после создания</string>
   <string name="share_via_link_default_name_template">Ссылка %1$s</string>
   <string name="share_via_link_empty_password">Пароль пуст</string>
-  <string name="private_link_info">Это частная ссылка, её могут использовать только люди, у которых есть доступ к файлу или каталогу. Используйте её в качестве постоянной ссылки для себя или чтобы указать другим на файлы в совместном доступе.</string>
+  <string name="private_link_info">Личная ссылка: её могут использовать только те, у кого есть доступ к файлу или каталогу. Используйте её в качестве постоянной ссылки для себя или чтобы указать другим на файлы в общем доступе</string>
   <string name="file_private_link_error">Личная ссылка для этого файла недоступна</string>
   <string name="download_notification_channel_name">Скачивания</string>
   <string name="download_notification_channel_description">Просмотр имени скачиваемого файла и процесса</string>

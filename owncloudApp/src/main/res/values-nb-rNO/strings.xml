@@ -491,7 +491,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Den offentlige linken utløper senest %1$d dager etter den ble opprettet</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">Passordfeltet er tomt</string>
-  <string name="private_link_info">Privat lenke: Bare personer som har tilgang til filen/mappen kan bruke den. Bruk dette som en permanent lenke for din egen bruk eller for å lede andre til filer innenfor delinger</string>
+  <string name="private_link_info">Privat lenke: Bare personer som har tilgang til filen/mappen kan bruke den. Bruk den som en permanent lenke for deg selv eller andre. </string>
   <string name="file_private_link_error">Privat link er ikke tilgjengelig for denne fil</string>
   <string name="download_notification_channel_name">Last ned</string>
   <string name="download_notification_channel_description">Se filnavn og framdrift for nedlasting</string>

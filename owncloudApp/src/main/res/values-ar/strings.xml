@@ -503,7 +503,7 @@
   <string name="share_via_link_expiration_date_explanation_label">ستنتهي صلاحية الرابط العام خلال موعد أقصاه %1$d أيام بعد إنشائه</string>
   <string name="share_via_link_default_name_template">%1$s رابط</string>
   <string name="share_via_link_empty_password">كلمة المرور فارغة</string>
-  <string name="private_link_info">هذا رابط خاص، لا يمكن لأي شخص سوى الأشخاص الذين لهم حق الوصول إلى الملف/المجلد استخدامه فقط. استخدمه كرابط دائم لنفسك أو لتوجيه الآخرين إلى الملفات داخل المشاركات.</string>
+  <string name="private_link_info">رابط خاص: فقط الأشخاص الذين لديهم حق الوصول إلى الملف / المجلد يمكنهم استخدامه. استخدمه كرابط دائم لنفسك أو لتوجيه الآخرين إلى الملفات داخل المشاركات</string>
   <string name="file_private_link_error">الرابط الخاص غير متوفر لهذا الملف</string>
   <string name="download_notification_channel_name">التنزيلات</string>
   <string name="download_notification_channel_description">انظر اسم ملف التنزيل والتقدم</string>

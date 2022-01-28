@@ -489,7 +489,6 @@
   <string name="share_via_link_expiration_date_enforced_label">Kadaluwarsa</string>
   <string name="share_via_link_expiration_date_explanation_label">Tautan publik akan kadaluwarsa tidak lebih dari %1$d hari setelah dibuat</string>
   <string name="share_via_link_default_name_template">%1$s tautan</string>
-  <string name="private_link_info">Ini adalah tautan privat, hanya orang yang punya akses ke berkas/ folder dapat menggunakannya. Gunakan sebagai tautan permanen untuk diri sendiri, atau arahkan kepada lainnya untuk file yang dibagi</string>
   <string name="file_private_link_error">Tautan pribadi tidak tersedia untuk file ini</string>
   <string name="download_notification_channel_name">Unduh</string>
   <string name="download_notification_channel_description">Lihat nama file unduhan dan kemajuan</string>

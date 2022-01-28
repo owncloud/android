@@ -529,7 +529,7 @@
   <string name="share_via_link_expiration_date_explanation_label">這個公開的連結會在 %1$d 天後失效</string>
   <string name="share_via_link_default_name_template">%1$s 連結</string>
   <string name="share_via_link_empty_password">密碼為空</string>
-  <string name="private_link_info">這是一個私人連結，只有有權訪問該檔案/目錄的人才能使用它。 使用它作為您自己的永久連結，或將其他人指向共享中的文件。</string>
+  <string name="private_link_info">專用連結：只有有權訪問檔案/目錄的人才能使用它。 使用它作為您自己的永久連結，或將其他人指向共享中的文件</string>
   <string name="file_private_link_error">私人連結不適可用的於此檔案</string>
   <string name="download_notification_channel_name">下載</string>
   <string name="download_notification_channel_description">查看下載檔案的名稱和進度</string>

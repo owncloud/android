@@ -512,7 +512,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Herkese açık bağlantının süresi, oluşturulduktan en geç %1$d gün sonra dolacak</string>
   <string name="share_via_link_default_name_template">%1$s bağlantı</string>
   <string name="share_via_link_empty_password">Parola boş</string>
-  <string name="private_link_info">Bu bir özel bağlantıdır, bunu sadece dosyaya/klasöre erişimi olan kişiler kullanabilir. Bu bağlantıyı, kendiniz için kalıcı bir bağlantı olarak veya başkalarına paylaşım içindeki dosyaları gösterebilmek için kullanın.</string>
+  <string name="private_link_info">Özel bağlantı: Yalnızca dosyaya/klasöre erişimi olan kişiler kullanabilir. Bunu kendiniz için kalıcı bir bağlantı olarak veya başkalarını paylaşımlardaki dosyalara yönlendirmek için kullanın</string>
   <string name="file_private_link_error">Bu dosya için özel bağlantı mevcut değil</string>
   <string name="download_notification_channel_name">İndirmeler</string>
   <string name="download_notification_channel_description">İndirilen dosyanın adını ve durumunu gör</string>

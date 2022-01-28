@@ -519,7 +519,6 @@ Il Download del file inizierà automaticamente</string>
   <string name="share_via_link_expiration_date_explanation_label">Il collegamento pubblico scadrà non più tardi di %1$d giorni dopo la sua creazione</string>
   <string name="share_via_link_default_name_template">collegamento %1$s</string>
   <string name="share_via_link_empty_password">La password è vuota</string>
-  <string name="private_link_info">Questo è un link privato, solo le persone che hanno accesso al file/cartella lo possono usare. Usalo come link permanente per te o per puntare altri file senza condivisioni. </string>
   <string name="file_private_link_error">Il link privato non è disponibile per questo file</string>
   <string name="download_notification_channel_name">Download</string>
   <string name="download_notification_channel_description">Visualizza il nome dei file scaricati e i progressi</string>

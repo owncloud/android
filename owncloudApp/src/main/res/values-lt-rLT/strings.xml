@@ -453,7 +453,6 @@
   <string name="share_via_link_expiration_date_enforced_label">Galiojimas Ū</string>
   <string name="share_via_link_expiration_date_explanation_label">Vieša nuoroda galios %1$ddienų nuo sukūrimo</string>
   <string name="share_via_link_default_name_template">%1$s nuoroda</string>
-  <string name="private_link_info">Ši nuoroda privati, tik turintys priėjimą prie failų gali naudoti ją. Naudokite nuolatinę nuorodą sau arba nurodykite kitus bylos dalyboje.</string>
   <string name="file_private_link_error">Privati nuoroda neegzistuoja šiam failui</string>
   <string name="download_notification_channel_name">Parsiuntimai</string>
   <string name="download_notification_channel_description">Žiūrėti siunčiamo failo vardą ir progresą</string>

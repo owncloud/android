@@ -508,7 +508,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_via_link_expiration_date_explanation_label">A ligazón pública non caducará antes de %1$d días após a súa creación</string>
   <string name="share_via_link_default_name_template">Ligazón %1$s</string>
   <string name="share_via_link_empty_password">O contrasinal está baleiro</string>
-  <string name="private_link_info">Isto é unha ligazón privada, só as persoas que teñen acceso ao ficheiro/cartafol poden empregalo. Úseo como ligazón permanente para vostede ou para dirixir a outros a ficheiros compartidos.</string>
+  <string name="private_link_info">Ligazón privada: Só as persoas que teñen acceso ao ficheiro/cartafol poden empregalo. Úseo como ligazón permanente para vostede ou para dirixir a outros a ficheiros compartidos</string>
   <string name="file_private_link_error">A ligazón privada non está dispoñíbel para este ficheiro</string>
   <string name="download_notification_channel_name">Descargas</string>
   <string name="download_notification_channel_description">Vexa o nome do ficheiro en descarga e o progreso</string>

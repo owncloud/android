@@ -492,7 +492,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Link publiczny wygaśnie nie później niż %1$d dni od jego utworzenia</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">Hasło jest puste</string>
-  <string name="private_link_info">To jest link prywatny. Tylko użytkownicy, którzy mają przyznany dostęp do folderów lub plików mogą z niego skorzystać. Użyj go jako linka bezpośredniego dla siebie lub jako odnośnik dla użytkowników, którym udostępniasz.</string>
+  <string name="private_link_info">Prywatny link: Tylko użytkownicy, którzy mają przyznany dostęp do folderów lub plików mogą z niego skorzystać. Użyj go jako linka bezpośredniego dla siebie lub jako odnośnik dla użytkowników, którym udostępniasz.</string>
   <string name="file_private_link_error">Link prywatny nie jest dostępny dla tego pliku</string>
   <string name="download_notification_channel_name">Pobrania</string>
   <string name="download_notification_channel_description">Zobacz nazwę oraz postęp pobieranego pliku</string>

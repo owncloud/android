@@ -507,7 +507,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Ο δημόσιος σύνδεσμος λήγει το αργότερο %1$d ημέρες μετά την δημιουργία του</string>
   <string name="share_via_link_default_name_template">%1$s σύνδεσμος</string>
   <string name="share_via_link_empty_password">Το συνθηματικό είναι κενό</string>
-  <string name="private_link_info">Αυτός είναι ένας ιδιωτικός σύνδεσμος, μόνο τα άτομα που έχουν πρόσβαση στο αρχείο / φάκελο μπορούν να το χρησιμοποιήσουν. Χρησιμοποιήστε το ως μόνιμο σύνδεσμο για τον εαυτό σας ή να προβάλλετε στους άλλους τα αρχεία μέσα σε κοινόχρηστα.</string>
+  <string name="private_link_info">Ιδιωτικός σύνδεσμος: Μόνο τα άτομα που έχουν πρόσβαση στο αρχείο / φάκελο μπορούν να τα χρησιμοποιήσουν. Χρησιμοποιήστε το ως μόνιμο σύνδεσμο για τον εαυτό σας ή για να τοποθετήσετε άλλους σε αρχεία μέσα σε κοινόχρηστα στοιχεία</string>
   <string name="file_private_link_error">Ο ιδιωτικός σύνδεσμος δεν είναι διαθέσιμος γι\' αυτό το αρχείο</string>
   <string name="download_notification_channel_name">Λήψεις</string>
   <string name="download_notification_channel_description">Προβολή ονόματος αρχείου λήψης και προόδου</string>

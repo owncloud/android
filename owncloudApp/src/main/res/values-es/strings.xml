@@ -528,7 +528,7 @@
   <string name="share_via_link_expiration_date_explanation_label">El enlace público no expirará antes de %1$d dias despues de ser creado</string>
   <string name="share_via_link_default_name_template">%1$s enlace</string>
   <string name="share_via_link_empty_password">La contraseña está vacía</string>
-  <string name="private_link_info">Esto es un enlace privado, sólo las personas que tienen acceso al archivo/carpeta pueden usarlo. Úsalo como enlace permanente o dirigir a otros hacia archivos dentro de compartidos.</string>
+  <string name="private_link_info">Enlace privado: Solo las personas que tengan acceso al archivo/carpeta, podrán usarlo. Uselo como enlace permanente para Vd, o para que otros puedan acceder a sus compartidos.</string>
   <string name="file_private_link_error">El enlace privado no está disponible para este archivo</string>
   <string name="download_notification_channel_name">Descargas</string>
   <string name="download_notification_channel_description">Ver el nombre y progreso del archivo de descargar</string>

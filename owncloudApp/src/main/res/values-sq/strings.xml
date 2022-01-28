@@ -539,7 +539,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Lidhja publike do të skadojë jo më vonë se %1$d ditë pas krijimit</string>
   <string name="share_via_link_default_name_template">Lidhje %1$s</string>
   <string name="share_via_link_empty_password">Fjalëkalimi është i zbrazët</string>
-  <string name="private_link_info">Kjo është një lidhje private, mund ta përdorin vetëm personat të cilëve u është lejuar hyrja te kartela/dosja. Përdoreni si një lidhje të përhershme për veten ose për të drejtuar të tjerët drejt kartelash brenda ndarjesh.</string>
+  <string name="private_link_info">Lidhje private: Mund ta përdorin vetëm personat të cilëve u është lejuar hyrja te kartela/dosja. Përdoreni si një lidhje të përhershme për veten ose për të drejtuar të tjerët drejt kartelash brenda ndarjesh</string>
   <string name="file_private_link_error">S\’ka lidhje private për këtë kartelë</string>
   <string name="download_notification_channel_name">Shkarkime</string>
   <string name="download_notification_channel_description">Shihni emrin e kartelës që shkarkohet dhe ecurinë e shkarkimit</string>

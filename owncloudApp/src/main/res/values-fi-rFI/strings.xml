@@ -432,7 +432,6 @@
   <string name="share_warning_about_forwarding_public_links">Kenellä tahansa linkin omaavalla on pääsy tiedostoon/kansioon</string>
   <string name="share_via_link_password_enforced_label">Salasana *</string>
   <string name="share_via_link_expiration_date_enforced_label">Vanheneminen *</string>
-  <string name="private_link_info">Tämä on yksityinen linkki. Vain henkilöt joilla on käyttöoikeus tiedostoon/kansioon voivat käyttää sitä. Käytä sitä pysyvänä linkkinä itselleni tai osoittaaksesi muille tiedostojen sijainti</string>
   <string name="file_private_link_error">Yksityinen linkki ei ole käytetävissä tälle tiedostolle</string>
   <string name="download_notification_channel_name">Lataukset</string>
   <string name="upload_notification_channel_name">Lähetykset</string>

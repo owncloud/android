@@ -433,7 +433,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Tento odkaz nevyprší skôr ako %1$d dní po vytvorení.</string>
   <string name="share_via_link_default_name_template">%1$s Odkaz</string>
   <string name="share_via_link_empty_password">Heslo je prázdne.</string>
-  <string name="private_link_info">Toto je súkromný odkaz, iba užívatelia ktorí majú prístup do súboru/Adresára ho môžu používať. Použi ho ako trvalý odkaz pre seba alebo ako bod  pre ostatných na súbory s ich zdieľaniami.</string>
   <string name="file_private_link_error">Súkromný odkaz nie je dostupný pre tento súbor.</string>
   <string name="download_notification_channel_name">Sťahovania</string>
   <string name="download_notification_channel_description">Pozri meno sťahovaného súboru a pokračuj</string>

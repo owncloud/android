@@ -507,7 +507,7 @@
   <string name="share_via_link_expiration_date_explanation_label">הקישור הציבורי יפוג לא יותר מ- %1$d ימים לאחר שנוצר</string>
   <string name="share_via_link_default_name_template">קישור %1$s</string>
   <string name="share_via_link_empty_password">הסיסמא ריקה</string>
-  <string name="private_link_info">זה קישור פרטי, רק אנשים שיש להם גישה לקובץ/תיקייה יכולים להשתמש בו. ניתן להשתמש בו כקישור קבוע לעצמך או לצורך הפניית אחרים לקבצים מתוך שיתופים.</string>
+  <string name="private_link_info">קישור פרטי: רק אנשים שיש להם גישה לקובץ/ספריה יכולים להשתמש בו. ניתן להשתמש בו כקישור קבע לעצמך או להפנות אחרים לקבצים המשוייכים לשיתוף</string>
   <string name="file_private_link_error">אין קישור פרטי זמין לקובץ זה</string>
   <string name="download_notification_channel_name">הורדות</string>
   <string name="download_notification_channel_description">הצגת שם הקובץ והתקדמות ההורדה</string>

@@ -486,7 +486,6 @@
   <string name="share_via_link_expiration_date_explanation_label">公开链接将会在创建之后%1$d天过期</string>
   <string name="share_via_link_default_name_template">%1$s链接</string>
   <string name="share_via_link_empty_password">密码为空</string>
-  <string name="private_link_info">这是一个私有链接,只有有权访问该文件/文件夹的人才可以使用它。将其作为给您自己或者其他人分享文件的永久链接。</string>
   <string name="file_private_link_error">该文件不支持私密连接</string>
   <string name="download_notification_channel_name">下载</string>
   <string name="download_notification_channel_description">查看下载文件名称和进度</string>
