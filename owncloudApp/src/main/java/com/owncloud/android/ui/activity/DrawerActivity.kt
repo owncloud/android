@@ -165,6 +165,9 @@ abstract class DrawerActivity : ToolbarActivity() {
         if (!resources.getBoolean(R.bool.feedback_enabled)) {
             navigationView.menu.removeItem(R.id.drawer_menu_feedback)
         }
+        if (!resources.getBoolean(R.bool.multiaccount_support)) {
+            navigationView.menu.removeItem(R.id.drawer_menu_accounts)
+        }
         navigationView.setNavigationItemSelectedListener { menuItem: MenuItem ->
             getDrawerLayout()?.closeDrawers()
             when (menuItem.itemId) {
@@ -368,11 +371,13 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
 
         // re-add add-account and manage-accounts
-        navigationMenu.add(
-            R.id.drawer_menu_accounts, R.id.drawer_menu_account_add,
-            MENU_ORDER_ACCOUNT_FUNCTION,
-            resources.getString(R.string.prefs_add_account)
-        ).setIcon(R.drawable.ic_plus_grey)
+        if (getResources().getBoolean(R.bool.multiaccount_support)) {
+            navigationMenu.add(
+                R.id.drawer_menu_accounts, R.id.drawer_menu_account_add,
+                MENU_ORDER_ACCOUNT_FUNCTION,
+                resources.getString(R.string.prefs_add_account)
+            ).setIcon(R.drawable.ic_plus_grey)
+        }
         navigationMenu.add(
             R.id.drawer_menu_accounts, R.id.drawer_menu_account_manage,
             MENU_ORDER_ACCOUNT_FUNCTION,
