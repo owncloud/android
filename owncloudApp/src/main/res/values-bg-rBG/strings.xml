@@ -274,7 +274,6 @@
   <string name="auth_expired_basic_auth_toast">Моля въведете текущата парола</string>
   <string name="auth_connecting_auth_server">Свързване към сървъра за удостоверяване ...</string>
   <string name="auth_unsupported_auth_method">Сървърът не поддържа този метод за удостоверяване</string>
-  <string name="auth_unsupported_multiaccount">%1$s не поддържа множество профили</string>
   <string name="auth_fail_get_user_name">Вашият сървър не връща правилен идентификационен номер на потребител, моля свържете се с администратор</string>
   <string name="auth_can_not_auth_against_server">Неуспешно удостоверяване към този сървър</string>
   <string name="auth_account_does_not_exist">Профила не съществува на устройството все още</string>

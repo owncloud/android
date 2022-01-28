@@ -113,7 +113,6 @@
   <string name="auth_oauth_error_access_denied">অনূমোদনকরী সার্ভার প্রবেশাধিকার অস্বীকার করেছে</string>
   <string name="auth_expired_oauth_token_toast">আপনার অনুমোদন বাতিল হয়ে গেছে। আবার অনুমোদন নিন</string>
   <string name="auth_unsupported_auth_method">এই অনুমোদন প্রক্রিয়া সার্ভারে সমর্থন করেনা</string>
-  <string name="auth_unsupported_multiaccount">%1$s একাধিক একাউন্ট সমর্থন করেনা</string>
   <string name="auth_fail_get_user_name">আপনার সার্ভার একটি সঠিক ব্যবহারকারী আইডি দেয়না। দয়া করে প্রশাসকের সংগে যোগাযোগ করুন
 ⇥</string>
   <string name="common_rename">পূনঃনামকরণ</string>

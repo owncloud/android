@@ -196,7 +196,6 @@
   <string name="auth_expired_basic_auth_toast">Oppgje passord</string>
     <string name="auth_connecting_auth_server">Koblar til autentiseringstenar</string>
   <string name="auth_unsupported_auth_method">Tenaren støttar ikkje denne metode for autentisering</string>
-  <string name="auth_unsupported_multiaccount">%1$sstøttar ikkje fleire kontoar</string>
   <string name="common_rename">Endra namn</string>
   <string name="common_remove">Fjern</string>
   <string name="confirmation_remove_local">Berre lokalt</string>

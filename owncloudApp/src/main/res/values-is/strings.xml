@@ -245,7 +245,6 @@
   <string name="auth_expired_basic_auth_toast">Settu inn núgildandi lykilorð</string>
   <string name="auth_connecting_auth_server">Tengist við auðkenningarþjón …</string>
   <string name="auth_unsupported_auth_method">Þjónninn styður ekki þessa auðkenningaraðferð</string>
-  <string name="auth_unsupported_multiaccount">%1$s styður ekki fjölaðganga</string>
   <string name="auth_fail_get_user_name">Þjónninn skilar ekki réttu notandaauðkenni, hafðu samband við kerfisstjóra
 	</string>
   <string name="auth_can_not_auth_against_server">Get ekki auðkennt á þessum þjóni</string>

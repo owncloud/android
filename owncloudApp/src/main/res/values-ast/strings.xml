@@ -188,7 +188,6 @@
   <string name="auth_expired_basic_auth_toast">Por favor, introduzca la contraseña actual</string>
   <string name="auth_connecting_auth_server">Coneutando al sirvidor d\'autentificación…</string>
   <string name="auth_unsupported_auth_method">El sirvidor nun sofita esti métodu/triba d\'autentificación</string>
-  <string name="auth_unsupported_multiaccount">%1$s nun permite cuentes múltiples</string>
   <string name="auth_fail_get_user_name">El to sirvidor nun ta tornando un usuariu correutu, por favor contauta col alministrador
 	</string>
   <string name="auth_can_not_auth_against_server">Nun pues autentificate nesti sirvidor</string>

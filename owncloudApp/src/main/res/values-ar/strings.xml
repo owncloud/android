@@ -274,7 +274,6 @@
   <string name="auth_expired_basic_auth_toast">يُرجى إدخال كلمة المرور الحالية</string>
   <string name="auth_connecting_auth_server">جار الاتصال بخادم المصادقة ...</string>
   <string name="auth_unsupported_auth_method">لا يدعم الخادم طريقة المصادقة هذه</string>
-  <string name="auth_unsupported_multiaccount">%1$s لا يدعم الحسابات المتعددة</string>
   <string name="auth_fail_get_user_name">لا يُرجع خادمك معرف مستخدم صحيحًا، يُرجى الاتصال بالمسؤول</string>
   <string name="auth_can_not_auth_against_server">لا يمكن المصادقة على هذا الخادم</string>
   <string name="auth_account_does_not_exist">لم يعد الحساب موجودًا في الجهاز</string>

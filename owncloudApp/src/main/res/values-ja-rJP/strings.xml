@@ -235,7 +235,6 @@
   <string name="auth_expired_basic_auth_toast">現在のパスワードを入力してください</string>
   <string name="auth_connecting_auth_server">認証サーバーに接続中...</string>
   <string name="auth_unsupported_auth_method">サーバーはこの認証方式をサポートしていません</string>
-  <string name="auth_unsupported_multiaccount">%1$s は複数アカウントをサポートしていません</string>
   <string name="auth_fail_get_user_name">サーバーが正しいユーザーIDを返しませんでした。管理者に問い合わせてください。
 	</string>
   <string name="auth_can_not_auth_against_server">認証サーバーに接続できません</string>

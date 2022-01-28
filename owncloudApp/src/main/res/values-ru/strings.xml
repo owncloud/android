@@ -294,7 +294,6 @@
   <string name="auth_expired_basic_auth_toast">Пожалуйста укажите текущий пароль</string>
   <string name="auth_connecting_auth_server">Подключение к серверу авторизации ...</string>
   <string name="auth_unsupported_auth_method">Сервер не поддерживает выбранный метод аутентификации</string>
-  <string name="auth_unsupported_multiaccount">%1$s не поддерживает несколько учётных записей</string>
   <string name="auth_fail_get_user_name">Сервер вернул некорректный пользовательский идентификатор. Пожалуйста, свяжитесь с вашим администратором
 ⇥</string>
   <string name="auth_can_not_auth_against_server">Не удается авторизоваться на этом сервере</string>

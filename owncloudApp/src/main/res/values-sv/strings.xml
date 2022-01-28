@@ -215,7 +215,6 @@
   <string name="auth_expired_basic_auth_toast">Var god ange ditt nuvarande lösenord</string>
   <string name="auth_connecting_auth_server">Ansluter till autentiseringsserver ...</string>
   <string name="auth_unsupported_auth_method">Servern har inte stöd för denna autentiseringsmetod</string>
-  <string name="auth_unsupported_multiaccount">%1$s har inte stöd för multipla konton</string>
   <string name="auth_fail_get_user_name">Din server returnerar inte ett korrekt användare id, vänligen kontakta en administratör
 	</string>
   <string name="auth_can_not_auth_against_server">Det går inte att autentisera mot denna server</string>

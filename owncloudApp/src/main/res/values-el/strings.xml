@@ -275,7 +275,6 @@
   <string name="auth_expired_basic_auth_toast">Παρακαλούμε εισάγετε το τρέχον συνθηματικό</string>
   <string name="auth_connecting_auth_server">Συνδεθείτε στον εξουσιοδοτημένο διακομιστή …</string>
   <string name="auth_unsupported_auth_method">Ο διακομιστής δεν υποστηρίζει αυτή τη μέθοδο πιστοποίησης</string>
-  <string name="auth_unsupported_multiaccount">Ο %1$s  δεν υποστηρίζει πολλαπλούς λογαριασμούς</string>
   <string name="auth_fail_get_user_name">Ο διακομιστής σας δεν επιστρέφει το σωστό αναγνωριστικό χρήστη, παρακαλούμε επικοινωνήστε με τον διαχειριστή
 </string>
   <string name="auth_can_not_auth_against_server">Αδυναμία πιστοποίησης σε αυτόν τον διακομιστή</string>

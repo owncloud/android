@@ -214,7 +214,6 @@ Mesedez, baimendu berriz</string>
   <string name="auth_expired_basic_auth_toast">Mesedez, sartu oraingo pasahitza</string>
   <string name="auth_connecting_auth_server">Konektatzen autentikazio zerbitzarira…</string>
   <string name="auth_unsupported_auth_method">Zerbitzariak ez du autentikazio metodo hau onartzen</string>
-  <string name="auth_unsupported_multiaccount">%1$s ez du kontu anitzak onartzen</string>
   <string name="auth_fail_get_user_name">Zure zerbitzariak ez du bueltatzen erabiltzailearen id egokia, mesedez jarri harremanetan administratzailearekin.</string>
   <string name="auth_can_not_auth_against_server">Ezin da autentikatu zerbitzarian.</string>
   <string name="auth_account_does_not_exist">Kontua oraindik ez da existitzen gailuan</string>

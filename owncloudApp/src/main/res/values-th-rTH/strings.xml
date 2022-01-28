@@ -302,7 +302,6 @@
   <string name="auth_expired_basic_auth_toast">กรุณากรอกรหัสผ่านปัจจุบัน</string>
   <string name="auth_connecting_auth_server">กำลังเชื่อมต่อกับเซิร์ฟเวอร์ที่ตรวจสอบสิทธิ์เข้าใช้งาน</string>
   <string name="auth_unsupported_auth_method">เซิร์ฟเวอร์ไม่สนับสนุนการยืนยันตัวตนนี้</string>
-  <string name="auth_unsupported_multiaccount">%1$s ไม่สนับสนุนให้มีหลายบัญชี</string>
   <string name="auth_fail_get_user_name">เซิร์ฟเวอร์ของคุณไม่ได้ส่งคืนรหัสผู้ใช้ที่ถูกต้อง กรุณาติดต่อผู้ดูแลระบบ!</string>
   <string name="auth_can_not_auth_against_server">ไม่สามารถตรวจสอบสิทธิ์การเข้าใช้งานกับเซิร์ฟเวอร์นี้ได้</string>
   <string name="auth_account_does_not_exist">ยังไม่มีบัญชีในอุปกรณ์นี้</string>

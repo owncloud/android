@@ -305,7 +305,6 @@
   <string name="auth_expired_basic_auth_toast">Ju lutem, jepni fjalëkalimin e tanishëm</string>
   <string name="auth_connecting_auth_server">Po lidhet te shërbyesi i mirëfilltësimeve …</string>
   <string name="auth_unsupported_auth_method">Shërbyesi s\’e mbulon këtë metodë mirëfilltësimesh</string>
-  <string name="auth_unsupported_multiaccount">%1$s s\’mbulon llogari të shumëfishta</string>
   <string name="auth_fail_get_user_name">Shërbyesi juaj s\’po përgjigje me id të saktë përdoruesi, ju lutemi, lidhuni me një admin</string>
   <string name="auth_can_not_auth_against_server">S\’kryhet dot mirëfilltësimi me këtë shërbyes</string>
   <string name="auth_account_does_not_exist">Llogaria s\’ekziston ende te pajisja</string>

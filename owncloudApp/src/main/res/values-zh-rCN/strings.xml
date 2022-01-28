@@ -261,7 +261,6 @@
   <string name="auth_expired_basic_auth_toast">请输入当前的密码</string>
   <string name="auth_connecting_auth_server">连接认证服务器...</string>
   <string name="auth_unsupported_auth_method">服务器不支持这种验证方式</string>
-  <string name="auth_unsupported_multiaccount">%1$s不支持多个账户</string>
   <string name="auth_fail_get_user_name">您的服务器没有返回一个正确的用户 id，请联系管理员
 	</string>
   <string name="auth_can_not_auth_against_server">无法连接认证服务器</string>
