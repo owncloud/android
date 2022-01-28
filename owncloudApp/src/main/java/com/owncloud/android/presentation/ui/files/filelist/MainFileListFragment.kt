@@ -20,9 +20,12 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
+<<<<<<< HEAD
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+=======
+>>>>>>> CR. Unify list of files management
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -186,7 +189,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
-            retrieveData(fileListOption)
+            retrieveData()
         }
 
         //Set SortOptions and its listeners
@@ -217,21 +220,12 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         // Observe the action of retrieving the list of files from DB.
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
-            }
-        })
-
-        // Observe the action of retrieving the list of shared by link files from DB.
-        mainFileListViewModel.getFilesSharedByLinkData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
-            }
-        })
-
-        // Observe the action of retrieving the list of available offline files from DB.
-        mainFileListViewModel.getFilesAvailableOfflineData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
+                val filesList = when (fileListOption) {
+                    FileListOption.ALL_FILES -> data ?: emptyList()
+                    FileListOption.AV_OFFLINE -> data?.filter { it.keepInSync == 1 } ?: emptyList()
+                    FileListOption.SHARED_BY_LINK -> data?.filter { it.sharedByLink || it.sharedWithSharee == true } ?: emptyList()
+                }
+                updateFileListData(filesList)
             }
         })
 
@@ -332,16 +326,12 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun updateFileListOption(newFileListOption: FileListOption) {
         fileListOption = newFileListOption
-        retrieveData(newFileListOption)
+        retrieveData()
         updateFab(newFileListOption)
     }
 
-    private fun retrieveData(newFileListOption: FileListOption) {
-        when (newFileListOption) {
-            FileListOption.ALL_FILES -> mainFileListViewModel.listCurrentDirectory()
-            FileListOption.AV_OFFLINE -> mainFileListViewModel.getAvailableOfflineFilesList()
-            FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
-        }
+    private fun retrieveData() {
+        mainFileListViewModel.listCurrentDirectory()
     }
 
     private fun updateFab(newFileListOption: FileListOption) {
