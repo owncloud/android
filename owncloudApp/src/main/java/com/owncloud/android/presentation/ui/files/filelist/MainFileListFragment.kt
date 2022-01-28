@@ -596,13 +596,19 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         /// actions possible on a batch of files
         when (menuId) {
             R.id.file_action_select_all -> {
+                // Last item on list is the footer, so that element must be excluded from selection
+                for (i in 0 until fileListAdapter.itemCount - 1) {
+                    if (!fileListAdapter.isSelected(i)) {
+                        toggleSelection(i)
+                    }
+                }
                 return true
             }
             R.id.action_select_inverse -> {
-                for (i in 0..fileListAdapter.itemCount) {
-
+                // Last item on list is the footer, so that element must be excluded from selection
+                for (i in 0 until fileListAdapter.itemCount - 1) {
+                    toggleSelection(i)
                 }
-
                 return true
             }
             R.id.action_remove_file -> {
