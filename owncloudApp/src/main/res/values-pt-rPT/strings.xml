@@ -433,6 +433,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Expiração *</string>
   <string name="share_via_link_expiration_date_explanation_label">A hiperligação pública irá expirar, o mais tardar %1$d dias após a sua criação </string>
   <string name="share_via_link_default_name_template">%1$s hiperligação</string>
+  <string name="private_link_info">Hiperligação privada: apenas as pessoas que têm acesso ao ficheiro / pasta podem usá-la. Use-a como uma ligação permanente para si mesmo ou para apontar outros para os ficheiros dentro das partilhas</string>
   <string name="download_notification_channel_name">Transferências</string>
   <string name="upload_notification_channel_name">Carregamentos</string>
   <string name="media_service_notification_channel_name">Reprodutor de música</string>

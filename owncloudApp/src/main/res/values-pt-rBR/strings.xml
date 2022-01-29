@@ -541,7 +541,7 @@
   <string name="share_via_link_expiration_date_explanation_label">O link público expirará até %1$d dias após sua criação</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">A senha está vazia</string>
-  <string name="private_link_info">Link privado: apenas as pessoas que têm acesso ao arquivo/pasta podem usá-lo. Use-o como um link permanente para você ou apontar para outros, arquivos em compartilhamentos</string>
+  <string name="private_link_info">Linque privado: apenas as pessoas que têm acesso ao arquivo/pasta podem usá-lo. Use-o como um linque permanente para você ou apontar para outros, arquivos em compartilhamentos</string>
   <string name="file_private_link_error">O link privado não está disponível para este arquivo</string>
   <string name="download_notification_channel_name">Baixados</string>
   <string name="download_notification_channel_description">Ver o nome do arquivo baixado e o progresso</string>
