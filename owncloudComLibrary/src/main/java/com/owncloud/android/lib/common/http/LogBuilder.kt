@@ -41,13 +41,13 @@ object LogBuilder {
 enum class NetworkPetition {
     REQUEST, RESPONSE;
 
-    override fun toString(): String = super.toString().toLowerCase(Locale.ROOT)
+    override fun toString(): String = super.toString().lowercase(Locale.ROOT)
 }
 
 enum class NetworkNode {
     INFO, HEADER, BODY;
 
-    override fun toString(): String = super.toString().toLowerCase(Locale.ROOT)
+    override fun toString(): String = super.toString().lowercase(Locale.ROOT)
 }
 
 /**
