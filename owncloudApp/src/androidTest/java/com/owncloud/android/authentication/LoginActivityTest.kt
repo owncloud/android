@@ -184,15 +184,27 @@ class LoginActivityTest {
         assertViewsDisplayed(
             showHostUrlFrame = false,
             showHostUrlInput = false,
-            showCenteredRefreshButton = true,
+            showCenteredRefreshButton = false,
             showEmbeddedCheckServerButton = false
         )
 
         verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+    }
 
+    @Test
+    fun initialViewStatus_brandedOptions_serverInfoInSetup_connectionFails() {
+
+        launchTest(showServerUrlInput = false, serverUrl = OC_SERVER_INFO.baseUrl)
+
+        serverInfoLiveData.postValue(Event(UIResult.Error(NoNetworkConnectionException())))
+
+        R.id.centeredRefreshButton.isDisplayed(true)
         R.id.centeredRefreshButton.scrollAndClick()
 
         verify(exactly = 2) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(isSecureConnection = true))))
+
+        R.id.centeredRefreshButton.isDisplayed(false)
     }
 
     @Test

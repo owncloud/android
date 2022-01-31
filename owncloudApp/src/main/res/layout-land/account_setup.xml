@@ -80,7 +80,7 @@
                         android:layout_marginBottom="10dp"
                         android:contentDescription="@string/auth_check_server"
                         android:text="@string/auth_check_server"
-                        android:theme="@style/Button.Secondary"
+                        android:theme="@style/Button.Authenticator"
                         android:visibility="gone" />
 
                     <TextView

@@ -230,6 +230,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
+        updateCenteredRefreshButtonVisibility(shouldBeVisible = false)
         uiResult.getStoredData()?.run {
             serverBaseUrl = baseUrl
             binding.hostUrlInput.run {
@@ -292,6 +293,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun getServerInfoIsError(uiResult: UIResult<ServerInfo>) {
+        updateCenteredRefreshButtonVisibility(shouldBeVisible = true)
         when (uiResult.getThrowableOrNull()) {
             is CertificateCombinedException ->
                 showUntrustedCertDialog(uiResult.getThrowableOrNull() as CertificateCombinedException)
@@ -647,13 +649,16 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.loginButton.isVisible = false
     }
 
+    private fun updateCenteredRefreshButtonVisibility(shouldBeVisible: Boolean) {
+        if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
+            binding.centeredRefreshButton.isVisible = shouldBeVisible
+        }
+    }
+
     private fun initBrandableOptionsUI() {
         if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
             binding.hostUrlFrame.isVisible = false
-            binding.centeredRefreshButton.run {
-                isVisible = true
-                setOnClickListener { checkOcServer() }
-            }
+            binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
 
         if (contextProvider.getString(R.string.server_url).isNotEmpty()) {
