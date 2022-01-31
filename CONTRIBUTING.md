@@ -70,4 +70,4 @@ Please submit translations via [Transifex][transifex].
 ## Code of conduct
 Please, read the [ownCloud code of conduct]. Being respectful and polite with other members of the community and staff is necessary to develop a better product together.
 
-[ownCloud code of conduct]: https://owncloud.org/community/code-of-conduct/
+[ownCloud code of conduct]: https://owncloud.com/contribute/code-of-conduct/
