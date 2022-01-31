@@ -230,7 +230,6 @@
   <string name="auth_expired_basic_auth_toast">현재 암호를 입력하십시오</string>
   <string name="auth_connecting_auth_server">인증 서버에 연결하는 중…</string>
   <string name="auth_unsupported_auth_method">서버에서 이 인증 방법을 지원하지 않음</string>
-  <string name="auth_unsupported_multiaccount">%1$s에서 다중 계정을 지원하지 않습니다</string>
   <string name="auth_fail_get_user_name">서버에서 올바른 사용자 ID를 반환하지 않았습니다. 시스템 관리자에게 연락하십시오
 	</string>
   <string name="auth_can_not_auth_against_server">이 서버에 인증할 수 없음</string>

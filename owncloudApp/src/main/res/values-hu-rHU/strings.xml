@@ -282,7 +282,6 @@
   <string name="auth_expired_basic_auth_toast">Adja meg az aktuális jelszót</string>
   <string name="auth_connecting_auth_server">Csatlakozás a hitelesítési kiszolgálóhoz…</string>
   <string name="auth_unsupported_auth_method">A kiszolgáló nem támogatja ezt a hitelesítési módszert</string>
-  <string name="auth_unsupported_multiaccount">A(z) %1$s nem támogat egyszerre több fiókot</string>
   <string name="auth_fail_get_user_name">A kiszolgáló nem ad vissza helyes felhasználói azonosítót, lépjen kapcsolatba egy rendszergazdával
 	</string>
   <string name="auth_can_not_auth_against_server">Nem tud hitelesíteni a kiszolgálóhoz</string>

@@ -201,7 +201,6 @@
   <string name="auth_expired_basic_auth_toast">Zadajte svoje aktuálne heslo</string>
   <string name="auth_connecting_auth_server">Pripájam sa na autentifikačný server ...</string>
   <string name="auth_unsupported_auth_method">Server nepodporuje túto autentifikačnú metódu</string>
-  <string name="auth_unsupported_multiaccount">%1$s nepodporuje viacero účtov</string>
   <string name="auth_fail_get_user_name">Váš server nevracia správne používateľské id, kontaktujte prosím správcu systému
 	</string>
   <string name="auth_can_not_auth_against_server">Nemôžem verifikovať tento server</string>

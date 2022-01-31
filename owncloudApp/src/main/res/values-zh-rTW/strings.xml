@@ -293,7 +293,6 @@
   <string name="auth_expired_basic_auth_toast">請輸入目前的密碼</string>
   <string name="auth_connecting_auth_server">連接驗證伺服器中...</string>
   <string name="auth_unsupported_auth_method">伺服器不支援這種認證方式</string>
-  <string name="auth_unsupported_multiaccount">%1$s 不支援複數賬戶</string>
   <string name="auth_fail_get_user_name">你的伺服器並沒有傳回正確的使用者 ID, 請聯絡伺服器的管理員
 	</string>
   <string name="auth_can_not_auth_against_server">無法驗證這個伺服器</string>

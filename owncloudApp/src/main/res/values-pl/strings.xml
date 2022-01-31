@@ -261,7 +261,6 @@
   <string name="auth_expired_basic_auth_toast">Podaj aktualne hasło</string>
   <string name="auth_connecting_auth_server">Łączenie z serwerem poświadczeń...</string>
   <string name="auth_unsupported_auth_method">Serwer nie obsługuje tej metody autoryzacji</string>
-  <string name="auth_unsupported_multiaccount">%1$s nie wspiera wielu kont</string>
   <string name="auth_fail_get_user_name">Twój serwer nie zwraca prawidłowego id użytkownika, proszę skontaktuj się z administratorem
 	</string>
   <string name="auth_can_not_auth_against_server">Błąd autoryzacji na tym serwerze</string>

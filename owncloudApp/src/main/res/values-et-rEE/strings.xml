@@ -208,7 +208,6 @@
   <string name="auth_expired_oauth_token_toast">Sinu autoriseerimine aegus. Palun autoriseeri uuesti</string>
   <string name="auth_expired_basic_auth_toast">Palun sisesta kehtiv parool</string>
   <string name="auth_unsupported_auth_method">See server ei toeta seda autentimise viisi</string>
-  <string name="auth_unsupported_multiaccount">%1$s ei toeta mitme konto kasutamist</string>
   <string name="auth_fail_get_user_name">Server ei tagasta korrektset kasutaja ID-d. Palun kontakteeru administraatoriga.
 ⇥</string>
   <string name="auth_account_does_not_exist">Kontot pole veel seadmes</string>

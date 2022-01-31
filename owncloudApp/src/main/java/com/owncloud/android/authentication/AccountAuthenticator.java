@@ -1,11 +1,13 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,8 +32,6 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -76,12 +76,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     private Context mContext;
 
-    private Handler mHandler;
-
     AccountAuthenticator(Context context) {
         super(context);
         mContext = context;
-        mHandler = new Handler();
     }
 
     /**
@@ -115,14 +112,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             setIntentFlags(intent);
 
             bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        } else {
-            // Return an error
-            bundle.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
-            final String message = String.format(mContext.getString(R.string.auth_unsupported_multiaccount),
-                    mContext.getString(R.string.app_name));
-            bundle.putString(AccountManager.KEY_ERROR_MESSAGE, message);
-
-            mHandler.post(() -> Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show());
         }
 
         return bundle;

@@ -179,7 +179,6 @@
   <string name="auth_expired_basic_auth_toast">W.e.g dat aktuellt Passwuert aginn</string>
     <string name="auth_connecting_auth_server">Verbanne mam Authentifizéier-Server</string>
   <string name="auth_unsupported_auth_method">De Server ënnerstëtzt dës Authentifizéierungsmethod net</string>
-  <string name="auth_unsupported_multiaccount">%1$s ënnerstëtzt keng multipel Konten</string>
   <string name="auth_fail_get_user_name">Däi Server schéckt keng korrekt Benotzer ID zeréck, w.e.g. kontaktéier däin Administrateur</string>
   <string name="auth_account_does_not_exist">De Konto gëtt et net op dësem Gerät</string>
   <string name="set_available_offline">Offline als verfügbar uweisen</string>

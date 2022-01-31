@@ -266,7 +266,6 @@
   <string name="auth_expired_basic_auth_toast">Legg inn nåværende passord</string>
   <string name="auth_connecting_auth_server">Kobler til autentiserings-server ..</string>
   <string name="auth_unsupported_auth_method">Serveren støtter ikke denne autorisasjonsmetoden</string>
-  <string name="auth_unsupported_multiaccount">%1$s støtter ikke flere kontoer</string>
   <string name="auth_fail_get_user_name">Tjeneren din svarer ikke med korrekt bruker-ID, vennligst ta kontakt med en administrator
 	</string>
   <string name="auth_can_not_auth_against_server">Kan ikke autentisere mot denne serveren</string>

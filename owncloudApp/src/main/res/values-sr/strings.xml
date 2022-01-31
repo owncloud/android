@@ -175,7 +175,6 @@
   <string name="auth_expired_basic_auth_toast">Унесите тренутну лозинку</string>
   <string name="auth_connecting_auth_server">Повезујем се са сервером аутентификације…</string>
   <string name="auth_unsupported_auth_method">Сервер не подржава овај начин аутентификације</string>
-  <string name="auth_unsupported_multiaccount">%1$s не подржава вишеструке налоге</string>
   <string name="auth_fail_get_user_name">Сервер не враћа исправан ИД корисника. Контактирајте администратора
 	</string>
   <string name="auth_can_not_auth_against_server">Не могу да аутентификујем са овим сервером</string>

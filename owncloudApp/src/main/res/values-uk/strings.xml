@@ -248,7 +248,6 @@
   <string name="auth_expired_basic_auth_toast">Будь ласка, введіть поточний пароль</string>
   <string name="auth_connecting_auth_server">Підключення до серверу аутентифікації ...</string>
   <string name="auth_unsupported_auth_method">Цей сервер не підтримує обраний метод аутентифікації</string>
-  <string name="auth_unsupported_multiaccount">%1$s не підтримує одночасно декілька облікових записів</string>
   <string name="auth_fail_get_user_name">Ваш сервер не повертає коректний ідентифікатор користувача, будь ласка зверніться до адміністратора
 ⇥</string>
   <string name="auth_can_not_auth_against_server">Неможливо виконати аутентифікацію на цьому сервері</string>

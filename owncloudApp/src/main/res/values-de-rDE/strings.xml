@@ -281,7 +281,6 @@
   <string name="auth_expired_basic_auth_toast">Bitte geben Sie Ihr aktuelles Passwort ein</string>
   <string name="auth_connecting_auth_server">Verbinde mit dem Authentifizierung-Server…</string>
   <string name="auth_unsupported_auth_method">Der Server unterstützt diese Legitimierungsmethode nicht</string>
-  <string name="auth_unsupported_multiaccount">%1$s unterstützt mehrere Benutzerkonten nicht</string>
   <string name="auth_fail_get_user_name">Ihr Server gibt keine richtige Benutzerkennung zurück, bitte kontaktieren Sie einen Administrator
 ⇥</string>
   <string name="auth_can_not_auth_against_server">Die Authentifizierung gegenüber dem Server konnte nicht durchgeführt werden</string>

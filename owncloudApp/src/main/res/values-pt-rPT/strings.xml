@@ -222,7 +222,6 @@
   <string name="auth_expired_basic_auth_toast">Por favor, introduza a sua passe actual</string>
   <string name="auth_connecting_auth_server">A ligar ao servidor de autenticação...</string>
   <string name="auth_unsupported_auth_method">O servidor não suporta este método de autenticação</string>
-  <string name="auth_unsupported_multiaccount">%1$s não suporta várias contas</string>
   <string name="auth_fail_get_user_name">O seu servidor não está a devolver a id. correcta, por favor, contacte um administrador.</string>
   <string name="auth_can_not_auth_against_server">Impossível autenticar neste servidor</string>
   <string name="auth_account_does_not_exist">A conta ainda não existe no dispositivo</string>

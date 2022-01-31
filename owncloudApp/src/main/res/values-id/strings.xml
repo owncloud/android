@@ -266,7 +266,6 @@
   <string name="auth_expired_basic_auth_toast">Masukkan password</string>
   <string name="auth_connecting_auth_server">Menyambung ke penyedia otentikasi ...</string>
   <string name="auth_unsupported_auth_method">Server tidak mendukung medote otentikasi ini</string>
-  <string name="auth_unsupported_multiaccount">%1$s tidak mendukung banyak akun </string>
   <string name="auth_fail_get_user_name">Server Anda tidak membalas id pengguna dengan banar, Sialakn hubungi Administrator
 	</string>
   <string name="auth_can_not_auth_against_server">Tidak dapat mengotentikasi server ini</string>

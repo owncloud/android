@@ -250,7 +250,6 @@
   <string name="auth_expired_basic_auth_toast">Indtast venligst den nuværende adgangskode</string>
   <string name="auth_connecting_auth_server">Tilslutter til adgangsgivende server …</string>
   <string name="auth_unsupported_auth_method">Serveren understøtter ikke denne godkendelsesmetode</string>
-  <string name="auth_unsupported_multiaccount">%1$s understøtter ikke flere konti</string>
   <string name="auth_fail_get_user_name">Din server retunere ikke et korrekt bruger-id. Kontakt venligst din administrator</string>
   <string name="auth_can_not_auth_against_server">Kan ikke godkendes til denne server</string>
   <string name="auth_account_does_not_exist">Kontoen findes endnu ikke på enheden</string>

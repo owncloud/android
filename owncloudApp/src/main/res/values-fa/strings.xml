@@ -227,7 +227,6 @@
   <string name="auth_expired_basic_auth_toast">لطفا رمز عبور فعلی را وارد نمایید</string>
   <string name="auth_connecting_auth_server">اتّصال به کارساز تصدیق…</string>
   <string name="auth_unsupported_auth_method">سرور این نوع احراز هویت را پشتیبانی نمی‌کند</string>
-  <string name="auth_unsupported_multiaccount">%1$s چند اکانته بودن را پشتیبانی نمی‌کند</string>
   <string name="auth_fail_get_user_name">کارسازتان شناسهٔ کاربری درستی برنمی‌گرداند. لطفاً با یک مدیر تماس بگیرید
 	</string>
   <string name="auth_can_not_auth_against_server">نمی‌توان روی این کارساز تصدیق هویت شد</string>

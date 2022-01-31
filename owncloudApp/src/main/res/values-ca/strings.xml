@@ -267,7 +267,6 @@
   <string name="auth_expired_basic_auth_toast">Escriviu la contrasenya actual</string>
   <string name="auth_connecting_auth_server">Connectant amb el servidor d\'autentificació...</string>
   <string name="auth_unsupported_auth_method">El serivdor no permet aquest mètode d\'autenticació</string>
-  <string name="auth_unsupported_multiaccount">%1$s no permet comptes múltiples</string>
   <string name="auth_fail_get_user_name">El servidor no retorna una id d\'usuari correcta, contacteu amb l\'administrador.</string>
   <string name="auth_can_not_auth_against_server">No es pot autenticar en aquest servidor</string>
   <string name="auth_account_does_not_exist">El compte no existeix en aquest dispositiu encara</string>

@@ -249,7 +249,6 @@
   <string name="auth_expired_basic_auth_toast">Vpišite trenutno geslo</string>
   <string name="auth_connecting_auth_server">Povezovanje s overitvenim strežnikom</string>
   <string name="auth_unsupported_auth_method">Strežnik ne podpira tega načina overitve</string>
-  <string name="auth_unsupported_multiaccount">%1$s ne omogoča podpore več računom</string>
   <string name="auth_fail_get_user_name">Strežnik ne vrača ustreznega ID uporabnika. Stopite v stik s skrbnikom sistema.
 	</string>
   <string name="auth_can_not_auth_against_server">Povezave s strežnikom ni mogoče overiti</string>

@@ -246,7 +246,6 @@
   <string name="auth_expired_basic_auth_toast">Por favor introduzca su contraseña actual</string>
   <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
   <string name="auth_unsupported_auth_method">El servidor no soporta este método de autenticación</string>
-  <string name="auth_unsupported_multiaccount">%1$s no soporta cuentas múltiples</string>
   <string name="auth_fail_get_user_name">Su servidor no está retornando una identificación de usuario correcta; contacte a un administrador
 	</string>
   <string name="auth_can_not_auth_against_server">No se puedo autenticar a este servidor</string>

@@ -268,7 +268,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="auth_expired_basic_auth_toast">Veuillez saisir votre mot de passe</string>
   <string name="auth_connecting_auth_server">Connexion au serveur d\'authentification …</string>
   <string name="auth_unsupported_auth_method">Le serveur ne prend pas en charge pas cette méthode d\'authentification</string>
-  <string name="auth_unsupported_multiaccount">%1$s ne prend pas en charge les comptes multiples</string>
   <string name="auth_fail_get_user_name">Votre serveur a retourné un identifiant d\'utilisateur incorrect. Veuillez prendre contact avec votre administrateur
 </string>
   <string name="auth_can_not_auth_against_server">Impossible de s\'authentifier sur ce serveur</string>
