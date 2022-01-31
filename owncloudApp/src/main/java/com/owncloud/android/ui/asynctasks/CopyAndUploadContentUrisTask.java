@@ -48,31 +48,30 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
 
     /**
      * Helper method building a correct array of parameters to be passed to {@link #execute(Object[])} )}
-     *
+     * <p>
      * Just packages the received parameters in correct order, doesn't check anything about them.
      *
-     * @param   account             OC account to upload the shared files.
-     * @param   sourceUris          Array of "content://" URIs to the files to be uploaded.
-     * @param   remotePaths         Array of absolute paths in the OC account to set to the uploaded files.
-     * @param   behaviour           Indicates what to do with the local file once uploaded.
-     * @param   contentResolver     {@link ContentResolver} instance with appropriate permissions to open the
-     *                              URIs in 'sourceUris'.
-     *
-     * Handling this parameter in {@link #doInBackground(Object[])} keeps an indirect reference to the
-     * caller Activity, what is technically wrong, since it will be held in memory
-     * (with all its associated resources) until the task finishes even though the user leaves the Activity.
-     *
-     * But we really, really, really want that the files are copied to temporary files in the OC folder and then
-     * uploaded, even if the user gets bored of waiting while the copy finishes. And we can't forward the job to
-     * another {@link Context}, because if any of the content:// URIs is constrained by a TEMPORARY READ PERMISSION,
-     * trying to open it will fail with a {@link SecurityException} after the user leaves the
-     *                                                     ReceiveExternalFilesActivity Activity. We
-     * really tried it.
-     *
-     * So we are doomed to leak here for the best interest of the user. Please, don't do similar in other places.
-     *
-     * Any idea to prevent this while keeping the functionality will be welcome.
-     *
+     * @param account         OC account to upload the shared files.
+     * @param sourceUris      Array of "content://" URIs to the files to be uploaded.
+     * @param remotePaths     Array of absolute paths in the OC account to set to the uploaded files.
+     * @param behaviour       Indicates what to do with the local file once uploaded.
+     * @param contentResolver {@link ContentResolver} instance with appropriate permissions to open the
+     *                        URIs in 'sourceUris'.
+     *                        <p>
+     *                        Handling this parameter in {@link #doInBackground(Object[])} keeps an indirect reference to the
+     *                        caller Activity, what is technically wrong, since it will be held in memory
+     *                        (with all its associated resources) until the task finishes even though the user leaves the Activity.
+     *                        <p>
+     *                        But we really, really, really want that the files are copied to temporary files in the OC folder and then
+     *                        uploaded, even if the user gets bored of waiting while the copy finishes. And we can't forward the job to
+     *                        another {@link Context}, because if any of the content:// URIs is constrained by a TEMPORARY READ PERMISSION,
+     *                        trying to open it will fail with a {@link SecurityException} after the user leaves the
+     *                        ReceiveExternalFilesActivity Activity. We
+     *                        really tried it.
+     *                        <p>
+     *                        So we are doomed to leak here for the best interest of the user. Please, don't do similar in other places.
+     *                        <p>
+     *                        Any idea to prevent this while keeping the functionality will be welcome.
      * @return Correct array of parameters to be passed to {@link #execute(Object[])}
      */
     public static Object[] makeParamsToExecute(
@@ -115,9 +114,9 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
     }
 
     /**
-     * @param params    Params to execute the task; see
-     *                  {@link #makeParamsToExecute(Account, Uri[], String[], int, ContentResolver)}
-     *                  for further details.
+     * @param params Params to execute the task; see
+     *               {@link #makeParamsToExecute(Account, Uri[], String[], int, ContentResolver)}
+     *               for further details.
      */
     @Override
     protected ResultCode doInBackground(Object[] params) {
@@ -257,10 +256,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                     default:
                         messageId = R.string.common_error_unknown;
                 }
-                String message = String.format(
-                        mAppContext.getString(messageId),
-                        mAppContext.getString(R.string.app_name)
-                );
+                String message = mAppContext.getString(messageId);
                 Toast.makeText(mAppContext, message, Toast.LENGTH_LONG).show();
             }
         }
@@ -269,7 +265,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
     /**
      * Sets the object waiting for progress report via callbacks.
      *
-     * @param listener      New object to report progress via callbacks
+     * @param listener New object to report progress via callbacks
      */
     public void setListener(OnCopyTmpFilesTaskListener listener) {
         mListener = new WeakReference<>(listener);
