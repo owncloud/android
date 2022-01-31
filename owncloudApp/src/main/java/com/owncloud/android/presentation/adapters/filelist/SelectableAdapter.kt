@@ -46,18 +46,15 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder?> :
         } else {
             selectedItems.put(position, true)
         }
-        notifyItemChanged(position)
+        notifyDataSetChanged()
     }
 
     /**
      * Clear the selection status for all items
      */
     fun clearSelection() {
-        val selection = getSelectedItems()
         selectedItems.clear()
-        for (i in selection) {
-            notifyItemChanged(i)
-        }
+        notifyDataSetChanged()
     }
 
     /**
