@@ -30,6 +30,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
@@ -160,16 +161,16 @@ class MainApp : Application() {
     }
 
     private fun startLogsIfEnabled() {
-        val preferenceManager = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val preferenceProvider = SharedPreferencesProviderImpl(applicationContext)
 
         if (BuildConfig.DEBUG) {
-            val alreadySet = preferenceManager.contains(PREFERENCE_ENABLE_LOGGING)
+            val alreadySet = preferenceProvider.containsPreference(PREFERENCE_ENABLE_LOGGING)
             if (!alreadySet) {
-                preferenceManager.edit().putBoolean(PREFERENCE_ENABLE_LOGGING, true).apply()
+                preferenceProvider.putBoolean(PREFERENCE_ENABLE_LOGGING, true)
             }
         }
 
-        enabledLogging = preferenceManager.getBoolean(PREFERENCE_ENABLE_LOGGING, false)
+        enabledLogging = preferenceProvider.getBoolean(PREFERENCE_ENABLE_LOGGING, false)
 
         if (enabledLogging) {
             LogsProvider(applicationContext).startLogging()
