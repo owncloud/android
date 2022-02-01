@@ -37,7 +37,6 @@
   <string name="prefs_passcode">Kunci kode sandi</string>
   <string name="prefs_biometric">Kunci biometrik</string>
   <string name="prefs_biometric_summary">Aktifkan kode sandi atau kunci pola untuk mengaktifkan opsi ini</string>
-  <string name="confirmation_access_from_document_provider_title">Anda yakin ingin mengaktifkan fitur ini?</string>
   <string name="prefs_touches_with_other_visible_windows">Bersentuhan dengan jendela lainnya</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Perbolehkan sentuhan ketika penglihatan dikaburkan oleh jendela lain yang terlihat. Aktifkanlah untuk menggunakan aplikasi penyaring cahaya.</string>
   <string name="confirmation_touches_with_other_windows_title">Anda yakin ingin mengaktifkan fitur ini?</string>
@@ -75,8 +74,6 @@
   <string name="passcode_already_set">Pola dan kunci kode sandi tidak dapat diaktifkan secara bersamaan, harap nonaktifkan kode sandi terlebih dahulu</string>
   <string name="pattern_no_longer_required">Pola tidak akan ditanyakan lagi</string>
   <string name="pattern_configure_your_pattern_explanation">Pola akan diminta setiap kali aplikasi dimulai</string>
-  <string name="pass_code_locked">Dikunci dengan sandi</string>
-  <string name="pattern_locked">Dikunci dengan pola</string>
   <string name="illegal_argument_exception_message">AKSI yang sah dibutuhkan dalam maksud melewati ke </string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Berkas</string>

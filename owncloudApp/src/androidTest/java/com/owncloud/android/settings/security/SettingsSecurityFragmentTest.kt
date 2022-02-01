@@ -45,7 +45,7 @@ import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.testutil.security.OC_PATTERN
 import com.owncloud.android.utils.matchers.verifyPreference
@@ -121,7 +121,7 @@ class SettingsSecurityFragmentTest {
             prefPattern = fragment.findPreference(PatternActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
             prefLockApplication = fragment.findPreference(PREFERENCE_LOCK_TIMEOUT)!!
-            prefAccessDocumentProvider = fragment.findPreference(PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER)!!
+            prefAccessDocumentProvider = fragment.findPreference(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER)!!
             prefTouchesWithOtherVisibleWindows =
                 fragment.findPreference(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)!!
         }
@@ -152,7 +152,7 @@ class SettingsSecurityFragmentTest {
         )
 
         prefAccessDocumentProvider.verifyPreference(
-            keyPref = PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER,
+            keyPref = PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER,
             titlePref = context.getString(R.string.prefs_access_from_document_provider),
             summaryPref = context.getString(R.string.prefs_access_from_document_provider_summary),
             visible = true,

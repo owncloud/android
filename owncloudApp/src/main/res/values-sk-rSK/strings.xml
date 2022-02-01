@@ -37,7 +37,6 @@
   <string name="prefs_passcode">Heslo</string>
   <string name="prefs_biometric">Biometrický zámok</string>
   <string name="prefs_biometric_summary">Zapnite heslo ale PIN pre zapnutie tejto funkcionality.</string>
-  <string name="confirmation_access_from_document_provider_title">Vážne si prajete zapnúť túto funkciu ?</string>
   <string name="prefs_touches_with_other_visible_windows">Dotkne sa to ostatných viditeľných okien.</string>
   <string name="confirmation_touches_with_other_windows_title">Vážne si prajete zapnúť túto funkciu ?</string>
   <string name="prefs_camera_picture_upload">Nahrávanie obrázkov.</string>

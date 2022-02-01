@@ -41,7 +41,6 @@
   <string name="prefs_passcode">Захистити паролем</string>
   <string name="prefs_biometric">Біометричне блокування</string>
   <string name="prefs_biometric_summary">Увімкніть блокування паролем або графічним ключем щоб увімкнути це налаштування</string>
-  <string name="confirmation_access_from_document_provider_title">Ви впевнені, що хочете включити цю функцію?</string>
   <string name="prefs_touches_with_other_visible_windows">Взаємодія з іншими відкритими вікнами</string>
   <string name="confirmation_touches_with_other_windows_title">Ви впевнені, що хочете включити цю функцію?</string>
   <string name="prefs_camera_picture_upload">Завантаження зображень</string>

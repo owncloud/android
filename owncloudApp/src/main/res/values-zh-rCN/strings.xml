@@ -43,7 +43,6 @@
   <string name="prefs_lock_application_entries_1minute">1 分钟后</string>
   <string name="prefs_lock_application_entries_5minutes">5 分钟后</string>
   <string name="prefs_lock_application_entries_30minutes">30 分钟后</string>
-  <string name="confirmation_access_from_document_provider_title">你确定要启用此功能吗？</string>
   <string name="confirmation_touches_with_other_windows_title">你确定要启用此功能吗？</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
   <string name="prefs_camera_picture_upload_summary">自动上传相机拍摄的图片</string>

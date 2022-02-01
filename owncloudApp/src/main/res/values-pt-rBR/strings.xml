@@ -46,10 +46,6 @@
   <string name="prefs_lock_application_entries_1minute">Após 1 minuto</string>
   <string name="prefs_lock_application_entries_5minutes">Após 5 minutos</string>
   <string name="prefs_lock_application_entries_30minutes">Após 30 minutos</string>
-  <string name="prefs_access_from_document_provider">Acesso do provedor de documentos</string>
-  <string name="prefs_access_from_document_provider_summary">Permita o acesso aos arquivos das contas no aplicativo por meio do explorador de arquivos nativo do Android quando houver um conjunto de bloqueio.</string>
-  <string name="confirmation_access_from_document_provider_title">Tem certeza de que deseja ativar esse recurso?</string>
-  <string name="confirmation_access_from_document_provider_message">Use este recurso com responsabilidade. Ativar esse recurso significa que seus arquivos podem ser abertos para aqueles aplicativos que usam o explorador de arquivos nativo do Android, independentemente dos métodos de bloqueio definidos.</string>
   <string name="prefs_touches_with_other_visible_windows">Toques com outras janelas visíveis</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques quando a visualização é obscurecida por outra janela visível. Ativá-lo para usar aplicativos de filtragem de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Tem certeza de que deseja ativar esse recurso?</string>
@@ -104,8 +100,6 @@
   <string name="passcode_already_set">Os bloqueios de padrão e senha não podem ser ativados ao mesmo tempo, desative primeiro o código de acesso</string>
   <string name="pattern_no_longer_required">O padrão não será mais solicitado</string>
   <string name="pattern_configure_your_pattern_explanation">O padrão será solicitado sempre que o aplicativo for iniciado</string>
-  <string name="pass_code_locked">Bloqueado com senha</string>
-  <string name="pattern_locked">Bloqueado com padrão</string>
   <string name="illegal_argument_exception_message">Uma AÇÃO válida é necessária no intento passado para</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Arquivos</string>

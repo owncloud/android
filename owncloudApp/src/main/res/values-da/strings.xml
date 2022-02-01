@@ -37,7 +37,6 @@
   <string name="prefs_passcode">Passcode-lås</string>
   <string name="prefs_biometric">Biometrisk lås</string>
   <string name="prefs_biometric_summary">Slå passcode eller mønsterlås til for at aktivere denne valgmulighed</string>
-  <string name="confirmation_access_from_document_provider_title">Er du sikker på du vil aktivere denne egenskab?</string>
   <string name="prefs_touches_with_other_visible_windows">Berøring med andre synlige vinduer</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Tillad berøring når visningen er forstyrret af et andet vindue. Aktivér for at bruge med apps som filtrerer lys.</string>
   <string name="confirmation_touches_with_other_windows_title">Er du sikker på du vil aktivere denne egenskab?</string>
