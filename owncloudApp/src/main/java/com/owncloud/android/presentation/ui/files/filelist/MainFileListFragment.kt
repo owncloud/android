@@ -270,6 +270,14 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 updateFileListData(filesList = data ?: emptyList())
             }
         })
+
+        filesViewModel.refreshFolder.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                if (actionMode != null) {
+                    actionMode!!.finish()
+                }
+            }
+        })
     }
 
     private fun updateFileListData(filesList: List<OCFile>) {
@@ -571,7 +579,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 R.id.action_rename_file -> {
                     val dialog = RenameFileDialogFragment.newInstance(singleFile)
                     dialog.show(fragmentManager!!, FileDetailFragment.FTAG_RENAME_FILE)
-
                     return true
                 }
                 R.id.action_see_details -> {
@@ -620,7 +627,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             R.id.action_download_file,
             R.id.action_sync_file -> {
                 syncFiles(checkedFiles)
-                //containerActivity?.fileOperationsHelper?.syncFiles(checkedFiles)
                 return true
             }
             R.id.action_cancel_sync -> {
