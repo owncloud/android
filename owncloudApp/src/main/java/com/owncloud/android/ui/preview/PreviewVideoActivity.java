@@ -23,11 +23,11 @@ package com.owncloud.android.ui.preview;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -61,7 +61,6 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
      */
     public static final String EXTRA_START_POSITION = "START_POSITION";
 
-    private Handler mainHandler;
     private PlayerView exoPlayerView;
 
     private boolean mExoPlayerBooted = false;
@@ -70,8 +69,6 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
     private boolean mAutoplay; // when 'true', the playback starts immediately with the activity
     private long mPlaybackPosition; // continue the playback in the specified position
-
-    private static final int NOT_FOUND_ERROR = 404;
 
     // Activity lifecycle
 
@@ -151,18 +148,15 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     // Video player internal methods
 
     private void preparePlayer() {
-
         // Create a default TrackSelector
-        mainHandler = new Handler();
-        AdaptiveTrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory();
+        AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = new SimpleExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
         player.addListener(this);
         exoPlayerView.setPlayer(player);
         // Prepare video player asynchronously
-        new PrepareVideoPlayerAsyncTask(getApplicationContext(), this, getFile(), getAccount(),
-                mainHandler).execute();
+        new PrepareVideoPlayerAsyncTask(getApplicationContext(), this, getFile(), getAccount()
+        ).execute();
     }
 
     /**
@@ -199,7 +193,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     // Video player eventListener implementation
 
     @Override
-    public void onPlayerError(PlaybackException error) {
+    public void onPlayerError(@NonNull PlaybackException error) {
 
         Timber.e(error, "Error in video player");
 
@@ -237,7 +231,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     }
 
     @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+    public void onTracksChanged(@NonNull TrackGroupArray trackGroups, @NonNull TrackSelectionArray trackSelections) {
         // Do nothing
     }
 
