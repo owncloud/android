@@ -20,12 +20,18 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
+import android.content.ContentProvider
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.providers.ContextProvider
 
 class PatternViewModel(
-    private val preferencesProvider: SharedPreferencesProvider
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
     fun setPattern(pattern: String) {
@@ -41,5 +47,16 @@ class PatternViewModel(
     fun checkPatternIsValid(patternValue: String?): Boolean {
         val savedPattern = preferencesProvider.getString(PatternActivity.PREFERENCE_PATTERN, null)
         return savedPattern != null && savedPattern == patternValue
+    }
+
+    private fun getPreferenceManagerEditor(): SharedPreferences.Editor {
+        val appPrefsEditor = PreferenceManager.getDefaultSharedPreferences(contextProvider.getContext())
+        return appPrefsEditor.edit()
+    }
+
+    fun setBiometricsState(enabled: Boolean) {
+        val editor = getPreferenceManagerEditor()
+        editor.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, enabled)
+        editor.apply()
     }
 }

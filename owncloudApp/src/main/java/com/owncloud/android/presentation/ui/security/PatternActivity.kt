@@ -41,6 +41,10 @@ import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.extensions.showBiometricDialog
+import com.owncloud.android.interfaces.BiometricStatus
+import com.owncloud.android.interfaces.IEnableBiometrics
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
@@ -48,7 +52,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class PatternActivity : AppCompatActivity() {
+class PatternActivity : AppCompatActivity(), IEnableBiometrics {
 
     // ViewModel
     private val patternViewModel by viewModel<PatternViewModel>()
@@ -62,6 +66,8 @@ class PatternActivity : AppCompatActivity() {
     private lateinit var patternExplanation: TextView
     private lateinit var patternLockView: PatternLockView
     private lateinit var patternError: TextView
+
+    val resultIntent = Intent()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -293,11 +299,10 @@ class PatternActivity : AppCompatActivity() {
     }
 
     private fun savePatternAndExit() {
-        val result = Intent()
         patternViewModel.setPattern(patternValue!!)
-        setResult(RESULT_OK, result)
+        setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
-        finish()
+        showBiometricDialog(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -329,6 +334,20 @@ class PatternActivity : AppCompatActivity() {
             return true
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onOptionSelected(optionSelected: BiometricStatus) {
+        when (optionSelected) {
+            BiometricStatus.ENABLED_BY_USER -> {
+                resultIntent.putExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, true)
+                patternViewModel.setBiometricsState(enabled = true)
+            }
+            BiometricStatus.DISABLED_BY_USER -> {
+                resultIntent.putExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false)
+                patternViewModel.setBiometricsState(enabled = false)
+            }
+        }
+        finish()
     }
 
     companion object {

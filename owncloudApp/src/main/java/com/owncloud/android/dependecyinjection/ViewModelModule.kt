@@ -66,6 +66,6 @@ val viewModelModule = module {
     viewModel { PassCodeViewModel(get(), get()) }
     viewModel { LogListViewModel(get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get()) }
-    viewModel { PatternViewModel(get()) }
+    viewModel { PatternViewModel(get(), get()) }
     viewModel { BiometricViewModel(get(), get()) }
 }

@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
+import android.content.SharedPreferences
 import android.os.CountDownTimer
 import android.os.SystemClock
 import androidx.lifecycle.LiveData
@@ -27,7 +28,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
@@ -107,10 +110,16 @@ class PassCodeViewModel(
             override fun onTick(millisUntilFinished: Long) {
                 val hours = TimeUnit.HOURS.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS)
                 val minutes =
-                    if (hours > 0) TimeUnit.MINUTES.convert(TimeUnit.SECONDS.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS) - hours.times(3600), TimeUnit.SECONDS)
+                    if (hours > 0) TimeUnit.MINUTES.convert(
+                        TimeUnit.SECONDS.convert(
+                            millisUntilFinished.plus(1000),
+                            TimeUnit.MILLISECONDS
+                        ) - hours.times(3600), TimeUnit.SECONDS
+                    )
                     else TimeUnit.MINUTES.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS)
                 val seconds = TimeUnit.SECONDS.convert(millisUntilFinished.plus(1000), TimeUnit.MILLISECONDS).rem(60)
-                val timeString = if (hours > 0) String.format("%02d:%02d:%02d", hours, minutes, seconds) else String.format("%02d:%02d", minutes, seconds)
+                val timeString =
+                    if (hours > 0) String.format("%02d:%02d:%02d", hours, minutes, seconds) else String.format("%02d:%02d", minutes, seconds)
                 _getTimeToUnlockLiveData.postValue(Event(timeString))
             }
 
@@ -127,5 +136,16 @@ class PassCodeViewModel(
             pinChar?.let { pinString += pinChar }
         }
         return if (pinString.isEmpty()) null else pinString
+    }
+
+    private fun getPreferenceManagerEditor(): SharedPreferences.Editor {
+        val appPrefsEditor = PreferenceManager.getDefaultSharedPreferences(contextProvider.getContext())
+        return appPrefsEditor.edit()
+    }
+
+    fun setBiometricsState(enabled: Boolean) {
+        val editor = getPreferenceManagerEditor()
+        editor.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, enabled)
+        editor.apply()
     }
 }
