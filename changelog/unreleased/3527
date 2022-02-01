@@ -1,0 +1,6 @@
+Enhancement: Enable logs by default in debug mode
+
+Now, when the app is built in DEBUG mode, the logs are enabled by default.
+
+https://github.com/owncloud/android/issues/3526
+https://github.com/owncloud/android/pull/3527

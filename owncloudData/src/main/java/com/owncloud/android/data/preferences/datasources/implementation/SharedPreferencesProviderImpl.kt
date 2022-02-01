@@ -44,5 +44,7 @@ class SharedPreferencesProviderImpl(
     override fun putBoolean(key: String, value: Boolean) = editor.putBoolean(key, value).apply()
     override fun getBoolean(key: String, defaultValue: Boolean) = sharedPreferences.getBoolean(key, defaultValue)
 
+    override fun containsPreference(key: String) = sharedPreferences.contains(key)
+
     override fun removePreference(key: String) = editor.remove(key).apply()
 }

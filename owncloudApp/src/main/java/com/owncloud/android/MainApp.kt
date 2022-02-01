@@ -30,9 +30,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
-import com.owncloud.android.presentation.ui.security.BiometricManager
-import com.owncloud.android.presentation.ui.security.PassCodeManager
-import com.owncloud.android.presentation.ui.security.PatternManager
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
@@ -45,11 +43,14 @@ import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
-import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.presentation.ui.security.BiometricActivity
+import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.security.PatternManager
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
+import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
@@ -159,9 +160,17 @@ class MainApp : Application() {
         initDependencyInjection()
     }
 
-    fun startLogsIfEnabled() {
-        enabledLogging = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            .getBoolean(SettingsLogsFragment.PREFERENCE_ENABLE_LOGGING, false)
+    private fun startLogsIfEnabled() {
+        val preferenceProvider = SharedPreferencesProviderImpl(applicationContext)
+
+        if (BuildConfig.DEBUG) {
+            val alreadySet = preferenceProvider.containsPreference(PREFERENCE_ENABLE_LOGGING)
+            if (!alreadySet) {
+                preferenceProvider.putBoolean(PREFERENCE_ENABLE_LOGGING, true)
+            }
+        }
+
+        enabledLogging = preferenceProvider.getBoolean(PREFERENCE_ENABLE_LOGGING, false)
 
         if (enabledLogging) {
             LogsProvider(applicationContext).startLogging()

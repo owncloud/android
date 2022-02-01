@@ -15,6 +15,7 @@ Summary
 * Enhancement - Respect capability for Avatar support: [#3438](https://github.com/owncloud/android/pull/3438)
 * Enhancement - Brute force protection: [#3320](https://github.com/owncloud/android/issues/3320)
 * Enhancement - "Open with" action now allows editing: [#3475](https://github.com/owncloud/android/issues/3475)
+* Enhancement - Enable logs by default in debug mode: [#3526](https://github.com/owncloud/android/issues/3526)
 
 Details
 -------
@@ -80,6 +81,13 @@ Details
 
    https://github.com/owncloud/android/issues/3475
    https://github.com/owncloud/android/pull/3499
+
+* Enhancement - Enable logs by default in debug mode: [#3526](https://github.com/owncloud/android/issues/3526)
+
+   Now, when the app is built in DEBUG mode, the logs are enabled by default.
+
+   https://github.com/owncloud/android/issues/3526
+   https://github.com/owncloud/android/pull/3527
 
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================

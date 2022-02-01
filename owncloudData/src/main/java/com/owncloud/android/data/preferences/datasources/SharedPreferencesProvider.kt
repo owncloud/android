@@ -33,5 +33,7 @@ interface SharedPreferencesProvider {
     fun putBoolean(key: String, value: Boolean)
     fun getBoolean(key: String, defaultValue: Boolean): Boolean
 
+    fun containsPreference(key: String): Boolean
+
     fun removePreference(key: String)
 }
