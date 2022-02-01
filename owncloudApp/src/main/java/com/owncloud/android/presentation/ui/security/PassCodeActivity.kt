@@ -45,6 +45,9 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.hideSoftKeyboard
+import com.owncloud.android.extensions.showBiometricDialog
+import com.owncloud.android.interfaces.BiometricStatus
+import com.owncloud.android.interfaces.IEnableBiometrics
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
@@ -53,13 +56,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Arrays
 
-class PassCodeActivity : AppCompatActivity() {
+class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
 
     // ViewModel
     private val passCodeViewModel by viewModel<PassCodeViewModel>()
 
     private var _binding: PasscodelockBinding? = null
-    val binding get() =  _binding!!
+    val binding get() = _binding!!
 
     private lateinit var passCodeEditTexts: Array<EditText?>
     private lateinit var passCodeDigits: Array<String?>
@@ -428,7 +431,7 @@ class PassCodeActivity : AppCompatActivity() {
         passCodeViewModel.setPassCode(passCodeString.toString())
         setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
-        finish()
+        showBiometricDialog(this)
     }
 
     public override fun onSaveInstanceState(outState: Bundle) {
@@ -488,6 +491,16 @@ class PassCodeActivity : AppCompatActivity() {
                         " constructor"
             }
         }
+    }
+
+    override fun onOptionSelected(optionSelected: BiometricStatus) {
+        when (optionSelected) {
+            BiometricStatus.ENABLED_BY_USER -> {
+            }
+            BiometricStatus.DISABLED_BY_USER -> {
+            }
+        }
+        finish()
     }
 
     companion object {

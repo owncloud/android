@@ -269,6 +269,9 @@
     <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
     <string name="biometric_prompt_title">Biometric log in</string>
     <string name="biometric_prompt_subtitle">Log in using your biometric credential</string>
+    <string name="biometric_dialog_title">Unlock using biometric lock?</string>
+    <string name="biometric_dialog_disable_option">Disable</string>
+    <string name="biometric_dialog_enable_option">Enable</string>
 
     <string name="media_notif_ticker">%1$s music player</string>
     <string name="media_state_playing">%1$s (playing)</string>
@@ -315,7 +318,7 @@
     <string name="auth_expired_basic_auth_toast">Please enter the current password</string>
     <string name="auth_connecting_auth_server">Connecting to authentication server …</string>
     <string name="auth_unsupported_auth_method">The server does not support this authentication method</string>
-  <string name="auth_fail_get_user_name">Your server is not returning a correct user id, please contact an administrator
+    <string name="auth_fail_get_user_name">Your server is not returning a correct user id, please contact an administrator
 	</string>
     <string name="auth_can_not_auth_against_server">Cannot authenticate to this server</string>
     <string name="auth_account_does_not_exist">Account does not exist in the device yet</string>

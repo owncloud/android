@@ -38,6 +38,8 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.interfaces.BiometricStatus
+import com.owncloud.android.interfaces.IEnableBiometrics
 import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
@@ -283,5 +285,20 @@ fun Activity.manageOptionLockSelected(type: LockType) {
             putExtra(EXTRAS_LOCK_ENFORCED, true)
         })
     }
+}
+
+fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
+    AlertDialog.Builder(this).apply {
+        setCancelable(false)
+        setTitle(getString(R.string.biometric_dialog_title))
+        setPositiveButton(R.string.biometric_dialog_enable_option) { dialog, _ ->
+            iEnableBiometrics.onOptionSelected(BiometricStatus.ENABLED_BY_USER)
+            dialog.dismiss()
+        }
+        setNegativeButton(R.string.biometric_dialog_disable_option) { dialog, _ ->
+            iEnableBiometrics.onOptionSelected(BiometricStatus.DISABLED_BY_USER)
+            dialog.dismiss()
+        }
+    }.show()
 }
 
