@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.viewmodels.security
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
+import com.owncloud.android.providers.ContextProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -36,13 +37,15 @@ import org.junit.Test
 class PatternViewModelTest : ViewModelTest() {
     private lateinit var patternViewModel: PatternViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
+    private lateinit var contextProvider: ContextProvider
 
     private val pattern = "1234"
 
     @Before
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
-        patternViewModel = PatternViewModel(preferencesProvider)
+        contextProvider = mockk(relaxUnitFun = true)
+        patternViewModel = PatternViewModel(preferencesProvider, contextProvider)
     }
 
     @Test
