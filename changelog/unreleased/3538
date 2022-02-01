@@ -1,0 +1,8 @@
+Enhancement: Preference for locking access from document provider is now independent from locking methods
+
+Previously, the "Access from document provider" preference was only enabled if at least one
+locking method was activated. Now, it has changes to "Lock access from document provider"
+and is independent from locking methods, just like another preference.
+
+https://github.com/owncloud/android/issues/3520
+https://github.com/owncloud/android/pull/3538
