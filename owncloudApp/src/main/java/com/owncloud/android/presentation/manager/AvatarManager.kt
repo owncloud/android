@@ -34,6 +34,7 @@ import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.ui.DefaultAvatarTextDrawable
 import com.owncloud.android.utils.BitmapUtils
 import org.koin.core.KoinComponent
+import org.koin.core.error.InstanceCreationException
 import org.koin.core.inject
 import timber.log.Timber
 import kotlin.math.roundToInt
@@ -63,9 +64,14 @@ class AvatarManager : KoinComponent {
             return BitmapUtils.bitmapToCircularBitmapDrawable(appContext.resources, it)
         }
 
-        val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
-        val storedCapabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(account.name))
-        val shouldFetchAvatar = storedCapabilities?.isFetchingAvatarAllowed() ?: true
+        val shouldFetchAvatar = try {
+            val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+            val storedCapabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(account.name))
+            storedCapabilities?.isFetchingAvatarAllowed() ?: true
+        } catch (instanceCreationException: InstanceCreationException) {
+            Timber.e(instanceCreationException, "Koin may not be initialized at this point")
+            true
+        }
 
         // Avatar not found in disk cache, fetch from server.
         if (fetchIfNotCached && shouldFetchAvatar) {
