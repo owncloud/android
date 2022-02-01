@@ -25,34 +25,42 @@ package com.owncloud.android.settings.security
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.utils.matchers.isDisplayed
-import com.owncloud.android.utils.matchers.withText
-import org.junit.After
-import org.junit.Test
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
 import com.owncloud.android.utils.click
+import com.owncloud.android.utils.matchers.isDisplayed
+import com.owncloud.android.utils.matchers.nthChildOf
 import com.owncloud.android.utils.matchers.withChildCountAndId
+import com.owncloud.android.utils.matchers.withText
 import io.mockk.every
 import io.mockk.mockk
-import com.owncloud.android.utils.matchers.nthChildOf
 import io.mockk.verify
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
+import org.junit.Rule
+import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -213,6 +221,8 @@ class PassCodeActivityTest {
 
     @Test
     fun secondTryCorrect() {
+        every { passCodeViewModel.isBiometricLockAvailable() } returns true
+
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
@@ -220,6 +230,9 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
         // Second typing
         typePasscode(defaultPassCode)
+
+        // Click dialog's enable option
+        onView(withText(R.string.biometric_dialog_enable_option)).perform(click())
 
         // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
@@ -341,6 +354,44 @@ class PassCodeActivityTest {
             isDisplayed(true)
             withText(R.string.pass_code_wrong)
         }
+    }
+
+    @Test
+    fun checkEnableBiometricDialogIsVisible() {
+        every { passCodeViewModel.isBiometricLockAvailable() } returns true
+
+        // Open Activity in passcode creation mode
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+
+        // First typing
+        typePasscode(defaultPassCode)
+        // Second typing
+        typePasscode(defaultPassCode)
+
+        // Check if dialog is visible
+        onView(withText(R.string.biometric_dialog_enable_option)).inRoot(isDialog()).check(matches(isDisplayed())).perform(click())
+
+        // Checking that the result returned is OK
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
+
+    }
+
+    @Test
+    fun checkEnableBiometricDialogIsNotVisible() {
+        every { passCodeViewModel.isBiometricLockAvailable() } returns false
+
+        // Open Activity in passcode creation mode
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+
+        // First typing
+        typePasscode(defaultPassCode)
+        // Second typing
+        typePasscode(defaultPassCode)
+
+        // Check dialog is not visible and method is not called.
+        verify(exactly = 0) { passCodeViewModel.setBiometricsState(any()) }
+
+        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED )
     }
 
     private fun openPasscodeActivity(mode: String) {
