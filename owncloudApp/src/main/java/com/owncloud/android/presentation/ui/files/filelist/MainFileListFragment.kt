@@ -86,6 +86,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
+    private val filesViewModel by viewModel<FilesViewModel>()
 
     private val KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED"
     private val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
@@ -618,7 +619,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             }
             R.id.action_download_file,
             R.id.action_sync_file -> {
-                containerActivity?.fileOperationsHelper?.syncFiles(checkedFiles)
+                syncFiles(checkedFiles)
+                //containerActivity?.fileOperationsHelper?.syncFiles(checkedFiles)
                 return true
             }
             R.id.action_cancel_sync -> {
@@ -730,6 +732,20 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             binding.optionsLayout.visibility = View.VISIBLE
 
             fileListAdapter.clearSelection()
+        }
+    }
+
+    fun syncFiles(files: Collection<OCFile?>) {
+        for (file in files) {
+            file?.let { syncFile(file) }
+        }
+    }
+
+    fun syncFile(file: OCFile) {
+        if (!file.isFolder) {
+            // TODO Sync file
+        } else {
+            filesViewModel.refreshFolder(file.remotePath)
         }
     }
 

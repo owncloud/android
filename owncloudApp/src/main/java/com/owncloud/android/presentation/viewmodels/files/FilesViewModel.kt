@@ -38,6 +38,9 @@ class FilesViewModel(
     private val _createFolder = MediatorLiveData<Event<UIResult<Unit>>>()
     val createFolder: LiveData<Event<UIResult<Unit>>> = _createFolder
 
+    private val _refreshFolder = MediatorLiveData<Event<UIResult<Unit>>>()
+    val refreshFolder: LiveData<Event<UIResult<Unit>>> = _refreshFolder
+
     fun createFolder(
         parentFile: OCFile,
         folderName: String
@@ -55,7 +58,7 @@ class FilesViewModel(
         remotePath: String
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutineDispatcherProvider.io,
-        liveData = _createFolder,
+        liveData = _refreshFolder,
         useCase = refreshFolderFromServerAsyncUseCase,
         useCaseParams = RefreshFolderFromServerAsyncUseCase.Params(
             remotePath = remotePath
