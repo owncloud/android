@@ -302,7 +302,11 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
         patternViewModel.setPattern(patternValue!!)
         setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
-        showBiometricDialog(this)
+        if (patternViewModel.isBiometricLockAvailable()) {
+            showBiometricDialog(this)
+        } else {
+            finish()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

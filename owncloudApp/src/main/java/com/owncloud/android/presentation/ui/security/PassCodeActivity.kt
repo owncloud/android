@@ -432,7 +432,12 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
         passCodeViewModel.setPassCode(passCodeString.toString())
         setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
-        showBiometricDialog(this)
+        if (passCodeViewModel.isBiometricLockAvailable()) {
+            showBiometricDialog(this)
+        } else {
+            finish()
+        }
+
     }
 
     public override fun onSaveInstanceState(outState: Bundle) {

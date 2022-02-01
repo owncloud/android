@@ -21,10 +21,12 @@
 package com.owncloud.android.presentation.viewmodels.security
 
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.presentation.ui.security.BiometricActivity
+import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.providers.ContextProvider
 
@@ -46,6 +48,14 @@ class PatternViewModel(
     fun checkPatternIsValid(patternValue: String?): Boolean {
         val savedPattern = preferencesProvider.getString(PatternActivity.PREFERENCE_PATTERN, null)
         return savedPattern != null && savedPattern == patternValue
+    }
+
+    fun isBiometricLockAvailable(): Boolean {
+        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            false
+        } else if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
+            false
+        } else BiometricManager.hasEnrolledBiometric() // Biometric not enrolled
     }
 
     private fun getPreferenceManagerEditor(): SharedPreferences.Editor {

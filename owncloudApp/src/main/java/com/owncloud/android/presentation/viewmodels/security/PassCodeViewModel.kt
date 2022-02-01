@@ -21,6 +21,7 @@
 package com.owncloud.android.presentation.viewmodels.security
 
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.CountDownTimer
 import android.os.SystemClock
 import androidx.lifecycle.LiveData
@@ -31,6 +32,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.BiometricActivity
+import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
@@ -136,6 +138,14 @@ class PassCodeViewModel(
             pinChar?.let { pinString += pinChar }
         }
         return if (pinString.isEmpty()) null else pinString
+    }
+
+    fun isBiometricLockAvailable(): Boolean {
+        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            false
+        } else if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
+            false
+        } else BiometricManager.hasEnrolledBiometric() // Biometric not enrolled
     }
 
     private fun getPreferenceManagerEditor(): SharedPreferences.Editor {
