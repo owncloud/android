@@ -1,4 +1,4 @@
-Enhancement: Preference for locking access from document provider is now independent from locking methods
+Enhancement: Access from document provider independent from locking methods
 
 Previously, the "Access from document provider" preference was only enabled if at least one
 locking method was activated. Now, it has changes to "Lock access from document provider"
