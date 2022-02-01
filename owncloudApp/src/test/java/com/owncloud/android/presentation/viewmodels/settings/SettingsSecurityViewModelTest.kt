@@ -102,7 +102,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `set pref access from document provider - ok - true`() {
+    fun `set pref lock access from document provider - ok - true`() {
         securityViewModel.setPrefLockAccessDocumentProvider(true)
 
         verify(exactly = 1) {
@@ -111,7 +111,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `set pref access from document provider - ok - false`() {
+    fun `set pref lock access from document provider - ok - false`() {
         securityViewModel.setPrefLockAccessDocumentProvider(false)
 
         verify(exactly = 1) {
