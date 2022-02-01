@@ -36,7 +36,6 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
@@ -59,7 +58,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
-import org.junit.Rule
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -391,7 +389,7 @@ class PassCodeActivityTest {
         // Check dialog is not visible and method is not called.
         verify(exactly = 0) { passCodeViewModel.setBiometricsState(any()) }
 
-        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED )
+        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)
     }
 
     private fun openPasscodeActivity(mode: String) {
