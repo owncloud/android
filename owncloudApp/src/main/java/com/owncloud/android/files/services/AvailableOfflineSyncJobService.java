@@ -139,10 +139,8 @@ public class AvailableOfflineSyncJobService extends JobService {
          * @param accountName          account to synchronize the available offline file with
          */
         private void startSyncOperation(OCFile availableOfflineFile, String accountName) {
-            if (MainApp.Companion.getEnabledLogging()) {
-                Timber.i("Requested synchronization for file %1s in account %2s",
-                        availableOfflineFile.getRemotePath(), accountName);
-            }
+            Timber.i("Requested synchronization for file %1s in account %2s",
+                    availableOfflineFile.getRemotePath(), accountName);
 
             Account account = AccountUtils.getOwnCloudAccountByName(mAvailableOfflineJobService, accountName);
             if (account == null) {
@@ -151,16 +149,13 @@ public class AvailableOfflineSyncJobService extends JobService {
             }
 
             FileDataStorageManager storageManager =
-                    new FileDataStorageManager(
-                            mAvailableOfflineJobService, account, mAvailableOfflineJobService.getContentResolver()
-                    );
+                    new FileDataStorageManager(mAvailableOfflineJobService, account, mAvailableOfflineJobService.getContentResolver());
 
             SynchronizeFileOperation synchronizeFileOperation =
                     new SynchronizeFileOperation(availableOfflineFile, null, account, false,
                             mAvailableOfflineJobService, true);
 
-            RemoteOperationResult result = synchronizeFileOperation.
-                    execute(storageManager, mAvailableOfflineJobService);
+            RemoteOperationResult result = synchronizeFileOperation.execute(storageManager, mAvailableOfflineJobService);
 
             if (result.getCode() == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
                 notifyConflict(availableOfflineFile, account, mAvailableOfflineJobService);

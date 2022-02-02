@@ -61,15 +61,15 @@ public class SynchronizeFileOperation extends SyncOperation {
 
     /**
      * Constructor for "full synchronization mode".
-     *
+     * <p>
      * Uses remotePath to retrieve all the data both in local cache and in the remote OC server
      * when the operation is executed, instead of reusing {@link OCFile} instances.
-     *
+     * <p>
      * Useful for direct synchronization of a single file.
      *
-     * @param remotePath       Path to the OCFile to sync
-     * @param account          ownCloud account holding the file.
-     * @param context          Android context; needed to start transfers.
+     * @param remotePath Path to the OCFile to sync
+     * @param account    ownCloud account holding the file.
+     * @param context    Android context; needed to start transfers.
      */
     public SynchronizeFileOperation(
             String remotePath,
@@ -89,22 +89,22 @@ public class SynchronizeFileOperation extends SyncOperation {
     /**
      * Constructor allowing to reuse {@link OCFile} instances just queried from local cache or
      * from remote OC server.
-     *
+     * <p>
      * Useful to include this operation as part of the synchronization of a folder
      * (or a full account), avoiding the repetition of fetch operations
      * (both in local database or remote server).
-     *
+     * <p>
      * At least one of localFile or serverFile MUST NOT BE NULL. If you don't have none of them,
      * use the other constructor.
      *
-     * @param localFile        Data of file (just) retrieved from local cache/database.
-     * @param serverFile       Data of file (just) retrieved from a remote server. If null,
-     *                         will be retrieved from network by the operation when executed.
-     * @param account          ownCloud account holding the file.
-     * @param pushOnly         When 'true', if 'severFile' is NULL, will not fetch remote properties before
-     *                         trying to upload local changes; upload operation will take care of not overwriting
-     *                         remote content if there are unnoticed changes on the server.
-     * @param context          Android context; needed to start transfers.
+     * @param localFile                        Data of file (just) retrieved from local cache/database.
+     * @param serverFile                       Data of file (just) retrieved from a remote server. If null,
+     *                                         will be retrieved from network by the operation when executed.
+     * @param account                          ownCloud account holding the file.
+     * @param pushOnly                         When 'true', if 'severFile' is NULL, will not fetch remote properties before
+     *                                         trying to upload local changes; upload operation will take care of not overwriting
+     *                                         remote content if there are unnoticed changes on the server.
+     * @param context                          Android context; needed to start transfers.
      * @param requestedFromAvOfflineJobService When 'true' will perform some specific operations
      */
     public SynchronizeFileOperation(
@@ -220,9 +220,7 @@ public class SynchronizeFileOperation extends SyncOperation {
             }
         }
 
-        if (MainApp.Companion.getEnabledLogging()) {
-            Timber.i("Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() + ": " + result.getLogMessage());
-        }
+        Timber.i("Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() + ": " + result.getLogMessage());
 
         return result;
     }
