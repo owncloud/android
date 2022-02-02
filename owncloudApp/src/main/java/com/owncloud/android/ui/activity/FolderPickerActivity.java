@@ -166,7 +166,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             }
             listFragment.setMessageForEmptyList(getString(message));
         } else {
-            Timber.e("OCFileListFragment is null");
+            Timber.e("MainFileListFragment is null");
         }
     }
 
