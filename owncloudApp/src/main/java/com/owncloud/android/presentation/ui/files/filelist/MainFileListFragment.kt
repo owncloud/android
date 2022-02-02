@@ -485,7 +485,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     override fun onCreateFolderListener() {
-        //TODO("Not yet implemented")
+        val dialog = CreateFolderDialogFragment.newInstance(mainFileListViewModel.getFile(), this)
+        dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_FOLDER)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean = false
@@ -583,7 +584,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 }
                 R.id.action_rename_file -> {
                     val dialog = RenameFileDialogFragment.newInstance(singleFile)
-                    dialog.show(fragmentManager!!, FileDetailFragment.FTAG_RENAME_FILE)
+                    dialog.show(requireActivity().supportFragmentManager, FileDetailFragment.FTAG_RENAME_FILE)
                     return true
                 }
                 R.id.action_see_details -> {
@@ -626,7 +627,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             }
             R.id.action_remove_file -> {
                 val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles)
-                dialog.show(fragmentManager!!, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
                 return true
             }
             R.id.action_download_file,
@@ -770,6 +771,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun setMessageForEmptyList(message: String) {
         binding.emptyDataParent.root.visibility = View.VISIBLE
+        binding.emptyDataParent.listEmptyDatasetIcon.visibility = View.GONE
+        binding.emptyDataParent.listEmptyDatasetTitle.visibility = View.GONE
         binding.emptyDataParent.listEmptyDatasetSubTitle.text = message
     }
 
