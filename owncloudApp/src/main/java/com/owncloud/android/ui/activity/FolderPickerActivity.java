@@ -159,14 +159,12 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             if (!mSyncInProgress) {
                 // In case folder list is empty
                 message = R.string.file_list_empty_moving;
-                /**if (listFragment.getProgressBar() != null) {
-                 listFragment.getProgressBar().setVisibility(View.GONE);
-                 }
-                 if (listFragment.getShadowView() != null) {
-                 listFragment.getShadowView().setVisibility(View.VISIBLE);
-                 }*/
+                listFragment.getProgressBar();
+                listFragment.getProgressBar().setVisibility(View.GONE);
+                listFragment.getShadowView();
+                listFragment.getShadowView().setVisibility(View.VISIBLE);
             }
-            //listFragment.setMessageForEmptyList(getString(message));
+            listFragment.setMessageForEmptyList(getString(message));
         } else {
             Timber.e("OCFileListFragment is null");
         }
@@ -215,7 +213,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         MainFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
-            // fileListFragment.setProgressBarAsIndeterminate(true);
+            fileListFragment.setProgressBarAsIndeterminate(true);
         }
 
         setBackgroundText();
@@ -294,7 +292,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     protected void refreshListOfFilesFragment() {
         MainFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
-            //fileListFragment.listDirectory(true);
+            fileListFragment.listCurrentDirectory();
         }
     }
 
@@ -489,7 +487,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
                 MainFileListFragment fileListFragment = getListOfFilesFragment();
                 if (fileListFragment != null) {
-                    //fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
+                    fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
                 }
 
                 setBackgroundText();
