@@ -502,10 +502,10 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
     override fun onOptionSelected(optionSelected: BiometricStatus) {
         when (optionSelected) {
             BiometricStatus.ENABLED_BY_USER -> {
-                resultIntent.putExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, true)
+                passCodeViewModel.setBiometricsState(enabled = true)
             }
             BiometricStatus.DISABLED_BY_USER -> {
-                resultIntent.putExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false)
+                passCodeViewModel.setBiometricsState(enabled = false)
             }
         }
         finish()

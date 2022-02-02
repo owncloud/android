@@ -62,10 +62,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
             else {
                 prefPasscode?.isChecked = true
-                result.data?.getBooleanExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false).apply {
-                    securityViewModel.setBiometricsState(this ?: false)
-                    prefBiometric?.isChecked = this ?: false
-                }
+                prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
                 // Allow to use biometric lock, lock delay and access from document provider since Passcode lock has been enabled
                 enableBiometricAndLockApplicationAndAccessFromDocumentProvider()
@@ -90,10 +87,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
             else {
                 prefPattern?.isChecked = true
-                result.data?.getBooleanExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false).apply {
-                    securityViewModel.setBiometricsState(this ?: false)
-                    prefBiometric?.isChecked = this ?: false
-                }
+                prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
                 // Allow to use biometric lock, lock delay and access from document provider since Pattern lock has been enabled
                 enableBiometricAndLockApplicationAndAccessFromDocumentProvider()

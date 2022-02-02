@@ -48,14 +48,5 @@ class SettingsSecurityViewModel(
 
     fun isSecurityEnforcedEnabled() = contextProvider.getBoolean(R.bool.lock_enforced)
 
-    private fun getPreferenceManagerEditor(): SharedPreferences.Editor {
-        val appPrefsEditor = PreferenceManager.getDefaultSharedPreferences(contextProvider.getContext())
-        return appPrefsEditor.edit()
-    }
-
-    fun setBiometricsState(enabled: Boolean) {
-        val editor = getPreferenceManagerEditor()
-        editor.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, enabled)
-        editor.apply()
-    }
+    fun getBiometricsState(): Boolean = preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 }

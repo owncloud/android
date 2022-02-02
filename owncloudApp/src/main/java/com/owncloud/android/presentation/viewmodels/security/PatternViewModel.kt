@@ -57,4 +57,15 @@ class PatternViewModel(
             false
         } else BiometricManager.hasEnrolledBiometric() // Biometric not enrolled
     }
+
+    private fun getPreferenceManagerEditor(): SharedPreferences.Editor {
+        val appPrefsEditor = PreferenceManager.getDefaultSharedPreferences(contextProvider.getContext())
+        return appPrefsEditor.edit()
+    }
+
+    fun setBiometricsState(enabled: Boolean) {
+        val editor = getPreferenceManagerEditor()
+        editor.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, enabled)
+        editor.apply()
+    }
 }
