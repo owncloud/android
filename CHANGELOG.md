@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
+* Enhancement - Permission dialog removal: [#2524](https://github.com/owncloud/android/pull/2524)
 * Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
 * Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
 * Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
@@ -27,6 +28,13 @@ Details
 
    https://github.com/owncloud/android/issues/3060
    https://github.com/owncloud/android/pull/3437
+
+* Enhancement - Permission dialog removal: [#2524](https://github.com/owncloud/android/pull/2524)
+
+   The old permission request dialog has been removed. It was not needed after migrating the
+   storage to scoped storage, read and write permissions are guaranteed in our scoped storage.
+
+   https://github.com/owncloud/android/pull/2524
 
 * Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
 
