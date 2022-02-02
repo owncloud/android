@@ -26,7 +26,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
@@ -105,10 +104,12 @@ class MainFileListViewModel(
 
     private fun getSearchFilesList(fileListOption: FileListOption, folderId: Long, searchText: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getSearchFolderContentUseCase.execute(GetSearchFolderContentUseCase.Params(
-                fileListOption = fileListOption,
-                folderId = folderId,
-                search = searchText)
+            getSearchFolderContentUseCase.execute(
+                GetSearchFolderContentUseCase.Params(
+                    fileListOption = fileListOption,
+                    folderId = folderId,
+                    search = searchText
+                )
             ).let {
                 when (it) {
                     is UseCaseResult.Error -> _getSearchedFilesData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
