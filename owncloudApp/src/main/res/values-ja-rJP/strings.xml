@@ -423,7 +423,6 @@
   <string name="manage_space_description">%1$s のデータから 設定、データベース、サーバー証明書が完全に削除されます。\n\n ダウンロードされたファイルはそのまま残ります。\n\n 実行中はしばらくお待ちください。</string>
   <string name="manage_space_clear_data">データのクリア</string>
   <string name="manage_space_error">いくつかのファイルがクリアできませんでした。</string>
-  <string name="permission_storage_access">ファイルをダウンロード &amp; アップロードする追加の権限が必要です。</string>
   <string name="local_file_not_found_toast">ローカルファイルにファイルがありません</string>
   <string name="confirmation_remove_files_alert">選択したものを削除してよろしいですか?</string>
   <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>

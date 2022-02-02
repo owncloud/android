@@ -479,7 +479,6 @@
 \n\nТова може да отнеме малко време.</string>
   <string name="manage_space_clear_data">Изчисти данните</string>
   <string name="manage_space_error">Някой файлове не могат да бъдат изтрити</string>
-  <string name="permission_storage_access">Необходими са допълнителни права за качване &amp; сваляне на файлове.</string>
   <string name="local_file_not_found_toast">Файла не беше намерен на локалната файлова система</string>
   <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>

@@ -486,7 +486,6 @@
   <string name="manage_space_description">Einstellungen, Datenbank und Server-Zertifikate von %1$s\'s Daten werden dauerhaft gelöscht.\n\nHerunter geladene Dateien bleiben unangetastet.\n\nDieser Vorgang kann eine Zeit dauern.</string>
   <string name="manage_space_clear_data">Lösche Daten</string>
   <string name="manage_space_error">Einige Dateien konnten nicht gelöscht werden</string>
-  <string name="permission_storage_access">Weitere Berechtigungen erforderlich für das Hoch- und Herunterladen von Dateien</string>
   <string name="local_file_not_found_toast">Die Datei wurde im lokalen Dateisystem nicht gefunden</string>
   <string name="confirmation_remove_files_alert">Möchten Sie die ausgewählten Elemente wirklich löschen?</string>
   <string name="confirmation_remove_folders_alert">Möchten Sie die ausgewählten Elemente und dessen Inhalt wirklich löschen?</string>

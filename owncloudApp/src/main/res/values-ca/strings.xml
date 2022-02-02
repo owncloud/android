@@ -468,7 +468,6 @@
   <string name="manage_space_description">La configuració, base de dades i certificats del servidor %1$s s\'esborraran de forma permanent.\n\nEls arxius descarregats quedaran intactes.\n\nAquest procés tardarà una mica.</string>
   <string name="manage_space_clear_data">Neteja dades</string>
   <string name="manage_space_error">Alguns fitxers no s\'han pogut esborrar</string>
-  <string name="permission_storage_access">Es requereixen permisos addicionals per a pujar i baixar fitxers.</string>
   <string name="local_file_not_found_toast">El fitxer no s\'ha trobat entre els fitxers locals</string>
   <string name="confirmation_remove_files_alert">Segur que vols esborrar els elements seleccionats?</string>
   <string name="confirmation_remove_folders_alert">Segur que voleu esborrar els elements seleccionats i els seus continguts?</string>

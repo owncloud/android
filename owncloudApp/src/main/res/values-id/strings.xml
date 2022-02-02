@@ -462,7 +462,6 @@
 \n\nBerkas terunduh tidak akan terhapus.\n\nProses dapat memakan waktu.</string>
   <string name="manage_space_clear_data">Membersihkan data</string>
   <string name="manage_space_error">Beberapa berkas tidak dapat dihapus.</string>
-  <string name="permission_storage_access">Izin tambahan diperlukan untuk mengunggah &amp; amp; Download file</string>
   <string name="local_file_not_found_toast">Berkas tidak ditemukan di lokal sistem</string>
   <string name="confirmation_remove_files_alert">Apakah anda yakin ingin menghapus item terpilih?</string>
   <string name="confirmation_remove_folders_alert">Apakah anda yakin ingin menghapus item terpilih beserta isinya?</string>

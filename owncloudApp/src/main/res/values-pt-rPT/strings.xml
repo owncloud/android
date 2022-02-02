@@ -406,7 +406,6 @@
   <string name="manage_space_description">As configurações, base de dados e certificados de servidor dos dados de %1$s serão eliminados para sempre. \n\nOs ficheiros transferidos serão mantidos.\n\nEste processo pode demorar algum tempo.</string>
   <string name="manage_space_clear_data">Limpar dados</string>
   <string name="manage_space_error">Alguns ficheiros não podem ser apagados.</string>
-  <string name="permission_storage_access">São necessárias permissões adicionais para enviar e transferir ficheiros.</string>
   <string name="local_file_not_found_toast">O ficheiro não foi encontrado no sistema de ficheiros local</string>
   <string name="confirmation_remove_files_alert">Tem a certeza que deseja remover os items selecionados?</string>
   <string name="confirmation_remove_folders_alert">Tem a certeza que deseja remover os items selecionados e os seus respetivos conteúdos?</string>

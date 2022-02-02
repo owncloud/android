@@ -436,7 +436,6 @@ Te rog ia legătura cu administratorul</string>
   <string name="manage_space_description">Configurările, baza de date și certificatele serverului de la informațiile %1$s vor fi șterse definitiv.\n\nFișierele descărcate vor fi păstrate neatinse.\n\nAcest process poate dura o vreme.</string>
   <string name="manage_space_clear_data">Curăță informațiile</string>
   <string name="manage_space_error">Unele fișiere nu pot fi șterse.</string>
-  <string name="permission_storage_access">Sunt necesare permisiuni suplimentare pentru a încărca &amp; descărca fișierele.</string>
   <string name="local_file_not_found_toast">Acest fișier nu a fost găsit în sistemul de fișiere local</string>
   <string name="confirmation_remove_files_alert">Chiar vrei să ștergi elementele selectate ?</string>
   <string name="confirmation_remove_folders_alert">Chiar vrei să ștergi elementele selectate și conținutul lor ?</string>

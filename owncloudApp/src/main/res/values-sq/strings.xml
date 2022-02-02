@@ -511,7 +511,6 @@
   <string name="manage_space_description">Rregullimet, baza e të dhënave dhe dëshmitë e shërbyesit prej të dhënave nga %1$s do të fshihen përgjithmonë. \n\nKartelat e shkarkuara do të ruhen të paprekura.\n\nKy proces mund të hajë ca kohë.</string>
   <string name="manage_space_clear_data">Spastroji të dhënat</string>
   <string name="manage_space_error">Ca kartela s\’u fshinë dot.</string>
-  <string name="permission_storage_access">Që të ngarkoni &amp; shkarkoni kartela lypsen leje shtesë.</string>
   <string name="local_file_not_found_toast">Kartela s\’u gjet te sistemi vendor i kartelave</string>
   <string name="confirmation_remove_files_alert">Doni vërtet të hiqen objektet e përzgjedhur?</string>
   <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre?</string>

@@ -508,7 +508,6 @@
   <string name="manage_space_description">การตั้งค่าใบรับรองเซิร์ฟเวอร์และฐานข้อมูลจาก %1$s จะถูกลบอย่างถาวร \n\nไฟล์ที่ดาวน์โหลดจะถูกเก็บไว้อย่างดี กระบวนการนี้ต้องใช้เวลาสักครู่</string>
   <string name="manage_space_clear_data">ล้างข้อมูล</string>
   <string name="manage_space_error">บางไฟล์ไม่สามารถลบได้</string>
-  <string name="permission_storage_access">กำหนดสิทธิ์เพิ่มเติมที่จำเป็นในการอัปโหลดและดาวน์โหลดไฟล์แล้ว</string>
   <string name="local_file_not_found_toast">ไม่พบไฟล์ในเครื่อง</string>
   <string name="confirmation_remove_files_alert">คุณมั่นใจว่าต้องการลบรายการที่เลือก?</string>
   <string name="confirmation_remove_folders_alert">คุณต้องการลบรายการที่เลือกและเนื้อหาของพวกเขา?</string>

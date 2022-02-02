@@ -405,7 +405,6 @@
   <string name="manage_space_description">Nastavenia, certifikaty databazy a servera z %1$s budú trvalo odstránené. \n\nStiahnuté súbory budú ponechané.\n\nTento proces môžete spustiť iba raz.</string>
   <string name="manage_space_clear_data">Vyčistenie dát.</string>
   <string name="manage_space_error">Niektoré súbory nemohli byť zmazané.</string>
-  <string name="permission_storage_access">Dalšie práva su požadované pre nahratie &amp; Stiahnutie súborov.</string>
   <string name="local_file_not_found_toast">Tento súbor sa nenachádza v lokálnom zozname súborov</string>
   <string name="confirmation_remove_files_alert">Vážne si želáš odstrániť tieto položky ?</string>
   <string name="confirmation_remove_folders_alert">Vážne si želáš odstrániť tieto položky a ich obsah ?</string>

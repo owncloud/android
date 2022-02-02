@@ -480,7 +480,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="manage_space_description">Van ser eliminados de xeito permanente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
   <string name="manage_space_clear_data">Limpar os datos</string>
   <string name="manage_space_error">Algúns ficheiros non puideron seren eliminados.</string>
-  <string name="permission_storage_access">Requirense permisos adicionais para enviar e descargar ficheiros.</string>
   <string name="local_file_not_found_toast">Non se atopou o ficheiro no sistema local de ficheiros</string>
   <string name="confirmation_remove_files_alert">Confirma que quere retirar os elementos seleccionados?</string>
   <string name="confirmation_remove_folders_alert">Confirma que quere eliminar os elementos seleccionados e o seu contido?</string>

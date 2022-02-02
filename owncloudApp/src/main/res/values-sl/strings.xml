@@ -437,7 +437,6 @@
   <string name="manage_space_description">Naastavitve, podatkovna zbirka in potrdila strežnika podatkov %1$s bodo trajno izbrisani. \n\nŽe prejete datoteke bodo ostane nedotaknjene.\n\nTo opravilo je lahko dolgotrajno.</string>
   <string name="manage_space_clear_data">Počisti podatke</string>
   <string name="manage_space_error">Nekaterih datotek ni mogoče izbrisati.</string>
-  <string name="permission_storage_access">Za prejemanje oziroma pošiljanje datotek v oblak so zahtevana dodatna dovoljenja.</string>
   <string name="local_file_not_found_toast">Datoteke ni mogoče najti na krajevnem sistemu</string>
   <string name="confirmation_remove_files_alert">Ali res želite odstraniti izbrane predmete?</string>
   <string name="confirmation_remove_folders_alert">Ali res želite odstraniti izbrane predmete in njihovo vsebino?</string>

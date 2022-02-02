@@ -464,7 +464,6 @@
   <string name="manage_space_description">Ustawienia, baza danych i certyfikaty serwera %1$s zostaną trwale skasowane.\n\nPobrane pliki pozostaną na swoich miejscach.\n\nTen proces zajmie trochę czasu.</string>
   <string name="manage_space_clear_data">Wyczyść dane</string>
   <string name="manage_space_error">Nie udało się usunąć niektórych plików.</string>
-  <string name="permission_storage_access">Dodatkowe uprawnienia do wysyłania i ściągania plików.</string>
   <string name="local_file_not_found_toast">Plik nie został znaleziony w lokalnym systemie plików</string>
   <string name="confirmation_remove_files_alert">Czy na pewno chcesz usunąć wybrane pliki?</string>
   <string name="confirmation_remove_folders_alert">Czy naprawdę chcesz usunąć wybrane foldery i ich zawartość?</string>
