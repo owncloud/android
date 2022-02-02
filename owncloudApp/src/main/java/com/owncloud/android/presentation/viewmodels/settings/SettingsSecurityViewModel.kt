@@ -20,11 +20,9 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
