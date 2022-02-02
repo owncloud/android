@@ -29,6 +29,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -88,17 +89,26 @@ class FileListAdapter(
             }
             ViewType.GRID_IMAGE.ordinal -> {
                 val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                binding.root.tag = ViewType.GRID_IMAGE
+                binding.root.apply {
+                    tag = ViewType.GRID_IMAGE
+                    filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+                }
                 GridImageViewHolder(binding)
             }
             ViewType.GRID_ITEM.ordinal -> {
                 val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                binding.root.tag = ViewType.GRID_ITEM
+                binding.root.apply {
+                    tag = ViewType.GRID_ITEM
+                    filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+                }
                 GridViewHolder(binding)
             }
             else -> {
                 val binding = ListFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                binding.root.tag = ViewType.FOOTER
+                binding.root.apply {
+                    tag = ViewType.FOOTER
+                    filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+                }
                 FooterViewHolder(binding)
             }
         }
@@ -147,7 +157,7 @@ class FileListAdapter(
         val viewType = getItemViewType(position)
 
 
-        if (!isFooter(position)) { // Is Item
+        if (viewType != ViewType.FOOTER.ordinal) { // Is Item
 
             val file = files[position] as OCFile
             val name = file.fileName
@@ -166,10 +176,7 @@ class FileListAdapter(
                 ViewType.LIST_ITEM.ordinal -> {
                     val view = holder as ListViewHolder
                     view.binding.let {
-                        it.fileListConstraintLayout.apply {
-                            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-                        }
-
+                        it.fileListConstraintLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
@@ -177,7 +184,7 @@ class FileListAdapter(
                     }
                 }
                 ViewType.GRID_ITEM.ordinal -> {
-                    //Filename
+                    // Filename
                     val view = holder as GridViewHolder
                     view.binding.Filename.text = file.fileName
                 }
@@ -189,30 +196,27 @@ class FileListAdapter(
                         if (file.sharedByLink) {
                             it.sharedIcon.apply {
                                 setImageResource(R.drawable.ic_shared_by_link)
-                                visibility = View.VISIBLE
+                                isVisible = true
                                 bringToFront()
                             }
                         } else if (file.sharedWithSharee == true || file.isSharedWithMe) {
                             it.sharedIcon.apply {
                                 setImageResource(R.drawable.shared_via_users)
-                                visibility = View.VISIBLE
+                                isVisible = true
                                 bringToFront()
                             }
                         } else {
-                            it.sharedIcon.visibility = View.GONE
+                            it.sharedIcon.isVisible = false
                         }
                     }
                 }
 
             }
 
-            //TODO Delete it when manage state sync.
-            holder.itemView.findViewById<ImageView>(R.id.localFileIndicator).apply {
-                visibility = View.GONE
-            }
-            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).apply {
-                visibility = View.GONE
-            }
+            // TODO Delete it when manage state sync.
+            holder.itemView.findViewById<ImageView>(R.id.localFileIndicator).isVisible = false
+
+            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).isVisible = false
 
 
             holder.itemView.setOnClickListener {
@@ -230,7 +234,7 @@ class FileListAdapter(
             }
 
             val checkBoxV = holder.itemView.findViewById<ImageView>(R.id.custom_checkbox).apply {
-                visibility = View.GONE
+                isVisible = false
             }
             holder.itemView.setBackgroundColor(Color.WHITE)
 
@@ -244,7 +248,7 @@ class FileListAdapter(
             checkBoxV.visibility = if (getCheckedItems().isNotEmpty()) View.VISIBLE else View.GONE
 
             if (file.isFolder) {
-                //Folder
+                // Folder
                 fileIcon.setImageResource(
                     MimetypeIconUtil.getFolderTypeIconId(
                         file.isSharedWithMe || file.sharedWithSharee == true,
@@ -279,8 +283,8 @@ class FileListAdapter(
                 }
             }
 
-        } else { //Is Footer
-            if (viewType == ViewType.FOOTER.ordinal && !isShowingJustFolders) {
+        } else { // Is Footer
+            if (!isShowingJustFolders) {
                 val view = holder as FooterViewHolder
                 val file = files[position] as OCFooterFile
                 (view.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams).apply {
@@ -292,17 +296,14 @@ class FileListAdapter(
     }
 
     private fun manageListOfFilesAndGenerateText(list: List<OCFile>): String {
-        var filesCount = 0
-        var foldersCount = 0
-        val count: Int = list.size
-        var file: OCFile
-        for (i in 0 until count) {
-            file = list[i]
+        val filesCount = 0
+        val foldersCount = 0
+        for (file in list) {
             if (file.isFolder) {
-                foldersCount++
+                foldersCount.plus(1)
             } else {
                 if (!file.isHidden) {
-                    filesCount++
+                    filesCount.plus(1)
                 }
             }
         }
