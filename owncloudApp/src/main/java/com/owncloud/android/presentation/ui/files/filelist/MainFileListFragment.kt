@@ -30,6 +30,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -290,6 +291,10 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun listDirectory(directory: OCFile) {
         mainFileListViewModel.listDirectory(directory = directory)
+    }
+
+    fun listCurrentDirectory() {
+        mainFileListViewModel.listCurrentDirectory()
     }
 
     private fun isShowingJustFolders(): Boolean {
@@ -753,6 +758,27 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         } else {
             filesViewModel.refreshFolder(file.remotePath)
         }
+    }
+
+    fun getProgressBar(): ProgressBar {
+        return binding.syncProgressBar
+    }
+
+    fun getShadowView(): View {
+        return binding.shadowView
+    }
+
+    fun setMessageForEmptyList(message: String) {
+        binding.emptyDataParent.root.visibility = View.VISIBLE
+        binding.emptyDataParent.listEmptyDatasetSubTitle.text = message
+    }
+
+    fun setProgressBarAsIndeterminate(indeterminate: Boolean) {
+        Timber.d("Setting progress visibility to %s", indeterminate)
+        binding.shadowView.visibility = View.GONE
+        binding.syncProgressBar.visibility = View.VISIBLE
+        binding.syncProgressBar.isIndeterminate = indeterminate
+        binding.syncProgressBar.postInvalidate()
     }
 
     companion object {
