@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 
@@ -72,7 +73,7 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
             onBrowsedDownTo(folder);
 
             if (!stateWasRecovered) {
-                OCFileListFragment listOfFolders = getListOfFilesFragment();
+                MainFileListFragment listOfFolders = getListOfFilesFragment();
                 listOfFolders.listDirectory(folder);
 
                 startSyncFolderOperation(folder, false);
