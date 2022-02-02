@@ -20,9 +20,12 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
@@ -44,4 +47,15 @@ class SettingsSecurityViewModel(
         preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
 
     fun isSecurityEnforcedEnabled() = contextProvider.getBoolean(R.bool.lock_enforced)
+
+    private fun getPreferenceManagerEditor(): SharedPreferences.Editor {
+        val appPrefsEditor = PreferenceManager.getDefaultSharedPreferences(contextProvider.getContext())
+        return appPrefsEditor.edit()
+    }
+
+    fun setBiometricsState(enabled: Boolean) {
+        val editor = getPreferenceManagerEditor()
+        editor.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, enabled)
+        editor.apply()
+    }
 }

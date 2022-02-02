@@ -63,6 +63,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             else {
                 prefPasscode?.isChecked = true
                 result.data?.getBooleanExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false).apply {
+                    securityViewModel.setBiometricsState(this ?: false)
                     prefBiometric?.isChecked = this ?: false
                 }
 
@@ -90,6 +91,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             else {
                 prefPattern?.isChecked = true
                 result.data?.getBooleanExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false).apply {
+                    securityViewModel.setBiometricsState(this ?: false)
                     prefBiometric?.isChecked = this ?: false
                 }
 

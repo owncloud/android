@@ -344,11 +344,9 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
         when (optionSelected) {
             BiometricStatus.ENABLED_BY_USER -> {
                 resultIntent.putExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, true)
-                patternViewModel.setBiometricsState(enabled = true)
             }
             BiometricStatus.DISABLED_BY_USER -> {
                 resultIntent.putExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false)
-                patternViewModel.setBiometricsState(enabled = false)
             }
         }
         finish()

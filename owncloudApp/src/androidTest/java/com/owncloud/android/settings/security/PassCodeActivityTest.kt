@@ -25,7 +25,6 @@ package com.owncloud.android.settings.security
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -39,9 +38,12 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
+import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
@@ -55,6 +57,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
@@ -77,11 +80,13 @@ class PassCodeActivityTest {
     private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
 
     private lateinit var passCodeViewModel: PassCodeViewModel
+    private lateinit var biometricViewModel: BiometricViewModel
 
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         passCodeViewModel = mockk(relaxUnitFun = true)
+        biometricViewModel = mockk(relaxUnitFun = true)
 
         timeToUnlockLiveData = MutableLiveData()
         finishTimeToUnlockLiveData = MutableLiveData()
@@ -387,7 +392,9 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
 
         // Check dialog is not visible and method is not called.
-        verify(exactly = 0) { passCodeViewModel.setBiometricsState(any()) }
+        every { passCodeViewModel.isBiometricLockAvailable() } returns false
+
+        assertFalse(passCodeViewModel.isBiometricLockAvailable())
     }
 
     private fun openPasscodeActivity(mode: String) {
