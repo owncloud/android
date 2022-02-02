@@ -104,6 +104,7 @@ class SettingsSecurityFragmentTest {
             )
         }
         every { securityViewModel.isSecurityEnforcedEnabled() } returns false
+        every { securityViewModel.getBiometricsState() } returns false
 
         Intents.init()
     }
@@ -484,11 +485,11 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun checkIfUserEnabledBiometricRecommendation() {
+        every { securityViewModel.getBiometricsState() } returns true
+
         launchTest()
 
         firstEnablePasscode(true)
-
-        every { securityViewModel.setBiometricsState(true) }
 
         onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
         assertTrue(prefBiometric!!.isEnabled)
@@ -500,8 +501,6 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         firstEnablePasscode()
-
-        every { securityViewModel.setBiometricsState(false) }
 
         assertFalse(prefBiometric!!.isChecked)
     }
