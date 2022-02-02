@@ -197,23 +197,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
         // Lock access from document provider
         prefLockAccessDocumentProvider?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
-            if (!(newValue as Boolean)) {
-                activity?.let {
-                    AlertDialog.Builder(it)
-                        .setTitle(getString(R.string.confirmation_lock_access_from_document_provider_title))
-                        .setMessage(getString(R.string.confirmation_lock_access_from_document_provider_message))
-                        .setNegativeButton(getString(R.string.common_no), null)
-                        .setPositiveButton(
-                            getString(R.string.common_yes)
-                        ) { _: DialogInterface?, _: Int ->
-                            securityViewModel.setPrefLockAccessDocumentProvider(true)
-                            prefLockAccessDocumentProvider?.isChecked = false
-                            notifyDocumentProviderRoots(requireContext())
-                        }
-                        .show()
-                }
-                return@setOnPreferenceChangeListener false
-            }
+            securityViewModel.setPrefLockAccessDocumentProvider(true)
             notifyDocumentProviderRoots(requireContext())
             true
         }

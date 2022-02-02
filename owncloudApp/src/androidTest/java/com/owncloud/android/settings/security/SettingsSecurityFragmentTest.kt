@@ -369,16 +369,6 @@ class SettingsSecurityFragmentTest {
     }
 
     @Test
-    fun lockAccessFromDocumentProviderDialog() {
-        launchTest()
-
-        onView(withText(R.string.prefs_lock_access_from_document_provider)).perform(click())
-        onView(withText(R.string.prefs_lock_access_from_document_provider)).perform(click())
-        onView(withText(R.string.confirmation_lock_access_from_document_provider_title)).check(matches(isDisplayed()))
-        onView(withText(R.string.confirmation_lock_access_from_document_provider_message)).check(matches(isDisplayed()))
-    }
-
-    @Test
     fun lockAccessFromDocumentProviderEnable() {
         launchTest()
 
@@ -392,18 +382,7 @@ class SettingsSecurityFragmentTest {
 
         onView(withText(R.string.prefs_lock_access_from_document_provider)).perform(click())
         onView(withText(R.string.prefs_lock_access_from_document_provider)).perform(click())
-        onView(withText(R.string.common_yes)).perform(click())
         assertFalse(prefLockAccessDocumentProvider.isChecked)
-    }
-
-    @Test
-    fun lockAccessFromDocumentProviderDisableRefuse() {
-        launchTest()
-
-        onView(withText(R.string.prefs_lock_access_from_document_provider)).perform(click())
-        onView(withText(R.string.prefs_lock_access_from_document_provider)).perform(click())
-        onView(withText(R.string.common_no)).perform(click())
-        assertTrue(prefLockAccessDocumentProvider.isChecked)
     }
 
     @Test
