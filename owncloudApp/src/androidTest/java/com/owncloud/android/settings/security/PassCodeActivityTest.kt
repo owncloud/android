@@ -387,7 +387,7 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
 
         // Check dialog is not visible and method is not called.
-        verify() { passCodeViewModel.setBiometricsState(false) }
+        verify(exactly = 0) { passCodeViewModel.setBiometricsState(false) }
     }
 
     private fun openPasscodeActivity(mode: String) {
