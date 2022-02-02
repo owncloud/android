@@ -489,7 +489,7 @@ class SettingsSecurityFragmentTest {
 
         launchTest()
 
-        firstEnablePasscode(true)
+        firstEnablePasscode()
 
         onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
         assertTrue(prefBiometric!!.isEnabled)
@@ -505,12 +505,11 @@ class SettingsSecurityFragmentTest {
         assertFalse(prefBiometric!!.isChecked)
     }
 
-    private fun firstEnablePasscode(biometricStatus: Boolean = false) {
+    private fun firstEnablePasscode() {
         every { securityViewModel.isPatternSet() } returns false
 
         mockIntent(
-            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT,
-            extras = Pair(SettingsSecurityFragment.BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, biometricStatus)
+            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_passcode)).perform(click())
     }

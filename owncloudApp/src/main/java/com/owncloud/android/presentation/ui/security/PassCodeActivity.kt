@@ -48,7 +48,6 @@ import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.interfaces.BiometricStatus
 import com.owncloud.android.interfaces.IEnableBiometrics
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots

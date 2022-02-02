@@ -41,7 +41,6 @@ import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
@@ -373,7 +372,6 @@ class PassCodeActivityTest {
 
         // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
-        assertEquals(activityScenario.result.resultData.getBooleanExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false), true)
 
     }
 
@@ -389,9 +387,8 @@ class PassCodeActivityTest {
         // Second typing
         typePasscode(defaultPassCode)
 
-        // Checking that the result returned is false
+        // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
-        assertEquals(activityScenario.result.resultData.getBooleanExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false), false)
     }
 
     private fun openPasscodeActivity(mode: String) {

@@ -273,7 +273,6 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         const val PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows"
         const val EXTRAS_LOCK_ENFORCED = "EXTRAS_LOCK_ENFORCED"
         const val PREFERENCE_LOCK_ATTEMPTS = "PrefLockAttempts"
-        const val BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA = "BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA"
     }
 
 }
