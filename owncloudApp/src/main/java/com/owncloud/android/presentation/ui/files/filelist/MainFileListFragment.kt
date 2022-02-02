@@ -761,7 +761,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
         val KEY_FILE = "$MY_PACKAGE.extra.FILE"
-
+        @JvmStatic
         fun newInstance(
             justFolders: Boolean = false,
             pickingAFolder: Boolean = false
