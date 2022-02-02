@@ -291,11 +291,11 @@ fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
     AlertDialog.Builder(this).apply {
         setCancelable(false)
         setTitle(getString(R.string.biometric_dialog_title))
-        setPositiveButton(R.string.biometric_dialog_enable_option) { dialog, _ ->
+        setPositiveButton(R.string.biometric_dialog_yes_option) { dialog, _ ->
             iEnableBiometrics.onOptionSelected(BiometricStatus.ENABLED_BY_USER)
             dialog.dismiss()
         }
-        setNegativeButton(R.string.biometric_dialog_disable_option) { dialog, _ ->
+        setNegativeButton(R.string.biometric_dialog_no_option) { dialog, _ ->
             iEnableBiometrics.onOptionSelected(BiometricStatus.DISABLED_BY_USER)
             dialog.dismiss()
         }

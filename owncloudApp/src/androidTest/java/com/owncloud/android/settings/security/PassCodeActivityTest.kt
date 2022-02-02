@@ -38,11 +38,10 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
@@ -57,8 +56,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -235,7 +232,7 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
 
         // Click dialog's enable option
-        onView(withText(R.string.biometric_dialog_enable_option)).perform(click())
+        onView(withText(R.string.biometric_dialog_yes_option)).perform(click())
 
         // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
@@ -372,10 +369,11 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
 
         // Check if dialog is visible
-        onView(withText(R.string.biometric_dialog_enable_option)).inRoot(isDialog()).check(matches(isDisplayed())).perform(click())
+        onView(withText(R.string.biometric_dialog_yes_option)).inRoot(isDialog()).check(matches(isDisplayed())).perform(click())
 
         // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
+        assertEquals(activityScenario.result.resultData.getBooleanExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false), true)
 
     }
 
@@ -391,10 +389,9 @@ class PassCodeActivityTest {
         // Second typing
         typePasscode(defaultPassCode)
 
-        // Check dialog is not visible and method is not called.
-        every { passCodeViewModel.isBiometricLockAvailable() } returns false
-
-        assertFalse(passCodeViewModel.isBiometricLockAvailable())
+        // Checking that the result returned is false
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
+        assertEquals(activityScenario.result.resultData.getBooleanExtra(BIOMETRIC_ENABLED_FROM_DIALOG_EXTRA, false), false)
     }
 
     private fun openPasscodeActivity(mode: String) {

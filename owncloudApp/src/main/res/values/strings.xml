@@ -269,9 +269,9 @@
     <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
     <string name="biometric_prompt_title">Biometric log in</string>
     <string name="biometric_prompt_subtitle">Log in using your biometric credential</string>
-    <string name="biometric_dialog_title">Unlock using biometric lock?</string>
-    <string name="biometric_dialog_disable_option">Disable</string>
-    <string name="biometric_dialog_enable_option">Enable</string>
+    <string name="biometric_dialog_title">Do you want to additionally activate biometric security?</string>
+    <string name="biometric_dialog_no_option">No</string>
+    <string name="biometric_dialog_yes_option">Yes</string>
 
     <string name="media_notif_ticker">%1$s music player</string>
     <string name="media_state_playing">%1$s (playing)</string>
