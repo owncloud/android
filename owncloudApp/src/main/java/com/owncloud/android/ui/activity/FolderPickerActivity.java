@@ -315,11 +315,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     public void onBackPressed() {
         MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
-            int levelsUp = listOfFiles.onBrowseUp();
-            if (levelsUp == 0) {
-                finish();
-                return;
-            }
+            listOfFiles.onBrowseUp();
             setFile(listOfFiles.getCurrentFile());
             updateNavigationElementsInActionBar();
         }
