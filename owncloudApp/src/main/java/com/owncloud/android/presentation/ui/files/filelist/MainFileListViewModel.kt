@@ -26,6 +26,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
@@ -39,8 +40,11 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
+import java.io.File
 
 class MainFileListViewModel(
     private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
@@ -48,6 +52,8 @@ class MainFileListViewModel(
     private val getFilesAvailableOfflineUseCase: GetFilesAvailableOfflineUseCase,
     private val getSearchFolderContentUseCase: GetSearchFolderContentUseCase,
     private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
+    private val getFileByIdUseCase: GetFileByIdUseCase,
+    private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     private val contextProvider: ContextProvider,
@@ -59,17 +65,13 @@ class MainFileListViewModel(
     val getFilesListStatusLiveData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesListStatusLiveData
 
-    private val _getFilesSharedByLinkData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
-    val getFilesSharedByLinkData: LiveData<Event<UIResult<List<OCFile>>>>
-        get() = _getFilesSharedByLinkData
-
-    private val _getFilesAvailableOfflineData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
-    val getFilesAvailableOfflineData: LiveData<Event<UIResult<List<OCFile>>>>
-        get() = _getFilesAvailableOfflineData
-
     private val _getSearchedFilesData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
     val getSearchedFilesData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getSearchedFilesData
+
+    private val _getFileData = MutableLiveData<Event<UIResult<OCFile>>>()
+    val getFileData: LiveData<Event<UIResult<OCFile>>>
+        get() = _getFileData
 
     private fun getFilesList(folderId: Long) {
         val filesListLiveData: LiveData<List<OCFile>> =
@@ -77,28 +79,6 @@ class MainFileListViewModel(
 
         _getFilesListStatusLiveData.addSource(filesListLiveData) {
             _getFilesListStatusLiveData.postValue(Event(UIResult.Success(it)))
-        }
-    }
-
-    fun getSharedByLinkFilesList() {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getFilesSharedByLinkUseCase.execute(GetFilesSharedByLinkUseCase.Params(owner = file.owner)).let {
-                when (it) {
-                    is UseCaseResult.Error -> _getFilesSharedByLinkData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                    is UseCaseResult.Success -> _getFilesSharedByLinkData.postValue(Event(UIResult.Success(it.getDataOrNull())))
-                }
-            }
-        }
-    }
-
-    fun getAvailableOfflineFilesList() {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getFilesAvailableOfflineUseCase.execute(GetFilesAvailableOfflineUseCase.Params(owner = file.owner)).let {
-                when (it) {
-                    is UseCaseResult.Error -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                    is UseCaseResult.Success -> _getFilesAvailableOfflineData.postValue(Event(UIResult.Success(it.getDataOrNull())))
-                }
-            }
         }
     }
 
@@ -169,6 +149,55 @@ class MainFileListViewModel(
             files, sortOrderSaved,
             ascendingModeSaved
         )
+    }
+
+    fun manageBrowseUp(fileListOption: FileListOption?) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            var parentDir: OCFile?
+            var parentPath: String? = null
+            if (file.parentId != FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+                parentPath = File(file.remotePath).parent
+                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
+
+                val fileByIdResult = getFileByRemotePathUseCase.execute(
+                    GetFileByRemotePathUseCase.Params(
+                        owner = file.owner,
+                        remotePath = parentPath!!
+                    )
+                )
+                parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
+            } else {
+                val fileByIdResult = getFileByIdUseCase.execute(
+                    GetFileByIdUseCase.Params(
+                        fileId = OCFile.ROOT_PARENT_ID
+                    )
+                )
+                parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
+            }
+            while (parentDir == null) {
+                parentPath = if (parentPath != null && parentPath != File.separator) File(parentPath).parent else File.separator
+                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
+                val fileByIdResult = getFileByRemotePathUseCase.execute(
+                    GetFileByRemotePathUseCase.Params(
+                        owner = file.owner,
+                        remotePath = parentPath!!
+                    )
+                )
+                parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
+            }
+
+            if (fileListOption?.isSharedByLink() == true && !parentDir.sharedByLink) {
+                val fileByIdResult = getFileByIdUseCase.execute(
+                    GetFileByIdUseCase.Params(
+                        fileId = OCFile.ROOT_PARENT_ID
+                    )
+                )
+                parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
+            }
+            file = parentDir!!
+
+            _getFileData.postValue(Event(UIResult.Success(file)))
+        }
     }
 
     companion object {
