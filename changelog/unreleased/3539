@@ -1,7 +1,7 @@
-Enhancement: Suggest to the user to enable enhanced security
+Enhancement: Suggest the user to enable enhanced security
 
 When a user sets the passcode or pattern lock
-on the security screen. The application suggests to the user
-whether to enable or disable a biometric lock to unlock the application.
+on the security screen, the application suggests the user
+whether to enable or not a biometric lock to unlock the application.
 
 https://github.com/owncloud/android/pull/3539

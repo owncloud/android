@@ -45,6 +45,7 @@ import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.interfaces.BiometricStatus
 import com.owncloud.android.interfaces.IEnableBiometrics
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
+import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
@@ -55,6 +56,7 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
 
     // ViewModel
     private val patternViewModel by viewModel<PatternViewModel>()
+    private val biometricViewModel by viewModel<BiometricViewModel>()
 
     private var confirmingPattern = false
     private var patternValue: String? = null
@@ -301,7 +303,7 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
         patternViewModel.setPattern(patternValue!!)
         setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
-        if (patternViewModel.isBiometricLockAvailable()) {
+        if (biometricViewModel.isBiometricLockAvailable()) {
             showBiometricDialog(this)
         } else {
             finish()

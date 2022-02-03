@@ -80,7 +80,6 @@ class SettingsSecurityFragmentTest {
 
     private lateinit var securityViewModel: SettingsSecurityViewModel
     private lateinit var biometricViewModel: BiometricViewModel
-    private lateinit var sharedPreferencesProvider: SharedPreferencesProvider
     private lateinit var context: Context
 
     @Before
@@ -88,7 +87,6 @@ class SettingsSecurityFragmentTest {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         securityViewModel = mockk(relaxUnitFun = true)
         biometricViewModel = mockk(relaxUnitFun = true)
-        sharedPreferencesProvider = mockk(relaxUnitFun = true)
         mockkObject(BiometricManager)
 
         stopKoin()
@@ -492,7 +490,6 @@ class SettingsSecurityFragmentTest {
         firstEnablePasscode()
 
         onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
-        assertTrue(prefBiometric!!.isEnabled)
         assertTrue(prefBiometric!!.isChecked)
     }
 

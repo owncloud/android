@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.BiometricActivity
+import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.providers.ContextProvider
@@ -144,6 +145,14 @@ class BiometricViewModel(
             pinChar?.let { pinString += pinChar }
         }
         return if (pinString.isEmpty()) null else pinString
+    }
+
+    fun isBiometricLockAvailable(): Boolean {
+        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            false
+        } else if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
+            false
+        } else BiometricManager.hasEnrolledBiometric() // Biometric not enrolled
     }
 
     companion object {

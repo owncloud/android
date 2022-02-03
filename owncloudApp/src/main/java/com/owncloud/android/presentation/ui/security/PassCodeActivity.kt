@@ -49,6 +49,7 @@ import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.interfaces.BiometricStatus
 import com.owncloud.android.interfaces.IEnableBiometrics
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
+import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
@@ -60,6 +61,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
 
     // ViewModel
     private val passCodeViewModel by viewModel<PassCodeViewModel>()
+    private val biometricViewModel by viewModel<BiometricViewModel>()
 
     private var _binding: PasscodelockBinding? = null
     val binding get() = _binding!!
@@ -431,7 +433,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
         passCodeViewModel.setPassCode(passCodeString.toString())
         setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
-        if (passCodeViewModel.isBiometricLockAvailable()) {
+        if (biometricViewModel.isBiometricLockAvailable()) {
             showBiometricDialog(this)
         } else {
             finish()

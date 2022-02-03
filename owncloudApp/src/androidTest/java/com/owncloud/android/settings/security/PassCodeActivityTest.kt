@@ -33,7 +33,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -95,6 +94,9 @@ class PassCodeActivityTest {
                 module(override = true) {
                     viewModel {
                         passCodeViewModel
+                    }
+                    viewModel {
+                        biometricViewModel
                     }
                 }
             )
@@ -220,7 +222,7 @@ class PassCodeActivityTest {
 
     @Test
     fun secondTryCorrect() {
-        every { passCodeViewModel.isBiometricLockAvailable() } returns true
+        every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
@@ -231,7 +233,7 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
 
         // Click dialog's enable option
-        onView(withText(R.string.biometric_dialog_yes_option)).perform(click())
+        onView(withText(R.string.common_yes)).perform(click())
 
         // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
@@ -357,7 +359,7 @@ class PassCodeActivityTest {
 
     @Test
     fun checkEnableBiometricDialogIsVisible() {
-        every { passCodeViewModel.isBiometricLockAvailable() } returns true
+        every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
@@ -367,17 +369,14 @@ class PassCodeActivityTest {
         // Second typing
         typePasscode(defaultPassCode)
 
-        // Check if dialog is visible
-        onView(withText(R.string.biometric_dialog_yes_option)).inRoot(isDialog()).check(matches(isDisplayed())).perform(click())
-
-        // Checking that the result returned is OK
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
-
+        onView(withText(R.string.biometric_dialog_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.common_yes)).check(matches(isDisplayed()))
+        onView(withText(R.string.common_no)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun checkEnableBiometricDialogIsNotVisible() {
-        every { passCodeViewModel.isBiometricLockAvailable() } returns false
+    fun checkEnableBiometricDialogYesOption() {
+        every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
@@ -386,6 +385,26 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
         // Second typing
         typePasscode(defaultPassCode)
+
+        onView(withText(R.string.common_yes)).perform(click())
+
+        // Checking that the result returned is OK
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
+    }
+
+    @Test
+    fun checkEnableBiometricDialogNoOption() {
+        every { biometricViewModel.isBiometricLockAvailable() } returns true
+
+        // Open Activity in passcode creation mode
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+
+        // First typing
+        typePasscode(defaultPassCode)
+        // Second typing
+        typePasscode(defaultPassCode)
+
+        onView(withText(R.string.common_no)).perform(click())
 
         // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)

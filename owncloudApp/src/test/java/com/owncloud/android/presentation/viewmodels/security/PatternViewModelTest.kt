@@ -37,15 +37,13 @@ import org.junit.Test
 class PatternViewModelTest : ViewModelTest() {
     private lateinit var patternViewModel: PatternViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
-    private lateinit var contextProvider: ContextProvider
 
     private val pattern = "1234"
 
     @Before
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
-        contextProvider = mockk(relaxUnitFun = true)
-        patternViewModel = PatternViewModel(preferencesProvider, contextProvider)
+        patternViewModel = PatternViewModel(preferencesProvider)
     }
 
     @Test
