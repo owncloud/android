@@ -656,13 +656,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 }
                 listOfFiles?.onBrowseUp()
             }
-            /*if (listOfFiles != null) {  // should never be null, indeed
-                file = listOfFiles.getCurrentFile()
-                if (file != null) {
-                    listOfFiles.listDirectory(file)
-                }
-            }
-            cleanSecondFragment()*/
+
+            cleanSecondFragment()
         }
     }
 
