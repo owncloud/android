@@ -316,11 +316,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
             listOfFiles.onBrowseUp();
-            /*int levelsUp = listOfFiles.onBrowseUp();
-            if (levelsUp == 0) {
-                finish();
-                return;
-            }*/
             setFile(listOfFiles.getCurrentFile());
             updateNavigationElementsInActionBar();
         }

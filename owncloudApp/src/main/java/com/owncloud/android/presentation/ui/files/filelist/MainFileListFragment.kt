@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
+ * @author Jose Antonio Barros Ramos
  * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -78,7 +79,6 @@ import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
-import java.io.File
 import java.util.ArrayList
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
@@ -756,6 +756,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
         val KEY_FILE = "$MY_PACKAGE.extra.FILE"
+
         @JvmStatic
         fun newInstance(
             justFolders: Boolean = false,
