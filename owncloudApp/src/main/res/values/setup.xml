@@ -110,6 +110,6 @@
     <integer name="passcode_digits">4</integer>
 
     <!--Security enforced -->
-    <bool name="lock_enforced">false</bool>
+    <integer name="lock_enforced">0</integer>
 
 </resources>

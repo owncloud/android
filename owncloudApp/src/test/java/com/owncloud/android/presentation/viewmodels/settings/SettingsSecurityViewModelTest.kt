@@ -22,6 +22,7 @@ package com.owncloud.android.presentation.viewmodels.settings
 
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.extensions.LockEnforcedType
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
@@ -139,27 +140,27 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `set pref is security enforced enabled - ok - true`() {
-        every { contextProvider.getBoolean(any()) } returns true
+        every { contextProvider.getInt(any()) } returns LockEnforcedType.DIALOG_OPTION.ordinal
 
         securityViewModel.isSecurityEnforcedEnabled().apply {
             assertTrue(this)
         }
 
         verify(exactly = 1) {
-            contextProvider.getBoolean(R.bool.lock_enforced)
+            contextProvider.getInt(R.integer.lock_enforced)
         }
     }
 
     @Test
     fun `set pref is security enforced enabled - ok - false`() {
-        every { contextProvider.getBoolean(any()) } returns false
+        every { contextProvider.getInt(any()) } returns LockEnforcedType.DISABLED.ordinal
 
         securityViewModel.isSecurityEnforcedEnabled().apply {
             assertFalse(this)
         }
 
         verify(exactly = 1) {
-            contextProvider.getBoolean(R.bool.lock_enforced)
+            contextProvider.getInt(R.integer.lock_enforced)
         }
     }
 

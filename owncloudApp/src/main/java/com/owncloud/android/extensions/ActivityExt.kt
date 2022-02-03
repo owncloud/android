@@ -43,6 +43,7 @@ import com.owncloud.android.interfaces.IEnableBiometrics
 import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
+import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
@@ -250,31 +251,58 @@ fun Activity.hideSoftKeyboard() {
 fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
     val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
 
-    val lockEnforced = this.resources.getBoolean(R.bool.lock_enforced)
+    val lockEnforced: Int = this.resources.getInteger(R.integer.lock_enforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-    if (lockEnforced && !passcodeConfigured && !patternConfigured) {
+    when (lockEnforced) {
+        LockEnforcedType.DIALOG_OPTION.ordinal -> {
+            if (!passcodeConfigured && !patternConfigured) {
+                val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
+                var optionSelected = 0
 
-        val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
-        var optionSelected = 0
-
-        AlertDialog.Builder(this).apply {
-            setCancelable(false)
-            setTitle(getString(R.string.security_enforced_title))
-            setSingleChoiceItems(options, optionSelected) { _, which -> optionSelected = which }
-            setPositiveButton(android.R.string.ok) { dialog, _ ->
-                when (optionSelected) {
-                    0 -> securityEnforced.optionLockSelected(LockType.PASSCODE)
-                    1 -> securityEnforced.optionLockSelected(LockType.PATTERN)
-                }
-                dialog.dismiss()
+                AlertDialog.Builder(this).apply {
+                    setCancelable(false)
+                    setTitle(getString(R.string.security_enforced_title))
+                    setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
+                    setPositiveButton(android.R.string.ok) { dialog, _ ->
+                        when (optionSelected) {
+                            LockType.PASSCODE.ordinal -> securityEnforced.optionLockSelected(LockType.PASSCODE)
+                            LockType.PATTERN.ordinal -> securityEnforced.optionLockSelected(LockType.PATTERN)
+                        }
+                        dialog.dismiss()
+                    }
+                }.show()
             }
-        }.show()
+        }
+        LockEnforcedType.PASSCODE_OPTION.ordinal -> {
+            if (!passcodeConfigured) {
+                manageOptionLockSelected(LockType.PASSCODE)
+            }
+        }
+        LockEnforcedType.PATTERN_OPTION.ordinal -> {
+            if (!patternConfigured) {
+                manageOptionLockSelected(LockType.PATTERN)
+            }
+        }
     }
 }
 
 fun Activity.manageOptionLockSelected(type: LockType) {
+
+    SharedPreferencesProviderImpl(this).let {
+        // Remove passcode
+        it.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
+        it.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+
+        // Remove pattern
+        it.removePreference(PatternActivity.PREFERENCE_PATTERN)
+        it.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
+
+        // Remove biometric
+        it.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
+    }
+
     when (type) {
         LockType.PASSCODE -> startActivity(Intent(this, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
@@ -300,5 +328,9 @@ fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
             dialog.dismiss()
         }
     }.show()
+}
+
+enum class LockEnforcedType {
+    DISABLED, DIALOG_OPTION, PASSCODE_OPTION, PATTERN_OPTION
 }
 
