@@ -22,7 +22,6 @@ package com.owncloud.android.presentation.ui.files.filelist
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -42,7 +41,6 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
-import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -72,7 +70,6 @@ import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
-import java.io.File
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
@@ -93,7 +90,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var viewType: ViewType
 
-    private var fileListOption: FileListOption? = FileListOption.ALL_FILES
+    private var fileListOption: FileListOption = FileListOption.ALL_FILES
 
     private var file: OCFile? = null
 
@@ -118,16 +115,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             file = savedInstanceState.getParcelable(KEY_FILE)
         }
 
-        fileListOption =
-            if (requireArguments().getParcelable<Parcelable?>(ARG_LIST_FILE_OPTION) != null)
-                requireArguments().getParcelable(ARG_LIST_FILE_OPTION)
-            else
-                FileListOption.ALL_FILES
+        fileListOption = requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES
 
-        if (fileListOption == null) {
-            fileListOption = FileListOption.ALL_FILES
-        }
-        updateFab(fileListOption!!)
+        updateFab(fileListOption)
     }
 
     /**
@@ -203,7 +193,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
-            retrieveData(fileListOption ?: FileListOption.ALL_FILES)
+            retrieveData()
         }
 
         //Set SortOptions and its listeners
@@ -234,21 +224,12 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         // Observe the action of retrieving the list of files from DB.
         mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
-            }
-        })
-
-        // Observe the action of retrieving the list of shared by link files from DB.
-        mainFileListViewModel.getFilesSharedByLinkData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
-            }
-        })
-
-        // Observe the action of retrieving the list of available offline files from DB.
-        mainFileListViewModel.getFilesAvailableOfflineData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
+                val filesList = when (fileListOption) {
+                    FileListOption.ALL_FILES -> data ?: emptyList()
+                    FileListOption.AV_OFFLINE -> data?.filter { it.keepInSync == 1 } ?: emptyList()
+                    FileListOption.SHARED_BY_LINK -> data?.filter { it.sharedByLink || it.sharedWithSharee == true } ?: emptyList()
+                }
+                updateFileListData(filesList)
             }
         })
 
@@ -256,6 +237,16 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.getSearchedFilesData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(filesList = data ?: emptyList())
+            }
+        })
+
+        // Observe the action of retrieving the OCFile.
+        mainFileListViewModel.getFileData.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                data?.let {
+                    file = it
+                    mainFileListViewModel.listDirectory(it)
+                }
             }
         })
     }
@@ -335,16 +326,12 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun updateFileListOption(newFileListOption: FileListOption) {
         fileListOption = newFileListOption
-        retrieveData(newFileListOption)
+        retrieveData()
         updateFab(newFileListOption)
     }
 
-    private fun retrieveData(newFileListOption: FileListOption) {
-        when (newFileListOption) {
-            FileListOption.ALL_FILES -> mainFileListViewModel.listCurrentDirectory()
-            FileListOption.AV_OFFLINE -> mainFileListViewModel.getAvailableOfflineFilesList()
-            FileListOption.SHARED_BY_LINK -> mainFileListViewModel.getSharedByLinkFilesList()
-        }
+    private fun retrieveData() {
+        mainFileListViewModel.listCurrentDirectory()
     }
 
     private fun updateFab(newFileListOption: FileListOption) {
@@ -466,7 +453,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     override fun onQueryTextSubmit(query: String?): Boolean = false
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        newText?.let { mainFileListViewModel.listSearchCurrentDirectory(fileListOption!!, it) }
+        newText?.let { mainFileListViewModel.listSearchCurrentDirectory(fileListOption, it) }
         return true
     }
 
@@ -486,35 +473,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
      * database, it continues browsing up until finding an existing folders.
      *
      *
-     * return       Count of folder levels browsed up.
      */
-    fun onBrowseUp(): Int {
-        var parentDir: OCFile?
-        var moveCount = 0
-        if (file != null && containerActivity != null) {
-            val storageManager: FileDataStorageManager = containerActivity!!.storageManager
-            var parentPath: String? = null
-            if (file?.parentId != FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
-                parentPath = File(file!!.remotePath).parent
-                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
-                parentDir = storageManager.getFileByPath(parentPath!!)
-                moveCount++
-            } else {
-                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            }
-            while (parentDir == null) {
-                parentPath = File(parentPath).parent
-                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
-                parentDir = storageManager.getFileByPath(parentPath!!)
-                moveCount++
-            } // exit is granted because storageManager.getFileByPath("/") never returns null
-
-            if (fileListOption?.isSharedByLink() == true && !parentDir.sharedByLink) {
-                parentDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            }
-            file = parentDir
-        } // else - should never happen now
-        return moveCount
+    fun onBrowseUp() {
+        mainFileListViewModel.manageBrowseUp(fileListOption)
     }
 
     /**
@@ -601,6 +562,10 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
             fileListAdapter.clearSelection()
         }
+    }
+
+    interface BrowseUpListener {
+        fun onBrowseUpListener()
     }
 
     companion object {
