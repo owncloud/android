@@ -18,6 +18,7 @@ Summary
 * Enhancement - Brute force protection: [#3320](https://github.com/owncloud/android/issues/3320)
 * Enhancement - "Open with" action now allows editing: [#3475](https://github.com/owncloud/android/issues/3475)
 * Enhancement - Enable logs by default in debug mode: [#3526](https://github.com/owncloud/android/issues/3526)
+* Enhancement - Suggest the user to enable enhanced security: [#3539](https://github.com/owncloud/android/pull/3539)
 
 Details
 -------
@@ -105,6 +106,13 @@ Details
 
    https://github.com/owncloud/android/issues/3526
    https://github.com/owncloud/android/pull/3527
+
+* Enhancement - Suggest the user to enable enhanced security: [#3539](https://github.com/owncloud/android/pull/3539)
+
+   When a user sets the passcode or pattern lock on the security screen, the application suggests
+   the user whether to enable or not a biometric lock to unlock the application.
+
+   https://github.com/owncloud/android/pull/3539
 
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================
