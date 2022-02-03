@@ -576,12 +576,14 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 return true
             }
             R.id.action_set_available_offline -> {
-                containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, true)
+                // TODO Waiting to be implemented
+                //containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, true)
                 //getListView().invalidateViews()
                 return true
             }
             R.id.action_unset_available_offline -> {
-                containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, false)
+                // TODO Waiting to be implemented
+                //containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, false)
                 //getListView().invalidateViews()
                 //invalidateActionMode()
                 /*if (fileListOption?.isAvailableOffline() == true) {
