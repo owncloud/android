@@ -42,7 +42,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
-import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -287,14 +286,19 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     protected OCFile getCurrentFolder() {
-        OCFile file = getFile();
-        if (file != null) {
-            if (file.isFolder()) {
-                return file;
+        MainFileListFragment listOfFiles = getListOfFilesFragment();
+        if (listOfFiles != null) {  // should never be null, indeed
+            OCFile file = listOfFiles.getCurrentFile();
+            if (file != null) {
+                if (file.isFolder()) {
+                    return file;
+                } else if (getStorageManager() != null) {
+                    String parentPath = file.getRemotePath().substring(0,
+                            file.getRemotePath().lastIndexOf(file.getFileName()));
+                    return getStorageManager().getFileByPath(parentPath);
+                }
             } else if (getStorageManager() != null) {
-                String parentPath = file.getRemotePath().substring(0,
-                        file.getRemotePath().lastIndexOf(file.getFileName()));
-                return getStorageManager().getFileByPath(parentPath);
+                return getStorageManager().getFileByPath(OCFile.ROOT_PATH);
             }
         }
         return null;
