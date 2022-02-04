@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
+* Bugfix - Small bug when privacy policy disabled: [#3542](https://github.com/owncloud/android/pull/3542)
 * Enhancement - Permission dialog removal: [#2524](https://github.com/owncloud/android/pull/2524)
 * Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
 * Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
@@ -28,6 +29,14 @@ Details
 
    https://github.com/owncloud/android/issues/3060
    https://github.com/owncloud/android/pull/3437
+
+* Bugfix - Small bug when privacy policy disabled: [#3542](https://github.com/owncloud/android/pull/3542)
+
+   Previously, when privacy policy setup was disabled, the side menu showed the privacy policy
+   menu item. Now, option is hidden when privacy policy is disabled.
+
+   https://github.com/owncloud/android/issues/3521
+   https://github.com/owncloud/android/pull/3542
 
 * Enhancement - Permission dialog removal: [#2524](https://github.com/owncloud/android/pull/2524)
 

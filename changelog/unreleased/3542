@@ -1,0 +1,8 @@
+Bugfix: Small bug when privacy policy disabled
+
+Previously, when privacy policy setup was disabled,
+the side menu showed the privacy policy menu item.
+Now, option is hidden when privacy policy is disabled.
+
+https://github.com/owncloud/android/pull/3542
+https://github.com/owncloud/android/issues/3521

@@ -168,6 +168,9 @@ abstract class DrawerActivity : ToolbarActivity() {
         if (!resources.getBoolean(R.bool.multiaccount_support)) {
             navigationView.menu.removeItem(R.id.drawer_menu_accounts)
         }
+        if (!resources.getBoolean(R.bool.privacy_policy_enabled)) {
+            navigationView.menu.removeItem(R.id.drawer_menu_privacy_policy)
+        }
         navigationView.setNavigationItemSelectedListener { menuItem: MenuItem ->
             getDrawerLayout()?.closeDrawers()
             when (menuItem.itemId) {
