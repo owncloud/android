@@ -324,9 +324,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         _binding = null
     }
 
-    fun updateFileListOption(newFileListOption: FileListOption) {
+    fun updateFileListOption(newFileListOption: FileListOption, file: OCFile) {
         fileListOption = newFileListOption
-        retrieveData()
+        mainFileListViewModel.listDirectory(file)
         updateFab(newFileListOption)
     }
 
@@ -655,8 +655,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 menu,
                 enableSelectAll,
                 true,
-                fileListOption?.isAvailableOffline() ?: false,
-                fileListOption?.isSharedByLink() ?: false
+                fileListOption.isAvailableOffline() ?: false,
+                fileListOption.isSharedByLink() ?: false
             )
 
             return true
