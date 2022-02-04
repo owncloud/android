@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
-import android.content.SharedPreferences
 import android.os.CountDownTimer
 import android.os.SystemClock
 import androidx.lifecycle.LiveData
@@ -28,7 +27,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
