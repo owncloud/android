@@ -19,7 +19,7 @@ Summary
 * Enhancement - Enable logs by default in debug mode: [#3526](https://github.com/owncloud/android/issues/3526)
 * Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
 * Enhancement - Suggest the user to enable enhanced security: [#3539](https://github.com/owncloud/android/pull/3539)
-* Enhancement - Extended security enforced: [#3544](https://github.com/owncloud/android/pull/3544)
+* Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 
 Details
 -------
@@ -116,7 +116,7 @@ Details
 
    https://github.com/owncloud/android/pull/3539
 
-* Enhancement - Extended security enforced: [#3544](https://github.com/owncloud/android/pull/3544)
+* Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 
    A new extended branding/MDM options have been added to make app lock via passcode or pattern
    compulsory.
