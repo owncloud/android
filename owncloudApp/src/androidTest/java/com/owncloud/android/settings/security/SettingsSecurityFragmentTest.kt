@@ -488,8 +488,8 @@ class SettingsSecurityFragmentTest {
 
         firstEnablePasscode()
 
-        onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
         assertTrue(prefBiometric!!.isChecked)
+        assertTrue(prefBiometric!!.isEnabled)
     }
 
     @Test
