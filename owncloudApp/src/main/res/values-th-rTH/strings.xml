@@ -59,7 +59,7 @@
   <string name="prefs_subsection_video_uploads_summary">จัดการตำแหน่งและพฤติกรรมของวิดีโอที่อัปโหลดโดยอัตโนมัติ</string>
   <string name="prefs_camera_picture_upload">อัปโหลดรูปภาพ</string>
   <string name="prefs_camera_picture_upload_summary">อัปโหลดภาพที่ถ่ายด้วยกล้องโดยอัตโนมัติ</string>
-  <string name="prefs_camera_picture_upload_path_title">เส้นทางการอัปโหลดรูปภาพ</string>
+  <string name="prefs_camera_picture_upload_path_title">Path สำหรับอัปโหลดรูปภาพ</string>
   <string name="prefs_camera_picture_upload_conditions_title">เงื่อนไขในการดำเนินการอัปโหลด</string>
   <string name="prefs_camera_picture_upload_conditions_summary">การอัปโหลดจะถูกทริกเกอร์ก็ต่อเมื่อตัวเลือกทั้งหมดที่ถูกเลือกได้รับการเติมเต็มแล้ว</string>
   <string name="prefs_camera_picture_upload_on_wifi">อัปโหลดรูปภาพผ่านทาง WiFi เท่านั้น</string>
@@ -67,7 +67,7 @@
   <string name="prefs_camera_upload_on_charging_summary">เปิดใช้งานการอัปโหลดผ่าน WiFi เท่านั้นเพื่อเปิดใช้งานตัวเลือกนี้</string>
   <string name="prefs_camera_video_upload">อัปโหลดวิดีโอ</string>
   <string name="prefs_camera_video_upload_summary">อัปโหลดวิดีโอที่บันทึกด้วยกล้องโดยอัตโนมัติ</string>
-  <string name="prefs_camera_video_upload_path_title">เส้นทางการอัปโหลดวิดีโอ</string>
+  <string name="prefs_camera_video_upload_path_title">Path สำหรับอัปโหลดวิดีโอ</string>
   <string name="prefs_camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง WiFi เท่านั้น</string>
   <string name="prefs_camera_video_upload_on_charging">อัปโหลดวิดีโอเมื่อชาร์จเท่านั้น</string>
   <string name="prefs_log_open_logs_list_view">ไฟล์ log</string>
@@ -198,7 +198,9 @@
   <string name="uploader_upload_camera_upload_files">กำลังอัปโหลดไฟล์รูปภาพ</string>
   <string name="uploader_upload_picture_upload_files">%d รูปภาพใหม่ถูกอัปโหลดแล้ว</string>
   <string name="uploader_upload_video_upload_files">%d วิดีโอใหม่จะถูกอัปโหลด</string>
-  <string name="uploader_upload_picture_upload_error">พาธสำหรับอัปโหลดรูปภาพไม่ถูกต้อง</string>
+  <string name="uploader_upload_camera_upload_source_path_error">อัปโหลดรูปภาพจากกล้องล้มเหลว</string>
+  <string name="uploader_upload_picture_upload_error">Path สำหรับอัปโหลดรูปภาพไม่ถูกต้อง</string>
+  <string name="uploader_upload_video_upload_error">Path ที่ใช้สำหรับอัปโหลดวิดีโอไม่ถูกต้อง</string>
   <string name="uploader_upload_available_offline_files">กำลังอัปโหลดไฟล์ออฟไลน์ที่มีอยู่</string>
   <string name="uploader_upload_requested_from_wifi_files">กำลังร้องขอการอัปโหลดจากไฟล์ WiFi</string>
   <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
