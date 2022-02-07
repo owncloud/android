@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
+ * @author Jose Antonio Barros Ramos
  * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,8 +31,6 @@ import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.domain.files.usecases.GetFilesAvailableOfflineUseCase
-import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
@@ -48,8 +47,6 @@ import java.io.File
 
 class MainFileListViewModel(
     private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
-    private val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase,
-    private val getFilesAvailableOfflineUseCase: GetFilesAvailableOfflineUseCase,
     private val getSearchFolderContentUseCase: GetSearchFolderContentUseCase,
     private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val getFileByIdUseCase: GetFileByIdUseCase,

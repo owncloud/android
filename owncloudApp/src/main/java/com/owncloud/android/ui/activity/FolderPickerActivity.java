@@ -42,7 +42,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
-import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -51,10 +50,10 @@ import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment;
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.utils.PreferenceUtils;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
@@ -131,7 +130,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             }
 
             if (!stateWasRecovered) {
-                OCFileListFragment listOfFolders = getListOfFilesFragment();
+                MainFileListFragment listOfFolders = getListOfFilesFragment();
                 listOfFolders.listDirectory(folder);
 
                 startSyncFolderOperation(folder, false);
@@ -142,10 +141,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void createFragments() {
-        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(true, FileListOption.ALL_FILES, true, true,
-                false);
+        MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(false, true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.fragment_container, listOfFiles, TAG_LIST_OF_FOLDERS);
+        transaction.add(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS);
         transaction.commit();
     }
 
@@ -154,29 +152,27 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
      * loading or folder is empty
      */
     public void setBackgroundText() {
-        OCFileListFragment listFragment = getListOfFilesFragment();
+        MainFileListFragment listFragment = getListOfFilesFragment();
         if (listFragment != null) {
             int message = R.string.file_list_loading;
             if (!mSyncInProgress) {
                 // In case folder list is empty
                 message = R.string.file_list_empty_moving;
-                if (listFragment.getProgressBar() != null) {
-                    listFragment.getProgressBar().setVisibility(View.GONE);
-                }
-                if (listFragment.getShadowView() != null) {
-                    listFragment.getShadowView().setVisibility(View.VISIBLE);
-                }
+                listFragment.getProgressBar();
+                listFragment.getProgressBar().setVisibility(View.GONE);
+                listFragment.getShadowView();
+                listFragment.getShadowView().setVisibility(View.VISIBLE);
             }
             listFragment.setMessageForEmptyList(getString(message));
         } else {
-            Timber.e("OCFileListFragment is null");
+            Timber.e("MainFileListFragment is null");
         }
     }
 
-    protected OCFileListFragment getListOfFilesFragment() {
+    protected MainFileListFragment getListOfFilesFragment() {
         Fragment listOfFiles = getSupportFragmentManager().findFragmentByTag(FolderPickerActivity.TAG_LIST_OF_FOLDERS);
         if (listOfFiles != null) {
-            return (OCFileListFragment) listOfFiles;
+            return (MainFileListFragment) listOfFiles;
         }
         Timber.e("Access to unexisting list of files fragment!!");
         return null;
@@ -214,7 +210,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         );
         synchFolderOp.execute(getStorageManager(), this, null, null);
 
-        OCFileListFragment fileListFragment = getListOfFilesFragment();
+        MainFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
             fileListFragment.setProgressBarAsIndeterminate(true);
         }
@@ -279,28 +275,33 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     protected OCFile getCurrentFolder() {
-        OCFile file = getFile();
-        if (file != null) {
-            if (file.isFolder()) {
-                return file;
+        MainFileListFragment listOfFiles = getListOfFilesFragment();
+        if (listOfFiles != null) {  // should never be null, indeed
+            OCFile file = listOfFiles.getCurrentFile();
+            if (file != null) {
+                if (file.isFolder()) {
+                    return file;
+                } else if (getStorageManager() != null) {
+                    String parentPath = file.getRemotePath().substring(0,
+                            file.getRemotePath().lastIndexOf(file.getFileName()));
+                    return getStorageManager().getFileByPath(parentPath);
+                }
             } else if (getStorageManager() != null) {
-                String parentPath = file.getRemotePath().substring(0,
-                        file.getRemotePath().lastIndexOf(file.getFileName()));
-                return getStorageManager().getFileByPath(parentPath);
+                return getStorageManager().getFileByPath(OCFile.ROOT_PATH);
             }
         }
         return null;
     }
 
     protected void refreshListOfFilesFragment() {
-        OCFileListFragment fileListFragment = getListOfFilesFragment();
+        MainFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
-            fileListFragment.listDirectory(true);
+            fileListFragment.listCurrentDirectory();
         }
     }
 
     public void browseToRoot() {
-        OCFileListFragment listOfFiles = getListOfFilesFragment();
+        MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
             OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
             listOfFiles.listDirectory(root);
@@ -312,13 +313,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     @Override
     public void onBackPressed() {
-        OCFileListFragment listOfFiles = getListOfFilesFragment();
+        MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
-            int levelsUp = listOfFiles.onBrowseUp();
-            if (levelsUp == 0) {
-                finish();
-                return;
-            }
+            listOfFiles.onBrowseUp();
             setFile(listOfFiles.getCurrentFile());
             updateNavigationElementsInActionBar();
         }
@@ -386,7 +383,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void refreshList(boolean ignoreETag) {
-        OCFileListFragment listOfFiles = getListOfFilesFragment();
+        MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {
             OCFile folder = listOfFiles.getCurrentFile();
             if (folder != null) {
@@ -457,7 +454,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                         }
 
                         if (currentDir.getRemotePath().equals(synchFolderRemotePath)) {
-                            OCFileListFragment fileListFragment = getListOfFilesFragment();
+                            MainFileListFragment fileListFragment = getListOfFilesFragment();
                             if (fileListFragment != null) {
                                 fileListFragment.listDirectory(currentDir);
                             }
@@ -488,7 +485,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 }
                 Timber.d("Setting progress visibility to %s", mSyncInProgress);
 
-                OCFileListFragment fileListFragment = getListOfFilesFragment();
+                MainFileListFragment fileListFragment = getListOfFilesFragment();
                 if (fileListFragment != null) {
                     fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
                 }

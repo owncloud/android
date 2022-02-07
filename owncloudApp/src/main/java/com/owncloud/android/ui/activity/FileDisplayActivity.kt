@@ -695,11 +695,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 }
                 listOfFiles?.onBrowseUp()
             }
-            /*if (listOfFiles != null) {  // should never be null, indeed
-                file = listOfFiles.getCurrentFile()
-                listOfFiles.listDirectory(file)
-            }
-            cleanSecondFragment()*/
+
+            cleanSecondFragment()
         }
     }
 
@@ -1625,7 +1622,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             if (listMainFileFragment != null) {
                 fileListOption = newFileListOption
                 file = storageManager.getFileByPath(OCFile.ROOT_PATH)
-                listMainFileFragment?.updateFileListOption(newFileListOption)
+                listMainFileFragment?.updateFileListOption(newFileListOption, file)
                 updateToolbar(null)
             } else {
                 super.navigateToOption(FileListOption.ALL_FILES)

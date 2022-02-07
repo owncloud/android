@@ -144,7 +144,9 @@ class FileListAdapter(
         val checkedPositions = getSelectedItems()
 
         for (i in checkedPositions) {
-            checkedItems.add(files[i] as OCFile)
+            if (files[i] is OCFile){
+                checkedItems.add(files[i] as OCFile)
+            }
         }
 
         return checkedItems
@@ -243,7 +245,7 @@ class FileListAdapter(
                 holder.itemView.setBackgroundColor(Color.WHITE)
                 checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
             }
-            checkBoxV.visibility = View.VISIBLE
+            checkBoxV.isVisible = getCheckedItems().isNotEmpty()
 
             if (file.isFolder) {
                 // Folder

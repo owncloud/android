@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
+ * @author Jose Antonio Barros Ramos
  * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,13 +21,16 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -61,20 +65,27 @@ import com.owncloud.android.presentation.ui.files.SortOrder
 import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
+import com.owncloud.android.ui.activity.FolderPickerActivity
+import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
+import com.owncloud.android.ui.dialog.RenameFileDialogFragment
+import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
+import java.util.ArrayList
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
+    private val filesViewModel by viewModel<FilesViewModel>()
 
     private val KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED"
     private val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
@@ -95,6 +106,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     private var file: OCFile? = null
 
     var actionMode: ActionMode? = null
+
+    var enableSelectAll = true
+
     private var statusBarColorActionMode: Int? = null
     private var statusBarColor: Int? = null
 
@@ -249,6 +263,14 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 }
             }
         })
+
+        filesViewModel.refreshFolder.observe(viewLifecycleOwner, Event.EventObserver {
+            it.onSuccess { data ->
+                if (actionMode != null) {
+                    actionMode!!.finish()
+                }
+            }
+        })
     }
 
     private fun updateFileListData(filesList: List<OCFile>) {
@@ -261,6 +283,10 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun listDirectory(directory: OCFile) {
         mainFileListViewModel.listDirectory(directory = directory)
+    }
+
+    fun listCurrentDirectory() {
+        mainFileListViewModel.listCurrentDirectory()
     }
 
     private fun isShowingJustFolders(): Boolean {
@@ -324,9 +350,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         _binding = null
     }
 
-    fun updateFileListOption(newFileListOption: FileListOption) {
+    fun updateFileListOption(newFileListOption: FileListOption, file: OCFile) {
         fileListOption = newFileListOption
-        retrieveData()
+        mainFileListViewModel.listDirectory(file)
         updateFab(newFileListOption)
     }
 
@@ -447,7 +473,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     override fun onCreateFolderListener() {
-        //TODO("Not yet implemented")
+        val dialog = CreateFolderDialogFragment.newInstance(mainFileListViewModel.getFile(), this)
+        dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_FOLDER)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean = false
@@ -492,6 +519,121 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         (activity as FileActivity).setDrawerLockMode(if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
+    /**
+     * Start the appropriate action(s) on the currently selected files given menu selected by the user.
+     *
+     * @param menuId Identifier of the action menu selected by the user
+     * @return 'true' if the menu selection started any action, 'false' otherwise.
+     */
+    @SuppressLint("UseRequireInsteadOfGet")
+    private fun onFileActionChosen(menuId: Int?): Boolean {
+        val checkedFiles = fileListAdapter.getCheckedItems() as ArrayList<OCFile>
+
+        if (checkedFiles.isEmpty()) {
+            return false
+        } else if (checkedFiles.size == 1) {
+            /// action only possible on a single file
+            val singleFile = checkedFiles.first()
+            when (menuId) {
+                R.id.action_share_file -> {
+                    containerActivity?.fileOperationsHelper?.showShareFile(singleFile)
+                    enableSelectAll = false
+                    return true
+                }
+                R.id.action_open_file_with -> {
+                    containerActivity?.fileOperationsHelper?.openFile(singleFile)
+                    return true
+                }
+                R.id.action_rename_file -> {
+                    val dialog = RenameFileDialogFragment.newInstance(singleFile)
+                    dialog.show(requireActivity().supportFragmentManager, FileDetailFragment.FTAG_RENAME_FILE)
+                    return true
+                }
+                R.id.action_see_details -> {
+                    if (actionMode != null) {
+                        actionMode!!.finish()
+                    }
+                    containerActivity?.showDetails(singleFile)
+                    return true
+                }
+                R.id.action_send_file -> {
+                    //Obtain the file
+                    if (!singleFile.isAvailableLocally) { // Download the file
+                        Timber.d("%s : File must be downloaded", singleFile.remotePath)
+                        (containerActivity as FileDisplayActivity).startDownloadForSending(singleFile)
+                    } else {
+                        containerActivity?.fileOperationsHelper?.sendDownloadedFile(singleFile)
+                    }
+                    return true
+                }
+            }
+        }
+
+        /// actions possible on a batch of files
+        when (menuId) {
+            R.id.file_action_select_all -> {
+                // Last item on list is the footer, so that element must be excluded from selection
+                for (i in 0 until fileListAdapter.itemCount - 1) {
+                    if (!fileListAdapter.isSelected(i)) {
+                        toggleSelection(i)
+                    }
+                }
+                return true
+            }
+            R.id.action_select_inverse -> {
+                // Last item on list is the footer, so that element must be excluded from selection
+                for (i in 0 until fileListAdapter.itemCount - 1) {
+                    toggleSelection(i)
+                }
+                return true
+            }
+            R.id.action_remove_file -> {
+                val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles)
+                dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                return true
+            }
+            R.id.action_download_file,
+            R.id.action_sync_file -> {
+                syncFiles(checkedFiles)
+                return true
+            }
+            R.id.action_cancel_sync -> {
+                (containerActivity as FileDisplayActivity).cancelTransference(checkedFiles)
+                return true
+            }
+            R.id.action_set_available_offline -> {
+                // TODO Waiting to be implemented
+                //containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, true)
+                //getListView().invalidateViews()
+                return true
+            }
+            R.id.action_unset_available_offline -> {
+                // TODO Waiting to be implemented
+                //containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, false)
+                //getListView().invalidateViews()
+                //invalidateActionMode()
+                /*if (fileListOption?.isAvailableOffline() == true) {
+                    onRefresh()
+                }*/
+                return true
+            }
+            R.id.action_move -> {
+                val action = Intent(activity, FolderPickerActivity::class.java)
+                action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
+                requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
+                return true
+            }
+            R.id.action_copy -> {
+                val action = Intent(activity, FolderPickerActivity::class.java)
+                action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
+                requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
+                return true
+            }
+        }
+
+        return false
+    }
+
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -528,21 +670,26 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 checkedCount
             )
             mode?.title = title
-            val fileMenuFilter = FileMenuFilter(checkedFiles, (requireActivity() as FileActivity).account, containerActivity, activity)
+            val fileMenuFilter = FileMenuFilter(
+                checkedFiles,
+                (requireActivity() as FileActivity).account,
+                containerActivity,
+                activity
+            )
 
             fileMenuFilter.filter(
                 menu,
-                false,
+                enableSelectAll,
                 true,
-                fileListOption?.isAvailableOffline() ?: false,
-                fileListOption?.isSharedByLink() ?: false
+                fileListOption.isAvailableOffline() ?: false,
+                fileListOption.isSharedByLink() ?: false
             )
 
             return true
         }
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            return false
+            return onFileActionChosen(item?.itemId)
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {
@@ -564,6 +711,47 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         }
     }
 
+    fun syncFiles(files: Collection<OCFile?>) {
+        for (file in files) {
+            file?.let { syncFile(file) }
+        }
+    }
+
+    fun syncFile(file: OCFile) {
+        if (!file.isFolder) {
+            // TODO Sync file
+        } else {
+            filesViewModel.refreshFolder(file.remotePath)
+        }
+    }
+
+    fun getProgressBar(): ProgressBar {
+        return binding.syncProgressBar
+    }
+
+    fun getShadowView(): View {
+        return binding.shadowView
+    }
+
+    fun setMessageForEmptyList(message: String) {
+        binding.emptyDataParent.root.visibility = View.VISIBLE
+        binding.emptyDataParent.apply {
+            listEmptyDatasetIcon.visibility = View.GONE
+            listEmptyDatasetTitle.visibility = View.GONE
+            listEmptyDatasetSubTitle.text = message
+        }
+    }
+
+    fun setProgressBarAsIndeterminate(indeterminate: Boolean) {
+        Timber.d("Setting progress visibility to %s", indeterminate)
+        binding.shadowView.visibility = View.GONE
+        binding.syncProgressBar.apply {
+            visibility = View.VISIBLE
+            isIndeterminate = indeterminate
+            postInvalidate()
+        }
+    }
+
     interface BrowseUpListener {
         fun onBrowseUpListener()
     }
@@ -575,6 +763,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
         val KEY_FILE = "$MY_PACKAGE.extra.FILE"
 
+        @JvmStatic
         fun newInstance(
             justFolders: Boolean = false,
             pickingAFolder: Boolean = false
