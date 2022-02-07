@@ -333,7 +333,8 @@ fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
             dialog.dismiss()
         }
         .show()
-}
+    }
+
 
 fun Activity.checkPasscodeDelayEnforced() {
     val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
