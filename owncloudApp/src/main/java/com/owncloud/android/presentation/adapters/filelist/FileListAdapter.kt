@@ -245,7 +245,7 @@ class FileListAdapter(
                 holder.itemView.setBackgroundColor(Color.WHITE)
                 checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
             }
-            checkBoxV.visibility = if (getCheckedItems().isNotEmpty()) View.VISIBLE else View.GONE
+            checkBoxV.isVisible = getCheckedItems().isNotEmpty()
 
             if (file.isFolder) {
                 // Folder

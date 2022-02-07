@@ -709,17 +709,21 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun setMessageForEmptyList(message: String) {
         binding.emptyDataParent.root.visibility = View.VISIBLE
-        binding.emptyDataParent.listEmptyDatasetIcon.visibility = View.GONE
-        binding.emptyDataParent.listEmptyDatasetTitle.visibility = View.GONE
-        binding.emptyDataParent.listEmptyDatasetSubTitle.text = message
+        binding.emptyDataParent.apply {
+            listEmptyDatasetIcon.visibility = View.GONE
+            listEmptyDatasetTitle.visibility = View.GONE
+            listEmptyDatasetSubTitle.text = message
+        }
     }
 
     fun setProgressBarAsIndeterminate(indeterminate: Boolean) {
         Timber.d("Setting progress visibility to %s", indeterminate)
         binding.shadowView.visibility = View.GONE
-        binding.syncProgressBar.visibility = View.VISIBLE
-        binding.syncProgressBar.isIndeterminate = indeterminate
-        binding.syncProgressBar.postInvalidate()
+        binding.syncProgressBar.apply {
+            visibility = View.VISIBLE
+            isIndeterminate = indeterminate
+            postInvalidate()
+        }
     }
 
     interface BrowseUpListener {
