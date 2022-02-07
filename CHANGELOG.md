@@ -124,7 +124,6 @@ Details
    https://github.com/owncloud/android/issues/3543
    https://github.com/owncloud/android/pull/3544
 
-
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.19.0 relevant to
