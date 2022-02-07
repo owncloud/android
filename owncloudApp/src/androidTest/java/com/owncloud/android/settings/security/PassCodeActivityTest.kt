@@ -29,30 +29,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.utils.matchers.isDisplayed
-import com.owncloud.android.utils.matchers.withText
-import org.junit.After
-import org.junit.Test
+import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
 import com.owncloud.android.utils.click
+import com.owncloud.android.utils.matchers.isDisplayed
+import com.owncloud.android.utils.matchers.nthChildOf
 import com.owncloud.android.utils.matchers.withChildCountAndId
+import com.owncloud.android.utils.matchers.withText
 import io.mockk.every
 import io.mockk.mockk
-import com.owncloud.android.utils.matchers.nthChildOf
 import io.mockk.verify
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Ignore
+import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -71,11 +75,13 @@ class PassCodeActivityTest {
     private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
 
     private lateinit var passCodeViewModel: PassCodeViewModel
+    private lateinit var biometricViewModel: BiometricViewModel
 
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         passCodeViewModel = mockk(relaxUnitFun = true)
+        biometricViewModel = mockk(relaxUnitFun = true)
 
         timeToUnlockLiveData = MutableLiveData()
         finishTimeToUnlockLiveData = MutableLiveData()
@@ -88,6 +94,9 @@ class PassCodeActivityTest {
                 module(override = true) {
                     viewModel {
                         passCodeViewModel
+                    }
+                    viewModel {
+                        biometricViewModel
                     }
                 }
             )
@@ -213,6 +222,8 @@ class PassCodeActivityTest {
 
     @Test
     fun secondTryCorrect() {
+        every { biometricViewModel.isBiometricLockAvailable() } returns true
+
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
@@ -220,6 +231,9 @@ class PassCodeActivityTest {
         typePasscode(defaultPassCode)
         // Second typing
         typePasscode(defaultPassCode)
+
+        // Click dialog's enable option
+        onView(withText(R.string.common_yes)).perform(click())
 
         // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
@@ -341,6 +355,59 @@ class PassCodeActivityTest {
             isDisplayed(true)
             withText(R.string.pass_code_wrong)
         }
+    }
+
+    @Test
+    fun checkEnableBiometricDialogIsVisible() {
+        every { biometricViewModel.isBiometricLockAvailable() } returns true
+
+        // Open Activity in passcode creation mode
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+
+        // First typing
+        typePasscode(defaultPassCode)
+        // Second typing
+        typePasscode(defaultPassCode)
+
+        onView(withText(R.string.biometric_dialog_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.common_yes)).check(matches(isDisplayed()))
+        onView(withText(R.string.common_no)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun checkEnableBiometricDialogYesOption() {
+        every { biometricViewModel.isBiometricLockAvailable() } returns true
+
+        // Open Activity in passcode creation mode
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+
+        // First typing
+        typePasscode(defaultPassCode)
+        // Second typing
+        typePasscode(defaultPassCode)
+
+        onView(withText(R.string.common_yes)).perform(click())
+
+        // Checking that the result returned is OK
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
+    }
+
+    @Test
+    fun checkEnableBiometricDialogNoOption() {
+        every { biometricViewModel.isBiometricLockAvailable() } returns true
+
+        // Open Activity in passcode creation mode
+        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+
+        // First typing
+        typePasscode(defaultPassCode)
+        // Second typing
+        typePasscode(defaultPassCode)
+
+        onView(withText(R.string.common_no)).perform(click())
+
+        // Checking that the result returned is OK
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
     }
 
     private fun openPasscodeActivity(mode: String) {

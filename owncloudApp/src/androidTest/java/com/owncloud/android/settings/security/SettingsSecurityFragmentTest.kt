@@ -22,6 +22,7 @@ package com.owncloud.android.settings.security
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
+import androidx.biometric.BiometricViewModel
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.CheckBoxPreference
@@ -77,12 +78,14 @@ class SettingsSecurityFragmentTest {
     private lateinit var prefTouchesWithOtherVisibleWindows: CheckBoxPreference
 
     private lateinit var securityViewModel: SettingsSecurityViewModel
+    private lateinit var biometricViewModel: BiometricViewModel
     private lateinit var context: Context
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         securityViewModel = mockk(relaxUnitFun = true)
+        biometricViewModel = mockk(relaxUnitFun = true)
         mockkObject(BiometricManager)
 
         stopKoin()
@@ -98,6 +101,7 @@ class SettingsSecurityFragmentTest {
             )
         }
         every { securityViewModel.isSecurityEnforcedEnabled() } returns false
+        every { securityViewModel.getBiometricsState() } returns false
 
         Intents.init()
     }
@@ -474,6 +478,27 @@ class SettingsSecurityFragmentTest {
     fun patternLockVisible() {
         launchTest()
         assertTrue(prefPattern.isVisible)
+    }
+
+    @Test
+    fun checkIfUserEnabledBiometricRecommendation() {
+        every { securityViewModel.getBiometricsState() } returns true
+
+        launchTest()
+
+        firstEnablePasscode()
+
+        assertTrue(prefBiometric!!.isChecked)
+        assertTrue(prefBiometric!!.isEnabled)
+    }
+
+    @Test
+    fun checkIfUserNotEnabledBiometricRecommendation() {
+        launchTest()
+
+        firstEnablePasscode()
+
+        assertFalse(prefBiometric!!.isChecked)
     }
 
     private fun firstEnablePasscode() {

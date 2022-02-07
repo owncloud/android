@@ -33,14 +33,14 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
-import com.owncloud.android.presentation.ui.security.LockTimeout
-import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.presentation.ui.security.BiometricActivity
+import com.owncloud.android.presentation.ui.security.BiometricManager
+import com.owncloud.android.presentation.ui.security.LockTimeout
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -62,6 +62,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
             else {
                 prefPasscode?.isChecked = true
+                prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
                 // Allow to use biometric lock, lock delay and access from document provider since Passcode lock has been enabled
                 enableBiometricAndLockApplicationAndAccessFromDocumentProvider()
@@ -86,6 +87,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
             else {
                 prefPattern?.isChecked = true
+                prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
                 // Allow to use biometric lock, lock delay and access from document provider since Pattern lock has been enabled
                 enableBiometricAndLockApplicationAndAccessFromDocumentProvider()

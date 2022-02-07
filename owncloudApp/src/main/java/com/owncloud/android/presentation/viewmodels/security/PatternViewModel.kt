@@ -22,6 +22,7 @@ package com.owncloud.android.presentation.viewmodels.security
 
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 
 class PatternViewModel(
@@ -41,5 +42,9 @@ class PatternViewModel(
     fun checkPatternIsValid(patternValue: String?): Boolean {
         val savedPattern = preferencesProvider.getString(PatternActivity.PREFERENCE_PATTERN, null)
         return savedPattern != null && savedPattern == patternValue
+    }
+
+    fun setBiometricsState(enabled: Boolean) {
+        preferencesProvider.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, enabled)
     }
 }
