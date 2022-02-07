@@ -111,5 +111,6 @@
 
     <!--Security enforced -->
     <integer name="lock_enforced">0</integer>
+    <integer name="lock_delay_enforced">0</integer>
 
 </resources>

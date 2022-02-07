@@ -153,4 +153,30 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         val result = securityViewModel.isSecurityEnforcedEnabled()
         assertFalse(result)
     }
+
+    @Test
+    fun `set pref is security delay enforced enabled - ok - true`() {
+        every { preferencesProvider.getBoolean(any(), any()) } returns true
+
+        securityViewModel.isSecurityEnforcedDelayEnabled().apply {
+            assertTrue(this)
+        }
+
+        verify(exactly = 1) {
+            preferencesProvider.getBoolean(SettingsSecurityFragment.ENFORCED_LOCK_DELAY, false)
+        }
+    }
+
+    @Test
+    fun `set pref is security delay enforced enabled - ok - false`() {
+        every { preferencesProvider.getBoolean(any(), any()) } returns false
+
+        securityViewModel.isSecurityEnforcedDelayEnabled().apply {
+            assertFalse(this)
+        }
+
+        verify(exactly = 1) {
+            preferencesProvider.getBoolean(SettingsSecurityFragment.ENFORCED_LOCK_DELAY, false)
+        }
+    }
 }
