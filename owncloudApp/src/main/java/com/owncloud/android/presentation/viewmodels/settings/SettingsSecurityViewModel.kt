@@ -24,7 +24,7 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.enums.LockEnforcedType
-import com.owncloud.android.enums.LockEnforcedType.Companion.toLockEnforcedType
+import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
@@ -48,5 +48,5 @@ class SettingsSecurityViewModel(
 
     fun getBiometricsState(): Boolean = preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 
-    fun isSecurityEnforcedEnabled() = toLockEnforcedType(R.integer.lock_enforced) != LockEnforcedType.DISABLED
+    fun isSecurityEnforcedEnabled() = parseFromInteger(R.integer.lock_enforced) != LockEnforcedType.DISABLED
 }

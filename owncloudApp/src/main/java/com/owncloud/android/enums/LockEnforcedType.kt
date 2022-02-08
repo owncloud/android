@@ -20,10 +20,16 @@
 
 package com.owncloud.android.enums
 
-enum class LockEnforcedType(val value: Int) {
-    DISABLED(0), EITHER_ENFORCED(1), PASSCODE_ENFORCED(2), PATTERN_ENFORCED(3);
+enum class LockEnforcedType {
+    DISABLED, EITHER_ENFORCED, PASSCODE_ENFORCED, PATTERN_ENFORCED;
 
     companion object {
-        fun toLockEnforcedType(value: Int): LockEnforcedType = values().first { it.value == value }
+        fun parseFromInteger(int: Int): LockEnforcedType =
+            when (int) {
+                1 -> EITHER_ENFORCED
+                2 -> PASSCODE_ENFORCED
+                3 -> PATTERN_ENFORCED
+                else -> DISABLED
+            }
     }
 }

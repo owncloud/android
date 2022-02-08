@@ -23,7 +23,7 @@ package com.owncloud.android.presentation.viewmodels.settings
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.enums.LockEnforcedType
-import com.owncloud.android.enums.LockEnforcedType.Companion.toLockEnforcedType
+import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
@@ -154,7 +154,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `set pref is security enforced enabled - ok - false`() {
-        every { toLockEnforcedType(contextProvider.getInt(any())) } returns LockEnforcedType.DISABLED
+        every { parseFromInteger(contextProvider.getInt(any())) } returns LockEnforcedType.DISABLED
 
         securityViewModel.isSecurityEnforcedEnabled().apply {
             assertFalse(this)

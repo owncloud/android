@@ -39,7 +39,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.enums.LockEnforcedType
-import com.owncloud.android.enums.LockEnforcedType.Companion.toLockEnforcedType
+import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
 import com.owncloud.android.interfaces.BiometricStatus
 import com.owncloud.android.interfaces.IEnableBiometrics
 import com.owncloud.android.interfaces.ISecurityEnforced
@@ -258,7 +258,7 @@ fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-    when (toLockEnforcedType(lockEnforced)) {
+    when (parseFromInteger(lockEnforced)) {
         LockEnforcedType.EITHER_ENFORCED -> {
             if (!passcodeConfigured && !patternConfigured) {
                 val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
