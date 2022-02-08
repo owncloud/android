@@ -23,8 +23,9 @@ package com.owncloud.android.presentation.viewmodels.settings
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.enums.LockEnforcedType
+import com.owncloud.android.enums.LockEnforcedType.Companion.toLockEnforcedType
 import com.owncloud.android.presentation.ui.security.BiometricActivity
-import com.owncloud.android.extensions.LockEnforcedType
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
@@ -45,8 +46,7 @@ class SettingsSecurityViewModel(
     fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =
         preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
 
-
     fun getBiometricsState(): Boolean = preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 
-    fun isSecurityEnforcedEnabled() = contextProvider.getInt(R.integer.lock_enforced) > LockEnforcedType.DISABLED.ordinal
+    fun isSecurityEnforcedEnabled() = toLockEnforcedType(R.integer.lock_enforced) != LockEnforcedType.DISABLED
 }

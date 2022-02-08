@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -18,16 +18,12 @@
  *
  */
 
-package com.owncloud.android.interfaces
+package com.owncloud.android.enums
 
-interface ISecurityEnforced {
-    fun optionLockSelected(type: LockType)
-}
-
-enum class LockType(val value: Int) {
-    PASSCODE(0), PATTERN(1);
+enum class LockEnforcedType(val value: Int) {
+    DISABLED(0), EITHER_ENFORCED(1), PASSCODE_ENFORCED(2), PATTERN_ENFORCED(3);
 
     companion object {
-        fun toLockType(value: Int): LockType = values().first { it.value == value }
+        fun toLockEnforcedType(value: Int): LockEnforcedType = values().first { it.value == value }
     }
 }

@@ -38,10 +38,13 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.enums.LockEnforcedType
+import com.owncloud.android.enums.LockEnforcedType.Companion.toLockEnforcedType
 import com.owncloud.android.interfaces.BiometricStatus
 import com.owncloud.android.interfaces.IEnableBiometrics
 import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
+import com.owncloud.android.interfaces.LockType.Companion.toLockType
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
@@ -255,8 +258,8 @@ fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-    when (lockEnforced) {
-        LockEnforcedType.DIALOG_OPTION.ordinal -> {
+    when (toLockEnforcedType(lockEnforced)) {
+        LockEnforcedType.EITHER_ENFORCED -> {
             if (!passcodeConfigured && !patternConfigured) {
                 val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
                 var optionSelected = 0
@@ -266,21 +269,21 @@ fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
                     setTitle(getString(R.string.security_enforced_title))
                     setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
                     setPositiveButton(android.R.string.ok) { dialog, _ ->
-                        when (optionSelected) {
-                            LockType.PASSCODE.ordinal -> securityEnforced.optionLockSelected(LockType.PASSCODE)
-                            LockType.PATTERN.ordinal -> securityEnforced.optionLockSelected(LockType.PATTERN)
+                        when (toLockType(optionSelected)) {
+                            LockType.PASSCODE -> securityEnforced.optionLockSelected(LockType.PASSCODE)
+                            LockType.PATTERN -> securityEnforced.optionLockSelected(LockType.PATTERN)
                         }
                         dialog.dismiss()
                     }
                 }.show()
             }
         }
-        LockEnforcedType.PASSCODE_OPTION.ordinal -> {
+        LockEnforcedType.PASSCODE_ENFORCED -> {
             if (!passcodeConfigured) {
                 manageOptionLockSelected(LockType.PASSCODE)
             }
         }
-        LockEnforcedType.PATTERN_OPTION.ordinal -> {
+        LockEnforcedType.PATTERN_ENFORCED -> {
             if (!patternConfigured) {
                 manageOptionLockSelected(LockType.PATTERN)
             }
@@ -316,21 +319,17 @@ fun Activity.manageOptionLockSelected(type: LockType) {
 }
 
 fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
-    AlertDialog.Builder(this).apply {
-        setCancelable(false)
-        setTitle(getString(R.string.biometric_dialog_title))
-        setPositiveButton(R.string.common_yes) { dialog, _ ->
+    AlertDialog.Builder(this)
+        .setCancelable(false)
+        .setTitle(getString(R.string.biometric_dialog_title))
+        .setPositiveButton(R.string.common_yes) { dialog, _ ->
             iEnableBiometrics.onOptionSelected(BiometricStatus.ENABLED_BY_USER)
             dialog.dismiss()
         }
-        setNegativeButton(R.string.common_no) { dialog, _ ->
+        .setNegativeButton(R.string.common_no) { dialog, _ ->
             iEnableBiometrics.onOptionSelected(BiometricStatus.DISABLED_BY_USER)
             dialog.dismiss()
         }
-    }.show()
-}
-
-enum class LockEnforcedType {
-    DISABLED, DIALOG_OPTION, PASSCODE_OPTION, PATTERN_OPTION
+        .show()
 }
 
