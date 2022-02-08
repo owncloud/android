@@ -155,7 +155,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         assertFalse(result)
     }
 
-    @Ignore("Testing test")
     @Test
     fun `set pref is security delay enforced enabled - ok - true`() {
         every { preferencesProvider.getBoolean(any(), any()) } returns true
@@ -169,7 +168,6 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         }
     }
 
-    @Ignore("Testing test")
     @Test
     fun `set pref is security delay enforced enabled - ok - false`() {
         every { preferencesProvider.getBoolean(any(), any()) } returns false
