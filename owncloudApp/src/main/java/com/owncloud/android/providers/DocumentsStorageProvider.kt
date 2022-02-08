@@ -230,7 +230,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         // If OwnCloud is protected with passcode or pattern and access from document provider is not allowed, return empty cursor
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val lockAccessFromDocumentProvider = preferences.getBoolean(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, false)
-        if (lockAccessFromDocumentProvider) {
+        if (lockAccessFromDocumentProvider && AccountUtils.getAccounts(contextApp).isNotEmpty()) {
             return result.apply { addProtectedRoot(contextApp) }
         }
 
