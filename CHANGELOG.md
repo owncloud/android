@@ -12,12 +12,12 @@ Summary
 * Bugfix - Small bug when privacy policy disabled: [#3542](https://github.com/owncloud/android/pull/3542)
 * Enhancement - Permission dialog removal: [#2524](https://github.com/owncloud/android/pull/2524)
 * Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
-* Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
 * Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 * Enhancement - Respect capability for Avatar support: [#3438](https://github.com/owncloud/android/pull/3438)
 * Enhancement - Brute force protection: [#3320](https://github.com/owncloud/android/issues/3320)
 * Enhancement - "Open with" action now allows editing: [#3475](https://github.com/owncloud/android/issues/3475)
 * Enhancement - Enable logs by default in debug mode: [#3526](https://github.com/owncloud/android/issues/3526)
+* Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
 * Enhancement - Suggest the user to enable enhanced security: [#3539](https://github.com/owncloud/android/pull/3539)
 
 Details
@@ -54,16 +54,6 @@ Details
 
    https://github.com/owncloud/android/issues/3344
    https://github.com/owncloud/android/pull/3375
-
-* Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
-
-   Previously, files of ownCloud accounts couldn't be accessed from document provider or
-   Android native file explorer when there was a lock set in the app. Now, a new preference has been
-   added to allow the access when the app is locked, disabled by default so that it's safer for those
-   who don't want this feature.
-
-   https://github.com/owncloud/android/issues/3379
-   https://github.com/owncloud/android/pull/3384
 
 * Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
 
@@ -106,6 +96,17 @@ Details
 
    https://github.com/owncloud/android/issues/3526
    https://github.com/owncloud/android/pull/3527
+
+* Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
+
+   Previously, files of ownCloud accounts couldn't be accessed via documents provider when
+   there was a lock set in the app. Now, a new preference has been added to allow/disallow the
+   access, so users have more control over their files.
+
+   https://github.com/owncloud/android/issues/3379
+   https://github.com/owncloud/android/issues/3520
+   https://github.com/owncloud/android/pull/3384
+   https://github.com/owncloud/android/pull/3538
 
 * Enhancement - Suggest the user to enable enhanced security: [#3539](https://github.com/owncloud/android/pull/3539)
 

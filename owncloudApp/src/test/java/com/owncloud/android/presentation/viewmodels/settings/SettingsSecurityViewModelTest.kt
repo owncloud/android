@@ -102,20 +102,20 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `set pref access from document provider - ok - true`() {
-        securityViewModel.setPrefAccessDocumentProvider(true)
+    fun `set pref lock access from document provider - ok - true`() {
+        securityViewModel.setPrefLockAccessDocumentProvider(true)
 
         verify(exactly = 1) {
-            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER, true)
+            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, true)
         }
     }
 
     @Test
-    fun `set pref access from document provider - ok - false`() {
-        securityViewModel.setPrefAccessDocumentProvider(false)
+    fun `set pref lock access from document provider - ok - false`() {
+        securityViewModel.setPrefLockAccessDocumentProvider(false)
 
         verify(exactly = 1) {
-            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER, false)
+            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, false)
         }
     }
 

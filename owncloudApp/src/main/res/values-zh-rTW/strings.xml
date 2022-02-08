@@ -46,7 +46,6 @@
   <string name="prefs_lock_application_entries_1minute">1分鐘後</string>
   <string name="prefs_lock_application_entries_5minutes">5分鐘後</string>
   <string name="prefs_lock_application_entries_30minutes">30分鐘後</string>
-  <string name="confirmation_access_from_document_provider_title">您確定要啟用這個功能？</string>
   <string name="prefs_touches_with_other_visible_windows">與其他可見窗口接觸</string>
   <string name="prefs_touches_with_other_visible_windows_summary">當視圖被另一個可見窗口遮擋時，允許觸摸。 啟用它以使用濾光應用程序。</string>
   <string name="confirmation_touches_with_other_windows_title">您確定要啟用這個功能？</string>
@@ -94,8 +93,6 @@
   <string name="passcode_already_set">模式和密碼鎖不能同時已啟用，請先停用密碼</string>
   <string name="pattern_no_longer_required">模式將不再被詢問</string>
   <string name="pattern_configure_your_pattern_explanation">每次啟動應用軟體時都會請求該模式</string>
-  <string name="pass_code_locked">密碼與鎖定</string>
-  <string name="pattern_locked">鎖定與圖案</string>
   <string name="illegal_argument_exception_message">傳遞給的Intent中需要有效的ACTION</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">檔案</string>

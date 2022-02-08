@@ -37,7 +37,6 @@
   <string name="prefs_passcode">Contrasenya</string>
   <string name="prefs_biometric">Bloqueig biomètric  </string>
   <string name="prefs_biometric_summary">Activa la contrasenya o el patró de desbloqueig per activar aquesta opció</string>
-  <string name="confirmation_access_from_document_provider_title">Segur que voleu habilitar aquesta funció?</string>
   <string name="confirmation_touches_with_other_windows_title">Segur que voleu habilitar aquesta funció?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilitzeu aquesta característica sota la vostra responsabilitat, aplicacions malicioses podrien executar accions sense que us adonesiu fent servir altres vistes.</string>
   <string name="prefs_camera_picture_upload">Imatges pujades</string>
@@ -73,8 +72,6 @@
   <string name="passcode_already_set">El patró i la contrasenya no poden ser activats al mateix moment. Desactiva la contrasenya si us plau.</string>
   <string name="pattern_no_longer_required">No demanar mai més el patró</string>
   <string name="pattern_configure_your_pattern_explanation">El patró es demanarà cada cop que s\'engegui l\'app</string>
-  <string name="pass_code_locked">Bloquejat amb codi</string>
-  <string name="pattern_locked">Bloquejat amb patró</string>
   <string name="illegal_argument_exception_message">Una ACCIÓ vàlida es requereix per passar a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Arxius</string>

@@ -46,12 +46,11 @@ class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
             .add(Root.COLUMN_FLAGS, flags)
     }
 
-    fun addProtectedRoot(context: Context, passcodeState: Boolean) {
+    fun addProtectedRoot(context: Context) {
         newRow()
             .add(
                 Root.COLUMN_SUMMARY,
-                if (passcodeState) context.getString(R.string.pass_code_locked)
-                else context.getString(R.string.pattern_locked)
+                context.getString(R.string.document_provider_locked)
             )
             .add(Root.COLUMN_TITLE, context.getString(R.string.app_name))
             .add(Root.COLUMN_ICON, R.mipmap.icon)

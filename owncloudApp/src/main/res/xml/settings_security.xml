@@ -40,9 +40,9 @@
         app:useSimpleSummaryProvider="true" />
     <CheckBoxPreference
         app:iconSpaceReserved="false"
-        app:key="access_from_document_provider"
-        app:summary="@string/prefs_access_from_document_provider_summary"
-        app:title="@string/prefs_access_from_document_provider" />
+        app:key="lock_access_from_document_provider"
+        app:summary="@string/prefs_lock_access_from_document_provider_summary"
+        app:title="@string/prefs_lock_access_from_document_provider" />
     <CheckBoxPreference
         app:iconSpaceReserved="false"
         app:key="touches_with_other_visible_windows"

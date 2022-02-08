@@ -37,7 +37,6 @@
   <string name="prefs_passcode">Contraseña</string>
   <string name="prefs_biometric">Candado Biométrico</string>
   <string name="prefs_biometric_summary">Habilitar código de acceso o bloqueo de patrón para habilitar esta opción</string>
-  <string name="confirmation_access_from_document_provider_title">¿Está seguro/a que desea habilitar esta función?</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro/a que desea habilitar esta función?</string>
   <string name="prefs_camera_picture_upload">Cargar imagenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar fotos automáticamente tomadas por la cámara</string>
@@ -63,8 +62,6 @@
   <string name="prefs_enable_logging">Habilitar registro</string>
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_not_same_pattern">Los patrones introducidos son diferentes</string>
-  <string name="pass_code_locked">Asegurar con contraseña</string>
-  <string name="pattern_locked">Asegurar con patrón</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
   <string name="bottom_nav_uploads">Cargas</string>

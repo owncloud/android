@@ -37,7 +37,6 @@
   <string name="prefs_passcode">Blokada hasłem</string>
   <string name="prefs_biometric">blokada biometryczna</string>
   <string name="prefs_biometric_summary">Wprowadź kod PIN lub wzór odblokowania aby odblokować tę opcję</string>
-  <string name="confirmation_access_from_document_provider_title">Czy jesteś pewny, że chcesz włączyć tą funkcję?</string>
   <string name="confirmation_touches_with_other_windows_title">Czy jesteś pewny, że chcesz włączyć tą funkcję?</string>
   <string name="prefs_camera_picture_upload">Wrzucanie obrazków</string>
   <string name="prefs_camera_picture_upload_summary">Automatycznie wrzuć obrazki zrobione przez kamerę</string>
@@ -72,8 +71,6 @@
   <string name="passcode_already_set">Wzór odblokowywania i hasło nie mogą być włączone jednocześnie, proszę wyłączyć hasło</string>
   <string name="pattern_no_longer_required">Nie będziesz więcej pytany o wzór odblokowywania</string>
   <string name="pattern_configure_your_pattern_explanation">Wzór odblokowywania będzie wymagany przy każdorazowym uruchomieniu aplikacji</string>
-  <string name="pass_code_locked">Zablokowanie hasłem</string>
-  <string name="pattern_locked">Zablokowanie wzorem</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Pliki</string>
   <string name="bottom_nav_uploads">Wrzucone</string>

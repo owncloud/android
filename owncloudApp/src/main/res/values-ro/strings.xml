@@ -36,7 +36,6 @@
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>
   <string name="prefs_biometric">Blocare biometrică</string>
-  <string name="confirmation_access_from_document_provider_title">Ești sigur că dorești activarea acestei funcții?</string>
   <string name="confirmation_touches_with_other_windows_title">Ești sigur că dorești activarea acestei funcții?</string>
   <string name="prefs_camera_picture_upload">Încărcări fotografii</string>
   <string name="prefs_camera_picture_upload_summary">Încarcă automat fotografiile create cu camera</string>
@@ -65,8 +64,6 @@
   <string name="pattern_incorrect_pattern">Model incorect</string>
   <string name="pattern_reenter_pattern">Te rog reintrodu modelul</string>
   <string name="pattern_not_same_pattern">Modelele nu sunt identice</string>
-  <string name="pass_code_locked">Blocat cu cod</string>
-  <string name="pattern_locked">Blocat cu model</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fișiere</string>
   <string name="bottom_nav_uploads">Încărcări</string>

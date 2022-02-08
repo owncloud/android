@@ -39,7 +39,6 @@
   <string name="prefs_passcode">Jelszavas zár</string>
   <string name="prefs_biometric">Biometrikus azonosítás</string>
   <string name="prefs_biometric_summary">Adjon meg zárolási jelszót vagy mintát a beállítás engedélyezéséhez</string>
-  <string name="confirmation_access_from_document_provider_title">Biztos, hogy engedélyezi ezt a funkciót?</string>
   <string name="prefs_touches_with_other_visible_windows">Érintkezik más látható ablakkal</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Engedélyezze az érintéseket, amikor a kép takarásban van egy másik ablak által.</string>
   <string name="confirmation_touches_with_other_windows_title">Biztos, hogy engedélyezi ezt a funkciót?</string>
@@ -83,8 +82,6 @@
   <string name="passcode_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a jelszót</string>
   <string name="pattern_no_longer_required">A minta többé nem lesz bekérve</string>
   <string name="pattern_configure_your_pattern_explanation">A minta az app minden egyes indításakor be lesz kérve</string>
-  <string name="pass_code_locked">Jelszóval zárolva</string>
-  <string name="pattern_locked">Mintával zárolva</string>
   <string name="illegal_argument_exception_message">Érvényes MŰVELET szükséges</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fájlkezelő</string>

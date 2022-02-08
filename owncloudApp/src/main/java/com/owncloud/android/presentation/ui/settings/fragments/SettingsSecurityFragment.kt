@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -54,7 +54,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     private var prefPattern: CheckBoxPreference? = null
     private var prefBiometric: CheckBoxPreference? = null
     private var prefLockApplication: ListPreference? = null
-    private var prefAccessDocumentProvider: CheckBoxPreference? = null
+    private var prefLockAccessDocumentProvider: CheckBoxPreference? = null
     private var prefTouchesWithOtherVisibleWindows: CheckBoxPreference? = null
 
     private val enablePasscodeLauncher =
@@ -65,7 +65,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
                 // Allow to use biometric lock, lock delay and access from document provider since Passcode lock has been enabled
-                enableBiometricAndLockApplicationAndAccessFromDocumentProvider()
+                enableBiometricAndLockApplication()
             }
         }
 
@@ -78,7 +78,6 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 // Do not allow to use biometric lock, lock delay nor access from document provider since Passcode lock has been disabled
                 disableBiometric()
                 prefLockApplication?.isEnabled = false
-                disableAccessFromDocumentProvider()
             }
         }
 
@@ -90,7 +89,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 prefBiometric?.isChecked = securityViewModel.getBiometricsState()
 
                 // Allow to use biometric lock, lock delay and access from document provider since Pattern lock has been enabled
-                enableBiometricAndLockApplicationAndAccessFromDocumentProvider()
+                enableBiometricAndLockApplication()
             }
         }
 
@@ -103,7 +102,6 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 // Do not allow to use biometric lock, lock delay nor access from document provider since Pattern lock has been disabled
                 disableBiometric()
                 prefLockApplication?.isEnabled = false
-                disableAccessFromDocumentProvider()
             }
         }
 
@@ -128,7 +126,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 LockTimeout.THIRTY_MINUTES.name
             ).toTypedArray()
         }
-        prefAccessDocumentProvider = findPreference(PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER)
+        prefLockAccessDocumentProvider = findPreference(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER)
         prefTouchesWithOtherVisibleWindows = findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)
 
         prefPasscode?.isVisible = !securityViewModel.isSecurityEnforcedEnabled()
@@ -152,7 +150,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         }
 
         // Pattern lock
-        prefPattern?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+        prefPattern?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
             if (securityViewModel.isPasscodeSet()) {
                 showMessageInSnackbar(getString(R.string.passcode_already_set))
             } else {
@@ -179,7 +177,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                     disableBiometric()
                 }
 
-                prefBiometric?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+                prefBiometric?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
                     val incomingValue = newValue as Boolean
 
                     // No biometric enrolled yet
@@ -192,37 +190,20 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             }
         }
 
-        // Lock application and Access from document provider visibility
+        // Lock application
         if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) {
             prefLockApplication?.isEnabled = false
-            disableAccessFromDocumentProvider()
         }
 
-        // Access from document provider
-        prefAccessDocumentProvider?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
-            if (newValue as Boolean) {
-                activity?.let {
-                    AlertDialog.Builder(it)
-                        .setTitle(getString(R.string.confirmation_access_from_document_provider_title))
-                        .setMessage(getString(R.string.confirmation_access_from_document_provider_message))
-                        .setNegativeButton(getString(R.string.common_no), null)
-                        .setPositiveButton(
-                            getString(R.string.common_yes)
-                        ) { dialog: DialogInterface?, which: Int ->
-                            securityViewModel.setPrefAccessDocumentProvider(true)
-                            prefAccessDocumentProvider?.isChecked = true
-                            notifyDocumentProviderRoots(requireContext())
-                        }
-                        .show()
-                }
-                return@setOnPreferenceChangeListener false
-            }
+        // Lock access from document provider
+        prefLockAccessDocumentProvider?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
+            securityViewModel.setPrefLockAccessDocumentProvider(true)
             notifyDocumentProviderRoots(requireContext())
             true
         }
 
         // Touches with other visible windows
-        prefTouchesWithOtherVisibleWindows?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+        prefTouchesWithOtherVisibleWindows?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
             if (newValue as Boolean) {
                 activity?.let {
                     AlertDialog.Builder(it)
@@ -231,7 +212,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                         .setNegativeButton(getString(R.string.common_no), null)
                         .setPositiveButton(
                             getString(R.string.common_yes)
-                        ) { dialog: DialogInterface?, which: Int ->
+                        ) { _: DialogInterface?, _: Int ->
                             securityViewModel.setPrefTouchesWithOtherVisibleWindows(true)
                             prefTouchesWithOtherVisibleWindows?.isChecked = true
                         }
@@ -243,13 +224,12 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun enableBiometricAndLockApplicationAndAccessFromDocumentProvider() {
+    private fun enableBiometricAndLockApplication() {
         prefBiometric?.apply {
             isEnabled = true
             summary = null
         }
         prefLockApplication?.isEnabled = true
-        prefAccessDocumentProvider?.isEnabled = true
     }
 
     private fun disableBiometric() {
@@ -260,16 +240,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun disableAccessFromDocumentProvider() {
-        prefAccessDocumentProvider?.apply {
-            isChecked = false
-            isEnabled = false
-        }
-    }
-
     companion object {
         private const val SCREEN_SECURITY = "security_screen"
-        const val PREFERENCE_ACCESS_FROM_DOCUMENT_PROVIDER = "access_from_document_provider"
+        const val PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER = "lock_access_from_document_provider"
         const val PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows"
         const val EXTRAS_LOCK_ENFORCED = "EXTRAS_LOCK_ENFORCED"
         const val PREFERENCE_LOCK_ATTEMPTS = "PrefLockAttempts"
