@@ -227,16 +227,18 @@ class DocumentsStorageProvider : DocumentsProvider() {
     override fun queryRoots(projection: Array<String>?): Cursor {
         val result = RootCursor(projection)
         val contextApp = context ?: return result
-        // If OwnCloud is protected with passcode or pattern and access from document provider is not allowed, return empty cursor
+        val accounts = AccountUtils.getAccounts(contextApp)
+
+        // If access from document provider is not allowed, return empty cursor
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val lockAccessFromDocumentProvider = preferences.getBoolean(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, false)
-        if (lockAccessFromDocumentProvider && AccountUtils.getAccounts(contextApp).isNotEmpty()) {
+        if (lockAccessFromDocumentProvider && accounts.isNotEmpty()) {
             return result.apply { addProtectedRoot(contextApp) }
         }
 
         initiateStorageMap()
 
-        for (account in AccountUtils.getAccounts(contextApp)) {
+        for (account in accounts) {
             result.addRoot(account, contextApp)
         }
         return result
