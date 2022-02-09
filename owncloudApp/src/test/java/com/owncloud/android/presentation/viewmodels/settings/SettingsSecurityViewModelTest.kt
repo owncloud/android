@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.enums.LockEnforcedType
 import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
@@ -143,21 +142,16 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     fun `set pref is security enforced enabled - ok - true`() {
         every { contextProvider.getInt(any()) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
 
-        securityViewModel.isSecurityEnforcedEnabled().apply {
-            assertTrue(this)
-        }
+        val result = securityViewModel.isSecurityEnforcedEnabled()
+        assertFalse(result)
 
-        verify(exactly = 1) {
-            contextProvider.getInt(R.integer.lock_enforced)
-        }
     }
 
     @Test
     fun `set pref is security enforced enabled - ok - false`() {
         every { parseFromInteger(contextProvider.getInt(any())) } returns LockEnforcedType.DISABLED
 
-        securityViewModel.isSecurityEnforcedEnabled().apply {
-            assertFalse(this)
-        }
+        val result = securityViewModel.isSecurityEnforcedEnabled()
+        assertFalse(result)
     }
 }
