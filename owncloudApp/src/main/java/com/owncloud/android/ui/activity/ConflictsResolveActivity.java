@@ -62,7 +62,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 forceOverwrite = true;
                 break;
             case KEEP_BOTH:
-                behaviour = FileUploader.LOCAL_BEHAVIOUR_MOVE;
+                behaviour = FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE;
                 break;
             case SERVER:
                 // use server version -> delete local, request download

@@ -145,9 +145,9 @@ public class FileUploader extends Service
 
     protected static final String KEY_LOCAL_BEHAVIOUR = "BEHAVIOUR";
 
-    public static final int LOCAL_BEHAVIOUR_COPY = 0;
-    public static final int LOCAL_BEHAVIOUR_MOVE = 1;
-    public static final int LOCAL_BEHAVIOUR_FORGET = 2;
+    public static final int LEGACY_LOCAL_BEHAVIOUR_COPY = 0;
+    public static final int LEGACY_LOCAL_BEHAVIOUR_MOVE = 1;
+    public static final int LEGACY_LOCAL_BEHAVIOUR_FORGET = 2;
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
@@ -324,7 +324,7 @@ public class FileUploader extends Service
             }
 
             boolean forceOverwrite = intent.getBooleanExtra(KEY_FORCE_OVERWRITE, false);
-            int localAction = intent.getIntExtra(KEY_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_FORGET);
+            int localAction = intent.getIntExtra(KEY_LOCAL_BEHAVIOUR, LEGACY_LOCAL_BEHAVIOUR_FORGET);
 
             boolean isCreateRemoteFolder = intent.getBooleanExtra(KEY_CREATE_REMOTE_FOLDER, false);
 

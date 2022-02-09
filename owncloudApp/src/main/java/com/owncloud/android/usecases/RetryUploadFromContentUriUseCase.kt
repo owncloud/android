@@ -25,7 +25,7 @@ import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Behavior.COPY
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Behavior.MOVE
-import com.owncloud.android.files.services.FileUploader.LOCAL_BEHAVIOUR_MOVE
+import com.owncloud.android.files.services.FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE
 
 class RetryUploadFromContentUriUseCase(
     private val workManager: WorkManager
@@ -45,7 +45,7 @@ class RetryUploadFromContentUriUseCase(
                 accountName = uploadToRetry.accountName,
                 contentUri = uploadToRetry.localPath.toUri(),
                 lastModifiedInSeconds = (uploadToRetry.uploadEndTimestamp / 1000).toString(),
-                behavior = if (uploadToRetry.localAction == LOCAL_BEHAVIOUR_MOVE) MOVE.name else COPY.name,
+                behavior = if (uploadToRetry.localAction == LEGACY_LOCAL_BEHAVIOUR_MOVE) MOVE.name else COPY.name,
                 uploadPath = uploadToRetry.remotePath,
                 uploadIdInStorageManager = uploadToRetry.uploadId,
                 wifiOnly = false,
