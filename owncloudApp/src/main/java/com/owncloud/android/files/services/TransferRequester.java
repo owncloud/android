@@ -71,7 +71,6 @@ public class TransferRequester {
             String[] remotePaths,
             String[] mimeTypes,
             Integer behaviour,
-            Boolean createRemoteFolder,
             int createdBy
     ) {
         Intent intent = new Intent(context, FileUploader.class);
@@ -81,7 +80,6 @@ public class TransferRequester {
         intent.putExtra(FileUploader.KEY_REMOTE_FILE, remotePaths);
         intent.putExtra(FileUploader.KEY_MIME_TYPE, mimeTypes);
         intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
-        intent.putExtra(FileUploader.KEY_CREATE_REMOTE_FOLDER, createRemoteFolder);
         intent.putExtra(FileUploader.KEY_CREATED_BY, createdBy);
 
         if ((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO) &&
@@ -101,7 +99,7 @@ public class TransferRequester {
      * Call to upload a new single file
      */
     public void uploadNewFile(Context context, Account account, String localPath, String remotePath, int
-            behaviour, String mimeType, boolean createRemoteFile, int createdBy) {
+            behaviour, String mimeType, int createdBy) {
 
         uploadNewFiles(
                 context,
@@ -110,7 +108,6 @@ public class TransferRequester {
                 new String[]{remotePath},
                 new String[]{mimeType},
                 behaviour,
-                createRemoteFile,
                 createdBy
         );
     }
