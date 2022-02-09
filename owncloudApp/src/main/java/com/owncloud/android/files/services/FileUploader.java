@@ -138,10 +138,6 @@ public class FileUploader extends Service
      * Key to signal what is the origin of the upload request
      */
     protected static final String KEY_CREATED_BY = "CREATED_BY";
-    /**
-     * Set to true if upload is to performed only when phone is being charged.
-     */
-    protected static final String KEY_WHILE_CHARGING_ONLY = "KEY_WHILE_CHARGING_ONLY";
 
     protected static final String KEY_LOCAL_BEHAVIOUR = "BEHAVIOUR";
 
