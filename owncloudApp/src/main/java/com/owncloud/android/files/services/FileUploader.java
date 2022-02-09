@@ -131,10 +131,6 @@ public class FileUploader extends Service
      */
     protected static final String KEY_FORCE_OVERWRITE = "KEY_FORCE_OVERWRITE";
     /**
-     * Set to true if remote folder is to be created if it does not exist.
-     */
-    protected static final String KEY_CREATE_REMOTE_FOLDER = "CREATE_REMOTE_FOLDER";
-    /**
      * Key to signal what is the origin of the upload request
      */
     protected static final String KEY_CREATED_BY = "CREATED_BY";
@@ -322,8 +318,6 @@ public class FileUploader extends Service
             boolean forceOverwrite = intent.getBooleanExtra(KEY_FORCE_OVERWRITE, false);
             int localAction = intent.getIntExtra(KEY_LOCAL_BEHAVIOUR, LEGACY_LOCAL_BEHAVIOUR_FORGET);
 
-            boolean isCreateRemoteFolder = intent.getBooleanExtra(KEY_CREATE_REMOTE_FOLDER, false);
-
             if (intent.hasExtra(KEY_FILE) && files == null) {
                 Timber.e("Incorrect array for OCFiles provided in upload intent");
                 return Service.START_NOT_STICKY;
@@ -376,7 +370,6 @@ public class FileUploader extends Service
                     OCUpload ocUpload = new OCUpload(ocFile, account);
                     ocUpload.setFileSize(ocFile.getLength());
                     ocUpload.setForceOverwrite(forceOverwrite);
-                    ocUpload.setCreateRemoteFolder(isCreateRemoteFolder);
                     ocUpload.setCreatedBy(createdBy);
                     ocUpload.setLocalAction(localAction);
                     /*ocUpload.setUseWifiOnly(isUseWifiOnly);
@@ -407,9 +400,6 @@ public class FileUploader extends Service
                     }
 
                     newUploadFileOperation.setCreatedBy(createdBy);
-                    if (isCreateRemoteFolder) {
-                        newUploadFileOperation.setRemoteFolderToBeCreated();
-                    }
                     newUploadFileOperation.addDatatransferProgressListener(this);
                     newUploadFileOperation.addDatatransferProgressListener((FileUploaderBinder) mBinder);
 
