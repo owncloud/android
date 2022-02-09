@@ -80,6 +80,9 @@ public class UploadFileOperation extends SyncOperation {
      */
     private OCFile mOldFile;
     private String mRemotePath;
+
+    // LEGACY - TO BE REMOVED
+    @Deprecated
     private boolean mRemoteFolderToBeCreated;
     private boolean mForceOverwrite;
     private int mLocalBehaviour;

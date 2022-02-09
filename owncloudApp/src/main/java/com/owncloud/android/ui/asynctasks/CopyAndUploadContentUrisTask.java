@@ -228,7 +228,6 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 remotePath,
                 behaviour,
                 mimeType,
-                false,      // do not create parent folder if not existent
                 UploadFileOperation.CREATED_BY_USER
         );
     }
