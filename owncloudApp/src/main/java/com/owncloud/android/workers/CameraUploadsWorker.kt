@@ -293,9 +293,9 @@ class CameraUploadsWorker(
             isForceOverwrite = false
             createdBy = createdByWorker
             localAction = if (behavior == FolderBackUpConfiguration.Behavior.MOVE)
-                FileUploader.LOCAL_BEHAVIOUR_MOVE
+                FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE
             else
-                FileUploader.LOCAL_BEHAVIOUR_COPY
+                FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY
             uploadStatus = UploadStatus.UPLOAD_IN_PROGRESS
         }
         return uploadStorageManager.storeUpload(ocUpload)

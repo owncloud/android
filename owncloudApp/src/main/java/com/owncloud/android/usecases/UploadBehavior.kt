@@ -22,10 +22,11 @@ import com.owncloud.android.files.services.FileUploader
 
 
 /**
- * Behavior of the upload after uploading.
+ * Behavior of the file to upload.
  *
- * COPY - Source file will be kept
- * MOVE - Source file will be removed
+ * COPY_TO_TEMPORAL_AND_UPLOAD - Make a temporal file before uploading.
+ * MOVE_TO_NEW_PLACE - Source file is potentially in a wrong place inside owncloud local storage and needs to be moved to a new one.
+ * FORGET - Upload the file to server(normally a cached one) and do not keep a copy in the local storage.
  *
  * By default, the file will be copied. We do not want to remove the file without user approval.
  *
@@ -33,13 +34,14 @@ import com.owncloud.android.files.services.FileUploader
  * Warning -> Order of elements is really important. The ordinal is used to store the value in the database.
  */
 enum class UploadBehavior {
-    COPY, MOVE;
+    COPY, MOVE, FORGET;
 
     companion object {
         fun fromLegacyLocalBehavior(oldLocalBehavior: Int): UploadBehavior {
             return when (oldLocalBehavior) {
-                FileUploader.LOCAL_BEHAVIOUR_MOVE -> MOVE
-                FileUploader.LOCAL_BEHAVIOUR_COPY -> COPY
+                FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE -> MOVE
+                FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY -> COPY
+                FileUploader.LEGACY_LOCAL_BEHAVIOUR_FORGET -> FORGET
                 else -> COPY
             }
         }

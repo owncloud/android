@@ -231,7 +231,7 @@ public class SynchronizeFileOperation extends SyncOperation {
      */
     private void requestForUpload(OCFile file) {
         TransferRequester requester = new TransferRequester();
-        requester.uploadUpdate(mContext, mAccount, file, FileUploader.LOCAL_BEHAVIOUR_MOVE, true,
+        requester.uploadUpdate(mContext, mAccount, file, FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE, true,
                 mRequestedFromAvOfflineJobService);
 
         mTransferWasRequested = true;

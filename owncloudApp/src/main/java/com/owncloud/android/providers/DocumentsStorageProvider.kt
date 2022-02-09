@@ -138,7 +138,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             currentStorageManager?.account,
                             ocFile.storagePath,
                             ocFile.remotePath,
-                            FileUploader.LOCAL_BEHAVIOUR_COPY,
+                            FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY,
                             ocFile.mimeType,
                             false,
                             UploadFileOperation.CREATED_BY_USER
