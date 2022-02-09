@@ -460,7 +460,7 @@ public class UploadsStorageManager extends Observable {
                     uploadFileOperation.getRemotePath()
             );
         } else {
-            String localPath = (FileUploader.LOCAL_BEHAVIOUR_MOVE == uploadFileOperation.getLocalBehaviour())
+            String localPath = (FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE == uploadFileOperation.getLocalBehaviour())
                     ? uploadFileOperation.getStoragePath() : null;
 
             if (uploadResult.isSuccess()) {
@@ -487,7 +487,7 @@ public class UploadsStorageManager extends Observable {
      * Updates the persistent upload database with an upload now in progress.
      */
     public void updateDatabaseUploadStart(UploadFileOperation uploadFileOperation) {
-        String localPath = (FileUploader.LOCAL_BEHAVIOUR_MOVE == uploadFileOperation.getLocalBehaviour())
+        String localPath = (FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE == uploadFileOperation.getLocalBehaviour())
                 ? uploadFileOperation.getStoragePath() : null;
 
         updateUploadStatus(

@@ -315,7 +315,7 @@ public class UploadFileOperation extends SyncOperation {
             expectedFile = new File(expectedPath);
 
             /// copy the file locally before uploading
-            if (mLocalBehaviour == FileUploader.LOCAL_BEHAVIOUR_COPY &&
+            if (mLocalBehaviour == FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY &&
                     !mOriginalStoragePath.equals(expectedPath)) {
 
                 String temporalPath = FileStorageUtils.getTemporalPath(mAccount.name) + mFile.getRemotePath();
@@ -434,7 +434,7 @@ public class UploadFileOperation extends SyncOperation {
     protected void moveTemporalOriginalFiles(File temporalFile, File originalFile, String expectedPath,
                                              File expectedFile)
             throws IOException {
-        if (mLocalBehaviour == FileUploader.LOCAL_BEHAVIOUR_FORGET) {
+        if (mLocalBehaviour == FileUploader.LEGACY_LOCAL_BEHAVIOUR_FORGET) {
             String temporalPath = FileStorageUtils.getTemporalPath(mAccount.name) + mFile.getRemotePath();
             if (mOriginalStoragePath.equals(temporalPath)) {
                 // delete local file is was pre-copied in temporary folder (see .ui.helpers.UriUploader)
