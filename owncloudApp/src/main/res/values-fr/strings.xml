@@ -512,7 +512,6 @@ Téléchargez-le ici : %2$s</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>
-    <item quantity="many">%d sélectionnés</item>
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Passer</string>
