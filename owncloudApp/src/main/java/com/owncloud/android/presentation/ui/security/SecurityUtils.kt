@@ -40,6 +40,18 @@ enum class LockTimeout {
             THIRTY_MINUTES -> 1_800_000
         }
     }
+
+    companion object {
+        fun parseFromInteger(int: Int): LockTimeout {
+            return when (int) {
+                1 -> IMMEDIATELY
+                2 -> ONE_MINUTE
+                3 -> FIVE_MINUTES
+                4 -> THIRTY_MINUTES
+                else -> DISABLED
+            }
+        }
+    }
 }
 
 /**

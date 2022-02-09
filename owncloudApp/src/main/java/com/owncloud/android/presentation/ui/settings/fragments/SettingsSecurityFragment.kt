@@ -125,7 +125,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 LockTimeout.FIVE_MINUTES.name,
                 LockTimeout.THIRTY_MINUTES.name
             ).toTypedArray()
-            isEnabled = !securityViewModel.isSecurityEnforcedDelayEnabled()
+            isEnabled = !securityViewModel.isLockDelayEnabled()
         }
         prefLockAccessDocumentProvider = findPreference(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER)
         prefTouchesWithOtherVisibleWindows = findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)
@@ -247,7 +247,5 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         const val PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS = "touches_with_other_visible_windows"
         const val EXTRAS_LOCK_ENFORCED = "EXTRAS_LOCK_ENFORCED"
         const val PREFERENCE_LOCK_ATTEMPTS = "PrefLockAttempts"
-        const val ENFORCED_LOCK_DELAY = "ENFORCED_LOCK_DELAY"
     }
-
 }

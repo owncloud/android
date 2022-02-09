@@ -34,7 +34,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
@@ -157,27 +156,25 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `set pref is security delay enforced enabled - ok - true`() {
-        every { preferencesProvider.getBoolean(any(), any()) } returns true
+        every { contextProvider.getInt(any()) } returns 1
 
-        securityViewModel.isSecurityEnforcedDelayEnabled().apply {
-            assertTrue(this)
-        }
+        val isEnabled = securityViewModel.isLockDelayEnabled()
+        assertTrue(isEnabled)
 
         verify(exactly = 1) {
-            preferencesProvider.getBoolean(SettingsSecurityFragment.ENFORCED_LOCK_DELAY, false)
+            contextProvider.getInt(R.integer.lock_delay_enforced)
         }
     }
 
     @Test
     fun `set pref is security delay enforced enabled - ok - false`() {
-        every { preferencesProvider.getBoolean(any(), any()) } returns false
+        every { contextProvider.getInt(any()) } returns 0
 
-        securityViewModel.isSecurityEnforcedDelayEnabled().apply {
-            assertFalse(this)
-        }
+        val isEnabled = securityViewModel.isLockDelayEnabled()
+        assertFalse(isEnabled)
 
         verify(exactly = 1) {
-            preferencesProvider.getBoolean(SettingsSecurityFragment.ENFORCED_LOCK_DELAY, false)
+            contextProvider.getInt(R.integer.lock_delay_enforced)
         }
     }
 }

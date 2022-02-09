@@ -50,7 +50,6 @@ import com.owncloud.android.presentation.ui.security.LockTimeout
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.ENFORCED_LOCK_DELAY
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.ui.helpers.ShareSheetHelper
@@ -336,31 +335,29 @@ fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
     }
 
 
-fun Activity.checkPasscodeDelayEnforced() {
+fun Activity.checkLockDelayEnforced() {
     val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
 
     val lockEnforcedDelay = this.resources.getInteger(R.integer.lock_delay_enforced)
+    val lockTimeout = LockTimeout.parseFromInteger(lockEnforcedDelay)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-    if (lockEnforcedDelay > LockTimeout.DISABLED.ordinal && (passcodeConfigured || patternConfigured)) {
-        when (lockEnforcedDelay) {
-            LockTimeout.IMMEDIATELY.ordinal -> {
+    if (lockTimeout != LockTimeout.DISABLED && (passcodeConfigured || patternConfigured)) {
+        when (lockTimeout) {
+            LockTimeout.IMMEDIATELY -> {
                 sharedPreferencesProvider.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)
             }
-            LockTimeout.ONE_MINUTE.ordinal -> {
+            LockTimeout.ONE_MINUTE -> {
                 sharedPreferencesProvider.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.ONE_MINUTE.name)
             }
-            LockTimeout.FIVE_MINUTES.ordinal -> {
+            LockTimeout.FIVE_MINUTES -> {
                 sharedPreferencesProvider.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.FIVE_MINUTES.name)
             }
-            LockTimeout.THIRTY_MINUTES.ordinal -> {
+            LockTimeout.THIRTY_MINUTES -> {
                 sharedPreferencesProvider.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.THIRTY_MINUTES.name)
             }
         }
-        sharedPreferencesProvider.putBoolean(ENFORCED_LOCK_DELAY, true)
-    } else {
-        sharedPreferencesProvider.putBoolean(ENFORCED_LOCK_DELAY, false)
     }
 }
 

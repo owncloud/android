@@ -54,7 +54,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.extensions.checkPasscodeDelayEnforced
+import com.owncloud.android.extensions.checkLockDelayEnforced
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -152,7 +152,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         super.onCreate(savedInstanceState) // this calls onAccountChanged() when ownCloud Account is valid
 
         checkPasscodeEnforced(this)
-        checkPasscodeDelayEnforced()
+        checkLockDelayEnforced()
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
 

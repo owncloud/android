@@ -56,7 +56,7 @@ import com.owncloud.android.domain.exceptions.StateMismatchException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
-import com.owncloud.android.extensions.checkPasscodeDelayEnforced
+import com.owncloud.android.extensions.checkLockDelayEnforced
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.manageOptionLockSelected
@@ -103,7 +103,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         super.onCreate(savedInstanceState)
 
         checkPasscodeEnforced(this)
-        checkPasscodeDelayEnforced()
+        checkLockDelayEnforced()
 
         // Protection against screen recording
         if (!BuildConfig.DEBUG) {
