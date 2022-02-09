@@ -140,7 +140,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             ocFile.remotePath,
                             FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY,
                             ocFile.mimeType,
-                            false,
                             UploadFileOperation.CREATED_BY_USER
                         )
                     }
