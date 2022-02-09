@@ -145,7 +145,7 @@ public class OCUpload implements Parcelable {
         mAccountName = "";
         mFileSize = -1;
         mId = -1;
-        mLocalAction = FileUploader.LOCAL_BEHAVIOUR_COPY;
+        mLocalAction = FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY;
         mForceOverwrite = false;
         mCreatesRemoteFolder = false;
         mUploadStatus = UploadStatus.UPLOAD_IN_PROGRESS;
