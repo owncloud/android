@@ -77,7 +77,9 @@ public class OCUpload implements Parcelable {
     private boolean mForceOverwrite;
     /**
      * Create destination folder?
+     * LEGACY - TO BE REMOVED
      */
+    @Deprecated
     private boolean mCreatesRemoteFolder;
     /**
      * Status of upload (later, in_progress, ...).
