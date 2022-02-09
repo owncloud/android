@@ -157,7 +157,6 @@ public class UriUploader {
                 remotePath,
                 mBehaviour,
                 null,       // MIME type will be detected from file name
-                false,      // do not create parent folder if not existent
                 UploadFileOperation.CREATED_BY_USER
         );
     }
