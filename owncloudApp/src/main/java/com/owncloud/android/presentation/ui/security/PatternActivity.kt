@@ -234,6 +234,7 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
             patternError.visibility = View.INVISIBLE
             val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
             preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, SystemClock.elapsedRealtime())
+            PatternManager.onActivityStopped(this)
             finish()
         } else {
             showErrorAndRestart(
@@ -306,6 +307,7 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
         if (biometricViewModel.isBiometricLockAvailable()) {
             showBiometricDialog(this)
         } else {
+            PatternManager.onActivityStopped(this)
             finish()
         }
     }
@@ -350,6 +352,7 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
                 patternViewModel.setBiometricsState(false)
             }
         }
+        PatternManager.onActivityStopped(this)
         finish()
     }
 

@@ -35,6 +35,7 @@ import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.concurrent.Executor
+import com.owncloud.android.presentation.ui.security.BiometricManager as OwnCloudBiometricManager
 
 class BiometricActivity : AppCompatActivity() {
 
@@ -94,6 +95,7 @@ class BiometricActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                     biometricViewModel.setLastUnlockTimestamp()
+                    OwnCloudBiometricManager.onActivityStopped(this@BiometricActivity)
                     finish()
                 }
 
