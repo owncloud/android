@@ -269,6 +269,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
                 startActivity(intent)
             }
             passCodeViewModel.resetNumberOfAttempts()
+            PassCodeManager.onActivityStopped(this)
             finish()
         } else {
             showErrorAndRestart(
@@ -436,9 +437,9 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
         if (biometricViewModel.isBiometricLockAvailable()) {
             showBiometricDialog(this)
         } else {
+            PassCodeManager.onActivityStopped(this)
             finish()
         }
-
     }
 
     public override fun onSaveInstanceState(outState: Bundle) {
@@ -509,6 +510,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
                 passCodeViewModel.setBiometricsState(enabled = false)
             }
         }
+        PassCodeManager.onActivityStopped(this)
         finish()
     }
 

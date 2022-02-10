@@ -33,15 +33,15 @@ import kotlin.math.abs
 object PassCodeManager {
 
     private val exemptOfPasscodeActivities: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
-    private var visibleActivitiesCounter = 0
+    private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
     private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPasscodeActivities.contains(activity.javaClass) && passCodeShouldBeRequested()) {
 
             // Do not ask for passcode if biometric is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.isBiometricEnabled()) {
-                visibleActivitiesCounter++
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.isBiometricEnabled() && !visibleActivities.contains(PassCodeActivity::class.java)) {
+                visibleActivities.add(activity.javaClass)
                 return
             }
 
@@ -55,15 +55,15 @@ object PassCodeManager {
             activity.startActivity(intent)
         }
 
-        visibleActivitiesCounter++ // keep it AFTER passCodeShouldBeRequested was checked
+        visibleActivities.add(activity.javaClass) // keep it AFTER passCodeShouldBeRequested was checked
     }
 
     fun onActivityStopped(activity: Activity) {
-        if (visibleActivitiesCounter > 0) visibleActivitiesCounter--
+        visibleActivities.remove(activity.javaClass)
 
         bayPassUnlockOnce()
         val powerMgr = activity.getSystemService(Context.POWER_SERVICE) as PowerManager
-        if (isPassCodeEnabled() && !powerMgr.isScreenOn) {
+        if (isPassCodeEnabled() && !powerMgr.isInteractive) {
             activity.moveTaskToBack(true)
         }
     }
@@ -71,7 +71,8 @@ object PassCodeManager {
     private fun passCodeShouldBeRequested(): Boolean {
         val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
         val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
-        return if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivitiesCounter <= 0) isPassCodeEnabled()
+        return if (visibleActivities.contains(PassCodeActivity::class.java)) isPassCodeEnabled()
+        else if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivities.isEmpty()) isPassCodeEnabled()
         else false
     }
 

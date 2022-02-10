@@ -33,30 +33,30 @@ import kotlin.math.abs
 object PatternManager {
 
     private val exemptOfPatternActivities: MutableSet<Class<*>> = mutableSetOf(PatternActivity::class.java)
-    private var visibleActivitiesCounter = 0
+    private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
     private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPatternActivities.contains(activity.javaClass) && patternShouldBeRequested()) {
 
             // Do not ask for pattern if biometric is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.isBiometricEnabled()) {
-                visibleActivitiesCounter++
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.isBiometricEnabled() && !visibleActivities.contains(PatternActivity::class.java)) {
+                visibleActivities.add(activity.javaClass)
                 return
             }
 
             askUserForPattern(activity)
         }
 
-        visibleActivitiesCounter++
+        visibleActivities.add(activity.javaClass)
     }
 
     fun onActivityStopped(activity: Activity) {
-        if (visibleActivitiesCounter > 0) visibleActivitiesCounter--
+        visibleActivities.remove(activity.javaClass)
 
         bayPassUnlockOnce()
         val powerMgr = activity.getSystemService(Context.POWER_SERVICE) as PowerManager
-        if (isPatternEnabled() && !powerMgr.isScreenOn) {
+        if (isPatternEnabled() && !powerMgr.isInteractive) {
             activity.moveTaskToBack(true)
         }
     }
@@ -64,7 +64,8 @@ object PatternManager {
     private fun patternShouldBeRequested(): Boolean {
         val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
         val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
-        return if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivitiesCounter <= 0) isPatternEnabled()
+        return if (visibleActivities.contains(PatternActivity::class.java)) isPatternEnabled()
+        else if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivities.isEmpty()) isPatternEnabled()
         else false
     }
 
