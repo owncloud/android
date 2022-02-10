@@ -118,7 +118,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private AccountManager mAccountManager;
     private Stack<String> mParents;
-    private ArrayList<Uri> mStreamsToUpload;
+    private ArrayList<Uri> mStreamsToUpload = new ArrayList<>();
     private String mUploadPath;
     private OCFile mFile;
     private SortOptionsView mSortOptionsView;
@@ -514,24 +514,35 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private void prepareStreamsToUpload() {
         if (getIntent().getAction() != null && getIntent().getAction().equals(Intent.ACTION_SEND)) {
-            mStreamsToUpload = new ArrayList<>();
-            mStreamsToUpload.add(getIntent().getParcelableExtra(Intent.EXTRA_STREAM));
-            if (mStreamsToUpload.get(0) != null) {
-                String streamToUpload = mStreamsToUpload.get(0).toString();
-                if (streamToUpload.contains("/data") && streamToUpload.contains(getPackageName()) &&
-                        !streamToUpload.contains(getCacheDir().getPath()) &&
-                        !streamToUpload.contains(Environment.getExternalStorageDirectory().toString())) {
-                    finish();
-                }
+            Uri safeStream = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
+            if (safeStream != null) {
+                mStreamsToUpload.add(safeStream);
             }
         } else if (getIntent().getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
-            mStreamsToUpload = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+            ArrayList<Uri> safeArrayList = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+            if (safeArrayList != null) {
+                mStreamsToUpload = safeArrayList;
+            }
+        }
+
+        if (isPlainTextUpload()) {
+            return;
+        }
+
+        for (Uri stream : mStreamsToUpload) {
+            String streamToUpload = stream.toString();
+            if (streamToUpload.contains("/data") &&
+                    streamToUpload.contains(getPackageName()) &&
+                    !streamToUpload.contains(getCacheDir().getPath()) &&
+                    !streamToUpload.contains(Environment.getExternalStorageDirectory().toString())
+            ) {
+                finish();
+            }
         }
     }
 
     private boolean somethingToUpload() {
-        return (mStreamsToUpload != null && mStreamsToUpload.get(0) != null ||
-                isPlainTextUpload());
+        return (!mStreamsToUpload.isEmpty() || isPlainTextUpload());
     }
 
     /**
@@ -540,7 +551,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
      * @return true/false
      */
     private boolean isPlainTextUpload() {
-        return mStreamsToUpload.get(0) == null &&
+        return mStreamsToUpload.isEmpty() &&
                 getIntent().getStringExtra(Intent.EXTRA_TEXT) != null;
     }
 
