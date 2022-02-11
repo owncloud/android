@@ -53,10 +53,12 @@
   <string name="prefs_camera_picture_upload_summary">Automatischer Upload von Fotos</string>
   <string name="prefs_camera_picture_upload_path_title">Speicherpfad für hochgeladene Bilder</string>
   <string name="prefs_camera_picture_upload_on_wifi">Bilder nur über Wifi hochladen</string>
+  <string name="prefs_camera_picture_upload_on_charging">Bilder nur beim Aufladen hochladen</string>
   <string name="prefs_camera_video_upload">Video-Uploads</string>
   <string name="prefs_camera_video_upload_summary">Automatischer Upload von Videos</string>
   <string name="prefs_camera_video_upload_path_title">Pfad für Video-Upload</string>
   <string name="prefs_camera_video_upload_on_wifi">Videos nur über Wifi hochladen</string>
+  <string name="prefs_log_open_logs_list_view">Protokolle</string>
   <string name="prefs_log_title">Protokollierung aktivieren</string>
   <string name="prefs_log_summary">Dies wird zur Protokollierung von Problemen genutzt</string>
   <string name="prefs_log_title_history">Log Historie</string>
@@ -75,16 +77,19 @@
   <string name="prefs_enable_logging_summary">Wenn aktiviert, können Protokolle die Leistung beeinträchtigen und sensible Informationen enthalten. Die Protokolle unterliegen jedoch nicht der automatischen Übertragung an ownCloud Server. Die Weitergabe von Protokollen an andere liegt in der alleinigen Verantwortung des Benutzers.</string>
   <string name="prefs_send_feedback">Feedback senden</string>
   <string name="prefs_app_version">App Version</string>
+  <string name="prefs_app_version_summary">%1$s%2$sVersion%3$s(%4$s)</string>
   <string name="pattern_enter_pattern">Bitte gib dein Muster ein</string>
   <string name="pattern_configure_pattern">Gib dein Muster ein</string>
   <string name="pattern_remove_pattern">Entferne dein Muster</string>
   <string name="pattern_incorrect_pattern">Falsches Muster</string>
   <string name="pattern_reenter_pattern">Muster bitte erneut eingeben</string>
   <string name="pattern_not_same_pattern">Die Muster stimmen nicht überein</string>
+  <string name="pattern_error_set">Beim Erstellen der Muster-Sperre ist ein Fehler aufgetreten</string>
   <string name="pattern_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte Muster deaktivieren</string>
   <string name="passcode_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte PIN deaktivieren</string>
   <string name="pattern_no_longer_required">Muster wird nicht mehr verlangt</string>
   <string name="pattern_configure_your_pattern_explanation">Das Muster wird bei jedem Start der Anwendung verlangt</string>
+  <string name="document_provider_locked">Blockiert</string>
   <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Dateien</string>
@@ -179,6 +184,7 @@
   <string name="uploader_upload_picture_upload_files">%d neue Bilder werden hochgeladen</string>
   <string name="uploader_upload_video_upload_files">%d neue Videos werden hochgeladen</string>
   <string name="uploader_upload_camera_upload_source_path_error">Kamera-Upload fehlgeschlagen</string>
+  <string name="uploader_upload_picture_upload_error">Pfad für Bilder-Uploads ist nicht mehr gültig</string>
   <string name="uploader_upload_available_offline_files">Hochladen von verfügbaren Offline-Dateien</string>
   <string name="uploader_upload_requested_from_wifi_files">Hochladen von angeforderten WLAN-Dateien</string>
   <string name="ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
