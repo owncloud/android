@@ -24,7 +24,6 @@ import android.accounts.Account
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -220,14 +219,14 @@ class FileListAdapter(
 
 
             holder.itemView.setOnClickListener {
-                listener.clickItem(
+                listener.onItemClick(
                     ocFile = file,
                     position = position
                 )
             }
 
             holder.itemView.setOnLongClickListener {
-                listener.longClickItem(
+                listener.onLongItemClick(
                     ocFile = file,
                     position = position
                 )
@@ -358,8 +357,8 @@ class FileListAdapter(
     }
 
     interface FileListAdapterListener {
-        fun clickItem(ocFile: OCFile, position: Int)
-        fun longClickItem(ocFile: OCFile, position: Int): Boolean = true
+        fun onItemClick(ocFile: OCFile, position: Int)
+        fun onLongItemClick(ocFile: OCFile, position: Int): Boolean = true
     }
 
     inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
