@@ -21,18 +21,18 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
-<<<<<<< HEAD
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-=======
->>>>>>> CR. Unify list of files management
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -83,7 +83,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
 import java.util.ArrayList
-import java.lang.ClassCastException
 
 class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
@@ -162,21 +161,21 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             isShowingJustFolders = isShowingJustFolders(),
             listener = object :
                 FileListAdapter.FileListAdapterListener {
-                override fun clickItem(ocFile: OCFile, position: Int) {
+                override fun onItemClick(ocFile: OCFile, position: Int) {
                     if (actionMode != null) {
                         toggleSelection(position)
                     } else {
                         if (ocFile.isFolder) {
                             file = ocFile
                             mainFileListViewModel.listDirectory(ocFile)
-                            // TODO Manage animation listDirectoryWithAnimationDown
+                            listDirectoryWithAnimation(ocFile)
                         } else { /// Click on a file
                             // TODO Click on a file
                         }
                     }
                 }
 
-                override fun longClickItem(ocFile: OCFile, position: Int): Boolean {
+                override fun onLongItemClick(ocFile: OCFile, position: Int): Boolean {
                     if (actionMode == null) {
                         actionMode = (activity as AppCompatActivity).startSupportActionMode(actionModeCallback)
                     }
@@ -199,6 +198,20 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 it.onCreateFolderListener = this
                 it.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER)
             }
+        }
+    }
+
+    private fun listDirectoryWithAnimation(file: OCFile) {
+        if (mainFileListViewModel.isInPowerSaveMode(activity)) {
+            listDirectory(file)
+        } else {
+            val fadeOutFront = AnimationUtils.loadAnimation(context, R.anim.dir_fadeout_front)
+            Handler(Looper.getMainLooper()).postDelayed({
+                listDirectory(file)
+                val fadeInBack = AnimationUtils.loadAnimation(context, R.anim.dir_fadein_back)
+                binding.recyclerViewMainFileList.animation = fadeInBack
+            }, 200)
+            binding.recyclerViewMainFileList.startAnimation(fadeOutFront)
         }
     }
 
