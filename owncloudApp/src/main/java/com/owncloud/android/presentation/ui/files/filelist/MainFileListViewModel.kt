@@ -21,6 +21,9 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
+import android.content.Context
+import android.os.PowerManager
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,17 +33,17 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
+import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.domain.files.model.FileListOption
-import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
-import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
 import java.io.File
@@ -195,6 +198,11 @@ class MainFileListViewModel(
 
             _getFileData.postValue(Event(UIResult.Success(file)))
         }
+    }
+
+    fun isInPowerSaveMode(fragmentActivity: FragmentActivity?): Boolean {
+        val powerManager = fragmentActivity?.getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isPowerSaveMode
     }
 
     companion object {
