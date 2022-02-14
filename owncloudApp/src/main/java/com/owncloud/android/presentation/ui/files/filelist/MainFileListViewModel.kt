@@ -29,6 +29,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
@@ -41,9 +42,12 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseC
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.ui.activity.FileActivity
+import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
 import java.io.File
@@ -57,6 +61,7 @@ class MainFileListViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     private val contextProvider: ContextProvider,
+    private val workManager: WorkManager,
 ) : ViewModel() {
 
     private lateinit var file: OCFile
@@ -203,6 +208,10 @@ class MainFileListViewModel(
     fun isInPowerSaveMode(fragmentActivity: FragmentActivity?): Boolean {
         val powerManager = fragmentActivity?.getSystemService(Context.POWER_SERVICE) as PowerManager
         return powerManager.isPowerSaveMode
+    }
+
+    fun fileIsDownloading(file: OCFile, containerActivity: FileFragment.ContainerActivity?): Boolean {
+        return workManager.isDownloadPending((containerActivity as FileActivity).account, file)
     }
 
     companion object {
