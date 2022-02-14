@@ -77,6 +77,10 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment
 import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
+import com.owncloud.android.ui.preview.PreviewAudioFragment
+import com.owncloud.android.ui.preview.PreviewImageFragment
+import com.owncloud.android.ui.preview.PreviewTextFragment
+import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -170,7 +174,40 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                             mainFileListViewModel.listDirectory(ocFile)
                             listDirectoryWithAnimation(ocFile)
                         } else { /// Click on a file
-                            // TODO Click on a file
+                            if (PreviewImageFragment.canBePreviewed(ocFile)) {
+                                // preview image - it handles the sync, if needed
+                                (containerActivity as FileDisplayActivity).startImagePreview(ocFile)
+                            } else if (PreviewTextFragment.canBePreviewed(ocFile)) {
+                                (containerActivity as FileDisplayActivity).let {
+                                    it.startTextPreview(ocFile)
+                                    it.fileOperationsHelper.syncFile(ocFile)
+                                }
+                            } else if (PreviewAudioFragment.canBePreviewed(ocFile)) {
+                                // media preview
+                                (containerActivity as FileDisplayActivity).let {
+                                    it.startAudioPreview(ocFile, 0)
+                                    it.fileOperationsHelper.syncFile(ocFile)
+                                }
+                            } else if (PreviewVideoFragment.canBePreviewed(ocFile) && !mainFileListViewModel.fileIsDownloading(ocFile, containerActivity)) {
+                                // FIXME: 13/10/2020 : New_arch: Av.Offline
+                                // Available offline exception, don't initialize streaming
+                                // if (!file.isAvailableLocally() && file.isAvailableOffline()) {
+                                if (ocFile.isAvailableLocally) {
+                                    // sync file content, then open with external apps
+                                    (containerActivity as FileDisplayActivity).startSyncThenOpen(ocFile)
+                                } else {
+                                    // media preview
+                                    (containerActivity as FileDisplayActivity).startVideoPreview(ocFile, 0)
+                                }
+
+                                // If the file is already downloaded sync it, just to update it if there is a
+                                // new available file version
+                                if (ocFile.isAvailableLocally) {
+                                    (containerActivity as FileDisplayActivity).fileOperationsHelper.syncFile(ocFile)
+                                }
+                            } else {
+                                (containerActivity as FileDisplayActivity).startSyncThenOpen(ocFile)
+                            }
                         }
                     }
                 }
