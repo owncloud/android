@@ -211,7 +211,7 @@ def setOutputFileName(variant, appName, callerProject) {
 
     def buildNumber = System.env.OC_BUILD_NUMBER
     if (buildNumber) {
-        newName += ".$buildNumber"
+        newName += "_$buildNumber"
     }
 
     newName += originalName.substring(callerProject.archivesBaseName.length())
