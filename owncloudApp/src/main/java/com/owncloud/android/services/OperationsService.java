@@ -76,6 +76,7 @@ public class OperationsService extends Service {
     public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
+    public static final String EXTRA_SYNC_REGULAR_FILES = "SYNC_REGULAR_FILES";
     public static final String EXTRA_IS_LAST_FILE_TO_REMOVE = "EXTRA_IS_LAST_FILE_TO_REMOVE";
 
     public static final String EXTRA_COOKIE = "COOKIE";
@@ -497,13 +498,15 @@ public class OperationsService extends Service {
                             // Sync folder (all its descendant files are synced)
                             String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
                             boolean pushOnly = operationIntent.getBooleanExtra(EXTRA_PUSH_ONLY, false);
+                            boolean syncContentOfRegularFiles = operationIntent.getBooleanExtra(EXTRA_SYNC_REGULAR_FILES, false);
                             operation = new SynchronizeFolderOperation(
                                     this,                       // TODO remove this dependency from construction time
                                     remotePath,
                                     account,
                                     System.currentTimeMillis(),  // TODO remove this dependency from construction time
                                     pushOnly,
-                                    false
+                                    false,
+                                    syncContentOfRegularFiles
                             );
 
                             break;

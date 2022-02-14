@@ -271,7 +271,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                 getAccount(),
                 mCurrentSyncTime,
                 pushOnly,
-                true       // sync full account
+                true,       // sync full account
+                false       // sync regular files in folder
         );
 
         RemoteOperationResult result;
