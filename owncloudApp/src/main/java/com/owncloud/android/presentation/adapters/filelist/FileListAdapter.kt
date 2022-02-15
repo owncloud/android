@@ -155,7 +155,6 @@ class FileListAdapter(
 
         val viewType = getItemViewType(position)
 
-
         if (viewType != ViewType.FOOTER.ordinal) { // Is Item
 
             val file = files[position] as OCFile
@@ -282,7 +281,7 @@ class FileListAdapter(
             }
 
         } else { // Is Footer
-            if (!isShowingJustFolders) {
+            if (viewType == ViewType.FOOTER.ordinal && !isShowingJustFolders) {
                 val view = holder as FooterViewHolder
                 val file = files[position] as OCFooterFile
                 (view.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams).apply {
@@ -294,14 +293,14 @@ class FileListAdapter(
     }
 
     private fun manageListOfFilesAndGenerateText(list: List<OCFile>): String {
-        val filesCount = 0
-        val foldersCount = 0
+        var filesCount = 0
+        var foldersCount = 0
         for (file in list) {
             if (file.isFolder) {
-                foldersCount.plus(1)
+                foldersCount++
             } else {
                 if (!file.isHidden) {
-                    filesCount.plus(1)
+                    filesCount++
                 }
             }
         }
