@@ -215,8 +215,7 @@ class FileListAdapter(
             // TODO Delete it when manage state sync.
             holder.itemView.findViewById<ImageView>(R.id.localFileIndicator).isVisible = false
 
-            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).isVisible = false
-
+            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).isVisible = file.sharedByLink
 
             holder.itemView.setOnClickListener {
                 listener.onItemClick(
