@@ -22,13 +22,13 @@ assignees: ''
  - [ ] [GIT] Create and sign tag 'oc-android-X.X.X' in HEAD commit of release branch, in owncloud/android
  - [ ] [GIT] Create and sign tag 'Y.Y.Y' in HEAD commit of release branch, in owncloud/android-library
  - [ ] [DIS] Generate final bundle from signed commit in owncloud/android
- - [ ] [COM] Inform `#release_coordination` and `#marketing` in internal chat
  - [ ] [GIT] Merge branch `release/Y.Y.Y` in owncloud/android-library, into master
  - [ ] [GIT] Merge branch `release/X.X.X` in owncloud/android, into master
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
  - [ ] [GIT] Publish a new release in owncloud/android
  - [ ] [DIS] Create post in central.owncloud.org ([`Category:Android + Tag:news`](https://central.owncloud.org/tags/c/news/5/android))
+ - [ ] [COM] Inform `#updates` and `#marketing` in internal chat
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
  - [ ] [GIT] Merge master branch into stable, in owncloud/android-library
  - [ ] [GIT] Merge master branch into stable, in owncloud/android
