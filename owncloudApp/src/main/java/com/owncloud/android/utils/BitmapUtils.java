@@ -175,7 +175,7 @@ public class BitmapUtils {
      *
      *  @param h Hue is specified as degrees in the range 0 - 360.
      *  @param s Saturation is specified as a percentage in the range 1 - 100.
-     *  @param l Lumanance is specified as a percentage in the range 1 - 100.
+     *  @param l Luminance is specified as a percentage in the range 1 - 100.
      *  @param alpha  the alpha value between 0 - 1
      *  adapted from https://svn.codehaus.org/griffon/builders/gfxbuilder/tags/GFXBUILDER_0.2/
      *  gfxbuilder-core/src/main/com/camick/awt/HSLColor.java

@@ -208,7 +208,6 @@
   <string name="auth_expired_oauth_token_toast">Sinu autoriseerimine aegus. Palun autoriseeri uuesti</string>
   <string name="auth_expired_basic_auth_toast">Palun sisesta kehtiv parool</string>
   <string name="auth_unsupported_auth_method">See server ei toeta seda autentimise viisi</string>
-  <string name="auth_unsupported_multiaccount">%1$s ei toeta mitme konto kasutamist</string>
   <string name="auth_fail_get_user_name">Server ei tagasta korrektset kasutaja ID-d. Palun kontakteeru administraatoriga.
 ⇥</string>
   <string name="auth_account_does_not_exist">Kontot pole veel seadmes</string>
@@ -227,7 +226,7 @@
   <string name="sync_file_nothing_to_do_msg">Faili sisu on juba sünkroniseeritud</string>
   <string name="create_dir_fail_msg">Kataloogi ei saa tekitada</string>
   <string name="filename_forbidden_characters">Keelatud sümbolid:  / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Faili nimesonvähemalt üks keelatud märk</string>
+  <string name="filename_forbidden_characters_from_server">Faili nimesonvähemalt üks keelatud märk</string>
   <string name="filename_empty">Faili nime lahter ei saa olla tühi</string>
   <string name="wait_a_moment">Oota hetk</string>
   <string name="filedisplay_unexpected_bad_get_content">Ootamatu tõrge ; palun kasuta faili valimiseks mõnda teist rakendust</string>

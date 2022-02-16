@@ -177,7 +177,7 @@ public class DisplayUtils {
     }
 
     /**
-     * calculates the relative time string based on the given modificaion timestamp.
+     * calculates the relative time string based on the given modification timestamp.
      *
      * @param context               the app's context
      * @param modificationTimestamp the UNIX timestamp of the file modification time.

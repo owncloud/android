@@ -1,0 +1,9 @@
+Enhancement: Lock delay for app
+
+A new preference has been added to choose the interval in which the
+app will be unlocked after having unlocked it once, making it more
+comfortable for those who access the app frequently and have a security
+lock set.
+
+https://github.com/owncloud/android/issues/3344
+https://github.com/owncloud/android/pull/3375

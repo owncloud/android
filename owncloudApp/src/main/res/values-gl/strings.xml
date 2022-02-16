@@ -38,6 +38,11 @@
   <string name="prefs_passcode">Código de bloqueo</string>
   <string name="prefs_biometric">Bloqueo da biometría</string>
   <string name="prefs_biometric_summary">Activar o código de seguridade ou patrón de bloqueo para activar esta opción</string>
+  <string name="prefs_lock_application">Bloquear a aplicación</string>
+  <string name="prefs_lock_application_entries_immediately">Inmediatamente</string>
+  <string name="prefs_lock_application_entries_1minute">Após 1 minuto</string>
+  <string name="prefs_lock_application_entries_5minutes">Após 5 minutos</string>
+  <string name="prefs_lock_application_entries_30minutes">Após 30 minutos</string>
   <string name="prefs_touches_with_other_visible_windows">Toques con outras xanelas visíbeis</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques cando a vista estea escurecida por outra xanela visíbel. Activar o emprego de aplis de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Confirma que quere activar esta característica?</string>
@@ -77,8 +82,6 @@
   <string name="passcode_already_set">Non é posíbel activar os bloqueos de patrón e de código de seguridade ao mesmo tempo, primeiro desactive o código de seguridade</string>
   <string name="pattern_no_longer_required">Xa non se pedirá o patrón</string>
   <string name="pattern_configure_your_pattern_explanation">Solicitaráselle o patrón cada vez que inicie a aplicación</string>
-  <string name="pass_code_locked">Bloqueado con código de seguridade</string>
-  <string name="pattern_locked">Bloqueado con patrón</string>
   <string name="illegal_argument_exception_message">É necesaria unha ACCIÓN válida na intención pasada a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Ficheiros</string>
@@ -270,7 +273,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="auth_expired_basic_auth_toast">Introduza o contrasinal actual</string>
   <string name="auth_connecting_auth_server">Conectando co servidor de autenticación…</string>
   <string name="auth_unsupported_auth_method">O servidor non admite este método de autenticación</string>
-  <string name="auth_unsupported_multiaccount">%1$s non admite contas múltipes</string>
   <string name="auth_fail_get_user_name">O seu servidor non devolveu un ID de usuario correcto, contacte cun administrador
 	</string>
   <string name="auth_can_not_auth_against_server">Non é posíbel autenticarse neste servidor</string>
@@ -296,7 +298,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="sync_file_nothing_to_do_msg">Os contidos do ficheiro xa están sincronizados</string>
   <string name="create_dir_fail_msg">Non foi posíbel crear o cartafol</string>
   <string name="filename_forbidden_characters">Caracteres non permitidos: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">O nome de ficheiro contén algún carácter incorrecto</string>
+  <string name="filename_forbidden_characters_from_server">O nome de ficheiro contén algún carácter incorrecto</string>
   <string name="filename_empty">O nome de ficheiro non pode estar baleiro</string>
   <string name="wait_a_moment">Agarde un chisco</string>
   <string name="wait_checking_credentials">Comprobando as credenciais almacenadas</string>
@@ -475,7 +477,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="manage_space_description">Van ser eliminados de xeito permanente os axustes , base de datos e certificados do servidor de %1$s.\n\nOs ficheiros descargados manteranse sen cambios.\n\nEste proceso pode levar bastante tempo.</string>
   <string name="manage_space_clear_data">Limpar os datos</string>
   <string name="manage_space_error">Algúns ficheiros non puideron seren eliminados.</string>
-  <string name="permission_storage_access">Requirense permisos adicionais para enviar e descargar ficheiros.</string>
   <string name="local_file_not_found_toast">Non se atopou o ficheiro no sistema local de ficheiros</string>
   <string name="confirmation_remove_files_alert">Confirma que quere retirar os elementos seleccionados?</string>
   <string name="confirmation_remove_folders_alert">Confirma que quere eliminar os elementos seleccionados e o seu contido?</string>
@@ -502,7 +503,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_via_link_expiration_date_explanation_label">A ligazón pública non caducará antes de %1$d días após a súa creación</string>
   <string name="share_via_link_default_name_template">Ligazón %1$s</string>
   <string name="share_via_link_empty_password">O contrasinal está baleiro</string>
-  <string name="private_link_info">Isto é unha ligazón privada, só as persoas que teñen acceso ao ficheiro/cartafol poden empregalo. Úseo como ligazón permanente para vostede ou para dirixir a outros a ficheiros compartidos.</string>
+  <string name="private_link_info">Ligazón privada: Só as persoas que teñen acceso ao ficheiro/cartafol poden empregalo. Úseo como ligazón permanente para vostede ou para dirixir a outros a ficheiros compartidos</string>
   <string name="file_private_link_error">A ligazón privada non está dispoñíbel para este ficheiro</string>
   <string name="download_notification_channel_name">Descargas</string>
   <string name="download_notification_channel_description">Vexa o nome do ficheiro en descarga e o progreso</string>
@@ -534,7 +535,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="welcome_feature_4_text">As súas imaxes ou vídeos enviaranse automaticamente</string>
   <string name="welcome_feature_5_title">Fluxo de vídeo</string>
   <string name="welcome_feature_5_text">Reproduza os seus vídeos sen descargalos</string>
-  <string name="no_borwser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
+  <string name="no_browser_installed_alert">Non hai un navegador instalado, Instale un para poder facer un acceso seguro.</string>
   <string name="common_not_found">non foi atopado</string>
   <string name="supports_oauth2_error">Non foi posible saber se OAuth2 é compatíbel</string>
   <string name="get_base_url_error">Non foi posíbel saber cal é o URL base do servidor</string>
@@ -542,4 +543,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="prefs_logs_summary">Os rexistros poden conter información confidencial. Compartir rexistros con outras persoas é responsabilidade exclusiva do usuario</string>
   <string name="synchronizing_account">Sincronizando a conta</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Código de bloqueo</string>
 </resources>

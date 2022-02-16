@@ -41,6 +41,11 @@
   <string name="prefs_passcode">Kyçje me kodkalim</string>
   <string name="prefs_biometric">Kyçje biometrike</string>
   <string name="prefs_biometric_summary">Që të aktivizohet kjo mundësi, aktivizoni kyçje përmes kodkalimesh ose përmes rregullsish</string>
+  <string name="prefs_lock_application">Kyçe aplikacionin</string>
+  <string name="prefs_lock_application_entries_immediately">Menjëherë</string>
+  <string name="prefs_lock_application_entries_1minute">Pas 1 minute</string>
+  <string name="prefs_lock_application_entries_5minutes">Pas 5 minutash</string>
+  <string name="prefs_lock_application_entries_30minutes">Pas 30 minutash</string>
   <string name="prefs_touches_with_other_visible_windows">Prekje me dritare të tjera të dukshme</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Lejo prekje, kur pamja është zënë nga një tjetër dritare e dukshme. Aktivizojeni, që të përdorni aplikacione filtrimi drite.</string>
   <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori?</string>
@@ -95,8 +100,6 @@
   <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
   <string name="pattern_no_longer_required">S\’do të pyetet më për rregullsinë</string>
   <string name="pattern_configure_your_pattern_explanation">Rregullsia do të kërkohet sa herë që niset aplikacioni</string>
-  <string name="pass_code_locked">Kyçur përmes kodkalimi</string>
-  <string name="pattern_locked">Kyçur përmes rregullsie</string>
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Kartela</string>
@@ -248,9 +251,11 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_error_set">Ndodhi një gabim teksa ujdisej kyçje frazëkalimi</string>
   <string name="pass_code_error_remove">Ndodhi një gabim teksa hiqej kyçje frazëkalimi</string>
+  <string name="lock_time_try_again">Ju lutemi, riprovoni për %1$s</string>
   <string name="biometric_not_enrolled">Që të përdorni këtë veçori, regjistroni të paktën një palë kredenciale biometrike</string>
   <string name="biometric_prompt_title">Hyrje biometrike</string>
   <string name="biometric_prompt_subtitle">Bëni hyrjen duke përdorur kredencialet tuaja biometrike</string>
+  <string name="biometric_dialog_title">Doni të aktivizohet edhe siguri bionetrike?</string>
   <string name="media_notif_ticker">Lojtësi %1$s i muzikës</string>
   <string name="media_state_playing">%1$s (po luhet)</string>
   <string name="media_state_loading">%1$s (po ngarkohet)</string>
@@ -295,7 +300,6 @@
   <string name="auth_expired_basic_auth_toast">Ju lutem, jepni fjalëkalimin e tanishëm</string>
   <string name="auth_connecting_auth_server">Po lidhet te shërbyesi i mirëfilltësimeve …</string>
   <string name="auth_unsupported_auth_method">Shërbyesi s\’e mbulon këtë metodë mirëfilltësimesh</string>
-  <string name="auth_unsupported_multiaccount">%1$s s\’mbulon llogari të shumëfishta</string>
   <string name="auth_fail_get_user_name">Shërbyesi juaj s\’po përgjigje me id të saktë përdoruesi, ju lutemi, lidhuni me një admin</string>
   <string name="auth_can_not_auth_against_server">S\’kryhet dot mirëfilltësimi me këtë shërbyes</string>
   <string name="auth_account_does_not_exist">Llogaria s\’ekziston ende te pajisja</string>
@@ -321,7 +325,7 @@
   <string name="sync_file_nothing_to_do_msg">Lëndë kartele tashmë e njëkohësuar</string>
   <string name="create_dir_fail_msg">S\’u krijua dot dosja</string>
   <string name="filename_forbidden_characters">Shenja të ndaluara: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Emri i kartelës përmban të paktën një shenjë të pavlefshme</string>
+  <string name="filename_forbidden_characters_from_server">Emri i kartelës përmban të paktën një shenjë të pavlefshme</string>
   <string name="filename_empty">Emri i kartelës s\’mund të jetë i zbrazët</string>
   <string name="wait_a_moment">Pritni një çast</string>
   <string name="wait_checking_credentials">Po kontrollohen kredenciale të depozituara</string>
@@ -502,7 +506,6 @@
   <string name="manage_space_description">Rregullimet, baza e të dhënave dhe dëshmitë e shërbyesit prej të dhënave nga %1$s do të fshihen përgjithmonë. \n\nKartelat e shkarkuara do të ruhen të paprekura.\n\nKy proces mund të hajë ca kohë.</string>
   <string name="manage_space_clear_data">Spastroji të dhënat</string>
   <string name="manage_space_error">Ca kartela s\’u fshinë dot.</string>
-  <string name="permission_storage_access">Që të ngarkoni &amp; shkarkoni kartela lypsen leje shtesë.</string>
   <string name="local_file_not_found_toast">Kartela s\’u gjet te sistemi vendor i kartelave</string>
   <string name="confirmation_remove_files_alert">Doni vërtet të hiqen objektet e përzgjedhur?</string>
   <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre?</string>
@@ -529,7 +532,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Lidhja publike do të skadojë jo më vonë se %1$d ditë pas krijimit</string>
   <string name="share_via_link_default_name_template">Lidhje %1$s</string>
   <string name="share_via_link_empty_password">Fjalëkalimi është i zbrazët</string>
-  <string name="private_link_info">Kjo është një lidhje private, mund ta përdorin vetëm personat të cilëve u është lejuar hyrja te kartela/dosja. Përdoreni si një lidhje të përhershme për veten ose për të drejtuar të tjerët drejt kartelash brenda ndarjesh.</string>
+  <string name="private_link_info">Lidhje private: Mund ta përdorin vetëm personat të cilëve u është lejuar hyrja te kartela/dosja. Përdoreni si një lidhje të përhershme për veten ose për të drejtuar të tjerët drejt kartelash brenda ndarjesh</string>
   <string name="file_private_link_error">S\’ka lidhje private për këtë kartelë</string>
   <string name="download_notification_channel_name">Shkarkime</string>
   <string name="download_notification_channel_description">Shihni emrin e kartelës që shkarkohet dhe ecurinë e shkarkimit</string>
@@ -561,7 +564,7 @@
   <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
   <string name="welcome_feature_5_title">Transmetim videosh</string>
   <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
-  <string name="no_borwser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
+  <string name="no_browser_installed_alert">S\’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
   <string name="common_not_found">s\’u gjet</string>
   <string name="supports_oauth2_error">S\’qe e mundur të dihej nëse mbulohet OAuth2</string>
   <string name="get_base_url_error">S\’qe e mundur të dihej URL-ja bazë e shërbyesit</string>
@@ -579,4 +582,8 @@
   <string name="scoped_storage_wizard_migration_in_progress">Po migrohen kartelat tuaja. Ju lutemi, mos e fikni pajisjen.</string>
   <string name="scoped_storage_wizard_migration_in_progress_button">Po punohet… Ju lutemi, pritni</string>
   <string name="scoped_storage_wizard_title">Më shumë siguri për kartelat tuaja</string>
+  <!--Security Enforced-->
+  <string name="security_enforced_title">Ju lutemi, përzgjidhni një mundësi për kyçje aplikacioni:</string>
+  <string name="security_enforced_first_option">Kyçje me kodkalim</string>
+  <string name="security_enforced_second_option">Kyçje me rregullsi</string>
 </resources>

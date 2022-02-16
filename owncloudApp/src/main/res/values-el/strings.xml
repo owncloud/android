@@ -38,6 +38,11 @@
   <string name="prefs_passcode">Κλείδωμα με κωδικό</string>
   <string name="prefs_biometric">Βιομετρικό κλείδωμα</string>
   <string name="prefs_biometric_summary">Ενεργοποιήστε τον κωδικό ή το μοτίβο κλειδώματος για να ενεργοποιήσετε αυτήν την επιλογή</string>
+  <string name="prefs_lock_application">Κλείδωμα εφαρμογής</string>
+  <string name="prefs_lock_application_entries_immediately">Αμέσως</string>
+  <string name="prefs_lock_application_entries_1minute">Μετά από 1 λεπτό</string>
+  <string name="prefs_lock_application_entries_5minutes">Μετά από 5 λεπτά</string>
+  <string name="prefs_lock_application_entries_30minutes">Μετά από 30 λεπτά</string>
   <string name="prefs_touches_with_other_visible_windows">Άγγιγμα με άλλα ορατά παράθυρα</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Επιτρέψτε το άγγιγμα όταν η προβολή καλύπτεται από άλλο ορατό παράθυρο. Ενεργοποιήστε τη χρήση εφαρμογών φιλτραρίσματος φωτός.</string>
   <string name="confirmation_touches_with_other_windows_title">Είστε βέβαιοι ότι θέλετε να ενεργοποιήσετε αυτήν τη λειτουργία;</string>
@@ -79,8 +84,6 @@
   <string name="passcode_already_set">Δεν είναι δυνατή η ταυτόχρονη ενεργοποίηση των κλειδώματος με μοτίβο και κωδικό, απενεργοποιήστε πρώτα τον κωδικό</string>
   <string name="pattern_no_longer_required">Το μοτίβο δεν θα ζητείται πια</string>
   <string name="pattern_configure_your_pattern_explanation">Το πρότυπο θα ζητηθεί κάθε φορά που ξεκινάει η εφαρμογή</string>
-  <string name="pass_code_locked">Κλείδωμα με κωδικό</string>
-  <string name="pattern_locked">Κλείδωμα με μοτίβο</string>
   <string name="illegal_argument_exception_message">Μια έγκυρη ΕΝΕΡΓΕΙΑ είναι απαραίτητη για την πρόθεση να περάσει σε</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Αρχεία</string>
@@ -269,7 +272,6 @@
   <string name="auth_expired_basic_auth_toast">Παρακαλούμε εισάγετε το τρέχον συνθηματικό</string>
   <string name="auth_connecting_auth_server">Συνδεθείτε στον εξουσιοδοτημένο διακομιστή …</string>
   <string name="auth_unsupported_auth_method">Ο διακομιστής δεν υποστηρίζει αυτή τη μέθοδο πιστοποίησης</string>
-  <string name="auth_unsupported_multiaccount">Ο %1$s  δεν υποστηρίζει πολλαπλούς λογαριασμούς</string>
   <string name="auth_fail_get_user_name">Ο διακομιστής σας δεν επιστρέφει το σωστό αναγνωριστικό χρήστη, παρακαλούμε επικοινωνήστε με τον διαχειριστή
 </string>
   <string name="auth_can_not_auth_against_server">Αδυναμία πιστοποίησης σε αυτόν τον διακομιστή</string>
@@ -293,7 +295,7 @@
   <string name="sync_file_nothing_to_do_msg">Τα περιεχόμενα του αρχείου έχουν ήδη συγχρονιστεί</string>
   <string name="create_dir_fail_msg">Ο φάκελος δεν ήταν δυνατό να δημιουργηθεί</string>
   <string name="filename_forbidden_characters">Μη-επιτρεπόμενοι χαρακτήρες: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Το όνομα αρχείου περιέχει τουλάχιστο ένα μη έγκυρο χαρακτήρα</string>
+  <string name="filename_forbidden_characters_from_server">Το όνομα αρχείου περιέχει τουλάχιστο ένα μη έγκυρο χαρακτήρα</string>
   <string name="filename_empty">Το όνομα αρχείου δεν μπορεί να είναι κενό</string>
   <string name="wait_a_moment">Παρακαλούμε περιμένετε</string>
   <string name="wait_checking_credentials">Γίνεται έλεγχος αποθηκευμένων διαπιστευτηρίων</string>
@@ -474,7 +476,6 @@
   <string name="manage_space_description">Οι ρυθμίσεις, οι βάσεις δεδομένων και οι τα πιστοποιητικά των διακομιστών από τα δεδομένα του %1$s θα διαγραφούν μόνιμα. \n\nΤα ληφθέντα αρχεία θα παραμείνουν άθικτα. \n\nΗ διαδικασία αυτή μπορεί να διαρκέσει αρκετό χρόνο.</string>
   <string name="manage_space_clear_data">Εκκαθάριση δεδομένων</string>
   <string name="manage_space_error">Μερικά αρχεία δεν μπορούν να διαγραφούν</string>
-  <string name="permission_storage_access">Επιπλέον δικαιώματα απαιτούνται για να γίνει μεταφόρτωση &amp; λήψη αρχείων.</string>
   <string name="local_file_not_found_toast">Το αρχείο δεν βρέθηκε στο τοπικό σύστημα αρχείων</string>
   <string name="confirmation_remove_files_alert">Θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα;</string>
   <string name="confirmation_remove_folders_alert">Θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα και τα περιεχόμενά τους;</string>
@@ -501,7 +502,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Ο δημόσιος σύνδεσμος λήγει το αργότερο %1$d ημέρες μετά την δημιουργία του</string>
   <string name="share_via_link_default_name_template">%1$s σύνδεσμος</string>
   <string name="share_via_link_empty_password">Το συνθηματικό είναι κενό</string>
-  <string name="private_link_info">Αυτός είναι ένας ιδιωτικός σύνδεσμος, μόνο τα άτομα που έχουν πρόσβαση στο αρχείο / φάκελο μπορούν να το χρησιμοποιήσουν. Χρησιμοποιήστε το ως μόνιμο σύνδεσμο για τον εαυτό σας ή να προβάλλετε στους άλλους τα αρχεία μέσα σε κοινόχρηστα.</string>
+  <string name="private_link_info">Ιδιωτικός σύνδεσμος: Μόνο τα άτομα που έχουν πρόσβαση στο αρχείο / φάκελο μπορούν να τα χρησιμοποιήσουν. Χρησιμοποιήστε το ως μόνιμο σύνδεσμο για τον εαυτό σας ή για να τοποθετήσετε άλλους σε αρχεία μέσα σε κοινόχρηστα στοιχεία</string>
   <string name="file_private_link_error">Ο ιδιωτικός σύνδεσμος δεν είναι διαθέσιμος γι\' αυτό το αρχείο</string>
   <string name="download_notification_channel_name">Λήψεις</string>
   <string name="download_notification_channel_description">Προβολή ονόματος αρχείου λήψης και προόδου</string>
@@ -533,8 +534,10 @@
   <string name="welcome_feature_4_text">Οι φωτογραφίες  / τα βίντεο σας μεταφορτώθηκαν αυτόματα</string>
   <string name="welcome_feature_5_title">Ροή βίντεο</string>
   <string name="welcome_feature_5_text">Αναπαράγετε τα βίντεό σας χωρίς να κάνετε λήψη</string>
-  <string name="no_borwser_installed_alert">Δεν είναι εγκατεστημένος περιηγητής. Παρακαλούμε εγκαταστήστε ένα περιηγητή έτσι ώστε να επιτρέπεται η ασφαλής σύνδεση.</string>
+  <string name="no_browser_installed_alert">Δεν είναι εγκατεστημένος περιηγητής. Παρακαλούμε εγκαταστήστε ένα περιηγητή έτσι ώστε να επιτρέπεται η ασφαλής σύνδεση.</string>
   <string name="common_not_found">δεν βρέθηκε</string>
   <string name="synchronizing_account">Λογαριασμός συγχρονισμού</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Κλείδωμα με κωδικό</string>
 </resources>

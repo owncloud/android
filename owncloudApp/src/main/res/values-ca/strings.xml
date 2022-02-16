@@ -72,8 +72,6 @@
   <string name="passcode_already_set">El patró i la contrasenya no poden ser activats al mateix moment. Desactiva la contrasenya si us plau.</string>
   <string name="pattern_no_longer_required">No demanar mai més el patró</string>
   <string name="pattern_configure_your_pattern_explanation">El patró es demanarà cada cop que s\'engegui l\'app</string>
-  <string name="pass_code_locked">Bloquejat amb codi</string>
-  <string name="pattern_locked">Bloquejat amb patró</string>
   <string name="illegal_argument_exception_message">Una ACCIÓ vàlida es requereix per passar a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Arxius</string>
@@ -266,7 +264,6 @@
   <string name="auth_expired_basic_auth_toast">Escriviu la contrasenya actual</string>
   <string name="auth_connecting_auth_server">Connectant amb el servidor d\'autentificació...</string>
   <string name="auth_unsupported_auth_method">El serivdor no permet aquest mètode d\'autenticació</string>
-  <string name="auth_unsupported_multiaccount">%1$s no permet comptes múltiples</string>
   <string name="auth_fail_get_user_name">El servidor no retorna una id d\'usuari correcta, contacteu amb l\'administrador.</string>
   <string name="auth_can_not_auth_against_server">No es pot autenticar en aquest servidor</string>
   <string name="auth_account_does_not_exist">El compte no existeix en aquest dispositiu encara</string>
@@ -291,7 +288,7 @@
   <string name="sync_file_nothing_to_do_msg">Contingut de l\'arxiu ja sincronitzat</string>
   <string name="create_dir_fail_msg">La carpeta no s\'ha pogut crear</string>
   <string name="filename_forbidden_characters">Caràcters no permesos: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">El nom del fitxer conté al menys un caràcter invàlid</string>
+  <string name="filename_forbidden_characters_from_server">El nom del fitxer conté al menys un caràcter invàlid</string>
   <string name="filename_empty">El Nom de l\'arxiu no pot estar buit</string>
   <string name="wait_a_moment">Espereu</string>
   <string name="wait_checking_credentials">Comprovant les credencials emmagatzemades</string>
@@ -468,7 +465,6 @@
   <string name="manage_space_description">La configuració, base de dades i certificats del servidor %1$s s\'esborraran de forma permanent.\n\nEls arxius descarregats quedaran intactes.\n\nAquest procés tardarà una mica.</string>
   <string name="manage_space_clear_data">Neteja dades</string>
   <string name="manage_space_error">Alguns fitxers no s\'han pogut esborrar</string>
-  <string name="permission_storage_access">Es requereixen permisos addicionals per a pujar i baixar fitxers.</string>
   <string name="local_file_not_found_toast">El fitxer no s\'ha trobat entre els fitxers locals</string>
   <string name="confirmation_remove_files_alert">Segur que vols esborrar els elements seleccionats?</string>
   <string name="confirmation_remove_folders_alert">Segur que voleu esborrar els elements seleccionats i els seus continguts?</string>
@@ -495,7 +491,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Els enllaços públics caducaran abans de %1$d dies de la seva creació</string>
   <string name="share_via_link_default_name_template">enllaç %1$s</string>
   <string name="share_via_link_empty_password">La contrasenya és buida</string>
-  <string name="private_link_info">Enllaç privat, només les persones que tenen accés al fitxer/carpeta el podran utilitzar. </string>
   <string name="file_private_link_error">Enllaç privat no disponible per aquest fitxer</string>
   <string name="download_notification_channel_name">Baixades</string>
   <string name="download_notification_channel_description">Veure el fitxer en descàrrega i progrés</string>
@@ -527,11 +522,13 @@
   <string name="welcome_feature_4_text">Fotos i Vídeos carregats automàticament</string>
   <string name="welcome_feature_5_title">Transmissió de vídeo</string>
   <string name="welcome_feature_5_text">Reprodueix els vídeos sense descarregar-los</string>
-  <string name="no_borwser_installed_alert">Ningun navegador instal·lat. Si us plau, instal·la un navegador per permetre un inici de sessió segur.</string>
+  <string name="no_browser_installed_alert">Ningun navegador instal·lat. Si us plau, instal·la un navegador per permetre un inici de sessió segur.</string>
   <string name="common_not_found">No s\' ha trobat</string>
   <string name="supports_oauth2_error">No s\' ha pogut saber si s\' admet OAuth2 </string>
   <string name="get_base_url_error">No ha sigut possible conèixer l\'URL del servidor</string>
   <string name="prefs_http_logs">Registre de sol·licituds i respostes HTTP</string>
   <string name="prefs_logs_summary">Els registres poden contenir informació sensible. Compartir els registres amb altres és responsabilitat exclusiva de l’usuari</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Contrasenya</string>
 </resources>

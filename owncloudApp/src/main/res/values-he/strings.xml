@@ -38,6 +38,11 @@
   <string name="prefs_passcode">נעילת סיסמא</string>
   <string name="prefs_biometric">נעילה ביומטרית</string>
   <string name="prefs_biometric_summary">הפעלת קוד סיסמא או נעילת דפוס במטרה לאפשר אפשרות זו</string>
+  <string name="prefs_lock_application">נעילת יישום</string>
+  <string name="prefs_lock_application_entries_immediately">מיידי</string>
+  <string name="prefs_lock_application_entries_1minute">אחרי דקה אחת</string>
+  <string name="prefs_lock_application_entries_5minutes">אחרי 5 דקות</string>
+  <string name="prefs_lock_application_entries_30minutes">אחרי 30 דקות</string>
   <string name="prefs_touches_with_other_visible_windows">נוגע בחלונות גלויים אחרים</string>
   <string name="prefs_touches_with_other_visible_windows_summary">מאפשר מגע כאשר התצוגה מוסתרת על ידי חלון גלוי אחר. יש לאפשר זאת לשימוש ביישומי סינון קלים.</string>
   <string name="confirmation_touches_with_other_windows_title">האם באמת לאפשר תכונה זו?</string>
@@ -77,8 +82,6 @@
   <string name="passcode_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את הקוד תחילה</string>
   <string name="pattern_no_longer_required">לא תופיע עוד בקשה עם תבנית</string>
   <string name="pattern_configure_your_pattern_explanation">תופיע בקשה לאימות תבנית עם כל הפעלה של היישומון</string>
-  <string name="pass_code_locked">נעילה על בסיס סיסמא</string>
-  <string name="pattern_locked">נעילה על בסיס תבנית</string>
   <string name="illegal_argument_exception_message">פעולה חוקית נדרשת להעברה</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">קבצים</string>
@@ -269,7 +272,6 @@
   <string name="auth_expired_basic_auth_toast">יש להכניס את הסיסמא הנוכחית</string>
   <string name="auth_connecting_auth_server">מתחבר לשרת אימות...</string>
   <string name="auth_unsupported_auth_method">השרת אינו תומך בשיטת אימות זו</string>
-  <string name="auth_unsupported_multiaccount">%1$s אינו תומך בריבוי חשבונות</string>
   <string name="auth_fail_get_user_name">השרת אינו מחזיר מספר משתמש נכון, יש ליצור קשר עם מנהל
 ⇥</string>
   <string name="auth_can_not_auth_against_server">לא ניתן לאמת עבור שרת זה</string>
@@ -295,7 +297,7 @@
   <string name="sync_file_nothing_to_do_msg">תוכן הקובץ כבר מסונכרן</string>
   <string name="create_dir_fail_msg">לא ניתן ליצור תיקייה</string>
   <string name="filename_forbidden_characters">תווים אסורים: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">שם קובץ כולל לפחות תו אחד לא חוקי</string>
+  <string name="filename_forbidden_characters_from_server">שם קובץ כולל לפחות תו אחד לא חוקי</string>
   <string name="filename_empty">שם קובץ לא יכול להיות ריק</string>
   <string name="wait_a_moment">נא להמתין רגע</string>
   <string name="wait_checking_credentials">בודק אישורים שמורים</string>
@@ -474,7 +476,6 @@
   <string name="manage_space_description">הגדרות, של אישורי מסד נתונים ושרת מתוך מידע %1$s\'s ימחק לצמיתות. \n\nקבצים שהורדו ישמרו ללא פגע.\n\nתהליך זה יכול להמשך זמן מה.</string>
   <string name="manage_space_clear_data">ניקוי מידע</string>
   <string name="manage_space_error">לא ניתן היה למחוק מספר קבצים.</string>
-  <string name="permission_storage_access">נדרשות הרשאות נוספות להעלאה והורדת קבצים.</string>
   <string name="local_file_not_found_toast">הקובץ לא נמצא במערכת הקבצים המקומית</string>
   <string name="confirmation_remove_files_alert">האם באמת להסיר את הפריטים הנבחרים?</string>
   <string name="confirmation_remove_folders_alert">האם באמת להסיר את הפריטים הנבחרים ואת התוכן שלהם?</string>
@@ -501,7 +502,7 @@
   <string name="share_via_link_expiration_date_explanation_label">הקישור הציבורי יפוג לא יותר מ- %1$d ימים לאחר שנוצר</string>
   <string name="share_via_link_default_name_template">קישור %1$s</string>
   <string name="share_via_link_empty_password">הסיסמא ריקה</string>
-  <string name="private_link_info">זה קישור פרטי, רק אנשים שיש להם גישה לקובץ/תיקייה יכולים להשתמש בו. ניתן להשתמש בו כקישור קבוע לעצמך או לצורך הפניית אחרים לקבצים מתוך שיתופים.</string>
+  <string name="private_link_info">קישור פרטי: רק אנשים שיש להם גישה לקובץ/ספריה יכולים להשתמש בו. ניתן להשתמש בו כקישור קבע לעצמך או להפנות אחרים לקבצים המשוייכים לשיתוף</string>
   <string name="file_private_link_error">אין קישור פרטי זמין לקובץ זה</string>
   <string name="download_notification_channel_name">הורדות</string>
   <string name="download_notification_channel_description">הצגת שם הקובץ והתקדמות ההורדה</string>
@@ -535,11 +536,13 @@
   <string name="welcome_feature_4_text">התמונות/הסרטונים שלך יועלו אוטומטית</string>
   <string name="welcome_feature_5_title">הזרמת סרטונים</string>
   <string name="welcome_feature_5_text">ניגון הסרטונים שלך ללא הורדה שלהם</string>
-  <string name="no_borwser_installed_alert">לא הותקן דפדפן. יש להתקין דפדפן בכדי לאפשר חיבור מאובטח.</string>
+  <string name="no_browser_installed_alert">לא הותקן דפדפן. יש להתקין דפדפן בכדי לאפשר חיבור מאובטח.</string>
   <string name="common_not_found">לא נמצא</string>
   <string name="supports_oauth2_error">לא ניתן היה לדעת אם OAuth2 נתמך</string>
   <string name="get_base_url_error">לא ניתן היה לדעת את נתיב הבסיס של השרת</string>
   <string name="prefs_http_logs">תיעוד בקשות ותגובות HTTP</string>
   <string name="prefs_logs_summary">לוגים עלולים להכיל מידע רגיש. שיתוף לוגים עם אחרים הנו באחריות הבלעדית של המשתמש</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">נעילת סיסמא</string>
 </resources>

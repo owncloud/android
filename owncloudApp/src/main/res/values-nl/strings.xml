@@ -38,6 +38,11 @@
   <string name="prefs_passcode">Pincode slot</string>
   <string name="prefs_biometric">Biometrisch slot</string>
   <string name="prefs_biometric_summary">Zet de toegangscode of de patroonvergrendeling aan om deze optie te activeren </string>
+  <string name="prefs_lock_application">Vergrendel applicatie</string>
+  <string name="prefs_lock_application_entries_immediately">Direct</string>
+  <string name="prefs_lock_application_entries_1minute">Na 1 minuut</string>
+  <string name="prefs_lock_application_entries_5minutes">Na 5 minuten</string>
+  <string name="prefs_lock_application_entries_30minutes">Na 30 minuten</string>
   <string name="prefs_touches_with_other_visible_windows">Aanraken bij andere zichtbare vensters</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Sta acties toe als het scherm wordt beinvloed door een andere app. Zet dit aan als je licht-filter apps gebruikt.</string>
   <string name="confirmation_touches_with_other_windows_title">Weet je zeker dat je deze functionaliteit wilt aanzetten?</string>
@@ -76,8 +81,6 @@
   <string name="passcode_already_set">Patroon- en toegangscodes kunnen niet tegelijkertijd actief zijn, deactiveer eerst de toegangscode</string>
   <string name="pattern_no_longer_required">Het patroon zal niet meer worden gevraagd</string>
   <string name="pattern_configure_your_pattern_explanation">Telkens wanneer de app is gestart zal er om een patroon worden gevraagd</string>
-  <string name="pass_code_locked">Vergrendeld met wachtwoord</string>
-  <string name="pattern_locked">Vergrendeld met patroon</string>
   <string name="illegal_argument_exception_message">Een geldige ACTIE is nodig in de Intentie die wordt doorgegeven aan</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Bestanden</string>
@@ -269,7 +272,6 @@ Download hier: %2$s</string>
   <string name="auth_expired_basic_auth_toast">Voer uw huidige wachtwoord in</string>
   <string name="auth_connecting_auth_server">Verbinden met authenticatieserver...</string>
   <string name="auth_unsupported_auth_method">De server ondersteunt deze authenticatiemethode niet</string>
-  <string name="auth_unsupported_multiaccount">%1$s ondersteunt het gebruik van meerdere accounts niet</string>
   <string name="auth_fail_get_user_name">Uw server geeft geen goede userid terug, neem contact op met uw beheerder
 	</string>
   <string name="auth_can_not_auth_against_server">Kan niet authenticeren tegen deze server</string>
@@ -295,7 +297,7 @@ Download hier: %2$s</string>
   <string name="sync_file_nothing_to_do_msg">Bestandsinhoud is al gesynchroniseerd</string>
   <string name="create_dir_fail_msg">Map kon niet worden aangemaakt</string>
   <string name="filename_forbidden_characters">Verboden tekens: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">De bestandsnaam bevat ten minste één ongeldig teken</string>
+  <string name="filename_forbidden_characters_from_server">De bestandsnaam bevat ten minste één ongeldig teken</string>
   <string name="filename_empty">Bestandsnaam mag niet leeg zijn</string>
   <string name="wait_a_moment">Even geduld</string>
   <string name="wait_checking_credentials">Opgeslagen inloggegevens nakijken</string>
@@ -474,7 +476,6 @@ Neem contact op met uw beheerder</string>
   <string name="manage_space_description">Instellingen, database en servercertificaten van %1$s\'s data zullen permanent worden verwijderd. \n\nGedownloade bestanden blijven onaangeroerd.\n\nDit proces kan even duren.</string>
   <string name="manage_space_clear_data">Verwijder data</string>
   <string name="manage_space_error">Sommige bestanden konden niet worden verwijderd</string>
-  <string name="permission_storage_access">Aanvullende permssies vereist voor het uploaden en downloaden van bestanden.</string>
   <string name="local_file_not_found_toast">Het bestand is niet te vinden binnen het lokale bestandssysteem.</string>
   <string name="confirmation_remove_files_alert">Wilt u werkelijk de geselecteerde onderwerpen verwijderen?</string>
   <string name="confirmation_remove_folders_alert">Wilt u werkelijk de geselecteerde onderwerpen en de inhoud ervan verwijderen?</string>
@@ -501,7 +502,7 @@ Neem contact op met uw beheerder</string>
   <string name="share_via_link_expiration_date_explanation_label">De openbare link vervalt niet eerder dan %1$d dagen na het aanmaken</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">Het wachtwoord-veld is leeg</string>
-  <string name="private_link_info">Dit is een privélink, alleen mensen met toegang tot het bestand/map kunnen hem gebruiken. Gebruik het als een permanente link voor uwzelf of om andere naar bestanden de wijzen in gedeelde mappen.</string>
+  <string name="private_link_info">Privélink: alleen personen die toegang hebben tot het bestand of de map kunnen deze gebruiken. Gebruik het als een permanente link voor uzelf of om anderen te verwijzen naar bestanden binnen shares.</string>
   <string name="file_private_link_error">Privelink naar dit bestand is niet beschikbaar</string>
   <string name="download_notification_channel_name">Downloads</string>
   <string name="download_notification_channel_description">Zie de bestandsnaam en de voortgang van het bestand dat wordt gedownload</string>
@@ -533,9 +534,11 @@ Neem contact op met uw beheerder</string>
   <string name="welcome_feature_4_text">Uw afbeeldingen/video\'s automatisch uploaden</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
-  <string name="no_borwser_installed_alert">Geen browser geinstalleerd. Installeer een browser om een veilige login mogelijk te maken.</string>
+  <string name="no_browser_installed_alert">Geen browser geinstalleerd. Installeer een browser om een veilige login mogelijk te maken.</string>
   <string name="common_not_found">Niet gevonden</string>
   <string name="supports_oauth2_error">Het was niet mogelijk om te weten of OAuth2 wordt ondersteund</string>
   <string name="get_base_url_error">Het was niet mogelijk om de basis-URL van de server te kennen</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Pincode slot</string>
 </resources>

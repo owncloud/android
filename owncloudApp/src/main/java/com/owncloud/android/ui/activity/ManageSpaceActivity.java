@@ -35,7 +35,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.extensions.ActivityExtKt;
+import com.owncloud.android.presentation.ui.security.BiometricActivity;
 import com.owncloud.android.presentation.ui.security.PassCodeActivity;
+import com.owncloud.android.presentation.ui.security.PatternActivity;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
@@ -68,7 +70,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
         Button clearDataButton = findViewById(R.id.clearDataButton);
         clearDataButton.setOnClickListener(v -> {
-            ClearDataAsynTask clearDataTask = new ClearDataAsynTask();
+            ClearDataAsyncTask clearDataTask = new ClearDataAsyncTask();
             clearDataTask.execute();
         });
     }
@@ -90,7 +92,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
     /**
      * AsyncTask for Clear Data, saving the passcode
      */
-    private class ClearDataAsynTask extends AsyncTask<Void, Void, Boolean> {
+    private class ClearDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -102,7 +104,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
                     .getDefaultSharedPreferences(getApplicationContext());
 
             boolean passCodeEnable = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
-            boolean patternEnabled = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
+            boolean patternEnabled = appPrefs.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false);
             boolean biometricEnabled = appPrefs.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false);
 
             final String passcodeString = appPrefs.getString(PREFERENCE_PASSCODE, null);
@@ -117,7 +119,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
             String patternValue = "";
             if (patternEnabled) {
-                patternValue = appPrefs.getString(PatternLockActivity.KEY_PATTERN, null);
+                patternValue = appPrefs.getString(PatternActivity.PREFERENCE_PATTERN, null);
             }
 
             // Clear data
@@ -137,14 +139,14 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
             // Recover pattern
             if (patternEnabled) {
-                appPrefsEditor.putString(PatternLockActivity.KEY_PATTERN, patternValue);
+                appPrefsEditor.putString(PatternActivity.PREFERENCE_PATTERN, patternValue);
             }
 
             // Reenable biometric
             appPrefsEditor.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, biometricEnabled);
 
             appPrefsEditor.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, passCodeEnable);
-            appPrefsEditor.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, patternEnabled);
+            appPrefsEditor.putBoolean(PatternActivity.PREFERENCE_SET_PATTERN, patternEnabled);
             result = result && appPrefsEditor.commit();
 
             return result;

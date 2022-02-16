@@ -1,10 +1,12 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -121,7 +123,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
     /**
      * 'True' means that the contents of all the files in the folder will be synchronized;
-     * otherwise, only contents of available offline files will be synchronized.
+     * otherwise, only contents of available offline or already downloaded files will be synchronized.
      */
     private final boolean mSyncContentOfRegularFiles;
 
@@ -237,7 +239,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * Get list of files in folder from remote server.
      *
      * @param client {@link OwnCloudClient} instance used to access the server.
-     * @return Result of the fetch, including list of remote files in the sync'ed folder.
+     * @return Result of the fetch, including list of remote files in the synced folder.
      * @throws OperationCancelledException
      */
     @NonNull
@@ -395,14 +397,14 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * <p>
      * Stores the operations in mFoldersToSyncContents and mFilesToSyncContents.
      *
-     * @param localFile  Local information about the file which contents might be sync'ed.
+     * @param localFile  Local information about the file which contents might be synced.
      * @param remoteFile Server information of the file.
      * @return 'True' when the received file was not changed in the server side from the
      * last synchronization.
      */
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
 
-        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableOffline());
+        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isDown() || localFile.isAvailableOffline());
         boolean serverUnchanged;
 
         if (localFile.isFolder()) {
@@ -423,10 +425,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 intent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
                 intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, localFile.getRemotePath());
                 intent.putExtra(OperationsService.EXTRA_PUSH_ONLY, serverUnchanged);
-                intent.putExtra(
-                        OperationsService.EXTRA_SYNC_REGULAR_FILES,
-                        mSyncContentOfRegularFiles
-                );
+                intent.putExtra(OperationsService.EXTRA_SYNC_REGULAR_FILES, mSyncContentOfRegularFiles);
                 mFoldersToSyncContents.add(intent);
             }
 
@@ -442,7 +441,6 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                         mAccount,
                         serverUnchanged,
                         mContext,
-                        false,
                         false
                 );
                 mFilesToSyncContents.add(operation);
@@ -538,7 +536,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * user action or not.
      *
      * @param file ownCloud file to check.
-     * @return 'True' if the received file should not be automatically sync'ed due to a previous
+     * @return 'True' if the received file should not be automatically synced due to a previous
      * upload error that requires an user action.
      */
     private boolean isBlockedForAutomatedSync(OCFile file) {
@@ -550,7 +548,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 case FOLDER_ERROR:
                 case FILE_NOT_FOUND:
                 case FILE_ERROR:
-                case PRIVILEDGES_ERROR:
+                case PRIVILEGES_ERROR:
                 case CONFLICT_ERROR:
                     return true;
             }

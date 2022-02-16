@@ -36,7 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Account mCurrentAccount;
 
     /**
-     * Capabilites of the server where {@link #mCurrentAccount} lives.
+     * Capabilities of the server where {@link #mCurrentAccount} lives.
      */
     private OCCapability mCapabilities;
 
@@ -269,17 +269,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (mMandatoryCreation && !accountWasSet) {
                 finish();
             }
-        }
-    }
-
-    public void hideSoftKeyboard() {
-        View focusedView = getCurrentFocus();
-        if (focusedView != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(
-                    focusedView.getWindowToken(),
-                    0
-            );
         }
     }
 

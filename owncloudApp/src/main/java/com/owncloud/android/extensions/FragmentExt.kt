@@ -20,10 +20,11 @@
 package com.owncloud.android.extensions
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.owncloud.android.R
 
 fun Fragment.showErrorInSnackbar(genericErrorMessageId: Int, throwable: Throwable?) =
     throwable?.let {
@@ -53,4 +54,15 @@ fun Fragment.showAlertDialog(
         .setPositiveButton(positiveButtonText, positiveButtonListener)
         .setNegativeButton(negativeButtonText, negativeButtonListener)
         .show()
+}
+
+fun Fragment.hideSoftKeyboard() {
+    val focusedView = requireActivity().currentFocus
+    focusedView?.let {
+        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(
+            focusedView.windowToken,
+            0
+        )
+    }
 }

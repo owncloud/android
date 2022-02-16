@@ -38,6 +38,11 @@
   <string name="prefs_passcode">Code de sécurité</string>
   <string name="prefs_biometric">Vérouillage biométrique</string>
   <string name="prefs_biometric_summary">Activez un code de sécurité ou un motif afin d’activer cette option</string>
+  <string name="prefs_lock_application">Verrouiller l\'application</string>
+  <string name="prefs_lock_application_entries_immediately">immédiatement</string>
+  <string name="prefs_lock_application_entries_1minute">Après 1 minute</string>
+  <string name="prefs_lock_application_entries_5minutes">Après 5 minutes</string>
+  <string name="prefs_lock_application_entries_30minutes">Après 30 minutes</string>
   <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Vous utilisez cette fonctionnalité sous votre propre responsabilité. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l’application.</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
@@ -74,8 +79,6 @@
   <string name="passcode_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le code de sécurité</string>
   <string name="pattern_no_longer_required">La saisie du motif ne vous sera plus demandée</string>
   <string name="pattern_configure_your_pattern_explanation">La saisie du motif sera requise à chaque ouverture de l’application</string>
-  <string name="pass_code_locked">Vérouillé par un mot de passe</string>
-  <string name="pattern_locked">Vérouillé par un schéma</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fichiers</string>
   <string name="bottom_nav_uploads">Téléversements</string>
@@ -262,7 +265,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="auth_expired_basic_auth_toast">Veuillez saisir votre mot de passe</string>
   <string name="auth_connecting_auth_server">Connexion au serveur d\'authentification …</string>
   <string name="auth_unsupported_auth_method">Le serveur ne prend pas en charge pas cette méthode d\'authentification</string>
-  <string name="auth_unsupported_multiaccount">%1$s ne prend pas en charge les comptes multiples</string>
   <string name="auth_fail_get_user_name">Votre serveur a retourné un identifiant d\'utilisateur incorrect. Veuillez prendre contact avec votre administrateur
 </string>
   <string name="auth_can_not_auth_against_server">Impossible de s\'authentifier sur ce serveur</string>
@@ -288,7 +290,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="sync_file_nothing_to_do_msg">Le contenu du fichier est déjà synchronisé</string>
   <string name="create_dir_fail_msg">Le dossier n\'a pas pu être créé</string>
   <string name="filename_forbidden_characters">Caractères interdits : / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Le nom de fichier contient au moins un caractère non valide</string>
+  <string name="filename_forbidden_characters_from_server">Le nom de fichier contient au moins un caractère non valide</string>
   <string name="filename_empty">Le nom du fichier ne peut pas être vide</string>
   <string name="wait_a_moment">Veuillez patienter</string>
   <string name="wait_checking_credentials">Vérification des identifiants enregistrés</string>
@@ -465,7 +467,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="manage_space_description">Les paramètres, la base de données et les certificats du serveur provenant de %1$s seront définitivement effacés. \n\nLes fichiers téléchargés ne seront pas impactés.\n\nCe processus peut prendre du temps.</string>
   <string name="manage_space_clear_data">Effacer les données</string>
   <string name="manage_space_error">Certains fichiers n\'ont pu être supprimés.</string>
-  <string name="permission_storage_access">Des permissions supplémentaires sont exigées pour téléverser &amp; télécharger des fichiers.</string>
   <string name="local_file_not_found_toast">Le fichier n\'a pas été trouvé sur le système de fichier local</string>
   <string name="confirmation_remove_files_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ?</string>
   <string name="confirmation_remove_folders_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ainsi que leurs contenus ?</string>
@@ -492,7 +493,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="share_via_link_expiration_date_explanation_label">Ce lien public expirera au plus tard %1$d jours après sa création</string>
   <string name="share_via_link_default_name_template">lien %1$s</string>
   <string name="share_via_link_empty_password">Le mot de passe est vide</string>
-  <string name="private_link_info">Ceci est un lien privé ; seules les personnes ayant accès à ce fichier/dossier peuvent l\'utiliser. Utilisez-le comme lien permanent pour vous-même ou pour pointer sur ce fichier/dossier dans le partage avec d\'autres utilisateur.</string>
+  <string name="private_link_info">Lien privé: seules les personnes ayant accès au fichier / dossier peuvent l\'utiliser. Utilisez-le comme un lien permanent pour vous-même ou pour diriger les autres vers des fichiers dans des partages</string>
   <string name="file_private_link_error">Le lien privé n\'est pas disponible pour ce fichier</string>
   <string name="download_notification_channel_name">Téléchargements</string>
   <string name="download_notification_channel_description">Voir le nom du fichier téléchargé et sa progression</string>
@@ -524,8 +525,10 @@ Téléchargez-le ici : %2$s</string>
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
   <string name="welcome_feature_5_title">Streaming vidéo</string>
   <string name="welcome_feature_5_text">Lire vos vidéos sans les télécharger</string>
-  <string name="no_borwser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
+  <string name="no_browser_installed_alert">Pas de navigateur installé. Veuillez installer un navigateur afin de permettre une connexion sécurisée.</string>
   <string name="common_not_found">ça n\'a pas été trouvé</string>
   <string name="get_base_url_error">Il est impossible de trouver l\'adresse du serveur</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Code de sécurité</string>
 </resources>

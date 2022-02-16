@@ -32,6 +32,7 @@
   <string name="prefs_manage_accounts">계정 관리</string>
   <string name="prefs_passcode">암호 잠금</string>
   <string name="prefs_biometric_summary">이 옵션을 활성화하려면 비밀번호나 패턴 잠금을 활성화하십시오</string>
+  <string name="prefs_lock_application">애플리케이션 잠그기</string>
   <string name="prefs_camera_picture_upload">사진 업로드</string>
   <string name="prefs_camera_picture_upload_summary">카메라로 찍은 사진 자동으로 업로드</string>
   <string name="prefs_camera_picture_upload_path_title">사진 업로드 경로</string>
@@ -229,7 +230,6 @@
   <string name="auth_expired_basic_auth_toast">현재 암호를 입력하십시오</string>
   <string name="auth_connecting_auth_server">인증 서버에 연결하는 중…</string>
   <string name="auth_unsupported_auth_method">서버에서 이 인증 방법을 지원하지 않음</string>
-  <string name="auth_unsupported_multiaccount">%1$s에서 다중 계정을 지원하지 않습니다</string>
   <string name="auth_fail_get_user_name">서버에서 올바른 사용자 ID를 반환하지 않았습니다. 시스템 관리자에게 연락하십시오
 	</string>
   <string name="auth_can_not_auth_against_server">이 서버에 인증할 수 없음</string>
@@ -253,7 +253,7 @@
   <string name="sync_file_nothing_to_do_msg">파일 내용이 이미 동기화됨</string>
   <string name="create_dir_fail_msg">폴더를 만들 수 없음</string>
   <string name="filename_forbidden_characters">사용할 수 없는 문자: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">파일 이름에 하나 이상의 사용할 수 없는 문자가 포함되어 있음</string>
+  <string name="filename_forbidden_characters_from_server">파일 이름에 하나 이상의 사용할 수 없는 문자가 포함되어 있음</string>
   <string name="filename_empty">파일 이름이 비어 있을 수 없음</string>
   <string name="wait_a_moment">잠시 기다려 주십시오</string>
   <string name="wait_checking_credentials">저장된 인증 정보 확인 중</string>
@@ -416,7 +416,6 @@
   <string name="manage_space_description">%1$s의 데이터에서 설정, 데이터베이스, 서버 인증서를 삭제합니다.\n\n다운로드한 파일은 변경되지 않습니다.\n\n이 작업은 시간이 걸릴 수 있습니다.</string>
   <string name="manage_space_clear_data">데이터 지우기</string>
   <string name="manage_space_error">일부 파일을 삭제할 수 없습니다.</string>
-  <string name="permission_storage_access">파일을 업로드 및 다운로드하려면 추가 권한이 필요합니다.</string>
   <string name="local_file_not_found_toast">로컬 파일 시스템에서 파일을 찾을 수 없음</string>
   <string name="confirmation_remove_files_alert">선택한 항목을 삭제하시겠습니까?</string>
   <string name="confirmation_remove_folders_alert">선택한 항목과 포함된 내용을 삭제하시겠습니까?</string>
@@ -442,7 +441,7 @@
   <string name="share_via_link_expiration_date_enforced_label">만료 기한 *</string>
   <string name="share_via_link_expiration_date_explanation_label">이 공개 링크는 %1$d일 후에 만료 됩니다</string>
   <string name="share_via_link_default_name_template">%1$s 링크</string>
-  <string name="private_link_info">이 링크는 비공개 링크입니다. 파일이나 폴더에 접근할 수 있는 사람만 사용할 수 있습니다. 나 자신을 위한 영구 링크나 다른 사람에게 공유된 파일을 알려 줄 때 사용하십시오.</string>
+  <string name="private_link_info">비공개 링크: 파일/폴더에 접근할 수 있는 사람만 사용할 수 있습니다. 나 자신을 위한 영구 링크 또는 다른 사람들과의 공유 지점으로 사용하십시오.</string>
   <string name="file_private_link_error">이 파일의 비공개 링크를 사용할 수 없음</string>
   <string name="download_notification_channel_name">다운로드</string>
   <string name="download_notification_channel_description">다운로드하고 있는 파일 이름과 진행 상황 보기</string>
@@ -465,4 +464,6 @@
   <string name="welcome_feature_4_title">카메라 업로드</string>
   <string name="welcome_feature_5_title">비디오 스트리밍</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">암호 잠금</string>
 </resources>

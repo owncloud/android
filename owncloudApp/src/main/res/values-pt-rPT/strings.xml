@@ -32,6 +32,10 @@
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerir contas</string>
   <string name="prefs_passcode">Proteção por código</string>
+  <string name="prefs_lock_application">Bloquear aplicação</string>
+  <string name="prefs_lock_application_entries_1minute">Depois de 1 minuto</string>
+  <string name="prefs_lock_application_entries_5minutes">Depois de 5 minutos</string>
+  <string name="prefs_lock_application_entries_30minutes">Depois de 30 minutos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotografias tiradas pela camera</string>
   <string name="prefs_camera_picture_upload_on_wifi">Enviar as imagens apenas via wi-fi</string>
   <string name="prefs_camera_video_upload_path_title">Caminho do envio de vídeo</string>
@@ -218,7 +222,6 @@
   <string name="auth_expired_basic_auth_toast">Por favor, introduza a sua passe actual</string>
   <string name="auth_connecting_auth_server">A ligar ao servidor de autenticação...</string>
   <string name="auth_unsupported_auth_method">O servidor não suporta este método de autenticação</string>
-  <string name="auth_unsupported_multiaccount">%1$s não suporta várias contas</string>
   <string name="auth_fail_get_user_name">O seu servidor não está a devolver a id. correcta, por favor, contacte um administrador.</string>
   <string name="auth_can_not_auth_against_server">Impossível autenticar neste servidor</string>
   <string name="auth_account_does_not_exist">A conta ainda não existe no dispositivo</string>
@@ -241,7 +244,7 @@
   <string name="sync_file_nothing_to_do_msg">O conteúdo do ficheiro já foi sincronizado</string>
   <string name="create_dir_fail_msg">Não foi possível criar a pasta</string>
   <string name="filename_forbidden_characters">Carateres proibidos: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">O nome de ficheiro contém pelo menos um carácter inválido</string>
+  <string name="filename_forbidden_characters_from_server">O nome de ficheiro contém pelo menos um carácter inválido</string>
   <string name="filename_empty">O nome do ficheiro não pode estar vazio.</string>
   <string name="wait_a_moment">Aguarde um momento</string>
   <string name="wait_checking_credentials">Verificando as credenciais guardadas</string>
@@ -403,7 +406,6 @@
   <string name="manage_space_description">As configurações, base de dados e certificados de servidor dos dados de %1$s serão eliminados para sempre. \n\nOs ficheiros transferidos serão mantidos.\n\nEste processo pode demorar algum tempo.</string>
   <string name="manage_space_clear_data">Limpar dados</string>
   <string name="manage_space_error">Alguns ficheiros não podem ser apagados.</string>
-  <string name="permission_storage_access">São necessárias permissões adicionais para enviar e transferir ficheiros.</string>
   <string name="local_file_not_found_toast">O ficheiro não foi encontrado no sistema de ficheiros local</string>
   <string name="confirmation_remove_files_alert">Tem a certeza que deseja remover os items selecionados?</string>
   <string name="confirmation_remove_folders_alert">Tem a certeza que deseja remover os items selecionados e os seus respetivos conteúdos?</string>
@@ -429,6 +431,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Expiração *</string>
   <string name="share_via_link_expiration_date_explanation_label">A hiperligação pública irá expirar, o mais tardar %1$d dias após a sua criação </string>
   <string name="share_via_link_default_name_template">%1$s hiperligação</string>
+  <string name="private_link_info">Hiperligação privada: apenas as pessoas que têm acesso ao ficheiro / pasta podem usá-la. Use-a como uma ligação permanente para si mesmo ou para apontar outros para os ficheiros dentro das partilhas</string>
   <string name="download_notification_channel_name">Transferências</string>
   <string name="upload_notification_channel_name">Carregamentos</string>
   <string name="media_service_notification_channel_name">Reprodutor de música</string>
@@ -442,4 +445,6 @@
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Ignorar</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Proteção por código</string>
 </resources>

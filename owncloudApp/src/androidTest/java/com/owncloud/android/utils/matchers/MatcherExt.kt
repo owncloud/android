@@ -58,9 +58,9 @@ fun Int.withText(resourceId: Int) {
         .check(matches(ViewMatchers.withText(resourceId)))
 }
 
-fun Int.withTextColor(resourceId: Int) {
+fun Int.withChildCountAndId(count: Int, resourceId: Int) {
     onView(withId(this))
-        .check(matches(ViewMatchers.hasTextColor(resourceId)))
+        .check(matches(withChildViewCount(count, withId(resourceId))))
 }
 
 fun Int.assertVisibility(visibility: ViewMatchers.Visibility) {

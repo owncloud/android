@@ -52,12 +52,17 @@ import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
+import com.owncloud.android.domain.exceptions.StateMismatchException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.goToUrl
+import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
+import com.owncloud.android.interfaces.ISecurityEnforced
+import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
@@ -74,7 +79,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 
-class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
+class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener, ISecurityEnforced {
 
     private val authenticationViewModel by viewModel<OCAuthenticationViewModel>()
     private val oauthViewModel by viewModel<OAuthViewModel>()
@@ -95,6 +100,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        checkPasscodeEnforced(this)
 
         // Protection against screen recording
         if (!BuildConfig.DEBUG) {
@@ -223,6 +230,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
+        updateCenteredRefreshButtonVisibility(shouldBeVisible = false)
         uiResult.getStoredData()?.run {
             serverBaseUrl = baseUrl
             binding.hostUrlInput.run {
@@ -285,6 +293,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun getServerInfoIsError(uiResult: UIResult<ServerInfo>) {
+        updateCenteredRefreshButtonVisibility(shouldBeVisible = true)
         when (uiResult.getThrowableOrNull()) {
             is CertificateCombinedException ->
                 showUntrustedCertDialog(uiResult.getThrowableOrNull() as CertificateCombinedException)
@@ -445,7 +454,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             clientId = clientId,
             responseType = ResponseType.CODE.string,
             scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else "",
-            codeChallenge = oauthViewModel.codeChallenge
+            codeChallenge = oauthViewModel.codeChallenge,
+            state = oauthViewModel.oidcState
         )
 
         customTabsIntent.launchUrl(
@@ -463,18 +473,24 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun handleGetAuthorizationCodeResponse(intent: Intent) {
         val authorizationCode = intent.data?.getQueryParameter("code")
+        val state = intent.data?.getQueryParameter("state")
 
-        if (authorizationCode != null) {
-            Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
-            exchangeAuthorizationCodeForTokens(authorizationCode)
+        if (state != oauthViewModel.oidcState) {
+            Timber.e("OAuth request to get authorization code failed. State mismatching, maybe somebody is trying a CSRF attack.")
+            updateOAuthStatusIconAndText(StateMismatchException())
         } else {
-            val authorizationError = intent.data?.getQueryParameter("error")
-            val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
+            if (authorizationCode != null) {
+                Timber.d("Authorization code received [$authorizationCode]. Let's exchange it for access token")
+                exchangeAuthorizationCodeForTokens(authorizationCode)
+            } else {
+                val authorizationError = intent.data?.getQueryParameter("error")
+                val authorizationErrorDescription = intent.data?.getQueryParameter("error_description")
 
-            Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]. Error description: [$authorizationErrorDescription]")
-            val authorizationException =
-                if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
-            updateOAuthStatusIconAndText(authorizationException)
+                Timber.e("OAuth request to get authorization code failed. Error: [$authorizationError]. Error description: [$authorizationErrorDescription]")
+                val authorizationException =
+                    if (authorizationError == "access_denied") UnauthorizedException() else Throwable()
+                updateOAuthStatusIconAndText(authorizationException)
+            }
         }
     }
 
@@ -633,13 +649,16 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.loginButton.isVisible = false
     }
 
+    private fun updateCenteredRefreshButtonVisibility(shouldBeVisible: Boolean) {
+        if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
+            binding.centeredRefreshButton.isVisible = shouldBeVisible
+        }
+    }
+
     private fun initBrandableOptionsUI() {
         if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
             binding.hostUrlFrame.isVisible = false
-            binding.centeredRefreshButton.run {
-                isVisible = true
-                setOnClickListener { checkOcServer() }
-            }
+            binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
 
         if (contextProvider.getString(R.string.server_url).isNotEmpty()) {
@@ -704,5 +723,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             accountAuthenticatorResponse = null
         }
         super.finish()
+    }
+
+    override fun optionLockSelected(type: LockType) {
+        manageOptionLockSelected(type)
     }
 }

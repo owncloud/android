@@ -1,0 +1,7 @@
+Enhancement: Respect capability for Avatar support
+
+Previously, the user's avatar was shown by default.
+Now, it is shown or not depending on a new capability.
+
+https://github.com/owncloud/android/pull/3438
+https://github.com/owncloud/android/issues/3285

@@ -48,7 +48,7 @@
             android:id="@id/exo_ffwd"
             style="@style/ExoMediaButton.FastForward" />
 
-        // This is the custom button
+        <!-- This are the custom buttons-->
 
         <ImageButton
             android:id="@+id/fullscreen_button"

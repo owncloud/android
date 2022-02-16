@@ -94,7 +94,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
      *
      * Reference: http://developer.android.com/guide/topics/search/adding-custom-suggestions.html#CustomContentProvider
      *
-     * @param uri           Content [Uri], formattted as
+     * @param uri           Content [Uri], formatted as
      * "content://com.owncloud.android.providers.UsersAndGroupsSearchProvider/" +
      * [android.app.SearchManager.SUGGEST_URI_PATH_QUERY] + "/" + 'userQuery'
      * @param projection    Expected to be NULL.

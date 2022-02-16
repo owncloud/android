@@ -38,6 +38,11 @@
   <string name="prefs_passcode">Parola kod kilidi</string>
   <string name="prefs_biometric">Biyometrik kilit</string>
   <string name="prefs_biometric_summary">Bu özelliği etkinleştirmek için parola veya desen ile kilitlemeyi etkinleşir</string>
+  <string name="prefs_lock_application">Uygulamayı kitle</string>
+  <string name="prefs_lock_application_entries_immediately">Hemen</string>
+  <string name="prefs_lock_application_entries_1minute">1 dakika sonra</string>
+  <string name="prefs_lock_application_entries_5minutes">5 dakika sonra</string>
+  <string name="prefs_lock_application_entries_30minutes">30 dakika sonra</string>
   <string name="prefs_touches_with_other_visible_windows">Diğer görünür pencerelerle birlikte dokunma</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Başka bir görünür pencere tarafından gizlendiğinde dokunmalara izin ver. Uygulamaları hafif filtrelemek için etkinleştir.</string>
   <string name="confirmation_touches_with_other_windows_title">Bu özelliği etkinleştirmek istediğinizden emin misiniz?</string>
@@ -77,8 +82,6 @@
   <string name="passcode_already_set">Desen ve parola kilitleme aynı anda etkinleştirilemez, lütfen öncelikle parolayı devre dışı bırakınız.</string>
   <string name="pattern_no_longer_required">Desen artık sorulmayacak</string>
   <string name="pattern_configure_your_pattern_explanation">Uygulama her açılışında desen sorulacak</string>
-  <string name="pass_code_locked">Parola kodu ile kilitlendi</string>
-  <string name="pattern_locked">Desenle kilitlendi</string>
   <string name="illegal_argument_exception_message">Geçilen Niyette geçerli bir EYLEM gerekli</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Dosyalar</string>
@@ -271,7 +274,6 @@
   <string name="auth_expired_basic_auth_toast">Lütfen mevcut parolanızı girin</string>
   <string name="auth_connecting_auth_server">Kimlik doğrulama sunucusuna bağlanılıyor…</string>
   <string name="auth_unsupported_auth_method">Sunucu bu kimlik doğrulama yöntemini desteklemiyor</string>
-  <string name="auth_unsupported_multiaccount">%1$s çoklu hesapları desteklemiyor</string>
   <string name="auth_fail_get_user_name">Sunucunuz geçerli bir kullanıcı kimliği döndürmüyor, lütfen yöneticinizle iletişime geçin
         </string>
   <string name="auth_can_not_auth_against_server">Bu sunucuya karşı kimlik doğrulama yapılamaz</string>
@@ -297,7 +299,7 @@
   <string name="sync_file_nothing_to_do_msg">Dosya içerikleri zaten eşitlenmiş</string>
   <string name="create_dir_fail_msg">Klasör oluşturulamadı</string>
   <string name="filename_forbidden_characters">Yasaklı karakterler: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Dosya adı en az bir geçersiz karakter içeriyor</string>
+  <string name="filename_forbidden_characters_from_server">Dosya adı en az bir geçersiz karakter içeriyor</string>
   <string name="filename_empty">Dosya adı boş olamaz</string>
   <string name="wait_a_moment">Bir süre bekleyin</string>
   <string name="wait_checking_credentials">Kayıtlı kimlik bilgileri kontrol ediliyor</string>
@@ -479,7 +481,6 @@
   <string name="manage_space_description">%1$s sunucusundan ayarlar, veritabanı ve sunucu sertifikaları kalıcı olarak silinecektir. \n\nİndirilen dosyalara dokunulmayacaktır.\n\nBu işlem biraz zaman alabilir.</string>
   <string name="manage_space_clear_data">Verileri temizle</string>
   <string name="manage_space_error">Bazı dosyalar silinemedi</string>
-  <string name="permission_storage_access">Dosya yüklemek ve indirmek için ek izin gerekiyor.</string>
   <string name="local_file_not_found_toast">Dosya yerel dosya sisteminde bulunamadı</string>
   <string name="confirmation_remove_files_alert">Seçili nesneleri silmek istediğinize emin misiniz?</string>
   <string name="confirmation_remove_folders_alert">Seçili nesneleri ve içeriklerini silmek istediğinize emin misiniz?</string>
@@ -506,7 +507,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Herkese açık bağlantının süresi, oluşturulduktan en geç %1$d gün sonra dolacak</string>
   <string name="share_via_link_default_name_template">%1$s bağlantı</string>
   <string name="share_via_link_empty_password">Parola boş</string>
-  <string name="private_link_info">Bu bir özel bağlantıdır, bunu sadece dosyaya/klasöre erişimi olan kişiler kullanabilir. Bu bağlantıyı, kendiniz için kalıcı bir bağlantı olarak veya başkalarına paylaşım içindeki dosyaları gösterebilmek için kullanın.</string>
+  <string name="private_link_info">Özel bağlantı: Yalnızca dosyaya/klasöre erişimi olan kişiler kullanabilir. Bunu kendiniz için kalıcı bir bağlantı olarak veya başkalarını paylaşımlardaki dosyalara yönlendirmek için kullanın</string>
   <string name="file_private_link_error">Bu dosya için özel bağlantı mevcut değil</string>
   <string name="download_notification_channel_name">İndirmeler</string>
   <string name="download_notification_channel_description">İndirilen dosyanın adını ve durumunu gör</string>
@@ -538,7 +539,9 @@
   <string name="welcome_feature_4_text">Resimleriniz/videolarınız otomatik yüklendi</string>
   <string name="welcome_feature_5_title">Video akışı</string>
   <string name="welcome_feature_5_text">Videolarınızı onları indirmeden oynatın</string>
-  <string name="no_borwser_installed_alert">Yüklü tarayıcı yok. Lütfen güvenli bağlantıyı sağlamak için bir tarayıcı yükleyin.</string>
+  <string name="no_browser_installed_alert">Yüklü tarayıcı yok. Lütfen güvenli bağlantıyı sağlamak için bir tarayıcı yükleyin.</string>
   <string name="common_not_found">bulunamadı</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Parola kod kilidi</string>
 </resources>

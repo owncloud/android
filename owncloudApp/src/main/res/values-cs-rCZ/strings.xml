@@ -41,6 +41,10 @@
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
   <string name="prefs_biometric">Biometrický zámek</string>
   <string name="prefs_biometric_summary">Nutné povolit bezpečnostní kód nebo gesto k povolení této možnosti</string>
+  <string name="prefs_lock_application">Uzamknout aplikaci</string>
+  <string name="prefs_lock_application_entries_1minute">Za 1 minutu</string>
+  <string name="prefs_lock_application_entries_5minutes">Za 5 minut</string>
+  <string name="prefs_lock_application_entries_30minutes">Za 30 minut</string>
   <string name="prefs_touches_with_other_visible_windows">Dotek s jinými viditelnými okny</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Povolit dotek s aplikacemi, které mohou překrýt toto okno. Nutné pro povolení při použití filtrů světla.</string>
   <string name="confirmation_touches_with_other_windows_title">Jste si jisti, že chcete povolit tuto funkci?</string>
@@ -88,8 +92,6 @@
   <string name="passcode_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte bezpečnostní kód</string>
   <string name="pattern_no_longer_required">Gesto již nebude vyžadováno</string>
   <string name="pattern_configure_your_pattern_explanation">Gesto bude vyžadováno při každém startu aplikace</string>
-  <string name="pass_code_locked">Uzamčeno bezpečnostním kódem</string>
-  <string name="pattern_locked">Uzamčeno gestem</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Soubory</string>
   <string name="bottom_nav_uploads">Nahrání</string>
@@ -286,7 +288,6 @@
   <string name="auth_expired_basic_auth_toast">Zadejte prosím aktuální heslo</string>
   <string name="auth_connecting_auth_server">Připojování k ověřovacímu serveru ...</string>
   <string name="auth_unsupported_auth_method">Server nepodporuje tuto přihlašovací metodu</string>
-  <string name="auth_unsupported_multiaccount">%1$s nepodporuje více účtů</string>
   <string name="auth_fail_get_user_name">Váš server nevrací správné přihlašovací ID, kontaktujte prosím svého správce systému</string>
   <string name="auth_can_not_auth_against_server">Na tomto serveru nelze ověřit</string>
   <string name="auth_account_does_not_exist">V zařízení není zatím nastaven účet</string>
@@ -312,7 +313,7 @@
   <string name="sync_file_nothing_to_do_msg">Obsah souboru je již synchronizován</string>
   <string name="create_dir_fail_msg">Adresář nemohl být vytvořen</string>
   <string name="filename_forbidden_characters">Zakázané znaky: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Jméno souboru obsahuje alespoň jeden neplatný znak</string>
+  <string name="filename_forbidden_characters_from_server">Jméno souboru obsahuje alespoň jeden neplatný znak</string>
   <string name="filename_empty">Název nemůže být prázdný</string>
   <string name="wait_a_moment">Počkejte chvíli</string>
   <string name="wait_checking_credentials">Ověřování uložených přihlašovacích údajů</string>
@@ -494,7 +495,6 @@ správce systému.</string>
   <string name="manage_space_description">Nastavení, databáze a certifikáty serverů z %1$s data budou permanentně smazány. \n\nStažené soubory nebudou rozbaleny.\n\nTento proces může chvíli trvat.</string>
   <string name="manage_space_clear_data">Vyčistit data</string>
   <string name="manage_space_error">Některé soubory nebylo možno smazat.</string>
-  <string name="permission_storage_access">Vyžadována dodatečná oprávnění pro nahrávání &amp; stahování souborů.</string>
   <string name="local_file_not_found_toast">Soubor nebyl nalezen v místním souborovém systému</string>
   <string name="confirmation_remove_files_alert">Opravdu chcete odstranit vybrané položky?</string>
   <string name="confirmation_remove_folders_alert">Opravdu chcete odstranit vybrané položky a jejich obsah?</string>
@@ -521,7 +521,6 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_explanation_label">Platnost tohoto veřejného odkazu skončí nejpozději %1$d dní po jeho vytvoření</string>
   <string name="share_via_link_default_name_template">%1$s odkaz</string>
   <string name="share_via_link_empty_password">Heslo není vyplněno</string>
-  <string name="private_link_info">Toto je soukromý odkaz, pouze osoby s přístupem k souboru/složce jej mohou použít. Použijte jej jako trvalý odkaz pro sebe nebo přejděte k souborům v rámci sdílených souborů</string>
   <string name="file_private_link_error">Soukromý odkaz není pro tento soubor k dispozici</string>
   <string name="download_notification_channel_name">Stažení</string>
   <string name="download_notification_channel_description">Ukázat název souboru a průběh stahování</string>
@@ -555,7 +554,7 @@ správce systému.</string>
   <string name="welcome_feature_4_text">Obrázky/videa se automaticky nahrály</string>
   <string name="welcome_feature_5_title">Přehrávání videa</string>
   <string name="welcome_feature_5_text">Přehrávejte videa bez nutnosti stažení na disk</string>
-  <string name="no_borwser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
+  <string name="no_browser_installed_alert">Není nainstalován žádný prohlížeč. Nainstalujte si prosím prohlížeč pro bezpečné přihlášení.</string>
   <string name="common_not_found">nebylo nalezeno</string>
   <string name="supports_oauth2_error">Nebylo možné zjistit, zda-li je OAuth2 podporováno</string>
   <string name="get_base_url_error">Nebylo možné zjistit základní URL adresu serveru</string>
@@ -563,4 +562,6 @@ správce systému.</string>
   <string name="prefs_logs_summary">Log může obsahovat citlivé informace. Sdílení je pouze na vaší zodpovědnosti.</string>
   <string name="synchronizing_account">Synchronizuji účet</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Zámek bezpečnostního kódu</string>
 </resources>

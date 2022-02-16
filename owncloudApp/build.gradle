@@ -13,15 +13,14 @@ dependencies {
 
     // Dependencies for app building
     implementation "androidx.legacy:legacy-support-v4:$androidX"
-    implementation "androidx.annotation:annotation:1.2.0"
+    implementation "androidx.annotation:annotation:1.3.0"
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.jakewharton:disklrucache:2.0.2'
     implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
     implementation 'com.github.aritraroy.PatternLockView:patternlockview:a90b0d4bf0'
     implementation "androidx.appcompat:appcompat:$appCompat"
     implementation 'com.getbase:floatingactionbutton:1.10.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
-    implementation "androidx.browser:browser:1.3.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation "androidx.sqlite:sqlite-ktx:$sqliteVersion"
     implementation "androidx.biometric:biometric:$biometricVersion"
 
@@ -81,7 +80,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-web:$espressoTestVersion"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiAutomatorTestVersion"
     androidTestImplementation "androidx.annotation:annotation:$annotationTestVersion"
-    androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation("io.mockk:mockk-android:$mockkVersion") {
         exclude module: 'objenesis'
     }
@@ -100,8 +99,8 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 21900000
-        versionName = "2.19"
+        versionCode = 22000000
+        versionName = "2.20"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
@@ -212,7 +211,7 @@ def setOutputFileName(variant, appName, callerProject) {
 
     def buildNumber = System.env.OC_BUILD_NUMBER
     if (buildNumber) {
-        newName += ".$buildNumber"
+        newName += "_$buildNumber"
     }
 
     newName += originalName.substring(callerProject.archivesBaseName.length())

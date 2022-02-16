@@ -179,7 +179,6 @@
   <string name="auth_expired_basic_auth_toast">W.e.g dat aktuellt Passwuert aginn</string>
     <string name="auth_connecting_auth_server">Verbanne mam Authentifizéier-Server</string>
   <string name="auth_unsupported_auth_method">De Server ënnerstëtzt dës Authentifizéierungsmethod net</string>
-  <string name="auth_unsupported_multiaccount">%1$s ënnerstëtzt keng multipel Konten</string>
   <string name="auth_fail_get_user_name">Däi Server schéckt keng korrekt Benotzer ID zeréck, w.e.g. kontaktéier däin Administrateur</string>
   <string name="auth_account_does_not_exist">De Konto gëtt et net op dësem Gerät</string>
   <string name="set_available_offline">Offline als verfügbar uweisen</string>
@@ -199,7 +198,7 @@
   <string name="sync_file_nothing_to_do_msg">Fichiersinhalter scho synchroniséiert</string>
   <string name="create_dir_fail_msg">Dossier konnt net ugeluecht ginn</string>
   <string name="filename_forbidden_characters">Verbueden Zeechen:  / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Den Numm vum Fichier entält min. een ongültegz Zeechen</string>
+  <string name="filename_forbidden_characters_from_server">Den Numm vum Fichier entält min. een ongültegz Zeechen</string>
   <string name="filename_empty">De Fichiersnumm kann net eidel sinn</string>
   <string name="wait_a_moment">Waart ee Moment</string>
   <string name="filedisplay_unexpected_bad_get_content">Onerwaarte Problem ; w.e.g. wiel de Fichier aus enger anerer App eraus</string>

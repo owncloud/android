@@ -20,10 +20,13 @@
 
 package com.owncloud.android.settings.security
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
+import androidx.biometric.BiometricViewModel
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.CheckBoxPreference
+import androidx.preference.ListPreference
 import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -36,21 +39,20 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
-import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
-import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
-import com.owncloud.android.ui.activity.BiometricActivity
+import com.owncloud.android.presentation.ui.security.BiometricActivity
+import com.owncloud.android.presentation.ui.security.BiometricManager
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
-import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
+import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
+import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.testutil.security.OC_PATTERN
-import com.owncloud.android.ui.activity.PatternLockActivity
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.mockkObject
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -71,23 +73,20 @@ class SettingsSecurityFragmentTest {
     private lateinit var prefPasscode: CheckBoxPreference
     private lateinit var prefPattern: CheckBoxPreference
     private var prefBiometric: CheckBoxPreference? = null
+    private lateinit var prefLockApplication: ListPreference
+    private lateinit var prefLockAccessDocumentProvider: CheckBoxPreference
     private lateinit var prefTouchesWithOtherVisibleWindows: CheckBoxPreference
 
-    private lateinit var biometricManager: BiometricManager
-
     private lateinit var securityViewModel: SettingsSecurityViewModel
-    private lateinit var passCodeViewModel: PassCodeViewModel
+    private lateinit var biometricViewModel: BiometricViewModel
     private lateinit var context: Context
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         securityViewModel = mockk(relaxUnitFun = true)
-        passCodeViewModel = mockk(relaxUnitFun = true)
-        mockkStatic(BiometricManager::class)
-        biometricManager = mockk(relaxUnitFun = true)
-
-        every { BiometricManager.getBiometricManager(any()) } returns biometricManager
+        biometricViewModel = mockk(relaxUnitFun = true)
+        mockkObject(BiometricManager)
 
         stopKoin()
 
@@ -98,15 +97,11 @@ class SettingsSecurityFragmentTest {
                     viewModel {
                         securityViewModel
                     }
-                    viewModel {
-                        passCodeViewModel
-                    }
                 }
             )
         }
-
-        every { passCodeViewModel.getPassCode() } returns OC_PASSCODE_4_DIGITS
-        every { passCodeViewModel.getNumberOfPassCodeDigits() } returns 4
+        every { securityViewModel.isSecurityEnforcedEnabled() } returns false
+        every { securityViewModel.getBiometricsState() } returns false
 
         Intents.init()
     }
@@ -118,13 +113,15 @@ class SettingsSecurityFragmentTest {
     }
 
     private fun launchTest(withBiometrics: Boolean = true) {
-        every { biometricManager.isHardwareDetected } returns withBiometrics
+        every { BiometricManager.isHardwareDetected() } returns withBiometrics
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
             prefPasscode = fragment.findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE)!!
-            prefPattern = fragment.findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN)!!
+            prefPattern = fragment.findPreference(PatternActivity.PREFERENCE_SET_PATTERN)!!
             prefBiometric = fragment.findPreference(BiometricActivity.PREFERENCE_SET_BIOMETRIC)
+            prefLockApplication = fragment.findPreference(PREFERENCE_LOCK_TIMEOUT)!!
+            prefLockAccessDocumentProvider = fragment.findPreference(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER)!!
             prefTouchesWithOtherVisibleWindows =
                 fragment.findPreference(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)!!
         }
@@ -140,12 +137,28 @@ class SettingsSecurityFragmentTest {
         assertFalse(prefPasscode.isChecked)
 
         prefPattern.verifyPreference(
-            keyPref = PatternLockActivity.PREFERENCE_SET_PATTERN,
+            keyPref = PatternActivity.PREFERENCE_SET_PATTERN,
             titlePref = context.getString(R.string.prefs_pattern),
             visible = true,
             enabled = true
         )
         assertFalse(prefPattern.isChecked)
+
+        prefLockApplication.verifyPreference(
+            keyPref = PREFERENCE_LOCK_TIMEOUT,
+            titlePref = context.getString(R.string.prefs_lock_application),
+            visible = true,
+            enabled = false
+        )
+
+        prefLockAccessDocumentProvider.verifyPreference(
+            keyPref = PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER,
+            titlePref = context.getString(R.string.prefs_lock_access_from_document_provider),
+            summaryPref = context.getString(R.string.prefs_lock_access_from_document_provider_summary),
+            visible = true,
+            enabled = true
+        )
+        assertFalse(prefLockAccessDocumentProvider.isChecked)
 
         prefTouchesWithOtherVisibleWindows.verifyPreference(
             keyPref = SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS,
@@ -191,6 +204,7 @@ class SettingsSecurityFragmentTest {
 
         launchTest()
 
+        mockIntent(RESULT_OK, PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
         onView(withText(R.string.prefs_passcode)).perform(click())
         intended(hasComponent(PassCodeActivity::class.java.name))
     }
@@ -202,7 +216,7 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         onView(withText(R.string.prefs_pattern)).perform(click())
-        intended(hasComponent(PatternLockActivity::class.java.name))
+        intended(hasComponent(PatternActivity::class.java.name))
     }
 
     @Test
@@ -221,52 +235,37 @@ class SettingsSecurityFragmentTest {
     @Test
     fun patternLockEnabledOk() {
         every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Success()
 
         launchTest()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_PATTERN),
-            action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
+            extras = Pair(PatternActivity.PREFERENCE_PATTERN, OC_PATTERN),
+            action = PatternActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertTrue(prefPattern.isChecked)
     }
 
     @Test
-    fun patternLockEnabledError() {
-        every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Error()
-
-        launchTest()
-
-        mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_PATTERN),
-            action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
-        )
-        onView(withText(R.string.prefs_pattern)).perform(click())
-        assertFalse(prefPattern.isChecked)
-        onView(withText(R.string.pattern_error_set)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun enablePasscodeEnablesBiometricLock() {
+    fun enablePasscodeEnablesBiometricLockAndLockApplication() {
         launchTest()
 
         firstEnablePasscode()
         onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
         assertTrue(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
+        assertTrue(prefLockApplication.isEnabled)
     }
 
     @Test
-    fun enablePatternEnablesBiometricLock() {
+    fun enablePatternEnablesBiometricLockAndLockApplication() {
         launchTest()
 
         firstEnablePattern()
         onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
         assertTrue(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
+        assertTrue(prefLockApplication.isEnabled)
     }
 
     @Test
@@ -304,47 +303,28 @@ class SettingsSecurityFragmentTest {
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
         assertFalse(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
+        assertFalse(prefLockApplication.isEnabled)
     }
 
     @Test
     fun disablePatternOk() {
-        every { securityViewModel.handleDisablePattern(any()) } returns UIResult.Success()
-
         launchTest()
 
         firstEnablePattern()
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_CHECK_RESULT, true),
-            action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
+            action = PatternActivity.ACTION_CHECK_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
         assertFalse(prefPattern.isChecked)
         onView(withText(R.string.prefs_biometric)).check(matches(not(isEnabled())))
         assertFalse(prefBiometric!!.isEnabled)
         assertFalse(prefBiometric!!.isChecked)
-    }
-
-    @Test
-    fun disablePatternError() {
-        every { securityViewModel.handleDisablePattern(any()) } returns UIResult.Error()
-
-        launchTest()
-
-        firstEnablePattern()
-        mockIntent(
-            extras = Pair(PatternLockActivity.KEY_CHECK_RESULT, true),
-            action = PatternLockActivity.ACTION_CHECK_WITH_RESULT
-        )
-        onView(withText(R.string.prefs_pattern)).perform(click())
-        assertTrue(prefPattern.isChecked)
-        onView(withText(R.string.prefs_biometric)).check(matches(isEnabled()))
-        assertTrue(prefBiometric!!.isEnabled)
-        onView(withText(R.string.pattern_error_remove)).check(matches(isDisplayed()))
+        assertFalse(prefLockApplication.isEnabled)
     }
 
     @Test
     fun enableBiometricLockWithPasscodeEnabled() {
-        every { biometricManager.hasEnrolledBiometric() } returns true
+        every { BiometricManager.hasEnrolledBiometric() } returns true
 
         launchTest()
 
@@ -355,7 +335,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun enableBiometricLockWithPatternEnabled() {
-        every { biometricManager.hasEnrolledBiometric() } returns true
+        every { BiometricManager.hasEnrolledBiometric() } returns true
 
         launchTest()
 
@@ -366,7 +346,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun enableBiometricLockNoEnrolledBiometric() {
-        every { biometricManager.hasEnrolledBiometric() } returns false
+        every { BiometricManager.hasEnrolledBiometric() } returns false
 
         launchTest()
 
@@ -378,7 +358,7 @@ class SettingsSecurityFragmentTest {
 
     @Test
     fun disableBiometricLock() {
-        every { biometricManager.hasEnrolledBiometric() } returns true
+        every { BiometricManager.hasEnrolledBiometric() } returns true
 
         launchTest()
 
@@ -386,6 +366,23 @@ class SettingsSecurityFragmentTest {
         onView(withText(R.string.prefs_biometric)).perform(click())
         onView(withText(R.string.prefs_biometric)).perform(click())
         assertFalse(prefBiometric!!.isChecked)
+    }
+
+    @Test
+    fun lockAccessFromDocumentProviderEnable() {
+        launchTest()
+
+        onView(withText(R.string.prefs_lock_access_from_document_provider)).perform(click())
+        assertTrue(prefLockAccessDocumentProvider.isChecked)
+    }
+
+    @Test
+    fun lockAccessFromDocumentProviderDisable() {
+        launchTest()
+
+        onView(withText(R.string.prefs_lock_access_from_document_provider)).perform(click())
+        onView(withText(R.string.prefs_lock_access_from_document_provider)).perform(click())
+        assertFalse(prefLockAccessDocumentProvider.isChecked)
     }
 
     @Test
@@ -425,6 +422,53 @@ class SettingsSecurityFragmentTest {
         assertFalse(prefTouchesWithOtherVisibleWindows.isChecked)
     }
 
+    @Test
+    fun passcodeLockNotVisible() {
+        every { securityViewModel.isSecurityEnforcedEnabled() } returns true
+        launchTest()
+        assertFalse(prefPasscode.isVisible)
+    }
+
+    @Test
+    fun patternLockNotVisible() {
+        every { securityViewModel.isSecurityEnforcedEnabled() } returns true
+        launchTest()
+        assertFalse(prefPattern.isVisible)
+    }
+
+    @Test
+    fun passcodeLockVisible() {
+        launchTest()
+        assertTrue(prefPasscode.isVisible)
+    }
+
+    @Test
+    fun patternLockVisible() {
+        launchTest()
+        assertTrue(prefPattern.isVisible)
+    }
+
+    @Test
+    fun checkIfUserEnabledBiometricRecommendation() {
+        every { securityViewModel.getBiometricsState() } returns true
+
+        launchTest()
+
+        firstEnablePasscode()
+
+        assertTrue(prefBiometric!!.isChecked)
+        assertTrue(prefBiometric!!.isEnabled)
+    }
+
+    @Test
+    fun checkIfUserNotEnabledBiometricRecommendation() {
+        launchTest()
+
+        firstEnablePasscode()
+
+        assertFalse(prefBiometric!!.isChecked)
+    }
+
     private fun firstEnablePasscode() {
         every { securityViewModel.isPatternSet() } returns false
 
@@ -436,11 +480,9 @@ class SettingsSecurityFragmentTest {
 
     private fun firstEnablePattern() {
         every { securityViewModel.isPasscodeSet() } returns false
-        every { securityViewModel.handleEnablePattern(any()) } returns UIResult.Success()
 
         mockIntent(
-            extras = Pair(PatternLockActivity.KEY_PATTERN, OC_PATTERN),
-            action = PatternLockActivity.ACTION_REQUEST_WITH_RESULT
+            action = PatternActivity.ACTION_REQUEST_WITH_RESULT
         )
         onView(withText(R.string.prefs_pattern)).perform(click())
     }

@@ -40,17 +40,15 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
     private final WeakReference<OnPrepareVideoPlayerTaskListener> mListener;
     private OCFile mFile;
     private Account mAccount;
-    private Handler mHandler;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
     public PrepareVideoPlayerAsyncTask(Context context, OnPrepareVideoPlayerTaskListener listener,
-                                       OCFile file, Account account, Handler mainHandler) {
+                                       OCFile file, Account account) {
         mContext = context;
         mListener = new WeakReference<>(listener);
         mFile = file;
         mAccount = account;
-        mHandler = mainHandler;
     }
 
     @Override
@@ -88,7 +86,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
     }
 
     /**
-     * Build the media source neeeded to play the video
+     * Build the media source needed to play the video
      *
      * @param mediaDataSourceFactory
      * @param uri

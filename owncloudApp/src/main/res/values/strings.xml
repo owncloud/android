@@ -43,6 +43,13 @@
     <string name="prefs_passcode">Passcode lock</string>
     <string name="prefs_biometric">Biometric lock</string>
     <string name="prefs_biometric_summary">Enable passcode or pattern lock to enable this option</string>
+    <string name="prefs_lock_application">Lock application</string>
+    <string name="prefs_lock_application_entries_immediately">Immediately</string>
+    <string name="prefs_lock_application_entries_1minute">After 1 minute</string>
+    <string name="prefs_lock_application_entries_5minutes">After 5 minutes</string>
+    <string name="prefs_lock_application_entries_30minutes">After 30 minutes</string>
+    <string name="prefs_lock_access_from_document_provider">Lock access from document provider</string>
+    <string name="prefs_lock_access_from_document_provider_summary">Lock access from other apps to the files of the accounts in the app via the Android native file explorer.</string>
     <string name="prefs_touches_with_other_visible_windows">Touches with other visible windows</string>
     <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
     <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
@@ -97,8 +104,7 @@
     <string name="passcode_already_set">Pattern and passcode locks cannot be enabled at the same time, please disable passcode first</string>
     <string name="pattern_no_longer_required">The pattern will not be asked anymore</string>
     <string name="pattern_configure_your_pattern_explanation">The pattern will be requested every time the app is started</string>
-    <string name="pass_code_locked">Locked with passcode</string>
-    <string name="pattern_locked">Locked with pattern</string>
+    <string name="document_provider_locked">Locked</string>
     <string name="illegal_argument_exception_message">A valid ACTION is needed in the Intent passed to</string>
 
     <!-- Bottom navigation bar -->
@@ -255,9 +261,12 @@
     <string name="pass_code_error_set">An error occurred while setting the passcode lock</string>
     <string name="pass_code_error_remove">An error occurred while removing the passcode lock</string>
 
+    <string name="lock_time_try_again">Please, try again in %1$s</string>
+
     <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
     <string name="biometric_prompt_title">Biometric log in</string>
     <string name="biometric_prompt_subtitle">Log in using your biometric credential</string>
+    <string name="biometric_dialog_title">Do you want to additionally activate biometric security?</string>
 
     <string name="media_notif_ticker">%1$s music player</string>
     <string name="media_state_playing">%1$s (playing)</string>
@@ -304,7 +313,6 @@
     <string name="auth_expired_basic_auth_toast">Please enter the current password</string>
     <string name="auth_connecting_auth_server">Connecting to authentication server …</string>
     <string name="auth_unsupported_auth_method">The server does not support this authentication method</string>
-    <string name="auth_unsupported_multiaccount">%1$s does not support multiple accounts</string>
     <string name="auth_fail_get_user_name">Your server is not returning a correct user id, please contact an administrator
 	</string>
     <string name="auth_can_not_auth_against_server">Cannot authenticate to this server</string>
@@ -332,7 +340,7 @@
     <string name="sync_file_nothing_to_do_msg">File contents already synchronized</string>
     <string name="create_dir_fail_msg">Folder could not be created</string>
     <string name="filename_forbidden_characters">Forbidden characters: / \\ &lt; &gt; : " | ? *</string>
-    <string name="filename_forbidden_charaters_from_server">File name contains at least one invalid character</string>
+    <string name="filename_forbidden_characters_from_server">File name contains at least one invalid character</string>
     <string name="filename_empty">File name cannot be empty</string>
     <string name="wait_a_moment">Wait a moment</string>
     <string name="wait_checking_credentials">Checking stored credentials</string>
@@ -547,7 +555,6 @@
     <string name="manage_space_clear_data">Clear data</string>
     <string name="manage_space_error">Some files could not be deleted.</string>
 
-    <string name="permission_storage_access">Additional permissions required to upload &amp; download files.</string>
     <string name="local_file_not_found_toast">The file was not found in the local file system</string>
     <string name="confirmation_remove_files_alert">Do you really want to remove the selected items?</string>
     <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
@@ -577,7 +584,7 @@
     <string name="share_via_link_expiration_date_explanation_label">The public link will expire no later than %1$d days after it is created</string>
     <string name="share_via_link_default_name_template">%1$s link</string>
     <string name="share_via_link_empty_password">The password is empty</string>
-    <string name="private_link_info">This is a private link, only people who have access to the file/folder can use it. Use it as a permanent link for yourself or to point others to files within shares.</string>
+    <string name="private_link_info">Private link: Only people who have access to the file/folder can use it. Use it as a permanent link for yourself or to point others to files within shares</string>
     <string name="file_private_link_error">Private link is not available for this file</string>
     <string name="download_notification_channel_name">Downloads</string>
     <string name="download_notification_channel_description">See the download file name and progress</string>
@@ -611,7 +618,7 @@
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
-    <string name="no_borwser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
+    <string name="no_browser_installed_alert">No browser installed. Please install a Browser in order to allow a secure login.</string>
     <string name="common_not_found">it was not found</string>
 
     <string name="supports_oauth2_error">It was not possible to know if OAuth2 is supported</string>
@@ -632,4 +639,10 @@
     <string name="scoped_storage_wizard_migration_in_progress">Migrating your files. Please don’t turn your device off.</string>
     <string name="scoped_storage_wizard_migration_in_progress_button">Working… Please wait</string>
     <string name="scoped_storage_wizard_title">More security for your files</string>
+
+    <!-- Security Enforced -->
+    <string name="security_enforced_title">Please, select an option to lock the app:</string>
+    <string name="security_enforced_first_option">Passcode lock</string>
+    <string name="security_enforced_second_option">Pattern lock</string>
+
 </resources>

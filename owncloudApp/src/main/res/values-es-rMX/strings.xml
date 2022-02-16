@@ -62,8 +62,6 @@
   <string name="prefs_enable_logging">Habilitar registro</string>
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_not_same_pattern">Los patrones introducidos son diferentes</string>
-  <string name="pass_code_locked">Asegurar con contraseña</string>
-  <string name="pattern_locked">Asegurar con patrón</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
   <string name="bottom_nav_uploads">Cargas</string>
@@ -245,7 +243,6 @@
   <string name="auth_expired_basic_auth_toast">Por favor introduzca su contraseña actual</string>
   <string name="auth_connecting_auth_server">Conectando al servidor de autentificación</string>
   <string name="auth_unsupported_auth_method">El servidor no soporta este método de autenticación</string>
-  <string name="auth_unsupported_multiaccount">%1$s no soporta cuentas múltiples</string>
   <string name="auth_fail_get_user_name">Su servidor no está retornando una identificación de usuario correcta; contacte a un administrador
 	</string>
   <string name="auth_can_not_auth_against_server">No se puedo autenticar a este servidor</string>
@@ -270,7 +267,7 @@
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
   <string name="create_dir_fail_msg">No se pudo crear la carpeta</string>
   <string name="filename_forbidden_characters">Carácteres ilegales: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Nombre de archivo contiene al menos un caracter no válido</string>
+  <string name="filename_forbidden_characters_from_server">Nombre de archivo contiene al menos un caracter no válido</string>
   <string name="filename_empty">El nombre de archivo no puede estar vacío</string>
   <string name="wait_a_moment">Espere un momento</string>
   <string name="wait_checking_credentials">Comprobando las credenciales guardadas</string>
@@ -440,7 +437,6 @@
   <string name="manage_space_description">Las opciones, certificados y Bases de Datos de %1$s\'s serán borrados permanentemente. \n\nLos archibos bajados no serán tocados. .\n\nEste proceso tardará algún tiempo.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>
   <string name="manage_space_error">No se han podido eliminar algunos archivos</string>
-  <string name="permission_storage_access">Se requieren permisos adicionales para subir &amp; y descargar archivos.</string>
   <string name="local_file_not_found_toast">El archivo no se encuentra en el servidor local de archivos.</string>
   <string name="confirmation_remove_files_alert">¿Realmente deseas eliminar los elementos seleccionados?</string>
   <string name="confirmation_remove_folders_alert">¿Realmente deseas eliminar los elementos seleccionados y su contenido?</string>
@@ -467,7 +463,6 @@
   <string name="share_via_link_expiration_date_explanation_label">El enlace público expirará a más tardar %1$d días después de su creación</string>
   <string name="share_via_link_default_name_template">%1$s enlace</string>
   <string name="share_via_link_empty_password">La contraseña está vacía</string>
-  <string name="private_link_info">Este es un enlace privado, solo las personas que tienen acceso al archivo/carpeta pueden usarlo. Úsalo como un enlace permanente para ti mismo o para señalar a otros a los archivos dentro de las acciones.</string>
   <string name="file_private_link_error">El enlace privado no está disponible para este archivo</string>
   <string name="download_notification_channel_name">Descargas</string>
   <string name="download_notification_channel_description">Ver el nombre y progreso del archivo a descargar</string>
@@ -497,4 +492,6 @@
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
   <string name="common_not_found">no se encontró</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Contraseña</string>
 </resources>

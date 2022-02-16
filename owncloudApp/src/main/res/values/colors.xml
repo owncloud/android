@@ -40,7 +40,7 @@
     <color name="textColor">@color/black</color>
     <color name="drawerMenuTextColor">#000000</color>
     <color name="list_divider_background">#eee</color>
-    <color name="filelist_icon_backgorund">#DDDDDD</color>
+    <color name="filelist_icon_background">#DDDDDD</color>
     <color name="dark_background_text_color">#EEEEEE</color>
     <color name="secondary_button_color">#D6D7D7</color>
     <color name="transparent">#00000000</color>

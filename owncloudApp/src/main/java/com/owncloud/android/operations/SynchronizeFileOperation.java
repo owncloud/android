@@ -1,11 +1,13 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David A. Velasco
  * @author masensio
  * @author David González Verdugo
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2012 Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -56,19 +58,18 @@ public class SynchronizeFileOperation extends SyncOperation {
 
     private boolean mTransferWasRequested = false;
     private boolean mRequestedFromAvOfflineJobService;
-    private boolean mShouldCheckForLocalChanges;
 
     /**
      * Constructor for "full synchronization mode".
-     *
+     * <p>
      * Uses remotePath to retrieve all the data both in local cache and in the remote OC server
      * when the operation is executed, instead of reusing {@link OCFile} instances.
-     *
+     * <p>
      * Useful for direct synchronization of a single file.
      *
-     * @param remotePath       Path to the OCFile to sync
-     * @param account          ownCloud account holding the file.
-     * @param context          Android context; needed to start transfers.
+     * @param remotePath Path to the OCFile to sync
+     * @param account    ownCloud account holding the file.
+     * @param context    Android context; needed to start transfers.
      */
     public SynchronizeFileOperation(
             String remotePath,
@@ -83,28 +84,27 @@ public class SynchronizeFileOperation extends SyncOperation {
         mPushOnly = false;
         mContext = context;
         mRequestedFromAvOfflineJobService = false;
-        mShouldCheckForLocalChanges = false;
     }
 
     /**
      * Constructor allowing to reuse {@link OCFile} instances just queried from local cache or
      * from remote OC server.
-     *
+     * <p>
      * Useful to include this operation as part of the synchronization of a folder
      * (or a full account), avoiding the repetition of fetch operations
      * (both in local database or remote server).
-     *
+     * <p>
      * At least one of localFile or serverFile MUST NOT BE NULL. If you don't have none of them,
      * use the other constructor.
      *
-     * @param localFile        Data of file (just) retrieved from local cache/database.
-     * @param serverFile       Data of file (just) retrieved from a remote server. If null,
-     *                         will be retrieved from network by the operation when executed.
-     * @param account          ownCloud account holding the file.
-     * @param pushOnly         When 'true', if 'severFile' is NULL, will not fetch remote properties before
-     *                         trying to upload local changes; upload operation will take care of not overwriting
-     *                         remote content if there are unnoticed changes on the server.
-     * @param context          Android context; needed to start transfers.
+     * @param localFile                        Data of file (just) retrieved from local cache/database.
+     * @param serverFile                       Data of file (just) retrieved from a remote server. If null,
+     *                                         will be retrieved from network by the operation when executed.
+     * @param account                          ownCloud account holding the file.
+     * @param pushOnly                         When 'true', if 'severFile' is NULL, will not fetch remote properties before
+     *                                         trying to upload local changes; upload operation will take care of not overwriting
+     *                                         remote content if there are unnoticed changes on the server.
+     * @param context                          Android context; needed to start transfers.
      * @param requestedFromAvOfflineJobService When 'true' will perform some specific operations
      */
     public SynchronizeFileOperation(
@@ -113,8 +113,7 @@ public class SynchronizeFileOperation extends SyncOperation {
             Account account,
             boolean pushOnly,
             Context context,
-            boolean requestedFromAvOfflineJobService,
-            boolean shouldCheckForLocalChanges
+            boolean requestedFromAvOfflineJobService
     ) {
 
         mLocalFile = localFile;
@@ -134,7 +133,6 @@ public class SynchronizeFileOperation extends SyncOperation {
         mPushOnly = pushOnly;
         mContext = context;
         mRequestedFromAvOfflineJobService = requestedFromAvOfflineJobService;
-        mShouldCheckForLocalChanges = shouldCheckForLocalChanges;
     }
 
     @Override
@@ -191,7 +189,7 @@ public class SynchronizeFileOperation extends SyncOperation {
                     result = new RemoteOperationResult<>(ResultCode.SYNC_CONFLICT);
                     getStorageManager().saveConflict(mLocalFile, mServerFile.getEtag());
 
-                } else if (localChanged && mShouldCheckForLocalChanges) {
+                } else if (localChanged) {
                     if (mPushOnly) {
                         // prevent accidental override of unnoticed change in server;
                         // dirty trick, more refactoring is needed, but not today;
@@ -215,16 +213,14 @@ public class SynchronizeFileOperation extends SyncOperation {
                     result = new RemoteOperationResult<>(ResultCode.OK);
                 }
 
-                // safe blanket: sync'ing a not in-conflict file will clean wrong conflict markers in ancestors
+                // safe blanket: syncing a not in-conflict file will clean wrong conflict markers in ancestors
                 if (result.getCode() != ResultCode.SYNC_CONFLICT) {
                     getStorageManager().saveConflict(mLocalFile, null);
                 }
             }
         }
 
-        if (MainApp.Companion.getEnabledLogging()) {
-            Timber.i("Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() + ": " + result.getLogMessage());
-        }
+        Timber.i("Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() + ": " + result.getLogMessage());
 
         return result;
     }

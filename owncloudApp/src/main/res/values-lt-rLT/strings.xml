@@ -238,7 +238,6 @@
   <string name="auth_expired_basic_auth_toast">Įveskite dabartinį slaptažodį</string>
   <string name="auth_connecting_auth_server">Jungiasi į authorizacijos serverį ...</string>
   <string name="auth_unsupported_auth_method">Serveris nepalaiko šio autentikacijos metodo</string>
-  <string name="auth_unsupported_multiaccount">%1$s nepalaiko kelių paskyrų iš karto</string>
   <string name="auth_fail_get_user_name">Serveris negražina tinkamo vartotojo ID, susisiekite su administratoriumi</string>
   <string name="auth_can_not_auth_against_server">Nepavyko autorizuotis į serverį</string>
   <string name="auth_account_does_not_exist">Paskyra neegzistuoja įrenginyje</string>
@@ -261,7 +260,7 @@
   <string name="sync_file_nothing_to_do_msg">Failo turinys jau sunchronizuotas</string>
   <string name="create_dir_fail_msg">Aplanko sukurti nepavyko</string>
   <string name="filename_forbidden_characters">Neleistini simboliai: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Failo vardas sudarytas iš neleistinų simbolių</string>
+  <string name="filename_forbidden_characters_from_server">Failo vardas sudarytas iš neleistinų simbolių</string>
   <string name="filename_empty">Failo pavadinimas negali būti tuščias</string>
   <string name="wait_a_moment">Truputį palaukite</string>
   <string name="wait_checking_credentials">Tikrina išsaugotus prisijungimus</string>
@@ -427,7 +426,6 @@
   <string name="manage_space_description">Nustatymai, duombazės ir serverio sertifikatai  iš%1$sbus ištrinti. \n\nParsiūsti failai bus nepaliesti.\n\nŠis procesas gali užtrukti.</string>
   <string name="manage_space_clear_data">Išvalyti duomenis</string>
   <string name="manage_space_error">Kai kurių failų nepavyko ištrinti.</string>
-  <string name="permission_storage_access">Reikalingos papildomos teisės įkelti ir parsisiūsti failus.</string>
   <string name="local_file_not_found_toast">Byla nerasta lokalioje sistemoje</string>
   <string name="confirmation_remove_files_alert">Ar tikrai norite pašalinti pasirinktą sąrašą?</string>
   <string name="confirmation_remove_folders_alert">Ar tikrai norite pašalinti pasirinktus obejktus ir jų turinį?</string>
@@ -453,7 +451,6 @@
   <string name="share_via_link_expiration_date_enforced_label">Galiojimas Ū</string>
   <string name="share_via_link_expiration_date_explanation_label">Vieša nuoroda galios %1$ddienų nuo sukūrimo</string>
   <string name="share_via_link_default_name_template">%1$s nuoroda</string>
-  <string name="private_link_info">Ši nuoroda privati, tik turintys priėjimą prie failų gali naudoti ją. Naudokite nuolatinę nuorodą sau arba nurodykite kitus bylos dalyboje.</string>
   <string name="file_private_link_error">Privati nuoroda neegzistuoja šiam failui</string>
   <string name="download_notification_channel_name">Parsiuntimai</string>
   <string name="download_notification_channel_description">Žiūrėti siunčiamo failo vardą ir progresą</string>
@@ -472,4 +469,6 @@
   <string name="welcome_feature_skip_button">Praleisti</string>
   <string name="welcome_feature_4_title">Nuotraukų įkėlimai</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Užrakto kodas</string>
 </resources>

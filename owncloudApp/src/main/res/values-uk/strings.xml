@@ -247,7 +247,6 @@
   <string name="auth_expired_basic_auth_toast">Будь ласка, введіть поточний пароль</string>
   <string name="auth_connecting_auth_server">Підключення до серверу аутентифікації ...</string>
   <string name="auth_unsupported_auth_method">Цей сервер не підтримує обраний метод аутентифікації</string>
-  <string name="auth_unsupported_multiaccount">%1$s не підтримує одночасно декілька облікових записів</string>
   <string name="auth_fail_get_user_name">Ваш сервер не повертає коректний ідентифікатор користувача, будь ласка зверніться до адміністратора
 ⇥</string>
   <string name="auth_can_not_auth_against_server">Неможливо виконати аутентифікацію на цьому сервері</string>
@@ -271,7 +270,7 @@
   <string name="sync_file_nothing_to_do_msg">Зміст файлу вже синхронізовано</string>
   <string name="create_dir_fail_msg">Не вдалося створити теку</string>
   <string name="filename_forbidden_characters">Заборонені символи: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Ім’я файлу містить принаймні один некоректний символ</string>
+  <string name="filename_forbidden_characters_from_server">Ім’я файлу містить принаймні один некоректний символ</string>
   <string name="filename_empty"> Ім\'я файлу не може бути порожнім.</string>
   <string name="wait_a_moment">Зачекайте хвилинку</string>
   <string name="wait_checking_credentials">Перевірка збережених облікових даних</string>
@@ -432,7 +431,6 @@
   <string name="manage_space_description">Налаштування, бази даних і сертифікати сервера з даних %1$s\'s будуть вилучені повністю. \n\nЗвантажені файли будуть збережені незайманими.\n\nЦей процес може тривати якийсь час.</string>
   <string name="manage_space_clear_data">Очистити дані</string>
   <string name="manage_space_error">Деякі файли неможливо вилучити.</string>
-  <string name="permission_storage_access">Вимагаються додаткові дозволи для надсилання &amp; звантаження файлів.</string>
   <string name="local_file_not_found_toast">Файл не знайдено в локальній файловій системі</string>
   <string name="confirmation_remove_files_alert">Ви дійсно бажаєте вилучити вибране?</string>
   <string name="confirmation_remove_folders_alert">Ви дійсно бажаєте вилучити вибране і їхній вміст?</string>
@@ -459,7 +457,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Публічне посилання спливатиме не пізніше ніж за %1$d днів, після того, як буде створено</string>
   <string name="share_via_link_default_name_template">%1$s посилання</string>
   <string name="share_via_link_empty_password">Порожній пароль</string>
-  <string name="private_link_info">Це приватне посилання, його можуть використовувати лише люди, які мають доступ до файлу/папки. Використовуйте його як постійне посилання для себе або для того, щоб вказати іншим посилання на файли.</string>
   <string name="download_notification_channel_name">Завантаження</string>
   <string name="upload_notification_channel_name">Відвантаження</string>
   <string name="media_service_notification_channel_name">Музичний програвач</string>
@@ -481,4 +478,6 @@
   <string name="welcome_feature_5_title">Потокове відео</string>
   <string name="welcome_feature_5_text">Переглядайте відео не завантажуючи його</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Захистити паролем</string>
 </resources>

@@ -188,7 +188,6 @@
   <string name="auth_expired_basic_auth_toast">Por favor, introduzca la contraseña actual</string>
   <string name="auth_connecting_auth_server">Coneutando al sirvidor d\'autentificación…</string>
   <string name="auth_unsupported_auth_method">El sirvidor nun sofita esti métodu/triba d\'autentificación</string>
-  <string name="auth_unsupported_multiaccount">%1$s nun permite cuentes múltiples</string>
   <string name="auth_fail_get_user_name">El to sirvidor nun ta tornando un usuariu correutu, por favor contauta col alministrador
 	</string>
   <string name="auth_can_not_auth_against_server">Nun pues autentificate nesti sirvidor</string>
@@ -210,7 +209,7 @@
   <string name="sync_file_nothing_to_do_msg">El conteníu del ficheru yá ta sincronizáu</string>
   <string name="create_dir_fail_msg">Nun se puede crear la carpeta</string>
   <string name="filename_forbidden_characters">Caráuteres prohibíos: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">El nome del ficheru contién polo menos un carácter non válidu</string>
+  <string name="filename_forbidden_characters_from_server">El nome del ficheru contién polo menos un carácter non válidu</string>
   <string name="filename_empty">El nome de ficheru nun pue tar baleru</string>
   <string name="wait_a_moment">Espera un momentu</string>
   <string name="wait_checking_credentials">Comprobación de credenciales almacenaes</string>
@@ -361,7 +360,6 @@
   <string name="manage_space_description">Axustes, bases de datos y sirvidor de certificaos de los datos %1$s esborraránse dafechu. \n\nLos archivos descargados caltendrase intactos.\n\nEsti procesu puede tardar dalgún tiempu.</string>
   <string name="manage_space_clear_data">Llimpiar datos</string>
   <string name="manage_space_error">Dalgunos ficheros nun pudieron esborrase.</string>
-  <string name="permission_storage_access">Ríquense permisos adicionales para xubir &amp; los ficheros descargaos.</string>
   <string name="local_file_not_found_toast">El ficheru nun s\'atopó nel sistema de ficheros llocal</string>
   <string name="confirmation_remove_files_alert">¿De que quies desaniciar los elementos seleicionaos?</string>
   <string name="confirmation_remove_folders_alert">¿De xuru que quies desaniciar los elementos seleicionaos y los sos conteníos?</string>

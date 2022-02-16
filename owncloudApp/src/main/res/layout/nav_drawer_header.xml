@@ -77,7 +77,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/drawer_username_full"
-            app:layout_constraintEnd_toStartOf="@id/drawer_account_chooser_toogle"
+            app:layout_constraintEnd_toStartOf="@id/drawer_account_chooser_toggle"
             app:layout_constraintStart_toStartOf="@id/drawer_current_account"
             tools:text="@string/app_name" />
 
@@ -95,7 +95,7 @@
             tools:text="@string/app_name" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/drawer_account_chooser_toogle"
+            android:id="@+id/drawer_account_chooser_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_half_padding"

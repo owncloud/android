@@ -92,7 +92,7 @@ import static com.owncloud.android.utils.NotificationConstantsKt.UPLOAD_NOTIFICA
  * <p>
  * On next invocation of {@link FileUploader} uploaded files which
  * previously failed will be uploaded again until either upload succeeded or a
- * fatal error occured.
+ * fatal error occurred.
  * <p>
  * Every file passed to this service is uploaded. No filtering is performed.
  */
@@ -532,7 +532,7 @@ public class FileUploader extends Service
 
     @Override
     public void onAccountsUpdated(Account[] accounts) {
-        // Review current upload, and cancel it if its account doen't exist
+        // Review current upload, and cancel it if its account doesn't exist
         if (mCurrentUpload != null &&
                 !AccountUtils.exists(mCurrentUpload.getAccount().name, getApplicationContext())) {
             mCurrentUpload.cancel();
@@ -886,7 +886,7 @@ public class FileUploader extends Service
                                     mCurrentUpload.getRemotePath(),
                                     mCurrentAccount.name
                             );
-                            Timber.v(stringToLog);
+                            Timber.v("%s", stringToLog);
                         }
                     } else if (uploadResult.getCode() == ResultCode.DELAYED_FOR_WIFI) {
                         // if failed due to the upload is delayed for wifi, schedule automatic retry as well
@@ -903,7 +903,7 @@ public class FileUploader extends Service
                             mCurrentUpload.getRemotePath(),
                             mCurrentAccount.name
                     );
-                    Timber.v(stringToLog);
+                    Timber.v("%s", stringToLog);
                 }
 
                 if (uploadResult != null) {

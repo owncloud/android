@@ -28,6 +28,7 @@ assignees: ''
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
  - [ ] [GIT] Publish a new release in owncloud/android
+ - [ ] [DIS] Create post in central.owncloud.org ([`Category:Android + Tag:news`](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
  - [ ] [GIT] Merge master branch into stable, in owncloud/android-library
  - [ ] [GIT] Merge master branch into stable, in owncloud/android

@@ -130,7 +130,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             file.remotePath,
             shareType,
             shareeName,
-            getAppropiatePermissions(shareType),
+            getAppropriatePermissions(shareType),
             account.name
         )
     }
@@ -152,7 +152,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         )
     }
 
-    private fun getAppropiatePermissions(shareType: ShareType?): Int {
+    private fun getAppropriatePermissions(shareType: ShareType?): Int {
         // check if the Share is FERERATED
         val isFederated = ShareType.FEDERATED == shareType
 

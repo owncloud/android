@@ -235,7 +235,6 @@
   <string name="auth_expired_basic_auth_toast">現在のパスワードを入力してください</string>
   <string name="auth_connecting_auth_server">認証サーバーに接続中...</string>
   <string name="auth_unsupported_auth_method">サーバーはこの認証方式をサポートしていません</string>
-  <string name="auth_unsupported_multiaccount">%1$s は複数アカウントをサポートしていません</string>
   <string name="auth_fail_get_user_name">サーバーが正しいユーザーIDを返しませんでした。管理者に問い合わせてください。
 	</string>
   <string name="auth_can_not_auth_against_server">認証サーバーに接続できません</string>
@@ -259,7 +258,7 @@
   <string name="sync_file_nothing_to_do_msg">ファイルコンテンツはすでに同期されています</string>
   <string name="create_dir_fail_msg">フォルダーを作成できませんでした</string>
   <string name="filename_forbidden_characters">使用できない文字: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">ファイル名に1文字以上の無効な文字が含まれています</string>
+  <string name="filename_forbidden_characters_from_server">ファイル名に1文字以上の無効な文字が含まれています</string>
   <string name="filename_empty">ファイル名を空にすることはできません。</string>
   <string name="wait_a_moment">しばらくお待ちください</string>
   <string name="wait_checking_credentials">保存された資格情報をチェック</string>
@@ -424,7 +423,6 @@
   <string name="manage_space_description">%1$s のデータから 設定、データベース、サーバー証明書が完全に削除されます。\n\n ダウンロードされたファイルはそのまま残ります。\n\n 実行中はしばらくお待ちください。</string>
   <string name="manage_space_clear_data">データのクリア</string>
   <string name="manage_space_error">いくつかのファイルがクリアできませんでした。</string>
-  <string name="permission_storage_access">ファイルをダウンロード &amp; アップロードする追加の権限が必要です。</string>
   <string name="local_file_not_found_toast">ローカルファイルにファイルがありません</string>
   <string name="confirmation_remove_files_alert">選択したものを削除してよろしいですか?</string>
   <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
@@ -463,6 +461,8 @@
   <string name="welcome_feature_skip_button">スキップ</string>
   <string name="welcome_feature_3_title">複数アカウント</string>
   <string name="welcome_feature_4_title">カメラアップロード</string>
-  <string name="no_borwser_installed_alert">ブラウザーがインストールされていません。安全なログインを許可するためにブラウザーをインストールしてください。</string>
+  <string name="no_browser_installed_alert">ブラウザーがインストールされていません。安全なログインを許可するためにブラウザーをインストールしてください。</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">パスコードロック</string>
 </resources>

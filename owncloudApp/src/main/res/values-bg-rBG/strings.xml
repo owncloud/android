@@ -37,10 +37,15 @@
   <string name="prefs_passcode">Заключваща парола</string>
   <string name="prefs_biometric">Биометрично заключване</string>
   <string name="prefs_biometric_summary">Активирайте парола или схема за заключване за да активирате тази опция</string>
+  <string name="prefs_lock_application_entries_1minute">След 1 минута</string>
+  <string name="prefs_lock_application_entries_5minutes">След 5 минути</string>
+  <string name="prefs_lock_application_entries_30minutes">След 30 минути</string>
   <string name="prefs_touches_with_other_visible_windows">Докосване с други видими прозорци</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешаване на докосвания, когато изгледът е затъмнен от друг видим прозорец. Разрешете да използва приложения за филтриране на светлината.</string>
   <string name="confirmation_touches_with_other_windows_title">Сигурни ли сте, че искате да активирате тази функция?</string>
   <string name="confirmation_touches_with_other_windows_message">Използвайте тази функция на ваша отговорност, злонамерено приложение може да се опита да ви подведе при извършването на някои действия, незабележимо, като използва други изгледи.</string>
+  <string name="prefs_subsection_picture_uploads">Автоматично качване на снимки</string>
+  <string name="prefs_subsection_video_uploads">Автоматично качване на видеа</string>
   <string name="prefs_camera_picture_upload">Качване на снимки</string>
   <string name="prefs_camera_picture_upload_summary">Автоматично качване на снимки направени от камерата</string>
   <string name="prefs_camera_picture_upload_path_title">Път за качване на снимка</string>
@@ -49,6 +54,7 @@
   <string name="prefs_camera_video_upload_summary">Автоматично качване на видео напавено от камерата</string>
   <string name="prefs_camera_video_upload_path_title">Път за качване на видео</string>
   <string name="prefs_camera_video_upload_on_wifi">Качване на видео само през WiFi</string>
+  <string name="prefs_camera_video_upload_on_charging">Качване на видеа, само докато се зарежда</string>
   <string name="prefs_log_title">Разреши влизане</string>
   <string name="prefs_log_summary">Използва се за докладване на проблеми</string>
   <string name="prefs_log_title_history">История на влизанията</string>
@@ -64,6 +70,7 @@
   <string name="prefs_remember_last_upload_location_summary">Запомни мястото на последната споделена папка</string>
   <string name="prefs_pattern">Схема за заключване</string>
   <string name="prefs_enable_logging">Разреши влизане</string>
+  <string name="prefs_app_version">Версия</string>
   <string name="pattern_enter_pattern">Моля въведете вашата схема</string>
   <string name="pattern_configure_pattern">Въведете схема</string>
   <string name="pattern_remove_pattern">Премахване на вашата схема</string>
@@ -74,8 +81,6 @@
   <string name="passcode_already_set">Заключването със схема и парола не може да бъде активно едновременно, моля деактивирайте първо паролата</string>
   <string name="pattern_no_longer_required">Схемата повече няма да бъде зададена</string>
   <string name="pattern_configure_your_pattern_explanation">Схемата ще бъде искана при всяко стартиране на приложението</string>
-  <string name="pass_code_locked">Заключване с парола</string>
-  <string name="pattern_locked">Заключване със схема</string>
   <string name="illegal_argument_exception_message">Необходимо е валидно ДЕЙСТВИЕ в целта, предадена на</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Файлове</string>
@@ -266,7 +271,6 @@
   <string name="auth_expired_basic_auth_toast">Моля въведете текущата парола</string>
   <string name="auth_connecting_auth_server">Свързване към сървъра за удостоверяване ...</string>
   <string name="auth_unsupported_auth_method">Сървърът не поддържа този метод за удостоверяване</string>
-  <string name="auth_unsupported_multiaccount">%1$s не поддържа множество профили</string>
   <string name="auth_fail_get_user_name">Вашият сървър не връща правилен идентификационен номер на потребител, моля свържете се с администратор</string>
   <string name="auth_can_not_auth_against_server">Неуспешно удостоверяване към този сървър</string>
   <string name="auth_account_does_not_exist">Профила не съществува на устройството все още</string>
@@ -291,7 +295,7 @@
   <string name="sync_file_nothing_to_do_msg">Съдържанието на файла е вече синхронизирано</string>
   <string name="create_dir_fail_msg">Папката не може да бъде създадена</string>
   <string name="filename_forbidden_characters">Забранени символи: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Името на файла съдържа поне един невалиден символ</string>
+  <string name="filename_forbidden_characters_from_server">Името на файла съдържа поне един невалиден символ</string>
   <string name="filename_empty">Името на файла не може да бъде празно</string>
   <string name="wait_a_moment">Изчакайте малко</string>
   <string name="wait_checking_credentials">Проверка на запаметените идентификационни данни</string>
@@ -424,6 +428,7 @@
   <string name="prefs_camera_upload_source_path_title_required">задължителен</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Оригиналният файл ще бъде</string>
   <string name="prefs_camera_upload_behaviour_title">Оригиналният файл ще бъде</string>
+  <string name="prefs_camera_upload_last_sync_title">Последна синхронизация</string>
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>
   <string name="pref_behaviour_entries_keep_file">запази в оригиналната папка</string>
@@ -471,7 +476,6 @@
 \n\nТова може да отнеме малко време.</string>
   <string name="manage_space_clear_data">Изчисти данните</string>
   <string name="manage_space_error">Някой файлове не могат да бъдат изтрити</string>
-  <string name="permission_storage_access">Необходими са допълнителни права за качване &amp; сваляне на файлове.</string>
   <string name="local_file_not_found_toast">Файла не беше намерен на локалната файлова система</string>
   <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
@@ -498,7 +502,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Публичната връзка изтича не по-късно от %1$d дни след създаването й</string>
   <string name="share_via_link_default_name_template">%1$s връзка</string>
   <string name="share_via_link_empty_password">Паролата е празна</string>
-  <string name="private_link_info">Това е поверителна връзка и само хората, които имат достъп до файла/папката могат да я използват. Използвайте я за себе си  като постоянна връзка или да насочвате други към файловете в рамката на това споделяне.</string>
   <string name="file_private_link_error">Поверителната връзка не е налична за този файл</string>
   <string name="download_notification_channel_name">Изтегляния</string>
   <string name="download_notification_channel_description">Вижте името на файла и напредъка на изтегляне</string>
@@ -530,9 +533,13 @@
   <string name="welcome_feature_4_text">Вашите снимки/видеоклипове се качват автоматично</string>
   <string name="welcome_feature_5_title">Видео поток</string>
   <string name="welcome_feature_5_text">Възпроизвеждайте видеоклиповете си без да ги изтегляте</string>
-  <string name="no_borwser_installed_alert">Не е инсталиран браузър. Моля, инсталирайте браузър за да имате достъп до сигурно влизане.</string>
+  <string name="no_browser_installed_alert">Не е инсталиран браузър. Моля, инсталирайте браузър за да имате достъп до сигурно влизане.</string>
   <string name="common_not_found">не беше намерен</string>
   <string name="supports_oauth2_error">Не беше възможно да се разбере дали OAuth2 се поддържа</string>
   <string name="get_base_url_error">Не беше възможно да се открие базовият URL адрес на сървъра</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_intro_button">Нека започнем</string>
+  <!--Security Enforced-->
+  <string name="security_enforced_title">Моля, изберете начин за заключване на приложението</string>
+  <string name="security_enforced_first_option">Заключваща парола</string>
 </resources>

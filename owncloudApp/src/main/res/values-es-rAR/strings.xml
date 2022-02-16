@@ -38,6 +38,11 @@
   <string name="prefs_passcode">Bloqueo con clave</string>
   <string name="prefs_biometric">Bloqueo biométrico</string>
   <string name="prefs_biometric_summary">Habilitar la contraseña o patrón de bloqueo para utilizar esta opción</string>
+  <string name="prefs_lock_application">Bloquear aplicación</string>
+  <string name="prefs_lock_application_entries_immediately">Inmediatamente</string>
+  <string name="prefs_lock_application_entries_1minute">Después de 1 minuto</string>
+  <string name="prefs_lock_application_entries_5minutes">Después de 5 minutos</string>
+  <string name="prefs_lock_application_entries_30minutes">Después de 30 minutos</string>
   <string name="prefs_touches_with_other_visible_windows">En contacto con otras ventanas visibles</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir clicks mientras que la vista está oscurecida por otra ventana visible. Habilítalo para utilizar aplicaciones de filtro de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Estás seguro que quieres habilitar esta funcionalidad?</string>
@@ -76,8 +81,6 @@
   <string name="passcode_already_set">El patrón y la clave de desbloqueo no pueden estar activos al mismo tiempo, por favor desactiva primero la clave</string>
   <string name="pattern_no_longer_required">El patrón no se volverá a solicitar</string>
   <string name="pattern_configure_your_pattern_explanation">Se solicitará el patrón cada vez que se inicie una aplicación</string>
-  <string name="pass_code_locked">Bloqueado con código de acceso</string>
-  <string name="pattern_locked">Bloqueado con patrón</string>
   <string name="illegal_argument_exception_message">Se necesita una ACCION válida para poder pasar a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
@@ -268,7 +271,6 @@
   <string name="auth_expired_basic_auth_toast">Por favor ingrese su contraseña actual</string>
   <string name="auth_connecting_auth_server">Conectando al servidor de autenticación ...</string>
   <string name="auth_unsupported_auth_method">El servidor no soporta este método de autenticación</string>
-  <string name="auth_unsupported_multiaccount">%1$s no soporta múltiples cuentas</string>
   <string name="auth_fail_get_user_name">Tú servidor no esta regresando una identificación de usuario correcta, por favor contacta a un administrador</string>
   <string name="auth_can_not_auth_against_server">No se puede autenticar con este servidor</string>
   <string name="auth_account_does_not_exist">La cuenta no existe todavía en este dispositivo</string>
@@ -293,7 +295,7 @@
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
   <string name="create_dir_fail_msg">La carpeta puede no haber sido creada</string>
   <string name="filename_forbidden_characters">Caracteres prohibidos: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">El nombre del archivo contiene algún caracter inválido</string>
+  <string name="filename_forbidden_characters_from_server">El nombre del archivo contiene algún caracter inválido</string>
   <string name="filename_empty">El nombre de archivo no puede estar vacío</string>
   <string name="wait_a_moment">Esperá un momento</string>
   <string name="wait_checking_credentials">Revisando credenciales guardadas</string>
@@ -471,7 +473,6 @@
   <string name="manage_space_description">Los ajustes, certificados de base de datos y servidor de %1$s serán elminados permanentemente. \n\nLos Archivos descargados no serán tocados.\n\nEste proceso puede tardar en completarse.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>
   <string name="manage_space_error">Algunos archivos no pueden ser eliminados.</string>
-  <string name="permission_storage_access">Se requieren permisos adicionales para subir o descargar archivos.</string>
   <string name="local_file_not_found_toast">El archivo no ha sido encontrado en el sistema local de archivos.</string>
   <string name="confirmation_remove_files_alert">¿Realmente quieres eliminar los items seleccionados?</string>
   <string name="confirmation_remove_folders_alert">¿Realmente quieres eliminar los ítems seleccionados y su contenido?</string>
@@ -498,7 +499,6 @@
   <string name="share_via_link_expiration_date_explanation_label">El enlace público expirará no antes de %1$d días después de su creación</string>
   <string name="share_via_link_default_name_template">Enlace %1$s</string>
   <string name="share_via_link_empty_password">La contraseña está en blanco</string>
-  <string name="private_link_info">Este es un vínculo privado, solo las personas que tienen acceso al archivo/carpeta pueden usarlo. Usalo como un enlace permanente para vos o para dirigir a otros a archivos dentro recursos compartidos.</string>
   <string name="file_private_link_error">El enlace privado no está disponible para este archivo</string>
   <string name="download_notification_channel_name">Descargas</string>
   <string name="download_notification_channel_description">Ver el nombre del archivo descargado y su progreso</string>
@@ -530,9 +530,11 @@
   <string name="welcome_feature_4_text">Tus fotos/videos automáticamente cargadas</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
-  <string name="no_borwser_installed_alert">No hay un navegador instalado. Por favor instale un navegador para poder realizar un ingreso seguro.</string>
+  <string name="no_browser_installed_alert">No hay un navegador instalado. Por favor instale un navegador para poder realizar un ingreso seguro.</string>
   <string name="common_not_found">no fue encontrado</string>
   <string name="supports_oauth2_error">No fue posible verificar si OAuth2 está soportado</string>
   <string name="get_base_url_error">No fue posible recuperar la URL base del servidor</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Bloqueo con clave</string>
 </resources>

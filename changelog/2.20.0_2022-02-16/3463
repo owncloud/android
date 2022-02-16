@@ -1,0 +1,9 @@
+Enhancement: Brute force protection
+
+Previously, when setting passcode lock, an unlimited number of attempts
+to unlock the app could be done in a row. Now, from the third incorrect
+attempt, there will be an exponential growing waiting time until next
+unlock attempt.
+
+https://github.com/owncloud/android/issues/3320
+https://github.com/owncloud/android/pull/3463

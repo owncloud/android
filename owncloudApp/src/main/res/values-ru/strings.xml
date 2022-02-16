@@ -41,6 +41,11 @@
   <string name="prefs_passcode">Блокировка кодом</string>
   <string name="prefs_biometric">Биометрическая блокировка</string>
   <string name="prefs_biometric_summary">Чтобы использовать эту настройку, включите блокировку по коду или графическому ключу</string>
+  <string name="prefs_lock_application">Блокировка приложения</string>
+  <string name="prefs_lock_application_entries_immediately">Немедленно</string>
+  <string name="prefs_lock_application_entries_1minute">Через 1 минуту</string>
+  <string name="prefs_lock_application_entries_5minutes">Через 5 минут</string>
+  <string name="prefs_lock_application_entries_30minutes">Через 30 минут</string>
   <string name="prefs_touches_with_other_visible_windows">Разрешить работу под прозрачными окнами других приложений</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешает взаимодействие, когда есть перекрытие другим видимым или прозрачным окном. Это нужно, если вы используете приложения для фильтрации света от экрана. Перекрывающее приложение сможет получать информацию о взаимодействии.</string>
   <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>
@@ -88,8 +93,6 @@
   <string name="passcode_already_set">Сначала отключите код. Графический ключ и код не могут быть включены одновременно.</string>
   <string name="pattern_no_longer_required">Графический ключ не будет больше запрашиваться</string>
   <string name="pattern_configure_your_pattern_explanation">Графический ключ будет запрашиваться каждый раз при запуске приложения</string>
-  <string name="pass_code_locked">Заблокировано кодом</string>
-  <string name="pattern_locked">Заблокировано графическим ключом</string>
   <string name="illegal_argument_exception_message">Допустимое ДЕЙСТВИЕ требуется для передачи в намерениях</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Файлы</string>
@@ -288,7 +291,6 @@
   <string name="auth_expired_basic_auth_toast">Пожалуйста укажите текущий пароль</string>
   <string name="auth_connecting_auth_server">Подключение к серверу авторизации ...</string>
   <string name="auth_unsupported_auth_method">Сервер не поддерживает выбранный метод аутентификации</string>
-  <string name="auth_unsupported_multiaccount">%1$s не поддерживает несколько учётных записей</string>
   <string name="auth_fail_get_user_name">Сервер вернул некорректный пользовательский идентификатор. Пожалуйста, свяжитесь с вашим администратором
 ⇥</string>
   <string name="auth_can_not_auth_against_server">Не удается авторизоваться на этом сервере</string>
@@ -315,7 +317,7 @@
   <string name="sync_file_nothing_to_do_msg">Содержимое файла уже синхронизировано</string>
   <string name="create_dir_fail_msg">Не удалось создать каталог</string>
   <string name="filename_forbidden_characters">Недопустимые символы: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Имя файла содержит по крайней мере один некорректный символ</string>
+  <string name="filename_forbidden_characters_from_server">Имя файла содержит по крайней мере один некорректный символ</string>
   <string name="filename_empty">Имя файла не может быть пустым</string>
   <string name="wait_a_moment">Подождите немного</string>
   <string name="wait_checking_credentials">Проверка сохранённых учётных данных</string>
@@ -496,7 +498,6 @@
   <string name="manage_space_description">Настройки, сертификаты базы данных и сервера из данных %1$s будут удалены навсегда. \n\nЗагруженные файлы будут сохранены нетронутыми. \n\nЭтот процесс может занять некоторое время.</string>
   <string name="manage_space_clear_data">Очистить данные</string>
   <string name="manage_space_error">Некоторые файлы не могут быть удалены.</string>
-  <string name="permission_storage_access">Для загрузки и скачивания файлов требуются дополнительные права.</string>
   <string name="local_file_not_found_toast">Файл не был найден в локальной файловой системе</string>
   <string name="confirmation_remove_files_alert">Вы действительно хотите удалить выбранные элементы?</string>
   <string name="confirmation_remove_folders_alert">Вы действительно хотите удалить выбранные элементы вместе с их содержимым?</string>
@@ -523,7 +524,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Общедоступная ссылка устареет не позднее, чем через %1$d дней после создания</string>
   <string name="share_via_link_default_name_template">Ссылка %1$s</string>
   <string name="share_via_link_empty_password">Пароль пуст</string>
-  <string name="private_link_info">Это частная ссылка, её могут использовать только люди, у которых есть доступ к файлу или каталогу. Используйте её в качестве постоянной ссылки для себя или чтобы указать другим на файлы в совместном доступе.</string>
+  <string name="private_link_info">Личная ссылка: её могут использовать только те, у кого есть доступ к файлу или каталогу. Используйте её в качестве постоянной ссылки для себя или чтобы указать другим на файлы в общем доступе</string>
   <string name="file_private_link_error">Личная ссылка для этого файла недоступна</string>
   <string name="download_notification_channel_name">Скачивания</string>
   <string name="download_notification_channel_description">Просмотр имени скачиваемого файла и процесса</string>
@@ -557,7 +558,7 @@
   <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
   <string name="welcome_feature_5_title"> Потоковое видео</string>
   <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
-  <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
+  <string name="no_browser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
   <string name="common_not_found">не найдено</string>
   <string name="supports_oauth2_error">Невозможно было узнать, поддерживается ли OAuth2</string>
   <string name="get_base_url_error">Узнать базу сервера, было невозможно</string>
@@ -565,4 +566,6 @@
   <string name="prefs_logs_summary">В логах может содержаться чувствительная информация. Отправка логов третьим лицам находится под вашей ответственностью</string>
   <string name="synchronizing_account">Синхронизация аккаунта</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Блокировка кодом</string>
 </resources>

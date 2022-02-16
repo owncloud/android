@@ -41,6 +41,13 @@
   <string name="prefs_passcode">Bloqueio de senha</string>
   <string name="prefs_biometric">Bloqueio biométrico</string>
   <string name="prefs_biometric_summary">Ativar senha ou bloqueio padrão para habilitar esta opção</string>
+  <string name="prefs_lock_application">Bloquear aplicação</string>
+  <string name="prefs_lock_application_entries_immediately">Imediatamente</string>
+  <string name="prefs_lock_application_entries_1minute">Após 1 minuto</string>
+  <string name="prefs_lock_application_entries_5minutes">Após 5 minutos</string>
+  <string name="prefs_lock_application_entries_30minutes">Após 30 minutos</string>
+  <string name="prefs_lock_access_from_document_provider">Bloquear o acesso do provedor de documentos</string>
+  <string name="prefs_lock_access_from_document_provider_summary">Bloqueie o acesso de outros aplicativos aos arquivos das contas no aplicativo por meio do explorador de arquivos nativo do Android.</string>
   <string name="prefs_touches_with_other_visible_windows">Toques com outras janelas visíveis</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques quando a visualização é obscurecida por outra janela visível. Ativá-lo para usar aplicativos de filtragem de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Tem certeza de que deseja ativar esse recurso?</string>
@@ -95,8 +102,7 @@
   <string name="passcode_already_set">Os bloqueios de padrão e senha não podem ser ativados ao mesmo tempo, desative primeiro o código de acesso</string>
   <string name="pattern_no_longer_required">O padrão não será mais solicitado</string>
   <string name="pattern_configure_your_pattern_explanation">O padrão será solicitado sempre que o aplicativo for iniciado</string>
-  <string name="pass_code_locked">Bloqueado com senha</string>
-  <string name="pattern_locked">Bloqueado com padrão</string>
+  <string name="document_provider_locked">Bloqueado</string>
   <string name="illegal_argument_exception_message">Uma AÇÃO válida é necessária no intento passado para</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Arquivos</string>
@@ -248,9 +254,11 @@
   <string name="pass_code_wrong">Código de acesso incorreto</string>
   <string name="pass_code_error_set">Ocorreu um erro ao configurar o bloqueio da senha</string>
   <string name="pass_code_error_remove">Ocorreu um erro ao remover o bloqueio da senha</string>
+  <string name="lock_time_try_again">Por favor, tente novamente em %1$s</string>
   <string name="biometric_not_enrolled">Registre pelo menos uma biométria para usar esse recurso</string>
   <string name="biometric_prompt_title">Conexão biométrica</string>
   <string name="biometric_prompt_subtitle">Conectar usando sua credencial biométrica</string>
+  <string name="biometric_dialog_title">Deseja ativar adicionalmente a segurança biométrica?</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
   <string name="media_state_playing">%1$s (reproduzindo)</string>
   <string name="media_state_loading">%1$s (carregando)</string>
@@ -295,7 +303,6 @@
   <string name="auth_expired_basic_auth_toast">Por favor, digite a senha atual</string>
   <string name="auth_connecting_auth_server">Conectando ao servidor de autenticação ...</string>
   <string name="auth_unsupported_auth_method">O servidor não suporta este método de autenticação</string>
-  <string name="auth_unsupported_multiaccount">%1$s não suporta múltiplas contas</string>
   <string name="auth_fail_get_user_name">Seu servidor não está retornando um ID de usuário correto, por favor, entre em contato com um administrador
 ⇥</string>
   <string name="auth_can_not_auth_against_server">Não é possível obter autenticação neste servidor</string>
@@ -322,7 +329,7 @@
   <string name="sync_file_nothing_to_do_msg">Conteúdo do arquivo já foi sincronizado</string>
   <string name="create_dir_fail_msg">A pasta não pode ser criada</string>
   <string name="filename_forbidden_characters">Caracteres proibidos: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">O nome do arquivo contem pelo menos um caractere inválido  </string>
+  <string name="filename_forbidden_characters_from_server">O nome do arquivo contem pelo menos um caractere inválido  </string>
   <string name="filename_empty">O nome do arquivo não pode estar vazio</string>
   <string name="wait_a_moment">Aguarde um momento</string>
   <string name="wait_checking_credentials">Verificando credenciais salvas</string>
@@ -504,7 +511,6 @@
   <string name="manage_space_description">Definições, certificados de banco de dados e servidor de dados %1$s serão excluído permanentemente. \n\nArquivos baixados serão mantidos inalterados. \n\nEste processo pode demorar algum tempo.</string>
   <string name="manage_space_clear_data">Limpar dados</string>
   <string name="manage_space_error">Alguns arquivos não puderam ser excluído.</string>
-  <string name="permission_storage_access">Permissões adicionais são necessárias para se enviar e baixar arquivos &amp; .</string>
   <string name="local_file_not_found_toast">O arquivo não foi encontrado no sistema de arquivos local</string>
   <string name="confirmation_remove_files_alert">Você realmente deseja remover os itens selecionados?</string>
   <string name="confirmation_remove_folders_alert">Você realmente deseja remover os itens selecionados e seus conteúdos?</string>
@@ -531,7 +537,7 @@
   <string name="share_via_link_expiration_date_explanation_label">O link público expirará até %1$d dias após sua criação</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">A senha está vazia</string>
-  <string name="private_link_info">Este é um link privado, somente pessoas que tenham acesso ao arquivo/pasta podem usa-lo. Use isso como um link permanente para você mesmo ou apontar para outros arquivos contidos nesse compartilhamento.</string>
+  <string name="private_link_info">Linque privado: apenas as pessoas que têm acesso ao arquivo/pasta podem usá-lo. Use-o como um linque permanente para você ou apontar para outros, arquivos em compartilhamentos</string>
   <string name="file_private_link_error">O link privado não está disponível para este arquivo</string>
   <string name="download_notification_channel_name">Baixados</string>
   <string name="download_notification_channel_description">Ver o nome do arquivo baixado e o progresso</string>
@@ -563,7 +569,7 @@
   <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
   <string name="welcome_feature_5_title">Transmissão de vídeo</string>
   <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
-  <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
+  <string name="no_browser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
   <string name="common_not_found">não foi encontrado</string>
   <string name="supports_oauth2_error">Não foi possível  saber se OAuth2 é suportada</string>
   <string name="get_base_url_error">Não foi possível saber a url base do servidor</string>
@@ -581,4 +587,8 @@
   <string name="scoped_storage_wizard_migration_in_progress">Migrando seus arquivos. Por favor não desligue seu dispositivo.</string>
   <string name="scoped_storage_wizard_migration_in_progress_button">Trabalhando... Por favor, aguarde</string>
   <string name="scoped_storage_wizard_title">Mais segurança para seus arquivos</string>
+  <!--Security Enforced-->
+  <string name="security_enforced_title">Por favor, selecione uma opção para bloquear o aplicativo:</string>
+  <string name="security_enforced_first_option">Bloqueio de senha</string>
+  <string name="security_enforced_second_option">Bloqueio Padrão</string>
 </resources>

@@ -227,7 +227,6 @@
   <string name="auth_expired_basic_auth_toast">لطفا رمز عبور فعلی را وارد نمایید</string>
   <string name="auth_connecting_auth_server">اتّصال به کارساز تصدیق…</string>
   <string name="auth_unsupported_auth_method">سرور این نوع احراز هویت را پشتیبانی نمی‌کند</string>
-  <string name="auth_unsupported_multiaccount">%1$s چند اکانته بودن را پشتیبانی نمی‌کند</string>
   <string name="auth_fail_get_user_name">کارسازتان شناسهٔ کاربری درستی برنمی‌گرداند. لطفاً با یک مدیر تماس بگیرید
 	</string>
   <string name="auth_can_not_auth_against_server">نمی‌توان روی این کارساز تصدیق هویت شد</string>
@@ -251,7 +250,7 @@
   <string name="sync_file_nothing_to_do_msg">محتوای فایل قبلا همگام شده</string>
   <string name="create_dir_fail_msg">پوشه نتوانست ایجاد شود</string>
   <string name="filename_forbidden_characters">کاراکترهای ممنوع: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">نام فایل دارای حداقل یک کاراکتر نامعتبر است</string>
+  <string name="filename_forbidden_characters_from_server">نام فایل دارای حداقل یک کاراکتر نامعتبر است</string>
   <string name="filename_empty">نام فایل نمی تواند خالی باشد</string>
   <string name="wait_a_moment">لحظه‌ای صبر کنید</string>
   <string name="wait_checking_credentials">بررسی گواهی‌نامه‌های ذخیره شده</string>

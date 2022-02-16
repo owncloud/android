@@ -1,0 +1,7 @@
+Enhancement: Permission dialog removal
+
+The old permission request dialog has been removed.
+It was not needed after migrating the storage to scoped storage,
+read and write permissions are guaranteed in our scoped storage.
+
+https://github.com/owncloud/android/pull/2524

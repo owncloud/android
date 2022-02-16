@@ -30,21 +30,38 @@
   <string name="drawer_feedback">Segnalazioni</string>
   <string name="drawer_help">Aiuto</string>
   <string name="prefs_category_general">Generale</string>
+  <string name="prefs_subsection_logging">Logging</string>
   <string name="prefs_subsection_more">Altro</string>
   <string name="prefs_subsection_security">Protezione</string>
+  <string name="prefs_subsection_security_summary">Imposta i blocchi per accedere all\'app e consentire tocchi con altre finestre visibili</string>
+  <string name="prefs_subsection_logging_summary">Tieni traccia dei log prodotti dall\'esecuzione dell\'app</string>
+  <string name="prefs_subsection_more_summary">Informazioni sull\'app, feedback e altro</string>
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
   <string name="prefs_biometric">Blocco biometrico</string>
   <string name="prefs_biometric_summary">Abilita il blocco con pasword o la sequenza di blocco per attivare questa opzione.</string>
+  <string name="prefs_lock_application">Blocca applicazione</string>
+  <string name="prefs_lock_application_entries_immediately">Immediatamente</string>
+  <string name="prefs_lock_application_entries_1minute">Dopo 1 minuto</string>
+  <string name="prefs_lock_application_entries_5minutes">Dopo 5 minuti</string>
+  <string name="prefs_lock_application_entries_30minutes">Dopo 30 minuti</string>
   <string name="prefs_touches_with_other_visible_windows">Tocca con altre finestre visibili</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Consenti tocchi quando la vista è oscurata da un\'altra finestra visibile. Abilitalo per utilizzare app di filtraggio della luce.</string>
   <string name="confirmation_touches_with_other_windows_title">Sei sicuro di voler abilitare queste funzione?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilizzare questa funzione con responsabilità, un\'applicazione dannosa potrebbe tentare di derubare l\'utente nell\'eseguire alcune azioni, inconsapevoli, utilizzando altre visualizzazioni.</string>
+  <string name="prefs_subsection_picture_uploads">Carica automaticamente le immagini</string>
+  <string name="prefs_subsection_picture_uploads_summary">Gestisci la posizione e il comportamento delle immagini caricate automaticamente</string>
+  <string name="prefs_subsection_video_uploads">Caricamento automatico dei video</string>
+  <string name="prefs_subsection_video_uploads_summary">Gestisci posizione e comportamento dei video caricati automaticamente</string>
   <string name="prefs_camera_picture_upload">Caricamento immagini</string>
   <string name="prefs_camera_picture_upload_summary">Carica automaticamente le immagini scattate dalla fotocamera</string>
   <string name="prefs_camera_picture_upload_path_title">Percorso caricamento immagini</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Condizioni per eseguire i caricamenti</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">I caricamenti verranno attivati quando tutte le opzioni selezionate saranno soddisfatte</string>
   <string name="prefs_camera_picture_upload_on_wifi">Carica le immagini solo tramite wifi</string>
+  <string name="prefs_camera_picture_upload_on_charging">Carica le immagini solo durante la ricarica</string>
+  <string name="prefs_camera_upload_on_charging_summary">Abilita solo caricamenti Wi-Fi per attivare questa opzione</string>
   <string name="prefs_camera_video_upload">Caricamento video</string>
   <string name="prefs_camera_video_upload_summary">Carica automaticamente video registrati dalla videocamera</string>
   <string name="prefs_camera_video_upload_path_title">Percorso caricamento video</string>
@@ -75,8 +92,6 @@
   <string name="passcode_already_set">I blocchi con sequenza e password non possono essere abilitati allo stesso tempo, disabilita la password prima</string>
   <string name="pattern_no_longer_required">La sequenza non sarà più richiesta</string>
   <string name="pattern_configure_your_pattern_explanation">La sequenza sarà richiesta ogni volta che la app sarà avviata</string>
-  <string name="pass_code_locked">Bloccato con codice</string>
-  <string name="pattern_locked">Bloccato con disegno</string>
   <string name="illegal_argument_exception_message">Una AZIONE valida è necessaria per l\'intenzione di passare a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">File</string>
@@ -267,7 +282,6 @@
   <string name="auth_expired_basic_auth_toast">Digita la password attuale</string>
   <string name="auth_connecting_auth_server">Connessione al server di autenticazione in corso...</string>
   <string name="auth_unsupported_auth_method">Il server non supporta questo metodo di autenticazione</string>
-  <string name="auth_unsupported_multiaccount">%1$s non supporta account multipli</string>
   <string name="auth_fail_get_user_name">Il tuo server non ha restituito un id utente corretto, contatta un amministratore
 	</string>
   <string name="auth_can_not_auth_against_server">Impossibile autenticarsi a questo server</string>
@@ -293,7 +307,7 @@
   <string name="sync_file_nothing_to_do_msg">Contenuti del file già sincronizzati</string>
   <string name="create_dir_fail_msg">La cartella non può essere creata</string>
   <string name="filename_forbidden_characters">Caratteri proibiti: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Il nome del file contiene almeno un carattere non valido</string>
+  <string name="filename_forbidden_characters_from_server">Il nome del file contiene almeno un carattere non valido</string>
   <string name="filename_empty">Il nome del file non può essere vuoto</string>
   <string name="wait_a_moment">Attendi</string>
   <string name="wait_checking_credentials">Controllo delle credenziali memorizzate</string>
@@ -472,7 +486,6 @@
   <string name="manage_space_description">Impostazioni, database e certificati server dai dati di %1$s saranno eliminati definitivamente. \n\n\I file scaricati rimarranno intatti.\n\nQuesto processo può richiedere del tempo.</string>
   <string name="manage_space_clear_data">Cancella i dati</string>
   <string name="manage_space_error">Alcuni file non possono essere eliminati.</string>
-  <string name="permission_storage_access">Permessi aggiuntivi sono richiesti per caricare e scaricare i file.</string>
   <string name="local_file_not_found_toast">Il file non è stato trovato nel file system locale</string>
   <string name="confirmation_remove_files_alert">Vuoi davvero rimuovere gli elementi selezionati?</string>
   <string name="confirmation_remove_folders_alert">Vuoi davvero rimuovere gli elementi selezionati e il loro contenuto?</string>
@@ -500,7 +513,6 @@ Il Download del file inizierà automaticamente</string>
   <string name="share_via_link_expiration_date_explanation_label">Il collegamento pubblico scadrà non più tardi di %1$d giorni dopo la sua creazione</string>
   <string name="share_via_link_default_name_template">collegamento %1$s</string>
   <string name="share_via_link_empty_password">La password è vuota</string>
-  <string name="private_link_info">Questo è un link privato, solo le persone che hanno accesso al file/cartella lo possono usare. Usalo come link permanente per te o per puntare altri file senza condivisioni. </string>
   <string name="file_private_link_error">Il link privato non è disponibile per questo file</string>
   <string name="download_notification_channel_name">Download</string>
   <string name="download_notification_channel_description">Visualizza il nome dei file scaricati e i progressi</string>
@@ -532,9 +544,12 @@ Il Download del file inizierà automaticamente</string>
   <string name="welcome_feature_4_text">Le tue foto e video saranno automaticamente inviati al server</string>
   <string name="welcome_feature_5_title">Flusso video</string>
   <string name="welcome_feature_5_text">Guarda i tuoi filmati senza doverli scaricare</string>
-  <string name="no_borwser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
+  <string name="no_browser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
   <string name="common_not_found">non è stato trovato</string>
   <string name="supports_oauth2_error">Non è stato possibile sapere se OAuth2 è supportato</string>
   <string name="get_base_url_error">Non è stato possibile conoscere l\'URL di base del server</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_migrate_and_clean_button">Migra adesso</string>
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Blocco con codice di sicurezza</string>
 </resources>

@@ -1,11 +1,13 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -71,7 +73,6 @@ public class OperationsService extends Service {
     public static final String EXTRA_NEWNAME = "NEWNAME";
     public static final String EXTRA_REMOVE_ONLY_LOCAL = "REMOVE_LOCAL_COPY";
     public static final String EXTRA_CREATE_FULL_PATH = "CREATE_FULL_PATH";
-    public static final String EXTRA_RESULT = "RESULT";
     public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
@@ -328,7 +329,7 @@ public class OperationsService extends Service {
      */
     private static class ServiceHandler extends Handler {
         // don't make it a final class, and don't remove the static ; lint will warn about a p
-        // ossible memory leak
+        // possible memory leak
 
         OperationsService mService;
 
@@ -494,11 +495,10 @@ public class OperationsService extends Service {
                             break;
                         }
                         case ACTION_SYNC_FOLDER: {
-                            // Sync folder (all its descendant files are sync'ed)
+                            // Sync folder (all its descendant files are synced)
                             String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
                             boolean pushOnly = operationIntent.getBooleanExtra(EXTRA_PUSH_ONLY, false);
-                            boolean syncContentOfRegularFiles =
-                                    operationIntent.getBooleanExtra(EXTRA_SYNC_REGULAR_FILES, false);
+                            boolean syncContentOfRegularFiles = operationIntent.getBooleanExtra(EXTRA_SYNC_REGULAR_FILES, false);
                             operation = new SynchronizeFolderOperation(
                                     this,                       // TODO remove this dependency from construction time
                                     remotePath,

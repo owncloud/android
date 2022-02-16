@@ -28,7 +28,6 @@
 
 package com.owncloud.android.ui.activity
 
-import android.Manifest
 import android.accounts.Account
 import android.accounts.AuthenticatorException
 import android.app.Activity
@@ -38,10 +37,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.content.res.Resources.NotFoundException
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.Menu
@@ -50,23 +47,23 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.presentation.ui.security.PassCodeManager
-import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.extensions.checkPasscodeEnforced
+import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.files.services.TransferRequester
+import com.owncloud.android.interfaces.ISecurityEnforced
+import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -80,6 +77,7 @@ import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
+import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
@@ -94,9 +92,7 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
-import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.Extras
-import com.owncloud.android.utils.PermissionUtil
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -110,9 +106,8 @@ import kotlin.coroutines.CoroutineContext
 /**
  * Displays, what files the user has available in his ownCloud. This is the main view.
  */
-
 class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
-    CoroutineScope {
+    CoroutineScope, ISecurityEnforced {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -154,6 +149,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         Timber.v("onCreate() start")
 
         super.onCreate(savedInstanceState) // this calls onAccountChanged() when ownCloud Account is valid
+
+        checkPasscodeEnforced(this)
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
 
@@ -225,53 +222,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        if (PermissionUtil.isPermissionNotGranted(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            // Check if we should show an explanation
-            if (PermissionUtil.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-            ) {
-                // Show explanation to the user and then request permission
-                val snackbar = Snackbar.make(
-                    findViewById(R.id.list_layout),
-                    R.string.permission_storage_access,
-                    Snackbar.LENGTH_INDEFINITE
-                )
-                    .setAction(android.R.string.ok) { PermissionUtil.requestWriteExternalStoreagePermission(this@FileDisplayActivity) }
-
-                DisplayUtils.colorSnackbar(this, snackbar)
-
-                snackbar.show()
-            } else {
-                // No explanation needed, request the permission.
-                PermissionUtil.requestWriteExternalStoreagePermission(this)
-            }
-        }
-
         if (savedInstanceState == null) {
             createMinFragments()
         }
 
         setBackgroundText()
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            PermissionUtil.PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
-                // If request is cancelled, result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted
-                    startSyncFolderOperation(file, false)
-                }
-                // If permission denied --> do nothing
-                return
-            }
-        }
     }
 
     /**
@@ -362,7 +317,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      *
      * @param file used to decide which fragment should be chosen
      * @return a new second fragment instance if it has not been chosen before, or the fragment
-     * previously chosen otherwhise
+     * previously chosen otherwise
      */
     private fun chooseInitialSecondFragment(file: OCFile?): Fragment? {
 
@@ -516,13 +471,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            BiometricManager.getBiometricManager(this).bayPassUnlockOnce()
-        }
-        PassCodeManager.bayPassUnlockOnce()
-        PatternManager.getPatternManager().bayPassUnlockOnce()
+        bayPassUnlockOnce()
 
-        // Hanndle calls form internal activities.
+        // Handle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS && (resultCode == Activity.RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {
 
             requestUploadOfContentFromApps(data, resultCode)
@@ -1459,7 +1410,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * synchronized too.
      *
      * @param folder     Folder to refresh.
-     * @param ignoreETag If 'true', the data from the server will be fetched and sync'ed even if the eTag
+     * @param ignoreETag If 'true', the data from the server will be fetched and synced even if the eTag
      * didn't change.
      */
     fun startSyncFolderOperation(folder: OCFile?, ignoreETag: Boolean) {
@@ -1691,6 +1642,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         FileListOption.SHARED_BY_LINK -> R.id.nav_shared_by_link_files
         FileListOption.AV_OFFLINE -> R.id.nav_available_offline_files
         else -> R.id.nav_all_files
+    }
+
+    override fun optionLockSelected(type: LockType) {
+        manageOptionLockSelected(type)
     }
 
     companion object {

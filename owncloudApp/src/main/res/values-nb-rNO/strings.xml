@@ -37,6 +37,9 @@
   <string name="prefs_passcode">Passordlås</string>
   <string name="prefs_biometric">Biometrisk lås</string>
   <string name="prefs_biometric_summary">Aktiver passord eller mønsterlås for å aktivere dette alternativet</string>
+  <string name="prefs_lock_application_entries_1minute">Etter 1 minutt</string>
+  <string name="prefs_lock_application_entries_5minutes">Etter 5 minutter</string>
+  <string name="prefs_lock_application_entries_30minutes">Etter 30 minutter</string>
   <string name="confirmation_touches_with_other_windows_title">Er du sikker på at du vil aktivere dette?</string>
   <string name="prefs_camera_picture_upload">Bilde-opplastninger</string>
   <string name="prefs_camera_picture_upload_summary">Last opp bilder tatt med kamera automatisk</string>
@@ -71,8 +74,6 @@
   <string name="passcode_already_set">Mønsterlås og passordlås kan ikke være aktiv samtidig. Deaktivert passord først</string>
   <string name="pattern_no_longer_required">Det vil ikke bli spurt om mønsteret mer</string>
   <string name="pattern_configure_your_pattern_explanation">Det vil bli spurt om mønsteret hver gang appen startes</string>
-  <string name="pass_code_locked">Låst med passord</string>
-  <string name="pattern_locked">Låst med mønster</string>
   <string name="illegal_argument_exception_message">En gyldig ACTION må være med i intent sendt til</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Filer</string>
@@ -262,7 +263,6 @@
   <string name="auth_expired_basic_auth_toast">Legg inn nåværende passord</string>
   <string name="auth_connecting_auth_server">Kobler til autentiserings-server ..</string>
   <string name="auth_unsupported_auth_method">Serveren støtter ikke denne autorisasjonsmetoden</string>
-  <string name="auth_unsupported_multiaccount">%1$s støtter ikke flere kontoer</string>
   <string name="auth_fail_get_user_name">Tjeneren din svarer ikke med korrekt bruker-ID, vennligst ta kontakt med en administrator
 	</string>
   <string name="auth_can_not_auth_against_server">Kan ikke autentisere mot denne serveren</string>
@@ -286,7 +286,7 @@
   <string name="sync_file_nothing_to_do_msg">filinnhold er allerede synkronisert</string>
   <string name="create_dir_fail_msg">Mappe kunne ikke opprettes</string>
   <string name="filename_forbidden_characters">Forbudte tegn: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Filnavnet inneholder minst ett ulovlig tegn</string>
+  <string name="filename_forbidden_characters_from_server">Filnavnet inneholder minst ett ulovlig tegn</string>
   <string name="filename_empty">Filnavn kan ikke være tomt</string>
   <string name="wait_a_moment">Vent et øyeblikk</string>
   <string name="wait_checking_credentials">Sjekker lagrede påloggingsdetaljer</string>
@@ -460,7 +460,6 @@
   <string name="manage_space_description">Innstillinger, database og server-sertifikater fra %1$s sine data vil bli slettet permanent. \n\nNedlastede filer beholdes urørt.\n\nDenne prosessen kan ta litt tid.</string>
   <string name="manage_space_clear_data">Nullstill data</string>
   <string name="manage_space_error">Noen filer kunne ikke fjernes.</string>
-  <string name="permission_storage_access">Flere tillatelser trengs for å laste opp &amp; ned filer.</string>
   <string name="local_file_not_found_toast">Filen ble ikke funnet i det lokale filsystemet</string>
   <string name="confirmation_remove_files_alert">Vil du virkelig fjerne de valgte elementene?</string>
   <string name="confirmation_remove_folders_alert">Vil du virkelig fjerne de valgte elementene og innholdet i dem?</string>
@@ -487,7 +486,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Den offentlige linken utløper senest %1$d dager etter den ble opprettet</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">Passordfeltet er tomt</string>
-  <string name="private_link_info">Privat lenke: Bare personer som har tilgang til filen/mappen kan bruke den. Bruk dette som en permanent lenke for din egen bruk eller for å lede andre til filer innenfor delinger</string>
+  <string name="private_link_info">Privat lenke: Bare personer som har tilgang til filen/mappen kan bruke den. Bruk den som en permanent lenke for deg selv eller andre. </string>
   <string name="file_private_link_error">Privat link er ikke tilgjengelig for denne fil</string>
   <string name="download_notification_channel_name">Last ned</string>
   <string name="download_notification_channel_description">Se filnavn og framdrift for nedlasting</string>
@@ -517,4 +516,6 @@
   <string name="welcome_feature_5_title">Video strømming</string>
   <string name="welcome_feature_5_text">Spill av videoene dine uten å laste dem ned</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Passordlås</string>
 </resources>

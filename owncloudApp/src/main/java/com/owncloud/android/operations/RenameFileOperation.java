@@ -3,7 +3,7 @@
  *
  * @author David A. Velasco
  * @author masensio
- * @authro Christian Schabesberger
+ * @author Christian Schabesberger
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify

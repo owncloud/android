@@ -20,36 +20,31 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.content.Intent
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
+import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
+import com.owncloud.android.providers.ContextProvider
 
 class SettingsSecurityViewModel(
-    private val preferencesProvider: SharedPreferencesProvider
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val contextProvider: ContextProvider
 ) : ViewModel() {
 
-    fun isPatternSet() = preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+    fun isPatternSet() = preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
     fun isPasscodeSet() = preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
 
-    fun handleEnablePattern(data: Intent?): UIResult<Unit> {
-        val pattern = data?.getStringExtra(PatternLockActivity.KEY_PATTERN) ?: return UIResult.Error()
-        preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, pattern)
-        preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
-        return UIResult.Success()
-    }
-
-    fun handleDisablePattern(data: Intent?): UIResult<Unit> {
-        data?.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false).takeIf { it == true }
-            ?: return UIResult.Error()
-        preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
-        return UIResult.Success()
-    }
+    fun setPrefLockAccessDocumentProvider(value: Boolean) =
+        preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, value)
 
     fun setPrefTouchesWithOtherVisibleWindows(value: Boolean) =
         preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, value)
+
+    fun isSecurityEnforcedEnabled() = contextProvider.getBoolean(R.bool.lock_enforced)
+
+    fun getBiometricsState(): Boolean = preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 }

@@ -82,8 +82,6 @@
   <string name="passcode_already_set">A minta- és a jelszózárak nem kapcsolhatóak be egyszerre, előbb tiltsa le a jelszót</string>
   <string name="pattern_no_longer_required">A minta többé nem lesz bekérve</string>
   <string name="pattern_configure_your_pattern_explanation">A minta az app minden egyes indításakor be lesz kérve</string>
-  <string name="pass_code_locked">Jelszóval zárolva</string>
-  <string name="pattern_locked">Mintával zárolva</string>
   <string name="illegal_argument_exception_message">Érvényes MŰVELET szükséges</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fájlkezelő</string>
@@ -281,7 +279,6 @@
   <string name="auth_expired_basic_auth_toast">Adja meg az aktuális jelszót</string>
   <string name="auth_connecting_auth_server">Csatlakozás a hitelesítési kiszolgálóhoz…</string>
   <string name="auth_unsupported_auth_method">A kiszolgáló nem támogatja ezt a hitelesítési módszert</string>
-  <string name="auth_unsupported_multiaccount">A(z) %1$s nem támogat egyszerre több fiókot</string>
   <string name="auth_fail_get_user_name">A kiszolgáló nem ad vissza helyes felhasználói azonosítót, lépjen kapcsolatba egy rendszergazdával
 	</string>
   <string name="auth_can_not_auth_against_server">Nem tud hitelesíteni a kiszolgálóhoz</string>
@@ -307,7 +304,7 @@
   <string name="sync_file_nothing_to_do_msg">Az állományok már szinkronizáltak</string>
   <string name="create_dir_fail_msg">A mappát nem lehet létrehozni</string>
   <string name="filename_forbidden_characters">Tiltott karakterek: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">A fájlnév legalább egy érvénytelen karaktert tartalmaz</string>
+  <string name="filename_forbidden_characters_from_server">A fájlnév legalább egy érvénytelen karaktert tartalmaz</string>
   <string name="filename_empty">A fájlnév nem lehet üres</string>
   <string name="wait_a_moment">Egy pillanat…</string>
   <string name="wait_checking_credentials">A tárolt hitelesítő adatok ellenőrzése</string>
@@ -489,7 +486,6 @@
   <string name="manage_space_description">Beállítások, adatbázis és kiszolgáló tanúsítványok %1$s az adatok véglegesen törlődnek. \ n \ n A letöltött fájlok érintetlenül maradnak. \ n \ n Ez a folyamat eltarthat egy ideig.</string>
   <string name="manage_space_clear_data">Adatok törlése</string>
   <string name="manage_space_error">Egyes fájlokat nem lehet törölni.</string>
-  <string name="permission_storage_access">További felhatalmazások szükségesek a feltöltéshez &amp; fájlok letöltése.</string>
   <string name="local_file_not_found_toast">A fájl nem található a helyi fájlrendszerben</string>
   <string name="confirmation_remove_files_alert">Tényleg szeretné eltávolítani a kijelölt elemeket?</string>
   <string name="confirmation_remove_folders_alert">Tényleg szeretné eltávolítani a kijelölt elemeket és azok tartalmát?</string>
@@ -516,7 +512,6 @@
   <string name="share_via_link_expiration_date_explanation_label">A nyilvános link legrövidebb időn belül lejár %1$d néhány nappal azután, hogy létrejött</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">A jelszó üres</string>
-  <string name="private_link_info">Ez egy privát link, csak azokat használhatják, akik hozzáférnek a fájlhoz / mappához. Használja állandó kapcsolatként saját magának, vagy mutasson másokat a megosztott fájlokba.</string>
   <string name="file_private_link_error">A privát link nem érhető el ehhez a fájlhoz</string>
   <string name="download_notification_channel_name">Letöltések</string>
   <string name="download_notification_channel_description">Lásd a letöltési fájl nevét és az előrehaladást</string>
@@ -548,7 +543,7 @@
   <string name="welcome_feature_4_text">Fényképek/videok automatikusan feltöltve</string>
   <string name="welcome_feature_5_title">Video streaming</string>
   <string name="welcome_feature_5_text">Videók lejátszása letöltésük nélkül</string>
-  <string name="no_borwser_installed_alert">Nincs böngésző telepítve. Telepítsen böngészőt a biztonságos bejelentkezés lehetővé tételéhez</string>
+  <string name="no_browser_installed_alert">Nincs böngésző telepítve. Telepítsen böngészőt a biztonságos bejelentkezés lehetővé tételéhez</string>
   <string name="common_not_found">nem található</string>
   <string name="supports_oauth2_error">nem ismert, hogy az OAuth2 támogatott-e</string>
   <string name="get_base_url_error">a szerver url címe nem ismert</string>
@@ -556,4 +551,6 @@
   <string name="prefs_logs_summary">A logok érzékeny információkat tartalmazhatnak. A logok adatainak megosztása a felhasználó felelőssége.</string>
   <string name="synchronizing_account">Fiók szinkronizálása</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Jelszavas zár</string>
 </resources>

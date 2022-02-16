@@ -249,7 +249,6 @@
   <string name="auth_expired_basic_auth_toast">Indtast venligst den nuværende adgangskode</string>
   <string name="auth_connecting_auth_server">Tilslutter til adgangsgivende server …</string>
   <string name="auth_unsupported_auth_method">Serveren understøtter ikke denne godkendelsesmetode</string>
-  <string name="auth_unsupported_multiaccount">%1$s understøtter ikke flere konti</string>
   <string name="auth_fail_get_user_name">Din server retunere ikke et korrekt bruger-id. Kontakt venligst din administrator</string>
   <string name="auth_can_not_auth_against_server">Kan ikke godkendes til denne server</string>
   <string name="auth_account_does_not_exist">Kontoen findes endnu ikke på enheden</string>
@@ -272,7 +271,7 @@
   <string name="sync_file_nothing_to_do_msg">Filindholdet allerede synkroniseret</string>
   <string name="create_dir_fail_msg">Kunne ikke oprette mappe</string>
   <string name="filename_forbidden_characters">Ugyldige tegn: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Filnavnet indeholder mindst ét ugyldigt tegn</string>
+  <string name="filename_forbidden_characters_from_server">Filnavnet indeholder mindst ét ugyldigt tegn</string>
   <string name="filename_empty">Filnavnet kan ikke stå tomt.</string>
   <string name="wait_a_moment">Vent et øjeblik</string>
   <string name="wait_checking_credentials">Kontrollerer gemte legitimationsoplysninger</string>
@@ -430,7 +429,6 @@
   <string name="manage_space_description">Indstillinger, database og server certifikater fra %1$s\'s data vil blive slettet permanent.\n\nHentede filer vil blive beholdt urørte.\n\nDenne proces kan tage nogen tid.</string>
   <string name="manage_space_clear_data">Ryd data</string>
   <string name="manage_space_error">Nogle filer kunne ikke slettes.</string>
-  <string name="permission_storage_access">Yderligere tilladelser, der kræves for at sende &amp; hente filer.</string>
   <string name="local_file_not_found_toast">Filen blev ikke fundet i det lokale filsystem</string>
   <string name="confirmation_remove_files_alert">Ønsker du virkelig at fjerne de valgte enheder?</string>
   <string name="confirmation_remove_folders_alert">Ønsker du virkelig at fjerne de valgte emner og deres indhold?</string>
@@ -456,7 +454,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Udløb</string>
   <string name="share_via_link_expiration_date_explanation_label">Det offentlige link vil senest udløbe %1$d dage efter at det er oprettet</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
-  <string name="private_link_info">Dette er et privat link, som kun folk med adgang til filen/mappen kan bruge. Brug det som et permanent link for dig selv eller til at dirigere folk til filder, der er delt</string>
+  <string name="private_link_info">Privat link: Kun personer, der har adgang til filen/mappen kan bruge det. Brug det som et permanent link for dig selv, eller til at dirigere andre til delte filer</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valgt</item>
     <item quantity="other">%d valgte</item>
@@ -464,4 +462,6 @@
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Spring over</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Passcode-lås</string>
 </resources>

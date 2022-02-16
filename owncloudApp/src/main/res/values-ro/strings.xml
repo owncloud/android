@@ -64,8 +64,6 @@
   <string name="pattern_incorrect_pattern">Model incorect</string>
   <string name="pattern_reenter_pattern">Te rog reintrodu modelul</string>
   <string name="pattern_not_same_pattern">Modelele nu sunt identice</string>
-  <string name="pass_code_locked">Blocat cu cod</string>
-  <string name="pattern_locked">Blocat cu model</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fișiere</string>
   <string name="bottom_nav_uploads">Încărcări</string>
@@ -246,7 +244,6 @@
   <string name="auth_expired_basic_auth_toast">Introdu te rog parola curenta</string>
   <string name="auth_connecting_auth_server">Conectare la serverul de autentificare...</string>
   <string name="auth_unsupported_auth_method">Serverul nu soporta aceasta metoda de autentificare </string>
-  <string name="auth_unsupported_multiaccount">%1$s nu suporta conturi multiple</string>
   <string name="auth_fail_get_user_name">Server-ul dvs. nu  întoarce un ID de utilizator corect, vă rugăm să contactați un administrator </string>
   <string name="auth_can_not_auth_against_server">Nu se poate autentifica la acest serer</string>
   <string name="auth_account_does_not_exist">Contul nu există încă în dispozitiv</string>
@@ -270,7 +267,7 @@
   <string name="sync_file_nothing_to_do_msg">Continutul fisierului este deja sincronizat</string>
   <string name="create_dir_fail_msg">Nu a putut fi creat directorul</string>
   <string name="filename_forbidden_characters">Caractere interzise: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Numele fișierului conține măcar un caracter invalid</string>
+  <string name="filename_forbidden_characters_from_server">Numele fișierului conține măcar un caracter invalid</string>
   <string name="filename_empty">Numele fișierului nu poate fi gol.</string>
   <string name="wait_a_moment">Așteaptă un moment</string>
   <string name="wait_checking_credentials">Verific datele stocate</string>
@@ -436,7 +433,6 @@ Te rog ia legătura cu administratorul</string>
   <string name="manage_space_description">Configurările, baza de date și certificatele serverului de la informațiile %1$s vor fi șterse definitiv.\n\nFișierele descărcate vor fi păstrate neatinse.\n\nAcest process poate dura o vreme.</string>
   <string name="manage_space_clear_data">Curăță informațiile</string>
   <string name="manage_space_error">Unele fișiere nu pot fi șterse.</string>
-  <string name="permission_storage_access">Sunt necesare permisiuni suplimentare pentru a încărca &amp; descărca fișierele.</string>
   <string name="local_file_not_found_toast">Acest fișier nu a fost găsit în sistemul de fișiere local</string>
   <string name="confirmation_remove_files_alert">Chiar vrei să ștergi elementele selectate ?</string>
   <string name="confirmation_remove_folders_alert">Chiar vrei să ștergi elementele selectate și conținutul lor ?</string>
@@ -463,7 +459,6 @@ Te rog ia legătura cu administratorul</string>
   <string name="share_via_link_expiration_date_explanation_label">Legătura publică va expira nu mai târziu de %1$d zile după ce a fost create.</string>
   <string name="share_via_link_default_name_template">%1$s legătură</string>
   <string name="share_via_link_empty_password">Câmpul parola este gol</string>
-  <string name="private_link_info">Aceasta este o legătură private, doar oamenii care au acces la fișier/dosar pot să o folosească. Folosește legătura pentru tine însuți sau pentru a direcționa pe alții spre fișierele din partajare.</string>
   <string name="file_private_link_error">Nu este disponibilă legătură privată pentru acest fișier</string>
   <string name="download_notification_channel_name">Descărcări</string>
   <string name="download_notification_channel_description">Vizualizează fișierul care se descarcă și progresul</string>
@@ -487,4 +482,6 @@ Te rog ia legătura cu administratorul</string>
   <string name="welcome_feature_5_text">Rulează videoclipurile tale fără a le descărca</string>
   <string name="common_not_found">nu a fost găsit</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Parolă de blocare</string>
 </resources>

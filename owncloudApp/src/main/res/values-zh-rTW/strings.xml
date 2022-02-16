@@ -41,6 +41,11 @@
   <string name="prefs_passcode">密碼鎖</string>
   <string name="prefs_biometric">生物識別鎖</string>
   <string name="prefs_biometric_summary">啟用密碼或模式鎖定以啟用此選項。</string>
+  <string name="prefs_lock_application">鎖定應用程式</string>
+  <string name="prefs_lock_application_entries_immediately">立即</string>
+  <string name="prefs_lock_application_entries_1minute">1分鐘後</string>
+  <string name="prefs_lock_application_entries_5minutes">5分鐘後</string>
+  <string name="prefs_lock_application_entries_30minutes">30分鐘後</string>
   <string name="prefs_touches_with_other_visible_windows">與其他可見窗口接觸</string>
   <string name="prefs_touches_with_other_visible_windows_summary">當視圖被另一個可見窗口遮擋時，允許觸摸。 啟用它以使用濾光應用程序。</string>
   <string name="confirmation_touches_with_other_windows_title">您確定要啟用這個功能？</string>
@@ -88,8 +93,6 @@
   <string name="passcode_already_set">模式和密碼鎖不能同時已啟用，請先停用密碼</string>
   <string name="pattern_no_longer_required">模式將不再被詢問</string>
   <string name="pattern_configure_your_pattern_explanation">每次啟動應用軟體時都會請求該模式</string>
-  <string name="pass_code_locked">密碼與鎖定</string>
-  <string name="pattern_locked">鎖定與圖案</string>
   <string name="illegal_argument_exception_message">傳遞給的Intent中需要有效的ACTION</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">檔案</string>
@@ -287,7 +290,6 @@
   <string name="auth_expired_basic_auth_toast">請輸入目前的密碼</string>
   <string name="auth_connecting_auth_server">連接驗證伺服器中...</string>
   <string name="auth_unsupported_auth_method">伺服器不支援這種認證方式</string>
-  <string name="auth_unsupported_multiaccount">%1$s 不支援複數賬戶</string>
   <string name="auth_fail_get_user_name">你的伺服器並沒有傳回正確的使用者 ID, 請聯絡伺服器的管理員
 	</string>
   <string name="auth_can_not_auth_against_server">無法驗證這個伺服器</string>
@@ -314,7 +316,7 @@
   <string name="sync_file_nothing_to_do_msg">檔案與同步</string>
   <string name="create_dir_fail_msg">資料夾無法建立</string>
   <string name="filename_forbidden_characters">禁止使用字符: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">檔案名稱含有不合法的字元</string>
+  <string name="filename_forbidden_characters_from_server">檔案名稱含有不合法的字元</string>
   <string name="filename_empty">檔名不能為空的</string>
   <string name="wait_a_moment">請稍後</string>
   <string name="wait_checking_credentials">檢查儲存的密碼</string>
@@ -496,7 +498,6 @@
   <string name="manage_space_description">來自 %1$s 的設定, 資料庫與伺服器的憑證將被永久的刪除.\n\n下載的檔案也將無法存取.\n\n這個動作將花費一些時間.</string>
   <string name="manage_space_clear_data">清除資料</string>
   <string name="manage_space_error">某些檔案無法被刪除.</string>
-  <string name="permission_storage_access">需要額外的權限來上傳或下傳檔案.</string>
   <string name="local_file_not_found_toast">在本地的檔案系統中找不到這個檔案</string>
   <string name="confirmation_remove_files_alert">您真的要移除所選取的項目?</string>
   <string name="confirmation_remove_folders_alert">您真的要移除所選取的項目與裡面的文件?</string>
@@ -523,7 +524,7 @@
   <string name="share_via_link_expiration_date_explanation_label">這個公開的連結會在 %1$d 天後失效</string>
   <string name="share_via_link_default_name_template">%1$s 連結</string>
   <string name="share_via_link_empty_password">密碼為空</string>
-  <string name="private_link_info">這是一個私人連結，只有有權訪問該檔案/目錄的人才能使用它。 使用它作為您自己的永久連結，或將其他人指向共享中的文件。</string>
+  <string name="private_link_info">專用連結：只有有權訪問檔案/目錄的人才能使用它。 使用它作為您自己的永久連結，或將其他人指向共享中的文件</string>
   <string name="file_private_link_error">私人連結不適可用的於此檔案</string>
   <string name="download_notification_channel_name">下載</string>
   <string name="download_notification_channel_description">查看下載檔案的名稱和進度</string>
@@ -554,7 +555,7 @@
   <string name="welcome_feature_4_text">您的圖片/視頻自動地上傳</string>
   <string name="welcome_feature_5_title">視頻流</string>
   <string name="welcome_feature_5_text">播放視頻而不下載它們</string>
-  <string name="no_borwser_installed_alert">未安裝瀏覽器。 請安裝瀏覽器以允許安全登錄。</string>
+  <string name="no_browser_installed_alert">未安裝瀏覽器。 請安裝瀏覽器以允許安全登錄。</string>
   <string name="common_not_found">找不到</string>
   <string name="supports_oauth2_error">無法知道是否支持OAuth2</string>
   <string name="get_base_url_error">無法知道伺服器基本超連結</string>
@@ -562,4 +563,6 @@
   <string name="prefs_logs_summary">記錄可能包含敏感信息。 與他人共享記錄與唯一的使用者責任</string>
   <string name="synchronizing_account">同步帳號</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">密碼鎖</string>
 </resources>

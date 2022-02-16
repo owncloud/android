@@ -184,7 +184,6 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="auth_oauth_error_access_denied">Accès refusat pel servidor d\'autorizacion</string>
   <string name="auth_expired_oauth_token_toast">Vòstra autorizacion a expirat. Mercé de vos autentificar tornamai</string>
     <string name="auth_unsupported_auth_method">Lo servidor pren pas en carga pas aqueste metòde d\'autentificacion</string>
-  <string name="auth_unsupported_multiaccount">%1$s pren pas en carga los comptes multiples</string>
   <string name="auth_fail_get_user_name">Vòstre servidor a tornat un identificant d\'utilizaire incorrècte. Prenètz contacte amb vòstre administrator
 </string>
   <string name="auth_account_does_not_exist">Lo compte existís pas encara sus aqueste periferic</string>
@@ -203,7 +202,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="sync_file_nothing_to_do_msg">Lo contengut del fichièr es ja sincronizat</string>
   <string name="create_dir_fail_msg">Lo dorsièr a pas pogut èsser creat</string>
   <string name="filename_forbidden_characters">Caractèrs interdits : / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Lo nom de fichièr conten al mens un caractèr invalid</string>
+  <string name="filename_forbidden_characters_from_server">Lo nom de fichièr conten al mens un caractèr invalid</string>
   <string name="filename_empty">Lo nom del fichièr pòt pas èsser void</string>
   <string name="wait_a_moment">Pacientatz</string>
   <string name="filedisplay_unexpected_bad_get_content">Problèma imprevist. Ensajatz una autra aplicacion per la seleccion del fichièr</string>

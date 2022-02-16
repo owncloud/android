@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Andy Scherzinger
- * @author Tobias Kaminsiky
+ * @author Tobias Kaminsky
  * Copyright (C) 2016 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify

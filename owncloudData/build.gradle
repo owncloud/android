@@ -44,7 +44,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':owncloudDomain')
 
     // Owncloud Android Library
@@ -53,8 +52,6 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-
-    implementation "androidx.legacy:legacy-support-v4:$androidX"
 
     // Room
     implementation "androidx.room:room-ktx:$roomVersion"

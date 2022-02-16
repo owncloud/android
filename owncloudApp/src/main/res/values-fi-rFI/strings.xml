@@ -228,7 +228,6 @@
   <string name="auth_expired_basic_auth_toast">Anna nykyinen salasana</string>
   <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
   <string name="auth_unsupported_auth_method">Palvelin ei tue tätä tunnistautumistapaa</string>
-  <string name="auth_unsupported_multiaccount">%1$s ei tue useita tilejä</string>
   <string name="auth_fail_get_user_name">Palvelimesi ei palauta oikeaa käyttäjä-ID:tä, ota yhteyttä järjestelmänvalvojaan
 	</string>
   <string name="auth_can_not_auth_against_server">Tälle palvelimelle ei voi tunnistautua</string>
@@ -251,7 +250,7 @@
   <string name="sync_file_nothing_to_do_msg">Tiedoston sisältö on jo synkronoitu</string>
   <string name="create_dir_fail_msg">Kansion luominen epäonnistui</string>
   <string name="filename_forbidden_characters">Kielletyt merkit: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Tiedoston nimi sisältää ainakin yhden virheellisen merkin</string>
+  <string name="filename_forbidden_characters_from_server">Tiedoston nimi sisältää ainakin yhden virheellisen merkin</string>
   <string name="filename_empty">Tiedoston nimi ei voi olla tyhjä</string>
   <string name="wait_a_moment">Odota hetki</string>
   <string name="wait_checking_credentials">Tarkistetaan tallennettuja tilitietoja</string>
@@ -413,7 +412,6 @@
   <string name="manage_space_title">Hallitse tilaa</string>
   <string name="manage_space_clear_data">Tyhjennä tiedot</string>
   <string name="manage_space_error">Joitain tiedostoja ei voitu poistaa.</string>
-  <string name="permission_storage_access">Tiedostojen lataaminen ja lähetys vaatii lisäoikeuksia.</string>
   <string name="local_file_not_found_toast">Tiedostoa ei löytynyt paikallisesta tiedostojärjestelmästä</string>
   <string name="confirmation_remove_files_alert">Haluatko varmasti poistaa valitut kohteet?</string>
   <string name="confirmation_remove_folders_alert">Haluatko varmasti poistaa valitut kohteet ja niiden sisällön?</string>
@@ -432,7 +430,6 @@
   <string name="share_warning_about_forwarding_public_links">Kenellä tahansa linkin omaavalla on pääsy tiedostoon/kansioon</string>
   <string name="share_via_link_password_enforced_label">Salasana *</string>
   <string name="share_via_link_expiration_date_enforced_label">Vanheneminen *</string>
-  <string name="private_link_info">Tämä on yksityinen linkki. Vain henkilöt joilla on käyttöoikeus tiedostoon/kansioon voivat käyttää sitä. Käytä sitä pysyvänä linkkinä itselleni tai osoittaaksesi muille tiedostojen sijainti</string>
   <string name="file_private_link_error">Yksityinen linkki ei ole käytetävissä tälle tiedostolle</string>
   <string name="download_notification_channel_name">Lataukset</string>
   <string name="upload_notification_channel_name">Lähetykset</string>
@@ -461,6 +458,8 @@
   <string name="welcome_feature_4_text">Kuvasi/videosi lähetetään automaattisesti</string>
   <string name="welcome_feature_5_title">Videoiden striimaus</string>
   <string name="welcome_feature_5_text">Toista videosi lataamatta niitä</string>
-  <string name="no_borwser_installed_alert">Selainta ei asennettu. Ole hyvä ja asenna selain jotta turvallinen kirjautuminen on mahdollista.</string>
+  <string name="no_browser_installed_alert">Selainta ei asennettu. Ole hyvä ja asenna selain jotta turvallinen kirjautuminen on mahdollista.</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Suojakoodilukitus</string>
 </resources>

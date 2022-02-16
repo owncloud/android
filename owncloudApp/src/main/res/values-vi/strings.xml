@@ -174,7 +174,6 @@
   <string name="auth_oauth_error_access_denied">Từ chối truy cập vì xác nhận từ phía máy chủ</string>
   <string name="auth_expired_oauth_token_toast">Hạn xác nhận của bạn đã hết. Vui lòng, xác nhận lại</string>
   <string name="auth_unsupported_auth_method">Máy chủ không hổ trợ phương thức xác thực này</string>
-  <string name="auth_unsupported_multiaccount">%1$s  không hỗ trợ nhiều tài khoản</string>
   <string name="common_rename">Sửa tên</string>
   <string name="common_remove">Xóa</string>
   <string name="confirmation_remove_local">Chỉ cục bộ</string>
@@ -186,7 +185,7 @@
   <string name="sync_file_fail_msg">Tập tin từ xa không được kiểm tra</string>
   <string name="sync_file_nothing_to_do_msg">Nội dung tập tin đã đồng bộ</string>
   <string name="filename_forbidden_characters">Những kí tự không được dùng: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Tên tệp tin chứa ít nhất một ký tự không hợp lệ</string>
+  <string name="filename_forbidden_characters_from_server">Tên tệp tin chứa ít nhất một ký tự không hợp lệ</string>
   <string name="wait_a_moment">Chờ một lúc</string>
   <string name="filedisplay_unexpected_bad_get_content">Vấn đề bất ngờ ; hãy thử ứng dụng khác để chọn tập tin</string>
   <string name="filedisplay_no_file_selected">Không có tập tin nào được chọn</string>

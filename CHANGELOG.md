@@ -1,3 +1,120 @@
+Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
+=======================================
+The following sections list the changes in ownCloud Android Client 2.20.0 relevant to
+ownCloud admins and users.
+
+[2.20.0]: https://github.com/owncloud/android/compare/v2.19.0...v2.20.0
+
+Summary
+-------
+
+* Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
+* Bugfix - Small bug when privacy policy disabled: [#3542](https://github.com/owncloud/android/pull/3542)
+* Enhancement - Permission dialog removal: [#2524](https://github.com/owncloud/android/pull/2524)
+* Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
+* Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
+* Enhancement - Respect capability for Avatar support: [#3438](https://github.com/owncloud/android/pull/3438)
+* Enhancement - Brute force protection: [#3320](https://github.com/owncloud/android/issues/3320)
+* Enhancement - "Open with" action now allows editing: [#3475](https://github.com/owncloud/android/issues/3475)
+* Enhancement - Enable logs by default in debug mode: [#3526](https://github.com/owncloud/android/issues/3526)
+* Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
+* Enhancement - Suggest the user to enable enhanced security: [#3539](https://github.com/owncloud/android/pull/3539)
+
+Details
+-------
+
+* Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
+
+   Previously, when users set up a large number of accounts, the side menu overlapped the
+   available space quota. Now, everything is contained within a scroll to avoid this.
+
+   https://github.com/owncloud/android/issues/3060
+   https://github.com/owncloud/android/pull/3437
+
+* Bugfix - Small bug when privacy policy disabled: [#3542](https://github.com/owncloud/android/pull/3542)
+
+   Previously, when privacy policy setup was disabled, the side menu showed the privacy policy
+   menu item. Now, option is hidden when privacy policy is disabled.
+
+   https://github.com/owncloud/android/issues/3521
+   https://github.com/owncloud/android/pull/3542
+
+* Enhancement - Permission dialog removal: [#2524](https://github.com/owncloud/android/pull/2524)
+
+   The old permission request dialog has been removed. It was not needed after migrating the
+   storage to scoped storage, read and write permissions are guaranteed in our scoped storage.
+
+   https://github.com/owncloud/android/pull/2524
+
+* Enhancement - Lock delay for app: [#3344](https://github.com/owncloud/android/issues/3344)
+
+   A new preference has been added to choose the interval in which the app will be unlocked after
+   having unlocked it once, making it more comfortable for those who access the app frequently and
+   have a security lock set.
+
+   https://github.com/owncloud/android/issues/3344
+   https://github.com/owncloud/android/pull/3375
+
+* Enhancement - Security enforced: [#3434](https://github.com/owncloud/android/pull/3434)
+
+   A new branding/MDM option has been added to make app lock via passcode or pattern compulsory,
+   whichever the user chooses.
+
+   https://github.com/owncloud/android/issues/3400
+   https://github.com/owncloud/android/pull/3434
+
+* Enhancement - Respect capability for Avatar support: [#3438](https://github.com/owncloud/android/pull/3438)
+
+   Previously, the user's avatar was shown by default. Now, it is shown or not depending on a new
+   capability.
+
+   https://github.com/owncloud/android/issues/3285
+   https://github.com/owncloud/android/pull/3438
+
+* Enhancement - Brute force protection: [#3320](https://github.com/owncloud/android/issues/3320)
+
+   Previously, when setting passcode lock, an unlimited number of attempts to unlock the app
+   could be done in a row. Now, from the third incorrect attempt, there will be an exponential
+   growing waiting time until next unlock attempt.
+
+   https://github.com/owncloud/android/issues/3320
+   https://github.com/owncloud/android/pull/3463
+
+* Enhancement - "Open with" action now allows editing: [#3475](https://github.com/owncloud/android/issues/3475)
+
+   Previously, when a document file was opened and edited with an external app, changes weren't
+   saved because it didn't synchronized with the server. Now, when you edit a document and
+   navigate or refresh in the ownCloud app, it synchronizes automatically, keeping consistence
+   of your files.
+
+   https://github.com/owncloud/android/issues/3475
+   https://github.com/owncloud/android/pull/3499
+
+* Enhancement - Enable logs by default in debug mode: [#3526](https://github.com/owncloud/android/issues/3526)
+
+   Now, when the app is built in DEBUG mode, the logs are enabled by default.
+
+   https://github.com/owncloud/android/issues/3526
+   https://github.com/owncloud/android/pull/3527
+
+* Enhancement - Allow access from document provider preference: [#3379](https://github.com/owncloud/android/issues/3379)
+
+   Previously, files of ownCloud accounts couldn't be accessed via documents provider when
+   there was a lock set in the app. Now, a new preference has been added to allow/disallow the
+   access, so users have more control over their files.
+
+   https://github.com/owncloud/android/issues/3379
+   https://github.com/owncloud/android/issues/3520
+   https://github.com/owncloud/android/pull/3384
+   https://github.com/owncloud/android/pull/3538
+
+* Enhancement - Suggest the user to enable enhanced security: [#3539](https://github.com/owncloud/android/pull/3539)
+
+   When a user sets the passcode or pattern lock on the security screen, the application suggests
+   the user whether to enable or not a biometric lock to unlock the application.
+
+   https://github.com/owncloud/android/pull/3539
+
 Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.19.0 relevant to
@@ -430,7 +547,7 @@ Details
 - Bug fixes, including:
   + Fix crash when changing orientation in some operations
   + Fix OAuth2 token is not renewed after being revoked
-  + Fix ocasional crash when opening share by link
+  + Fix occasional crash when opening share by link
   + Fix navigation loop in shared by link and Av. Offline options
 
 ## 2.15 beta v2 (May 2020)

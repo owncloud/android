@@ -123,7 +123,7 @@ public class RenameFileDialogFragment
             }
 
             if (!FileUtils.isValidName(newFileName)) {
-                showSnackMessage(R.string.filename_forbidden_charaters_from_server);
+                showSnackMessage(R.string.filename_forbidden_characters_from_server);
                 return;
             }
 

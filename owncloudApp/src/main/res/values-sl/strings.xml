@@ -66,8 +66,6 @@
   <string name="pattern_not_same_pattern">Vzorca se ne ujemata</string>
   <string name="pattern_no_longer_required">Ne boste več vprašani po vzorcu</string>
   <string name="pattern_configure_your_pattern_explanation">Vzorec bo zahtevan vedno, ko se zažene aplikacija</string>
-  <string name="pass_code_locked">Zaklenjeno z geslom</string>
-  <string name="pattern_locked">Zaklenjeno z vzorcem</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Datoteke</string>
   <string name="bottom_nav_uploads">Prenosi na strežnik</string>
@@ -248,7 +246,6 @@
   <string name="auth_expired_basic_auth_toast">Vpišite trenutno geslo</string>
   <string name="auth_connecting_auth_server">Povezovanje s overitvenim strežnikom</string>
   <string name="auth_unsupported_auth_method">Strežnik ne podpira tega načina overitve</string>
-  <string name="auth_unsupported_multiaccount">%1$s ne omogoča podpore več računom</string>
   <string name="auth_fail_get_user_name">Strežnik ne vrača ustreznega ID uporabnika. Stopite v stik s skrbnikom sistema.
 	</string>
   <string name="auth_can_not_auth_against_server">Povezave s strežnikom ni mogoče overiti</string>
@@ -272,7 +269,7 @@
   <string name="sync_file_nothing_to_do_msg">Vsebina datoteke je že usklajena</string>
   <string name="create_dir_fail_msg">Mape ni mogoče ustvariti</string>
   <string name="filename_forbidden_characters">Nedovoljeni znaki: characters: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Ime datoteke vsebuje vsaj en neveljaven znak.</string>
+  <string name="filename_forbidden_characters_from_server">Ime datoteke vsebuje vsaj en neveljaven znak.</string>
   <string name="filename_empty">Ime datoteke ne sme biti prazno</string>
   <string name="wait_a_moment">Počakajte trenutek ...</string>
   <string name="wait_checking_credentials">Poteka preverjanje shranjenih poveril</string>
@@ -437,7 +434,6 @@
   <string name="manage_space_description">Naastavitve, podatkovna zbirka in potrdila strežnika podatkov %1$s bodo trajno izbrisani. \n\nŽe prejete datoteke bodo ostane nedotaknjene.\n\nTo opravilo je lahko dolgotrajno.</string>
   <string name="manage_space_clear_data">Počisti podatke</string>
   <string name="manage_space_error">Nekaterih datotek ni mogoče izbrisati.</string>
-  <string name="permission_storage_access">Za prejemanje oziroma pošiljanje datotek v oblak so zahtevana dodatna dovoljenja.</string>
   <string name="local_file_not_found_toast">Datoteke ni mogoče najti na krajevnem sistemu</string>
   <string name="confirmation_remove_files_alert">Ali res želite odstraniti izbrane predmete?</string>
   <string name="confirmation_remove_folders_alert">Ali res želite odstraniti izbrane predmete in njihovo vsebino?</string>
@@ -463,7 +459,6 @@
   <string name="share_via_link_expiration_date_enforced_label">Datum preteka *</string>
   <string name="share_via_link_expiration_date_explanation_label">Javna povezava bo potekla %1$d dni po ustvarjanju.</string>
   <string name="share_via_link_default_name_template">Povezava %1$s</string>
-  <string name="private_link_info">Ustvarjena je zasebna povezava, do katere imajo dostop le uporabniki z dovoljenji. Uporabite jo kot trajno povezavo zase ali za souporabo z drugimi uporabniki.</string>
   <string name="file_private_link_error">Za to datoteko zasebna povezava ni na voljo</string>
   <string name="download_notification_channel_name">Prejmi</string>
   <string name="download_notification_channel_description">Pokaži ime datoteke in napredek prenosa s strežnika</string>
@@ -489,4 +484,6 @@
   <string name="welcome_feature_4_title">Pošiljanje posnetkov s kamero</string>
   <string name="common_not_found">Ni bilo najdeno</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Zakleni dostop s kodo PIN</string>
 </resources>

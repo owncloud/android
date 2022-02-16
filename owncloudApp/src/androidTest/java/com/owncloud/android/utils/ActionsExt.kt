@@ -33,6 +33,10 @@ fun Int.replaceText(text: String) {
     onView(withId(this)).perform(scrollTo(), ViewActions.replaceText(text))
 }
 
-fun Int.click() {
+fun Int.scrollAndClick() {
     onView(withId(this)).perform(scrollTo(), ViewActions.click())
+}
+
+fun Int.click() {
+    onView(withId(this)).perform(ViewActions.click())
 }

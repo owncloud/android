@@ -1,0 +1,7 @@
+Enhancement: Security enforced
+
+A new branding/MDM option has been added to make app
+lock via passcode or pattern compulsory, whichever the user chooses.
+
+https://github.com/owncloud/android/pull/3434
+https://github.com/owncloud/android/issues/3400

@@ -30,12 +30,21 @@ import com.owncloud.android.data.authentication.QUERY_PARAMETER_CODE_CHALLENGE_M
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_STATE
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import java.net.URLEncoder
 import java.security.MessageDigest
 import java.security.SecureRandom
 
 class OAuthUtils {
+
+    fun generateRandomState(): String {
+        val secureRandom = SecureRandom()
+        val randomBytes = ByteArray(DEFAULT_STATE_ENTROPY)
+        secureRandom.nextBytes(randomBytes)
+        val encoding = Base64.NO_WRAP or Base64.NO_PADDING or Base64.URL_SAFE
+        return Base64.encodeToString(randomBytes, encoding)
+    }
 
     fun generateRandomCodeVerifier(): String {
         val secureRandom = SecureRandom()
@@ -58,6 +67,7 @@ class OAuthUtils {
         private const val ALGORITHM_SHA_256 = "SHA-256"
         private const val CODE_CHALLENGE_METHOD = "S256"
         private const val DEFAULT_CODE_VERIFIER_ENTROPY = 64
+        private const val DEFAULT_STATE_ENTROPY = 15
 
         fun buildClientRegistrationRequest(
             registrationEndpoint: String,
@@ -88,6 +98,7 @@ class OAuthUtils {
             responseType: String,
             scope: String,
             codeChallenge: String,
+            state: String,
         ): Uri =
             authorizationEndpoint.buildUpon()
                 .appendQueryParameter(QUERY_PARAMETER_REDIRECT_URI, redirectUri)
@@ -96,6 +107,7 @@ class OAuthUtils {
                 .appendQueryParameter(QUERY_PARAMETER_SCOPE, scope)
                 .appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE, codeChallenge)
                 .appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD)
+                .appendQueryParameter(QUERY_PARAMETER_STATE, state)
                 .build()
 
         fun buildRedirectUri(context: Context): Uri =

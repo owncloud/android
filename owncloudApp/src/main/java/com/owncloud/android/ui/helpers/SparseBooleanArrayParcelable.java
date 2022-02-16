@@ -24,7 +24,7 @@ import android.os.Parcelable;
 import android.util.SparseBooleanArray;
 
 /**
- * Wraps a SparseBooleanArrayParcelable to allow its serialization and desearialization
+ * Wraps a SparseBooleanArrayParcelable to allow its serialization and deserialization
  * through {@link Parcelable} interface.
  */
 public class SparseBooleanArrayParcelable implements Parcelable {

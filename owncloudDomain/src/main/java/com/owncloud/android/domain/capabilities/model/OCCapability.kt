@@ -44,6 +44,7 @@ data class OCCapability(
     val filesSharingResharing: CapabilityBooleanType,
     val filesSharingFederationOutgoing: CapabilityBooleanType,
     val filesSharingFederationIncoming: CapabilityBooleanType,
+    val filesSharingUserProfilePicture: CapabilityBooleanType,
     val filesBigFileChunking: CapabilityBooleanType,
     val filesUndelete: CapabilityBooleanType,
     val filesVersioning: CapabilityBooleanType
@@ -51,6 +52,10 @@ data class OCCapability(
     fun isChunkingAllowed(): Boolean {
         val doubleChunkingVersion = davChunkingVersion.toDoubleOrNull()
         return (filesBigFileChunking.isTrue && doubleChunkingVersion != null && doubleChunkingVersion >= 1.0)
+    }
+
+    fun isFetchingAvatarAllowed(): Boolean {
+        return filesSharingUserProfilePicture.isTrue || filesSharingUserProfilePicture.isUnknown
     }
 }
 

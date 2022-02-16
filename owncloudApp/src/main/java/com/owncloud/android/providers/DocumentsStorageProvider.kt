@@ -56,8 +56,7 @@ import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NotificationUtils
 import timber.log.Timber
@@ -152,8 +151,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             getAccountFromFileId(ocFile.fileId),
                             false,
                             context,
-                            false,
-                            true
+                            false
                         ).apply {
                             val result = execute(currentStorageManager, context)
                             if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
@@ -229,17 +227,18 @@ class DocumentsStorageProvider : DocumentsProvider() {
     override fun queryRoots(projection: Array<String>?): Cursor {
         val result = RootCursor(projection)
         val contextApp = context ?: return result
-        // If OwnCloud is protected with passcode or pattern, return empty cursor.
+        val accounts = AccountUtils.getAccounts(contextApp)
+
+        // If access from document provider is not allowed, return empty cursor
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val passCodeState = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-        val patternState = preferences.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
-        if (passCodeState || patternState) {
-            return result.apply { addProtectedRoot(contextApp, passCodeState) }
+        val lockAccessFromDocumentProvider = preferences.getBoolean(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, false)
+        if (lockAccessFromDocumentProvider && accounts.isNotEmpty()) {
+            return result.apply { addProtectedRoot(contextApp) }
         }
 
         initiateStorageMap()
 
-        for (account in AccountUtils.getAccounts(contextApp)) {
+        for (account in accounts) {
             result.addRoot(account, contextApp)
         }
         return result

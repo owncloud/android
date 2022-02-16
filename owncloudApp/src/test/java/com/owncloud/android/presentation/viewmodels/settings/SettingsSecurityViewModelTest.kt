@@ -20,17 +20,17 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import android.content.Intent
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.ui.activity.PatternLockActivity
+import com.owncloud.android.providers.ContextProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -40,16 +40,13 @@ import org.junit.Test
 class SettingsSecurityViewModelTest : ViewModelTest() {
     private lateinit var securityViewModel: SettingsSecurityViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
+    private lateinit var contextProvider: ContextProvider
 
     @Before
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
-        securityViewModel = SettingsSecurityViewModel(preferencesProvider)
-    }
-
-    @After
-    override fun tearDown() {
-        super.tearDown()
+        contextProvider = mockk(relaxUnitFun = true)
+        securityViewModel = SettingsSecurityViewModel(preferencesProvider, contextProvider)
     }
 
     @Test
@@ -61,7 +58,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         assertTrue(patternSet)
 
         verify(exactly = 1) {
-            preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+            preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
         }
     }
 
@@ -74,7 +71,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         assertFalse(patternSet)
 
         verify(exactly = 1) {
-            preferencesProvider.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
+            preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
         }
     }
 
@@ -105,80 +102,20 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `handle enable pattern - ok`() {
-        val data: Intent = mockk()
-        val pattern = "pattern"
-
-        every { data.getStringExtra(any()) } returns pattern
-
-        val patternEnableResult = securityViewModel.handleEnablePattern(data)
-
-        assertTrue(patternEnableResult.isSuccess)
+    fun `set pref lock access from document provider - ok - true`() {
+        securityViewModel.setPrefLockAccessDocumentProvider(true)
 
         verify(exactly = 1) {
-            data.getStringExtra(PatternLockActivity.KEY_PATTERN)
-            preferencesProvider.putString(PatternLockActivity.KEY_PATTERN, pattern)
-            preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, true)
+            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, true)
         }
     }
 
     @Test
-    fun `handle enable pattern - ko - data intent is null`() {
-        val patternEnableResult = securityViewModel.handleEnablePattern(null)
-
-        assertTrue(patternEnableResult.isError)
-    }
-
-    @Test
-    fun `handle enable pattern - ko - pattern is null`() {
-        val data: Intent = mockk()
-
-        every { data.getStringExtra(any()) } returns null
-
-        val patternEnableResult = securityViewModel.handleEnablePattern(data)
-
-        assertTrue(patternEnableResult.isError)
+    fun `set pref lock access from document provider - ok - false`() {
+        securityViewModel.setPrefLockAccessDocumentProvider(false)
 
         verify(exactly = 1) {
-            data.getStringExtra(PatternLockActivity.KEY_PATTERN)
-        }
-    }
-
-    @Test
-    fun `handle disable pattern - ok`() {
-        val data: Intent = mockk()
-
-        every { data.getBooleanExtra(any(), any()) } returns true
-
-        val patternDisableResult = securityViewModel.handleDisablePattern(data)
-
-        assertTrue(patternDisableResult.isSuccess)
-
-        verify(exactly = 1) {
-            data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)
-            preferencesProvider.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false)
-        }
-    }
-
-    @Test
-    fun `handle disable pattern - ko - data intent is null`() {
-        val patternDisableResult = securityViewModel.handleDisablePattern(null)
-
-        assertTrue(patternDisableResult.isError)
-    }
-
-    @Test
-    fun `handle disable pattern - ko - key check result is false`() {
-        val data: Intent = mockk()
-
-        every { data.getBooleanExtra(any(), any()) } returns false
-
-        val patternDisableResult = securityViewModel.handleDisablePattern(data)
-
-        assertTrue(patternDisableResult.isError)
-
-        verify(exactly = 1) {
-            data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT, false)
+            preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, false)
         }
     }
 
@@ -197,6 +134,32 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             preferencesProvider.putBoolean(SettingsSecurityFragment.PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS, false)
+        }
+    }
+
+    @Test
+    fun `set pref is security enforced enabled - ok - true`() {
+        every { contextProvider.getBoolean(any()) } returns true
+
+        securityViewModel.isSecurityEnforcedEnabled().apply {
+            assertTrue(this)
+        }
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.lock_enforced)
+        }
+    }
+
+    @Test
+    fun `set pref is security enforced enabled - ok - false`() {
+        every { contextProvider.getBoolean(any()) } returns false
+
+        securityViewModel.isSecurityEnforcedEnabled().apply {
+            assertFalse(this)
+        }
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.lock_enforced)
         }
     }
 

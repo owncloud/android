@@ -35,6 +35,10 @@
   <string name="prefs_accounts">Notandaaðgangar</string>
   <string name="prefs_manage_accounts">Sýsla með notandaaðganga</string>
   <string name="prefs_passcode">Læsing með lykilkóða</string>
+  <string name="prefs_lock_application">Lock application</string>
+  <string name="prefs_lock_application_entries_1minute">After 1 minute</string>
+  <string name="prefs_lock_application_entries_5minutes">After 5 minutes</string>
+  <string name="prefs_lock_application_entries_30minutes">After 30 minutes</string>
   <string name="prefs_camera_picture_upload">Innsendar myndir</string>
   <string name="prefs_camera_picture_upload_summary">Hlaða sjálfvirkt inn myndum teknum á myndavél</string>
   <string name="prefs_camera_picture_upload_path_title">Innsendingarslóð fyrir myndir</string>
@@ -241,7 +245,6 @@
   <string name="auth_expired_basic_auth_toast">Settu inn núgildandi lykilorð</string>
   <string name="auth_connecting_auth_server">Tengist við auðkenningarþjón …</string>
   <string name="auth_unsupported_auth_method">Þjónninn styður ekki þessa auðkenningaraðferð</string>
-  <string name="auth_unsupported_multiaccount">%1$s styður ekki fjölaðganga</string>
   <string name="auth_fail_get_user_name">Þjónninn skilar ekki réttu notandaauðkenni, hafðu samband við kerfisstjóra
 	</string>
   <string name="auth_can_not_auth_against_server">Get ekki auðkennt á þessum þjóni</string>
@@ -265,7 +268,7 @@
   <string name="sync_file_nothing_to_do_msg">Efni skrár er þegar samstillt</string>
   <string name="create_dir_fail_msg">Tókst ekki að búa til möppu</string>
   <string name="filename_forbidden_characters">Óleyfilegir stafir: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Skráarheitið inniheldur að minnsta kosti einn ógildan staf</string>
+  <string name="filename_forbidden_characters_from_server">Skráarheitið inniheldur að minnsta kosti einn ógildan staf</string>
   <string name="filename_empty">Skráarheiti má ekki vera tómt</string>
   <string name="wait_a_moment">Bíddu aðeins</string>
   <string name="wait_checking_credentials">Athuga vistuð auðkenni</string>
@@ -432,7 +435,6 @@
   <string name="manage_space_description">Stillingar, gagnagrunnur og skilríki þjóna úr gögnum %1$s verður eytt endanlega. \n\nSóttar skrár verða skildar eftir ósnertar.\n\nÞetta ferli getur tekið drjúgan tíma.</string>
   <string name="manage_space_clear_data">Hreinsa gögn</string>
   <string name="manage_space_error">Ekki tókst að eyða öllum skrám.</string>
-  <string name="permission_storage_access">Aukinna heimilda er krafist til að geta sent inn og sótt skrár.</string>
   <string name="local_file_not_found_toast">Skráin fannst ekki á tölvunni þinni</string>
   <string name="confirmation_remove_files_alert">Ertu viss um að þú viljir fjarlægja valin atriði?</string>
   <string name="confirmation_remove_folders_alert">Ertu viss um að þú viljir fjarlægja valin atriði og innihald þeirra?</string>
@@ -458,7 +460,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Rennur út *</string>
   <string name="share_via_link_expiration_date_explanation_label">Opinberi tengillinn rennur út eigi síðar en %1$d dögum eftir að hann er útbúinn</string>
   <string name="share_via_link_default_name_template">%1$s tengill</string>
-  <string name="private_link_info">Þetta er einkatengilll, aðeins fólk sem hefur aðgang að skránni/möppunni getur notað hann. Notaðu hann sem varanlegan tengil fyrir sjálfan þig eða til að beina öðrum á skrár innan sameigna.</string>
+  <string name="private_link_info">Einkatengilll: Aðeins fólk sem hefur aðgang að skránni/möppunni getur notað hann. Notaðu hann sem varanlegan tengil fyrir sjálfan þig eða til að beina öðrum á skrár innan sameigna</string>
   <string name="download_notification_channel_name">Niðurhöl</string>
   <string name="upload_notification_channel_name">Innsendingar</string>
   <string name="media_service_notification_channel_name">Tónlistarspilari</string>
@@ -483,4 +485,6 @@
   <string name="welcome_feature_4_title">Innsendingar úr myndavél</string>
   <string name="welcome_feature_5_title">Streyming myndskeiða</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Læsing með lykilkóða</string>
 </resources>

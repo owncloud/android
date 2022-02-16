@@ -30,7 +30,7 @@ import com.owncloud.android.R;
 import timber.log.Timber;
 
 /**
- * Activity copying the text of the received Intent into the system clibpoard.
+ * Activity copying the text of the received Intent into the system clipboard.
  */
 @SuppressWarnings("deprecation")
 public class CopyToClipboardActivity extends Activity {

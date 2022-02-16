@@ -71,8 +71,6 @@
   <string name="passcode_already_set">Wzór odblokowywania i hasło nie mogą być włączone jednocześnie, proszę wyłączyć hasło</string>
   <string name="pattern_no_longer_required">Nie będziesz więcej pytany o wzór odblokowywania</string>
   <string name="pattern_configure_your_pattern_explanation">Wzór odblokowywania będzie wymagany przy każdorazowym uruchomieniu aplikacji</string>
-  <string name="pass_code_locked">Zablokowanie hasłem</string>
-  <string name="pattern_locked">Zablokowanie wzorem</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Pliki</string>
   <string name="bottom_nav_uploads">Wrzucone</string>
@@ -260,7 +258,6 @@
   <string name="auth_expired_basic_auth_toast">Podaj aktualne hasło</string>
   <string name="auth_connecting_auth_server">Łączenie z serwerem poświadczeń...</string>
   <string name="auth_unsupported_auth_method">Serwer nie obsługuje tej metody autoryzacji</string>
-  <string name="auth_unsupported_multiaccount">%1$s nie wspiera wielu kont</string>
   <string name="auth_fail_get_user_name">Twój serwer nie zwraca prawidłowego id użytkownika, proszę skontaktuj się z administratorem
 	</string>
   <string name="auth_can_not_auth_against_server">Błąd autoryzacji na tym serwerze</string>
@@ -286,7 +283,7 @@
   <string name="sync_file_nothing_to_do_msg">Zawartość pliku została już synchronizowana</string>
   <string name="create_dir_fail_msg">Folder nie może zostać utworzony</string>
   <string name="filename_forbidden_characters">Znaki zabronione: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Nazwa pliku zawiera co najmniej jeden nieprawidłowy znak</string>
+  <string name="filename_forbidden_characters_from_server">Nazwa pliku zawiera co najmniej jeden nieprawidłowy znak</string>
   <string name="filename_empty">Nazwa pliku nie może być pusta.</string>
   <string name="wait_a_moment">Poczekaj chwilę</string>
   <string name="wait_checking_credentials">Sprawdzanie danych</string>
@@ -464,7 +461,6 @@
   <string name="manage_space_description">Ustawienia, baza danych i certyfikaty serwera %1$s zostaną trwale skasowane.\n\nPobrane pliki pozostaną na swoich miejscach.\n\nTen proces zajmie trochę czasu.</string>
   <string name="manage_space_clear_data">Wyczyść dane</string>
   <string name="manage_space_error">Nie udało się usunąć niektórych plików.</string>
-  <string name="permission_storage_access">Dodatkowe uprawnienia do wysyłania i ściągania plików.</string>
   <string name="local_file_not_found_toast">Plik nie został znaleziony w lokalnym systemie plików</string>
   <string name="confirmation_remove_files_alert">Czy na pewno chcesz usunąć wybrane pliki?</string>
   <string name="confirmation_remove_folders_alert">Czy naprawdę chcesz usunąć wybrane foldery i ich zawartość?</string>
@@ -491,7 +487,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Link publiczny wygaśnie nie później niż %1$d dni od jego utworzenia</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">Hasło jest puste</string>
-  <string name="private_link_info">To jest link prywatny. Tylko użytkownicy, którzy mają przyznany dostęp do folderów lub plików mogą z niego skorzystać. Użyj go jako linka bezpośredniego dla siebie lub jako odnośnik dla użytkowników, którym udostępniasz.</string>
+  <string name="private_link_info">Prywatny link: Tylko użytkownicy, którzy mają przyznany dostęp do folderów lub plików mogą z niego skorzystać. Użyj go jako linka bezpośredniego dla siebie lub jako odnośnik dla użytkowników, którym udostępniasz.</string>
   <string name="file_private_link_error">Link prywatny nie jest dostępny dla tego pliku</string>
   <string name="download_notification_channel_name">Pobrania</string>
   <string name="download_notification_channel_description">Zobacz nazwę oraz postęp pobieranego pliku</string>
@@ -524,9 +520,11 @@
   <string name="welcome_feature_4_text">Automatyczne wysyłanie twoich zdjęć oraz wideo </string>
   <string name="welcome_feature_5_title">Wideotransmisja</string>
   <string name="welcome_feature_5_text">Odtwarzaj twoje pliki wideo bez pobierania</string>
-  <string name="no_borwser_installed_alert">Nie wykryto żadnej zainstalowanej przeglądarki. Zainstaluj przeglądarkę by umożliwić bezpieczne logowanie.</string>
+  <string name="no_browser_installed_alert">Nie wykryto żadnej zainstalowanej przeglądarki. Zainstaluj przeglądarkę by umożliwić bezpieczne logowanie.</string>
   <string name="common_not_found">nie znaleziono</string>
   <string name="supports_oauth2_error">Nie było możliwe stwierdzenie czy OAuth2 jest wspierane</string>
   <string name="get_base_url_error">Nie było możliwe znalezienie adresu URL serwera</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Blokada hasłem</string>
 </resources>

@@ -43,7 +43,7 @@ public interface ComponentsGetter {
 
     /**
      * To be invoked when the parent activity is fully created to get a reference
-     * to the OperationsSerivce service API.
+     * to the OperationsService service API.
      */
     OperationsServiceBinder getOperationsServiceBinder();
 

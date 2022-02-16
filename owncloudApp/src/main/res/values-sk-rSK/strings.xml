@@ -200,7 +200,6 @@
   <string name="auth_expired_basic_auth_toast">Zadajte svoje aktuálne heslo</string>
   <string name="auth_connecting_auth_server">Pripájam sa na autentifikačný server ...</string>
   <string name="auth_unsupported_auth_method">Server nepodporuje túto autentifikačnú metódu</string>
-  <string name="auth_unsupported_multiaccount">%1$s nepodporuje viacero účtov</string>
   <string name="auth_fail_get_user_name">Váš server nevracia správne používateľské id, kontaktujte prosím správcu systému
 	</string>
   <string name="auth_can_not_auth_against_server">Nemôžem verifikovať tento server</string>
@@ -226,7 +225,7 @@
   <string name="sync_file_nothing_to_do_msg">Obsah súboru je zosynchronizovaný</string>
   <string name="create_dir_fail_msg">Priečinok nie je možné vytvoriť</string>
   <string name="filename_forbidden_characters">Zakázané znaky: / \\ &lt; &gt; : \" | ? *</string>
-  <string name="filename_forbidden_charaters_from_server">Názov súboru obsahuje nevhodný znak</string>
+  <string name="filename_forbidden_characters_from_server">Názov súboru obsahuje nevhodný znak</string>
   <string name="filename_empty">Názov súboru nemôže byť prázdny</string>
   <string name="wait_a_moment">Počkať chvíľu</string>
   <string name="wait_checking_credentials">Kontrolujem uložené údaje</string>
@@ -405,7 +404,6 @@
   <string name="manage_space_description">Nastavenia, certifikaty databazy a servera z %1$s budú trvalo odstránené. \n\nStiahnuté súbory budú ponechané.\n\nTento proces môžete spustiť iba raz.</string>
   <string name="manage_space_clear_data">Vyčistenie dát.</string>
   <string name="manage_space_error">Niektoré súbory nemohli byť zmazané.</string>
-  <string name="permission_storage_access">Dalšie práva su požadované pre nahratie &amp; Stiahnutie súborov.</string>
   <string name="local_file_not_found_toast">Tento súbor sa nenachádza v lokálnom zozname súborov</string>
   <string name="confirmation_remove_files_alert">Vážne si želáš odstrániť tieto položky ?</string>
   <string name="confirmation_remove_folders_alert">Vážne si želáš odstrániť tieto položky a ich obsah ?</string>
@@ -432,7 +430,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Tento odkaz nevyprší skôr ako %1$d dní po vytvorení.</string>
   <string name="share_via_link_default_name_template">%1$s Odkaz</string>
   <string name="share_via_link_empty_password">Heslo je prázdne.</string>
-  <string name="private_link_info">Toto je súkromný odkaz, iba užívatelia ktorí majú prístup do súboru/Adresára ho môžu používať. Použi ho ako trvalý odkaz pre seba alebo ako bod  pre ostatných na súbory s ich zdieľaniami.</string>
   <string name="file_private_link_error">Súkromný odkaz nie je dostupný pre tento súbor.</string>
   <string name="download_notification_channel_name">Sťahovania</string>
   <string name="download_notification_channel_description">Pozri meno sťahovaného súboru a pokračuj</string>
@@ -458,4 +455,6 @@
   <string name="welcome_feature_3_text">Pripoj sa k všetkým svojim ownCloud Serverom</string>
   <string name="welcome_feature_4_title">Náhrávky z kamery</string>
   <!--Scoped storage migration wizard-->
+  <!--Security Enforced-->
+  <string name="security_enforced_first_option">Heslo</string>
 </resources>
