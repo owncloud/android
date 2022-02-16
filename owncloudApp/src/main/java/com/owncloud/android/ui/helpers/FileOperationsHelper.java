@@ -45,6 +45,8 @@ import timber.log.Timber;
 
 import java.util.Collection;
 
+import static com.owncloud.android.services.OperationsService.EXTRA_SYNC_REGULAR_FILES;
+
 public class FileOperationsHelper {
 
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
@@ -227,6 +229,7 @@ public class FileOperationsHelper {
             intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
             intent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+            intent.putExtra(EXTRA_SYNC_REGULAR_FILES, true);
             mFileActivity.startService(intent);
         }
     }

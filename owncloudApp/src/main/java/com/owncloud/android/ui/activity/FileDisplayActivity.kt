@@ -222,8 +222,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        startSyncFolderOperation(file, false)
-
         if (savedInstanceState == null) {
             createMinFragments()
         }

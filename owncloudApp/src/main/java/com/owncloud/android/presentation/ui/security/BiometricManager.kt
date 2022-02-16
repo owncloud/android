@@ -35,8 +35,9 @@ import kotlin.math.abs
 
 object BiometricManager {
 
-    private val exemptOfBiometricActivities: MutableSet<Class<*>> = mutableSetOf(BiometricActivity::class.java)
-    private var visibleActivitiesCounter = 0
+    private val exemptOfBiometricActivities: MutableSet<Class<*>> =
+        mutableSetOf(BiometricActivity::class.java, PassCodeActivity::class.java, PatternActivity::class.java)
+    private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
     private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
     private val biometricManager: BiometricManager = BiometricManager.from(appContext)
 
@@ -45,30 +46,32 @@ object BiometricManager {
 
             if (isHardwareDetected() && hasEnrolledBiometric()) {
                 // Use biometric lock
-                val i = Intent(appContext, BiometricActivity::class.java)
+                val i = Intent(appContext, BiometricActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                }
                 activity.startActivity(i)
             } else if (isPassCodeEnabled()) {
                 // Cancel biometric lock and use passcode unlock method
                 PassCodeManager.onBiometricCancelled(activity)
-                visibleActivitiesCounter++
+                visibleActivities.add(activity.javaClass)
             } else if (isPatternEnabled()) {
                 // Cancel biometric lock and use pattern unlock method
                 PatternManager.onBiometricCancelled(activity)
-                visibleActivitiesCounter++
+                visibleActivities.add(activity.javaClass)
             }
 
         }
 
-        visibleActivitiesCounter++ // keep it AFTER biometricShouldBeRequested was checked
+        visibleActivities.add(activity.javaClass) // keep it AFTER biometricShouldBeRequested was checked
 
     }
 
     fun onActivityStopped(activity: Activity) {
-        if (visibleActivitiesCounter > 0) visibleActivitiesCounter--
+        visibleActivities.remove(activity.javaClass)
 
         bayPassUnlockOnce()
         val powerMgr = activity.getSystemService(Context.POWER_SERVICE) as PowerManager
-        if (isBiometricEnabled() && !powerMgr.isScreenOn) {
+        if (isBiometricEnabled() && !powerMgr.isInteractive) {
             activity.moveTaskToBack(true)
         }
     }
@@ -76,7 +79,8 @@ object BiometricManager {
     private fun biometricShouldBeRequested(): Boolean {
         val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
         val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
-        return if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivitiesCounter <= 0) isBiometricEnabled()
+        return if (visibleActivities.contains(BiometricActivity::class.java)) isBiometricEnabled()
+        else if (abs(SystemClock.elapsedRealtime() - lastUnlockTimestamp) > timeout && visibleActivities.isEmpty()) isBiometricEnabled()
         else false
     }
 
