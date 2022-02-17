@@ -264,18 +264,18 @@ fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
                 val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
                 var optionSelected = 0
 
-                AlertDialog.Builder(this).apply {
-                    setCancelable(false)
-                    setTitle(getString(R.string.security_enforced_title))
-                    setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
-                    setPositiveButton(android.R.string.ok) { dialog, _ ->
+                AlertDialog.Builder(this)
+                    .setCancelable(false)
+                    .setTitle(getString(R.string.security_enforced_title))
+                    .setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
+                    .setPositiveButton(android.R.string.ok) { dialog, _ ->
                         when (toLockType(optionSelected)) {
                             LockType.PASSCODE -> securityEnforced.optionLockSelected(LockType.PASSCODE)
                             LockType.PATTERN -> securityEnforced.optionLockSelected(LockType.PATTERN)
                         }
                         dialog.dismiss()
                     }
-                }.show()
+                    .show()
             }
         }
         LockEnforcedType.PASSCODE_ENFORCED -> {
