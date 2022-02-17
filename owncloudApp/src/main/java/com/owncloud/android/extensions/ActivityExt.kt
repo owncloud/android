@@ -46,8 +46,6 @@ import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.ui.security.BiometricActivity
-import com.owncloud.android.presentation.ui.security.LockTimeout
-import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
@@ -332,33 +330,7 @@ fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
             dialog.dismiss()
         }
         .show()
-    }
-
-
-fun Activity.checkLockDelayEnforced() {
-    val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
-
-    val lockDelayEnforced = this.resources.getInteger(R.integer.lock_delay_enforced)
-    val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
-    val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-    val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
-
-    if (lockTimeout != LockTimeout.DISABLED && (passcodeConfigured || patternConfigured)) {
-        when (lockTimeout) {
-            LockTimeout.IMMEDIATELY -> {
-                sharedPreferencesProvider.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)
-            }
-            LockTimeout.ONE_MINUTE -> {
-                sharedPreferencesProvider.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.ONE_MINUTE.name)
-            }
-            LockTimeout.FIVE_MINUTES -> {
-                sharedPreferencesProvider.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.FIVE_MINUTES.name)
-            }
-            LockTimeout.THIRTY_MINUTES -> {
-                sharedPreferencesProvider.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.THIRTY_MINUTES.name)
-            }
-        }
-    }
 }
+
 
 

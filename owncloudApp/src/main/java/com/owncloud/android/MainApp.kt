@@ -45,6 +45,8 @@ import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
+import com.owncloud.android.presentation.ui.security.LockTimeout
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.presentation.ui.security.PatternActivity
@@ -158,6 +160,7 @@ class MainApp : Application() {
         })
 
         initDependencyInjection()
+        checkLockDelayEnforced(appContext)
     }
 
     private fun startLogsIfEnabled() {
@@ -306,6 +309,32 @@ class MainApp : Application() {
                         remoteDataSourceModule
                     )
                 )
+            }
+        }
+
+        private fun checkLockDelayEnforced(context: Context) {
+            val preferences = SharedPreferencesProviderImpl(context)
+
+            val lockDelayEnforced = context.resources.getInteger(R.integer.lock_delay_enforced)
+            val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
+            val passcodeConfigured = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+            val patternConfigured = preferences.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
+
+            if (lockTimeout != LockTimeout.DISABLED && (passcodeConfigured || patternConfigured)) {
+                when (lockTimeout) {
+                    LockTimeout.IMMEDIATELY -> {
+                        preferences.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)
+                    }
+                    LockTimeout.ONE_MINUTE -> {
+                        preferences.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.ONE_MINUTE.name)
+                    }
+                    LockTimeout.FIVE_MINUTES -> {
+                        preferences.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.FIVE_MINUTES.name)
+                    }
+                    LockTimeout.THIRTY_MINUTES -> {
+                        preferences.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.THIRTY_MINUTES.name)
+                    }
+                }
             }
         }
     }
