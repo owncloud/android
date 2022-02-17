@@ -1,6 +1,6 @@
 Enhancement: Extended security enforced
 
-A new extended branding/MDM options have been added to make app
+New extended branding options have been added to make app
 lock via passcode or pattern compulsory.
 
 https://github.com/owncloud/android/issues/3543
