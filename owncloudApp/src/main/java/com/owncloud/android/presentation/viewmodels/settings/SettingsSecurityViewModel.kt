@@ -50,5 +50,5 @@ class SettingsSecurityViewModel(
     fun getBiometricsState(): Boolean = preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 
     fun isSecurityEnforcedEnabled() = parseFromInteger(contextProvider.getInt(R.integer.lock_enforced)) != LockEnforcedType.DISABLED
-    fun isLockDelayEnabled() = LockTimeout.parseFromInteger(contextProvider.getInt(R.integer.lock_delay_enforced)) != LockTimeout.DISABLED
+    fun isLockDelayEnforcedEnabled() = LockTimeout.parseFromInteger(contextProvider.getInt(R.integer.lock_delay_enforced)) != LockTimeout.DISABLED
 }

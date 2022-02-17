@@ -155,10 +155,10 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `set pref is security delay enforced enabled - ok - true`() {
+    fun `is lock delay enforced enabled - ok - true`() {
         every { contextProvider.getInt(any()) } returns 1
 
-        val isEnabled = securityViewModel.isLockDelayEnabled()
+        val isEnabled = securityViewModel.isLockDelayEnforcedEnabled()
         assertTrue(isEnabled)
 
         verify(exactly = 1) {
@@ -167,10 +167,10 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `set pref is security delay enforced enabled - ok - false`() {
+    fun `is lock delay enforced enabled - ok - false`() {
         every { contextProvider.getInt(any()) } returns 0
 
-        val isEnabled = securityViewModel.isLockDelayEnabled()
+        val isEnabled = securityViewModel.isLockDelayEnforcedEnabled()
         assertFalse(isEnabled)
 
         verify(exactly = 1) {

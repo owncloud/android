@@ -125,7 +125,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 LockTimeout.FIVE_MINUTES.name,
                 LockTimeout.THIRTY_MINUTES.name
             ).toTypedArray()
-            isEnabled = !securityViewModel.isLockDelayEnabled()
+            isEnabled = !securityViewModel.isLockDelayEnforcedEnabled()
         }
         prefLockAccessDocumentProvider = findPreference(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER)
         prefTouchesWithOtherVisibleWindows = findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)

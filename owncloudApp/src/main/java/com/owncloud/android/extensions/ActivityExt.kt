@@ -338,8 +338,8 @@ fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
 fun Activity.checkLockDelayEnforced() {
     val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
 
-    val lockEnforcedDelay = this.resources.getInteger(R.integer.lock_delay_enforced)
-    val lockTimeout = LockTimeout.parseFromInteger(lockEnforcedDelay)
+    val lockDelayEnforced = this.resources.getInteger(R.integer.lock_delay_enforced)
+    val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
