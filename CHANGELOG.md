@@ -15,7 +15,7 @@ Details
 
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 
-   A new extended branding/MDM options have been added to make app lock via passcode or pattern
+   New extended branding options have been added to make app lock via passcode or pattern
    compulsory.
 
    https://github.com/owncloud/android/issues/3543
