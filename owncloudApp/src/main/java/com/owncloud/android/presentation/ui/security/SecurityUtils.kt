@@ -33,8 +33,7 @@ enum class LockTimeout {
 
     fun toMilliseconds(): Int {
         return when (this) {
-            DISABLED,
-            IMMEDIATELY -> 1_000
+            DISABLED, IMMEDIATELY -> 1_000
             ONE_MINUTE -> 60_000
             FIVE_MINUTES -> 300_000
             THIRTY_MINUTES -> 1_800_000

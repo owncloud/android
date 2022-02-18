@@ -321,20 +321,7 @@ class MainApp : Application() {
             val patternConfigured = preferences.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
             if (lockTimeout != LockTimeout.DISABLED && (passcodeConfigured || patternConfigured)) {
-                when (lockTimeout) {
-                    LockTimeout.IMMEDIATELY -> {
-                        preferences.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)
-                    }
-                    LockTimeout.ONE_MINUTE -> {
-                        preferences.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.ONE_MINUTE.name)
-                    }
-                    LockTimeout.FIVE_MINUTES -> {
-                        preferences.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.FIVE_MINUTES.name)
-                    }
-                    LockTimeout.THIRTY_MINUTES -> {
-                        preferences.putString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.THIRTY_MINUTES.name)
-                    }
-                }
+                preferences.putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
             }
         }
     }
