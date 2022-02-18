@@ -24,10 +24,15 @@ interface ISecurityEnforced {
     fun optionLockSelected(type: LockType)
 }
 
-enum class LockType(val value: Int) {
-    PASSCODE(0), PATTERN(1);
+enum class LockType() {
+    PASSCODE, PATTERN;
 
     companion object {
-        fun toLockType(value: Int): LockType = values().first { it.value == value }
+        fun parseFromInteger(value: Int): LockType {
+            return when (value) {
+                0 -> PASSCODE
+                else -> PATTERN
+            }
+        }
     }
 }

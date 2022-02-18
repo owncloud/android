@@ -143,7 +143,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         every { contextProvider.getInt(any()) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
 
         val result = securityViewModel.isSecurityEnforcedEnabled()
-        assertFalse(result)
+        assertTrue(result)
 
     }
 

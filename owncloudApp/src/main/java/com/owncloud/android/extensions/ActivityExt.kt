@@ -44,7 +44,6 @@ import com.owncloud.android.interfaces.BiometricStatus
 import com.owncloud.android.interfaces.IEnableBiometrics
 import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
-import com.owncloud.android.interfaces.LockType.Companion.toLockType
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
@@ -269,7 +268,7 @@ fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
                     .setTitle(getString(R.string.security_enforced_title))
                     .setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
                     .setPositiveButton(android.R.string.ok) { dialog, _ ->
-                        when (toLockType(optionSelected)) {
+                        when (LockType.parseFromInteger(optionSelected)) {
                             LockType.PASSCODE -> securityEnforced.optionLockSelected(LockType.PASSCODE)
                             LockType.PATTERN -> securityEnforced.optionLockSelected(LockType.PATTERN)
                         }
