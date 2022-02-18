@@ -317,10 +317,8 @@ class MainApp : Application() {
 
             val lockDelayEnforced = context.resources.getInteger(R.integer.lock_delay_enforced)
             val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
-            val passcodeConfigured = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-            val patternConfigured = preferences.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-            if (lockTimeout != LockTimeout.DISABLED && (passcodeConfigured || patternConfigured)) {
+            if (lockTimeout != LockTimeout.DISABLED) {
                 preferences.putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
             }
         }

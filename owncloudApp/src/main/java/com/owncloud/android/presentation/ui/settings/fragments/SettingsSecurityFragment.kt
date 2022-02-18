@@ -230,7 +230,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             isEnabled = true
             summary = null
         }
-        prefLockApplication?.isEnabled = true
+        prefLockApplication?.isEnabled = !securityViewModel.isLockDelayEnforcedEnabled()
     }
 
     private fun disableBiometric() {
