@@ -56,6 +56,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
@@ -70,7 +71,10 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.interfaces.ISecurityEnforced;
+import com.owncloud.android.interfaces.LockType;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -112,7 +116,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         implements OnItemClickListener, android.view.View.OnClickListener,
         CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener, SortOptionsView.SortOptionsListener,
         SortBottomSheetFragment.SortDialogListener, SortOptionsView.CreateFolderListener, SearchView.OnQueryTextListener,
-        View.OnFocusChangeListener, ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener {
+        View.OnFocusChangeListener, ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener, ISecurityEnforced {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
 
@@ -152,6 +156,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         prepareStreamsToUpload(); //streams need to be prepared before super.onCreate() is called
+
+        ActivityExtKt.checkPasscodeEnforced(this, this);
 
         if (savedInstanceState == null) {
             mParents = new Stack<>();
@@ -209,7 +215,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
             fm.beginTransaction()
                     .add(taskRetainerFragment, TaskRetainerFragment.FTAG_TASK_RETAINER_FRAGMENT).commit();
         }   // else, Fragment already created and retained across configuration change
-
 
     }
 
@@ -429,7 +434,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         Timber.d("Populating view with content of : %s", full_path);
         mFile = getStorageManager().getFileByPath(full_path);
         if (mFile != null) {
-            if(mAdapter == null) {
+            if (mAdapter == null) {
                 mAdapter = new ReceiveExternalFilesAdapter(
                         this, getStorageManager(), getAccount());
                 mListView.setAdapter(mAdapter);
@@ -765,8 +770,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             updateEmptyListMessage(getString(R.string.local_file_list_search_with_no_matches));
         } else if (!hasFocus && mAdapter.getFiles().isEmpty()) {
             updateEmptyListMessage(getString(R.string.file_list_empty));
-        }
-        else {
+        } else {
             updateEmptyListMessage(getString(R.string.empty));
         }
     }
@@ -774,6 +778,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     public void updateEmptyListMessage(String updateTxt) {
         mEmptyListMessage.setText(updateTxt);
+    }
+
+    @Override
+    public void optionLockSelected(@NonNull LockType type) {
+        ActivityExtKt.manageOptionLockSelected(this, type);
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {
