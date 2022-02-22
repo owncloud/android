@@ -56,9 +56,13 @@ import com.owncloud.android.domain.exceptions.StateMismatchException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.goToUrl
+import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
+import com.owncloud.android.interfaces.ISecurityEnforced
+import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
@@ -75,7 +79,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 
-class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener {
+class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener, ISecurityEnforced {
 
     private val authenticationViewModel by viewModel<OCAuthenticationViewModel>()
     private val oauthViewModel by viewModel<OAuthViewModel>()
@@ -96,6 +100,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        checkPasscodeEnforced(this)
 
         // Protection against screen recording
         if (!BuildConfig.DEBUG) {
@@ -717,5 +723,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             accountAuthenticatorResponse = null
         }
         super.finish()
+    }
+
+    override fun optionLockSelected(type: LockType) {
+        manageOptionLockSelected(type)
     }
 }
