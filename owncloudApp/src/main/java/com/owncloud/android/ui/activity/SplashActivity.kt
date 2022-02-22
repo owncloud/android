@@ -32,12 +32,11 @@ import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 
 class SplashActivity : AppCompatActivity() {
 
-    private val mdmProvider = MdmProvider(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (BuildConfig.FLAVOR == MainApp.MDM_FLAVOR) {
+            val mdmProvider = MdmProvider(this)
             mdmProvider.cacheStringRestriction(CONFIGURATION_SERVER_URL, R.string.server_url_configuration_feedback_ok)
             mdmProvider.cacheBooleanRestriction(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.string.server_url_input_visibility_configuration_feedback_ok)
         }
