@@ -1,3 +1,26 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v2.20.0...master
+
+Summary
+-------
+
+* Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
+
+Details
+-------
+
+* Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
+
+   New extended branding options have been added to make app lock via passcode or pattern
+   compulsory.
+
+   https://github.com/owncloud/android/issues/3543
+   https://github.com/owncloud/android/pull/3544
+
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.20.0 relevant to
