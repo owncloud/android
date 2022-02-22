@@ -29,14 +29,26 @@ const val PREFERENCE_LAST_UNLOCK_TIMESTAMP = "last_unlock_timestamp"
 const val PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP = "last_unlock_attempt_timestamp"
 
 enum class LockTimeout {
-    IMMEDIATELY, ONE_MINUTE, FIVE_MINUTES, THIRTY_MINUTES;
+    DISABLED, IMMEDIATELY, ONE_MINUTE, FIVE_MINUTES, THIRTY_MINUTES;
 
     fun toMilliseconds(): Int {
         return when (this) {
-            IMMEDIATELY -> 1_000
+            DISABLED, IMMEDIATELY -> 1_000
             ONE_MINUTE -> 60_000
             FIVE_MINUTES -> 300_000
             THIRTY_MINUTES -> 1_800_000
+        }
+    }
+
+    companion object {
+        fun parseFromInteger(int: Int): LockTimeout {
+            return when (int) {
+                1 -> IMMEDIATELY
+                2 -> ONE_MINUTE
+                3 -> FIVE_MINUTES
+                4 -> THIRTY_MINUTES
+                else -> DISABLED
+            }
         }
     }
 }

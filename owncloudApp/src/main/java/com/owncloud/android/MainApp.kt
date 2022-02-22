@@ -45,6 +45,8 @@ import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
+import com.owncloud.android.presentation.ui.security.LockTimeout
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.presentation.ui.security.PatternActivity
@@ -158,6 +160,7 @@ class MainApp : Application() {
         })
 
         initDependencyInjection()
+        checkLockDelayEnforced(appContext)
     }
 
     private fun startLogsIfEnabled() {
@@ -306,6 +309,17 @@ class MainApp : Application() {
                         remoteDataSourceModule
                     )
                 )
+            }
+        }
+
+        private fun checkLockDelayEnforced(context: Context) {
+            val preferences = SharedPreferencesProviderImpl(context)
+
+            val lockDelayEnforced = context.resources.getInteger(R.integer.lock_delay_enforced)
+            val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
+
+            if (lockTimeout != LockTimeout.DISABLED) {
+                preferences.putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
             }
         }
     }

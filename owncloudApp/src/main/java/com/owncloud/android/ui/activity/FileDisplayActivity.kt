@@ -100,7 +100,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
 import kotlin.coroutines.CoroutineContext
 
 /**

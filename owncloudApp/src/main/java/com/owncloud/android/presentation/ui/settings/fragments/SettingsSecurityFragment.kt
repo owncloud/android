@@ -125,6 +125,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 LockTimeout.FIVE_MINUTES.name,
                 LockTimeout.THIRTY_MINUTES.name
             ).toTypedArray()
+            isEnabled = !securityViewModel.isLockDelayEnforcedEnabled()
         }
         prefLockAccessDocumentProvider = findPreference(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER)
         prefTouchesWithOtherVisibleWindows = findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)
@@ -229,7 +230,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             isEnabled = true
             summary = null
         }
-        prefLockApplication?.isEnabled = true
+        prefLockApplication?.isEnabled = !securityViewModel.isLockDelayEnforcedEnabled()
     }
 
     private fun disableBiometric() {
@@ -247,5 +248,4 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         const val EXTRAS_LOCK_ENFORCED = "EXTRAS_LOCK_ENFORCED"
         const val PREFERENCE_LOCK_ATTEMPTS = "PrefLockAttempts"
     }
-
 }

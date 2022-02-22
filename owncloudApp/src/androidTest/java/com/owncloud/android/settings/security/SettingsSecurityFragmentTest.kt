@@ -102,6 +102,7 @@ class SettingsSecurityFragmentTest {
         }
         every { securityViewModel.isSecurityEnforcedEnabled() } returns false
         every { securityViewModel.getBiometricsState() } returns false
+        every { securityViewModel.isLockDelayEnforcedEnabled() } returns false
 
         Intents.init()
     }

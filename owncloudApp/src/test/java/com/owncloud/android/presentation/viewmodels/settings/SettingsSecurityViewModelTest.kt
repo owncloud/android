@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.enums.LockEnforcedType
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
@@ -138,7 +139,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `set pref is security enforced enabled - ok - true`() {
+    fun `is security enforced enabled - ok - true`() {
         every { contextProvider.getInt(any()) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
 
         val result = securityViewModel.isSecurityEnforcedEnabled()
@@ -147,10 +148,35 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `set pref is security enforced enabled - ok - false`() {
+    fun `is security enforced enabled - ok - false`() {
         every { contextProvider.getInt(any()) } returns LockEnforcedType.DISABLED.ordinal
 
         val result = securityViewModel.isSecurityEnforcedEnabled()
         assertFalse(result)
     }
+
+    @Test
+    fun `is lock delay enforced enabled - ok - true`() {
+        every { contextProvider.getInt(any()) } returns 1
+
+        val isEnabled = securityViewModel.isLockDelayEnforcedEnabled()
+        assertTrue(isEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getInt(R.integer.lock_delay_enforced)
+        }
+    }
+
+    @Test
+    fun `is lock delay enforced enabled - ok - false`() {
+        every { contextProvider.getInt(any()) } returns 0
+
+        val isEnabled = securityViewModel.isLockDelayEnforcedEnabled()
+        assertFalse(isEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getInt(R.integer.lock_delay_enforced)
+        }
+    }
 }
+

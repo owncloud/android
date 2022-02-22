@@ -258,6 +258,7 @@ fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
     when (parseFromInteger(lockEnforced)) {
+        LockEnforcedType.DISABLED -> {}
         LockEnforcedType.EITHER_ENFORCED -> {
             if (!passcodeConfigured && !patternConfigured) {
                 val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
@@ -331,4 +332,6 @@ fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
         }
         .show()
 }
+
+
 
