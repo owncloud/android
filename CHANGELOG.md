@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 
 Details
 -------
+
+* Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
+
+   A new local setup's option has been added for the application to lock after the selected
+   interval
+
+   https://github.com/owncloud/android/issues/3440
+   https://github.com/owncloud/android/pull/3547
 
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 
