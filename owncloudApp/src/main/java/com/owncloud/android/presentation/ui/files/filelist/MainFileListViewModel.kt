@@ -123,10 +123,6 @@ class MainFileListViewModel(
         getSearchFilesList(fileListOption, file.id!!, searchText)
     }
 
-    fun refreshDirectory() {
-        refreshFilesList(file.remotePath)
-    }
-
     fun getFile(): OCFile {
         return file
     }
