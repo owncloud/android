@@ -44,6 +44,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.FileListOption
@@ -188,7 +189,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                                 }
                             } else if (PreviewVideoFragment.canBePreviewed(ocFile) && !mainFileListViewModel.fileIsDownloading(
                                     ocFile,
-                                    containerActivity
+                                    AccountUtils.getCurrentOwnCloudAccount(context)
                                 )
                             ) {
                                 // FIXME: 13/10/2020 : New_arch: Av.Offline
