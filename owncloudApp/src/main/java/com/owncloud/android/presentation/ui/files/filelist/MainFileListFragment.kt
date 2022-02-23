@@ -172,6 +172,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                         if (ocFile.isFolder) {
                             file = ocFile
                             mainFileListViewModel.listDirectory(ocFile)
+                            filesViewModel.refreshFolder(ocFile.remotePath)
                             listDirectoryWithAnimation(ocFile)
                         } else { /// Click on a file
                             if (PreviewImageFragment.canBePreviewed(ocFile)) {
@@ -188,7 +189,11 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                                     it.startAudioPreview(ocFile, 0)
                                     it.fileOperationsHelper.syncFile(ocFile)
                                 }
-                            } else if (PreviewVideoFragment.canBePreviewed(ocFile) && !mainFileListViewModel.fileIsDownloading(ocFile, containerActivity)) {
+                            } else if (PreviewVideoFragment.canBePreviewed(ocFile) && !mainFileListViewModel.fileIsDownloading(
+                                    ocFile,
+                                    containerActivity
+                                )
+                            ) {
                                 // FIXME: 13/10/2020 : New_arch: Av.Offline
                                 // Available offline exception, don't initialize streaming
                                 // if (!file.isAvailableLocally() && file.isAvailableOffline()) {
