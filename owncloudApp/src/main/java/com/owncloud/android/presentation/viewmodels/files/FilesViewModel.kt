@@ -60,6 +60,7 @@ class FilesViewModel(
         coroutineDispatcher = coroutineDispatcherProvider.io,
         liveData = _refreshFolder,
         useCase = refreshFolderFromServerAsyncUseCase,
+        showLoading = true,
         useCaseParams = RefreshFolderFromServerAsyncUseCase.Params(
             remotePath = remotePath
         )
