@@ -101,13 +101,6 @@ class MainFileListViewModel(
         }
     }
 
-    private fun refreshFilesList(remotePath: String) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            _getFilesListStatusLiveData.postValue(Event(UIResult.Loading()))
-            refreshFolderFromServerAsyncUseCase.execute(RefreshFolderFromServerAsyncUseCase.Params(remotePath = remotePath))
-        }
-    }
-
     fun listCurrentDirectory() {
         getFilesList(file.id!!)
     }
