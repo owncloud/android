@@ -66,7 +66,7 @@ def get_list_of_last_commits_in_month():
     start_time = date.fromisocalendar(2019, 0o01, 0o02)
     time_pos = start_time
     list_of_last_commits = []
-    for i in range(0, 2*12 + 10):
+    for i in range(0, 3*12 + 1):
         time_after = str(time_pos - time_step).replace("-", ".")
         time_before = str(time_pos).replace("-", ".") 
         last_commit = shell_run(f"""
