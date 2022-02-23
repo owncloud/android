@@ -25,14 +25,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -174,7 +171,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                             file = ocFile
                             mainFileListViewModel.listDirectory(ocFile)
                             filesViewModel.refreshFolder(ocFile.remotePath)
-                            listDirectoryWithAnimation(ocFile)
                         } else { /// Click on a file
                             if (PreviewImageFragment.canBePreviewed(ocFile)) {
                                 // preview image - it handles the sync, if needed
@@ -241,20 +237,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 it.onCreateFolderListener = this
                 it.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER)
             }
-        }
-    }
-
-    private fun listDirectoryWithAnimation(file: OCFile) {
-        if (mainFileListViewModel.isInPowerSaveMode(activity)) {
-            listDirectory(file)
-        } else {
-            val fadeOutFront = AnimationUtils.loadAnimation(context, R.anim.dir_fadeout_front)
-            Handler(Looper.getMainLooper()).postDelayed({
-                listDirectory(file)
-                val fadeInBack = AnimationUtils.loadAnimation(context, R.anim.dir_fadein_back)
-                binding.recyclerViewMainFileList.animation = fadeInBack
-            }, 200)
-            binding.recyclerViewMainFileList.startAnimation(fadeOutFront)
         }
     }
 
