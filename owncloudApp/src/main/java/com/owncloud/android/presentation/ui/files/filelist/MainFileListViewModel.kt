@@ -78,6 +78,7 @@ class MainFileListViewModel(
             getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folderId))
 
         _getFilesListStatusLiveData.addSource(filesListLiveData) {
+            _getFilesListStatusLiveData.removeSource(filesListLiveData)
             _getFilesListStatusLiveData.postValue(Event(UIResult.Success(it)))
         }
     }
