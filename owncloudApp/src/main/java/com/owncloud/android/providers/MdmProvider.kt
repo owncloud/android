@@ -24,10 +24,7 @@ import android.content.Context
 import android.content.RestrictionsManager
 import androidx.enterprise.feedback.KeyedAppState
 import androidx.enterprise.feedback.KeyedAppStatesReporter
-import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
-import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 
 class MdmProvider(
     private val context: Context
