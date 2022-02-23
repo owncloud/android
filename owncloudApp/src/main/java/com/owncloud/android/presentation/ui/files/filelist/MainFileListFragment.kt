@@ -58,6 +58,7 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
+import com.owncloud.android.presentation.fold
 import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.onSuccess
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
@@ -251,7 +252,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
-            retrieveData()
+            filesViewModel.refreshFolder(mainFileListViewModel.getFile().remotePath)
         }
 
         //Set SortOptions and its listeners
@@ -323,11 +324,11 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         })
 
         filesViewModel.refreshFolder.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                if (actionMode != null) {
-                    actionMode!!.finish()
-                }
-            }
+            it.fold(
+                onLoading = { binding.swipeRefreshMainFileList.isRefreshing = true },
+                onSuccess = { binding.swipeRefreshMainFileList.isRefreshing = false },
+                onFailure = { binding.swipeRefreshMainFileList.isRefreshing = false }
+            )
         })
     }
 
@@ -412,10 +413,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         fileListOption = newFileListOption
         mainFileListViewModel.listDirectory(file)
         updateFab(newFileListOption)
-    }
-
-    private fun retrieveData() {
-        mainFileListViewModel.listCurrentDirectory()
     }
 
     private fun updateFab(newFileListOption: FileListOption) {
