@@ -21,9 +21,7 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
-import android.content.Context
-import android.os.PowerManager
-import androidx.fragment.app.FragmentActivity
+import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -46,8 +44,6 @@ import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.ui.activity.FileActivity
-import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
 import java.io.File
@@ -201,13 +197,8 @@ class MainFileListViewModel(
         }
     }
 
-    fun isInPowerSaveMode(fragmentActivity: FragmentActivity?): Boolean {
-        val powerManager = fragmentActivity?.getSystemService(Context.POWER_SERVICE) as PowerManager
-        return powerManager.isPowerSaveMode
-    }
-
-    fun fileIsDownloading(file: OCFile, containerActivity: FileFragment.ContainerActivity?): Boolean {
-        return workManager.isDownloadPending((containerActivity as FileActivity).account, file)
+    fun fileIsDownloading(file: OCFile, account: Account): Boolean {
+        return workManager.isDownloadPending(account, file)
     }
 
     companion object {
