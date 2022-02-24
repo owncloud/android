@@ -56,7 +56,7 @@ class RemoteOAuthDataSourceTest {
 
     @Before
     fun init() {
-        every { clientManager.getClientForUnExistingAccount(any(), any()) } returns ocClientMocked
+        every { clientManager.getClientForAnonymousCredentials(any(), any()) } returns ocClientMocked
 
         remoteOAuthDataSource = RemoteOAuthDataSourceImpl(
             clientManager = clientManager,

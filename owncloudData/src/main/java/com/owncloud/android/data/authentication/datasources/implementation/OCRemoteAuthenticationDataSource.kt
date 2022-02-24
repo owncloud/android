@@ -42,7 +42,7 @@ class OCRemoteAuthenticationDataSource(
     private fun login(ownCloudCredentials: OwnCloudCredentials, serverPath: String): Pair<UserInfo, String?> {
 
         val client: OwnCloudClient =
-            clientManager.getClientForUnExistingAccount(
+            clientManager.getClientForAnonymousCredentials(
                 path = serverPath,
                 requiresNewClient = false
             ).apply { credentials = ownCloudCredentials }

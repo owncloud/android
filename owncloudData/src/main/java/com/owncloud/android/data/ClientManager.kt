@@ -52,7 +52,7 @@ class ClientManager(
      * Helpful to keep the cookies from the status request to the final login and user info retrieval.
      * For regular uses, use [getClientForAccount]
      */
-    fun getClientForUnExistingAccount(
+    fun getClientForAnonymousCredentials(
         path: String,
         requiresNewClient: Boolean,
         ownCloudCredentials: OwnCloudCredentials? = getAnonymousCredentials()
