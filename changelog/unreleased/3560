@@ -1,0 +1,8 @@
+Bugfix: Security flags for recording screen
+
+Previously, if passcode or pattern were enabled, no screen from the app could be viewed
+from a recording screen app. Now, only the login, passcode and pattern screens are protected
+against recording.
+
+https://github.com/owncloud/android/issues/3468
+https://github.com/owncloud/android/pull/3560

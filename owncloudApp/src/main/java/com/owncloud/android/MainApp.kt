@@ -29,7 +29,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.WindowManager
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -92,17 +91,6 @@ class MainApp : Application() {
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
-                val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-                val patternCodeEnabled = preferences.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
-                if (!enabledLogging) {
-                    // To enable biometric you need to enable passCode or pattern, so no need to add check to if
-                    if (passCodeEnabled || patternCodeEnabled) {
-                        activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-                    } else {
-                        activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-                    }
-                } // else, let it go, or taking screenshots & testing will not be possible
 
                 // If there's any lock protection, don't show wizard at this point, show it when lock activities
                 // have finished

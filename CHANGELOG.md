@@ -8,11 +8,21 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 
 Details
 -------
+
+* Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
+
+   Previously, if passcode or pattern were enabled, no screen from the app could be viewed from a
+   recording screen app. Now, only the login, passcode and pattern screens are protected against
+   recording.
+
+   https://github.com/owncloud/android/issues/3468
+   https://github.com/owncloud/android/pull/3560
 
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 
