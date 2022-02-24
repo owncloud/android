@@ -44,18 +44,18 @@ import java.util.concurrent.TimeUnit
  * @author Abel García de Prada
  *
  * @param remotePath      Path to append to the URL owned by the client instance.
- * @param isUserLogged    When `true`, the username won't be added at the end of the PROPFIND url since is not
+ * @param isUserLoggedIn    When `true`, the username won't be added at the end of the PROPFIND url since is not
  *                        needed to check user credentials
  */
 class CheckPathExistenceRemoteOperation(
     val remotePath: String? = "",
-    val isUserLogged: Boolean
+    val isUserLoggedIn: Boolean
 ) : RemoteOperation<Boolean>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Boolean> {
         return try {
             val stringUrl =
-                if (isUserLogged) client.baseFilesWebDavUri.toString()
+                if (isUserLoggedIn) client.baseFilesWebDavUri.toString()
                 else client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)
 
             val propFindMethod = PropfindMethod(URL(stringUrl), 0, allPropset).apply {
