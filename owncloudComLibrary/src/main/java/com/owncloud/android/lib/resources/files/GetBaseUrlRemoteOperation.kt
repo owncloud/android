@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
-*   Copyright (C) 2020 ownCloud GmbH.
+*   Copyright (C) 2022 ownCloud GmbH.
 *
 *   Permission is hereby granted, free of charge, to any person obtaining a copy
 *   of this software and associated documentation files (the "Software"), to deal
@@ -25,61 +25,40 @@ package com.owncloud.android.lib.resources.files
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
-import com.owncloud.android.lib.common.http.methods.webdav.DavUtils.allPropset
+import com.owncloud.android.lib.common.http.methods.webdav.DavUtils
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import timber.log.Timber
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
 /**
- * Operation to check the existence of a path in a remote server.
+ * Operation to get the base url, which might differ in case of a redirect.
  *
- * @author David A. Velasco
- * @author David González Verdugo
- * @author Abel García de Prada
- *
- * @param remotePath      Path to append to the URL owned by the client instance.
- * @param isUserLoggedIn    When `true`, the username won't be added at the end of the PROPFIND url since is not
- *                        needed to check user credentials
+ * @author Christian Schabesberger
  */
-class CheckPathExistenceRemoteOperation(
-    val remotePath: String? = "",
-    val isUserLoggedIn: Boolean
-) : RemoteOperation<Boolean>() {
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<Boolean> {
+class GetBaseUrlRemoteOperation : RemoteOperation<String?>() {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<String?> {
         return try {
-            val stringUrl =
-                if (isUserLoggedIn) client.baseFilesWebDavUri.toString()
-                else client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)
+            val stringUrl = client.baseFilesWebDavUri.toString()
 
-            val propFindMethod = PropfindMethod(URL(stringUrl), 0, allPropset).apply {
+            val propFindMethod = PropfindMethod(URL(stringUrl), 0, DavUtils.allPropset).apply {
                 setReadTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
                 setConnectionTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
             }
 
-            var status = client.executeHttpMethod(propFindMethod)
-            /* PROPFIND method
-             * 404 NOT FOUND: path doesn't exist,
-             * 207 MULTI_STATUS: path exists.
-             */
-            Timber.d(
-                "Existence check for $stringUrl finished with HTTP status $status${if (!isSuccess(status)) "(FAIL)" else ""}"
-            )
-            if (isSuccess(status)) RemoteOperationResult<Boolean>(ResultCode.OK).apply { data = true }
-            else RemoteOperationResult<Boolean>(propFindMethod).apply { data = false }
+            val status = client.executeHttpMethod(propFindMethod)
 
+            if (isSuccess(status)) RemoteOperationResult<String?>(RemoteOperationResult.ResultCode.OK).apply {
+                data = propFindMethod.getFinalUrl().toString()
+            }
+            else RemoteOperationResult<String?>(propFindMethod).apply { data = null }
         } catch (e: Exception) {
-            val result = RemoteOperationResult<Boolean>(e)
-            Timber.e(
-                e,
-                "Existence check for ${client.userFilesWebDavUri}${WebdavUtils.encodePath(remotePath)} : ${result.logMessage}"
-            )
-            result
+            Timber.e(e, "Could not get actuall (or redirected) base URL from base url (/).")
+            RemoteOperationResult<String?>(e);
         }
     }
 
