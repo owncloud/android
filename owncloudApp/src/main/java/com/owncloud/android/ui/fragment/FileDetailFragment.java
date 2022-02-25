@@ -365,7 +365,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             setFilename(file.getFileName());
             setFiletype(file);
             setFilesize(file.getFileLength());
-
+            setTimeCreated(file.getCreationTimestamp());
             setTimeModified(file.getModificationTimestamp());
 
             // configure UI for depending upon local state of the file
@@ -474,6 +474,18 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         TextView tv = getView().findViewById(R.id.fdSize);
         if (tv != null) {
             tv.setText(DisplayUtils.bytesToHumanReadable(filesize, getActivity()));
+        }
+    }
+
+    /**
+     * Updates the time that the file was created
+     *
+     * @param milliseconds Unix time to set
+     */
+    private void setTimeCreated(long milliseconds) {
+        TextView tv = getView().findViewById(R.id.fdCreated);
+        if (tv != null) {
+            tv.setText(DisplayUtils.unixTimeToHumanReadable(milliseconds));
         }
     }
 
