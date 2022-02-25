@@ -30,9 +30,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTPS_PREFIX
 import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_PREFIX
-import com.owncloud.android.lib.resources.status.HttpScheme.HTTP_SCHEME
 import org.json.JSONException
-import timber.log.Timber
 
 /**
  * Checks if the server is valid
@@ -45,13 +43,13 @@ import timber.log.Timber
 class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
 
     public override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
-        if(!usesHttpOrHttps(client.baseUri)) {
+        if (!usesHttpOrHttps(client.baseUri)) {
             client.baseUri = buildFullHttpsUrl(client.baseUri)
         }
         return tryToConnect(client)
     }
 
-    private fun updateClientBaseUrl(client:OwnCloudClient, newBaseUrl:String) {
+    private fun updateClientBaseUrl(client: OwnCloudClient, newBaseUrl: String) {
         client.baseUri = Uri.parse(newBaseUrl)
     }
 

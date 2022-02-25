@@ -15,17 +15,17 @@ import timber.log.Timber
 import java.io.IOException
 import java.lang.Exception
 
-class ConnectionValidator (
+class ConnectionValidator(
     val context: Context,
     val clearCookiesOnValidation: Boolean
-){
+) {
 
     fun validate(baseClient: OwnCloudClient, singleSessionManager: SingleSessionManager): Boolean {
         try {
             var validationRetryCount = 0
             val client = OwnCloudClient(baseClient.baseUri, null, false, singleSessionManager)
             if (clearCookiesOnValidation) {
-                client.clearCookies();
+                client.clearCookies()
             } else {
                 client.cookiesForBaseUri = baseClient.cookiesForBaseUri
             }
@@ -45,7 +45,7 @@ class ConnectionValidator (
                 }
 
                 // Skip the part where we try to check if we can access the parts where we have to be logged in... if we are not logged in
-                if(baseClient.credentials !is OwnCloudAnonymousCredentials) {
+                if (baseClient.credentials !is OwnCloudAnonymousCredentials) {
                     client.setFollowRedirects(false)
                     val contentReply = canAccessRootFolder(client)
                     if (contentReply.httpCode == HttpConstants.HTTP_OK) {

@@ -27,7 +27,6 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod
-import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import timber.log.Timber
@@ -58,7 +57,7 @@ class GetBaseUrlRemoteOperation : RemoteOperation<String?>() {
             else RemoteOperationResult<String?>(propFindMethod).apply { data = null }
         } catch (e: Exception) {
             Timber.e(e, "Could not get actuall (or redirected) base URL from base url (/).")
-            RemoteOperationResult<String?>(e);
+            RemoteOperationResult<String?>(e)
         }
     }
 
