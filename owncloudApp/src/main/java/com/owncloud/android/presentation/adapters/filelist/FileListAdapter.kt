@@ -64,14 +64,18 @@ class FileListAdapter(
     }
 
     fun updateFileList(filesToAdd: List<OCFile>) {
-        val diffUtilCallback = FileListDiffCallback(oldList = files, newList = filesToAdd)
-        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
-        files.clear()
-        files.addAll(filesToAdd)
+        val listWithFooter = mutableListOf<Any>()
+        listWithFooter.addAll(filesToAdd)
 
-        if (filesToAdd.isNotEmpty()) {
-            files.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
+        if (listWithFooter.isNotEmpty()) {
+            listWithFooter.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
         }
+
+        val diffUtilCallback = FileListDiffCallback(oldList = files, newList = listWithFooter)
+        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+
+        files.clear()
+        files.addAll(listWithFooter)
 
         diffResult.dispatchUpdatesTo(this)
     }
