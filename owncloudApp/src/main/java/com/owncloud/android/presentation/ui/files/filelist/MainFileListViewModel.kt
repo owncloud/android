@@ -23,9 +23,10 @@ package com.owncloud.android.presentation.ui.files.filelist
 
 import android.accounts.Account
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
@@ -37,7 +38,6 @@ import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
-import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.presentation.UIResult
@@ -50,7 +50,6 @@ import java.io.File
 class MainFileListViewModel(
     private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
     private val getSearchFolderContentUseCase: GetSearchFolderContentUseCase,
-    private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
@@ -61,7 +60,6 @@ class MainFileListViewModel(
 
     private lateinit var file: OCFile
 
-    private val _getFilesListStatusLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
     val getFilesListStatusLiveData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getFilesListStatusLiveData
 
@@ -73,14 +71,16 @@ class MainFileListViewModel(
     val getFileData: LiveData<Event<UIResult<OCFile>>>
         get() = _getFileData
 
-    private fun getFilesList(folderId: Long) {
-        val filesListLiveData: LiveData<List<OCFile>> =
+    val fileIdLiveData: MutableLiveData<Long> = MutableLiveData<Long>()
+    private val _getFilesListStatusLiveData:
+            LiveData<Event<UIResult<List<OCFile>>>> =
+        Transformations.switchMap(fileIdLiveData) { folderId ->
             getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folderId))
-
-        _getFilesListStatusLiveData.addSource(filesListLiveData) {
-            _getFilesListStatusLiveData.removeSource(filesListLiveData)
-            _getFilesListStatusLiveData.postValue(Event(UIResult.Success(it)))
+                .map { Event(UIResult.Success(it)) }
         }
+
+    private fun getFilesList(folderId: Long) {
+        fileIdLiveData.postValue(folderId)
     }
 
     private fun getSearchFilesList(fileListOption: FileListOption, folderId: Long, searchText: String) {
