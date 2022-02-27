@@ -33,6 +33,7 @@
   <string name="prefs_subsection_logging">日志</string>
   <string name="prefs_subsection_more">更多</string>
   <string name="prefs_subsection_security">安全</string>
+  <string name="prefs_subsection_more_summary">程序信息，反馈和其他</string>
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
@@ -44,6 +45,8 @@
   <string name="prefs_lock_application_entries_5minutes">5 分钟后</string>
   <string name="prefs_lock_application_entries_30minutes">30 分钟后</string>
   <string name="confirmation_touches_with_other_windows_title">你确定要启用此功能吗？</string>
+  <string name="prefs_subsection_picture_uploads">自动上传图片</string>
+  <string name="prefs_subsection_video_uploads">自动上传视频</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
   <string name="prefs_camera_picture_upload_summary">自动上传相机拍摄的图片</string>
   <string name="prefs_camera_picture_upload_path_title">图片上传路径</string>
@@ -52,6 +55,8 @@
   <string name="prefs_camera_video_upload_summary">自动上传相机拍摄的视频</string>
   <string name="prefs_camera_video_upload_path_title">视频上传路径</string>
   <string name="prefs_camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
+  <string name="prefs_log_open_logs_list_view">日志文件</string>
+  <string name="prefs_log_no_logs_list_view">空白日志文件夹</string>
   <string name="prefs_log_title">开启日志</string>
   <string name="prefs_log_summary">用于记录问题</string>
   <string name="prefs_log_title_history">历史日志</string>
@@ -68,6 +73,7 @@
   <string name="prefs_pattern">图案锁</string>
   <string name="prefs_enable_logging">开启日志</string>
   <string name="prefs_send_feedback">发送反馈</string>
+  <string name="prefs_app_version">程序版本</string>
   <string name="pattern_enter_pattern">请输入图案</string>
   <string name="pattern_configure_pattern">输入图案</string>
   <string name="pattern_remove_pattern">移除图案</string>
@@ -78,6 +84,7 @@
   <string name="passcode_already_set">图案锁和密码锁无法同时启用，请先禁用密码锁</string>
   <string name="pattern_no_longer_required">不再询问输入图案锁</string>
   <string name="pattern_configure_your_pattern_explanation">每次启动app时均需要输入图案解锁</string>
+  <string name="document_provider_locked">锁定</string>
   <string name="illegal_argument_exception_message">需要一个有效的 ACTION 传递意图</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">文件</string>
@@ -86,6 +93,7 @@
   <string name="bottom_nav_links">链接</string>
   <string name="recommend_subject">在您的智能手机上试用 %1$s！</string>
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
+  <string name="error_reason">因为</string>
   <string name="auth_failure_snackbar">认证失败</string>
   <string name="auth_failure_snackbar_action">更换账户</string>
   <string name="auth_oauth_failure_snackbar_action">登录</string>
@@ -164,6 +172,8 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">文件名不能为空</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">文件名不能超过 %d 个字符</string>
   <string name="uploader_upload_text_filename_hint">文件名</string>
+  <string name="uploader_upload_picture_upload_files">%d将上传新图片</string>
+  <string name="uploader_upload_camera_upload_source_path_error">相机上传失败</string>
   <string name="uploader_upload_available_offline_files">正在上传可用的离线文件</string>
   <string name="uploader_upload_requested_from_wifi_files">正在上传来自 WIFI 设备上传的文件</string>
   <string name="ssl_certificate_not_trusted">服务器证书不被信任</string>
@@ -216,6 +226,7 @@
   <string name="pass_code_remove_your_pass_code">移除您的密码</string>
   <string name="pass_code_mismatch">密码不一致</string>
   <string name="pass_code_wrong">错误的密码</string>
+  <string name="biometric_prompt_title">生物识别登录</string>
   <string name="media_notif_ticker">%1$s 音乐播放器</string>
   <string name="media_state_playing">%1$s (播放中)</string>
   <string name="media_state_loading">%1$s (载入中)</string>
@@ -273,6 +284,7 @@
   <string name="confirmation_remove_local">仅本地</string>
   <string name="confirmation_remove_account_alert">你确定要删除账户 %1$s 吗？</string>
   <string name="confirmation_remove_public_share_title">移除链接</string>
+  <string name="confirmation_remove_private_share_title">移除私有分享</string>
   <string name="remove_success_msg">成功删除</string>
   <string name="remove_fail_msg">无法完成删除</string>
   <string name="rename_dialog_title">请输出新的名字</string>
@@ -483,6 +495,7 @@
   <string name="share_via_link_expiration_date_explanation_label">公开链接将会在创建之后%1$d天过期</string>
   <string name="share_via_link_default_name_template">%1$s链接</string>
   <string name="share_via_link_empty_password">密码为空</string>
+  <string name="private_link_info">私有链接：仅有拥有访问该文件/文件夹的用户可以访问它。使用永久链接或定向分享给他人</string>
   <string name="file_private_link_error">该文件不支持私密连接</string>
   <string name="download_notification_channel_name">下载</string>
   <string name="download_notification_channel_description">查看下载文件名称和进度</string>
@@ -513,6 +526,7 @@
   <string name="welcome_feature_5_title">流媒体视频</string>
   <string name="welcome_feature_5_text">无需下载模仿你的视频</string>
   <string name="no_browser_installed_alert">未安装浏览器。请安装浏览器以使用安全登陆。</string>
+  <string name="common_not_found">找不到项目</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">密码锁</string>
