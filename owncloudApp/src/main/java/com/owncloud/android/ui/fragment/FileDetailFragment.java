@@ -39,6 +39,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -116,7 +117,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
         // Allow or disallow touches with other visible windows
         if (mLayout == R.layout.file_details_fragment) {
-            RelativeLayout fileDetailsLayout = getActivity().findViewById(R.id.fileDetailsLayout);
+            ConstraintLayout fileDetailsLayout = getActivity().findViewById(R.id.fileDetailsLayout);
             fileDetailsLayout.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
             );
