@@ -186,6 +186,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             listener = object :
                 FileListAdapter.FileListAdapterListener {
                 override fun onItemClick(ocFile: OCFile, position: Int) {
+                    (containerActivity as FileDisplayActivity).updateStandardToolbar(ocFile.fileName)
                     if (actionMode != null) {
                         toggleSelection(position)
                     } else {
