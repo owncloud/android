@@ -45,6 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:ellipsize="end"
+            android:paddingStart="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
             android:text=""
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -101,29 +102,6 @@
             tools:text="@tools:sample/lorem[6]" />
 
         <TextView
-            android:id="@+id/fdCreatedLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="@string/filedetails_created"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            app:layout_constraintBottom_toBottomOf="@id/fdCreated"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fdCreated" />
-
-        <TextView
-            android:id="@+id/fdCreated"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="end"
-            android:text=""
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/fdCreatedLabel"
-            app:layout_constraintTop_toBottomOf="@id/fdSize"
-            tools:text="@tools:sample/lorem[6]" />
-
-        <TextView
             android:id="@+id/fdModifiedLabel"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -143,7 +121,7 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdModifiedLabel"
-            app:layout_constraintTop_toBottomOf="@id/fdCreated"
+            app:layout_constraintTop_toBottomOf="@id/fdSize"
             tools:text="@tools:sample/lorem[6]" />
 
         <TextView

@@ -366,7 +366,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             setFilename(file.getFileName());
             setFiletype(file);
             setFilesize(file.getFileLength());
-            setTimeCreated(file.getCreationTimestamp());
             setTimeModified(file.getModificationTimestamp());
 
             // configure UI for depending upon local state of the file
@@ -479,18 +478,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     }
 
     /**
-     * Updates the time that the file was created
-     *
-     * @param milliseconds Unix time to set
-     */
-    private void setTimeCreated(long milliseconds) {
-        TextView tv = getView().findViewById(R.id.fdCreated);
-        if (tv != null) {
-            tv.setText(DisplayUtils.unixTimeToHumanReadable(milliseconds));
-        }
-    }
-
-    /**
      * Updates the time that the file was last modified
      *
      * @param milliseconds Unix time to set
@@ -508,9 +495,11 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private void setButtonsForTransferring() {
         if (!isEmpty()) {
             // show the progress bar for the transfer
-            getView().findViewById(R.id.fdProgressBlock).setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.fdProgressBar).setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.fdCancelBtn).setVisibility(View.VISIBLE);
             TextView progressText = getView().findViewById(R.id.fdProgressText);
             progressText.setVisibility(View.VISIBLE);
+
             FileDownloaderBinder downloaderBinder = mContainerActivity.getFileDownloaderBinder();
             FileUploaderBinder uploaderBinder = mContainerActivity.getFileUploaderBinder();
             //if (getFile().isDownloading()) {
@@ -530,9 +519,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private void setButtonsForDown() {
         if (!isEmpty()) {
             // hides the progress bar
-            getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
-            TextView progressText = getView().findViewById(R.id.fdProgressText);
-            progressText.setVisibility(View.GONE);
+            getView().findViewById(R.id.fdProgressText).setVisibility(View.GONE);
+            getView().findViewById(R.id.fdProgressBar).setVisibility(View.GONE);
+            getView().findViewById(R.id.fdCancelBtn).setVisibility(View.GONE);
         }
     }
 
@@ -542,9 +531,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private void setButtonsForRemote() {
         if (!isEmpty()) {
             // hides the progress bar
-            getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
-            TextView progressText = getView().findViewById(R.id.fdProgressText);
-            progressText.setVisibility(View.GONE);
+            getView().findViewById(R.id.fdProgressText).setVisibility(View.GONE);
+            getView().findViewById(R.id.fdProgressBar).setVisibility(View.GONE);
+            getView().findViewById(R.id.fdCancelBtn).setVisibility(View.GONE);
         }
     }
 
