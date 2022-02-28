@@ -147,7 +147,7 @@ class FileListAdapter(
         val checkedPositions = getSelectedItems()
 
         for (i in checkedPositions) {
-            if (files[i] is OCFile){
+            if (files[i] is OCFile) {
                 checkedItems.add(files[i] as OCFile)
             }
         }
