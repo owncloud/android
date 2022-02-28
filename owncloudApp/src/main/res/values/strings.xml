@@ -164,6 +164,8 @@
     <string name="filedetails_created">Created:</string>
     <string name="filedetails_modified">Modified:</string>
     <string name="filedetails_download">Download</string>
+    <string name="filedetails_file_image_content_description">File Image</string>
+    <string name="filedetails_cancel_btn_content_description">Cancel download button</string>
     <string name="filedetails_sync_file">Synchronize</string>
     <string name="filedetails_renamed_in_upload_msg">File was renamed to %1$s during upload</string>
     <string name="list_layout">List layout</string>
@@ -386,8 +388,6 @@
     <string name="placeholder_filesize">389 KB</string>
     <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
     <string name="placeholder_media_time">12:23:45</string>
-    <string name="file_image">File Image</string>
-    <string name="cancel_btn">Cancel download button</string>
 
     <string name="confirmation_disable_camera_uploads_title">Confirm</string>
     <string name="confirmation_disable_pictures_upload_message">Are you sure you want to disable this feature? The pending pictures will not be uploaded</string>
