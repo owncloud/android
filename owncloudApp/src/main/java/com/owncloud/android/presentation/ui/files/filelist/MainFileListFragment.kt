@@ -711,7 +711,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             mode?.title = title
             val fileMenuFilter = FileMenuFilter(
                 checkedFiles,
-                (requireActivity() as FileActivity).account,
+                AccountUtils.getCurrentOwnCloudAccount(requireContext()),
                 containerActivity,
                 activity
             )
@@ -720,8 +720,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 menu,
                 enableSelectAll,
                 true,
-                fileListOption.isAvailableOffline() ?: false,
-                fileListOption.isSharedByLink() ?: false
+                fileListOption.isAvailableOffline(),
+                fileListOption.isSharedByLink()
             )
 
             return true
