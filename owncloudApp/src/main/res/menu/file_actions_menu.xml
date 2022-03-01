@@ -24,14 +24,14 @@
     <item
         android:id="@+id/file_action_select_all"
         android:title="@string/actionbar_select_all"
-        android:showAsAction="never"
+        app:showAsAction="never"
         tools:ignore="AppCompatResource" />
 
     <item
         android:id="@+id/action_select_inverse"
         android:title="@string/actionbar_select_inverse"
         android:visible="true"
-        android:showAsAction="never"
+        app:showAsAction="never"
         tools:ignore="AppCompatResource" />
 
     <item
