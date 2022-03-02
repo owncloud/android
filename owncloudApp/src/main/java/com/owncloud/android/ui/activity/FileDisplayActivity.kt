@@ -517,7 +517,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             }
             android.R.id.home -> {
                 val second = secondFragment
-                val currentDir = currentDir
+                val currentDir = listMainFileFragment?.getCurrentFile()
 
                 val inRootFolder = currentDir != null && currentDir.parentId == 0L
                 val fileFragmentVisible = second != null && second.file != null
