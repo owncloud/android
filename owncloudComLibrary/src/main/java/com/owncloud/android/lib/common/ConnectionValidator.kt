@@ -19,7 +19,6 @@ class ConnectionValidator(
     val context: Context,
     val clearCookiesOnValidation: Boolean
 ) {
-
     fun validate(baseClient: OwnCloudClient, singleSessionManager: SingleSessionManager): Boolean {
         try {
             var validationRetryCount = 0
@@ -182,6 +181,6 @@ class ConnectionValidator(
     }
 
     companion object {
-        val VALIDATION_RETRY_COUNT = 3
+        private val VALIDATION_RETRY_COUNT = 3
     }
 }

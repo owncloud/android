@@ -73,20 +73,18 @@ internal class StatusRequester {
     data class RequestResult(
         val getMethod: GetMethod,
         val status: Int,
-        val redirectedToUnsecureLocation: Boolean,
         val lastLocation: String
     )
 
     fun request(baseLocation: String, client: OwnCloudClient): RequestResult {
-        var currentLocation = baseLocation + OwnCloudClient.STATUS_PATH
-        var redirectedToUnsecureLocation = false
+        val currentLocation = baseLocation + OwnCloudClient.STATUS_PATH
         var status: Int
 
         val getMethod = getGetMethod(currentLocation)
-        getMethod.setFollPermanentRedirects(true)
+        getMethod.setFollowPermanentRedirects(true)
         status = client.executeHttpMethod(getMethod)
 
-        return RequestResult(getMethod, status, redirectedToUnsecureLocation, getMethod.getFinalUrl().toString())
+        return RequestResult(getMethod, status, getMethod.getFinalUrl().toString())
     }
 
     private fun Int.isSuccess() = this == HttpConstants.HTTP_OK
@@ -106,12 +104,8 @@ internal class StatusRequester {
         // the version object will be returned even if the version is invalid, no error code;
         // every app will decide how to act if (ocVersion.isVersionValid() == false)
         val result: RemoteOperationResult<RemoteServerInfo> =
-            if (requestResult.redirectedToUnsecureLocation) {
-                RemoteOperationResult(RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
-            } else {
-                if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(RemoteOperationResult.ResultCode.OK_SSL)
-                else RemoteOperationResult(RemoteOperationResult.ResultCode.OK_NO_SSL)
-            }
+            if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(RemoteOperationResult.ResultCode.OK_SSL)
+            else RemoteOperationResult(RemoteOperationResult.ResultCode.OK_NO_SSL)
         val finalUrl = URL(requestResult.lastLocation)
         val finalBaseUrl = URL(
             finalUrl.protocol,

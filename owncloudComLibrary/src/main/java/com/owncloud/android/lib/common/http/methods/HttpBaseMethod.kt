@@ -166,7 +166,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
 
     open fun getFollowRedirects() = okHttpClient.followRedirects
 
-    open fun setFollPermanentRedirects(followRedirects: Boolean) {
+    open fun setFollowPermanentRedirects(followRedirects: Boolean) {
         _followPermanentRedirects = followRedirects
     }
 

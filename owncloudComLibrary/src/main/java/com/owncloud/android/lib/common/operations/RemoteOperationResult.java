@@ -60,6 +60,8 @@ public class RemoteOperationResult<T>
      * Generated - should be refreshed every time the class changes!!
      */
     private static final long serialVersionUID = 4968939884332372230L;
+    private static final String LOCATION = "location";
+    private static final String WWW_AUTHENTICATE = "www-authenticate";
 
     private boolean mSuccess = false;
     private int mHttpCode = -1;
@@ -257,11 +259,11 @@ public class RemoteOperationResult<T>
         this(httpCode, httpPhrase);
         if (headers != null) {
             for (Map.Entry<String, List<String>> header : headers.toMultimap().entrySet()) {
-                if ("location".equalsIgnoreCase(header.getKey())) {
+                if (LOCATION.equalsIgnoreCase(header.getKey())) {
                     mRedirectedLocation = header.getValue().get(0);
                     continue;
                 }
-                if ("www-authenticate".equalsIgnoreCase(header.getKey())) {
+                if (WWW_AUTHENTICATE.equalsIgnoreCase(header.getKey())) {
                     for (String value: header.getValue()) {
                         mAuthenticate.add(value.toLowerCase());
                     }

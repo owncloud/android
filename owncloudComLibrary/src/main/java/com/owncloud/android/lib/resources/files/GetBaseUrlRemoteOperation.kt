@@ -45,16 +45,21 @@ class GetBaseUrlRemoteOperation : RemoteOperation<String?>() {
             val stringUrl = client.baseFilesWebDavUri.toString()
 
             val propFindMethod = PropfindMethod(URL(stringUrl), 0, DavUtils.allPropset).apply {
-                setReadTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
-                setConnectionTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
+                setReadTimeout(TIMEOUT, TimeUnit.SECONDS)
+                setConnectionTimeout(TIMEOUT, TimeUnit.SECONDS)
             }
 
             val status = client.executeHttpMethod(propFindMethod)
 
-            if (isSuccess(status)) RemoteOperationResult<String?>(RemoteOperationResult.ResultCode.OK).apply {
-                data = propFindMethod.getFinalUrl().toString()
+            if (isSuccess(status)) {
+                RemoteOperationResult<String?>(RemoteOperationResult.ResultCode.OK).apply {
+                    data = propFindMethod.getFinalUrl().toString()
+                }
+            } else {
+                RemoteOperationResult<String?>(propFindMethod).apply {
+                    data = null
+                }
             }
-            else RemoteOperationResult<String?>(propFindMethod).apply { data = null }
         } catch (e: Exception) {
             Timber.e(e, "Could not get actuall (or redirected) base URL from base url (/).")
             RemoteOperationResult<String?>(e)
@@ -67,6 +72,6 @@ class GetBaseUrlRemoteOperation : RemoteOperation<String?>() {
         /**
          * Maximum time to wait for a response from the server in milliseconds.
          */
-        private const val TIMEOUT = 10000
+        private const val TIMEOUT = 10_000L
     }
 }
