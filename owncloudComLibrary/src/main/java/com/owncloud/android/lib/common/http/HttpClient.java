@@ -113,7 +113,7 @@ public class HttpClient {
                                                      CookieJar cookieJar) {
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(getLogInterceptor())
-                .addNetworkInterceptor(DebugInterceptorFactory.Companion.getInterceptor())
+                .addNetworkInterceptor(DebugInterceptorFactory.INSTANCE.getInterceptor())
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                 .readTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(HttpConstants.DEFAULT_DATA_TIMEOUT, TimeUnit.MILLISECONDS)
