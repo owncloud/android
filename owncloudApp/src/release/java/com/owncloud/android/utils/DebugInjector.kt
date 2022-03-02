@@ -1,7 +1,3 @@
-package com.owncloud.android.utils
-
-import android.content.Context
-
 /**
  * ownCloud Android client application
  *
@@ -21,10 +17,10 @@ import android.content.Context
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class DebugInjector {
-    companion object {
-        open fun injectDebugTools(context: Context) {
+package com.owncloud.android.utils
 
-        }
-    }
+import android.content.Context
+
+object DebugInjector {
+    open fun injectDebugTools(context: Context) {}
 }

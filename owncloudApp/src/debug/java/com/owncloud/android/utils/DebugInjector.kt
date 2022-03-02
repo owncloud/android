@@ -1,8 +1,3 @@
-package com.owncloud.android.utils
-
-import android.content.Context
-import com.facebook.stetho.Stetho
-
 /**
  * ownCloud Android client application
  *
@@ -22,10 +17,13 @@ import com.facebook.stetho.Stetho
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class DebugInjector {
-    companion object {
-        open fun injectDebugTools(context: Context) {
-            Stetho.initializeWithDefaults(context)
-        }
+package com.owncloud.android.utils
+
+import android.content.Context
+import com.facebook.stetho.Stetho
+
+object DebugInjector {
+    open fun injectDebugTools(context: Context) {
+        Stetho.initializeWithDefaults(context)
     }
 }
