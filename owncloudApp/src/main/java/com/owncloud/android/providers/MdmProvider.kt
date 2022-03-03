@@ -22,9 +22,14 @@ package com.owncloud.android.providers
 
 import android.content.Context
 import android.content.RestrictionsManager
+import androidx.annotation.BoolRes
+import androidx.annotation.StringRes
 import androidx.enterprise.feedback.KeyedAppState
 import androidx.enterprise.feedback.KeyedAppStatesReporter
+import com.owncloud.android.BuildConfig
+import com.owncloud.android.MainApp.Companion.MDM_FLAVOR
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.utils.MDMConfigurations
 
 class MdmProvider(
     private val context: Context
@@ -72,6 +77,26 @@ class MdmProvider(
         }
     }
 
+    fun getBrandingString(
+        @MDMConfigurations mdmKey: String,
+        @StringRes stringKey: Int,
+    ): String {
+        val setupValue: String = context.resources.getString(stringKey)
+
+        return if (isMdmFlavor()) {
+            preferencesProvider.getString(key = mdmKey, defaultValue = setupValue) ?: throw IllegalStateException("Key $stringKey is not supported")
+        } else setupValue
+    }
+
+    fun getBrandingBoolean(
+        @MDMConfigurations mdmKey: String,
+        @BoolRes booleanKey: Int
+    ): Boolean {
+        val setupValue = context.resources.getBoolean(booleanKey)
+
+        return if (isMdmFlavor()) preferencesProvider.getBoolean(key = mdmKey, defaultValue = setupValue) else setupValue
+    }
+
     private fun sendFeedback(
         reporter: KeyedAppStatesReporter = restrictionsReporter,
         key: String,
@@ -90,4 +115,6 @@ class MdmProvider(
         )
         reporter.setStates(states, null)
     }
+
+    private fun isMdmFlavor() = BuildConfig.FLAVOR == MDM_FLAVOR
 }

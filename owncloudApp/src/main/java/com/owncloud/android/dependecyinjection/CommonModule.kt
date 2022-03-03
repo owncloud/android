@@ -26,6 +26,7 @@ import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.providers.OCContextProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import org.koin.android.ext.koin.androidApplication
@@ -38,6 +39,7 @@ val commonModule = module {
     single { CoroutinesDispatcherProvider() }
     factory<ContextProvider> { OCContextProvider(androidContext()) }
     single { LogsProvider(get()) }
+    single { MdmProvider(androidContext()) }
     single { WorkManagerProvider(androidContext()) }
     single { AccountProvider(androidContext()) }
     single { UploadsStorageManager(androidApplication().contentResolver) }

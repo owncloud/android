@@ -9,7 +9,7 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -42,13 +42,11 @@ import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.owncloud.android.BuildConfig
-import com.owncloud.android.MainApp.Companion.MDM_FLAVOR
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.databinding.AccountSetupBinding
 import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
@@ -75,6 +73,7 @@ import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
@@ -90,7 +89,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private val authenticationViewModel by viewModel<OCAuthenticationViewModel>()
     private val oauthViewModel by viewModel<OAuthViewModel>()
     private val contextProvider by inject<ContextProvider>()
-    private val preferencesProvider by inject<SharedPreferencesProvider>()
+    private val mdmProvider by inject<MdmProvider>()
 
     private var loginAction: Byte = ACTION_CREATE
     private var authTokenType: String? = null
@@ -662,15 +661,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun initBrandableOptionsUI() {
-        val showInput = if (BuildConfig.FLAVOR == MDM_FLAVOR) preferencesProvider.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, contextProvider.getBoolean(R.bool.show_server_url_input)) else contextProvider.getBoolean(R.bool.show_server_url_input)
+        val showInput = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, booleanKey = R.bool.show_server_url_input)
         binding.hostUrlFrame.isVisible = showInput
         binding.centeredRefreshButton.isVisible = !showInput
         if (!showInput) {
             binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
 
-        val url = if (BuildConfig.FLAVOR == MDM_FLAVOR) preferencesProvider.getString(CONFIGURATION_SERVER_URL, contextProvider.getString(R.string.server_url)) else contextProvider.getString(R.string.server_url)
-        if (!url.isNullOrEmpty()) {
+        val url = mdmProvider.getBrandingString(mdmKey = CONFIGURATION_SERVER_URL, stringKey = R.string.server_url)
+        if (url.isNotEmpty()) {
             binding.hostUrlInput.setText(url)
             checkOcServer()
         }
