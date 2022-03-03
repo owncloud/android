@@ -266,6 +266,20 @@
     <string name="pass_code_wrong">Incorrect passcode</string>
     <string name="pass_code_error_set">An error occurred while setting the passcode lock</string>
     <string name="pass_code_error_remove">An error occurred while removing the passcode lock</string>
+    <string name="pass_code_0">0</string>
+    <string name="pass_code_1">1</string>
+    <string name="pass_code_2">2</string>
+    <string name="pass_code_3">3</string>
+    <string name="pass_code_4">4</string>
+    <string name="pass_code_5">5</string>
+    <string name="pass_code_6">6</string>
+    <string name="pass_code_7">7</string>
+    <string name="pass_code_8">8</string>
+    <string name="pass_code_9">9</string>
+    <string name="pass_code_backspace_button_content_description">Backspace button</string>
+    <string name="pass_code_backspace_tag">back</string>
+
+
 
     <string name="lock_time_try_again">Please, try again in %1$s</string>
 

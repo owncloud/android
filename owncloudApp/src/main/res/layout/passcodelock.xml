@@ -16,43 +16,48 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/passcodeLockLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="@dimen/standard_padding"
-    android:filterTouchesWhenObscured="true"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/standard_margin"
+    android:filterTouchesWhenObscured="true">
 
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_margin"
         android:text="@string/pass_code_enter_pass_code"
         android:textColor="@android:color/black"
-        android:gravity="center_horizontal"
         android:textSize="16sp"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/explanation"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_margin"
         android:text="@string/pass_code_configure_your_pass_code_explanation"
         android:textAppearance="@android:style/TextAppearance.Small"
-        android:gravity="center_horizontal"
         android:textSize="14sp"
-        />
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:id="@+id/layout_code"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:id="@+id/passCodeTxtLayout">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/explanation">
 
         <!-- Edit text items will be added here procedurally based on ownBrander settings. -->
 
@@ -63,16 +68,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/warning"
-        android:gravity="center_horizontal"
         android:textSize="16sp"
-        />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/cancel"
-        android:theme="@style/Button.Primary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@android:string/cancel" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_code" />
 
     <TextView
         android:id="@+id/lock_time"
@@ -80,9 +79,219 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:textColor="@android:color/black"
-        android:gravity="center_horizontal"
         android:textSize="16sp"
         android:visibility="invisible"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/error" />
 
-</LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/lock_time"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/btn_1"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_1"
+                android:text="@string/pass_code_1"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/btn_4"
+                app:layout_constraintEnd_toStartOf="@id/btn_2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_2"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_2"
+                android:text="@string/pass_code_2"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/btn_5"
+                app:layout_constraintEnd_toStartOf="@id/btn_3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/btn_1" />
+
+            <Button
+                android:id="@+id/btn_3"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_3"
+                android:text="@string/pass_code_3"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/btn_6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/btn_2" />
+
+            <Button
+                android:id="@+id/btn_4"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_4"
+                android:text="@string/pass_code_4"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/btn_7"
+                app:layout_constraintEnd_toStartOf="@id/btn_5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_5"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_5"
+                android:text="@string/pass_code_5"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/btn_8"
+                app:layout_constraintEnd_toStartOf="@id/btn_6"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/btn_4" />
+
+            <Button
+                android:id="@+id/btn_6"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_6"
+                android:text="@string/pass_code_6"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/btn_9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/btn_5" />
+
+            <Button
+                android:id="@+id/btn_7"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_7"
+                android:text="@string/pass_code_7"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/btn_fingerprint"
+                app:layout_constraintEnd_toStartOf="@id/btn_8"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_8"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_8"
+                android:text="@string/pass_code_8"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/btn_0"
+                app:layout_constraintEnd_toStartOf="@id/btn_9"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/btn_7" />
+
+            <Button
+                android:id="@+id/btn_9"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="@dimen/standard_margin"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_9"
+                android:text="@string/pass_code_9"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/btn_back"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/btn_8" />
+
+            <Button
+                android:id="@+id/btn_fingerprint"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="32dp"
+                android:tag="fingerprint"
+                android:enabled="false"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@id/cancel"
+                app:layout_constraintEnd_toStartOf="@id/btn_0"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_0"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_0"
+                android:text="@string/pass_code_0"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintBottom_toTopOf="@id/cancel"
+                app:layout_constraintEnd_toStartOf="@id/btn_back"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/btn_fingerprint" />
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/round_button"
+                android:tag="@string/pass_code_backspace_tag"
+                android:contentDescription="@string/pass_code_backspace_button_content_description"
+                android:src="@drawable/ic_backspace"
+                app:layout_constraintBottom_toTopOf="@id/cancel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/btn_0" />
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/standard_margin"
+                android:text="@android:string/cancel"
+                android:theme="@style/Button.Primary"
+                app:layout_constraintEnd_toEndOf="@id/btn_back"
+                app:layout_constraintStart_toStartOf="@id/btn_fingerprint"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

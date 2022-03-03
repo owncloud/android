@@ -128,7 +128,7 @@ class PassCodeActivityTest {
         R.id.explanation.isDisplayed(false)
 
         // Check if required amount of input fields are actually displayed
-        with(R.id.passCodeTxtLayout) {
+        with(R.id.layout_code) {
             isDisplayed(true)
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
@@ -156,7 +156,7 @@ class PassCodeActivityTest {
         R.id.explanation.isDisplayed(false)
 
         // Check if required amount of input fields are actually displayed
-        with(R.id.passCodeTxtLayout) {
+        with(R.id.layout_code) {
             isDisplayed(true)
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
@@ -181,7 +181,7 @@ class PassCodeActivityTest {
         }
 
         // Check if required amount of input fields are actually displayed
-        with(R.id.passCodeTxtLayout) {
+        with(R.id.layout_code) {
             isDisplayed(true)
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
@@ -270,7 +270,7 @@ class PassCodeActivityTest {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         for (i in 0..2) {
-            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
+            onView(nthChildOf(withId(R.id.layout_code), i)).perform(replaceText("1"))
         }
 
         R.id.cancel.click()
@@ -287,7 +287,7 @@ class PassCodeActivityTest {
 
         // Type incomplete passcode
         for (i in 0..1) {
-            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
+            onView(nthChildOf(withId(R.id.layout_code), i)).perform(replaceText("1"))
         }
 
         R.id.cancel.click()
@@ -419,7 +419,7 @@ class PassCodeActivityTest {
 
     private fun typePasscode(digits: Array<Char>) {
         for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits())
-            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText(digits[i].toString()))
+            onView(nthChildOf(withId(R.id.layout_code), i)).perform(replaceText(digits[i].toString()))
     }
 
     private fun storePasscode(passcode: String = OC_PASSCODE_6_DIGITS) {

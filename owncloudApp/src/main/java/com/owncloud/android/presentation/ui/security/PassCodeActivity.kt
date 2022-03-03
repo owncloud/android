@@ -39,6 +39,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
@@ -68,6 +69,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
 
     private lateinit var passCodeEditTexts: Array<EditText?>
     private lateinit var passCodeDigits: Array<String?>
+    private var passcode = StringBuilder()
     private var confirmingPassCode = false
     private var bChange = true // to control that only one blocks jump
     private val resultIntent = Intent()
@@ -155,20 +157,18 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
         }
 
         setTextListeners()
+        setButtonsListeners()
     }
 
     private fun inflatePasscodeTxtLine() {
-        val passcodeTxtLayout = findViewById<LinearLayout>(R.id.passCodeTxtLayout)
+        val layout_code = findViewById<LinearLayout>(R.id.layout_code)
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
-            val txt = layoutInflater.inflate(R.layout.passcode_edit_text, passcodeTxtLayout, false) as EditText
-            passcodeTxtLayout.addView(txt)
+            val txt = layoutInflater.inflate(R.layout.passcode_edit_text, layout_code, false) as EditText
+            layout_code.addView(txt)
             passCodeEditTexts[i] = txt
         }
         passCodeEditTexts.first()?.requestFocus()
-        window.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-        )
     }
 
     /**
@@ -198,6 +198,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
             passCodeEditTexts[i]?.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPasscodeDigits - 1))
+ /*HECHO
             if (i > 0) {
                 passCodeEditTexts[i]?.setOnKeyListener { _: View, keyCode: Int, _: KeyEvent? ->
                     if (keyCode == KeyEvent.KEYCODE_DEL && bChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
@@ -216,6 +217,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
                     false
                 }
             }
+  */
             passCodeEditTexts[i]?.onFocusChangeListener = OnFocusChangeListener { _: View, _: Boolean ->
                 /// TODO WIP: should take advantage of hasFocus to reduce processing
                 for (j in 0 until i) {
@@ -226,6 +228,56 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
                         break
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Binds the appropriate listeners to the numeric buttons to insert the pass code.
+     */
+    private fun setButtonsListeners() {
+        val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
+        val keyboardButtons = binding.layoutKeyboard.children
+        val specialButtons = listOf(binding.btnBack, binding.btnFingerprint)
+        val digitButtons = keyboardButtons.filter {
+            !specialButtons.contains(it)
+        }
+        for (button in digitButtons) {
+            button.setOnClickListener {
+                if (passcode.length < numberOfPasscodeDigits) {
+                    passCodeEditTexts[passcode.length]?.text = Editable.Factory.getInstance().newEditable(button.tag as String)
+                    passcode.append(button.tag as String)
+                    println("PULSADO: ${button.tag} TOTAL: ${passcode}")
+                }
+            }
+        }
+
+        binding.btnBack.setOnClickListener {
+            if(passcode.length>0){
+                passcode.deleteCharAt(passcode.length-1)
+                if (bChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
+                    passCodeEditTexts[passcode.length]?.apply {
+                        isEnabled = true
+                        setText("")
+                        requestFocus()
+                    }
+                    if (!confirmingPassCode) {
+                        passCodeDigits[passcode.length] = ""
+                    }
+                    bChange = false
+                } else if (!bChange) {
+                    bChange = true
+                }
+                println("PULSADO: ${binding.btnBack.tag} TOTAL: ${passcode}")
+            }
+        }
+
+        binding.btnFingerprint.setOnClickListener {
+            if (biometricViewModel.isBiometricLockAvailable()) {
+                showBiometricDialog(this)
+            } else {
+                PassCodeManager.onActivityStopped(this)
+                finish()
             }
         }
     }
@@ -398,8 +450,6 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
             }
         }
         passCodeEditTexts.first()?.requestFocus()
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(passCodeEditTexts.first(), InputMethodManager.SHOW_IMPLICIT)
     }
 
     /**
