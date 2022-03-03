@@ -189,9 +189,7 @@
 
         <activity
             android:name=".presentation.ui.security.PassCodeActivity"
-            android:theme="@style/Theme.ownCloud"
-            android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"/>
+            android:theme="@style/Theme.ownCloud"/>
         <activity
             android:name=".ui.activity.ConflictsResolveActivity"
             android:theme="@style/Theme.ownCloud" />

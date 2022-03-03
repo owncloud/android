@@ -140,7 +140,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
         Button ok = mView.findViewById(R.id.ok);
         ok.setOnClickListener(new OnCertificateTrusted());
 
-        Button cancel = mView.findViewById(R.id.cancel);
+        Button cancel = mView.findViewById(R.id.btnCancel);
         cancel.setOnClickListener(new OnCertificateNotTrusted());
 
         Button details = mView.findViewById(R.id.details_btn);

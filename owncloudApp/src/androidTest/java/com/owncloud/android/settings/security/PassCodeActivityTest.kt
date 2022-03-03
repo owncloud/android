@@ -133,7 +133,7 @@ class PassCodeActivityTest {
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        R.id.cancel.isDisplayed(false)
+        R.id.btnCancel.isDisplayed(false)
 
         R.id.lock_time.isDisplayed(false)
     }
@@ -161,7 +161,7 @@ class PassCodeActivityTest {
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        R.id.cancel.isDisplayed(false)
+        R.id.btnCancel.isDisplayed(false)
 
         R.id.lock_time.isDisplayed(true)
     }
@@ -186,7 +186,7 @@ class PassCodeActivityTest {
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        with(R.id.cancel) {
+        with(R.id.btnCancel) {
             isDisplayed(true)
             withText(android.R.string.cancel)
         }
@@ -200,7 +200,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        R.id.cancel.click()
+        R.id.btnCancel.click()
 
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
@@ -273,7 +273,7 @@ class PassCodeActivityTest {
             onView(nthChildOf(withId(R.id.layout_code), i)).perform(replaceText("1"))
         }
 
-        R.id.cancel.click()
+        R.id.btnCancel.click()
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
@@ -290,7 +290,7 @@ class PassCodeActivityTest {
             onView(nthChildOf(withId(R.id.layout_code), i)).perform(replaceText("1"))
         }
 
-        R.id.cancel.click()
+        R.id.btnCancel.click()
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
@@ -314,7 +314,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode deletion mode
         openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
 
-        R.id.cancel.click()
+        R.id.btnCancel.click()
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 

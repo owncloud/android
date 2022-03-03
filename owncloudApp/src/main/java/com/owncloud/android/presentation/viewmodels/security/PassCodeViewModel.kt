@@ -63,17 +63,10 @@ class PassCodeViewModel(
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     }
 
-    fun checkPassCodeIsValid(passCodeDigits: Array<String?>): Boolean {
+    fun checkPassCodeIsValid(passcode: String): Boolean {
         val passCodeString = getPassCode()
         if (passCodeString.isNullOrEmpty()) return false
-        var isValid = true
-        var i = 0
-        while (i < passCodeDigits.size && isValid) {
-            val originalDigit = passCodeString[i].toString()
-            isValid = passCodeDigits[i] != null && passCodeDigits[i] == originalDigit
-            i++
-        }
-        return isValid
+        return passcode==passCodeString
     }
 
     fun getNumberOfPassCodeDigits(): Int {

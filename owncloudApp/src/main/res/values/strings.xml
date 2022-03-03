@@ -277,6 +277,7 @@
     <string name="pass_code_8">8</string>
     <string name="pass_code_9">9</string>
     <string name="pass_code_backspace_button_content_description">Backspace button</string>
+    <string name="pass_code_biometric_button_content_description">Biometric button</string>
     <string name="pass_code_backspace_tag">back</string>
 
 
