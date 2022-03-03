@@ -180,41 +180,43 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun initLiveDataObservers() {
         // LiveData observers
-        authenticationViewModel.serverInfo.observe(this, { event ->
-            when (event.peekContent()) {
-                is UIResult.Success -> getServerInfoIsSuccess(event.peekContent())
+        authenticationViewModel.serverInfo.observe(this) { event ->
+            when (val uiResult = event.peekContent()) {
                 is UIResult.Loading -> getServerInfoIsLoading()
-                is UIResult.Error -> getServerInfoIsError(event.peekContent())
+                is UIResult.Success -> getServerInfoIsSuccess(uiResult)
+                is UIResult.Error -> getServerInfoIsError(uiResult)
             }
-        })
+        }
 
-        authenticationViewModel.loginResult.observe(this, { event ->
-            when (event.peekContent()) {
-                is UIResult.Success -> loginIsSuccess(event.peekContent())
+        authenticationViewModel.loginResult.observe(this) { event ->
+            when (val uiResult = event.peekContent()) {
                 is UIResult.Loading -> loginIsLoading()
-                is UIResult.Error -> loginIsError(event.peekContent())
+                is UIResult.Success -> loginIsSuccess(uiResult)
+                is UIResult.Error -> loginIsError(uiResult)
             }
-        })
+        }
 
-        authenticationViewModel.supportsOAuth2.observe(this, { event ->
-            when (event.peekContent()) {
-                is UIResult.Success -> updateAuthTokenTypeAndInstructions(event.peekContent())
+        authenticationViewModel.supportsOAuth2.observe(this) { event ->
+            when (val uiResult = event.peekContent()) {
+                is UIResult.Loading -> {}
+                is UIResult.Success -> updateAuthTokenTypeAndInstructions(uiResult)
                 is UIResult.Error -> showErrorInToast(
-                    R.string.supports_oauth2_error,
-                    event.peekContent().getThrowableOrNull()
+                    genericErrorMessageId = R.string.supports_oauth2_error,
+                    throwable = uiResult.error
                 )
             }
-        })
+        }
 
-        authenticationViewModel.baseUrl.observe(this, { event ->
-            when (event.peekContent()) {
-                is UIResult.Success -> updateBaseUrlAndHostInput(event.peekContent())
+        authenticationViewModel.baseUrl.observe(this) { event ->
+            when (val uiResult = event.peekContent()) {
+                is UIResult.Loading -> {}
+                is UIResult.Success -> updateBaseUrlAndHostInput(uiResult)
                 is UIResult.Error -> showErrorInToast(
-                    R.string.get_base_url_error,
-                    event.peekContent().getThrowableOrNull()
+                    genericErrorMessageId = R.string.get_base_url_error,
+                    throwable = uiResult.error
                 )
             }
-        })
+        }
     }
 
     private fun checkOcServer() {
@@ -373,19 +375,18 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         oauthViewModel.getOIDCServerConfiguration(serverBaseUrl)
-        oauthViewModel.oidcDiscovery.observe(this, {
-            when (it.peekContent()) {
-                is UIResult.Loading -> {
-                }
+        oauthViewModel.oidcDiscovery.observe(this) {
+            when (val uiResult = it.peekContent()) {
+                is UIResult.Loading -> {}
                 is UIResult.Success -> {
-                    Timber.d("Service discovery: ${it.peekContent().getStoredData()}")
+                    Timber.d("Service discovery: ${uiResult.data}")
                     oidcSupported = true
-                    it.peekContent().getStoredData()?.let { oidcServerConfiguration ->
+                    uiResult.data?.let { oidcServerConfiguration ->
                         val registrationEndpoint = oidcServerConfiguration.registrationEndpoint
                         if (registrationEndpoint != null) {
                             registerClient(
-                                oidcServerConfiguration.authorizationEndpoint.toUri(),
-                                registrationEndpoint
+                                authorizationEndpoint = oidcServerConfiguration.authorizationEndpoint.toUri(),
+                                registrationEndpoint = registrationEndpoint
                             )
                         } else {
                             performGetAuthorizationCodeRequest(oidcServerConfiguration.authorizationEndpoint.toUri())
@@ -393,11 +394,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     }
                 }
                 is UIResult.Error -> {
-                    Timber.e(it.peekContent().getThrowableOrNull(), "OIDC failed. Try with normal OAuth")
+                    Timber.e(uiResult.error, "OIDC failed. Try with normal OAuth")
                     startNormalOauthorization()
                 }
             }
-        })
+        }
     }
 
     /**
@@ -408,25 +409,24 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         registrationEndpoint: String
     ) {
         oauthViewModel.registerClient(registrationEndpoint)
-        oauthViewModel.registerClient.observe(this, {
-            when (it.peekContent()) {
-                is UIResult.Loading -> {
-                }
+        oauthViewModel.registerClient.observe(this) {
+            when (val uiResult = it.peekContent()) {
+                is UIResult.Loading -> {}
                 is UIResult.Success -> {
                     Timber.d("Client registered: ${it.peekContent().getStoredData()}")
-                    it.peekContent().getStoredData()?.let { clientRegistrationInfo ->
+                    uiResult.data?.let { clientRegistrationInfo ->
                         performGetAuthorizationCodeRequest(
-                            authorizationEndpoint,
-                            clientRegistrationInfo.clientId
+                            authorizationEndpoint = authorizationEndpoint,
+                            clientId = clientRegistrationInfo.clientId
                         )
                     }
                 }
                 is UIResult.Error -> {
-                    Timber.e(it.peekContent().getThrowableOrNull(), "Client registration failed.")
+                    Timber.e(uiResult.error, "Client registration failed.")
                     performGetAuthorizationCodeRequest(authorizationEndpoint)
                 }
             }
-        })
+        }
     }
 
     /**
@@ -524,36 +524,29 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         oauthViewModel.requestToken(requestToken)
 
-        oauthViewModel.requestToken.observe(this, {
-            when (it.peekContent()) {
-                is UIResult.Loading -> TODO()
+        oauthViewModel.requestToken.observe(this) {
+            when (val uiResult = it.peekContent()) {
+                is UIResult.Loading -> {}
                 is UIResult.Success -> {
-                    Timber.d(
-                        "Tokens received ${
-                            it.peekContent().getStoredData()
-                        }, trying to login, creating account and adding it to account manager"
-                    )
-                    val tokenResponse = it.peekContent().getStoredData() ?: return@observe
+                    Timber.d("Tokens received ${uiResult.data}, trying to login, creating account and adding it to account manager")
+                    val tokenResponse = uiResult.data ?: return@observe
 
                     authenticationViewModel.loginOAuth(
-                        tokenResponse.additionalParameters?.get(KEY_USER_ID) ?: "",
-                        OAUTH_TOKEN_TYPE,
-                        tokenResponse.accessToken,
-                        tokenResponse.refreshToken.orEmpty(),
-                        if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
-                        if (loginAction != ACTION_CREATE) userAccount?.name else null,
-                        clientRegistrationInfo
+                        username = tokenResponse.additionalParameters?.get(KEY_USER_ID).orEmpty(),
+                        authTokenType = OAUTH_TOKEN_TYPE,
+                        accessToken = tokenResponse.accessToken,
+                        refreshToken = tokenResponse.refreshToken.orEmpty(),
+                        scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
+                        updateAccountWithUsername = if (loginAction != ACTION_CREATE) userAccount?.name else null,
+                        clientRegistrationInfo = clientRegistrationInfo
                     )
                 }
                 is UIResult.Error -> {
-                    updateOAuthStatusIconAndText(it.peekContent().getThrowableOrNull())
-                    Timber.e(
-                        it.peekContent().getThrowableOrNull(),
-                        "OAuth request to exchange authorization code for tokens failed"
-                    )
+                    Timber.e(uiResult.error, "OAuth request to exchange authorization code for tokens failed")
+                    updateOAuthStatusIconAndText(uiResult.error)
                 }
             }
-        })
+        }
     }
 
     private fun updateAuthTokenTypeAndInstructions(uiResult: UIResult<Boolean?>) {
