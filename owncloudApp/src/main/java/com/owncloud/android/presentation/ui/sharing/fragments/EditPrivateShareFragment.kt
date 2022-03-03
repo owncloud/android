@@ -371,6 +371,8 @@ class EditPrivateShareFragment : DialogFragment() {
                     is UIResult.Success -> {
                         updateShare(uiResult.data)
                     }
+                    is UIResult.Error -> {}
+                    is UIResult.Loading -> {}
                 }
             }
         )
@@ -388,6 +390,7 @@ class EditPrivateShareFragment : DialogFragment() {
                     is UIResult.Loading -> {
                         listener?.showLoading()
                     }
+                    is UIResult.Success -> {}
                 }
             }
         )

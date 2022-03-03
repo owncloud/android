@@ -113,7 +113,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     }
 
     private fun initLiveDataObservers() {
-        picturesViewModel.pictureUploads.observe(viewLifecycleOwner, { pictureUploadsConfiguration ->
+        picturesViewModel.pictureUploads.observe(viewLifecycleOwner) { pictureUploadsConfiguration ->
             enablePictureUploads(pictureUploadsConfiguration != null)
             pictureUploadsConfiguration?.let {
                 prefPictureUploadsAccount?.value = it.accountName
@@ -124,7 +124,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                 prefPictureUploadsBehaviour?.value = it.behavior.name
                 prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
             } ?: resetFields()
-        })
+        }
     }
 
     private fun initPreferenceListeners() {

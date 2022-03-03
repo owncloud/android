@@ -47,9 +47,9 @@ class StorageMigrationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_storage_migration)
 
-        migrationViewModel.migrationState.observe(this, {
+        migrationViewModel.migrationState.observe(this) {
             navigateToNextMigrationScreen(it.peekContent())
-        })
+        }
     }
 
     override fun onBackPressed() {}

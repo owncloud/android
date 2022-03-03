@@ -147,6 +147,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     is UIResult.Loading -> {
                         showLoadingDialog(R.string.common_loading)
                     }
+                    is UIResult.Success -> {}
                 }
             }
         )
@@ -185,6 +186,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     is UIResult.Loading -> {
                         showLoadingDialog(R.string.common_loading)
                     }
+                    is UIResult.Success -> {}
                 }
             }
         )
@@ -257,6 +259,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     is UIResult.Loading -> {
                         showLoading()
                     }
+                    is UIResult.Success -> {}
                 }
             }
         )

@@ -301,69 +301,63 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     private fun observeCapabilities() {
-        ocCapabilityViewModel.capabilities.observe(
-            viewLifecycleOwner,
-            Observer { event ->
-                val uiResult = event.peekContent()
-                val capabilities = uiResult.getStoredData()
-                when (uiResult) {
-                    is UIResult.Success -> {
-                        capabilities?.let {
-                            updateCapabilities(it)
-                        }
-                        listener?.dismissLoading()
+        ocCapabilityViewModel.capabilities.observe(viewLifecycleOwner) { event ->
+            val uiResult = event.peekContent()
+            val capabilities = uiResult.getStoredData()
+            when (uiResult) {
+                is UIResult.Success -> {
+                    capabilities?.let {
+                        updateCapabilities(it)
                     }
-                    is UIResult.Error -> {
-                        capabilities?.let {
-                            updateCapabilities(it)
-                        }
-                        event.getContentIfNotHandled()?.let {
-                            showErrorInSnackbar(R.string.get_capabilities_error, uiResult.error)
-                        }
-                        listener?.dismissLoading()
+                    listener?.dismissLoading()
+                }
+                is UIResult.Error -> {
+                    capabilities?.let {
+                        updateCapabilities(it)
                     }
-                    is UIResult.Loading -> {
-                        listener?.showLoading()
-                        capabilities?.let {
-                            updateCapabilities(it)
-                        }
+                    event.getContentIfNotHandled()?.let {
+                        showErrorInSnackbar(R.string.get_capabilities_error, uiResult.error)
+                    }
+                    listener?.dismissLoading()
+                }
+                is UIResult.Loading -> {
+                    listener?.showLoading()
+                    capabilities?.let {
+                        updateCapabilities(it)
                     }
                 }
             }
-        )
+        }
     }
 
     private fun observeShares() {
-        ocShareViewModel.shares.observe(
-            viewLifecycleOwner,
-            Observer { event ->
-                val uiResult = event.peekContent()
-                val shares = uiResult.getStoredData()
-                when (uiResult) {
-                    is UIResult.Success -> {
-                        shares?.let {
-                            updateShares(it)
-                        }
-                        listener?.dismissLoading()
+        ocShareViewModel.shares.observe(viewLifecycleOwner) { event ->
+            val uiResult = event.peekContent()
+            val shares = uiResult.getStoredData()
+            when (uiResult) {
+                is UIResult.Success -> {
+                    shares?.let {
+                        updateShares(it)
                     }
-                    is UIResult.Error -> {
-                        shares?.let {
-                            updateShares(it)
-                        }
-                        event.getContentIfNotHandled()?.let {
-                            showErrorInSnackbar(R.string.get_shares_error, uiResult.error)
-                        }
-                        listener?.dismissLoading()
+                    listener?.dismissLoading()
+                }
+                is UIResult.Error -> {
+                    shares?.let {
+                        updateShares(it)
                     }
-                    is UIResult.Loading -> {
-                        listener?.showLoading()
-                        shares?.let {
-                            updateShares(it)
-                        }
+                    event.getContentIfNotHandled()?.let {
+                        showErrorInSnackbar(R.string.get_shares_error, uiResult.error)
+                    }
+                    listener?.dismissLoading()
+                }
+                is UIResult.Loading -> {
+                    listener?.showLoading()
+                    shares?.let {
+                        updateShares(it)
                     }
                 }
             }
-        )
+        }
     }
 
     private fun updateShares(shares: List<OCShare>) {

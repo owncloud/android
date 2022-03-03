@@ -398,10 +398,10 @@ abstract class DrawerActivity : ToolbarActivity() {
         Timber.d("Update Quota")
         val account = drawerViewModel.getCurrentAccount(this) ?: return
         drawerViewModel.getStoredQuota(account.name)
-        drawerViewModel.userQuota.observe(this, { event ->
-            when (event.peekContent()) {
+        drawerViewModel.userQuota.observe(this) { event ->
+            when (val uiResult = event.peekContent()) {
                 is UIResult.Success -> {
-                    event.peekContent().getStoredData()?.let { userQuota ->
+                    uiResult.data?.let { userQuota ->
                         when {
                             userQuota.available < 0 -> { // Pending, unknown or unlimited free storage
                                 getAccountQuotaBar()?.run {
@@ -437,7 +437,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 is UIResult.Loading -> getAccountQuotaText()?.text = getString(R.string.drawer_loading_quota)
                 is UIResult.Error -> getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
             }
-        })
+        }
     }
 
     override fun setupRootToolbar(title: String, isSearchEnabled: Boolean) {
