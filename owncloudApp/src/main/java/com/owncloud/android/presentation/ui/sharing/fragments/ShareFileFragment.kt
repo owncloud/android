@@ -33,7 +33,6 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ShareFileLayoutBinding
 import com.owncloud.android.datamodel.OCFile
