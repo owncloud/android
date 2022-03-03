@@ -35,32 +35,40 @@ class MdmProvider(
     private val restrictionsReporter = KeyedAppStatesReporter.create(context)
 
     fun cacheStringRestriction(key: String, idMessageFeedback: Int) {
-        if (restrictions.containsKey(key)) {
-            val conf = restrictions.getString(key)
-            val isConfCached = preferencesProvider.contains(key)
-            val oldConf = preferencesProvider.getString(key, null)
-            conf?.let { preferencesProvider.putString(key, it) }
-            if (!isConfCached || !conf.equals(oldConf)) {
-                sendFeedback(
-                    key = key,
-                    message = context.getString(idMessageFeedback)
-                )
-            }
+        if (!restrictions.containsKey(key)) {
+            // If we do not receive the key, do nothing
+            return
+        }
+
+        val newRestriction = restrictions.getString(key)
+        val isRestrictionAlreadyCached = preferencesProvider.contains(key)
+        val oldRestriction = preferencesProvider.getString(key, null)
+
+        newRestriction?.let { preferencesProvider.putString(key, it) }
+        if (!isRestrictionAlreadyCached || !newRestriction.equals(oldRestriction)) {
+            sendFeedback(
+                key = key,
+                message = context.getString(idMessageFeedback)
+            )
         }
     }
 
     fun cacheBooleanRestriction(key: String, idMessageFeedback: Int) {
-        if (restrictions.containsKey(key)) {
-            val conf = restrictions.getBoolean(key)
-            val isConfCached = preferencesProvider.contains(key)
-            val oldConf = preferencesProvider.getBoolean(key, false)
-            preferencesProvider.putBoolean(key, conf)
-            if (!isConfCached || (conf != oldConf)) {
-                sendFeedback(
-                    key = key,
-                    message = context.getString(idMessageFeedback)
-                )
-            }
+        if (!restrictions.containsKey(key)) {
+            // If we do not receive the key, do nothing
+            return
+        }
+
+        val newRestriction = restrictions.getBoolean(key)
+        val isRestrictionAlreadyCached = preferencesProvider.contains(key)
+        val oldRestriction = preferencesProvider.getBoolean(key, false)
+
+        preferencesProvider.putBoolean(key, newRestriction)
+        if (!isRestrictionAlreadyCached || (newRestriction != oldRestriction)) {
+            sendFeedback(
+                key = key,
+                message = context.getString(idMessageFeedback)
+            )
         }
     }
 
