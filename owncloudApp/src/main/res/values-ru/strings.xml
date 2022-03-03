@@ -566,6 +566,7 @@
   <string name="prefs_logs_summary">В логах может содержаться чувствительная информация. Отправка логов третьим лицам находится под вашей ответственностью</string>
   <string name="synchronizing_account">Синхронизация аккаунта</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_intro_button">Давайте начнём</string>
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Блокировка кодом</string>
 </resources>
