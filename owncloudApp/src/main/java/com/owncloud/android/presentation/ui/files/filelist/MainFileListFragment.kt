@@ -87,7 +87,8 @@ import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
 import java.util.ArrayList
 
-class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener, SortOptionsView.CreateFolderListener,
+class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener,
+    SortOptionsView.CreateFolderListener,
     CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
@@ -116,6 +117,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     private var statusBarColorActionMode: Int? = null
     private var statusBarColor: Int? = null
+
+    var fileActions: FileActions? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -165,7 +168,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             listener = object :
                 FileListAdapter.FileListAdapterListener {
                 override fun onItemClick(ocFile: OCFile, position: Int) {
-                    (containerActivity as FileDisplayActivity).updateStandardToolbar(ocFile.fileName)
+                    fileActions?.setTitle(ocFile)
                     if (actionMode != null) {
                         toggleSelection(position)
                     } else {
@@ -176,18 +179,13 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                         } else { /// Click on a file
                             if (PreviewImageFragment.canBePreviewed(ocFile)) {
                                 // preview image - it handles the sync, if needed
-                                (containerActivity as FileDisplayActivity).startImagePreview(ocFile)
+                                fileActions?.setImagePreview(ocFile)
                             } else if (PreviewTextFragment.canBePreviewed(ocFile)) {
-                                (containerActivity as FileDisplayActivity).let {
-                                    it.startTextPreview(ocFile)
-                                    it.fileOperationsHelper.syncFile(ocFile)
-                                }
+                                fileActions?.initTextPreview(ocFile)
                             } else if (PreviewAudioFragment.canBePreviewed(ocFile)) {
                                 // media preview
-                                (containerActivity as FileDisplayActivity).let {
-                                    it.startAudioPreview(ocFile, 0)
-                                    it.fileOperationsHelper.syncFile(ocFile)
-                                }
+                                fileActions?.initAudioPreview(ocFile)
+
                             } else if (PreviewVideoFragment.canBePreviewed(ocFile) && !mainFileListViewModel.fileIsDownloading(
                                     ocFile,
                                     AccountUtils.getCurrentOwnCloudAccount(context)
@@ -198,19 +196,19 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                                 // if (!file.isAvailableLocally() && file.isAvailableOffline()) {
                                 if (ocFile.isAvailableLocally) {
                                     // sync file content, then open with external apps
-                                    (containerActivity as FileDisplayActivity).startSyncThenOpen(ocFile)
+                                    fileActions?.startSyncAndOpenFile(ocFile)
                                 } else {
                                     // media preview
-                                    (containerActivity as FileDisplayActivity).startVideoPreview(ocFile, 0)
+                                    fileActions?.initVideoPreview(ocFile)
                                 }
 
                                 // If the file is already downloaded sync it, just to update it if there is a
                                 // new available file version
                                 if (ocFile.isAvailableLocally) {
-                                    (containerActivity as FileDisplayActivity).fileOperationsHelper.syncFile(ocFile)
+                                    fileActions?.initSync(ocFile)
                                 }
                             } else {
-                                (containerActivity as FileDisplayActivity).startSyncThenOpen(ocFile)
+                                fileActions?.initSyncAndOpenFile(ocFile)
                             }
                         }
                     }
@@ -578,7 +576,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                     //Obtain the file
                     if (!singleFile.isAvailableLocally) { // Download the file
                         Timber.d("%s : File must be downloaded", singleFile.remotePath)
-                        (containerActivity as FileDisplayActivity).startDownloadForSending(singleFile)
+                        fileActions?.initDownloadForSending(singleFile)
                     } else {
                         containerActivity?.fileOperationsHelper?.sendDownloadedFile(singleFile)
                     }
@@ -616,7 +614,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
                 return true
             }
             R.id.action_cancel_sync -> {
-                (containerActivity as FileDisplayActivity).cancelTransference(checkedFiles)
+                fileActions?.cancelFileTransference(checkedFiles)
                 return true
             }
             R.id.action_set_available_offline -> {
@@ -668,7 +666,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
             //hide FAB in multi selection mode
             binding.fabMain.visibility = View.GONE
-            (containerActivity as FileDisplayActivity).showBottomNavBar(false)
+            fileActions?.setBottomBarVisibility(false)
 
             // Hide sort options view in multi-selection mode
             binding.optionsLayout.visibility = View.GONE
@@ -720,7 +718,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             // show FAB on multi selection mode exit
             setFabEnabled(true)
 
-            (containerActivity as FileDisplayActivity).showBottomNavBar(true)
+            fileActions?.setBottomBarVisibility(true)
 
             // Show sort options view when multi-selection mode finish
             binding.optionsLayout.visibility = View.VISIBLE
@@ -770,8 +768,19 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         }
     }
 
-    interface BrowseUpListener {
+    interface FileActions {
         fun onBrowseUpListener()
+        fun setTitle(file: OCFile)
+        fun setImagePreview(file: OCFile)
+        fun initTextPreview(file: OCFile)
+        fun initAudioPreview(file: OCFile)
+        fun initVideoPreview(file: OCFile)
+        fun startSyncAndOpenFile(file: OCFile)
+        fun initSync(file: OCFile)
+        fun initSyncAndOpenFile(file: OCFile)
+        fun initDownloadForSending(file: OCFile)
+        fun cancelFileTransference(file: ArrayList<OCFile>)
+        fun setBottomBarVisibility(isVisible: Boolean)
     }
 
     companion object {
