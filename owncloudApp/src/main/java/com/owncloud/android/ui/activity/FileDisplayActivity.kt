@@ -111,7 +111,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -119,7 +118,7 @@ import kotlin.coroutines.CoroutineContext
  */
 
 class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
-    CoroutineScope, MainFileListFragment.BrowseUpListener {
+    CoroutineScope, MainFileListFragment.FileActions {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -349,6 +348,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         listOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))*/
 
         val mainListOfFiles = MainFileListFragment.newInstance()
+        mainListOfFiles.fileActions = this
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES_BIS)
         transaction.commit()
@@ -1683,5 +1683,51 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             listMainFileFragment?.listDirectory(file)
         }
         cleanSecondFragment()
+    }
+
+    override fun setTitle(file: OCFile) {
+        updateStandardToolbar(file.fileName)
+    }
+
+    override fun setImagePreview(file: OCFile) {
+        startImagePreview(file)
+    }
+
+    override fun initTextPreview(file: OCFile) {
+        startTextPreview(file)
+        fileOperationsHelper.syncFile(file)
+    }
+
+    override fun initAudioPreview(file: OCFile) {
+        startAudioPreview(file, 0)
+        fileOperationsHelper.syncFile(file)
+    }
+
+    override fun initVideoPreview(file: OCFile) {
+        startVideoPreview(file, 0)
+    }
+
+    override fun startSyncAndOpenFile(file: OCFile) {
+        startSyncThenOpen(file)
+    }
+
+    override fun initSync(file: OCFile) {
+        fileOperationsHelper.syncFile(file)
+    }
+
+    override fun initSyncAndOpenFile(file: OCFile) {
+        startSyncThenOpen(file)
+    }
+
+    override fun initDownloadForSending(file: OCFile) {
+        startDownloadForSending(file)
+    }
+
+    override fun cancelFileTransference(files: ArrayList<OCFile>) {
+        cancelTransference(files)
+    }
+
+    override fun setBottomBarVisibility(isVisible: Boolean) {
+        showBottomNavBar(isVisible)
     }
 }
