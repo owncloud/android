@@ -789,6 +789,11 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(KEY_FILE, file)
+    }
+
     interface FileActions {
         fun onBrowseUpListener()
         fun setTitle(file: OCFile)
