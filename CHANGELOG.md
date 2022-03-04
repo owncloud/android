@@ -11,6 +11,7 @@ Summary
 * Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
+* Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
 
 Details
 -------
@@ -39,6 +40,14 @@ Details
 
    https://github.com/owncloud/android/issues/3543
    https://github.com/owncloud/android/pull/3544
+
+* Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
+
+   Redesign of the file details screen to align the labels with the details. Linear and Relatives
+   layouts were deleted, now only ConstraintLayout is used.
+
+   https://github.com/owncloud/android/issues/3557
+   https://github.com/owncloud/android/pull/3569
 
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
