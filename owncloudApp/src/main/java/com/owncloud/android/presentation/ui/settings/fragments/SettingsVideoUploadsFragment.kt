@@ -113,7 +113,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     }
 
     private fun initLiveDataObservers() {
-        videosViewModel.videoUploads.observe(viewLifecycleOwner, { videoUploadsConfiguration ->
+        videosViewModel.videoUploads.observe(viewLifecycleOwner) { videoUploadsConfiguration ->
             enableVideoUploads(videoUploadsConfiguration != null)
             videoUploadsConfiguration?.let {
                 prefVideoUploadsAccount?.value = it.accountName
@@ -124,7 +124,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                 prefVideoUploadsBehaviour?.value = it.behavior.name
                 prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
             } ?: resetFields()
-        })
+        }
     }
 
     private fun initPreferenceListeners() {

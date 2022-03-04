@@ -442,17 +442,16 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     private fun observeCapabilities() {
-        ocCapabilityViewModel.capabilities.observe(
-            this,
-            { event ->
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        updateCapabilities(uiResult.data)
-                        listener?.dismissLoading()
-                    }
+        ocCapabilityViewModel.capabilities.observe(this) { event ->
+            when (val uiResult = event.peekContent()) {
+                is UIResult.Success -> {
+                    updateCapabilities(uiResult.data)
+                    listener?.dismissLoading()
                 }
+                is UIResult.Error -> {}
+                is UIResult.Loading -> {}
             }
-        )
+        }
     }
 
     private fun observePublicShareCreation() {

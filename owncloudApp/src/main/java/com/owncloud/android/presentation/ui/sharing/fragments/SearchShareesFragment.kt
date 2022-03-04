@@ -163,6 +163,8 @@ class SearchShareesFragment : Fragment(),
                         }
                         listener?.dismissLoading()
                     }
+                    is UIResult.Error -> {}
+                    is UIResult.Loading -> {}
                 }
             }
         )
