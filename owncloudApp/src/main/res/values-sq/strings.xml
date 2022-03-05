@@ -46,6 +46,8 @@
   <string name="prefs_lock_application_entries_1minute">Pas 1 minute</string>
   <string name="prefs_lock_application_entries_5minutes">Pas 5 minutash</string>
   <string name="prefs_lock_application_entries_30minutes">Pas 30 minutash</string>
+  <string name="prefs_lock_access_from_document_provider">Kyç hyrje nga furnizues dokumentesh</string>
+  <string name="prefs_lock_access_from_document_provider_summary">Kyçni hyrje nga aplikacione të tjerë te kartelat e llogarive te aplikacioni përmes eksploruesit të brendshëm Android të kartelave.</string>
   <string name="prefs_touches_with_other_visible_windows">Prekje me dritare të tjera të dukshme</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Lejo prekje, kur pamja është zënë nga një tjetër dritare e dukshme. Aktivizojeni, që të përdorni aplikacione filtrimi drite.</string>
   <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori?</string>
@@ -100,6 +102,7 @@
   <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
   <string name="pattern_no_longer_required">S\’do të pyetet më për rregullsinë</string>
   <string name="pattern_configure_your_pattern_explanation">Rregullsia do të kërkohet sa herë që niset aplikacioni</string>
+  <string name="document_provider_locked">Kyçur</string>
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Kartela</string>
@@ -156,6 +159,8 @@
   <string name="filedetails_created">Krijuar më:</string>
   <string name="filedetails_modified">Ndryshuar më:</string>
   <string name="filedetails_download">Shkarkoje</string>
+  <string name="filedetails_file_image_content_description">Pamje Kartele</string>
+  <string name="filedetails_cancel_btn_content_description">Buton anulimi shkarkimi</string>
   <string name="filedetails_sync_file">Njëkohëso</string>
   <string name="filedetails_renamed_in_upload_msg">Kartela u riemërtua si %1$s gjatë ngarkimit</string>
   <string name="list_layout">Skemë liste</string>
