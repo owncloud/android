@@ -168,7 +168,7 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
             listener = object :
                 FileListAdapter.FileListAdapterListener {
                 override fun onItemClick(ocFile: OCFile, position: Int) {
-                    fileActions?.setTitle(ocFile)
+                    fileActions?.onFileClicked(ocFile)
                     if (actionMode != null) {
                         toggleSelection(position)
                     } else {
@@ -775,7 +775,7 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
 
     interface FileActions {
         fun onBrowseUpListener()
-        fun setTitle(file: OCFile)
+        fun onFileClicked(file: OCFile)
         fun setImagePreview(file: OCFile)
         fun initTextPreview(file: OCFile)
         fun initAudioPreview(file: OCFile)
