@@ -91,9 +91,9 @@ class PassCodeViewModelTest : ViewModelTest() {
     fun `check passcode is valid - ok`() {
         every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
 
-        val passCodeDigits: Array<String?> = arrayOf("1", "1", "1", "1")
+        val passCode= "1111"
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
         assertTrue(passCodeCheckResult)
 
@@ -106,9 +106,9 @@ class PassCodeViewModelTest : ViewModelTest() {
     fun `check passcode is valid - ko - saved passcode is null`() {
         every { preferencesProvider.getString(any(), any()) } returns null
 
-        val passCodeDigits: Array<String?> = arrayOf("1", "1", "1", "1")
+        val passCode= "1111"
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
         assertFalse(passCodeCheckResult)
 
@@ -121,9 +121,9 @@ class PassCodeViewModelTest : ViewModelTest() {
     fun `check passcode is valid - ko - saved passcode is empty`() {
         every { preferencesProvider.getString(any(), any()) } returns ""
 
-        val passCodeDigits: Array<String?> = arrayOf("1", "1", "1", "1")
+        val passCode= "1111"
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
         assertFalse(passCodeCheckResult)
 
@@ -136,9 +136,9 @@ class PassCodeViewModelTest : ViewModelTest() {
     fun `check passcode is valid - ko - different digit`() {
         every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
 
-        val passCodeDigits: Array<String?> = arrayOf("1", "2", "1", "1")
+        val passCode= "1111"
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
         assertFalse(passCodeCheckResult)
 
@@ -151,9 +151,9 @@ class PassCodeViewModelTest : ViewModelTest() {
     fun `check passcode is valid - ko - null digit`() {
         every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
 
-        val passCodeDigits: Array<String?> = arrayOf("1", null, "1", "1")
+        val passCode= "1111"
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
         assertFalse(passCodeCheckResult)
 

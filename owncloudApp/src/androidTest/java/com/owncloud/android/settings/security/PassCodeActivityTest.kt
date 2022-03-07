@@ -71,8 +71,8 @@ class PassCodeActivityTest {
     private lateinit var timeToUnlockLiveData: MutableLiveData<Event<String>>
     private lateinit var finishTimeToUnlockLiveData: MutableLiveData<Event<Boolean>>
 
-    private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
-    private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
+    private val defaultPassCode = "111111"//arrayOf('1', '1', '1', '1', '1', '1')
+    private val wrongPassCode = "111222"//arrayOf('1', '1', '1', '2', '2', '2')
 
     private lateinit var passCodeViewModel: PassCodeViewModel
     private lateinit var biometricViewModel: BiometricViewModel
@@ -417,7 +417,7 @@ class PassCodeActivityTest {
         activityScenario = ActivityScenario.launch(intent)
     }
 
-    private fun typePasscode(digits: Array<Char>) {
+    private fun typePasscode(digits: String) {
         for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits())
             onView(nthChildOf(withId(R.id.layout_code), i)).perform(replaceText(digits[i].toString()))
     }
