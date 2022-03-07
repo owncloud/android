@@ -38,7 +38,7 @@ import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.LockTimeout
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment.Companion.removePreferenceFromScreen
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel

@@ -188,8 +188,9 @@
         <service android:name=".media.MediaService" />
 
         <activity
-            android:name=".presentation.ui.security.PassCodeActivity"
-            android:theme="@style/Theme.ownCloud"/>
+            android:name=".presentation.ui.security.passcode.PassCodeActivity"
+            android:theme="@style/Theme.ownCloud"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.ConflictsResolveActivity"
             android:theme="@style/Theme.ownCloud" />

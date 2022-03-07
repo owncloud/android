@@ -31,6 +31,8 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricPrompt
 import androidx.biometric.BiometricPrompt.PromptInfo
 import com.owncloud.android.R
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber

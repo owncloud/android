@@ -23,7 +23,7 @@ package com.owncloud.android.presentation.viewmodels.settings
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.enums.LockEnforcedType
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest

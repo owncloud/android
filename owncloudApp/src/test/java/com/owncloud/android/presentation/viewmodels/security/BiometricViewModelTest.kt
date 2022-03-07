@@ -23,7 +23,7 @@ package com.owncloud.android.presentation.viewmodels.security
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS

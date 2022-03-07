@@ -24,7 +24,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.ui.security
+package com.owncloud.android.presentation.ui.security.passcode
 
 import android.content.Intent
 import android.os.Bundle
@@ -37,12 +37,13 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.interfaces.BiometricStatus
 import com.owncloud.android.interfaces.IEnableBiometrics
@@ -53,9 +54,8 @@ import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocument
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.util.Arrays
 
-class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
+class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBiometrics {
 
     // ViewModel
     private val passCodeViewModel by viewModel<PassCodeViewModel>()
@@ -65,11 +65,10 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
     val binding get() = _binding!!
 
     private lateinit var passCodeEditTexts: Array<EditText?>
-    //private lateinit var passCodeDigits: Array<String?>
+
     private lateinit var passcode: StringBuilder
     private lateinit var firstPasscode: String
     private var confirmingPassCode = false
-    private var bChange = true // to control that only one blocks jump
     private val resultIntent = Intent()
 
     /**
@@ -80,13 +79,13 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
         subscribeToViewModel()
 
         _binding = PasscodelockBinding.inflate(layoutInflater)
 
-        /// protection against screen recording
+        // protection against screen recording
         if (!BuildConfig.DEBUG) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } // else, let it go, or taking screenshots & testing will not be possible
@@ -104,22 +103,20 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
 
         inflatePasscodeTxtLine()
 
+        binding.numberKeyboard.setListener(this)
+
         if (passCodeViewModel.getNumberOfAttempts() >= NUM_ATTEMPTS_WITHOUT_TIMER) {
             lockScreen()
         }
 
         when (intent.action) {
             ACTION_CHECK -> {
-                /// this is a pass code request; the user has to input the right value
+                // this is a pass code request; the user has to input the right value
                 binding.header.text = getString(R.string.pass_code_enter_pass_code)
                 binding.explanation.visibility = View.INVISIBLE
                 setCancelButtonEnabled(false) // no option to cancel
             }
             ACTION_REQUEST_WITH_RESULT -> {
-                if (savedInstanceState != null) {
-                    confirmingPassCode = savedInstanceState.getBoolean(KEY_CONFIRMING_PASSCODE)
-                    passcode = savedInstanceState.getString(KEY_PASSCODE_DIGITS) as StringBuilder
-                }
                 if (confirmingPassCode) {
                     //the app was in the passcode confirmation
                     requestPassCodeConfirmation()
@@ -128,7 +125,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
                         binding.header.text =
                             getString(R.string.pass_code_configure_your_pass_code_migration, passCodeViewModel.getNumberOfPassCodeDigits())
                     } else {
-                        /// pass code preference has just been activated in Preferences;
+                        // pass code preference has just been activated in Preferences;
                         // will receive and confirm pass code value
                         binding.header.text = getString(R.string.pass_code_configure_your_pass_code)
                     }
@@ -145,7 +142,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
                 }
             }
             ACTION_CHECK_WITH_RESULT -> {
-                /// pass code preference has just been disabled in Preferences;
+                // pass code preference has just been disabled in Preferences;
                 // will confirm user knows pass code, then remove it
                 binding.header.text = getString(R.string.pass_code_remove_your_pass_code)
                 binding.explanation.visibility = View.INVISIBLE
@@ -157,7 +154,6 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
         }
 
         setTextListeners()
-        setButtonsListeners()
     }
 
     private fun inflatePasscodeTxtLine() {
@@ -185,7 +181,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
             }
         } else {
             binding.btnCancel.apply {
-                visibility = View.INVISIBLE
+                visibility = View.GONE
                 setOnClickListener(null)
             }
         }
@@ -197,29 +193,10 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
     private fun setTextListeners() {
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
+            passCodeEditTexts[i]?.setOnClickListener { hideSoftKeyboard() }
             passCodeEditTexts[i]?.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPasscodeDigits - 1))
-            /*HECHO
-                       if (i > 0) {
-                           passCodeEditTexts[i]?.setOnKeyListener { _: View, keyCode: Int, _: KeyEvent? ->
-                               if (keyCode == KeyEvent.KEYCODE_DEL && bChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
-                                   passCodeEditTexts[i - 1]?.apply {
-                                       isEnabled = true
-                                       setText("")
-                                       requestFocus()
-                                   }
-                                   if (!confirmingPassCode) {
-                                       passCodeDigits[i - 1] = ""
-                                   }
-                                   bChange = false
-                               } else if (!bChange) {
-                                   bChange = true
-                               }
-                               false
-                           }
-                       }
-             */
             passCodeEditTexts[i]?.onFocusChangeListener = OnFocusChangeListener { _: View, _: Boolean ->
-                /// TODO WIP: should take advantage of hasFocus to reduce processing
+                // TODO WIP: should take advantage of hasFocus to reduce processing
                 for (j in 0 until i) {
                     if (passCodeEditTexts[j]?.text.toString() == "") {  // TODO WIP validation
                         // could be done in a global way, with a single OnFocusChangeListener for all the
@@ -232,48 +209,27 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
         }
     }
 
-    /**
-     * Binds the appropriate listeners to the numeric buttons to insert the pass code.
-     */
-    private fun setButtonsListeners() {
+    override fun onNumberClicked(number: Int) {
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
-        val keyboardButtons = binding.layoutKeyboard.children
-        val specialButtons = listOf(binding.btnBack, binding.btnBiometric, binding.btnCancel)
-        val digitButtons = keyboardButtons.filter {
-            !specialButtons.contains(it)
+
+        if (passcode.length < numberOfPasscodeDigits && !binding.lockTime.isVisible) {
+            passcode.append(number.toString())
+            passCodeEditTexts[passcode.length - 1]?.text = Editable.Factory.getInstance().newEditable(number.toString())
         }
-        for (button in digitButtons) {
-            button.setOnClickListener {
-                if (passcode.length < numberOfPasscodeDigits) {
-                    passcode.append(button.tag as String)
-                    passCodeEditTexts[passcode.length - 1]?.text = Editable.Factory.getInstance().newEditable(button.tag as String)
+    }
+
+    override fun onBiometricButtonClicked() {
+        //TODO
+    }
+
+    override fun onBackspaceButtonClicked() {
+        if (passcode.length > 0) {
+            passcode.deleteCharAt(passcode.length - 1)
+                passCodeEditTexts[passcode.length]?.apply {
+                    isEnabled = true
+                    setText("")
+                    requestFocus()
                 }
-            }
-        }
-
-        binding.btnBack.setOnClickListener {
-            if (passcode.length > 0) {
-                passcode.deleteCharAt(passcode.length - 1)
-                //if (bChange) {  // TODO WIP: event should be used to control what's exactly happening with DEL, not any custom field...
-                    passCodeEditTexts[passcode.length]?.apply {
-                        isEnabled = true
-                        setText("")
-                        requestFocus()
-                    }
-                //    bChange = false
-                //} else if (!bChange) {
-                 //   bChange = true
-                //}
-            }
-        }
-
-        binding.btnBiometric.setOnClickListener {
-            if (biometricViewModel.isBiometricLockAvailable()) {
-                //TODO
-            } else {
-                PassCodeManager.onActivityStopped(this)
-                finish()
-            }
         }
     }
 
@@ -299,10 +255,9 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
 
     private fun handleActionCheck() {
         if (passCodeViewModel.checkPassCodeIsValid(passcode.toString())) {
-            /// pass code accepted in request, user is allowed to access the app
+            // pass code accepted in request, user is allowed to access the app
             binding.error.visibility = View.INVISIBLE
             passCodeViewModel.setLastUnlockTimestamp()
-            //hideSoftKeyboard()
             val passCode = passCodeViewModel.getPassCode()
             if (passCode != null && passCode.length < passCodeViewModel.getNumberOfPassCodeDigits()) {
                 passCodeViewModel.setMigrationRequired(true)
@@ -336,7 +291,6 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
             val resultIntent = Intent()
             setResult(RESULT_OK, resultIntent)
             binding.error.visibility = View.INVISIBLE
-            //hideSoftKeyboard()
             notifyDocumentProviderRoots(applicationContext)
             finish()
         } else {
@@ -352,7 +306,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
             binding.lockTime.text = getString(R.string.lock_time_try_again, it)
         })
         passCodeViewModel.getFinishedTimeToUnlockLiveData.observe(this, Event.EventObserver {
-            binding.lockTime.isVisible = false
+            binding.lockTime.visibility = View.INVISIBLE
             for (editText: EditText? in passCodeEditTexts) {
                 editText?.isEnabled = true
             }
@@ -363,7 +317,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
     private fun lockScreen() {
         val timeToUnlock = passCodeViewModel.getTimeToUnlockLeft()
         if (timeToUnlock > 0) {
-            binding.lockTime.isVisible = true
+            binding.lockTime.visibility = View.VISIBLE
             for (editText: EditText? in passCodeEditTexts) {
                 editText?.isEnabled = false
             }
@@ -372,12 +326,12 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
     }
 
     private fun handleActionRequestWithResult() {
-        // enabling pass code
+// enabling pass code
         if (!confirmingPassCode) {
             binding.error.visibility = View.INVISIBLE
             requestPassCodeConfirmation()
         } else if (confirmPassCode()) {
-            // confirmed: user typed the same pass code twice
+// confirmed: user typed the same pass code twice
             if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) passCodeViewModel.setMigrationRequired(false)
             savePassCodeAndExit()
         } else {
@@ -426,7 +380,7 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
      */
     private fun confirmPassCode(): Boolean {
         confirmingPassCode = false
-        return firstPasscode==passcode.toString()
+        return firstPasscode == passcode.toString()
     }
 
     /**
@@ -478,12 +432,6 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
         }
     }
 
-    public override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(KEY_CONFIRMING_PASSCODE, confirmingPassCode)
-        outState.putString(KEY_PASSCODE_DIGITS, passcode.toString())
-    }
-
     /**
      * Constructor
      *
@@ -519,11 +467,11 @@ class PassCodeActivity : AppCompatActivity(), IEnableBiometrics {
         }
 
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-            // nothing to do
+// nothing to do
         }
 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            // nothing to do
+// nothing to do
         }
 
         init {

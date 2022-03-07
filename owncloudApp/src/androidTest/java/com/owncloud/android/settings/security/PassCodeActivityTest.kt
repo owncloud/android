@@ -39,7 +39,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS

@@ -46,7 +46,7 @@ import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.ui.security.BiometricActivity
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
