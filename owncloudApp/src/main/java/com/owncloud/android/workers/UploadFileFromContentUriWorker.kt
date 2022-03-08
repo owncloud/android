@@ -43,7 +43,6 @@ import com.owncloud.android.domain.exceptions.ServiceUnavailableException
 import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.extensions.parseError
-import com.owncloud.android.lib.common.ConnectionValidator
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
@@ -62,7 +61,6 @@ import java.io.File
 class UploadFileFromContentUriWorker(
     private val appContext: Context,
     private val workerParameters: WorkerParameters,
-    private val connectionValidator: ConnectionValidator
 ) : CoroutineWorker(
     appContext,
     workerParameters
@@ -233,7 +231,8 @@ class UploadFileFromContentUriWorker(
     }
 
     private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
-        .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext, connectionValidator)
+        .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext,
+        SingleSessionManager.getConnectionValidator())
 
     companion object {
         const val TRANSFER_TAG_CAMERA_UPLOAD = "TRANSFER_TAG_CAMERA_UPLOAD"
