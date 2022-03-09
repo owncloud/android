@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<merge
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     android:layout_gravity="center">
 
     <com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout
@@ -260,4 +262,4 @@
             app:srcCompat="@drawable/numberkeyboard_ic_backspace" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
-</merge>
+</androidx.constraintlayout.widget.ConstraintLayout>

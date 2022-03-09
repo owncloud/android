@@ -15,33 +15,4 @@
         <attr name="itemIcon" format="reference" />
         <attr name="title" format="string" />
     </declare-styleable>
-
-    <!--numeric keyboard-->
-    <attr name="numberkeyboard_keyboardType">
-        <enum name="integer" value="0"/>
-        <enum name="decimal" value="1"/>
-        <enum name="fingerprint" value="2"/>
-        <enum name="custom" value="3"/>
-    </attr>
-
-    <attr name="numberkeyboard_keyWidth" format="dimension">
-        <enum name="match_parent" value="-1"/>
-    </attr>
-
-    <attr name="numberkeyboard_keyHeight" format="dimension">
-        <enum name="match_parent" value="-1"/>
-    </attr>
-
-    <declare-styleable name="NumberKeyboard">
-        <attr name="numberkeyboard_keyWidth"/>
-        <attr name="numberkeyboard_keyHeight"/>
-        <attr name="numberkeyboard_keyPadding" format="dimension"/>
-        <attr name="numberkeyboard_numberKeyBackground" format="reference"/>
-        <attr name="numberkeyboard_numberKeyTextColor" format="reference"/>
-        <attr name="numberkeyboard_leftAuxBtnIcon" format="reference"/>
-        <attr name="numberkeyboard_leftAuxBtnBackground" format="reference"/>
-        <attr name="numberkeyboard_rightAuxBtnIcon" format="reference"/>
-        <attr name="numberkeyboard_rightAuxBtnBackground" format="reference"/>
-    </declare-styleable>
-
 </resources>

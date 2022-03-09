@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Passcode margin keyboard -->
+    <dimen name="passcode_standard_margin">24dp</dimen>
+    <dimen name="passcode_margin_top">32dp</dimen>
+    <dimen name="passcode_margin_bottom">32dp</dimen>
+    <dimen name="passcode_cancelBtn_margin_bottom">32dp</dimen>
+</resources>

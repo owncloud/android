@@ -113,8 +113,9 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
             ACTION_CHECK -> {
                 // this is a pass code request; the user has to input the right value
                 binding.header.text = getString(R.string.pass_code_enter_pass_code)
-                binding.explanation.visibility = View.INVISIBLE
+                binding.explanation.visibility = View.GONE
                 setCancelButtonEnabled(false) // no option to cancel
+                setLockTimeGone(false) // could see lock time when you are configuring passcode
             }
             ACTION_REQUEST_WITH_RESULT -> {
                 if (confirmingPassCode) {
@@ -133,11 +134,16 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                     when {
                         intent.extras?.getBoolean(EXTRAS_MIGRATION) == true -> {
                             setCancelButtonEnabled(false)
+                            setLockTimeGone(false)
                         }
                         intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) == true -> {
                             setCancelButtonEnabled(false)
+                            setLockTimeGone(false)
                         }
-                        else -> setCancelButtonEnabled(true)
+                        else -> {
+                            setCancelButtonEnabled(true)
+                            setLockTimeGone(true)
+                        }
                     }
                 }
             }
@@ -145,8 +151,9 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 // pass code preference has just been disabled in Preferences;
                 // will confirm user knows pass code, then remove it
                 binding.header.text = getString(R.string.pass_code_remove_your_pass_code)
-                binding.explanation.visibility = View.INVISIBLE
+                binding.explanation.visibility = View.GONE
                 setCancelButtonEnabled(true)
+                setLockTimeGone(true)
             }
             else -> {
                 throw IllegalArgumentException(R.string.illegal_argument_exception_message.toString() + " ")
@@ -184,6 +191,20 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 visibility = View.GONE
                 setOnClickListener(null)
             }
+        }
+    }
+
+    /**
+     * Put visibility GONE during the configuration of the passcode, because it is not
+     * going to appear, to leave more space to the keyboard in the small screens
+     *
+     * @param gone      'True' to make the lock time text gone, 'false' makes it invisible
+     */
+    private fun setLockTimeGone(gone: Boolean){
+        if(gone){
+            binding.lockTime.visibility=View.GONE
+        }else{
+            binding.lockTime.visibility=View.INVISIBLE
         }
     }
 
@@ -276,7 +297,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         } else {
             showErrorAndRestart(
                 errorMessage = R.string.pass_code_wrong, headerMessage = getString(R.string.pass_code_enter_pass_code),
-                explanationVisibility = View.INVISIBLE
+                explanationVisibility = View.GONE
             )
             passCodeViewModel.increaseNumberOfAttempts()
             if (passCodeViewModel.getNumberOfAttempts() >= NUM_ATTEMPTS_WITHOUT_TIMER) {
@@ -296,7 +317,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         } else {
             showErrorAndRestart(
                 errorMessage = R.string.pass_code_wrong, headerMessage = getString(R.string.pass_code_enter_pass_code),
-                explanationVisibility = View.INVISIBLE
+                explanationVisibility = View.GONE
             )
         }
     }
