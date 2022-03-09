@@ -113,4 +113,7 @@
     <integer name="lock_enforced">0</integer>
     <integer name="lock_delay_enforced">0</integer>
 
+    <!-- Apm settings -->
+    <bool name="clear_cookies_on_validation">false</bool>
+
 </resources>

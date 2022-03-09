@@ -65,7 +65,7 @@ val remoteDataSourceModule = module {
     single { OwnCloudAccount(get(), androidContext()) }
     single { SingleSessionManager.getDefaultSingleton().getClientFor(get(), androidContext(), get()) }
 
-    single { ConnectionValidator(androidContext(), false) }
+    single { ConnectionValidator(androidContext(), androidContext().resources.getBoolean(R.bool.clear_cookies_on_validation)) }
     single { ClientManager(get(), get(), get(), MainApp.accountType, get()) }
 
     single<CapabilityService> { OCCapabilityService(get()) }
