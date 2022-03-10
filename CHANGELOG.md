@@ -12,6 +12,7 @@ Summary
 * Bugfix - Crash when changing orientation in Details view: [#3571](https://github.com/owncloud/android/issues/3571)
 * Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
+* Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 * Enhancement - Improvements for the UI in the passcode screen: [#3516](https://github.com/owncloud/android/issues/3516)
 * Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
@@ -57,6 +58,14 @@ Details
 
    https://github.com/owncloud/android/issues/3440
    https://github.com/owncloud/android/pull/3547
+
+* Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
+
+   Now, when a MDM configuration is applied for the first time or changed by an IT administrator,
+   the app sends feedback that will be shown in the EMM console.
+
+   https://github.com/owncloud/android/issues/3420
+   https://github.com/owncloud/android/pull/3480
 
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 
