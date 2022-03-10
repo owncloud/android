@@ -1,6 +1,6 @@
 #!/bin/bash
 
-check_directory() {
+check_license_in_file() {
     if ! head -n 20 $FILE | grep -q "This program is free software: you can redistribute it and/or modify"
     then
         if ! head -n 20 $FILE | grep -q "Licensed under the Apache License, Version 2.0"
@@ -15,7 +15,7 @@ for DIRS in owncloudApp/src owncloudData/src owncloudDomain/src owncloudTestUtil
 do
     for FILE in $(find $DIRS -name "*.java" -o -name "*.kt")
     do
-        check_directory
+        check_license_in_file
     done
 done
 
@@ -23,4 +23,4 @@ done
 
 echo "========= Check Library =========="
 cd owncloud-android-library
-./check_script.sh
+./verify_licenses_script.sh
