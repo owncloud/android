@@ -8,6 +8,7 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author David Crespo Ríos
  * Copyright (C) 2011 Bartek Przybylski
  * Copyright (C) 2021 ownCloud GmbH.
  * <p>
@@ -109,14 +110,14 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         }
 
         when (intent.action) {
-            ACTION_CHECK -> {
+            ACTION_CHECK -> { //When you start the app with passcode
                 // this is a pass code request; the user has to input the right value
                 binding.header.text = getString(R.string.pass_code_enter_pass_code)
                 binding.explanation.visibility = View.GONE
                 setCancelButtonEnabled(false) // no option to cancel
                 setLockTimeGone(false) // could see lock time when you are configuring passcode
             }
-            ACTION_REQUEST_WITH_RESULT -> {
+            ACTION_REQUEST_WITH_RESULT -> { //Create a new password
                 if (confirmingPassCode) {
                     //the app was in the passcode confirmation
                     requestPassCodeConfirmation()
@@ -146,7 +147,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                     }
                 }
             }
-            ACTION_CHECK_WITH_RESULT -> {
+            ACTION_CHECK_WITH_RESULT -> { //Remove password
                 // pass code preference has just been disabled in Preferences;
                 // will confirm user knows pass code, then remove it
                 binding.header.text = getString(R.string.pass_code_remove_your_pass_code)
@@ -527,9 +528,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
 
         // NOTE: This is required to read the legacy pin code format
         const val PREFERENCE_PASSCODE_D = "PrefPinCode"
-
-        private const val KEY_PASSCODE_DIGITS = "PASSCODE_DIGITS"
-        private const val KEY_CONFIRMING_PASSCODE = "CONFIRMING_PASSCODE"
 
         const val EXTRAS_MIGRATION = "PASSCODE_MIGRATION"
         const val PASSCODE_MIN_LENGTH = 4
