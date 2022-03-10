@@ -28,11 +28,10 @@ object DebugInjector {
     open fun injectDebugTools(context: Context) {
         Stetho.initializeWithDefaults(context)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             StrictMode.setVmPolicy(
                 StrictMode.VmPolicy.Builder()
                     .penaltyLog()
-                    .detectUnsafeIntentLaunch()
                     .detectNonSdkApiUsage()
                     .build()
             )
