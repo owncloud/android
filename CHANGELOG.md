@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
+* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 * Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
@@ -24,6 +25,15 @@ Details
 
    https://github.com/owncloud/android/issues/3468
    https://github.com/owncloud/android/pull/3560
+
+* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
+
+   Two parameters (server url and server url input visibility) can be now managed via MDM. These
+   were the first parameters used to test integration with Android Enterprise and Android
+   Management API.
+
+   https://github.com/owncloud/android/issues/3415
+   https://github.com/owncloud/android/pull/3419
 
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 
