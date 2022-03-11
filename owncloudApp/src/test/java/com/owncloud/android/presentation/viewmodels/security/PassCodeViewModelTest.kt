@@ -136,7 +136,7 @@ class PassCodeViewModelTest : ViewModelTest() {
     fun `check passcode is valid - ko - different digit`() {
         every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
 
-        val passCode = "1111"
+        val passCode = "1211"
 
         val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
@@ -151,9 +151,15 @@ class PassCodeViewModelTest : ViewModelTest() {
     fun `check passcode is valid - ko - null digit`() {
         every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
 
-        val passCode = "1111"
+        val nullDigit: String? = null
+        val passCode: StringBuilder = StringBuilder()
+        passCode.append("1")
+        passCode.append("1")
+        passCode.append(nullDigit)
+        passCode.append("1")
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
+
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode.toString())
 
         assertFalse(passCodeCheckResult)
 
