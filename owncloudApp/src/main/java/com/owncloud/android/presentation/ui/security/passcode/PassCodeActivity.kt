@@ -197,11 +197,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
      *
      * @param gone      'True' to make the lock time text gone, 'false' makes it invisible
      */
-    private fun setLockTimeGone(gone: Boolean){
-        if(gone){
-            binding.lockTime.visibility=View.GONE
-        }else{
-            binding.lockTime.visibility=View.INVISIBLE
+    private fun setLockTimeGone(gone: Boolean) {
+        if (gone) {
+            binding.lockTime.visibility = View.GONE
+        } else {
+            binding.lockTime.visibility = View.INVISIBLE
         }
     }
 
@@ -243,11 +243,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
     override fun onBackspaceButtonClicked() {
         if (passcode.length > 0) {
             passcode.deleteCharAt(passcode.length - 1)
-                passCodeEditTexts[passcode.length]?.apply {
-                    isEnabled = true
-                    setText("")
-                    requestFocus()
-                }
+            passCodeEditTexts[passcode.length]?.apply {
+                isEnabled = true
+                setText("")
+                requestFocus()
+            }
         }
     }
 

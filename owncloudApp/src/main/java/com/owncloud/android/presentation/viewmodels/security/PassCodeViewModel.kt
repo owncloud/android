@@ -66,7 +66,7 @@ class PassCodeViewModel(
     fun checkPassCodeIsValid(passcode: String): Boolean {
         val passCodeString = getPassCode()
         if (passCodeString.isNullOrEmpty()) return false
-        return passcode==passCodeString
+        return passcode == passCodeString
     }
 
     fun getNumberOfPassCodeDigits(): Int {
