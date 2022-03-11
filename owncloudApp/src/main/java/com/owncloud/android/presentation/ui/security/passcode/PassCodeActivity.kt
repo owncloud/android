@@ -115,7 +115,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 binding.header.text = getString(R.string.pass_code_enter_pass_code)
                 binding.explanation.visibility = View.GONE
                 setCancelButtonEnabled(false) // no option to cancel
-                setLockTimeGone(false) // could see lock time when you are configuring passcode
             }
             ACTION_REQUEST_WITH_RESULT -> { //Create a new password
                 if (confirmingPassCode) {
@@ -134,11 +133,9 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                     when {
                         intent.extras?.getBoolean(EXTRAS_MIGRATION) == true -> {
                             setCancelButtonEnabled(false)
-                            setLockTimeGone(false)
                         }
                         intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) == true -> {
                             setCancelButtonEnabled(false)
-                            setLockTimeGone(false)
                         }
                         else -> {
                             setCancelButtonEnabled(true)

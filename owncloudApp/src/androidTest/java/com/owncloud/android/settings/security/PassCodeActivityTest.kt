@@ -174,8 +174,6 @@ class PassCodeActivityTest {
         R.id.btnCancel.isDisplayed(false)
 
         R.id.lock_time.isDisplayed(true)
-
-        R.id.error.isDisplayed(true)
     }
 
     @Test
