@@ -1,13 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+ownCloud Android client application
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+@author David Crespo Ríos
+Copyright (C) 2022 ownCloud GmbH.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    app:layout_constraintStart_toStartOf="parent"
+    android:layout_gravity="center"
     app:layout_constraintEnd_toEndOf="parent"
-    android:layout_gravity="center">
+    app:layout_constraintStart_toStartOf="parent">
 
     <com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout
         android:id="@+id/key1Container"
@@ -26,8 +42,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_one"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 
@@ -47,8 +63,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_two"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 
@@ -67,8 +83,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_three"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 
@@ -89,8 +105,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_four"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 
@@ -110,8 +126,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_five"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 
@@ -130,8 +146,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_six"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 
@@ -152,8 +168,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_seven"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 
@@ -173,8 +189,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_eight"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 
@@ -193,8 +209,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_nine"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 
@@ -238,8 +254,8 @@
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
             android:text="@string/numberkeyboard_zero"
-            android:textStyle="bold"
-            android:textColor="@drawable/numberkeyboard_key_text_color" />
+            android:textColor="@drawable/numberkeyboard_key_text_color"
+            android:textStyle="bold" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
 

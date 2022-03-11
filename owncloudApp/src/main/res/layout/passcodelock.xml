@@ -91,32 +91,22 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/passcode_margin_top"
         android:layout_marginBottom="@dimen/passcode_margin_bottom"
-        app:layout_constraintTop_toBottomOf="@id/lock_time"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnCancel" />
-
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/passcode_cancelBtn_margin_bottom"
-        android:paddingHorizontal="32dp"
-        android:text="@android:string/cancel"
-        android:textColor="@color/white"
-        android:background="@color/color_accent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@id/lock_time" />
     <!--
-    <Button
-        android:id="@+id/btnCancel"
-        android:theme="@style/Button.Primary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@android:string/cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-        -->
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/passcode_cancelBtn_margin_bottom"
+            android:paddingHorizontal="32dp"
+            android:text="@android:string/cancel"
+            android:textColor="@color/white"
+            android:background="@color/color_accent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+            -->
 </androidx.constraintlayout.widget.ConstraintLayout>

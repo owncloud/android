@@ -1,7 +1,6 @@
-Enhancement: Improvements for the UI in the file details screen
+Enhancement: Improvements for the UI in the passcode screen
 
-Redesign of the file details screen to align the labels with the details.
-Linear and Relatives layouts were deleted, now only ConstraintLayout is used.
+Redesign of the passcode screen to have the numeric keyboard in the screen instead of using the Android one.
 
-https://github.com/owncloud/android/issues/3557
-https://github.com/owncloud/android/pull/3569
+https://github.com/owncloud/android/issues/3516
+https://github.com/owncloud/android/pull/3582
