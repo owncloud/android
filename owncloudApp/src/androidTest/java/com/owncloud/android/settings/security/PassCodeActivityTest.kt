@@ -232,7 +232,7 @@ class PassCodeActivityTest {
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(doesNotExist())
 
         R.id.btnCancel.isDisplayed(true)
-        
+
         R.id.error.isDisplayed(false)
     }
 
@@ -290,7 +290,7 @@ class PassCodeActivityTest {
         // Open Activity in passcode creation mode
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
-        for (i in 0..2){
+        for (i in 0..2) {
             onView(withId(R.id.key1)).perform(click())
         }
 
@@ -307,7 +307,7 @@ class PassCodeActivityTest {
         setPassCode1()
 
         // Type incomplete passcode
-        for (i in 0..2){
+        for (i in 0..2) {
             onView(withId(R.id.key2)).perform(click())
         }
 
@@ -452,14 +452,14 @@ class PassCodeActivityTest {
         activityScenario = ActivityScenario.launch(intent)
     }
 
-    private fun setPassCode1(){
-        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()){
+    private fun setPassCode1() {
+        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
             onView(withId(R.id.key1)).perform(click())
         }
     }
 
-    private fun setPassCode2(){
-        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()){
+    private fun setPassCode2() {
+        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
             onView(withId(R.id.key2)).perform(click())
         }
     }
