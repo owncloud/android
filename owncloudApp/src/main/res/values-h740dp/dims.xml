@@ -18,9 +18,9 @@
   -->
 
 <resources>
-    <!-- Passcode margin keyboard for Tablets-->
-    <dimen name="passcode_standard_margin">48dp</dimen>
-    <dimen name="passcode_margin_top">150dp</dimen>
-    <dimen name="passcode_margin_bottom">64dp</dimen>
+    <!-- Passcode margin keyboard for standard screens-->
+    <dimen name="passcode_standard_margin">32dp</dimen>
+    <dimen name="passcode_margin_top">100dp</dimen>
+    <dimen name="passcode_margin_bottom">32dp</dimen>
     <dimen name="passcode_margin_buttons">8dp</dimen>
 </resources>
