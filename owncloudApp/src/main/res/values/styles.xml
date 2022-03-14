@@ -245,7 +245,7 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:clickable">true</item>
-        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_margin">@dimen/passcode_margin_buttons</item>
         <item name="android:background">@drawable/numberkeyboard_key_bg</item>
         <item name="android:padding">16dp</item>
         <item name="android:drawablePadding">-16dp</item>

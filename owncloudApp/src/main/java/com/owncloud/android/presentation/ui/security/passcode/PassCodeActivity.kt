@@ -114,7 +114,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
             ACTION_CHECK -> { //When you start the app with passcode
                 // this is a pass code request; the user has to input the right value
                 binding.header.text = getString(R.string.pass_code_enter_pass_code)
-                binding.explanation.visibility = View.GONE
+                binding.explanation.visibility = View.INVISIBLE
                 supportActionBar?.setDisplayHomeAsUpEnabled(false) //Don´t show the back arrow
             }
             ACTION_REQUEST_WITH_RESULT -> { //Create a new password
@@ -148,7 +148,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 // pass code preference has just been disabled in Preferences;
                 // will confirm user knows pass code, then remove it
                 binding.header.text = getString(R.string.pass_code_remove_your_pass_code)
-                binding.explanation.visibility = View.GONE
+                binding.explanation.visibility = View.INVISIBLE
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
             else -> {
@@ -260,7 +260,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         } else {
             showErrorAndRestart(
                 errorMessage = R.string.pass_code_wrong, headerMessage = getString(R.string.pass_code_enter_pass_code),
-                explanationVisibility = View.GONE
+                explanationVisibility = View.INVISIBLE
             )
             passCodeViewModel.increaseNumberOfAttempts()
             if (passCodeViewModel.getNumberOfAttempts() >= NUM_ATTEMPTS_WITHOUT_TIMER) {
@@ -280,7 +280,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         } else {
             showErrorAndRestart(
                 errorMessage = R.string.pass_code_wrong, headerMessage = getString(R.string.pass_code_enter_pass_code),
-                explanationVisibility = View.GONE
+                explanationVisibility = View.INVISIBLE
             )
         }
     }
