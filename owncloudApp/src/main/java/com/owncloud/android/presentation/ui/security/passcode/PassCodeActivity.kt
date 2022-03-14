@@ -140,7 +140,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                         }
                         else -> {
                             supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                            setLockTimeGone(true)
                         }
                     }
                 }
@@ -151,7 +150,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 binding.header.text = getString(R.string.pass_code_remove_your_pass_code)
                 binding.explanation.visibility = View.GONE
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                setLockTimeGone(true)
             }
             else -> {
                 throw IllegalArgumentException(R.string.illegal_argument_exception_message.toString() + " ")
@@ -175,40 +173,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
             passCodeEditTexts[i] = txt
         }
         passCodeEditTexts.first()?.requestFocus()
-    }
-
-    /**
-     * Enables or disables the cancel button to allow the user interrupt the ACTION
-     * requested to the activity.
-     *
-     * @param enabled       'True' makes the cancel button available, 'false' hides it.
-     */
-    private fun setCancelButtonEnabled(enabled: Boolean) {
-        /*if (enabled) {
-            binding.btnCancel.apply {
-                visibility = View.VISIBLE
-                setOnClickListener { finish() }
-            }
-        } else {
-            binding.btnCancel.apply {
-                visibility = View.GONE
-                setOnClickListener(null)
-            }
-        }*/
-    }
-
-    /**
-     * Put visibility GONE during the configuration of the passcode, because it is not
-     * going to appear, to leave more space to the keyboard in the small screens
-     *
-     * @param gone      'True' to make the lock time text gone, 'false' makes it invisible
-     */
-    private fun setLockTimeGone(gone: Boolean) {
-        if (gone) {
-            binding.lockTime.visibility = View.GONE
-        } else {
-            binding.lockTime.visibility = View.INVISIBLE
-        }
     }
 
     /**

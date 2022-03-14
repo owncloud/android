@@ -95,18 +95,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lock_time" />
-    <!--
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/passcode_cancelBtn_margin_bottom"
-            android:paddingHorizontal="32dp"
-            android:text="@android:string/cancel"
-            android:textColor="@color/white"
-            android:background="@color/color_accent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-            -->
 </androidx.constraintlayout.widget.ConstraintLayout>
