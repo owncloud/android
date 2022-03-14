@@ -32,6 +32,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.WindowManager
@@ -114,7 +115,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 // this is a pass code request; the user has to input the right value
                 binding.header.text = getString(R.string.pass_code_enter_pass_code)
                 binding.explanation.visibility = View.GONE
-                setCancelButtonEnabled(false) // no option to cancel
+                supportActionBar?.setDisplayHomeAsUpEnabled(false) //Don´t show the back arrow
             }
             ACTION_REQUEST_WITH_RESULT -> { //Create a new password
                 if (confirmingPassCode) {
@@ -132,13 +133,13 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                     binding.explanation.visibility = View.VISIBLE
                     when {
                         intent.extras?.getBoolean(EXTRAS_MIGRATION) == true -> {
-                            setCancelButtonEnabled(false)
+                            supportActionBar?.setDisplayHomeAsUpEnabled(false)
                         }
                         intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) == true -> {
-                            setCancelButtonEnabled(false)
+                            supportActionBar?.setDisplayHomeAsUpEnabled(false)
                         }
                         else -> {
-                            setCancelButtonEnabled(true)
+                            supportActionBar?.setDisplayHomeAsUpEnabled(true)
                             setLockTimeGone(true)
                         }
                     }
@@ -149,7 +150,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 // will confirm user knows pass code, then remove it
                 binding.header.text = getString(R.string.pass_code_remove_your_pass_code)
                 binding.explanation.visibility = View.GONE
-                setCancelButtonEnabled(true)
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 setLockTimeGone(true)
             }
             else -> {
@@ -158,6 +159,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         }
 
         setTextListeners()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun inflatePasscodeTxtLine() {
@@ -178,7 +184,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
      * @param enabled       'True' makes the cancel button available, 'false' hides it.
      */
     private fun setCancelButtonEnabled(enabled: Boolean) {
-        if (enabled) {
+        /*if (enabled) {
             binding.btnCancel.apply {
                 visibility = View.VISIBLE
                 setOnClickListener { finish() }
@@ -188,7 +194,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 visibility = View.GONE
                 setOnClickListener(null)
             }
-        }
+        }*/
     }
 
     /**
@@ -234,10 +240,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
             passcode.append(number.toString())
             passCodeEditTexts[passcode.length - 1]?.text = Editable.Factory.getInstance().newEditable(number.toString())
         }
-    }
-
-    override fun onBiometricButtonClicked() {
-        //TODO
     }
 
     override fun onBackspaceButtonClicked() {
