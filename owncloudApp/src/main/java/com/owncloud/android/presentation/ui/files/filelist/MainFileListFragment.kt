@@ -27,6 +27,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -136,6 +137,15 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
         fileListOption = requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES
 
         updateFab(fileListOption)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        (menu.findItem(R.id.action_search).actionView as SearchView).run {
+            maxWidth = Int.MAX_VALUE
+            queryHint = resources.getString(R.string.actionbar_search)
+            setOnQueryTextListener(this@MainFileListFragment)
+        }
     }
 
     /**
