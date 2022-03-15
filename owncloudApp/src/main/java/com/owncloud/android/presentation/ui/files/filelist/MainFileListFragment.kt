@@ -210,6 +210,8 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
                 }
 
                 override fun onLongItemClick(ocFile: OCFile, position: Int): Boolean {
+                    if (isPickingAFolder()) return false
+
                     if (actionMode == null) {
                         actionMode = (activity as AppCompatActivity).startSupportActionMode(actionModeCallback)
                     }
