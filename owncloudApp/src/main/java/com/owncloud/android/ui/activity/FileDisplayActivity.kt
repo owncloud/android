@@ -131,8 +131,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     /**
      * FileDisplayActivity is based on those two containers.
-     * Left one is used for showing a list of files - listMainFileFragment
-     * Right one is used for showing previews, details... - secondFragment
+     * Left one is used for showing a list of files - [listMainFileFragment]
+     * Right one is used for showing previews, details... - [secondFragment]
      *
      * We should rename them to a more accurate names.
      *
@@ -344,53 +344,52 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     /**
      * Choose the second fragment that is going to be shown
      *
-     * @param file used to decide which fragment should be chosen
+     * @param file used to decide which fragment should be chosen.
+     *
      * @return a new second fragment instance if it has not been chosen before, or the fragment
      * previously chosen otherwise
      */
-    private fun chooseInitialSecondFragment(file: OCFile?): Fragment? {
+    private fun chooseInitialSecondFragment(file: OCFile): Fragment? {
+        val secondFragment = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
 
-        var secondFragment = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
+        // Return second fragment if it has been already chosen
+        if (secondFragment != null) return secondFragment
 
-        if (secondFragment == null) { // If second fragment has not been chosen yet, choose it
-            if (file != null && !file.isFolder) {
-                if ((PreviewAudioFragment.canBePreviewed(file) || PreviewVideoFragment.canBePreviewed(file)) && file.lastSyncDateForProperties ?: 0 > 0  // temporal fix
-                ) {
-                    val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
-                    val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
+        // Return null if we receive a folder. This way, second fragment will be cleared. We should move this logic out of here.
+        if (file.isFolder) return null
 
-                    if (PreviewAudioFragment.canBePreviewed(file)) {
-
-                        secondFragment = PreviewAudioFragment.newInstance(
-                            file,
-                            account,
-                            startPlaybackPosition,
-                            autoplay
-                        )
-
-                    } else {
-
-                        secondFragment = PreviewVideoFragment.newInstance(
-                            file,
-                            account,
-                            startPlaybackPosition,
-                            autoplay
-                        )
-                    }
-
-                } else if (PreviewTextFragment.canBePreviewed(file)) {
-                    secondFragment = PreviewTextFragment.newInstance(
-                        file,
-                        account
-                    )
-
-                } else {
-                    secondFragment = FileDetailFragment.newInstance(file, account)
-                }
+        // Otherwise, decide which fragment should be shown.
+        return when {
+            PreviewAudioFragment.canBePreviewed(file) -> {
+                val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
+                val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
+                PreviewAudioFragment.newInstance(
+                    file,
+                    account,
+                    startPlaybackPosition,
+                    autoplay
+                )
+            }
+            PreviewVideoFragment.canBePreviewed(file) -> {
+                val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
+                val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
+                PreviewVideoFragment.newInstance(
+                    file,
+                    account,
+                    startPlaybackPosition,
+                    autoplay
+                )
+            }
+            PreviewTextFragment.canBePreviewed(file) -> {
+                PreviewTextFragment.newInstance(
+                    file,
+                    account
+                )
+            }
+            else -> {
+                FileDetailFragment.newInstance(file, account)
             }
         }
-
-        return secondFragment
     }
 
     /**
@@ -641,18 +640,21 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             // close fab
             listMainFileFragment?.getFabMain()?.collapse()
         } else {
-            // all closed
-            val listOfFiles = listMainFileFragment
-            if (secondFragment == null) {
-                val currentDir = listOfFiles?.getCurrentFile()
-                if (currentDir == null || currentDir.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+            // Every single menu is collapsed. We can navigate up.
+            if (secondFragment != null) {
+                // If secondFragment was shown, we need to navigate to the parent of the displayed file
+                // Need a cleanup
+                listMainFileFragment?.navigateToFolderId(secondFragment!!.file!!.parentId!!)
+                cleanSecondFragment()
+            } else {
+                val currentDirDisplayed = listMainFileFragment?.getCurrentFile()
+                if (currentDirDisplayed == null || currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
                     finish()
                     return
+                } else {
+                    listMainFileFragment?.onBrowseUp()
                 }
-                listOfFiles?.onBrowseUp()
             }
-
-            cleanSecondFragment()
         }
     }
 
