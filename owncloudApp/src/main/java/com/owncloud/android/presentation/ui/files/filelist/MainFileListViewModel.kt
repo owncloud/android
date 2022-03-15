@@ -59,29 +59,28 @@ class MainFileListViewModel(
     private val workManager: WorkManager,
 ) : ViewModel() {
 
-    private lateinit var file: OCFile
+    /** LiveData to maintain the current file displayed */
+    private val _currentFileLiveData = MutableLiveData<OCFile>()
+    val currentFileLiveData: LiveData<OCFile>
+        get() = _currentFileLiveData
 
-    val getFilesListStatusLiveData: LiveData<Event<UIResult<List<OCFile>>>>
-        get() = _getFilesListStatusLiveData
+    /** LiveData to maintain the folder content for the current file displayed.
+     * It is automatically updated after updating the _currentFileLiveData
+     */
+    private val _folderContentLiveData: LiveData<Event<List<OCFile>>> =
+        Transformations.switchMap(currentFileLiveData) { folder ->
+            getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folder.id!!))
+                .map { Event(it) }
+        }
+    val folderContentLiveData: LiveData<Event<List<OCFile>>>
+        get() = _folderContentLiveData
 
     private val _getSearchedFilesData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
     val getSearchedFilesData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getSearchedFilesData
 
-    private val _getFileData = MutableLiveData<Event<UIResult<OCFile>>>()
-    val getFileData: LiveData<Event<UIResult<OCFile>>>
-        get() = _getFileData
-
-    val fileIdLiveData: MutableLiveData<Long> = MutableLiveData<Long>()
-    private val _getFilesListStatusLiveData:
-            LiveData<Event<UIResult<List<OCFile>>>> =
-        Transformations.switchMap(fileIdLiveData) { folderId ->
-            getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folderId))
-                .map { Event(UIResult.Success(it)) }
-        }
-
     private fun getFilesList(folderId: Long) {
-        fileIdLiveData.postValue(folderId)
+        //fileIdLiveData.postValue(folderId)
     }
 
     private fun getSearchFilesList(fileListOption: FileListOption, folderId: Long, searchText: String) {
@@ -101,21 +100,28 @@ class MainFileListViewModel(
         }
     }
 
+    // FIXME: I think that this function is not needed at all. File list is automatically refreshed with database via LiveData.
     fun listCurrentDirectory() {
-        getFilesList(file.id!!)
+        //getFilesList(file.id!!)
+    }
+
+    fun navigateTo(ocFile: OCFile) {
+        _currentFileLiveData.postValue(ocFile)
     }
 
     fun listDirectory(directory: OCFile) {
-        file = directory
-        getFilesList(directory.id!!)
+        navigateTo(ocFile = directory)
+        //file = directory
+        //getFilesList(directory.id!!)
     }
 
     fun listSearchCurrentDirectory(fileListOption: FileListOption, searchText: String) {
-        getSearchFilesList(fileListOption, file.id!!, searchText)
+        getSearchFilesList(fileListOption, currentFileLiveData.value!!.id!!, searchText)
     }
 
     fun getFile(): OCFile {
-        return file
+        // FIXME: Remove those ugly !!
+        return currentFileLiveData.value!!
     }
 
     fun setGridModeAsPreferred() {
@@ -144,15 +150,16 @@ class MainFileListViewModel(
 
     fun manageBrowseUp(fileListOption: FileListOption?) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val currentFolder = currentFileLiveData.value!!
             var parentDir: OCFile?
             var parentPath: String? = null
-            if (file.parentId != FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
-                parentPath = File(file.remotePath).parent
+            if (currentFolder.parentId != FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+                parentPath = File(currentFolder.remotePath).parent
                 parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
 
                 val fileByIdResult = getFileByRemotePathUseCase.execute(
                     GetFileByRemotePathUseCase.Params(
-                        owner = file.owner,
+                        owner = currentFolder.owner,
                         remotePath = parentPath!!
                     )
                 )
@@ -170,7 +177,7 @@ class MainFileListViewModel(
                 parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
                 val fileByIdResult = getFileByRemotePathUseCase.execute(
                     GetFileByRemotePathUseCase.Params(
-                        owner = file.owner,
+                        owner = currentFolder.owner,
                         remotePath = parentPath!!
                     )
                 )
@@ -185,9 +192,8 @@ class MainFileListViewModel(
                 )
                 parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
             }
-            file = parentDir!!
 
-            _getFileData.postValue(Event(UIResult.Success(file)))
+            navigateTo(parentDir!!)
         }
     }
 

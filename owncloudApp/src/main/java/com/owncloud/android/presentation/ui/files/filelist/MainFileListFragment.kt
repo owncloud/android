@@ -133,10 +133,6 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
         initViews()
         subscribeToViewModels()
 
-        if (savedInstanceState != null) {
-            file = savedInstanceState.getParcelable(KEY_FILE)
-        }
-
         fileListOption = requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES
 
         updateFab(fileListOption)
@@ -189,12 +185,11 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
             listener = object :
                 FileListAdapter.FileListAdapterListener {
                 override fun onItemClick(ocFile: OCFile, position: Int) {
-                    fileActions?.onFileClicked(ocFile)
+                    fileActions?.onCurrentFolderUpdated(ocFile)
                     if (actionMode != null) {
                         toggleSelection(position)
                     } else {
                         if (ocFile.isFolder) {
-                            file = ocFile
                             mainFileListViewModel.listDirectory(ocFile)
                             filesViewModel.refreshFolder(ocFile.remotePath)
                         } else { /// Click on a file
@@ -276,32 +271,25 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
     }
 
     private fun subscribeToViewModels() {
-        // Observe the action of retrieving the list of files from DB.
-        mainFileListViewModel.getFilesListStatusLiveData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                val filesList = when (fileListOption) {
-                    FileListOption.ALL_FILES -> data ?: emptyList()
-                    FileListOption.AV_OFFLINE -> data?.filter { it.keepInSync == 1 } ?: emptyList()
-                    FileListOption.SHARED_BY_LINK -> data?.filter { it.sharedByLink || it.sharedWithSharee == true } ?: emptyList()
-                }
-                updateFileListData(filesList)
+        // Observe the current folder displayed and notify the listener
+        mainFileListViewModel.currentFileLiveData.observe(viewLifecycleOwner) {
+            fileActions?.onCurrentFolderUpdated(it)
+        }
+
+        // Observe the folder content.
+        mainFileListViewModel.folderContentLiveData.observe(viewLifecycleOwner, Event.EventObserver { folderContent ->
+            val filesList = when (fileListOption) {
+                FileListOption.ALL_FILES -> folderContent
+                FileListOption.AV_OFFLINE -> folderContent.filter { it.keepInSync == 1 }
+                FileListOption.SHARED_BY_LINK -> folderContent.filter { it.sharedByLink || it.sharedWithSharee == true }
             }
+            updateFileListData(filesList)
         })
 
         // Observe the action of retrieving the list of searched files from DB.
         mainFileListViewModel.getSearchedFilesData.observe(viewLifecycleOwner, Event.EventObserver {
             it.onSuccess { data ->
                 updateFileListData(filesList = data ?: emptyList())
-            }
-        })
-
-        // Observe the action of retrieving the OCFile.
-        mainFileListViewModel.getFileData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                data?.let {
-                    file = it
-                    mainFileListViewModel.listDirectory(it)
-                }
             }
         })
 
@@ -549,7 +537,7 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
      * @return The currently viewed OCFile
      */
     fun getCurrentFile(): OCFile? {
-        return file
+        return mainFileListViewModel.getFile()
     }
 
     private fun setDrawerStatus(enabled: Boolean) {
@@ -789,14 +777,9 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(KEY_FILE, file)
-    }
-
     interface FileActions {
         fun onBrowseUpListener()
-        fun onFileClicked(file: OCFile)
+        fun onCurrentFolderUpdated(newCurrentFolder: OCFile)
         fun setImagePreview(file: OCFile)
         fun initTextPreview(file: OCFile)
         fun initAudioPreview(file: OCFile)
