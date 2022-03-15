@@ -1647,9 +1647,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         cleanSecondFragment()
     }
 
-    override fun onFileClicked(file: OCFile) {
-        updateStandardToolbar(file.fileName)
-        setFile(file)
+    override fun onCurrentFolderUpdated(newCurrentFolder: OCFile) {
+        updateToolbar(newCurrentFolder)
+        file = newCurrentFolder
     }
 
     override fun setImagePreview(file: OCFile) {
