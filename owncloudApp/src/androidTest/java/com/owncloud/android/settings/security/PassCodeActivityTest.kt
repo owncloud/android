@@ -33,6 +33,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -46,11 +47,13 @@ import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
 import com.owncloud.android.utils.click
 import com.owncloud.android.utils.matchers.isDisplayed
+import com.owncloud.android.utils.matchers.isEnabled
 import com.owncloud.android.utils.matchers.withChildCountAndId
 import com.owncloud.android.utils.matchers.withText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -129,8 +132,6 @@ class PassCodeActivityTest {
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        R.id.btnCancel.isDisplayed(false)
-
         R.id.lock_time.isDisplayed(false)
 
         R.id.numberKeyboard.isDisplayed(true)
@@ -171,8 +172,6 @@ class PassCodeActivityTest {
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        R.id.btnCancel.isDisplayed(false)
-
         R.id.lock_time.isDisplayed(true)
     }
 
@@ -196,25 +195,9 @@ class PassCodeActivityTest {
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        with(R.id.btnCancel) {
-            isDisplayed(true)
-            withText(android.R.string.cancel)
-        }
-
         R.id.lock_time.isDisplayed(false)
 
         R.id.error.isDisplayed(false)
-    }
-
-    @Ignore("Flaky test, it fails many times")
-    @Test
-    fun passcodeViewCancelButton() {
-        // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-
-        R.id.btnCancel.click()
-
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test
@@ -230,8 +213,6 @@ class PassCodeActivityTest {
             withText(R.string.pass_code_reenter_your_pass_code)
         }
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(doesNotExist())
-
-        R.id.btnCancel.isDisplayed(true)
 
         R.id.error.isDisplayed(false)
     }
@@ -280,39 +261,7 @@ class PassCodeActivityTest {
             withText(R.string.pass_code_mismatch)
         }
 
-        R.id.btnCancel.isDisplayed(true)
-
         R.id.lock_time.isDisplayed(false)
-    }
-
-    @Test
-    fun cancelFirstTry() {
-        // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-
-        for (i in 0..2) {
-            onView(withId(R.id.key1)).perform(click())
-        }
-
-        R.id.btnCancel.click()
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
-    }
-
-    @Test
-    fun cancelSecondTry() {
-        // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-
-        //Set a passcode
-        setPassCode1()
-
-        // Type incomplete passcode
-        for (i in 0..2) {
-            onView(withId(R.id.key2)).perform(click())
-        }
-
-        R.id.btnCancel.click()
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test
@@ -330,21 +279,9 @@ class PassCodeActivityTest {
 
         R.id.explanation.isDisplayed(false)
 
-        R.id.btnCancel.isDisplayed(true)
-
         R.id.error.isDisplayed(false)
 
         R.id.lock_time.isDisplayed(false)
-    }
-
-    @Ignore("Flaky test, it fails many times")
-    @Test
-    fun deletePasscodeViewCancelButton() {
-        // Open Activity in passcode deletion mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
-
-        R.id.btnCancel.click()
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
     }
 
     @Test
@@ -388,8 +325,6 @@ class PassCodeActivityTest {
         R.id.explanation.isDisplayed(false)
 
         R.id.lock_time.isDisplayed(false)
-
-        R.id.btnCancel.isDisplayed(true)
     }
 
     @Test
