@@ -108,6 +108,15 @@ class MainFileListViewModel(
         _currentFileLiveData.postValue(ocFile)
     }
 
+    fun navigateTo(fileId: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val result = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = fileId))
+            result.getDataOrNull()?.let {
+                _currentFileLiveData.postValue(it)
+            }
+        }
+    }
+
     fun listDirectory(directory: OCFile) {
         navigateTo(ocFile = directory)
         //file = directory
