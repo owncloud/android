@@ -37,6 +37,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -63,7 +64,7 @@ import java.util.ArrayList;
 import static org.koin.java.KoinJavaComponent.get;
 
 public class FolderPickerActivity extends FileActivity implements FileFragment.ContainerActivity,
-        OnClickListener, OnEnforceableRefreshListener, CreateFolderDialogFragment.CreateFolderListener {
+        OnClickListener, OnEnforceableRefreshListener, CreateFolderDialogFragment.CreateFolderListener, MainFileListFragment.FileActions {
 
     public static final String EXTRA_FOLDER = FolderPickerActivity.class.getCanonicalName()
             + ".EXTRA_FOLDER";
@@ -146,6 +147,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     private void initAndShowListOfFilesFragment() {
         MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(false, true);
+        mainListOfFiles.setFileActions(this);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS);
         transaction.commit();
@@ -400,6 +402,67 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 showSnackMessage(errorMessage.toString());
             }
         });
+    }
+
+    @Override
+    public void onBrowseUpListener() {
+
+    }
+
+    @Override
+    public void onCurrentFolderUpdated(@NonNull OCFile newCurrentFolder) {
+        updateNavigationElementsInActionBar();
+        setFile(newCurrentFolder);
+    }
+
+    @Override
+    public void setImagePreview(@NonNull OCFile file) {
+
+    }
+
+    @Override
+    public void initTextPreview(@NonNull OCFile file) {
+
+    }
+
+    @Override
+    public void initAudioPreview(@NonNull OCFile file) {
+
+    }
+
+    @Override
+    public void initVideoPreview(@NonNull OCFile file) {
+
+    }
+
+    @Override
+    public void startSyncAndOpenFile(@NonNull OCFile file) {
+
+    }
+
+    @Override
+    public void initSync(@NonNull OCFile file) {
+
+    }
+
+    @Override
+    public void initSyncAndOpenFile(@NonNull OCFile file) {
+
+    }
+
+    @Override
+    public void initDownloadForSending(@NonNull OCFile file) {
+
+    }
+
+    @Override
+    public void cancelFileTransference(@NonNull ArrayList<OCFile> file) {
+
+    }
+
+    @Override
+    public void setBottomBarVisibility(boolean isVisible) {
+
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {
