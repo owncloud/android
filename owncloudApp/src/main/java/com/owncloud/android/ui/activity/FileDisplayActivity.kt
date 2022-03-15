@@ -1660,14 +1660,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
     }
 
-    override fun onBrowseUpListener() {
-        if (listMainFileFragment != null) {  // should never be null, indeed
-            file = listMainFileFragment?.getCurrentFile()
-            listMainFileFragment?.listDirectory(file)
-        }
-        cleanSecondFragment()
-    }
-
     override fun onCurrentFolderUpdated(newCurrentFolder: OCFile) {
         updateToolbar(newCurrentFolder)
         file = newCurrentFolder

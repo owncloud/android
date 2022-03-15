@@ -43,28 +43,20 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.presentation.UIResult;
-import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment;
-import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
-import kotlin.Unit;
-import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.util.ArrayList;
 
-import static org.koin.java.KoinJavaComponent.get;
-
 public class FolderPickerActivity extends FileActivity implements FileFragment.ContainerActivity,
-        OnClickListener, OnEnforceableRefreshListener, CreateFolderDialogFragment.CreateFolderListener, MainFileListFragment.FileActions {
+        OnClickListener, OnEnforceableRefreshListener, MainFileListFragment.FileActions {
 
     public static final String EXTRA_FOLDER = FolderPickerActivity.class.getCanonicalName()
             + ".EXTRA_FOLDER";
@@ -99,7 +91,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         }
 
         // sets callback listeners for UI elements
-        initControls();
+        initPickerListeners();
 
         // Action bar setup
         setupStandardToolbar(null, false, false, true);
@@ -224,9 +216,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         super.onResume();
         Timber.d("onResume() start");
 
-        // refresh list of files
-        refreshListOfFilesFragment();
-
         // Listen for sync messages
         IntentFilter syncIntentFilter = new IntentFilter(FileSyncAdapter.EVENT_FULL_SYNC_START);
         syncIntentFilter.addAction(FileSyncAdapter.EVENT_FULL_SYNC_END);
@@ -294,13 +283,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         return null;
     }
 
-    protected void refreshListOfFilesFragment() {
-        MainFileListFragment fileListFragment = getListOfFilesFragment();
-        if (fileListFragment != null) {
-            fileListFragment.listCurrentDirectory();
-        }
-    }
-
     public void browseToRoot() {
         MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
@@ -351,7 +333,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     /**
      * Set per-view controllers
      */
-    private void initControls() {
+    private void initPickerListeners() {
         mCancelBtn = findViewById(R.id.folder_picker_btn_cancel);
         mCancelBtn.setOnClickListener(this);
         mChooseBtn = findViewById(R.id.folder_picker_btn_choose);
@@ -404,29 +386,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 startSyncFolderOperation(folder, ignoreETag);
             }
         }
-    }
-
-    @Override
-    public void onFolderNameSet(@NotNull String newFolderName, @NotNull OCFile parentFolder) {
-        FilesViewModel filesViewModel = get(FilesViewModel.class);
-
-        filesViewModel.createFolder(parentFolder, newFolderName);
-        filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
-            UIResult<Unit> uiResult = uiResultEvent.peekContent();
-            if (uiResult.isSuccess()) {
-                refreshListOfFilesFragment();
-            } else {
-                Throwable throwable = uiResult.getThrowableOrNull();
-                CharSequence errorMessage = ThrowableExtKt.parseError(throwable, getResources().getString(R.string.create_dir_fail_msg),
-                        getResources(), false);
-                showSnackMessage(errorMessage.toString());
-            }
-        });
-    }
-
-    @Override
-    public void onBrowseUpListener() {
-
     }
 
     @Override

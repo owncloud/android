@@ -330,10 +330,6 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
         mainFileListViewModel.navigateTo(ocFile = directory)
     }
 
-    fun listCurrentDirectory() {
-        mainFileListViewModel.listCurrentDirectory()
-    }
-
     private fun isShowingJustFolders(): Boolean {
         val args = arguments
         return args != null && args.getBoolean(ARG_JUST_FOLDERS, false)
@@ -500,12 +496,10 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
         val filesViewModel = get(FilesViewModel::class.java)
 
         filesViewModel.createFolder(parentFolder, newFolderName)
-        filesViewModel.createFolder.observe(this, { uiResultEvent: Event<UIResult<Unit>> ->
-            val uiResult = uiResultEvent.peekContent()
-            if (!uiResult.isSuccess) {
-                val throwable = uiResult.getThrowableOrNull()
+        filesViewModel.createFolder.observe(viewLifecycleOwner, Event.EventObserver { uiResult: UIResult<Unit> ->
+            if (uiResult is UIResult.Error) {
                 val errorMessage =
-                    throwable!!.parseError(resources.getString(R.string.create_dir_fail_msg), resources, false)
+                    uiResult.error?.parseError(resources.getString(R.string.create_dir_fail_msg), resources, false)
                 showMessageInSnackbar(
                     message = errorMessage.toString()
                 )
@@ -794,7 +788,6 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
     }
 
     interface FileActions {
-        fun onBrowseUpListener()
         fun onCurrentFolderUpdated(newCurrentFolder: OCFile)
         fun setImagePreview(file: OCFile)
         fun initTextPreview(file: OCFile)
