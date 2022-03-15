@@ -92,7 +92,6 @@ import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
-import com.owncloud.android.ui.fragment.OCFileListFragment
 import com.owncloud.android.ui.fragment.TaskRetainerFragment
 import com.owncloud.android.ui.helpers.FilesUploadHelper
 import com.owncloud.android.ui.helpers.UriUploader
@@ -149,10 +148,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         internal set
 
     private val listMainFileFragment: MainFileListFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES_BIS) as MainFileListFragment?
-
-    private val listOfFilesFragment: OCFileListFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as OCFileListFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as MainFileListFragment?
 
     private val secondFragment: FileFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
@@ -312,7 +308,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         val mainListOfFiles = MainFileListFragment.newInstance()
         mainListOfFiles.fileActions = this
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES_BIS)
+        transaction.add(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
 
         mainListOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))
@@ -474,9 +470,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.action_select_all -> {
-                listOfFilesFragment?.selectAll()
-            }
             android.R.id.home -> {
                 val second = secondFragment
                 val currentDir = listMainFileFragment?.getCurrentFile()
@@ -772,8 +765,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         }
 
                         if (synchFolderRemotePath != null && currentDir.remotePath == synchFolderRemotePath) {
-                            val fileListFragment = listOfFilesFragment
-                            fileListFragment?.listDirectory(true)
+                            listMainFileFragment?.listDirectory(currentDir)
                         }
                         file = currentFile
                     }
@@ -817,8 +809,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     }
                 }
 
-                val fileListFragment = listOfFilesFragment
-                fileListFragment?.setProgressBarAsIndeterminate(syncInProgress)
+                listMainFileFragment?.setProgressBarAsIndeterminate(syncInProgress)
                 Timber.d("Setting progress visibility to $syncInProgress")
 
                 setBackgroundText()
@@ -845,14 +836,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
      * loading or folder is empty
      */
     fun setBackgroundText() {
-        val ocFileListFragment = listOfFilesFragment
+        val ocFileListFragment = listMainFileFragment
         if (ocFileListFragment != null) {
-            if (selectAllMenuItem != null) {
-                selectAllMenuItem!!.isVisible = true
-                if (ocFileListFragment.noOfItems == 0) {
-                    selectAllMenuItem!!.isVisible = false
-                }
-            }
+            selectAllMenuItem?.isVisible = ocFileListFragment.enableSelectAll
             var message = R.string.file_list_loading
             if (!syncInProgress) {
                 // In case file list is empty
@@ -862,10 +848,10 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         FileListOption.SHARED_BY_LINK -> R.string.file_list_empty_shared_by_links
                         else -> R.string.file_list_empty
                     }
-                ocFileListFragment.progressBar.visibility = View.GONE
-                ocFileListFragment.shadowView.visibility = View.VISIBLE
+                ocFileListFragment.getProgressBar().visibility = View.GONE
+                ocFileListFragment.getShadowView().visibility = View.VISIBLE
             }
-            ocFileListFragment.setMessageForEmptyList(getString(message))
+            listMainFileFragment?.setMessageForEmptyList(getString(message))
         } else {
             Timber.e("OCFileListFragment is null")
         }
@@ -1058,11 +1044,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     fun browseToRoot() {
-        val listOfFiles = listOfFilesFragment
+        val listOfFiles = listMainFileFragment
         if (listOfFiles != null) {  // should never be null, indeed
             val root = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            listOfFiles.listDirectory(root)
-            file = listOfFiles.currentFile
+            listOfFiles.listDirectory(root!!)
+            file = root
             startSyncFolderOperation(root, false)
         }
         cleanSecondFragment()
@@ -1126,8 +1112,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             } else {
                 return
             }
-            val listOfFiles = listOfFilesFragment
-            listOfFiles?.listDirectory(false)
             val secondFragment = secondFragment
             secondFragment?.onTransferServiceConnected()
         }
@@ -1372,8 +1356,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         MainApp.appContext, null, null
                     )// unneeded, handling via SyncBroadcastReceiver
 
-                    val fileListFragment = listOfFilesFragment
-                    fileListFragment?.setProgressBarAsIndeterminate(true)
+                    listMainFileFragment?.setProgressBarAsIndeterminate(true)
 
                     setBackgroundText()
                 }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
@@ -1568,10 +1551,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun refreshList(ignoreETag: Boolean) {
-        listOfFilesFragment?.let {
-            it.currentFile?.let { folder ->
-                startSyncFolderOperation(folder, ignoreETag)
-            }
+        listMainFileFragment?.getCurrentFile()?.let { folder ->
+            startSyncFolderOperation(folder, ignoreETag)
         }
     }
 
@@ -1620,7 +1601,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     companion object {
-        private const val TAG_LIST_OF_FILES_BIS = "TAG_LIST_OF_FILES_BIS"
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
